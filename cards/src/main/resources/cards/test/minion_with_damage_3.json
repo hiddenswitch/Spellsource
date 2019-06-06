@@ -1,0 +1,23 @@
+{
+  "name": "Damage 3",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Battlecry: Deal $6 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 6
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

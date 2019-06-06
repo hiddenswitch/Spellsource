@@ -1,0 +1,20 @@
+{
+  "name": "Summon 3",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_stat_1",
+      "minion_stat_1",
+      "minion_stat_1"
+    ]
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

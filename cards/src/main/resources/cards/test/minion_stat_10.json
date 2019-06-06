@@ -1,0 +1,13 @@
+{
+  "name": "Minion 10",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
