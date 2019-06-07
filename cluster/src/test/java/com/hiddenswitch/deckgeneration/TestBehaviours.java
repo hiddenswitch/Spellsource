@@ -1,9 +1,11 @@
 package com.hiddenswitch.deckgeneration;
 
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +59,22 @@ public class TestBehaviours extends TestBase {
 				return battlecryActions.get(0);
 			});
 			playCard(context, player, "minion_with_damage_3");
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithDefinedMulligan() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_with_damage_3");
+			receiveCard(context, player, "minion_stat_3");
+			receiveCard(context, player, "minion_stat_2");
+			List<String> cardsToKeep = new ArrayList<>();
+			cardsToKeep.add("minion_with_damage_3");
+			cardsToKeep.add("minion_stat_3");
+			PlayRandomWithDefinedMulligans behaviour = new PlayRandomWithDefinedMulligans(cardsToKeep);
+			List<Card> discardedCards = behaviour.mulligan(context, player, player.getHand());
+			assertTrue(discardedCards.get(0).getCardId().equals("minion_stat_2"));
+			assertTrue(discardedCards.size() == 1);
 		});
 	}
 }
