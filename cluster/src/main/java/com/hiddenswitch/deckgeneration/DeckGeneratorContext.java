@@ -105,7 +105,8 @@ public class DeckGeneratorContext {
 				.map(opposingDeck -> GameContext.simulate(
 						Arrays.asList(gameDeck, opposingDeck),
 						() -> this.playerBehaviour,
-						() -> this.enemyBehaviour, gamesPerMatch,
+						() -> this.enemyBehaviour,
+						gamesPerMatch,
 						true,
 						false,
 						null,
@@ -120,7 +121,7 @@ public class DeckGeneratorContext {
 	 *
 	 * @param ctx
 	 */
-	private void handleContext(GameContext ctx) {
+	protected void handleContext(GameContext ctx) {
 		ctx.getPlayer1().getHero().setMaxHp(startingHp);
 		ctx.getPlayer2().getHero().setMaxHp(startingHp);
 		ctx.getPlayer1().getHero().setBaseHp(startingHp);

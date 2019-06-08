@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ActsOnSpecificChromosomesMutator<
+public class ActsOnSpecificChromosomesBasicMutator<
 		G extends Gene<?, G>,
 		C extends Comparable<? super C>
 		> extends Mutator<G, C> {
-	List<Integer> chromosomesToActOn = new ArrayList<>();
+	List<Integer> chromosomesToActOn;
 
-	public ActsOnSpecificChromosomesMutator(double probability, List<Integer> chromosomesToActOn) {
+	public ActsOnSpecificChromosomesBasicMutator(double probability, List<Integer> chromosomesToActOn) {
 		super(probability);
 		this.chromosomesToActOn = chromosomesToActOn;
 	}
 
-	public ActsOnSpecificChromosomesMutator(List<Integer> chromosomesToActOn) {
+	public ActsOnSpecificChromosomesBasicMutator(List<Integer> chromosomesToActOn) {
 		super(0.1);
 		this.chromosomesToActOn = chromosomesToActOn;
 	}

@@ -31,7 +31,6 @@ public class TestBitSwapMutators {
 	 */
 	@Test
 	public void bitSwapByManaCostMutationWithSpecificDecksTest() {
-
 		// Create a card list with only 4 cards:
 		// 2 cost 1 mana and the other 2 cost 2 mana
 		CardCatalogue.loadCardsFromPackage();

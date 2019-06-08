@@ -12,6 +12,8 @@ import java.util.Random;
 import static org.testng.Assert.assertTrue;
 
 public class TestSpecificChromosomesMutators {
+	// Tests that the actsOnSpecificChromosomesMutator only mutates certain
+	// chromosomes of a genotype
 	@Test
 	public void testActsOnSpecificChromosomesMutator() {
 		int bitLength = 8;
@@ -23,7 +25,7 @@ public class TestSpecificChromosomesMutators {
 		List<Integer> chromosomesToActOn = new ArrayList<>();
 		chromosomesToActOn.add(1);
 
-		ActsOnSpecificChromosomesMutator actsOnSpecificChromosomesMutator = new ActsOnSpecificChromosomesMutator(1, chromosomesToActOn);
+		ActsOnSpecificChromosomesBasicMutator actsOnSpecificChromosomesMutator = new ActsOnSpecificChromosomesBasicMutator(1, chromosomesToActOn);
 		Random random = new XORShiftRandom(101010L);
 		MutatorResult<Genotype<BitGene>> result = actsOnSpecificChromosomesMutator.mutate(genotype, 1, random);
 		Chromosome<BitGene> resultChromosome1 = result.getResult().getChromosome(0);
@@ -39,5 +41,33 @@ public class TestSpecificChromosomesMutators {
 			}
 		}
 		assertTrue(isMutation);
+	}
+
+	@Test
+	public void testBitSwapOnSpecificChromosomesMutator() {
+		int bitLength = 2;
+
+		BitSet bits = new BitSet(bitLength);
+		bits.flip(0);
+		// bits = 01
+		Chromosome<BitGene> chromosome = BitChromosome.of(bits, bitLength);
+		Genotype<BitGene> genotype = Genotype.of(chromosome, chromosome);
+		// Beginning genotype: [01, 01]
+
+		List<Integer> chromosomesToActOn = new ArrayList<>();
+		chromosomesToActOn.add(1);
+
+		BitSwapOnSpecificChromosomesMutator bitSwapOnSpecificChromosomesMutator = new BitSwapOnSpecificChromosomesMutator(1, chromosomesToActOn);
+		Random random = new XORShiftRandom(101010L);
+		MutatorResult<Genotype<BitGene>> result = bitSwapOnSpecificChromosomesMutator.mutate(genotype, 1, random);
+		Chromosome<BitGene> resultChromosome1 = result.getResult().getChromosome(0);
+		Chromosome<BitGene> resultChromosome2 = result.getResult().getChromosome(1);
+
+		// Expected genotype: [01, 10]
+		assertTrue(resultChromosome1.getGene(0).getAllele());
+		assertTrue(!resultChromosome1.getGene(1).getAllele());
+		assertTrue(!resultChromosome2.getGene(0).getAllele());
+		assertTrue(resultChromosome2.getGene(1).getAllele());
+
 	}
 }
