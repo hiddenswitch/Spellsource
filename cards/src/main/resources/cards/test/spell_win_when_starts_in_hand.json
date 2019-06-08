@@ -1,0 +1,33 @@
+{
+  "name": "Prince Malchezaar",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Start of Game: Add 5 extra Legendary minions to your deck.",
+  "collectible": true,
+  "set": "ONE_NIGHT_IN_KARAZHAN",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "condition": {
+          "class": "HoldsCardCondition",
+          "cardFilter": {
+            "class": "CardFilter",
+            "card": "spell_win_when_starts_in_hand"
+          }
+        },
+        "class": "DestroySpell",
+        "target": "ENEMY_HERO"
+      }
+    }
+  ]
+}
