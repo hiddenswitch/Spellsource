@@ -6,6 +6,7 @@ import io.jenetics.Genotype;
 import io.jenetics.SwapMutator;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
+import io.jenetics.engine.Limits;
 import io.jenetics.util.Factory;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -74,7 +75,7 @@ public class TestDeckGeneration {
 		Engine<BitGene, Integer> engine = Engine.builder((individual) -> 0, bitGeneFactory)
 				.mapping(r -> {
 					List<Genotype<BitGene>> genotypes = r.getGenotypes().stream().collect(toList());
-					for (int i =0; i<genotypes.size(); i++) {
+					for (int i = 0; i < genotypes.size(); i++) {
 						assertTrue(!genotypes.get(i).getChromosome().getGene(0).booleanValue());
 					}
 					return r;
@@ -150,6 +151,63 @@ public class TestDeckGeneration {
 
 		Genotype<BitGene> result = engine.stream()
 				.limit(NUMBER_OF_GENERATIONS)
+				.collect(EvolutionResult.toBestGenotype());
+
+		assertTrue(result.getChromosome().getGene(winTheGameIndex).booleanValue());
+	}
+
+	// Tests the use of the stable fitness terminator,
+	// which terminates the genetic algorithm when the fitness
+	// has been stable for a certain number of generations
+	@Test
+	public void testDeckGeneratorUsingStableFitnessTermination() {
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 10;
+		int POPULATION_SIZE = 20;
+		int STABLE_GENERATIONS_COUNT = 5;
+
+		XORShiftRandom random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		// Create random decks for the tournament
+		for (int i = 0; i < 10; i++) {
+			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+			for (int j = 0; j < maxCardsPerDeck; j++) {
+				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+			}
+			basicTournamentDecks.add(tournamentDeck);
+		}
+
+		// Ensure that we do not begin with "win the game"
+		// in any of our original population decks
+		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
+
+		// Set up our tournament playing environment
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(maxCardsPerDeck);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		int winTheGameIndex = indexInBitmap.size() - 1;
+		List<Integer> invalidCards = new ArrayList<>(0);
+		invalidCards.add(winTheGameIndex);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(maxCardsPerDeck, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(1), new BitSwapMutator<>(1))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS_COUNT))
 				.collect(EvolutionResult.toBestGenotype());
 
 		assertTrue(result.getChromosome().getGene(winTheGameIndex).booleanValue());

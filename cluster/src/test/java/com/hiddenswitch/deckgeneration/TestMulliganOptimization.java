@@ -1,10 +1,9 @@
 package com.hiddenswitch.deckgeneration;
 
-import io.jenetics.BitGene;
-import io.jenetics.Genotype;
-import io.jenetics.SinglePointCrossover;
+import io.jenetics.*;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
+import io.jenetics.engine.Limits;
 import io.jenetics.util.Factory;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -12,16 +11,20 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertTrue;
 
 public class TestMulliganOptimization {
+
+	// Creates a test that shows that the genetic algorithm result for mulligans will
+	// always keep the "win the game" card in a deck kept constant through generations
 	@Test
 	public void willNotMulliganWinTheGameTest() {
 		int GAMES_PER_MATCH = 50;
@@ -29,8 +32,6 @@ public class TestMulliganOptimization {
 		int POPULATION_SIZE = 10;
 		int NUMBER_OF_GENERATIONS = 50;
 		int CARDS_IN_DECK = 30;
-
-		XORShiftRandom random = new XORShiftRandom(101010L);
 
 		CardCatalogue.loadCardsFromPackage();
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
@@ -70,18 +71,66 @@ public class TestMulliganOptimization {
 				.limit(NUMBER_OF_GENERATIONS)
 				.collect(EvolutionResult.toBestGenotype());
 
+
 		assertTrue(result.getChromosome(1).getGene(winTheGameIndex).booleanValue());
 	}
 
-	// Perhaps make the mulligan mutators more consistent to make this pass?
-	@Ignore
+	// Tests that the specific genotype factory generates only the specified genotype
+	@Test
+	public void specificGenotypesFactoryTest() {
+		int GAMES_PER_MATCH = 50;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 10;
+		int CARDS_IN_DECK = 30;
+		int NUMBER_OF_GENERATIONS = 10;
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 1)
+				.collect(toList());
+
+		GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE, Collections.singletonList(indexInBitmap.get(0).getCardId()));
+		basicTournamentDecks.add(tournamentDeck);
+
+		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
+		int bestCardIndex = indexInBitmap.size() - 1;
+
+		BitSet bits = new BitSet(indexInBitmap.size());
+		bits.flip(bestCardIndex);
+		Chromosome<BitGene> chromosome = BitChromosome.of(bits, indexInBitmap.size());
+		Genotype<BitGene> genotype = Genotype.of(chromosome);
+
+		// Set up our tournament playing environment
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(CARDS_IN_DECK);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		Factory<Genotype<BitGene>> specificFactory = new SpecificGenotypesFactory(Collections.singletonList(genotype));
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), specificFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new SwapMutator(0))
+				.build();
+
+		Genotype<BitGene> result = engine.stream().limit(NUMBER_OF_GENERATIONS).collect(EvolutionResult.toBestGenotype());
+		assertTrue(result.getChromosome().getGene(bestCardIndex).booleanValue());
+	}
+
+	// Creates a test that show that a genetic algorithm can both find the
+	// win the game card and decide not to mulligan it if drawn
 	@Test(invocationCount = 10)
 	public void willFindAndNotMulliganWinTheGameTest() {
-		int GAMES_PER_MATCH = 10;
-		int STARTING_HP = 20;
+		int GAMES_PER_MATCH_FOR_DECK_GENERATION = 10;
+		int GAMES_PER_MATCH_FOR_MULLIGAN_GENERATION = 60;
+		int NUMBER_OF_DECKS = 10;
+		int STARTING_HP = 30;
 		int POPULATION_SIZE = 10;
-		int NUMBER_OF_GENERATIONS = 40;
-		int CARDS_IN_DECK = 10;
+		int CARDS_IN_DECK = 20;
+		int STABLE_GENERATIONS = 10;
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
@@ -91,11 +140,11 @@ public class TestMulliganOptimization {
 				.stream()
 				.filter(card -> card.isCollectible()
 						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(22)
+						&& card.getCardSet() == CardSet.BASIC)
 				.collect(toList());
 
 		// Create random decks for the tournament
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < NUMBER_OF_DECKS; i++) {
 			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
 			for (int j = 0; j < CARDS_IN_DECK; j++) {
 				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
@@ -114,29 +163,49 @@ public class TestMulliganOptimization {
 		PlayRandomWithoutSelfDamageBehaviour enemyBehaviour = new PlayRandomWithoutSelfDamageBehaviour();
 		enemyBehaviour.ownMinionTargetingIsEnabled(false);
 		deckAndMulliganGeneratorContext.setEnemyBehaviour(enemyBehaviour);
-		deckAndMulliganGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+		deckAndMulliganGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH_FOR_DECK_GENERATION);
 		deckAndMulliganGeneratorContext.setStartingHp(STARTING_HP);
 		deckAndMulliganGeneratorContext.setMaxCardsPerDeck(CARDS_IN_DECK);
 
-		List<Integer> chromosomesToActOn = new ArrayList<>();
-		chromosomesToActOn.add(1);
+		List<Integer> deckListChromosomes = Collections.singletonList(0);
 
-		List<Integer> chromosomesToBitSwapActOn = new ArrayList<>();
-		chromosomesToBitSwapActOn.add(0);
+		List<Integer> mulliganChromosomes = Collections.singletonList(1);
 
-		Factory<Genotype<BitGene>> bitGeneFactory = new DeckAndMulliganGeneFactory(CARDS_IN_DECK, indexInBitmap.size(), invalidCards);
-		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckAndMulliganGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+		Factory<Genotype<BitGene>> deckFactory = new DeckAndMulliganGeneFactory(CARDS_IN_DECK, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> deckEngine = Engine.builder((individual) -> deckAndMulliganGeneratorContext.fitness(individual, HeroClass.BLUE), deckFactory)
 				.mapping(pop -> pop)
 				.populationSize(POPULATION_SIZE)
-				.alterers(new ActsOnSpecificChromosomesBasicMutator<>(1, chromosomesToActOn), new BitSwapOnSpecificChromosomesMutator<>(1, chromosomesToBitSwapActOn))
+				.alterers(new BitSwapOnSpecificChromosomesMutator<>(1, deckListChromosomes), new BitSwapOnSpecificChromosomesMutator<>(1, deckListChromosomes))
 				.build();
 
-		Genotype<BitGene> result = engine.stream()
-				.limit(NUMBER_OF_GENERATIONS)
+		Genotype<BitGene> deckResult = deckEngine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
 				.collect(EvolutionResult.toBestGenotype());
 
-		assertTrue(result.getChromosome(1).getGene(winTheGameIndex).booleanValue());
-		assertTrue(result.getChromosome(0).getGene(winTheGameIndex).booleanValue());
+		assertTrue(deckResult.getChromosome(0).getGene(winTheGameIndex).booleanValue());
 
+		GameDeck deckForMulliganOptimization = new GameDeck(HeroClass.BLUE);
+
+		for (int i = 0; i < deckResult.getChromosome().length(); i++) {
+			if (deckResult.getChromosome(0).getGene(i).booleanValue()) {
+				deckForMulliganOptimization.getCards().add(indexInBitmap.get(i));
+			}
+		}
+
+		deckAndMulliganGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH_FOR_MULLIGAN_GENERATION);
+		deckAndMulliganGeneratorContext.setBasicTournamentDecks(Collections.singletonList(deckForMulliganOptimization));
+
+		Factory<Genotype<BitGene>> mulliganFactory = new SpecificGenotypesFactory(Collections.singletonList(deckResult));
+		Engine<BitGene, Double> mulliganEngine = Engine.builder((individual) -> deckAndMulliganGeneratorContext.fitness(individual, HeroClass.BLUE), mulliganFactory)
+				.mapping(pop -> pop)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new ActsOnSpecificChromosomesBasicMutator<>(1, mulliganChromosomes), new MultiPointCrossoverOnSpecificChromosomes<>(1, mulliganChromosomes))
+				.build();
+
+		Genotype<BitGene> mulliganResult = mulliganEngine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
+				.collect(EvolutionResult.toBestGenotype());
+
+		assertTrue(mulliganResult.getChromosome(1).getGene(winTheGameIndex).booleanValue());
 	}
 }
