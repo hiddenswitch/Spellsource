@@ -1,7 +1,6 @@
 package com.hiddenswitch.deckgeneration;
 
 import io.jenetics.*;
-import io.jenetics.internal.math.probability;
 import io.jenetics.util.ISeq;
 
 import java.util.ArrayList;
@@ -30,10 +29,9 @@ public class ActsOnSpecificChromosomesBasicMutator<
 			final double p,
 			final Random random
 	) {
-		final int P = probability.toInt(p);
 		List<MutatorResult<Chromosome<G>>> mutatorResults = new ArrayList<>();
 		for (int i = 0; i < genotype.length(); i++) {
-			if (chromosomesToActOn.contains(i) && random.nextInt() < P) {
+			if (chromosomesToActOn.contains(i)) {
 				mutatorResults.add(mutate(genotype.getChromosome(i), p, random));
 			} else {
 				mutatorResults.add(MutatorResult.of(genotype.getChromosome(i)));

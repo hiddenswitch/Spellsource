@@ -17,9 +17,26 @@ public class TestCards extends TestBase {
 
 		DebugContext context = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
-		context.getPlayer1().getHand().add(CardCatalogue.getCardById("spell_win_when_starts_in_hand"));
-
+		context.getPlayer1().getHand().add(CardCatalogue.getCardById("minion_win_when_starts_in_hand"));
+		Assert.assertTrue(!context.getPlayer2().getHero().isDestroyed());
 		context.init();
 		Assert.assertTrue(context.getPlayer2().getHero().isDestroyed());
+
+		DebugContext badContext = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.CUSTOM);
+		badContext.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		for (int i = 0; i < 100; i++) {
+			badContext.getPlayer1().getDeck().add(CardCatalogue.getCardById("minion_novice_engineer"));
+		}
+
+		badContext.getPlayer1().getDeck().set(10, CardCatalogue.getCardById("minion_win_when_starts_in_hand"));
+
+		for (int i = 0; i < 100; i++) {
+			badContext.getPlayer1().getDeck().add(CardCatalogue.getCardById("minion_novice_engineer"));
+		}
+
+		Assert.assertTrue(!badContext.getPlayer2().getHero().isDestroyed());
+		badContext.init();
+		Assert.assertTrue(!badContext.getPlayer2().getHero().isDestroyed());
+
 	}
 }

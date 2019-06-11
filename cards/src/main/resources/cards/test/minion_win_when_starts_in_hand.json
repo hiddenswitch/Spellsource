@@ -1,0 +1,37 @@
+{
+  "name": "Win the Game If Starts In Hand",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Start of Game: If this card is in your hand, destroy the enemy hero",
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": {
+          "class": "ConditionalValueProvider",
+          "condition": {
+            "class": "HoldsCardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_win_when_starts_in_hand"
+            }
+          },
+          "ifFalse": 0,
+          "ifTrue": 30
+        }
+      }
+    }
+  ]
+}
