@@ -6,6 +6,7 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,112 @@ public class TestBehaviours extends TestBase {
 			List<Card> discardedCards = behaviour.mulligan(context, player, player.getHand());
 			assertTrue(discardedCards.get(0).getCardId().equals("minion_stat_2"));
 			assertTrue(discardedCards.size() == 1);
+		});
+	}
+
+	// Tests the PlayRandomWithoutSelfDamageWithDefinedBehavior for certain decisions:
+	// 1. Mulligan
+	// 2. Attacking enemy face
+	// 3. Attacking enemy minions
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyHero() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO), Collections.singletonList(Collections.singletonList("minion_with_damage_3")));
+			context.endTurn();
+			context.endTurn();
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+		});
+	}
+
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyMinion() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_stat_1");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION), Collections.singletonList(Collections.singletonList("minion_with_damage_3")));
+			context.endTurn();
+			context.endTurn();
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+		});
+	}
+
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorAlwaysAttackEnemyHero() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_stat_1");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.ALWAYS_ATTACK_ENEMY_HERO));
+			context.endTurn();
+			context.endTurn();
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+		});
+	}
+
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorMinionDoesNotAttack() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_stat_1");
+
+			List<DecisionType> decisionTypeList = new ArrayList<>();
+			decisionTypeList.add(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO);
+			decisionTypeList.add(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION);
+
+			List<List<String>> cardListForEachDecision = new ArrayList<>();
+			cardListForEachDecision.add(Collections.singletonList("minion_with_damage_3"));
+			cardListForEachDecision.add(Collections.singletonList("minion_with_damage_3"));
+
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypeList, cardListForEachDecision);
+			context.endTurn();
+			context.endTurn();
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 2 == actions.size());
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorMulligan() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_with_damage_3");
+			receiveCard(context, player, "minion_stat_3");
+			receiveCard(context, player, "minion_stat_2");
+			List<String> cardsToKeep = new ArrayList<>();
+			cardsToKeep.add("minion_with_damage_3");
+			cardsToKeep.add("minion_stat_3");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.KEEP_CARDS_ON_MULLIGAN), Collections.singletonList(cardsToKeep));
+			List<Card> discardedCards = behaviour.mulligan(context, player, player.getHand());
+			assertTrue(discardedCards.get(0).getCardId().equals("minion_stat_2"));
+			assertTrue(discardedCards.size() == 1);
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorStillCanAttackTauntMinionWithOnlyHitEnemyHeroActive() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.ALWAYS_ATTACK_ENEMY_HERO));
+			context.endTurn();
+			context.endTurn();
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize == actions.size());
 		});
 	}
 }

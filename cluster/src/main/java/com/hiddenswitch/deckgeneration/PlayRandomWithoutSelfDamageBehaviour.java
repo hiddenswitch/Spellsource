@@ -25,7 +25,6 @@ public class PlayRandomWithoutSelfDamageBehaviour extends PlayRandomBehaviour {
 		return super.requestAction(context, player, validActions);
 	}
 
-
 	public void filterActions(Player player, List<GameAction> validActions) {
 		if (!canTargetOwnFace) {
 			filterFaceHits(player, validActions);
