@@ -13,17 +13,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
-	List<DecisionType> decisionTypeList = new ArrayList<>();
-	List<DecisionType> otherDecisionTypeList;
+	List<DecisionType> cardListDecisionTypes;
+	List<DecisionType> booleanDecisionTypes;
 
-	public DeckAndDecisionGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks, List<DecisionType> decisionTypeList) {
+	public DeckAndDecisionGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks, List<DecisionType> cardListDecisionTypes) {
 		super(indexInBitmap, basicTournamentDecks);
-		this.decisionTypeList = decisionTypeList;
+		this.cardListDecisionTypes = cardListDecisionTypes;
 	}
 
-	public DeckAndDecisionGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks, List<DecisionType> decisionTypeList, List<DecisionType> otherDecisionTypeList) {
-		this(indexInBitmap, basicTournamentDecks, decisionTypeList);
-		this.otherDecisionTypeList = otherDecisionTypeList;
+	public DeckAndDecisionGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks, List<DecisionType> cardListDecisionTypes, List<DecisionType> booleanDecisionTypes) {
+		this(indexInBitmap, basicTournamentDecks, cardListDecisionTypes);
+		this.booleanDecisionTypes = booleanDecisionTypes;
 	}
 
 	@Override
@@ -36,10 +36,10 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 		}
 
 		List<List<String>> cardListForEachDecision = new ArrayList<>();
-		for (int i = 0; i < decisionTypeList.size(); i++) {
+		for (int i = 0; i < cardListDecisionTypes.size(); i++) {
 			List<String> cardListForDecision = new ArrayList<>();
 			for (int j = 0; j < individual.getChromosome(1 + i).length(); j++) {
-				if (individual.getChromosome(i).getGene(j).booleanValue()) {
+				if (individual.getChromosome(1 + i).getGene(j).booleanValue()) {
 					cardListForDecision.add(indexInBitmap.get(j).getCardId());
 				}
 			}
@@ -47,13 +47,13 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 		}
 
 		List<DecisionType> otherDecisionsList = new ArrayList<>();
-		for (int i = 0; i < otherDecisionTypeList.size(); i++) {
-			if (individual.getChromosome(i + decisionTypeList.size() + 1).getGene(0).booleanValue()) {
-				otherDecisionsList.add(otherDecisionTypeList.get(i));
+		for (int i = 0; i < booleanDecisionTypes.size(); i++) {
+			if (individual.getChromosome(i + cardListDecisionTypes.size() + 1).getGene(0).booleanValue()) {
+				otherDecisionsList.add(booleanDecisionTypes.get(i));
 			}
 		}
 
-		PlayRandomWithoutSelfDamageWithDefinedDecisions playerBehaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypeList, cardListForEachDecision, otherDecisionsList);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions playerBehaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(cardListDecisionTypes, cardListForEachDecision, otherDecisionsList);
 
 		return basicTournamentDecks.stream()
 				.map(opposingDeck -> GameContext.simulate(

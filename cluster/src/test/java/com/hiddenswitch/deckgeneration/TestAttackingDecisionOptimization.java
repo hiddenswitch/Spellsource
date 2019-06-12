@@ -67,4 +67,51 @@ public class TestAttackingDecisionOptimization {
 
 		assertTrue(result.getChromosome(1).getGene().booleanValue());
 	}
+
+	@Test
+	public void testWillAlwaysHitFaceWithCharge30() {
+		int GAMES_PER_MATCH = 50;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 10;
+		int CARDS_IN_DECK = 30;
+		int STABLE_GENERATIONS = 10;
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 1)
+				.collect(toList());
+
+		indexInBitmap.add(CardCatalogue.getCardById("minion_charge_30"));
+
+		GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE, indexInBitmap.stream().map(card -> card.getCardId()).collect(toList()));
+		basicTournamentDecks.add(tournamentDeck);
+
+		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks,  Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION), new ArrayList<>());
+		PlayRandomWithoutSelfDamageBehaviour enemyBehvaiour = new PlayRandomWithoutSelfDamageBehaviour();
+		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);
+		deckAndDecisionGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+		deckAndDecisionGeneratorContext.setStartingHp(STARTING_HP);
+		deckAndDecisionGeneratorContext.setMaxCardsPerDeck(CARDS_IN_DECK);
+
+		List<Integer> chromosomesToActOn = new ArrayList<>();
+		chromosomesToActOn.add(1);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckAndDecisionGeneFactory(CARDS_IN_DECK, CARDS_IN_DECK, Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION), new ArrayList<>());
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckAndDecisionGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new ActsOnSpecificChromosomesBasicMutator<>(0.2, chromosomesToActOn), new MultiPointCrossoverOnSpecificChromosomes<>(1, 2, chromosomesToActOn))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
+				.collect(EvolutionResult.toBestGenotype());
+
+		int chargeIndex = indexInBitmap.size() - 1;
+
+		assertTrue(result.getChromosome(1).getGene(chargeIndex).booleanValue());
+	}
 }
