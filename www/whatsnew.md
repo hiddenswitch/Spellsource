@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.33-2.0.30 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Abholos now correctly destroys only friendly minions and summons another Abholos (1133).
+
 ### 0.8.32-2.0.30 (Wednesday, June 5th, 2019)
 
 Bug fixes.
