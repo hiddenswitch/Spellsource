@@ -58,6 +58,30 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testAbholos() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion shouldNotDie1 = playMinionCard(context,opponent,"minion_neutral_test");
+			shouldNotDie1.setAttack(99);
+			context.endTurn();
+			Minion shouldDie1 = playMinionCard(context,player,"minion_neutral_test");
+			Minion shouldDie2 = playMinionCard(context,player,"minion_neutral_test");
+			shouldDie2.setAttack(10);
+			Minion abholos = playMinionCard(context,player,"minion_abholos");
+			destroy(context,abholos);
+			assertFalse(shouldNotDie1.isDestroyed(), "Opposing minions should not have been destroyed");
+			assertTrue(shouldDie1.isDestroyed(), "Friendly minions should be destroyed");
+			assertTrue(shouldDie2.isDestroyed(), "Friendly minions should be destroyed");
+			assertTrue(abholos.isDestroyed(), "Original Abholos should be destroyed");
+			Minion newAbholos = player.getMinions().get(0);
+			assertEquals(newAbholos.getSourceCard().getCardId(), "minion_abholos", "New minion should be an Abholos");
+			assertEquals(player.getMinions().size(),1, "Abholos should be the only minion");
+			assertEquals(newAbholos.getAttack(), shouldDie1.getAttack()+shouldDie2.getAttack(), "Combined attack should be dead minions' attack summed");
+			assertEquals(newAbholos.getHp(), shouldDie1.getHp()+shouldDie2.getHp(), "Combine HP should be dead minions' hp summed");
+		});
+	}
+
+	@Test
 	public void testUccianHydra() {
 		runGym((context, player, opponent) -> {
 			Minion hydra = playMinionCard(context, player, "minion_uccian_hydra");

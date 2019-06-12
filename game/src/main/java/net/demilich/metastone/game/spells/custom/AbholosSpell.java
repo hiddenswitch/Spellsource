@@ -10,12 +10,13 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Destroys all minions. Then, resummons the {@link SpellArg#CARD} and sets its stats to the sum of all the destroyed
+ * Destroys friendly minions. Then, resummons the {@link SpellArg#CARD} and sets its stats to the sum of all the destroyed
  * minions.
  */
 public final class AbholosSpell extends Spell {
@@ -23,8 +24,7 @@ public final class AbholosSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Player opponent = context.getOpponent(player);
-		List<Minion> minions = Stream.concat(player.getMinions().stream(), opponent.getMinions().stream()).collect(Collectors.toList());
+		List<Minion> minions = player.getMinions();
 		int attack = 0;
 		int hp = 0;
 		for (Minion minion : minions) {

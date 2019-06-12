@@ -698,18 +698,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                        and deathrattles are, unusually, {@code false} (not) child spells.
 	 * @param sourceAction    The {@link GameAction}, usually a {@link }
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
-	 *    SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
+	 * SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
 	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
-	 * 		spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
-	 * 		implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
-	 *    SpellDesc} as damage.
+	 * spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
+	 * implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
+	 * SpellDesc} as damage.
 	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
-	 * 		into actions the player can take.
+	 * into actions the player can take.
 	 * @see PlayCardAction#innerExecute(GameContext, int) for the call to this function that a player actually does when
-	 * 		they play a {@link Card} (as opposed to a battlecry or deathrattle).
+	 * they play a {@link Card} (as opposed to a battlecry or deathrattle).
 	 * @see BattlecryAction#execute(GameContext, int) for the call to this function that demonstrates a battlecry effect.
-	 * 		Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
+	 * Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
 	 */
 	@Suspendable
 	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
@@ -851,7 +851,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param source
 	 * @param sourceAction
 	 * @return {@code null} if this is not an overridable form of target acquisition; or, the intended target if the
-	 * 		target was not overridden, or the new target.
+	 * target was not overridden, or the new target.
 	 */
 	@Suspendable
 	protected @Nullable
@@ -1024,6 +1024,44 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			throw new RuntimeException("Infinite death checking loop");
 		}
 
+		List<Actor> destroyList = getDestroyedCharacters();
+
+		if (destroyList.isEmpty()) {
+			// This is the end of the sequence, call board changed event at most once even if no minions died.
+			if (sequenceDepth == 0) {
+				context.fireGameEvent(new BoardChangedEvent(context));
+			}
+			context.getEnvironment().put(Environment.DESTROYED_THIS_SEQUENCE_COUNT, 0);
+			// Reset all enchantment sequence counters
+			context.getTriggerManager().getTriggers().stream()
+					.filter(Enchantment.class::isInstance)
+					.map(Enchantment.class::cast)
+					.forEach(Enchantment::endOfSequence);
+			context.fireGameEvent(new DidEndSequenceEvent(context));
+			// Check if any characters have been marked as destroyed by ending the sequence. If one has, we're in big trouble.
+			if (!getDestroyedCharacters().isEmpty()) {
+				// Gotta end the sequence again!
+				endOfSequence(sequenceDepth + 1);
+			}
+			return;
+		}
+
+		// sort the destroyed actors by their id. This implies that actors with a lower id entered the game earlier than those with higher ids!
+		destroyList.sort(Comparator.comparingInt(Entity::getId));
+		// this method performs the actual removal
+		destroy(destroyList.toArray(new Actor[0]));
+		if (context.updateAndGetGameOver()) {
+			// The game ended. By now, all the triggers that were put into play may have been expired
+			return;
+		}
+
+
+		// deathrattles have been resolved, which may lead to other actors being destroyed now, so we need to check again
+		endOfSequence(sequenceDepth + 1);
+	}
+
+	@NotNull
+	private List<Actor> getDestroyedCharacters() {
 		List<Actor> destroyList = new ArrayList<>();
 		for (Player player : context.getPlayers()) {
 
@@ -1051,33 +1089,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				destroyList.add(player.getHero().getWeapon());
 			}
 		}
-
-		if (destroyList.isEmpty()) {
-			// This is the end of the sequence, call board changed event at most once even if no minions died.
-			if (sequenceDepth == 0) {
-				context.fireGameEvent(new BoardChangedEvent(context));
-			}
-			context.getEnvironment().put(Environment.DESTROYED_THIS_SEQUENCE_COUNT, 0);
-			// Reset all enchantment sequence counters
-			context.getTriggerManager().getTriggers().stream()
-					.filter(Enchantment.class::isInstance)
-					.map(Enchantment.class::cast)
-					.forEach(Enchantment::endOfSequence);
-			return;
-		}
-
-		// sort the destroyed actors by their id. This implies that actors with a lower id entered the game earlier than those with higher ids!
-		destroyList.sort(Comparator.comparingInt(Entity::getId));
-		// this method performs the actual removal
-		destroy(destroyList.toArray(new Actor[0]));
-		if (context.updateAndGetGameOver()) {
-			// The game ended. By now, all the triggers that were put into play may have been expired
-			return;
-		}
-
-
-		// deathrattles have been resolved, which may lead to other actors being destroyed now, so we need to check again
-		endOfSequence(sequenceDepth + 1);
+		return destroyList;
 	}
 
 	/**
@@ -1336,7 +1348,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param targets A list of {@link Actor} targets that should be destroyed.
 	 * @see #endOfSequence() for the code that actually finds dead entities as a result of effects and eventually destroys
-	 * 		them.
+	 * them.
 	 */
 	@Suspendable
 	public void destroy(Actor... targets) {
@@ -1691,11 +1703,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see <a href="http://hearthstone.gamepedia.com/Attack">Attack</a> for more on this method and its rules.
 	 * @see PhysicalAttackAction#execute(GameContext, int) for the main caller of this function.
 	 * @see net.demilich.metastone.game.spells.MisdirectSpell for an example of a spell that causes actors to fight each
-	 * 		other without a player initiatied action.
+	 * other without a player initiatied action.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) to see how to enumerate all the possible
-	 *    {@link PhysicalAttackAction} that determine what can fight what.
+	 * {@link PhysicalAttackAction} that determine what can fight what.
 	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) to see how minions with {@link Attribute#TAUNT}
-	 * 		affect what can and cannot be fought by a player.
+	 * affect what can and cannot be fought by a player.
 	 */
 	@Suspendable
 	public void fight(Player player, Actor attacker, Actor defender, PhysicalAttackAction sourceAction) {
@@ -1809,7 +1821,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player The player whose {@link Hero} should gain armor.
 	 * @param armor  The amount of armor to gain.
 	 * @see #damage(Player, Actor, int, Entity, boolean) for a description of how armor protects an {@link Actor} like a
-	 *    {@link Hero}.
+	 * {@link Hero}.
 	 */
 	@Suspendable
 	public void gainArmor(Player player, int armor) {
@@ -2052,7 +2064,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId The player whose point of view should be considered.
 	 * @return A list of valid actions the player can take. If it is not the player's turn, no actions are returned.
 	 * @see ActionLogic#getValidActions(GameContext, Player) for the logic behind determining what actions a player can
-	 * 		take.
+	 * take.
 	 */
 	@Suspendable
 	public List<GameAction> getValidActions(int playerId) {
@@ -2073,7 +2085,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param action   The action to get valid targets for.
 	 * @return A list of valid targets
 	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) for the logic behind determining valid targets
-	 * 		given an action.
+	 * given an action.
 	 */
 	public List<Entity> getValidTargets(int playerId, GameAction action) {
 		Player player = context.getPlayer(playerId);
@@ -2743,11 +2755,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param action   The game action to perform.
 	 * @see #getValidActions(int) for the way the {@link GameLogic} determines what actions a player can take.
 	 * @see Card#play() for an example of how a card generates a {@link PlayCardAction} that will eventually be sent to
-	 * 		this method.
+	 * this method.
 	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover
-	 * 		mechanic generates a {@link DiscoverAction} that gets sent to this method.
+	 * mechanic generates a {@link DiscoverAction} that gets sent to this method.
 	 * @see Minion#getBattlecries() for the method that creates battlecry actions. (Note: Deathrattles never involve a
-	 * 		player decision, so deathrattles never generate a battlecry).
+	 * player decision, so deathrattles never generate a battlecry).
 	 */
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
@@ -2959,7 +2971,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param secret   The secret being played.
 	 * @param fromHand When {@code true}, a {@link SecretPlayedEvent} is fired; otherwise, the event is not fired.
 	 * @see net.demilich.metastone.game.spells.AddSecretSpell the place where secret entities are created. A {@link Card}
-	 * 		uses this spell to actually create a {@link Secret}.
+	 * uses this spell to actually create a {@link Secret}.
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
@@ -3345,7 +3357,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                   due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
 	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #endOfSequence()}.
 	 * @see ReturnTargetToHandSpell for usage of {@link #removeActor(Actor, boolean)}. Note, this and {@link
-	 *    net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
+	 * net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
 	 */
 	@Suspendable
 	public void removeActor(Actor actor, boolean peacefully) {
@@ -3714,7 +3726,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * top of the deck, and {@code 0} for the bottom.
 	 *
 	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link
-	 *    #MAX_DECK_SIZE}).
+	 * #MAX_DECK_SIZE}).
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index) {
@@ -3730,7 +3742,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param index
 	 * @param quiet  If {@code true}, does not fire the {@link CardAddedToDeckEvent}.
 	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link *
-	 * 		#MAX_DECK_SIZE}).
+	 * #MAX_DECK_SIZE}).
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {
@@ -3772,8 +3784,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card   The card to shuffle into that player's deck.
 	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
-	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
-	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
+	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
@@ -3797,8 +3809,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
 	 *                              card cost modifiers).
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
-	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
-	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
+	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
@@ -3887,7 +3899,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                 minion that somehow gets silenced during the turn that spell is cast.
 	 * @param target   A {@link Minion} to silence.
 	 * @see <a href="http://hearthstone.gamepedia.com/Silence">Silence</a> for a complete description of the silencing
-	 * 		game rules.
+	 * game rules.
 	 */
 	@Suspendable
 	public void silence(int playerId, Actor target) {
