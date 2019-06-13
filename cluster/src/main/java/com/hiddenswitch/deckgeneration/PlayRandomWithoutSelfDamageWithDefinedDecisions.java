@@ -3,6 +3,7 @@ package com.hiddenswitch.deckgeneration;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Attribute;
@@ -20,6 +21,11 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	List<String> minionsThatDoNotAttackEnemyHero = new ArrayList<>();
 	List<String> minionsThatDoNotAttackEnemyMinions = new ArrayList<>();
 	boolean alwaysAttackEnemyHero = false;
+	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
+
+	public void setCanEndTurnIfAttackingEnemyHeroIsValid(boolean canEndTurnIfAttackingEnemyHeroIsValid) {
+		this.canEndTurnIfAttackingEnemyHeroIsValid = canEndTurnIfAttackingEnemyHeroIsValid;
+	}
 
 	/**
 	 * @param decisionTypes            A list of decision types that indicates what decisions we are manipulating
@@ -84,6 +90,8 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		).collect(Collectors.toList()).size() == 0) {
 			filterEnemyMinionHits(player, opponent, validActions);
 		}
+
+		filterEndTurn(player, opponent, validActions);
 	}
 
 	/**
@@ -121,6 +129,12 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		});
 	}
 
+	public void filterEndTurn(Player player, Player opponent, List<GameAction> validActions) {
+		if (!canEndTurnIfAttackingEnemyHeroIsValid && canAttackEnemyHero(opponent, validActions)) {
+			validActions.removeIf(actionToRemove -> actionToRemove instanceof EndTurnAction);
+		}
+	}
+
 	/**
 	 * @param player          the player that the minion belongs to
 	 * @param minionReference the reference to the minion instance on the board
@@ -129,5 +143,15 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	public String getMinionIdByReferenceForPlayer(Player player, EntityReference minionReference) {
 		List<String> result = player.getMinions().stream().filter(minion -> minion.getReference().equals(minionReference)).map(minion -> minion.getSourceCard().getCardId()).collect(Collectors.toList());
 		return result.size() == 0 ? null : result.get(0);
+	}
+
+	public boolean canAttackEnemyHero(Player opponent, List<GameAction> validActions) {
+		for (int i = 0; i < validActions.size(); i++) {
+			GameAction action = validActions.get(i);
+			if (action instanceof PhysicalAttackAction && action.getTargetReference().equals(opponent.getHero().getReference())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

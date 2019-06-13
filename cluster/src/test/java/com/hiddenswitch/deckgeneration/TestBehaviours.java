@@ -171,6 +171,30 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorCannotEndTurn() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_stat_1");
+
+			List<DecisionType> decisionTypeList = new ArrayList<>();
+			decisionTypeList.add(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION);
+
+			List<List<String>> cardListForEachDecision = new ArrayList<>();
+			cardListForEachDecision.add(Collections.singletonList("minion_with_damage_3"));
+
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypeList, cardListForEachDecision);
+			behaviour.setCanEndTurnIfAttackingEnemyHeroIsValid(false);
+
+			context.endTurn();
+			context.endTurn();
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 2 == actions.size());
+		});
+	}
+
+	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorStillCanAttackTauntMinionWithOnlyHitEnemyHeroActive() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
