@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Abholos now correctly destroys only friendly minions and summons another Abholos (1133).
+ - Hypnotic Beetle now costs 4 mana (1114).
 
 ### 0.8.32-2.0.30 (Wednesday, June 5th, 2019)
 
