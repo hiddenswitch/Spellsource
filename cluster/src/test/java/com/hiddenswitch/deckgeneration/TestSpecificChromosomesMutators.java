@@ -113,4 +113,47 @@ public class TestSpecificChromosomesMutators {
 		}
 		assertTrue(differences > 0);
 	}
+	@Test
+	public void testBitSwapBetweenTwoSequencesOnSpecificChromosomesMutator() {
+		int bitLength = 2;
+		BitSet bits1 = new BitSet(bitLength);
+		BitSet bits2 = new BitSet(bitLength);
+		for (int i = 0; i < bitLength / 2; i++) {
+			bits1.flip(i);
+			bits2.flip(i + (bitLength / 2));
+		}
+		Chromosome<BitGene> c1 = BitChromosome.of(bits1, bitLength);
+		Chromosome<BitGene> c2 = BitChromosome.of(bits2, bitLength);
+		Genotype<BitGene> gt1 = Genotype.of(c1, c1);
+		Genotype<BitGene> gt2 = Genotype.of(c2, c2);
+
+		List<Integer> chromosomesToCross = new ArrayList<>();
+		chromosomesToCross.add(1);
+
+		BitSwapBetweenTwoSequencesOnSpecificChromosomesMutator mutator = new BitSwapBetweenTwoSequencesOnSpecificChromosomesMutator(1, chromosomesToCross);
+		Random random = new XORShiftRandom(101010L);
+		List<MSeq<Chromosome<BitGene>>> c = mutator.getCrossedChromosomes(gt1, gt2, random);
+		assertTrue(!c.isEmpty());
+
+		MSeq<Chromosome<BitGene>> r1 = c.get(0);
+		MSeq<Chromosome<BitGene>> r2 = c.get(1);
+
+		for (int i = 0; i < bitLength / 2; i++) {
+			assertTrue(r1.get(0).getGene(i).booleanValue());
+			assertTrue(!r1.get(0).getGene(i + (bitLength / 2)).booleanValue());
+			assertTrue(!r2.get(0).getGene(i).booleanValue());
+			assertTrue(r2.get(0).getGene(i + (bitLength / 2)).booleanValue());
+		}
+
+		int differences = 0;
+
+		for (int i = 0; i < bitLength; i++) {
+			assertTrue(r1.get(1).getGene(i).booleanValue() ^ r2.get(1).getGene(i).booleanValue());
+			if (r1.get(1).getGene(i).booleanValue() ^ r2.get(1).getGene(i).booleanValue()) {
+				differences++;
+			}
+		}
+		assertTrue(differences == 2);
+	}
+
 }
