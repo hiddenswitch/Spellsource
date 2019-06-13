@@ -1,6 +1,6 @@
 {
   "name": "Charge 30",
-  "baseManaCost": 7,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 30,
