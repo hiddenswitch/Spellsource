@@ -1,6 +1,6 @@
 {
   "name": "Venom Breath",
-  "baseManaCost": 9,
+  "baseManaCost": 11,
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
