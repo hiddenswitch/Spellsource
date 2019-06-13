@@ -10,8 +10,14 @@ Bug fixes.
 
 ##### Content Fixes:
 
- - Abholos now correctly destroys only friendly minions and summons another Abholos (1133).
- - Hypnotic Beetle now costs 4 mana (1114).
+ - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
+ - Hypnotic Beetle now costs 4 mana. (1114)
+ - Sharper Claws (Upgraded Hero Power) now renamed to Hone Claws. (1118)
+ - Both Hero Powers no longer restore Health now. (1118)
+ - Majestic Fennec - Now a 4/6 Beast that restores 4 Health. (1118)
+ - Alder, Death Baron - Hero Power deals only 3 damage now. (1118)
+ - Venom Breath - Now costs 11 Mana. (1118)
+ - Conflagration - Now only deals 3 damage to a minion and the minions next to it. (1118)
 
 ### 0.8.32-2.0.30 (Wednesday, June 5th, 2019)
 
