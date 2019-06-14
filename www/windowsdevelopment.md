@@ -19,7 +19,8 @@ Follow this guide to be able to test your cards and make changes to the game cod
     3. [Writing a New Bot](#43-writing-a-new-bot)
  5. [Testing](#5-testing)
     1. [Running Test Code](#51-running-test-code)
-    2. [Connecting to a Local Server](#52-connecting-to-a-local-server)
+    2. [Understanding Traces](#52-understanding-traces)
+    3. [Connecting to a Local Server](#53-connecting-to-a-local-server)
  6. [Contributing Your Work](#6-contributing-your-work)
 
 ### 1. Prerequisites
@@ -71,7 +72,7 @@ Follow this guide to be able to test your cards and make changes to the game cod
  4. Set your code style:
     1. Go to File > Settings.
     2. Navigate to Editor > Font.
-    3. Change your font to Fira Code Retina (this will make it significantly more legible).
+    3. Change your font to Fira Code Retina. This will make text more legible.
     4. Again inside settings, navigate to Editor > Code Style.
     5. Click the gear icon to the right of Scheme, then choose Import Scheme > IntelliJ IDEA code style XML.
     6. Click the 3rd icon from the left above the file path, which looks like a folder with a mini IntelliJ IDEA logo in the lower right corner. This navigates you to the project folder.
@@ -193,7 +194,31 @@ Use these procedures to test your code either with coded tests or by interacting
  
 You can run all game tests by executing `./gradlew.bat game:test` inside ConEmu on Windows. If the engine has an issue parsing your card, you'll see an error in `CardValidationTests` with your card name specified. Other errors may occur due to differences in how projects run on Windows versus macOS; check the messages carefully for errors about your cards.
 
-#### 5.2 Connecting to a Local Server
+#### 5.2 Understanding Traces
+
+When you run `game:test`, changes that cause exceptions in `testRandomMassPlay` (a [fuzzer](https://en.wikipedia.org/wiki/Fuzzing)) will create files in the `game` directory, like `game/masstest-trace-2019-06-14T20_21_02_86166.json`.
+
+Use these to help you debug rare interactions or errors you didn't test in your cards.
+
+ 1. Configure IntelliJ to break on useful exceptions.
+    1. Navigate to Run > View Breakpoints.
+    2. Click the plus icon in the left list and choose Java Exception Breakpoints.
+    3. Write `java.lang.RuntimeException` and hit OK.
+    4. In the right pane:
+        1. Check Suspend, and choose **All**.
+        2. Check Condition, and set it to `!(this instanceof CancellationException)`.
+        3. Check Class filters, and set it to `com.hiddenswitch.* net.demilich.*`.
+        4. Under Notifications, check Caught exception and Uncaught Exception.
+    5. Click Done.
+ 2. Drag and drop the `.json` trace files into `game/src/test/resources/traces`.
+ 3. Navigate to `testTraces` by hitting shift twice and searching for it.
+ 4. Click the play button in the left gutter of the editor, and then choose Debug (the bug icon).
+ 5. Observe you will "break" on the exception that caused your test to fail. Look carefully for a `source` variable in the callstack of the Debug pane at the bottom, which you can navigate by clicking further down in the Stack panel. Examine the `source`, which is typically an in-game reference to the card whose effect is causing the issue.
+ 6. Fix the issue.
+ 7. Run the `testTraces` method again, which will exactly reproduce the issue. If the test now passes, you have fixed the issue successfully.
+ 8. Try running `testRandomMassPlay` by navigating to it with double Shift or by using `./gradlew.bat game:test`, and see if it passes now.
+
+#### 5.3 Connecting to a Local Server
 
  1. Disable your firewalls.
  2. Open ConEmu or create a new tab using the green plus icon button.
