@@ -1,0 +1,37 @@
+{
+  "name": "Geared Up!",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Twinspell. Summon a random Mech from your hand and give it Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "card": "twinspell_geared_up"
+      },
+      {
+        "class": "RecruitSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MECH",
+          "cardType": "MINION"
+        },
+        "cardLocation": "HAND",
+        "targetPlayer": "SELF",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT",
+          "target": "OUTPUT"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "RISE_OF_SHADOWS",
+  "fileFormatVersion": 1
+}
