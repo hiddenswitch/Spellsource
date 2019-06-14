@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 import static java.util.stream.Collectors.toList;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class TestAttackingDecisionOptimization {
@@ -195,4 +196,73 @@ public class TestAttackingDecisionOptimization {
 		assertTrue(deckResult.getChromosome(0).getGene(chargeIndex).booleanValue());
 		assertTrue(deckResult.getChromosome(1).getGene().booleanValue());
 	}
+
+	/**
+	 * In a deck with a 1/1 minion that deals 30 damage to the enemy
+	 * if it attacks a minion, tests if the genetic algorithm will optimize
+	 * the player behavior in order to ensure that this minion does not
+	 * always attack the enemy hero (even though it is initialized to do so)
+	 * against a deck that utilizes many minions
+	 */
+	@Test(invocationCount = 10)
+	public void testWillNotAlwaysHitFaceWithMinionThatDealsDamageWhenAttackingMinions() {
+		int GAMES_PER_MATCH = 100;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 10;
+		int CARDS_IN_DECK = 30;
+		int STABLE_GENERATIONS = 10;
+
+		Random random = new XORShiftRandom(101010L);
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 2)
+				.collect(toList());
+
+		indexInBitmap.add(CardCatalogue.getCardById("secret_explosive_trap"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_deal_damage_when_attacking_minion"));
+
+		GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+
+		for (int i =0; i< CARDS_IN_DECK - 11; i++) {
+			tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+		}
+		for (int i =0; i< 10; i++) {
+			tournamentDeck.getCards().add(CardCatalogue.getCardById("spell_summon_minion_3_2"));
+		}
+
+		tournamentDeck.getCards().add(CardCatalogue.getCardById("minion_deal_damage_when_attacking_minion"));
+		basicTournamentDecks.add(tournamentDeck);
+
+		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION), new ArrayList<>());
+		PlayRandomWithoutSelfDamageBehaviour enemyBehvaiour = new PlayRandomWithoutSelfDamageBehaviour();
+		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);
+		deckAndDecisionGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+		deckAndDecisionGeneratorContext.setStartingHp(STARTING_HP);
+		deckAndDecisionGeneratorContext.setMaxCardsPerDeck(CARDS_IN_DECK);
+
+		List<Integer> chromosomesToActOn = new ArrayList<>();
+		chromosomesToActOn.add(1);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckAndDecisionGeneFactory(CARDS_IN_DECK, CARDS_IN_DECK, new ArrayList<>(), 1, 0, 1.0);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckAndDecisionGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.mapping(pop -> pop)
+				.populationSize(POPULATION_SIZE)
+				.alterers(
+						new ActsOnSpecificChromosomesBasicMutator<>(0.5, chromosomesToActOn),
+						new MultiPointCrossoverOnSpecificChromosomes<>(1, 2, chromosomesToActOn))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
+				.collect(EvolutionResult.toBestGenotype());
+
+		int chargeIndex = indexInBitmap.size() - 1;
+
+		assertFalse(result.getChromosome(1).getGene(chargeIndex).booleanValue());
+	}
+
 }
