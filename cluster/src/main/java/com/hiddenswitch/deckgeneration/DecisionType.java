@@ -26,5 +26,11 @@ public enum DecisionType {
 	 * A player should be able to end their turn even if
 	 * attacking the enemy hero is a valid action
 	 */
-	CAN_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID
+	CANNOT_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID,
+
+	/**
+	 * A player should be able to cast buff spells on
+	 * enemy minions
+	 */
+	CANNOT_BUFF_ENEMY_MINIONS
 }

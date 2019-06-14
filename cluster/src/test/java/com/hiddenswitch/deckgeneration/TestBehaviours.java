@@ -1,6 +1,7 @@
 package com.hiddenswitch.deckgeneration;
 
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -206,6 +207,48 @@ public class TestBehaviours extends TestBase {
 			int originalSize = actions.size();
 			behaviour.filterActions(context, player, actions);
 			assertTrue(originalSize == actions.size());
+		});
+	}
+
+
+	@Test
+	public static void testGetTargetedMinionEntityIdForBuffSpellFromMetaSpell() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			receiveCard(context, player, "spell_blessing_of_might");
+			receiveCard(context, player, "spell_barkskin");
+			receiveCard(context, player, "spell_earth_shock");
+			player.setMana(1);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+			List<GameAction> actions = context.getValidActions();
+
+			boolean spellHasTargetedBuff1 = behaviour.targetedMinionIsBuffedBySpell(((PlaySpellCardAction) actions.get(0)).getSpell());
+			boolean spellHasTargetedBuff2 = behaviour.targetedMinionIsBuffedBySpell(((PlaySpellCardAction) actions.get(1)).getSpell());
+			boolean spellHasTargetedBuff3 = behaviour.targetedMinionIsBuffedBySpell(((PlaySpellCardAction) actions.get(2)).getSpell());
+			assertTrue(spellHasTargetedBuff1 && spellHasTargetedBuff2 && !spellHasTargetedBuff3);
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForBuffingEnemyMinions() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			receiveCard(context, player, "spell_barkskin");
+			player.setMana(1);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+			List<GameAction> actionsThatTargetOpponentMinions = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == opponent.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOpponentMinions.isEmpty());
 		});
 	}
 }

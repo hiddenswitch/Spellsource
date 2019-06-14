@@ -3,11 +3,12 @@ package com.hiddenswitch.deckgeneration;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.EndTurnAction;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.spells.BuffSpell;
+import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
@@ -22,9 +23,18 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	List<String> minionsThatDoNotAttackEnemyMinions = new ArrayList<>();
 	boolean alwaysAttackEnemyHero = false;
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
+	boolean canBuffEnemyMinions = false;
 
 	public void setCanEndTurnIfAttackingEnemyHeroIsValid(boolean canEndTurnIfAttackingEnemyHeroIsValid) {
 		this.canEndTurnIfAttackingEnemyHeroIsValid = canEndTurnIfAttackingEnemyHeroIsValid;
+	}
+
+	public void setAlwaysAttackEnemyHero(boolean alwaysAttackEnemyHero) {
+		this.alwaysAttackEnemyHero = alwaysAttackEnemyHero;
+	}
+
+	public void setCanBuffEnemyMinions(boolean canBuffEnemyMinions) {
+		this.canBuffEnemyMinions = canBuffEnemyMinions;
 	}
 
 	/**
@@ -62,10 +72,15 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		} else {
 			alwaysAttackEnemyHero = false;
 		}
-		if (booleanDecisionTypes.contains(DecisionType.CAN_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID)) {
-			canEndTurnIfAttackingEnemyHeroIsValid = true;
-		} else {
+		if (booleanDecisionTypes.contains(DecisionType.CANNOT_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID)) {
 			canEndTurnIfAttackingEnemyHeroIsValid = false;
+		} else {
+			canEndTurnIfAttackingEnemyHeroIsValid = true;
+		}
+		if (booleanDecisionTypes.contains(DecisionType.CANNOT_BUFF_ENEMY_MINIONS)) {
+			canBuffEnemyMinions = false;
+		} else {
+			canBuffEnemyMinions = true;
 		}
 	}
 
@@ -95,8 +110,8 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		).collect(Collectors.toList()).size() == 0) {
 			filterEnemyMinionHits(player, opponent, validActions);
 		}
-
-		filterEndTurn(player, opponent, validActions);
+		filterBuffSpellsOnEnemyMinions(player, opponent, validActions, context);
+		filterEndTurn(opponent, validActions);
 	}
 
 	/**
@@ -134,10 +149,98 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		});
 	}
 
-	public void filterEndTurn(Player player, Player opponent, List<GameAction> validActions) {
+	/**
+	 * Filter out the option to end the turn if certain conditions are satisfied
+	 *
+	 * @param opponent     The opposing player
+	 * @param validActions A list of valid options to filter
+	 */
+
+	public void filterEndTurn(Player opponent, List<GameAction> validActions) {
 		if (!canEndTurnIfAttackingEnemyHeroIsValid && canAttackEnemyHero(opponent, validActions)) {
 			validActions.removeIf(actionToRemove -> actionToRemove instanceof EndTurnAction);
 		}
+	}
+
+
+	public void filterBuffSpellsOnEnemyMinions(Player player, Player opponent, List<GameAction> validActions, GameContext context) {
+		validActions.removeIf(action -> {
+			if (checkIfMetaSpell(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+						&& targetedMinionIsBuffedBySpell(((PlaySpellCardAction) action).getSpell());
+			}
+			if (!checkIfBuffSpell(action)) {
+				if (!checkIfBuffBattlecry(action)) {
+					return false;
+				}
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+						&& targetedMinionIsBuffedBySpell(((BattlecryAction) action).getSpell());
+			}
+			return action.getTargets(context, player.getIndex()) != null
+					&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+					&& targetedMinionIsBuffedBySpell(((PlaySpellCardAction) action).getSpell());
+
+		});
+	}
+
+	public boolean checkIfBuffBattlecry(GameAction action) {
+		if (!(action instanceof BattlecryAction)) {
+			return false;
+		}
+
+		BattlecryAction spellCardAction = (BattlecryAction) action;
+		SpellDesc spellDesc = spellCardAction.getSpell();
+		if (spellDesc == null) {
+			return false;
+		}
+
+		return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass());
+
+
+	}
+
+	public boolean checkIfBuffSpell(GameAction action) {
+		if (!(action instanceof PlaySpellCardAction)) {
+			return false;
+		}
+
+		PlaySpellCardAction spellCardAction = (PlaySpellCardAction) action;
+		SpellDesc spellDesc = spellCardAction.getSpell();
+		if (spellDesc == null) {
+			return false;
+		}
+
+		return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass());
+	}
+
+	public boolean checkIfMetaSpell(GameAction action) {
+		if (!(action instanceof PlaySpellCardAction)) {
+			return false;
+		}
+
+		PlaySpellCardAction spellCardAction = (PlaySpellCardAction) action;
+		SpellDesc spellDesc = spellCardAction.getSpell();
+		if (spellDesc == null) {
+			return false;
+		}
+
+		return MetaSpell.class.isAssignableFrom(spellDesc.getDescClass());
+	}
+
+	public boolean targetedMinionIsBuffedBySpell(SpellDesc spellDesc) {
+		if (!MetaSpell.class.isAssignableFrom(spellDesc.getDescClass())) {
+			return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass()) && spellDesc.getTarget() == null;
+		}
+		List<SpellDesc> subSpells = spellDesc.subSpells();
+		for (int i = 0; i < subSpells.size(); i++) {
+			boolean subSpellBuffsTargetedMinion = targetedMinionIsBuffedBySpell(subSpells.get(i));
+			if (subSpellBuffsTargetedMinion) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
