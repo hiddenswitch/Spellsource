@@ -8,6 +8,8 @@ permalink: /whats-new/
 
 Bug fixes.
 
+Visit the new Windows development guide at http://playspellsource.com/windows-development/ for more about editing and authoring your own cards using the tools the developers use.
+
 ##### Content Fixes:
 
  - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
