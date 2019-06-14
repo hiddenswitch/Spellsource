@@ -3,7 +3,7 @@
 # Format: Custom
 #
 # 2x (0) Six Feet Under
-# 1x (1) Dragonling Pet
+# 1x (1) Spike, Pet Whelp
 # 2x (1) Fire Fly
 # 2x (1) Hardened Initiate
 # 1x (1) Hatches the Dragon
