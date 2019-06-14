@@ -1,10 +1,9 @@
 import unittest
-from typing import List
 
-from spellsource.behaviour import Behaviour, GameContext, Player, GameAction, Card
+from spellsource.behaviour import *
 from spellsource.context import Context
-from spellsource.playrandombehaviour import PlayRandomBehaviour
 from spellsource.gamestatevaluebehaviour import GameStateValueBehaviour
+from spellsource.playrandombehaviour import PlayRandomBehaviour
 from .decks import *
 
 
@@ -123,3 +122,47 @@ class BasicTest(unittest.TestCase):
                 context=ctx)))
             self.assertIsNotNone(results)
             self.assertEqual(len(results), 6)
+
+    def test_faq(self):
+        from spellsource.context import Context
+        with Context() as ctx:
+            game_context = ctx.GameContext.fromDeckLists([TOKEN_DRUID, EVEN_WARLOCK])
+            agent_1 = ctx.behaviour.FiberBehaviour()
+            agent_2 = ctx.behaviour.FiberBehaviour()
+
+            game_context.setBehaviour(ctx.GameContext.PLAYER_1, agent_1)
+            game_context.setBehaviour(ctx.GameContext.PLAYER_2, agent_2)
+            SEED = 10101
+            game_context.setLogic(ctx.GameLogic(SEED))
+            game_context.play(True)
+
+            def pending_mulligans():
+                for i, agent in enumerate([agent_1, agent_2]):
+                    print('Agent', i + 1, [card.toString() for card in agent.getMulliganCards()])
+
+            from time import sleep
+            sleep(0.01)
+            pending_mulligans()
+            malfurion_the_pestilent = agent_1.getMulliganCards()[2]
+            self.assertEqual(malfurion_the_pestilent.getName(), 'Malfurion the Pestilent')
+            agent_1.setMulligan([malfurion_the_pestilent])
+            sleep(0.01)
+            pending_mulligans()
+            sleep(0.01)
+            agent_2.setMulligan([])
+            _ = game_context.getActivePlayer().getName()
+            _ = [action.toString() for action in agent_1.getValidActions()]
+            _ = [card.toString() for card in game_context.getActivePlayer().getHand()]
+            _ = game_context.getActivePlayer().getMana()
+            _ = game_context.getActivePlayer().getHand()[0].getDescription()
+            card_bloodfen_raptor = ctx.CardCatalogue.getCardByName("Bloodfen Raptor")
+            self.assertIsNotNone(card_bloodfen_raptor)
+            bloodfen_raptor = card_bloodfen_raptor.summon()
+            opponent = game_context.getOpponent(game_context.getActivePlayer())
+            self.assertTrue(game_context.getLogic().summon(opponent.getId(), bloodfen_raptor, card_bloodfen_raptor, -1, False))
+            _ = [action.toString() for action in agent_1.getValidActions()]
+            for i, action in enumerate(agent_1.getValidActions()):
+                source = game_context.resolveSingleTarget(action.getSourceReference())
+                target = game_context.resolveSingleTarget(action.getTargetReference())
+                print('%d %s %s: Targeting %s' % (i, action.getActionType().toString(), source, target))
+            clone = game_context.clone()

@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -206,7 +207,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private DeckFormat deckFormat;
 	private TargetLogic targetLogic = new TargetLogic();
 	private TriggerManager triggerManager = new TriggerManager();
-	private Map<Environment, Object> environment = new HashMap<>();
+	private Map<Environment, Object> environment = new ConcurrentHashMap<>();
 	private int activePlayerId = -1;
 	private Player winner;
 	private GameStatus result;
