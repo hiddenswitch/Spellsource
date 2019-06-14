@@ -1,0 +1,18 @@
+{
+  "name": "Dawn's Might",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Give a minion +3/+2.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "MINIONS",
+    "attackBonus": 3,
+    "hpBonus": 2
+  },
+  "collectible": false,
+  "set": "RISE_OF_SHADOWS",
+  "fileFormatVersion": 1
+}

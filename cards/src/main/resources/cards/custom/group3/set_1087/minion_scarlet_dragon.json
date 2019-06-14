@@ -9,21 +9,21 @@
   "race": "DRAGON",
   "description": "Supremacy: Restore this minion to full Health.",
   "trigger": {
-    "eventTrigger": {
-      "class": "SupremacyTrigger"
-    },
+  "eventTrigger": {
+    "class": "SupremacyTrigger"
+  },
+  "spell": {
+    "class": "SupremacySpell",
     "spell": {
-      "class": "SupremacySpell",
-      "spell": {
-        "class": "HealSpell",
-        "target": "TRIGGER_HOST",
-        "value": {
-          "class": "AttributeValueProvider",
-          "attribute": "MAX_HP"
-        }
+      "class": "HealSpell",
+      "target": "TRIGGER_HOST",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
       }
     }
-  },
+  }
+},
   "attributes": {
     "SUPREMACY": true
   },
