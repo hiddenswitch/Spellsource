@@ -62,6 +62,11 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		} else {
 			alwaysAttackEnemyHero = false;
 		}
+		if (booleanDecisionTypes.contains(DecisionType.CAN_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID)) {
+			canEndTurnIfAttackingEnemyHeroIsValid = true;
+		} else {
+			canEndTurnIfAttackingEnemyHeroIsValid = false;
+		}
 	}
 
 	@Override

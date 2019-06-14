@@ -80,7 +80,6 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 		}
 
 		PlayRandomWithoutSelfDamageWithDefinedDecisions playerBehaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(cardListDecisionTypes, cardListForEachDecision, otherDecisionsList);
-		playerBehaviour.setCanEndTurnIfAttackingEnemyHeroIsValid(false);
 
 		return basicTournamentDecks.stream()
 				.map(opposingDeck -> GameContext.simulate(

@@ -21,5 +21,10 @@ public enum DecisionType {
 	/**
 	 * No minions should ever attack an opponent's minion
 	 */
-	ALWAYS_ATTACK_ENEMY_HERO
+	ALWAYS_ATTACK_ENEMY_HERO,
+	/**
+	 * A player should be able to end their turn even if
+	 * attacking the enemy hero is a valid action
+	 */
+	CAN_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID
 }
