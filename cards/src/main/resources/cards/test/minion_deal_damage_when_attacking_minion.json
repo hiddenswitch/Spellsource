@@ -1,0 +1,29 @@
+{
+  "name": "Deal Damage Without Attack",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "If you end your turn and this minion didn't attack, deal 5 damage to the opponent",
+  "attributes": {
+    "CHARGE": true,
+    "STEALTH": true
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "targetEntityType": "MINION",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 30
+    }
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

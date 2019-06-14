@@ -37,6 +37,19 @@ public class TestCards extends TestBase {
 		Assert.assertTrue(!badContext.getPlayer2().getHero().isDestroyed());
 		badContext.init();
 		Assert.assertTrue(!badContext.getPlayer2().getHero().isDestroyed());
+	}
 
+	@Test
+	public void testDealDamageWithoutAttackMinion() {
+		CardCatalogue.loadCardsFromPackage();
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, CardCatalogue.getCardById("minion_deal_damage_when_attacking_minion"));
+			playCard(context, opponent, CardCatalogue.getCardById("minion_antique_healbot"));
+			attack(context, player, player.getMinions().get(0), opponent.getHero());
+			Assert.assertTrue(opponent.getHero().getHp() == 29);
+			attack(context, player, player.getMinions().get(0), opponent.getMinions().get(0));
+			Assert.assertTrue(opponent.getHero().isDestroyed());
+		});
 	}
 }
