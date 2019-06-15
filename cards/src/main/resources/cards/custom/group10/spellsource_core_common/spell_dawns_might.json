@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Twinspell. Give a minion +3/+2.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
@@ -15,7 +15,6 @@
       },
       {
         "class": "BuffSpell",
-        "target": "MINIONS",
         "attackBonus": 3,
         "hpBonus": 2
       }

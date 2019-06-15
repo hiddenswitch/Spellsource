@@ -21,9 +21,8 @@
       "attribute": "TAUNT",
       "target": "OUTPUT"
     }
-  }
-},
-"collectible": true,
-"set": "RISE_OF_SHADOWS",
-"fileFormatVersion": 1
+  },
+  "collectible": true,
+  "set": "RISE_OF_SHADOWS",
+  "fileFormatVersion": 1
 }

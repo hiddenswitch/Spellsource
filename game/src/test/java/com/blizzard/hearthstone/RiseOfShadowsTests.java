@@ -13,6 +13,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -551,5 +552,24 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testDefensiveBearing() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_defensive_bearing", target);
+			assertEquals(target.getHp(), target.getBaseHp() + 2);
+			assertTrue(target.hasAttribute(Attribute.TAUNT));
+		});
+	}
+
+	@Test
+	public void testDawnsMight() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_dawns_might", target);
+			assertEquals(target.getAttack(), target.getBaseAttack() + 3);
+			assertEquals(target.getHp(),  target.getBaseHp() + 2);
+		});
+	}
 
 }

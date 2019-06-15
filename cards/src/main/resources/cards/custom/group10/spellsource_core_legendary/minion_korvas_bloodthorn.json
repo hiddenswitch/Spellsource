@@ -11,7 +11,7 @@
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
       "sourcePlayer": "SELF",
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINIONS"
     },
     "spell": {
       "class": "AddEnchantmentSpell",
