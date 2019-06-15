@@ -13,7 +13,7 @@
     "target": "ENEMY_CHARACTERS",
     "value": 4,
     "howMany": 4
-  }
+  },
   "attributes": {
     "DEATHRATTLES": true
   },
