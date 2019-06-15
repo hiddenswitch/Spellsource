@@ -1,0 +1,17 @@
+{
+  "name": "Buff 10",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion +10/+10. (+4 Attack/+4 Health)",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 10,
+    "hpBonus": 10
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

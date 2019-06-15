@@ -164,6 +164,9 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 
 
 	public void filterBuffSpellsOnEnemyMinions(Player player, Player opponent, List<GameAction> validActions, GameContext context) {
+		if (canBuffEnemyMinions) {
+			return;
+		}
 		validActions.removeIf(action -> {
 			if (checkIfMetaSpell(action)) {
 				return action.getTargets(context, player.getIndex()) != null

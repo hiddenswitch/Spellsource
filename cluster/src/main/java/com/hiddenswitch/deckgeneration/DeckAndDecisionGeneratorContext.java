@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 	List<DecisionType> cardListDecisionTypes;
-	List<DecisionType> booleanDecisionTypes;
+	List<DecisionType> booleanDecisionTypes = new ArrayList<>();
 
 	/**
 	 * @param indexInBitmap         The list of cards such that the i'th card is represented by the

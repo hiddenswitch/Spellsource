@@ -1,9 +1,6 @@
 package com.hiddenswitch.deckgeneration;
 
-import io.jenetics.BitChromosome;
-import io.jenetics.BitGene;
-import io.jenetics.Genotype;
-import io.jenetics.SwapMutator;
+import io.jenetics.*;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
 import io.jenetics.engine.Limits;
@@ -14,11 +11,10 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertTrue;
@@ -342,6 +338,142 @@ public class TestDeckGeneration {
 
 		assertTrue(result.getChromosome().getGene(winComboIndex1).booleanValue());
 		assertTrue(result.getChromosome().getGene(winComboIndex2).booleanValue());
+	}
+
+	/**
+	 * A test primarily for reference
+	 * With a player behaviour that can cast buff cards on enemy minions,
+	 * a gentic algorithm may not necessarily add a +10/+10 buff card
+	 * to the deck
+	 */
+	@Ignore
+	@Test(invocationCount = 10)
+	public void testWillNotNecessarilyFindBuffCardIfBuffingEnemyMinionsIsAllowed() {
+		int GAMES_PER_MATCH_FOR_DECK_GENERATION = 10;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 10;
+		int CARDS_IN_DECK = 20;
+		int STABLE_GENERATIONS = 10;
+		int NUMBER_OF_DECKS = 10;
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		indexInBitmap.add(CardCatalogue.getCardById("spell_buff_10"));
+		int buffIndex = indexInBitmap.size() - 1;
+
+		Random random = new XORShiftRandom(101010L);
+
+		// Create random decks for the tournament
+		for (int i = 0; i < NUMBER_OF_DECKS; i++) {
+			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+			for (int j = 0; j < CARDS_IN_DECK; j++) {
+				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+			}
+			basicTournamentDecks.add(tournamentDeck);
+		}
+
+		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, new ArrayList<>());
+		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(new ArrayList<>());
+		enemyBehvaiour.setCanEndTurnIfAttackingEnemyHeroIsValid(true);
+		enemyBehvaiour.setCanBuffEnemyMinions(true);
+		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);
+		deckAndDecisionGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH_FOR_DECK_GENERATION);
+		deckAndDecisionGeneratorContext.setStartingHp(STARTING_HP);
+		deckAndDecisionGeneratorContext.setMaxCardsPerDeck(CARDS_IN_DECK);
+
+		List<Integer> deckListChromosomes = Collections.singletonList(0);
+
+		Factory<Genotype<BitGene>> deckFactory = new DeckAndDecisionGeneFactory(CARDS_IN_DECK, indexInBitmap.size(), Collections.singletonList(buffIndex), 0, 0, 1.0);
+
+		Engine<BitGene, Double> deckEngine = Engine.builder((individual) -> deckAndDecisionGeneratorContext.fitness(individual, HeroClass.BLUE), deckFactory)
+				.mapping(pop -> pop)
+				.populationSize(POPULATION_SIZE)
+				.alterers(
+						new BitSwapOnSpecificChromosomesMutator<>(1, deckListChromosomes),
+						new BitSwapOnSpecificChromosomesMutator<>(1, deckListChromosomes),
+						new BitSwapBetweenTwoSequencesOnSpecificChromosomesMutator<>(1, deckListChromosomes))
+				.build();
+
+		Phenotype<BitGene, Double> deckResultPhenotype = deckEngine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
+				.collect(EvolutionResult.toBestPhenotype());
+
+		Genotype<BitGene> deckResult = deckResultPhenotype.getGenotype();
+		assertTrue(deckResult.getChromosome(0).getGene(buffIndex).booleanValue());
+	}
+
+	/**
+	 * With a player behaviour that never casts buff cards on enemy minions,
+	 * tests that the genetic algorithm adds a +10/+10 buff card to the deck
+	 * if avaialable
+	 */
+	@Test(invocationCount = 10)
+	public void testWillFindBuffCardIfBuffingEnemyMinionsIsForbidden() {
+		int GAMES_PER_MATCH_FOR_DECK_GENERATION = 10;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 10;
+		int CARDS_IN_DECK = 20;
+		int STABLE_GENERATIONS = 10;
+		int NUMBER_OF_DECKS = 10;
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		indexInBitmap.add(CardCatalogue.getCardById("spell_buff_10"));
+		int buffIndex = indexInBitmap.size() - 1;
+
+		Random random = new XORShiftRandom(101010L);
+
+		// Create random decks for the tournament
+		for (int i = 0; i < NUMBER_OF_DECKS; i++) {
+			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+			for (int j = 0; j < CARDS_IN_DECK; j++) {
+				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+			}
+			basicTournamentDecks.add(tournamentDeck);
+		}
+
+		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, new ArrayList<>(), Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(new ArrayList<>());
+		enemyBehvaiour.setCanEndTurnIfAttackingEnemyHeroIsValid(true);
+		enemyBehvaiour.setCanBuffEnemyMinions(false);
+		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);
+		deckAndDecisionGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH_FOR_DECK_GENERATION);
+		deckAndDecisionGeneratorContext.setStartingHp(STARTING_HP);
+		deckAndDecisionGeneratorContext.setMaxCardsPerDeck(CARDS_IN_DECK);
+
+		List<Integer> deckListChromosomes = Collections.singletonList(0);
+
+		Factory<Genotype<BitGene>> deckFactory = new DeckAndDecisionGeneFactory(CARDS_IN_DECK, indexInBitmap.size(), Collections.singletonList(buffIndex), 0, 1, 1.0);
+
+		Engine<BitGene, Double> deckEngine = Engine.builder((individual) -> deckAndDecisionGeneratorContext.fitness(individual, HeroClass.BLUE), deckFactory)
+				.mapping(pop -> pop)
+				.populationSize(POPULATION_SIZE)
+				.alterers(
+						new BitSwapOnSpecificChromosomesMutator<>(1, deckListChromosomes),
+						new BitSwapOnSpecificChromosomesMutator<>(1, deckListChromosomes),
+						new BitSwapBetweenTwoSequencesOnSpecificChromosomesMutator<>(1, deckListChromosomes))
+				.build();
+
+		Phenotype<BitGene, Double> deckResultPhenotype = deckEngine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
+				.collect(EvolutionResult.toBestPhenotype());
+
+		Genotype<BitGene> deckResult = deckResultPhenotype.getGenotype();
+		assertTrue(deckResult.getChromosome(0).getGene(buffIndex).booleanValue());
 	}
 }
 
