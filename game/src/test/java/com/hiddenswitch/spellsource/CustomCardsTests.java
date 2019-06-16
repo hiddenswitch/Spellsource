@@ -3,9 +3,7 @@ package com.hiddenswitch.spellsource;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -58,26 +56,94 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testKorvasBloodthorn() {
+		// Test casting spell on my own minion, opponent can't target it during their turn
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_korvas_bloodthorn");
+			Minion test = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Card minionTargetingSpellInOpponentsHand = receiveCard(context, opponent, "spell_test_cost_3_buff");
+			opponent.setMana(minionTargetingSpellInOpponentsHand.getBaseManaCost());
+			GameAction action = context.getValidActions()
+					.stream()
+					.filter(ga -> ga.getTargetReference() != null && ga.getTargetReference().equals(test.getReference()))
+					.findFirst().orElseThrow(AssertionError::new);
+			assertEquals(action.getSource(context), minionTargetingSpellInOpponentsHand, "Before Korvas's effect comes into play, the opponent can currently target my minion with a spell.");
+			context.endTurn();
+			playCard(context, player, "spell_test_cost_3_buff", test);
+			Card minionTargetingSpellInPlayerHand = receiveCard(context, player, "spell_test_cost_3_buff");
+			// Make sure we have enough mana
+			player.setMana(minionTargetingSpellInPlayerHand.getBaseManaCost());
+			// Check that we can target it
+			action = context.getValidActions()
+					.stream()
+					.filter(ga -> ga.getTargetReference() != null && ga.getTargetReference().equals(test.getReference()))
+					.findFirst().orElseThrow(AssertionError::new);
+			assertEquals(action.getSource(context), minionTargetingSpellInPlayerHand, "I should be able to cast a spell still on my own minion.");
+			context.endTurn();
+			// Now my opponent's turn
+			opponent.setMana(minionTargetingSpellInOpponentsHand.getBaseManaCost());
+			assertEquals(context.getValidActions()
+					.stream()
+					.filter(ga -> ga.getTargetReference() != null && ga.getTargetReference().equals(test.getReference()))
+					.count(), 0L, "There should be no actions that target the minion currently under the influence of Korvas's effect from my opponent's point of view.");
+		}, HeroClass.ANY, HeroClass.ANY);
+		// Test casting spell on opponent's minion, opponent can't target it during their turn
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_korvas_bloodthorn");
+			context.endTurn();
+			Minion test = playMinionCard(context, opponent, "minion_neutral_test");
+			Card minionTargetingSpellInOpponentsHand = receiveCard(context, opponent, "spell_test_cost_3_buff");
+			opponent.setMana(minionTargetingSpellInOpponentsHand.getBaseManaCost());
+			GameAction action = context.getValidActions()
+					.stream()
+					.filter(ga -> ga.getTargetReference() != null && ga.getTargetReference().equals(test.getReference()))
+					.findFirst().orElseThrow(AssertionError::new);
+			assertEquals(action.getSource(context), minionTargetingSpellInOpponentsHand,
+					"Before Korvas's effect comes into play, the opponent can currently target the opponent's minion with a spell.");
+			context.endTurn();
+			playCard(context, player, "spell_test_cost_3_buff", test);
+			Card minionTargetingSpellInPlayerHand = receiveCard(context, player, "spell_test_cost_3_buff");
+			// Make sure we have enough mana
+			player.setMana(minionTargetingSpellInPlayerHand.getBaseManaCost());
+			// Check that we can target it
+			action = context.getValidActions()
+					.stream()
+					.filter(ga -> ga.getTargetReference() != null
+							&& ga.getSource(context).equals(minionTargetingSpellInPlayerHand)
+							&& ga.getTargetReference().equals(test.getReference()))
+					.findFirst().orElseThrow(AssertionError::new);
+			context.endTurn();
+			// Now my opponent's turn
+			opponent.setMana(minionTargetingSpellInOpponentsHand.getBaseManaCost());
+			assertEquals(context.getValidActions()
+					.stream()
+					.filter(ga -> ga.getTargetReference() != null && ga.getTargetReference().equals(test.getReference()))
+					.count(), 0L, "There should be no actions that target the minion currently under the influence of Korvas's effect from my opponent's point of view.");
+		}, HeroClass.ANY, HeroClass.ANY);
+	}
+
+	@Test
 	public void testAbholos() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion shouldNotDie1 = playMinionCard(context,opponent,"minion_neutral_test");
+			Minion shouldNotDie1 = playMinionCard(context, opponent, "minion_neutral_test");
 			shouldNotDie1.setAttack(99);
 			context.endTurn();
-			Minion shouldDie1 = playMinionCard(context,player,"minion_neutral_test");
-			Minion shouldDie2 = playMinionCard(context,player,"minion_neutral_test");
+			Minion shouldDie1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion shouldDie2 = playMinionCard(context, player, "minion_neutral_test");
 			shouldDie2.setAttack(10);
-			Minion abholos = playMinionCard(context,player,"minion_abholos");
-			destroy(context,abholos);
+			Minion abholos = playMinionCard(context, player, "minion_abholos");
+			destroy(context, abholos);
 			assertFalse(shouldNotDie1.isDestroyed(), "Opposing minions should not have been destroyed");
 			assertTrue(shouldDie1.isDestroyed(), "Friendly minions should be destroyed");
 			assertTrue(shouldDie2.isDestroyed(), "Friendly minions should be destroyed");
 			assertTrue(abholos.isDestroyed(), "Original Abholos should be destroyed");
 			Minion newAbholos = player.getMinions().get(0);
 			assertEquals(newAbholos.getSourceCard().getCardId(), "minion_abholos", "New minion should be an Abholos");
-			assertEquals(player.getMinions().size(),1, "Abholos should be the only minion");
-			assertEquals(newAbholos.getAttack(), shouldDie1.getAttack()+shouldDie2.getAttack(), "Combined attack should be dead minions' attack summed");
-			assertEquals(newAbholos.getHp(), shouldDie1.getHp()+shouldDie2.getHp(), "Combine HP should be dead minions' hp summed");
+			assertEquals(player.getMinions().size(), 1, "Abholos should be the only minion");
+			assertEquals(newAbholos.getAttack(), shouldDie1.getAttack() + shouldDie2.getAttack(), "Combined attack should be dead minions' attack summed");
+			assertEquals(newAbholos.getHp(), shouldDie1.getHp() + shouldDie2.getHp(), "Combine HP should be dead minions' hp summed");
 		});
 	}
 

@@ -1,10 +1,10 @@
 {
-  "name": "Geared Up!",
+  "name": "Magical Haze",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Twinspell. Summon a random Mech from your hand and give it Taunt.",
+  "description": "Summon a random Mech from your hand and give it Guard. Add one more copy of this to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -32,6 +32,6 @@
     ]
   },
   "collectible": true,
-  "set": "RISE_OF_SHADOWS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
