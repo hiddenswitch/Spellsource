@@ -11,14 +11,13 @@
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
       "sourcePlayer": "SELF",
-      "targetEntityType": "MINIONS"
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "EVENT_TARGET",
       "aura": {
         "class": "AttributeAura",
-        "persistentOwner": true,
         "attribute": "AURA_UNTARGETABLE_BY_SPELLS",
         "target": "SELF",
         "condition": {
@@ -26,9 +25,9 @@
           "targetPlayer": "OPPONENT"
         }
       }
-    },
-    "collectible": true,
-    "set": "RISE_OF_SHADOWS",
-    "fileFormatVersion": 1
-  }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }
