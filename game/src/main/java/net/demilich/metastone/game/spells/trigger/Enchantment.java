@@ -271,6 +271,7 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public void setOwner(int playerIndex) {
+		super.setOwner(playerIndex);
 		for (EventTrigger trigger : triggers) {
 			trigger.setOwner(playerIndex);
 		}

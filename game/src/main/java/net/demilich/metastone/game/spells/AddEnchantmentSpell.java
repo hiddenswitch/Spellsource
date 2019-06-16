@@ -140,6 +140,7 @@ public class AddEnchantmentSpell extends Spell {
 
 		if (enchantmentDesc != null) {
 			Enchantment enchantment = enchantmentDesc.create();
+			// TODO: This implies persistent owner!
 			enchantment.setOwner(player.getId());
 			enchantment.setSourceCard(source.getSourceCard());
 			context.getLogic().addGameEventListener(player, enchantment, target);
@@ -148,6 +149,7 @@ public class AddEnchantmentSpell extends Spell {
 
 		if (aura != null) {
 			aura = aura.clone();
+			// TODO: This implies persistent owner!
 			aura.setOwner(player.getId());
 			aura.setSourceCard(source.getSourceCard());
 			// Enchantments added this way don't trigger a board changed event. They come into play immediately if the owning
