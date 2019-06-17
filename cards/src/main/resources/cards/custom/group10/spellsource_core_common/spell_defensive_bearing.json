@@ -10,8 +10,8 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "HealSpell",
-        "value": 2
+        "class": "BuffSpell",
+        "hpBonus": 2
       },
       {
         "class": "AddAttributeSpell",

@@ -6900,5 +6900,135 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), 8);
 		});
 	}
+
+	@Test
+	public void testDefensiveBearing() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_defensive_bearing", target);
+			assertTrue(target.hasAttribute(Attribute.TAUNT));
+			assertEquals(target.getHp(), target.getBaseHp() + 2);
+		});
+	}
+
+	@Test
+	public void testDawnsMight() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "spell_dawns_might", target);
+			assertEquals(target.getAttack(), target.getBaseAttack() + 3);
+			assertEquals(target.getHp(),  target.getBaseHp() + 2);
+			// Test whether twinspell exists
+			assertEquals(player.getHand().size(), 1);
+			Card copy = player.getHand().get(0);
+			assertFalse(copy.getDescription().contains("Twinspell"));
+			playCard(context, player, copy, target);
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	//Energized Spear - 3 Mana 3/2 Weapon Common "Supremacy: Restore your minions to full Health."
+	@Test
+	public void testEnergizedSpear() {
+		runGym((context, player, opponent) -> {
+			Minion dragon1 = playMinionCard(context, player, "minion_sleepy_dragon");
+			Minion dragon2 = playMinionCard(context, player, "minion_sleepy_dragon");
+			playCard(context, player, "weapon_energized_spear");
+			// Opponent's turn
+			context.endTurn();
+			Minion target3 = playMinionCard(context, opponent, "minion_neutral_test");
+			playCard(context, opponent, "spell_fireball", dragon1);
+			playCard(context, opponent, "spell_fireball", dragon2);
+			assertEquals(dragon1.getHp(), dragon1.getBaseHp() - 6);
+			assertEquals(dragon2.getHp(), dragon2.getBaseHp() - 6);
+			// Player's turn
+			context.endTurn();
+			// Test energized spear's attack and durability
+			attack(context, player, player.getHero(), target3);
+			// assertTrue(target3.isDestroyed());
+			assertEquals(opponent.getMinions().size(), 0);
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 1);
+			assertEquals(dragon1.getHp(), dragon1.getBaseHp());
+			assertEquals(dragon2.getHp(), dragon2.getBaseHp());
+		});
+	}
+
+	// Ethereal Knight - 3 Mana 2/3 Rare "Has +1 Attack for each friendly minion."
+	@Test
+	public void testEtherealKnight() {
+		runGym((context, player, opponent) -> {
+			Minion target1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, player, "minion_neutral_test");
+			Minion knight = playMinionCard(context, player, "minion_ethereal_knight");
+			assertEquals(knight.getHp(), 3);
+			assertEquals(knight.getAttack(), 5);
+			assertEquals(target1.getAttack(), 2);
+			assertEquals(target2.getAttack(), 2);
+		});
+	}
+
+	// Tempest Sentinel - 5 Mana 4/5 Elemental Rare "Spells cast on minions costs (1) less."
+	@Test
+	public void testTempestSentinel() {
+		runGym((context, player, opponent) -> {
+			Card costly = receiveCard(context, player, "spell_test_cost_3_buff");
+			Minion tempest = playMinionCard(context, player, "minion_tempest_sentinel");
+			assertEquals(costOf(context,player,costly),costly.getBaseManaCost() - 1);
+			assertEquals(tempest.getAttack(), 4);
+			assertEquals(tempest.getHp(), 5);
+		});
+	}
+
+	// Magical Haze - 7 Mana Spell Rare "Twinspell. Summon a random Elemental from your hand and give it Guard."
+	@Test
+	public void testMagicalHaze() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_wavecrasher");
+			playCard(context, player, "spell_magical_haze");
+			Minion ele = player.getMinions().get(0);
+			assertEquals(ele.getSourceCard().getCardId(), "minion_wavecrasher");
+			assertTrue(ele.hasAttribute(Attribute.TAUNT));
+			// Check twinspell
+			assertEquals(player.getHand().size(), 1);
+			Card copy = player.getHand().get(0);
+			assertFalse(copy.getDescription().contains("Twinspell"));
+			playCard(context, player, copy);
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	// Silver Warmaiden - 4 Mana 3/3 Epic "Opener: Damage an enemy minion until it has 1 Health."
+	@Test
+	public void testSilverWarmaiden() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_sleepy_dragon");
+			context.endTurn();
+			Minion maiden = playMinionCardWithBattlecry(context, player, "minion_silver_warmaiden", target);
+			assertEquals(target.getHp(), 1);
+			assertEquals(maiden.getHp(), 3);
+			assertEquals(maiden.getAttack(), 3);
+		});
+	}
+
+	// Hydraquatom (Atomius in Spellsource, as seen above) - 8 Mana 8/8 Legendary Elemental "Aftermath: Release four blasts at random enemies that deals 4 damage each."
+	@Test
+	public void testHydraquatom() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_the_darkness");
+			Minion target2 = playMinionCard(context, opponent, "minion_the_darkness");
+			context.endTurn();
+			Minion hydra = playMinionCard(context, player, "minion_hydraquatom");
+			context.endTurn();
+			int basehp = opponent.getHero().getHp();
+			playCard(context, opponent, "spell_fireball", hydra);
+			playCard(context, opponent, "spell_fireball", hydra);
+			assertTrue(hydra.isDestroyed());
+			assertEquals(opponent.getHero().getHp() + target1.getHp() + target2.getHp(), basehp + target1.getBaseHp() + target2.getBaseHp() - 16);
+		});
+	}
+
 }
 

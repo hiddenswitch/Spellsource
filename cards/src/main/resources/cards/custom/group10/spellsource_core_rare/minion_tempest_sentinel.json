@@ -1,12 +1,12 @@
 {
-  "name": "Violet Sentinel",
+  "name": "Tempest Sentinel",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "race": "MECH",
+  "race": "ELEMENTAL",
   "description": "Your spells cast on minions cost (1) less.",
   "cardCostModifier": {
     "class": "CardCostModifier",
