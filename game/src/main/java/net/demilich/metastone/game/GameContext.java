@@ -207,7 +207,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private DeckFormat deckFormat;
 	private TargetLogic targetLogic = new TargetLogic();
 	private TriggerManager triggerManager = new TriggerManager();
-	private Map<Environment, Object> environment = new ConcurrentHashMap<>();
+	private Map<Environment, Object> environment = new HashMap<>();
 	private int activePlayerId = -1;
 	private Player winner;
 	private GameStatus result;

@@ -85,14 +85,17 @@ mavenPublish {
     }
 }
 
+
+allprojects {
+    sourceCompatibility = 1.8
+    project.version = '0.8.32'
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: "com.vanniktech.maven.publish"
-
-    sourceCompatibility = 1.8
-    project.version = '0.8.32'
 
     repositories {
         mavenCentral()
@@ -101,9 +104,10 @@ subprojects {
 
     dependencies {
         compile group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
-        compile group: 'de.ruedigermoeller', name: 'fst', version: '2.56'
-        compile group: 'co.paralleluniverse', name: 'quasar-core', version: '0.8.0'
         runtime group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.6'
+        if (project.name != 'quasar-core') {
+            compile project(":quasar-core")
+        }
     }
 
     compileJava.dependsOn processResources
@@ -111,10 +115,12 @@ subprojects {
         options.encoding = 'UTF-8'
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
-        doLast {
-            ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
-            ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
-                fileset(dir: sourceSets.main.output.classesDirs.asPath)
+        if (project.name != 'quasar-core') {
+            doLast {
+                ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
+                ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
+                    fileset(dir: sourceSets.main.output.classesDirs.asPath)
+                }
             }
         }
     }
@@ -125,10 +131,12 @@ subprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
         doLast {
-            ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
-            ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
-                fileset(dir: sourceSets.main.output.classesDirs.asPath)
-                fileset(dir: sourceSets.test.output.classesDirs.asPath)
+            if (project.name != 'quasar-core') {
+                ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
+                ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
+                    fileset(dir: sourceSets.main.output.classesDirs.asPath)
+                    fileset(dir: sourceSets.test.output.classesDirs.asPath)
+                }
             }
         }
     }
