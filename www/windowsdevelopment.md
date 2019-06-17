@@ -77,6 +77,13 @@ Follow this guide to be able to test your cards and make changes to the game cod
     5. Click the gear icon to the right of Scheme, then choose Import Scheme > IntelliJ IDEA code style XML.
     6. Click the 3rd icon from the left above the file path, which looks like a folder with a mini IntelliJ IDEA logo in the lower right corner. This navigates you to the project folder.
     7. Choose idea-codestyle-scheme.xml in your project directory.
+ 5. Configure IntelliJ to run the project correctly.
+    1. Go to File > Settings.
+    2. Navigate to Build, Execution, Deployment > Build Tools > Gradle.
+    3. Under Delegate settings, both combo boxes should be set to Gradle.
+    4. Navigate to Build, Execution, Deployment > Build Tools > Gradle > Runner.
+    5. Check Delegate IDE build/run actions to Gradle.
+    6. Set Run tests using: to Gradle Test Runner.
 
 You have now configured a working Spellsource-Server editing environment.
 
