@@ -1,0 +1,16 @@
+{
+  "name": "Heal 30",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Restore #30 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 30
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

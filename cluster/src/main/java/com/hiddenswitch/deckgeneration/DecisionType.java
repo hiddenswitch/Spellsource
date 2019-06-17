@@ -29,13 +29,17 @@ public enum DecisionType {
 	CANNOT_END_TURN_IF_ATTACKING_ENEMY_HERO_IS_VALID,
 
 	/**
-	 * A player should be able to cast buff spells on
+	 * A player should not be able to cast buff spells on
 	 * enemy minions
 	 */
 	CANNOT_BUFF_ENEMY_MINIONS,
 
 	/**
-	 * A player should be able to heal enemy minions
+	 * A player should not be able to heal enemy minions
 	 */
-	CANNOT_HEAL_ENEMY_MINIONS,
+	CANNOT_HEAL_ENEMY_ENTITIES,
+	/**
+	 * A player should not be able to heal eneti
+	 */
+	CANNOT_HEAL_FULL_HEALTH_ENTITIES,
 }

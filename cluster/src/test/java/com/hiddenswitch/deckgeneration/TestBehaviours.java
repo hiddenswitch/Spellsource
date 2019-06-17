@@ -288,17 +288,42 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingEnemyMinions() {
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingEnemyEntities() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_goldshire_footman");
 			receiveCard(context, player, "spell_regenerate");
 			player.setMana(0);
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_HEAL_ENEMY_MINIONS));
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_HEAL_ENEMY_ENTITIES));
 			List<GameAction> actions = context.getValidActions();
 			int originalSize = actions.size();
 			behaviour.filterActions(context, player, actions);
 			assertTrue(originalSize - 2 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOpponentEntities = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == opponent.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingFullHealthEntities() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_stat_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			receiveCard(context, player, "spell_regenerate");
+			player.setMana(0);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_HEAL_FULL_HEALTH_ENTITIES));
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 4 == actions.size());
 
 			// There should be no valid actions that target enemy entities
 			List<GameAction> actionsThatTargetOpponentEntities = actions.stream()

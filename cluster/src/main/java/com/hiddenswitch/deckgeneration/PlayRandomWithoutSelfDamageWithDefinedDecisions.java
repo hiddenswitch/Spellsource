@@ -25,10 +25,15 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	boolean alwaysAttackEnemyHero = false;
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
 	boolean canBuffEnemyMinions = true;
-	boolean canHealEnemyMinions = true;
+	boolean canHealEnemyEntities = true;
+	boolean canHealFullHealthEntities = true;
 
 	public void setCanEndTurnIfAttackingEnemyHeroIsValid(boolean canEndTurnIfAttackingEnemyHeroIsValid) {
 		this.canEndTurnIfAttackingEnemyHeroIsValid = canEndTurnIfAttackingEnemyHeroIsValid;
+	}
+
+	public void setCanHealEnemyEntities(boolean canHealEnemyEntities) {
+		this.canHealEnemyEntities = canHealEnemyEntities;
 	}
 
 	public void setAlwaysAttackEnemyHero(boolean alwaysAttackEnemyHero) {
@@ -91,10 +96,15 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		} else {
 			canBuffEnemyMinions = true;
 		}
-		if (booleanDecisionTypes.contains(DecisionType.CANNOT_HEAL_ENEMY_MINIONS)) {
-			canHealEnemyMinions = false;
+		if (booleanDecisionTypes.contains(DecisionType.CANNOT_HEAL_ENEMY_ENTITIES)) {
+			canHealEnemyEntities = false;
 		} else {
-			canHealEnemyMinions = true;
+			canHealEnemyEntities = true;
+		}
+		if (booleanDecisionTypes.contains(DecisionType.CANNOT_HEAL_FULL_HEALTH_ENTITIES)) {
+			canHealFullHealthEntities = false;
+		} else {
+			canHealFullHealthEntities = true;
 		}
 	}
 
@@ -134,6 +144,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		}
 		filterBuffSpellsOnEnemyMinions(player, opponent, validActions, context);
 		filterHealingSpellsOnEnemyMinions(player, opponent, validActions, context);
+		filterHealingSpellsOnFullHealthMinions(player, opponent, validActions, context);
 		filterEndTurn(opponent, validActions);
 	}
 
@@ -233,7 +244,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 */
 
 	public void filterHealingSpellsOnEnemyMinions(Player player, Player opponent, List<GameAction> validActions, GameContext context) {
-		if (canHealEnemyMinions) {
+		if (canHealEnemyEntities) {
 			return;
 		}
 		validActions.removeIf(action -> {
@@ -258,6 +269,44 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 
 		});
 	}
+
+	/**
+	 * Remove all spells, battlecries, etc. that heal enemy minions by targeting them
+	 * (healing as a side effect is allowed)
+	 *
+	 * @param player       the {@link Player} that this behaviour controls
+	 * @param opponent     the {@link Player} that the player is against
+	 * @param validActions A list of valid {@link GameAction} to filter
+	 * @param context      The {@link GameContext} for this particular game
+	 */
+
+	public void filterHealingSpellsOnFullHealthMinions(Player player, Player opponent, List<GameAction> validActions, GameContext context) {
+		if (canHealFullHealthEntities) {
+			return;
+		}
+		validActions.removeIf(action -> {
+			if (checkIfMetaSpell(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getAttributeValue(Attribute.HP) == action.getTargets(context, player.getIndex()).get(0).getAttributeValue(Attribute.MAX_HP)
+						&& targetedEntityIsHealedBySpell(((PlaySpellCardAction) action).getSpell());
+			}
+			if (checkIfHealingSpell(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getAttributeValue(Attribute.HP) == action.getTargets(context, player.getIndex()).get(0).getAttributeValue(Attribute.MAX_HP)
+						&& targetedEntityIsHealedBySpell(((PlaySpellCardAction) action).getSpell());
+			}
+
+			if (checkIfHealingBattlecry(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getAttributeValue(Attribute.HP) == action.getTargets(context, player.getIndex()).get(0).getAttributeValue(Attribute.MAX_HP)
+						&& targetedEntityIsHealedBySpell(((BattlecryAction) action).getSpell());
+			}
+
+			return false;
+
+		});
+	}
+
 
 	public boolean checkIfMetaSpell(GameAction action) {
 		if (!(action instanceof PlaySpellCardAction)) {
