@@ -4,21 +4,21 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Summon a random Mech from your hand and give it Guard. Add one more copy of this to your hand.",
+  "description": "Summon a random Elemental from your hand and give it Guard. Add one more copy of this to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "ReceiveCardSpell",
-        "card": "twinspell_geared_up"
+        "card": "twinspell_magical_haze"
       },
       {
         "class": "RecruitSpell",
         "value": 1,
         "cardFilter": {
           "class": "CardFilter",
-          "race": "MECH",
+          "race": "ELEMENTAL",
           "cardType": "MINION"
         },
         "cardLocation": "HAND",

@@ -267,7 +267,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	@Override
 	public boolean hasPersistentOwner() {
-		return getDesc().getBool(AuraArg.PERSISTENT_OWNER);
+		return getDesc() != null && getDesc().getBool(AuraArg.PERSISTENT_OWNER);
 	}
 }
 
