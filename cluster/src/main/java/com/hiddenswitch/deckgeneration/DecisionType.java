@@ -32,5 +32,10 @@ public enum DecisionType {
 	 * A player should be able to cast buff spells on
 	 * enemy minions
 	 */
-	CANNOT_BUFF_ENEMY_MINIONS
+	CANNOT_BUFF_ENEMY_MINIONS,
+
+	/**
+	 * A player should be able to heal enemy minions
+	 */
+	CANNOT_HEAL_ENEMY_MINIONS,
 }

@@ -1,6 +1,7 @@
 package com.hiddenswitch.deckgeneration;
 
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.HeroPowerAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.tests.util.TestBase;
@@ -241,6 +242,8 @@ public class TestBehaviours extends TestBase {
 			int originalSize = actions.size();
 			behaviour.filterActions(context, player, actions);
 			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target enemy entities
 			List<GameAction> actionsThatTargetOpponentMinions = actions.stream()
 					.filter(action -> (
 							action.getTargets(context, player.getIndex())
@@ -249,6 +252,63 @@ public class TestBehaviours extends TestBase {
 									.findFirst()
 									.isPresent())).collect(Collectors.toList());
 			assertTrue(actionsThatTargetOpponentMinions.isEmpty());
+		});
+	}
+
+	@Test
+	public static void testGetTargetedMinionEntityIdForHealingSpellFromMetaSpell() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_void_terror");
+			receiveCard(context, player, "spell_flash_of_light");
+			receiveCard(context, player, "spell_sacrificial_pact");
+			receiveCard(context, player, "spell_holy_light");
+			player.setMana(2);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+			List<GameAction> actions = context.getValidActions();
+
+			// The damage hero powers should all be false
+			for (int i = 0; i < 4; i++) {
+				assertTrue(!behaviour.targetedEntityIsHealedBySpell(((HeroPowerAction) actions.get(i)).getSpell()));
+			}
+
+			// The healing spell flash of light should be true
+			for (int i = 5; i < 8; i++) {
+				assertTrue(behaviour.targetedEntityIsHealedBySpell(((PlaySpellCardAction) actions.get(i)).getSpell()));
+			}
+
+			// The spell sacrificial pact should be false
+			assertTrue(!behaviour.targetedEntityIsHealedBySpell(((PlaySpellCardAction) actions.get(8)).getSpell()));
+
+			// The spell healing spell holy light should be false
+			for (int i = 9; i < 13; i++) {
+				assertTrue(behaviour.targetedEntityIsHealedBySpell(((PlaySpellCardAction) actions.get(i)).getSpell()));
+			}
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingEnemyMinions() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_with_damage_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			receiveCard(context, player, "spell_regenerate");
+			player.setMana(0);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_HEAL_ENEMY_MINIONS));
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 2 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOpponentEntities = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == opponent.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
 		});
 	}
 }

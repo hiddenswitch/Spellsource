@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.spells.BuffSpell;
+import net.demilich.metastone.game.spells.HealSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -23,7 +24,8 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	List<String> minionsThatDoNotAttackEnemyMinions = new ArrayList<>();
 	boolean alwaysAttackEnemyHero = false;
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
-	boolean canBuffEnemyMinions = false;
+	boolean canBuffEnemyMinions = true;
+	boolean canHealEnemyMinions = true;
 
 	public void setCanEndTurnIfAttackingEnemyHeroIsValid(boolean canEndTurnIfAttackingEnemyHeroIsValid) {
 		this.canEndTurnIfAttackingEnemyHeroIsValid = canEndTurnIfAttackingEnemyHeroIsValid;
@@ -66,6 +68,13 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		updateBooleanDecisionTypes(booleanDecisionTypes);
 	}
 
+	/**
+	 * Updates the boolean parameters of the AI behaviour
+	 *
+	 * @param booleanDecisionTypes The list of boolean parameters that the AI
+	 *                             must follow
+	 */
+
 	public void updateBooleanDecisionTypes(List<DecisionType> booleanDecisionTypes) {
 		if (booleanDecisionTypes.contains(DecisionType.ALWAYS_ATTACK_ENEMY_HERO)) {
 			alwaysAttackEnemyHero = true;
@@ -81,6 +90,11 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 			canBuffEnemyMinions = false;
 		} else {
 			canBuffEnemyMinions = true;
+		}
+		if (booleanDecisionTypes.contains(DecisionType.CANNOT_HEAL_ENEMY_MINIONS)) {
+			canHealEnemyMinions = false;
+		} else {
+			canHealEnemyMinions = true;
 		}
 	}
 
@@ -102,6 +116,14 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		return super.requestAction(context, player, validActions);
 	}
 
+	/**
+	 * Filter all unwanted actions based on AI behaviour parameters
+	 *
+	 * @param context      the {@link GameContext} of the particular game
+	 * @param player       the {@link Player} that this behaviour controls
+	 * @param validActions the initial list of {@link GameAction} moves
+	 *                     that the player can do
+	 */
 	public void filterActions(GameContext context, Player player, List<GameAction> validActions) {
 		Player opponent = context.getOpponent(player);
 		filterEnemyFaceHits(player, opponent, validActions);
@@ -111,6 +133,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 			filterEnemyMinionHits(player, opponent, validActions);
 		}
 		filterBuffSpellsOnEnemyMinions(player, opponent, validActions, context);
+		filterHealingSpellsOnEnemyMinions(player, opponent, validActions, context);
 		filterEndTurn(opponent, validActions);
 	}
 
@@ -153,7 +176,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 * Filter out the option to end the turn if certain conditions are satisfied
 	 *
 	 * @param opponent     The opposing player
-	 * @param validActions A list of valid options to filter
+	 * @param validActions A list of valid {@link GameAction} to filter
 	 */
 
 	public void filterEndTurn(Player opponent, List<GameAction> validActions) {
@@ -162,6 +185,15 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		}
 	}
 
+	/**
+	 * Remove all spells, battlecries, etc. that buff enemy minions by targeting them
+	 * (buffing as a side effect is allowed)
+	 *
+	 * @param player       the {@link Player} that this behaviour controls
+	 * @param opponent     the {@link Player} that the player is against
+	 * @param validActions A list of valid {@link GameAction} to filter
+	 * @param context      The {@link GameContext} for this particular game
+	 */
 
 	public void filterBuffSpellsOnEnemyMinions(Player player, Player opponent, List<GameAction> validActions, GameContext context) {
 		if (canBuffEnemyMinions) {
@@ -173,20 +205,74 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
 						&& targetedMinionIsBuffedBySpell(((PlaySpellCardAction) action).getSpell());
 			}
-			if (!checkIfBuffSpell(action)) {
-				if (!checkIfBuffBattlecry(action)) {
-					return false;
-				}
+			if (checkIfBuffSpell(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+						&& targetedMinionIsBuffedBySpell(((PlaySpellCardAction) action).getSpell());
+			}
+
+			if (checkIfBuffBattlecry(action)) {
 				return action.getTargets(context, player.getIndex()) != null
 						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
 						&& targetedMinionIsBuffedBySpell(((BattlecryAction) action).getSpell());
 			}
-			return action.getTargets(context, player.getIndex()) != null
-					&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
-					&& targetedMinionIsBuffedBySpell(((PlaySpellCardAction) action).getSpell());
+
+			return false;
 
 		});
 	}
+
+	/**
+	 * Remove all spells, battlecries, etc. that heal enemy minions by targeting them
+	 * (healing as a side effect is allowed)
+	 *
+	 * @param player       the {@link Player} that this behaviour controls
+	 * @param opponent     the {@link Player} that the player is against
+	 * @param validActions A list of valid {@link GameAction} to filter
+	 * @param context      The {@link GameContext} for this particular game
+	 */
+
+	public void filterHealingSpellsOnEnemyMinions(Player player, Player opponent, List<GameAction> validActions, GameContext context) {
+		if (canHealEnemyMinions) {
+			return;
+		}
+		validActions.removeIf(action -> {
+			if (checkIfMetaSpell(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+						&& targetedEntityIsHealedBySpell(((PlaySpellCardAction) action).getSpell());
+			}
+			if (checkIfHealingSpell(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+						&& targetedEntityIsHealedBySpell(((PlaySpellCardAction) action).getSpell());
+			}
+
+			if (checkIfHealingBattlecry(action)) {
+				return action.getTargets(context, player.getIndex()) != null
+						&& action.getTargets(context, player.getIndex()).get(0).getOwner() == opponent.getOwner()
+						&& targetedEntityIsHealedBySpell(((BattlecryAction) action).getSpell());
+			}
+
+			return false;
+
+		});
+	}
+
+	public boolean checkIfMetaSpell(GameAction action) {
+		if (!(action instanceof PlaySpellCardAction)) {
+			return false;
+		}
+
+		PlaySpellCardAction spellCardAction = (PlaySpellCardAction) action;
+		SpellDesc spellDesc = spellCardAction.getSpell();
+		if (spellDesc == null) {
+			return false;
+		}
+
+		return MetaSpell.class.isAssignableFrom(spellDesc.getDescClass());
+	}
+
 
 	public boolean checkIfBuffBattlecry(GameAction action) {
 		if (!(action instanceof BattlecryAction)) {
@@ -218,7 +304,57 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass());
 	}
 
-	public boolean checkIfMetaSpell(GameAction action) {
+	/**
+	 * Checks if the particular spell buffs whatever entity it targets
+	 * (the target is null in this case)
+	 *
+	 * @param spellDesc The {@link SpellDesc} that we are analyzing
+	 * @return whether or not the spell buffs whatever entity it targets
+	 */
+	public boolean targetedMinionIsBuffedBySpell(SpellDesc spellDesc) {
+		if (!MetaSpell.class.isAssignableFrom(spellDesc.getDescClass())) {
+			return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass()) && spellDesc.getTarget() == null;
+		}
+		List<SpellDesc> subSpells = spellDesc.subSpells();
+		for (int i = 0; i < subSpells.size(); i++) {
+			boolean subSpellBuffsTargetedMinion = targetedMinionIsBuffedBySpell(subSpells.get(i));
+			if (subSpellBuffsTargetedMinion) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	public boolean checkIfHealingBattlecry(GameAction action) {
+		if (!(action instanceof BattlecryAction)) {
+			return false;
+		}
+
+		BattlecryAction spellCardAction = (BattlecryAction) action;
+		SpellDesc spellDesc = spellCardAction.getSpell();
+		if (spellDesc == null) {
+			return false;
+		}
+
+		return HealSpell.class.isAssignableFrom(spellDesc.getDescClass());
+	}
+
+	public boolean checkIfHealingHeroPower(GameAction action) {
+		if (!(action instanceof HeroPowerAction)) {
+			return false;
+		}
+
+		HeroPowerAction heroPowerAction = (HeroPowerAction) action;
+		SpellDesc spellDesc = heroPowerAction.getSpell();
+		if (spellDesc == null) {
+			return false;
+		}
+
+		return HealSpell.class.isAssignableFrom(spellDesc.getDescClass());
+	}
+
+	public boolean checkIfHealingSpell(GameAction action) {
 		if (!(action instanceof PlaySpellCardAction)) {
 			return false;
 		}
@@ -229,17 +365,24 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 			return false;
 		}
 
-		return MetaSpell.class.isAssignableFrom(spellDesc.getDescClass());
+		return HealSpell.class.isAssignableFrom(spellDesc.getDescClass());
 	}
 
-	public boolean targetedMinionIsBuffedBySpell(SpellDesc spellDesc) {
+	/**
+	 * Checks if the particular spell heals whatever entity it targets
+	 * (the target is null in this case)
+	 *
+	 * @param spellDesc The {@link SpellDesc} that we are analyzing
+	 * @return whether or not the spell heals whatever entity it targets
+	 */
+	public boolean targetedEntityIsHealedBySpell(SpellDesc spellDesc) {
 		if (!MetaSpell.class.isAssignableFrom(spellDesc.getDescClass())) {
-			return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass()) && spellDesc.getTarget() == null;
+			return HealSpell.class.isAssignableFrom(spellDesc.getDescClass()) && spellDesc.getTarget() == null;
 		}
 		List<SpellDesc> subSpells = spellDesc.subSpells();
 		for (int i = 0; i < subSpells.size(); i++) {
-			boolean subSpellBuffsTargetedMinion = targetedMinionIsBuffedBySpell(subSpells.get(i));
-			if (subSpellBuffsTargetedMinion) {
+			boolean subSpellHealsTargetedMinion = targetedEntityIsHealedBySpell(subSpells.get(i));
+			if (subSpellHealsTargetedMinion) {
 				return true;
 			}
 		}
