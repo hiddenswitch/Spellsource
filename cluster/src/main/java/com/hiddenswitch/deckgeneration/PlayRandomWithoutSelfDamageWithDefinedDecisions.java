@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.HealSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
@@ -14,6 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 // Behaviour that inherits all of PlayRandomWithoutSelfDamageBehaviour,
@@ -23,6 +25,11 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	List<String> minionsThatDoNotAttackEnemyHero = new ArrayList<>();
 	List<String> minionsThatDoNotAttackEnemyMinions = new ArrayList<>();
 	boolean alwaysAttackEnemyHero = false;
+
+	public void setCanHealFullHealthEntities(boolean canHealFullHealthEntities) {
+		this.canHealFullHealthEntities = canHealFullHealthEntities;
+	}
+
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
 	boolean canBuffEnemyMinions = true;
 	boolean canHealEnemyEntities = true;
@@ -361,17 +368,23 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 * @return whether or not the spell buffs whatever entity it targets
 	 */
 	public boolean targetedMinionIsBuffedBySpell(SpellDesc spellDesc) {
-		if (!MetaSpell.class.isAssignableFrom(spellDesc.getDescClass())) {
-			return BuffSpell.class.isAssignableFrom(spellDesc.getDescClass()) && spellDesc.getTarget() == null;
-		}
-		List<SpellDesc> subSpells = spellDesc.subSpells();
-		for (int i = 0; i < subSpells.size(); i++) {
-			boolean subSpellBuffsTargetedMinion = targetedMinionIsBuffedBySpell(subSpells.get(i));
-			if (subSpellBuffsTargetedMinion) {
-				return true;
+		Predicate<HasEntrySet.BfsNode<Enum, Object>> hasTarget = (node) -> {
+			if (!(node.getValue() instanceof SpellDesc)) {
+				return false;
 			}
-		}
-		return false;
+
+			SpellDesc spell = (SpellDesc) node.getValue();
+			return spell.getTarget() != null;
+		};
+		return spellDesc.bfs().build()
+				.anyMatch(node -> {
+					if (!(node.getValue() instanceof SpellDesc)) {
+						return false;
+					}
+					SpellDesc spell = (SpellDesc) node.getValue();
+
+					return node.predecessors().noneMatch(hasTarget) && !hasTarget.test(node) && BuffSpell.class.isAssignableFrom(spell.getDescClass());
+				});
 	}
 
 
@@ -425,17 +438,23 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 * @return whether or not the spell heals whatever entity it targets
 	 */
 	public boolean targetedEntityIsHealedBySpell(SpellDesc spellDesc) {
-		if (!MetaSpell.class.isAssignableFrom(spellDesc.getDescClass())) {
-			return HealSpell.class.isAssignableFrom(spellDesc.getDescClass()) && spellDesc.getTarget() == null;
-		}
-		List<SpellDesc> subSpells = spellDesc.subSpells();
-		for (int i = 0; i < subSpells.size(); i++) {
-			boolean subSpellHealsTargetedMinion = targetedEntityIsHealedBySpell(subSpells.get(i));
-			if (subSpellHealsTargetedMinion) {
-				return true;
+		Predicate<HasEntrySet.BfsNode<Enum, Object>> hasTarget = (node) -> {
+			if (!(node.getValue() instanceof SpellDesc)) {
+				return false;
 			}
-		}
-		return false;
+
+			SpellDesc spell = (SpellDesc) node.getValue();
+			return spell.getTarget() != null;
+		};
+		return spellDesc.bfs().build()
+				.anyMatch(node -> {
+					if (!(node.getValue() instanceof SpellDesc)) {
+						return false;
+					}
+					SpellDesc spell = (SpellDesc) node.getValue();
+
+					return node.predecessors().noneMatch(hasTarget) && !hasTarget.test(node) && HealSpell.class.isAssignableFrom(spell.getDescClass());
+				});
 	}
 
 	/**
