@@ -4,22 +4,28 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.33-2.0.30 (In Progress)
+### 0.8.33-2.0.31 (In Progress)
 
 Bug fixes.
 
 Visit the new Windows development guide at http://playspellsource.com/windows-development/ for more about editing and authoring your own cards using the tools the developers use.
 
+##### Usability Fixes:
+
+ - Secrets and quests appear in the client again. (1029)
+ - Weapons now disappear when they are destroyed. (910)
+ - Challenges to play a match or make a friend invite now correctly pop up. 
+
 ##### Content Fixes:
 
  - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
  - Hypnotic Beetle now costs 4 mana. (1114)
- - Sharper Claws (Upgraded Hero Power) now renamed to Hone Claws. (1118)
+ - Sharper Claws (Upgraded Skill) now renamed to Hone Claws. (1118)
  - Both Hero Powers no longer restore Health now. (1118)
- - Majestic Fennec - Now a 4/6 Beast that restores 4 Health. (1118)
- - Alder, Death Baron - Hero Power deals only 3 damage now. (1118)
- - Venom Breath - Now costs 11 Mana. (1118)
- - Conflagration - Now only deals 3 damage to a minion and the minions next to it. (1118)
+ - Majestic Fennec is now a 4/6 Beast that restores 4 Health. (1118)
+ - Alder, Death Baron's Skill deals only 3 damage now. (1118)
+ - Venom Breath now costs 11 Mana. (1118)
+ - Conflagration now only deals 3 damage to a minion and the minions next to it. (1118)
 
 ### 0.8.32-2.0.30 (Wednesday, June 5th, 2019)
 
