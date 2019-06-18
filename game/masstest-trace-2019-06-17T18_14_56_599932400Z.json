@@ -1,0 +1,11 @@
+{
+  "seed" : -1019663520382416411,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "GREEN", "RUST" ],
+  "deckCardIds" : [ [ "minion_cave_hydra", "spell_hot_shot", "minion_doomed_diver", "minion_floating_crystal", "minion_justicar_trueheart", "minion_silver_warmaiden", "minion_swamp_king_dred", "spell_crushing_walls", "minion_jack_in_the_box", "minion_brawler_bushi", "minion_nezumi_master", "minion_menagerie_magician", "spell_dire_frenzy", "spell_on_the_hunt", "minion_venomizer", "minion_corridor_creeper", "minion_mindswapper", "weapon_sniper_rifle", "minion_mist_howler", "secret_explosive_trap", "minion_naga_corsair", "minion_annoy-o-tron", "minion_contract_archer", "minion_sleepy_sprite", "minion_sleepy_scarecrow", "minion_halazzi_the_lynx", "minion_weaponized_pinata", "minion_wolfrider", "minion_twin_emperor_veklor", "minion_tundra_rhino" ], [ "minion_dragonhatcher", "minion_cult_master", "minion_treasure_hunter", "minion_fumewalker_zin", "minion_blowgill_sniper", "weapon_the_dreadtalon", "minion_supreme_finlord", "minion_gamon", "minion_faceless_shambler", "minion_night_prowler", "minion_gnomish_inventor", "minion_hot_garbage", "minion_armageddon_wyvern", "minion_bone_whelp", "minion_baron_rivendare", "minion_ancient_brewmaster", "minion_mountain_whelp", "minion_thitazov", "minion_gadgetzan_jouster", "minion_rend_blackhand", "minion_pyroblaster_zagrosz", "minion_azalina_soulthief", "minion_crimson_general", "minion_rousing_commander", "minion_gruul", "minion_dire_wolf_alpha", "minion_mad_summoner", "minion_booty_bay_bookie", "minion_colosseum_behemoth", "spell_primal_rage" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "CUSTOM", "VERDANT_DREAMS", "JOURNEY_TO_UNGORO", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "CLASSIC", "BLACKROCK_MOUNTAIN", "BASIC", "BOOMSDAY_PROJECT", "KOBOLDS_AND_CATACOMBS", "RASTAKHANS_RUMBLE", "PROMO", "HALL_OF_FAME", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "REWARD", "NAXXRAMAS", "SPELLSOURCE_BASIC", "SANDS_OF_TIME", "GOBLINS_VS_GNOMES", "WITCHWOOD" ],
+  "mulligans" : [ [ 20, 19 ], [ 49, 39, 46 ] ],
+  "actions" : [ 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 4, 2, 5, 0, 11, 6, 8, 1, 4, 0 ],
+  "id" : null
+}

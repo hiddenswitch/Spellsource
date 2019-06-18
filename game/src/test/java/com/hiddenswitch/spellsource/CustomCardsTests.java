@@ -7030,5 +7030,18 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
+	// Blastflame Dragon - 8 Mana 7/7 Dragon Common "Supremacy: Deal 7 damage to a random enemy minion."
+
+
+
+	// Tower Ophidian - 5 Mana 2/6 Dragon Common "Supremacy: Summon a copy of this minion."
+
+
+	// Dragon Caretaker - 1 Mana 2/1 Rare "Battlecry: Give a friendly Dragon +2 Health."
+
+	// Siphonscale Blade - 8 Mana 6/3 Weapon Epic "Can attack again after a friendly minion attacks and kills a minion."
+
+	// Irena, Dragon Knight - 3 Mana 2/1 Legendary "Blitz. Adjacent Dragons have double their Attack."
+
 }
 

@@ -1,0 +1,11 @@
+{
+  "seed" : -5821226022534847578,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "BLUE", "TOAST" ],
+  "deckCardIds" : [ [ "spell_shifting_scroll", "minion_goblin_blastmage", "minion_cinderslinger", "weapon_felomelorn", "minion_kabal_lackey", "minion_yokai_shapeshifter", "minion_fen_creeper", "minion_spellslinger", "minion_enhancing_shaman", "spell_flamecannon", "minion_mecha_thun", "spell_arcane_missiles", "minion_old_murk-eye", "minion_rhonin", "minion_curio_collector", "minion_pyros", "minion_tauren_warrior", "minion_raven_familiar", "minion_bullet_bull", "minion_silver_warmaiden", "minion_animated_armor", "spell_set_ablaze", "minion_sunbender", "secret_potion_of_polymorph", "minion_glass_golem", "minion_doctor_hatchett", "minion_dead_horse", "minion_froststeed", "spell_arcane_intellect", "spell_dragons_fury" ], [ "minion_twin_emperor_veklor", "minion_hench_clan_sneak", "minion_witch_s_cauldron", "minion_vicious_scalehide", "minion_obsidian_queen", "spell_summoned_table", "minion_refreshment_vendor", "minion_corrupted_egg", "minion_loose_specimen", "minion_crystal_golem", "minion_corrosive_sludge", "spell_massive_burp", "minion_cromwell", "minion_reckless_hero", "minion_blowgill_sniper", "spell_orgrimmar_portal", "spell_massive_burp", "minion_wargear", "spell_stormchops", "spell_well_fed", "minion_proud_defender", "minion_head_of_the_caravan", "minion_worgen_infiltrator", "minion_jeeves", "minion_hench_clan_sneak", "minion_sunwalker", "spell_top_chef", "minion_master_of_ceremonies", "minion_hecklebot", "spell_toxic_mushroom" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "JOURNEY_TO_UNGORO", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "REWARD", "LEAGUE_OF_EXPLORERS", "BASIC", "VERDANT_DREAMS", "PROMO", "SPELLSOURCE_BASIC", "BLACKROCK_MOUNTAIN", "RASTAKHANS_RUMBLE", "HALL_OF_FAME", "BATTLE_FOR_ASHENVALE", "GOBLINS_VS_GNOMES", "THE_GRAND_TOURNAMENT", "THE_OLD_GODS", "BOOMSDAY_PROJECT", "WITCHWOOD", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "KOBOLDS_AND_CATACOMBS", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "SANDS_OF_TIME", "NAXXRAMAS" ],
+  "mulligans" : [ [ 17, 29 ], [ 48 ] ],
+  "actions" : [ 1, 2, 0, 0, 0, 0, 0, 1, 1, 4, 0, 7, 3, 0, 5, 2, 17, 0, 1, 1, 0, 0, 4, 0, 0, 13, 0, 5, 0, 11, 8, 6, 0, 6, 14, 3, 1, 1, 0, 11, 5, 0, 2, 7, 0, 0, 0, 10, 1, 0, 5, 0, 9, 0, 8, 0 ],
+  "id" : null
+}

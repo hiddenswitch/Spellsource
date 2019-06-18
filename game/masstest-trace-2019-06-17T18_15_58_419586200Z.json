@@ -1,0 +1,11 @@
+{
+  "seed" : 3257722126500817274,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "EGGPLANT", "OBSIDIAN" ],
+  "deckCardIds" : [ [ "minion_proudjaw_lackey", "minion_saboteur", "spell_rockslide", "minion_magicat", "spell_devour", "minion_green_jelly", "minion_bull_dozer", "minion_vryghoul", "minion_clamouring_crusher", "minion_nightmare_dragon", "secret_gloat", "minion_silvermoon_guardian", "minion_champion_tangler", "minion_reckless_hero", "minion_weasel_tunneler", "minion_small-time_buccaneer", "minion_doctor_hatchett", "minion_brawler_bushi", "weapon_monster_manual", "minion_catacomb_candlefin", "minion_phantom_advisor", "minion_violet_wurm", "minion_river_crocolisk", "minion_huge_toad", "minion_clumsy_dryad", "minion_holomancer", "minion_fleshy_aberration", "minion_giant_mastodon", "spell_dastardly_duo", "minion_tuskarr_camper" ], [ "minion_deranged_shifter", "quest_into_the_mines", "spell_overtap", "minion_killing_machine", "minion_powerbringer", "spell_asphyxiate", "minion_marrowling", "minion_clumsy_dryad", "minion_silver_warmaiden", "minion_leatherclad_hogleader", "minion_hardened_initiate", "minion_green_jelly", "minion_the_lich_king", "spell_collectible_death_coil", "minion_rotting_dead", "minion_bloodbeast", "minion_tanglefur_mystic", "minion_tombstone_terror", "minion_blackwing_technician", "spell_shadow_infusion", "minion_shifting_sands", "minion_summoning_stone", "minion_underbelly_ooze", "minion_archerus_deathcharger", "minion_saronite_drake", "minion_sharkfin_fan", "minion_target_dummy", "permanent_puzzle_box", "minion_echoweb_lurker", "spell_chain_hook" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "CUSTOM", "VERDANT_DREAMS", "JOURNEY_TO_UNGORO", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "CLASSIC", "BLACKROCK_MOUNTAIN", "BASIC", "BOOMSDAY_PROJECT", "KOBOLDS_AND_CATACOMBS", "RASTAKHANS_RUMBLE", "PROMO", "HALL_OF_FAME", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "REWARD", "NAXXRAMAS", "SPELLSOURCE_BASIC", "SANDS_OF_TIME", "GOBLINS_VS_GNOMES", "WITCHWOOD" ],
+  "mulligans" : [ [ 22 ], [ 39, 41, 37 ] ],
+  "actions" : [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 0, 6, 2, 1, 8, 0, 0, 0, 4, 1 ],
+  "id" : null
+}

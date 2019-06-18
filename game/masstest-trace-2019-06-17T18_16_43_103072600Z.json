@@ -1,0 +1,11 @@
+{
+  "seed" : 7668804014070421041,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "PURPLE", "VIOLET" ],
+  "deckCardIds" : [ [ "minion_furnacefire_colossus", "minion_ice_cream_peddler", "minion_gravelsnout_knight", "spell_imprison", "weapon_soul_cursed_glaives", "spell_eye_beam", "weapon_glaives_of_the_fallen", "minion_silver_warmaiden", "spell_vengeful_retreat", "minion_corrupted_seer", "spell_fel_barrage", "spell_vengeful_retreat", "minion_undead_trickster", "minion_gravelsnout_knight", "minion_chromatic_vohlok", "spell_shear", "weapon_glaives_of_the_fallen", "minion_hypnotist", "minion_backstreet_leper", "minion_illidari_adept", "minion_cloud_serpent_hatchling", "minion_psych-o-tron", "minion_arcanosmith", "spell_fel_barrage", "spell_soul_cleave", "minion_illidari_adept", "minion_murloc_tidecaller", "spell_blur", "minion_argent_commander", "minion_sly_conquistador" ], [ "spell_running_on_empty", "minion_troggzor_the_earthinator", "minion_ragtag_rescuer", "minion_jumbo_imp", "minion_reckless_diretroll", "minion_gentle_megasaur", "minion_blood_witch", "minion_blingtron_3000", "minion_abyssal_enforcer", "minion_kawarimi_headbasher", "minion_plunderogue", "minion_blood_witch", "minion_piloted_shredder", "minion_slitherbow", "spell_mortal_coil", "minion_swamp_dragon_egg", "minion_archmage", "minion_possessed_lacky", "minion_kiljaeden_the_deceiver", "minion_beloved_benji", "minion_igneous_elemental", "minion_anarking", "minion_lord_jaraxxus", "spell_lesser_amethyst_spellstone", "minion_goldshire_footman", "minion_bull_dozer", "minion_vulgar_homunculus", "minion_quest_giver", "minion_crystalweaver", "minion_lil_exorcist" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "CUSTOM", "VERDANT_DREAMS", "JOURNEY_TO_UNGORO", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "CLASSIC", "BLACKROCK_MOUNTAIN", "BASIC", "BOOMSDAY_PROJECT", "KOBOLDS_AND_CATACOMBS", "RASTAKHANS_RUMBLE", "PROMO", "HALL_OF_FAME", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "REWARD", "NAXXRAMAS", "SPELLSOURCE_BASIC", "SANDS_OF_TIME", "GOBLINS_VS_GNOMES", "WITCHWOOD" ],
+  "mulligans" : [ [ 31, 21 ], [ 42 ] ],
+  "actions" : [ 1, 1, 1, 4, 0, 0, 1, 3, 1, 0, 2, 4, 2, 4, 3, 3, 2, 2, 1, 1, 7, 0 ],
+  "id" : null
+}
