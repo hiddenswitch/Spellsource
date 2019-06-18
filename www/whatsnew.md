@@ -3,9 +3,6 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-##### Content Additions:
-
- - 14 new cards in the Dragoon class. (1118)
 
 ### 0.8.33-2.0.31 (In Progress)
 
@@ -19,7 +16,12 @@ Visit the new Windows development guide at http://playspellsource.com/windows-de
  - Weapons now disappear when they are destroyed. (910)
  - Challenges to play a match or make a friend invite now correctly pop up. 
 
+##### Content Additions:
+
+ - 14 new cards in the Dragoon class. (1118, 1172)
+
 ##### Content Fixes:
+
  - Oppressor Defender now costs 6 Mana, a 2/2 minion. (1112)
  - Unnerving Spectre now costs 4 Mana, a 2/2 minion. (1112)
  - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
