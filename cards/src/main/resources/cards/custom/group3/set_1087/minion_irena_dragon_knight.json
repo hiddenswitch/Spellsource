@@ -1,0 +1,35 @@
+{
+  "name": "Dragon Caretaker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Blitz. Adjacent Dragons have double their Attack.",
+  "aura":
+    {
+      "class": "Aura",
+      "target": "ADJACENT_MINIONS",
+      "filter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      },
+      "alwaysApply": true,
+      "applyEffect": {
+        "class": "SetAttributeSpell",
+        "value": 2,
+        "attribute": "AURA_ATTACK_MULTIPLIER"
+      },
+      "removeEffect": {
+        "class": "RemoveAttributeSpell",
+        "attribute": "AURA_ATTACK_MULTIPLIER"
+      }
+    },
+"attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,6 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",
+  "race": "DRAGON",
   "description": "Supremacy: Deal 7 damage to a random enemy minion.",
   "trigger": {
     "eventTrigger": {
@@ -16,6 +17,11 @@
       "spell": {
         "class": "DamageSpell",
         "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "EntityEqualsFilter",
+          "secondaryTarget": "EVENT_TARGET",
+          "invert": true
+        },
         "value": 7,
         "randomTarget": true
       }
