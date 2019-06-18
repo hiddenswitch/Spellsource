@@ -14,11 +14,12 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestBehaviour;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
