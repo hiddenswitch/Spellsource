@@ -2,7 +2,7 @@
   "name": "Dragon Caretaker",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "LEGENDARY",
