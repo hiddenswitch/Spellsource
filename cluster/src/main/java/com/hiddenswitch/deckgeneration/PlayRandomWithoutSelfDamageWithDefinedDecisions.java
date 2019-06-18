@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.HealSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
@@ -24,16 +25,18 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	List<String> cardsToKeepOnMulligan = new ArrayList<>();
 	List<String> minionsThatDoNotAttackEnemyHero = new ArrayList<>();
 	List<String> minionsThatDoNotAttackEnemyMinions = new ArrayList<>();
+	List<String> cardsThatCannotTargetOwnEntities = new ArrayList<>();
+	List<String> cardsThatCannotTargetEnemyEntities = new ArrayList<>();
+
 	boolean alwaysAttackEnemyHero = false;
-
-	public void setCanHealFullHealthEntities(boolean canHealFullHealthEntities) {
-		this.canHealFullHealthEntities = canHealFullHealthEntities;
-	}
-
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
 	boolean canBuffEnemyMinions = true;
 	boolean canHealEnemyEntities = true;
 	boolean canHealFullHealthEntities = true;
+
+	public void setCanHealFullHealthEntities(boolean canHealFullHealthEntities) {
+		this.canHealFullHealthEntities = canHealFullHealthEntities;
+	}
 
 	public void setCanEndTurnIfAttackingEnemyHeroIsValid(boolean canEndTurnIfAttackingEnemyHeroIsValid) {
 		this.canEndTurnIfAttackingEnemyHeroIsValid = canEndTurnIfAttackingEnemyHeroIsValid;
@@ -67,6 +70,12 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 			}
 			if (decisionTypes.get(i).equals(DecisionType.KEEP_CARDS_ON_MULLIGAN)) {
 				cardsToKeepOnMulligan = cardsListForEachDecision.get(i);
+			}
+			if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES)) {
+				cardsThatCannotTargetEnemyEntities = cardsListForEachDecision.get(i);
+			}
+			if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES)) {
+				cardsThatCannotTargetOwnEntities = cardsListForEachDecision.get(i);
 			}
 		}
 	}
@@ -152,7 +161,59 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		filterBuffSpellsOnEnemyMinions(player, opponent, validActions, context);
 		filterHealingSpellsOnEnemyMinions(player, opponent, validActions, context);
 		filterHealingSpellsOnFullHealthMinions(player, opponent, validActions, context);
+		filterCardsThatCannotTargetCertainPlayerEntities(context, opponent, validActions, cardsThatCannotTargetEnemyEntities);
+		filterCardsThatCannotTargetCertainPlayerEntities(context, player, validActions, cardsThatCannotTargetOwnEntities);
 		filterEndTurn(opponent, validActions);
+	}
+
+	/**
+	 * Filters actions that play a card from a list of cards on a certain given player's entity
+	 *
+	 * @param context           The context for the game state
+	 * @param playerToNotTarget The player that a card on our list of cards is not allowed to target
+	 * @param validActions      The list of actions that we are filtering through
+	 * @param invalidCards      The list of card ids that are not allowed to target the given player's entities
+	 */
+	public void filterCardsThatCannotTargetCertainPlayerEntities(GameContext context, Player playerToNotTarget, List<GameAction> validActions, List<String> invalidCards) {
+		if (invalidCards.isEmpty()) {
+			return;
+		}
+		validActions.removeIf(action -> {
+			if (HeroPowerAction.class.isAssignableFrom(action.getClass())) {
+				HeroPowerAction heroPowerAction = (HeroPowerAction) action;
+				Entity sourceEntity = context.resolveSingleTarget(heroPowerAction.getSourceReference());
+				Card sourceCard = sourceEntity.getSourceCard();
+				String sourceCardId = sourceCard.getCardId();
+				if (!invalidCards.contains(sourceCardId)) {
+					return false;
+				}
+				Entity targetEntity = context.resolveSingleTarget(heroPowerAction.getTargetReference());
+				return targetEntity.getOwner() == playerToNotTarget.getOwner();
+			}
+			if (PlaySpellCardAction.class.isAssignableFrom(action.getClass())) {
+				PlaySpellCardAction playSpellCardAction = (PlaySpellCardAction) action;
+				Entity sourceEntity = context.resolveSingleTarget(playSpellCardAction.getSourceReference());
+				Card sourceCard = sourceEntity.getSourceCard();
+				String sourceCardId = sourceCard.getCardId();
+				if (!invalidCards.contains(sourceCardId)) {
+					return false;
+				}
+				Entity targetEntity = context.resolveSingleTarget(playSpellCardAction.getTargetReference());
+				return targetEntity.getOwner() == playerToNotTarget.getOwner();
+			}
+			if (BattlecryAction.class.isAssignableFrom(action.getClass())) {
+				BattlecryAction battlecryAction = (BattlecryAction) action;
+				Entity sourceEntity = context.resolveSingleTarget(battlecryAction.getSourceReference());
+				Card sourceCard = sourceEntity.getSourceCard();
+				String sourceCardId = sourceCard.getCardId();
+				if (!invalidCards.contains(sourceCardId)) {
+					return false;
+				}
+				Entity targetEntity = context.resolveSingleTarget(battlecryAction.getTargetReference());
+				return targetEntity.getOwner() == playerToNotTarget.getOwner();
+			}
+			return false;
+		});
 	}
 
 	/**

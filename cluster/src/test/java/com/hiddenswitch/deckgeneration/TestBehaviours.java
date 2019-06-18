@@ -4,6 +4,8 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.HeroPowerAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
@@ -336,4 +338,188 @@ public class TestBehaviours extends TestBase {
 			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
 		});
 	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities() {
+		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
+		List<String> list = new ArrayList<>();
+		list.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(list));
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_stat_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			receiveCard(context, player, "spell_ancestral_healing");
+			player.setMana(0);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOpponentEntities = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == opponent.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
+		});
+	}
+
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetEnemyEntities() {
+		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
+		List<String> list = new ArrayList<>();
+		list.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(list));
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_earthen_ring_farseer");
+
+			player.setMana(3);
+			overrideBattlecry(context, player, battlecryActions -> {
+				int originalSize = battlecryActions.size();
+				List<GameAction> actions = battlecryActions.stream().map(battlecryAction -> (GameAction) battlecryAction).collect(Collectors.toList());
+				behaviour.filterActions(context, player, actions);
+				assertTrue(originalSize - 1 == actions.size());
+
+				// There should be no valid actions that target enemy entities
+				List<GameAction> actionsThatTargetOpponentEntities = actions.stream()
+						.filter(action -> (
+								action.getTargets(context, player.getIndex())
+										.stream()
+										.filter(target -> target.getOwner() == opponent.getOwner())
+										.findFirst()
+										.isPresent())).collect(Collectors.toList());
+				assertTrue(actionsThatTargetOpponentEntities.isEmpty());
+				return battlecryActions.get(0);
+			});
+			playCard(context, player, "minion_earthen_ring_farseer");
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetEnemyEntities() {
+		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
+		List<String> list = new ArrayList<>();
+		list.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(list));
+
+		runGym((context, player, opponent) -> {
+			Hero priest = new Hero(CardCatalogue.getCardById("hero_anduin"), CardCatalogue.getCardById("hero_power_lesser_heal"));
+			player.setHero(priest);
+			player.getHero().setHp(30);
+			player.setMana(2);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOpponentEntities = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == opponent.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetOwnEntities() {
+		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
+		List<String> list = new ArrayList<>();
+		list.addAll(neverUseOnOwnMinion.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(list));
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_stat_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			receiveCard(context, player, "spell_moonfire");
+			player.setMana(0);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 2 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOwnEntities = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == player.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOwnEntities.isEmpty());
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetOwnEntities() {
+		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
+		List<String> list = new ArrayList<>();
+		list.addAll(neverUseOnOwnMinion.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(list));
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_fire_elemental");
+
+			player.setMana(10);
+			overrideBattlecry(context, player, battlecryActions -> {
+				int originalSize = battlecryActions.size();
+				List<GameAction> actions = battlecryActions.stream().map(battlecryAction -> (GameAction) battlecryAction).collect(Collectors.toList());
+				behaviour.filterActions(context, player, actions);
+				assertTrue(originalSize - 1 == actions.size());
+
+				// There should be no valid actions that target enemy entities
+				List<GameAction> actionsThatTargetOwnEntities = actions.stream()
+						.filter(action -> (
+								action.getTargets(context, player.getIndex())
+										.stream()
+										.filter(target -> target.getOwner() == player.getOwner())
+										.findFirst()
+										.isPresent())).collect(Collectors.toList());
+				assertTrue(actionsThatTargetOwnEntities.isEmpty());
+				return battlecryActions.get(0);
+			});
+			playCard(context, player, "minion_fire_elemental");
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetOwnEntities() {
+		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
+		List<String> list = new ArrayList<>();
+		list.addAll(neverUseOnOwnMinion.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(list));
+
+		runGym((context, player, opponent) -> {
+			player.setMana(2);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOwnEntities = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == player.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOwnEntities.isEmpty());
+		});
+	}
 }
+
+

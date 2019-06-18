@@ -42,4 +42,14 @@ public enum DecisionType {
 	 * A player should not be able to heal eneti
 	 */
 	CANNOT_HEAL_FULL_HEALTH_ENTITIES,
+
+	/**
+	 * Cards that cannot target enemy entities (spells, battlecries, etc.)
+	 */
+	SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES,
+
+	/**
+	 * Cards that cannot target player entities (spells, battlecries, etc.)
+	 */
+	SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES
 }
