@@ -2,7 +2,7 @@
   "name": "Ethereal Knight",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",

@@ -2,7 +2,7 @@
   "name": "Dawn's Might",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "rarity": "COMMON",
   "description": "Give a minion +3/+2.",
   "targetSelection": "MINIONS",
