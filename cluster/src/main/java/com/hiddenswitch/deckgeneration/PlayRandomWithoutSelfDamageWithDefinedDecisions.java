@@ -15,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,11 +23,11 @@ import java.util.stream.Collectors;
 // Behaviour that inherits all of PlayRandomWithoutSelfDamageBehaviour,
 // but also allows for additional specifications
 public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomWithoutSelfDamageBehaviour {
-	List<String> cardsToKeepOnMulligan = new ArrayList<>();
-	List<String> minionsThatDoNotAttackEnemyHero = new ArrayList<>();
-	List<String> minionsThatDoNotAttackEnemyMinions = new ArrayList<>();
-	List<String> cardsThatCannotTargetOwnEntities = new ArrayList<>();
-	List<String> cardsThatCannotTargetEnemyEntities = new ArrayList<>();
+	HashSet<String> cardsToKeepOnMulligan = new HashSet<>();
+	HashSet<String> minionsThatDoNotAttackEnemyHero = new HashSet<>();
+	HashSet<String> minionsThatDoNotAttackEnemyMinions = new HashSet<>();
+	HashSet<String> cardsThatCannotTargetOwnEntities = new HashSet<>();
+	HashSet<String> cardsThatCannotTargetEnemyEntities = new HashSet<>();
 
 	boolean alwaysAttackEnemyHero = false;
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
@@ -58,7 +59,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 * @param decisionTypes            A list of decision types that indicates what decisions we are manipulating
 	 * @param cardsListForEachDecision A list of cards that corresponds to each decision type
 	 */
-	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> decisionTypes, List<List<String>> cardsListForEachDecision) {
+	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> decisionTypes, List<HashSet<String>> cardsListForEachDecision) {
 		assert decisionTypes.size() == cardsListForEachDecision.size();
 
 		for (int i = 0; i < decisionTypes.size(); i++) {
@@ -84,7 +85,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		updateBooleanDecisionTypes(booleanDecisionTypes);
 	}
 
-	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> cardListDecisionTypes, List<List<String>> cardsListForEachDecision, List<DecisionType> booleanDecisionTypes) {
+	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> cardListDecisionTypes, List<HashSet<String>> cardsListForEachDecision, List<DecisionType> booleanDecisionTypes) {
 		this(cardListDecisionTypes, cardsListForEachDecision);
 		updateBooleanDecisionTypes(booleanDecisionTypes);
 	}
@@ -174,7 +175,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 * @param validActions      The list of actions that we are filtering through
 	 * @param invalidCards      The list of card ids that are not allowed to target the given player's entities
 	 */
-	public void filterCardsThatCannotTargetCertainPlayerEntities(GameContext context, Player playerToNotTarget, List<GameAction> validActions, List<String> invalidCards) {
+	public void filterCardsThatCannotTargetCertainPlayerEntities(GameContext context, Player playerToNotTarget, List<GameAction> validActions, HashSet<String> invalidCards) {
 		if (invalidCards.isEmpty()) {
 			return;
 		}

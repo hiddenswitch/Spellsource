@@ -10,6 +10,7 @@ import net.demilich.metastone.game.statistics.Statistic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -59,15 +60,15 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 
 		// Create the list of cards associated with each decisionType in order
 		// to create the behaviour to be utilized
-		List<List<String>> cardListForEachDecision = new ArrayList<>();
+		List<HashSet<String>> cardListForEachDecision = new ArrayList<>();
 		for (int i = 0; i < cardListDecisionTypes.size(); i++) {
-			List<String> cardListForDecision = new ArrayList<>();
+			HashSet<String> cardSetForDecision = new HashSet<>();
 			for (int j = 0; j < individual.getChromosome(1 + i).length(); j++) {
 				if (individual.getChromosome(1 + i).getGene(j).booleanValue()) {
-					cardListForDecision.add(indexInBitmap.get(j).getCardId());
+					cardSetForDecision.add(indexInBitmap.get(j).getCardId());
 				}
 			}
-			cardListForEachDecision.add(cardListForDecision);
+			cardListForEachDecision.add(cardSetForDecision);
 		}
 
 		// Determine which boolean decisionTypes should be utilized by the

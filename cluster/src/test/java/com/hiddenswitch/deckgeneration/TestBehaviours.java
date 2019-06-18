@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,7 +92,9 @@ public class TestBehaviours extends TestBase {
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyHero() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO), Collections.singletonList(Collections.singletonList("minion_with_damage_3")));
+			HashSet<String> minionsThatDoNotAttackEnemyHero = new HashSet<>();
+			minionsThatDoNotAttackEnemyHero.add("minion_with_damage_3");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO), Collections.singletonList(minionsThatDoNotAttackEnemyHero));
 			context.endTurn();
 			context.endTurn();
 			List<GameAction> actions = context.getValidActions();
@@ -107,7 +110,9 @@ public class TestBehaviours extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_stat_1");
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION), Collections.singletonList(Collections.singletonList("minion_with_damage_3")));
+			HashSet<String> minionsThatDoNotAttackEnemyMinions = new HashSet<>();
+			minionsThatDoNotAttackEnemyMinions.add("minion_with_damage_3");
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION), Collections.singletonList(minionsThatDoNotAttackEnemyMinions));
 			context.endTurn();
 			context.endTurn();
 			List<GameAction> actions = context.getValidActions();
@@ -144,9 +149,13 @@ public class TestBehaviours extends TestBase {
 			decisionTypeList.add(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO);
 			decisionTypeList.add(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION);
 
-			List<List<String>> cardListForEachDecision = new ArrayList<>();
-			cardListForEachDecision.add(Collections.singletonList("minion_with_damage_3"));
-			cardListForEachDecision.add(Collections.singletonList("minion_with_damage_3"));
+			List<HashSet<String>> cardListForEachDecision = new ArrayList<>();
+
+			HashSet<String> minionsThatDoNotAttack = new HashSet<>();
+			minionsThatDoNotAttack.add("minion_with_damage_3");
+
+			cardListForEachDecision.add(minionsThatDoNotAttack);
+			cardListForEachDecision.add(minionsThatDoNotAttack);
 
 			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypeList, cardListForEachDecision);
 			context.endTurn();
@@ -164,7 +173,7 @@ public class TestBehaviours extends TestBase {
 			receiveCard(context, player, "minion_with_damage_3");
 			receiveCard(context, player, "minion_stat_3");
 			receiveCard(context, player, "minion_stat_2");
-			List<String> cardsToKeep = new ArrayList<>();
+			HashSet<String> cardsToKeep = new HashSet<>();
 			cardsToKeep.add("minion_with_damage_3");
 			cardsToKeep.add("minion_stat_3");
 			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.KEEP_CARDS_ON_MULLIGAN), Collections.singletonList(cardsToKeep));
@@ -183,8 +192,10 @@ public class TestBehaviours extends TestBase {
 			List<DecisionType> decisionTypeList = new ArrayList<>();
 			decisionTypeList.add(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION);
 
-			List<List<String>> cardListForEachDecision = new ArrayList<>();
-			cardListForEachDecision.add(Collections.singletonList("minion_with_damage_3"));
+			List<HashSet<String>> cardListForEachDecision = new ArrayList<>();
+			HashSet<String> minionsThatCannotAttackEnemyMinions = new HashSet<>();
+			minionsThatCannotAttackEnemyMinions.add("minion_with_damage_3");
+			cardListForEachDecision.add(minionsThatCannotAttackEnemyMinions);
 
 			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypeList, cardListForEachDecision);
 			behaviour.setCanEndTurnIfAttackingEnemyHeroIsValid(false);
@@ -342,9 +353,9 @@ public class TestBehaviours extends TestBase {
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
-		List<String> list = new ArrayList<>();
-		list.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
-		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(list));
+		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnEnemyEntities));
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_stat_3");
@@ -373,9 +384,9 @@ public class TestBehaviours extends TestBase {
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetEnemyEntities() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
-		List<String> list = new ArrayList<>();
-		list.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
-		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(list));
+		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnEnemyEntities));
 
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_earthen_ring_farseer");
@@ -405,9 +416,9 @@ public class TestBehaviours extends TestBase {
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetEnemyEntities() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
-		List<String> list = new ArrayList<>();
-		list.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
-		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(list));
+		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnEnemyEntities));
 
 		runGym((context, player, opponent) -> {
 			Hero priest = new Hero(CardCatalogue.getCardById("hero_anduin"), CardCatalogue.getCardById("hero_power_lesser_heal"));
@@ -435,9 +446,9 @@ public class TestBehaviours extends TestBase {
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetOwnEntities() {
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
-		List<String> list = new ArrayList<>();
-		list.addAll(neverUseOnOwnMinion.classicAndBasicSets);
-		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(list));
+		HashSet<String> cardsThatCannotBeUsedOnOwnEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnOwnEntities.addAll(neverUseOnOwnMinion.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnOwnEntities));
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_stat_3");
@@ -465,9 +476,9 @@ public class TestBehaviours extends TestBase {
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetOwnEntities() {
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
-		List<String> list = new ArrayList<>();
-		list.addAll(neverUseOnOwnMinion.classicAndBasicSets);
-		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(list));
+		HashSet<String> cardsThatCannotBeUsedOnOwnEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnOwnEntities.addAll(neverUseOnOwnMinion.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnOwnEntities));
 
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_fire_elemental");
@@ -497,9 +508,9 @@ public class TestBehaviours extends TestBase {
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetOwnEntities() {
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
-		List<String> list = new ArrayList<>();
-		list.addAll(neverUseOnOwnMinion.classicAndBasicSets);
-		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(list));
+		HashSet<String> cardsThatCannotBeUsedOnOwnEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnOwnEntities.addAll(neverUseOnOwnMinion.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnOwnEntities));
 
 		runGym((context, player, opponent) -> {
 			player.setMana(2);
