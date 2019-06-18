@@ -6918,7 +6918,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 0);
 			playCard(context, player, "spell_dawns_might", target);
 			assertEquals(target.getAttack(), target.getBaseAttack() + 3);
-			assertEquals(target.getHp(),  target.getBaseHp() + 2);
+			assertEquals(target.getHp(), target.getBaseHp() + 2);
 			// Test whether twinspell exists
 			assertEquals(player.getHand().size(), 1);
 			Card copy = player.getHand().get(0);
@@ -6974,7 +6974,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card costly = receiveCard(context, player, "spell_test_cost_3_buff");
 			Minion tempest = playMinionCard(context, player, "minion_tempest_sentinel");
-			assertEquals(costOf(context,player,costly),costly.getBaseManaCost() - 1);
+			assertEquals(costOf(context, player, costly), costly.getBaseManaCost() - 1);
 			assertEquals(tempest.getAttack(), 4);
 			assertEquals(tempest.getHp(), 5);
 		});
@@ -7062,14 +7062,14 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	// Dragon Caretaker - 1 Mana 2/1 Rare "Battlecry: Give a friendly Dragon +2 Health."
-		@Test
-		public void testDragonCaretaker() {
-			runGym((context, player, opponent) -> {
-				Minion dragon = playMinionCard(context, player, "minion_blastflame_dragon");
-				playMinionCard(context, player, "minion_dragon_caretaker");
-				assertEquals(dragon.getHp(), dragon.getBaseHp() + 2);
-			});
-		}
+	@Test
+	public void testDragonCaretaker() {
+		runGym((context, player, opponent) -> {
+			Minion dragon = playMinionCard(context, player, "minion_blastflame_dragon");
+			playMinionCard(context, player, "minion_dragon_caretaker");
+			assertEquals(dragon.getHp(), dragon.getBaseHp() + 2);
+		});
+	}
 
 	// Siphonscale Blade - 8 Mana 6/3 Weapon Epic "Can attack again after a friendly minion attacks and kills a minion."
 	@Test
@@ -7124,6 +7124,13 @@ public class CustomCardsTests extends TestBase {
 			Minion dragon2 = playMinionCard(context, player, "minion_tower_ophidian");
 			assertEquals(nondragon.getAttack(), nondragon.getBaseAttack());
 			assertEquals(dragon2.getAttack(), dragon2.getBaseAttack() * 2);
+		});
+		// Irena, Dragon, Irena
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_irena_dragon_knight");
+			Minion dragon = playMinionCard(context, player, "minion_tower_ophidian");
+			playMinionCard(context, player, "minion_irena_dragon_knight");
+			assertEquals(dragon.getAttack(), dragon.getBaseAttack() * 4);
 		});
 	}
 

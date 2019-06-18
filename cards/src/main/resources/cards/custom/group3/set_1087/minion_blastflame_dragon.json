@@ -30,7 +30,7 @@
   "attributes": {
     "SUPREMACY": true
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

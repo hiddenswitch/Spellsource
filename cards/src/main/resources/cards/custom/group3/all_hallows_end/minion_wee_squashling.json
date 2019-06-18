@@ -11,7 +11,7 @@
     "targetSelection": "ANY",
     "spell": {
       "class": "HealSpell",
-      "value": 2
+      "value": 4
     }
   },
   "attributes": {

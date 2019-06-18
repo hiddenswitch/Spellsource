@@ -7,7 +7,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Fire four missiles at random enemies that deals 4 damage each.",
+  "description": "Aftermath: Fire four missiles at random enemies that deals 4 damage each.",
   "deathrattle": {
     "class": "MissilesSpell",
     "target": "ENEMY_CHARACTERS",
@@ -18,6 +18,6 @@
     "DEATHRATTLES": true
   },
   "collectible": true,
-  "set": "RISE_OF_SHADOWS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

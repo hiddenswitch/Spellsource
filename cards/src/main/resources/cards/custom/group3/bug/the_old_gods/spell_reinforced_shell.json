@@ -27,8 +27,7 @@
           }
         ]
       },
-      "hpBonus": 2,
-      "attackBonus": 0
+      "hpBonus": 2
     }
   },
   "attributes": {},
