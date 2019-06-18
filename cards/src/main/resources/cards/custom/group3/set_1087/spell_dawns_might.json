@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Twinspell. Give a minion +3/+2.",
+  "description": "Give a minion +3/+2. Add one more copy of this to your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -21,6 +21,6 @@
     ]
   },
   "collectible": true,
-  "set": "RISE_OF_SHADOWS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

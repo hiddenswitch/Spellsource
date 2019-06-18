@@ -332,7 +332,7 @@ public class RiseOfShadowsTests extends TestBase {
 	}
 
 	@Test
-	public void testMuckmorpher(){
+	public void testMuckmorpher() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_malygos");
 			for (int i = 0; i < 10; i++) {

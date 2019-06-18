@@ -16,7 +16,7 @@
       "class": "SupremacySpell",
       "spell": {
         "class": "SummonSpell",
-        "card": "minion_tower_ophidian"
+        "target": "SELF"
       }
     }
   },

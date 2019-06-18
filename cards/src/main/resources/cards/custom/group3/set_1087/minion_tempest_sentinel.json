@@ -15,7 +15,7 @@
     "operation": "SUBTRACT",
     "targetPlayer": "BOTH"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "BLIZZARD_ADVENTURE",
   "fileFormatVersion": 1
 }
