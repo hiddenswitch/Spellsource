@@ -1,0 +1,11 @@
+{
+  "seed" : 4428269321937976991,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "EGGPLANT", "OBSIDIAN" ],
+  "deckCardIds" : [ [ "minion_burst_bug", "minion_channeled_spirit", "minion_waterboy", "minion_steelwing_rider", "minion_bone_guard", "minion_force-tank_max", "minion_library_supervisor", "quest_forgotten_knowledge", "minion_fiery_tyrant", "minion_shroom_brewer", "spell_take_down", "minion_silver_warmaiden", "minion_cogmaster", "minion_hero-smasher_thag", "minion_monologist", "minion_core_hound", "minion_fae_horncaster", "minion_mutant_merchant", "minion_corridor_creeper", "minion_femme_fatale", "minion_mimicking_hornnose", "minion_corrosive_sludge", "minion_feugen", "minion_docile_boulder", "spell_echoing_potion", "secret_conjured_assistance", "minion_spiteful_summoner", "minion_summoning_stone", "minion_slippery_mook", "minion_violet_spellsword" ], [ "weapon_bloodsword", "minion_southsea_deckhand", "minion_sourcing_specialist", "spell_permafrost", "minion_hostile_snapdragon", "minion_whirlwind_tempest", "minion_deranged_greengill", "minion_dalaran_librarian", "minion_dragonling_pet", "spell_horn_of_winter", "minion_decomposed_spectator", "spell_collectible_army_of_the_dead", "spell_collectible_death_grip", "spell_collectible_anti_magic_shell", "minion_calcified_champion", "minion_weasel_tunneler", "spell_pay_respects", "minion_rend_blackhand", "minion_muck_hunter", "minion_deaf_knife", "minion_bob_the_undying", "minion_stowaway_scoundrel", "permanent_battle_for_mount_hyjal", "spell_chain_hook", "minion_wyrmguard", "minion_trapped_soul", "minion_loose_specimen", "minion_vryghoul", "spell_icecap", "weapon_bloodsword" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "JOURNEY_TO_UNGORO", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "REWARD", "LEAGUE_OF_EXPLORERS", "BASIC", "VERDANT_DREAMS", "PROMO", "SPELLSOURCE_BASIC", "BLACKROCK_MOUNTAIN", "RASTAKHANS_RUMBLE", "HALL_OF_FAME", "BATTLE_FOR_ASHENVALE", "GOBLINS_VS_GNOMES", "THE_GRAND_TOURNAMENT", "THE_OLD_GODS", "BOOMSDAY_PROJECT", "WITCHWOOD", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "KOBOLDS_AND_CATACOMBS", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "SANDS_OF_TIME", "NAXXRAMAS" ],
+  "mulligans" : [ [ 11 ], [ 63 ] ],
+  "actions" : [ 0, 2, 1, 1, 0, 2, 4, 0, 0, 1, 1, 0, 0, 4, 1, 1, 2, 0, 10, 3, 4, 0, 3, 2, 17, 18, 1, 9, 5, 0, 0, 13, 0 ],
+  "id" : null
+}

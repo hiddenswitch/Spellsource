@@ -1,0 +1,11 @@
+{
+  "seed" : -40933240704650993,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "ICECREAM", "NEONGREEN" ],
+  "deckCardIds" : [ [ "minion_lord_marrowgar_lich", "spell_dark_ritual", "minion_malygos", "spell_howling_blast_lich", "minion_murloc_raider", "minion_timebidding_magi", "spell_death_coil_lich", "minion_molten_giant", "minion_aeonus", "spell_howling_blast_lich", "minion_end_reveler", "minion_drudge_ghoul", "minion_servant_of_twilight", "minion_saronite_chain_gang", "minion_anubisath_sentinel", "minion_icecrown_lich", "minion_arfus", "minion_bomb_lobber", "spel_army_of_undeath", "minion_alexstrasza", "minion_the_curator", "spell_lich_phylactery", "spell_shadow_infusion_lich", "minion_bone_golem", "minion_barista_lynchen", "minion_demonic_frontrunner", "spell_shadow_infusion_lich", "minion_acidic_swamp_ooze", "minion_bone_golem", "spell_all_will_serve_lich" ], [ "permanent_formless_rancour", "minion_ships_cannon", "minion_batterhead", "minion_master_oakheart", "spell_feeding_frenzy", "minion_nebulous_entity", "spell_warp", "minion_grandmother_vratta", "minion_bronze_timekeeper", "spell_xenobulwark", "minion_puddlestomper", "spell_reconnoitre", "minion_zombie_chow", "minion_potion_vendor", "minion_nebulous_entity", "minion_patches_the_pirate", "minion_silver_warmaiden", "minion_southsea_captain", "spell_feeding_frenzy", "spell_observer", "permanent_formless_immortal", "permanent_formless_immortal", "spell_cannibalize", "minion_oni_entrapper", "minion_bugbiter", "minion_dragon_egg", "spell_observer", "minion_alien_invader", "minion_mind_harvester", "minion_toshley" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BATTLE_FOR_ASHENVALE", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "NAXXRAMAS", "KOBOLDS_AND_CATACOMBS", "CUSTOM", "REWARD", "BLACKROCK_MOUNTAIN", "BASIC", "BOOMSDAY_PROJECT", "CLASSIC", "RISE_OF_SHADOWS", "SPELLSOURCE_BASIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "GOBLINS_VS_GNOMES", "VERDANT_DREAMS", "WITCHWOOD", "PROMO", "SANDS_OF_TIME", "THE_GRAND_TOURNAMENT", "ONE_NIGHT_IN_KARAZHAN", "RASTAKHANS_RUMBLE", "JOURNEY_TO_UNGORO", "HALL_OF_FAME" ],
+  "mulligans" : [ [ 14 ], [ 44, 59 ] ],
+  "actions" : [ 3, 0, 0, 1, 4, 3, 1, 4, 0, 1, 1, 7, 4, 1, 1, 5, 1, 0, 8, 0, 1, 0, 10, 5, 0, 20, 9, 3, 1, 2, 0, 6, 16, 0, 1, 1, 7, 5, 0, 0, 26, 2, 6, 0, 0, 9, 11, 2 ],
+  "id" : null
+}

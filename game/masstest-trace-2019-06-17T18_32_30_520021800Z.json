@@ -1,0 +1,11 @@
+{
+  "seed" : -8135651471119471465,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "NAVY", "AMBER" ],
+  "deckCardIds" : [ [ "minion_violet_warden", "minion_ravasaur_runt", "spell_rat_plague", "minion_spirit_of_the_bear", "spell_ensnare", "minion_haunted_berserker", "minion_parallel_protector", "minion_blowgill_sniper", "minion_commander_gareth", "minion_old_ratmother", "minion_damaged_stegotron", "minion_unpowered_mauler", "minion_secretkeeper", "minion_silver_warmaiden", "spell_warfare_training", "minion_deathrider", "minion_catta_the_merciless", "spell_avenging_forces", "minion_ancient_mage", "minion_naga_illusionist", "spell_whelp_encounter", "minion_aged_enchanter", "minion_enhance-o_mechano", "minion_murloc_fixpicker", "minion_haunted_berserker", "minion_spellbreaker", "minion_mini_knight", "minion_battlerattler", "minion_dollmaster_dorian", "minion_malicious_magpie" ], [ "minion_ultrabug", "spell_teamwork", "minion_hercules", "minion_darkshard_duelist", "minion_blue_beetle", "minion_tauren_warrior", "minion_lance_carrier", "secret_obvious_ambush", "spell_boss_fight", "minion_ragnaros_the_firelord", "spell_unearth", "spell_venom_drench", "minion_swarmlord", "minion_worgen_greaser", "minion_monarch_barata", "minion_electrowright", "minion_bait", "spell_venom_drench", "secret_obvious_ambush", "minion_echoing_ooze", "minion_flame_juggler", "minion_molten_giant", "minion_ragtag_rescuer", "spell_ancient_catching", "minion_terala", "minion_glass_golem", "minion_corrupt_sentinel", "spell_refang", "spell_refang", "minion_grand_guardian" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BATTLE_FOR_ASHENVALE", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "NAXXRAMAS", "KOBOLDS_AND_CATACOMBS", "CUSTOM", "REWARD", "BLACKROCK_MOUNTAIN", "BASIC", "BOOMSDAY_PROJECT", "CLASSIC", "RISE_OF_SHADOWS", "SPELLSOURCE_BASIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "GOBLINS_VS_GNOMES", "VERDANT_DREAMS", "WITCHWOOD", "PROMO", "SANDS_OF_TIME", "THE_GRAND_TOURNAMENT", "ONE_NIGHT_IN_KARAZHAN", "RASTAKHANS_RUMBLE", "JOURNEY_TO_UNGORO", "HALL_OF_FAME" ],
+  "mulligans" : [ [ 25 ], [ 48, 47, 37 ] ],
+  "actions" : [ 1, 1, 0, 0, 3, 0, 0, 0, 5, 0, 1, 10, 6, 4, 1, 0, 10, 5, 0, 3, 2, 0, 28, 1 ],
+  "id" : null
+}

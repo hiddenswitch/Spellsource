@@ -1,0 +1,11 @@
+{
+  "seed" : -7884990641771770489,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "GREEN", "TIME" ],
+  "deckCardIds" : [ [ "minion_commander_gareth", "minion_aberrant_berserker", "spell_quick_shot", "spell_wing_blast", "minion_charged_devilsaur", "minion_frost_giant", "minion_king_krush", "minion_deathaxe_punisher", "spell_wing_blast", "spell_arcane_shot", "spell_make_friends", "minion_necromechanic", "minion_brave_archer", "spell_call_of_the_wild", "minion_icehowl", "minion_divine_cleric", "minion_soup_savant", "minion_mountain_nightmare", "minion_bone_drake", "spell_lesser_emerald_spellstone", "quest_a_final_strike", "secret_explosive_trap", "secret_hidden_cache", "minion_holdout_soldier", "minion_zoologist", "minion_crow_reaper", "minion_sergeant_sally", "minion_tinkmaster_overspark", "minion_necromechanic", "minion_arcane_fletcher" ], [ "spell_trials_of_the_weave", "spell_destined_to_repeat", "minion_meek_inheritor", "minion_coliseum_manager", "spell_lesser_marble_spellstone", "minion_toxic_sewer_ooze", "secret_delay_fate", "minion_miniature_gunner", "spell_firesilk_chrysalis", "spell_power_everlasting", "minion_timelost_sarcophagus", "spell_leyline_tap", "minion_loot_hoarder", "spell_bullet_time", "spell_peace_in_nothing", "minion_mystic_weaver", "minion_acolyte_of_peroth'arn", "minion_leeroy_jenkins", "minion_shade_of_naxxramas", "spell_snip_the_cord", "spell_tangled_destiny", "minion_cobalt_scalebane", "spell_astral_shockwave", "minion_blingtron_3000", "minion_arcane_accelerator", "minion_elven_archer", "spell_trials_of_the_weave", "minion_silver_warmaiden", "minion_mind_controlled_mech", "spell_altered_fate" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "JOURNEY_TO_UNGORO", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "REWARD", "LEAGUE_OF_EXPLORERS", "BASIC", "VERDANT_DREAMS", "PROMO", "SPELLSOURCE_BASIC", "BLACKROCK_MOUNTAIN", "RASTAKHANS_RUMBLE", "HALL_OF_FAME", "BATTLE_FOR_ASHENVALE", "GOBLINS_VS_GNOMES", "THE_GRAND_TOURNAMENT", "THE_OLD_GODS", "BOOMSDAY_PROJECT", "WITCHWOOD", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "KOBOLDS_AND_CATACOMBS", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "SANDS_OF_TIME", "NAXXRAMAS" ],
+  "mulligans" : [ [ 10, 17, 4 ], [ 42, 52 ] ],
+  "actions" : [ 2, 2, 4, 3, 3, 0, 4, 6, 1, 0, 0, 4, 1 ],
+  "id" : null
+}

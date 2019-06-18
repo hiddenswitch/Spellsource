@@ -1,0 +1,11 @@
+{
+  "seed" : -6419621273920867945,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "BLOOD", "JADE" ],
+  "deckCardIds" : [ [ "minion_elite_tauren_chieftain", "minion_assimilator", "spell_hemoshield", "spell_deaths_caress", "minion_veindrake", "spell_scarlet_thirst", "minion_goblin_bomb", "minion_chaotic_cutthroat", "minion_feral_gibberer", "minion_prince_taldaram", "minion_skullsplitter_troll", "minion_blood_of_the_ancient_one", "minion_arena_treasure_chest", "minion_end_reveler", "minion_crystallizer", "spell_blood_moon_rising", "spell_hemoshield", "minion_lifetaker", "minion_yokai_shapeshifter", "minion_murloc_warleader", "minion_swamp_leech", "minion_ogre_magi", "minion_mutamite_terror", "minion_forgotten_hero", "spell_harness_suffering", "minion_veindrake", "minion_feral_child", "minion_silver_warmaiden", "minion_evolved_kobold", "spell_blood_moon_rising" ], [ "spell_monastery_s_teachings", "spell_serpent_stance", "spell_dawns_might", "minion_student_of_the_serpent", "minion_omega_defender", "spell_gift_of_the_mists", "minion_netherspite_historian", "minion_madam_goya", "spell_chi_wave", "minion_violet_teacher", "minion_mrrrine", "spell_keg_smash", "spell_tiger_palm_strike", "minion_saronite_chain_gang", "spell_stance_change", "minion_kobold_apprentice", "spell_ox_stance", "minion_emperor_shaohao", "spell_monastery_s_teachings", "minion_bloodsail_corsair", "minion_monastery_scroll-keeper", "spell_crane_stance", "minion_unstable_ghoul", "minion_barista_lynchen", "spell_staggering_brew", "weapon_jade_serpent_staff", "minion_beckoner_of_evil", "spell_crane_stance", "minion_worgen_abomination", "minion_blowgill_sniper" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "CUSTOM", "VERDANT_DREAMS", "JOURNEY_TO_UNGORO", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "CLASSIC", "BLACKROCK_MOUNTAIN", "BASIC", "BOOMSDAY_PROJECT", "KOBOLDS_AND_CATACOMBS", "RASTAKHANS_RUMBLE", "PROMO", "HALL_OF_FAME", "ONE_NIGHT_IN_KARAZHAN", "RISE_OF_SHADOWS", "REWARD", "NAXXRAMAS", "SPELLSOURCE_BASIC", "SANDS_OF_TIME", "GOBLINS_VS_GNOMES", "WITCHWOOD" ],
+  "mulligans" : [ [ 22 ], [ 40 ] ],
+  "actions" : [ 0, 0, 1, 1, 1, 0, 7, 2, 0, 0, 11, 4, 0, 0, 12, 0, 0, 0, 1, 9, 9, 0, 1, 7, 6, 3, 6, 7, 10, 1, 2, 0, 21, 0 ],
+  "id" : null
+}
