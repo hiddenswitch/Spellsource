@@ -2,7 +2,7 @@
   "name": "Blastflame Dragon",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",

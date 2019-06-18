@@ -3,13 +3,16 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+##### Content Additions:
+
+ - 14 new cards in the Dragoon class.
 
 ### 0.8.33-2.0.30 (In Progress)
 
 Bug fixes.
 
 ##### Content Fixes:
-
+ - 
  - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
  - Hypnotic Beetle now costs 4 mana. (1114)
  - Sharper Claws (Upgraded Hero Power) now renamed to Hone Claws. (1118)

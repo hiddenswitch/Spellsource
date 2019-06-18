@@ -2,7 +2,7 @@
   "name": "Siphonscale Blade",
   "baseManaCost": 8,
   "type": "WEAPON",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "damage": 6,
   "durability": 3,
   "rarity": "EPIC",

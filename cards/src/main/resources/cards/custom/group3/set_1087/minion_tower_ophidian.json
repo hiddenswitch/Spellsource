@@ -2,7 +2,7 @@
   "name": "Tower Ophidian",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "COMMON",
