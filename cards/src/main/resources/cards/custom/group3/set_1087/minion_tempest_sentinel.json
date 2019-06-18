@@ -2,7 +2,7 @@
   "name": "Tempest Sentinel",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",

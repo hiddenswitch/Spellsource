@@ -2,7 +2,7 @@
   "name": "Defensive Bearing",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "rarity": "COMMON",
   "description": "Give a minion +2 Health and Taunt.",
   "targetSelection": "MINIONS",

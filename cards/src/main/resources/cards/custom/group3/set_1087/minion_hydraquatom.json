@@ -2,7 +2,7 @@
   "name": "Hydraquatom",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RUST",
   "race": "MECH",
   "baseAttack": 8,
   "baseHp": 8,
