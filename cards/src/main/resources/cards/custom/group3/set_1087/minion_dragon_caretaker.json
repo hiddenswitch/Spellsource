@@ -13,6 +13,7 @@
       "class": "BuffSpell",
       "hpBonus": 2,
       "cardFilter": {
+        "class": "CardFilter",
         "race": "DRAGON"
       }
     }
