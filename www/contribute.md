@@ -12,12 +12,12 @@ permalink: /contribute/
  3. [Card Merging Process](#3-card-merging-process)
     1. [Addressing Engineering Problems with Existing Cards](#31-addressing-engineering-problems-with-existing-cards)
     2. [Addressing Other Problems with Cards](#32-addressing-other-problems-with-cards)
- 4. [Best Practices](#4-best-practices)
- 5. [Programming Cards](#5-programming-cards)
 
 ### 1. How to Use This Document
 
 If you're making a contribution to Spellsource, please skim this document for what you need to know. Use its categories and quote it to help yourself, the maintainers and others keep up to standards for contributions and ensure everything goes smoothly.
+
+To read more about engineering, visit [Getting Started with Windows Development](/windows-development/).
 
 ### 2. Contribution Guidelines
 
@@ -135,101 +135,3 @@ Some considerations go into whether or not changes are accepted for these proble
    - Suggested improvements. This means identifying a concrete problem with a card (e.g., it's unbalanced) with a concrete fix (e.g., try reducing its cost). This is a form of brainstorming. An author's position is seen in a good light if the author was responsive to suggested improvements or tried their own. 
  - **Positive interactions with the community**: If the change is otherwise brought on by a commitment to improve the community's experience, it will be viewed favorably. There is a tension between an enthusiastic player, who may have been authoring custom cards and making contributions for a long time, and the player who *isn't playing yet*, like anonymous Internet users. Generally, the maintainers want to support users who are not yet playing, because they cannot voice their concerns and they help keep the game alive. For example, while flavor text is *always subject to change*, having original flavor for the time being is preferred to something unoriginal, because it's important that new players feel like they are playing something fresh and new. Or, for example, treating others with respect is always viewed *favorably*, because being disrespectful to new players or contributors will discourage their first match or contribution.
  - **Issues that improve the accessibility of the game or promote it positively**: Violating a contribution guideline in a way that encourages others to play or meets a specific, clear demand from players, especially new players, will generally be accepted.
-
-### 4. Best Practices
-
-Best practices will be updated here as time goes on.
-
-### 5. Programming Cards
-
-Get ready to program some cards! For things you don't understand in this section, **Google** and **Discord** are your best friends. Many steps are purposefully not detailed because they will be out of date by the time you use them.
-
-Contributing cards consists of writing specially-crafted JSON files into the `cards` directories and writing tests for them.
-
-Use the complete reference [here](https://hiddenswitch.github.io/Spellsource-Server/). In particular, the [spells](https://hiddenswitch.github.io/Spellsource-Server/net/demilich/metastone/game/spells/package-summary.html) reference is handy for learning exactly how spells (effects) work. 
-
-Additionally, to make it easier to contribute Hearthstone card functionality, the project has an automated test that accepts a URL to a community-standardized `cards.json` and checks which cards are missing. To use this feature, set the environment variable `SPELLSOURCE_CARDS_URL` to `https://api.hearthstonejson.com/v1/latest/enUS/cards.json`, or modify [CatalogueTests](game/src/test/java/com/blizzard/hearthstone/CatalogueTests.java) `getCurrentCards()` method to retrieve the latest URL.
-
-Let's run through a complete example of implementing a card, "Exampler" that reads: `Neutral (1) 4/4. Battlecry: Summon a 5/5 Skeleton for your opponent.`
-
- 1. In GitHub, [**fork**](https://help.github.com/articles/fork-a-repo/) the `Spellsource-Server `repository. [Clone](https://help.github.com/articles/cloning-a-repository/) your fork. You'll save your new card to this fork.
- 2. Using a [code editor](https://code.visualstudio.com), Create a file, [minion_exampler.json](https://hiddenswitch.github.io/Spellsource-Server/blob/master/cards/src/main/resources/cards/custom/minion_exampler.json), in the directory `cards/src/main/resources/cards/custom`. If the `custom` folder does not exist, create it; or, create a folder named after the game or mode for which you are creating cards.
- 3. Find a similar card to start as a base. In this case, we'll search for cards that summon other cards. Let's use [Rattling Rascal](https://hiddenswitch.github.io/Spellsource-Server/blob/master/cards/src/main/resources/cards/hearthstone/knights_of_the_frozen_throne/neutral/minion_rattling_rascal.json). Copy the contents of that card into `minion_exampler.json`.
- 4. Edit the appropriate fields to create this card. My version is below:
-
-     ```json
-     {
-       "name": "Exampler",
-       "baseManaCost": 1,
-       "type": "MINION",
-       "heroClass": "ANY",
-       "baseAttack": 4,
-       "baseHp": 4,
-       "rarity": "EPIC",
-       "description": "Battlecry: Summon a 5/5 Skeleton for your opponent",
-       "battlecry": {
-         "targetSelection": "NONE",
-         "spell": {
-           "class": "SummonSpell",
-           "card": "token_skeletal_enforcer",
-           "targetPlayer": "OPPONENT"
-         }
-       },
-       "attributes": {
-         "BATTLECRY": true
-       },
-       "collectible": true,
-       "set": "CUSTOM",
-       "fileFormatVersion": 1
-     }
-     ```
-
- 5. Write a test that verifies that the card works. We'll create a new file, [ExampleCardTests](https://hiddenswitch.github.io/Spellsource-Server/blob/master/game/src/test/java/com/hiddenswitch/spellsource/ExampleCardTests.java), that uses a "gym" to test that the card does what it is supposed to do. Here's an example test for Exampler:
-
-    ```java
-    package com.hiddenswitch.spellsource;
-
-    import net.demilich.metastone.tests.util.TestBase;
-    import org.testng.Assert;
-    import org.testng.annotations.Test;
-
-    public class ExampleCardTests extends TestBase {
-      @Test public void testExampler() {
-        runGym((context, player, opponent) -> {
-          playCard(context, player, "minion_exampler");
-          Assert.assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(),
-          "token_skeletal_enforcer",
-          "The opponent should have a Skeletal Enforcer after Exampler is summoned");
-        });
-      }
-    }
-    ```
-
-    These tests can be as involved as you'd like, and should explore corner cases or interactions whenever possible. Many simple cards do not require tests. But when you start writing your own code to implement cards, tests are especially important to verify functionality. **All** community-contributed cards that get distributed to the production Spellsource server must have tests.
-
- 6. Run your tests by executing `./gradlew game:test` on Mac or `gradlew.bat game:test` on Windows from a command line. If the engine has an issue parsing your card, you'll see an error in `CardValidationTests` with your card name specified. Other errors may occur due to differences in how projects run on Windows versus macOS; check the messages carefully for errors about your cards. If you don't see any about your cards, and you didn't change anything about other cards, you can safely proceed. For example, you can ignore issues related to "Weaponized Piñata" on Windows, because Windows does not read the "ñ" character correctly.
-
- 7. To play with the card, start the server and client using the instructions in the Quick Start guide.
-
- 8. Inside the client, choose Quick Play and create a new deck. The format for the deck list uses a standardized community pattern. Here's my example deck list:
-
-     ```text
-     Name: Test Deck Name
-     Class: Warrior
-     29x Exampler
-     1x Cheat Cost Zero
-     ```
-
-    Select this deck when starting your game. Note the three hashes to indicate the start of a deck name; otherwise, the formatting given here is the minimal amount of content needed to make a valid deck.
-
-    You can support more diverse scenarios/Tavern Brawls by specifying a Hero Card by name. For example, create a custom hero named `Enchantress` and add the line `Hero Card: Enchantress` to your decklist.
- 9. You will now play against an AI using the card. To play against others on your local network, enter Matchmaking instead of Quick Play. As long as your opponent's client is running on the local network and the network supports UDP broadcasting (most local Wi-Fi networks), your opponent's client will discover your local server. In the Spellsource client, a toast will appear at the bottom of your login screen indicating that you have connected to a local server if it successfully found one.
- 10. Once you are satisfied with your card, format it correctly using Python (install it first!):
-    
-     ```bash
-     # If you haven't already installed the Spellsource package, do so now.
-     pip3 install spellsource
-     spellsource format-cards
-     ```
-     
- 11. To contribute the card to the public networking servers, commit your changes to your fork with `git commit -am "A custom note about the card"`, `git push` and then pull-request to this repository.

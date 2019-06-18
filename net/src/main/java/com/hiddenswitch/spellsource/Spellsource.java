@@ -480,14 +480,7 @@ public class Spellsource {
 					e.printStackTrace();
 				}
 				return null;
-			}).map((deckList) -> {
-				try {
-					return DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
-			}).filter(Objects::nonNull).collect(toList()));
+			}).map((deckList) -> DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true)).filter(Objects::nonNull).collect(toList()));
 		}
 
 		return cachedStandardDecks;

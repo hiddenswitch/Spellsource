@@ -8,7 +8,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
@@ -36,7 +35,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -114,23 +112,6 @@ public class TestBase {
 			return;
 		}
 		throw new AssertionError("Adapted");
-	}
-
-	public static class OverrideHandle<T> {
-		private T object;
-		private AtomicBoolean stopped = new AtomicBoolean(false);
-
-		public void set(T object) {
-			this.object = object;
-		}
-
-		public T get() {
-			return object;
-		}
-
-		public void stop() {
-			stopped.set(true);
-		}
 	}
 
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
@@ -259,16 +240,6 @@ public class TestBase {
 		}
 	}
 
-	public static class GymFactory {
-		GymConsumer first;
-		GymConsumer after = ((context, player, opponent) -> {
-		});
-
-		public void run(GymConsumer consumer) {
-			runGym(first.andThen(consumer).andThen(after));
-		}
-	}
-
 	public static GymFactory getGymFactory(GymConsumer initializer) {
 		GymFactory factory = new GymFactory();
 		factory.first = initializer;
@@ -384,43 +355,6 @@ public class TestBase {
 		return (a.isParallel() || b.isParallel())
 				? StreamSupport.stream(split, true)
 				: StreamSupport.stream(split, false);
-	}
-
-	public static class TestBehaviour extends UtilityBehaviour {
-
-		private EntityReference targetPreference;
-
-		@Override
-		public String getName() {
-			return "Null Behaviour";
-		}
-
-		public EntityReference getTargetPreference() {
-			return targetPreference;
-		}
-
-		@Override
-		public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-			return new ArrayList<Card>();
-		}
-
-		@Override
-		public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-			if (targetPreference != null) {
-				for (GameAction action : validActions) {
-					if (action.getTargetReference().equals(targetPreference)) {
-						return action;
-					}
-				}
-			}
-
-			return validActions.get(0);
-		}
-
-		public void setTargetPreference(EntityReference targetPreference) {
-			this.targetPreference = targetPreference;
-		}
-
 	}
 
 	@BeforeMethod
