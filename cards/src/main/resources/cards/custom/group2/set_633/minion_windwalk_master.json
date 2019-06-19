@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Windfury. Deflect.",
+  "description": "Extra Strike. Deflect.",
   "attributes": {
     "DEFLECT": true,
     "WINDFURY": true
