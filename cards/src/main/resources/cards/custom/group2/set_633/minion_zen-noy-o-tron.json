@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Guard. Dodge. Deflect. Windfury.",
+  "description": "Guard. Dodge. Deflect. Extra Strike.",
   "attributes": {
     "DEFLECT": true,
     "DIVINE_SHIELD": true,

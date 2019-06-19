@@ -140,9 +140,13 @@ Thanks to a contribution from @Logovaz, there are new cards for Senzaku!
 The following keywords have been consistently applied to Spellsource cards:
 
  - Champion: Your player character. When this dies, you lose the game.
+ - Skill: Your champion's ability.
  - Skill: A spell your Champion can play every turn.
  - Opener: Occurs whenever the card is played from the hand.
  - Aftermath: Occurs whenever a minion dies (horribly) on the battlefield.
+ - Elusive: Cannot be targeted by spells or skills.
+ - Extra Strike: A character can attack twice.
+ - Quad Strike: A character can attack four times.
  - Hidden: This minion cannot be targeted by enemies until it deals damage.
  - Dodge: The first time this minion takes damage, it takes zero instead.
  - Dash: This can attack enemy minions even if it is exhausted.

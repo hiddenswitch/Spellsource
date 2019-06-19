@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 6,
   "rarity": "COMMON",
-  "description": "Windfury.",
+  "description": "Extra Strike.",
   "aura": {
     "class": "AttributeAura",
     "attribute": "AURA_WINDFURY",
