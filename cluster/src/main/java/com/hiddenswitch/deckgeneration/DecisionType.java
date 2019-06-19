@@ -51,5 +51,10 @@ public enum DecisionType {
 	/**
 	 * Cards that cannot target player entities (spells, battlecries, etc.)
 	 */
-	SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES
+	SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES,
+
+	/**
+	 * Damage spells that cannot target minions below a certain HP
+	 */
+	SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS
 }

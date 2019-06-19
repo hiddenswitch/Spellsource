@@ -577,6 +577,36 @@ public class TestBehaviours extends TestBase {
 			assertTrue(actionsThatTargetOwnEntities.isEmpty());
 		});
 	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeDamageCardsCannotTargetWeakMinions() {
+		HashSet<String> cardsThatCannotBeUsedOnWeakMinions = new HashSet<>();
+		cardsThatCannotBeUsedOnWeakMinions.add("spell_explosive_shot");
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS), Collections.singletonList(cardsThatCannotBeUsedOnWeakMinions));
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, opponent, "minion_chillwind_yeti");
+			receiveCard(context, player, "spell_explosive_shot");
+			player.setMana(5);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target player
+			List<GameAction> spellCardActionsThatTargetLowHealthMinions = actions.stream()
+					.filter(action ->
+							(!(action instanceof HeroPowerAction)) && (
+									action.getTargets(context, player.getIndex())
+											.stream()
+											.filter(target -> target.getOwner() == player.getOwner())
+											.findFirst()
+											.isPresent())).collect(Collectors.toList());
+			assertTrue(spellCardActionsThatTargetLowHealthMinions.isEmpty());
+		});
+	}
 }
 
 

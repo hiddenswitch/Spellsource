@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.HealSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
@@ -28,6 +29,8 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	HashSet<String> minionsThatDoNotAttackEnemyMinions = new HashSet<>();
 	HashSet<String> cardsThatCannotTargetOwnEntities = new HashSet<>();
 	HashSet<String> cardsThatCannotTargetEnemyEntities = new HashSet<>();
+	HashSet<String> cardsThatCannotTargetWeakMinions = new HashSet<>();
+	HealthThresholdsForDamageSpells healthThresholdsForDamageSpells = new HealthThresholdsForDamageSpells();
 
 	boolean alwaysAttackEnemyHero = false;
 	boolean canEndTurnIfAttackingEnemyHeroIsValid = true;
@@ -66,17 +69,20 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 			if (decisionTypes.get(i).equals(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO)) {
 				minionsThatDoNotAttackEnemyHero = cardsListForEachDecision.get(i);
 			}
-			if (decisionTypes.get(i).equals(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION)) {
+			else if (decisionTypes.get(i).equals(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION)) {
 				minionsThatDoNotAttackEnemyMinions = cardsListForEachDecision.get(i);
 			}
-			if (decisionTypes.get(i).equals(DecisionType.KEEP_CARDS_ON_MULLIGAN)) {
+			else if (decisionTypes.get(i).equals(DecisionType.KEEP_CARDS_ON_MULLIGAN)) {
 				cardsToKeepOnMulligan = cardsListForEachDecision.get(i);
 			}
-			if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES)) {
+			else if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES)) {
 				cardsThatCannotTargetEnemyEntities = cardsListForEachDecision.get(i);
 			}
-			if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES)) {
+			else if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES)) {
 				cardsThatCannotTargetOwnEntities = cardsListForEachDecision.get(i);
+			}
+			else if (decisionTypes.get(i).equals(DecisionType.SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS)) {
+				cardsThatCannotTargetWeakMinions = cardsListForEachDecision.get(i);
 			}
 		}
 	}
@@ -167,6 +173,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		filterHealingSpellsOnFullHealthMinions(player, opponent, validActions, context);
 		filterCardsThatCannotTargetCertainPlayerEntities(context, opponent, validActions, cardsThatCannotTargetEnemyEntities);
 		filterCardsThatCannotTargetCertainPlayerEntities(context, player, validActions, cardsThatCannotTargetOwnEntities);
+		filterSpellsThatTargetWeakMinions(context, validActions);
 		filterEndTurn(opponent, validActions);
 	}
 
@@ -254,6 +261,46 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 			return (opponent.getMinions().stream().filter(minion -> minion.getReference().equals(action.getTargetReference())).collect(Collectors.toList()).size() == 1);
 		});
 	}
+
+	public void filterSpellsThatTargetWeakMinions(GameContext context, List<GameAction> validActions) {
+		validActions.removeIf(action -> {
+			if (cardsThatCannotTargetWeakMinions.isEmpty()) {
+				return false;
+			}
+			if (PlaySpellCardAction.class.isAssignableFrom(action.getClass())) {
+				PlaySpellCardAction playSpellCardAction = (PlaySpellCardAction) action;
+				Entity sourceEntity = context.resolveSingleTarget(playSpellCardAction.getSourceReference());
+				String cardId = sourceEntity.getSourceCard().getCardId();
+				if (!cardsThatCannotTargetWeakMinions.contains(cardId)) {
+					return false;
+				}
+				Entity targetEntity = context.resolveSingleTarget(playSpellCardAction.getTargetReference());
+				if (!Minion.class.isAssignableFrom(targetEntity.getClass())) {
+					return false;
+				}
+				if (targetEntity.getAttributeValue(Attribute.HP) < healthThresholdsForDamageSpells.allThresholds.get(cardId)) {
+					return true;
+				}
+			}
+			if (BattlecryAction.class.isAssignableFrom(action.getClass())) {
+				BattlecryAction battlecryAction = (BattlecryAction) action;
+				Entity sourceEntity = context.resolveSingleTarget(battlecryAction.getSourceReference());
+				String cardId = sourceEntity.getSourceCard().getCardId();
+				if (!cardsThatCannotTargetWeakMinions.contains(cardId)) {
+					return false;
+				}
+				Entity targetEntity = context.resolveSingleTarget(battlecryAction.getTargetReference());
+				if (!Minion.class.isAssignableFrom(targetEntity.getClass())) {
+					return false;
+				}
+				if (targetEntity.getAttributeValue(Attribute.HP) < healthThresholdsForDamageSpells.allThresholds.get(cardId)) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
+
 
 	/**
 	 * Filter out the option to end the turn if certain conditions are satisfied
