@@ -56,5 +56,12 @@ public enum DecisionType {
 	/**
 	 * Damage spells that cannot target minions below a certain HP
 	 */
-	SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS
+	SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS,
+
+	/**
+	 * A player should not attack with a minion if it will die and not
+	 * kill the other minion (an attack where neither die or just the opposing
+	 * minion dies is acceptable)
+	 */
+	CANNOT_ATTACK_WITH_A_MINION_THAT_WILL_DIE_AND_NOT_KILL_OTHER_MINION
 }

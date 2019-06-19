@@ -37,6 +37,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	boolean canBuffEnemyMinions = true;
 	boolean canHealEnemyEntities = true;
 	boolean canHealFullHealthEntities = true;
+	boolean canAttackWithAMinionThatWillDieAndNotKillTheOtherMinion = true;
 
 	public void setCanHealFullHealthEntities(boolean canHealFullHealthEntities) {
 		this.canHealFullHealthEntities = canHealFullHealthEntities;
@@ -68,20 +69,15 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		for (int i = 0; i < decisionTypes.size(); i++) {
 			if (decisionTypes.get(i).equals(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_HERO)) {
 				minionsThatDoNotAttackEnemyHero = cardsListForEachDecision.get(i);
-			}
-			else if (decisionTypes.get(i).equals(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION)) {
+			} else if (decisionTypes.get(i).equals(DecisionType.SOME_MINIONS_DO_NOT_ATTACK_ENEMY_MINION)) {
 				minionsThatDoNotAttackEnemyMinions = cardsListForEachDecision.get(i);
-			}
-			else if (decisionTypes.get(i).equals(DecisionType.KEEP_CARDS_ON_MULLIGAN)) {
+			} else if (decisionTypes.get(i).equals(DecisionType.KEEP_CARDS_ON_MULLIGAN)) {
 				cardsToKeepOnMulligan = cardsListForEachDecision.get(i);
-			}
-			else if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES)) {
+			} else if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES)) {
 				cardsThatCannotTargetEnemyEntities = cardsListForEachDecision.get(i);
-			}
-			else if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES)) {
+			} else if (decisionTypes.get(i).equals(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES)) {
 				cardsThatCannotTargetOwnEntities = cardsListForEachDecision.get(i);
-			}
-			else if (decisionTypes.get(i).equals(DecisionType.SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS)) {
+			} else if (decisionTypes.get(i).equals(DecisionType.SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS)) {
 				cardsThatCannotTargetWeakMinions = cardsListForEachDecision.get(i);
 			}
 		}
@@ -132,6 +128,11 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		} else {
 			canHealFullHealthEntities = true;
 		}
+		if (booleanDecisionTypes.contains(DecisionType.CANNOT_ATTACK_WITH_A_MINION_THAT_WILL_DIE_AND_NOT_KILL_OTHER_MINION)) {
+			canAttackWithAMinionThatWillDieAndNotKillTheOtherMinion = false;
+		} else {
+			canAttackWithAMinionThatWillDieAndNotKillTheOtherMinion = true;
+		}
 	}
 
 	@Override
@@ -174,6 +175,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		filterCardsThatCannotTargetCertainPlayerEntities(context, opponent, validActions, cardsThatCannotTargetEnemyEntities);
 		filterCardsThatCannotTargetCertainPlayerEntities(context, player, validActions, cardsThatCannotTargetOwnEntities);
 		filterSpellsThatTargetWeakMinions(context, validActions);
+		filterAttacksByMinionsThatWillDieAndNotKillTheOtherMinion(context, validActions);
 		filterEndTurn(opponent, validActions);
 	}
 
@@ -262,6 +264,13 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		});
 	}
 
+	/**
+	 * Certain spells should not target minions that are sufficiently weak
+	 * (and can most likely be killed by other more cost efficient sources)
+	 *
+	 * @param context      The {@link GameContext} of our current game
+	 * @param validActions The list of actions to filter
+	 */
 	public void filterSpellsThatTargetWeakMinions(GameContext context, List<GameAction> validActions) {
 		validActions.removeIf(action -> {
 			if (cardsThatCannotTargetWeakMinions.isEmpty()) {
@@ -278,7 +287,8 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 				if (!Minion.class.isAssignableFrom(targetEntity.getClass())) {
 					return false;
 				}
-				if (targetEntity.getAttributeValue(Attribute.HP) < healthThresholdsForDamageSpells.allThresholds.get(cardId)) {
+				Minion targetMinion = (Minion) targetEntity;
+				if (targetMinion.getHp() < healthThresholdsForDamageSpells.allThresholds.get(cardId)) {
 					return true;
 				}
 			}
@@ -293,7 +303,8 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 				if (!Minion.class.isAssignableFrom(targetEntity.getClass())) {
 					return false;
 				}
-				if (targetEntity.getAttributeValue(Attribute.HP) < healthThresholdsForDamageSpells.allThresholds.get(cardId)) {
+				Minion targetMinion = (Minion) targetEntity;
+				if (targetMinion.getHp() < healthThresholdsForDamageSpells.allThresholds.get(cardId)) {
 					return true;
 				}
 			}
@@ -301,6 +312,36 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		});
 	}
 
+	/**
+	 * Filter out attack actions that will involve attacking a creature
+	 * resulting in the player's minion dying, but not the opponent's minion
+	 *
+	 * @param context      The {@link GameContext} of our current game
+	 * @param validActions The list of actions to filter
+	 */
+	public void filterAttacksByMinionsThatWillDieAndNotKillTheOtherMinion(GameContext context, List<GameAction> validActions) {
+		if (canAttackWithAMinionThatWillDieAndNotKillTheOtherMinion) {
+			return;
+		}
+
+		validActions.removeIf(action -> {
+			if (!PhysicalAttackAction.class.isAssignableFrom(action.getClass())) {
+				return false;
+			}
+			PhysicalAttackAction physicalAttackAction = (PhysicalAttackAction) action;
+			Entity sourceEntity = context.resolveSingleTarget(physicalAttackAction.getSourceReference());
+			Entity targetEntity = context.resolveSingleTarget(physicalAttackAction.getTargetReference());
+			if (!Minion.class.isAssignableFrom(sourceEntity.getClass()) || !Minion.class.isAssignableFrom(targetEntity.getClass())) {
+				return false;
+			}
+			Minion attackingMinion = (Minion) sourceEntity;
+			Minion defendingMinion = (Minion) targetEntity;
+			if (attackingMinion.getAttack() < defendingMinion.getHp() && attackingMinion.getHp() < defendingMinion.getAttack()) {
+				return true;
+			}
+			return false;
+		});
+	}
 
 	/**
 	 * Filter out the option to end the turn if certain conditions are satisfied

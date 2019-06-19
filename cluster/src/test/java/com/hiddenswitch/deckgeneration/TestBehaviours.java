@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
@@ -605,6 +606,36 @@ public class TestBehaviours extends TestBase {
 											.findFirst()
 											.isPresent())).collect(Collectors.toList());
 			assertTrue(spellCardActionsThatTargetLowHealthMinions.isEmpty());
+		});
+	}
+
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForCannotAttackWithMinionThatWillDieAndNotKillOtherMinion() {
+		HashSet<DecisionType> booleanDecisionTypes = new HashSet<>();
+		booleanDecisionTypes.add(DecisionType.CANNOT_ATTACK_WITH_A_MINION_THAT_WILL_DIE_AND_NOT_KILL_OTHER_MINION);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(booleanDecisionTypes);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, opponent, "minion_chillwind_yeti");
+			context.endTurn();
+			context.endTurn();
+			player.setMana(0);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target player
+			List<GameAction> attackActionsThatKillAttackingMinionButNotTheDefendingMinion = actions.stream()
+					.filter(action -> (
+							action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> Minion.class.isAssignableFrom(target.getClass()))
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(attackActionsThatKillAttackingMinionButNotTheDefendingMinion.isEmpty());
 		});
 	}
 }
