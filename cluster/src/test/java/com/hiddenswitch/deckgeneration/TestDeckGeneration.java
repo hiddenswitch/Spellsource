@@ -380,7 +380,7 @@ public class TestDeckGeneration {
 		}
 
 		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, new ArrayList<>());
-		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(new ArrayList<>());
+		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions();
 		enemyBehvaiour.setCanEndTurnIfAttackingEnemyHeroIsValid(true);
 		enemyBehvaiour.setCanBuffEnemyMinions(true);
 		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);
@@ -446,8 +446,8 @@ public class TestDeckGeneration {
 			basicTournamentDecks.add(tournamentDeck);
 		}
 
+		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions();
 		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, new ArrayList<>(), Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
-		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(new ArrayList<>());
 		enemyBehvaiour.setCanEndTurnIfAttackingEnemyHeroIsValid(true);
 		enemyBehvaiour.setCanBuffEnemyMinions(false);
 		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);

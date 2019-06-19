@@ -15,10 +15,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertFalse;
@@ -168,7 +165,7 @@ public class TestAttackingDecisionOptimization {
 		}
 
 		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, new ArrayList<>(), Collections.singletonList(DecisionType.ALWAYS_ATTACK_ENEMY_HERO));
-		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(new ArrayList<>());
+		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehvaiour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(new HashSet<>());
 		enemyBehvaiour.setCanEndTurnIfAttackingEnemyHeroIsValid(false);
 		deckAndDecisionGeneratorContext.setEnemyBehaviour(enemyBehvaiour);
 		deckAndDecisionGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH_FOR_DECK_GENERATION);

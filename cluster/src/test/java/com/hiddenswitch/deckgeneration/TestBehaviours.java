@@ -3,6 +3,7 @@ package com.hiddenswitch.deckgeneration;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.HeroPowerAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -128,7 +129,9 @@ public class TestBehaviours extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_stat_1");
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.ALWAYS_ATTACK_ENEMY_HERO));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.ALWAYS_ATTACK_ENEMY_HERO);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			context.endTurn();
 			context.endTurn();
 			List<GameAction> actions = context.getValidActions();
@@ -214,7 +217,9 @@ public class TestBehaviours extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_goldshire_footman");
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.ALWAYS_ATTACK_ENEMY_HERO));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.ALWAYS_ATTACK_ENEMY_HERO);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			context.endTurn();
 			context.endTurn();
 			List<GameAction> actions = context.getValidActions();
@@ -233,7 +238,9 @@ public class TestBehaviours extends TestBase {
 			receiveCard(context, player, "spell_barkskin");
 			receiveCard(context, player, "spell_earth_shock");
 			player.setMana(1);
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.CANNOT_BUFF_ENEMY_MINIONS);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			List<GameAction> actions = context.getValidActions();
 
 			boolean spellHasTargetedBuff1 = behaviour.targetedMinionIsBuffedBySpell(((PlaySpellCardAction) actions.get(0)).getSpell());
@@ -250,7 +257,10 @@ public class TestBehaviours extends TestBase {
 			playCard(context, opponent, "minion_goldshire_footman");
 			receiveCard(context, player, "spell_barkskin");
 			player.setMana(1);
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.CANNOT_BUFF_ENEMY_MINIONS);
+
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			List<GameAction> actions = context.getValidActions();
 			int originalSize = actions.size();
 			behaviour.filterActions(context, player, actions);
@@ -277,7 +287,9 @@ public class TestBehaviours extends TestBase {
 			receiveCard(context, player, "spell_sacrificial_pact");
 			receiveCard(context, player, "spell_holy_light");
 			player.setMana(2);
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_BUFF_ENEMY_MINIONS));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.CANNOT_BUFF_ENEMY_MINIONS);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			List<GameAction> actions = context.getValidActions();
 
 			// The damage hero powers should all be false
@@ -307,7 +319,9 @@ public class TestBehaviours extends TestBase {
 			playCard(context, opponent, "minion_goldshire_footman");
 			receiveCard(context, player, "spell_regenerate");
 			player.setMana(0);
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_HEAL_ENEMY_ENTITIES));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.CANNOT_HEAL_ENEMY_ENTITIES);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			List<GameAction> actions = context.getValidActions();
 			int originalSize = actions.size();
 			behaviour.filterActions(context, player, actions);
@@ -332,7 +346,9 @@ public class TestBehaviours extends TestBase {
 			playCard(context, opponent, "minion_goldshire_footman");
 			receiveCard(context, player, "spell_regenerate");
 			player.setMana(0);
-			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.CANNOT_HEAL_FULL_HEALTH_ENTITIES));
+			HashSet<DecisionType> decisionTypes = new HashSet<>();
+			decisionTypes.add(DecisionType.CANNOT_HEAL_FULL_HEALTH_ENTITIES);
+			PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes);
 			List<GameAction> actions = context.getValidActions();
 			int originalSize = actions.size();
 			behaviour.filterActions(context, player, actions);
@@ -343,7 +359,7 @@ public class TestBehaviours extends TestBase {
 					.filter(action -> (
 							action.getTargets(context, player.getIndex())
 									.stream()
-									.filter(target -> target.getOwner() == opponent.getOwner())
+									.filter(target -> target.getAttributeValue(Attribute.HP) == target.getAttributeValue(Attribute.MAX_HP))
 									.findFirst()
 									.isPresent())).collect(Collectors.toList());
 			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
@@ -380,6 +396,36 @@ public class TestBehaviours extends TestBase {
 		});
 	}
 
+	@Test
+	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities2() {
+		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
+		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
+		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnEnemyEntities));
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_stat_3");
+			playCard(context, opponent, "minion_goldshire_footman");
+			receiveCard(context, player, "spell_blessing_of_kings");
+			player.setMana(10);
+
+			List<GameAction> actions = context.getValidActions();
+			int originalSize = actions.size();
+			behaviour.filterActions(context, player, actions);
+			assertTrue(originalSize - 1 == actions.size());
+
+			// There should be no valid actions that target enemy entities
+			List<GameAction> actionsThatTargetOpponentEntities = actions.stream()
+					.filter(action -> (
+							!HeroPowerAction.class.isAssignableFrom(action.getClass())
+									&& action.getTargets(context, player.getIndex())
+									.stream()
+									.filter(target -> target.getOwner() == opponent.getOwner())
+									.findFirst()
+									.isPresent())).collect(Collectors.toList());
+			assertTrue(actionsThatTargetOpponentEntities.isEmpty());
+		});
+	}
 
 	@Test
 	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetEnemyEntities() {

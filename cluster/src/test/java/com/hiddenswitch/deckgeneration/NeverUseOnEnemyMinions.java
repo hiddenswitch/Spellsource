@@ -35,6 +35,7 @@ public class NeverUseOnEnemyMinions {
 		testAdd(hashSet, "spell_mark_of_nature_3");
 		testAdd(hashSet, "minion_argent_protector");
 		testAdd(hashSet, "spell_blessed_champion");
+		testAdd(hashSet, "spell_blessing_of_kings");
 		testAdd(hashSet, "spell_lay_on_hands");
 		testAdd(hashSet, "spell_cold_blood");
 		testAdd(hashSet, "spell_ancestral_spirit");

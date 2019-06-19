@@ -81,11 +81,14 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 		}
 	}
 
-	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> booleanDecisionTypes) {
+	public PlayRandomWithoutSelfDamageWithDefinedDecisions() {
+	}
+
+	public PlayRandomWithoutSelfDamageWithDefinedDecisions(HashSet<DecisionType> booleanDecisionTypes) {
 		updateBooleanDecisionTypes(booleanDecisionTypes);
 	}
 
-	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> cardListDecisionTypes, List<HashSet<String>> cardsListForEachDecision, List<DecisionType> booleanDecisionTypes) {
+	public PlayRandomWithoutSelfDamageWithDefinedDecisions(List<DecisionType> cardListDecisionTypes, List<HashSet<String>> cardsListForEachDecision, HashSet<DecisionType> booleanDecisionTypes) {
 		this(cardListDecisionTypes, cardsListForEachDecision);
 		updateBooleanDecisionTypes(booleanDecisionTypes);
 	}
@@ -97,7 +100,7 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	 *                             must follow
 	 */
 
-	public void updateBooleanDecisionTypes(List<DecisionType> booleanDecisionTypes) {
+	public void updateBooleanDecisionTypes(HashSet<DecisionType> booleanDecisionTypes) {
 		if (booleanDecisionTypes.contains(DecisionType.ALWAYS_ATTACK_ENEMY_HERO)) {
 			alwaysAttackEnemyHero = true;
 		} else {

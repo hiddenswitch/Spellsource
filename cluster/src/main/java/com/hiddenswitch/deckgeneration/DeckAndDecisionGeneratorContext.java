@@ -15,8 +15,20 @@ import java.util.List;
 
 
 public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
-	List<DecisionType> cardListDecisionTypes;
+	List<DecisionType> cardListDecisionTypes = new ArrayList<>();
 	List<DecisionType> booleanDecisionTypes = new ArrayList<>();
+	List<DecisionType> alwaysActiveCardListDecisionTypes = new ArrayList<>();
+	List<HashSet<String>> cardListsForAlwaysActiveCardListDecisionTypes = new ArrayList<>();
+
+	public void setAlwaysActiveCardListDecisionTypes(List<DecisionType> alwaysActiveCardListDecisionTypes, List<HashSet<String>> cardListsForAlwaysActiveCardListDecisionTypes) {
+		this.alwaysActiveCardListDecisionTypes = alwaysActiveCardListDecisionTypes;
+		this.cardListsForAlwaysActiveCardListDecisionTypes = cardListsForAlwaysActiveCardListDecisionTypes;
+
+	}
+
+	public DeckAndDecisionGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks) {
+		super(indexInBitmap, basicTournamentDecks);
+	}
 
 	/**
 	 * @param indexInBitmap         The list of cards such that the i'th card is represented by the
@@ -71,18 +83,23 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 			cardListForEachDecision.add(cardSetForDecision);
 		}
 
+		List<DecisionType> cardListDecisionTypesToUse = new ArrayList<>();
+		cardListDecisionTypesToUse.addAll(cardListDecisionTypes);
+		cardListDecisionTypesToUse.addAll(alwaysActiveCardListDecisionTypes);
+		cardListForEachDecision.addAll(cardListsForAlwaysActiveCardListDecisionTypes);
+
 		// Determine which boolean decisionTypes should be utilized by the
 		// player behaviour
-		List<DecisionType> otherDecisionsList = new ArrayList<>();
+		HashSet<DecisionType> otherDecisionsList = new HashSet<>();
 		for (int i = 0; i < booleanDecisionTypes.size(); i++) {
 			if (individual.getChromosome(i + cardListDecisionTypes.size() + 1).getGene(0).booleanValue()) {
 				otherDecisionsList.add(booleanDecisionTypes.get(i));
 			}
 		}
+		
+		PlayRandomWithoutSelfDamageWithDefinedDecisions playerBehaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(cardListDecisionTypesToUse, cardListForEachDecision, otherDecisionsList);
 
-		PlayRandomWithoutSelfDamageWithDefinedDecisions playerBehaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(cardListDecisionTypes, cardListForEachDecision, otherDecisionsList);
-
-		return basicTournamentDecks.stream()
+		double toReturn = basicTournamentDecks.stream()
 				.map(opposingDeck -> GameContext.simulate(
 						Arrays.asList(gameDeck, opposingDeck),
 						() -> playerBehaviour,
@@ -95,5 +112,6 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 				)
 				.mapToDouble(res -> res.getPlayer1Stats().getDouble(Statistic.WIN_RATE))
 				.average().orElse(Double.MIN_VALUE);
+		return toReturn;
 	}
 }
