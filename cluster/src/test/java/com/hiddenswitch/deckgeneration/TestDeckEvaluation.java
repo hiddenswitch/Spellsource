@@ -1,6 +1,7 @@
 package com.hiddenswitch.deckgeneration;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -24,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
 
 public class TestDeckEvaluation {
-	int GAMES_PER_MATCH = 18;
+	int GAMES_PER_MATCH = 15;
 
 	public List<Map.Entry<GameDeck, Double>> statsFromTournament(List<GameDeck> decks) throws InterruptedException {
 		Map<GameDeck[], SimulationResult> resultList = new HashMap<>();
@@ -163,4 +164,93 @@ public class TestDeckEvaluation {
 		}
 	}
 
+
+	public List<Map.Entry<GameDeck, Double>> statsFromTournamentWithSpecificBehaviours(List<GameDeck> decks, IntelligentBehaviour playerBehaviour) throws InterruptedException {
+		Map<GameDeck[], SimulationResult> resultList = new HashMap<>();
+		// Make two bots that make random decisions and play multiple games (GAMES_PER_MATCH)
+		for (GameDeck[] deckPairArray : GameContext.getDeckCombinations(decks, false)) {
+			AtomicReference<SimulationResult> resultRef = new AtomicReference<>();
+			GameContext.simulate(Arrays.asList(deckPairArray), Arrays.asList(() -> playerBehaviour, () -> playerBehaviour), GAMES_PER_MATCH, true,
+					resultRef::set);
+
+			SimulationResult result = resultRef.get();
+			resultList.put(deckPairArray, result);
+		}
+
+		// Order the decks by average win rate
+		List<Map.Entry<GameDeck, Double>> results = resultList.entrySet().stream()
+				.flatMap(kv -> Stream.of(
+						new TestDeckEvaluation.DeckWinrateTuple(kv.getKey()[0], kv.getValue().getPlayer1Stats().getDouble(Statistic.WIN_RATE)),
+						new TestDeckEvaluation.DeckWinrateTuple(kv.getKey()[1], kv.getValue().getPlayer2Stats().getDouble(Statistic.WIN_RATE))
+				))
+				.collect(Collectors.groupingBy(TestDeckEvaluation.DeckWinrateTuple::getGameDeck, averagingDouble(TestDeckEvaluation.DeckWinrateTuple::getWinRate)))
+				.entrySet()
+				.stream()
+				.collect(toList());
+		return results;
+	}
+
+	@Test
+	@Ignore
+	public void testGeneratedDeck() throws InterruptedException {
+		CardCatalogue.loadCardsFromPackage();
+
+		GameDeck generatedDeck = new GameDeck(HeroClass.BLUE);
+
+		generatedDeck.getCards().addCard("minion_river_crocolisk");
+		generatedDeck.getCards().addCard("minion_river_crocolisk");
+		generatedDeck.getCards().addCard("minion_bloodfen_raptor");
+		generatedDeck.getCards().addCard("minion_grimscale_oracle");
+		generatedDeck.getCards().addCard("minion_voodoo_doctor");
+		generatedDeck.getCards().addCard("minion_gnomish_inventor");
+		generatedDeck.getCards().addCard("minion_raid_leader");
+		generatedDeck.getCards().addCard("minion_raid_leader");
+		generatedDeck.getCards().addCard("minion_darkscale_healer");
+		generatedDeck.getCards().addCard("minion_booty_bay_bodyguard");
+		generatedDeck.getCards().addCard("minion_ironfur_grizzly");
+		generatedDeck.getCards().addCard("minion_dragonling_mechanic");
+		generatedDeck.getCards().addCard("minion_dragonling_mechanic");
+		generatedDeck.getCards().addCard("minion_stormwind_champion");
+		generatedDeck.getCards().addCard("spell_flamestrike");
+		generatedDeck.getCards().addCard("minion_shattered_sun_cleric");
+		generatedDeck.getCards().addCard("minion_lord_of_the_arena");
+		generatedDeck.getCards().addCard("minion_lord_of_the_arena");
+		generatedDeck.getCards().addCard("minion_frostwolf_warlord");
+		generatedDeck.getCards().addCard("minion_frostwolf_warlord");
+		generatedDeck.getCards().addCard("minion_goldshire_footman");
+		generatedDeck.getCards().addCard("minion_nightblade");
+		generatedDeck.getCards().addCard("spell_mirror_image");
+		generatedDeck.getCards().addCard("minion_acidic_swamp_ooze");
+		generatedDeck.getCards().addCard("minion_senjin_shieldmasta");
+		generatedDeck.getCards().addCard("minion_water_elemental");
+		generatedDeck.getCards().addCard("minion_gurubashi_berserker");
+		generatedDeck.getCards().addCard("minion_ogre_magi");
+		generatedDeck.getCards().addCard("minion_murloc_tidehunter");
+		generatedDeck.getCards().addCard("minion_stormwind_champion");
+
+		BasicTournamentDecks basicTournamentDecks = new BasicTournamentDecks();
+		List<GameDeck> tournamentDecks = new ArrayList<>();
+		tournamentDecks.add(basicTournamentDecks.getTrumpBasicPaladinDeck());
+		tournamentDecks.add(basicTournamentDecks.getTrumpBasicPriestDeck());
+		tournamentDecks.add(basicTournamentDecks.getTrumpBasicShamanDeck());
+		tournamentDecks.add(generatedDeck);
+
+		List<DecisionType> decisionTypes = new ArrayList<>();
+		decisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES);
+		decisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES);
+
+		List<HashSet<String>> cardListForEachDecisionType = new ArrayList<>();
+		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
+		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
+		cardListForEachDecisionType.add(neverUseOnEnemyMinions.classicAndBasicSets);
+		cardListForEachDecisionType.add(neverUseOnOwnMinion.classicAndBasicSets);
+
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(decisionTypes, cardListForEachDecisionType);
+
+		final List<Map.Entry<GameDeck, Double>> unsortedResults = statsFromTournamentWithSpecificBehaviours(tournamentDecks, behaviour);
+		final List<Map.Entry<GameDeck, Double>> results = unsortedResults.stream()
+				.sorted(Comparator.comparingDouble(kv -> -kv.getValue()))
+				.collect(toList());
+		System.out.println(results);
+	}
 }
