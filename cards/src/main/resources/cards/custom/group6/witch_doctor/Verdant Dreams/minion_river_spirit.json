@@ -25,6 +25,9 @@
       "cardLocation": "HAND"
 	}
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1

@@ -3,7 +3,12 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -264,16 +269,21 @@ public class WitchDoctorTests extends TestBase {
 	}
 
 	// Hone Reflexes: "Gain +3 Attack this turn.",
-	//@Test
-	//public void testHoneReflexes() {
-	//	runGym((context, player, opponent) -> {
-	//		useHeroPower(context, player);
-	//		assertEquals(player.getHero().getAttack(), player.getHero().getBaseAttack() + 3);
-	//		context.endTurn();
-	//		context.endTurn();
-	//		assertEquals(player.getHero().getAttack(), player.getHero().getBaseAttack());
-	//	});
-	//}
+	@Test
+	public void testHoneReflexes() {
+		runGym((context, player, opponent) -> {
+			SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
+			spell.put(SpellArg.CARD, "hero_power_hone_reflexes");
+			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+			context.getLogic().endOfSequence();
+			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_hone_reflexes");
+			useHeroPower(context, player);
+			assertEquals(player.getHero().getAttack(), player.getHero().getBaseAttack() + 3);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHero().getAttack(), player.getHero().getBaseAttack());
+		});
+	}
 
 	// Breezecatcher: "Battlecry: If you're holding an Emerald Secret, give your hero Windfury this turn.",
 	@Test
@@ -361,22 +371,88 @@ public class WitchDoctorTests extends TestBase {
 	}
 
 	// Shy Sprite: "Deflect. You can use your Hero Power twice per turn."
-	//@Test
-	//public void testShySprite() {
-	//	runGym(((context, player, opponent) -> {
-	//		player.getHero().setHeroPower("hero_power_r");
-	//		useHeroPower(context, player);
-	//		assertFalse(player.getHero().canAttackThisTurn());
-	//		Minion sprite = playMinionCard(context, player, "minion_shy_sprite");
-	//		context.endTurn();
-	//		playCard(context, opponent, "spell_fireball", sprite);
-	//		assertTrue();
-	//		context.endTurn();
-	//		useHeroPower(context, player);
-	//		assertTrue(player.getHero().canAttackThisTurn());
-	//	}));
-	//}
+	@Test
+	public void testShySprite() {
+		runGym((context, player, opponent) -> {
+			// Setting it to a specific hero power since some require a target some don't for useHeroPower()
+			SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
+			spell.put(SpellArg.CARD, "hero_power_hone_reflexes");
+			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+			context.getLogic().endOfSequence();
+			Card heropower = player.getHero().getHeroPower();
+			assertEquals(heropower.getCardId(), "hero_power_hone_reflexes");
+			player.setMana(20);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			useHeroPower(context, player);
+			assertFalse(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			Minion sprite = playMinionCard(context, player, "minion_shy_sprite");
+			context.endTurn();
+			player.getHero().setHp(10);
+			playCard(context, opponent, "spell_fireball", sprite);
+			assertFalse(sprite.isDestroyed());
+			assertEquals(player.getHero().getHp(), 4);
+			context.endTurn();
+			player.setMana(20);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			useHeroPower(context, player);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			useHeroPower(context, player);
+			assertFalse(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+		});
+	}
 
-	// TODOs: 1. fix river spirit, json file failed at CardValidationTests.java:77
-	//        2. write tests for hero power hone reflexes and minion shy sprite
+	// The Uncasked: "Battlecry: Draw Elementals from your deck until your hand is full.",
+	@Test
+	public void testTheUncasked() {
+		runGym(((context, player, opponent) -> {
+			assertEquals(player.getHand().size(), 0);
+			shuffleToDeck(context, player, "minion_lake_elemental");
+			shuffleToDeck(context, player, "minion_wisp");
+			shuffleToDeck(context, player, "minion_thunderhead");
+			playMinionCard(context, player, "minion_the_uncasked");
+			assertEquals(player.getHand().size(), 2);
+			assertEquals(player.getHand().get(0).getRace(), Race.ELEMENTAL);
+			assertEquals(player.getHand().get(1).getRace(), Race.ELEMENTAL);
+		}));
+	}
+
+	// Spell Hone Reflexes: "Your Hero Power becomes 'Gain +3 Attack this turn."
+	@Test
+	public void testSpellHoneReflexes() {
+		runGym(((context, player, opponent) -> {
+			assertNotEquals(player.getHero().getHeroPower().getCardId(), "hero_power_hone_reflexes");
+			playCard(context, player, "spell_hone_reflexes");
+			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_hone_reflexes");
+		}));
+	}
+
+	// Touch of Death: "Shoot missiles equal to your hero's Attack that each deal as much damage."
+	@Test
+	public void testTouchofDeath() {
+		runGym(((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test_14");
+			context.endTurn();
+			opponent.getHero().setHp(opponent.getHero().getBaseHp());
+			player.getHero().setAttack(2);
+			playCard(context, player, "spell_touch_of_death");
+			assertEquals(opponent.getHero().getHp() + target1.getHp(), opponent.getHero().getBaseHp() + target1.getBaseHp() - 4);
+		}));
+	}
+
+	// Zen Pilgrimage: "Shuffle a friendly minion into your deck. Add Emerald Secrets to your hand equal to its cost."
+	/*@Test
+	public void testZenPilgrimage() {
+		runGym(((context, player, opponent) -> {
+			Minion friend = playMinionCard(context, player, "minion_blood_knight");
+			playCard(context, player, "spell_zen_pilgrimage", friend);
+			assertEquals(player.getHand().size(), 3);
+			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
+		}));
+	}*/
+
+	// Revisit zen_pilgrimage card, not correct yet for howMany
+
 }

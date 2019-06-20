@@ -1,0 +1,11 @@
+{
+  "seed" : 6435388412301440741,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_emperor_shaohao", "minion_emissary_of_the_end", "minion_student_of_the_serpent", "spell_storm_earth_and_fire", "spell_misty_mana_tea", "minion_defender_of_argus", "minion_subject_9", "minion_safeguard", "minion_fire_fly", "minion_thundering_jade_serpent", "minion_eydis_darkbane", "minion_ghuun", "minion_spider_tank", "minion_monastery_guard", "minion_ticking_giant", "minion_eyeweaver", "minion_breezecatcher", "minion_breezecatcher", "minion_gravelsnout_knight", "minion_cloakscale_chemist", "minion_feral_gibberer", "minion_curious_kirrin", "minion_suspicious_wanderer", "minion_hench_clan_hag", "minion_chromaggus", "minion_doomed_diver", "minion_jhu_zho", "minion_cyclopian_horror", "minion_student_of_the_crane", "spell_tiger_stance" ], [ "spell_party_portal", "minion_gargoyle_warden", "minion_kaboom_bot", "minion_waterboy", "spell_new_arrival", "minion_tikrakazz", "spell_triple_shot", "weapon_scissors_of_dots", "minion_corrupted_seer", "minion_sly_conquistador", "spell_countershot", "spell_extermination_team", "weapon_sharp_a_practice", "secret_hidden_trap", "minion_rakanishu", "minion_quest_giver", "quest_forge_it", "minion_hold_hunter", "spell_amber_drop", "minion_bomb_squad", "spell_party_portal", "minion_westlands_mugger", "minion_rafaam_archivist", "minion_mindbreaker", "minion_tinkmaster_overspark", "minion_garrison_commander", "minion_regeneratin_thug", "minion_klive_icetooth", "minion_marsh_drake", "spell_supply" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "MEAN_STREETS_OF_GADGETZAN", "REWARD", "KOBOLDS_AND_CATACOMBS", "KNIGHTS_OF_THE_FROZEN_THRONE", "SPELLSOURCE_BASIC", "THE_OLD_GODS", "LEAGUE_OF_EXPLORERS", "BOOMSDAY_PROJECT", "WITCHWOOD", "SANDS_OF_TIME", "VERDANT_DREAMS", "RASTAKHANS_RUMBLE", "BASIC", "JOURNEY_TO_UNGORO", "RISE_OF_SHADOWS", "THE_GRAND_TOURNAMENT", "NAXXRAMAS", "BLACKROCK_MOUNTAIN", "BATTLE_FOR_ASHENVALE", "HALL_OF_FAME", "GOBLINS_VS_GNOMES", "CLASSIC", "CUSTOM", "PROMO", "ONE_NIGHT_IN_KARAZHAN" ],
+  "mulligans" : [ [ 24, 27, 7 ], [ 44, 59 ] ],
+  "actions" : [ 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 4, 0, 1, 0, 0, 4, 0, 6, 3, 0, 0, 12, 6, 3, 17, 1, 3, 3, 8, 0, 2, 7, 0, 4, 5, 3, 1, 2, 0, 12 ],
+  "id" : null
+}

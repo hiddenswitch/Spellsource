@@ -5,7 +5,6 @@
   "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Gain +3 Attack this turn.",
-  "targetSelection": "ANY",
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
