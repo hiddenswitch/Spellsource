@@ -2,6 +2,7 @@ package com.hiddenswitch.deckgeneration;
 
 import io.jenetics.BitGene;
 import io.jenetics.Genotype;
+import io.jenetics.Mutator;
 import io.jenetics.Phenotype;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
@@ -26,10 +27,10 @@ public class TestBasicDecksGeneration {
 
 	public void deckGenerationForClass(HeroClass heroClass) {
 		int MAX_CARDS_PER_DECK = 30;
-		int GAMES_PER_MATCH = 25;
+		int GAMES_PER_MATCH = 20;
 		int STARTING_HP = 30;
-		int POPULATION_SIZE = 10;
-		int STABLE_GENERATIONS = 20;
+		int POPULATION_SIZE = 20;
+		int STABLE_GENERATIONS = 10;
 
 		CardCatalogue.loadCardsFromPackage();
 
@@ -49,34 +50,42 @@ public class TestBasicDecksGeneration {
 		BasicTournamentDecks basicTournamentDecks = new BasicTournamentDecks();
 		List<GameDeck> tournamentDecksList = basicTournamentDecks.getAllTrumpBasicDecks();
 
-		DeckAndDecisionGeneratorContext deckGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, tournamentDecksList);
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, tournamentDecksList);
 		deckGeneratorContext.setStartingHp(STARTING_HP);
 		deckGeneratorContext.setMaxCardsPerDeck(MAX_CARDS_PER_DECK);
 		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
 
-		List<DecisionType> alwaysActiveCardListDecisionTypes = new ArrayList<>();
-		alwaysActiveCardListDecisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES);
-		alwaysActiveCardListDecisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES);
+		List<DecisionType> cardListDecisionTypes = new ArrayList<>();
+		cardListDecisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES);
+		cardListDecisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES);
 
-		List<HashSet<String>> cardListsForAlwaysActiveCardListDecisionTypes = new ArrayList<>();
+		List<HashSet<String>> cardListsForDecisionTypes = new ArrayList<>();
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
-		cardListsForAlwaysActiveCardListDecisionTypes.add(neverUseOnEnemyMinions.classicAndBasicSets);
-		cardListsForAlwaysActiveCardListDecisionTypes.add(neverUseOnOwnMinion.classicAndBasicSets);
+		cardListsForDecisionTypes.add(neverUseOnEnemyMinions.classicAndBasicSets);
+		cardListsForDecisionTypes.add(neverUseOnOwnMinion.classicAndBasicSets);
 
-		PlayRandomWithoutSelfDamageWithDefinedDecisions enemyBehaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(alwaysActiveCardListDecisionTypes, cardListsForAlwaysActiveCardListDecisionTypes);
+		HashSet<DecisionType> booleanDecisionTypes = new HashSet<>();
+		booleanDecisionTypes.add(DecisionType.CANNOT_ATTACK_WITH_A_MINION_THAT_WILL_DIE_AND_NOT_KILL_OTHER_MINION);
 
-		deckGeneratorContext.setEnemyBehaviour(enemyBehaviour);
-		deckGeneratorContext.setAlwaysActiveCardListDecisionTypes(alwaysActiveCardListDecisionTypes, cardListsForAlwaysActiveCardListDecisionTypes);
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(cardListDecisionTypes, cardListsForDecisionTypes, booleanDecisionTypes);
+
+		deckGeneratorContext.setEnemyBehaviour(behaviour);
+		deckGeneratorContext.setPlayerBehaviour(behaviour);
 
 		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(MAX_CARDS_PER_DECK, indexInBitmap.size());
+		List<Mutator> mutators = new ArrayList<>();
+		mutators.add(new BitSwapMutator<>(.7));
+		mutators.add(new BitSwapToChangeCardCountMutator<>(.7, indexInBitmap));
+		mutators.add(new BitSwapByManaCostMutator<>(.7, indexInBitmap));
 		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, heroClass), bitGeneFactory)
 				.mapping(pop -> pop)
 				.populationSize(POPULATION_SIZE)
-				.alterers(new BitSwapMutator<>(.8),
-						new BitSwapToChangeCardCountMutator<>(.8, indexInBitmap),
-						new BitSwapByManaCostMutator<>(.8, indexInBitmap),
-						new BitSwapBetweenTwoSequencesMutator<>(.8))
+				.alterers(
+						new UmbrellaMutator<>(mutators),
+						new UmbrellaMutator<>(mutators),
+						new BitSwapBetweenTwoSequencesMutator<>(.7),
+						new BitSwapBetweenTwoSequencesMutator<>(.7))
 				.build();
 
 		Phenotype<BitGene, Double> deckResultPhenotype = engine.stream()
@@ -110,6 +119,7 @@ public class TestBasicDecksGeneration {
 	public void paladinDeckGeneration() {
 		deckGenerationForClass(HeroClass.GOLD);
 	}
+
 	@Test
 
 	public void priestDeckGeneration() {
@@ -125,13 +135,16 @@ public class TestBasicDecksGeneration {
 	public void shamanDeckGeneration() {
 		deckGenerationForClass(HeroClass.SILVER);
 	}
+
 	@Test
 	public void warlockDeckGeneration() {
 		deckGenerationForClass(HeroClass.VIOLET);
 	}
+
 	@Test
 	public void warriorDeckGeneration() {
 		deckGenerationForClass(HeroClass.RED);
 	}
+
 }
 

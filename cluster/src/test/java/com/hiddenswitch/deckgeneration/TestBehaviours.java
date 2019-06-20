@@ -638,6 +638,29 @@ public class TestBehaviours extends TestBase {
 			assertTrue(attackActionsThatKillAttackingMinionButNotTheDefendingMinion.isEmpty());
 		});
 	}
+
+	@Test
+	public static void testValidActionsBySource() {
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions();
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, opponent, "minion_chillwind_yeti");
+			receiveCard(context, player, "spell_arcane_missiles");
+			receiveCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			context.endTurn();
+			player.setMana(2);
+
+			List<GameAction> actions = context.getValidActions();
+			List<List<GameAction>> sortedActions = behaviour.validActionsBySource(actions);
+			assertTrue(sortedActions.size() == 5);
+			for (int i = 0; i < sortedActions.size(); i++) {
+				for (GameAction action : sortedActions.get(i))
+					assertTrue(sortedActions.get(i).get(0).getSourceReference().equals(action.getSourceReference()));
+			}
+		});
+	}
 }
 
 

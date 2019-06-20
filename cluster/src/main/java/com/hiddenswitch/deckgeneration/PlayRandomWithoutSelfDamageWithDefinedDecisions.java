@@ -15,9 +15,7 @@ import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -150,7 +148,38 @@ public class PlayRandomWithoutSelfDamageWithDefinedDecisions extends PlayRandomW
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		filterActions(context, player, validActions);
-		return super.requestAction(context, player, validActions);
+		Random random = getRandom(context);
+		List<List<GameAction>> gameActionsBySourceReference = validActionsBySource(validActions);
+		List<GameAction> listOfActionsFromSourceToUse;
+		if (gameActionsBySourceReference.size() == 1) {
+			listOfActionsFromSourceToUse = gameActionsBySourceReference.get(0);
+		} else {
+			if (random.nextInt(validActions.size()) == 0) {
+				listOfActionsFromSourceToUse = gameActionsBySourceReference.get(gameActionsBySourceReference.size() - 1);
+			}
+			else {
+				listOfActionsFromSourceToUse = gameActionsBySourceReference.get(random.nextInt(gameActionsBySourceReference.size() - 1));
+			}
+		}
+		return listOfActionsFromSourceToUse.get(random.nextInt(listOfActionsFromSourceToUse.size()));
+	}
+
+	public List<List<GameAction>> validActionsBySource(List<GameAction> validActions) {
+		HashMap<EntityReference, Integer> indexBySourceReference = new HashMap<>();
+		List<List<GameAction>> gameActionsBySourceReference = new ArrayList<>();
+		int nextIndex = 0;
+		for (GameAction action : validActions) {
+			if (indexBySourceReference.containsKey(action.getSourceReference())) {
+				gameActionsBySourceReference.get(indexBySourceReference.get(action.getSourceReference())).add(action);
+			} else {
+				indexBySourceReference.put(action.getSourceReference(), nextIndex);
+				List<GameAction> newList = new ArrayList<>();
+				newList.add(action);
+				gameActionsBySourceReference.add(newList);
+				nextIndex++;
+			}
+		}
+		return gameActionsBySourceReference;
 	}
 
 	/**
