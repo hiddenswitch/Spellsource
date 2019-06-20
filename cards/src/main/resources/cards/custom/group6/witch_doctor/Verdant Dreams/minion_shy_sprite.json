@@ -6,9 +6,10 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Deflect. You can use your Hero Power twice per turn.",
+  "description": "Deflect. You can use your Skill twice per turn.",
   "attributes": {
-    "HERO_POWER_USAGES": 2
+    "HERO_POWER_USAGES": 2,
+    "DEFLECT": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

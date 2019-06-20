@@ -1,0 +1,11 @@
+{
+  "seed" : 2736220411526135683,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "ROSE" ],
+  "deckCardIds" : [ [ "minion_crane_school_instructor", "minion_servant_of_twilight", "minion_hemet_jungle_hunter", "minion_timewalker_stormlord", "minion_shy_sprite", "minion_haunted_creeper", "spell_chi_torpedo", "minion_kodorider", "minion_mrs_merria", "minion_mad_hatter", "spell_chi_wave", "minion_jhu_zho", "minion_ursol_the_wise", "minion_cobalt_scalebane", "spell_storm_earth_and_fire", "minion_black_ox_statue", "minion_spawn_of_nzoth", "minion_skunky_brew_alemental", "minion_imp_master", "minion_golakka_crawler", "minion_death_s_messenger", "minion_shedding_chameleon", "spell_dampen_harm", "spell_enveloping_mists", "minion_icehowl", "minion_deranged_greengill", "minion_fumewalker_zin", "spell_chi_wave", "minion_earthen_ring_farseer", "minion_mad_hatter" ], [ "minion_tainted_zealot", "minion_vilewing_broodmother", "minion_eydis_darkbane", "minion_temple_watcher", "minion_lost_spirit", "minion_darkwill_appraiser", "minion_avatar_of_hakkar", "minion_marin_the_fox", "minion_alemental", "spell_devil_within", "spell_drain_sanity", "spell_devil_within", "minion_heroic_innkeeper", "minion_baleful_banker", "minion_ankylo_devotee", "spell_rotten_curse", "spell_spiritball", "minion_rotten_applebaum", "minion_gnomish_inventor", "minion_jeweled_scarab", "minion_cinderslinger", "spell_bat-talion", "minion_coliseum_manager", "spell_shangas_spirit_brew", "minion_mountain_giant", "minion_arena_fanatic", "minion_furnacefire_colossus", "weapon_spiritbinder", "minion_gurubashi_chicken", "spell_nostalgia" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "MEAN_STREETS_OF_GADGETZAN", "REWARD", "KOBOLDS_AND_CATACOMBS", "KNIGHTS_OF_THE_FROZEN_THRONE", "SPELLSOURCE_BASIC", "THE_OLD_GODS", "LEAGUE_OF_EXPLORERS", "BOOMSDAY_PROJECT", "WITCHWOOD", "SANDS_OF_TIME", "VERDANT_DREAMS", "RASTAKHANS_RUMBLE", "BASIC", "JOURNEY_TO_UNGORO", "RISE_OF_SHADOWS", "THE_GRAND_TOURNAMENT", "NAXXRAMAS", "BLACKROCK_MOUNTAIN", "BATTLE_FOR_ASHENVALE", "HALL_OF_FAME", "GOBLINS_VS_GNOMES", "CLASSIC", "CUSTOM", "PROMO", "ONE_NIGHT_IN_KARAZHAN" ],
+  "mulligans" : [ [ 11 ], [ 54, 62, 63 ] ],
+  "actions" : [ 0, 1, 2, 1, 2, 1, 0, 0, 2, 2, 0, 4, 1, 9, 2, 17, 14, 4, 4, 0, 16, 2, 3, 0, 0, 2, 11, 3, 15, 8, 0, 2, 5, 5, 11, 6, 33, 2, 6, 3, 6, 0, 8, 2, 0, 13, 26 ],
+  "id" : null
+}
