@@ -25,7 +25,7 @@
         }
       ]
     },
-	{
+    {
       "class": "AttributeAura",
       "target": "OTHER_FRIENDLY_MINIONS",
       "attribute": "TAUNT"

@@ -1,0 +1,32 @@
+{
+  "name": "Jhu-zho, the Enlightened",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Swap each 1-Cost spell in your hand with a minion from your deck.",
+  "battlecry": {
+    "spell": {
+      "class": "SwapCardsSpell",
+      "secondaryTarget": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "manaCost": 1
+      },
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

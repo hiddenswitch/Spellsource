@@ -1,0 +1,17 @@
+{
+  "name": "Hone Reflexes",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Gain +3 Attack this turn.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+	"attackBonus": 3
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
