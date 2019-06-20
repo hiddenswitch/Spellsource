@@ -52,4 +52,26 @@ public class TestCards extends TestBase {
 			Assert.assertTrue(opponent.getHero().isDestroyed());
 		});
 	}
+
+	@Test
+	public void testWinTheGameAlt() {
+		CardCatalogue.loadCardsFromPackage();
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_win_the_game_alt");
+			Assert.assertTrue(opponent.getHero().isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_win_the_game");
+			playCard(context, player, "minion_win_the_game_alt");
+			Assert.assertTrue(!opponent.getHero().isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			player.getDeck().add(CardCatalogue.getCardById("spell_win_the_game"));
+			playCard(context, player, "minion_win_the_game_alt");
+			Assert.assertTrue(!opponent.getHero().isDestroyed());
+		});
+	}
 }

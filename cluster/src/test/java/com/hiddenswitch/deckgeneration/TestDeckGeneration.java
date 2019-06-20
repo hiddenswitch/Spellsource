@@ -475,5 +475,111 @@ public class TestDeckGeneration {
 		Genotype<BitGene> deckResult = deckResultPhenotype.getGenotype();
 		assertTrue(deckResult.getChromosome(0).getGene(buffIndex).booleanValue());
 	}
+
+
+	@Test
+	@Ignore
+	public void testObjectiveFunction() {
+		int STARTING_HP = 30;
+		int MAX_CARDS_PER_DECK = 10;
+		int POPULATION_SIZE = 10;
+		int STABLE_GENERATIONS = 10;
+		int GAMES_PER_MATCH = 200;
+
+		CardCatalogue.loadCardsFromPackage();
+		List<Card> indexInBitmap = new ArrayList<>();
+		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_novice_engineer"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_gnomish_inventor"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_loot_hoarder"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_power_word_shield"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_polluted_hoarder"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_coldlight_oracle"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_bloodmage_thalnos"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_acolyte_of_pain"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_novice_engineer"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_ogre_magi"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_chillwind_yeti"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_magma_rager"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_booty_bay_bodyguard"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_shattered_sun_cleric"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_goldshire_footman"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_bloodfen_raptor"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_razorfen_hunter"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_lord_of_the_arena"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stormwind_champion"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_core_hound"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_murloc_raider"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_wisp"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_boulderfist_ogre"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_senjin_shieldmasta"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_acidic_swamp_ooze"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_razorfen_hunter"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_win_the_game_alt"));
+
+		int badWinIndex = indexInBitmap.size() - 1;
+		int goodWinIndex = 0;
+
+		GameDeck generatedDeck = new GameDeck(HeroClass.BLUE);
+
+		generatedDeck.getCards().addCard("spell_win_the_game");
+		generatedDeck.getCards().addCard("minion_chillwind_yeti");
+		generatedDeck.getCards().addCard("minion_bloodfen_raptor");
+		generatedDeck.getCards().addCard("minion_novice_engineer");
+		generatedDeck.getCards().addCard("minion_gnomish_inventor");
+		generatedDeck.getCards().addCard("minion_loot_hoarder");
+		generatedDeck.getCards().addCard("spell_power_word_shield");
+		generatedDeck.getCards().addCard("minion_polluted_hoarder");
+		generatedDeck.getCards().addCard("minion_coldlight_oracle");
+		generatedDeck.getCards().addCard("minion_bloodmage_thalnos");
+
+		List<GameDeck> tournamentDecksList = Collections.singletonList(generatedDeck);
+
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, tournamentDecksList);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(MAX_CARDS_PER_DECK);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		List<DecisionType> cardListDecisionTypes = new ArrayList<>();
+		cardListDecisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES);
+		cardListDecisionTypes.add(DecisionType.SOME_CARDS_CANNOT_TARGET_OWN_ENTITIES);
+
+		List<HashSet<String>> cardListsForDecisionTypes = new ArrayList<>();
+		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
+		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
+		cardListsForDecisionTypes.add(neverUseOnEnemyMinions.classicAndBasicSets);
+		cardListsForDecisionTypes.add(neverUseOnOwnMinion.classicAndBasicSets);
+
+		HashSet<DecisionType> booleanDecisionTypes = new HashSet<>();
+		booleanDecisionTypes.add(DecisionType.CANNOT_ATTACK_WITH_A_MINION_THAT_WILL_DIE_AND_NOT_KILL_OTHER_MINION);
+
+		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(cardListDecisionTypes, cardListsForDecisionTypes, booleanDecisionTypes);
+
+		deckGeneratorContext.setEnemyBehaviour(behaviour);
+		deckGeneratorContext.setPlayerBehaviour(behaviour);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(MAX_CARDS_PER_DECK, indexInBitmap.size());
+		List<Mutator> mutators = new ArrayList<>();
+		mutators.add(new BitSwapMutator<>(.7));
+		mutators.add(new BitSwapToChangeCardCountMutator<>(.7, indexInBitmap));
+		mutators.add(new BitSwapByManaCostMutator<>(.7, indexInBitmap));
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.mapping(pop -> pop)
+				.populationSize(POPULATION_SIZE)
+				.alterers(
+						new UmbrellaMutator<>(mutators),
+						new UmbrellaMutator<>(mutators),
+						new BitSwapBetweenTwoSequencesMutator<>(.7),
+						new BitSwapBetweenTwoSequencesMutator<>(.7))
+				.build();
+
+		Phenotype<BitGene, Double> deckResultPhenotype = engine.stream()
+				.limit(Limits.bySteadyFitness(STABLE_GENERATIONS))
+				.collect(EvolutionResult.toBestPhenotype());
+
+		assertTrue(deckResultPhenotype.getGenotype().getChromosome().getGene(goodWinIndex).booleanValue());
+		assertTrue(!deckResultPhenotype.getGenotype().getChromosome().getGene(badWinIndex).booleanValue());
+		assertTrue(deckResultPhenotype.getFitness() < .51);
+	}
 }
 

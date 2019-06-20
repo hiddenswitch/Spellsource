@@ -1,0 +1,44 @@
+{
+  "name": "Win the game Alt",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: If Win The Game is not in your hand or deck, win the game",
+  "battlecry": {
+    "condition": {
+      "class": "OrCondition",
+      "invert": true,
+      "conditions": [
+        {
+          "class": "HoldsCardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "spell_win_the_game"
+          }
+        },
+        {
+          "class": "DeckContainsCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "spell_win_the_game"
+          }
+        }
+      ]
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_HERO"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
