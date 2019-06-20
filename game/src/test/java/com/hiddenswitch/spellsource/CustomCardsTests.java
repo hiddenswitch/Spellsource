@@ -7135,7 +7135,7 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-	//   Mollusk Meister: "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
+	// Mollusk Meister: "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
 	@Test
 	public void testMolluskMeister() {
 		// Empty deck
@@ -7153,5 +7153,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(friendly.getHp(), player.getHero().getArmor() + friendly.getBaseHp());
 		});
 	}
+
 }
 

@@ -208,4 +208,175 @@ public class WitchDoctorTests extends TestBase {
 			assertEquals(costOf(context, player, coin), 1);
 		});
 	}
+
+	// Secretive Chanter: "Opener: Transform all Voodoo spells in your hand into Emerald Secrets."
+	@Test
+	public void testSecretiveChanter() {
+		runGym((context, player, opponent) -> {
+			Card v1 = receiveCard(context, player, "spell_divination");
+			Card v2 = receiveCard(context, player, "spell_frenzy");
+			Card v3 = receiveCard(context, player, "spell_hex_bolt");
+			Card v4 = receiveCard(context, player, "spell_spirit_bind");
+			Card v5 = receiveCard(context, player, "spell_spirit_bind");
+			Card nonv = receiveCard(context, player, "spell_fireball");
+			playMinionCard(context, player, "minion_secretive_chanter");
+			// Check whether all Voodoo spells have been transformed
+			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(3).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(4).getCardId().contains("secret_secret_of"));
+			assertEquals(player.getHand().get(5).getCardId(), "spell_fireball");
+		});
+	}
+
+	// High Shaman Mawliki: "Your spells have Toxic. Your healing is doubled. Your other minions have Elusive and Guard."
+	@Test
+	public void testHighShamanMawliki() {
+		runGym((context, player, opponent) -> {
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion friend2 = playMinionCard(context, player, "minion_neutral_test_14");
+			playMinionCard(context, player, "minion_high_shaman_mawliki");
+			// Check for guard and elusive
+			assertTrue(friend1.hasAttribute(Attribute.TAUNT));
+			assertTrue(friend2.hasAttribute(Attribute.TAUNT));
+			assertTrue(friend1.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+			assertTrue(friend2.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+			context.endTurn();
+			Minion enemy1 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
+			Minion enemy2 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
+			Minion enemy3 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
+			context.endTurn();
+			// Check for toxic spells
+			playCard(context, player, "spell_fireball", enemy1);
+			playCard(context, player, "spell_fireball", enemy2);
+			assertTrue(enemy1.isDestroyed());
+			assertTrue(enemy2.isDestroyed());
+			assertEquals(opponent.getMinions().size(), 1);
+			context.endTurn();
+			attack(context, opponent, enemy3, friend2);
+			assertEquals(friend2.getHp(), 4);
+			context.endTurn();
+			// Check for double healing effect
+			playCard(context, player, "spell_crystal_power_2", friend2);
+			assertEquals(friend2.getHp(), 14);
+		});
+	}
+
+	// Hone Reflexes: "Gain +3 Attack this turn.",
+	//@Test
+	//public void testHoneReflexes() {
+	//	runGym((context, player, opponent) -> {
+	//		useHeroPower(context, player);
+	//		assertEquals(player.getHero().getAttack(), player.getHero().getBaseAttack() + 3);
+	//		context.endTurn();
+	//		context.endTurn();
+	//		assertEquals(player.getHero().getAttack(), player.getHero().getBaseAttack());
+	//	});
+	//}
+
+	// Breezecatcher: "Battlecry: If you're holding an Emerald Secret, give your hero Windfury this turn.",
+	@Test
+	public void testBreezecatcher() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_neutral_test_14");
+			context.endTurn();
+			player.getHero().setAttack(2);
+			receiveCard(context, player, "secret_secret_of_winter");
+			playMinionCard(context, player, "minion_breezecatcher");
+			attack(context, player, player.getHero(), target);
+			assertTrue(player.getHero().canAttackThisTurn());
+			context.endTurn();
+			context.endTurn();
+			attack(context, player, player.getHero(), target);
+			assertFalse(player.getHero().canAttackThisTurn());
+		});
+	}
+
+	// Curious Kirrin: "Deflect. Extra Strike. Whenever this minion attacks, add an Emerald Secret to your hand."
+	@Test
+	public void testCuriousKirrin() {
+		runGym((context, player, opponent) -> {
+			Minion kirrin = playMinionCard(context, player, "minion_curious_kirrin");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_14");
+			context.endTurn();
+			player.getHero().setHp(10);
+			attack(context, player, kirrin, enemy);
+			assertTrue(kirrin.canAttackThisTurn());
+			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
+			assertEquals(player.getHero().getHp(), 10 - enemy.getBaseAttack());
+		});
+	}
+
+	// Jhu Zho: "Opener: Swap each 1-Cost spell in your hand with a minion from your deck."
+	@Test
+	public void testJhuZho() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_pay_respects");
+			Card minion_indeck = shuffleToDeck(context, player, "minion_blastflame_dragon");
+			playMinionCard(context, player, "minion_jhu_zho");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0), minion_indeck);
+		});
+		runGym((context, player, opponent) -> {
+			Card inHand = receiveCard(context, player, "spell_pay_respects");
+			Card spell_indeck = shuffleToDeck(context, player, "spell_fireball");
+			playMinionCard(context, player, "minion_jhu_zho");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0), inHand);
+		});
+	}
+
+	// Lake Elemental: "Deflect."
+	@Test
+	public void testLakeElemental() {
+		runGym(((context, player, opponent) -> {
+			Minion lake = playMinionCard(context, player, "minion_lake_elemental");
+			context.endTurn();
+			player.getHero().setHp(10);
+			playCard(context, opponent, "spell_fireball", lake);
+			assertEquals(lake.getHp(), lake.getBaseHp());
+			assertEquals(player.getHero().getHp(), 4);
+			context.endTurn();
+			context.endTurn();
+			playCard(context, opponent, "spell_fireball", lake);
+			assertTrue(lake.isDestroyed());
+		}));
+	}
+
+	// River Spirit: "Battlecry: If you control another Elemental, summon an Elemental from your hand.",
+	@Test
+	public void testRiverSpirit() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_lake_elemental");
+			Card ele = receiveCard(context, player, "minion_crystal_giant");
+			Card wisp = receiveCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_river_spirit");
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(2).getSourceCard(), ele);
+			assertEquals(player.getHand().size(), 1);
+		});
+	}
+
+	// Shy Sprite: "Deflect. You can use your Hero Power twice per turn."
+	//@Test
+	//public void testShySprite() {
+	//	runGym(((context, player, opponent) -> {
+	//		player.getHero().setHeroPower("hero_power_r");
+	//		useHeroPower(context, player);
+	//		assertFalse(player.getHero().canAttackThisTurn());
+	//		Minion sprite = playMinionCard(context, player, "minion_shy_sprite");
+	//		context.endTurn();
+	//		playCard(context, opponent, "spell_fireball", sprite);
+	//		assertTrue();
+	//		context.endTurn();
+	//		useHeroPower(context, player);
+	//		assertTrue(player.getHero().canAttackThisTurn());
+	//	}));
+	//}
+
+	// TODOs: 1. fix river spirit, json file failed at CardValidationTests.java:77
+	//        2. write tests for hero power hone reflexes and minion shy sprite
 }
