@@ -7,14 +7,13 @@ package com.hiddenswitch.deckgeneration;
 
 import io.jenetics.Gene;
 import io.jenetics.internal.math.comb;
-import io.jenetics.internal.util.Equality;
-import io.jenetics.internal.util.Hash;
 import io.jenetics.util.MSeq;
 import io.jenetics.util.RandomRegistry;
 
 import java.util.List;
 import java.util.Random;
 
+import static io.jenetics.internal.util.Hashes.hash;
 import static java.lang.Math.min;
 import static java.lang.String.format;
 
@@ -122,17 +121,16 @@ public class MultiPointCrossoverOnSpecificChromosomes<
 
 	@Override
 	public int hashCode() {
-		return Hash.of(getClass())
-				.and(super.hashCode())
-				.and(_n).value();
+		return hash(super.hashCode(), hash(_n));
 	}
 
 	@Override
 	public boolean equals(final Object obj) {
-		return Equality.of(this, obj).test(mpc ->
-				_n == mpc._n &&
-						super.equals(obj)
-		);
+		return obj == this ||
+				obj != null &&
+						getClass() == obj.getClass() &&
+						_n == ((MultiPointCrossoverOnSpecificChromosomes) obj)._n &&
+						super.equals(obj);
 	}
 
 	@Override
