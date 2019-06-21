@@ -1,4 +1,6 @@
 dependencies {
+    compile project(':core')
+
     testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
 }
 

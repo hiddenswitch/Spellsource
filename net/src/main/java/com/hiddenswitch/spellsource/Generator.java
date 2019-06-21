@@ -70,7 +70,7 @@ public class Generator {
 	public List<Record> getSpellRecords() throws CardParseException, IOException, URISyntaxException {
 		CardCatalogue.loadCardsFromPackage();
 
-		Stream<Record> spells = CardCatalogue.getRecords().values().stream().map(CardCatalogueRecord::getDesc)
+		Stream<Record> spells = CardCatalogue.getRecords().values().stream().map(CardResource::getDesc)
 				.flatMap(desc -> toRecords(desc, 0));
 
 		return spells.collect(Collectors.toList());

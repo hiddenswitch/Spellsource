@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'com.hiddenswitch'
+version '0.8.33'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':game')
+    compile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
+    compile group: 'org.testng', name: 'testng', version: '6.14.3'
+    compile group: 'org.mockito', name: 'mockito-core', version: '2.24.5'
+    compile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+}
