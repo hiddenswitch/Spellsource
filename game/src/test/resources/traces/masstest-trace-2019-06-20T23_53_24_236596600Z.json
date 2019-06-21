@@ -1,0 +1,11 @@
+{
+  "seed" : 5215940852836862907,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "TIME" ],
+  "deckCardIds" : [ [ "minion_jhu_zho", "minion_terrified_tanooki", "minion_wobbling_runts", "minion_harrison_jones", "minion_novice_enchantress", "minion_argent_commander", "minion_chronocaller", "minion_guild_recruiter", "minion_jungle_king", "minion_steel_rager", "minion_elise_trailblazer", "minion_aysa_cloudsinger", "quest_eerie_fermentation", "spell_chi_wave", "minion_elusive_brawler", "minion_zen-noy-o-tron", "minion_blackflame_bomber", "minion_unseen_saboteur", "spell_zen_pilgrimage", "minion_sightless_ranger", "spell_keg_smash", "minion_artificial_life_cocoon", "minion_defender_of_tomorrow", "minion_windwalk_master", "minion_massive_turtle", "spell_gift_of_the_mists", "minion_lake_elemental", "minion_jar_of_mists", "spell_tiger_palm_strike", "minion_windwalk_master" ], [ "minion_oni_entrapper", "minion_eydis_darkbane", "minion_antique_healbot", "minion_mysterious_questgiver", "spell_firesilk_chrysalis", "minion_streetwise_specialist", "spell_banish", "minion_primal_mother", "quest_the_impossible_harvest", "minion_oondasta", "spell_peace_in_nothing", "spell_good_omens", "spell_lone_survivor", "minion_floating_crystal", "spell_overclock_timeweaver", "spell_good_omens", "spell_snip_the_cord", "spell_flicker_across_the_veil", "spell_altered_fate", "minion_tournament_attendee", "spell_temporal_echoes", "spell_sudden_storm", "spell_snip_the_cord", "weapon_blistering_blade", "secret_moments_hesitation", "spell_firesilk_chrysalis", "spell_sudden_storm", "minion_arcane_dynamo", "minion_mystic_weaver", "spell_overclock_timeweaver" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "LEAGUE_OF_EXPLORERS", "ONE_NIGHT_IN_KARAZHAN", "HALL_OF_FAME", "RISE_OF_SHADOWS", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "PROMO", "THE_GRAND_TOURNAMENT", "GOBLINS_VS_GNOMES", "CLASSIC", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "SANDS_OF_TIME", "CUSTOM", "BASIC", "THE_OLD_GODS", "KOBOLDS_AND_CATACOMBS", "BLACKROCK_MOUNTAIN", "NAXXRAMAS", "SPELLSOURCE_BASIC", "REWARD", "BOOMSDAY_PROJECT", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "mulligans" : [ [ 16, 26, 29 ], [ 44, 46, 59 ] ],
+  "actions" : [ 2, 4, 2, 0, 4, 0, 5, 1, 0, 1, 0, 0, 1, 0, 4, 0, 4, 1, 1, 3, 1, 4 ],
+  "id" : null
+}

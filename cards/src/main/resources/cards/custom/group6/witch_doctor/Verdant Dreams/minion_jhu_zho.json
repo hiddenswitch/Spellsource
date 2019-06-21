@@ -9,18 +9,19 @@
   "description": "Opener: Swap each 1-Cost spell in your hand with a minion from your deck.",
   "battlecry": {
     "spell": {
-      "class": "SwapCardsSpell",
-      "secondaryTarget": "FRIENDLY_HAND",
-      "filter": {
-        "class": "CardFilter",
-        "cardType": "SPELL",
-        "manaCost": 1
-      },
-      "target": "FRIENDLY_DECK",
-      "filter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      }
+      "class": "custom.SwapCardsInHandAndDeckSpell",
+      "value": 10,
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL",
+          "manaCost": 1
+        },
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      ]
     }
   },
   "attributes": {

@@ -1,0 +1,11 @@
+{
+  "seed" : -2039602063310458676,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "PURPLE" ],
+  "deckCardIds" : [ [ "minion_golakka_crawler", "minion_deathspeaker", "minion_arcane_golem", "minion_onyxia", "minion_zilliax", "spell_monastery_s_teachings", "minion_kodama_bulwark", "spell_spinning_crane_kick", "minion_squirming_tentacle", "minion_miniature_gunner", "minion_jhu_zho", "minion_mechanical_monstrosity", "minion_the_curator", "minion_white_tiger_statue", "minion_jastor_gallywyx", "minion_piloted_shredder", "minion_fanatical_brewmaster", "minion_enigmatic_brewmaster", "minion_widow_greenpaw", "spell_serpent_stance", "minion_emissary_of_the_end", "minion_north_sea_kraken", "spell_tiger_palm_strike", "minion_fencing_coach", "spell_dampen_harm", "minion_wobbling_runts", "minion_worgen_abomination", "minion_antique_healbot", "spell_enveloping_mists", "spell_crane_stance" ], [ "spell_chaos_nova", "weapon_illidari_warglaives", "minion_captain_stashin", "minion_gelbin_mekkatorque", "minion_brainstormer", "minion_augmented_pixie", "minion_master_of_the_glaive", "spell_blur", "minion_loose_specimen", "minion_silent_knight", "weapon_illidari_warglaives", "spell_shear", "minion_weaponized_pinata", "spell_nemesis", "spell_fel_barrage", "spell_feed_the_demon", "minion_coilskar_sea_caller", "minion_imp_master", "spell_demon_blades", "spell_blur", "minion_illidari_adept", "spell_shear", "minion_bomb_squad", "spell_metamorphosis", "weapon_chaos_blades", "minion_coilskar_sea_caller", "minion_gadgetzan_auctioneer", "minion_mutamite_terror", "minion_rapier_rodent", "minion_guild_guard" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "LEAGUE_OF_EXPLORERS", "ONE_NIGHT_IN_KARAZHAN", "HALL_OF_FAME", "RISE_OF_SHADOWS", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "PROMO", "THE_GRAND_TOURNAMENT", "GOBLINS_VS_GNOMES", "CLASSIC", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "SANDS_OF_TIME", "CUSTOM", "BASIC", "THE_OLD_GODS", "KOBOLDS_AND_CATACOMBS", "BLACKROCK_MOUNTAIN", "NAXXRAMAS", "SPELLSOURCE_BASIC", "REWARD", "BOOMSDAY_PROJECT", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "mulligans" : [ [ 19, 27, 17 ], [ 57 ] ],
+  "actions" : [ 0, 0, 2, 2, 1, 4, 0, 0, 1, 0, 0, 1, 1, 0, 0, 4, 0, 0, 5, 3, 0, 4, 1, 2, 0, 2, 5, 0, 3, 2, 6, 0, 10, 14, 1, 4, 25, 0, 0, 10, 7, 4, 32, 16 ],
+  "id" : null
+}

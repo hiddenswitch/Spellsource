@@ -1,0 +1,11 @@
+{
+  "seed" : -1748781931180496394,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "WHITE", "JADE" ],
+  "deckCardIds" : [ [ "minion_radiant_elemental", "minion_twilight_darkmender", "minion_flight_master", "minion_hunchback_supplier", "spell_holy_nova", "minion_omega_medic", "minion_scarlet_cleric", "minion_automedic_androne", "minion_tribemaster", "spell_eternal_servitude", "minion_wrathion", "minion_volatile_elemental", "minion_nature_rager", "minion_nozdormu", "minion_alarm-o-bot", "spell_mind_blast", "minion_crystal_shatterer", "minion_prophet_velen", "minion_toxic_sewer_ooze", "minion_eternal_time_eater", "spell_mass_hysteria", "minion_confessor_paletress", "minion_omega_medic", "minion_micro_raptors", "minion_twilight_whelp", "spell_lesser_diamond_spellstone", "minion_yaungol_guardian", "minion_purity_keeper", "minion_disciple_of_cthun", "minion_helpless_hatchling" ], [ "minion_micro_raptors", "minion_fungalmancer", "spell_storm_earth_and_fire", "spell_monastery_s_teachings", "minion_furious_ettin", "spell_transcendence", "minion_jhu_zho", "spell_breath_of_fire", "minion_student_of_the_tiger", "minion_death_s_messenger", "minion_chillwind_yeti", "minion_rummaging_kobold", "minion_bogovanis", "minion_huge_toad", "minion_student_of_the_tiger", "minion_sunfury_protector", "minion_black_ox_statue", "minion_unnerving_spectre", "minion_thundering_jade_serpent", "minion_phantom_freebooter", "minion_infinite_behemoth", "minion_red_crane_statue", "minion_doomsayer", "minion_darkmire_moonkin", "spell_serpent_stance", "minion_skunky_brew_alemental", "minion_ox_school_instructor", "minion_secretkeeper", "minion_core_hound", "minion_eldritch_horror" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "LEAGUE_OF_EXPLORERS", "ONE_NIGHT_IN_KARAZHAN", "HALL_OF_FAME", "RISE_OF_SHADOWS", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "PROMO", "THE_GRAND_TOURNAMENT", "GOBLINS_VS_GNOMES", "CLASSIC", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "SANDS_OF_TIME", "CUSTOM", "BASIC", "THE_OLD_GODS", "KOBOLDS_AND_CATACOMBS", "BLACKROCK_MOUNTAIN", "NAXXRAMAS", "SPELLSOURCE_BASIC", "REWARD", "BOOMSDAY_PROJECT", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "mulligans" : [ [ 23, 12, 11 ], [ 61, 46, 42 ] ],
+  "actions" : [ 0, 0, 4, 0, 0, 0, 4, 1, 0, 0, 5, 3, 0, 6, 0, 2 ],
+  "id" : null
+}
