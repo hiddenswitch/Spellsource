@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group 'com.hiddenswitch'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':core')
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile project(':testutils')
+}
