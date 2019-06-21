@@ -332,7 +332,7 @@ public class WitchDoctorTests extends TestBase {
 		});
 		runGym((context, player, opponent) -> {
 			Card inHand = receiveCard(context, player, "spell_pay_respects");
-			Card spell_indeck = shuffleToDeck(context, player, "spell_fireball");
+			shuffleToDeck(context, player, "spell_fireball");
 			playMinionCard(context, player, "minion_jhu_zho");
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0), inHand);

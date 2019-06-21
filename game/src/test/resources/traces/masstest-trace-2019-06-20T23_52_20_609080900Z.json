@@ -1,0 +1,11 @@
+{
+  "seed" : -2508102980650546802,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "AMBER" ],
+  "deckCardIds" : [ [ "minion_wild_pyromancer", "quest_eerie_fermentation", "minion_proud_defender", "minion_bull_dozer", "minion_jhu_zho", "minion_the_uncasked", "minion_annoy-o-tron", "minion_violet_illusionist", "minion_giant_serpent", "spell_zen_pilgrimage", "minion_zen-noy-o-tron", "minion_student_of_the_ox", "minion_crowd_roaster", "spell_staggering_brew", "minion_spectral_steed", "spell_rising_sun_kick", "minion_elusive_brawler", "spell_ox_stance", "minion_the_lich_king", "minion_ironfur_grizzly", "spell_misty_mana_tea", "minion_daring_reporter", "minion_darkscale_healer", "minion_bittertide_crab", "minion_stoneskin_basilisk", "minion_student_of_the_crane", "minion_helpless_hatchling", "minion_student_of_the_serpent", "spell_serpent_stance", "minion_ice_rager" ], [ "secret_obvious_ambush", "minion_target_dummy", "minion_bloodmage_thalnos", "minion_serv-ant", "minion_shallow_gravedigger", "minion_voodoo_doll", "minion_glass_golem", "minion_tanglefur_mystic", "minion_blubber_behemoth", "minion_gurubashi_chicken", "minion_saronite_chain_gang", "minion_selfburner", "minion_broodmother_narvina", "minion_argent_commander", "spell_spider_surveillance", "minion_dalaran_mage", "spell_boss_fight", "minion_wee_whelp", "minion_twilight_annihilator", "minion_murloc_tastyfin", "minion_nefarian", "minion_dalaran_crusader", "spell_hive_mind", "minion_hive_guardian", "spell_encased_in_amber", "minion_spyder", "spell_hive_mind", "minion_wee_whelp", "minion_gnomish_experimenter", "minion_lumina" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "LEAGUE_OF_EXPLORERS", "ONE_NIGHT_IN_KARAZHAN", "HALL_OF_FAME", "RISE_OF_SHADOWS", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "PROMO", "THE_GRAND_TOURNAMENT", "GOBLINS_VS_GNOMES", "CLASSIC", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "SANDS_OF_TIME", "CUSTOM", "BASIC", "THE_OLD_GODS", "KOBOLDS_AND_CATACOMBS", "BLACKROCK_MOUNTAIN", "NAXXRAMAS", "SPELLSOURCE_BASIC", "REWARD", "BOOMSDAY_PROJECT", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "mulligans" : [ [ 6, 15 ], [ 48, 65 ] ],
+  "actions" : [ 2, 1, 2, 0, 0, 1, 0, 1, 0, 7 ],
+  "id" : null
+}
