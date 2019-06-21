@@ -33,7 +33,6 @@ public final class SwapCardsInHandAndDeckSpell extends SwapCardsSpell {
 
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		for (int i = 0; i < count; i++) {
-			// Get a card in the hand
 			CardList filteredHand = player.getHand().filtered(filters[0].matcher(context, player, source));
 			CardList filteredDeck = player.getDeck().filtered(filters[1].matcher(context, player, source));
 			if (filteredDeck.isEmpty() || filteredHand.isEmpty()) {
