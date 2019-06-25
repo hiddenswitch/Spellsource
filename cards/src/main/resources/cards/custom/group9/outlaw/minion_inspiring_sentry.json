@@ -1,23 +1,21 @@
 {
-  "name": "McGrief",
+  "name": "Inspiring Sentry",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "COPPER",
-  "baseAttack": 5,
+  "baseAttack": 3,
   "baseHp": 4,
-  "rarity": "LEGENDARY",
-  "description": "Whenever you play a Quick Draw card, draw a card.",
+  "rarity": "EPIC",
+  "description": "Whenever you use your Skill, draw a card.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardPlayedTrigger",
-      "requiredAttribute": "QUICK_DRAW",
+      "class": "InspireTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
       "class": "DrawCardSpell"
     }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

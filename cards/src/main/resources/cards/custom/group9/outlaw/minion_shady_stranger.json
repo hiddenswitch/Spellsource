@@ -3,22 +3,20 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "COPPER",
-  "baseAttack": 2,
+  "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Taunt. Quick Draw: Your opponent draws a card.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "targetPlayer": "SELF"
-    },
+  "description": "Guard. Opener: Your opponent draws a card.",
+  "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell",
       "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {
-    "TAUNT": true
+    "TAUNT": true,
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",

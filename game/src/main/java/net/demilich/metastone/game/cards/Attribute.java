@@ -977,6 +977,10 @@ public enum Attribute {
 	 */
 	BEING_PLAYED,
 	/**
+	 * Marks a card as using a "Quick Draw" effect for the Outlaw class
+	 */
+	QUICK_DRAW,
+	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
 	 */

@@ -1,20 +1,20 @@
 {
-  "name": "Ride like the Wind!",
-  "baseManaCost": 3,
+  "name": "Bang!",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "FREE",
-  "description": "Give a minion +2 Attack. Draw a card.",
-  "targetSelection": "MINIONS",
+  "description": "Deal $2 damage. Draw a card.",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BuffSpell",
-        "attackBonus": 2
+        "class": "DamageSpell",
+        "value": 2
       },
       {
-        "class": "DrawSpell",
+        "class": "DrawCardSpell",
         "value": 1
       }
     ]

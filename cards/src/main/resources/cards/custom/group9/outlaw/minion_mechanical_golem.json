@@ -1,26 +1,28 @@
 {
-  "name": "Dustbowl Vigilante",
-  "baseManaCost": 4,
+  "name": "Mechanical Golem",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "COPPER",
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Quick Draw: Deal 3 damage randomly split among all enemies",
+  "race": "MECH",
+  "description": "Dash. Quick Draw: Attack a random enemy minion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 3
+      "class": "FightSpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true,
+      "secondaryTarget": "SELF"
     }
   },
   "attributes": {
-    "QUICK_DRAW": true
+    "QUICK_DRAW": true,
+    "DASH": true
   },
   "collectible": true,
   "set": "CUSTOM",

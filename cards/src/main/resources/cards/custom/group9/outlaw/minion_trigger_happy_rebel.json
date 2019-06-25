@@ -1,21 +1,22 @@
 {
-  "name": "Carriage Abductor",
-  "baseManaCost": 4,
+  "name": "Trigger Happy Rebel",
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "COPPER",
-  "baseAttack": 5,
-  "baseHp": 3,
-  "rarity": "COMMON",
-  "description": "Quick Draw: Deal 2 damage to the left-most enemy minion.",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Quick Draw: Deal 2 damage randomly split among all enemies",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "DamageSpell",
-      "target": "LEFTMOST_ENEMY_MINION",
-      "value": 2
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 2
     }
   },
   "attributes": {
