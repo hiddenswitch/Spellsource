@@ -9,8 +9,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Instant;
 import java.util.stream.IntStream;
 
@@ -35,12 +35,11 @@ public class MassTest extends TestBase {
 			context.play();
 		} catch (RuntimeException any) {
 			try {
-				Files.writeString(Path.of("masstest-trace-" + Instant.now().toString() + ".json"), context.getTrace().dump());
+				Files.write(FileSystems.getDefault().getPath("masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump().getBytes());
 			} catch (IOException e) {
 				return;
 			}
 			throw any;
 		}
-
 	}
 }

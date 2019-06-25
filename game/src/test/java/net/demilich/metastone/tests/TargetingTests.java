@@ -31,8 +31,8 @@ public class TargetingTests extends TestBase {
 		Card attackerCard = new TestMinionCard(1, 1, 0);
 		context.getLogic().receiveCard(mage.getId(), attackerCard);
 
-		context.getLogic().performGameAction(victim.getId(), tauntCard.play());
-		context.getLogic().performGameAction(mage.getId(), attackerCard.play());
+		context.performAction(victim.getId(), tauntCard.play());
+		context.performAction(mage.getId(), attackerCard.play());
 
 		Entity attacker = getSingleMinion(mage.getMinions());
 		Entity defender = getSingleMinion(victim.getMinions());

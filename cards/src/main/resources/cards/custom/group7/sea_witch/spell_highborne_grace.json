@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "COMMON",
-  "description": "Restore #[] Health. (Reservoir (0-15): Restores #14 instead).",
+  "description": "Restore #[7] Health. (Reservoir (0-15): Restores #14 instead).",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",
@@ -15,8 +15,8 @@
         "value1": 0,
         "value2": 15
       },
-      "ifTrue": 14,
-      "ifFalse": 7
+      "ifFalse": 7,
+      "ifTrue": 14
     }
   },
   "attributes": {},
@@ -33,8 +33,8 @@
           "value1": 0,
           "value2": 15
         },
-        "ifTrue": 14,
-        "ifFalse": 7
+        "ifFalse": 7,
+        "ifTrue": 14
       }
     }
   ]

@@ -233,7 +233,7 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	}
 
 	/**
-	 * Returns the last card in the card list.
+	 * Returns the last card in the card list. This is the top of the deck.
 	 *
 	 * @return The last card, or null if the {@link #size()} is {@code 0}.
 	 */

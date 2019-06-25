@@ -1,5 +1,5 @@
 {
-  "name": "7 damage single and 2 damage AoE",
+  "name": "Unnerfed Starfall",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "BROWN",
@@ -7,10 +7,18 @@
   "description": "Deal $7 damage. Deal $2 damage to all other enemies.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "SwipeSpell",
-    "value": 7,
-    "secondaryTarget": "ENEMY_CHARACTERS",
-    "secondaryValue": 2
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 5
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 2
+      }
+    ]
   },
   "collectible": false,
   "set": "UNNERFED",

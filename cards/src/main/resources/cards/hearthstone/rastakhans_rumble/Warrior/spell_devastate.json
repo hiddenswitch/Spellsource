@@ -4,10 +4,10 @@
   "type": "SPELL",
   "heroClass": "RED",
   "rarity": "COMMON",
-  "description": "Deal 4 damage to a damaged minion.",
+  "description": "Deal $4 damage to a damaged minion.",
   "condition": {
     "class": "AnyMatchFilterCondition",
-    "target": "MINIONS",
+    "target": "ALL_MINIONS",
     "filter": {
       "class": "DamagedFilter"
     }

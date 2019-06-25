@@ -14,14 +14,14 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "targetPlayer": "SELF",
     "target": "ENEMY_MINIONS",
-    "randomTarget": true
+    "randomTarget": true,
+    "targetPlayer": "SELF"
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CLASSIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

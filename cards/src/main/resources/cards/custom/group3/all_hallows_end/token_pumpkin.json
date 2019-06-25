@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Deathrattle: Restore #4 Health to your hero.",
+  "description": "Aftermath: Restore #4 Health to your champion.",
   "deathrattle": {
     "class": "HealSpell",
     "target": "FRIENDLY_HERO",

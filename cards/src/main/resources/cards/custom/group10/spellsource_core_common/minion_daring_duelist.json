@@ -1,0 +1,33 @@
+{
+  "name": "Daring Duelist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Dash. Whenever this attacks a minion and survives, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "TRIGGER_HOST",
+        "invert": true
+      }
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1,
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

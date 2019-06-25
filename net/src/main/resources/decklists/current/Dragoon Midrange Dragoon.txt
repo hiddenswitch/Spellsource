@@ -1,0 +1,22 @@
+### Dragoon: Midrange Dragoon
+# Class: RUST
+# Format: Custom
+#
+# 2x (1) Flaxen Whelp
+# 2x (2) Mountain Whelp
+# 2x (2) Netherspite Historian
+# 1x (3) No Man's Maul
+# 2x (3) Shackled Redbane
+# 2x (3) Verdant Squire
+# 2x (4) Grimestreet Corporal
+# 2x (4) Lava Saber
+# 2x (5) Blackwing Corruptor
+# 1x (5) Thitazov
+# 2x (6) Book Wyrm
+# 2x (6) Drakonid Bruiser
+# 2x (6) Explosive Ride!
+# 2x (7) Crowd Roaster
+# 2x (8) Aspect Awakening
+# 1x (9) Alder, Death Baron
+# 1x (9) Rheastrasza
+#

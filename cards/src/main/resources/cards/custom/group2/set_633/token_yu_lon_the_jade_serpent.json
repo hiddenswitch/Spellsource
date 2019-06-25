@@ -15,8 +15,8 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "minion_jade_serpent_statue",
-      "value": 2
+      "value": 2,
+      "card": "minion_jade_serpent_statue"
     }
   },
   "attributes": {

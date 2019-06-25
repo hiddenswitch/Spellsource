@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.decks;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 
@@ -11,6 +12,17 @@ import java.util.stream.Stream;
 
 import static net.demilich.metastone.game.cards.CardSet.*;
 
+/**
+ * The sets that are available to build decks from and generate cards from.
+ * <p>
+ * The list of formats currently are {@link #STANDARD}, {@link #WILD}, {@link #PAST}, {@link #CUSTOM}, {@link
+ * #GREATER_CUSTOM}, {@link #SPELLSOURCE}. {@link #SPELLSOURCE} is the default format for community games, while {@link
+ * #STANDARD} is the default format for testing bots.
+ *
+ * @see GameContext#getDeckFormat() for the property on the game context where the deck format is set
+ * @see #getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
+ * 		decks
+ */
 public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<CardSet> sets;
@@ -21,12 +33,10 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(EnumSet.of(
 							BASIC,
 							CLASSIC,
-							JOURNEY_TO_UNGORO,
-							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
-							RASTAKHANS_RUMBLE
+							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -51,6 +61,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS,
 							HALL_OF_FAME
 					))
 			);
@@ -95,6 +106,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							VERDANT_DREAMS,
@@ -126,6 +138,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							VERDANT_DREAMS,

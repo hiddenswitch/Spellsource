@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. Whenever you cast a spell, restore 3 Health to all friendly characters.",
+  "description": "Deflect. Whenever you cast a spell, restore #3 Health to all friendly characters.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

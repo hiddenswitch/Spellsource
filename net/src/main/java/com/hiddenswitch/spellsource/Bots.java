@@ -41,7 +41,6 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public interface Bots {
 	Logger LOGGER = LoggerFactory.getLogger(Bots.class);
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
-	String TAKING_BOT_LOCK_NAME = "Matchmaking::takingBot";
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<List<Integer>>() {
 	};
 
@@ -201,9 +200,7 @@ public interface Bots {
 				Decks.deleteDeck(DeckDeleteRequest.create(deckId));
 			}
 			for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
-				if (req.getFormat().equals("Standard")) {
-					Decks.createDeck(req.withUserId(bot.getString("_id")));
-				}
+				Decks.createDeck(req.withUserId(bot.getString("_id")));
 			}
 		}
 	}

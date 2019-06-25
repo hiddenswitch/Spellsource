@@ -43,6 +43,8 @@ import java.util.stream.Collectors;
  * target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then the
  * enchantments are copied.
  * <p>
+ * This effect will summon {@link SpellArg#VALUE} copies of whatever is specified, defaulting to {@code 1}.
+ * <p>
  * All of the successfully summoned minions will get the {@link SpellArg#SPELL} subspell cast on each of them, where
  * {@link EntityReference#OUTPUT} will reference each summoned minion.
  * <p>
@@ -241,7 +243,7 @@ public class SummonSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
 		if (count <= 0) {
-			logger.warn("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
+			logger.debug("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
 			return;
 		}
 
@@ -337,8 +339,10 @@ public class SummonSpell extends Spell {
 
 					// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
 					final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-					for (Card card : list.getCards(context, target)) {
-						list.add(minion, card);
+					for (EntityReference reference : list.getReferences(context, target)) {
+						if (!reference.equals(EntityReference.NONE)) {
+							list.add(minion, context.resolveSingleTarget(reference));
+						}
 					}
 				}
 			}

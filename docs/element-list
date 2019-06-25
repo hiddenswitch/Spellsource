@@ -16,6 +16,7 @@ net.demilich.metastone.game.entities.minions
 net.demilich.metastone.game.entities.weapons
 net.demilich.metastone.game.environment
 net.demilich.metastone.game.events
+net.demilich.metastone.game.fibers
 net.demilich.metastone.game.logic
 net.demilich.metastone.game.services
 net.demilich.metastone.game.spells

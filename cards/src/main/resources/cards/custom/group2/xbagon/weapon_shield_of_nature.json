@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Shield (1): Activate your hero power (targets chosen randomly)",
+  "description": "Shield (1): Activate your skill (targets chosen randomly)",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",

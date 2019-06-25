@@ -6,47 +6,26 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Starts dormant. Whenever the Headless Horseman dies, this awakens.",
-  "aura": {
-    "class": "Aura",
-    "target": "SELF",
-    "applyEffect": {
-      "class": "ConditionalEffectSpell",
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "PERMANENT",
-        "operation": "HAS"
-      },
-      "exclusive": true,
-      "spell1": {
-        "class": "SetDescriptionSpell"
-      },
-      "spell2": {
-        "class": "SetDescriptionSpell",
-        "description": "Permanent. When the Headless Horseman dies, this awakens!"
-      }
-    },
-    "removeEffect": {
-      "class": "ConditionalEffectSpell",
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "PERMANENT",
-        "operation": "HAS"
-      },
-      "exclusive": true,
-      "spell1": {
-        "class": "SetDescriptionSpell",
-        "description": "Permanent. When the Headless Horseman dies, this awakens!"
-      },
-      "spell2": {
-        "class": "SetDescriptionSpell"
-      }
-    }
-  },
+  "description": "[Starts dormant. ]Whenever the Headless Horseman dies, this awakens.",
   "attributes": {
     "PERMANENT": true
   },
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "AllMatchFilterCondition",
+        "target": "SELF",
+        "filter": {
+          "class": "EntityTypeFilter",
+          "entityType": "MINION"
+        }
+      },
+      "description1": "",
+      "description2": "Starts dormant. "
+    }
+  ]
 }

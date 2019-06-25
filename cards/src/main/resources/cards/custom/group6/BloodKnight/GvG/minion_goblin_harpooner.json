@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Choose a minion. It attacks a random friendly minion.",
+  "description": "Opener: Choose a minion. It attacks a random friendly minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
@@ -14,8 +14,8 @@
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "EntityEqualsFilter",
-        "secondaryTarget": "TARGET",
-        "invert": true
+        "invert": true,
+        "secondaryTarget": "TARGET"
       },
       "randomTarget": true,
       "secondaryTarget": "TARGET"

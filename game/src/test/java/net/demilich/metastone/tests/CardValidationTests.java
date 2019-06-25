@@ -1,11 +1,17 @@
 package net.demilich.metastone.tests;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.vertx.core.json.DecodeException;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardParser;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.ResourceInputStream;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.testng.Assert;
@@ -15,6 +21,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
 
@@ -56,24 +63,44 @@ public class CardValidationTests {
 	}
 
 	@Test(dataProvider = "CardProvider")
-	public void validateCard(File cardFile) throws FileNotFoundException {
+	public void validateCard(File cardFile) throws IOException {
+		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
+
 		try {
-			CardCatalogueRecord record = CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
+			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
 			Assert.assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
 			String description = record.getDesc().getDescription();
 			if (description != null) {
 				AttributeMap attributes = record.getDesc().getAttributes();
-				if (description.startsWith("Battlecry:")) {
-					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY), "A Battlecry card is missing a battlecry attribute.");
+				if (description.startsWith("Battlecry:")
+						|| description.startsWith("Opener:")) {
+					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY),
+							"An Opener card is missing the BATTLECRY attribute.");
 				}
 
-				if (description.startsWith("Deathrattle:")) {
-					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES));
+				if (description.startsWith("Deathrattle:")
+						|| description.startsWith("Aftermath:")) {
+					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES),
+							"An Aftermath card is missing the DEATHRATTLES attribute.");
 				}
 
+				if (record.getDesc().deathrattle != null) {
+					Assert.assertNotEquals(record.getDesc().deathrattle.getTarget(), EntityReference.ADJACENT_MINIONS,
+							"Deathrattles trigger from the graveyard, so they cannot contain a reference to ADJACENT_MINIONS. Use a custom.AdjacentDeathrattleSpell instead.");
+				}
+			}
+		} catch (DecodeException ex) {
+			// Decode again to throw the inner exception
+			try {
+				CardDesc desc = Json.mapper.readValue(new FileInputStream(cardFile), CardDesc.class);
+			} catch (JsonProcessingException innerEx) {
+				Assert.fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",
+						cardFile.getName(),
+						innerEx.getMessage(),
+						innerEx.getLocation().getLineNr(),
+						innerEx.getLocation().getColumnNr()), innerEx);
 			}
 		} catch (Exception ex) {
-			System.err.println(ex);
 			Assert.fail(cardFile.getName(), ex);
 		}
 	}

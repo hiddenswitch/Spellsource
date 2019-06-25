@@ -1,0 +1,38 @@
+{
+  "name": "Wavering Diabloist",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 9,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Guard. Opener: Deal 2 damage to all other characters, then restore #2 Health to any survivors.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ALL_OTHER_CHARACTERS",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "HealSpell",
+          "value": 2,
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

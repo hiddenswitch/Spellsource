@@ -14,11 +14,12 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestBehaviour;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -903,9 +904,9 @@ public class JourneyToUngoroTests extends TestBase {
 				Assert.assertNotEquals(oldId2, oldId1);
 				Card card = player.getHand().get(0);
 				if (card.isChooseOne()) {
-					context.getLogic().performGameAction(player.getId(), card.playOptions()[0]);
+					context.performAction(player.getId(), card.playOptions()[0]);
 				} else {
-					context.getLogic().performGameAction(player.getId(), card.play());
+					context.performAction(player.getId(), card.play());
 				}
 				// I suppose there might be a situation where a card gets shuffled into a deck and things glitch out,
 				// or the battlecry puts a card into the hand. So we're just testing to see there was no exception for

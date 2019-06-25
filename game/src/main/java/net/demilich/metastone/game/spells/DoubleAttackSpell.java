@@ -37,5 +37,4 @@ public class DoubleAttackSpell extends Spell {
 		targetActor.modifyAttribute(Attribute.ATTACK_BONUS, targetActor.getAttributeValue(Attribute.ATTACK) + targetActor.getAttributeValue(Attribute.ATTACK_BONUS));
 		targetActor.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, targetActor.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS));
 	}
-
 }

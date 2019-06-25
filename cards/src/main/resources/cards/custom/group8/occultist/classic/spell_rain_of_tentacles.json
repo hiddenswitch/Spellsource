@@ -1,20 +1,20 @@
 {
   "name": "Rain of Tentacles",
-  "baseManaCost": 8,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Summon seven 1/1 Tentacles with Taunt.",
+  "description": "Summon seven 1/1 Tentacles with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "token_tauntentacle",
-    "value": 7
+    "value": 7,
+    "card": "token_tauntentacle"
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CLASSIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

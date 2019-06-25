@@ -1,12 +1,12 @@
 {
-  "name": "King Archibald",
+  "name": "The Lynchpin",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "FREE",
-  "description": "<b>Rush</b>. Battlecry: Transform your Hero Power into Eternal Strength.",
+  "description": "<b>Dash</b>. Opener: Transform your Skill into Eternal Strength.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

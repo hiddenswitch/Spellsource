@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Passive Hero Power. Whenever your Hero takes damage, take half instead. (Rounded up)",
+  "description": "Passive Skill. Whenever your Champion takes damage, take half instead. (Rounded up)",
   "passiveTriggers": [
     {
       "eventTrigger": {

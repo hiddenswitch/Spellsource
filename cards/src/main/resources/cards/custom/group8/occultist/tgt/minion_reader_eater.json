@@ -9,7 +9,7 @@
   "description": "Whenever you shuffle a card into your deck, remove the card and give this minion +1/+1.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardShuffledTrigger",
+      "class": "ShuffledTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
@@ -28,9 +28,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "THE_GRAND_TOURNAMENT"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

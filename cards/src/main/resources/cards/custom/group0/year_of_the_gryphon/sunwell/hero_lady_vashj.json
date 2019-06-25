@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "GREEN",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Equip a 2/6 Serpent Spine Bow that puts Secrets into the battlefield.",
+  "description": "Opener: Equip a 2/6 Serpent Spine Bow that puts Secrets into the battlefield.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

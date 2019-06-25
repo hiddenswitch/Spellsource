@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Your Hero Power deals 4 extra damage.",
+  "description": "Your Skill deals 4 extra damage.",
   "attributes": {
     "HERO_POWER_DAMAGE": 4
   },

@@ -1,21 +1,20 @@
 package com.hiddenswitch.cluster.applications;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.cluster.models.SimulationConfig;
 import com.hiddenswitch.spellsource.util.Simulation;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;

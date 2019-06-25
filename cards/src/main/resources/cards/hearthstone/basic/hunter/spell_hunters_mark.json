@@ -1,6 +1,6 @@
 {
   "name": "Hunter's Mark",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "FREE",

@@ -1,0 +1,25 @@
+{
+  "name": "Mari Anette",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Transform all other minions into 2/2 Puppets that transform back at the end of your turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.TransformToAndBackSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "description": "At the end of your next turn, transforms back into ",
+      "card": "token_mari_puppet"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

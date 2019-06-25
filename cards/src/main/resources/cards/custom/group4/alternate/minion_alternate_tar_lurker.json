@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Taunt. Has +3 Attack during your opponent's turn.",
+  "description": "Guard. Has +3 Attack during your opponent's turn.",
   "aura": {
     "class": "BuffAura",
     "target": "SELF",

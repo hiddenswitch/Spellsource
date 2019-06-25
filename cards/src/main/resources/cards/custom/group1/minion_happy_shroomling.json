@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Give all Common friendly minions +1/+1.",
+  "description": "Opener: Give all Common friendly minions +1/+1.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

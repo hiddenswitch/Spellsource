@@ -14,55 +14,11 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "ConditionalSpell",
-        "condition": {
-          "class": "AttributeCondition",
-          "target": "FRIENDLY_WEAPON",
-          "attribute": "POISONOUS",
-          "operation": "HAS"
-        },
-        "spell": {
-          "class": "AddAttributeSpell",
-          "target": "SELF",
-          "attribute": "POISONOUS"
-        }
-      },
-      {
-        "class": "ConditionalSpell",
-        "condition": {
-          "class": "AttributeCondition",
-          "target": "FRIENDLY_WEAPON",
-          "attribute": "LIFESTEAL",
-          "operation": "HAS"
-        },
-        "spell": {
-          "class": "AddAttributeSpell",
-          "target": "SELF",
-          "attribute": "LIFESTEAL"
-        }
-      },
-      {
-        "class": "DamageSpell",
-        "value": {
-          "class": "AttributeValueProvider",
-          "target": "FRIENDLY_WEAPON",
-          "attribute": "ATTACK"
-        },
-        "ignoreSpellDamage": true
+        "class": "WeaponDamageSpell"
       },
       {
         "class": "ReturnTargetToHandSpell",
         "target": "FRIENDLY_WEAPON"
-      },
-      {
-        "class": "RemoveAttributeSpell",
-        "target": "SELF",
-        "attribute": "POISONOUS"
-      },
-      {
-        "class": "RemoveAttributeSpell",
-        "target": "SELF",
-        "attribute": "LIFESTEAL"
       }
     ]
   },

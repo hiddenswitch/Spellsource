@@ -9,6 +9,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
 
+import java.util.Objects;
+
 /**
  * An action indicating a spell is being cast.
  * <p>
@@ -38,7 +40,9 @@ public class PlaySpellCardAction extends PlayCardAction {
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
-		if (context.getLogic().hasAttribute(context.getPlayer(playerId), Attribute.SPELLS_CAST_TWICE)) {
+		Entity source = Objects.equals(getSourceReference(), EntityReference.NONE) ? null : context.resolveSingleTarget(getSourceReference());
+		Entity target = Objects.equals(getTargetReference(), EntityReference.NONE) ? null : context.resolveSingleTarget(getTargetReference());
+		if (context.getLogic().spellsCastTwice(context.getPlayer(playerId), (Card) source, source, target)) {
 			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 		}
 		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);

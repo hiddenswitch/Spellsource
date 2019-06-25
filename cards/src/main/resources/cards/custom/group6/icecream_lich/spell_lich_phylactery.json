@@ -1,10 +1,10 @@
 {
-  "name": "Lich's Phylactery",
-  "baseManaCost": 3,
+  "name": "Phylactery",
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "ICECREAM",
   "rarity": "FREE",
-  "description": "Restore #10 Health to your hero. Draw a card.",
+  "description": "Restore #10 Health to your champion. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

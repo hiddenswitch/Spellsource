@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Taunt. Deathrattle: Give a random friendly Beast +1/+1.",
+  "description": "Guard. Aftermath: Give a random friendly Beast +1/+1.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

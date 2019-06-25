@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Transform another minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
+  "description": "Opener: Transform another minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

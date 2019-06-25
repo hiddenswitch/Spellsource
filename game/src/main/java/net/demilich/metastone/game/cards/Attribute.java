@@ -15,6 +15,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,6 +57,10 @@ public enum Attribute {
 	 * For example, if it's the last element (i.e., index {@code -1}), its index from the end will be {@code 1}.
 	 */
 	INDEX_FROM_END,
+	/**
+	 * Returns the index of the entity in its current zone at the start of the game.
+	 */
+	STARTING_INDEX,
 	/**
 	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base attack
 	 * value of the {@link Minion} this card would summon.
@@ -204,6 +210,11 @@ public enum Attribute {
 	 */
 	AURA_TAUNT,
 	/**
+	 * Like taunt, but only applies while in hand or in the deck. Affects the summoned minion and goes away when this card
+	 * is moved to the graveyard.
+	 */
+	CARD_TAUNT,
+	/**
 	 * The total amount of spell damage that an {@link Entity} contributes.
 	 */
 	SPELL_DAMAGE,
@@ -245,7 +256,6 @@ public enum Attribute {
 	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
 	 *
 	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that implements Enrage.
-	 * @see GameLogic#handleEnrage(Actor) for the logic that controls this attribute.
 	 */
 	ENRAGED,
 	/**
@@ -259,8 +269,7 @@ public enum Attribute {
 	 * <p>
 	 * This implements Brann Bronzebeard's text.
 	 *
-	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
-	 * 		battlecries.
+	 * @deprecated since the introduction of {@link net.demilich.metastone.game.spells.aura.DoubleBattlecriesAura}.
 	 */
 	@Deprecated
 	DOUBLE_BATTLECRIES,
@@ -430,6 +439,10 @@ public enum Attribute {
 	 * An attribute that specifies that the attack of this {@link Minion} is equal to its hitpoints.
 	 */
 	ATTACK_EQUALS_HP,
+	/**
+	 * The aura version of {@link #ATTACK_EQUALS_HP}.
+	 */
+	AURA_ATTACK_EQUALS_HP,
 	/**
 	 * When set, this {@link Minion} cannot attack.
 	 */
@@ -923,14 +936,22 @@ public enum Attribute {
 	 */
 	SPELLS_CAST_TWICE,
 	/**
-	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 * Applies a multiplier to the base attack plus bonus attack on an {@link Actor}.
 	 */
 	ATTACK_MULTIPLIER,
 	/**
+	 * The aura version of {@link #ATTACK_MULTIPLIER}.
+	 */
+	AURA_ATTACK_MULTIPLIER,
+	/**
 	 * When non-zero, multiplies the {@link #ATTACK_BONUS}, {@link #TEMPORARY_ATTACK_BONUS}, {@link #AURA_ATTACK_BONUS}
-	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount.
+	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount. In other words, a multiplier that only affects bonuses.
 	 */
 	ATTACK_BONUS_MULTIPLIER,
+	/**
+	 * The aura version of {@link #ATTACK_BONUS_MULTIPLIER}.
+	 */
+	AURA_ATTACK_BONUS_MULTIPLIER,
 	/**
 	 * Will block an entity from receiving game event triggers
 	 */
@@ -972,6 +993,9 @@ public enum Attribute {
 	RESERVED_BOOLEAN_3,
 	RESERVED_BOOLEAN_4,
 	RESERVED_BOOLEAN_5,
+	/**
+	 * Counts the number of supremacies (kills, but not overkills) that the {@link Actor} has achieved.
+	 */
 	SUPREMACIES_THIS_GAME,
 	/**
 	 * Records the {@link EntityReference} of this choose one spell card's source card.
@@ -1000,15 +1024,45 @@ public enum Attribute {
 	 */
 	ATTACKS_THIS_TURN,
 	/**
+	 * The number of turns a player has for Demonic Form
+	 */
+	DEMONIC_FORM,
+	/**
 	 * Indicates this actor has a wither effect active on it. Does not actually implement the wither.
 	 */
 	WITHER,
 	/**
 	 * Indicates this actor has been withered.
 	 */
-	WITHERED, DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN;
+	WITHERED,
+	/**
+	 * Counter for each time a "XXXXX's Scheme" card has upgraded
+	 */
+	SCHEME,
+	/**
+	 * Indicates a minion is part of the "___ Lackey" subset of cards for the Year of the Dragon
+	 */
+	LACKEY,
+	/**
+	 * Indicates a minion is an official Treant, considered for Treant-related synergies
+	 */
+	TREANT,
+	DRAINED_THIS_TURN,
+    TOTAL_DRAINED,
+    DRAINED_LAST_TURN,
+    /**
+     * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+     */
+    SURGE,
+    DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
+	}
+
+	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+
+	public static List<Attribute> getCardEnchantmentAttributes() {
+		return cardEnchantmentAttributes;
 	}
 }

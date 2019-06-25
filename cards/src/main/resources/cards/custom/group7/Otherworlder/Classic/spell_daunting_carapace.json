@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "Give a minion -1/+4, <b>Taunt</b>, and <b>Wither (1)</b>.",
+  "description": "Give a minion -1/+4, <b>Guard</b>, and <b>Wither (1)</b>.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -20,12 +20,12 @@
       },
       {
         "class": "ModifyAttributeSpell",
-        "attribute": "WITHER",
-        "value": 1
+        "value": 1,
+        "attribute": "WITHER"
       },
       {
         "class": "AddEnchantmentSpell",
-        "trigger":  {
+        "trigger": {
           "eventTrigger": {
             "class": "DamageCausedTrigger",
             "hostTargetType": "IGNORE_OTHER_SOURCES"

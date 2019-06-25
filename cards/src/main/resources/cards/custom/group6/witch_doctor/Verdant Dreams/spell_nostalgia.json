@@ -1,0 +1,28 @@
+{
+  "name": "Nostalgia",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Discover a card you played this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "PLAYED_FROM_HAND_OR_DECK",
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "GraveyardCardsSource",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

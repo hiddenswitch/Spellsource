@@ -1,0 +1,25 @@
+{
+  "name": "Titanic Fanatic",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Guard. Aftermath: Give adjacent minions +3 Health.",
+  "deathrattle": {
+    "class": "custom.AdjacentDeathrattleSpell",
+    "target": "SELF",
+    "spell2": {
+      "class": "BuffSpell",
+      "hpBonus": 3
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

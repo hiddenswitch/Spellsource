@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Deal $6 damage. Supremacy: Restore #6 Health to your hero.",
+  "description": "Deal $6 damage. Supremacy: Restore #6 Health to your champion.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

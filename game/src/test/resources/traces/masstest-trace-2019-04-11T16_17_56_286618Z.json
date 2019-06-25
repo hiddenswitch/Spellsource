@@ -1,0 +1,11 @@
+{
+  "seed" : 3368450228785487204,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "ROSE", "ICE" ],
+  "deckCardIds" : [ [ "minion_aberration", "minion_aberration", "spell_jinx", "minion_mosshorn", "minion_packmother", "minion_chant_leader", "weapon_bloodshed_reaver", "weapon_sliver_of_silver", "minion_massive_egg", "minion_bone_guard", "spell_shadow_distortion", "spell_rage_ascension", "spell_jinx", "minion_mindbreaker", "minion_tormentaxx_hulk", "minion_corrupted_healbot", "spell_evocation_witchdoctor", "minion_smug_smuggler", "spell_berserk", "minion_ironplate_samurai", "minion_mana_wraith", "spell_shangas_spirit_brew", "minion_fading_berserker", "minion_scaled_nightmare", "minion_tormentaxx_hulk", "minion_plated_beetle", "spell_awakening_ritual", "minion_twilight_drake", "minion_shattered_sun_cleric", "minion_massive_egg" ], [ "minion_nesting_roc", "minion_stowaway_scoundrel", "minion_arcane_nullifier_x-21", "spell_runic_corruption", "spell_unholy_frenzy", "minion_worgen_abomination", "spell_runic_attunement", "minion_twilight_geomancer", "spell_blood_plague", "spell_runic_empowerment", "spell_unholy_frenzy", "minion_mind_control_tech", "minion_stampeding_kodo", "minion_corrupted_seer", "secret_parting_gift", "minion_falling_crusader", "minion_ebon_blade_worgen", "minion_shambling_horror", "minion_falling_crusader", "spell_runic_empowerment", "minion_trophy_huntress", "minion_headless_horseman", "minion_saronite_chain_gang", "spell_death_strike", "minion_thrallmar_farseer", "minion_ghoul", "spell_icy_talon", "spell_icy_talon", "minion_mana_addict", "spell_dark_transformation" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "REWARD", "HALL_OF_FAME", "CLASSIC", "BOOMSDAY_PROJECT", "BASIC", "LEAGUE_OF_EXPLORERS", "PROMO", "KNIGHTS_OF_THE_FROZEN_THRONE", "BATTLE_FOR_ASHENVALE", "THE_OLD_GODS", "MEAN_STREETS_OF_GADGETZAN", "VERDANT_DREAMS", "KOBOLDS_AND_CATACOMBS", "WITCHWOOD", "RASTAKHANS_RUMBLE", "BLACKROCK_MOUNTAIN", "JOURNEY_TO_UNGORO", "GOBLINS_VS_GNOMES", "ONE_NIGHT_IN_KARAZHAN", "THE_GRAND_TOURNAMENT", "CUSTOM", "SANDS_OF_TIME", "NAXXRAMAS", "SPELLSOURCE_BASIC" ],
+  "mulligans" : [ [ 31, 19 ], [ 37 ] ],
+  "actions" : [ 0, 1, 2, 0, 2, 2, 1, 1, 0, 4, 5 ],
+  "id" : null
+}

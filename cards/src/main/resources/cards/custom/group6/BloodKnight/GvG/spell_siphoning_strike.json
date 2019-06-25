@@ -9,19 +9,19 @@
   "spell": {
     "class": "FromDeckToHandSpell",
     "value": 1,
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "WEAPON"
-    },
     "spell": {
       "class": "DrainSpell",
       "target": "ENEMY_CHARACTERS",
-      "randomTarget": true,
       "value": {
         "class": "AttributeValueProvider",
         "target": "OUTPUT",
         "attribute": "ATTACK"
-      }
+      },
+      "randomTarget": true
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
     }
   },
   "collectible": true,

@@ -48,7 +48,7 @@ public class ConditionalEffectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.CONDITION, SpellArg.EXCLUSIVE, SpellArg.VALUE, SpellArg.SECONDARY_VALUE);
 
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 		SpellDesc primarySpell = (SpellDesc) desc.get(SpellArg.SPELL1);

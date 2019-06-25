@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Adapt a friendly Common minion.",
+  "description": "Opener: Adapt a friendly Common minion.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

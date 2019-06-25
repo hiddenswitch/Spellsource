@@ -3,21 +3,19 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
-import io.vertx.core.Vertx;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
@@ -29,19 +27,24 @@ import net.demilich.metastone.game.environment.EnvironmentDeque;
 import net.demilich.metastone.game.environment.EnvironmentMap;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.logic.GameStatus;
-import net.demilich.metastone.game.logic.TargetLogic;
-import net.demilich.metastone.game.logic.Trace;
+import net.demilich.metastone.game.events.SummonEvent;
+import net.demilich.metastone.game.logic.*;
 import net.demilich.metastone.game.services.Inventory;
+import net.demilich.metastone.game.spells.DrawCardSpell;
+import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.HealingTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.logic.TurnState;
 import org.apache.commons.math3.util.Combinations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -74,6 +78,19 @@ import static java.util.stream.Collectors.toList;
  * }
  * </pre>
  * <p>
+ * This will start a game between two opponents that try to play a little smarter, using the Spellsource agent {@link
+ * net.demilich.metastone.game.behaviour.GameStateValueBehaviour}. It will also use a pair of decks to do it.
+ * <pre>
+ * {@code
+ * GameContext context = new GameContext();
+ * for (int playerId : new int[] {GameContext.PLAYER_1, GameContext.PLAYER_2}) {
+ *   context.setBehaviour(playerId, new GameStateValueProvider());
+ *   context.setDeck(playerId, Deck.randomDeck(HeroClass.RED, DeckFormat.STANDARD));
+ * }
+ * context.play();
+ * }
+ * </pre>
+ * <p>
  * The most important part of the game state is encoded inside the fields of the {@link Player} object in {@link
  * #getPlayers()}, like {@link Player#getMinions()}. The actions taken by the players are delegated to the {@link
  * Behaviour} objects in {@link #getBehaviours()}.
@@ -88,7 +105,7 @@ import static java.util.stream.Collectors.toList;
  * <li>The {@link TriggerManager#getTriggers()} value from the {@link #getTriggerManager()} trigger manager.</li>
  * <li>The {@link DeckFormat} living in {@link #getDeckFormat()}.</li>
  * <li>The next entity ID that will be returned by {@link GameLogic#generateId()}, which is stored in {@link
- * GameLogic#getIdFactory()}'s {@link IdFactoryImpl#nextId} value.</li>
+ * GameLogic#getIdFactory()}'s values.</li>
  * <li>The seed of {@link GameLogic#getSeed()} and the internal serialized state of the {@link GameLogic#getRandom()}
  * random object indicating the next value.</li>
  * <li>The {@link #getTempCards()} temporary cards in a catalogue. These include cards that are generated by effects
@@ -128,13 +145,12 @@ import static java.util.stream.Collectors.toList;
  * Executing the card code is complicated, and follows the adage: Every sufficiently complex program has a poorly
  * implemented version of common Lisp. At a high level, players take turns generating {@link GameAction} objects, whose
  * {@link GameAction#execute(GameContext, int)} implementation does things like {@link GameLogic#castSpell(int,
- * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int, Minion, Entity, int, boolean)}. {@code "spell"} fields inside the {@link net.demilich.metastone.game.cards.desc.CardDesc}
- * of the card currently being played get executed by looking at their {@link net.demilich.metastone.game.spells.desc.SpellArg#CLASS}
- * and creating an instance of the corresponding subclass of {@link net.demilich.metastone.game.spells.Spell}.
- * Subsequent "sub-spells" are called by {@link net.demilich.metastone.game.spells.SpellUtils#castChildSpell(GameContext,
- * Player, SpellDesc, Entity, Entity)}. Various components like {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider}
- * or {@link net.demilich.metastone.game.spells.desc.condition.Condition} are defined in the card JSON and used to
- * provide program-like functionality.
+ * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int,
+ * Minion, Entity, int, boolean)}. {@code "spell"} fields inside the {@link CardDesc} of the card currently being played
+ * get executed by looking at their {@link SpellArg#CLASS} and creating an instance of the corresponding subclass of
+ * {@link Spell}. Subsequent "sub-spells" are called by {@link SpellUtils#castChildSpell(GameContext, Player, SpellDesc,
+ * Entity, Entity)}. Various components like {@link ValueProvider} or {@link Condition} are defined in the card JSON and
+ * used to provide program-like functionality.
  * <p>
  * To illustrate, the key parts of the call stack of a player playing the card Novice Engineer looks like this:
  * <ol>
@@ -147,20 +163,19 @@ import static java.util.stream.Collectors.toList;
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
  * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
- * <li>{@link GameLogic#resolveBattlecry(int, Actor)},
+ * <li>{@link GameLogic#resolveBattlecries(int, Actor)}},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
  * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all
- * effects</b>, not just spells. This method will create an instance of a {@link net.demilich.metastone.game.spells.DrawCardSpell}
- * and eventually calls...</li>
- * <li>{@link net.demilich.metastone.game.spells.Spell#cast(GameContext,
+ * effects</b>, not just spells. This method will create an instance of a {@link DrawCardSpell} and eventually
+ * calls...</li>
+ * <li>{@link Spell#cast(GameContext,
  * Player, SpellDesc, Entity, List)}, which provides common targeting code for spell effects. The meat and bones of
  * effects like drawing a card is done by:</li>
- * <li>{@link net.demilich.metastone.game.spells.Spell#onCast(GameContext,
- * Player, SpellDesc, Entity, Entity)}, the method that all 200+ spells implement to actually cause effects in game.
- * {@link net.demilich.metastone.game.spells.DrawCardSpell} therefore gets its...</li>
- * <li>{@link net.demilich.metastone.game.spells.DrawCardSpell#onCast(GameContext,
- * Player, SpellDesc, Entity, Entity)} method called. In order to cause a card to be drawn, this method calls...</li>
+ * <li>{@link Spell#cast(GameContext, Player, SpellDesc, Entity, List)}, the method that all 200+ spells
+ * implement to actually cause effects in game. {@link DrawCardSpell} therefore gets its...</li>
+ * <li>{@code DrawCardSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} method called. In order to cause a
+ * card to be drawn, this method calls...</li>
  * <li>{@link GameLogic#drawCard(int, Entity)},
  * which is where the actual work of moving a card from the {@link Player#getDeck()} {@link Zones#DECK} to the hand
  * occurs.</li>
@@ -172,20 +187,20 @@ import static java.util.stream.Collectors.toList;
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
  * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
  * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- * 		{@link Behaviour#requestAction(GameContext, Player, List)}.
+ *    {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- * 		GameContext} because it manipulates the state stored in it.
+ *    GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
  * @see Player#getStatistics() to see a summary of a player's activity during a game.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.
  */
-public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable {
+public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable, Comparable<GameContext> {
+	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
-	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
 	private Player[] players = new Player[2];
 	private Behaviour[] behaviours = new Behaviour[2];
 	private GameLogic logic;
@@ -206,104 +221,73 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private boolean didCallEndGame;
 
 	private transient Trace trace = new Trace();
+	private transient Fiber<Void> fiber;
 
 	/**
-	 * Creates a game context with two empty players.
+	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
+	 * <p>
+	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use {@link
+	 * #GameContext(HeroClass...)} with hero classes of your choosing to create a game context with enough initial state
+	 * to actually start playing immediately.
 	 */
 	public GameContext() {
-		setLogic(new GameLogic());
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
+		setLogic(new GameLogic());
 		setDeckFormat(DeckFormat.STANDARD);
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
 
 	/**
-	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified).
+	 * Creates a game context from another context by copying it.
 	 *
-	 * @param playerHero1 The first player's {@link HeroClass}
-	 * @param playerHero2 The second player's {@link HeroClass}
-	 * @return A game context.
+	 * @param fromContext The other context to copy.
 	 */
-	public static GameContext uninitialized(HeroClass playerHero1, HeroClass playerHero2) {
-		final Player player1 = new Player();
-		final Player player2 = new Player();
-		player1.setHero(HeroClass.getHeroCard(playerHero1).createHero());
-		player2.setHero(HeroClass.getHeroCard(playerHero2).createHero());
-		return new GameContext(player1, player2, new GameLogic(), new DeckFormat().withCardSets(CardSet.values()));
-	}
+	public GameContext(GameContext fromContext) {
+		GameLogic logicClone = fromContext.getLogic().clone();
+		Player player1Clone = fromContext.getPlayer1().clone();
+		Player player2Clone = fromContext.getPlayer2().clone();
+		setLogic(logicClone);
+		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
+		setDeckFormat(fromContext.getDeckFormat());
+		setPlayer1(player1Clone);
+		setPlayer2(player2Clone);
 
-	/**
-	 * Returns an uninitialized game context supporting all formats. Entity IDs have not been assigned to the cards;
-	 * mulligans haven't completed; the hero classes are neutral.
-	 *
-	 * @return An uninitialized game context that is nonetheless valid for performing many operations.
-	 */
-	public static GameContext uninitialized() {
-		return uninitialized(HeroClass.ANY, HeroClass.ANY);
-	}
+		setTempCards(fromContext.getTempCards().clone());
+		setTriggerManager(fromContext.getTriggerManager().clone());
+		setActivePlayerId(fromContext.getActivePlayerId());
+		setTurn(fromContext.getTurn());
+		setActionsThisTurn(fromContext.getActionsThisTurn());
+		setStatus(fromContext.getStatus());
+		setTurnState(fromContext.getTurnState());
+		setWinner(fromContext.getWinner());
+		setTrace(fromContext.getTrace().clone());
 
-	/**
-	 * Creates a game context from the given players, logic and deck format.
-	 *
-	 * @param player1    The first {@link Player} with a valid {@link Behaviour}. This is not necessarily the player who
-	 *                   will go first, which is determined by a coin flip.
-	 * @param player2    The second {@link Player} with a valid {@link Behaviour}.
-	 * @param logic      The game logic instance to use as the rules of the game.
-	 * @param deckFormat The cards that are legal to play in terms of a set of {@link CardSet} values.
-	 */
-	public GameContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
-		this();
-		if (player1.getId() == IdFactory.UNASSIGNED) {
-			player1.setId(PLAYER_1);
-		}
-
-		setPlayer(player1.getId(), player1);
-
-		if (player2 != null) {
-			if (player2.getId() == IdFactory.UNASSIGNED) {
-				player2.setId(PLAYER_2);
+		for (Map.Entry<Environment, Object> entry : fromContext.getEnvironment().entrySet()) {
+			Object value1 = entry.getValue();
+			if (value1 == null
+					|| !EnvironmentValue.class.isAssignableFrom(value1.getClass())) {
+				getEnvironment().put(entry.getKey(), value1);
+			} else {
+				EnvironmentValue value = (EnvironmentValue) value1;
+				getEnvironment().put(entry.getKey(), value.getCopy());
 			}
-
-			this.setPlayer(player2.getId(), player2);
 		}
-
-		this.setLogic(logic);
-		this.setDeckFormat(deckFormat);
 	}
 
 	/**
-	 * Construct a game with the specified hero class and cards for both players.
+	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified). A hero
+	 * card is retrieved and given to each player.
+	 * <p>
+	 * This is typically the absolute minimum needed to mutate and run a game.
 	 *
-	 * @param heroClass1
-	 * @param cardIds1
-	 * @param heroClass2
-	 * @param cardIds2
+	 * @param heroClasses The player's hero classes.
 	 */
-	public GameContext(HeroClass heroClass1, List<String> cardIds1, HeroClass heroClass2, List<String> cardIds2) {
+	public GameContext(HeroClass... heroClasses) {
 		this();
-		HeroClass[] heroClasses = new HeroClass[]{heroClass1, heroClass2};
-		List[] cardIds = new List[]{cardIds1, cardIds2};
-		List<GameDeck> decks = new ArrayList<>();
-		for (int i = 0; i < 2; i++) {
-			GameDeck deck = new GameDeck(heroClasses[i]);
-			for (Object s : cardIds[i]) {
-				Card c = CardCatalogue.getCardById(s.toString());
-				deck.getCards().add(c);
-			}
-			Player player = new Player(deck, "Player " + Integer.toString(i));
-			player.setId(i);
-			setPlayer(i, player);
-			behaviours[i] = new PlayRandomBehaviour();
-			decks.add(deck);
+		for (int i = 0; i < heroClasses.length; i++) {
+			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
 		}
-		DeckFormat deckFormat = DeckFormat.getSmallestSupersetFormat(decks);
-		setLogic(new GameLogic());
-		setDeckFormat(deckFormat);
-	}
-
-	protected boolean acceptAction(GameAction nextAction) {
-		return true;
 	}
 
 	/**
@@ -338,32 +322,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Override
 	public GameContext clone() {
-		GameLogic logicClone = getLogic().clone();
-		Player player1Clone = getPlayer1().clone();
-		Player player2Clone = getPlayer2().clone();
-		GameContext clone = new GameContext(player1Clone, player2Clone, logicClone, getDeckFormat());
-		clone.setTempCards(getTempCards().clone());
-		clone.setTriggerManager(getTriggerManager().clone());
-		clone.setActivePlayerId(activePlayerId);
-		clone.setTurn(getTurn());
-		clone.setActionsThisTurn(getActionsThisTurn());
-		clone.setResult(getStatus());
-		clone.setTurnState(getTurnState());
-		clone.setWinner(logicClone.getWinner(player1Clone, player2Clone));
-
-		for (Map.Entry<Environment, Object> entry : getEnvironment().entrySet()) {
-			Object value1 = entry.getValue();
-			if (value1 == null
-					|| !EnvironmentValue.class.isAssignableFrom(value1.getClass())) {
-				clone.getEnvironment().put(entry.getKey(), value1);
-			} else {
-				EnvironmentValue value = (EnvironmentValue) value1;
-				clone.getEnvironment().put(entry.getKey(), value.getCopy());
-			}
-		}
-
-		clone.behaviours = new Behaviour[]{behaviours[0] == null ? null : behaviours[0].clone(), behaviours[1] == null ? null : behaviours[1].clone()};
-		return clone;
+		return new GameContext(this);
 	}
 
 	/**
@@ -453,16 +412,15 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * card." </li><li>They are changes in game state that are notable for a player to see. They can be interpreted as
 	 * checkpoints that need to be rendered to the client</li><li></ol>
 	 * <p>
-	 * Typically a {@link GameEvent} is instantiated inside a function in {@link GameLogic}, like {@link
-	 * net.demilich.metastone.game.events.SummonEvent} inside {@link GameLogic#summon(int, Minion, Entity, int, boolean)},
-	 * and then fired by the {@link GameLogic} using this function.
+	 * Typically a {@link GameEvent} is instantiated inside a function in {@link GameLogic}, like {@link SummonEvent}
+	 * inside {@link GameLogic#summon(int, Minion, Entity, int, boolean)}, and then fired by the {@link GameLogic} using
+	 * this function.
 	 *
 	 * @param gameEvent     The {@link GameEvent} to fire.
 	 * @param otherTriggers Other triggers to consider besides the ones inside this game context's {@link TriggerManager}.
 	 *                      This may be synthetic triggers that implement analytics, networked game logic, newsfeed
 	 *                      reports, spectating features, etc.
-	 * @see net.demilich.metastone.game.spells.trigger.HealingTrigger for an example of a trigger that listens to a
-	 * 		specific event.
+	 * @see HealingTrigger for an example of a trigger that listens to a specific event.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
 	 * @see #addTrigger(Trigger) for the place to add triggers that react to game events.
 	 */
@@ -485,10 +443,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public boolean updateAndGetGameOver() {
 		if (getPlayer1() == null
 				|| getPlayer2() == null) {
-			setResult(GameStatus.RUNNING);
+			setStatus(GameStatus.RUNNING);
 			return false;
 		}
-		setResult(getLogic().getMatchResult(getActivePlayer(), getOpponent(getActivePlayer())));
+		setStatus(getLogic().getMatchResult(getActivePlayer(), getOpponent(getActivePlayer())));
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		return getStatus() != GameStatus.RUNNING;
 	}
@@ -854,7 +812,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return turnState;
 	}
 
-	@Suspendable
 	public List<GameAction> getValidActions() {
 		if (updateAndGetGameOver()) {
 			return new ArrayList<>();
@@ -932,7 +889,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Ensures that the game state is traced / recorded
 	 */
 	protected void startTrace() {
-		trace.setStartState(getGameStateCopy());
+		trace.setStartState(getGameState());
 		trace.setSeed(getLogic().getSeed());
 		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
@@ -950,7 +907,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @see GameLogic#performGameAction(int, GameAction) for more about game actions.
 	 */
 	@Suspendable
-	protected void performAction(int playerId, GameAction gameAction) {
+	public void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
 		onGameStateChanged();
 	}
@@ -970,19 +927,23 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	public void play() {
 		LOGGER.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-		if (Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
-			Fiber<Void> f;
-			SuspendableCallable<Void> innerPlay = () -> {
+		play(false);
+	}
+
+	@Suspendable
+	public void play(boolean fork) {
+		if (fork) {
+			if (getFiber() != null) {
+				throw new IllegalStateException("fiber");
+			}
+
+			setFiber(new Fiber<>(() -> {
 				init();
 				resume();
 				return null;
-			};
-			if (Vertx.currentContext() != null) {
-				f = Sync.getContextScheduler().newFiber(innerPlay);
-			} else {
-				f = new Fiber<>(innerPlay);
-			}
-			f.start();
+			}));
+
+			getFiber().start();
 		} else {
 			init();
 			resume();
@@ -996,8 +957,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * currently active player. It then calls {@link #performAction(int, GameAction)} with the returned {@link
 	 * GameAction}.
 	 *
-	 * @return {@code false} if the player selected an {@link net.demilich.metastone.game.actions.EndTurnAction},
-	 * 		indicating the player would like to end their turn.
+	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end
+	 * 		their turn.
 	 */
 	@Suspendable
 	public boolean takeActionInTurn() {
@@ -1012,20 +973,27 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			return true;
 		}
 
-		List<GameAction> validActions = getValidActions();
-		if (validActions.size() == 0) {
-			//endTurn();
+		boolean gameOver = updateAndGetGameOver();
+		if (gameOver) {
 			return false;
 		}
 
-		GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), getValidActions());
+		List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
+
+		if (validActions.size() == 0) {
+			return false;
+		}
+
+		GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
 
 		if (nextAction == null) {
 			throw new NullPointerException("nextAction");
 		}
 
 		trace.addAction(nextAction.getId(), nextAction, this);
-		performAction(getActivePlayerId(), nextAction);
+
+		getLogic().performGameAction(getActivePlayerId(), nextAction);
+		onGameStateChanged();
 
 		return nextAction.getActionType() != ActionType.END_TURN;
 	}
@@ -1044,8 +1012,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * destroyed,
 	 *
 	 * @param entityReference           The entity whose triggers should be removed.
-	 * @param removeAuras               {@code true} if the entity has {@link net.demilich.metastone.game.spells.aura.Aura}
-	 *                                  triggers
+	 * @param removeAuras               {@code true} if the entity has {@link Aura} triggers
 	 * @param keepSelfCardCostModifiers
 	 */
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers) {
@@ -1217,6 +1184,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setLogic(GameLogic logic) {
+		if (this.logic != null && logic.getInternalId() != this.logic.getInternalId()) {
+			throw new IllegalArgumentException("logic.getInternalId() != this.logic.getInternalId()");
+		}
 		this.logic = logic;
 		logic.setContext(this);
 	}
@@ -1241,7 +1211,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return result;
 	}
 
-	public void setResult(GameStatus result) {
+	public void setStatus(GameStatus result) {
 		this.result = result;
 	}
 
@@ -1286,11 +1256,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		this.setDeckFormat(state.deckFormat);
 	}
 
-	public void setPlayer(int index, Player player) {
+	public GameContext setPlayer(int index, Player player) {
 		this.players[index] = player;
 		if (player.getId() != index) {
 			player.setId(index);
 		}
+		return this;
 	}
 
 	public void setActivePlayerId(int id) {
@@ -1384,11 +1355,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Returns the spell values calculated so far by descending {@link net.demilich.metastone.game.spells.MetaSpell#onCast(GameContext,
-	 * Player, SpellDesc, Entity, Entity)} calls.
+	 * Returns the spell values calculated so far by {@link MetaSpell} spells.
 	 * <p>
-	 * Implements Living Mana. Using a stack fixes issues where a later {@link net.demilich.metastone.game.spells.MetaSpell}
-	 * busts an earlier one.
+	 * Implements Living Mana. Using a stack fixes issues where a later {@link MetaSpell} busts an earlier one.
 	 *
 	 * @return A stack of {@link Integer} spell values.
 	 */
@@ -1466,6 +1435,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return getLastCardPlayedMap().get(IdFactory.UNASSIGNED);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<Integer, EntityReference> getLastSpellPlayedThisTurnMap() {
+		if (!getEnvironment().containsKey(Environment.LAST_SPELL_PLAYED_THIS_TURN)) {
+			getEnvironment().put(Environment.LAST_SPELL_PLAYED_THIS_TURN, new EnvironmentMap<>());
+		}
+		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_SPELL_PLAYED_THIS_TURN);
+	}
+
+	public void setLastSpellPlayedThisTurn(int playerId, EntityReference cardReference) {
+		getLastSpellPlayedThisTurnMap().put(IdFactory.UNASSIGNED, cardReference);
+		getLastSpellPlayedThisTurnMap().put(playerId, cardReference);
+	}
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence() {
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(IdFactory.UNASSIGNED);
@@ -1515,7 +1496,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * <p>
 	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
-	 * @param deckPair        A pair of decks to run a match with.
+	 * @param decks           Decks to run the match with. At least two are required.
 	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
 	 *                        <p>
@@ -1523,13 +1504,39 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
+	 *                        {@link #simulationCount(int, int, boolean)}.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
 	 *                        on this JVM instance.
 	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
 	 *                        completed. This can be used to implement progress on a different thread.
 	 */
-	public static SimulationResult simulate(List<GameDeck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
-		return simulate(deckPair, player1, player2, numberOfGamesInBatch, useJavaParallel, matchCounter, null);
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, AtomicInteger matchCounter) {
+		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, false, matchCounter, null);
+	}
+
+	/**
+	 * Runs a simulation of the decks with the specified AIs.
+	 * <p>
+	 * This call will be blocking regardless of using it in a parallel fashion.
+	 *
+	 * @param decks           Decks to run the match with. At least one is required if {@code includeMirrors} is {@code
+	 *                        true}, otherwise at least two.
+	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
+	 *                        corresponds to an AI to use for this player.
+	 *                        <p>
+	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first
+	 *                        player's AI should be a game state value behaviour.
+	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
+	 *                        corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
+	 *                        {@link #simulationCount(int, int, boolean)}.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
+	 *                        on this JVM instance.
+	 * @param includeMirrors  When {@code true}, includes mirror matchups for each deck.
+	 */
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors) {
+		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, includeMirrors, null, null);
 	}
 
 	/**
@@ -1547,23 +1554,27 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
+	 *                        {@link #simulationCount(int, int, boolean)}.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
 	 *                        on this JVM instance.
+	 * @param includeMirrors  When {@code true}, includes mirror matchups
 	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
 	 * @param contextHandler  A handler that can modify the game context for customization after it was initialized with
-	 *                        the specified decks but before mulligans. For example, the {@link GameLogic#seed} can be
-	 *                        changed here.
+	 *                        the specified decks but before mulligans. For example, the {@link GameLogic#getSeed()} can
+	 *                        be
 	 */
-	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
 		// Actually run the computation
-		List<GameDeck[]> combinations = getDeckCombinations(decks, false);
-		Stream<GameDeck[]> deckStream = IntStream.range(0, numberOfGamesInBatch).boxed().flatMap(i -> combinations.stream());
+		List<GameDeck[]> combinations = getDeckCombinations(decks, includeMirrors);
+		Stream<GameDeck[]> deckStream = IntStream.range(0, gamesPerMatchup).boxed().flatMap(i -> combinations.stream());
 		if (useJavaParallel) {
 			deckStream = deckStream.parallel();
 		}
 
 		return deckStream.map(decksPair -> {
-			GameContext newGame = GameContext.fromDecks(decks);
+			GameContext newGame = GameContext.fromDecks(Arrays.asList(decksPair));
+			newGame.setLoggingLevel(Level.OFF);
 			newGame.behaviours[0] = player1.get();
 			newGame.behaviours[1] = player2.get();
 			if (contextHandler != null) {
@@ -1572,36 +1583,53 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			SimulationResult innerResult = new SimulationResult(1);
 
 			try {
+				if (matchCounter != null) {
+					matchCounter.incrementAndGet();
+				}
+
 				newGame.play();
 
 				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
 				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
 				innerResult.calculateMetaStatistics();
+			} catch (Throwable any) {
+				innerResult.setExceptionCount(innerResult.getExceptionCount() + 1);
+				return null;
 			} finally {
 				newGame.dispose();
 			}
 
-			if (matchCounter != null) {
-				matchCounter.incrementAndGet();
-			}
-
 			return innerResult;
-		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
+		})
+				.filter(Objects::nonNull)
+				.reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
+	}
+
+	/**
+	 * Calculates the expected number of simulations that will be run given the parameters of the simulation function.
+	 *
+	 * @param numberOfDecks   The number of decks (i.e., {@code decks.size()})
+	 * @param gamesPerMatchup The number of games to play per unique deck pair.
+	 * @param includeMirrors  When true, include mirror matches.
+	 * @return
+	 */
+	public static int simulationCount(int numberOfDecks, int gamesPerMatchup, boolean includeMirrors) {
+		return ((includeMirrors ? numberOfDecks : 0) + (numberOfDecks * (numberOfDecks - 1)) / 2) * gamesPerMatchup;
 	}
 
 	/**
 	 * A generator of simulation results. Blocks until all simulations are complete.
 	 *
-	 * @param deckPair
-	 * @param behaviours
-	 * @param numberOfGamesInBatch
-	 * @param reduce               When {@code true}, merges matches that have the same behaviour and decks.
-	 * @param computed             The callback that will be fed a simulation result whenever it is computed.
+	 * @param deckPair        Two decks to test. Specify the same deck twice to perform a mirror match.
+	 * @param behaviours      The behaviours to use. When an empty list is specified, uses {@link PlayRandomBehaviour}.
+	 * @param gamesPerMatchup The number of games to play per matchup.
+	 * @param reduce          When {@code true}, merges matches that have the same behaviour and decks.
+	 * @param computed        The callback that will be fed a simulation result whenever it is computed.
 	 * @throws InterruptedException
 	 */
-	public static void simulate(List<GameDeck> deckPair, List<Supplier<Behaviour>> behaviours, int numberOfGamesInBatch, boolean reduce, Consumer<SimulationResult> computed) throws InterruptedException {
+	public static void simulate(List<GameDeck> deckPair, List<Supplier<Behaviour>> behaviours, int gamesPerMatchup, boolean reduce, Consumer<SimulationResult> computed) throws InterruptedException {
 		// Actually run the computation
-		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel().unordered();
+		Stream<Integer> stream = IntStream.range(0, gamesPerMatchup).boxed().parallel().unordered();
 
 		Stream<SimulationResult> result = stream.map(i -> {
 			GameContext newGame;
@@ -1724,7 +1752,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @see #play() to actually execute the game.
 	 */
 	public static GameContext fromTwoRandomDecks() {
-		return fromDecks(Arrays.asList(new RandomDeck(), new RandomDeck()));
+		return fromDecks(Arrays.asList(Deck.randomDeck(), Deck.randomDeck()));
 	}
 
 	/**
@@ -1760,18 +1788,23 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public static List<GameDeck[]> getDeckCombinations(List<GameDeck> decks, boolean includeMirrors) {
-		// Create deck combinations
-		Combinations combinations = new Combinations(decks.size(), 2);
 		List<GameDeck[]> deckPairs = new ArrayList<>();
-		for (int[] combination : combinations) {
-			deckPairs.add(new GameDeck[]{decks.get(combination[0]), decks.get(combination[1])});
-		}
+
+		// Create deck combinations
 		// Include same deck matchups
 		if (includeMirrors) {
 			for (GameDeck deck : decks) {
 				deckPairs.add(new GameDeck[]{deck, deck});
 			}
 		}
+
+		if (decks.size() >= 2) {
+			Combinations combinations = new Combinations(decks.size(), 2);
+			for (int[] combination : combinations) {
+				deckPairs.add(new GameDeck[]{decks.get(combination[0]), decks.get(combination[1])});
+			}
+		}
+
 		return deckPairs;
 	}
 
@@ -1888,5 +1921,37 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	protected boolean didCallEndGame() {
 		return didCallEndGame;
+	}
+
+	public Fiber<Void> getFiber() {
+		return fiber;
+	}
+
+	protected GameContext setFiber(Fiber<Void> fiber) {
+		this.fiber = fiber;
+		return this;
+	}
+
+	public void setDeck(int playerId, GameDeck deck) {
+		getPlayer(playerId).getDeck().clear();
+		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
+		getPlayer(playerId).setHero(deck.getHeroCard().createHero());
+		getTrace().getDeckCardIds();
+	}
+
+	/**
+	 * Returns {@code 0} if the two game contexts have the same meaningful game state.
+	 * <p>
+	 * Otherwise, returns {@code 1} if {@code other} is "further along"
+	 *
+	 * @param other
+	 * @return
+	 */
+	public int compareTo(@NotNull GameContext other) {
+		return 0;
+	}
+
+	protected void setTrace(Trace trace) {
+		this.trace = trace;
 	}
 }

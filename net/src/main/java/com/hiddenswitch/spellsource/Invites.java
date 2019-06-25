@@ -13,7 +13,9 @@ import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -46,14 +48,31 @@ public interface Invites {
 
 	/**
 	 * Sends clients undelivered invites and marks them as pending.
-	 *
 	 */
 	static void handleConnections() {
 		Connection.connected((connection, fut) -> {
+			String userId = connection.userId();
+			connection.endHandler(suspendableHandler(v -> {
+				// Reject pending challenge invites
+				List<JsonObject> invites = mongo().findWithOptions(INVITES, json(
+						"queueId", json("$ne", null),
+						"status", json("$in", PENDING_STATUSES),
+						"$or", array(json("fromUserId", userId),
+								json("toUserId", userId))), new FindOptions()
+						.setFields(json("_id", 1)));
+				for (JsonObject invite : invites) {
+					try {
+						deleteInvite(new InviteId(invite.getString("_id")), new UserId(userId));
+					} catch (IllegalStateException ex) {
+						// Sometime between retrieving the invite and now, the invite was accepted.
+						LOGGER.warn("handleConnections endHandler {}: An invite's state was changed between retrieving it and " +
+								"canceling/rejecting it due to disconnect.", userId);
+					}
+				}
+			}));
 			defer(v -> {
 				try {
 					// Expire old invites as sender or recipient
-					String userId = connection.userId();
 					expireInvites(userId);
 
 					// Notify recipients of all pending invites.
@@ -210,6 +229,7 @@ public interface Invites {
 			Invite invite = new Invite()
 					.id(inviteId.toString())
 					.fromName(user.getUsername())
+					.toName(toUser.getUsername())
 					.fromUserId(user.getId())
 					.toUserId(toUser.getId())
 					.message(request.getMessage())
@@ -221,7 +241,7 @@ public interface Invites {
 				invite.setFriendId(user.getId());
 			}
 
-			if (request.getQueueId() != null) {
+			if (request.getQueueId() != null || request.getDeckId() != null) {
 				// Assert that the player isn't currently in a match.
 
 				UserId userId = new UserId(user.getId());
@@ -238,7 +258,8 @@ public interface Invites {
 				request.setQueueId(RandomStringUtils.randomAlphanumeric(10));
 				// Right now, anyone can wait in any queue, but this is probably the most convenient.
 				// TODO: Destroy the user's missing queues
-				String customQueueId = user.getUsername() + "-" + inviteId + "-" + request.getQueueId();
+				String queueIdRequested = request.getQueueId() == null ? "" : "-" + request.getQueueId();
+				String customQueueId = user.getUsername() + "-" + inviteId + queueIdRequested;
 				invite.queueId(customQueueId);
 
 				// The matchmaker will close itself automatically if no one joins after 4s or the
@@ -385,7 +406,7 @@ public interface Invites {
 				// Reject the invite if the player was already in a match.
 				invite.setStatus(StatusEnum.REJECTED);
 				// This does the updating
-				deleteInvite(new InviteId(invite.getId()), recipient);
+				deleteInvite(new InviteId(invite.getId()), new UserId(recipient.getId()));
 				return res;
 			}
 		}
@@ -413,20 +434,20 @@ public interface Invites {
 	 * This will cancel the invite, or reject it if the recipient is deleting it.
 	 *
 	 * @param inviteId
-	 * @param user
+	 * @param userId
 	 * @return
 	 * @throws SuspendExecution
 	 */
 	static @NotNull
-	InviteResponse deleteInvite(@NotNull InviteId inviteId, @NotNull UserRecord user) throws SuspendExecution {
+	InviteResponse deleteInvite(@NotNull InviteId inviteId, @NotNull UserId userId) throws SuspendExecution {
 		Invite invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
 
 		if (invite == null) {
 			throw new NullPointerException(String.format("Invite not found: %s", inviteId));
 		}
 
-		boolean isSender = invite.getFromUserId().equals(user.getId());
-		boolean isRecipient = invite.getToUserId().equals(user.getId());
+		boolean isSender = invite.getFromUserId().equals(userId.toString());
+		boolean isRecipient = invite.getToUserId().equals(userId.toString());
 		if (!isSender && !isRecipient) {
 			throw new SecurityException("You did not have access to change this invite.");
 		}
@@ -458,6 +479,10 @@ public interface Invites {
 		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
 		senderConnection.write(env);
 
+		// Dequeue the sender if this was a matchmaking invite
+		if (invite.getQueueId() != null) {
+			Matchmaking.dequeue(new UserId(invite.getFromUserId()));
+		}
 		return new InviteResponse().invite(invite);
 	}
 }

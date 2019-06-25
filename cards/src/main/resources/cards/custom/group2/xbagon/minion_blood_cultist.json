@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Discover a Deathrattle minion. Gain its Deathrattle effect.",
+  "description": "Opener: Discover an Aftermath minion. Gain its Aftermath effect.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

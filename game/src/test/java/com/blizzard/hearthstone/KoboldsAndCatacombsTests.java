@@ -304,7 +304,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		// Also tests that amethyst doesn't trigger on fatigue
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_amethyst_spellstone");
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
 	}
@@ -323,11 +323,11 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testTheDarkness() {
 		final String regularDescription = "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.";
-		final String permanentDescription = "Permanent. When your opponent draws 3 Candles, this awakens!";
+		final String permanentDescription = "When your opponent draws 3 Candles, this awakens!";
 		runGym((context, player, opponent) -> {
 			Minion theDarkness = playMinionCard(context, player, "minion_the_darkness");
 			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT), "Comes into play permanent.");
-			assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+			assertEquals(theDarkness.getDescription(context, player), permanentDescription, "Should have different description.");
 			// Note that the opponent is going to draw three cards next turn, so let's remove one
 			context.getLogic().removeCard(opponent.getDeck().get(0));
 			context.endTurn();
@@ -359,7 +359,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 			assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
 			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
-			assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+			assertEquals(theDarkness.getDescription(context, player), regularDescription, "Should have different description.");
 			Assert.assertTrue(theDarkness.canAttackThisTurn());
 		});
 
@@ -375,7 +375,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			}
 			assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
 			Assert.assertTrue(theDarkness.hasAttribute(Attribute.PERMANENT));
-			assertEquals(theDarkness.getDescription(), permanentDescription, "Should have different description.");
+			assertEquals(theDarkness.getDescription(context, player), permanentDescription, "Should have different description.");
 		});
 
 		// When copied while on the board as a minion, the copy will not start dormant
@@ -389,7 +389,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 			assertEquals(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_candle")).count(), 0L);
 			Assert.assertFalse(theDarkness.hasAttribute(Attribute.PERMANENT));
-			assertEquals(theDarkness.getDescription(), regularDescription, "Should have different description.");
+			assertEquals(theDarkness.getDescription(context, player), regularDescription, "Should have different description.");
 			Minion faceless = (Minion) playMinionCard(context, player, "minion_faceless_manipulator").transformResolved(context);
 			assertEquals(faceless.getSourceCard().getCardId(), "minion_the_darkness");
 			Assert.assertFalse(faceless.hasAttribute(Attribute.PERMANENT));
@@ -693,7 +693,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			player.setMana(10);
 			assertEquals(card.getBaseAttack(), 1);
 			assertEquals(card.getBaseHp(), 1);
-			context.getLogic().performGameAction(player.getId(), card.play());
+			context.performAction(player.getId(), card.play());
 			assertEquals(player.getMana(), 9);
 			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 			assertEquals(player.getMinions().get(1).getHp(), 1);
@@ -767,7 +767,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			context.endTurn();
 			attack(context, player, player.getHero(), opponent.getHero());
 			assertEquals(player.getHero().getWeaponZone().size(), 0);
-			context.getLogic().performGameAction(player.getId(), bloodfenCard.play());
+			context.performAction(player.getId(), bloodfenCard.play());
 			context.endTurn();
 			playCard(context, player, "spell_assassinate", player.getMinions().get(0));
 			assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_valanyr");
@@ -832,7 +832,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 			GameAction heroPowerAction = player.getHeroPowerZone().get(0).play();
 			heroPowerAction.setTarget(silverHand1);
-			context.getLogic().performGameAction(player.getId(), heroPowerAction);
+			context.performAction(player.getId(), heroPowerAction);
 			context.endTurn();
 
 			Minion lynessaSunsorrow = playMinionCard(context, player, "minion_lynessa_sunsorrow");
@@ -1032,8 +1032,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "spell_shield_block");
 			receiveCard(context, player, "spell_lesser_jasper_spellstone");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
-			attack(context, opponent, wolfrider, player.getHero());
+			Minion charger = playMinionCard(context, player, "minion_charge_test");
+			attack(context, opponent, charger, player.getHero());
 			assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_jasper_spellstone");
 		});
 	}

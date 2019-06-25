@@ -38,6 +38,9 @@ ROSE | &quot;ROSE&quot;
 BLOOD | &quot;BLOOD&quot;
 NEONGREEN | &quot;NEONGREEN&quot;
 TEAL | &quot;TEAL&quot;
+DARKGREEN | &quot;DARKGREEN&quot;
+PURPLE | &quot;PURPLE&quot;
+TIME | &quot;TIME&quot;
 
 
 <a name="FormatEnum"></a>

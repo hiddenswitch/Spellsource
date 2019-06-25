@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Put a 'Hangover' card on top of your deck.",
+  "description": "Opener: Put a 'Hangover' card on top of your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

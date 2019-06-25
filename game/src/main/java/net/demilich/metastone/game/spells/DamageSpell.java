@@ -156,6 +156,5 @@ public class DamageSpell extends Spell {
 		}
 		return damage;
 	}
-
 }
 

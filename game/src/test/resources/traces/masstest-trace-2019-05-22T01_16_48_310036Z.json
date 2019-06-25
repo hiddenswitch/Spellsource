@@ -1,0 +1,11 @@
+{
+  "seed" : -4282014411706283014,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "PURPLE", "BLACK" ],
+  "deckCardIds" : [ [ "weapon_chaos_blades", "weapon_soul_cursed_glaives", "spell_fel_rush", "weapon_chaos_blades", "spell_feed_the_demon", "minion_lingering_spirit", "minion_colrum", "weapon_soul_cursed_glaives", "minion_death_s_messenger", "minion_pumpkin_peasant", "minion_gentleman_s_giant", "spell_eye_beam", "minion_duskboar", "spell_eye_beam", "minion_echoing_ooze", "weapon_felblade", "minion_acolyte_of_peroth'arn", "minion_yokai_shapeshifter", "minion_haunted_armor", "minion_carnivorous_cube", "minion_helpless_hatchling", "spell_vengeful_retreat", "minion_corridor_creeper", "weapon_glaives_of_the_fallen", "minion_bighand_brute", "minion_murloc_tinyfin", "minion_plunderogue", "spell_throw_glaive", "minion_stalagg", "spell_momentum" ], [ "minion_infinite_futurist", "minion_ironplate_samurai", "minion_lightning_elemental", "minion_muklas_champion", "minion_fiery_tyrant", "minion_kobold_illusionist", "spell_bag_of_doubloons", "minion_dancing_swords", "minion_criminologist", "minion_grimscale_oracle", "minion_king_mukla", "minion_pogo_hopper", "minion_silent_knight", "spell_shadowstep", "minion_hooded_ritualist", "weapon_shadowblade", "minion_tribemaster", "minion_arcane_dynamo", "spell_burgle", "minion_star_aligner", "minion_ticking_giant", "minion_furnacefire_colossus", "minion_golakka_crawler", "minion_blubber_behemoth", "spell_tinkers_sharpsword_oil", "minion_spellzerker", "quest_the_caverns_below", "minion_archmage", "weapon_perditions_blade", "spell_backstab" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "THE_GRAND_TOURNAMENT", "GOBLINS_VS_GNOMES", "CLASSIC", "ONE_NIGHT_IN_KARAZHAN", "BLACKROCK_MOUNTAIN", "SANDS_OF_TIME", "LEAGUE_OF_EXPLORERS", "WITCHWOOD", "JOURNEY_TO_UNGORO", "BASIC", "BATTLE_FOR_ASHENVALE", "PROMO", "KNIGHTS_OF_THE_FROZEN_THRONE", "NAXXRAMAS", "MEAN_STREETS_OF_GADGETZAN", "RASTAKHANS_RUMBLE", "HALL_OF_FAME", "REWARD", "THE_OLD_GODS", "VERDANT_DREAMS", "KOBOLDS_AND_CATACOMBS", "BOOMSDAY_PROJECT", "SPELLSOURCE_BASIC", "CUSTOM" ],
+  "mulligans" : [ [ 33 ], [ 62 ] ],
+  "actions" : [ 0, 0, 0, 0, 1, 0, 0 ],
+  "id" : null
+}

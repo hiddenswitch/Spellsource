@@ -15,6 +15,8 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -38,7 +40,7 @@ import java.util.function.Consumer;
  * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private long seed;
 	private int catalogueVersion;
 	private HeroClass[] heroClasses;
@@ -48,6 +50,7 @@ public class Trace implements Serializable, Cloneable {
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
 	private transient List<String> log = new ArrayList<>();
+	private String id;
 
 	public Trace() {
 	}
@@ -57,11 +60,11 @@ public class Trace implements Serializable, Cloneable {
 		Player[] players = new Player[]{gameState.player1, gameState.player2};
 		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new CardSet[0]);
 		deckFormatName = gameState.deckFormat.getName();
-		heroClasses = new HeroClass[2];
-		deckCardIds = new String[2][];
+		setHeroClasses(new HeroClass[2]);
+		setDeckCardIds(new String[2][]);
 		for (int i = 0; i < 2; i++) {
-			heroClasses[i] = players[i].getHero().getHeroClass();
-			deckCardIds[i] = players[i].getDeck().stream().map(Card::getCardId).toArray(String[]::new);
+			getHeroClasses()[i] = players[i].getHero().getHeroClass();
+			getDeckCardIds()[i] = players[i].getDeck().stream().map(Card::getCardId).toArray(String[]::new);
 		}
 	}
 
@@ -118,23 +121,18 @@ public class Trace implements Serializable, Cloneable {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = new GameContext(
-				new Player(DeckCreateRequest.fromCardIds(heroClasses[0], deckCardIds[0]).withFormat(deckFormatName).toGameDeck(), "Player 0"),
-				new Player(DeckCreateRequest.fromCardIds(heroClasses[1], deckCardIds[1]).withFormat(deckFormatName).toGameDeck(), "Player 1"),
-				new GameLogic(),
-				new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets)
-		);
+		GameContext stateRestored = getStartingGameContext();
+
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
+
 		stateRestored.setBehaviour(
 				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
 		stateRestored.setBehaviour(
 				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
-		GameLogic logic = new GameLogic((IdFactoryImpl) stateRestored.getLogic().getIdFactory(), getSeed());
-		logic.setContext(stateRestored);
-		stateRestored.setLogic(logic);
+
 		try {
 			stateRestored.init();
 			stateRestored.resume();
@@ -143,6 +141,36 @@ public class Trace implements Serializable, Cloneable {
 		}
 		CardCatalogue.setVersion(originalCatalogueVersion);
 		return stateRestored;
+	}
+
+	@NotNull
+	private GameContext getStartingGameContext() {
+		GameContext gameContext = new GameContext();
+		restoreStartingStateTo(gameContext);
+		return gameContext;
+	}
+
+	public void restoreStartingStateTo(GameContext context) {
+		if (heroClasses != null && deckCardIds != null) {
+			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses[0], deckCardIds[0]).withFormat(deckFormatName).toGameDeck(), "Player 0"));
+			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses[1], deckCardIds[1]).withFormat(deckFormatName).toGameDeck(), "Player 1"));
+		} else if (heroClasses != null) {
+			context.setPlayer(0, new Player(heroClasses[0]));
+			context.setPlayer(1, new Player(heroClasses[1]));
+		} else {
+			context.setPlayer(0, new Player());
+			context.setPlayer(1, new Player());
+		}
+
+		if (deckFormatSets != null && deckFormatName != null) {
+			context.setDeckFormat(new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets));
+		} else {
+			context.setDeckFormat(DeckFormat.STANDARD);
+		}
+
+		GameLogic logic = new GameLogic((IdFactoryImpl) context.getLogic().getIdFactory(), getSeed());
+		logic.setContext(context);
+		context.setLogic(logic);
 	}
 
 	public String dump() {
@@ -223,5 +251,21 @@ public class Trace implements Serializable, Cloneable {
 	public Trace setActions(List<Integer> actions) {
 		this.actions = actions;
 		return this;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public Trace setId(String id) {
+		this.id = id;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.toString();
 	}
 }

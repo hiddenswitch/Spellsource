@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Passive Hero Power. Whenever a friendly minion returns to your hand, set its cost to 0.",
+  "description": "Passive Skill. Whenever a friendly minion returns to your hand, set its cost to 0.",
   "passiveTriggers": [
     {
       "eventTrigger": {
@@ -18,7 +18,7 @@
         "cardCostModifier": {
           "class": "CardCostModifier",
           "target": "SELF",
-          "value": 0,
+          "value": 1,
           "operation": "SET"
         }
       }

@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Taunt. Battlecry: Freeze this minion.",
+  "description": "Guard. Opener: Freeze this minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

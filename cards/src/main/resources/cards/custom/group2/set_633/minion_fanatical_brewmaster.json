@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Deflect. Battlecry: Add a 1/2 Alemental to your hand.",
+  "description": "Deflect. Opener: Add a 1/2 Alemental to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

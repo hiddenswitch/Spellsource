@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Summon a 6/6 Aberration.",
+  "description": "Aftermath: Summon a 6/6 Aberration.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_aberration"
@@ -15,9 +15,9 @@
     "DEATHRATTLES": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CLASSIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

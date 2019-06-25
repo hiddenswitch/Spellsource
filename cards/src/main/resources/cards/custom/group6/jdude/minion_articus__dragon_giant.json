@@ -3,14 +3,11 @@
   "baseManaCost": 20,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 12,
-  "baseHp": 12,
-  "rarity": "EPIC",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Taunt. Costs (1) less for each card in both players hands.",
-  "attributes": {
-    "TAUNT": true
-  },
+  "description": "Costs (1) less for each card in both players hands.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

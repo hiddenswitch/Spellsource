@@ -17,6 +17,12 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Transforms the {@code target} card into a card retrieved from {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc)}, keeping important attributes like {@link
+ * Attribute#STARTED_IN_DECK}, {@link Attribute#STARTED_IN_HAND} and {@link Attribute#REMOVES_SELF_AT_END_OF_TURN}
+ * (ghostly) consistent. Typically used in conjunction with a {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc#keepAfterTransform}
+ * setting.
+ */
 public class TransformInHandSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TransformInHandSpell.class);
@@ -68,5 +74,4 @@ public class TransformInHandSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, replaced);
 		}
 	}
-
 }

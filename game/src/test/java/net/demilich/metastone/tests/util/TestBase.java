@@ -8,7 +8,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
@@ -36,7 +35,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -49,16 +47,24 @@ import static org.mockito.ArgumentMatchers.anyList;
 public class TestBase {
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
+		return playChooseOneCard(context, player, baseCardId, chosenCardId, null);
+	}
+
+	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId, Entity target) {
 		Card baseCard = receiveCard(context, player, baseCardId);
 		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
 		player.setMana(cost);
-		context.getLogic().performGameAction(player.getId(), context.getValidActions()
+		GameAction action = context.getValidActions()
 				.stream()
 				.filter(ga -> ga instanceof PlayChooseOneCardAction)
 				.map(ga -> (PlayChooseOneCardAction) ga)
 				.filter(coca -> coca.getChoiceCardId().equals(chosenCardId))
 				.findFirst()
-				.orElseThrow(AssertionError::new));
+				.orElseThrow(AssertionError::new);
+		if (target != null) {
+			action.setTarget(target);
+		}
+		context.performAction(player.getId(), action);
 		return baseCard;
 	}
 
@@ -106,23 +112,6 @@ public class TestBase {
 			return;
 		}
 		throw new AssertionError("Adapted");
-	}
-
-	public static class OverrideHandle<T> {
-		private T object;
-		private AtomicBoolean stopped = new AtomicBoolean(false);
-
-		public void set(T object) {
-			this.object = object;
-		}
-
-		public T get() {
-			return object;
-		}
-
-		public void stop() {
-			stopped.set(true);
-		}
 	}
 
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
@@ -251,16 +240,6 @@ public class TestBase {
 		}
 	}
 
-	public static class GymFactory {
-		GymConsumer first;
-		GymConsumer after = ((context, player, opponent) -> {
-		});
-
-		public void run(GymConsumer consumer) {
-			runGym(first.andThen(consumer).andThen(after));
-		}
-	}
-
 	public static GymFactory getGymFactory(GymConsumer initializer) {
 		GymFactory factory = new GymFactory();
 		factory.first = initializer;
@@ -293,6 +272,16 @@ public class TestBase {
 		GameContext context = new DebugContext(new Player(deck1), new Player(deck2), new GameLogic() {
 			@Override
 			public int determineBeginner(int... playerIds) {
+				return 0;
+			}
+
+			@Override
+			protected int getStarterCards() {
+				return 0;
+			}
+
+			@Override
+			protected int getSecondPlayerBonusStarterCards() {
 				return 0;
 			}
 		}, DeckFormat.getSmallestSupersetFormat(deck1, deck2));
@@ -368,43 +357,6 @@ public class TestBase {
 				: StreamSupport.stream(split, false);
 	}
 
-	public static class TestBehaviour extends UtilityBehaviour {
-
-		private EntityReference targetPreference;
-
-		@Override
-		public String getName() {
-			return "Null Behaviour";
-		}
-
-		public EntityReference getTargetPreference() {
-			return targetPreference;
-		}
-
-		@Override
-		public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-			return new ArrayList<Card>();
-		}
-
-		@Override
-		public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-			if (targetPreference != null) {
-				for (GameAction action : validActions) {
-					if (action.getTargetReference().equals(targetPreference)) {
-						return action;
-					}
-				}
-			}
-
-			return validActions.get(0);
-		}
-
-		public void setTargetPreference(EntityReference targetPreference) {
-			this.targetPreference = targetPreference;
-		}
-
-	}
-
 	@BeforeMethod
 	public void loadCards() throws Exception {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
@@ -415,7 +367,7 @@ public class TestBase {
 	protected static void attack(GameContext context, Player player, Entity attacker, Entity target) {
 		PhysicalAttackAction physicalAttackAction = new PhysicalAttackAction(attacker.getReference());
 		physicalAttackAction.setTarget(target);
-		context.getLogic().performGameAction(player.getId(), physicalAttackAction);
+		context.performAction(player.getId(), physicalAttackAction);
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
@@ -423,8 +375,8 @@ public class TestBase {
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit, DeckFormat deckFormat) {
-		Player player1 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 1");
-		Player player2 = new Player(Deck.getRandomDeck(hero2, deckFormat), "Player 2");
+		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
+		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
 
 		DebugContext context = new DebugContext(player1, player2, new GameLogic() {
 			@Override
@@ -490,19 +442,19 @@ public class TestBase {
 		if (card.getTargetSelection() != TargetSelection.NONE && card.getTargetSelection() != null) {
 			throw new UnsupportedOperationException(String.format("This card %s requires a target.", card.getName()));
 		}
-		context.getLogic().performGameAction(player.getId(), card.play());
+		context.performAction(player.getId(), card.play());
 	}
 
 	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player) {
-		context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+		context.performAction(player.getId(), player.getHero().getHeroPower().play());
 	}
 
 	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player, EntityReference target) {
 		PlayCardAction action = player.getHero().getHeroPower().play();
 		action.setTargetReference(target);
-		context.getLogic().performGameAction(player.getId(), action);
+		context.performAction(player.getId(), action);
 	}
 
 	protected static void playCard(GameContext context, Player player, String cardId, Entity target) {
@@ -518,7 +470,7 @@ public class TestBase {
 		}
 		GameAction action = card.play();
 		action.setTarget(target);
-		context.getLogic().performGameAction(player.getId(), action);
+		context.performAction(player.getId(), action);
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, String minionCardId) {
@@ -531,7 +483,7 @@ public class TestBase {
 		}
 
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
-		context.getLogic().performGameAction(player.getId(), play);
+		context.performAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
 	}
 

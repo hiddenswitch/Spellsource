@@ -1,20 +1,27 @@
 {
-  "name": "The King in Yellow",
+  "name": "Hastur, King in Yellow",
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, transform your other minions into 6/6 Aberrations.",
+  "description": "After another friendly minion survives damage, transform it into a 6/6 Aberration.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF",
+      "targetEntityType": "MINION",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET",
+        "invert": true
+      }
     },
     "spell": {
       "class": "TransformMinionSpell",
-      "target": "OTHER_FRIENDLY_MINIONS",
+      "target": "EVENT_TARGET",
       "card": "token_aberration"
     }
   },
