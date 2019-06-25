@@ -444,15 +444,22 @@ public class WitchDoctorTests extends TestBase {
 	@Test
 	public void testZenPilgrimage() {
 		runGym(((context, player, opponent) -> {
-			Minion friend = playMinionCard(context, player, "minion_blood_knight");
-			playCard(context, player, "spell_zen_pilgrimage", friend);
+			Minion friend1 = playMinionCard(context, player, "minion_blood_knight");
+			playCard(context, player, "spell_zen_pilgrimage", friend1);
 			assertEquals(player.getHand().size(), 3);
 			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
 			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
 			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
+			assertEquals(player.getMinions().size(), 0);
+		}));
+		runGym(((context, player, opponent) -> {
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_zen_pilgrimage", friend1);
+			assertEquals(player.getHand().size(), 2);
+			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
+			assertEquals(player.getMinions().size(), 0);
 		}));
 	}
-
-	// Revisit zen_pilgrimage card, not correct yet for howMany
 
 }
