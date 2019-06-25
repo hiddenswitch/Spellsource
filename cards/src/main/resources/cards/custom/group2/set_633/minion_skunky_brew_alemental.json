@@ -1,13 +1,13 @@
 {
-  "name": "Skunky Brew Alemental",
+  "name": "Deepwoods Elemental",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 5,
   "baseHp": 4,
-  "rarity": "EPIC",
+  "rarity": "Rare",
   "race": "ELEMENTAL",
-  "description": "Deflect. Opener: Summon two 1/2 Alementals.",
+  "description": "Deflect. Opener: Summon two 1/2 Elementals.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

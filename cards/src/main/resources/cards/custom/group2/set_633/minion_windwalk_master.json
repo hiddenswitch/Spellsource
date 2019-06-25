@@ -1,12 +1,12 @@
 {
-  "name": "Windwalk Master",
+  "name": "Shigaraki Elder",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Extra Strike. Deflect.",
+  "description": "Deflect. Can attack twice in a turn.",
   "attributes": {
     "DEFLECT": true,
     "WINDFURY": true

@@ -1,5 +1,5 @@
 {
-  "name": "Niuzao, the Black Ox",
+  "name": "Yashima, Cheerful Tanuki",
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
@@ -7,27 +7,21 @@
   "baseHp": 10,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Guard. Deflect. At the end of your turn, give your other minions +2 Health and Deflect.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "target": "OTHER_FRIENDLY_MINIONS",
-          "hpBonus": 2
-        },
-        {
-          "class": "AddAttributeSpell",
-          "target": "OTHER_FRIENDLY_MINIONS",
-          "attribute": "DEFLECT"
+  "description": "Guard, Deflect. Aftermath: Give your minions Guard and Deflect.",
+  "deathrattle": {
+    "class": "MetaSpell",
+     "spells": [
+       {
+         "class": "AddAttributeSpell",
+         "target": "FRIENDLY_MINIONS",
+         "attribute": "TAUNT",
+       },
+       {
+         "class": "AddAttributeSpell",
+         "target": "FRIENDLY_MINIONS",
+         "attribute": "DEFLECT",
         }
       ]
-    }
   },
   "attributes": {
     "DEFLECT": true,
