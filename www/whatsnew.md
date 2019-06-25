@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.34 (In Progress)
+
+Yig's Mastermind mana cost increased from 8 to 10. (1184)
+
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
 Bug fixes.
