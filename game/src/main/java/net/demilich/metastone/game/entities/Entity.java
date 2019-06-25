@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.CustomCloneable;
@@ -119,14 +120,25 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the specified attribute as an {@link Integer} value or fails with an exception.
+	 * Gets the specified attribute as an {@link Integer} value or {@code 0} if the specified attribute is of the wrong
+	 * type or is not found.
 	 *
 	 * @param attribute The {@link Attribute} to look up.
 	 * @return The attribute's value or 0 if it isn't set.
-	 * @throws ClassCastException if the {@link Attribute} is not an {@link Integer}
 	 */
-	public int getAttributeValue(Attribute attribute) throws ClassCastException {
+	public int getAttributeValue(Attribute attribute) {
 		return (int) getAttributes().getOrDefault(attribute, 0);
+	}
+
+	/**
+	 * Gets the specified attribute as an {@link Integer} value, defaulting to the specified value if the value is not an
+	 * integer.
+	 *
+	 * @param attribute The {@link Attribute} to look up.
+	 * @return The attribute's value or 0 if it isn't set.
+	 */
+	public int getAttributeValue(Attribute attribute, int defaultValue) {
+		return (int) getAttributes().getOrDefault(attribute, defaultValue);
 	}
 
 	/**
@@ -491,11 +503,25 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return (EnchantmentDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new EnchantmentDesc[0]);
 	}
 
-	@Override
-	public int compareTo(Entity o) {
-		if (o == null) {
-			return 1;
+	public DynamicDescriptionDesc[] getDynamicDescription() {
+		if (getAttributes().containsKey(Attribute.DYNAMIC_DESCRIPTION)) {
+			return (DynamicDescriptionDesc[]) getAttribute(Attribute.DYNAMIC_DESCRIPTION);
 		}
+		return getSourceCard() != null ? getSourceCard().getDesc().getDynamicDescription() : null;
+	}
+
+	public String[] evaluateDescriptions(GameContext context, Player player) {
+		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
+		String[] strings = new String[dynamicDescriptionDescs.length];
+
+		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
+			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
+		}
+		return strings;
+	}
+
+	@Override
+	public int compareTo(@NotNull Entity o) {
 		return Integer.compare(this.getId(), o.getId());
 	}
 
@@ -552,93 +578,94 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The dynamic description if this entity is a card, otherwise the {@link #getDescription()}.
 	 */
 	public String getDescription(GameContext context, Player player) {
-		if (getSourceCard() != null && getEntityType() == EntityType.CARD) {
+		String description = getDescription();
+		Card card = getSourceCard();
+
+		if (getDynamicDescription() != null
+				&& getDynamicDescription().length > 0
+				&& (isInPlay() || getZone() == Zones.HAND || getZone() == Zones.DECK)) {
 			// First parse dynamic descriptions
-			Card card = getSourceCard();
-			String description = card.getDescription();
-			if (card.getZone() == Zones.HAND) {
-				if (description.contains("[") && card.getDynamicDescription() != null) {
-					int i = 0;
-					String[] descriptions = card.evaluateDescriptions(context, player);
-					while (description.contains("[")) {
-						int start = description.indexOf("[");
-						int end = description.indexOf("]");
-						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
-					}
-				}
-			} else {
-				description = description.replace("[", "X").replace("]", "");
-			}
-
-			// Handle spell damage
-			if (card.isSpell() || card.isHeroPower()) {
-				// Find the $ damages
-				Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the dollar sign in the beginning
-					int damage = Integer.parseInt(matcher.group(1));
-					int modifiedDamage;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						ValueProviderDesc desc = new ValueProviderDesc();
-						desc.put(ValueProviderArg.VALUE, damage);
-						desc.put(ValueProviderArg.CLASS, card.isSpell() ? SpellDamageValueProvider.class : HeroPowerDamageValueProvider.class);
-						ValueProvider provider = desc.create();
-						modifiedDamage = provider.getValue(context, player, player.getHero(), card);
-					} else {
-						modifiedDamage = damage;
-					}
-					if (modifiedDamage != damage) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
+			if (description.contains("[") && getDynamicDescription() != null) {
+				int i = 0;
+				String[] descriptions = evaluateDescriptions(context, player);
+				while (description.contains("[")) {
+					int start = description.indexOf("[");
+					int end = description.indexOf("]");
+					description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+					i++;
 				}
 			}
-
-			// Healing
-			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
-				Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the # in the beginning
-					int healing = Integer.parseInt(matcher.group(1));
-					int modifiedHealing = healing;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-						if (card.isSpell()) {
-							modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
-						}
-						if (card.isHeroPower()) {
-							modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
-						}
-					}
-					if (modifiedHealing != healing) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedHealing));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedHealing));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			}
-
-			return description;
 		} else {
-			return getDescription();
+			description = description.replace("[", "").replace("]", "");
 		}
+
+		// Handle spell damage
+		if (card.isSpell() || card.isHeroPower()) {
+			// Find the $ damages
+			Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
+			StringBuffer newDescription = new StringBuffer();
+
+			boolean matchedAtLeastOnce = false;
+			while (matcher.find()) {
+				// Skip the dollar sign in the beginning
+				int damage = Integer.parseInt(matcher.group(1));
+				int modifiedDamage;
+				if (card.getId() != GameLogic.UNASSIGNED) {
+					ValueProviderDesc desc = new ValueProviderDesc();
+					desc.put(ValueProviderArg.VALUE, damage);
+					desc.put(ValueProviderArg.CLASS, card.isSpell()
+							? SpellDamageValueProvider.class
+							: HeroPowerDamageValueProvider.class);
+					ValueProvider provider = desc.create();
+					modifiedDamage = provider.getValue(context, player, player.getHero(), card);
+				} else {
+					modifiedDamage = damage;
+				}
+				modifyDescription(matcher, newDescription, damage, modifiedDamage);
+				matchedAtLeastOnce = true;
+			}
+			if (matchedAtLeastOnce) {
+				matcher.appendTail(newDescription);
+				description = newDescription.toString();
+			}
+		}
+
+		// Healing
+		if (true) {
+			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
+			StringBuffer newDescription = new StringBuffer();
+
+			boolean matchedAtLeastOnce = false;
+			while (matcher.find()) {
+				// Skip the # in the beginning
+				int healing = Integer.parseInt(matcher.group(1));
+				int modifiedHealing = healing;
+				if (card.getId() != GameLogic.UNASSIGNED) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+					if (card.isSpell()) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
+					}
+					if (card.isHeroPower()) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+					}
+				}
+				modifyDescription(matcher, newDescription, healing, modifiedHealing);
+				matchedAtLeastOnce = true;
+			}
+			if (matchedAtLeastOnce) {
+				matcher.appendTail(newDescription);
+				description = newDescription.toString();
+			}
+		}
+
+		return description;
 	}
 
+	private void modifyDescription(Matcher matcher, StringBuffer newDescription, int originalValue, int newValue) {
+		if (newValue != originalValue) {
+			matcher.appendReplacement(newDescription, String.format("*%d*", newValue));
+		} else {
+			matcher.appendReplacement(newDescription, Integer.toString(newValue));
+		}
+	}
 }

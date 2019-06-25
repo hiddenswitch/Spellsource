@@ -3,10 +3,10 @@
   "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "ROSE",
-  "baseAttack": 6,
-  "baseHp": 6,
+  "baseAttack": 7,
+  "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Spell Damage +2. Deathrattle: Give a random friendly minion +6/+6 and Spell Damage +2.",
+  "description": "Spellpower +3. Aftermath: Give a random friendly minion +7/+7 and Spellpower +3.",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",
@@ -14,19 +14,19 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": 6,
-        "hpBonus": 6
+        "attackBonus": 7,
+        "hpBonus": 7
       },
       {
         "class": "ModifyAttributeSpell",
-        "attribute": "SPELL_DAMAGE",
-        "value": 2
+        "value": 3,
+        "attribute": "SPELL_DAMAGE"
       }
     ]
   },
   "attributes": {
-    "SPELL_DAMAGE": 2,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "SPELL_DAMAGE": 3
   },
   "collectible": true,
   "set": "CUSTOM",

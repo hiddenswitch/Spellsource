@@ -28,6 +28,17 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testTessGreymaneFlamewakerInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_mind_blast");
+			playCard(context, player, "minion_flamewaker");
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "minion_tess_greymane");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 5, "Only mindblast should have been played, Flamewaker should not have been triggered");
+		});
+	}
+
+	@Test
 	public void testTheGlassKnight() {
 		runGym((context, player, opponent) -> {
 			Minion glassKnight = playMinionCard(context, player, "minion_the_glass_knight");
@@ -207,8 +218,8 @@ public class WitchwoodTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			// Make sure there are minions for novice and shudderwock to transform into
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_cost_4_test", "minion_cost_11_test"));
-			playCard(context, player, "hero_thrall_deathseer");
 			playMinionCard(context, player, "minion_novice_engineer");
+			playCard(context, player, "hero_thrall_deathseer");
 			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
 			context.getLogic().setRandom(new XORShiftRandom(0L) {
 				@Override

@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Battlecry: If 3 or more minions died this turn, gain Poisonous.",
+  "description": "Opener: If 3 or more minions died this turn, gain Toxic.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

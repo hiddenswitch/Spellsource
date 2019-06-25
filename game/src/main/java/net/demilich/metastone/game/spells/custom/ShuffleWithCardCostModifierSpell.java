@@ -4,18 +4,14 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.CardCostModifierSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
-
-import java.util.Arrays;
 
 /**
  * Generates the cards retrieved by {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc)} rules,
@@ -46,7 +42,7 @@ public final class ShuffleWithCardCostModifierSpell extends CardCostModifierSpel
 			desc.remove(SpellArg.VALUE);
 			desc.remove(SpellArg.TARGET);
 			super.onCast(context, player, desc, source, card);
-			context.getLogic().shuffleToDeck(player, card, false, true);
+			context.getLogic().shuffleToDeck(player, null, card, false, true);
 		}
 	}
 }

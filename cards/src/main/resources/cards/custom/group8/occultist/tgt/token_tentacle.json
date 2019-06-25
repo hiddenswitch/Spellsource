@@ -8,9 +8,9 @@
   "rarity": "FREE",
   "description": "",
   "collectible": false,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "THE_GRAND_TOURNAMENT"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

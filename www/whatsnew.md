@@ -3,155 +3,170 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
 
-Thanks to a contribution from @Pircival, @Walrus, @Logovaz and @Muhframos, introducing a Spellsource Basic set.
+### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
-Thanks to a contribution from @Muhframos, introducing the Occultist class.
+Bug fixes.
 
-And thanks to a contribution from @Rumu11, we have more Verdant Dreams cards.
+Visit the new Windows development guide at http://playspellsource.com/windows-development/ for more about editing and authoring your own cards using the tools the developers use.
 
-Additional bug fixes.
+##### Usability Fixes:
 
-##### Content Additions:
-
- - Additional Verdant Dreams expansion cards.
- - A Spellsource Basic set, with 55 neutral minions.
- - The new Occultist class, with 57 cards and tokens.
- - The Basic Spellsource set.
-
-##### Content Fixes:
-
- - Teamwork now costs 7 mana.
- - Elementium Shell now costs 3 mana, does not draw, and only buffs health.
- - Maexnna's Femur now costs 8 mana and has 2 durability.
- - Swarm Shield now costs 2 mana and gives a multiplier of 3 armor.
- - Breath of Fire now reads, "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)," which means all its damage effects gain spell power.
- - Wild Pyromancer, Flamewaker and other spell casted triggering effects no longer trigger off Scroll of Wonders, Tess Greymane or other force casts that reuse cards from the graveyard.
-
-### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
-
-Bug fixes and Verdant Dreams.
+ - Secrets and quests appear in the client again. (1029)
+ - Weapons now disappear when they are destroyed. (910)
+ - Challenges to play a match or make a friend invite now correctly pop up. 
 
 ##### Content Additions:
 
- - @Rumu's Verdant Dreams expansion.
- - The Paladin card Echo! Echo! Echo!.
+ - 14 new cards in the Dragoon class. (1118, 1172)
 
 ##### Content Fixes:
 
- - Skulking Geist now only destroys cost 1 spells instead of cost 1 cards.
- - Dueling effects like Mass Hysteria and Duelmaster Fizzle no longer consume attacks. This includes situations where an attack may trigger a secret that prevents the attack from finishing.
- - Tainted Raven now interacts with silence correctly.
- - Vanal Petkiper now creates 1 buff when targeting Nightmare Amalgam instead of 7. 
- - Sideline Coach now buffs before the minion attacks.
- - Nebulous Entity now deals 2 damage instead of giving a -2 HP buff.
- - Grandmother Vratta now has 7 HP (was 10).
- - Distort's attack buff is no longer affected by spell damage.
- - Spirit of the Dragonhawk now interacts with Ice Walker correctly.
- - Chi-Ji now restores a flat 3 Health when triggered.
- - Yu'lon is now a 8/6 and only summons two statues.
- - Xuen now only has Charge and Deflect.
- - Soothing Mists now heals 3 (was 5).
- - Assimilator and Broodmother Narvina both in play no longer causes an infinite loop.
+ - Oppressor Defender now costs 6 Mana, a 2/2 minion. (1112)
+ - Unnerving Spectre now costs 4 Mana, a 2/2 minion. (1112)
+ - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
+ - Hypnotic Beetle now costs 4 mana. (1114)
+ - Sharper Claws (Upgraded Skill) now renamed to Hone Claws. (1118)
+ - Both Hero Powers no longer restore Health now. (1118)
+ - Majestic Fennec is now a 4/6 Beast that restores 4 Health. (1118)
+ - Alder, Death Baron's Skill deals only 3 damage now. (1118)
+ - Venom Breath now costs 11 Mana. (1118)
+ - Conflagration now only deals 3 damage to a minion and the minions next to it. (1118)
 
-### 0.8.11-2.0.22 (Friday, January 11th, 2019)
+### 0.8.32-2.0.30 (Wednesday, June 5th, 2019)
 
 Bug fixes.
 
 ##### Content Fixes:
 
- - Wither no longer affects Heroes.
- - Primordial Supremacy now buffs Titans, Xenodrones OR Wither minions, rather than Titans and Xenodrones WITH Wither.
- - Cards that rely on player statistics like number of minions summoned (Castle Giant, Thing From Below) now correctly show their costs to the client.
- - Cards that receive HP hand buffs now correctly show their HP in the client. For example, casting Roll on a minion should now show the correct stats in the client.
- - Distort now reads "Give a minion +3 Attack. Deal 3 damage to it. (Improved by Spell Damage)."
- - Card cost modifiers are no longer duplicated twice when gained via a minion transform-copy effect. (Fixes interactions between Faceless Manipulator, Prince Taldaram and cards like Radiant Elemental).
- - Otherworlder's Vicious Progeny upgraded hero power now correctly summons a 0/2 Xenodrone.
- - Mind Harvester only draws cards at the end of its owner's turn.
- - Berserk now causes the targeted minion to attack all others.
+ - Klive Icetooth now correctly plays its Opener. (1124)
+ - The End now applies to both player's hands and the stats effect applies before the Opener is evaluated. (1126)
+ - Uccian Hydra now correctly triggers. (1125)
+ - Yokai Bonder now reads, "Dash. Whenever this attacks, draw a Beast from your deck." (1123)
+ - Bogovanis now puts the Sourcestone into the opponent's deck. (1120)
 
-### 0.8.10-2.0.22 (Wednesday, January 9th, 2019)
+### 0.8.31-2.0.30 (Tuesday, May 28th, 2019)
 
-Thanks to a contribution from @Samswize, we have new Lich cards!
+Updates from @Logovaz for Witch Doctor.
 
-Thanks to a contribution from @DeepKhaos (@Dipsy), we have new Blood Knight Cards!
-
-Additionally, the client has been upgraded for better performance.
+New cards from @Muhframos for Occultist too!
 
 ##### Content Additions:
 
- - The new Lich cards Lord Marrowgar, Scrap Scavenger, Blood Boil, Chains of Ice, Path Frost, and Ebonchill.
- - The new Blood Knight cards Scarlet Thirst, Veindrake, Smoldering Husk, Assimilator, Goblin Harpooner, The Blood Engine, Blood to Iron, Siphoning Strike, Sweet Sustenance, and Voltsaber.
- 
+ - Significant additions to Occultist. (1057)
+
 ##### Content Fixes:
 
- - Rendering Curse no longer gives minions marked for death its deathrattle.
- - Blood Moon Rising and Scarlet Thirst in play with an empty deck no longer interact to cause an infinite loop due to fatigue.
- - The Blood Knight hero powers now summon a Xenodrone after the buff.
- - Rotten Curse no longer gives Immune to your hero.
- - Overdrive now only affects friendly minions.
- - Heartpiercer now only drains from minions it hit.
+ - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
+ - Hatches the Dragon is no longer collectible. (1094)
+ - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
+ - Nature Rager now gains +1 Health instead of +1/+1. (1077)
+ - Ending the turn with an Infinite Warden on the board without an End Time on the board no longer crashes the game.
 
-### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
+### 0.8.30-2.0.30 (Monday, May 27th, 2019)
 
-Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
+Introducing the Spellsource Legendaries!
 
-And also, we get a great contribution from @AnterogradeNil: Introducing the Otherworlder class!
-
-@Pircival contributed new Baron cards and fixes.
-
-@Logovaz contributed new Witch Doctor cards.
-
-@LyokoBarbossa also contributed fixes.
+Bug fixes.
 
 ##### Content Additions:
 
- - The Blood Knight class, starting with 38 cards and tokens.
- - The Otherworlder class, starting with 34 cards and tokens.
- - The new Baron cards Pawshop Trader, Smug Smuggler, Trisword Swinger, and Vanal Petkiper.
- - The new Witch Doctor cards Aberration, Chant Leader, Fading Berserker, Raptor Rider Raider, Tainted Raven, Temple Watcher, Tiki Tokens, Wolpertinger, Zalmah, Awakening Ritual, Bottled Spirit, False Promise, Ghostly Essence, Haunted Happenings, Paranoia, Rotten Curse, Shadow Puppetry, Spirit Bind, Spiritball, Bloodshed Reaver, and Spirit Wand.
+ - New Spellsource Legendaries. (1074)
 
 ##### Content Fixes:
 
- - Healing in excess of the health that can actually be restored no longer incorrectly triggers Pearl Spellstones, Soup Vendor, Blackguard, Virtuous Vapor, or Azjol Visionary.
- - Cards that summon themselves on Deathrattle like Sacred Tombstone and Kil'jaeden, Deceiver no longer cause infinite loops.
- - Meat Construct no longer causes infinite loops.
- - Bronze Timekeeper now correctly triggers turn start and end enchantments that do something to their hosts.
- - Fight! now gives a friendly and random enemy minion +3/+3 (was +4 Attack) and now costs 2 (was 1).
- - One For All now gives the next minion you play this turn +2/+2 (was +3/+1).
- - Crone's Attendant is now a Beast (Instead of a Mech)
- - Ritual Dagger now correctly adds a random Voodoo spell to your hand instead of the Truesilver effect.
- - Shadow Puppetry now costs (3).
- - Divination and Spirit Bind tokens from Hero Power now give +2 Health and Restore 2 Health respectively.
+ - Daring Duelist now only draws a card when it survives damage. (1111)
+ - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
+ - Copying minions that have jailed other minions no longer causes errors.
 
-### 0.8.8-2.0.20 (Friday, January 4th, 2019)
+### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
 
-The Hidden Switch Launcher for Windows has been updated to 1.1.0 and should start on the latest updates to Windows 10 now.
+Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together the fixes flawlessly.
 
-Additionally, the Collection view on Windows clients now correctly shows cards again.
+##### Content Fixes:
 
-### 0.8.8-2.0.19 (Friday, January 4th, 2019)
+ - Disco Inferno now swaps stats with a friendly minion. (1109)
+ - Ninjarcher now deals 2 damage to a random enemy. (1101)
+ - Malicious Magpie now deals damage only when other minions attack. (1100)
+ - Bloody Blade is now a 3/2. (1102)
+ - Redhide Butcher now has the correct effect and rarity. (1104)
+ - Sly Conquistador now has Dodge. (1107)
+ - Terrified Tanooki now gains +1 attack. (1108)
+ - Attrition Master now affects minions during both player's turns.
+ - Gurubashi Berserker now transforms once into a Rage Behemoth without incorrectly summoning more tokens. (1110)
+ - Northot, Necromaster no longer has an infinite loop interaction with your Falling Crusader (for your troubles).
+ - Shapeseeper now correctly buffs its stats. (1106)
+ - Doomed Diver now triggers correctly. (1103)
 
-Happy New Years to all Spellsource players!
+### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
 
-The server has been migrated in this release.
+Hearthstone updates. Thanks to @doombubbles for the great contribution!
 
-###### Content Fixes:
+The 0.8 series will be the last to receive Hearthstone updates.
 
- - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
- - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
- - Abomination's Might, previously mis-named Icy Talon, now has a new name.
- - Dancing Rune Weapon now draws a card.
- - The spell Rune Tap now costs (1).
- - Chains of Ice now draws a card correctly.
- - Dyn-o-Matic now correctly deals 5 damage to random targets.
- - Bwonsamdi from Witch Doctor no longer causes an infinite recursion when each player controls one.
+##### Content Additions:
+ - The Rise of Shadows set for Hearthstone
+ - Standard rotation into Year of the Dragon
 
-###### Usability Fixes:
+### 0.8.27-2.0.30 (Thursday, May 23rd, 2019)
 
- - Attacks no longer animate twice.
- - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
- - The server is now hosted locally in California instead of Oregon.
- - Server deployments will result in less downtime. Downtime is reduced from around 10 minutes to less than 20 seconds.
- - Patches can occur more frequently. In the previous infrastructure, patches could only be applied at most once per hour. Patches can now be applied as frequently as possible.
+Thanks to @Phyley for contributing new fixes to Vermancer!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - 9 new cards in the Vermancer class.
+
+##### Content Fixes:
+
+ - Various changes to Vermancer cards.
+ - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
+ - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
+ - Kraken's Call, Gilblin Plunderer, Calm Currents, Condensation, Finding Mobus, Three Fathoms Below and Water Blast all shuffle the correct number of Ocean Depths into the deck now.
+ - Gilblin Plunderer's text is now correct.
+ - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
+ - Evaporation now deals 3 damage to all enemy minions.
+ - Wrath of the Occult no longer requires targeting.
+
+##### Usability Fixes:
+
+ - It is no longer possible to select a neutral champion in the deck creation screen.
+
+### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
+
+Thanks to a contribution from @Logovaz, there are new cards for Senzaku!
+
+The following keywords have been consistently applied to Spellsource cards:
+
+ - Champion: Your player character. When this dies, you lose the game.
+ - Skill: Your champion's ability.
+ - Skill: A spell your Champion can play every turn.
+ - Opener: Occurs whenever the card is played from the hand.
+ - Aftermath: Occurs whenever a minion dies (horribly) on the battlefield.
+ - Elusive: Cannot be targeted by spells or skills.
+ - Extra Strike: A character can attack twice.
+ - Quad Strike: A character can attack four times.
+ - Hidden: This minion cannot be targeted by enemies until it deals damage.
+ - Dodge: The first time this minion takes damage, it takes zero instead.
+ - Dash: This can attack enemy minions even if it is exhausted.
+ - Blitz: This can attack enemies even if it is exhausted.
+ - Spellpower (X): Your Spells deal this much more damage.
+ - Toxic: This kills minions it damages.
+ - Guard: This must be destroyed before minions can attack its champion.
+
+Now clarifying the following additional keywords:
+
+ - Armor: Instead of losing health, lose this instead.
+ - Deflect: The first time this minion takes damage, deal it to its Champion instead.
+ - Wither (X): This reduces its target's health by this amount, and restores the health at the start of the caster's turn.
+ - Enchantment: Occurs as long as the target this is attached to is in play.
+ - Exhausted: During the turn it comes into play or changes sides, this minion is exhausted and cannot attack this turn. It loses exhaustion at the start of next turn.
+ - Elusive: Cannot be targeted by spells or skills.
+ - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
+ - Roast: Remove a card from the top of your deck.
+ - Reservoir (X): Occurs when your deck is larger than this amount.
+ - Sacrifice: Occurs whenever a friendly minion dies.
+ - Silence: The text on this card and any enchantments added later are no longer in play.
+ - Supremacy: Occurs whenever this minion attacks and kills another.
+ - Surge: Occurs when a card is played from the hand on the same turn it was added to the hand.

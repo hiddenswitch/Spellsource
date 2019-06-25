@@ -616,7 +616,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private com.hiddenswitch.spellsource.client.models.GameState getClientGameState(com.hiddenswitch.spellsource.common.GameState state) {
-		GameContext simulatedContext = new GameContext(state.player1, state.player2, new GameLogic(), new DeckFormat());
+		GameContext simulatedContext = new GameContext();
 		simulatedContext.setGameState(state);
 
 		// Compute the local player

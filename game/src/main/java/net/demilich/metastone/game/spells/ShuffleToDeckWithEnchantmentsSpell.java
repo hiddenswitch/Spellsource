@@ -3,45 +3,102 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.custom.AddEnchantmentToMinionCardSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 /**
- * A work in progress spell that implements Immortal Prelate.
+ * Shuffles the {@code target} {@link net.demilich.metastone.game.entities.EntityType#MINION} into the player's deck
+ * with the enchantments
  */
 public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		if (target != null) {
-			Card card = target.getSourceCard();
-			SpellUtils.processKeptEnchantments(context, target, card);
-			if (target instanceof Actor) {
-				final Actor actor = (Actor) target;
-				List<Enchantment> enchantments = actor.getEnchantmentsFromContext(context);
-				for (Enchantment enchantment : enchantments) {
-					EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
-					enchantmentDesc.eventTrigger = enchantment.getTriggers().get(0).getDesc();
-					enchantmentDesc.countByValue = enchantment.isCountByValue();
-					enchantmentDesc.keepAfterTransform = enchantment.isKeptAfterTransform();
-					enchantmentDesc.maxFires = enchantment.getMaxFires();
-					enchantmentDesc.spell = enchantment.getSpell();
-					enchantmentDesc.oneTurn = enchantment.oneTurnOnly();
-					enchantmentDesc.persistentOwner = enchantment.hasPersistentOwner();
-					card.addStoredEnchantment(enchantmentDesc);
-				}
-			}
-			context.getLogic().shuffleToDeck(player, card, false, true);
+		if (target == null) {
+			return;
+		}
+
+		if (!(target instanceof Actor)) {
+			return;
 		}
 
 
+		Actor actor = (Actor) target;
+		List<Enchantment> enchantments = context.getTriggersAssociatedWith(actor.getReference()).stream()
+				.filter(Enchantment.class::isInstance)
+				.map(Enchantment.class::cast)
+				.filter(e -> !e.isExpired())
+				.collect(toList());
+
+		Card sourceCard = target.getSourceCard();
+		List<EnchantmentDesc> copies = enchantments.stream()
+				.filter(e -> e.getSourceCard().getId() != sourceCard.getId())
+				.map(enchantment -> {
+					EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
+					enchantmentDesc.eventTrigger = enchantment.getTriggers().get(0).getDesc().clone();
+					enchantmentDesc.countByValue = enchantment.isCountByValue();
+					enchantmentDesc.keepAfterTransform = enchantment.isKeptAfterTransform();
+					enchantmentDesc.maxFires = enchantment.getMaxFires();
+					enchantmentDesc.spell = enchantment.getSpell().clone();
+					enchantmentDesc.oneTurn = enchantment.oneTurnOnly();
+					enchantmentDesc.persistentOwner = enchantment.hasPersistentOwner();
+					return enchantmentDesc;
+				})
+				.collect(toList());
+
+		// Get the deathrattles.
+		List<SpellDesc> deathrattles = new ArrayList<>(actor.getDeathrattleEnchantments());
+
+		if (!actor.isDestroyed()) {
+			context.getLogic().removeActor(actor, true);
+		}
+
+		// Remove the attack and HP bonuses from the source card, if they exist
+		sourceCard.getAttributes().remove(Attribute.ATTACK_BONUS);
+		sourceCard.getAttributes().remove(Attribute.HP_BONUS);
+		// Shuffles a copy of Immortal Prelate back into the deck
+		Card card = CopyCardSpell.copyCard(context, player, sourceCard, (playerId, copiedCard) -> {
+			moveCopyToDestination(context, player, target, copiedCard);
+		});
+
+
+		for (EnchantmentDesc enchantmentDesc : copies) {
+			SpellUtils.castChildSpell(context, player, AddEnchantmentToMinionCardSpell.create(card, enchantmentDesc), source, card);
+		}
+
+		// Also add the deathrattles
+		for (int i = 0; i < deathrattles.size(); i++) {
+			// Skip this deathrattle.
+			SpellDesc deathrattle = deathrattles.get(i);
+			if ((int) deathrattle.getOrDefault(SpellArg.DEATHRATTLE_ID, i) == (int) desc.getOrDefault(SpellArg.DEATHRATTLE_ID, -1)) {
+				continue;
+			}
+			SpellUtils.castChildSpell(context, player, AddDeathrattleSpell.create(card.getReference(), deathrattle), source, card);
+		}
+	}
+
+	@Suspendable
+	protected void moveCopyToDestination(GameContext context, Player player, Entity target, Card copiedCard) {
+		// Da Undatakah interaction
+		if (!copiedCard.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			copiedCard.setAttribute(Attribute.KEEPS_ENCHANTMENTS);
+		}
+		context.getLogic().shuffleToDeck(player, copiedCard, false);
+		SpellUtils.processKeptEnchantments(target, copiedCard);
 	}
 }
 

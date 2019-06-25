@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Taunt. Sacrifice: Summon a 2/2 Ghoul with Taunt.",
+  "description": "Guard. Sacrifice: Summon a 2/2 Ghoul with Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
@@ -14,9 +14,12 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "SummonSpell",
-      "card": "token_lich_ghoul_taunt",
-      "targetPlayer": "SELF"
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_lich_ghoul_taunt",
+        "targetPlayer": "SELF"
+      }
     }
   },
   "attributes": {

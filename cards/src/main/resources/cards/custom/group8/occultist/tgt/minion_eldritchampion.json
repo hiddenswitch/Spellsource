@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Whenever your hero takes damage on your turn, deal 3 damage to the enemy hero.",
+  "description": "Whenever your hero takes damage on your turn, deal 3 damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -24,9 +24,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "THE_GRAND_TOURNAMENT"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

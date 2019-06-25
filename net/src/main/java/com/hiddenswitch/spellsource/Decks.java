@@ -87,6 +87,7 @@ public interface Decks {
 		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = Inventory
 				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft())
+						.setStandard(request.isStandardDeck())
 						.withHeroCardId(request.getHeroCardId())
 						.withFormat(request.getFormat()));
 

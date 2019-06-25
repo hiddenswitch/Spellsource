@@ -1,26 +1,16 @@
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'com.hiddenswitch'
-            artifactId = 'net'
-            version = project.version
-
-            from components.java
-        }
-    }
-}
-
 buildscript {
     repositories {
         mavenCentral()
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
     }
 }
 
-def hazelcastJvmArgs = ["--add-modules", "java.se",
+def jdk8 = JavaVersion.current() == JavaVersion.VERSION_1_8
+
+def hazelcastJvmArgs = jdk8 ? [] : ["--add-modules", "java.se",
                         "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
                         "--add-opens", "java.base/java.lang=ALL-UNNAMED",
                         "--add-opens", "java.base/java.nio=ALL-UNNAMED",
@@ -35,22 +25,34 @@ def debugSystemProperties = ["spellsource.port"                        : "8080",
                              "games.defaultNoActivityTimeout"          : "999999000",
                              "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory"]
 
-apply plugin: 'application'
-mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
+def mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 configurations.all {
     resolutionStrategy {
         force 'com.hazelcast:hazelcast:3.11'
         force 'org.apache.commons:commons-lang3:3.5'
-        force 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+        force 'com.fasterxml.jackson.core:jackson-core:2.9.8'
         force 'com.fasterxml.jackson.core:annotations:2.9.0'
-        force 'com.fasterxml.jackson.core:databind:2.9.7'
+        force 'com.fasterxml.jackson.core:databind:2.9.8'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
     }
 }
 
 shadowJar {
+    mergeServiceFiles()
+    classifier = null;
+    configurations = [project.configurations.compile]
     zip64 true
+}
+
+artifacts {
+    archives shadowJar
 }
 
 repositories {
@@ -84,19 +86,19 @@ dependencies {
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
-    
+
     /* Hazelcast Consul discovery support is pretty spotty
     compile group: 'org.bitsofinfo', name: 'hazelcast-consul-discovery-spi', version: '1.0-RC9'
     compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: '3.0.3'
     compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http-hc', version: '3.0.3'
     */
-    
+
     compile project(':game')
     compile project(':cards')
     compile project(':client')
     compile project(':vertx-sync')
 
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
     testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
@@ -114,7 +116,7 @@ test {
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
     }
-    
+
     if (System.properties.containsKey("exclude-tests")) {
         exclude(System.properties.getProperty("exclude-tests").split(","))
     }

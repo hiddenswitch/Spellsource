@@ -40,6 +40,13 @@ import java.io.Serializable;
  *         "value": 1
  *     }
  * </pre>
+ * <p>
+ * When a target isn't specified, the card cost modification applies to the hand of the owner of this card cost modifier
+ * (i.e. {@link EntityReference#FRIENDLY_HAND}.
+ * <p>
+ * To make a card cost modifier apply to both player's hands during both player's turns, {@link
+ * CardCostModifierArg#TARGET_PLAYER} must be {@link TargetPlayer#BOTH} and the {@code target} should be {@link
+ * EntityReference#BOTH_HANDS}.
  *
  * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
  * 		effects into play.
@@ -160,6 +167,14 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 			case OWNER:
 				applies &= card.getOwner() == player.getOwner();
 				break;
+			case PLAYER_1:
+				applies &= card.getOwner() == GameContext.PLAYER_1;
+				break;
+			case PLAYER_2:
+				applies &= card.getOwner() == GameContext.PLAYER_2;
+				break;
+			case BOTH:
+			case EITHER:
 			default:
 				break;
 		}

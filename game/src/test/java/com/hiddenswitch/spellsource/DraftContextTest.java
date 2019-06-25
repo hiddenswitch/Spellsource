@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-/**
- * Created by bberman on 12/14/16.
- */
 public class DraftContextTest {
 	@Test
 	public void testDraftComplete() throws SuspendExecution, CardParseException, IOException, URISyntaxException {

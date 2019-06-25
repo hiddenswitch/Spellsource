@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Taunt Costs (1) less for each Dragon you control.",
+  "description": "Guard Costs (1) less for each Dragon you control.",
   "attributes": {
     "TAUNT": true
   },

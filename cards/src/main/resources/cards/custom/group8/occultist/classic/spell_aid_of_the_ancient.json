@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Summon three 1/1 Tentacles with Taunt.",
+  "description": "Summon three 1/1 Tentacles with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
@@ -15,9 +15,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CLASSIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

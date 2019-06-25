@@ -6,6 +6,9 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 
+/**
+ * Combines multiple card sources together and includes cards from all of them.
+ */
 public class CombinedSource extends CardSource {
 	public CombinedSource(CardSourceDesc desc) {
 		super(desc);

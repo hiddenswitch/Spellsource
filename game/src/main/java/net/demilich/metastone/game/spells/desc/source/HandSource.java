@@ -7,6 +7,9 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.util.Map;
 
+/**
+ * Returns a list of cards in the hand.
+ */
 public class HandSource extends CardSource {
 
 	public HandSource(CardSourceDesc desc) {

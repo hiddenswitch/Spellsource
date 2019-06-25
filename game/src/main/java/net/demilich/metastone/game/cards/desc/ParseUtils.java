@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -79,6 +80,12 @@ public class ParseUtils {
 				return EntityReference.OTHER_ENEMY_MINIONS;
 			case "leftmost_friendly_card_hand":
 				return EntityReference.LEFTMOST_FRIENDLY_CARD_HAND;
+			case "leftmost_enemy_card_hand":
+				return EntityReference.LEFTMOST_ENEMY_CARD_HAND;
+			case "friendly_last_spell_played_this_turn":
+				return EntityReference.FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN;
+			case "rightmost_friendly_card_hand":
+				return EntityReference.RIGHTMOST_FRIENDLY_CARD_HAND;
 			case "last_card_played":
 				return EntityReference.LAST_CARD_PLAYED;
 			case "friendly_last_card_played":
@@ -197,8 +204,12 @@ public class ParseUtils {
 				return EntityReference.CURRENT_SUMMONING_MINION;
 			case "enemy_middle_minions":
 				return EntityReference.ENEMY_MIDDLE_MINIONS;
+			case "friendly_last_minion_played":
+				return EntityReference.FRIENDLY_LAST_MINION_PLAYED;
+			case "other_friendly_characters":
+				return EntityReference.OTHER_FRIENDLY_CHARACTERS;
 			default:
-				return null;
+				throw new NullPointerException(str);
 		}
 	}
 
@@ -211,7 +222,7 @@ public class ParseUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) {
+	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) throws JsonMappingException {
 		switch (valueType) {
 			case INTEGER:
 				return jsonData.asInt();
@@ -373,23 +384,32 @@ public class ParseUtils {
 			case CHOOSE_ONE_OVERRIDE:
 				return Enum.valueOf(ChooseOneOverride.class, jsonData.asText());
 			case DYNAMIC_DESCRIPTION:
-				if (jsonData.toString().startsWith("\"")) {
+				if (jsonData.isTextual()) {
 					DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
-					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.toString().replace("\"", ""));
-					return descriptionDesc;
+					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.asText());
+					return descriptionDesc.create();
 				}
-				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData);
+				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData).create();
 			case DYNAMIC_DESCRIPTION_ARRAY:
 				ArrayNode jsonArray = (ArrayNode) jsonData;
-				DynamicDescription[] array2 = new DynamicDescription[jsonArray.size()];
-				for (int i = 0; i < array2.length; i++) {
-					if (jsonArray.get(i).toString().startsWith("\"")) {
+				DynamicDescription[] dynamicDescriptions = new DynamicDescription[jsonArray.size()];
+				for (int i = 0; i < dynamicDescriptions.length; i++) {
+					if (jsonArray.get(i).isTextual()) {
 						DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
-						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).toString().replace("\"", ""));
-						array2[i] = descriptionDesc.create();
-					} else array2[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).asText());
+						dynamicDescriptions[i] = descriptionDesc.create();
+					} else {
+						dynamicDescriptions[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+					}
 				}
-				return array2;
+				return dynamicDescriptions;
+			case ZONES:
+				ArrayNode zoneArray = (ArrayNode) jsonData;
+				Zones[] zones = new Zones[zoneArray.size()];
+				for (int i = 0; i < zoneArray.size(); i++) {
+					zones[i] = Enum.valueOf(Zones.class, jsonData.get(i).asText());
+				}
+				return zones;
 			default:
 				break;
 		}

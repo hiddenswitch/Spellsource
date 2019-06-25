@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Battlecry: Draw a spell. Restore Health to your hero equal to its Cost.",
+  "description": "Opener: Draw a spell. Restore Health to your champion equal to its Cost.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

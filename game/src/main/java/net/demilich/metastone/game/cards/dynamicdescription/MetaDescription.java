@@ -2,7 +2,7 @@ package net.demilich.metastone.game.cards.dynamicdescription;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
 
 /**
  * Concatenates the strings and {@link DynamicDescription} objects specified in its {@link
@@ -14,11 +14,11 @@ public class MetaDescription extends DynamicDescription {
 	}
 
 	@Override
-	public String resolveFinalString(GameContext context, Player player, Card card) {
+	public String resolveFinalString(GameContext context, Player player, Entity entity) {
 		DynamicDescription[] dynamicDescriptions = (DynamicDescription[]) getDesc().get(DynamicDescriptionArg.DESCRIPTIONS);
 		String description = "";
 		for (DynamicDescription dynamicDescription : dynamicDescriptions) {
-			description += dynamicDescription.resolveFinalString(context, player, card);
+			description += dynamicDescription.resolveFinalString(context, player, entity);
 		}
 		return description;
 	}

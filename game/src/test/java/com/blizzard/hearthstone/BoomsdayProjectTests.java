@@ -7,13 +7,18 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.environment.EnvironmentDeque;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static org.testng.Assert.*;
 
@@ -118,6 +123,10 @@ public class BoomsdayProjectTests extends TestBase {
 
 	@Test
 	public void testTreantSynergyCards() {
+		EnvironmentDeque<Integer> deque = new EnvironmentDeque<>();
+		deque.addLast(5);
+		assertFalse(deque.isEmpty());
+
 		// Dendrologist, mulchmuncher, landscaping
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_dendrologist");
@@ -227,8 +236,10 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testUnexpectedResults() { //well hopefully we can get some expected results here
+	public void testUnexpectedResults() {
+		// Well hopefully we can get some expected results here
 		runGym((context, player, opponent) -> {
+			context.getLogic().setRandom(new XORShiftRandom(101010L));
 			// Just summon basic cards so that there aren't so many weird interactions
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_unexpected_results");
@@ -237,6 +248,7 @@ public class BoomsdayProjectTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
+			context.getLogic().setRandom(new XORShiftRandom(101010L));
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "minion_bloodmage_thalnos");
 			playCard(context, player, "spell_unexpected_results");
@@ -293,10 +305,10 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testAutoDefenseMatric() {
+	public void testAutoDefenseMatrix() {
 		runGym((context, player, opponent) -> {
 			Minion attacker = playMinionCard(context, opponent, "minion_upgradeable_framebot");
-			Minion defender = playMinionCard(context, player, "token_defender"); //he lives!
+			Minion defender = playMinionCard(context, player, "token_defender");
 			Minion bolvar = playMinionCard(context, player, "minion_bolvar_fireblood");
 			playCard(context, player, "secret_autodefense_matrix");
 			if (context.getActivePlayerId() == player.getId()) {
@@ -773,7 +785,7 @@ public class BoomsdayProjectTests extends TestBase {
 					.findFirst()
 					.orElseThrow(NullPointerException::new);
 
-			context.getLogic().performGameAction(player.getId(), choice);
+			context.performAction(player.getId(), choice);
 			assertTrue(subject.isDestroyed());
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "spell_starfall");

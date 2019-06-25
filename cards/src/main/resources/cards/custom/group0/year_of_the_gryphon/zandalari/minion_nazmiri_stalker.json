@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "targetEntityType": "MINION",
-      "sourcePlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "MetaSpell",
@@ -23,8 +23,8 @@
         },
         {
           "class": "CastCardsSpell",
-          "secondaryTarget": "EVENT_SOURCE",
-          "target": "ADJACENT_TO_TARGET"
+          "target": "ADJACENT_TO_TARGET",
+          "secondaryTarget": "EVENT_SOURCE"
         }
       ]
     }

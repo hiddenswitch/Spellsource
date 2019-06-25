@@ -1,13 +1,13 @@
 {
-  "name": "Lord Cookie",
+  "name": "Faefellow Crumble",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "race": "MURLOC",
-  "description": "Whenever you summon a Pirate, draw a Murloc. Whenever you summon a Murloc, draw a Pirate.",
+  "race": "FAE",
+  "description": "Whenever you summon a Pirate, draw a Fae. Whenever you summon a Fae, draw a Pirate.",
   "triggers": [
     {
       "eventTrigger": {
@@ -20,7 +20,7 @@
         "value": 1,
         "cardFilter": {
           "class": "CardFilter",
-          "race": "MURLOC",
+          "race": "FAE",
           "cardType": "MINION"
         }
       }
@@ -28,7 +28,7 @@
     {
       "eventTrigger": {
         "class": "MinionSummonedTrigger",
-        "race": "MURLOC",
+        "race": "FAE",
         "targetPlayer": "SELF"
       },
       "spell": {

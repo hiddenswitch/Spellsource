@@ -13,40 +13,62 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "RevealCardSpell",
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "OrCondition",
+        "conditions": [
           {
-            "class": "RemoveCardSpell",
-            "target": "OUTPUT"
+            "class": "DeckContainsCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "spell_flamestrike"
+            }
           },
           {
-            "class": "DamageSpell",
-            "target": "ENEMY_MINIONS",
-            "value": {
-              "class": "SpellDamageValueProvider",
-              "value": 4
+            "class": "HoldsCardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "spell_flamestrike"
             }
           }
         ]
       },
-      "cardFilter": {
-        "class": "SpecificCardFilter",
-        "card": "spell_flamestrike"
-      },
-      "cardSource": {
-        "class": "CombinedSource",
-        "cardSources": [
-          {
-            "class": "HandSource",
-            "targetPlayer": "SELF"
-          },
-          {
-            "class": "DeckSource",
-            "targetPlayer": "SELF"
-          }
-        ]
+      "spell": {
+        "class": "RevealCardSpell",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "RemoveCardSpell",
+              "target": "OUTPUT"
+            },
+            {
+              "class": "DamageSpell",
+              "target": "ENEMY_MINIONS",
+              "value": {
+                "class": "SpellDamageValueProvider",
+                "value": 4
+              }
+            }
+          ]
+        },
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "card": "spell_flamestrike"
+        },
+        "cardSource": {
+          "class": "CombinedSource",
+          "cardSources": [
+            {
+              "class": "HandSource",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "DeckSource",
+              "targetPlayer": "SELF"
+            }
+          ]
+        }
       }
     }
   },

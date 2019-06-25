@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: Deal 2 damage to all other characters and Freeze them.",
+  "description": "Opener: Deal 2 damage to all other characters and Freeze them.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

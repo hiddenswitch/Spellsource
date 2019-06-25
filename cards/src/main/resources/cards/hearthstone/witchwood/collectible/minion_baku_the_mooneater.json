@@ -9,7 +9,7 @@
   "race": "BEAST",
   "description": "Start of Game: If your deck has only odd-Cost cards, upgrade your Hero Power.",
   "collectible": true,
-  "set": "WITCHWOOD",
+  "set": "HALL_OF_FAME",
   "fileFormatVersion": 1,
   "gameTriggers": [
     {

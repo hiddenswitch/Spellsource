@@ -10,8 +10,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -143,9 +145,20 @@ public class Player extends Entity implements Serializable {
 	 */
 
 	public Player(GameDeck deck, String name) {
+		this();
 		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy());
 		this.setHero(deck.getHeroCard().createHero());
 		this.setName(name);
+	}
+
+	/**
+	 * Creates a player with the hero card of the specified hero class
+	 *
+	 * @param heroClass
+	 */
+	public Player(HeroClass heroClass) {
+		this();
+		this.setHero(HeroClass.getHeroCard(heroClass).createHero());
 	}
 
 	/**
@@ -533,4 +546,12 @@ public class Player extends Entity implements Serializable {
 		return getHero().getSourceCard();
 	}
 
+	/**
+	 * Returns a {@link TargetPlayer} specifier for this player.
+	 *
+	 * @return Either {@link TargetPlayer#PLAYER_1} or {@link TargetPlayer#PLAYER_2}.
+	 */
+	public TargetPlayer toTargetPlayer() {
+		return getId() == GameContext.PLAYER_1 ? TargetPlayer.PLAYER_1 : TargetPlayer.PLAYER_2;
+	}
 }

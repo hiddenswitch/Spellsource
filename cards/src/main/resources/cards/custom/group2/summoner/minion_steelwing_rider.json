@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Taunt, Windfury. Invoke (7): Summon a copy of this.",
+  "description": "Guard, Extra Strike. Invoke (7): Summon a copy of this.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"

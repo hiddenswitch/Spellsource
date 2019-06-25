@@ -71,24 +71,26 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 
 			Card secretCard = context.getLogic().removeRandom(secretCards);
 
-			if (secretCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				secretCard.setId(context.getLogic().generateId());
-				secretCard.setOwner(player.getId());
-				secretCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-			}
-
-			SpellDesc secretSpellDesc = secretCard.getSpell();
-			Secret secret = (Secret) secretSpellDesc.get(SpellArg.SECRET);
-			context.getLogic().playSecret(player, secret, false);
-			if (secretCard.getZone() == Zones.DECK) {
-				context.getLogic().removeCard(secretCard);
-			} else {
-				secretCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-				context.getLogic().removeCard(secretCard);
-			}
-
-
+			putSecretIntoPlay(context, player, secretCard);
 		}
 	}
 
+	@Suspendable
+	protected void putSecretIntoPlay(GameContext context, Player player, Card secretCard) {
+		if (secretCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+			secretCard.setId(context.getLogic().generateId());
+			secretCard.setOwner(player.getId());
+			secretCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+		}
+
+		SpellDesc secretSpellDesc = secretCard.getSpell();
+		Secret secret = (Secret) secretSpellDesc.get(SpellArg.SECRET);
+		context.getLogic().playSecret(player, secret, false);
+		if (secretCard.getZone() == Zones.DECK) {
+			context.getLogic().removeCard(secretCard);
+		} else {
+			secretCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			context.getLogic().removeCard(secretCard);
+		}
+	}
 }

@@ -9,9 +9,8 @@
   "description": "Overkill: Double this minion's Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
       "class": "OverkillSpell",

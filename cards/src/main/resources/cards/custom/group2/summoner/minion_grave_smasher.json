@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Deathrattle: Copy a random Deathrattle card from your deck.",
+  "description": "Aftermath: Copy a random Aftermath card from your deck.",
   "deathrattle": {
     "class": "CopyCardSpell",
     "target": "FRIENDLY_DECK",

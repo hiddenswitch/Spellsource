@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Roast three 1-Cost minions.",
+  "description": "Opener: Roast three 1-Cost minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

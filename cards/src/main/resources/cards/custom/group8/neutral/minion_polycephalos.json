@@ -7,26 +7,21 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Taunt. Battlecry: Gain +1/+1 for each enemy Deathrattle minion.",
+  "description": "Dash. Opener: Gain +1 Attack for each enemy minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "value": {
+      "attackBonus": {
         "class": "EntityCounter",
-        "target": "ENEMY_MINIONS",
-        "filter": {
-          "class": "CardFilter",
-          "attribute": "DEATHRATTLES",
-          "operation": "HAS"
-        }
+        "target": "ENEMY_MINIONS"
       }
     }
   },
   "attributes": {
     "BATTLECRY": true,
-    "TAUNT": true
+    "RUSH": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

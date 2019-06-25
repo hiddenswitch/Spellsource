@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If your deck has no spells, restore all friendly characters to full health.",
+  "description": "Opener: If your deck has no spells, restore all friendly characters to full health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

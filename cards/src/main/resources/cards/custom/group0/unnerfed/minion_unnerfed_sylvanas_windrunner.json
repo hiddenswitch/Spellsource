@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Take control of a random enemy minion.",
+  "description": "Aftermath: Take control of a random enemy minion.",
   "deathrattle": {
     "class": "MindControlSpell",
     "target": "ENEMY_MINIONS",

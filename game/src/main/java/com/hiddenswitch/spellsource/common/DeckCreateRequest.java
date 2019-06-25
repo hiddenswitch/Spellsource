@@ -26,6 +26,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private String heroCardId;
 	private boolean draft;
 	private String format;
+	private boolean isStandardDeck;
 	private List<String> inventoryIds = new ArrayList<>();
 	private List<String> cardIds = new ArrayList<>();
 
@@ -306,5 +307,14 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				.withHeroClass(heroClass)
 				.withName(name)
 				.withUserId(userId);
+	}
+
+	public boolean isStandardDeck() {
+		return isStandardDeck;
+	}
+
+	public DeckCreateRequest setStandardDeck(boolean standardDeck) {
+		isStandardDeck = standardDeck;
+		return this;
 	}
 }

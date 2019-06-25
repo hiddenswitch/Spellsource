@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static net.demilich.metastone.game.entities.heroes.HeroClass.*;
 
 /**
  * Progresses a draft.
@@ -54,35 +55,24 @@ public class DraftLogic {
 	}
 
 	private List<HeroClass> createHeroChoices() {
-		List<HeroClass> classes = Arrays.asList(
-				HeroClass.EGGPLANT,
-				HeroClass.ICE,
-				HeroClass.JADE,
-				HeroClass.LEATHER,
-				HeroClass.NAVY,
-				HeroClass.RUST,
-				HeroClass.OBSIDIAN,
-				HeroClass.AMBER,
-				HeroClass.TOAST
-		);
+		List<HeroClass> classes = HeroClass.getBaseClasses();
 
+		// For now, simply return all the classes
+		return classes;
+		/*
 		Collections.shuffle(classes, getRandom());
 		return Arrays.asList(classes.get(0), classes.get(1), classes.get(2));
+		*/
 	}
 
 	private List<List<String>> createDraftCards(HeroClass hero) {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
 		List<CardSet> equals = Arrays.asList(
-				CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
-				CardSet.WITCHWOOD,
-				CardSet.BOOMSDAY_PROJECT,
-				CardSet.KOBOLDS_AND_CATACOMBS,
+				CardSet.VERDANT_DREAMS,
 				CardSet.BATTLE_FOR_ASHENVALE,
-				CardSet.SANDS_OF_TIME
+				CardSet.SANDS_OF_TIME,
+				CardSet.SPELLSOURCE_BASIC
 		);
 
 		// Until we have enough mean streets cards, don't use it

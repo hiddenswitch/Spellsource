@@ -56,3 +56,4 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 		return desc.hashCode();
 	}
 }
+

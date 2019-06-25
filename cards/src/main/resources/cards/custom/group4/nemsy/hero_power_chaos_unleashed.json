@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Discover a new Hero Power.",
+  "description": "Discover a new Skill.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

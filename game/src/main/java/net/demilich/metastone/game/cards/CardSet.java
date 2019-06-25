@@ -26,6 +26,7 @@ public enum CardSet {
 	WITCHWOOD,
 	BOOMSDAY_PROJECT,
 	RASTAKHANS_RUMBLE,
+	RISE_OF_SHADOWS,
 	BLIZZARD_ADVENTURE,
 	HALL_OF_FAME,
 	CUSTOM,
@@ -39,7 +40,7 @@ public enum CardSet {
 	SPELLSOURCE;
 
 	public static CardSet latestHearthstoneExpansion() {
-		return RASTAKHANS_RUMBLE;
+		return RISE_OF_SHADOWS;
 	}
 
 	public boolean isHearthstoneSet() {

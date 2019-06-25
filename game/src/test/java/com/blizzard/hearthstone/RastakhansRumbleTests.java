@@ -379,13 +379,12 @@ public class RastakhansRumbleTests extends TestBase {
 	}
 
 	@Test
-	@Ignore("card needs to be re-enabled")
 	public void testImmortalPrelate() {
 		runGym((context, player, opponent) -> {
-			Minion ip = playMinionCard(context, player, "minion_immortal_prelate");
-			playCard(context, player, "spell_blessing_of_wisdom", ip);
-			destroy(context, ip);
-			context.getLogic().drawCard(player.getId(), null);
+			Minion prelate = playMinionCard(context, player, "minion_immortal_prelate");
+			playCard(context, player, "spell_blessing_of_wisdom", prelate);
+			destroy(context, prelate);
+			context.getLogic().drawCard(player.getId(), player);
 			shuffleToDeck(context, player, "minion_wisp");
 			playCard(context, player, player.getHand().get(0));
 			attack(context, player, player.getMinions().get(0), opponent.getHero());

@@ -1,12 +1,12 @@
 {
-  "name": "Stormwind Commander",
+  "name": "Firegate Commander",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Your Knights have Charge.",
+  "description": "Your Knights have Blitz.",
   "aura": {
     "class": "AttributeAura",
     "target": "OTHER_FRIENDLY_MINIONS",

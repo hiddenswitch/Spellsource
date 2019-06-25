@@ -7,13 +7,9 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Deathrattle: Add a random Beast to your hand. It Costs (2) less.",
+  "description": "Aftermath: Add a random Beast to your hand. It Costs (2) less.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
-    "cardFilter": {
-      "class": "RaceFilter",
-      "race": "BEAST"
-    },
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "OUTPUT",
@@ -23,6 +19,10 @@
         "value": 2,
         "operation": "SUBTRACT"
       }
+    },
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
     }
   },
   "attributes": {

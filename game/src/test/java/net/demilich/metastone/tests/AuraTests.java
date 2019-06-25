@@ -15,6 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestBehaviour;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
@@ -48,7 +49,7 @@ public class AuraTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), destroyCard);
 		GameAction destroyAction = destroyCard.play();
 		destroyAction.setTarget(testMinion2);
-		context.getLogic().performGameAction(player.getId(), destroyAction);
+		context.performAction(player.getId(), destroyAction);
 		Assert.assertEquals(testMinion1.getAttack(), 2);
 		Assert.assertEquals(direWolf.getAttack(), 2);
 		Assert.assertEquals(testMinion3.getAttack(), 6);
@@ -87,7 +88,7 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(minion2.getAttack(), 2);
 		PhysicalAttackAction attackAction = new PhysicalAttackAction(enemyMinion.getReference());
 		attackAction.setTarget(minion2);
-		context.getLogic().performGameAction(opponent.getId(), attackAction);
+		context.performAction(opponent.getId(), attackAction);
 		Assert.assertEquals(minion1.getAttack(), 1);
 
 		card = new TestMinionCard(1, 1);
@@ -118,7 +119,7 @@ public class AuraTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), facelessCard);
 		GameAction action = facelessCard.play();
 		action.setTarget(warleader);
-		context.getLogic().performGameAction(player.getId(), action);
+		context.performAction(player.getId(), action);
 		Assert.assertEquals(murloc.getAttack(), 6);
 		Assert.assertEquals(murloc.getHp(), 1);
 	}
@@ -146,7 +147,7 @@ public class AuraTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), mindControlCard);
 		GameAction mindControl = mindControlCard.play();
 		mindControl.setTarget(auraMinion);
-		context.getLogic().performGameAction(player.getId(), mindControl);
+		context.performAction(player.getId(), mindControl);
 
 		Assert.assertEquals(auraMinion.getOwner(), player.getId());
 		Assert.assertEquals(minion1.getAttack(), 2);
@@ -180,7 +181,7 @@ public class AuraTests extends TestBase {
 		context.getLogic().receiveCard(opponent.getId(), facelessCard);
 		GameAction action = facelessCard.play();
 		action.setTarget(dummy);
-		context.getLogic().performGameAction(opponent.getId(), action);
+		context.performAction(opponent.getId(), action);
 
 		Minion facelessCopy = getSummonedMinion(opponent.getMinions());
 		Assert.assertEquals(facelessCopy.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS), false);

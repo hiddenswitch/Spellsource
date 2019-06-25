@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Charge. Whenever this attacks and kills a minion, draw a card.",
+  "description": "Blitz. Whenever this attacks and kills a minion, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

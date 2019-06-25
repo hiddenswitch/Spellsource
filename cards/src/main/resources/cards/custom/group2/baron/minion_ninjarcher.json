@@ -15,6 +15,7 @@
     "spell": {
       "class": "MissilesSpell",
       "target": "ENEMY_CHARACTERS",
+      "howMany": 1,
       "value": 2
     }
   },

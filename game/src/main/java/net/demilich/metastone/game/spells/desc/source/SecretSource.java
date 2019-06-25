@@ -7,6 +7,10 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
+/**
+ * Returns a list of {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} cards from the controller's hero
+ * class or the {@link CardSourceArg#HERO_CLASS} if this controller ordinarily does not have secrets.
+ */
 public class SecretSource extends CardSource implements HasCardCreationSideEffects {
 
 	public SecretSource(CardSourceDesc desc) {

@@ -5,12 +5,13 @@ from math import factorial
 from multiprocessing import Queue
 from typing import Callable, Sequence, Union
 
-from spellsource.behaviour import Behaviour
+from spellsource.behaviour import Behaviour, _WrapperBehaviour
 from spellsource.context import Context
 
 
 def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
-             behaviours: Sequence[Union[str, Behaviour, Callable[[], Behaviour]]] = (), mirrors: bool = False,
+             behaviours: Sequence[Union[str, Behaviour, _WrapperBehaviour, Callable[[], Behaviour]]] = (),
+             mirrors: bool = False,
              reduce: bool = True):
     """
     Run a simulation using AIs of a given deck matchup.
@@ -83,9 +84,11 @@ def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
             behaviours[i] = PythonBridge.getBehaviourByName(behaviour)
             assert behaviours[i] is not None
         elif isinstance(behaviour, Behaviour):
-            behaviours[i] = _Supplier(lambda: behaviour.clone().wrap(ctx))
+            behaviours[i] = _Supplier(lambda x=behaviour: x.clone().wrap(ctx))
+        elif isinstance(behaviour, _WrapperBehaviour):
+            behaviours[i] = _Supplier(lambda x=behaviour: x.clone())
         elif isinstance(behaviour, Callable):
-            behaviours[i] = _Supplier(lambda: behaviour().wrap(ctx))
+            behaviours[i] = _Supplier(lambda x=behaviour: x().wrap(ctx))
 
     f = factorial
     estimated_length = f(len(decks)) // f(2) // f(len(decks) - 2)

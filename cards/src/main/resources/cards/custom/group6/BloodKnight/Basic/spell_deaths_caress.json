@@ -16,7 +16,7 @@
       "spell": {
         "class": "DamageSpell",
         "target": "SELF",
-		"value": {
+        "value": {
           "class": "SpellDamageValueProvider",
           "value": 3
         }

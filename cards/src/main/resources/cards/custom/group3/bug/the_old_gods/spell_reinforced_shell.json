@@ -1,0 +1,37 @@
+{
+  "name": "Reinforced Shell",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Give your Beasts +2 Health this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "aura": {
+      "class": "BuffAura",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "SILENCED",
+            "invert": true
+          },
+          {
+            "class": "CardFilter",
+            "race": "BEAST",
+            "cardType": "MINION"
+          }
+        ]
+      },
+      "hpBonus": 2
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
