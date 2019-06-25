@@ -1,5 +1,5 @@
 {
-  "name": "Xuen, the White Tiger",
+  "name": "Kumiho, Nine-tailed Kitsune",
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
@@ -7,9 +7,9 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Blitz. Deflect.",
+  "description": "Dash, Deflect.",
   "attributes": {
-    "CHARGE": true,
+    "RUSH": true,
     "DEFLECT": true
   },
   "collectible": false,

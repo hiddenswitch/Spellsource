@@ -1,67 +1,26 @@
 {
-  "name": "Keg Smash",
-  "baseManaCost": 3,
+  "name": "Mark of Despair",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Choose a minion and adjacent minions. Destroy the next one that takes damage.",
+  "description": "Choose a minion. Whenever it takes damage, destroy it.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AdjacentEffectSpell",
-        "spell1": {
-          "class": "AddAttributeSpell",
-          "attribute": "RESERVED_BOOLEAN_3"
-        },
-        "spell2": {
-          "class": "AddAttributeSpell",
-          "attribute": "RESERVED_BOOLEAN_3"
-        }
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "targetPlayer": "SELF"
       },
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "DamageReceivedTrigger",
-            "fireCondition": {
-              "class": "AttributeCondition",
-              "attribute": "RESERVED_BOOLEAN_3"
-            }
-          },
-          "spell": {
-            "class": "MetaSpell",
-            "spells": [
-              {
-                "class": "DestroySpell",
-                "target": "EVENT_TARGET"
-              },
-              {
-                "class": "AddEnchantmentSpell",
-                "target": "FRIENDLY_PLAYER",
-                "trigger": {
-                  "eventTrigger": {
-                    "class": "WillEndSequenceTrigger"
-                  },
-                  "spell": {
-                    "class": "RemoveAttributeSpell",
-                    "target": "ALL_MINIONS",
-                    "attribute": "RESERVED_BOOLEAN_3"
-                  },
-                  "maxFires": 1
-                }
-              }
-            ]
-          }
-        }
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
       }
-    ]
+    }
   },
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
-  "wiki": "Area of effect damage like Flamestrike counts as damage being dealt simultaneously, so all Keg Smashed targets will be destroyed."
 }

@@ -1,22 +1,22 @@
 {
-  "name": "Chi-Ji, the Red Crane",
+  "name": "Shitakiri, Slit-Tongue Suzume",
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 9,
-  "baseHp": 5,
+  "baseHp": 6,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. Whenever you cast a spell, restore #3 Health to all friendly characters.",
+  "description": "Deflect. Your other minions have Deflect during your opponent's turn.",
   "trigger": {
     "eventTrigger": {
-      "class": "SpellCastedTrigger",
-      "sourcePlayer": "SELF"
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
     },
-    "spell": {
-      "class": "HealSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "value": 3
+    "aura": {
+    "class": "AttributeAura",
+    "target": "ADJACENT_MINIONS",
+      "attribute": "AURA_DEFLECT"
     }
   },
   "attributes": {

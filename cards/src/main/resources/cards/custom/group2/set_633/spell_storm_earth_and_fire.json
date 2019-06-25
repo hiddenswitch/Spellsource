@@ -1,33 +1,58 @@
 {
-  "name": "Storm, Earth, and Fire",
+  "name": "Fury of the Elements",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "JADE",
+  "heroClass": "monk",
   "rarity": "FREE",
-  "description": "Summon two random Elemental Spirits.",
-  "targetSelection": "NONE",
-  "spell": {
-    "class": "MetaSpell",
-    "spells": [
+  "description": "Summon two different Elemental Spirits",
+  "condition": {
+    "class": "AndCondition",
+    "conditions": [
       {
-        "class": "SummonSpell",
-        "cards": [
-          "token_storm_spirit",
-          "token_earth_spirit",
-          "token_fire_spirit"
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_storm_spirit"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_earth_spirit"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_fire_spirit"
+            }
+          },
         ],
-        "randomTarget": true
+        "invert": true
       },
       {
-        "class": "SummonSpell",
-        "cards": [
-          "token_storm_spirit",
-          "token_earth_spirit",
-          "token_fire_spirit"
-        ],
-        "randomTarget": true
+        "class": "MinionCountCondition",
+        "value": 7,
+        "operation": "LESS"
       }
     ]
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_storm_spirit",
+      "token_earth_spirit",
+      "token_fire_spirit"
+    ],
+      "exclusive": true,
+      "randomTarget": true
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
