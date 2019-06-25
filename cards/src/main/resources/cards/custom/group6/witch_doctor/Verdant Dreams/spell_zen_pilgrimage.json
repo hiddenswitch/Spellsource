@@ -18,8 +18,12 @@
           "secret_secret_of_autumn",
           "secret_secret_of_twilight"
         ],
-        "randomTarget": true,
-        "howMany": 3
+        "randomTarget": true
+      },
+      "howMany": {
+        "class": "AttributeValueProvider",
+        "target": "TARGET",
+        "attribute": "BASE_MANA_COST"
       }
   },
   "collectible": true,
