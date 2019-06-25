@@ -3,10 +3,10 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "COPPER",
-  "baseAttack": 3,
-  "baseHp": 4,
+  "baseAttack": 4,
+  "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Quick Draw: Deal 1 damage to the enemy hero.",
+  "description": "Quick Draw: Deal 1 damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -18,7 +18,9 @@
       "value": 1
     }
   },
-  "attributes": {},
+  "attributes": {
+    "QUICK_DRAW": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

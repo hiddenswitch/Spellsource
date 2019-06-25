@@ -1,0 +1,35 @@
+{
+  "name": "Spooky Turret",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Quick Draw: Draw 2 cards and destroy this.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "value": 2
+        },
+        {
+          "class": "DestroySpell",
+          "target": "SELF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "QUICK_DRAW": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
