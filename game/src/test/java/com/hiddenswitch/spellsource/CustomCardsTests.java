@@ -1546,7 +1546,7 @@ public class CustomCardsTests extends TestBase {
 			int hpValue = 17;
 			chenToken.setHp(hpValue);
 			playCard(context, player, "spell_pyroblast", player.getHero());
-			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_chen_stormstout");
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_mienzhou");
 			assertEquals(player.getHero().getHp(), hpValue);
 			assertEquals(player.getMinions().size(), 0);
 		});
@@ -1560,7 +1560,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getMinions().size(), 0);
 			playCard(context, player, "spell_pyroblast", player.getHero());
-			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_chen_stormstout");
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_mienzhou");
 			assertEquals(player.getHero().getHp(), 30);
 			assertEquals(player.getHand().size(), 0);
 		});
@@ -1576,7 +1576,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getDeck().size(), 1);
 			assertEquals(player.getMinions().size(), 0);
 			playCard(context, player, "spell_pyroblast", player.getHero());
-			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_chen_stormstout");
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_mienzhou");
 			assertEquals(player.getHero().getHp(), 30);
 			assertEquals(player.getDeck().size(), 0);
 		});
