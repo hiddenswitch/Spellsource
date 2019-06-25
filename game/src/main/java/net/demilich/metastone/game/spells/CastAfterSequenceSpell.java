@@ -8,6 +8,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.spells.trigger.DidEndSequenceTrigger;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
@@ -84,7 +85,7 @@ public final class CastAfterSequenceSpell extends Spell {
 		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
 		enchantmentDesc.spell = spell;
 		enchantmentDesc.maxFires = 1;
-		enchantmentDesc.eventTrigger = new EventTriggerDesc(WillEndSequenceTrigger.class);
+		enchantmentDesc.eventTrigger = new EventTriggerDesc(DidEndSequenceTrigger.class);
 		context.getLogic().addGameEventListener(player, enchantmentDesc.create(), player);
 	}
 }

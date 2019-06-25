@@ -1,0 +1,31 @@
+{
+  "name": "Merciless Corruptor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Opener: Give your minions \"Aftermath: Deal 1 damage to all minions.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

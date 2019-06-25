@@ -8,6 +8,8 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.environment.EnvironmentDeque;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
@@ -234,8 +236,10 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testUnexpectedResults() { //well hopefully we can get some expected results here
+	public void testUnexpectedResults() {
+		// Well hopefully we can get some expected results here
 		runGym((context, player, opponent) -> {
+			context.getLogic().setRandom(new XORShiftRandom(101010L));
 			// Just summon basic cards so that there aren't so many weird interactions
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_unexpected_results");
@@ -244,6 +248,7 @@ public class BoomsdayProjectTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
+			context.getLogic().setRandom(new XORShiftRandom(101010L));
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "minion_bloodmage_thalnos");
 			playCard(context, player, "spell_unexpected_results");

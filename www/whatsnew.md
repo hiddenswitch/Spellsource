@@ -4,13 +4,84 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.30-2.0.30 (In Progress)
+### 0.8.34 (In Progress)
+
+Kahl of the Deep is now a 3/5, cost 5, that draws 3 cards for the opponent instead of 8. (1182)
+
+### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
+
+Bug fixes.
+
+Visit the new Windows development guide at http://playspellsource.com/windows-development/ for more about editing and authoring your own cards using the tools the developers use.
+
+##### Usability Fixes:
+
+ - Secrets and quests appear in the client again. (1029)
+ - Weapons now disappear when they are destroyed. (910)
+ - Challenges to play a match or make a friend invite now correctly pop up. 
+
+##### Content Additions:
+
+ - 14 new cards in the Dragoon class. (1118, 1172)
+
+##### Content Fixes:
+
+ - Oppressor Defender now costs 6 Mana, a 2/2 minion. (1112)
+ - Unnerving Spectre now costs 4 Mana, a 2/2 minion. (1112)
+ - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
+ - Hypnotic Beetle now costs 4 mana. (1114)
+ - Sharper Claws (Upgraded Skill) now renamed to Hone Claws. (1118)
+ - Both Hero Powers no longer restore Health now. (1118)
+ - Majestic Fennec is now a 4/6 Beast that restores 4 Health. (1118)
+ - Alder, Death Baron's Skill deals only 3 damage now. (1118)
+ - Venom Breath now costs 11 Mana. (1118)
+ - Conflagration now only deals 3 damage to a minion and the minions next to it. (1118)
+
+### 0.8.32-2.0.30 (Wednesday, June 5th, 2019)
 
 Bug fixes.
 
 ##### Content Fixes:
 
+ - Klive Icetooth now correctly plays its Opener. (1124)
+ - The End now applies to both player's hands and the stats effect applies before the Opener is evaluated. (1126)
+ - Uccian Hydra now correctly triggers. (1125)
+ - Yokai Bonder now reads, "Dash. Whenever this attacks, draw a Beast from your deck." (1123)
+ - Bogovanis now puts the Sourcestone into the opponent's deck. (1120)
+
+### 0.8.31-2.0.30 (Tuesday, May 28th, 2019)
+
+Updates from @Logovaz for Witch Doctor.
+
+New cards from @Muhframos for Occultist too!
+
+##### Content Additions:
+
+ - Significant additions to Occultist. (1057)
+
+##### Content Fixes:
+
+ - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
+ - Hatches the Dragon is no longer collectible. (1094)
+ - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
+ - Nature Rager now gains +1 Health instead of +1/+1. (1077)
+ - Ending the turn with an Infinite Warden on the board without an End Time on the board no longer crashes the game.
+
+### 0.8.30-2.0.30 (Monday, May 27th, 2019)
+
+Introducing the Spellsource Legendaries!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - New Spellsource Legendaries. (1074)
+
+##### Content Fixes:
+
  - Daring Duelist now only draws a card when it survives damage. (1111)
+ - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
+ - Copying minions that have jailed other minions no longer causes errors.
 
 ### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
 
@@ -73,9 +144,13 @@ Thanks to a contribution from @Logovaz, there are new cards for Senzaku!
 The following keywords have been consistently applied to Spellsource cards:
 
  - Champion: Your player character. When this dies, you lose the game.
+ - Skill: Your champion's ability.
  - Skill: A spell your Champion can play every turn.
  - Opener: Occurs whenever the card is played from the hand.
  - Aftermath: Occurs whenever a minion dies (horribly) on the battlefield.
+ - Elusive: Cannot be targeted by spells or skills.
+ - Extra Strike: A character can attack twice.
+ - Quad Strike: A character can attack four times.
  - Hidden: This minion cannot be targeted by enemies until it deals damage.
  - Dodge: The first time this minion takes damage, it takes zero instead.
  - Dash: This can attack enemy minions even if it is exhausted.

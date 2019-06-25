@@ -6,7 +6,7 @@
   "rarity": "LEGENDARY",
   "description": "Quest: Shuffle 7 cards into your deck. Reward: Titan Feast.",
   "quest": {
-    "class": "CardShuffledTrigger",
+    "class": "ShuffledTrigger",
     "targetPlayer": "SELF"
   },
   "countUntilCast": 7,

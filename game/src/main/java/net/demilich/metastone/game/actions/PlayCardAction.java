@@ -109,6 +109,7 @@ public abstract class PlayCardAction extends GameAction {
 
 		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 			card.getDeathrattleEnchantments().clear();
+			card.getBattlecryEnchantments().clear();
 		}
 
 		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, card.getReference()));

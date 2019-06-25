@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -102,7 +103,7 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 	}
 
 	@SuppressWarnings("unchecked")
-	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) {
+	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) throws JsonMappingException {
 		T inst = createDescInstance();
 		final String suppliedClassName = node.get("class").asText();
 		String[] spellClassNames = new String[]{getAbstractComponentClass().getPackage().getName() + "." + suppliedClassName, getAbstractComponentClass().getPackage().getName() + ".custom." + suppliedClassName};
@@ -116,7 +117,7 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 		}
 
 		if (spellClass == null) {
-			throw new RuntimeException("parser encountered an invalid class: " + suppliedClassName);
+			throw ctxt.weirdStringException(suppliedClassName,getAbstractComponentClass(),"parser encountered an invalid class");
 		}
 
 

@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 7,
   "rarity": "LEGENDARY",
-  "description": "Windfury, Opener: Cast 'Hunter's Mark' on all minions (set Health to 1).",
+  "description": "Extra Strike, Opener: Cast 'Hunter's Mark' on all minions (set Health to 1).",
   "battlecry": {
     "spell": {
       "class": "SetHpSpell",

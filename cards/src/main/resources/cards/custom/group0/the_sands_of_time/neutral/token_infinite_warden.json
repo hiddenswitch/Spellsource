@@ -17,8 +17,18 @@
       "class": "MetaSpell",
       "target": "ALL_ENTITIES",
       "filter": {
-        "class": "SpecificCardFilter",
-        "card": "permanent_the_end_time"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "SpecificCardFilter",
+            "card": "permanent_the_end_time"
+          },
+          {
+            "class": "EntityTypeFilter",
+            "entityType": "MINION"
+          }
+        ]
+
       },
       "spells": [
         {
