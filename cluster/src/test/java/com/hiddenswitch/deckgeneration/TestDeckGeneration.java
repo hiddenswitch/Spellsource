@@ -152,6 +152,125 @@ public class TestDeckGeneration {
 		assertTrue(result.getChromosome().getGene(winTheGameIndex).booleanValue());
 	}
 
+	@Test
+	public void testDeckGeneratorRoundRobinTournament() {
+		int MAX_CARDS_IN_DECK = 4;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 10;
+
+		XORShiftRandom random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+		List<Genotype<BitGene>> basicTournamentDeckGenotypes = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		for (int i = 0; i < 9; i++) {
+			BitSet bits = new BitSet(indexInBitmap.size() + 1);
+			for (int j = 0; j < MAX_CARDS_IN_DECK; j++) {
+				int bitToFlip = random.nextInt(indexInBitmap.size());
+				while (bits.get(bitToFlip)) {
+					bitToFlip = random.nextInt(indexInBitmap.size());
+				}
+				bits.flip(bitToFlip);
+			}
+			basicTournamentDeckGenotypes.add(Genotype.of(BitChromosome.of(bits)));
+		}
+
+		// Ensure that we do not begin with "win the game"
+		// in any of our original population decks
+		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
+
+		int winTheGameIndex = indexInBitmap.size() - 1;
+
+		BitSet winningBits = new BitSet(indexInBitmap.size());
+		winningBits.flip(winTheGameIndex);
+		for (int i = 0; i < MAX_CARDS_IN_DECK - 1; i++) {
+			int bitToFlip = random.nextInt(indexInBitmap.size());
+			while (winningBits.get(bitToFlip)) {
+				bitToFlip = random.nextInt(indexInBitmap.size());
+			}
+			winningBits.flip(bitToFlip);
+		}
+		basicTournamentDeckGenotypes.add(Genotype.of(BitChromosome.of(winningBits)));
+
+		// Set up our tournament playing environment
+		DeckGeneratorRoundRobinContext deckGeneratorContext = new DeckGeneratorRoundRobinContext(indexInBitmap);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(MAX_CARDS_IN_DECK);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		deckGeneratorContext.runTournament(basicTournamentDeckGenotypes, HeroClass.BLUE);
+		Double bestWinRate = deckGeneratorContext.winRatesForEachGenotype.get(basicTournamentDeckGenotypes.get(basicTournamentDeckGenotypes.size() - 1));
+		for (int i = 0; i < basicTournamentDeckGenotypes.size() - 2; i++) {
+			assertTrue(bestWinRate > deckGeneratorContext.winRatesForEachGenotype.get(basicTournamentDeckGenotypes.get(i)));
+		}
+		Double allWinRatesAverage = deckGeneratorContext.winRatesForEachGenotype.values().stream().mapToDouble(val -> val.doubleValue()).average().getAsDouble();
+		assertTrue(allWinRatesAverage == 0.5);
+	}
+
+	/**
+	 * Here, instead of having a constant set of tournament decks and evolving our decks based on the
+	 * win rate against those decks, we instead let the fitnesses be the win rates of the decks
+	 * against the other decks in the pool (survival of the fittest essentially). Then, we take the best deck
+	 * from the last population.
+	 */
+	@Test
+	public void testDeckGeneratorForContinuallyUpdatingTournamentDecks() {
+		int MAX_CARDS_PER_DECK = 4;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 10;
+		int POPULATION_SIZE = 10;
+		int NUMBER_OF_GENERATIONS = 30;
+
+		CardCatalogue.loadCardsFromPackage();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		// Ensure that we do not begin with "win the game"
+		// in any of our original population decks
+		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
+
+		// Set up our tournament playing environment
+		DeckGeneratorRoundRobinContext deckGeneratorContext = new DeckGeneratorRoundRobinContext(indexInBitmap);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(MAX_CARDS_PER_DECK);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		int winTheGameIndex = indexInBitmap.size() - 1;
+		List<Integer> invalidCards = new ArrayList<>(0);
+		invalidCards.add(indexInBitmap.size() - 1);
+
+		Engine.Evaluator<BitGene, Double> evaluator = population -> {
+			deckGeneratorContext.runTournament(population.stream().map(p -> p.getGenotype()).collect(toList()), HeroClass.BLUE);
+			population.forEach(Phenotype::evaluate);
+			deckGeneratorContext.clearWinRates();
+			return population.asISeq();
+		};
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(MAX_CARDS_PER_DECK, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual), bitGeneFactory)
+				.mapping(pop -> pop)
+				.evaluator(evaluator)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(1), new BitSwapMutator<>(1))
+				.build();
+
+		EvolutionResult<BitGene, Double> result = engine
+				.stream()
+				.skip(NUMBER_OF_GENERATIONS)
+				.findFirst().get();
+		assertTrue(result.getBestPhenotype().getGenotype().getChromosome().getGene(winTheGameIndex).booleanValue());
+	}
+
 	// Tests the use of the stable fitness terminator,
 	// which terminates the genetic algorithm when the fitness
 	// has been stable for a certain number of generations
