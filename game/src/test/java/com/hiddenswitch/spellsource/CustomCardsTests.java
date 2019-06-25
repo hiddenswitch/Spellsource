@@ -1526,7 +1526,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_aysa_cloudsinger");
 			assertEquals(player.getMinions().size(), 1);
 			Minion chenToken = player.getMinions().get(0);
-			assertEquals(chenToken.getSourceCard().getCardId(), "token_chen_stormstout");
+			assertEquals(chenToken.getSourceCard().getCardId(), "token_mienzhou");
 			assertEquals(chenToken.getHp(), heroHp);
 			assertEquals(chenToken.getMaxHp(), 30);
 		});
