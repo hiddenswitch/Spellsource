@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -221,7 +222,7 @@ public class ParseUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) {
+	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) throws JsonMappingException {
 		switch (valueType) {
 			case INTEGER:
 				return jsonData.asInt();

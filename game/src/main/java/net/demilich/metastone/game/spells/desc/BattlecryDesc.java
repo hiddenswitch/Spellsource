@@ -76,9 +76,9 @@ import static com.google.common.collect.Maps.immutableEntry;
  * 		how the battlecry action is processed.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object> {
+public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object>, Cloneable {
 	public SpellDesc spell;
-	public TargetSelection targetSelection;
+	public TargetSelection targetSelection = TargetSelection.NONE;
 	public ConditionDesc condition;
 	public String name;
 	public String description;
@@ -100,7 +100,11 @@ public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryD
 
 	@JsonIgnore
 	public BattlecryAction toBattlecryAction() {
-		return BattlecryAction.createBattlecry(getSpell(), getTargetSelection());
+		BattlecryAction battlecry = BattlecryAction.createBattlecry(getSpell(), getTargetSelection());
+		if (condition != null) {
+			battlecry.setCondition(condition.create());
+		}
+		return battlecry;
 	}
 
 	/**
@@ -177,5 +181,21 @@ public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryD
 				immutableEntry(BattlecryDescArg.DESCRIPTION, description)
 		);
 		return entries;
+	}
+
+	@Override
+	public BattlecryDesc clone() {
+		try {
+			BattlecryDesc desc = (BattlecryDesc) super.clone();
+			if (desc.spell != null) {
+				desc.spell = spell.clone();
+			}
+			if (desc.condition != null) {
+				desc.condition = condition.clone();
+			}
+			return desc;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }

@@ -55,7 +55,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	private static Logger logger = LoggerFactory.getLogger(Card.class);
 
-	protected static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
+	public static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
 			Arrays.asList(
 					Attribute.PASSIVE_TRIGGERS,
 					Attribute.DECK_TRIGGERS,
@@ -87,6 +87,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	private CardDesc desc;
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
 	private List<EnchantmentDesc> storedEnchantments = new ArrayList<>();
+	private List<BattlecryDesc> battlecryEnchantments = new ArrayList<>();
 
 	protected Card() {
 		attributes = new CardAttributeMap(this);
@@ -249,10 +250,16 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.setDeathrattleEnchantments(new ArrayList<>());
+		clone.setBattlecryEnchantments(new ArrayList<>());
 		getDeathrattleEnchantments().forEach(de -> clone.getDeathrattleEnchantments().add(de.clone()));
+		getBattlecryEnchantments().forEach(be -> clone.addBattlecry(be.clone()));
 		clone.setStoredEnchantments(new ArrayList<>());
 		clone.getStoredEnchantments().addAll(getStoredEnchantments());
 		return clone;
+	}
+
+	protected void setBattlecryEnchantments(ArrayList<BattlecryDesc> objects) {
+		battlecryEnchantments = objects;
 	}
 
 	/**
@@ -490,7 +497,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			case GROUP:
 				throw new UnsupportedOperationException("The method .play() should not be called for GroupCard");
 		}
-		System.out.println(getCardType() + " " + getName());
 		throw new UnsupportedOperationException();
 	}
 
@@ -660,7 +666,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 				PlayCardAction[] actions = new PlayCardAction[getChooseOneBattlecries().length];
 				for (int i = 0; i < getChooseOneBattlecries().length; i++) {
-					BattlecryAction battlecry = getChooseOneBattlecries()[i].toBattlecryAction();
+					BattlecryDesc battlecry = getChooseOneBattlecries()[i];
 					PlayCardAction option;
 					if (getCardType() == CardType.MINION) {
 						option = new PlayMinionCardAction(getReference(), battlecry);
@@ -724,15 +730,13 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				action = new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
 				break;
 			case WEAPON:
-				action = new PlayWeaponCardAction(getReference(), getDesc().getChooseBothBattlecry().toBattlecryAction());
+				action = new PlayWeaponCardAction(getReference(), getDesc().getChooseBothBattlecry());
 				break;
 			case HERO:
-				action = new PlayHeroCardAction(getReference(), getDesc().getChooseBothBattlecry().toBattlecryAction());
+				action = new PlayHeroCardAction(getReference(), getDesc().getChooseBothBattlecry());
 				break;
 			case MINION:
-				BattlecryDesc battlecryOption = getDesc().getChooseBothBattlecry();
-				BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.getSpell(), battlecryOption.getTargetSelection());
-				action = new PlayMinionCardAction(getReference(), battlecry);
+				action = new PlayMinionCardAction(getReference(), getDesc().getChooseBothBattlecry());
 				break;
 			case GROUP:
 				throw new UnsupportedOperationException("group");
@@ -934,7 +938,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @return The provided actor.
 	 */
 	public Actor applyText(Actor instance) {
-		instance.setBattlecry(getDesc().getBattlecryAction());
+		instance.setBattlecry(getDesc().getBattlecry());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
 				(Race) getAttribute(Attribute.RACE) :
 				getDesc().getRace());
@@ -944,8 +948,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			instance.addDeathrattle(getDesc().getDeathrattle());
 		}
 
-		if (getDeathrattleEnchantments().size() > 0) {
+		if (!getDeathrattleEnchantments().isEmpty()) {
 			getDeathrattleEnchantments().forEach(instance::addDeathrattle);
+		}
+
+		if (!getBattlecryEnchantments().isEmpty()) {
+			getBattlecryEnchantments().forEach(instance::addBattlecry);
 		}
 
 		if (getDesc().getTrigger() != null) {
@@ -1010,6 +1018,14 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public void addDeathrattle(SpellDesc deathrattle) {
 		// TODO: Should Forlorn Stalker affect cards with deathrattle added this way?
 		getDeathrattleEnchantments().add(deathrattle);
+	}
+
+	public void addBattlecry(BattlecryDesc battlecry) {
+		getBattlecryEnchantments().add(battlecry);
+	}
+
+	public List<BattlecryDesc> getBattlecryEnchantments() {
+		return battlecryEnchantments;
 	}
 
 	public void addStoredEnchantment(EnchantmentDesc enchantmentDesc) {

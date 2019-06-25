@@ -16,6 +16,8 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
@@ -29,10 +31,7 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -115,8 +114,7 @@ public class SpellUtils {
 			return false;
 		}
 
-		Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-
+		player = determineCastingPlayer.getCastingPlayer();
 		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
 
 		PlayCardAction action = null;
@@ -154,6 +152,7 @@ public class SpellUtils {
 
 		if (action == null) {
 			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -174,45 +173,17 @@ public class SpellUtils {
 			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
 			// Do we resolve battlecries?
 			if (resolveBattlecry) {
-				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
-				// the action from the actor that would be summoned.
-				BattlecryAction specifiedAction;
-				if (actionWithBattlecry.getBattlecry() == null) {
-					// Look at the actor
-					Actor actor = card.actor();
-					if (actor == null) {
-						logger.error("playCardRandom {} {}: The actor is missing from the card {}", context.getGameId(), source, card);
-						return false;
-					}
-					specifiedAction = actor.getBattlecry();
-				} else {
-					specifiedAction = actionWithBattlecry.getBattlecry();
-				}
-
-				if (specifiedAction != null) {
-					// We found a battlecry
-					specifiedAction = specifiedAction.clone();
-
-					// If a target is required then we'll see if there are valid targets and execute it. If a target isn't required,
-					// then the battlecry will do what it needs to do.
-					if (specifiedAction.getTargetRequirement() != null
-							&& specifiedAction.getTargetRequirement() != TargetSelection.NONE) {
-						List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
-						if (targets.isEmpty()) {
-							// Don't execute the battlecry if there are no valid targets for one that requires targets but still
-							// put the actor into play
-							specifiedAction = BattlecryAction.NONE;
-						} else {
-							EntityReference battlecryTarget = context.getLogic().getRandom(targets).getReference();
-							specifiedAction.setTargetReference(battlecryTarget);
-						}
-						actionWithBattlecry.setBattlecry(specifiedAction);
-					}
+				// TODO: Doesn't quite do what it's supposed to
+				if (RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, card, (Actor) source)) {
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+					return true;
 				}
 			} else {
 				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
 				// true but this method's parameter to not resolve battlecries will be respected
-				actionWithBattlecry.setBattlecry(BattlecryAction.NONE);
+				BattlecryDesc nullBattlecry = new BattlecryDesc();
+				nullBattlecry.spell = NullSpell.create();
+				actionWithBattlecry.setBattlecry(nullBattlecry);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
 			// This is some other kind of action that takes a target
@@ -225,6 +196,7 @@ public class SpellUtils {
 				} else {
 					// Card should be revealed, but there were no valid targets so the spell isn't cast
 					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 					return true;
 				}
 			}
@@ -232,6 +204,7 @@ public class SpellUtils {
 			// Target requirement may have been none, but the action is still valid.
 		} else {
 			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -476,7 +449,7 @@ public class SpellUtils {
 	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
 	 *                inherited from this spell.
 	 * @param spells  A list of spells from which to generate virtual cards.
-	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
+	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecries()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
 	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.

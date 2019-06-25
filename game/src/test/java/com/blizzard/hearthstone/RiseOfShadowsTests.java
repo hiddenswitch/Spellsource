@@ -13,6 +13,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -331,7 +332,7 @@ public class RiseOfShadowsTests extends TestBase {
 	}
 
 	@Test
-	public void testMuckmorpher(){
+	public void testMuckmorpher() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_malygos");
 			for (int i = 0; i < 10; i++) {
@@ -550,6 +551,5 @@ public class RiseOfShadowsTests extends TestBase {
 			assertEquals(harpy.getMaxNumberOfAttacks(), 4);
 		});
 	}
-
 
 }

@@ -92,6 +92,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		this(desc.getSecondaryTrigger() == null ? new WillEndSequenceTrigger() : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
 		setEntityFilter(desc.getFilter());
 		setCondition(desc.getCondition());
+		setPersistentOwner(desc.getBool(AuraArg.PERSISTENT_OWNER));
 		setDesc(desc);
 	}
 
@@ -262,6 +263,11 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	public SpellDesc getApplyEffect() {
 		return applyAuraEffect;
+	}
+
+	@Override
+	public boolean hasPersistentOwner() {
+		return getDesc() != null && getDesc().getBool(AuraArg.PERSISTENT_OWNER);
 	}
 }
 

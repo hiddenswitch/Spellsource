@@ -10,9 +10,9 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestBehaviour;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

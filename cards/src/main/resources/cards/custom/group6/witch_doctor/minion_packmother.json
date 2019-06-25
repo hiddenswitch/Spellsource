@@ -1,6 +1,6 @@
 {
   "name": "Packmother",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 4,

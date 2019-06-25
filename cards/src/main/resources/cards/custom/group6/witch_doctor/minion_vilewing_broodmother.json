@@ -3,20 +3,20 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ROSE",
-  "baseAttack": 3,
-  "baseHp": 3,
+  "baseAttack": 1,
+  "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Toxic. Opener: Summon a 1/1 Hatchling with Toxic.",
-  "battlecry": {
-    "spell": {
-      "class": "SummonSpell",
-      "boardPositionRelative": "RIGHT",
-      "card": "token_vilewing_hatchling"
-    }
+  "description": "Toxic. Aftermath: Summon two 1/1 Hatchlings with Toxic.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_spider",
+      "token_spider"
+    ]
   },
   "attributes": {
-    "BATTLECRY": true,
+    "DEATHRATTLES": true,
     "POISONOUS": true
   },
   "collectible": true,
