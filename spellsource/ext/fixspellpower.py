@@ -144,7 +144,7 @@ CARDS = [
     'spell_shooting_star',
     'spell_hellfire',
     'spell_impending_doom',
-    'spell_tiger_palm_strike',
+    'spell_palm_strike',
     'spell_astroblast',
     'spell_ignite',
     'spell_beakered_lightning',
