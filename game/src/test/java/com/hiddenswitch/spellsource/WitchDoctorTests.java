@@ -441,7 +441,7 @@ public class WitchDoctorTests extends TestBase {
 	}
 
 	// Zen Pilgrimage: "Shuffle a friendly minion into your deck. Add Emerald Secrets to your hand equal to its cost."
-	/*@Test
+	@Test
 	public void testZenPilgrimage() {
 		runGym(((context, player, opponent) -> {
 			Minion friend = playMinionCard(context, player, "minion_blood_knight");
@@ -451,7 +451,7 @@ public class WitchDoctorTests extends TestBase {
 			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
 			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
 		}));
-	}*/
+	}
 
 	// Revisit zen_pilgrimage card, not correct yet for howMany
 
