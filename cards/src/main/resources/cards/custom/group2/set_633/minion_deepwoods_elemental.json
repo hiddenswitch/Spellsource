@@ -12,8 +12,8 @@
     "spell": {
       "class": "SummonSpell",
       "cards": [
-        "token_tiny_alemental",
-        "token_tiny_alemental"
+        "token_stony_elemental",
+        "token_stony_elemental"
       ]
     }
   },
