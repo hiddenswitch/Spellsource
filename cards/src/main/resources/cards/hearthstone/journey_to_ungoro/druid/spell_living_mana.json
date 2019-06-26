@@ -7,7 +7,7 @@
   "description": "Transform your Mana Crystals into 2/2 minions. Recover the mana when they die.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "TransformManaIntoMinionSpell"
+    "class": "ManaCrystalToMinionSpell"
   },
   "collectible": true,
   "set": "JOURNEY_TO_UNGORO",
