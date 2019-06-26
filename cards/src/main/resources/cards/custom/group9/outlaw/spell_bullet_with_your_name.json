@@ -7,20 +7,29 @@
   "description": "Give all friendly minions 'Quick Draw: Deal 1 damage to the enemy champion.'",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddEnchantmentSpell",
+    "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",
-    "trigger": {
-      "eventTrigger": {
-        "class": "CardDrawnTrigger",
-        "targetPlayer": "SELF"
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardDrawnTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DamageSpell",
+            "target": "ENEMY_HERO",
+            "value": 1
+          },
+          "persistentOwner": true
+        }
       },
-      "spell": {
-        "class": "DamageSpell",
-        "target": "ENEMY_HERO",
-        "value": 1
-      },
-      "persistentOwner": true
-    }
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "QUICK_DRAW"
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

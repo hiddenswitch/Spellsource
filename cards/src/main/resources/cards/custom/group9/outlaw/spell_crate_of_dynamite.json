@@ -1,6 +1,6 @@
 {
   "name": "Crate of Dynamite",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "COMMON",

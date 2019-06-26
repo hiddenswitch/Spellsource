@@ -16,7 +16,15 @@
       "class": "FromDeckToHandSpell"
     },
     "spell2": {
-      "class": "PutOnBottomOfDeckSpell"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell"
+        },
+        {  
+          "class": "PutOnBottomOfDeckSpell"
+        }
+      ]
     }
   },
   "collectible": true,

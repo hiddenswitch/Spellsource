@@ -9,7 +9,7 @@
   "spell": {
     "class": "ConditionalEffectSpell",
     "target": "ENEMY_MINIONS",
-    "randomTarget": "TRUE",
+    "randomTarget": true,
     "condition": {
       "class": "IsDeadCondition"
     },

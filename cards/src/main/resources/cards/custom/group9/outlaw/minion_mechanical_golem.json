@@ -22,7 +22,7 @@
   },
   "attributes": {
     "QUICK_DRAW": true,
-    "DASH": true
+    "RUSH": true
   },
   "collectible": true,
   "set": "CUSTOM",
