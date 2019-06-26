@@ -8,7 +8,7 @@ permalink: /whats-new/
 
 Bug fixes.
 
-Visit the new Windows development guide at http://playspellsource.com/windows-development/ for more about editing and authoring your own cards using the tools the developers use.
+Visit the new Windows development guide at [http://playspellsource.com/windows-development/](http://playspellsource.com/windows-development/) for more about editing and authoring your own cards using the tools the developers use.
 
 ##### Usability Fixes:
 
@@ -79,94 +79,55 @@ Bug fixes.
  - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
  - Copying minions that have jailed other minions no longer causes errors.
 
-### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
+### Basic Rules
 
-Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together the fixes flawlessly.
+This is a summary of the basic rules of Spellsource.
 
-##### Content Fixes:
+#### Gameplay
 
- - Disco Inferno now swaps stats with a friendly minion. (1109)
- - Ninjarcher now deals 2 damage to a random enemy. (1101)
- - Malicious Magpie now deals damage only when other minions attack. (1100)
- - Bloody Blade is now a 3/2. (1102)
- - Redhide Butcher now has the correct effect and rarity. (1104)
- - Sly Conquistador now has Dodge. (1107)
- - Terrified Tanooki now gains +1 attack. (1108)
- - Attrition Master now affects minions during both player's turns.
- - Gurubashi Berserker now transforms once into a Rage Behemoth without incorrectly summoning more tokens. (1110)
- - Northot, Necromaster no longer has an infinite loop interaction with your Falling Crusader (for your troubles).
- - Shapeseeper now correctly buffs its stats. (1106)
- - Doomed Diver now triggers correctly. (1103)
+Players combat each other using cards in a one-versus-one matchup until one of the player's champions is destroyed.
 
-### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
+Each player starts the match by choosing which cards to discard from their initial hand (the Mulligan). Then, one of the two players takes his first turn, while the other receives a bonus Mana card called the coin.
 
-Hearthstone updates. Thanks to @doombubbles for the great contribution!
+At the start of each turn, players gain 1 mana, up to 10. This mana is spent playing cards.
 
-The 0.8 series will be the last to receive Hearthstone updates.
+Some cards can put minions on the board. Minions have an attack value (the lower left number) and a health (the lower right number). At the start of the next turn, minions can attack opposing minions or the opposing hero, dealing and taking damage. Minions whose health goes below zero are destroyed.
 
-##### Content Additions:
- - The Rise of Shadows set for Hearthstone
- - Standard rotation into Year of the Dragon
+Some minions and spells accept targets when they are played. For a minion, this is typically part of an "Opener," or action played from the hand.
 
-### 0.8.27-2.0.30 (Thursday, May 23rd, 2019)
+Text comes "into play" as soon as both players see it. This is typically on the battlefield, or the two rows (yours and your opponent's) of minions, the champions, the weapons they have equipped, and the Skill.
 
-Thanks to @Phyley for contributing new fixes to Vermancer!
+The weapon is a bonus item that grants your champion the ability to attack.
 
-Bug fixes.
+The Skill is a spell that is playable once per turn specific to your champion.
 
-##### Content Additions:
+#### Keywords:
 
- - 9 new cards in the Vermancer class.
-
-##### Content Fixes:
-
- - Various changes to Vermancer cards.
- - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
- - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
- - Kraken's Call, Gilblin Plunderer, Calm Currents, Condensation, Finding Mobus, Three Fathoms Below and Water Blast all shuffle the correct number of Ocean Depths into the deck now.
- - Gilblin Plunderer's text is now correct.
- - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
- - Evaporation now deals 3 damage to all enemy minions.
- - Wrath of the Occult no longer requires targeting.
-
-##### Usability Fixes:
-
- - It is no longer possible to select a neutral champion in the deck creation screen.
-
-### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
-
-Thanks to a contribution from @Logovaz, there are new cards for Senzaku!
-
-The following keywords have been consistently applied to Spellsource cards:
-
- - Champion: Your player character. When this dies, you lose the game.
- - Skill: Your champion's ability.
- - Skill: A spell your Champion can play every turn.
- - Opener: Occurs whenever the card is played from the hand.
  - Aftermath: Occurs whenever a minion dies (horribly) on the battlefield.
- - Elusive: Cannot be targeted by spells or skills.
- - Extra Strike: A character can attack twice.
- - Quad Strike: A character can attack four times.
- - Hidden: This minion cannot be targeted by enemies until it deals damage.
- - Dodge: The first time this minion takes damage, it takes zero instead.
- - Dash: This can attack enemy minions even if it is exhausted.
- - Blitz: This can attack enemies even if it is exhausted.
- - Spellpower (X): Your Spells deal this much more damage.
- - Toxic: This kills minions it damages.
- - Guard: This must be destroyed before minions can attack its champion.
-
-Now clarifying the following additional keywords:
-
  - Armor: Instead of losing health, lose this instead.
+ - Blitz: This can attack enemies even if it is exhausted.
+ - Champion: Your player character. When this dies, you lose the game.
+ - Dash: This can attack enemy minions even if it is exhausted.
  - Deflect: The first time this minion takes damage, deal it to its Champion instead.
- - Wither (X): This reduces its target's health by this amount, and restores the health at the start of the caster's turn.
+ - Dodge: The first time this minion takes damage, it takes zero instead.
+ - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
+ - Elusive: Cannot be targeted by spells or skills.
  - Enchantment: Occurs as long as the target this is attached to is in play.
  - Exhausted: During the turn it comes into play or changes sides, this minion is exhausted and cannot attack this turn. It loses exhaustion at the start of next turn.
- - Elusive: Cannot be targeted by spells or skills.
- - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
- - Roast: Remove a card from the top of your deck.
+ - Extra Strike: A character can attack twice.
+ - Guard: This must be destroyed before minions can attack its champion.
+ - Hidden: This minion cannot be targeted by enemies until it deals damage.
+ - Litedrain: Restores health for each damage dealt.
+ - Opener: Occurs whenever the card is played from the hand.
+ - Quad Strike: A character can attack four times.
  - Reservoir (X): Occurs when your deck is larger than this amount.
+ - Roast: Remove a card from the top of your deck.
  - Sacrifice: Occurs whenever a friendly minion dies.
  - Silence: The text on this card and any enchantments added later are no longer in play.
+ - Skill: A spell your Champion can play every turn.
+ - Spellpower (X): Your Spells deal this much more damage.
+ - Stunned: A character that cannot attack this turn and the next.
  - Supremacy: Occurs whenever this minion attacks and kills another.
  - Surge: Occurs when a card is played from the hand on the same turn it was added to the hand.
+ - Toxic: This kills minions it damages.
+ - Wither (X): This reduces its target's health by this amount, and restores the health at the start of the caster's turn.
