@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "COPPER",
   "baseAttack": 2,
-  "baseHp": 2,
+  "baseHp": 3,
   "rarity": "COMMON",
   "description": "Quick Draw: Draw 2 cards and destroy this.",
   "trigger": {

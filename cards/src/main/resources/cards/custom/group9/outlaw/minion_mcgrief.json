@@ -6,12 +6,12 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever you play a Quick Draw card, draw a card.",
+  "description": "After you play a Quick Draw card, draw a card.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardPlayedTrigger",
+      "class": "AfterCardPlayedTrigger",
       "requiredAttribute": "QUICK_DRAW",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "DrawCardSpell"
