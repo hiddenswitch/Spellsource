@@ -1,0 +1,11 @@
+{
+  "seed" : 1196995269631556559,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "BLOOD" ],
+  "deckCardIds" : [ [ "minion_jar_of_mists", "spell_chi_torpedo", "minion_psych-o-tron", "minion_ox_school_instructor", "minion_flight_master", "spell_spinning_crane_kick", "minion_enigmatic_brewmaster", "spell_chi_wave", "spell_stance_change", "minion_eydis_darkbane", "minion_duskboar", "minion_student_of_the_serpent", "minion_enigmatic_brewmaster", "minion_black_ox_statue", "minion_serpent_ward", "spell_misty_mana_tea", "minion_blackboar", "minion_dalaran_mage", "minion_xavius", "minion_deathlord", "minion_elite_tauren_chieftain", "minion_mechanical_monstrosity", "minion_illidan_stormrage", "spell_ox_stance", "minion_flutterer", "minion_polluted_hoarder", "minion_artificial_life_cocoon", "spell_thunder_focus_brew", "spell_touch_of_karma", "spell_touch_of_karma" ], [ "minion_marrow_render", "spell_feed_the_flames", "spell_merciless_strike", "weapon_voltsaber", "minion_muck_hunter", "minion_crystal_shatterer", "minion_lifetaker", "spell_merciless_strike", "spell_harness_suffering", "weapon_midnight_blade", "minion_zombie_chow", "minion_mecha_rager", "spell_grim_awakening", "minion_ice_rager", "spell_red_lightning", "spell_deaths_caress", "minion_amgam_rager", "minion_polychrome_hydra", "minion_stonetusk_boar", "minion_ravasaur_runt", "minion_lifetaker", "minion_ships_cannon", "minion_archmage_vargoth", "minion_selfburner", "spell_blood_to_iron", "minion_bloodrider", "minion_acolyte_of_potassium", "minion_redhide_butcher", "minion_sand_giant", "minion_the_blood_engine" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "GOBLINS_VS_GNOMES", "LEAGUE_OF_EXPLORERS", "THE_GRAND_TOURNAMENT", "SPELLSOURCE_BASIC", "NAXXRAMAS", "JOURNEY_TO_UNGORO", "REWARD", "CLASSIC", "RISE_OF_SHADOWS", "PROMO", "MEAN_STREETS_OF_GADGETZAN", "WITCHWOOD", "KNIGHTS_OF_THE_FROZEN_THRONE", "THE_OLD_GODS", "HALL_OF_FAME", "ONE_NIGHT_IN_KARAZHAN", "BASIC", "BLACKROCK_MOUNTAIN", "RASTAKHANS_RUMBLE", "SANDS_OF_TIME", "CUSTOM", "BOOMSDAY_PROJECT", "BATTLE_FOR_ASHENVALE", "KOBOLDS_AND_CATACOMBS" ],
+  "mulligans" : [ [ 13 ], [ 49 ] ],
+  "actions" : [ 0, 1, 1, 6, 1, 2, 2, 1, 9, 7, 1, 0, 0, 4, 1, 12, 3, 0, 0, 18, 3, 6, 2, 0, 0, 16, 0, 3, 0, 0, 24, 4, 0, 0, 16, 15, 3, 7, 2, 1, 0, 0, 3, 5, 0, 8, 0 ],
+  "id" : null
+}

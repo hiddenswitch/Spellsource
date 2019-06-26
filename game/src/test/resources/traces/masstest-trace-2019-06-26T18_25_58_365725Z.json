@@ -1,0 +1,11 @@
+{
+  "seed" : 9131684294547000242,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "VIOLET" ],
+  "deckCardIds" : [ [ "minion_jade_cloud_serpent", "minion_emperor_shaohao", "minion_keening_banshee", "minion_feral_gibberer", "minion_fossilized_devilsaur", "spell_misty_mana_tea", "spell_touch_of_karma", "minion_subject_9", "minion_alien_invader", "minion_worgen_greaser", "minion_barnes", "minion_gargoyle_warden", "quest_eerie_fermentation", "spell_monastery_s_teachings", "minion_acolyte_of_pain", "minion_unpowered_mauler", "minion_student_of_the_tiger", "minion_necrotic_geist", "minion_proud_defender", "minion_ancient_harbinger", "spell_leg_sweep", "minion_aysa_cloudsinger", "minion_silithid_swarmer", "minion_alemental", "minion_onis_eye", "spell_stance_change", "minion_master_jouster", "spell_touch_of_karma", "spell_crane_stance", "minion_nexus-champion_saraad" ], [ "minion_faceless_shambler", "minion_yokai_shapeshifter", "minion_felstalker", "minion_disciple_of_cthun", "minion_beckoner_of_evil", "minion_proud_defender", "minion_plunderogue", "minion_krul_the_unshackled", "minion_ravenous_pterrordax", "spell_curse_of_weakness", "minion_cursing_chimp", "minion_ancient_of_blossoms", "minion_ancient_shade", "minion_ravenous_pterrordax", "minion_darkshire_librarian", "minion_burly_rockjaw_trogg", "minion_slitherbow", "spell_dark_possession", "minion_reckless_diretroll", "minion_kobold_librarian", "minion_ragtag_rescuer", "spell_chaos_bolt", "minion_violet_spellsword", "minion_twilight_geomancer", "minion_twilight_summoner", "minion_mistress_of_mixtures", "spell_spreading_madness", "minion_withered_wretch", "spell_impending_doom", "minion_ratcatcher" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "JOURNEY_TO_UNGORO", "SANDS_OF_TIME", "THE_GRAND_TOURNAMENT", "BOOMSDAY_PROJECT", "BLACKROCK_MOUNTAIN", "KNIGHTS_OF_THE_FROZEN_THRONE", "REWARD", "CLASSIC", "LEAGUE_OF_EXPLORERS", "KOBOLDS_AND_CATACOMBS", "NAXXRAMAS", "VERDANT_DREAMS", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "GOBLINS_VS_GNOMES", "HALL_OF_FAME", "SPELLSOURCE_BASIC", "CUSTOM", "BASIC", "PROMO", "THE_OLD_GODS", "RISE_OF_SHADOWS", "ONE_NIGHT_IN_KARAZHAN" ],
+  "mulligans" : [ [ 29, 16 ], [ 63 ] ],
+  "actions" : [ 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 2, 2, 5, 0, 0, 8, 3, 1, 4, 2, 9, 9, 13, 3, 0, 4, 2, 5, 6 ],
+  "id" : null
+}

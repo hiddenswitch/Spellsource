@@ -10,7 +10,7 @@
   "description": "Deflect. At the end of your turn, summon two Blessed Koi Statues.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnSEndTrigger",
+      "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {

@@ -1,0 +1,11 @@
+{
+  "seed" : 6282537715684755554,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "LEATHER", "JADE" ],
+  "deckCardIds" : [ [ "minion_dirty_rat", "spell_distract", "secret_hidden_trap", "spell_distract", "minion_polychrome_hydra", "minion_troggzor_the_earthinator", "minion_forest_magistrate", "spell_party_portal", "spell_party_poppers", "minion_phantom_militia", "minion_augmented_pixie", "spell_escape_position", "minion_snapshooter", "spell_triple_shot", "minion_midnight_drake", "spell_revelating_gas", "minion_omega_defender", "minion_tinkmaster_overspark", "spell_new_arrival", "minion_slitherbow", "minion_tikrakazz", "minion_second-rate_bruiser", "spell_revelating_gas", "quest_forge_it", "minion_voodoo_doll", "minion_boneguard_lieutenant", "minion_second-rate_bruiser", "minion_volcanic_drake", "minion_one_handed_butcher", "minion_loot_hoarder" ], [ "minion_trogg_gloomeater", "minion_defias_cleaner", "minion_kelthuzad", "minion_emperor_shaohao", "minion_southsea_giant", "minion_uncle_gao", "spell_thunder_focus_brew", "minion_griftah", "minion_sunborne_valkyr", "minion_king_togwaggle", "minion_suspicious_wanderer", "spell_stance_change", "minion_ysera", "spell_dampen_harm", "minion_tsulong", "minion_injured_blademaster", "minion_suspicious_wanderer", "minion_flutterer", "minion_the_grudge", "minion_artificial_life_cocoon", "minion_fanatical_brewmaster", "minion_amani_war_bear", "spell_soothing_mists", "minion_recurring_villain", "minion_elusive_brawler", "minion_explosive_sheep", "minion_mecha_rager", "spell_effuse", "spell_chi_wave", "minion_thundering_jade_serpent" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "GOBLINS_VS_GNOMES", "LEAGUE_OF_EXPLORERS", "THE_GRAND_TOURNAMENT", "SPELLSOURCE_BASIC", "NAXXRAMAS", "JOURNEY_TO_UNGORO", "REWARD", "CLASSIC", "RISE_OF_SHADOWS", "PROMO", "MEAN_STREETS_OF_GADGETZAN", "WITCHWOOD", "KNIGHTS_OF_THE_FROZEN_THRONE", "THE_OLD_GODS", "HALL_OF_FAME", "ONE_NIGHT_IN_KARAZHAN", "BASIC", "BLACKROCK_MOUNTAIN", "RASTAKHANS_RUMBLE", "SANDS_OF_TIME", "CUSTOM", "BOOMSDAY_PROJECT", "BATTLE_FOR_ASHENVALE", "KOBOLDS_AND_CATACOMBS" ],
+  "mulligans" : [ [ 15 ], [ 50 ] ],
+  "actions" : [ 1, 1, 4, 6, 2, 0, 8, 10, 2, 12, 8, 2, 1 ],
+  "id" : null
+}

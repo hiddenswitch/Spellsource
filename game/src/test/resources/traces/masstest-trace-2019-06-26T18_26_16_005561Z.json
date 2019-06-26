@@ -1,0 +1,11 @@
+{
+  "seed" : 8602171980068289114,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "AMBER" ],
+  "deckCardIds" : [ [ "minion_bloodsail_raider", "spell_staggering_brew", "minion_aysa_cloudsinger", "minion_white_tiger_statue", "minion_jade_serpent_statue", "weapon_jade_serpent_staff", "spell_breath_of_fire", "minion_floating_crystal", "minion_alemental", "spell_tiger_palm_strike", "minion_widow_greenpaw", "minion_red_crane_statue", "spell_roll", "quest_eerie_fermentation", "spell_stance_change", "minion_student_of_the_serpent", "minion_squirrel_knight", "minion_pumpkin_peasant", "minion_zen-noy-o-tron", "minion_monastery_scroll-keeper", "spell_dampen_harm", "minion_arena_fanatic", "minion_bullet_bull", "spell_fortifying_brew", "spell_fists_of_fury", "minion_eranikus", "minion_white_tiger_statue", "minion_jar_of_mists", "spell_rising_sun_kick", "minion_student_of_the_ox" ], [ "minion_corpsetaker", "minion_giant_spider", "minion_worker_queen", "spell_teamwork", "spell_spawning_pool", "minion_muklas_champion", "minion_hench_clan_hag", "minion_pumpkin_peasant", "minion_giant", "minion_lightning_lure", "spell_swarm_shield", "spell_spiderbomb", "spell_lesser_amber_spellstone", "spell_swarm_shield", "spell_parasites", "spell_your_heart_will_explode", "minion_stowaway_scoundrel", "spell_a_challenger_appears", "minion_flystinger", "minion_die_insect", "minion_timewalker_initiate", "minion_giant_disappointment", "minion_drakkari_enchanter", "minion_zombie_chow", "minion_nursery_overseer", "minion_mother_spider", "minion_mechwarper", "spell_locust_swarm", "minion_faithful_lumi", "minion_bug_boss" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "JOURNEY_TO_UNGORO", "SANDS_OF_TIME", "THE_GRAND_TOURNAMENT", "BOOMSDAY_PROJECT", "BLACKROCK_MOUNTAIN", "KNIGHTS_OF_THE_FROZEN_THRONE", "REWARD", "CLASSIC", "LEAGUE_OF_EXPLORERS", "KOBOLDS_AND_CATACOMBS", "NAXXRAMAS", "VERDANT_DREAMS", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "GOBLINS_VS_GNOMES", "HALL_OF_FAME", "SPELLSOURCE_BASIC", "CUSTOM", "BASIC", "PROMO", "THE_OLD_GODS", "RISE_OF_SHADOWS", "ONE_NIGHT_IN_KARAZHAN" ],
+  "mulligans" : [ [ 17, 14, 26 ], [ 38, 36, 56 ] ],
+  "actions" : [ 0, 0, 1, 6, 4, 5, 1, 4, 0, 7, 4, 10, 3, 0, 4, 1, 6, 1, 10, 5, 2, 0, 12, 1, 4, 9, 21, 20, 20, 25, 15, 18, 1, 8, 23, 1, 0, 24, 24, 14, 27, 21 ],
+  "id" : null
+}

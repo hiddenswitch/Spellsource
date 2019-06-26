@@ -11,7 +11,7 @@
     "trigger": {
       "eventTrigger": {
         "class": "DamageReceivedTrigger",
-        "targetPlayer": "SELF"
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
       "spell": {
         "class": "DestroySpell",
@@ -22,5 +22,5 @@
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
+  "fileFormatVersion": 1
 }

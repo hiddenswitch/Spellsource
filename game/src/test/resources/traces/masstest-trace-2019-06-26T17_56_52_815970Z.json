@@ -1,0 +1,11 @@
+{
+  "seed" : -5949375972398283325,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "SILVER" ],
+  "deckCardIds" : [ [ "minion_ancient_harbinger", "spell_tiger_stance", "minion_abandoned_geneticist", "minion_faerie_dragon", "minion_deathlord", "spell_serpent_stance", "spell_effuse", "minion_wisp", "minion_gold_picaroon", "minion_zoobot", "spell_fortifying_brew", "minion_crane_school_instructor", "minion_elusive_brawler", "minion_feral_gibberer", "minion_jade_cloud_serpent", "minion_ironfur_grizzly", "minion_burgly_bully", "minion_millhouse_manastorm", "spell_stance_change", "spell_thunder_focus_brew", "minion_majordomo_executus", "minion_shimmering_courser", "minion_jade_cloud_serpent", "spell_roll", "spell_keg_smash", "spell_effuse", "spell_chi_torpedo", "spell_stance_change", "spell_roll", "spell_rising_sun_kick" ], [ "minion_headless_horseman_revengeance", "weapon_likkim", "minion_arcane_tyrant", "minion_holomancer", "minion_mineral_masher", "minion_former_champ", "spell_forked_lightning", "minion_murmuring_elemental", "spell_feral_spirit", "minion_imp_master", "minion_fire_plume_harbinger", "minion_flamewreathed_faceless", "minion_swift_messenger", "minion_pondlord", "minion_wartbringer", "minion_flight_master", "minion_chief_inspector", "minion_fireguard_destroyer", "minion_fel_reaver", "minion_rumbling_elemental", "weapon_hammer_of_twilight", "minion_witchs_apprentice", "minion_phantom_freebooter", "weapon_thunderfury", "minion_voodoo_hexer", "spell_feral_spirit", "spell_rain_of_toads", "spell_ancestral_plane", "minion_menacing_nimbus", "minion_shifting_sands" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "CLASSIC", "ONE_NIGHT_IN_KARAZHAN", "THE_OLD_GODS", "BLACKROCK_MOUNTAIN", "KNIGHTS_OF_THE_FROZEN_THRONE", "RISE_OF_SHADOWS", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "BOOMSDAY_PROJECT", "VERDANT_DREAMS", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "KOBOLDS_AND_CATACOMBS", "NAXXRAMAS", "SANDS_OF_TIME", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "GOBLINS_VS_GNOMES", "WITCHWOOD", "BASIC", "PROMO", "RASTAKHANS_RUMBLE", "REWARD", "HALL_OF_FAME", "LEAGUE_OF_EXPLORERS" ],
+  "mulligans" : [ [ 8 ], [ 48 ] ],
+  "actions" : [ 0, 0, 1, 0, 0, 2, 1, 1, 4, 2, 0, 0, 6, 0, 14, 6, 2, 0, 2, 7, 4, 0, 0, 23, 0, 7, 3, 3, 2, 4, 0, 0, 0, 32, 8, 4, 4, 11, 2, 3, 2, 1, 3, 0, 2, 1 ],
+  "id" : null
+}

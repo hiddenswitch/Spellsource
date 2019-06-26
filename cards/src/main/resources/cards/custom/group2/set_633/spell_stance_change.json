@@ -17,7 +17,6 @@
         "class": "CastFromGroupSpell",
         "value": 2,
         "group": "group_stance_change"
-  },
       }
     ]
   },
