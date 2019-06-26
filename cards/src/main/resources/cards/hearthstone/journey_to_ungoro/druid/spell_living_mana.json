@@ -12,9 +12,14 @@
       "class": "AlgebraicValueProvider",
       "operation": "MINIMUM",
       "value1": {
-        "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "MAX_MANA",
-        "targetPlayer": "SELF"
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MAX_MANA",
+          "targetPlayer": "SELF"
+        },
+        "value2": 5
       },
       "value2": {
         "class": "AlgebraicValueProvider",
@@ -29,7 +34,7 @@
     "spells": [
       {
         "class": "SummonSpell",
-        "value": {
+        "howMany": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         },
