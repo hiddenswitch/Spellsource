@@ -5,7 +5,7 @@
   "heroClass": "JADE",
   "baseAttack": 5,
   "baseHp": 4,
-  "rarity": "Rare",
+  "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Deflect. Opener: Summon two 1/2 Elementals.",
   "battlecry": {

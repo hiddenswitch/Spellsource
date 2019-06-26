@@ -10,18 +10,18 @@
   "description": "Guard, Deflect. Aftermath: Give your minions Guard and Deflect.",
   "deathrattle": {
     "class": "MetaSpell",
-     "spells": [
-       {
-         "class": "AddAttributeSpell",
-         "target": "FRIENDLY_MINIONS",
-         "attribute": "TAUNT",
-       },
-       {
-         "class": "AddAttributeSpell",
-         "target": "FRIENDLY_MINIONS",
-         "attribute": "DEFLECT",
-        }
-      ]
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "DEFLECT"
+      }
+    ]
   },
   "attributes": {
     "DEFLECT": true,

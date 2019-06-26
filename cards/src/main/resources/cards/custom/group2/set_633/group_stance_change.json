@@ -8,16 +8,18 @@
       "class": "MetaSpell",
       "target": "FRIENDLY_MINIONS",
       "name": "Suzume Stance",
-      "description": Give your minions +1/+1 and Dodge.",
-        "spells": [
+      "description": "Give your minions +1/+1 and Dodge.",
+      "spells": [
         {
           "class": "BuffSpell",
-          "value": 1
+          "attackBonus": 1,
+          "hpBonus": 1
         },
         {
           "class": "AddAttributeSpell",
           "attribute": "DIVINE_SHIELD"
         }
+      ]
     },
     {
       "class": "BuffSpell",
@@ -31,25 +33,28 @@
       "target": "FRIENDLY_MINIONS",
       "name": "Tanuki Stance",
       "description": "Give your minions +2 Health and Guard",
-        "spells": [
+      "spells": [
         {
           "class": "BuffSpell",
-          "healthBonus": 2
+          "hpBonus": 2
         },
         {
           "class": "AddAttributeSpell",
           "attribute": "TAUNT"
         }
+      ]
     },
+    {
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "name": Koi Stance
+      "name": "Koi Stance",
       "description": "Restore 2 Health to your champion for each friendly minion.",
       "value": {
         "class": "EntityCounter",
         "target": "FRIENDLY_MINIONS",
         "multiplier": 2
       }
+    }
   ],
   "rarity": "FREE",
   "collectible": false,

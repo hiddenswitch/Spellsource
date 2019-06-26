@@ -3452,17 +3452,14 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "spell_keg_smash", target2);
-			playCard(context, player, "spell_razorpetal", target3);
-			assertTrue(target3.isDestroyed());
-			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
 			playCard(context, player, "spell_razorpetal", target1);
-			assertTrue(target3.isDestroyed());
 			assertFalse(target1.isDestroyed());
 			assertFalse(target2.isDestroyed());
+			playCard(context, player, "spell_razorpetal", target2);
+			assertFalse(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
 		});
 
 		// Test AoE
@@ -3470,18 +3467,16 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "spell_keg_smash", target2);
 			playCard(context, player, "spell_arcane_explosion");
-			assertTrue(target1.isDestroyed());
+			assertFalse(target1.isDestroyed());
 			assertTrue(target2.isDestroyed());
-			assertTrue(target3.isDestroyed());
 			context.endTurn();
-			Minion target4 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "spell_arcane_explosion");
-			assertFalse(target4.isDestroyed());
+			assertFalse(target3.isDestroyed());
 		});
 
 		// Test hero attacking
@@ -3489,59 +3484,13 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "spell_keg_smash", target2);
 			playCard(context, player, "weapon_wicked_knife");
 
-			attack(context, player, player.getHero(), target3);
-			assertTrue(target3.isDestroyed());
+			attack(context, player, player.getHero(), target2);
+			assertTrue(target2.isDestroyed());
 			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
-			playCard(context, player, "spell_razorpetal", target1);
-			assertTrue(target3.isDestroyed());
-			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
-		});
-
-		// Test keg smash playing more than once
-		runGym((context, player, opponent) -> {
-			context.endTurn();
-			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			context.endTurn();
-			playCard(context, player, "spell_keg_smash", target2);
-			playCard(context, player, "spell_razorpetal", target3);
-			assertTrue(target3.isDestroyed());
-			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
-			playCard(context, player, "spell_razorpetal", target1);
-			assertTrue(target3.isDestroyed());
-			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
-
-			// end some turns
-			for (int i = 0; i < 3; i++) {
-				context.endTurn();
-				context.endTurn();
-			}
-
-			// keg smash again
-			context.endTurn();
-			target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			context.endTurn();
-			playCard(context, player, "spell_keg_smash", target2);
-			playCard(context, player, "spell_razorpetal", target3);
-			assertTrue(target3.isDestroyed());
-			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
-			playCard(context, player, "spell_razorpetal", target1);
-			assertTrue(target3.isDestroyed());
-			assertFalse(target1.isDestroyed());
-			assertFalse(target2.isDestroyed());
 		});
 	}
 
@@ -7134,6 +7083,5 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(dragon.getAttack(), dragon.getBaseAttack() * 4);
 		});
 	}
-
 }
 

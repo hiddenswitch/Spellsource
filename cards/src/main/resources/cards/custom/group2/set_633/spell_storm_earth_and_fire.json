@@ -2,7 +2,7 @@
   "name": "Fury of the Elements",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "monk",
+  "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Summon two different Elemental Spirits",
   "condition": {
@@ -31,7 +31,7 @@
               "class": "SpecificCardFilter",
               "card": "token_fire_spirit"
             }
-          },
+          }
         ],
         "invert": true
       },
@@ -50,11 +50,11 @@
       "token_earth_spirit",
       "token_fire_spirit"
     ],
-      "exclusive": true,
-      "randomTarget": true
-    }
-  },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+    "exclusive": true,
+    "randomTarget": true
+  }
+},
+"collectible": true,
+"set": "CUSTOM",
+"fileFormatVersion": 1
 }
