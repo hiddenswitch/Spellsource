@@ -875,7 +875,7 @@ public class JourneyToUngoroTests extends TestBase {
 					int minionsOnBoard = Math.min((int) maxMinionsSummoned + finalI, 7);
 					int minionsSummonedByLivingMana = Math.min(7, minionsOnBoard - finalI);
 					assertEquals(player.getMinions().size(), minionsOnBoard);
-					assertEquals(player.getMana(), mana - minionsSummonedByLivingMana,
+					assertEquals(player.getMana(), mana - 5,
 							String.format("Prior max mana: %d, prior minions on  board: %d", mana, finalI));
 				}));
 				runGym(((context, player, opponent) -> {
@@ -884,15 +884,7 @@ public class JourneyToUngoroTests extends TestBase {
 					assertEquals(player.getMinions().size(), 0);
 					playCard(context, player, "spell_living_mana");
 					assertEquals(player.getMinions().size(), 7);
-					assertEquals(player.getMana(), 3);
-				}));
-				runGym(((context, player, opponent) -> {
-					player.setMaxMana(10);
-					player.setMana(10);
-					assertEquals(player.getMinions().size(), 0);
-					playCard(context, player, "spell_living_mana");
-					assertEquals(player.getMinions().size(), 7);
-					assertEquals(player.getMana(), 3);
+					assertEquals(player.getMana(), 5);
 				}));
 				runGym(((context, player, opponent) -> {
 					player.setMaxMana(10);
@@ -903,7 +895,7 @@ public class JourneyToUngoroTests extends TestBase {
 					assertEquals(costOf(context, player, livingmana), 4);
 					playCard(context, player, livingmana);
 					assertEquals(player.getMinions().size(), 7);
-					assertEquals(player.getMana(), 4);
+					assertEquals(player.getMana(), 6);
 				}));
 			}
 
