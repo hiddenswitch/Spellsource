@@ -15,21 +15,21 @@
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "card": "token_storm_spirit"
+              "card": "token_bellowing_spirit"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "card": "token_earth_spirit"
+              "card": "token_unearthed_spirit"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "card": "token_fire_spirit"
+              "card": "token_burning_spirit"
             }
           }
         ],
@@ -46,15 +46,15 @@
   "spell": {
     "class": "SummonSpell",
     "cards": [
-      "token_storm_spirit",
-      "token_earth_spirit",
-      "token_fire_spirit"
+      "token_bellowing_spirit",
+      "token_unearthed_spirit",
+      "token_burning_spirit"
     ],
     "exclusive": true,
     "randomTarget": true
-  }
-},
-"collectible": true,
-"set": "CUSTOM",
-"fileFormatVersion": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }
+

@@ -3,6 +3,9 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.34 (In Progress)
+
+Lots of Monk changes courtesy of @Grand!
 
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
