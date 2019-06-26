@@ -860,7 +860,7 @@ public class JourneyToUngoroTests extends TestBase {
 	}
 
 	@Test
-/*	public void testLivingMana() {
+	public void testLivingMana() {
 		zip(Stream.of(5, 6, 7, 8, 9, 10), Stream.of(5, 6, 7, 7, 7, 7), (mana, maxMinionsSummoned) -> {
 			for (int i = 0; i <= 7; i++) {
 				int finalI = i;
@@ -875,27 +875,40 @@ public class JourneyToUngoroTests extends TestBase {
 					int minionsOnBoard = Math.min((int) maxMinionsSummoned + finalI, 7);
 					int minionsSummonedByLivingMana = Math.min(7, minionsOnBoard - finalI);
 					assertEquals(player.getMinions().size(), minionsOnBoard);
-					assertEquals(player.getMaxMana(), mana - minionsSummonedByLivingMana,
+					assertEquals(player.getMana(), mana - minionsSummonedByLivingMana,
 							String.format("Prior max mana: %d, prior minions on  board: %d", mana, finalI));
+				}));
+				runGym(((context, player, opponent) -> {
+					player.setMaxMana(10);
+					player.setMana(10);
+					assertEquals(player.getMinions().size(), 0);
+					playCard(context, player, "spell_living_mana");
+					assertEquals(player.getMinions().size(), 7);
+					assertEquals(player.getMana(), 3);
+				}));
+				runGym(((context, player, opponent) -> {
+					player.setMaxMana(10);
+					player.setMana(10);
+					assertEquals(player.getMinions().size(), 0);
+					playCard(context, player, "spell_living_mana");
+					assertEquals(player.getMinions().size(), 7);
+					assertEquals(player.getMana(), 3);
+				}));
+				runGym(((context, player, opponent) -> {
+					player.setMaxMana(10);
+					player.setMana(10);
+					assertEquals(player.getMinions().size(), 0);
+					Card livingmana = receiveCard(context, player, "spell_living_mana");
+					playCard(context, player, "spell_reduce_card_cost_test");
+					assertEquals(costOf(context, player, livingmana), 4);
+					playCard(context, player, livingmana);
+					assertEquals(player.getMinions().size(), 7);
+					assertEquals(player.getMana(), 4);
 				}));
 			}
 
-
 			return null;
 		}).collect(toList());
-	}*/
-	public void testLivingMana() {
-		runGym(((context, player, opponent) -> {
-			player.setMaxMana(7);
-			player.setMana(7);
-			assertEquals(player.getMinions().size(), 0);
-			playCard(context, player, "spell_living_mana");
-
-			assertEquals(player.getMinions().size(), 7);
-			assertEquals(player.getMana(), 0);
-// why mana will turn negative: cost is deducted from player twice.
-// 8 - 12 = 8 - (7 + 5) = -4 while 7 already includes the cost of 5 manas in it.
-		}));
 	}
 
 
