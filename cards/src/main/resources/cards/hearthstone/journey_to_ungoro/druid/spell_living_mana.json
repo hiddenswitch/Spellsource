@@ -12,14 +12,9 @@
       "class": "AlgebraicValueProvider",
       "operation": "MINIMUM",
       "value1": {
-        "class": "AlgebraicValueProvider",
-        "operation": "SUBTRACT",
-        "value1": {
-          "class": "PlayerAttributeValueProvider",
-          "playerAttribute": "MAX_MANA",
-          "targetPlayer": "SELF"
-        },
-        "value2": 5
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MAX_MANA",
+        "targetPlayer": "SELF"
       },
       "value2": {
         "class": "AlgebraicValueProvider",
@@ -34,7 +29,7 @@
     "spells": [
       {
         "class": "SummonSpell",
-        "howMany": {
+        "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         },
@@ -43,9 +38,23 @@
       {
         "class": "ModifyMaxManaSpell",
         "value": {
-          "class": "GameValueProvider",
-          "gameValue": "SPELL_VALUE",
-          "multiplier": -1
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA",
+            "targetPlayer": "SELF"
+          },
+          "value2": {
+            "class": "AlgebraicValueProvider",
+            "operation": "ADD",
+            "value1": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE",
+              "multiplier": -1
+            },
+            "value2": 5
+          }
         }
       }
     ]
