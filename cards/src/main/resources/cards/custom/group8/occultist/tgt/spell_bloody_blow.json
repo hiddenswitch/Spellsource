@@ -1,10 +1,10 @@
 {
   "name": "Bloody Blow",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Take $4 damage. Deal $2 damage to all minions.",
+  "description": "Take $2 damage. Deal $2 damage to two random enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
