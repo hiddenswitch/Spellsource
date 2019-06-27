@@ -5,25 +5,14 @@
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Restore [0] Health to your Champion. (Increases by 3 for each minion that died this turn.)",
-  "trigger": {
-    "eventTrigger": {
-      "class": "MinionDeathTrigger",
-      "targetPlayer": "BOTH"
-    },
-    "spell": {
-      "class": "ModifyAttributeSpell",
-      "target": "SELF",
-      "attribute": "RESERVED_INTEGER_1"
-    },
-    "targetSelection": "ANY",
-    "spell": {
-      "class": "HealSpell",
-      "value": {
-        "class": "AttributeValueProvider",
-        "target": "SELF",
-        "attribute": "RESERVED_INTEGER_1",
-        "multiplier": 3
-      }
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": {
+      "class": "DiedThisTurnValueProvider",
+      "targetPlayer": "BOTH",
+      "multiplier": 3
     }
   },
   "collectible": true,
@@ -33,9 +22,7 @@
     {
       "class": "ValueDescription",
       "value": {
-        "class": "AttributeValueProvider",
-        "target": "SELF",
-        "attribute": "RESERVED_INTEGER_1",
+        "class": "DiedThisTurnValueProvider",
         "multiplier": 3
       }
     }

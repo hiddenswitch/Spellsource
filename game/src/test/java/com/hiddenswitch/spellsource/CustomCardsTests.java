@@ -7135,5 +7135,38 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testAncientBlood() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(2);
+			playCard(context, player, "spell_ancient_blood");
+			assertEquals(player.getHero().getHp(), 2);
+			for (int i = 0; i < 3; i++) {
+				playCard(context, player, "minion_bloodfen_raptor");
+				playCard(context, opponent, "minion_bloodfen_raptor");
+			}
+			playCard(context, player, "spell_flamestrike");
+			playCard(context, player, "spell_ancient_blood");
+			assertEquals(player.getHero().getHp(), 11);
+			playCard(context, player, "spell_hellfire");
+			assertEquals(player.getHero().getHp(), 8);
+			playCard(context, player, "spell_ancient_blood");
+			assertEquals(player.getHero().getHp(), 26);
+		});
+	}
+
+	@Test
+	public void testBloodyBlow() {
+		CardCatalogue.loadCardsFromPackage();
+		CardCatalogue.getCardById("spell_bloody_blow");
+		runGym((context, player, opponent) -> {
+			Minion minion1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion minion2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_bloody_blow");
+			assertTrue(minion1.isDestroyed());
+			assertTrue(minion2.isDestroyed());
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 2);
+		});
+	}
 }
 

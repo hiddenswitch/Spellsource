@@ -13,13 +13,23 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "MultiTargetSpell",
-    "target": "ENEMY_MINIONS",
-    "value": 2,
-    "spell": {
-      "class": "DamageSpell",
-      "value": 2
-    }
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "MultiTargetSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 2,
+        "spell": {
+          "class": "DamageSpell",
+          "value": 2
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2
+      }
+    ]
   },
   "collectible": true,
   "set": "THE_GRAND_TOURNAMENT",
