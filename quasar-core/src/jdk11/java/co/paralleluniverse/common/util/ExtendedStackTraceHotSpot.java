@@ -225,7 +225,8 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
     static {
         try {
             final String javaVersion = System.getProperty("java.version");
-            if (!javaVersion.startsWith("1.8") && !javaVersion.startsWith("8.") && !javaVersion.startsWith("1.9") && !javaVersion.startsWith("9."))
+            if (!javaVersion.startsWith("1.8") && !javaVersion.startsWith("8.") && !javaVersion.startsWith("1.9") && !javaVersion.startsWith("9.")
+                && !javaVersion.startsWith("11") && !javaVersion.startsWith("12") && !javaVersion.startsWith("13"))
                 throw new IllegalStateException("UnsupportedJavaVersion");
             if (!System.getProperty("java.vm.name").toLowerCase().contains("hotspot"))
                 throw new IllegalStateException("Not HotSpot");

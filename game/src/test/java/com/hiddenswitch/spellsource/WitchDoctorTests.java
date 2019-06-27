@@ -15,6 +15,19 @@ import static org.testng.Assert.*;
 public class WitchDoctorTests extends TestBase {
 
 	@Test
+	public void testMariAnetteAuraInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion dragon = playMinionCard(context, player, "minion_dragon_test");
+			playMinionCard(context, player, "minion_irena_dragon_knight");
+			assertEquals(dragon.getAttack(), dragon.getBaseAttack() * 2);
+			playCard(context,player,"minion_mari_anette");
+			context.endTurn();
+			context.endTurn();
+			context.endTurn();
+		});
+	}
+
+	@Test
 	public void testGurubashiBloodletter() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

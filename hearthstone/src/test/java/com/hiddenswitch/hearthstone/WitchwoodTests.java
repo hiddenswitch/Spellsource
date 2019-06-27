@@ -165,7 +165,7 @@ public class WitchwoodTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Minion paragon = playMinionCard(context, player, "minion_paragon_of_light");
-			playCard(context, player, "spell_dragon_s_strength", paragon);
+			playCard(context, player, "spell_earthen_might", paragon);
 			context.endTurn();
 			context.endTurn();
 			player.getHero().setHp(10);
@@ -239,20 +239,6 @@ public class WitchwoodTests extends TestBase {
 			destroy(context, remove);
 			playMinionCard(context, player, "minion_shudderwock");
 			assertEquals(player.getHand().size(), 0, "Should NOT copy Shudderwock");
-		});
-	}
-
-	@Test
-	public void testShudderwockBloodCultistInteraction() {
-		runGym((context, player, opponent) -> {
-			Minion remove = playMinionCard(context, player, "minion_blood_cultist");
-			context.getLogic().removePeacefully(remove);
-			context.getLogic().endOfSequence();
-			overrideDiscover(context, player, discoverActions -> {
-				fail("Shouldn't prompt to discover");
-				return null;
-			});
-			playMinionCard(context, player, "minion_shudderwock");
 		});
 	}
 

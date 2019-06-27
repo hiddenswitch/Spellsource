@@ -4,6 +4,16 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.34-2.0.31 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Yig's Mastermind and other cards that interact with deck cards would incorrectly cast pre-transformation versions of those cards. It no longer crashes the game.
+ - Mari Anette and Irena, Dragon Knight no longer interact in a way that crashes the game.
+ - Fairy Fixpicker no longer causes crashes when it attempts to replace cards that are immediately roasted or discarded.
+
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
 Bug fixes.

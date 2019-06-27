@@ -18,6 +18,8 @@ import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.tests.util.DebugContext;
+import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -46,7 +48,7 @@ public class BotsTest extends SpellsourceTestBase {
 		sync(() -> {
 			DebugContext context1 = TestBase.createContext(HeroClass.GREEN, HeroClass.GOLD);
 			context1.endTurn();
-			context1.forceStartTurn(context1.getActivePlayerId());
+			context1.startTurn(context1.getActivePlayerId());
 			int startTurn = context1.getTurn();
 			GameAction gameAction = null;
 			while (gameAction == null

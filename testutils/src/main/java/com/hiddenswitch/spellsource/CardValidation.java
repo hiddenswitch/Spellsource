@@ -1,21 +1,18 @@
-package net.demilich.metastone.tests;
+package com.hiddenswitch.spellsource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardParser;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import com.hiddenswitch.spellsource.ResourceInputStream;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,31 +20,14 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
 
-/**
- * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)
- * method to ensure that each card is well formed and can be parsed.
- */
-public class CardValidationTests {
-	private static final String CARDS_DIR = "src/main/resources/cards/"; // relative path from module root
+public class CardValidation {
 	private static final CardParser CARD_PARSER = new CardParser();
-	private static List<File> ALL_CARD_FILES;
 
-	@DataProvider(name = "CardProvider")
-	public static Object[][] getCardFiles() {
-		if (ALL_CARD_FILES == null) {
-			try {
-				ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
-						new File(CARDS_DIR),
-						new RegexFileFilter("^(.*json)"),
-						DirectoryFileFilter.DIRECTORY);
-			} catch (IllegalArgumentException ignored) {
-				ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
-						new File("../cards/" + CARDS_DIR),
-						new RegexFileFilter("^(.*json)"),
-						DirectoryFileFilter.DIRECTORY);
-			}
-
-		}
+	public static Object[][] getCardFiles(String path) {
+		List<File> ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
+				new File(path),
+				new RegexFileFilter("^(.*json)"),
+				DirectoryFileFilter.DIRECTORY);
 
 		int size = ALL_CARD_FILES.size();
 		File file;
@@ -60,8 +40,7 @@ public class CardValidationTests {
 		return matrix;
 	}
 
-	@Test(dataProvider = "CardProvider")
-	public void validateCard(File cardFile) throws IOException {
+	public static void validateCard(File cardFile) throws IOException {
 		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
 
 		try {
