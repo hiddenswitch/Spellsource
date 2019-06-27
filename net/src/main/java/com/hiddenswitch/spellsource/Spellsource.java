@@ -460,6 +460,15 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(31)
 						.withUp(thisVertx -> {
+							// Rerun the earlier changes since something definitely glitched out
+							changeCardId("minion_anub'rekhan", "minion_anobii");
+							changeCardId("minion_azjol_visionary", "minion_visionary");
+							changeCardId("minion_nerubian_vizier", "minion_vizier");
+							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
+							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
+							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
+							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
+							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
 							changeCardId("spell_ahnqiraj_portal", "spell_ancient_waygate");
 						}))
 				.migrateTo(31, then2 ->
