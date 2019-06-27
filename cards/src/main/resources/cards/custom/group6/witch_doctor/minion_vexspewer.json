@@ -16,22 +16,18 @@
         "spell_hex_bolt",
         "spell_spirit_bind"
       ],
-      "randomTarget": true,
-	  "targetPlayer": "SELF"
+      "randomTarget": true
     }
   },
   "deathrattle": {
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "cards": [
-        "spell_divination",
-        "spell_frenzy",
-        "spell_hex_bolt",
-        "spell_spirit_bind"
-      ],
-      "randomTarget": true,
-	  "targetPlayer": "SELF"
-    }
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_divination",
+      "spell_frenzy",
+      "spell_hex_bolt",
+      "spell_spirit_bind"
+    ],
+    "randomTarget": true
   },
   "attributes": {
     "BATTLECRY": true,

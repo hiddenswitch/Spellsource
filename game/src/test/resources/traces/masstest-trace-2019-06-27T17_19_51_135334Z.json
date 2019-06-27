@@ -1,0 +1,11 @@
+{
+  "seed" : 7177143725183245187,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "BLOOD", "ROSE" ],
+  "deckCardIds" : [ [ "minion_lost_tallstrider", "minion_stubborn_stegodon", "minion_massive_turtle", "weapon_heartpiercer", "minion_questing_adventurer", "minion_freyas_familliar", "weapon_voltsaber", "minion_blood_elf_champion", "minion_ragtag_rescuer", "minion_lounge_brownie", "minion_servant_of_kalimos", "spell_blood_to_iron", "spell_red_lightning", "minion_matriarch_aiiran", "minion_malygos", "minion_ursol_the_wise", "spell_systemic_transfer", "minion_pint-sized_summoner", "minion_blood_elf_champion", "spell_rending_curse", "spell_feed_the_flames", "minion_ambushing_rose", "spell_blood_moon_rising", "minion_marrow_render", "spell_systemic_transfer", "spell_harness_suffering", "minion_genn_greymane", "minion_recurring_torrent", "minion_sunfury_protector", "spell_blood_plague_blood_knight" ], [ "secret_devils_deal", "minion_disciple_of_cthun", "minion_cursed_disciple", "minion_zalmah", "spell_marked_for_sacrifice", "spell_hex_zombie", "minion_cairne_bloodhoof", "spell_paranoia", "minion_azalina_soulthief", "minion_doctosaur", "minion_bladesworn", "minion_mechanical_whelp", "minion_murloc_jek", "minion_marsh_drake", "minion_clockwork_gnome", "minion_magic_monkey", "spell_devilry_flare", "minion_piloted_sky_golem", "spell_drain_sanity", "spell_awakening_ritual", "spell_shadow_distortion", "spell_frightful_vision", "spell_paranoia", "minion_djinni_of_zephyrs", "minion_necksnapper", "spell_unearthly_haunting", "weapon_staff_of_origination", "minion_blood_cultist", "spell_nostalgia", "minion_bone_guard" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BOOMSDAY_PROJECT", "RASTAKHANS_RUMBLE", "GOBLINS_VS_GNOMES", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE", "THE_GRAND_TOURNAMENT", "BASIC", "SPELLSOURCE_BASIC", "REWARD", "BLACKROCK_MOUNTAIN", "MEAN_STREETS_OF_GADGETZAN", "HALL_OF_FAME", "VERDANT_DREAMS", "BATTLE_FOR_ASHENVALE", "SANDS_OF_TIME", "NAXXRAMAS", "PROMO", "WITCHWOOD", "RISE_OF_SHADOWS", "KOBOLDS_AND_CATACOMBS", "ONE_NIGHT_IN_KARAZHAN", "CUSTOM", "THE_OLD_GODS", "CLASSIC", "LEAGUE_OF_EXPLORERS" ],
+  "mulligans" : [ [ 23, 20 ], [ 64, 38 ] ],
+  "actions" : [ 0, 0, 0, 0, 2, 2, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 3, 6, 2, 3, 1, 7, 2, 6, 2, 11, 2, 1, 3, 7, 0, 0, 3, 7, 16, 7, 9, 4 ],
+  "id" : null
+}
