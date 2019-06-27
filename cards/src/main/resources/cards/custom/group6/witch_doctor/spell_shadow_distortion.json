@@ -1,14 +1,14 @@
 {
-  "name": "Shadow Distortion",
+  "name": "Alter Ego",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
-  "description": "Deal $2 damage to all minions. Swap the Attack and Health of the survivors.",
+  "description": "Deal $2 damage to all enemy minions. Swap the Attack and Health of the survivors.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-    "target": "ALL_MINIONS",
+    "target": "ENEMY_MINIONS",
     "spells": [
       {
         "class": "DamageSpell",
