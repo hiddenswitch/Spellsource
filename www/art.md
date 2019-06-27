@@ -4,9 +4,18 @@ title: Art
 permalink: /art/
 ---
 
-# Spellsource Art Specification
+# Spellsource Art Specification (1.1)
 
 This document contains the basic art specifications and needs for Spellsource.
+
+### Changes Since 1.0
+
+ - Clarified that status icons for minions can be auras / outline changes to the base card, and which statuses appear most frequently with others.
+ - Clarified values that appear sometimes next to champions.
+ - Added leftmost and rightmost card icons.
+ - In-hand card can now be a scaled-down version of a mobile full-screen, natural sized card.
+ - Targetability/selectability is now programmatically rendered as an outline.
+ - Added Card Creator spec for a **screenshot** instead of individual elements.
 
 ### Key Facts
 
@@ -37,41 +46,30 @@ These are the art products needed in order of priority.
 
 Spellsource needs a mobile-ready portrait and landscape supporting battlefield where the main gameplay takes place.
 
- - Accommodates 7 minion tokens on each side of the battlefield.
+ - Accommodates 7 minion tokens on each side of the battlefield with a base card, character sprite and shadow.
     - Tokens need to show their attack and hitpoint values at a glance.
-    - Should accommodate up to 2 additional status indicator icons.
+    - Should accommodate statuses.
+        - See the [Buffs/debuffs/statuses](#buffsdebuffsstatuses) section for the different statuses. 
+        - At most **one** icon.
+        - Whenever favorable for portrait layout, render the status as an overlaid particle effect, stationary graphic aura, or distinct outline / shape change for the base card.
+        - These often stack!
+            - Guard is the most often stacked with others, so it's a good candidate for a base card shape change. It indicates that it must be targeted first when doing physical attacks.
+            - Trigger host is the second most often stacked with others and is also used to communicate gameplay effects.
+            - Finally, Aftermath is the third most often stacked with others. This communicates to players that a character does something important when it dies. Currently rendered as a "giftbox."
+            - Everything else is very rarely stacking with each other so it's okay if it overlaps.
     - Clear which side of the battlefield is friendly versus opposing.
     - Needs to be in a line.
-    - Can be touch held to show the card corresponding to the minion.
+    - Can be touch held to show the card corresponding to the minion. This is also a chance to provide tooltips for all the statuses/indicators in effect for the character, so that in case the statuses are crowded players still know what's going on.
  - A champion token, a weapon token and a skill token on each side.
     - Can be touch held to show the card corresponding to the token.
-    - Accommodates 2 additional status indicator icons.
+    - Champions can have buffs/debuffs/statuses like the minions.
     - Both have hitpoint values.
     - Weapon has an attack value.
-    - Champion sometimes has an attack value.
-    - Champion sometimes has an armor value.
-    - Otherwise champions can have buffs/debuffs/statuses like the minions.
- - Buffs/debuffs/statuses:
-    - Playability auras: animated borders that indicate the status of the character
-        - None (default unplayable)
-        - Green: playable
-        - White: targetable
-        - Yellow: condition playable (indicates the card's condition, like its opener condition, is met)
-    - Aftermath: indicates when the character dies something happens
-    - Trigger host: indicates the character's text is listening to events on the battlefield and may cause other effects
-    - Guard: indicates the character must be targeted by physical attacks before other characters. May be indicated by using two rows, an icon, or some kind of change to the base card.
-    - Stunned: A character that has a no-attack debuff.
-    - Hidden: A character that cannot be targeted until it attacks first.
-    - Extra strike: A character that can attack twice
-    - Dodge: A character which takes no damage the first time it is hit. Dodge is lost after the first hit.
-    - Deflect: A character whose champion takes damage instead the first time it is hit. Deflect is lost after the first hit.
-    - Elusive: Cannot be targeted by spells or skills.
-    - Toxic: A minion or weapon that kills whatever it hits.
-    - Silenced: Indicates a character whose text is no longer in play.
-    - Drain: Indicates a minion restores and gains health for each damage dealt.
-    - Litedrain: Indicates minion or weapon only restores health for each damage dealt.
+    - **Sometimes values**:
+        - Champion sometimes has an attack value.
+        - Champion sometimes has an armor value.
  - Both player's hands, up to ten cards.
-    - Should be clear which card is the "leftmost" and "rightmost"
+    - Should be clear which card is the "leftmost" and "rightmost" using a **simple icon** (like a left arrow or a right arrow).
     - During the opponent's turn, opponent's hand position changes and draws should be clear.
     - Each card should have a mana cost, title, portrait and when applicable, attack and health values. See the card deliverable for more detail.
     - Has a "zoomed out" view, which should show some small suggestion of the image, the title and cost at minimum, and a "zoomed in" view, which allows the player to drag and drop any of the cards easily. "zoomed in" may also expand into a traditional scrollable grid instead of obscuring elements on screen.
@@ -101,6 +99,28 @@ Spellsource needs a mobile-ready portrait and landscape supporting battlefield w
     - First battlefield based on the Spellsource lore
     - Large, rectangular, croppable
     - Could be tileset
+
+##### Buffs/Debuffs/Statuses
+
+ - Playability/targetability auras: **Programmatically** rendered borders that indicate the status of the character
+     - None (default unplayable)
+     - Green: playable
+     - White: targetable
+ - **Condition Playable**: A particle effect aura overlaid on the card or character  that indicates the card's condition, like its opener condition, is met. For example, some cards gain a bonus if you hold another card in your hand. This aura communicates the condition is met.
+ - Aftermath: indicates when the character dies something happens
+ - Trigger host: indicates the character's text is listening to events on the battlefield and may cause other effects. The indicator or aura will "activate" whenever the trigger fires, during game events, to communicate to the player that the trigger has fired.
+ - Guard: indicates the character must be targeted by physical attacks before other characters. May be indicated by using two rows, an icon, or some kind of change to the base card.
+ - Stunned: A character that has a no-attack debuff.
+ - Hidden: A character that cannot be targeted until it attacks first.
+ - Extra strike: A character that can attack twice
+ - Dodge: A character which takes no damage the first time it is hit. Dodge is lost after the first hit.
+ - Deflect: A character whose champion takes damage instead the first time it is hit. Deflect is lost after the first hit.
+ - Elusive: Cannot be targeted by spells or skills.
+ - Toxic: A minion or weapon that kills whatever it hits.
+ - Silenced: Indicates a character whose text is no longer in play.
+ - Drain: Indicates a minion restores and gains health for each damage dealt.
+ - Litedrain: Indicates minion or weapon only restores health for each damage deal
+ - **Wounded:** Indicates the character has taken damage and is no longer at maximum health.
 
 #### 2. Card
 
@@ -146,10 +166,10 @@ A visual representation of a card at multiple scales.
     - Back of card is just a small-scale card back.
     - Used to represent opponent's hand on the battlefield and potentially touchables in the power history.
  - **Small**: In-hand card zoomed out.
+    - Can be a **scaled down** version of a full card, but the following elements should be legible in scaled-down version:
     - Front of card shows visible title and Thumbnail scale of portrait (see portrait elements).
     - Mana cost, attack, health, and a card type easily visible.
-    - All other elements from tiny.
- - **Full**: In-hand card at natural size (close to 3.5x2.5 in, or 204x145 pixels, exact size TBD)
+ - **Full**: Card at natural screen size (close to 3.5x2.5 in, or 204x145 pixels, exact size TBD)
     - All elements from tiny and small.
     - Full description.
     - Full portrait
@@ -274,6 +294,15 @@ These elements will be used for app stores, icons, trademarks, the wiki and the 
     - Class Maker / Contributor icon for people who write champions and cards
     - Lore Writer / Contributor icon for people who write to the wiki
 
-#### 6. Card Creator Elements
+#### 6. Card Creator Screenshot
 
-Pixel art style elements for a [Blockly](https://developers.google.com/blockly/) based code editor for creating cards in the game. TBD. Requires some investigation into the official blockly editor. Primarily 9-slice colored elements with various notches.
+Screenshot for reference for a [Blockly](https://developers.google.com/blockly/) based code editor for creating cards in the game. This screenshot will be the reference image for programmatically generated pixel art in the actual code editor engine.
+
+ - [Use this demo to understand what this is](https://developers.google.com/blockly/)
+ - [Use this screenshot for reference](https://www.dropbox.com/s/wxtn5bqwmlgdklq/Blockly%20Screenshot.png?dl=1)
+ - Variety of blocks and notches should be rendered in pixel art with thematic text.
+ - Right pane shows Spellsource card with editable text fields.
+ - Left pane should show list of blocks.
+ - Does **not** need to be sliced
+ - Include the play button. This would hide the editor and take you into a battlefield with the card in your hand.
+ - Keep it **landscape iPhone sized**. If you have an innovative idea on how to make this portrait go for it, but it may be too hard! There are other block based programming tools for phones to reference.s
