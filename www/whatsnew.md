@@ -4,10 +4,6 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.34 (In Progress)
-
-Kahl of the Deep is now a 3/5, cost 5, that draws 3 cards for the opponent instead of 8. (1182)
-
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
 Bug fixes.
