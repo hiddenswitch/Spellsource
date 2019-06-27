@@ -15,11 +15,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.events.GameStartEvent;
-import net.demilich.metastone.game.events.TurnEndEvent;
-import net.demilich.metastone.game.events.TurnStartEvent;
-import net.demilich.metastone.game.events.WillEndSequenceEvent;
-import net.demilich.metastone.game.events.PreGameStartEvent;
+import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
@@ -30,7 +26,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
@@ -908,13 +903,13 @@ public class CustomCardsTests extends TestBase {
 			Minion kahl = playMinionCard(context, player, "minion_kahl_of_the_deep");
 			destroy(context, kahl);
 			assertEquals(opponent.getDeck().size(), 1);
-			for (int i = 0; i < 9; i++) {
+			for (int i = 0; i < 4; i++) {
 				// Inserts to the bottom of the deck
 				context.getLogic().insertIntoDeck(opponent, CardCatalogue.getCardById("spell_the_coin"), 0);
 			}
-			assertEquals(opponent.getDeck().size(), 10);
+			assertEquals(opponent.getDeck().size(), 5);
 			context.endTurn();
-			assertEquals(opponent.getHand().size(), 9, "Drew 8 cards + Kahl");
+			assertEquals(opponent.getHand().size(), 4, "Drew 3 cards + Kahl");
 			assertEquals(opponent.getDeck().size(), 1, "1 card left in the deck");
 			assertEquals(opponent.getHand().get(0).getCardId(), "minion_kahl_of_the_deep");
 		});
