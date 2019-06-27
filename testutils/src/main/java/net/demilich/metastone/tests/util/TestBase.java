@@ -368,11 +368,11 @@ public class TestBase {
 		context.performAction(player.getId(), physicalAttackAction);
 	}
 
-	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
+	public static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
 		return createContext(hero1, hero2, true, DeckFormat.CUSTOM);
 	}
 
-	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit, DeckFormat deckFormat) {
+	public static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit, DeckFormat deckFormat) {
 		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
 		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
 

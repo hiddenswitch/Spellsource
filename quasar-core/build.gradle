@@ -17,6 +17,9 @@ plugins {
     id 'java'
 }
 
+group 'com.hiddenswitch'
+version '0.8.0'
+
 ext.vendor = "Parallel Universe Software Co."
 ext.quasarJar = "${rootProject.projectDir}/quasar-core/build/libs/quasar-core-${version}.jar" // project(':quasar-core').jar.archivePath
 ext.java8 = JavaVersion.current() == JavaVersion.VERSION_1_8
@@ -24,10 +27,8 @@ ext.guavaVer = '26.0-jre'
 ext.asmVer = project.ext.java8 ? '5.2' : '7.0'
 ext.kotlinVer = '1.3.0'
 
-group 'com.hiddenswitch'
-version '0.8.0'
-
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.current()
 
 repositories {
     mavenLocal()
@@ -163,7 +164,9 @@ dependencies {
 
     // this happens after we've filtered the dependency on ASM from core's module-info
     compileTestJava {
-        options.compilerArgs += ["--add-modules", "org.objectweb.asm", "--add-reads", "co.paralleluniverse.quasar.core=org.objectweb.asm"]
+        if (!project.ext.java8) {
+            options.compilerArgs += ["--add-modules", "org.objectweb.asm", "--add-reads", "co.paralleluniverse.quasar.core=org.objectweb.asm"]
+        }
     }
 
     provided('junit:junit:4.12') {
@@ -180,42 +183,25 @@ dependencies {
 
 compileJava.dependsOn processResources
 compileJava {
-    if (project.name != 'quasar-kotlin') {
-        doLast {
-            scanAndInstrument(sourceSets.main, [configurations.provided, configurations.runtime])
-        }
+    doLast {
+        scanAndInstrument(sourceSets.main, [configurations.provided, configurations.runtime])
     }
 }
 
-test.dependsOn jar
-
-tasks.withType(Test) {
-    useJUnit()
-
-    if (project.name != 'quasar-kotlin') {
-//            moduleOptions {
-//                runOnClasspath = true
-//            }
+test {
+    if (!project.ext.java8) {
+        jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
     }
-    // jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
-    // systemProperty 'co.paralleluniverse.fibers.verifyInstrumentation', 'true'
-
-    // systemProperty "java.util.logging.config.file", "jul.properties"
-
-    // Uncomment and add ${rootProject.projectDir}/log4j.xml, if not present, for logging
-    // systemProperty "log4j.configurationFile", "${rootProject.projectDir}/log4j.xml"
-
-    // systemProperty "Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
-
-    // systemProperty 'co.paralleluniverse.debugMode', 'true'
+    
+    dependsOn = [jar, compileClassloadertestJava]
+    useJUnit()
+    
     systemProperty 'co.paralleluniverse.monitoring.flightRecorderLevel', '5'
     systemProperty 'co.paralleluniverse.globalFlightRecorder', 'true'
     systemProperty 'co.paralleluniverse.flightRecorderDumpFile', 'quasar.log'
     systemProperty 'co.paralleluniverse.monitoring.flightRecorderSize', '200000'
 
-    if (project.name != 'quasar-core') {
-        jvmArgs "-javaagent:${quasarJar}" // =vdmc (verbose, debug, allow monitors, check class)
-    }
+    jvmArgs "-javaagent:${project.ext.quasarJar}" // =vdmc (verbose, debug, allow monitors, check class)
 
     if (project.name != 'quasar-kotlin') { // TODO investigate why kotlin-plugin 1.1.2+ doesn't like it
         jvmArgs "-Xbootclasspath/a:${configurations.timewarp.singleFile}"
@@ -225,12 +211,6 @@ tasks.withType(Test) {
     }
 
     jvmArgs "-Xmx1024m"
-//        jvmArgs "-XX:+TraceClassLoading"
-//        jvmArgs "-XX:+TraceClassUnloading"
-//        if (!project.ext.java8) {
-//            jvmArgs "-XX:MaxPermSize=512m" // Travis is having some trouble with PermGen
-//        }
-    // jvmArgs "-XX:-UseCompressedOops"
 
     beforeTest { desc ->
         logger.quiet("Running test: " + desc)
@@ -266,26 +246,22 @@ tasks.withType(Test) {
 
         systemProperty "log4j.configurationFile", "${rootProject.projectDir}/log4j.xml"
         systemProperty "Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
-        // systemProperty 'co.paralleluniverse.fibers.verifyInstrumentation', 'true'
-        jvmArgs "-javaagent:${quasarJar}" // =vdmc (verbose, debug, allow monitors, check class)
-
-        // jvmArgs '-XX:+UnlockCommercialFeatures', '-XX:+FlightRecorder', '-XX:StartFlightRecording=duration=60s,filename=recording.jfr,settings=heap'
+        jvmArgs "-javaagent:${project.ext.quasarJar}" // =vdmc (verbose, debug, allow monitors, check class)
     }
 }
 
-project.afterEvaluate {
-    run.dependsOn project(':quasar-core').shadowJar
-
-    jar {
-        manifest {
-            attributes(
-                    "Implementation-Title": project.name,
-                    "Implementation-Version": version,
-                    "Implementation-Vendor": vendor,
-                    "Automatic-Module-Name": project.moduleName,
-                    "Built-By": System.getProperty("user.name"),
-            )
-        }
+jar {
+    manifest {
+        attributes(
+                "Implementation-Title"      :   project.name,
+                "Implementation-Version"    :   version,
+                "Implementation-Vendor"     :   vendor,
+                "Premain-Class"             :   "co.paralleluniverse.fibers.instrument.JavaAgent",
+                "Agent-Class"               :   "co.paralleluniverse.fibers.instrument.JavaAgent",
+                "Can-Retransform-Classes"   :   "true",
+                "Can-Redefine-Classes"      :   "true",
+                "Built-By"                  :   System.getProperty("user.name"),
+        )
     }
 }
 
@@ -293,27 +269,13 @@ tasks.withType(JavaExec) {
     classpath += sourceSets.test.runtimeClasspath + sourceSets.test.output + sourceSets.jmh.runtimeClasspath + sourceSets.jmh.output
 }
 
-//    tasks.withType(Debug) {
-//        classpath = sourceSets.test.runtimeClasspath
-//    }
-
 configure(javadoc) {
     classpath += configurations.provided
 
     exclude 'module-info.java' // Temporary, as module path is not added
 
     options {
-//          addStringOption('-module-path', classpath.asPath)
-        // docletpath = configurations.markdownDoclet.files.asType(List)
-        // doclet = 'ch.raffael.doclets.pegdown.PegdownDoclet'
-        // addStringOption("parse-timeout", "10")
         addStringOption('Xdoclint:none', '-quiet')
-//             addStringOption('-module-path', classpath.asPath)
-        // stylesheetFile = rootProject.file('./baselib/javadoc.css')
-//            links = [
-//                "https://docs.oracle.com/en/java/javase/11/docs/api/",
-//                "https://google.github.io/guava/releases/${guavaVer}/api/docs/"
-//            ]
     }
 }
 
@@ -366,12 +328,6 @@ configurations.runtime.artifacts.with { archives ->
 
 configurations {
     archives.extendsFrom runtime
-}
-
-configure(project.tasks.compileJava) {
-    doLast {
-        scanAndInstrument(sourceSets.main, [configurations.provided, configurations.runtime])
-    }
 }
 
 def scanAndInstrument(SourceSet sset, configs) {
