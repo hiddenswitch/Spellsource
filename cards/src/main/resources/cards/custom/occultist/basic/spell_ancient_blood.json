@@ -14,7 +14,7 @@
       "class": "ModifyAttributeSpell",
       "target": "SELF",
       "attribute": "RESERVED_INTEGER_1"
-    }
+    },
   "targetSelection": "ANY",
     "spell": {
       "class": "HealSpell",
