@@ -1061,7 +1061,7 @@ public class CustomCardsTests extends TestBase {
 	public void testTaintedRaven() {
 		runGym((context, player, opponent) -> {
 			Minion taintedRaven = playMinionCard(context, player, "minion_tainted_raven");
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 4; i++) {
 				receiveCard(context, opponent, "spell_the_coin");
 			}
 			context.getLogic().endOfSequence();

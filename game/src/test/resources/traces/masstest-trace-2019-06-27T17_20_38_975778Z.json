@@ -1,0 +1,11 @@
+{
+  "seed" : 1932431854298232971,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "ROSE", "BLACK" ],
+  "deckCardIds" : [ [ "minion_witching_traveler", "spell_shadow_puppetry", "minion_faceless_behemoth", "minion_silverback_matriarch", "secret_shallow_grave", "minion_mind_control_tech", "minion_glacial_shard", "spell_split_personality", "spell_voodoo_infusion", "spell_cursed_mask", "minion_wolpertinger", "minion_zandalari_conjurer", "spell_shadow_puppetry", "minion_lord_of_the_arena", "minion_tunnel_soulfinder", "spell_hex_zombie", "spell_morbid_mockery", "minion_baron_rivendare", "minion_fassnu_avenger", "spell_evocation_witchdoctor", "minion_archivist_elysiana", "secret_funeral_rites", "minion_beloved_benji", "minion_barside_slinker", "minion_nerubian_prophet", "minion_raptor_rider_raider", "minion_blackboar", "spell_split_personality", "minion_bwonsamdi_witchdoctor", "spell_rage_ascension" ], [ "spell_leeching_poison", "weapon_necrium_blade", "spell_sprint", "weapon_shadowblade", "spell_pocket_sand", "spell_pocket_sand", "minion_si7_agent", "minion_silver_hand_regent", "minion_patient_assassin", "minion_cursed_castaway", "spell_togwaggles_scheme", "minion_green_jelly", "minion_ghuun", "minion_dark_iron_skulker", "weapon_shadowblade", "minion_jade_spirit", "minion_zilch_god_of_nothing", "minion_ravenholdt_assassin", "minion_ticking_giant", "minion_masquerading_dryad", "minion_grassroot_mossling", "permanent_desolation_of_karesh", "weapon_obsidian_shard", "minion_hoarding_dragon", "minion_cavern_shinyfinder", "minion_timewalker_stormlord", "minion_selfburner", "spell_pilfer", "secret_sudden_betrayal", "minion_inora_spellbound" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BOOMSDAY_PROJECT", "RASTAKHANS_RUMBLE", "GOBLINS_VS_GNOMES", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE", "THE_GRAND_TOURNAMENT", "BASIC", "SPELLSOURCE_BASIC", "REWARD", "BLACKROCK_MOUNTAIN", "MEAN_STREETS_OF_GADGETZAN", "HALL_OF_FAME", "VERDANT_DREAMS", "BATTLE_FOR_ASHENVALE", "SANDS_OF_TIME", "NAXXRAMAS", "PROMO", "WITCHWOOD", "RISE_OF_SHADOWS", "KOBOLDS_AND_CATACOMBS", "ONE_NIGHT_IN_KARAZHAN", "CUSTOM", "THE_OLD_GODS", "CLASSIC", "LEAGUE_OF_EXPLORERS" ],
+  "mulligans" : [ [ 32, 29 ], [ 41 ] ],
+  "actions" : [ 0, 1, 0, 0, 3, 0, 0, 3, 0, 1, 1, 1, 0, 2, 1, 0, 0, 0, 7, 4, 2, 0, 0, 3, 8, 8, 2, 1, 0, 3, 10, 1, 4, 4, 0, 0, 17 ],
+  "id" : null
+}
