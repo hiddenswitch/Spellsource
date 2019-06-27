@@ -457,7 +457,12 @@ public class Spellsource {
 							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
 							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
 						}))
-				.migrateTo(30, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(31)
+						.withUp(thisVertx -> {
+							changeCardId("spell_ahnqiraj_portal", "spell_ancient_waygate");
+						}))
+				.migrateTo(31, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
