@@ -600,9 +600,9 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testAnzuTheRavenGod() {
+	public void testKinruTheBenevolent() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_anzu_the_raven_god");
+			playCard(context, player, "minion_kinru_the_benevolent");
 			playCard(context, player, "spell_doom");
 			assertEquals(player.getMinions().size(), 0);
 		});
@@ -690,17 +690,17 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testCursedMirror() {
+	public void testBodyswap() {
 		runGym((context, player, opponent) -> {
 			Minion test = playMinionCard(context, player, "minion_neutral_test");
-			playCard(context, player, "spell_cursed_mirror", test);
+			playCard(context, player, "spell_bodyswap", test);
 			assertEquals(test.getHp(), 30);
 			assertEquals(player.getHero().getHp(), CardCatalogue.getCardById("minion_neutral_test").getBaseHp() + 10);
 		});
 	}
 
 	@Test
-	public void testGhuunTheFalseGod() {
+	public void testSoulcallerRoten() {
 		runGym((context, player, opponent) -> {
 			// Cost 1
 			playMinionCard(context, player, "minion_wisp");
@@ -712,7 +712,7 @@ public class CustomCardsTests extends TestBase {
 			Card card1 = receiveCard(context, player, "minion_cost_three_test");
 			Card card2 = receiveCard(context, player, "minion_cost_three_test");
 			Card card3 = receiveCard(context, player, "minion_neutral_test");
-			playCard(context, player, "minion_ghuun_the_false_god");
+			playCard(context, player, "minion_soulcaller_roten");
 			assertEquals(card1.getZone(), Zones.GRAVEYARD);
 			assertEquals(card2.getZone(), Zones.GRAVEYARD);
 			assertEquals(card3.getZone(), Zones.HAND);

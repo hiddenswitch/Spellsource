@@ -8,7 +8,7 @@
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "TransformMinionSpell",
-    "card": "token_voodoo_pig"
+    "card": "token_sacrificial_pig"
   },
   "collectible": true,
   "set": "CUSTOM",
