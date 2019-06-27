@@ -4,9 +4,13 @@ title: Art
 permalink: /art/
 ---
 
-# Spellsource Art Specification (1.1)
+# Spellsource Art Specification (1.2)
 
 This document contains the basic art specifications and needs for Spellsource.
+
+### Changes Since 1.1
+
+ - Added Blockly/Scratch block spec.
 
 ### Changes Since 1.0
 
@@ -294,9 +298,25 @@ These elements will be used for app stores, icons, trademarks, the wiki and the 
     - Class Maker / Contributor icon for people who write champions and cards
     - Lore Writer / Contributor icon for people who write to the wiki
 
-#### 6. Card Creator Screenshot
+#### 6. Card Creator
 
-Screenshot for reference for a [Blockly](https://developers.google.com/blockly/) based code editor for creating cards in the game. This screenshot will be the reference image for programmatically generated pixel art in the actual code editor engine.
+The card creator is a block based programming interface for coding Spellsource cards.
+
+##### Elements
+
+Use the spec from the [Scratch 3.0 design materials](https://github.com/LLK/scratch-blocks/wiki/Design). This spec will be used 
+
+ - 9 slice "blocks" that support different elements in each of the 9 corners and shows an icon in the center.
+ - Follows a lego-piece like pattern of notches.
+ - The blocks almost always have type.
+ - Sometimes the blocks contain input fields
+ - They have a vertical and horizontal notch pattern.
+ - They sometimes contain empty puzzle piece cutouts inside for doing code loops.
+ - They support a rectangle, diamond, capsule and "start" (hero) border, and a small, wide, and tall shape.
+
+##### Screenshot
+
+Screenshot for reference for a [Blockly](https://developers.google.com/blockly/) based code editor for creating cards in the game. This screenshot will be the reference image for communications about the feature, especially for funders.
 
  - [Use this demo to understand what this is](https://developers.google.com/blockly/)
  - [Use this screenshot for reference](https://www.dropbox.com/s/wxtn5bqwmlgdklq/Blockly%20Screenshot.png?dl=1)
