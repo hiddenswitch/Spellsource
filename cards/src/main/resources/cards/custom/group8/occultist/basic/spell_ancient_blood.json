@@ -1,19 +1,43 @@
 {
-  "name": "Ancient Blood",
-  "baseManaCost": 5,
+  "name": "Bloody Reconstruction",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Restore #12 Health.",
-  "targetSelection": "ANY",
-  "spell": {
-    "class": "HealSpell",
-    "value": 12
+  "description": "Restore [0] Health to your Champion. (Increases by 3 for each minion that died this turn.)",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "attribute": "RESERVED_INTEGER_1"
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1",
+        "multiplier": 3
+      }
+    }
   },
   "collectible": true,
+  "set": "BASIC",
   "fileFormatVersion": 1,
-  "sets": [
-    "CUSTOM",
-    "BASIC"
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1",
+        "multiplier": 3
+      }
+    }
   ]
 }
