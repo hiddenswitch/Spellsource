@@ -1,12 +1,12 @@
 {
-  "name": "Bladesworn",
+  "name": "Entranced Dancer",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Whenever you target this minion with a spell, gain +1 Health.",
+  "description": "After you cast a spell on this, gain +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

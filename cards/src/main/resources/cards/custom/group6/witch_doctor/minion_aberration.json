@@ -1,12 +1,12 @@
 {
-  "name": "Aberration",
+  "name": "Temple Militia",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ROSE",
-  "baseAttack": 3,
-  "baseHp": 2,
+  "baseAttack": 2,
+  "baseHp": 3,
   "rarity": "RARE",
-  "description": "After you target this with a spell, add an Aberration to your hand.",
+  "description": "After you cast a spell on this, add a Temple Militia to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

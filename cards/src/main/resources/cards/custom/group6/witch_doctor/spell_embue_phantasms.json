@@ -1,22 +1,29 @@
 {
   "name": "Embue Phantasms",
-  "baseManaCost": 7,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Give a minion \"Aftermath: Summon five 2/2 Spirits.\"",
-  "targetSelection": "MINIONS",
+  "description": "Draw 2 cards. Give any minions drawn 'Aftermath: Summon a 2/2 Spirit'.",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "AddDeathrattleSpell",
+    "class": "DrawCardSpell",
+    "value": 2,
     "spell": {
-      "class": "SummonSpell",
-      "cards": [
-        "token_voodoo_spirit",
-        "token_voodoo_spirit",
-        "token_voodoo_spirit",
-        "token_voodoo_spirit",
-        "token_voodoo_spirit"
-      ]
+      "class": "ConditionalSpell",
+      "target": "OUTPUT",
+      "condition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      },
+      "spell": {
+        "class": "AddDeathrattleSpell",
+		"target": "OUTPUT",
+        "spell": {
+          "class": "SummonSpell",
+          "cards": [
+            "token_voodoo_spirit"
+		  ]
     }
   },
   "collectible": true,
