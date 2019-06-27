@@ -29,13 +29,15 @@
   "collectible": true,
   "set": "BASIC",
   "fileFormatVersion": 1,
-   {
+    "dynamicDescription": [
+      {
       "class": "ValueDescription",
       "value": {
         "class": "AttributeValueProvider",
         "target": "SELF",
         "attribute": "RESERVED_INTEGER_1",
-		"multiplier": 3
-      }
+	"multiplier": 3
+       }
     }
+  ]
 }
