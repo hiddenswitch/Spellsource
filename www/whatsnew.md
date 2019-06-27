@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.34 (In Progress)
+
+Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
+
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
 Bug fixes.
