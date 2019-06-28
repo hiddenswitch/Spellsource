@@ -6,51 +6,19 @@
   "rarity": "FREE",
   "description": "Summon two different Elemental Spirits",
   "condition": {
-    "class": "AndCondition",
-    "conditions": [
-      {
-        "class": "AndCondition",
-        "conditions": [
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_bellowing_spirit"
-            }
-          },
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_unearthed_spirit"
-            }
-          },
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_burning_spirit"
-            }
-          }
-        ],
-        "invert": true
-      },
-      {
-        "class": "MinionCountCondition",
-        "value": 7,
-        "operation": "LESS"
-      }
-    ]
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
   },
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
+    "value": 2,
     "cards": [
       "token_bellowing_spirit",
       "token_unearthed_spirit",
       "token_burning_spirit"
     ],
-    "exclusive": true,
     "randomTarget": true
   },
   "collectible": true,
