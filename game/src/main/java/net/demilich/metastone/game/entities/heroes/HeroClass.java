@@ -93,7 +93,7 @@ public enum HeroClass {
 			case RED:
 				return CardCatalogue.getCardById("hero_garrosh");
 			case JADE:
-				return CardCatalogue.getCardById("hero_chen_stormstout");
+				return CardCatalogue.getCardById("hero_mienzhou");
 			case ROSE:
 				return CardCatalogue.getCardById("hero_witch_doctor");
 			case NAVY:

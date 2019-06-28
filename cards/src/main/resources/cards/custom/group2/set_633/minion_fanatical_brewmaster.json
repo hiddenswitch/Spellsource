@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "token_tiny_alemental"
+      "card": "token_stony_elemental"
     }
   },
   "attributes": {
