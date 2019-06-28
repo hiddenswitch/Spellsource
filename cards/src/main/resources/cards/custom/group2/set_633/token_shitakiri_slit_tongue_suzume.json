@@ -8,14 +8,26 @@
   "rarity": "FREE",
   "race": "ELEMENTAL",
   "description": "Deflect. Your other minions have Deflect during your opponent's turn.",
-  "aura": {
-    "class": "AttributeAura",
-    "target": "OTHER_FRIENDLY_MINIONS",
-    "condition": {
-      "class": "OwnedByPlayerCondition",
-      "targetPlayer": "INACTIVE"
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "OPPONENT"
     },
-    "attribute": "DEFLECT"
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attribute": "DEFLECT",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DEFLECT",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "revertTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "OPPONENT"
+      }
+    }
   },
   "attributes": {
     "DEFLECT": true

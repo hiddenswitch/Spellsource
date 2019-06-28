@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Can attack twice in a turn.",
+  "description": "Extra Strike (Can attack twice in a turn).",
   "attributes": {
     "WINDFURY": true
   },

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Deflect. Can attack twice in a turn.",
+  "description": "Deflect. Extra Strike (Can attack twice in a turn).",
   "attributes": {
     "DEFLECT": true,
     "WINDFURY": true

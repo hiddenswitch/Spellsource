@@ -7083,5 +7083,41 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(dragon.getAttack(), dragon.getBaseAttack() * 4);
 		});
 	}
+
+	@Test
+	public void testFuryOfTheElements() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "token_bellowing_spirit");
+			playCard(context, player, "token_unearthed_spirit");
+			playCard(context, player, "token_burning_spirit");
+			player.setMana(10);
+			receiveCard(context, player, "spell_fury_of_the_elements");
+			assertEquals(context.getValidActions().size(), 7);
+			playCard(context, player, "spell_fury_of_the_elements");
+			assertEquals(player.getMinions().size(), 5);
+		});
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			playCard(context, player, "spell_fury_of_the_elements");
+			assertFalse(player.getMinions().get(0).equals(player.getMinions().get(1)));
+		});
+	}
+
+	@Test
+	public void testShitakiriSlitTongueSuzumue() {
+		runGym((context, player, opponent) -> {
+			Minion shitakiri = playMinionCard(context, player, "token_shitakiri_slit_tongue_suzume");
+			Minion hadDeflect = playMinionCard(context, player, "minion_test_deflect");
+			Minion didNotHaveDeflect = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			assertTrue(shitakiri.hasAttribute(Attribute.DEFLECT));
+			assertTrue(hadDeflect.hasAttribute(Attribute.DEFLECT));
+			assertTrue(didNotHaveDeflect.hasAttribute(Attribute.DEFLECT));
+			context.endTurn();
+			assertTrue(shitakiri.hasAttribute(Attribute.DEFLECT));
+			assertTrue(hadDeflect.hasAttribute(Attribute.DEFLECT));
+			assertFalse(didNotHaveDeflect.hasAttribute(Attribute.DEFLECT));
+		});
+	}
 }
 

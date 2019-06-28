@@ -8,19 +8,22 @@ import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
-import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.*;
+import com.hiddenswitch.spellsource.models.CollectionTypes;
+import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
+import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
+import com.hiddenswitch.spellsource.models.MigrationRequest;
+import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.reflections.Reflections;
@@ -40,7 +43,6 @@ import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -457,7 +459,157 @@ public class Spellsource {
 							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
 							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
 						}))
-				.migrateTo(30, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(31)
+						.withUp(thisVertex -> {
+							changeCardId("minion_student_of_the_tiger", "minion_lungrath_hunter");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(32)
+						.withUp(thisVertex -> {
+							changeCardId("hero_chen_stormstout", "hero_mienzhou");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(33)
+						.withUp(thisVertex -> {
+							changeCardId("hero_power_meditation", "hero_power_effuse");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(34)
+						.withUp(thisVertex -> {
+							changeCardId("minion_blessed_koi_statue", "minion_jade_serpent_statue");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(35)
+						.withUp(thisVertex -> {
+							changeCardId("minion_skunky_brew_alemental", "minion_deepwoods_elemental");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(36)
+						.withUp(thisVertex -> {
+							changeCardId("minion_crane_school_instructor", "minion_desciple_of_shitakiri");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(37)
+						.withUp(thisVertex -> {
+							changeCardId("minion_black_ox_statue", "minion_enchanted_tapestry");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(38)
+						.withUp(thisVertex -> {
+							changeCardId("minion_emperor_shaohao", "minion_master_jigen");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(39)
+						.withUp(thisVertex -> {
+							changeCardId("minion_monastery_guard", "minion_monastery_warden");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(40)
+						.withUp(thisVertex -> {
+							changeCardId("minion_windwalk_master", "minion_shigaraki_elder");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(41)
+						.withUp(thisVertex -> {
+							changeCardId("minion_elusive_brawler", "minion_sly_brawler");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(42)
+						.withUp(thisVertex -> {
+							changeCardId("spell_leg_sweep", "spell_axe_kick");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(43)
+						.withUp(thisVertex -> {
+							changeCardId("spell_chi_torpedo", "spell_chi_restoration");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(45)
+						.withUp(thisVertex -> {
+							changeCardId("spell_gift_of_the_mists", "spell_enlightenment");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(46)
+						.withUp(thisVertex -> {
+							changeCardId("spell_flying_serpent_kick", "spell_fiery_kitsune_punch");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(47)
+						.withUp(thisVertex -> {
+							changeCardId("spell_fortifying_brew", "spell_fortifying_prayer");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(48)
+						.withUp(thisVertex -> {
+							changeCardId("spell_storm_earth_and_fire", "spell_fury_of_the_elements");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(49)
+						.withUp(thisVertex -> {
+							changeCardId("spell_staggering_brew", "spell_honed_potion");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(50)
+						.withUp(thisVertex -> {
+							changeCardId("spell_keg_smash", "spell_mark_of_despair");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(51)
+						.withUp(thisVertex -> {
+							changeCardId("spell_tiger_palm_strike", "spell_palm_strike");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(52)
+						.withUp(thisVertex -> {
+							changeCardId("spell_effuse", "spell_springs_of_ebisu");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(53)
+						.withUp(thisVertex -> {
+							changeCardId("spell_dampen_harm", "spell_steadfast_defense");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(54)
+						.withUp(thisVertex -> {
+							changeCardId("spell_breath_of_fire", "spell_windswept_strike");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(55)
+						.withUp(thisVertex -> {
+							changeCardId("spell_storm_spirit", "spell_bellowing_spirit");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(56)
+						.withUp(thisVertex -> {
+							changeCardId("spell_fire_spirit", "spell_burning_spirit");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(57)
+						.withUp(thisVertex -> {
+							changeCardId("token_xuen_the_white_tiger", "token_kumiho_nine_tailed_kitsune");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(58)
+						.withUp(thisVertex -> {
+							changeCardId("token_chi_ji_the_red_crane", "token_shitakiri_slit_tongue_suzume");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(59)
+						.withUp(thisVertex -> {
+							changeCardId("token_tiny_alemental", "token_stony_elemental");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(60)
+						.withUp(thisVertex -> {
+							changeCardId("token_earth_spirit", "token_unearthed_spirit");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(61)
+						.withUp(thisVertex -> {
+							changeCardId("token_niuzao_the_black_ox", "token_yashima_cheerful_tanuki");
+						}))
+				.migrateTo(61, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
