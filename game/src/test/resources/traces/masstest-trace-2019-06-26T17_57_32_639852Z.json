@@ -1,0 +1,11 @@
+{
+  "seed" : 6670619077477116893,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "NEONGREEN", "JADE" ],
+  "deckCardIds" : [ [ "minion_huge_toad", "minion_giggling_inventor", "spell_xenobulwark", "minion_cursing_chimp", "minion_meat_wagon", "spell_quasar_blast", "minion_grape_merchant", "spell_malignancy", "spell_cannibalize", "spell_cannibalize", "spell_feeding_frenzy", "minion_sated_threshadon", "spell_feeding_frenzy", "minion_night_prowler", "minion_hungry_dragon", "minion_dire_mole", "permanent_formless_celerity", "minion_degenerator", "minion_ice_rager", "minion_reckless_giant", "spell_daunting_carapace", "spell_chaos_bolts", "spell_malignancy", "permanent_formless_immortal", "minion_nesting_roc", "minion_harbinger_of_hope", "minion_amani_berserker", "minion_bull_dozer", "spell_xenobulwark", "minion_heroic_innkeeper" ], [ "minion_kaboom_bot", "spell_fiery_kitsune_punch", "spell_fists_of_fury", "spell_steadfast_defense", "minion_uncle_gao", "minion_grassroot_mossling", "minion_monastery_warden", "spell_soothing_mists", "minion_alien_ravager", "spell_stance_change", "spell_axe_kick", "minion_portal_keeper", "minion_swift_stinger", "spell_springs_of_ebisu", "minion_snapjaw_shellfighter", "minion_crowd_roaster", "minion_primalfin_lookout", "minion_draining_ooze", "minion_sneaky_kaeru", "minion_jar_of_mists", "spell_spinning_crane_kick", "minion_star_aligner", "spell_roll", "minion_deepwoods_elemental", "minion_felsoul_inquisitor", "minion_hecklebot", "spell_fortifying_prayer", "spell_transcendence", "quest_eerie_fermentation", "minion_dirty_rat" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "CLASSIC", "ONE_NIGHT_IN_KARAZHAN", "THE_OLD_GODS", "BLACKROCK_MOUNTAIN", "KNIGHTS_OF_THE_FROZEN_THRONE", "RISE_OF_SHADOWS", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "BOOMSDAY_PROJECT", "VERDANT_DREAMS", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "KOBOLDS_AND_CATACOMBS", "NAXXRAMAS", "SANDS_OF_TIME", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "GOBLINS_VS_GNOMES", "WITCHWOOD", "BASIC", "PROMO", "RASTAKHANS_RUMBLE", "REWARD", "HALL_OF_FAME", "LEAGUE_OF_EXPLORERS" ],
+  "mulligans" : [ [ 31 ], [ 60 ] ],
+  "actions" : [ 0, 0, 2, 2, 0, 0, 0, 0, 1, 2, 1, 0, 0, 9, 9, 6 ],
+  "id" : null
+}

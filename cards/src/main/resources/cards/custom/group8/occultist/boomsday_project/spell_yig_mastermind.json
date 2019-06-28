@@ -1,6 +1,6 @@
 {
   "name": "Yig's Mastermind",
-  "baseManaCost": 8,
+  "baseManaCost": 10,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "LEGENDARY",

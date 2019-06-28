@@ -1,0 +1,11 @@
+{
+  "seed" : -7897344741248698567,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "NEONGREEN" ],
+  "deckCardIds" : [ [ "minion_klive_icetooth", "minion_infinite_futurist", "minion_monastery_scroll-keeper", "spell_axe_kick", "minion_skeram_cultist", "minion_electrowright", "minion_student_of_the_ox", "spell_monastery_s_teachings", "minion_suspicious_wanderer", "spell_springs_of_ebisu", "minion_moat_lurker", "minion_uncle_gao", "minion_artificial_life_cocoon", "minion_quest_giver", "minion_ox_school_instructor", "minion_nefarian", "spell_ox_stance", "minion_hobgoblin", "spell_serpent_stance", "minion_vryghoul", "spell_palm_strike", "minion_monastery_warden", "spell_soothing_mists", "minion_dalaran_crusader", "minion_fanatical_brewmaster", "spell_stance_change", "spell_rising_sun_kick", "minion_faceless_manipulator", "spell_mark_of_despair", "spell_fists_of_fury" ], [ "minion_reno_jackson", "minion_puddlestomper", "minion_degenerator", "spell_daunting_carapace", "permanent_formless_immortal", "permanent_formless_celerity", "spell_reconnoitre", "minion_hakkar_the_soulflayer", "minion_explosive_sheep", "minion_polychrome_hydra", "spell_distort", "minion_heroic_innkeeper", "spell_reconnoitre", "permanent_formless_celerity", "spell_asteroid_impact", "minion_hemet_nesingwary", "minion_explosive_sheep", "minion_dragonmaw_scorcher", "spell_primordial_supremacy", "spell_quasar_blast", "permanent_formless_rancour", "spell_malignancy", "minion_grave_shambler", "minion_blackwing_corruptor", "minion_mind_harvester", "minion_mekgineer_thermaplugg", "minion_hunchback_supplier", "minion_nightmare_whelp", "permanent_formless_immortal", "spell_warp" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "NAXXRAMAS", "VERDANT_DREAMS", "THE_GRAND_TOURNAMENT", "LEAGUE_OF_EXPLORERS", "BATTLE_FOR_ASHENVALE", "CUSTOM", "BLACKROCK_MOUNTAIN", "THE_OLD_GODS", "REWARD", "GOBLINS_VS_GNOMES", "BASIC", "JOURNEY_TO_UNGORO", "BOOMSDAY_PROJECT", "SPELLSOURCE_BASIC", "PROMO", "ONE_NIGHT_IN_KARAZHAN", "KNIGHTS_OF_THE_FROZEN_THRONE", "SANDS_OF_TIME", "KOBOLDS_AND_CATACOMBS", "RISE_OF_SHADOWS", "HALL_OF_FAME", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "WITCHWOOD", "CLASSIC" ],
+  "mulligans" : [ [ 11, 7, 22 ], [ 43, 40 ] ],
+  "actions" : [ 0, 1, 2, 0, 1, 3, 0, 1, 0, 1, 1, 3, 0, 7, 7, 0, 5, 3, 0, 2, 0, 12, 2, 0, 7, 5, 1, 2, 6, 5 ],
+  "id" : null
+}

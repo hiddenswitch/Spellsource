@@ -1,0 +1,26 @@
+{
+  "name": "Deepwoods Elemental",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Deflect. Opener: Summon two 1/2 Elementals.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_stony_elemental",
+        "token_stony_elemental"
+      ]
+    }
+  },
+  "attributes": {
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
