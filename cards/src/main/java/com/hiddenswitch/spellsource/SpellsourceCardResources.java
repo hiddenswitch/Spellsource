@@ -8,7 +8,7 @@ public final class SpellsourceCardResources extends AbstractCardResources<Spells
 
 	@Override
 	public String getDirectoryPrefix() {
-		return "custom";
+		return "cards/custom";
 	}
 }
 
