@@ -9,30 +9,27 @@
   "race": "ELEMENTAL",
   "description": "Opener: If you're holding an Emerald Secret, give your champion an extra strike this turn.",
   "battlecry": {
-    "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "HoldsCardCondition",
-        "cardFilter": {
-          "class": "SpecificCardFilter",
-          "cards": [
-            "secret_secret_of_winter",
-            "secret_secret_of_spring",
-            "secret_secret_of_summer",
-            "secret_secret_of_autumn",
-            "secret_secret_of_twilight"
-          ]
-        },
-        "targetPlayer": "SELF"
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "cards": [
+          "secret_secret_of_winter",
+          "secret_secret_of_spring",
+          "secret_secret_of_summer",
+          "secret_secret_of_autumn",
+          "secret_secret_of_twilight"
+        ]
       },
-      "spell": {
-        "class": "AddAttributeSpell",
-        "target": "FRIENDLY_HERO",
-        "attribute": "WINDFURY",
-        "revertTrigger": {
-          "class": "TurnEndTrigger",
-          "targetPlayer": "SELF"
-        }
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "WINDFURY",
+      "revertTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
       }
     }
   },

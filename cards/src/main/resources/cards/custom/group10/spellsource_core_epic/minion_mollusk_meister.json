@@ -8,7 +8,7 @@
   "baseHp": 8,
   "description": "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "MetaSpell",
       "spells": [
@@ -19,7 +19,7 @@
         },
         {
           "class": "BuffSpell",
-          "target": "FRIENDLY_MINIONS",
+          "target": "TARGET",
           "hpBonus": {
             "class": "AttributeValueProvider",
             "target": "FRIENDLY_HERO",

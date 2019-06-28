@@ -7138,13 +7138,6 @@ public class CustomCardsTests extends TestBase {
 	// Mollusk Meister: "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
 	@Test
 	public void testMolluskMeister() {
-		// Empty deck
-		runGym((context, player, opponent) -> {
-			player.getHero().modifyArmor(3);
-			playMinionCard(context, player, "minion_mollusk_meister");
-			assertEquals(player.getHero().getArmor(), 11);
-		});
-		// Non-empty deck
 		runGym((context, player, opponent) -> {
 			player.getHero().modifyArmor(3);
 			Minion friendly = playMinionCard(context, player, "minion_neutral_test");

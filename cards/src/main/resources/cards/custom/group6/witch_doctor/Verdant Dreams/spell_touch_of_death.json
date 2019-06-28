@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Shoot missiles equal to your hero's Attack that each deal as much damage.",
+  "description": "Shoot [0] missiles that deal $[0] damage each. (Increases for each attack your Champion has).",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",
@@ -22,5 +22,23 @@
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "ATTACK"
+      }
+    },
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "ATTACK"
+      }
+    }
+  ]
 }
