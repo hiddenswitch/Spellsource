@@ -20,7 +20,7 @@
         },
         "spell": {
           "class": "DrawCardSpell",
-          "value": 8,
+          "value": 3,
           "targetPlayer": "SELF"
         }
       }
