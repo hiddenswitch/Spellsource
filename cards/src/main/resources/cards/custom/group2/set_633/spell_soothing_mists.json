@@ -1,17 +1,19 @@
 {
   "name": "Soothing Mists",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "COMMON",
-  "description": "Echo. Restore #3 Health.",
-  "targetSelection": "ANY",
+  "description": "Choose a minion. Restore Health to your champion equal to its Attack.",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "HealSpell",
-    "value": 3
-  },
-  "attributes": {
-    "ECHO": true
+    "target": "FRIENDLY_HERO",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "TARGET",
+      "attribute": "ATTACK"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

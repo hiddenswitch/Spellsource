@@ -1,0 +1,11 @@
+{
+  "seed" : 7778178204118499706,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "SILVER", "ROSE" ],
+  "deckCardIds" : [ [ "minion_spectral_knight", "minion_twilight_drake", "minion_forgotten_yaungol", "minion_puddlestomper", "minion_pondlord", "minion_sunreaver_spy", "minion_lorewalker_cho", "spell_ancient_power", "minion_zentimo", "spell_blazing_invocation", "minion_frostfeather", "minion_flametongue_totem", "minion_skeram_cultist", "weapon_likkim", "minion_gadgetzan_socialite", "minion_moshogg_enforcer", "minion_flutterer", "spell_stormcrack", "minion_river_crocolisk", "minion_grumble_worldshaker", "minion_little_purrsuer", "minion_blood_of_the_ancient_one", "minion_amathyst_panther", "minion_bloodsail_corsair", "minion_southsea_deckhand", "weapon_likkim", "minion_neptulon", "minion_hyldnir_frostrider", "minion_witchs_apprentice", "minion_freyas_familliar" ], [ "minion_survivalist_yukono", "spell_mojo_curse", "minion_fassnu_avenger", "minion_tainted_raven", "minion_jungle_soulfinder", "minion_timebidding_magi", "minion_soultracker", "minion_chant_leader", "minion_temple_watcher", "spell_voodoo_infusion", "minion_beckoner_of_evil", "spell_unearthly_haunting", "minion_upgradeable_framebot", "minion_high_shaman_mawliki", "spell_shadow_puppetry", "minion_hexlord_zixxis", "minion_grim_clairvoyant", "spell_hex_pig", "minion_soulcaller_roten", "minion_mimirons_head", "spell_bottled_spirit", "secret_funeral_rites", "minion_mana_wraith", "spell_wicked_insight", "spell_ashes_to_ashes_voodoo", "spell_ghostly_essence", "minion_hypnotic_chameleon", "spell_voodoo_infusion", "weapon_hexcarver", "minion_banana_buffoon" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BOOMSDAY_PROJECT", "RASTAKHANS_RUMBLE", "GOBLINS_VS_GNOMES", "JOURNEY_TO_UNGORO", "KNIGHTS_OF_THE_FROZEN_THRONE", "THE_GRAND_TOURNAMENT", "BASIC", "SPELLSOURCE_BASIC", "REWARD", "BLACKROCK_MOUNTAIN", "MEAN_STREETS_OF_GADGETZAN", "HALL_OF_FAME", "VERDANT_DREAMS", "BATTLE_FOR_ASHENVALE", "SANDS_OF_TIME", "NAXXRAMAS", "PROMO", "WITCHWOOD", "RISE_OF_SHADOWS", "KOBOLDS_AND_CATACOMBS", "ONE_NIGHT_IN_KARAZHAN", "CUSTOM", "THE_OLD_GODS", "CLASSIC", "LEAGUE_OF_EXPLORERS" ],
+  "mulligans" : [ [ 24, 14 ], [ 40 ] ],
+  "actions" : [ 0, 0, 1, 0, 1, 2, 1, 2, 3, 0, 0, 5, 10, 8, 7, 7, 8, 9, 8 ],
+  "id" : null
+}

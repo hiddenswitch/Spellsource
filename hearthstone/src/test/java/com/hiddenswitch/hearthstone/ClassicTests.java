@@ -747,7 +747,7 @@ public class ClassicTests extends TestBase {
 	}
 
 	@Test
-	public void testGurubashiBerserker() {
+	public void testHotheadedVillager() {
 		runGym((context, player, opponent) -> {
 			player.setMana(10);
 			opponent.setMana(10);
