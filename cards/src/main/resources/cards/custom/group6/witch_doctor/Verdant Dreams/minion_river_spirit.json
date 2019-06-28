@@ -15,15 +15,15 @@
         "class": "RaceFilter",
         "race": "ELEMENTAL"
       }
-	},
-	"spell": {
-	  "class": "RecruitSpell",
+    },
+    "spell": {
+      "class": "RecruitSpell",
       "cardFilter": {
         "class": "RaceFilter",
         "race": "ELEMENTAL"
-        },
+      },
       "cardLocation": "HAND"
-	}
+    }
   },
   "attributes": {
     "BATTLECRY": true

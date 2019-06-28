@@ -6,9 +6,12 @@
   "rarity": "FREE",
   "description": "Gain +3 Attack this turn.",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-	"attackBonus": 3
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "attackBonus": 3
+    }
   },
   "collectible": false,
   "set": "VERDANT_DREAMS",
