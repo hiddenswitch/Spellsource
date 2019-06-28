@@ -1,0 +1,26 @@
+{
+  "name": "Twistbark Staff",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "COMMON",
+  "description": "Costs (2) less while you have Spellpower.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "SpellDamageValueProvider"
+      },
+      "value2": 1
+    },
+    "ifFalse": 0,
+    "ifTrue": 2
+  }
+}
