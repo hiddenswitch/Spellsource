@@ -7154,6 +7154,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			playCard(context, opponent, "minion_razorfen_hunter");
 			assertEquals(opponent.getMinions().size(), 1);
+			assertEquals(opponent.getHand().get(0).getCardId(), "minion_razorfen_hunter");
 		});
 	}
 
