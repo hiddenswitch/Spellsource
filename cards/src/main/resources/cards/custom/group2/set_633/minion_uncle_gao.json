@@ -41,7 +41,7 @@
               ]
             },
             "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           },
           {
             "class": "SummonSpell",
@@ -64,7 +64,7 @@
               ]
             },
             "boardPositionRelative": "LEFT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           },
           {
             "class": "SummonSpell",
@@ -87,7 +87,7 @@
               ]
             },
             "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           },
           {
             "class": "SummonSpell",
@@ -110,7 +110,7 @@
               ]
             },
             "boardPositionRelative": "LEFT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           },
           {
             "class": "SummonSpell",
@@ -133,7 +133,7 @@
               ]
             },
             "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           },
           {
             "class": "SummonSpell",
@@ -156,7 +156,7 @@
               ]
             },
             "boardPositionRelative": "LEFT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           },
           {
             "class": "SummonSpell",
@@ -179,7 +179,7 @@
               ]
             },
             "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental"
+            "card": "token_stony_elemental"
           }
         ]
       }

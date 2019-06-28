@@ -3,9 +3,14 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+
 ### 0.8.34-2.0.32 (In Progress)
 
 Bug fixes.
+
+##### Content Additions:
+
+ - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
 
 ##### Content Fixes:
 
