@@ -1,0 +1,11 @@
+{
+  "seed" : 1311725064683281127,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "GOLD", "JADE" ],
+  "deckCardIds" : [ [ "minion_annoying_beetle", "minion_bonemare", "minion_captain_greenskin", "weapon_hammer_of_the_naaru", "minion_shielded_minibot", "minion_squirrel_knight", "minion_ivory_knight", "secret_getaway_kodo", "minion_skeram_cultist", "minion_annoy_o_module", "minion_hench_clan_thug", "minion_sunreaver_spy", "minion_gilblin_stalker", "weapon_stick", "weapon_coghammer", "minion_murloc_knight", "minion_nick_of_time", "minion_wavering_diabloist", "spell_level_up", "minion_twilight_annihilator", "minion_happy_ghoul", "spell_solemn_vigil", "spell_small-time_recruits", "minion_toshley", "secret_hidden_wisdom", "minion_fencing_coach", "minion_fae_horncaster", "minion_holdout_soldier", "minion_quartermaster", "minion_meanstreet_marshal" ], [ "spell_fists_of_fury", "minion_hold_hunter", "minion_baby_griffin", "spell_chi_restoration", "minion_ox_school_instructor", "minion_thrallmar_farseer", "minion_enigmatic_brewmaster", "minion_gilblin_stalker", "minion_mimirons_head", "spell_monastery_s_teachings", "minion_lungrath_hunter", "spell_spinning_crane_kick", "weapon_jade_serpent_staff", "minion_jungle_wanderer", "minion_shade_of_naxxramas", "spell_steadfast_defense", "minion_swarmed_captive", "minion_monastery_scroll-keeper", "minion_hunchback_supplier", "minion_sly_brawler", "minion_artificial_life_cocoon", "minion_bloodmage_thalnos", "spell_axe_kick", "minion_tsulong", "minion_small-time_buccaneer", "minion_ambushing_rose", "spell_stance_change", "spell_chi_wave", "minion_dozing_marksman", "minion_sly_brawler" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "CLASSIC", "ONE_NIGHT_IN_KARAZHAN", "THE_OLD_GODS", "BLACKROCK_MOUNTAIN", "KNIGHTS_OF_THE_FROZEN_THRONE", "RISE_OF_SHADOWS", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "BOOMSDAY_PROJECT", "VERDANT_DREAMS", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE", "KOBOLDS_AND_CATACOMBS", "NAXXRAMAS", "SANDS_OF_TIME", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "GOBLINS_VS_GNOMES", "WITCHWOOD", "BASIC", "PROMO", "RASTAKHANS_RUMBLE", "REWARD", "HALL_OF_FAME", "LEAGUE_OF_EXPLORERS" ],
+  "mulligans" : [ [ 6, 24, 18 ], [ 38, 49 ] ],
+  "actions" : [ 0, 0, 2, 3, 0, 0, 4, 2, 4, 3, 1, 1, 10, 0, 7, 3, 1, 3, 1, 4, 5, 3, 0, 3, 12, 5, 1, 2, 0, 0, 0, 1, 7 ],
+  "id" : null
+}
