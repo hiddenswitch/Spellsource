@@ -7135,5 +7135,101 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testRitualShaman() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "secret_counterspell");
+			playCard(context, player, "minion_ritual_shaman");
+			assertEquals(player.getSecrets().size(), 0);
+			playCard(context, player, "spell_mirror_image");
+			playCard(context, player, "minion_ritual_shaman");
+			assertEquals(player.getSecrets().size(), 1);
+		});
+	}
+
+	@Test
+	public void testGhastlyVisage() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_ghastly_visage");
+			context.endTurn();
+			playCard(context, opponent, "minion_razorfen_hunter");
+			assertEquals(opponent.getMinions().size(), 1);
+		});
+	}
+
+	@Test
+	public void testGreaterGood() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_greater_good");
+			context.endTurn();
+			playCard(context, opponent, "spell_mind_blast");
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 5);
+			receiveCard(context, player, "spell_the_coin");
+			playCard(context, opponent, "spell_mind_blast");
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 5);
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
+	public void testSubjectToSacrifice() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_subject_to_sacrifice");
+			Minion playerMinion1 = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion playerMinion2 = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion playerMinion3 = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion playerMinion4 = playMinionCard(context, player, "minion_stonetusk_boar");
+			Minion playerMinion5 = playMinionCard(context, player, "minion_stonetusk_boar");
+			context.endTurn();
+			playCard(context, opponent, "minion_chillwind_yeti");
+
+			assertTrue(playerMinion1.isDestroyed());
+			assertTrue(playerMinion2.isDestroyed());
+			assertTrue(playerMinion3.isDestroyed());
+			assertTrue(playerMinion4.isDestroyed());
+			assertTrue(playerMinion5.isDestroyed());
+			assertEquals(opponent.getMinions().size(), 0);
+		});
+	}
+
+	@Test
+	public void testEmbuePhantasms() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_stonetusk_boar");
+			shuffleToDeck(context, player, "minion_stonetusk_boar");
+			playCard(context, player, "spell_embue_phantasms");
+			Minion yeti = playMinionCard(context, opponent, "minion_chillwind_yeti");
+			Minion boar1 = playMinionCard(context, player, player.getHand().peekFirst());
+			Minion boar2 = playMinionCard(context, player, player.getHand().peekFirst());
+			attack(context, player, boar1, yeti);
+			attack(context, player, boar2, yeti);
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_voodoo_spirit");
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_voodoo_spirit");
+		});
+	}
+
+	@Test
+	public void testSacrificialBlade() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(20);
+			playCard(context, player, "weapon_sacrificial_blade");
+			assertEquals(player.getHero().getHp(), 20);
+			playMinionCard(context, opponent, "minion_chillwind_yeti");
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "weapon_sacrificial_blade");
+			assertEquals(player.getHero().getHp(), 25);
+		});
+
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(20);
+			playCard(context, player, "weapon_sacrificial_blade");
+			assertEquals(player.getHero().getHp(), 20);
+			playMinionCard(context, player, "minion_chillwind_yeti");
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "weapon_sacrificial_blade");
+			assertEquals(player.getHero().getHp(), 25);
+		});
+	}
 }
 
