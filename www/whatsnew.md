@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Additions:
 
  - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
+ - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
 
 ##### Content Fixes:
 

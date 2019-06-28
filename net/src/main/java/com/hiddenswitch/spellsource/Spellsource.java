@@ -461,7 +461,41 @@ public class Spellsource {
 						}))
 				.add(new MigrationRequest()
 						.withVersion(31)
-						.withUp(thisVertex -> {
+						.withUp(thisVertx -> {
+							changeCardId("hero_witch_doctor", "hero_senzaku");
+							changeCardId("minion_emerald_exhibit", "minion_ceremonial_alter");
+							changeCardId("minion_bladesworn", "minion_entranced_dancer");
+							changeCardId("minion_blood_transfuser", "minion_forgotten_ancestor");
+							changeCardId("minion_doby_mick", "minion_gaitha_the_protector");
+							changeCardId("minion_gurubashi_bloodletter", "minion_hotheaded_villager");
+							changeCardId("minion_tunnel_soulfinder", "minion_jungle_soulfinder");
+							changeCardId("minion_anzu_the_raven_god", "minion_kinru_the_benevolent");
+							changeCardId("minion_spore_bat", "minion_prized_boar");
+							changeCardId("minion_winterfang_seer", "minion_rallying_elder");
+							changeCardId("minion_darkwill_appraiser", "minion_resourceful_hoarder");
+							changeCardId("minion_wolpertinger", "minion_shimmerscale");
+							changeCardId("minion_ghuun_the_false_god", "minion_soulcaller_roten");
+							changeCardId("minion_zandalari_conjurer", "minion_spiritcaller");
+							changeCardId("minion_avatar_of_hakkar", "minion_survivalist_yukono");
+							changeCardId("minion_aberration", "minion_temple_militia");
+							changeCardId("minion_nraqi_oppressor", "minion_underbrush_protector");
+							changeCardId("minion_energized_spectre", "minion_undergrowth_spirit");
+							changeCardId("minion_bwonsamdi_witchdoctor", "minion_ushibasu_the_vigilant");
+							changeCardId("spell_shadow_distortion", "spell_alter_ego");
+							changeCardId("spell_cycle_of_undeath", "spell_ashes_to_ashes_voodoo");
+							changeCardId("spell_mass_production", "spell_beastcallers_summon");
+							changeCardId("spell_cursed_mirror", "spell_bodyswap");
+							changeCardId("spell_blood_rage", "spell_hex_behemoth");
+							changeCardId("spell_hex_zombie", "spell_hex_pig");
+							changeCardId("spell_spiritball", "spell_jungles_guidance");
+							changeCardId("spell_kanov_worms", "spell_law_of_the_jungle");
+							changeCardId("spell_drain_sanity", "spell_manic_outburst");
+							changeCardId("spell_bone_bond", "spell_wicked_insight");
+							changeCardId("token_spiritfused_machine", "token_hungry_jaguar");
+							changeCardId("token_voodoo_pig", "token_sacrificial_pig");
+							changeCardId("weapon_staff_of_origination", "weapon_hexcarver");
+							changeCardId("weapon_butchers_cleaver", "weapon_sacrificial_blade");
+							changeCardId("weapon_spirit_wand", "weapon_twistbark_staff");
 							changeCardId("minion_student_of_the_tiger", "minion_lungrath_hunter");
 							changeCardId("hero_chen_stormstout", "hero_mienzhou");
 							changeCardId("hero_power_meditation", "hero_power_effuse");

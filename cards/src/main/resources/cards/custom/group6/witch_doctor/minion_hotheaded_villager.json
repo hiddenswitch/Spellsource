@@ -1,0 +1,28 @@
+{
+  "name": "Hotheaded Villager",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "After this survives damage, transform it into a 5/5 Rage Behemoth.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_rage_behemoth"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
