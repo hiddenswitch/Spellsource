@@ -3749,16 +3749,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {
-		if (card.getId() == IdFactory.UNASSIGNED) {
-			card.setId(generateId());
-		}
-
-		if (card.getOwner() == IdFactory.UNASSIGNED) {
-			card.setOwner(player.getId());
-		}
-
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
+			if (card.getId() == IdFactory.UNASSIGNED) {
+				card.setId(generateId());
+			}
+
+			if (card.getOwner() == IdFactory.UNASSIGNED) {
+				card.setOwner(player.getId());
+			}
+
 			if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
 				player.getDeck().add(index, card);
 			} else {
@@ -3772,6 +3772,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 			}
 			return true;
+		} else if (card.getId() != IdFactory.UNASSIGNED) {
+			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 		return false;
 	}
@@ -3817,19 +3819,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
-		if (card.getId() == IdFactory.UNASSIGNED) {
-			card.setId(generateId());
-		}
-		int originalOwner = card.getOwner();
-		if (card.getOwner() == IdFactory.UNASSIGNED) {
-			card.setOwner(player.getId());
-		}
-
-		// Remove passive triggers
-		removeEnchantments(card, true, keepCardCostModifiers);
-
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
+			if (card.getId() == IdFactory.UNASSIGNED) {
+				card.setId(generateId());
+			}
+			int originalOwner = card.getOwner();
+			if (card.getOwner() == IdFactory.UNASSIGNED) {
+				card.setOwner(player.getId());
+			}
+
+			// Remove passive triggers
+			removeEnchantments(card, true, keepCardCostModifiers);
+
 			if (count == 0) {
 				card.moveOrAddTo(context, Zones.DECK);
 			} else {
@@ -3856,6 +3858,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				EnvironmentEntityList.getList(context, Environment.SHUFFLED_CARDS_LIST).add(player, card);
 			}
 			return true;
+		} else if (card.getId() != IdFactory.UNASSIGNED) {
+			removeEnchantments(card, true, keepCardCostModifiers);
+			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 		return false;
 	}
