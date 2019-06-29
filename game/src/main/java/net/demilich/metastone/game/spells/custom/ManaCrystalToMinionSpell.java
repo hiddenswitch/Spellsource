@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -23,8 +25,8 @@ public class ManaCrystalToMinionSpell extends SummonSpell {
 		// Summon minions per summoncount
 		for (int i = 0; i < summonCount; i++) {
 			SpellDesc summonSpell = new SpellDesc(SummonSpell.class);
-			String CardId = "token_mana_treant";
-			summonSpell.put(SpellArg.CARD, CardId);
+			String cardId = (SpellUtils.getCard(context, desc)).getCardId();
+			summonSpell.put(SpellArg.CARD, cardId);
 			super.onCast(context, player, summonSpell, source, target);
 		}
 	}
