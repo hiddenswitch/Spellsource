@@ -28,12 +28,12 @@
     {
       "class": "AttributeAura",
       "target": "OTHER_FRIENDLY_MINIONS",
-      "attribute": "TAUNT"
+      "attribute": "AURA_TAUNT"
     },
     {
       "class": "AttributeAura",
       "target": "OTHER_FRIENDLY_MINIONS",
-      "attribute": "UNTARGETABLE_BY_SPELLS"
+      "attribute": "AURA_UNTARGETABLE_BY_SPELLS"
     }
   ],
   "attributes": {

@@ -243,10 +243,10 @@ public class WitchDoctorTests extends TestBase {
 			Minion friend2 = playMinionCard(context, player, "minion_neutral_test_14");
 			playMinionCard(context, player, "minion_high_shaman_mawliki");
 			// Check for guard and elusive
-			assertTrue(friend1.hasAttribute(Attribute.TAUNT));
-			assertTrue(friend2.hasAttribute(Attribute.TAUNT));
-			assertTrue(friend1.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
-			assertTrue(friend2.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+			assertTrue(friend1.hasAttribute(Attribute.AURA_TAUNT));
+			assertTrue(friend2.hasAttribute(Attribute.AURA_TAUNT));
+			assertTrue(friend1.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+			assertTrue(friend2.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
 			context.endTurn();
 			Minion enemy1 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
 			Minion enemy2 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
@@ -325,10 +325,10 @@ public class WitchDoctorTests extends TestBase {
 	public void testJhuZho() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "spell_pay_respects");
-			Card minion_indeck = shuffleToDeck(context, player, "minion_blastflame_dragon");
+			Card minionInDeck = shuffleToDeck(context, player, "minion_blastflame_dragon");
 			playMinionCard(context, player, "minion_jhu_zho");
 			assertEquals(player.getHand().size(), 1);
-			assertEquals(player.getHand().get(0), minion_indeck);
+			assertEquals(player.getHand().get(0), minionInDeck);
 		});
 		runGym((context, player, opponent) -> {
 			Card inHand = receiveCard(context, player, "spell_pay_respects");
@@ -361,11 +361,11 @@ public class WitchDoctorTests extends TestBase {
 	public void testRiverSpirit() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_lake_elemental");
-			Card ele = receiveCard(context, player, "minion_crystal_giant");
+			Card elemental = receiveCard(context, player, "minion_crystal_giant");
 			Card wisp = receiveCard(context, player, "minion_wisp");
 			playMinionCard(context, player, "minion_river_spirit");
 			assertEquals(player.getMinions().size(), 3);
-			assertEquals(player.getMinions().get(2).getSourceCard(), ele);
+			assertEquals(player.getMinions().get(2).getSourceCard(), elemental);
 			assertEquals(player.getHand().size(), 1);
 		});
 	}
@@ -379,12 +379,12 @@ public class WitchDoctorTests extends TestBase {
 			spell.put(SpellArg.CARD, "hero_power_hone_reflexes");
 			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
 			context.getLogic().endOfSequence();
-			Card heropower = player.getHero().getHeroPower();
-			assertEquals(heropower.getCardId(), "hero_power_hone_reflexes");
+			Card heroPower = player.getHero().getHeroPower();
+			assertEquals(heroPower.getCardId(), "hero_power_hone_reflexes");
 			player.setMana(20);
-			assertTrue(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			assertTrue(context.getLogic().canPlayCard(player.getId(), heroPower.getReference()));
 			useHeroPower(context, player);
-			assertFalse(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			assertFalse(context.getLogic().canPlayCard(player.getId(), heroPower.getReference()));
 			Minion sprite = playMinionCard(context, player, "minion_shy_sprite");
 			context.endTurn();
 			player.getHero().setHp(10);
@@ -393,11 +393,11 @@ public class WitchDoctorTests extends TestBase {
 			assertEquals(player.getHero().getHp(), 4);
 			context.endTurn();
 			player.setMana(20);
-			assertTrue(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			assertTrue(context.getLogic().canPlayCard(player.getId(), heroPower.getReference()));
 			useHeroPower(context, player);
-			assertTrue(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			assertTrue(context.getLogic().canPlayCard(player.getId(), heroPower.getReference()));
 			useHeroPower(context, player);
-			assertFalse(context.getLogic().canPlayCard(player.getId(), heropower.getReference()));
+			assertFalse(context.getLogic().canPlayCard(player.getId(), heroPower.getReference()));
 		});
 	}
 
