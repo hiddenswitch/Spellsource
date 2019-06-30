@@ -4,6 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
+=======
 ### 0.8.34-2.0.32 (In Progress)
 
 Bug fixes.
@@ -12,6 +13,8 @@ Bug fixes.
 
  - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
  - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
+ - Thanks to contributions from @Muhframos, Occultist updates! (1198)
+
 
 ##### Content Fixes:
 
