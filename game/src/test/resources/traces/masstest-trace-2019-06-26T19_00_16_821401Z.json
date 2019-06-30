@@ -1,0 +1,11 @@
+{
+  "seed" : -244823186417532613,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_gelbin_mekkatorque", "minion_red_crane_statue", "minion_soup_savant", "minion_carnivorous_cube", "minion_spirited_bomber", "minion_skeram_cultist", "spell_tiger_stance", "minion_white_tiger_statue", "minion_defender_of_tomorrow", "spell_misty_mana_tea", "spell_stance_change", "minion_raging_worgen", "minion_rattling_rascal", "minion_fen_creeper", "minion_nexus-champion_saraad", "spell_black_ox_brew", "minion_boar_brawler", "minion_magic_carpet", "minion_oppressor_defender", "minion_spiteful_smith", "minion_phantom_militia", "minion_guardian_kirin", "spell_chi_wave", "minion_furbolg_mossbinder", "minion_shifting_sands", "minion_corrosive_sludge", "minion_glass_memory_golem", "minion_blue_nestwatcher", "minion_desciple_of_shitakiri", "minion_tribemaster" ], [ "minion_quest_giver", "minion_prince_taldaram", "minion_one_handed_butcher", "minion_anarking", "minion_zilliax", "minion_highwayman", "minion_guild_recruiter", "minion_festivity_golem", "spell_focus_fire", "minion_mr_smith", "minion_rotorblade_chopper", "minion_tikrakazz", "minion_mindswapper", "minion_seaforium_bomber", "weapon_scissors_of_dots", "spell_focus_fire", "spell_distract", "minion_skilled_hunter", "spell_reload", "spell_demand", "minion_jungle_operative", "minion_fel_manticore", "minion_dark_iron_dwarf", "minion_book_wyrm", "secret_hidden_trap", "minion_tortollan_primalist", "minion_treasure_mimic", "minion_drakonid_brute", "minion_toothpick_fighter", "minion_rambletusk_shaker" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "NAXXRAMAS", "KNIGHTS_OF_THE_FROZEN_THRONE", "WITCHWOOD", "BLACKROCK_MOUNTAIN", "SANDS_OF_TIME", "RASTAKHANS_RUMBLE", "ONE_NIGHT_IN_KARAZHAN", "CUSTOM", "KOBOLDS_AND_CATACOMBS", "BOOMSDAY_PROJECT", "REWARD", "MEAN_STREETS_OF_GADGETZAN", "SPELLSOURCE_BASIC", "THE_OLD_GODS", "JOURNEY_TO_UNGORO", "RISE_OF_SHADOWS", "CLASSIC", "PROMO", "GOBLINS_VS_GNOMES", "VERDANT_DREAMS", "BASIC", "HALL_OF_FAME", "LEAGUE_OF_EXPLORERS", "THE_GRAND_TOURNAMENT", "BATTLE_FOR_ASHENVALE" ],
+  "mulligans" : [ [ 28, 6 ], [ 49, 54 ] ],
+  "actions" : [ 0, 1, 0, 0, 0, 2, 5, 0, 1, 3, 0, 0, 3, 2, 1, 0, 2, 1, 1, 5, 1 ],
+  "id" : null
+}

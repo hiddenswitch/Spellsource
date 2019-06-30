@@ -1,0 +1,23 @@
+{
+  "name": "Prized Boar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Dash. <b>Aftermath:</b> Give your minions +1/+1.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
