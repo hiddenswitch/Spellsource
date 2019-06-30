@@ -1,0 +1,30 @@
+{
+  "name": "Complex Chord",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "Give a minion +2/+1. If you have none, summon two 1/1 Patrons.",
+  "targetSelection": "MINION",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "HasMinionCondition"
+    },
+    "spell1": {
+      "class": "BuffSpell",
+      "attackBonus": 2,
+      "hpBonus": 1
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_patron",
+        "token_patron"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

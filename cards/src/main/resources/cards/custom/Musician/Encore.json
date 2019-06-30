@@ -1,0 +1,18 @@
+{
+  "name": "Encore",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "EPIC",
+  "description": "Your minions can attack an additional time this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+     "class": "ModifyAttributeSpell",
+     "target": "FRIENDLY_MINIONS",
+     "value": 1,
+     "attribute": "EXTRA_ATTACKS"
+      }
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

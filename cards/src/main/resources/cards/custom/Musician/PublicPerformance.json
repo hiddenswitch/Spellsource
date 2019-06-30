@@ -1,0 +1,27 @@
+{
+  "name": "Public Performance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Give a minion +1/+1. Add two Coins to your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      },
+      {
+    "class": "ReceiveCardSpell",
+    "value": 2,
+    "card": "spell_the_coin"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
