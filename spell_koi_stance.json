@@ -1,0 +1,21 @@
+{
+  "name": "Koi Stance",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Restore #12 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS",
+      "multiplier": 2
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
