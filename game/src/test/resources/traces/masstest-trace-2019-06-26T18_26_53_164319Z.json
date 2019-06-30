@@ -1,0 +1,11 @@
+{
+  "seed" : -1827907992213701033,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "PURPLE" ],
+  "deckCardIds" : [ [ "minion_knight_eternal", "minion_blazecaller", "spell_stance_change", "minion_silvermoon_guardian", "spell_serpent_stance", "minion_ox_school_instructor", "minion_knife_juggler", "minion_ticking_giant", "spell_springs_of_ebisu", "minion_tanglefer_of_the_jungle", "minion_red_crane_statue", "minion_polycephalos", "spell_tiger_stance", "spell_sleight_of_hand", "minion_unseen_saboteur", "spell_mark_of_despair", "minion_fanatical_brewmaster", "spell_monastery_s_teachings", "minion_uncle_gao", "minion_student_of_the_serpent", "spell_soothing_mists", "minion_street_trickster", "minion_unpowered_mauler", "minion_hoarding_dragon", "minion_murloc_tastyfin", "minion_wisp", "spell_steadfast_defense", "minion_polluted_hoarder", "minion_aeonus", "minion_silver_hand_regent" ], [ "spell_nemesis", "minion_coilskar_sea_caller", "spell_chaos_nova", "minion_illidari_adept", "minion_spellbreaker", "spell_vengeful_retreat", "minion_masked_contender", "minion_expert_explorer", "spell_vengeful_retreat", "weapon_soul_cursed_glaives", "spell_fel_rush", "minion_illidari_adept", "minion_beast_king", "minion_azzinoth", "minion_meat_wagon", "minion_shroom_brewer", "minion_coppertail_imposter", "minion_faceless_behemoth", "weapon_chaos_blades", "spell_chaos_nova", "minion_master_of_the_glaive", "minion_blackflame_bomber", "weapon_soul_cursed_glaives", "minion_eranikus", "spell_demon_spikes", "minion_deathspeaker", "spell_double_jump", "minion_ashtongue_stalker", "spell_soul_cleave", "minion_bittertide_hydra" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "JOURNEY_TO_UNGORO", "SANDS_OF_TIME", "THE_GRAND_TOURNAMENT", "BOOMSDAY_PROJECT", "BLACKROCK_MOUNTAIN", "KNIGHTS_OF_THE_FROZEN_THRONE", "REWARD", "CLASSIC", "LEAGUE_OF_EXPLORERS", "KOBOLDS_AND_CATACOMBS", "NAXXRAMAS", "VERDANT_DREAMS", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "BATTLE_FOR_ASHENVALE", "WITCHWOOD", "GOBLINS_VS_GNOMES", "HALL_OF_FAME", "SPELLSOURCE_BASIC", "CUSTOM", "BASIC", "PROMO", "THE_OLD_GODS", "RISE_OF_SHADOWS", "ONE_NIGHT_IN_KARAZHAN" ],
+  "mulligans" : [ [ 7, 5 ], [ 36 ] ],
+  "actions" : [ 0, 0, 0, 0, 0, 2, 11, 2, 1, 0, 6, 1, 0, 0, 2, 0, 0, 8, 2, 1, 2, 0, 4, 12, 4, 6, 13, 1, 9, 2, 4, 0, 8, 0, 7, 6, 4, 0, 5, 2, 0, 8, 6, 4, 3, 1 ],
+  "id" : null
+}
