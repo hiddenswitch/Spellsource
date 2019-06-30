@@ -4,9 +4,11 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.34-2.0.31 (In Progress)
+### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.
+
+The 0.8 series will be the last to contain content external from Spellsource.
 
 ##### Content Additions:
 
