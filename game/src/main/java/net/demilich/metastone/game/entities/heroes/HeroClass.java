@@ -71,6 +71,7 @@ public enum HeroClass {
 	 * @param heroClass The hero class
 	 * @return A hero card
 	 */
+	@NotNull
 	public static Card getHeroCard(HeroClass heroClass) {
 		switch (heroClass) {
 			case BROWN:
