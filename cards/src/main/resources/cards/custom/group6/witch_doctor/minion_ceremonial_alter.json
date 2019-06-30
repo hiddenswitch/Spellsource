@@ -1,0 +1,22 @@
+{
+  "name": "Ceremonial Alter",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 0,
+  "baseHp": 12,
+  "rarity": "RARE",
+  "description": "Guard. Aftermath: Your opponent draws 2 cards.",
+  "deathrattle": {
+    "class": "DrawCardSpell",
+    "value": 2,
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
