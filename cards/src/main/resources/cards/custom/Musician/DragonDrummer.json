@@ -1,0 +1,26 @@
+{
+  "name": "Dragon Drummer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "At the end of your turn, give adjacent minions +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+    "class": "BuffSpell",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 0
+  },
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Full Audience",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "Reduce the cost of minions in your hand by (1).",
+  "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+		"filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+          },
+        "operation": "SUBTRACT"
+      }
+	 },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Storm Guitar",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "CORAL",
+  "damage": 5,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Opener: Deal 3 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+    "class": "DamageSpell",
+    "value": 3
+  },
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
