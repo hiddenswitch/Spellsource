@@ -12,6 +12,7 @@ Bug fixes and content additions.
 
  - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
  - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
+ - Thanks to contributions from @Muhframos, Occultist updates! (1198)
 
 ##### Content Fixes:
 
@@ -24,6 +25,10 @@ Bug fixes and content additions.
  - Yig's Mastermind cost increased from 8 to 10. (1184)
  - Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
  - Stealing a card when a deck is full no longer causes a crash.
+ - Wavering Diabolist correctly indicates that it does not have Guard. (1203)
+ - Timewalker Strider now reads "After this minion attacks, it gains +2 Attack." (1201)
+ - Energetic Mentee now specifies that it's first abilitiy is an opener. (1202)
+ - Fireguard Bulwark now properly has Guard. (1200)
 
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
 
