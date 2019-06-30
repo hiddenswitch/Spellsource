@@ -3,10 +3,9 @@
   "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 7,
+  "baseAttack": 4,
   "baseHp": 9,
   "rarity": "RARE",
-  "race": "MECH",
   "description": "Aftermath: Summon a random minion from your deck.",
   "deathrattle": {
     "class": "RecruitSpell",
@@ -14,8 +13,7 @@
     "targetPlayer": "SELF"
   },
   "attributes": {
-    "DEATHRATTLES": true,
-    "TAUNT": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "sets": [
