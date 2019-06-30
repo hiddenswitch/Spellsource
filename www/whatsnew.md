@@ -4,7 +4,6 @@ title: What's New
 permalink: /whats-new/
 ---
 
-=======
 ### 0.8.34-2.0.32 (In Progress)
 
 Bug fixes.
@@ -24,6 +23,7 @@ Bug fixes.
  - Yig's Mastermind cost increased from 8 to 10. (1184)
  - Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
  - Timewalker Strider now reads "After this minion attacks, it gains +2 Attack." (1201)
+ - Energetic Mentee now specifies that it's first abilitiy is an opener. (1202)
  - Fireguard Bulwark now properly has Guard. (1200)
 
 ### 0.8.33-2.0.31 (Tuesday, June 18th, 2019)
