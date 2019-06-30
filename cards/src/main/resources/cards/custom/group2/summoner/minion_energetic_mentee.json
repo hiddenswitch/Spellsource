@@ -48,6 +48,7 @@
     }
   },
   "attributes": {
+    "BATTLECRY": true,
     "INVOKE": 3
   },
   "collectible": true,
