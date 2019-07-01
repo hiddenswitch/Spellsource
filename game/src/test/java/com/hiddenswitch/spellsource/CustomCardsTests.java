@@ -7246,5 +7246,14 @@ public class CustomCardsTests extends TestBase {
 			assertFalse(didNotHaveDeflect.hasAttribute(Attribute.DEFLECT));
 		});
 	}
+
+	@Test
+	public void testProperCardIds() {
+		CardCatalogue.loadCardsFromPackage();
+		CardCatalogue.getCardById("minion_jade_cloud_serpent");
+		CardCatalogue.getCardById("spell_honed_potion");
+		CardCatalogue.getCardById("token_bellowing_spirit");
+		CardCatalogue.getCardById("token_burning_spirit");
+	}
 }
 
