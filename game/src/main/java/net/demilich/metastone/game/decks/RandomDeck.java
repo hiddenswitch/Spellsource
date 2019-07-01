@@ -58,10 +58,12 @@ final class RandomDeck extends GameDeck {
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)
+				&& !card.getCardType().isCardType(CardType.CLASS)
 				&& card.hasHeroClass(getHeroClass()));
 		CardList neutralCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)
+				&& !card.getCardType().isCardType(CardType.CLASS)
 				&& card.hasHeroClass(HeroClass.ANY));
 
 		while (!this.isComplete()) {

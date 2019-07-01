@@ -455,7 +455,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			}
 		} else if (Objects.equals(heroClass, getHeroClass())) {
 			return true;
-		} else if (heroClass.equals(HeroClass.INHERIT)) {
+		} else if (Objects.equals(heroClass, HeroClass.INHERIT)) {
 			return true;
 		}
 		return false;
@@ -500,6 +500,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				return new HeroPowerAction(getSpell(), this, getTargetSelection());
 			case GROUP:
 				throw new UnsupportedOperationException("The method .play() should not be called for GroupCard");
+			case CLASS:
+				throw new UnsupportedOperationException("The method .play() should not be called for ClassCard");
 		}
 		throw new UnsupportedOperationException();
 	}
