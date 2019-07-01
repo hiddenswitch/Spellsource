@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.35-2.0.31 (July 1st, 2019)
+
+Fixing issues with cards not being found or detected after their IDs were changed.
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.

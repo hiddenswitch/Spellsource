@@ -88,7 +88,7 @@ mavenPublish {
 
 allprojects {
     sourceCompatibility = 1.8
-    project.version = '0.8.34'
+    project.version = '0.8.35'
 }
 
 subprojects {
