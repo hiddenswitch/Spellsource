@@ -967,7 +967,7 @@ public class JourneyToUngoroTests extends TestBase {
 
 	@Test
 	public void testFreeFromAmber() {
-		GameContext context = createContext(HeroClass.WHITE, HeroClass.WHITE);
+		GameContext context = createContext("WHITE", "WHITE");
 		Player player = context.getActivePlayer();
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];

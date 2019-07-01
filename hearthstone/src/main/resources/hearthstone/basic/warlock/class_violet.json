@@ -1,0 +1,9 @@
+{
+  "name": "Warlock",
+  "type": "CLASS",
+  "hero": "hero_guldan",
+  "heroClass": "VIOLET",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

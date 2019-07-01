@@ -301,7 +301,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		setAttribute(Attribute.MAX_HP, value);
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return getSourceCard().getHeroClass();
 	}
 

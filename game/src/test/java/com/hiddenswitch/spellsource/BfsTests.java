@@ -54,7 +54,7 @@ public class BfsTests {
 		assertContains(nodes, CardDescArg.NAME, "Name");
 		assertContains(nodes, CardDescArg.BASE_MANA_COST, 3);
 		assertContains(nodes, CardDescArg.TYPE, CardType.MINION);
-		assertContains(nodes, CardDescArg.HERO_CLASS, HeroClass.GOLD);
+		assertContains(nodes, CardDescArg.HERO_CLASS, "GOLD");
 		assertContains(nodes, CardDescArg.BASE_ATTACK, 2);
 		assertContains(nodes, CardDescArg.BASE_HP, 1);
 		assertContains(nodes, CardDescArg.RARITY, Rarity.COMMON);

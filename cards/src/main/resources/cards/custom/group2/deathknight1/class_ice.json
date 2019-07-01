@@ -1,0 +1,9 @@
+{
+  "name": "Ice Knight",
+  "type": "CLASS",
+  "hero": "hero_darion",
+  "heroClass": "ICE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

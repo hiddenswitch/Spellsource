@@ -11,7 +11,7 @@ public class ManaTests extends TestBase {
 
 	@Test
 	public void testDarnassusAspirant() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.RED);
+		GameContext context = createContext("BROWN", "RED");
 		Player player = context.getPlayer1();
 		int playerId = player.getId();
 

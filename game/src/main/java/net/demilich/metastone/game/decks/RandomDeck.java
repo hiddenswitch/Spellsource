@@ -22,7 +22,7 @@ final class RandomDeck extends GameDeck {
 	 * @param heroClass  The hero class
 	 * @param deckFormat The format
 	 */
-	RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
+	RandomDeck(String heroClass, DeckFormat deckFormat) {
 		super(heroClass);
 		populate(deckFormat);
 	}
@@ -34,7 +34,7 @@ final class RandomDeck extends GameDeck {
 	 * @param deckFormat
 	 */
 	RandomDeck(DeckFormat deckFormat) {
-		this(HeroClass.random(), deckFormat);
+		this(HeroClass.random(deckFormat), deckFormat);
 	}
 
 	/**
@@ -42,14 +42,14 @@ final class RandomDeck extends GameDeck {
 	 * DeckFormat#CUSTOM} format.
 	 */
 	RandomDeck() {
-		this(HeroClass.random(), DeckFormat.CUSTOM);
+		this(HeroClass.random(DeckFormat.CUSTOM), DeckFormat.CUSTOM);
 	}
 
 	/**
 	 * Creates a random deck with the specified hero class and a balance of 50% Class cards and Neutral cards in the
 	 * {@link DeckFormat#CUSTOM} format.
 	 */
-	public RandomDeck(HeroClass heroClass) {
+	public RandomDeck(String heroClass) {
 		this(heroClass, DeckFormat.CUSTOM);
 	}
 

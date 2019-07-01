@@ -608,7 +608,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			useHeroPower(context, player, player.getHero().getReference());
 			assertEquals(player.getDeck().get(0).getCardId(), "spell_ocean_depths");
-		}, HeroClass.TEAL, HeroClass.TEAL);
+		}, "TEAL", "TEAL");
 	}
 
 	@Test
@@ -1246,7 +1246,7 @@ public class CustomCardsTests extends TestBase {
 			context = context.clone();
 			player = context.getPlayer1();
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 1);
-		}, HeroClass.GOLD, HeroClass.GOLD);
+		}, "GOLD", "GOLD");
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_justicar_trueheart");
@@ -1254,14 +1254,14 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost());
 			useHeroPower(context, player);
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
-		}, HeroClass.GOLD, HeroClass.GOLD);
+		}, "GOLD", "GOLD");
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_justicar_trueheart");
 			useHeroPower(context, player);
 			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
-		}, HeroClass.GOLD, HeroClass.GOLD);
+		}, "GOLD", "GOLD");
 	}
 
 	@Test
@@ -1588,7 +1588,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(xahDorah.getAttack(), xahDorah.getBaseAttack() + 1);
 			playCard(context, player, "spell_fissure");
 			assertTrue(warGolem.isDestroyed());
-		}, HeroClass.RUST, HeroClass.RUST);
+		}, "RUST", "RUST");
 	}
 
 	@Test
@@ -1674,7 +1674,7 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_bloodfen_raptor");
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test
@@ -2194,7 +2194,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(context.getValidActions().stream().anyMatch(hp -> hp.getActionType() == ActionType.HERO_POWER && hp.getTargetReference().equals(big.getReference())));
 			useHeroPower(context, player, big.getReference());
 			assertEquals(big.getHp(), big.getMaxHp() - 4);
-		}, HeroClass.TOAST, HeroClass.TOAST);
+		}, "TOAST", "TOAST");
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_hallucinogenic_mushroom");
@@ -2204,7 +2204,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), hp - 4);
 			assertEquals(player.getHand().size(), 1);
 			assertTrue(Arrays.asList("spell_clarity_mushroom", "spell_healing_mushroom", "spell_toxic_mushroom", "spell_hallucinogenic_mushroom").contains(player.getHand().get(0).getCardId()));
-		}, HeroClass.TOAST, HeroClass.TOAST);
+		}, "TOAST", "TOAST");
 
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(10);
@@ -2214,7 +2214,7 @@ public class CustomCardsTests extends TestBase {
 			useHeroPower(context, player);
 			assertEquals(opponent.getHero().getHp(), hp - 4);
 			assertEquals(player.getHero().getHp(), 10 + 4);
-		}, HeroClass.TOAST, HeroClass.TOAST);
+		}, "TOAST", "TOAST");
 
 		runGym((context, player, opponent) -> {
 			context.endTurn();
@@ -2231,7 +2231,7 @@ public class CustomCardsTests extends TestBase {
 			player.getHeroPowerZone().get(0).setDesc(clone);
 			useHeroPower(context, player);
 			assertTrue(big.isDestroyed());
-		}, HeroClass.TOAST, HeroClass.TOAST);
+		}, "TOAST", "TOAST");
 	}
 
 	@Test
@@ -2713,7 +2713,7 @@ public class CustomCardsTests extends TestBase {
 			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(player.getHero().getReference()));
 			context.getLogic().endOfSequence();
 			assertEquals(player.getHero().getAttack(), 3);
-		}, HeroClass.RUST, HeroClass.RUST);
+		}, "RUST", "RUST");
 	}
 
 	@Test
@@ -2722,7 +2722,7 @@ public class CustomCardsTests extends TestBase {
 			Minion target = playMinionCard(context, player, "minion_heavy_duty_dragoon");
 			useHeroPower(context, player, target.getReference());
 			assertEquals(player.getHero().getAttack(), 2);
-		}, HeroClass.JADE, HeroClass.JADE);
+		}, "JADE", "JADE");
 	}
 
 	@Test
@@ -3269,7 +3269,7 @@ public class CustomCardsTests extends TestBase {
 			context.performAction(player.getId(), player.getHero().getHeroPower().play());
 			// It should have run out of durability and been put to the graveyard
 			assertEquals(shield.getZone(), Zones.GRAVEYARD);
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 	}
 
 	@Test
@@ -3657,7 +3657,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(costOf(context, player, card), card.getBaseManaCost());
 			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(costOf(context, player, card), card.getBaseManaCost() - 2);
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 	}
 
 	@Test
@@ -3696,7 +3696,7 @@ public class CustomCardsTests extends TestBase {
 
 			destroy(context, annoyingBeetle);
 			assertEquals(opponent.getHeroPowerZone().get(0).getCardId(), "hero_power_fireblast");
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test
@@ -4652,19 +4652,19 @@ public class CustomCardsTests extends TestBase {
 				playCard(context, player, "minion_criminologist");
 				Card card = player.getHand().get(0);
 				assertTrue(card.isSecret());
-				HeroClass secretClass = card.getHeroClass();
+				String secretClass = card.getHeroClass();
 				switch (heroClass) {
 					case MAGE:
-						assertEquals(secretClass, HeroClass.BLUE);
+						assertEquals(secretClass, "BLUE");
 						break;
 					case HUNTER:
-						assertEquals(secretClass, HeroClass.GREEN);
+						assertEquals(secretClass, "GREEN");
 						break;
 					case PALADIN:
-						assertEquals(secretClass, HeroClass.GOLD);
+						assertEquals(secretClass, "GOLD");
 						break;
 					case ROGUE:
-						assertEquals(secretClass, HeroClass.BLACK);
+						assertEquals(secretClass, "BLACK");
 						break;
 				}
 			});
@@ -5088,7 +5088,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			assertEquals(costOf(context, player, player.getHand().get(0)), cost[0]);
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 
 	@Test
@@ -5614,7 +5614,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 2);
 			playCard(context, player, "minion_earth_elemental");
 			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 0);
-		}, HeroClass.SILVER, HeroClass.SILVER);
+		}, "SILVER", "SILVER");
 	}
 
 	@Test
@@ -6012,7 +6012,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(dreadBlade.hasAttribute(Attribute.LIFESTEAL));
 			playCard(context, player, dreadBlade);
 			assertTrue(player.getWeaponZone().get(0).hasAttribute(Attribute.LIFESTEAL));
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 
 		runGym((context, player, opponent) -> {
 			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
@@ -6021,7 +6021,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(dreadBlade.hasAttribute(Attribute.BATTLECRY));
 			playCard(context, player, dreadBlade);
 			assertEquals(player.getMinions().size(), 2);
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 
 		runGym((context, player, opponent) -> {
 			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
@@ -6031,7 +6031,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, dreadBlade);
 			destroy(context, player.getWeaponZone().get(0));
 			assertEquals(player.getMinions().size(), 2);
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 
 		runGym((context, player, opponent) -> {
 			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
@@ -6048,7 +6048,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(costOf(context, player, dreadBlade), 3);
 			playCard(context, player, "spell_arcane_missiles");
 			assertEquals(costOf(context, player, dreadBlade), 1);
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 
 		runGym((context, player, opponent) -> {
 			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
@@ -6391,7 +6391,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testAlternateBaku() {
-		DebugContext context = createContext(HeroClass.SILVER, HeroClass.SILVER, false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("SILVER", "SILVER", false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_faithful_lumi")
@@ -6403,7 +6403,7 @@ public class CustomCardsTests extends TestBase {
 		context.init();
 		assertEquals(context.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_alternate_totemic_slam");
 
-		DebugContext context2 = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		DebugContext context2 = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
 		context2.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context2.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_faithful_lumi")
@@ -6418,7 +6418,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testAlternateGenn() {
-		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")
@@ -6450,7 +6450,7 @@ public class CustomCardsTests extends TestBase {
 		int direStables = 0;
 
 		for (int i = 0; i < 100; i++) {
-			DebugContext debug = createContext(HeroClass.GREEN, HeroClass.GREEN, false, DeckFormat.ALL);
+			DebugContext debug = createContext("GREEN", "GREEN", false, DeckFormat.ALL);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				for (int j = 0; j < 10; j++) {
@@ -6647,7 +6647,7 @@ public class CustomCardsTests extends TestBase {
 			useHeroPower(context, player, wisp.getReference());
 			assertTrue(wisp.isDestroyed());
 			assertEquals(costOf(context, player, felblade), 1);
-		}, HeroClass.PURPLE, HeroClass.PURPLE);
+		}, "PURPLE", "PURPLE");
 	}
 
 	@Test
@@ -6750,7 +6750,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 2);
 			useHeroPower(context, player, wisp.getReference());
 			assertEquals(player.getHand().size(), 3);
-		}, HeroClass.PURPLE, HeroClass.PURPLE);
+		}, "PURPLE", "PURPLE");
 	}
 
 	@Test

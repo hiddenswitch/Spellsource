@@ -14,7 +14,7 @@ public class HeroClassCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		HeroClass heroClass = (HeroClass) desc.get(ConditionArg.HERO_CLASS);
+		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
 		TargetPlayer targetPlayer = (TargetPlayer) desc.getOrDefault(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
 		Player opponent = context.getOpponent(player);
 		switch (targetPlayer) {

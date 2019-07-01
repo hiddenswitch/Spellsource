@@ -1,0 +1,9 @@
+{
+  "name": "Hunter",
+  "type": "CLASS",
+  "hero": "hero_rexxar",
+  "heroClass": "GREEN",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

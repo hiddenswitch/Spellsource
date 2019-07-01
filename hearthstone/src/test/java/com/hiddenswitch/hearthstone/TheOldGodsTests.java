@@ -86,7 +86,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testRenounceDarkness() {
 		runGym((context, player, opponent) -> {
-			Map<HeroClass, Card> testCard = Stream.of(
+			Map<String, Card> testCard = Stream.of(
 					"minion_black_test",
 					"minion_blue_test",
 					"minion_brown_test",
@@ -112,7 +112,7 @@ public class TheOldGodsTests extends TestBase {
 			GameLogic spyLogic = Mockito.spy(context.getLogic());
 			context.setLogic(spyLogic);
 			AtomicInteger invocationCount = new AtomicInteger(0);
-			AtomicReference<HeroClass> chosenHeroClass = new AtomicReference<>(HeroClass.VIOLET);
+			AtomicReference<String> chosenHeroClass = new AtomicReference<>("VIOLET");
 			Answer answer = invocation -> {
 				if (invocationCount.getAndIncrement() == 0) {
 					// We're choosing the hero power
@@ -133,13 +133,13 @@ public class TheOldGodsTests extends TestBase {
 
 			Assert.assertTrue(player.getDeck().containsCard("minion_bloodfen_raptor"));
 			Assert.assertTrue(player.getHand().containsCard("minion_bloodfen_raptor"));
-			Assert.assertFalse(player.getHero().getHeroPower().hasHeroClass(HeroClass.VIOLET));
+			Assert.assertFalse(player.getHero().getHeroPower().hasHeroClass("VIOLET"));
 			Assert.assertEquals(Stream.concat(player.getHand().stream(), player.getDeck().stream())
 					.filter(card -> !card.hasHeroClass(HeroClass.ANY))
-					.filter(card -> !card.hasHeroClass(HeroClass.VIOLET))
+					.filter(card -> !card.hasHeroClass("VIOLET"))
 					.filter(card -> costOf(context, player, card) == 1)
 					.count(), count + 1);
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 	}
 
 	@Test
@@ -347,7 +347,7 @@ public class TheOldGodsTests extends TestBase {
 
 	@Test
 	public void testALightInTheDarkness() {
-		GameContext context = createContext(HeroClass.SILVER, HeroClass.RED);
+		GameContext context = createContext("SILVER", "RED");
 		context.getLogic().setRandom(new XORShiftRandom(101010L));
 		Player player = context.getActivePlayer();
 		final DiscoverAction[] action = {null};
@@ -417,7 +417,7 @@ public class TheOldGodsTests extends TestBase {
 
 	@Test
 	public void testKingsDefenderHogger() {
-		DebugContext context = createContext(HeroClass.RED, HeroClass.RED);
+		DebugContext context = createContext("RED", "RED");
 		Player player = context.getPlayer1();
 		Hero hero = player.getHero();
 
@@ -434,7 +434,7 @@ public class TheOldGodsTests extends TestBase {
 
 	@Test
 	public void testRallyingBlade() {
-		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
+		GameContext context = createContext("GOLD", "BLACK");
 		Player player = context.getPlayer1();
 		Card argentSquireCard = CardCatalogue.getCardById("minion_argent_squire");
 		Minion argentSquire = playMinionCard(context, player, argentSquireCard);

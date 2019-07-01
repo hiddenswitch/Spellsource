@@ -450,7 +450,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		DeckCreateRequest createRequest;
 		if (request.getDeckList() == null
 				|| request.getDeckList().equals("")) {
-			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass().name());
+			final String heroClass = request.getHeroClass().name();
 
 			createRequest = new DeckCreateRequest()
 					.withName(request.getName())

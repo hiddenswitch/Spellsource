@@ -1,0 +1,9 @@
+{
+  "name": "Mage",
+  "type": "CLASS",
+  "hero": "hero_jaina",
+  "heroClass": "BLUE",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

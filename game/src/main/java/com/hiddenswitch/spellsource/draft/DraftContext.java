@@ -49,7 +49,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		getBehaviour().chooseHeroAsync(getPublicState().getHeroClassChoices(), this::onHeroSelected);
 	}
 
-	public void onHeroSelected(AsyncResult<HeroClass> choice) {
+	public void onHeroSelected(AsyncResult<String> choice) {
 		if (choice.failed()) {
 			// TODO: Retry
 			return;

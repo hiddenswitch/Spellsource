@@ -118,7 +118,7 @@ public class CardCatalogue {
 		return null;
 	}
 
-	public static Card getCardByName(String name, HeroClass heroClass) {
+	public static Card getCardByName(String name, String heroClass) {
 		List<CardCatalogueRecord> namedCards = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).collect(Collectors.toList());
 		if (!namedCards.isEmpty()) {
 			if (namedCards.size() > 1) {
@@ -139,30 +139,30 @@ public class CardCatalogue {
 	}
 
 	public static CardList query(DeckFormat deckFormat) {
-		return query(deckFormat, (CardType) null, (Rarity) null, (HeroClass) null, (Attribute) null);
+		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null);
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType) {
-		return query(deckFormat, cardType, (Rarity) null, (HeroClass) null, (Attribute) null);
+		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, HeroClass heroClass) {
+	public static CardList query(DeckFormat deckFormat, String heroClass) {
 		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass) {
 		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, HeroClass heroClass, HeroClass actualHeroClass) {
+	public static CardList query(DeckFormat deckFormat, String heroClass, String actualHeroClass) {
 		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, actualHeroClass);
 	}
 
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag) {
 		return query(deckFormat, cardType, rarity, heroClass, tag, null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, String actualHeroClass) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			if (card.getDesc().getFileFormatVersion() > version) {

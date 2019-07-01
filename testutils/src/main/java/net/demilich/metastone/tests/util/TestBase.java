@@ -251,7 +251,7 @@ public class TestBase {
 	}
 
 	@Suspendable
-	public static void runGym(GymConsumer consumer, HeroClass heroClass1, HeroClass heroClass2) {
+	public static void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
 		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
@@ -290,7 +290,7 @@ public class TestBase {
 
 	@Suspendable
 	public static void runGym(GymConsumer consumer) {
-		runGym(consumer, HeroClass.BLUE, HeroClass.BLUE);
+		runGym(consumer, "BLUE", "BLUE");
 	}
 
 	public static void clearHand(GameContext context, Player player) {
@@ -368,11 +368,11 @@ public class TestBase {
 		context.performAction(player.getId(), physicalAttackAction);
 	}
 
-	public static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
+	public static DebugContext createContext(String hero1, String hero2) {
 		return createContext(hero1, hero2, true, DeckFormat.CUSTOM);
 	}
 
-	public static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit, DeckFormat deckFormat) {
+	public static DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
 		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
 		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
 

@@ -1,0 +1,9 @@
+{
+  "name": "Blood Knight",
+  "type": "CLASS",
+  "hero": "hero_koltira",
+  "heroClass": "BLOOD",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -28,7 +28,7 @@ public class OneNightInKarazhanTests extends TestBase {
 			Assert.assertEquals(costOf(context, player, bloodfen), bloodfen.getBaseManaCost());
 			Assert.assertEquals(costOf(context, player, rogueCard), rogueCard.getBaseManaCost());
 			Assert.assertEquals(costOf(context, player, mageCard), mageCard.getBaseManaCost() - 2);
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class OneNightInKarazhanTests extends TestBase {
 
 	@Test
 	public void testPrinceMalchezaar() {
-		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")

@@ -111,8 +111,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String heroPower;
 	public int baseManaCost;
 	public CardType type;
-	public HeroClass heroClass;
-	public HeroClass[] heroClasses;
+	public String heroClass;
+	public String[] heroClasses;
 	public int baseAttack;
 	public int baseHp;
 	public int damage;
@@ -158,7 +158,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int fileFormatVersion = 1;
 	public DynamicDescriptionDesc[] dynamicDescription;
 	public Boolean legacy;
-
+	public String hero;
 	public CardDesc() {
 		super();
 	}
@@ -285,11 +285,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * <p>
 	 * Choose {@link HeroClass#ANY} for a neutral card.
 	 */
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -297,11 +297,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * For tri-class cards from the MSOG Hearthstone expansion, this field contains their three classes. Typically
 	 * uninteresting to use for custom cards.
 	 */
-	public HeroClass[] getHeroClasses() {
+	public String[] getHeroClasses() {
 		return heroClasses;
 	}
 
-	public void setHeroClasses(HeroClass[] heroClasses) {
+	public void setHeroClasses(String[] heroClasses) {
 		this.heroClasses = heroClasses;
 	}
 
@@ -573,6 +573,10 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 */
 	public String getWiki() {
 		return wiki;
+	}
+
+	public String getHero() {
+		return hero;
 	}
 
 	public void setWiki(String wiki) {

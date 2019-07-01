@@ -924,7 +924,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		final Hero previousHero = player.getHero();
 		hero.setId(generateId());
 		hero.setOwner(player.getId());
-		if (hero.getHeroClass() == null || hero.getHeroClass() == HeroClass.ANY) {
+		if (hero.getHeroClass() == null || hero.getHeroClass().equals(HeroClass.ANY)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
 
@@ -937,7 +937,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
-		if (hero.getHeroPower().getHeroClass() == HeroClass.INHERIT) {
+		if (Objects.equals(hero.getHeroPower().getHeroClass(), HeroClass.INHERIT)) {
 			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
 		}
 		// Set hero power ID before events trigger to prevent issues
@@ -3031,7 +3031,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return action;
 		/*
 		Card heroPower = player.getHero().getHeroPower();
-		if (heroPower.getHeroClass() != HeroClass.GREEN) {
+		if (heroPower.getHeroClass() != "GREEN") {
 			return;
 		}
 		if (action.getActionType() == ActionType.HERO_POWER && hasAttribute(player, Attribute.HERO_POWER_CAN_TARGET_MINIONS)) {

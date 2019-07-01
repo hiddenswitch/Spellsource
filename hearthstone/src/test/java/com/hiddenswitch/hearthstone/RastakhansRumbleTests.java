@@ -221,7 +221,7 @@ public class RastakhansRumbleTests extends TestBase {
 			for (int i = 0; i < 3; i++) {
 				assertEquals(opponent.getMinions().get(i).getHp(), 13, i + "");
 			}
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test

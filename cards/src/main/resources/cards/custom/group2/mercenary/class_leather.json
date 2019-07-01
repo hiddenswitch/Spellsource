@@ -1,0 +1,9 @@
+{
+  "name": "Mercenaryy",
+  "type": "CLASS",
+  "hero": "hero_quarnassio",
+  "heroClass": "LEATHER",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

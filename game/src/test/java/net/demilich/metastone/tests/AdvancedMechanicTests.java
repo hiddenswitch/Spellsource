@@ -312,7 +312,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		// Test basic discover
 		// Black, blue, gold
-		HeroClass[] classes = new HeroClass[]{HeroClass.BLACK, HeroClass.BLUE, HeroClass.GOLD};
+		String[] classes = new String[]{"BLACK", "BLUE", "GOLD"};
 
 		// Tests that the discover comes in the exact order the author requested when howMany == choices
 		for (int j = 0; j < 3; j++) {
@@ -362,7 +362,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testChooseOne() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.RED);
+		GameContext context = createContext("BROWN", "RED");
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -396,7 +396,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testCopyCards() {
-		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
+		GameContext context = createContext("WHITE", "RED");
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 		clearHand(context, player);
@@ -412,7 +412,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testDivineShield() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		GameContext context = createContext("BLUE", "RED");
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -506,7 +506,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testSetHpPlusSilence() {
-		GameContext context = createContext(HeroClass.GREEN, HeroClass.RED);
+		GameContext context = createContext("GREEN", "RED");
 		Player player = context.getPlayer1();
 		Player opponent = context.getPlayer2();
 
@@ -541,7 +541,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testShorttermBuffs() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		GameContext context = createContext("BLUE", "RED");
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();

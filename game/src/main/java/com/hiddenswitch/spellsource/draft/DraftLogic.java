@@ -43,7 +43,7 @@ public class DraftLogic {
 		notifyPublicStateChanged();
 	}
 
-	public void startDraft(HeroClass heroClass) {
+	public void startDraft(String heroClass) {
 		// Determine the cards available to this player for the draft.
 		// For now, do not make later parts of the draft dependent on earlier parts.
 		getContext().getPublicState().setHeroClass(heroClass);
@@ -54,8 +54,8 @@ public class DraftLogic {
 		notifyPublicStateChanged();
 	}
 
-	private List<HeroClass> createHeroChoices() {
-		List<HeroClass> classes = HeroClass.getBaseClasses();
+	private List<String> createHeroChoices() {
+		List<String> classes = HeroClass.getBaseClasses(DeckFormat.ALL);
 
 		// For now, simply return all the classes
 		return classes;
@@ -65,7 +65,7 @@ public class DraftLogic {
 		*/
 	}
 
-	private List<List<String>> createDraftCards(HeroClass hero) {
+	private List<List<String>> createDraftCards(String hero) {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
 		List<CardSet> equals = Arrays.asList(

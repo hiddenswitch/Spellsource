@@ -154,7 +154,7 @@ public class NaxxramasTests extends TestBase {
 			Card poisonSeeds = CardCatalogue.getCardById("spell_poison_seeds");
 			playCard(context, player, poisonSeeds);
 			Assert.assertEquals(player.getHero().getHp(), GameLogic.MAX_HERO_HP);
-		}, HeroClass.BROWN, HeroClass.WHITE);
+		}, "BROWN", "WHITE");
 	}
 
 	@Test
@@ -171,6 +171,6 @@ public class NaxxramasTests extends TestBase {
 			for (Minion minion : player.getMinions()) {
 				Assert.assertEquals(minion.getSourceCard().getCardId(), "token_spectral_spider");
 			}
-		}, HeroClass.BROWN, HeroClass.BLACK);
+		}, "BROWN", "BLACK");
 	}
 }

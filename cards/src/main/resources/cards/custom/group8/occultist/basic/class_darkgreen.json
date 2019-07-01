@@ -1,0 +1,9 @@
+{
+  "name": "Occultist",
+  "type": "CLASS",
+  "hero": "hero_jikr",
+  "heroClass": "DARKGREEN",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

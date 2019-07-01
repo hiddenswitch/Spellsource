@@ -232,7 +232,7 @@ public class CardInteractionTests extends TestBase {
 			assertEquals(player.getMinions().size(), 0);
 
 			// start a new game
-			context = createContext(HeroClass.VIOLET, HeroClass.VIOLET);
+			context = createContext("VIOLET", "VIOLET");
 			// opponent plays Repentance, which triggers on Lord Jaraxxus play
 			player = context.getActivePlayer();
 			context.endTurn();
@@ -245,7 +245,7 @@ public class CardInteractionTests extends TestBase {
 			// Jaraxxus should be affected by Repentance, bringing him down to 1 hp
 			assertEquals(player.getHero().getHp(), 1);
 			assertNotNull(player.getHero().getWeapon());
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 	}
 
 	@Test

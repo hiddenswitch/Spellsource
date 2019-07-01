@@ -80,7 +80,7 @@ public abstract class SpellsourceTestBase {
 		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
 		return Decks.createDeck(new DeckCreateRequest()
 				.withUserId(userId)
-				.withHeroClass(HeroClass.RED)
+				.withHeroClass("RED")
 				.withName("Test Deck")
 				.withFormat("Wild")
 				.withInventoryIds(inventoryIds));

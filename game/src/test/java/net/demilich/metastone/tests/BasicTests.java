@@ -65,7 +65,7 @@ public class BasicTests extends TestBase {
 			destroy(context, raidLeader);
 			Assert.assertEquals(silverHandRecruit.getZone(), Zones.BATTLEFIELD);
 			Assert.assertEquals(player.getMinions().size(), 1);
-		}, HeroClass.GOLD, HeroClass.GOLD);
+		}, "GOLD", "GOLD");
 	}
 
 	private Card getTheCoin(CardList cards) {
@@ -91,7 +91,7 @@ public class BasicTests extends TestBase {
 			context.performAction(mage.getId(), devMonster.play());
 
 			Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class BasicTests extends TestBase {
 			// hero attacked; both entities should be damaged
 			Assert.assertEquals(druid.getHero().getHp(), druid.getHero().getMaxHp() - 2 * damage);
 			Assert.assertEquals(devMonster.getHp(), devMonster.getMaxHp() - damage);
-		}, HeroClass.BLUE, HeroClass.BROWN);
+		}, "BLUE", "BROWN");
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class BasicTests extends TestBase {
 
 			Assert.assertEquals(mage.getMinions().size(), 1);
 			Assert.assertEquals(warrior.getMinions().size(), 0);
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test
@@ -179,12 +179,12 @@ public class BasicTests extends TestBase {
 			Actor right = mage.getMinions().get(1);
 			Assert.assertEquals(left.getAttack(), 2);
 			Assert.assertEquals(right.getAttack(), 1);
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test
 	public void testTheCoin() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		GameContext context = createContext("BLUE", "RED");
 		Player mage = context.getPlayer1();
 		Player warrior = context.getPlayer2();
 
