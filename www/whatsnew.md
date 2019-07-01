@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.35 (In Progress)
+
+ - Silverbone Claw now buffs a dragon in hand even if it is the only dragon in the player's hand. (1208)
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.
