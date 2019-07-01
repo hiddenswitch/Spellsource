@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.35 (In Progress)
+
+ - Beetle Bash is no longer targeted and now properly gives 4 armor instead of 5. (1212)
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.
