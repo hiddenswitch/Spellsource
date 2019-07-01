@@ -250,6 +250,10 @@ public class CardCatalogue {
 				continue;
 			}
 
+			if (card.getCardType().isCardType(CardType.CLASS)) {
+				continue;
+			}
+
 			if (deckFormat != null && !deckFormat.isInFormat(card)) {
 				continue;
 			}
