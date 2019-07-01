@@ -25,16 +25,15 @@ Follow this guide to be able to test your cards and make changes to the game cod
 
 ### 1. Prerequisites
 
- 1. Make sure you have updated to the latest version of Windows 10, v1093 "May 2019."
- 2. Install some helpful Windows development utilities.
+ 1. Install some helpful Windows development utilities.
     1. [7-Zip](https://www.7-zip.org/a/7z1900-x64.exe) for a friendlier way to open zip files.
     2. [ConEmu](https://www.fosshub.com/ConEmu.html?dwl=ConEmuSetup.190526.exe) for a better console.
     3. [Git for Windows](https://github.com/git-for-windows/git/releases/download/v2.22.0.windows.1/Git-2.22.0-64-bit.exe) which also installs some helpful console programs. Hit next on all the prompts, since it's a little confusing.
- 3. Install Java 12.
+ 2. Install Java 12.
     1. Start by [downloading the zip file for Windows (OpenJDK 12.0.1)](https://download.java.net/java/GA/jdk12.0.1/69cfe15208a647278a19ef0990eea691/12/GPL/openjdk-12.0.1_windows-x64_bin.zip) from the [OpenJDK website](https://jdk.java.net/12/).
     2. Extract the zip file to your `C:\Program Files` directory. If you did this correctly, you should be able to find `java.exe` at  `C:\Program Files\jdk-12.0.1\bin\java.exe`.
- 4. Install [MongoDB 4](https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi).
- 5. Add `java`, `git` and `mongod` to your PATH:
+ 3. Install [MongoDB 4](https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.10-signed.msi).
+ 4. Add `java`, `git` and `mongod` to your PATH:
     1. Hit the Windows key to bring open the Start menu, and type "This PC".
     2. Right click on the This PC result and choose Properties. You should now see the `Control Panel\System and Security\System` control panel pane.
     3. Click Advanced System Settings in the left sidebar.
@@ -45,7 +44,7 @@ Follow this guide to be able to test your cards and make changes to the game cod
         1. `C:\Program Files\jdk-12.0.1\bin`
         2. `C:\Program Files\MongoDB\Server\4.0\bin`
         3. `C:\Program Files\Git\bin`
- 6. Install [IntelliJ IDEA Community Edition](https://download.jetbrains.com/idea/ideaIC-2019.1.3-jbr11.exe) to use as a code editor.
+ 5. Install [IntelliJ IDEA Community Edition](https://download.jetbrains.com/idea/ideaIC-2019.1.3-jbr11.exe) to use as a code editor.
  
 ### 2. Download Spellsource
 
