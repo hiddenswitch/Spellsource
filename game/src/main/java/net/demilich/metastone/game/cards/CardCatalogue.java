@@ -179,7 +179,8 @@ public class CardCatalogue {
 				continue;
 			}
 			// per default, do not include hero powers
-			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.isQuest()) {
+			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.isQuest() ||
+					(card.getCardType().isCardType(CardType.CLASS) && cardType != CardType.CLASS)) {
 				continue;
 			}
 			if (rarity != null && !card.getRarity().isRarity(rarity)) {
