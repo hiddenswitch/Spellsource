@@ -11,8 +11,8 @@
   "deathrattle": {
     "class": "SummonSpell",
     "cards": [
-      "token_spider",
-      "token_spider"
+      "token_vilewing_hatchling",
+      "token_vilewing_hatchling"
     ]
   },
   "attributes": {

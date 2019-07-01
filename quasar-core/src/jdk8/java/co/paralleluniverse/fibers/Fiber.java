@@ -80,7 +80,7 @@ public class Fiber<V> extends Strand implements Joinable<V>, Serializable, Futur
     static final boolean USE_VAL_FOR_RESULT = true;
     private static final Object RESET = new Object();
     private static final boolean traceInterrupt = SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.traceInterrupt");
-    private static final boolean disableAgentWarning = SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableAgentWarning");
+    private static final boolean disableAgentWarning = true; // SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableAgentWarning");
     public static final int DEFAULT_STACK_SIZE = 32;
     private static final Object SERIALIZER_BLOCKER = new Object();
     private static final boolean MAINTAIN_ACCESS_CONTROL_CONTEXT = (System.getSecurityManager() != null);

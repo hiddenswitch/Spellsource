@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "Guard. Opener: Deal 2 damage to all other characters, then restore #2 Health to any survivors.",
+  "description": "Opener: Deal 2 damage to all other characters, then restore #2 Health to any survivors.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

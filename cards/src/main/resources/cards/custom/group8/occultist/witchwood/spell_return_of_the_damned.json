@@ -1,6 +1,6 @@
 {
   "name": "Return of the Damned",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",

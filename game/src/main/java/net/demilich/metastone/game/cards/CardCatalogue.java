@@ -1,19 +1,25 @@
 package net.demilich.metastone.game.cards;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.hiddenswitch.spellsource.CardResource;
+import com.hiddenswitch.spellsource.CardResources;
+import com.hiddenswitch.spellsource.CardsModule;
+import com.hiddenswitch.spellsource.ResourceInputStream;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.utils.ResourceInputStream;
-import net.demilich.metastone.game.utils.ResourceLoader;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,21 +29,39 @@ import java.util.stream.Stream;
  */
 public class CardCatalogue {
 	/**
-	 * The directory/prefix of the location in the JAR resources of the {@code card} module, i.e., a directory inside of
-	 * {@code cards/src/main/resources}.
+	 * A class that describes injected card resources used internally by a static global card catalogue..
 	 */
-	public static final String CARDS_FOLDER = "cards";
-	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
-	private static int version = 1;
+	public static class InjectedCardResources {
+		private Set<CardResources> cardResources;
 
+		@Inject
+		public InjectedCardResources(Set<CardResources> cardResources) {
+			this.cardResources = cardResources;
+		}
+	}
+
+	private static final Injector INJECTOR;
+
+	static {
+		// This code iterates through all the classes on the classpath that are subtypes of CardsModule as "plugins", then
+		// makes the cards they define available to the card catalogue.
+		INJECTOR = Guice.createInjector(new Reflections("com.hiddenswitch.spellsource").getSubTypesOf(CardsModule.class).stream().map(clazz -> {
+			try {
+				return clazz.getConstructor().newInstance();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}).collect(Collectors.toList()));
+	}
+
+	private static Logger LOGGER = LoggerFactory.getLogger(CardCatalogue.class);
+	private static int version = 1;
+	private static AtomicBoolean loaded = new AtomicBoolean();
 	private final static Map<String, Card> cards = new LinkedHashMap<>();
 	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>();
 	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>();
 
-	public static void add(Card card) {
-		cards.put(card.getCardId(), card);
-	}
-
+	@NotNull
 	public static CardList getAll() {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
@@ -80,10 +104,12 @@ public class CardCatalogue {
 	 *
 	 * @return
 	 */
+	@NotNull
 	public static Map<String, CardCatalogueRecord> getRecords() {
 		return Collections.unmodifiableMap(records);
 	}
 
+	@Nullable
 	public static Card getCardByName(String name) {
 		CardCatalogueRecord namedCard = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(recordsByName.get(name).get(0));
 		if (namedCard != null) {
@@ -172,26 +198,47 @@ public class CardCatalogue {
 	}
 
 	/**
-	 * Loads all the cards specified in the {@code "cards/src/main/resources" + CARDS_FOLDER } directory in the {@code
-	 * cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
+	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
+	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
 	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
-		// TODO: Set this somewhere better
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
-		synchronized (cards) {
-			if (!cards.isEmpty()) {
-				return;
+		if (!loaded.compareAndSet(false, true)) {
+			return;
+		}
+
+		try {
+			Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+			InjectedCardResources cardResources = INJECTOR.getInstance(InjectedCardResources.class);
+			Collection<ResourceInputStream> inputStreams = cardResources.cardResources.stream().flatMap(resource -> resource.getResources().stream()).map(resource -> ((CardResource) resource)).map(resource -> (ResourceInputStream) resource).collect(Collectors.toList());
+			Map<String, CardDesc> cardDesc = new HashMap<>();
+			ArrayList<String> badCards = new ArrayList<>();
+			CardParser cardParser = new CardParser();
+
+			for (ResourceInputStream resourceInputStream : inputStreams) {
+				try {
+					final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
+					CardDesc desc = record.getDesc();
+					if (cardDesc.containsKey(desc.getId())) {
+						LOGGER.error("loadCards: Card id {} is duplicated!", desc.getId());
+					}
+					cardDesc.put(desc.getId(), desc);
+					records.put(desc.getId(), record);
+					recordsByName.putIfAbsent(desc.getName(), new ArrayList<>());
+					recordsByName.get(desc.getName()).add(record);
+				} catch (Exception e) {
+					LOGGER.error("loadCards: An error occurred while processing {}: {}", resourceInputStream.getFileName(), e.toString());
+					badCards.add(resourceInputStream.getFileName());
+				}
 			}
 
-			Collection<ResourceInputStream> inputStreams = null;
-			try {
-				inputStreams = ResourceLoader.loadInputStreams(CARDS_FOLDER, false);
-				loadCards(inputStreams);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			for (CardDesc desc : cardDesc.values()) {
+				Card instance = desc.create();
+				cards.put(instance.getCardId(), instance);
 			}
+
+			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -213,36 +260,6 @@ public class CardCatalogue {
 		return result;
 	}
 
-
-	private static void loadCards(Collection<ResourceInputStream> inputStreams) throws IOException, URISyntaxException, CardParseException {
-		Map<String, CardDesc> cardDesc = new HashMap<String, CardDesc>();
-		ArrayList<String> badCards = new ArrayList<>();
-		CardParser cardParser = new CardParser();
-
-		for (ResourceInputStream resourceInputStream : inputStreams) {
-			try {
-				final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
-				CardDesc desc = record.getDesc();
-				if (cardDesc.containsKey(desc.getId())) {
-					logger.error("loadCards: Card id {} is duplicated!", desc.getId());
-				}
-				cardDesc.put(desc.getId(), desc);
-				records.put(desc.getId(), record);
-				recordsByName.putIfAbsent(desc.getName(), new ArrayList<>());
-				recordsByName.get(desc.getName()).add(record);
-			} catch (Exception e) {
-				logger.error("loadCards: An error occurred while processing {}: {}", resourceInputStream.fileName, e.toString());
-				badCards.add(resourceInputStream.fileName);
-			}
-		}
-
-		for (CardDesc desc : cardDesc.values()) {
-			Card instance = desc.create();
-			CardCatalogue.add(instance);
-		}
-
-		logger.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
-	}
 
 	public static Stream<Card> stream() {
 		return cards.values().stream().filter(card -> card.getDesc().getFileFormatVersion() <= version);

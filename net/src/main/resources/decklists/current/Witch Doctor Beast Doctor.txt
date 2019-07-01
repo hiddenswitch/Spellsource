@@ -11,11 +11,11 @@
 # 2x (3) Nightmare Warden
 # 2x (3) Prolific Tamer
 # 2x (4) Mutamite Terror
-# 2x (4) Spore Bat
-# 2x (4) Wolpertinger
+# 2x (4) Prized Boar
+# 2x (4) Shimmerscale
 # 1x (5) Ptero Max
 # 2x (6) Evocation
 # 2x (6) Packmother
-# 1x (7) Doby Mick
+# 1x (7) Gaitha the Protector
 # 2x (7) Jungle King
 #

@@ -1,0 +1,11 @@
+{
+  "seed" : 6314992119163393868,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "JADE" ],
+  "deckCardIds" : [ [ "spell_fists_of_fury", "minion_baron_geddon", "spell_fiery_kitsune_punch", "minion_life_cocoon", "minion_nightblade", "minion_red_mana_wyrm", "minion_uncle_gao", "minion_life_cocoon", "minion_master_jigen", "spell_rising_sun_kick", "minion_hypnotic_beetle", "minion_fight_promoter", "minion_fanatical_brewmaster", "spell_tiger_stance", "minion_elise_starseeker", "minion_grassroot_mossling", "minion_angry_chicken", "spell_steadfast_defense", "spell_misty_mana_tea", "spell_mark_of_despair", "minion_defender_of_tomorrow", "minion_recurring_villain", "minion_spark_engine", "minion_mechanical_monstrosity", "minion_mrs_merria", "minion_knight_eternal", "minion_student_of_the_crane", "minion_scarlet_crusader", "spell_mark_of_despair", "minion_ox_school_instructor" ], [ "spell_mark_of_despair", "minion_shrieking_shroom", "minion_jar_of_mists", "minion_troggzor_the_earthinator", "spell_transcendence", "minion_amathyst_panther", "spell_honed_position", "minion_jar_of_mists", "minion_ogre_magi", "minion_master_jigen", "minion_ravenous_lookout", "spell_serpent_stance", "spell_serpent_stance", "spell_sleight_of_hand", "spell_stance_change", "spell_fiery_kitsune_punch", "spell_palm_strike", "minion_enchanted_tapestry", "minion_ox_school_instructor", "minion_flutterer", "spell_misty_mana_tea", "spell_roll", "spell_transcendence", "spell_tiger_stance", "spell_tiger_stance", "minion_deepwoods_elemental", "spell_fists_of_fury", "spell_rising_sun_kick", "minion_tsulong", "minion_shigaraki_elder" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "NAXXRAMAS", "VERDANT_DREAMS", "THE_GRAND_TOURNAMENT", "LEAGUE_OF_EXPLORERS", "BATTLE_FOR_ASHENVALE", "CUSTOM", "BLACKROCK_MOUNTAIN", "THE_OLD_GODS", "REWARD", "GOBLINS_VS_GNOMES", "BASIC", "JOURNEY_TO_UNGORO", "BOOMSDAY_PROJECT", "SPELLSOURCE_BASIC", "PROMO", "ONE_NIGHT_IN_KARAZHAN", "KNIGHTS_OF_THE_FROZEN_THRONE", "SANDS_OF_TIME", "KOBOLDS_AND_CATACOMBS", "RISE_OF_SHADOWS", "HALL_OF_FAME", "RASTAKHANS_RUMBLE", "MEAN_STREETS_OF_GADGETZAN", "WITCHWOOD", "CLASSIC" ],
+  "mulligans" : [ [ 32, 20, 12 ], [ 62, 52 ] ],
+  "actions" : [ 0, 0, 2, 1, 3, 2, 1, 5, 0, 0, 7, 1, 4, 0, 2, 1, 0, 6, 7, 7, 1, 0, 9, 3, 1, 4, 5, 3, 3, 1, 0, 3, 0, 7, 17, 12, 29, 16, 4, 4, 1 ],
+  "id" : null
+}

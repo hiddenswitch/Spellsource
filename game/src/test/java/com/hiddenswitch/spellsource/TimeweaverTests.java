@@ -3,7 +3,6 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
@@ -11,7 +10,6 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 import static org.testng.Assert.*;
 
