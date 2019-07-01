@@ -445,23 +445,21 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(29)
 						.withUp(thisVertx -> {
-							changeCardId("minon_treeleach", "minion_treeleach");
 						}))
 				.add(new MigrationRequest()
 						.withVersion(30)
 						.withUp(thisVertx -> {
-							changeCardId("minion_anub'rekhan", "minion_anobii");
-							changeCardId("minion_azjol_visionary", "minion_visionary");
-							changeCardId("minion_nerubian_vizier", "minion_vizier");
-							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
-							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
-							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
-							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
-							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+							// Reran elsewhere
 						}))
 				.add(new MigrationRequest()
 						.withVersion(31)
 						.withUp(thisVertx -> {
+							// Reran elsewhere
+						}))
+				.add(new MigrationRequest()
+						.withVersion(32)
+						.withUp(thisVertx -> {
+							changeCardId("minon_treeleach", "minion_treeleach");
 							changeCardId("hero_witch_doctor", "hero_senzaku");
 							changeCardId("minion_emerald_exhibit", "minion_ceremonial_alter");
 							changeCardId("minion_bladesworn", "minion_entranced_dancer");
@@ -537,7 +535,7 @@ public class Spellsource {
 							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
 							changeCardId("spell_ahnqiraj_portal", "spell_ancient_waygate");
 						}))
-				.migrateTo(31, then2 ->
+				.migrateTo(32, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -681,6 +679,7 @@ public class Spellsource {
 
 	@Suspendable
 	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
+		CardCatalogue.loadCardsFromPackage();
 		try {
 			CardCatalogue.getCardById(newId);
 		} catch (Throwable any) {
