@@ -295,8 +295,8 @@ public class RiseOfShadowsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			overrideDiscover(context, player, discoverActions -> {
 				discoverActions.stream().forEach(discoverAction -> {
-					assertFalse(discoverAction.getCard().getHeroClass() == HeroClass.SELF);
-					assertFalse(discoverAction.getCard().getHeroClass() == HeroClass.ANY);
+					assertNotEquals(HeroClass.SELF, discoverAction.getCard().getHeroClass());
+					assertNotEquals(HeroClass.ANY, discoverAction.getCard().getHeroClass());
 				});
 				return discoverActions.get(0);
 			});
@@ -482,7 +482,7 @@ public class RiseOfShadowsTests extends TestBase {
 			assertEquals(costOf(context, player, vendetta), 4);
 			receiveCard(context, player, "spell_pyroblast");
 			assertEquals(costOf(context, player, vendetta), 0);
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 
 	@Test

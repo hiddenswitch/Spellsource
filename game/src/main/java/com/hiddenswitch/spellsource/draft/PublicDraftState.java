@@ -11,9 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class PublicDraftState implements Serializable {
-	private List<HeroClass> heroClassChoices;
+	private List<String> heroClassChoices;
 	private List<String> currentCardChoices;
-	private HeroClass heroClass;
+	private String heroClass;
 	private DraftStatus status;
 	private List<String> selectedCards;
 	private int cardsRemaining;
@@ -37,11 +37,11 @@ public class PublicDraftState implements Serializable {
 		return deck;
 	}
 
-	public List<HeroClass> getHeroClassChoices() {
+	public List<String> getHeroClassChoices() {
 		return heroClassChoices;
 	}
 
-	public void setHeroClassChoices(List<HeroClass> heroClassChoices) {
+	public void setHeroClassChoices(List<String> heroClassChoices) {
 		this.heroClassChoices = heroClassChoices;
 	}
 
@@ -53,11 +53,11 @@ public class PublicDraftState implements Serializable {
 		this.currentCardChoices = currentCardChoices;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 

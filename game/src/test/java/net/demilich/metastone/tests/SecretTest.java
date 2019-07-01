@@ -34,7 +34,7 @@ public class SecretTest extends TestBase {
 			attack(context, opponent, minion, player.getHero());
 			assertTrue(minion.isDestroyed());
 			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - minion.getAttack());
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test

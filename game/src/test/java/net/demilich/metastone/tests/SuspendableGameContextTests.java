@@ -16,7 +16,7 @@ public class SuspendableGameContextTests extends TestBase {
 
 	@Test
 	public void testBasicSuspendableContext() throws ExecutionException, InterruptedException {
-		SuspendableGameContext context = new SuspendableGameContext(HeroClass.BLACK, HeroClass.BROWN);
+		SuspendableGameContext context = new SuspendableGameContext("BLACK", "BROWN");
 		context.play();
 		context.setMulligan(context.getActivePlayerId(), Collections.emptyList());
 		context.setMulligan(context.getNonActivePlayerId(), Collections.emptyList());
@@ -25,7 +25,7 @@ public class SuspendableGameContextTests extends TestBase {
 		}
 		assertTrue(context.updateAndGetGameOver());
 
-		context = new SuspendableGameContext(HeroClass.BLACK, HeroClass.BROWN);
+		context = new SuspendableGameContext("BLACK", "BROWN");
 		context.play();
 		context.setMulligan(context.getNonActivePlayerId(), Collections.emptyList());
 		context.setMulligan(context.getActivePlayerId(), Collections.emptyList());
@@ -37,11 +37,11 @@ public class SuspendableGameContextTests extends TestBase {
 
 	@Test
 	public void testCopySuspendableContext() throws ExecutionException, InterruptedException {
-		SuspendableGameContext context1 = new SuspendableGameContext(HeroClass.BLACK, HeroClass.BROWN);
+		SuspendableGameContext context1 = new SuspendableGameContext("BLACK", "BROWN");
 		SuspendableGameContext context2 = context1.clone();
 
 		assertEquals(context1.getPlayer(0).getHero().getHeroClass(), context2.getPlayer(0).getHero().getHeroClass());
-		assertEquals(HeroClass.BLACK, context2.getPlayer(0).getHero().getHeroClass());
+		assertEquals("BLACK", context2.getPlayer(0).getHero().getHeroClass());
 		assertNull(context1.getFiber());
 		assertNull(context2.getFiber());
 

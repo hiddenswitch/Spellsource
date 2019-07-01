@@ -1,0 +1,9 @@
+{
+  "name": "Shaman",
+  "type": "CLASS",
+  "hero": "hero_thrall",
+  "heroClass": "SILVER",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

@@ -23,7 +23,7 @@ public class TechnicalTests extends TestBase {
 
 	@Test
 	public void testDoubleCorruption() {
-		GameContext context = createContext(HeroClass.VIOLET, HeroClass.RED);
+		GameContext context = createContext("VIOLET", "RED");
 		Player warlock = context.getPlayer1();
 		warlock.setMana(10);
 		Player warrior = context.getPlayer2();
@@ -55,7 +55,7 @@ public class TechnicalTests extends TestBase {
 
 	@Test
 	public void testTriplePyromancer() {
-		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
+		GameContext context = createContext("WHITE", "RED");
 		Player player1 = context.getPlayer1();
 		player1.setMana(10);
 

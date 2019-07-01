@@ -285,6 +285,10 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 	}
 
+	public String getHero() {
+		return getDesc().getHero();
+	}
+
 	/**
 	 * Gets the set that the card belongs to.
 	 *
@@ -308,11 +312,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return The hero class
 	 */
-	public HeroClass getHeroClass() {
-		return (HeroClass) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
+	public String getHeroClass() {
+		return (String) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		getAttributes().put(Attribute.HERO_CLASS, heroClass);
 	}
 
@@ -321,7 +325,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return The hero classes (the gang)
 	 */
-	public HeroClass[] getHeroClasses() {
+	public String[] getHeroClasses() {
 		return getDesc().getHeroClasses();
 	}
 
@@ -442,16 +446,16 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @param heroClass The {@link HeroClass} to search.
 	 * @return <code>True</code> if this card has the specified class.
 	 */
-	public boolean hasHeroClass(HeroClass heroClass) {
+	public boolean hasHeroClass(String heroClass) {
 		if (getHeroClasses() != null) {
-			for (HeroClass h : getHeroClasses()) {
+			for (String h : getHeroClasses()) {
 				if (heroClass.equals(h)) {
 					return true;
 				}
 			}
-		} else if (heroClass == getHeroClass()) {
+		} else if (Objects.equals(heroClass, getHeroClass())) {
 			return true;
-		} else if (heroClass == HeroClass.INHERIT) {
+		} else if (heroClass.equals(HeroClass.INHERIT)) {
 			return true;
 		}
 		return false;

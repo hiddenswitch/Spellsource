@@ -145,7 +145,7 @@ public class ModelsTest {
 
 	private void runGym(GymConsumer consume) {
 		CardCatalogue.loadCardsFromPackage();
-		GameContext context = new GameContext(HeroClass.BLACK, HeroClass.BLACK);
+		GameContext context = new GameContext("BLACK", "BLACK");
 		context.setLogic(new GameLogic(101010L));
 		context.setBehaviour(0, new ChooseLastBehaviour());
 		context.setBehaviour(1, new ChooseLastBehaviour());

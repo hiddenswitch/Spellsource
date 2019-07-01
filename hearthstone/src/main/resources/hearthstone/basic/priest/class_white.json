@@ -1,0 +1,9 @@
+{
+  "name": "Priest",
+  "type": "CLASS",
+  "hero": "hero_anduin",
+  "heroClass": "WHITE",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

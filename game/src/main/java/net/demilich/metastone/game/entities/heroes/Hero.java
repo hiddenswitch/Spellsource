@@ -12,7 +12,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public final class Hero extends Actor {
-	private HeroClass heroClass;
+	private String heroClass;
 	private EntityZone<Card> heroPowerZone = new EntityZone<>(getOwner(), Zones.HERO_POWER);
 	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), Zones.WEAPON);
 
@@ -64,7 +64,7 @@ public final class Hero extends Actor {
 	}
 
 	@Override
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
@@ -99,7 +99,7 @@ public final class Hero extends Actor {
 		return newArmor - originalArmor;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 

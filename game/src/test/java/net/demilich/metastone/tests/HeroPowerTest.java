@@ -43,7 +43,7 @@ public class HeroPowerTest extends TestBase {
 
 			Assert.assertEquals(hero.getHp(), GameLogic.MAX_HERO_HP - armorUpBonus);
 			Assert.assertEquals(hero.getArmor(), armorUpBonus / 2);
-		}, HeroClass.RED, HeroClass.RED);
+		}, "RED", "RED");
 
 	}
 
@@ -59,7 +59,7 @@ public class HeroPowerTest extends TestBase {
 			final int fireblastDamage = 1;
 			context.performAction(context.getPlayer1().getId(), fireblast);
 			Assert.assertEquals(victim.getHp(), victimStartHp - fireblastDamage);
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class HeroPowerTest extends TestBase {
 			Assert.assertEquals(priest.getHp(), GameLogic.MAX_HERO_HP);
 			context.performAction(context.getPlayer1().getId(), lesserHeal);
 			Assert.assertEquals(priest.getHp(), GameLogic.MAX_HERO_HP);
-		}, HeroClass.WHITE, HeroClass.RED);
+		}, "WHITE", "RED");
 
 	}
 
@@ -96,7 +96,7 @@ public class HeroPowerTest extends TestBase {
 			final int lifeTapDamage = 2;
 			Assert.assertEquals(warlock.getHp(), GameLogic.MAX_HERO_HP - lifeTapDamage);
 			Assert.assertEquals(player.getHand().getCount(), cardCount + 1);
-		}, HeroClass.VIOLET, HeroClass.RED);
+		}, "VIOLET", "RED");
 
 	}
 }

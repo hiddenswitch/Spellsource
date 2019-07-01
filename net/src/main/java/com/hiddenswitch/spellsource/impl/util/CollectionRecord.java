@@ -25,7 +25,7 @@ public class CollectionRecord extends MongoRecord {
 	/**
 	 * Hero class for deck collection records.
 	 */
-	private HeroClass heroClass;
+	private String heroClass;
 
 	/**
 	 * Names for alliance and deck collection records.
@@ -70,7 +70,7 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public static CollectionRecord deck(final String userId, final String name, final HeroClass heroClass, final boolean draft) {
+	public static CollectionRecord deck(final String userId, final String name, final String heroClass, final boolean draft) {
 		return new CollectionRecord()
 				.withDraft(draft)
 				.setUserId(userId)
@@ -166,11 +166,11 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public CollectionRecord setHeroClass(HeroClass heroClass) {
+	public CollectionRecord setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}

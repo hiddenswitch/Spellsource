@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 public class AllianceSpellTests extends TestBase {
 	@Test
 	public void testLastMinionDestroyedBattlecrySummon() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		GameContext context = createContext("BLUE", "RED");
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();

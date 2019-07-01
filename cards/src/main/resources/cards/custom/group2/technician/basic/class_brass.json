@@ -1,0 +1,9 @@
+{
+  "name": "Technician",
+  "type": "CLASS",
+  "hero": "hero_brass",
+  "heroClass": "BRASS",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

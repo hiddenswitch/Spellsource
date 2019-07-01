@@ -327,7 +327,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// This is a depth 6 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
 			assertTrue(context.updateAndGetGameOver());
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 
 	@Test
@@ -346,7 +346,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			GameAction chosen = behaviour.requestAction(context, player, actions);
 			Assert.assertEquals(chosen.getSourceReference(), fireball.getReference(), "The AI should have chosen to play the Fireball");
 			Assert.assertEquals(chosen.getTargetReference(), opponent.getHero().getReference(), "The AI should have chosen to cast it against the enemy hero.");
-		}, /*Set hero class to mage for fireblast hero power*/ HeroClass.BLUE, HeroClass.BLUE);
+		}, /*Set hero class to mage for fireblast hero power*/ "BLUE", "BLUE");
 	}
 
 

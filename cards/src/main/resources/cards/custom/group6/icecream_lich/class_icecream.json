@@ -1,0 +1,9 @@
+{
+  "name": "Lich",
+  "type": "CLASS",
+  "hero": "hero_kel_thuzad",
+  "heroClass": "ICECREAM",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

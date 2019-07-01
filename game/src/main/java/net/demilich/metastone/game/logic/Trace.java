@@ -43,7 +43,7 @@ public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 3L;
 	private long seed;
 	private int catalogueVersion;
-	private HeroClass[] heroClasses;
+	private String[] heroClasses;
 	private String[][] deckCardIds;
 	private String deckFormatName;
 	private CardSet[] deckFormatSets;
@@ -60,7 +60,7 @@ public class Trace implements Serializable, Cloneable {
 		Player[] players = new Player[]{gameState.player1, gameState.player2};
 		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new CardSet[0]);
 		deckFormatName = gameState.deckFormat.getName();
-		setHeroClasses(new HeroClass[2]);
+		setHeroClasses(new String[2]);
 		setDeckCardIds(new String[2][]);
 		for (int i = 0; i < 2; i++) {
 			getHeroClasses()[i] = players[i].getHero().getHeroClass();
@@ -208,11 +208,11 @@ public class Trace implements Serializable, Cloneable {
 		return log;
 	}
 
-	public HeroClass[] getHeroClasses() {
+	public String[] getHeroClasses() {
 		return heroClasses;
 	}
 
-	public Trace setHeroClasses(HeroClass[] heroClasses) {
+	public Trace setHeroClasses(String[] heroClasses) {
 		this.heroClasses = heroClasses;
 		return this;
 	}

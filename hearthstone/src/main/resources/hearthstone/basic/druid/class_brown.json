@@ -1,0 +1,9 @@
+{
+  "name": "Druid",
+  "type": "CLASS",
+  "hero": "hero_malfurion",
+  "heroClass": "BROWN",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

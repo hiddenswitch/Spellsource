@@ -1,0 +1,9 @@
+{
+  "name": "Warrior",
+  "type": "CLASS",
+  "hero": "hero_garrosh",
+  "heroClass": "RED",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

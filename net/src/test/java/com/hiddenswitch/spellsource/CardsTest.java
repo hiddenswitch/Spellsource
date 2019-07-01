@@ -35,8 +35,8 @@ public class CardsTest extends SpellsourceTestBase {
 	@Test
 	public void testContainsHeroCards(TestContext context) {
 		CardCatalogue.loadCardsFromPackage();
-		for (HeroClass heroClass : HeroClass.values()) {
-			HeroClass.getHeroCard(heroClass);
+		for (Card classCard : HeroClass.getClassCards(DeckFormat.ALL)) {
+			assertNotNull(CardCatalogue.getCardById(classCard.getHero()));
 		}
 	}
 }

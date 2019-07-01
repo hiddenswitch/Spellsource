@@ -50,7 +50,11 @@ public enum CardType {
 	 * An enchantment card stores data used by effects like {@link net.demilich.metastone.game.spells.AddDeathrattleSpell}
 	 * and {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}, copying the values from it to the target.
 	 */
-	ENCHANTMENT;
+	ENCHANTMENT,
+	/**
+	 * A class card contains the properties to associate a specific hero-class String with, like it's name, hero, color, etc
+	 */
+	CLASS;
 
 	/**
 	 * Indicates whether or not the instance is of the specified card type.

@@ -1,0 +1,9 @@
+{
+  "name": "Timeweaver",
+  "type": "CLASS",
+  "hero": "hero_atropos",
+  "heroClass": "TIME",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

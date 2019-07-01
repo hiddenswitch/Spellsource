@@ -93,7 +93,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertTrue(bloodfenRaptor.isDestroyed());
 			assertEquals(player.getHero().getArmor(), 0);
 			assertEquals(weapon.getAttack(), 0);
-		}, HeroClass.RED, HeroClass.RED);
+		}, "RED", "RED");
 	}
 
 	@Test
@@ -280,7 +280,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
 	public void testUnidentifiedElixirStartsInHand() {
-		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck ->
 				Stream.generate(() -> "spell_unidentified_elixir")
@@ -298,7 +298,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
 			playCard(context, player, "minion_flame_imp");
 			assertEquals(player.getHand().get(0).getCardId(), "spell_amethyst_spellstone");
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 
 		// Amethyst should not trigger on warlock hero power
 		// Also tests that amethyst doesn't trigger on fatigue
@@ -306,7 +306,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
 			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_amethyst_spellstone");
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 	}
 
 	@Test
@@ -848,7 +848,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertEquals(player.getHand().size(), GameLogic.MAX_HAND_CARDS);
 			assertEquals(player.getHand().stream()
 					.filter(c -> c.getCardType() == CardType.SPELL)
-					.filter(c -> c.getHeroClass() == HeroClass.GREEN)
+					.filter(c -> c.getHeroClass().equals("GREEN"))
 					.count(), 10L);
 		});
 	}

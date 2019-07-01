@@ -1,0 +1,9 @@
+{
+  "name": "Vermancer",
+  "type": "CLASS",
+  "hero": "hero_zara",
+  "heroClass": "AMBER",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

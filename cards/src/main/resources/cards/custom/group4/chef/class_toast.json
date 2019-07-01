@@ -1,0 +1,9 @@
+{
+  "name": "Chef",
+  "type": "CLASS",
+  "hero": "hero_warchef_gordo",
+  "heroClass": "TOAST",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

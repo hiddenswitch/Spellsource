@@ -1,0 +1,9 @@
+{
+  "name": "Rogue",
+  "type": "CLASS",
+  "hero": "hero_valeera",
+  "heroClass": "BLACK",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

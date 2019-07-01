@@ -40,7 +40,7 @@ public final class GuessCardSpell extends Spell {
 		Player opponent = context.getOpponent(player);
 
 		// Find all the cards which started in the opponent's deck.
-		Map<HeroClass, List<Entity>> deckCards = context.getEntities()
+		Map<String, List<Entity>> deckCards = context.getEntities()
 				.filter(e -> e.getOwner() == opponent.getId())
 				.filter(e -> e.getEntityType() == EntityType.CARD)
 				.filter(e -> e.hasAttribute(Attribute.STARTED_IN_DECK))
@@ -48,8 +48,8 @@ public final class GuessCardSpell extends Spell {
 
 		Set<String> startingDeck = deckCards.values().stream().flatMap(Collection::stream).map(Entity::getSourceCard).map(Card::getCardId).collect(toSet());
 
-		HeroClass opponentClass = opponent.getHero().getHeroClass();
-		HeroClass correctClass;
+		String opponentClass = opponent.getHero().getHeroClass();
+		String correctClass;
 		final Card correctCard;
 
 		if (deckCards.containsKey(opponentClass)

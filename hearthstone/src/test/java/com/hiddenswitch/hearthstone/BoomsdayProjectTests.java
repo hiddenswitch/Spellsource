@@ -299,7 +299,7 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getHero().getHp(), 26);
 			playCard(context, player, "spell_drain_life", opponent.getHero());
 			assertEquals(player.getHero().getHp(), 30);
-		}, HeroClass.WHITE, HeroClass.RED);
+		}, "WHITE", "RED");
 	}
 
 	@Test
@@ -449,27 +449,27 @@ public class BoomsdayProjectTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			assertEquals(player.getDeck().size(), 0);
-			assertEquals(opponent.getHero().getHeroClass(), HeroClass.RED, "class");
+			assertEquals(opponent.getHero().getHeroClass(), "RED", "class");
 			playCard(context, player, "spell_academic_espionage");
 			for (Card card : player.getDeck()) {
 				assertEquals(costOf(context, player, card), 1, card.getName() + " mana");
-				assertTrue(card.hasHeroClass(HeroClass.RED), card.getName() + " class");
+				assertTrue(card.hasHeroClass("RED"), card.getName() + " class");
 			}
-		}, HeroClass.RED, HeroClass.RED);
+		}, "RED", "RED");
 
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			assertEquals(player.getDeck().size(), 0);
-			assertEquals(opponent.getHero().getHeroClass(), HeroClass.RED, "class");
+			assertEquals(opponent.getHero().getHeroClass(), "RED", "class");
 			playCard(context, player, "minion_augmented_elekk");
 			playCard(context, player, "spell_academic_espionage");
 
 			assertEquals(player.getDeck().size(), 20);
 			for (Card card : player.getDeck()) {
 				assertEquals(costOf(context, player, card), 1, card.getName() + " mana");
-				assertTrue(card.hasHeroClass(HeroClass.RED), card.getName() + " class");
+				assertTrue(card.hasHeroClass("RED"), card.getName() + " class");
 			}
-		}, HeroClass.BLACK, HeroClass.RED);
+		}, "BLACK", "RED");
 	}
 
 	@Test

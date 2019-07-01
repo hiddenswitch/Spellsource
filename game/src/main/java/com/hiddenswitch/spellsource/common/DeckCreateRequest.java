@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class DeckCreateRequest implements Serializable, Cloneable {
 	private String userId;
 	private String name;
-	private HeroClass heroClass;
+	private String heroClass;
 	private String heroCardId;
 	private boolean draft;
 	private String format;
@@ -85,7 +85,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 						break;
 				}
 				try {
-					request.setHeroClass(HeroClass.valueOf(heroClass));
+					request.setHeroClass(heroClass);
 				} catch (IllegalArgumentException ex) {
 					errors.add(new IllegalArgumentException(String.format("No class named %s could be found", heroClass), ex));
 				} catch (NullPointerException ex) {
@@ -156,7 +156,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return request;
 	}
 
-	public static DeckCreateRequest fromCardIds(HeroClass heroClass, String... cardIds) {
+	public static DeckCreateRequest fromCardIds(String heroClass, String... cardIds) {
 		return new DeckCreateRequest()
 				.withCardIds(Arrays.asList(cardIds))
 				.withHeroClass(heroClass);
@@ -174,11 +174,11 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		this.name = name;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -200,7 +200,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return this;
 	}
 
-	public DeckCreateRequest withHeroClass(final HeroClass heroClass) {
+	public DeckCreateRequest withHeroClass(final String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}
@@ -278,7 +278,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public boolean isValid() {
 		return getName() != null
 				&& getHeroClass() != null
-				&& getHeroClass().isBaseClass()
+				&& HeroClass.getBaseClasses(DeckFormat.ALL).contains(getHeroClass())
 				&& (getCardIds().size() + getInventoryIds().size()) == 30;
 	}
 
@@ -300,7 +300,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return this;
 	}
 
-	public static DeckCreateRequest empty(String userId, String name, HeroClass heroClass) {
+	public static DeckCreateRequest empty(String userId, String name, String heroClass) {
 		return new DeckCreateRequest()
 				.withFormat("Standard")
 				.withDraft(false)

@@ -1,0 +1,9 @@
+{
+  "name": "Monk",
+  "type": "CLASS",
+  "hero": "hero_mienzhou",
+  "heroClass": "JADE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

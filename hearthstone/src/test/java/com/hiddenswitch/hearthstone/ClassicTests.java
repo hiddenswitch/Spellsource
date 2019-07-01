@@ -440,7 +440,7 @@ public class ClassicTests extends TestBase {
 			for (Minion minion : opponent.getMinions()) {
 				assertEquals(minion.hasAttribute(Attribute.FROZEN), true);
 			}
-		}, HeroClass.BLUE, HeroClass.VIOLET);
+		}, "BLUE", "VIOLET");
 	}
 
 	@Test
@@ -466,7 +466,7 @@ public class ClassicTests extends TestBase {
 					assertEquals(minion.getHp(), 1);
 				}
 			}
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 
@@ -476,7 +476,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
 			playCard(context, player, "minion_elven_archer", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 1);
-		}, HeroClass.RED, HeroClass.SILVER);
+		}, "RED", "SILVER");
 	}
 
 	@Test
@@ -487,7 +487,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getHand().getCount(), cardCount);
 			playCard(context, player, "minion_novice_engineer");
 			assertEquals(player.getHand().getCount(), cardCount + 1);
-		}, HeroClass.RED, HeroClass.SILVER);
+		}, "RED", "SILVER");
 	}
 
 	@Test
@@ -505,7 +505,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4);
 			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4 - 7);
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test
@@ -518,7 +518,7 @@ public class ClassicTests extends TestBase {
 
 			playCard(context, player, "minion_acidic_swamp_ooze");
 			Assert.assertNull(opponent.getHero().getWeapon());
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 	}
 
 	@Test
@@ -535,7 +535,7 @@ public class ClassicTests extends TestBase {
 			// Pyromancer
 			// triggers, clearing the two 1/1 Spectral Spiders
 			assertEquals(opponent.getMinions().size(), 0);
-		}, HeroClass.WHITE, HeroClass.RED);
+		}, "WHITE", "RED");
 	}
 
 	@Test
@@ -568,7 +568,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(adjacentMinion2.getHp(), 2);
 
 			assertEquals(player.getMinions().size(), 3);
-		}, HeroClass.GOLD, HeroClass.BLACK);
+		}, "GOLD", "BLACK");
 
 	}
 
@@ -598,7 +598,7 @@ public class ClassicTests extends TestBase {
 			context.performAction(rogue.getId(), action);
 
 			assertEquals(player.getMinions().size(), 1);
-		}, HeroClass.GOLD, HeroClass.BLACK);
+		}, "GOLD", "BLACK");
 	}
 
 
@@ -632,7 +632,7 @@ public class ClassicTests extends TestBase {
 
 			assertEquals(adjacentMinion1.getHp(), 2);
 			assertEquals(adjacentMinion2.getHp(), 2);
-		}, HeroClass.GOLD, HeroClass.BLACK);
+		}, "GOLD", "BLACK");
 	}
 
 	@Test
@@ -661,7 +661,7 @@ public class ClassicTests extends TestBase {
 			// not below 1
 			context.performAction(player.getId(), testCard.play());
 			assertEquals(player.getMana(), 3);
-		}, HeroClass.VIOLET, HeroClass.RED);
+		}, "VIOLET", "RED");
 	}
 
 	@Test
@@ -703,7 +703,7 @@ public class ClassicTests extends TestBase {
 
 			// Smith is destroyed, weapon power should be back to normal
 			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
-		}, HeroClass.RED, HeroClass.RED);
+		}, "RED", "RED");
 	}
 
 
@@ -742,7 +742,7 @@ public class ClassicTests extends TestBase {
 			context.performAction(player.getId(), arcaneExplosionCard.play());
 			// hp should been affected after playing area of effect spell
 			Assert.assertNotEquals(faerieDragonHp, elusiveOne.getHp());
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 
 	}
 
@@ -779,7 +779,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(attacker.getHp(), attacker.getMaxHp() - 2 * BASE_ATTACK - ATTACK_BONUS);
 			assertEquals(defender.getHp(), defender.getMaxHp() - 2 * attacker.getAttack());
 			assertEquals(defender.getAttack(), BASE_ATTACK + 2 * ATTACK_BONUS);
-		}, HeroClass.BLUE, HeroClass.RED);
+		}, "BLUE", "RED");
 
 	}
 
@@ -815,6 +815,6 @@ public class ClassicTests extends TestBase {
 			context.getLogic().endTurn(player.getId());
 			assertEquals(druid.getAttack(), 0);
 			assertEquals(minion.getAttack(), 1);
-		}, HeroClass.BROWN, HeroClass.RED);
+		}, "BROWN", "RED");
 	}
 }

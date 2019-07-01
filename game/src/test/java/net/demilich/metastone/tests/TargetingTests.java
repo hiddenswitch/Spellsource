@@ -21,7 +21,7 @@ public class TargetingTests extends TestBase {
 
 	@Test
 	public void testTaunt() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		GameContext context = createContext("BLUE", "RED");
 		Player mage = context.getPlayer1();
 		Player victim = context.getPlayer2();
 

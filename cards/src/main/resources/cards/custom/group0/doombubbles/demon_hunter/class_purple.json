@@ -1,0 +1,9 @@
+{
+  "name": "Demon Hunter",
+  "type": "CLASS",
+  "hero": "hero_illidan",
+  "heroClass": "PURPLE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

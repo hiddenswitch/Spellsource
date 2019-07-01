@@ -75,7 +75,7 @@ public class CreateCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		HeroClass heroClass = HeroClass.ANY;
+		String heroClass = HeroClass.ANY;
 		Rarity rarity = Rarity.FREE;
 		CardSet cardSet = CardSet.BASIC;
 		SpellDesc[] spells = discoverCardParts(context, player, desc, source, target);
