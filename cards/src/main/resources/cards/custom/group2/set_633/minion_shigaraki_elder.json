@@ -1,0 +1,17 @@
+{
+  "name": "Shigaraki Elder",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Deflect. Extra Strike (Can attack twice in a turn).",
+  "attributes": {
+    "DEFLECT": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

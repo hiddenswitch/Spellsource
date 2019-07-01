@@ -1,0 +1,26 @@
+{
+  "name": "Mark of Despair",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Choose a minion. Whenever it takes damage, destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
