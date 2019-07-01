@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.35 (In Progress)
+
+ - Shigaraki Elder now correctly labeled as a common card. (1211)
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.
