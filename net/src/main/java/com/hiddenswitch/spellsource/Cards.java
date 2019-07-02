@@ -104,7 +104,8 @@ public interface Cards {
 				.filter(cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getSet())
 						&& cd.type != CardType.GROUP
 						&& cd.type != CardType.HERO_POWER
-						&& cd.type != CardType.ENCHANTMENT)
+						&& cd.type != CardType.ENCHANTMENT
+						&& cd.type != CardType.CLASS)
 				.map(CardDesc::create)
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> {
