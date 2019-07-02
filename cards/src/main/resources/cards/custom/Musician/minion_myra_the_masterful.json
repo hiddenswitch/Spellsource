@@ -2,14 +2,13 @@
   "name": "Myra the Masterful",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "CORAL"
+  "heroClass": "CORAL",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Your spells are cast twice.",
-  "aura": {
-    "class": "DoubleSpellsAura",
-    "target": "FRIENDLY_CARDS"
+  "attributes": {
+    "SPELLS_CAST_TWICE": true
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -1,0 +1,31 @@
+{
+  "name": "Loralyn",
+  "heroPower": "hero_power_chord",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "Skill: Give a minion +1/+1. If you have none, summon a 1/1 Patron.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "aura": {
+    "class": "TargetSelectionOverrideAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "targetSelection": "MINIONS",
+    "filter": {
+      "class": "TargetSelectionFilter",
+      "targetSelection": "NONE"
+    },
+    "condition": {
+      "class": "MinionCountCondition",
+      "targetPlayer": "SELF",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

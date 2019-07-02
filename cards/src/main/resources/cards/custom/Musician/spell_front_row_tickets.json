@@ -6,12 +6,13 @@
   "rarity": "FREE",
   "description": "Draw two minions from your deck.",
   "spell": {
-      "class": "FromDeckToHandSpell",
-      "value": 2,
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION",
-      },
+    "class": "FromDeckToHandSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
