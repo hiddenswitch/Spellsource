@@ -10,7 +10,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "fireCondition": {
+      "queueCondition": {
         "class": "CardPropertyCondition",
         "target": "EVENT_SOURCE",
         "card": "spell_the_coin"

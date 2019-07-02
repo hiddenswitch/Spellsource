@@ -10,11 +10,11 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-    "class": "ReceiveCardSpell",
-    "value": 4,
-    "card": "spell_the_coin"
+      "class": "ReceiveCardSpell",
+      "value": 4,
+      "card": "spell_the_coin"
+    }
   },
-  }
   "attributes": {
     "BATTLECRY": true
   },

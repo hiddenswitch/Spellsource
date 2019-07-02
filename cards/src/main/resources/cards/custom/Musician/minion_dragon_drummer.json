@@ -14,11 +14,11 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-    "class": "BuffSpell",
-    "target": "ADJACENT_MINIONS",
-    "attackBonus": 2,
-    "hpBonus": 0
-  },
+      "class": "BuffSpell",
+      "target": "ADJACENT_MINIONS",
+      "attackBonus": 2,
+      "hpBonus": 0
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

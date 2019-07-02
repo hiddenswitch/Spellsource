@@ -10,11 +10,12 @@
   "description": "Opener: Draw a spell from your deck.",
   "battlecry": {
     "spell": {
-    "class": "FromDeckToHandSpell",
-    "value": 1,
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      }
     }
   },
   "attributes": {

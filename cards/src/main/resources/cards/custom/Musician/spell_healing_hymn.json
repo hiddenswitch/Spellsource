@@ -7,10 +7,10 @@
   "description": "Restore 5 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
-     "class": "HealSpell",
-     "target": "FRIENDLY_HERO",
-     "value": 5
-    }
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 5
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
