@@ -690,6 +690,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				return actions;
 			case GROUP:
 				throw new UnsupportedOperationException("group");
+			case CLASS:
+				throw new UnsupportedOperationException("class");
 		}
 		return new PlayCardAction[0];
 	}

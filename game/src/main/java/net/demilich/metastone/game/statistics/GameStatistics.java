@@ -66,6 +66,8 @@ public class GameStatistics implements Cloneable, Serializable {
 				break;
 			case GROUP:
 				break;
+			case CLASS:
+				break;
 		}
 		increaseCardCount(card, turn);
 	}
