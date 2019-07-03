@@ -7,15 +7,14 @@
   "description": "Destroy all minions except the opponent's highest Attack minion.",
   "targetSelection": "NONE",
   "spell": {
-   "class": "DestroyAllExceptOneSpell",
-    "spells":
-       "target": "ENEMY_MINIONS",
-        "filter": {
-          "class": "HighestAttributeFilter",
-          "target": "ENEMY_MINIONS",
-          "attribute": "ATTACK"
-        }
-      },
+    "class": "DestroyAllExceptOneSpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "HighestAttributeFilter",
+      "target": "ENEMY_MINIONS",
+      "attribute": "ATTACK"
+    }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

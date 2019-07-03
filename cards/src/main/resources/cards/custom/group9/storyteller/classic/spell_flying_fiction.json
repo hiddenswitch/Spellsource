@@ -6,22 +6,23 @@
   "rarity": "COMMON",
   "description": "Summon two 1/1 Pagelings. Give them Dash.",
   "targetSelection": "NONE",
-	"spell": {
+  "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-      "class": "SummonSpell",
-      "cards": [
-        "token_pageling",
-        "token_pageling"
+        "class": "SummonSpell",
+        "cards": [
+          "token_pageling",
+          "token_pageling"
+        ]
       },
       {
-      "class": "AddAttributeSpell",
-      "target": "OUTPUT",
-      "attribute": "RUSH"
+        "class": "AddAttributeSpell",
+        "target": "OUTPUT",
+        "attribute": "RUSH"
       }
-	 ]
-	},
+    ]
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
