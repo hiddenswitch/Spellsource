@@ -7114,7 +7114,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-  public void testRitualShaman() {
+	public void testRitualShaman() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "secret_counterspell");
 			playCard(context, player, "minion_ritual_shaman");
@@ -7245,6 +7245,16 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(hadDeflect.hasAttribute(Attribute.DEFLECT));
 			assertFalse(didNotHaveDeflect.hasAttribute(Attribute.DEFLECT));
 		});
+	}
+
+	@Test
+	public void testBookOfLife() {
+		runGym((context, player, opponent) -> {
+			assertEquals(player.getHand().size(), 0);
+			useHeroPower(context, player);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_restorative_words");
+		}, HeroClass.OLIVE, HeroClass.OLIVE);
 	}
 }
 

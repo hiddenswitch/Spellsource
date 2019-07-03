@@ -1,0 +1,19 @@
+{
+  "name": "Book of Life 2",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "description": "Add a spell to your hand that restores 3 Health.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_restorative_passage"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
