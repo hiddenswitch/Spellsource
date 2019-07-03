@@ -7279,5 +7279,37 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(raptor.hasAttribute(Attribute.TAUNT));
 		}));
 	}
+
+	@Test
+	public void testEbisusChosen() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_ebisus_chosen");
+			player.getHero().setHp(20);
+			player.getHero().setAttack(2);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHero().getHp(), 24);
+			Minion raptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			attack(context, player, player.getHero(), raptor);
+			assertEquals(player.getHero().getHp(), 28 - raptor.getAttack());
+		}));
+	}
+
+	@Test
+	public void testWardenSaihan() {
+		runGym(((context, player, opponent) -> {
+			Minion warden = playMinionCard(context, player, "minion_warden_saihan");
+			playCard(context, opponent, "spell_mind_blast");
+			assertEquals(warden.getHp(), warden.getMaxHp());
+
+			playCard(context, player, "spell_flamestrike");
+			assertEquals(warden.getHp(), warden.getMaxHp());
+
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_fireball", raptor);
+			assertFalse(raptor.isDestroyed());
+			assertEquals(raptor.getHp(), raptor.getMaxHp());
+			assertEquals(warden.getHp(), warden.getMaxHp() - 6);
+		}));
+	}
 }
 
