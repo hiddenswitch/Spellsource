@@ -1,15 +1,14 @@
 {
-  "name": "Suspicious Wanderer",
-  "baseManaCost": 3,
+  "name": "Plucky Pilgrim",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 3,
+  "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Echo. Deflect.",
+  "description": "Deflect",
   "attributes": {
-    "DEFLECT": true,
-    "ECHO": true
+    "DEFLECT": true
   },
   "collectible": true,
   "set": "CUSTOM",

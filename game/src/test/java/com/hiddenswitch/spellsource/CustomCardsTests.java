@@ -7114,7 +7114,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-  public void testRitualShaman() {
+	public void testRitualShaman() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "secret_counterspell");
 			playCard(context, player, "minion_ritual_shaman");
@@ -7245,6 +7245,39 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(hadDeflect.hasAttribute(Attribute.DEFLECT));
 			assertFalse(didNotHaveDeflect.hasAttribute(Attribute.DEFLECT));
 		});
+	}
+
+	@Test
+	public void testStanceChange() {
+		runGym(((context, player, opponent) -> {
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_kitsune_stance");
+			assertEquals(raptor.getAttack(), raptor.getBaseAttack() + 2);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			player.getHero().setHp(20);
+			playCard(context, player, "spell_koi_stance");
+			assertEquals(player.getHero().getHp(), 20 + (2 * player.getMinions().size()));
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_suzume_stance");
+			assertEquals(raptor.getAttack(), raptor.getBaseAttack() + 1);
+			assertEquals(raptor.getHp(), raptor.getBaseHp() + 1);
+			assertTrue(raptor.hasAttribute(Attribute.DIVINE_SHIELD));
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_tanuki_stance");
+			assertEquals(raptor.getHp(), raptor.getBaseHp() + 2);
+			assertTrue(raptor.hasAttribute(Attribute.TAUNT));
+		}));
 	}
 }
 

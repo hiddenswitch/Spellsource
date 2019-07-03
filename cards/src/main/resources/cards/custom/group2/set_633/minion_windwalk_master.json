@@ -1,15 +1,15 @@
 {
-  "name": "Suspicious Wanderer",
+  "name": "Shigaraki Elder",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Echo. Deflect.",
+  "description": "Deflect. Can attack twice in a turn.",
   "attributes": {
     "DEFLECT": true,
-    "ECHO": true
+    "WINDFURY": true
   },
   "collectible": true,
   "set": "CUSTOM",
