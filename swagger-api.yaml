@@ -412,33 +412,6 @@ definitions:
           A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
           otherwise specified.
         type: 'string'
-        enum:
-          - 'BROWN'
-          - 'GREEN'
-          - 'BLUE'
-          - 'GOLD'
-          - 'WHITE'
-          - 'BLACK'
-          - 'SILVER'
-          - 'VIOLET'
-          - 'RED'
-          - 'JADE'
-          - 'NAVY'
-          - 'LEATHER'
-          - 'RUST'
-          - 'EGGPLANT'
-          - 'ICE'
-          - 'OBSIDIAN'
-          - 'ICECREAM'
-          - 'AMBER'
-          - 'TOAST'
-          - 'ROSE'
-          - 'BLOOD'
-          - 'NEONGREEN'
-          - 'TEAL'
-          - 'DARKGREEN'
-          - 'PURPLE'
-          - 'TIME'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -1736,6 +1709,7 @@ definitions:
           - 'WEAPON'
           - 'HERO_POWER'
           - 'CHOOSE_ONE'
+          - 'CLASS'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1771,6 +1745,18 @@ definitions:
           For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the
           other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
           turn 0.
+        type: 'boolean'
+        default: false
+      color:
+        description: |
+          The color for the class
+        type: 'array'
+        items:
+          type: 'number'
+          format: 'float'
+      blackText:
+        description: |
+          Whether the class should use black text instead of the default white
         type: 'boolean'
         default: false
   DraftsChooseCardRequest:

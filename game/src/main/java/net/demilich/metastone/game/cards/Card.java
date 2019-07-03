@@ -1224,4 +1224,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		this.storedEnchantments = storedEnchantments;
 		return this;
 	}
+
+	public boolean isBlackText() {
+		return getDesc().isBlackText();
+	}
+
+	public int[] getColor() {
+		return getDesc().getColor();
+	}
 }

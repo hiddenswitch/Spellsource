@@ -3,6 +3,8 @@
   "type": "CLASS",
   "hero": "",
   "heroClass": "SPIRIT",
+  "color": [135, 102, 250],
+  "blackText": false,
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

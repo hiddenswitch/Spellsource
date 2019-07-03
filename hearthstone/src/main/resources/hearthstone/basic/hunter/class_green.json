@@ -3,6 +3,8 @@
   "type": "CLASS",
   "hero": "hero_rexxar",
   "heroClass": "GREEN",
+  "color": [60, 145, 7],
+  "blackText": false,
   "collectible": true,
   "set": "BASIC",
   "fileFormatVersion": 1

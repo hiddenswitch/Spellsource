@@ -33,91 +33,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class DecksPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  /**
-   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified. 
-   */
-  public enum HeroClassEnum {
-    BROWN("BROWN"),
-    
-    GREEN("GREEN"),
-    
-    BLUE("BLUE"),
-    
-    GOLD("GOLD"),
-    
-    WHITE("WHITE"),
-    
-    BLACK("BLACK"),
-    
-    SILVER("SILVER"),
-    
-    VIOLET("VIOLET"),
-    
-    RED("RED"),
-    
-    JADE("JADE"),
-    
-    NAVY("NAVY"),
-    
-    LEATHER("LEATHER"),
-    
-    RUST("RUST"),
-    
-    EGGPLANT("EGGPLANT"),
-    
-    ICE("ICE"),
-    
-    OBSIDIAN("OBSIDIAN"),
-    
-    ICECREAM("ICECREAM"),
-    
-    AMBER("AMBER"),
-    
-    TOAST("TOAST"),
-    
-    ROSE("ROSE"),
-    
-    BLOOD("BLOOD"),
-    
-    NEONGREEN("NEONGREEN"),
-    
-    TEAL("TEAL"),
-    
-    DARKGREEN("DARKGREEN"),
-    
-    PURPLE("PURPLE"),
-    
-    TIME("TIME");
-
-    private String value;
-
-    HeroClassEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static HeroClassEnum fromValue(String text) {
-      for (HeroClassEnum b : HeroClassEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("heroClass")
-  private HeroClassEnum heroClass = null;
+  private String heroClass = null;
 
   @JsonProperty("name")
   private String name = null;
@@ -172,7 +89,7 @@ public class DecksPutRequest implements Serializable {
   @JsonProperty("deckList")
   private String deckList = null;
 
-  public DecksPutRequest heroClass(HeroClassEnum heroClass) {
+  public DecksPutRequest heroClass(String heroClass) {
     this.heroClass = heroClass;
     return this;
   }
@@ -182,11 +99,11 @@ public class DecksPutRequest implements Serializable {
    * @return heroClass
   **/
   @ApiModelProperty(value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified. ")
-  public HeroClassEnum getHeroClass() {
+  public String getHeroClass() {
     return heroClass;
   }
 
-  public void setHeroClass(HeroClassEnum heroClass) {
+  public void setHeroClass(String heroClass) {
     this.heroClass = heroClass;
   }
 
