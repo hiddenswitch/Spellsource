@@ -9,23 +9,32 @@
   "spell": {
     "class": "AdjacentEffectSpell",
     "spell1": {
-        "class": "BuffSpell",
-        "attackBonus": 3,
-        "hpBonus": 4
-      },
-      {
-        "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
-      },
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 3,
+          "hpBonus": 4
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
+    },
     "spell2": {
-        "class": "BuffSpell",
-        "attackBonus": 3,
-        "hpBonus": 4
-      },
-      {
-        "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
-      },
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 3,
+          "hpBonus": 4
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
     }
   },
   "collectible": true,

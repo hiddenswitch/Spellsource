@@ -8,18 +8,19 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
-	  "trigger": {
-		"eventTrigger": {
-		  "class": "PhysicalAttackTrigger",
-		  "sourceEntityType": "MINION",
-		  "sourcePlayer": "SELF"
-		},
-		"spell": {
-		  "class": "DamageSpell",
-		  "target": "EVENT_TARGET",
-		  "value": 3
-		}
-	  },
+    "trigger": {
+      "eventTrigger": {
+        "class": "PhysicalAttackTrigger",
+        "sourceEntityType": "MINION",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "EVENT_TARGET",
+        "value": 3
+      }
+    }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

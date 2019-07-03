@@ -47,6 +47,7 @@ public enum HeroClass {
 	PURPLE,
 	TIME,
 	TEAL,
+	OLIVE,
     /**
 	 * The Hearthstone Death Knight card class.
 	 */

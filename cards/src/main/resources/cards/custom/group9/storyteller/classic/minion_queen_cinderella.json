@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "description": "Blitz. Opener: Deal 6 damage to an enemy minion.",
-   "battlecry": {
+  "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "DamageSpell",
@@ -15,7 +15,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
     "CHARGE": true
   },
   "collectible": true,
