@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Start of Game: If your deck has 30 Dragons, draw this card from your deck.",
+  "description": "Start of Game: If your deck only contains Dragons, draw this card from your deck.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "GameStartTrigger",
@@ -23,7 +23,10 @@
             "race": "DRAGON"
           }
         },
-        "value2": 30
+        "value2": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK"
+        }
       }
     },
     "spell": {
