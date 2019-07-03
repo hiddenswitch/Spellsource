@@ -3,6 +3,8 @@
   "type": "CLASS",
   "hero": "hero_atropos",
   "heroClass": "TIME",
+  "color": [212, 212, 227],
+  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

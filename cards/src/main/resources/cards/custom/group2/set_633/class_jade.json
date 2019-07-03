@@ -3,6 +3,8 @@
   "type": "CLASS",
   "hero": "hero_mienzhou",
   "heroClass": "JADE",
+  "color": [0, 168, 107],
+  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

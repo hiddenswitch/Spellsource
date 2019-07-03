@@ -1189,7 +1189,14 @@ public interface Games extends Verticle {
 			case CHOOSE_ONE:
 				// TODO: Handle choose one cards
 				break;
+			case CLASS:
+				entityState.blackText(card.isBlackText());
+				if (card.getColor() != null) {
+					entityState.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
+				}
+				break;
 		}
+
 		entity.state(entityState);
 		return entity;
 	}

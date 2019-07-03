@@ -2,6 +2,8 @@
   "name": "Sea Witch",
   "type": "CLASS",
   "hero": "hero_lady_vashj_sea_witch",
+  "color": [77, 214, 148],
+  "blackText": false,
   "heroClass": "TEAL",
   "collectible": true,
   "set": "CUSTOM",

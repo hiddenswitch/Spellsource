@@ -159,6 +159,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public DynamicDescriptionDesc[] dynamicDescription;
 	public Boolean legacy;
 	public String hero;
+	public int[] color;
+	public boolean blackText;
 	public CardDesc() {
 		super();
 	}
@@ -1086,5 +1088,13 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {
 		return dynamicDescription;
+	}
+
+	public int[] getColor() {
+		return color;
+	}
+
+	public boolean isBlackText() {
+		return blackText;
 	}
 }

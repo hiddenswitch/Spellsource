@@ -3,6 +3,8 @@
   "type": "CLASS",
   "hero": "hero_zara",
   "heroClass": "AMBER",
+  "color": [255, 204, 0],
+  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
