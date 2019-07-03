@@ -8,11 +8,9 @@
   "rarity": "RARE",
   "description": "Guard. Aftermath: Summon a 4/4 Deluging Spirit.",
   "deathrattle": {
-    "spell": {
-      "class": "SummonSpell",
-      "card": "token_deluging_spirit",
-      "targetPlayer": "SELF"
-    }
+    "class": "SummonSpell",
+    "card": "token_deluging_spirit",
+    "targetPlayer": "SELF"
   },
   "attributes": {
     "DEATHRATTLES": true,
