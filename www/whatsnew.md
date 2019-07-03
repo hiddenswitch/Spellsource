@@ -8,6 +8,8 @@ permalink: /whats-new/
 
 Fixing issues with cards not being found or detected after their IDs were changed.
 
+More Monk updates thanks to @Grand! (1219)
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.
