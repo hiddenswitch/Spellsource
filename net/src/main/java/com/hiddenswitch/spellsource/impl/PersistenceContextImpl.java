@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
+import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import net.demilich.metastone.game.Player;
@@ -66,6 +67,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 				.withTag("id", id)
 				.withTag("attribute", attribute.toKeyCase())
 				.withTag("gameEvent", event.getEventType().toString())
+				.withTag(Tags.SAMPLING_PRIORITY, 0)
 				.withTag("value", newValue == null ? "" : newValue.toString());
 
 		if (gameContext instanceof Server) {

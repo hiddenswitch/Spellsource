@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.impl;
 
-import com.hiddenswitch.spellsource.client.models.Envelope;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
 import io.vertx.core.json.JsonObject;
