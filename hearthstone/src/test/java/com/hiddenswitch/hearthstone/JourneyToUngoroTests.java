@@ -39,7 +39,7 @@ public class JourneyToUngoroTests extends TestBase {
 	public void testStonehillDefender() {
 		for (int i = 0; i < 1000; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.ALL);
+				context.setDeckFormat(DeckFormat.getFormat("All"));
 				// Check that stonehill never gets a spellsource minion
 				overrideDiscoverChoice(da -> {
 					assertTrue(da.stream().noneMatch(c -> c.getCard().getCardSet() == "SPELLSOURCE" && c.getCard().getCardSet() == "TEST"));

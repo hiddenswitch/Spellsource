@@ -90,7 +90,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static Card getHeroCard(String heroClass) {
-		CardList classCards = getClassCards(DeckFormat.ALL).filtered(card -> card.getHeroClass().equals(heroClass));
+		CardList classCards = getClassCards(DeckFormat.getFormat("All")).filtered(card -> card.getHeroClass().equals(heroClass));
 		if (classCards.isEmpty()) {
 			return CardCatalogue.getCardById("hero_neutral");
 		}

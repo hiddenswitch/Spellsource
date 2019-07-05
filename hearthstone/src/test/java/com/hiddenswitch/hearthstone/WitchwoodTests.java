@@ -326,7 +326,7 @@ public class WitchwoodTests extends TestBase {
 	@Test
 	public void testGennGreymane() {
 		{
-			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
+			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
 			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				Stream.generate(() -> "minion_bloodfen_raptor")
@@ -347,7 +347,7 @@ public class WitchwoodTests extends TestBase {
 		}
 
 		{
-			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
+			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
 			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				Stream.generate(() -> "minion_argent_squire")
@@ -459,7 +459,7 @@ public class WitchwoodTests extends TestBase {
 	public void testMalchezaarBaku() {
 		int success = 0;
 		for (int i = 0; i < 100; i++) {
-			DebugContext debug = createContext("BLUE", "BLUE", false, DeckFormat.ALL);
+			DebugContext debug = createContext("BLUE", "BLUE", false, DeckFormat.getFormat("All"));
 			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				for (int j = 0; j < 10; j++) {

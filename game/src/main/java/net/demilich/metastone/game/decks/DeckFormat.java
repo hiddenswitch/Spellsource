@@ -1,8 +1,7 @@
 package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -13,9 +12,6 @@ import java.util.stream.Stream;
 /**
  * The sets that are available to build decks from and generate cards from.
  * <p>
- * The list of formats currently are {@link #STANDARD}, {@link #WILD}, {@link #PAST}, {@link #CUSTOM}, {@link
- * #GREATER_CUSTOM}, {@link #SPELLSOURCE}. {@link #SPELLSOURCE} is the default format for community games, while {@link
- * #STANDARD} is the default format for testing bots.
  *
  * @see GameContext#getDeckFormat() for the property on the game context where the deck format is set
  * @see #getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
@@ -25,6 +21,7 @@ public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<String> sets;
 
+	/*
 	public static final DeckFormat STANDARD = new DeckFormat()
 			.withName("Standard")
 			.withCardSets(List.of(
@@ -150,6 +147,8 @@ public class DeckFormat implements Serializable, Cloneable {
 					"CUSTOM"
 			));
 
+	 */
+
 	public static DeckFormat ALL = new DeckFormat()
 			.withName("All");
 
@@ -160,35 +159,19 @@ public class DeckFormat implements Serializable, Cloneable {
 		}
 	}
 
-	private static final Map<String, DeckFormat> FORMATS = Collections.unmodifiableMap(Stream.of(
-			STANDARD,
-			WILD,
-			CUSTOM,
-			PAST,
-			SPELLSOURCE,
-			GREATER_CUSTOM,
-			ALL)
-			.collect(Collectors.toMap(DeckFormat::getName, Function.identity())));
+	private static Map<String, DeckFormat> FORMATS = new HashMap<>();
+
+	public static void populateFormats(CardList formatCards) {
+		FORMATS.put("All", ALL);
+		for (Card formatCard : formatCards) {
+			FORMATS.put(formatCard.getName(), new DeckFormat()
+				.withName(formatCard.getName())
+				.withCardSets(formatCard.getCardSets()));
+		}
+	}
 
 	public static DeckFormat getFormat(String name) {
-		name = name.toLowerCase();
-		switch (name) {
-			case "standard":
-				return STANDARD;
-			case "wild":
-				return WILD;
-			case "all":
-				return ALL;
-			case "spellsource":
-				return SPELLSOURCE;
-			case "past":
-				return PAST;
-			case "greater custom":
-				return GREATER_CUSTOM;
-			case "custom":
-			default:
-				return CUSTOM;
-		}
+		return FORMATS.getOrDefault(name, ALL);
 	}
 
 	public static Map<String, DeckFormat> formats() {
@@ -196,7 +179,7 @@ public class DeckFormat implements Serializable, Cloneable {
 	}
 
 	public static DeckFormat getSmallestSupersetFormat(Set<String> requiredSets) {
-		DeckFormat smallestFormat = DeckFormat.ALL;
+		DeckFormat smallestFormat = DeckFormat.getFormat("All");
 		int minExcess = smallestFormat.sets.size();
 
 		for (Map.Entry<String, DeckFormat> format : DeckFormat.formats().entrySet()) {

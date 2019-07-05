@@ -54,7 +54,11 @@ public enum CardType {
 	/**
 	 * A class card contains the properties to associate a specific hero-class String with, like it's name, hero, color, etc
 	 */
-	CLASS;
+	CLASS,
+	/**
+	 * A format card lists sets to include as a collection
+	 */
+	FORMAT;
 
 	/**
 	 * Indicates whether or not the instance is of the specified card type.

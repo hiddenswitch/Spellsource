@@ -178,9 +178,10 @@ public class CardCatalogue {
 			if (cardType != null && !card.getCardType().isCardType(cardType)) {
 				continue;
 			}
-			// per default, do not include hero powers
+			// per default, do not include hero powers, quests, classes, and formats
 			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.isQuest() ||
-					(card.getCardType().isCardType(CardType.CLASS) && cardType != CardType.CLASS)) {
+					(card.getCardType().isCardType(CardType.CLASS) && cardType != CardType.CLASS) ||
+					(card.getCardType().isCardType(CardType.FORMAT) && cardType != CardType.FORMAT)) {
 				continue;
 			}
 			if (rarity != null && !card.getRarity().isRarity(rarity)) {
@@ -244,6 +245,8 @@ public class CardCatalogue {
 				}
 			});
 			DeckFormat.populateAll(sets);
+			DeckFormat.populateFormats(new CardArrayList(cards.values().stream()
+					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList())));
 
 
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
@@ -259,7 +262,7 @@ public class CardCatalogue {
 				continue;
 			}
 
-			if (card.getCardType().isCardType(CardType.CLASS)) {
+			if (card.getCardType().isCardType(CardType.CLASS) || card.getCardType().isCardType(CardType.FORMAT)) {
 				continue;
 			}
 

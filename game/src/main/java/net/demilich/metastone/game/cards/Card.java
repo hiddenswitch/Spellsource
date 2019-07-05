@@ -299,6 +299,15 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
+	 * Gets the sets that this card lists.
+	 *
+	 * @return The card sets
+	 */
+	public String[] getCardSets() {
+		return getDesc().getSets();
+	}
+
+	/**
 	 * Gets the card type, like Hero, Secret, Spell or Minion.
 	 *
 	 * @return The card type
@@ -502,6 +511,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				throw new UnsupportedOperationException("The method .play() should not be called for GroupCard");
 			case CLASS:
 				throw new UnsupportedOperationException("The method .play() should not be called for ClassCard");
+			case FORMAT:
+				throw new UnsupportedOperationException("The method .play() should not be called for FormatCard");
 		}
 		throw new UnsupportedOperationException();
 	}
@@ -692,6 +703,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				throw new UnsupportedOperationException("group");
 			case CLASS:
 				throw new UnsupportedOperationException("class");
+			case FORMAT:
+				throw new UnsupportedOperationException("format");
 		}
 		return new PlayCardAction[0];
 	}

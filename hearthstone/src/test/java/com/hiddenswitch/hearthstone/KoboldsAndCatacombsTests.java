@@ -280,7 +280,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
 	public void testUnidentifiedElixirStartsInHand() {
-		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck ->
 				Stream.generate(() -> "spell_unidentified_elixir")

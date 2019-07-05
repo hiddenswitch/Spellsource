@@ -55,7 +55,7 @@ public class DraftLogic {
 	}
 
 	private List<String> createHeroChoices() {
-		List<String> classes = HeroClass.getBaseClasses(DeckFormat.ALL);
+		List<String> classes = HeroClass.getBaseClasses(DeckFormat.getFormat("All"));
 
 		// For now, simply return all the classes
 		return classes;

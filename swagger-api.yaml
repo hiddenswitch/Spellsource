@@ -435,12 +435,6 @@ definitions:
           Certain queues only support certain formats. Typically, when requesting the listing of queues with
           matchmakingGet, the queues will specify which current decks can be chosen.
         type: 'string'
-        enum:
-          - 'Standard'
-          - 'Wild'
-          - 'Custom'
-          - 'Spellsource'
-          - 'All'
       deckList:
         type: 'string'
         description: |
@@ -1710,6 +1704,7 @@ definitions:
           - 'HERO_POWER'
           - 'CHOOSE_ONE'
           - 'CLASS'
+          - 'FORMAT'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1759,6 +1754,12 @@ definitions:
           Whether the class should use black text instead of the default white
         type: 'boolean'
         default: false
+      cardSets:
+        description: |
+          The card sets listed by the card
+        type: 'array'
+        items:
+          type: 'string'
   DraftsChooseCardRequest:
     type: 'object'
     required:

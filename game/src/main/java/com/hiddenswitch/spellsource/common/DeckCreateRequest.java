@@ -278,7 +278,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public boolean isValid() {
 		return getName() != null
 				&& getHeroClass() != null
-				&& HeroClass.getBaseClasses(DeckFormat.ALL).contains(getHeroClass())
+				&& HeroClass.getBaseClasses(DeckFormat.getFormat("All")).contains(getHeroClass())
 				&& (getCardIds().size() + getInventoryIds().size()) == 30;
 	}
 

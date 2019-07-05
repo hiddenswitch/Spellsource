@@ -1195,6 +1195,9 @@ public interface Games extends Verticle {
 					entityState.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
 				}
 				break;
+			case FORMAT:
+				entityState.cardSets(Arrays.asList(card.getCardSets()));
+				break;
 		}
 
 		entity.state(entityState);

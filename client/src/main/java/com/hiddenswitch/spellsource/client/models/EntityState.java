@@ -206,7 +206,9 @@ public class EntityState implements Serializable {
     
     CHOOSE_ONE("CHOOSE_ONE"),
     
-    CLASS("CLASS");
+    CLASS("CLASS"),
+    
+    FORMAT("FORMAT");
 
     private String value;
 
@@ -304,6 +306,9 @@ public class EntityState implements Serializable {
 
   @JsonProperty("blackText")
   private Boolean blackText = false;
+
+  @JsonProperty("cardSets")
+  private List<String> cardSets = null;
 
   public EntityState location(EntityLocation location) {
     this.location = location;
@@ -1411,6 +1416,32 @@ public class EntityState implements Serializable {
     this.blackText = blackText;
   }
 
+  public EntityState cardSets(List<String> cardSets) {
+    this.cardSets = cardSets;
+    return this;
+  }
+
+  public EntityState addCardSetsItem(String cardSetsItem) {
+    if (this.cardSets == null) {
+      this.cardSets = new ArrayList<>();
+    }
+    this.cardSets.add(cardSetsItem);
+    return this;
+  }
+
+   /**
+   * The card sets listed by the card 
+   * @return cardSets
+  **/
+  @ApiModelProperty(value = "The card sets listed by the card ")
+  public List<String> getCardSets() {
+    return cardSets;
+  }
+
+  public void setCardSets(List<String> cardSets) {
+    this.cardSets = cardSets;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1481,12 +1512,13 @@ public class EntityState implements Serializable {
         Objects.equals(this.rarity, entityState.rarity) &&
         Objects.equals(this.gameStarted, entityState.gameStarted) &&
         Objects.equals(this.color, entityState.color) &&
-        Objects.equals(this.blackText, entityState.blackText);
+        Objects.equals(this.blackText, entityState.blackText) &&
+        Objects.equals(this.cardSets, entityState.cardSets);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText, cardSets);
   }
 
 
@@ -1556,6 +1588,7 @@ public class EntityState implements Serializable {
     sb.append("    gameStarted: ").append(toIndentedString(gameStarted)).append("\n");
     sb.append("    color: ").append(toIndentedString(color)).append("\n");
     sb.append("    blackText: ").append(toIndentedString(blackText)).append("\n");
+    sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
     sb.append("}");
     return sb.toString();
   }
