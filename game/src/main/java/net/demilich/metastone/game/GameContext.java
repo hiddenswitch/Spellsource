@@ -297,7 +297,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param card The card to add, typically made with code.
 	 */
 	public void addTempCard(Card card) {
-		getTempCards().addCard(card);
+		getTempCards().addCard(card.clone());
 	}
 
 	/**
