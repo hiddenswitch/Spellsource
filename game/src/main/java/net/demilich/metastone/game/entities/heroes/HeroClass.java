@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -72,6 +71,7 @@ public enum HeroClass {
 	 * @param heroClass The hero class
 	 * @return A hero card
 	 */
+	@NotNull
 	public static Card getHeroCard(HeroClass heroClass) {
 		switch (heroClass) {
 			case BROWN:
@@ -93,9 +93,9 @@ public enum HeroClass {
 			case RED:
 				return CardCatalogue.getCardById("hero_garrosh");
 			case JADE:
-				return CardCatalogue.getCardById("hero_chen_stormstout");
+				return CardCatalogue.getCardById("hero_mienzhou");
 			case ROSE:
-				return CardCatalogue.getCardById("hero_witch_doctor");
+				return CardCatalogue.getCardById("hero_senzaku");
 			case NAVY:
 				return CardCatalogue.getCardById("hero_baron_aldus");
 			case LEATHER:

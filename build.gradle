@@ -87,8 +87,9 @@ mavenPublish {
 
 
 allprojects {
-    sourceCompatibility = 1.8
-    project.version = '0.8.33'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.current()
+    project.version = '0.8.35'
 }
 
 subprojects {
@@ -101,13 +102,9 @@ subprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-
-    dependencies {
-        compile group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
-        runtime group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.6'
-        if (project.name != 'quasar-core') {
-            compile project(":quasar-core")
-        }
+    
+    java {
+        disableAutoTargetJvm()
     }
 
     compileJava.dependsOn processResources
@@ -115,7 +112,7 @@ subprojects {
         options.encoding = 'UTF-8'
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
-        if (project.name != 'quasar-core') {
+        if (project.name != 'quasar-core' && project.name != 'client') {
             doLast {
                 ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
                 ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
@@ -131,7 +128,7 @@ subprojects {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
         doLast {
-            if (project.name != 'quasar-core') {
+            if (project.name != 'quasar-core' && project.name != 'client') {
                 ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
                 ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
                     fileset(dir: sourceSets.main.output.classesDirs.asPath)

@@ -1,0 +1,27 @@
+{
+  "name": "Jungle Soulfinder",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Add a random Aftermath minion to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "DEATHRATTLES",
+        "cardType": "MINION",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

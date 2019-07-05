@@ -5,11 +5,13 @@ import com.hiddenswitch.spellsource.models.QueryCardsRequest;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 public class CardsTest extends SpellsourceTestBase {
@@ -28,5 +30,13 @@ public class CardsTest extends SpellsourceTestBase {
 
 			assertEquals(expectedCount, commons.size());
 		});
+	}
+
+	@Test
+	public void testContainsHeroCards(TestContext context) {
+		CardCatalogue.loadCardsFromPackage();
+		for (HeroClass heroClass : HeroClass.values()) {
+			HeroClass.getHeroCard(heroClass);
+		}
 	}
 }

@@ -1,0 +1,16 @@
+{
+  "name": "Sly Brawler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Elusive",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

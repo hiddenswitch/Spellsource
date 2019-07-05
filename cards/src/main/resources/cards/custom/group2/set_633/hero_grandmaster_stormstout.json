@@ -14,7 +14,7 @@
         "minion_student_of_the_crane",
         "minion_student_of_the_ox",
         "minion_student_of_the_serpent",
-        "minion_student_of_the_tiger"
+        "minion_lungrath_hunter"
       ]
     }
   },
@@ -23,7 +23,7 @@
     "BATTLECRY": true,
     "MAX_HP": 30
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

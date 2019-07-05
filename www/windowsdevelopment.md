@@ -16,7 +16,8 @@ Follow this guide to be able to test your cards and make changes to the game cod
  4. [Common Coding Tasks](#4-common-coding-tasks)
     1. [Editing an Existing Card](#41-editing-an-existing-card)
     2. [Creating a New Card](#42-creating-a-new-card)
-    3. [Writing a New Bot](#43-writing-a-new-bot)
+    3. [Creating a Custom Spell](#43-creating-a-custom-spell)
+    4. [Writing a New Bot](#44-writing-a-new-bot)
  5. [Testing](#5-testing)
     1. [Running Test Code](#51-running-test-code)
     2. [Understanding Traces](#52-understanding-traces)
@@ -175,8 +176,163 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
 
     These tests can be as involved as you'd like, and should explore corner cases or interactions whenever possible. Many simple cards do not require tests. But when you start writing your own code to implement cards, tests are especially important to verify functionality. **All** community-contributed cards that get distributed to the production Spellsource server must have tests.
 
+#### 4.3 Creating a Custom Spell
+
+Sometimes effects are too difficult to implement in the JSON scripting format and Java is better suited.
+
+This example will implement the spell, "Summon the minion with the most copies in your deck."
+
+ 1. Create a spell whose `"spell": {"class"...` is `custom.SummonMinionWithMostCopiesInDeckSpell`:
+
+     ```json
+     {
+       "name": "A Common Summoner",
+       "baseManaCost": 6,
+       "type": "SPELL",
+       "heroClass": "JADE",
+       "rarity": "EPIC",
+       "description": "Summon the minion with the most copies in your deck.",
+       "targetSelection": "NONE",
+       "spell": {
+         "class": "custom.SummonMinionWithMostCopiesInDeckSpell"
+       },
+       "collectible": true,
+       "set": "CUSTOM",
+       "fileFormatVersion": 1
+     }
+     ```
+ 2. Create a new Java file corresponding to this spell.
+    1. In the Project panel, navigate to the `game/src/main/java/net/demilich/metastone/game/spells/custom/` directory by expanding the little triangles.
+    2. Right click on the directory icon with the white dot in it corresponding to `custom`.
+    3. Choose New > Java Class.
+    4. Enter `SummonMinionWithMostCopiesInDeckSpell`
+    5. Write `extends Spell` after the class name.
+    6. The class will now appear to have a red underline underneath it. Hit Alt-Enter and choose Implement methods... Alt-Enter is a general hotkey for "Help me."
+    7. Add the annotation `@Suspendable` to `onCast`.
+    8. Write `/**` above the `public class Summon...` line, and hit enter. You will now have autocompleted a comment block where you should document what this spell does.
+    9. Hit Ctrl-Alt-L to autoformat the file.
+    10. Your code will now look like this:
+      
+         ```java
+         package net.demilich.metastone.game.spells.custom;
+         
+         import co.paralleluniverse.fibers.Suspendable;
+         import net.demilich.metastone.game.GameContext;
+         import net.demilich.metastone.game.Player;
+         import net.demilich.metastone.game.entities.Entity;
+         import net.demilich.metastone.game.spells.Spell;
+         import net.demilich.metastone.game.spells.desc.SpellDesc;
+         
+         /**
+          * Summons a minion from the player's deck with the most copies in the deck. If there are multiple minions with the most
+          * copies, summon one at random.
+          */
+         public class SummonMinionWithMostCopiesInDeckSpell extends Spell {
+         	@Override
+         	@Suspendable
+         	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+         
+         	}
+         }
+
+        
+         ```
+ 3. Author the spell.
+    1. The `player` variable corresponds to the player who's currently invoking the spell. The `source` is, in this case, the card being played, but is generally the origin of the effect. The `target` is `null` in this case, because the player did not choose a target, but it is typically the player's chosen target.
+    2. To reuse an existing spell effect, like a summon, create a `new SpellDesc(SummonSpell.class)`, then case it using `SpellUtils.castChildSpell`. The name of the argument to `new SpellDesc` will correspond to the `"class":` items you find in the existing cards.
+    3. We want something of the form:
+        
+        ```json
+        {
+          "class": "SummonSpell",
+          "card": /*the most common card*/
+        }
+        ``` 
+        
+       To do this, you will start with a `SpellDesc` and `put` arguments into it:
+       
+        ```java
+        SpellDesc summonSpell = new SpellDesc(SummonSpell.class);
+        summonSpell.put(SpellArg.CARD, /* the most common card */);
+        ```
+       
+       Observe that the key `"target"` that normally appears in the JSON corresponds to an enum value `SpellArg.TARGET` in the `SpellDesc`. You can find corresponding `SpellArgs` by looking for the `UPPER_CASE` formatted version of JSON keys. Check your work using double Shift to find the `SpellArg`.
+    4. Iterate through the player's deck to find the minion card with the most copies, then summon it:
+         
+         ```java
+         Map<String, Integer> countOfCard = new HashMap<>();
+         for (int i = 0; i < player.getDeck().size(); i++) {
+         	Card card = player.getDeck().get(i);
+         	if (card.getCardType() != CardType.MINION) {
+         		continue;
+         	}
+         	int newCount = countOfCard.getOrDefault(card.getCardId(), 1);
+         	countOfCard.put(card.getCardId(), newCount);
+         }
+         // Find the highest count card
+         int maxCount = Integer.MIN_VALUE;
+         List<String> maxCardIds = new ArrayList<>();
+         for (String cardId : countOfCard.keySet()) {
+         	int count = countOfCard.get(cardId);
+         	if (count > maxCount) {
+         		maxCount = count;
+         		maxCardIds.clear();
+         		maxCardIds.add(cardId);
+         	} else if (count == maxCount) {
+         		maxCardIds.add(cardId);
+         	}
+         }
+         SpellDesc summonSpell = new SpellDesc(SummonSpell.class);
+         String randomCardId = context.getLogic().removeRandom(maxCardIds);
+         summonSpell.put(SpellArg.CARD, randomCardId);
+         SpellUtils.castChildSpell(context, player, summonSpell, source, target);
+         ```
+    5. There are several alternative ways to author this spell and make it better. An important revision is to set the spell to extend a `SummonSpell` instead of a `Spell`, so that this effect interacts with other effects that specifically deal with summoning. Then, we'll use `super.onCast` instead of `SpellUtils.castChildSpell` to call the original effect. We also need to deal with the fact that the spell might not find any minions:
+    
+        ```java
+        public class SummonMinionWithMostCopiesInDeckSpell extends SummonSpell {
+        	@Override
+        	@Suspendable
+        	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+        		Map<String, Integer> countOfCard = new HashMap<>();
+        		for (int i = 0; i < player.getDeck().size(); i++) {
+        			Card card = player.getDeck().get(i);
+        			if (card.getCardType() != CardType.MINION) {
+        				continue;
+        			}
+        
+        			int newCount = countOfCard.getOrDefault(card.getCardId(), 1);
+        			countOfCard.put(card.getCardId(), newCount);
+        		}
+        		// Find the highest count card
+        		int maxCount = Integer.MIN_VALUE;
+        		List<String> maxCardIds = new ArrayList<>();
+        		for (String cardId : countOfCard.keySet()) {
+        			int count = countOfCard.get(cardId);
+        			if (count > maxCount) {
+        				maxCount = count;
+        				maxCardIds.clear();
+        				maxCardIds.add(cardId);
+        			} else if (count == maxCount) {
+        				maxCardIds.add(cardId);
+        			}
+        		}
+        		
+        		if (maxCardIds.isEmpty()) {
+        			return;
+        		}
+        
+        		SpellDesc summonSpell = new SpellDesc(SummonSpell.class);
+        		String randomCardId = context.getLogic().removeRandom(maxCardIds);
+        		summonSpell.put(SpellArg.CARD, randomCardId);
+        		super.onCast(context, player, summonSpell, source, target);
+        	}
+        }
+        ```
+        
+ 4. Write a test for your card using the examples in this document. 
  
-#### 4.3 Writing a New Bot
+#### 4.4 Writing a New Bot
 
  1. For an example of an existing bot, navigate to `GameStateValueBehaviour` by searching for it using the double Shift search.
  2. Create a new intelligent bot by navigating to `IntelligentBehaviour`.

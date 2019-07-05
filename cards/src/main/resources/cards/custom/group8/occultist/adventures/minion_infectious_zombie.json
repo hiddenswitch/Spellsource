@@ -3,8 +3,8 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 4,
-  "baseHp": 5,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "Aftermath: Transform a random friendly minion into an Infectious Zombie.",
   "deathrattle": {
