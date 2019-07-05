@@ -2,16 +2,14 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.client.models.ClientToServerMessage;
 import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
-import com.hiddenswitch.spellsource.impl.ConnectionImpl;
-import com.hiddenswitch.spellsource.impl.EnvelopeMessageCodec;
-import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.impl.*;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.streams.ReadStream;
@@ -76,7 +74,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	static @NotNull
 	WriteStream<Envelope> writeStream(@NotNull String userId) {
-		return Vertx.currentContext().owner().eventBus().publisher(toBusAddress(userId), new DeliveryOptions().setCodecName("envelope"));
+		return Vertx.currentContext().owner().eventBus().publisher(toBusAddress(userId));
 	}
 
 	static @NotNull
@@ -97,7 +95,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	static String toBusAddress(String userId) {
-		return "Connection::clusteredConsumer[" + userId + "]";
+		return "Connection/clusteredConsumer[" + userId + "]";
 	}
 
 	/**
@@ -134,11 +132,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	static Deque<SetupHandler> getHandlers() {
 		Vertx vertx = Vertx.currentContext().owner();
 		final Context context = vertx.getOrCreateContext();
-		Deque<SetupHandler> handlers = context.get("Connection::handlers");
+		Deque<SetupHandler> handlers = context.get("Connection/handlers");
 
 		if (handlers == null) {
 			handlers = new ConcurrentLinkedDeque<>();
-			context.put("Connection::handlers", handlers);
+			context.put("Connection/handlers", handlers);
 		}
 		return handlers;
 	}
@@ -151,7 +149,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	@Suspendable
 	static SuspendableLock methodLock(String userId) {
-		return SuspendableLock.lock("Connection::method-ordering-lock[" + userId + "]");
+		return SuspendableLock.lock("Connection/method-ordering-lock[" + userId + "]");
 	}
 
 	/**
@@ -227,6 +225,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		Vertx owner = Vertx.currentContext().owner();
 		if (CODECS_REGISTERED.putIfAbsent(((VertxInternal) owner).getNodeID(), true) == null) {
 			owner.eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
+			owner.eventBus().registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
+			owner.eventBus().registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
 		}
 	}
 

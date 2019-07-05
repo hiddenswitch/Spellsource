@@ -73,7 +73,7 @@ public interface Bots {
 		// See if there's a cache of bot plans for this action
 		if (behaviour instanceof GameStateValueBehaviour) {
 			GameStateValueBehaviour gsvb = (GameStateValueBehaviour) behaviour;
-			SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate("Bots::indexPlans");
+			SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate("Bots/indexPlans");
 			GameId gameId = request.gameId;
 			Buffer buf = map.get(gameId);
 			if (buf != null) {
