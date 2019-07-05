@@ -7411,5 +7411,23 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(raptor3.hasAttribute(Attribute.TAUNT));
 		});
 	}
+
+	@Test
+	public void testHouseOfCandy() {
+		runGym(((context, player, opponent) -> {
+			context.endTurn();
+			Minion raptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "secret_house_of_candy");
+			context.endTurn();
+			Minion yeti = playMinionCard(context, opponent, "minion_chillwind_yeti");
+			assertEquals(player.getSecrets().size(), 1);
+			playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(opponent.getMinions().size(), 2);
+			assertTrue(opponent.getMinions().contains(yeti));
+			assertTrue(opponent.getMinions().contains(raptor));
+		}));
+	}
 }
 
