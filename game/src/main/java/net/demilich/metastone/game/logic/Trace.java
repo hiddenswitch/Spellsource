@@ -46,7 +46,7 @@ public class Trace implements Serializable, Cloneable {
 	private String[] heroClasses;
 	private String[][] deckCardIds;
 	private String deckFormatName;
-	private CardSet[] deckFormatSets;
+	private String[] deckFormatSets;
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
 	private transient List<String> log = new ArrayList<>();
@@ -58,7 +58,7 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
 		Player[] players = new Player[]{gameState.player1, gameState.player2};
-		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new CardSet[0]);
+		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new String[0]);
 		deckFormatName = gameState.deckFormat.getName();
 		setHeroClasses(new String[2]);
 		setDeckCardIds(new String[2][]);
@@ -235,11 +235,11 @@ public class Trace implements Serializable, Cloneable {
 		return this;
 	}
 
-	public CardSet[] getDeckFormatSets() {
+	public String[] getDeckFormatSets() {
 		return deckFormatSets;
 	}
 
-	public Trace setDeckFormatSets(CardSet[] deckFormatSets) {
+	public Trace setDeckFormatSets(String[] deckFormatSets) {
 		this.deckFormatSets = deckFormatSets;
 		return this;
 	}

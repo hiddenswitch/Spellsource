@@ -186,7 +186,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			final int i = j;
 			final int expectedCost = Math.min(10, i);
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+				context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 				context.getLogic().gainArmor(player, i);
 				playCard(context, player, "minion_geosculptor_yip");
 				context.endTurn();
@@ -527,7 +527,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testUnstableEvolution() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC"));
 			Minion minion = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_unstable_evolution", minion);
 			assertEquals(player.getHand().size(), 1);

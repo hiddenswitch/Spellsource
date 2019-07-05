@@ -135,7 +135,7 @@ public class CardCatalogue {
 	}
 
 	public static CardList getHeroes() {
-		return query(null, card -> card.getCardSet() == CardSet.BASIC && card.getCardType() == CardType.HERO);
+		return query(null, card -> card.getCardSet().equals("BASIC") && card.getCardType() == CardType.HERO);
 	}
 
 	public static CardList query(DeckFormat deckFormat) {
@@ -236,6 +236,15 @@ public class CardCatalogue {
 				Card instance = desc.create();
 				cards.put(instance.getCardId(), instance);
 			}
+
+			List<String> sets = new ArrayList<>();
+			cards.forEach((s, card) -> {
+				if (!sets.contains(card.getCardSet())) {
+					sets.add(card.getCardSet());
+				}
+			});
+			DeckFormat.populateAll(sets);
+
 
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 		} catch (Exception e) {

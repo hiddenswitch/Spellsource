@@ -254,8 +254,6 @@ public class ParseUtils {
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
 			case RACE:
 				return Enum.valueOf(Race.class, jsonData.asText());
-			case CARD_SET:
-				return Enum.valueOf(CardSet.class, jsonData.asText());
 			case SPELL:
 				return spellParser.innerDeserialize(ctxt, jsonData);
 			case SPELL_ARRAY: {

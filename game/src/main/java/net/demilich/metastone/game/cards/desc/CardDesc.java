@@ -153,8 +153,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String wiki;
 	public boolean collectible = true;
 	@JsonProperty
-	public CardSet set;
-	public CardSet[] sets;
+	public String set;
+	public String[] sets;
 	public int fileFormatVersion = 1;
 	public DynamicDescriptionDesc[] dynamicDescription;
 	public Boolean legacy;
@@ -326,14 +326,14 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
 	@JsonIgnore
-	public CardSet getSet() {
+	public String getSet() {
 		if (sets != null && sets.length > 0) {
 			return sets[0];
 		}
 		return set;
 	}
 
-	public void setSet(CardSet set) {
+	public void setSet(String set) {
 		this.set = set;
 	}
 

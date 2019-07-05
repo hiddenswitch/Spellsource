@@ -239,7 +239,7 @@ public class BoomsdayProjectTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getLogic().setRandom(new XORShiftRandom(101010L));
 			// Just summon basic cards so that there aren't so many weird interactions
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 			playCard(context, player, "spell_unexpected_results");
 			assertEquals(player.getMinions().get(0).getSourceCard().getBaseManaCost(), 2);
 			assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 2);
@@ -247,7 +247,7 @@ public class BoomsdayProjectTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			context.getLogic().setRandom(new XORShiftRandom(101010L));
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 			playCard(context, player, "minion_bloodmage_thalnos");
 			playCard(context, player, "spell_unexpected_results");
 			assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 3);
@@ -447,7 +447,7 @@ public class BoomsdayProjectTests extends TestBase {
 	@Test
 	public void testAcademicEspionage() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC"));
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(opponent.getHero().getHeroClass(), "RED", "class");
 			playCard(context, player, "spell_academic_espionage");
@@ -458,7 +458,7 @@ public class BoomsdayProjectTests extends TestBase {
 		}, "RED", "RED");
 
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC"));
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(opponent.getHero().getHeroClass(), "RED", "class");
 			playCard(context, player, "minion_augmented_elekk");
