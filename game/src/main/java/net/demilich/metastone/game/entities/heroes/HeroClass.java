@@ -130,7 +130,7 @@ public enum HeroClass {
 			case TIME:
 				return CardCatalogue.getCardById("hero_atropos");
 			case OLIVE:
-				return CardCatalogue.getCardById("hero_storyteller");
+				return CardCatalogue.getCardById("hero_lomenia");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
