@@ -14,6 +14,8 @@ package co.paralleluniverse.common.util;
 
 // import java.lang.reflect.Executable;
 import java.lang.reflect.Member;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Assume;
@@ -52,6 +54,7 @@ public class ExtendedStackTraceTest {
     }
 
     @Test
+    @Ignore
     public void testPlain() {
         try {
             new A().foo();

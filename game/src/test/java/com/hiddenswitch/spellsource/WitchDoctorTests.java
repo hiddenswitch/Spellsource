@@ -17,15 +17,28 @@ import static org.testng.Assert.*;
 public class WitchDoctorTests extends TestBase {
 
 	@Test
-	public void testGurubashiBloodletter() {
+	public void testHotheadedVillager() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion target = playMinionCard(context, opponent, "minion_gurubashi_bloodletter");
+			Minion target = playMinionCard(context, opponent, "minion_hotheaded_villager");
 			context.endTurn();
 			playCard(context, player, "spell_2_missiles");
 			assertEquals(opponent.getMinions().size(), 1);
 			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), "token_rage_behemoth");
 			assertEquals(target.transformResolved(context), opponent.getMinions().get(0));
+		});
+	}
+
+	@Test
+	public void testMariAnetteAuraInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion dragon = playMinionCard(context, player, "minion_dragon_test");
+			playMinionCard(context, player, "minion_irena_dragon_knight");
+			assertEquals(dragon.getAttack(), dragon.getBaseAttack() * 2);
+			playCard(context,player,"minion_mari_anette");
+			context.endTurn();
+			context.endTurn();
+			context.endTurn();
 		});
 	}
 
@@ -137,10 +150,10 @@ public class WitchDoctorTests extends TestBase {
 	}
 
 	@Test
-	public void testDobyMick() {
+	public void testGaithaTheProtector() {
 		runGym((context, player, opponent) -> {
 			Minion test1 = playMinionCard(context, player, "minion_neutral_test");
-			playCard(context, player, "minion_doby_mick");
+			playCard(context, player, "minion_gaitha_the_protector");
 			playCard(context, player, "spell_test_deal_6", test1);
 			assertEquals(test1.getHp(), 1);
 			Minion test2 = playMinionCard(context, player, "minion_neutral_test");

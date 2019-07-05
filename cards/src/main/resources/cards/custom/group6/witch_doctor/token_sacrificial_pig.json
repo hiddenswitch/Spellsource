@@ -1,0 +1,21 @@
+{
+  "name": "Sacrificial Pig",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Aftermath: Restore #5 Health to the enemy champion.",
+  "deathrattle": {
+    "class": "HealSpell",
+    "target": "ENEMY_HERO",
+    "value": 5
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

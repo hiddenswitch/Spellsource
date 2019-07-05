@@ -65,6 +65,9 @@ public class PlayCardsRandomlySpell extends Spell {
 			if (card.equals(source)) {
 				continue;
 			}
+
+			// The card may have been transformed!
+			card = (Card) card.transformResolved(context);
 			/*
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());

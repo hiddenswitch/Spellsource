@@ -40,4 +40,9 @@ public final class FatigueEvent extends GameEvent implements HasValue {
 	public int getValue() {
 		return amount;
 	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		return String.format("%s took %s fatigue damage", context.getPlayer(playerId).getName(), amount);
+	}
 }
