@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e
-echo "Make sure mongod is running at localhost:27017 using mkdir -pv .mongo && mongod --dbpath ./.mongo/"
+
+if [[ "$CI" != "true" ]] && ! pgrep -x "mongod" > /dev/null ; then
+    echo "Make sure mongod is running at localhost:27017 using"
+    echo "  mkdir -pv .mongo && mongod --dbpath ./.mongo/"
+    exit 1
+fi
+
 sleep 2
 export MONGO_URL=mongodb://localhost:27017/testdb
 echo "Clearing database testdb"
