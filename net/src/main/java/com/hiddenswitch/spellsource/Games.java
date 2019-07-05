@@ -71,7 +71,7 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES_PLAYERS_MAP = "Games::players";
+	String GAMES_PLAYERS_MAP = "Games/players";
 	String GAMES = "games";
 
 	/**
@@ -631,7 +631,7 @@ public interface Games extends Verticle {
 	 * @return A map.
 	 */
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games::connections");
+		return SuspendableMap.getOrCreate("Games/connections");
 	}
 
 	/**
@@ -1306,7 +1306,7 @@ public interface Games extends Verticle {
 			// Append the final game states / deltas.
 			augmentReplayWithCtx.accept(replayCtx);
 		} catch (Throwable any) {
-			LOGGER.error("replayFromGameContext {}:", originalCtx.getGameId(), any);
+			Tracing.error(any);
 		}
 
 		return replay;

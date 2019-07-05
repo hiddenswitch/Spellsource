@@ -93,9 +93,7 @@ public interface Logic {
 				GameEventType.BEFORE_SUMMON,
 				Attribute.UNIQUE_CHAMPION_IDS_SIZE,
 				(PersistenceContext<BeforeSummonEvent> context) -> {
-					if (context.event().getMinion() == null
-							|| context.event().getSource() == null
-							|| context.event().getSource().getCardInventoryId() == null) {
+					if (context.event().getSource().getCardInventoryId() == null) {
 						return;
 					}
 
