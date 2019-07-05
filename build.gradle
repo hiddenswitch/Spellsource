@@ -87,8 +87,9 @@ mavenPublish {
 
 
 allprojects {
-    sourceCompatibility = 1.8
-    project.version = '0.8.34'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.current()
+    project.version = '0.8.35'
 }
 
 subprojects {
@@ -100,6 +101,10 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url 'https://jitpack.io' }
+    }
+    
+    java {
+        disableAutoTargetJvm()
     }
 
     compileJava.dependsOn processResources

@@ -78,6 +78,7 @@ public class ClusterTest extends SpellsourceTestBase {
 
 	@Test(timeout = 90000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
+		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2);
 		Async latch = context.async(count);
@@ -89,6 +90,7 @@ public class ClusterTest extends SpellsourceTestBase {
 				.setWarningExceptionTime(30000L), context.asyncAssertSuccess(newVertxInstance -> {
 			// Deploy a second gateway
 			newVertx.set(newVertxInstance);
+			newVertxInstance.runOnContext(v -> Connection.registerCodecs());
 			Mongo.mongo().connectWithEnvironment(newVertxInstance);
 			newVertxInstance.deployVerticle(Gateway.create(9090), context.asyncAssertSuccess(v2 -> {
 				newVertxInstance.deployVerticle(Games.create(), context.asyncAssertSuccess(v3 -> {

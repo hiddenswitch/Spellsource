@@ -35,12 +35,17 @@
           "class": "DrawCardSpell"
         },
         {
-          "class": "CastAfterSequenceSpell",
+          "class": "ConditionalSpell",
           "spell": {
             "class": "ShuffleToDeckSpell",
             "card": "spell_corrupted_blood",
             "howMany": 2,
             "targetPlayer": "SELF"
+          },
+          "condition": {
+            "class": "IsDeadCondition",
+            "target": "FRIENDLY_HERO",
+            "invert": true
           }
         }
       ]
