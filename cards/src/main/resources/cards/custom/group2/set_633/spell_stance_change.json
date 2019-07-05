@@ -14,13 +14,20 @@
         "target": "FRIENDLY_MINIONS"
       },
       {
-        "class": "CastFromGroupSpell",
-        "value": 2,
-        "group": "group_stance_change"
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "CastCardsSpell"
+        },
+        "cards": [
+          "spell_kitsune_stance",
+          "spell_tanuki_stance",
+          "spell_suzume_stance",
+          "spell_koi_stance"
+        ],
+        "howMany": 4
       }
     ]
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

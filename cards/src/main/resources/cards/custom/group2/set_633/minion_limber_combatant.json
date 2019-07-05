@@ -1,0 +1,27 @@
+{
+  "name": "Limber Combatant",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Deflect. After this minion Deflects, gain Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseDeflectTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "attributes": {
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
