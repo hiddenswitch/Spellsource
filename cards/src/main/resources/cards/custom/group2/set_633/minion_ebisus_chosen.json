@@ -1,12 +1,12 @@
 {
-  "name": "Staff of Flowing Waters",
-  "baseManaCost": 4,
-  "type": "WEAPON",
+  "name": "Ebisu's Chosen",
+  "baseManaCost": 3,
+  "type": "MINION",
   "heroClass": "JADE",
-  "damage": 0,
-  "durability": 4,
-  "rarity": "RARE",
-  "description": "After your champion attacks, summon a Jade Serpent Statue.",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "After your champion attacks, restore #4 Health to it.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -15,8 +15,9 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "SummonSpell",
-      "card": "minion_blessed_koi_statue"
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 4
     }
   },
   "attributes": {},
