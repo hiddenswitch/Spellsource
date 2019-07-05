@@ -667,7 +667,7 @@ public class BoomsdayProjectTests extends TestBase {
 	public void testArcaneDynamo() {
 		for (int i = 0; i < 25; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.STANDARD);
+				context.setDeckFormat(DeckFormat.getFormat("Standard"));
 				playCard(context, player, "minion_arcane_dynamo");
 				assertTrue(player.getHand().get(0).getBaseManaCost() >= 5);
 			});

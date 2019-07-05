@@ -42,49 +42,8 @@ public class DecksPutRequest implements Serializable {
   @JsonProperty("inventoryIds")
   private List<String> inventoryIds = null;
 
-  /**
-   * The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. 
-   */
-  public enum FormatEnum {
-    STANDARD("Standard"),
-    
-    WILD("Wild"),
-    
-    CUSTOM("Custom"),
-    
-    SPELLSOURCE("Spellsource"),
-    
-    ALL("All");
-
-    private String value;
-
-    FormatEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static FormatEnum fromValue(String text) {
-      for (FormatEnum b : FormatEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("format")
-  private FormatEnum format = null;
+  private String format = null;
 
   @JsonProperty("deckList")
   private String deckList = null;
@@ -151,7 +110,7 @@ public class DecksPutRequest implements Serializable {
     this.inventoryIds = inventoryIds;
   }
 
-  public DecksPutRequest format(FormatEnum format) {
+  public DecksPutRequest format(String format) {
     this.format = format;
     return this;
   }
@@ -161,11 +120,11 @@ public class DecksPutRequest implements Serializable {
    * @return format
   **/
   @ApiModelProperty(value = "The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. ")
-  public FormatEnum getFormat() {
+  public String getFormat() {
     return format;
   }
 
-  public void setFormat(FormatEnum format) {
+  public void setFormat(String format) {
     this.format = format;
   }
 

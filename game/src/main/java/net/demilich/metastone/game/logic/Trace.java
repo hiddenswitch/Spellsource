@@ -165,7 +165,7 @@ public class Trace implements Serializable, Cloneable {
 		if (deckFormatSets != null && deckFormatName != null) {
 			context.setDeckFormat(new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets));
 		} else {
-			context.setDeckFormat(DeckFormat.STANDARD);
+			context.setDeckFormat(DeckFormat.getFormat("Standard"));
 		}
 
 		GameLogic logic = new GameLogic((IdFactoryImpl) context.getLogic().getIdFactory(), getSeed());

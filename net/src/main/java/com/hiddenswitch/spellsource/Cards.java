@@ -101,7 +101,7 @@ public interface Cards {
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)
-				.filter(cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getSet())
+				.filter(cd -> DeckFormat.getFormat("Greater Custom").isInFormat(cd.getSet())
 						&& cd.type != CardType.GROUP
 						&& cd.type != CardType.HERO_POWER
 						&& cd.type != CardType.ENCHANTMENT)

@@ -42,7 +42,7 @@ final class RandomDeck extends GameDeck {
 	 * DeckFormat#CUSTOM} format.
 	 */
 	RandomDeck() {
-		this(HeroClass.random(DeckFormat.CUSTOM), DeckFormat.CUSTOM);
+		this(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
 	}
 
 	/**
@@ -50,7 +50,7 @@ final class RandomDeck extends GameDeck {
 	 * {@link DeckFormat#CUSTOM} format.
 	 */
 	public RandomDeck(String heroClass) {
-		this(heroClass, DeckFormat.CUSTOM);
+		this(heroClass, DeckFormat.getFormat("Custom"));
 	}
 
 	private void populate(DeckFormat deckFormat) {
@@ -59,11 +59,13 @@ final class RandomDeck extends GameDeck {
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)
 				&& !card.getCardType().isCardType(CardType.CLASS)
+				&& !card.getCardType().isCardType(CardType.FORMAT)
 				&& card.hasHeroClass(getHeroClass()));
 		CardList neutralCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)
 				&& !card.getCardType().isCardType(CardType.CLASS)
+				&& !card.getCardType().isCardType(CardType.FORMAT)
 				&& card.hasHeroClass(HeroClass.ANY));
 
 		while (!this.isComplete()) {

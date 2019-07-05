@@ -65,6 +65,7 @@ Name | Type | Description | Notes
 **gameStarted** | **Boolean** | For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the other player to finish mulligan or, if both players have this field as true, indicates the game has begun on turn 0.  |  [optional]
 **color** | **List&lt;Float&gt;** | The color for the class  |  [optional]
 **blackText** | **Boolean** | Whether the class should use black text instead of the default white  |  [optional]
+**cardSets** | **List&lt;String&gt;** | The card sets listed by the card  |  [optional]
 
 
 <a name="CardTypeEnum"></a>
@@ -78,6 +79,7 @@ WEAPON | &quot;WEAPON&quot;
 HERO_POWER | &quot;HERO_POWER&quot;
 CHOOSE_ONE | &quot;CHOOSE_ONE&quot;
 CLASS | &quot;CLASS&quot;
+FORMAT | &quot;FORMAT&quot;
 
 
 <a name="RarityEnum"></a>

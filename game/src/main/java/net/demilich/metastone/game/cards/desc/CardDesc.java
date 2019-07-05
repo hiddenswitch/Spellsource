@@ -333,6 +333,10 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return set;
 	}
 
+	public String[] getSets() {
+		return sets;
+	}
+
 	public void setSet(String set) {
 		this.set = set;
 	}

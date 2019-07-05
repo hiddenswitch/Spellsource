@@ -31,13 +31,13 @@ public interface Deck extends Cloneable {
 
 	static @NotNull
 	GameDeck randomDeck(@NotNull String heroClass) {
-		return new RandomDeck(heroClass, DeckFormat.CUSTOM);
+		return new RandomDeck(heroClass, DeckFormat.getFormat("Custom"));
 	}
 
 	static @NotNull
 	GameDeck randomDeck() {
-		List<String> baseClasses = HeroClass.getBaseClasses(DeckFormat.CUSTOM);
-		return new RandomDeck(HeroClass.random(DeckFormat.CUSTOM), DeckFormat.CUSTOM);
+		List<String> baseClasses = HeroClass.getBaseClasses(DeckFormat.getFormat("Custom"));
+		return new RandomDeck(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
 	}
 
 	/**

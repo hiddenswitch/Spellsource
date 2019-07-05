@@ -6391,7 +6391,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testAlternateBaku() {
-		DebugContext context = createContext("SILVER", "SILVER", false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("SILVER", "SILVER", false, DeckFormat.getFormat("Custom"));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_faithful_lumi")
@@ -6403,7 +6403,7 @@ public class CustomCardsTests extends TestBase {
 		context.init();
 		assertEquals(context.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_alternate_totemic_slam");
 
-		DebugContext context2 = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
+		DebugContext context2 = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
 		context2.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context2.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_faithful_lumi")
@@ -6418,7 +6418,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testAlternateGenn() {
-		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")
@@ -6450,7 +6450,7 @@ public class CustomCardsTests extends TestBase {
 		int direStables = 0;
 
 		for (int i = 0; i < 100; i++) {
-			DebugContext debug = createContext("GREEN", "GREEN", false, DeckFormat.ALL);
+			DebugContext debug = createContext("GREEN", "GREEN", false, DeckFormat.getFormat("All"));
 			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				for (int j = 0; j < 10; j++) {

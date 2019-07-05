@@ -261,7 +261,7 @@ public class TestBase {
 		clearZone(context, opponent.getDeck());
 		clearZone(context, player.getGraveyard());
 		clearZone(context, opponent.getGraveyard());
-		context.setDeckFormat(DeckFormat.CUSTOM);
+		context.setDeckFormat(DeckFormat.getFormat("Custom"));
 
 		consumer.run(context, player, opponent);
 	}
@@ -369,7 +369,7 @@ public class TestBase {
 	}
 
 	public static DebugContext createContext(String hero1, String hero2) {
-		return createContext(hero1, hero2, true, DeckFormat.CUSTOM);
+		return createContext(hero1, hero2, true, DeckFormat.getFormat("Custom"));
 	}
 
 	public static DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
