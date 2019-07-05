@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "OLIVE",
-  "rarity": "COMMON",
+  "rarity": "FREE",
   "description": "Deal $2 damage to a minion. If it survives, fully heal it.",
   "targetSelection": "MINIONS",
   "spell": {
