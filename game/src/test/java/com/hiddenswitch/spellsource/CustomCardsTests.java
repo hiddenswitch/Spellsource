@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -7114,7 +7115,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-  public void testRitualShaman() {
+	public void testRitualShaman() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "secret_counterspell");
 			playCard(context, player, "minion_ritual_shaman");
@@ -7245,6 +7246,20 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(hadDeflect.hasAttribute(Attribute.DEFLECT));
 			assertFalse(didNotHaveDeflect.hasAttribute(Attribute.DEFLECT));
 		});
+	}
+
+	@Test
+	public void testSpike() {
+		CardCatalogue.loadCardsFromPackage();
+		GameDeck dragonDeck = new GameDeck(HeroClass.BLUE);
+		dragonDeck.getCards().add(CardCatalogue.getCardById("minion_dragonling_pet"));
+		for (int i = 0; i < 29; i++) {
+			dragonDeck.getCards().add(CardCatalogue.getCardById("minion_hatespawn_dragon"));
+		}
+		runGym(((context, player, opponent) -> {
+			assertTrue(player.getHand().containsCard("minion_dragonling_pet"));
+			assertTrue(opponent.getHand().containsCard("minion_dragonling_pet"));
+		}), dragonDeck, dragonDeck);
 	}
 }
 
