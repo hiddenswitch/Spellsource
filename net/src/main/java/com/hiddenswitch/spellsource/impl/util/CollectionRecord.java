@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by bberman on 2/6/17.
+ * A mongodb record of the user's collection metadata. Does not contain the inventory IDs themselves.
  */
 public class CollectionRecord extends MongoRecord {
 	private String userId;

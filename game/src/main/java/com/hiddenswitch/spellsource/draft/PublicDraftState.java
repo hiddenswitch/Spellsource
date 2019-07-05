@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Public information about the player's draft.
+ */
 public class PublicDraftState implements Serializable {
 	private List<String> heroClassChoices;
 	private List<String> currentCardChoices;

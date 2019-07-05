@@ -17,6 +17,10 @@ plugins {
     id 'java'
 }
 
+java {
+    disableAutoTargetJvm()
+}
+
 group 'com.hiddenswitch'
 version '0.8.0'
 
@@ -88,11 +92,6 @@ sourceSets {
         compileClasspath += main.output + test.compileClasspath
         runtimeClasspath += compileClasspath + test.runtimeClasspath
     }
-}
-
-compileJmhJava {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
 }
 
 dependencies {
