@@ -1,19 +1,17 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
-import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
-import io.vertx.core.Vertx;
 
 import java.lang.ref.WeakReference;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 /**
- * Created by bberman on 12/6/16.
+ * A timer for keeping track of a client's activity. Uses a {@link Scheduler} (typically implemented from vertx) for
+ * timers. Calls a handler after {@code noActivityTimeout} of not getting {@link #activity()} called.
  */
 public class ActivityMonitor {
 	private final long noActivityTimeout;
@@ -21,10 +19,6 @@ public class ActivityMonitor {
 	private TimerId lastTimerId;
 	private final SuspendableAction1<ActivityMonitor> onTimeout;
 	private GameId gameId;
-
-	public ActivityMonitor(Vertx vertx, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout, GameId gameId) {
-		this(new VertxScheduler(vertx), noActivityTimeout, onTimeout, gameId);
-	}
 
 	public ActivityMonitor(Scheduler scheduler, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout, GameId gameId) {
 		this.gameId = gameId;

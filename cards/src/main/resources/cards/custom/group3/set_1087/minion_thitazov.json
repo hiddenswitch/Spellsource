@@ -21,6 +21,10 @@
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
+      "filter": {
+        "class": "IsDestroyedFilter",
+        "invert": true
+      },
       "attackBonus": 1,
       "hpBonus": 1
     }
