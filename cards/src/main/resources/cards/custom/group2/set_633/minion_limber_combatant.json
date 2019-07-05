@@ -14,6 +14,7 @@
     },
     "spell": {
       "class": "AddAttributeSpell",
+      "target": "SELF",
       "attribute": "DIVINE_SHIELD"
     }
   },
