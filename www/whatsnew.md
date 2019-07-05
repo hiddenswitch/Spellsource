@@ -4,6 +4,16 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.36-2.0.31 (In Progress)
+
+Bug fixes.
+
+##### Context Fixes:
+
+ - When you have a Lifesteal weapon equipped and get dealt fatigue damage, your champion no longer restores health.
+ - Teaching a card a return-to-hand spell and playing that card twice no longer causes a crash. Other cards with card creation effects no longer have unusual side effects related to returning minions to hand.
+ - Corrupted Blood, Hallazeal the Ascended and Soup Vendor now correctly kill you without causing an infinite loop.
+ 
 ### 0.8.35-2.0.31 (July 1st, 2019)
 
 Fixing issues with cards not being found or detected after their IDs were changed.

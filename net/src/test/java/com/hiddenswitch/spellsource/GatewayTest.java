@@ -15,6 +15,7 @@ import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.test.core.Repeat;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -143,6 +144,7 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 	@Test(timeout = 32000L)
+	@Repeat(times = 10)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		// Play twice
 		UnityClient client = new UnityClient(context);
