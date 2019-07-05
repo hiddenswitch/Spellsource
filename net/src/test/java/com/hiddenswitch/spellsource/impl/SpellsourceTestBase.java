@@ -15,6 +15,7 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.json.Json;
@@ -59,6 +60,7 @@ public abstract class SpellsourceTestBase {
 					.setBlockedThreadCheckInterval(999999)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
+				Tracing.initializeGlobal(vertx);
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
 					vertx.executeBlocking(fut -> {
@@ -141,6 +143,7 @@ public abstract class SpellsourceTestBase {
 
 	@AfterClass
 	public static void tearDown(TestContext context) {
+		GlobalTracer.get().close();
 		/*
 		if (initialized.compareAndSet(true, false)) {
 			final Async async = context.async();

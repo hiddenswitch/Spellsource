@@ -58,6 +58,8 @@ definitions:
             $ref: '#/definitions/Invite'
           match:
             $ref: '#/definitions/Match'
+          spanContext:
+            $ref: '#/definitions/SpanContext'
       changed:
         description: |
           Indicates that a record's fields have changed.
@@ -2042,6 +2044,15 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+  SpanContext:
+    type: 'object'
+    description: |
+      A piece of data that assists in OpenTracing from the client.
+    properties:
+      data:
+        type: 'string'
+        format: 'binary'
+        description: Binary carried opentracing span context
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
