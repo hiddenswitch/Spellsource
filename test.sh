@@ -14,12 +14,4 @@ else
   export GRADLE_CMD=gradle
 fi
 
-${GRADLE_CMD} cards:test
-${GRADLE_CMD} game:test
-
-# Only run the net test on a host that's capable of running such an intense integration
-if [[ "$CI" != "true" ]] ; then
-  echo "Running net tests"
-  sleep 4
-  ${GRADLE_CMD} net:test
-fi
+${GRADLE_CMD} test
