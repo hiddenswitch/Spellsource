@@ -2809,10 +2809,15 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testSilverboneClaw() {
 		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_silverbone_claw");
+			assertEquals(player.getHand().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
 			Card dragon = receiveCard(context, player, "token_44dragon");
 			playCard(context, player, "weapon_silverbone_claw");
-			assertEquals(dragon.getAttack(), dragon.getBaseAttack());
-			assertEquals(dragon.getHp(), dragon.getBaseHp());
+			assertEquals(dragon.getBonusAttack(), 2);
+			assertEquals(dragon.getBonusHp(), 0);
 		});
 
 		runGym((context, player, opponent) -> {
