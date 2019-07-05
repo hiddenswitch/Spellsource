@@ -122,7 +122,7 @@ public interface Cards {
 	 */
 	@Suspendable
 	static void invalidateCardCache() {
-		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards::cards");
+		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards/cards");
 		// Invalidate the cache here
 		cache.put("cards-version", Vertx.currentContext().deploymentID());
 		cache.put("cards-last-modified", Gateway.DATE_TIME_FORMATTER.format(new Date()));

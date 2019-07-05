@@ -92,7 +92,7 @@ if(hasProperty('target') && target == 'android') {
     apply plugin: 'maven'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.current()
 
     install {
         repositories.mavenInstaller {

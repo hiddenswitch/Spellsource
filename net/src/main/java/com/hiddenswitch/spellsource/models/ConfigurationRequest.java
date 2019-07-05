@@ -1,10 +1,12 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.impl.DeckId;
-import com.hiddenswitch.spellsource.impl.GameId;
-import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
+import io.jaegertracing.internal.JaegerSpanContext;
+import io.opentracing.SpanContext;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -23,6 +25,9 @@ public final class ConfigurationRequest implements Serializable {
 	private GameId gameId;
 	private List<Configuration> configurations = new ArrayList<>();
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
+	@JsonDeserialize(using = SpanContextDeserializer.class)
+	@JsonSerialize(using = SpanContextSerializer.class)
+	private SpanContext spanContext;
 
 	public ConfigurationRequest() {
 	}
@@ -94,6 +99,15 @@ public final class ConfigurationRequest implements Serializable {
 
 	public ConfigurationRequest setNoActivityTimeout(long noActivityTimeout) {
 		this.noActivityTimeout = noActivityTimeout;
+		return this;
+	}
+
+	public SpanContext getSpanContext() {
+		return spanContext;
+	}
+
+	public ConfigurationRequest setSpanContext(SpanContext spanContext) {
+		this.spanContext = spanContext;
 		return this;
 	}
 
