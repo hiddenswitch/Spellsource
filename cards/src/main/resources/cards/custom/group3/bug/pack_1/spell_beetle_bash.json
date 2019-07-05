@@ -5,14 +5,14 @@
   "heroClass": "AMBER",
   "rarity": "RARE",
   "description": "Gain 4 Armor. Summon a 1/4 Blue Beetle with Guard.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 5
+        "armorBonus": 4
       },
       {
         "class": "SummonSpell",
