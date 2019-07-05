@@ -16,6 +16,8 @@ Bug fixes.
  - Corrupted Blood, Hallazeal the Ascended and Soup Vendor now correctly kill you without causing an infinite loop.
  - Beetle Bash is no longer targeted and now properly gives 4 armor instead of 5. (1212)
  - Shigaraki Elder now correctly labeled as a common card. (1211)
+ - Silverbone Claw now buffs a dragon in hand even if it is the only dragon in the player's hand. (1208)
+
  
 ### 0.8.35-2.0.31 (July 1st, 2019)
 
