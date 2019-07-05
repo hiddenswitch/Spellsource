@@ -7248,6 +7248,40 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testThitazov() {
+		// attacker from friendly side dies, won't get buffed
+		runGym(((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			attack(context, player, wisp, enemy);
+			assertTrue(enemy.isDestroyed());
+			assertTrue(wisp.isDestroyed());
+			assertEquals(friend1.getHp(), friend1.getBaseHp() + 1);
+			assertEquals(thitazov.getHp(), thitazov.getBaseHp());
+			assertEquals(thitazov.getAttack(), thitazov.getBaseAttack());
+		}));
+		// attacker from friendly side survives, gets buffed
+		runGym(((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			attack(context, player, friend1, enemy);
+			assertTrue(enemy.isDestroyed());
+			// friend1 gets the 1 hp that it loses due to the attack back through thitazov's buff
+			assertEquals(friend1.getHp(), friend1.getBaseHp());
+			assertEquals(wisp.getHp(), wisp.getBaseHp() + 1);
+			assertEquals(thitazov.getAttack(), thitazov.getBaseAttack());
+		}));
+	}
+
+  @Test
 	public void testStanceChange() {
 		runGym(((context, player, opponent) -> {
 			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
