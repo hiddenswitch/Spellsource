@@ -91,7 +91,7 @@ RUN set -eux; \
 	javac --version; \
 	java --version
 
-ENV SPELLSOURCE_VERSION=0.8.34
+ENV SPELLSOURCE_VERSION=0.8.35
 ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}.jar
 
 RUN mkdir /etc/service/java

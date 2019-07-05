@@ -6,18 +6,11 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Guard. Aftermath: If it's your opponent's turn, summon a 6/6 Mistlurker.",
+  "description": "Guard. Aftermath: Summon a 4/4 Deluging Spirit.",
   "deathrattle": {
-    "class": "ConditionalSpell",
-    "condition": {
-      "class": "OwnedByPlayerCondition",
-      "targetPlayer": "INACTIVE"
-    },
-    "spell": {
-      "class": "SummonSpell",
-      "card": "token_mistlurker",
-      "targetPlayer": "SELF"
-    }
+    "class": "SummonSpell",
+    "card": "token_deluging_spirit",
+    "targetPlayer": "SELF"
   },
   "attributes": {
     "DEATHRATTLES": true,

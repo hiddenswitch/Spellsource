@@ -18,7 +18,7 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 	private final MessageProducer<Buffer> producer;
 
 	public SuspendableEventBusCondition(String name) {
-		this.address = "SuspendableEventBusCondition::consumer-" + name;
+		this.address = "SuspendableEventBusCondition/consumer-" + name;
 		this.producer = Vertx.currentContext().owner()
 				.eventBus()
 				.sender(address);
