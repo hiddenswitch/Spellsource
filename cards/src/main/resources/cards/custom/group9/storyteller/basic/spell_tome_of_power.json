@@ -15,8 +15,19 @@
         "hpBonus": 1
       },
       {
-		"class": "ModifyMaxManaSpell",
-		"value": 1
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "ManaMaxedCondition"
+        },
+        "spell1": {
+          "class": "ReceiveCardSpell",
+          "card": "spell_excess_mana",
+          "targetPlayer": "SELF"
+        },
+        "spell2": {
+          "class": "ModifyMaxManaSpell",
+          "value": 1
+        }
       }
     ]
   },

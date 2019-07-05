@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.36 (In Progress)
+
+Implements Basic and Classic Storyteller thanks to @Skurleton! (1221)
+
 ### 0.8.35-2.0.31 (July 1st, 2019)
 
 Fixing issues with cards not being found or detected after their IDs were changed.
