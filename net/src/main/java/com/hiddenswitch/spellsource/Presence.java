@@ -32,13 +32,13 @@ public interface Presence {
 				try {
 					UserId key = new UserId(connection.userId());
 					connection.endHandler(Sync.suspendableHandler(ignored -> {
-						SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + connection.userId() + "]");
+						SuspendableCounter connections = SuspendableCounter.create("Presence/connections[" + connection.userId() + "]");
 						if (connections.decrementAndGet() == 0L) {
 							updatePresence(key, PresenceEnum.OFFLINE);
 						}
 					}));
 
-					SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + connection.userId() + "]");
+					SuspendableCounter connections = SuspendableCounter.create("Presence/connections[" + connection.userId() + "]");
 					// Once the user is connected, set their status to online
 					long numConnections = connections.incrementAndGet();
 					if (numConnections == 1L) {
@@ -78,7 +78,7 @@ public interface Presence {
 
 
 	static void updatePresence(String userId) throws SuspendExecution {
-		SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + userId + "]");
+		SuspendableCounter connections = SuspendableCounter.create("Presence/connections[" + userId + "]");
 		boolean isInGame = Games.getUsersInGames().containsKey(new UserId(userId));
 		if (connections.get() == 0L) {
 			updatePresence(new UserId(userId), PresenceEnum.OFFLINE);

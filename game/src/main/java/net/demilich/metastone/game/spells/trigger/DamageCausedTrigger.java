@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
@@ -26,6 +27,8 @@ public class DamageCausedTrigger extends EventTrigger {
 			if (damageEvent.getSource() instanceof Card && !((Card) damageEvent.getSource()).getCardType().isCardType(cardType)) {
 				return false;
 			} else if (damageEvent.getSource() instanceof Actor && !((Actor) damageEvent.getSource()).getSourceCard().getCardType().isCardType(cardType)) {
+				return false;
+			} else if (damageEvent.getSource() instanceof Player) {
 				return false;
 			}
 		}

@@ -233,6 +233,7 @@ Class | Method | HTTP request | Description
  - [ReplayDeltas](docs/ReplayDeltas.md)
  - [ReplayGameStates](docs/ReplayGameStates.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
+ - [SpanContext](docs/SpanContext.md)
  - [SpellAction](docs/SpellAction.md)
  - [SpellsourceException](docs/SpellsourceException.md)
  - [SummonAction](docs/SummonAction.md)

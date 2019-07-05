@@ -462,7 +462,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to indicate the card's target selection. Considered obsolete.
 	 */
-	@Deprecated
 	TARGET_SELECTION,
 	/**
 	 * Specifies the {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} enchantment that should be

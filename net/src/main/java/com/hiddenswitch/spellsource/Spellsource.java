@@ -678,6 +678,12 @@ public class Spellsource {
 		return gameTriggers;
 	}
 
+	/**
+	 * A map of spells that can be cast by {@link net.demilich.metastone.game.spells.desc.SpellArg#NAME} using a {@link
+	 * DelegateSpell}.
+	 *
+	 * @return
+	 */
 	public Map<String, Spell> getSpells() {
 		return spells;
 	}
