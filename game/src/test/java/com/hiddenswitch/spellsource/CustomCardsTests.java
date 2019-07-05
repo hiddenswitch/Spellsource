@@ -7114,7 +7114,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-  public void testRitualShaman() {
+	public void testRitualShaman() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "secret_counterspell");
 			playCard(context, player, "minion_ritual_shaman");
@@ -7254,6 +7254,105 @@ public class CustomCardsTests extends TestBase {
 		CardCatalogue.getCardById("spell_honed_potion");
 		CardCatalogue.getCardById("token_bellowing_spirit");
 		CardCatalogue.getCardById("token_burning_spirit");
+  }
+
+ 	@Test
+	public void testThitazov() {
+		// attacker from friendly side dies, won't get buffed
+		runGym(((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			attack(context, player, wisp, enemy);
+			assertTrue(enemy.isDestroyed());
+			assertTrue(wisp.isDestroyed());
+			assertEquals(friend1.getHp(), friend1.getBaseHp() + 1);
+			assertEquals(thitazov.getHp(), thitazov.getBaseHp());
+			assertEquals(thitazov.getAttack(), thitazov.getBaseAttack());
+		}));
+		// attacker from friendly side survives, gets buffed
+		runGym(((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			attack(context, player, friend1, enemy);
+			assertTrue(enemy.isDestroyed());
+			// friend1 gets the 1 hp that it loses due to the attack back through thitazov's buff
+			assertEquals(friend1.getHp(), friend1.getBaseHp());
+			assertEquals(wisp.getHp(), wisp.getBaseHp() + 1);
+			assertEquals(thitazov.getAttack(), thitazov.getBaseAttack());
+		}));
+	}
+
+  @Test
+	public void testStanceChange() {
+		runGym(((context, player, opponent) -> {
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_kitsune_stance");
+			assertEquals(raptor.getAttack(), raptor.getBaseAttack() + 2);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			player.getHero().setHp(20);
+			playCard(context, player, "spell_koi_stance");
+			assertEquals(player.getHero().getHp(), 20 + (2 * player.getMinions().size()));
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_suzume_stance");
+			assertEquals(raptor.getAttack(), raptor.getBaseAttack() + 1);
+			assertEquals(raptor.getHp(), raptor.getBaseHp() + 1);
+			assertTrue(raptor.hasAttribute(Attribute.DIVINE_SHIELD));
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_tanuki_stance");
+			assertEquals(raptor.getHp(), raptor.getBaseHp() + 2);
+			assertTrue(raptor.hasAttribute(Attribute.TAUNT));
+		}));
+	}
+
+	@Test
+	public void testEbisusChosen() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_ebisus_chosen");
+			player.getHero().setHp(20);
+			player.getHero().setAttack(2);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHero().getHp(), 24);
+			Minion raptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			attack(context, player, player.getHero(), raptor);
+			assertEquals(player.getHero().getHp(), 28 - raptor.getAttack());
+		}));
+	}
+
+	@Test
+	public void testWardenSaihan() {
+		runGym(((context, player, opponent) -> {
+			Minion warden = playMinionCard(context, player, "minion_warden_saihan");
+			playCard(context, opponent, "spell_mind_blast");
+			assertEquals(warden.getHp(), warden.getMaxHp());
+
+			playCard(context, player, "spell_flamestrike");
+			assertEquals(warden.getHp(), warden.getMaxHp());
+
+			Minion raptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_fireball", raptor);
+			assertFalse(raptor.isDestroyed());
+			assertEquals(raptor.getHp(), raptor.getMaxHp());
+			assertEquals(warden.getHp(), warden.getMaxHp() - 6);
+		}));
 	}
 }
 
