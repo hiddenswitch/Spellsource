@@ -1,0 +1,50 @@
+{
+  "name": "Warden Saihan",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a friendly minion takes damage, this minion takes it instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "SELF",
+            "invert": true
+          },
+          {
+            "class": "EventTargetMatchesReferenceCondition",
+            "target": "FRIENDLY_MINIONS"
+          }
+        ]
+      },
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SplashDamageSpell",
+          "target": "TRIGGER_HOST"
+        },
+        {
+          "class": "ModifyDamageSpell",
+          "value": 0,
+          "operation": "SET"
+        }
+      ]
+    },
+    "maxFiresPerSequence": 16
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

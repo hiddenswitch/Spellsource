@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **friend** | [**Friend**](Friend.md) |  |  [optional]
 **invite** | [**Invite**](Invite.md) |  |  [optional]
 **match** | [**Match**](Match.md) |  |  [optional]
+**spanContext** | [**SpanContext**](SpanContext.md) |  |  [optional]
 
 
 

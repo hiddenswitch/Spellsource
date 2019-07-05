@@ -445,23 +445,21 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(29)
 						.withUp(thisVertx -> {
-							changeCardId("minon_treeleach", "minion_treeleach");
 						}))
 				.add(new MigrationRequest()
 						.withVersion(30)
 						.withUp(thisVertx -> {
-							changeCardId("minion_anub'rekhan", "minion_anobii");
-							changeCardId("minion_azjol_visionary", "minion_visionary");
-							changeCardId("minion_nerubian_vizier", "minion_vizier");
-							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
-							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
-							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
-							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
-							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+							// Reran elsewhere
 						}))
 				.add(new MigrationRequest()
 						.withVersion(31)
 						.withUp(thisVertx -> {
+							// Reran elsewhere
+						}))
+				.add(new MigrationRequest()
+						.withVersion(32)
+						.withUp(thisVertx -> {
+							changeCardId("minon_treeleach", "minion_treeleach");
 							changeCardId("hero_witch_doctor", "hero_senzaku");
 							changeCardId("minion_emerald_exhibit", "minion_ceremonial_alter");
 							changeCardId("minion_bladesworn", "minion_entranced_dancer");
@@ -519,8 +517,6 @@ public class Spellsource {
 							changeCardId("spell_effuse", "spell_springs_of_ebisu");
 							changeCardId("spell_dampen_harm", "spell_steadfast_defense");
 							changeCardId("spell_breath_of_fire", "spell_windswept_strike");
-							changeCardId("spell_storm_spirit", "spell_bellowing_spirit");
-							changeCardId("spell_fire_spirit", "spell_burning_spirit");
 							changeCardId("token_xuen_the_white_tiger", "token_kumiho_nine_tailed_kitsune");
 							changeCardId("token_chi_ji_the_red_crane", "token_shitakiri_slit_tongue_suzume");
 							changeCardId("token_tiny_alemental", "token_stony_elemental");
@@ -537,7 +533,14 @@ public class Spellsource {
 							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
 							changeCardId("spell_ahnqiraj_portal", "spell_ancient_waygate");
 						}))
-				.migrateTo(31, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(33)
+						.withUp(thisVertx -> {
+							changeCardId("minion_jade_serpent_statue", "minion_jade_cloud_serpent");
+							changeCardId("token_storm_spirit", "token_bellowing_spirit");
+							changeCardId("token_fire_spirit", "token_burning_spirit");
+						}))
+				.migrateTo(33, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -675,12 +678,19 @@ public class Spellsource {
 		return gameTriggers;
 	}
 
+	/**
+	 * A map of spells that can be cast by {@link net.demilich.metastone.game.spells.desc.SpellArg#NAME} using a {@link
+	 * DelegateSpell}.
+	 *
+	 * @return
+	 */
 	public Map<String, Spell> getSpells() {
 		return spells;
 	}
 
 	@Suspendable
 	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
+		CardCatalogue.loadCardsFromPackage();
 		try {
 			CardCatalogue.getCardById(newId);
 		} catch (Throwable any) {
