@@ -7248,6 +7248,15 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testProperCardIds() {
+		CardCatalogue.loadCardsFromPackage();
+		CardCatalogue.getCardById("minion_jade_cloud_serpent");
+		CardCatalogue.getCardById("spell_honed_potion");
+		CardCatalogue.getCardById("token_bellowing_spirit");
+		CardCatalogue.getCardById("token_burning_spirit");
+  }
+
+ 	@Test
 	public void testThitazov() {
 		// attacker from friendly side dies, won't get buffed
 		runGym(((context, player, opponent) -> {
