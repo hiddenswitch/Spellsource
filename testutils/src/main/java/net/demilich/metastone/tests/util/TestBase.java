@@ -41,6 +41,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static org.junit.Assert.fail;
+
 
 public class TestBase {
 
@@ -221,6 +223,48 @@ public class TestBase {
 
 	public static int costOf(GameContext context, Player player, Card deckCard) {
 		return context.getLogic().getModifiedManaCost(player, deckCard);
+	}
+
+	public static void assertThrows(ThrowingRunnable runnable) {
+		assertThrows(Throwable.class, runnable);
+	}
+
+	/**
+	 * Asserts that {@code runnable} throws an exception of type {@code throwableClass} when executed. If it does not
+	 * throw an exception, an {@link AssertionError} is thrown. If it throws the wrong type of exception, an {@code
+	 * AssertionError} is thrown describing the mismatch; the exception that was actually thrown can be obtained by
+	 * calling {@link AssertionError#getCause}.
+	 *
+	 * @param throwableClass the expected type of the exception
+	 * @param runnable       A function that is expected to throw an exception when invoked
+	 * @since 6.9.5
+	 */
+	@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+	@Suspendable
+	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
+		expectThrows(throwableClass, runnable);
+	}
+
+	@Suspendable
+	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
+		try {
+			runnable.run();
+		} catch (Throwable t) {
+			if (throwableClass.isInstance(t)) {
+				return throwableClass.cast(t);
+			} else {
+				String mismatchMessage = String.format("Expected %s to be thrown, but %s was thrown",
+						throwableClass.getSimpleName(), t.getClass().getSimpleName());
+
+				final AssertionError cause = new AssertionError(mismatchMessage, t);
+				fail(cause.getMessage());
+				return null;
+			}
+		}
+		String message = String.format("Expected %s to be thrown, but nothing was thrown",
+				throwableClass.getSimpleName());
+		fail(new AssertionError(message).getMessage());
+		return null;
 	}
 
 	@FunctionalInterface
@@ -486,4 +530,8 @@ public class TestBase {
 	}
 
 
+	public interface ThrowingRunnable {
+		@Suspendable
+		void run() throws Throwable;
+	}
 }

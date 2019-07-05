@@ -695,7 +695,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards::cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
 
 		String cardsVersion = cache.get("cards-version");
 		String lastModified = cache.get("cards-last-modified");

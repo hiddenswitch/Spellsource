@@ -484,7 +484,7 @@ public class SpellUtils {
 			Card card = spellCardDesc.create();
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
-			context.addTempCard(card.clone());
+			context.addTempCard(card);
 			card.moveOrAddTo(context, Zones.DISCOVER);
 			cards.add(card);
 

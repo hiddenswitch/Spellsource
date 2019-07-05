@@ -3,10 +3,7 @@ package com.hiddenswitch.spellsource.applications;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hiddenswitch.spellsource.Broadcaster;
-import com.hiddenswitch.spellsource.Cluster;
-import com.hiddenswitch.spellsource.Gateway;
-import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
@@ -44,6 +41,7 @@ public class LocalClustered {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		LoggerFactory.initialise();
 
+
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
 		final HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701));
@@ -60,7 +58,7 @@ public class LocalClustered {
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 40), then -> {
 
 			final Vertx vertx = then.result();
-
+			Tracing.initializeGlobal(vertx);
 			Mongo.mongo().connectWithEnvironment(vertx);
 			Spellsource.spellsource().migrate(vertx, v1 -> {
 				if (v1.failed()) {

@@ -99,7 +99,7 @@ if(hasProperty('target') && target == 'android') {
 
     {{#java8}}
     sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.current()
     {{/java8}}
     {{^java8}}
     sourceCompatibility = JavaVersion.VERSION_1_7
