@@ -872,7 +872,7 @@ public class JourneyToUngoroTests extends TestBase {
 					player.setMaxMana(mana);
 					player.setMana(mana);
 					playCard(context, player, "spell_living_mana");
-					int minionsOnBoard = Math.min((int) maxMinionsSummoned + finalI, 7);
+					int minionsOnBoard = Math.min(maxMinionsSummoned + finalI, 7);
 					int minionsSummonedByLivingMana = Math.min(7, minionsOnBoard - finalI);
 					assertEquals(player.getMinions().size(), minionsOnBoard);
 					assertEquals(player.getMaxMana(), mana - minionsSummonedByLivingMana,
@@ -882,7 +882,6 @@ public class JourneyToUngoroTests extends TestBase {
 			}
 			return null;
 		}).collect(toList());
-
 	}
 
 	@Test
