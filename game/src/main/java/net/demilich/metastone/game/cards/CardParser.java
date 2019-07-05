@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -14,20 +16,15 @@ import java.io.IOException;
  * A class responsible for deserializing JSON representations of cards.
  */
 public class CardParser {
-	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
 
-	public static CardCatalogueRecord parseCard(JsonObject card) throws IOException {
-		final String id = card.getString("id");
-		CardDesc desc = card.mapTo(CardDesc.class);
-		if (desc.getId() == null) {
-			desc.setId(id);
-		}
-		return new CardCatalogueRecord(id, desc);
+	static {
+		Json.mapper.configure(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION, true);
+		Json.mapper.configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, true);
 	}
 
 	@SuppressWarnings("unchecked")
 	public CardCatalogueRecord parseCard(ResourceInputStream resourceInputStream) throws IOException {
-		String input = IOUtils.toString(resourceInputStream.getInputStream());
+		String input = IOUtils.toString(resourceInputStream.getInputStream()).trim();
 		CardDesc desc = Json.decodeValue(input, CardDesc.class);
 
 		final String fileName = resourceInputStream.getFileName();

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import io.opentracing.SpanContext;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.core.json.Json;
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ public class SpanContextDeserializer extends StdDeserializer<SpanContext> {
 
 	@Override
 	public SpanContext deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		JsonNode node = p.readValueAsTree();
+		JsonNode node = ctxt.readValue(p, JsonNode.class);
 		return GlobalTracer.get().extract(Format.Builtin.TEXT_MAP, new JsonCarrier(node));
 	}
 }
