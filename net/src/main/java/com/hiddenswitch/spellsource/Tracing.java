@@ -30,6 +30,7 @@ public interface Tracing {
 			return;
 		}
 		Tags.ERROR.set(span, true);
+		Tags.SAMPLING_PRIORITY.set(span, 1);
 		span.log(ImmutableMap.of(
 				Fields.EVENT, "error",
 				Fields.ERROR_OBJECT, throwable,
