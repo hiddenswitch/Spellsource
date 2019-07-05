@@ -77,7 +77,7 @@ public class CreateCardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String heroClass = HeroClass.ANY;
 		Rarity rarity = Rarity.FREE;
-		CardSet cardSet = CardSet.BASIC;
+		String cardSet = "BASIC";
 		SpellDesc[] spells = discoverCardParts(context, player, desc, source, target);
 		switch (source.getEntityType()) {
 			case ANY:

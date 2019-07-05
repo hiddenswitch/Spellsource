@@ -21,11 +21,11 @@ public class CardsTest extends SpellsourceTestBase {
 			// Query for a bunch of different things and compare the values
 
 			List<CardCatalogueRecord> commons = Cards.query(new QueryCardsRequest()
-					.withSets(CardSet.BASIC, CardSet.CLASSIC)
+					.withSets("BASIC", "CLASSIC")
 					.withRarity(Rarity.COMMON)).getRecords();
 
 			int expectedCount = CardCatalogue.query(new DeckFormat()
-					.withCardSets(CardSet.BASIC, CardSet.CLASSIC), c -> c.isCollectible() && c.getRarity().isRarity(Rarity.COMMON))
+					.withCardSets("BASIC", "CLASSIC"), c -> c.isCollectible() && c.getRarity().isRarity(Rarity.COMMON))
 					.getCount();
 
 			assertEquals(expectedCount, commons.size());

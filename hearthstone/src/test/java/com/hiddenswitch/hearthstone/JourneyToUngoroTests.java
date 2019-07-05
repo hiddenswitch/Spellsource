@@ -42,7 +42,7 @@ public class JourneyToUngoroTests extends TestBase {
 				context.setDeckFormat(DeckFormat.ALL);
 				// Check that stonehill never gets a spellsource minion
 				overrideDiscoverChoice(da -> {
-					assertTrue(da.stream().noneMatch(c -> c.getCard().getCardSet() == CardSet.SPELLSOURCE && c.getCard().getCardSet() == CardSet.TEST));
+					assertTrue(da.stream().noneMatch(c -> c.getCard().getCardSet() == "SPELLSOURCE" && c.getCard().getCardSet() == "TEST"));
 					return da.get(0);
 				});
 				playMinionCard(context, player, "minion_stonehill_defender");

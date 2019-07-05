@@ -50,7 +50,7 @@ public interface Cards {
 			response = new QueryCardsResponse()
 					.withRecords(request.getCardIds().stream().map(CardCatalogue.getRecords()::get).collect(toList()));
 		} else {
-			final EnumSet<CardSet> sets = EnumSet.noneOf(CardSet.class);
+			final Set<String> sets = Collections.emptySet();
 			sets.addAll(Arrays.asList(request.getSets()));
 
 			List<CardCatalogueRecord> results = CardCatalogue.getRecords().values().stream().filter(r -> {

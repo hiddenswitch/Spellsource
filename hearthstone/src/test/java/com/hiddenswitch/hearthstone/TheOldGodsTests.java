@@ -201,7 +201,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testMasterOfEvolutionBrann() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_brann_bronzebeard");
 			playCard(context, player, "minion_master_of_evolution");

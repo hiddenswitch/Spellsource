@@ -99,8 +99,8 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
-		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+		String cardSet = (String) getDesc().get(EntityFilterArg.CARD_SET);
+		if (cardSet != null && !cardSet.equals("ANY") && !card.getCardSet().equals(cardSet)) {
 			return false;
 		}
 

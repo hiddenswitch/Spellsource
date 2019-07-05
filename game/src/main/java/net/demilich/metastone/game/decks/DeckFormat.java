@@ -10,8 +10,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.demilich.metastone.game.cards.CardSet.*;
-
 /**
  * The sets that are available to build decks from and generate cards from.
  * <p>
@@ -25,149 +23,142 @@ import static net.demilich.metastone.game.cards.CardSet.*;
  */
 public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
-	private Set<CardSet> sets;
+	private Set<String> sets;
 
 	public static final DeckFormat STANDARD = new DeckFormat()
 			.withName("Standard")
-			.withCardSets(
-					Collections.unmodifiableSet(EnumSet.of(
-							BASIC,
-							CLASSIC,
-							WITCHWOOD,
-							BOOMSDAY_PROJECT,
-							RASTAKHANS_RUMBLE,
-							RISE_OF_SHADOWS
-					)));
+			.withCardSets(List.of(
+					"BASIC",
+					"CLASSIC",
+					"WITCHWOOD",
+					"BOOMSDAY_PROJECT",
+					"RASTAKHANS_RUMBLE",
+					"RISE_OF_SHADOWS"
+			));
 
 	public static final DeckFormat WILD = new DeckFormat()
 			.withName("Wild")
-			.withCardSets(
-					Collections.unmodifiableSet(EnumSet.of(
-							BASIC,
-							CLASSIC,
-							REWARD,
-							PROMO,
-							NAXXRAMAS,
-							GOBLINS_VS_GNOMES,
-							BLACKROCK_MOUNTAIN,
-							THE_GRAND_TOURNAMENT,
-							LEAGUE_OF_EXPLORERS,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
-							JOURNEY_TO_UNGORO,
-							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS,
-							WITCHWOOD,
-							BOOMSDAY_PROJECT,
-							RASTAKHANS_RUMBLE,
-							RISE_OF_SHADOWS,
-							HALL_OF_FAME
-					))
-			);
+			.withCardSets(List.of(
+					"BASIC",
+					"CLASSIC",
+					"REWARD",
+					"PROMO",
+					"NAXXRAMAS",
+					"GOBLINS_VS_GNOMES",
+					"BLACKROCK_MOUNTAIN",
+					"THE_GRAND_TOURNAMENT",
+					"LEAGUE_OF_EXPLORERS",
+					"THE_OLD_GODS",
+					"ONE_NIGHT_IN_KARAZHAN",
+					"MEAN_STREETS_OF_GADGETZAN",
+					"JOURNEY_TO_UNGORO",
+					"KNIGHTS_OF_THE_FROZEN_THRONE",
+					"KOBOLDS_AND_CATACOMBS",
+					"WITCHWOOD",
+					"BOOMSDAY_PROJECT",
+					"RASTAKHANS_RUMBLE",
+					"RISE_OF_SHADOWS",
+					"HALL_OF_FAME"
+			));
 
 	public static final DeckFormat PAST = new DeckFormat()
 			.withName("Past")
-			.withCardSets(
-					Collections.unmodifiableSet(EnumSet.of(
-							REWARD,
-							PROMO,
-							NAXXRAMAS,
-							GOBLINS_VS_GNOMES,
-							BLACKROCK_MOUNTAIN,
-							THE_GRAND_TOURNAMENT,
-							LEAGUE_OF_EXPLORERS,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
-							HALL_OF_FAME
-					))
-			);
+			.withCardSets(List.of(
+					"REWARD",
+					"PROMO",
+					"NAXXRAMAS",
+					"GOBLINS_VS_GNOMES",
+					"BLACKROCK_MOUNTAIN",
+					"THE_GRAND_TOURNAMENT",
+					"LEAGUE_OF_EXPLORERS",
+					"THE_OLD_GODS",
+					"ONE_NIGHT_IN_KARAZHAN",
+					"MEAN_STREETS_OF_GADGETZAN",
+					"HALL_OF_FAME"
+			));
 
 	public static final DeckFormat CUSTOM = new DeckFormat()
 			.withName("Custom")
-			.withCardSets(
-					Collections.unmodifiableSet(EnumSet.of(
-							BASIC,
-							CLASSIC,
-							REWARD,
-							PROMO,
-							NAXXRAMAS,
-							GOBLINS_VS_GNOMES,
-							BLACKROCK_MOUNTAIN,
-							THE_GRAND_TOURNAMENT,
-							LEAGUE_OF_EXPLORERS,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
-							JOURNEY_TO_UNGORO,
-							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS,
-							WITCHWOOD,
-							BOOMSDAY_PROJECT,
-							RASTAKHANS_RUMBLE,
-							RISE_OF_SHADOWS,
-							BATTLE_FOR_ASHENVALE,
-							SANDS_OF_TIME,
-							VERDANT_DREAMS,
-							HALL_OF_FAME,
-							SPELLSOURCE_BASIC,
-							CardSet.CUSTOM
-					))
-			);
+			.withCardSets(List.of(
+					"BASIC",
+					"CLASSIC",
+					"REWARD",
+					"PROMO",
+					"NAXXRAMAS",
+					"GOBLINS_VS_GNOMES",
+					"BLACKROCK_MOUNTAIN",
+					"THE_GRAND_TOURNAMENT",
+					"LEAGUE_OF_EXPLORERS",
+					"THE_OLD_GODS",
+					"ONE_NIGHT_IN_KARAZHAN",
+					"MEAN_STREETS_OF_GADGETZAN",
+					"JOURNEY_TO_UNGORO",
+					"KNIGHTS_OF_THE_FROZEN_THRONE",
+					"KOBOLDS_AND_CATACOMBS",
+					"WITCHWOOD",
+					"BOOMSDAY_PROJECT",
+					"RASTAKHANS_RUMBLE",
+					"RISE_OF_SHADOWS",
+					"BATTLE_FOR_ASHENVALE",
+					"SANDS_OF_TIME",
+					"VERDANT_DREAMS",
+					"HALL_OF_FAME",
+					"SPELLSOURCE_BASIC",
+					"CUSTOM"
+			));
 
 	public static final DeckFormat GREATER_CUSTOM = new DeckFormat()
 			.withName("Greater Custom")
-			.withCardSets(
-					Collections.unmodifiableSet(EnumSet.of(
-							BASIC,
-							CLASSIC,
-							REWARD,
-							PROMO,
-							NAXXRAMAS,
-							GOBLINS_VS_GNOMES,
-							BLACKROCK_MOUNTAIN,
-							THE_GRAND_TOURNAMENT,
-							LEAGUE_OF_EXPLORERS,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
-							JOURNEY_TO_UNGORO,
-							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS,
-							WITCHWOOD,
-							BOOMSDAY_PROJECT,
-							RASTAKHANS_RUMBLE,
-							RISE_OF_SHADOWS,
-							BATTLE_FOR_ASHENVALE,
-							SANDS_OF_TIME,
-							VERDANT_DREAMS,
-							HALL_OF_FAME,
-							ALTERNATIVE,
-							UNNERFED,
-							BLIZZARD_ADVENTURE,
-							SPELLSOURCE_BASIC,
-							CardSet.CUSTOM
-					))
-			);
+			.withCardSets(List.of(
+					"BASIC",
+					"CLASSIC",
+					"REWARD",
+					"PROMO",
+					"NAXXRAMAS",
+					"GOBLINS_VS_GNOMES",
+					"BLACKROCK_MOUNTAIN",
+					"THE_GRAND_TOURNAMENT",
+					"LEAGUE_OF_EXPLORERS",
+					"THE_OLD_GODS",
+					"ONE_NIGHT_IN_KARAZHAN",
+					"MEAN_STREETS_OF_GADGETZAN",
+					"JOURNEY_TO_UNGORO",
+					"KNIGHTS_OF_THE_FROZEN_THRONE",
+					"KOBOLDS_AND_CATACOMBS",
+					"WITCHWOOD",
+					"BOOMSDAY_PROJECT",
+					"RASTAKHANS_RUMBLE",
+					"RISE_OF_SHADOWS",
+					"BATTLE_FOR_ASHENVALE",
+					"SANDS_OF_TIME",
+					"VERDANT_DREAMS",
+					"HALL_OF_FAME",
+					"ALTERNATIVE",
+					"UNNERFED",
+					"BLIZZARD_ADVENTURE",
+					"SPELLSOURCE_BASIC",
+					"CUSTOM"
+			));
 
 	public static final DeckFormat SPELLSOURCE = new DeckFormat()
 			.withName("Spellsource")
-			.withCardSets(
-					Collections.unmodifiableSet(EnumSet.of(
-							SPELLSOURCE_BASIC,
-							VERDANT_DREAMS,
-							SANDS_OF_TIME,
-							BATTLE_FOR_ASHENVALE,
-							CardSet.CUSTOM
-					))
-			);
+			.withCardSets(List.of(
+					"SPELLSOURCE_BASIC",
+					"VERDANT_DREAMS",
+					"SANDS_OF_TIME",
+					"BATTLE_FOR_ASHENVALE",
+					"CUSTOM"
+			));
 
-	public static final DeckFormat ALL = new DeckFormat()
-			.withName("All")
-			.withCardSets(
-					Collections.unmodifiableSet(new HashSet<>(Arrays.asList(CardSet.values())))
-			);
+	public static DeckFormat ALL = new DeckFormat()
+			.withName("All");
+
+	public static void populateAll(List<String> sets) {
+		ALL.sets.clear();
+		for (String set : sets) {
+			ALL.addSet(set);
+		}
+	}
 
 	private static final Map<String, DeckFormat> FORMATS = Collections.unmodifiableMap(Stream.of(
 			STANDARD,
@@ -204,12 +195,12 @@ public class DeckFormat implements Serializable, Cloneable {
 		return FORMATS;
 	}
 
-	public static DeckFormat getSmallestSupersetFormat(Set<CardSet> requiredSets) {
+	public static DeckFormat getSmallestSupersetFormat(Set<String> requiredSets) {
 		DeckFormat smallestFormat = DeckFormat.ALL;
 		int minExcess = smallestFormat.sets.size();
 
 		for (Map.Entry<String, DeckFormat> format : DeckFormat.formats().entrySet()) {
-			Set<CardSet> formatSets = format.getValue().getCardSets();
+			Set<String> formatSets = format.getValue().getCardSets();
 			if (!formatSets.containsAll(requiredSets)) {
 				continue;
 			}
@@ -239,22 +230,21 @@ public class DeckFormat implements Serializable, Cloneable {
 		sets = new HashSet<>();
 	}
 
-	public void addSet(CardSet cardSet) {
+	public void addSet(String cardSet) {
 		sets.add(cardSet);
 	}
 
 	public boolean isInFormat(Card card) {
 		if (sets.contains(card.getCardSet())) {
 			return true;
-		}
-		return false;
+		} else return false;
 	}
 
-	public boolean isInFormat(CardSet set) {
+	public boolean isInFormat(String set) {
 		return set != null && sets.contains(set);
 	}
 
-	public Set<CardSet> getCardSets() {
+	public Set<String> getCardSets() {
 		return sets;
 	}
 
@@ -271,18 +261,22 @@ public class DeckFormat implements Serializable, Cloneable {
 		return this;
 	}
 
-	public DeckFormat withCardSets(CardSet... cardSets) {
-		for (CardSet cardSet : cardSets) {
+	public DeckFormat withCardSets(String... cardSets) {
+		for (String cardSet : cardSets) {
 			addSet(cardSet);
 		}
 		return this;
 	}
 
-	public DeckFormat withCardSets(Iterable<CardSet> cardSets) {
-		for (CardSet cardSet : cardSets) {
+	public DeckFormat withCardSets(Iterable<String> cardSets) {
+		for (String cardSet : cardSets) {
 			addSet(cardSet);
 		}
 		return this;
+	}
+
+	public static String latestHearthstoneExpansion() {
+		return "RISE_OF_SHADOWS";
 	}
 
 	@Override

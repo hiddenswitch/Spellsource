@@ -294,7 +294,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return The card set
 	 */
-	public CardSet getCardSet() {
+	public String getCardSet() {
 		return getDesc().getSet();
 	}
 

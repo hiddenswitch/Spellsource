@@ -252,7 +252,7 @@ public class TestBase {
 
 	@Suspendable
 	public static void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
-		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 		clearHand(context, player);

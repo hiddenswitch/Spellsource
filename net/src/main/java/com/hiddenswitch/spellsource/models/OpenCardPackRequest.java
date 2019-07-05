@@ -9,15 +9,15 @@ import java.io.Serializable;
  */
 public class OpenCardPackRequest implements Serializable {
 	private String userId;
-	private CardSet[] sets;
+	private String[] sets;
 	private int numberOfPacks;
 	private int cardsPerPack;
 
-	public CardSet[] getSets() {
+	public String[] getSets() {
 		return sets;
 	}
 
-	public void setSets(CardSet[] sets) {
+	public void setSets(String[] sets) {
 		this.sets = sets;
 	}
 
@@ -50,7 +50,7 @@ public class OpenCardPackRequest implements Serializable {
 		this.userId = userId;
 	}
 
-	public OpenCardPackRequest withSets(CardSet ...sets) {
+	public OpenCardPackRequest withSets(String ...sets) {
 		this.sets = sets;
 		return this;
 	}
