@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.36-2.0.31 (July 6th, 2019)
+### 0.8.36-2.0.32 (July 6th, 2019)
 
 Bug fixes and new Verdant Dreams cards.
 

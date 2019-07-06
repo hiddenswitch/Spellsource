@@ -4,8 +4,6 @@
 [![Discord](https://img.shields.io/badge/chat-join%20us%20on%20discord-blue.svg?longCache=true&style=flat&icon=discord)](https://discord.gg/HmbESh2)
 [![Documentation](https://img.shields.io/badge/docs-java-yellow.svg?longCache=true&style=flat)](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html)
 
-![In-Game Screenshot](https://thumbs.gfycat.com/EverlastingGiddyBluetickcoonhound-size_restricted.gif)
-
 This is a simulator and game server for community and official Hearthstone cards.
 
 **Play Now**: Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
@@ -16,14 +14,19 @@ Please see the Issues tab to report bugs or request functionality.
 
 ### Contents
 
- 1. [Description](#description)
- 2. [AI Research FAQ](#ai-research-faq)
- 3. [Quick Start Python](#quick-start-python)
- 4. [Quick Start Multiplayer](#quick-start-multiplayer)
- 5. [Quick Start Contributing Cards](#quick-start-contributing-cards)
- 8. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
- 9. [Troubleshooting](#troubleshooting)
- 10. [Contributing Cards](#contributing-cards)
+ 1. [Changelist](www/whatsnew.md)
+ 2. [Description](#description)
+ 3. [AI Research FAQ](#ai-research-faq)
+ 4. [Quick Start Python](#quick-start-python)
+ 5. [Quick Start Multiplayer](#quick-start-multiplayer)
+ 6. [Quick Start Contributing Cards](#quick-start-contributing-cards)
+ 7. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
+ 8. [Troubleshooting](#troubleshooting)
+ 9. [Contributing Cards](#contributing-cards)
+
+### Changelist
+
+Read [the latest changes here](www/whatsnew.md) or the deployed changes on the [website](https://playspellsource.com/whats-new).
 
 ### Description
 
