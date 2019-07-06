@@ -98,6 +98,12 @@ RUN mkdir /etc/service/java
 COPY server.sh /etc/service/java/run
 RUN chmod +x /etc/service/java/run
 
+RUN mkdir /etc/service/jaegeragent
+COPY agent.sh /etc/service/jaegeragent/run
+RUN chmod +x /etc/service/jaegeragent/run
+
+COPY --from=jaegertracing/jaeger-agent:1.13 /go/bin/agent-linux /go/bin/agent-linux
+
 # Define working directory.
 WORKDIR /data
 
