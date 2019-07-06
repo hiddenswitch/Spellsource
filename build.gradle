@@ -89,7 +89,7 @@ mavenPublish {
 allprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.current()
-    project.version = '0.8.35'
+    project.version = '0.8.36'
 }
 
 subprojects {
