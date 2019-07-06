@@ -10,9 +10,18 @@ Bug fixes.
 
 ##### Context Fixes:
 
+ - Thanks to contributions from @Grand, Monk has been updated. (1219)
+ - Thanks to another contribution from @Grand, more Verdant Dreams cards have been introduced! (1099)
  - When you have a Lifesteal weapon equipped and get dealt fatigue damage, your champion no longer restores health.
  - Teaching a card a return-to-hand spell and playing that card twice no longer causes a crash. Other cards with card creation effects no longer have unusual side effects related to returning minions to hand.
  - Corrupted Blood, Hallazeal the Ascended and Soup Vendor now correctly kill you without causing an infinite loop.
+ - Beetle Bash is no longer targeted and now properly gives 4 armor instead of 5. (1212)
+ - Thitazov now no longer buffs minions that have died. (1027)
+ - Shigaraki Elder now correctly labeled as a common card. (1211)
+ - Silverbone Claw now buffs a dragon in hand even if it is the only dragon in the player's hand. (1208)
+ - Living Mana no longer puts you into negative mana. (1026)
+ - Mollusk Meister now has the correct effects. (1115)
+
  
 ### 0.8.35-2.0.31 (July 1st, 2019)
 

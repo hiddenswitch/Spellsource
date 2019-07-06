@@ -861,6 +861,7 @@ public class JourneyToUngoroTests extends TestBase {
 
 	@Test
 	public void testLivingMana() {
+		// Check correct summon count
 		zip(Stream.of(5, 6, 7, 8, 9, 10), Stream.of(5, 6, 7, 7, 7, 7), (mana, maxMinionsSummoned) -> {
 			for (int i = 0; i <= 7; i++) {
 				int finalI = i;
@@ -868,19 +869,17 @@ public class JourneyToUngoroTests extends TestBase {
 					for (int j = 0; j < finalI; j++) {
 						playMinionCard(context, player, "minion_wisp");
 					}
-
 					player.setMaxMana(mana);
 					player.setMana(mana);
 					playCard(context, player, "spell_living_mana");
-					int minionsOnBoard = Math.min((int) maxMinionsSummoned + finalI, 7);
+					int minionsOnBoard = Math.min(maxMinionsSummoned + finalI, 7);
 					int minionsSummonedByLivingMana = Math.min(7, minionsOnBoard - finalI);
 					assertEquals(player.getMinions().size(), minionsOnBoard);
 					assertEquals(player.getMaxMana(), mana - minionsSummonedByLivingMana,
 							String.format("Prior max mana: %d, prior minions on  board: %d", mana, finalI));
 				}));
+
 			}
-
-
 			return null;
 		}).collect(toList());
 	}
