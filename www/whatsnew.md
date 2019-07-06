@@ -10,6 +10,8 @@ Bug fixes and new Verdant Dreams cards.
 
 ##### Content Additions:
 
+- Thanks to another contribution from @Grand, more Verdant Dreams cards have been introduced! (1099)
+
 ##### Context Fixes:
 
  - Thanks to contributions from @Grand, Monk has been updated. (1219)
