@@ -1,0 +1,26 @@
+{
+  "name": "Reduce Card Cost by 1",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Reduce the cost of all spells in your hand by 1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_HAND",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "target": "SELF",
+      "value": 1,
+      "operation": "SUBTRACT"
+    },
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
