@@ -112,7 +112,7 @@ public class MonkTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_lake_elemental");
 			Card elemental = receiveCard(context, player, "minion_crystal_giant");
-			Card wisp = receiveCard(context, player, "minion_wisp");
+			receiveCard(context, player, "minion_wisp");
 			playMinionCard(context, player, "minion_river_spirit");
 			assertEquals(player.getMinions().size(), 3);
 			assertEquals(player.getMinions().get(2).getSourceCard(), elemental);
