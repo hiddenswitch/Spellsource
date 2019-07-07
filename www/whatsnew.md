@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.37-2.0.32 (In Progress)
+
+Bug fixes.
+
+##### Contet Fixes:
+
+ - Roll and Immortal Prelate no longer crash shuffling minions that have gained Auras into the hand or deck. (1124)
+
 ### 0.8.36-2.0.32 (July 6th, 2019)
 
 Bug fixes and new Verdant Dreams cards.
