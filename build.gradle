@@ -104,7 +104,9 @@ subprojects {
     }
     
     java {
-        disableAutoTargetJvm()
+        if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+            disableAutoTargetJvm()
+        }
     }
 
     compileJava.dependsOn processResources
