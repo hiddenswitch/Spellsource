@@ -44,6 +44,7 @@ jar {
 
 shadowJar {
     mergeServiceFiles()
+    archiveClassifier.set(null)
     configurations = [project.configurations.compile]
     zip64 true
 }
