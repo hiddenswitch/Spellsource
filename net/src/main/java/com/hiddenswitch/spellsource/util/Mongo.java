@@ -3,7 +3,6 @@ package com.hiddenswitch.spellsource.util;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.util.MongoRecord;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
@@ -46,7 +45,7 @@ public class Mongo {
 	public synchronized Mongo startEmbedded() {
 		if (localMongoServer == null) {
 			logger.info("startEmbedded: Starting Mongod embedded.");
-			localMongoServer = new LocalMongo();
+			localMongoServer = LocalMongo.create();
 			try {
 				localMongoServer.start();
 			} catch (Throwable e) {
