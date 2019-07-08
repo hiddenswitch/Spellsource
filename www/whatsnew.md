@@ -16,6 +16,8 @@ Bug fixes.
 
 Bug fixes and new Verdant Dreams cards.
 
+For Python users, the build is compatible with Java 8.
+
 ##### Content Additions:
 
 - Thanks to another contribution from @Grand, more Verdant Dreams cards have been introduced! (1099)

@@ -29,10 +29,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 configurations.all {
     resolutionStrategy {
         force 'com.hazelcast:hazelcast:3.11'
-        force 'org.apache.commons:commons-lang3:3.5'
-        force 'com.fasterxml.jackson.core:jackson-core:2.9.8'
-        force 'com.fasterxml.jackson.core:annotations:2.9.0'
-        force 'com.fasterxml.jackson.core:databind:2.9.8'
     }
 }
 
@@ -90,14 +86,7 @@ dependencies {
     compile group: 'su.nlq', name: 'vertx-prometheus-metrics', version: '3.6.0'
     compile group: 'javax.cache', name: 'cache-api', version: '1.1.1'
     compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
-    compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
     compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
-
-    /* Hazelcast Consul discovery support is pretty spotty
-    compile group: 'org.bitsofinfo', name: 'hazelcast-consul-discovery-spi', version: '1.0-RC9'
-    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: '3.0.3'
-    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http-hc', version: '3.0.3'
-    */
 
     compile project(':game')
     compile project(':cards')
@@ -110,7 +99,6 @@ dependencies {
     testCompile 'io.vertx:vertx-core:3.6.0:tests'
     testCompile 'org.powermock:powermock-module-junit4:2.0.2'
     testCompile 'org.powermock:powermock-api-mockito2:2.0.2'
-    testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
     testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'

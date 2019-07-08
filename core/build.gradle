@@ -4,8 +4,6 @@ plugins {
 
 group 'com.hiddenswitch'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
