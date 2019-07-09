@@ -7,9 +7,11 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.custom.AddEnchantmentToMinionCardSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
@@ -45,7 +47,8 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 				.collect(toList());
 
 		Card sourceCard = target.getSourceCard();
-		List<EnchantmentDesc> copies = enchantments.stream()
+		List<EnchantmentDesc> enchantmentDescCopies = enchantments.stream()
+				.filter(e -> !(e instanceof Aura))
 				.filter(e -> e.getSourceCard().getId() != sourceCard.getId())
 				.map(enchantment -> {
 					EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
@@ -58,6 +61,12 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 					enchantmentDesc.persistentOwner = enchantment.hasPersistentOwner();
 					return enchantmentDesc;
 				})
+				.collect(toList());
+
+		List<Aura> auras = enchantments.stream()
+				.filter(e -> e instanceof Aura)
+				.filter(e -> e.getSourceCard().getId() != sourceCard.getId())
+				.map(Aura.class::cast)
 				.collect(toList());
 
 		// Get the deathrattles.
@@ -76,8 +85,12 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 		});
 
 
-		for (EnchantmentDesc enchantmentDesc : copies) {
+		for (EnchantmentDesc enchantmentDesc : enchantmentDescCopies) {
 			SpellUtils.castChildSpell(context, player, AddEnchantmentToMinionCardSpell.create(card, enchantmentDesc), source, card);
+		}
+
+		for (Aura aura : auras) {
+			SpellUtils.castChildSpell(context, player, AddEnchantmentToMinionCardSpell.create(card, aura), source, card);
 		}
 
 		// Also add the deathrattles

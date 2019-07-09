@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.decks.Deck;

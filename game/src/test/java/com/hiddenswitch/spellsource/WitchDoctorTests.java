@@ -233,7 +233,7 @@ public class WitchDoctorTests extends TestBase {
 			Card v3 = receiveCard(context, player, "spell_hex_bolt");
 			Card v4 = receiveCard(context, player, "spell_spirit_bind");
 			Card v5 = receiveCard(context, player, "spell_spirit_bind");
-			Card nonv = receiveCard(context, player, "spell_fireball");
+			Card nonv = receiveCard(context, player, "spell_test_deal_6");
 			playMinionCard(context, player, "minion_secretive_chanter");
 			// Check whether all Voodoo spells have been transformed
 			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
@@ -241,7 +241,7 @@ public class WitchDoctorTests extends TestBase {
 			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
 			assertTrue(player.getHand().get(3).getCardId().contains("secret_secret_of"));
 			assertTrue(player.getHand().get(4).getCardId().contains("secret_secret_of"));
-			assertEquals(player.getHand().get(5).getCardId(), "spell_fireball");
+			assertEquals(player.getHand().get(5).getCardId(), "spell_test_deal_6");
 		});
 	}
 
@@ -263,8 +263,8 @@ public class WitchDoctorTests extends TestBase {
 			Minion enemy3 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
 			context.endTurn();
 			// Check for toxic spells
-			playCard(context, player, "spell_fireball", enemy1);
-			playCard(context, player, "spell_fireball", enemy2);
+			playCard(context, player, "spell_test_deal_6", enemy1);
+			playCard(context, player, "spell_test_deal_6", enemy2);
 			assertTrue(enemy1.isDestroyed());
 			assertTrue(enemy2.isDestroyed());
 			assertEquals(opponent.getMinions().size(), 1);

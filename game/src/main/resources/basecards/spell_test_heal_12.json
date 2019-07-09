@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "",
+  "targetSelection": "FRIENDLY_CHARACTERS",
+  "spell": {
+    "class": "HealSpell",
+    "value": 12
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

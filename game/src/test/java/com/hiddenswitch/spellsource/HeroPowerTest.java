@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.heroes.Hero;

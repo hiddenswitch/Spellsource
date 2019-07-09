@@ -15,7 +15,7 @@ import net.demilich.metastone.game.targeting.Zones;
  * Currently, this effect might be incorrectly interpreted as shuffling to the deck with enchantments. While there are
  * no effects currently doing this, some may in the future.
  */
-public final class ReturnToHandWithEnchantments extends ShuffleToDeckWithEnchantmentsSpell {
+public final class ReturnToHandWithEnchantmentsSpell extends ShuffleToDeckWithEnchantmentsSpell {
 
 	@Override
 	@Suspendable

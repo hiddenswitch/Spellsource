@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -82,22 +82,22 @@ public class AdvancedMechanicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			// Should give us exactly two card cost modifiers
-			Minion radiant = playMinionCard(context, player, "minion_radiant_elemental");
-			Minion princeTaldaramTransformed = playMinionCardWithBattlecry(context, player, "minion_prince_taldaram", radiant);
-			assertEquals(princeTaldaramTransformed.getSourceCard().getCardId(), "minion_radiant_elemental");
-			Card costThreeSpell = receiveCard(context, player, "spell_blood_warriors");
+			Minion radiant = playMinionCard(context, player, "minion_test_spells_cost_1_less");
+			Minion transformedCopy = playMinionCardWithBattlecry(context, player, "minion_test_copy", radiant);
+			assertEquals(transformedCopy.getSourceCard().getCardId(), "minion_test_spells_cost_1_less");
+			Card costThreeSpell = receiveCard(context, player, "spell_test_cost_3_spell");
 			assertEquals(costOf(context, player, costThreeSpell), costThreeSpell.getBaseManaCost() - 2);
 		});
 
 		runGym((context, player, opponent) -> {
 			// Should correctly copy enchantments granted after the fact
 			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
-			playCard(context, player, "spell_blessing_of_wisdom", blessed);
+			playCard(context, player, "spell_test_enchant_persistent_owner", blessed);
 			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
 			context.endTurn();
 			context.endTurn();
 			for (int i = 0; i < 10; i++) {
-				shuffleToDeck(context, player, "spell_the_coin");
+				shuffleToDeck(context, player, "spell_lunstone");
 			}
 			attack(context, player, blessed, opponent.getHero());
 			assertEquals(player.getHand().size(), 1);
@@ -109,13 +109,13 @@ public class AdvancedMechanicTests extends TestBase {
 			// Copies with persistent owner should work
 			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
 			context.endTurn();
-			playCard(context, opponent, "spell_blessing_of_wisdom", blessed);
+			playCard(context, opponent, "spell_test_enchant_persistent_owner", blessed);
 			context.endTurn();
 			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
 			context.endTurn();
 			context.endTurn();
 			for (int i = 0; i < 10; i++) {
-				shuffleToDeck(context, opponent, "spell_the_coin");
+				shuffleToDeck(context, opponent, "spell_lunstone");
 			}
 			attack(context, player, blessed, opponent.getHero());
 			assertEquals(opponent.getHand().size(), 1);
@@ -156,12 +156,35 @@ public class AdvancedMechanicTests extends TestBase {
 	@Test
 	public void testSecrets() {
 		runGym((context, player, opponent) -> {
+			// Player has secret in list
+			playCard(context, player, "secret_test_counterspell");
+			assertEquals(player.getSecrets().size(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Opponent triggers secret
+			playCard(context, player, "secret_test_counterspell");
+			context.endTurn();
+			Card lunstone = receiveCard(context, player, "spell_lunstone");
+			playCard(context, opponent, lunstone);
+			assertEquals(opponent.getMana(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Player does not trigger off own secret
+			playCard(context, player, "secret_test_counterspell");
+			player.setMana(1);
+			playCard(context, player, "spell_lunstone");
+			assertEquals(player.getMana(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
 			// Player cannot play multiples of the same secrets
-			playCard(context, player, "secret_counterspell");
-			Card counterspell = receiveCard(context, player, "secret_counterspell");
+			playCard(context, player, "secret_test_counterspell");
+			Card testCounterSpell = receiveCard(context, player, "secret_test_counterspell");
 			player.setMana(3);
 			assertFalse(context.getValidActions().stream().anyMatch(p -> p.getActionType() == ActionType.SPELL
-					&& p.getSourceReference().equals(counterspell.getReference())));
+					&& p.getSourceReference().equals(testCounterSpell.getReference())));
 		});
 	}
 
@@ -171,7 +194,7 @@ public class AdvancedMechanicTests extends TestBase {
 			int hp = player.getHero().getHp();
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
-			playCard(context, player, "spell_fireball", deflect);
+			playCard(context, player, "spell_test_deal_6", deflect);
 			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
 			assertFalse(deflect.isDestroyed());
 			assertEquals(player.getHero().getHp(), hp - 6);
@@ -465,7 +488,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(attacker.getAttack(), BASE_ATTACK + ENRAGE_ATTACK_BONUS);
 
 			// heal - enrage attack bonus should be gone
-			playCard(context, player, "spell_greater_healing_potion", attacker);
+			playCard(context, player, "spell_test_heal_12", attacker);
 			assertEquals(attacker.getAttack(), BASE_ATTACK);
 			assertFalse(attacker.hasAttribute(Attribute.ENRAGED));
 
@@ -475,7 +498,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 
 			// attack should be set to 1
-			playCard(context, player, "spell_humility", attacker);
+			playCard(context, player, "spell_test_set_1_attack", attacker);
 			assertEquals(attacker.getAttack(), 1);
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 		});
