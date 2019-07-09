@@ -49,6 +49,8 @@ public class Trace implements Serializable, Cloneable {
 	private String[] deckFormatSets;
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
+	@JsonIgnore
+	private transient List<GameAction> rawActions = new ArrayList<>();
 	private transient List<String> log = new ArrayList<>();
 	private String id;
 
@@ -91,6 +93,7 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void addAction(int actionId, GameAction action, GameContext context) {
 		actions.add(actionId);
+		rawActions.add(action);
 		if (context == null) {
 			log.add(action.toString());
 		} else {
@@ -267,5 +270,10 @@ public class Trace implements Serializable, Cloneable {
 		return new ToStringBuilder(this)
 				.append("id", getId())
 				.toString();
+	}
+
+	@JsonIgnore
+	public List<GameAction> getRawActions() {
+		return rawActions;
 	}
 }
