@@ -87,8 +87,47 @@ mavenPublish {
 
 
 allprojects {
-    sourceCompatibility = 1.8
-    project.version = '0.8.35'
+    java {
+        // We are always source-compatible with Java 1.8 (no advanced language features)
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        // But we target the JVM that is currently used to compile this code. Many Windows users can only practically
+        // install Java 8 because that's what there are installers for, so we have a parallel support for it. To build
+        // for Java 8, the JAVA_HOME must point to a Java 8 JDK and gradle should be started with 
+        targetCompatibility = JavaVersion.current()
+    }
+
+    // Standardize versions of all the dependent modules in our projects
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
+                    details.useVersion "3.5"
+                }
+
+                if (details.requested.group == 'commons-lang') {
+                    details.useVersion "2.5"
+                }
+
+                if (details.requested.group == 'commons-collections') {
+                    details.useVersion "3.2.2"
+                }
+
+                if (details.requested.group == 'commons-io') {
+                    details.useVersion "2.5"
+                }
+                
+                if (details.requested.group == 'commons-logging') {
+                    details.useVersion "1.2"
+                }
+
+                if (details.requested.group == 'ch.qos.logback') {
+                    details.useVersion "1.1.7"
+                }
+            }
+        }
+    }
+
+    project.version = '0.8.36'
 }
 
 subprojects {

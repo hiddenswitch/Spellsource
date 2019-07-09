@@ -54,7 +54,7 @@ public class Encode {
 		ListMultimap<String, JsonObject> records = LinkedListMultimap.create();
 
 		for (Card card : CardCatalogue.getAll()) {
-			if (!DeckFormat.CUSTOM.isInFormat(card.getCardSet())) {
+			if (!DeckFormat.getFormat("Custom").isInFormat(card.getCardSet())) {
 				continue;
 			}
 

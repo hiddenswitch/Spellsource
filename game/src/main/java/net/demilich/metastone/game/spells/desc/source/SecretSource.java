@@ -19,13 +19,13 @@ public class SecretSource extends CardSource implements HasCardCreationSideEffec
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		HeroClass defaultHeroClass = (HeroClass) getDesc().getOrDefault(CardSourceArg.HERO_CLASS, HeroClass.GOLD);
+		String defaultHeroClass = (String) getDesc().getOrDefault(CardSourceArg.HERO_CLASS, "GOLD");
 		// If the player doesn't ordinarily have secrets, return GOLD or otherwise specified secrets
 		CardList secretCards = CardCatalogue.query(context.getDeckFormat())
-				.filtered(c -> c.getHeroClass() == player.getHero().getHeroClass() && c.isSecret() && c.isCollectible());
+				.filtered(c -> c.getHeroClass().equals(player.getHero().getHeroClass()) && c.isSecret() && c.isCollectible());
 		if (secretCards.isEmpty()) {
 			secretCards = CardCatalogue.query(context.getDeckFormat())
-					.filtered(c -> c.getHeroClass() == defaultHeroClass && c.isSecret() && c.isCollectible());
+					.filtered(c -> c.getHeroClass().equals(defaultHeroClass) && c.isSecret() && c.isCollectible());
 		}
 		return secretCards;
 	}

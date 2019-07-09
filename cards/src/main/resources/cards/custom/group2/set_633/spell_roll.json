@@ -14,7 +14,7 @@
         "attribute": "KEEPS_ENCHANTMENTS"
       },
       {
-        "class": "ReturnToHandWithEnchantments"
+        "class": "ReturnToHandWithEnchantmentsSpell"
       }
     ]
   },

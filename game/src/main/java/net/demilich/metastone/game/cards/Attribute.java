@@ -525,7 +525,8 @@ public enum Attribute {
 	 */
 	GAME_TRIGGERS,
 	/**
-	 * This attribute keeps track of how many times the hero power was used this turn.
+	 * This attribute indicates the maximum number of times a hero power can be used in a turn. It is an aura effect. The
+	 * number of times a hero power can be used will be the max value found among in-play entities owned by the player.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
 	 * 		a hero power card, can be played.

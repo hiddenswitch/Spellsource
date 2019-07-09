@@ -48,13 +48,13 @@ public interface Inventory {
 	static OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws InterruptedException, SuspendExecution {
 		QueryCardsRequest commons = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
-				.withSets(CardSet.SPELLSOURCE)
+				.withSets("SPELLSOURCE")
 				.withRarity(Rarity.COMMON)
 				.withRandomCount((request.getCardsPerPack() - 1) * request.getNumberOfPacks());
 
 		QueryCardsRequest allianceRares = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
-				.withSets(CardSet.SPELLSOURCE)
+				.withSets("SPELLSOURCE")
 				.withRarity(Rarity.ALLIANCE)
 				.withRandomCount(request.getNumberOfPacks());
 

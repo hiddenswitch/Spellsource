@@ -31,7 +31,7 @@ public class ScenarioTests extends TestBase {
 	@Ignore
 	void testCurvestone() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 			playCard(context, player, "spell_discover_minion_on_curve");
 			Assert.assertEquals(player.getHand().get(0).getBaseManaCost(), 1);
 			Assert.assertEquals(player.getHand().get(0).getCardType(), CardType.MINION);
@@ -48,7 +48,7 @@ public class ScenarioTests extends TestBase {
 		for (int i = 1; i < 11; i++) {
 			int finalI = i;
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+				context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 				for (int x = 0; x < finalI - 1; x++) {
 					context.endTurn();
 					context.endTurn();
