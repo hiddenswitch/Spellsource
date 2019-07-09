@@ -5,7 +5,16 @@ import subprocess
 import sys
 
 if sys.version_info < (3, 6):
-    sys.exit('Spellsource requires Python 3.6')
+    sys.exit('Spellsource requires Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
+
+try:
+    java_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode('utf-8')
+    if java_version == '':
+        java_version = subprocess.check_output(["java", "-version"]).decode('utf-8')
+    if '11' not in java_version and '12' not in java_version and '13' not in java_version:
+        raise ValueError
+except:
+    sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
 
 SRC_PATH = './'
 with open('README.md', 'r') as readme_file:
@@ -47,8 +56,17 @@ setup(name='spellsource',
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='GPLv3',
-      install_requires=['py4j==0.10.8.1', 'tqdm', 'objdict', 'msgpack', 'click', 'autoboto', 'scrapy', 'boto3', 'hearthstone',
-                        'pymongo', 'mistletoe'],
+      install_requires=['py4j==0.10.8.1',
+                        'tqdm>=4',
+                        'objdict',
+                        'msgpack',
+                        'Click==7.0',
+                        'autoboto==0.4.3',
+                        'scrapy',
+                        'boto3',
+                        'hearthstone',
+                        'pymongo',
+                        'mistletoe'],
       extras_require={
           'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk']
       },

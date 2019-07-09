@@ -8,7 +8,7 @@ permalink: /whats-new/
 
 Bug fixes.
 
-##### Contet Fixes:
+##### Content Fixes:
 
  - Roll and Immortal Prelate no longer crash shuffling minions that have gained Auras into the hand or deck. (1124)
 
@@ -16,7 +16,7 @@ Bug fixes.
 
 Bug fixes and new Verdant Dreams cards.
 
-For Python users, the build is compatible with Java 8.
+For Python users, the build is now compatible with Java 11.
 
 ##### Content Additions:
 
