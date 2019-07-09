@@ -41,6 +41,8 @@ For Python users, the build is now compatible with Java 11.
 
 Fixing issues with cards not being found or detected after their IDs were changed.
 
+Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.
