@@ -82,7 +82,7 @@ public class MonkTests extends TestBase {
 		});
 		runGym((context, player, opponent) -> {
 			Card inHand = receiveCard(context, player, "spell_pay_respects");
-			shuffleToDeck(context, player, "spell_fireball");
+			shuffleToDeck(context, player, "spell_test_deal_6");
 			playMinionCard(context, player, "minion_jhu_zho");
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0), inHand);
@@ -96,12 +96,12 @@ public class MonkTests extends TestBase {
 			Minion lake = playMinionCard(context, player, "minion_lake_elemental");
 			context.endTurn();
 			player.getHero().setHp(10);
-			playCard(context, opponent, "spell_fireball", lake);
+			playCard(context, opponent, "spell_test_deal_6", lake);
 			assertEquals(lake.getHp(), lake.getBaseHp());
 			assertEquals(player.getHero().getHp(), 4);
 			context.endTurn();
 			context.endTurn();
-			playCard(context, opponent, "spell_fireball", lake);
+			playCard(context, opponent, "spell_test_deal_6", lake);
 			assertTrue(lake.isDestroyed());
 		}));
 	}
@@ -138,7 +138,7 @@ public class MonkTests extends TestBase {
 			Minion sprite = playMinionCard(context, player, "minion_shy_sprite");
 			context.endTurn();
 			player.getHero().setHp(10);
-			playCard(context, opponent, "spell_fireball", sprite);
+			playCard(context, opponent, "spell_test_deal_6", sprite);
 			assertFalse(sprite.isDestroyed());
 			assertEquals(player.getHero().getHp(), 4);
 			context.endTurn();

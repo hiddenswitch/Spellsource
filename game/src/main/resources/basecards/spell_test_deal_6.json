@@ -2,7 +2,7 @@
   "name": "Deal 6",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "BLUE",
+  "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Deal $6 damage.",
   "targetSelection": "ANY",

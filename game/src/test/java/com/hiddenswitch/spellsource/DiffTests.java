@@ -1,4 +1,4 @@
-package net.demilich.metastone.tests;
+package com.hiddenswitch.spellsource;
 
 import com.hiddenswitch.spellsource.util.DiffContext;
 import com.hiddenswitch.spellsource.util.DiffSequence;
