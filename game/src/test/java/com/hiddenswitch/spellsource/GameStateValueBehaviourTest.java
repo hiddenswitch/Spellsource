@@ -333,7 +333,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testDestroyAt2HP() {
 		runGym((context, player, opponent) -> {
-			Card fireball = receiveCard(context, player, "spell_fireball");
+			Card fireball = receiveCard(context, player, "spell_test_deal_6");
 			player.setMana(4);
 			player.setMaxMana(4);
 			opponent.getHero().setHp(2);
@@ -381,7 +381,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			opponent.setMana(4);
 			opponent.setMaxMana(4);
 			Card cursed = receiveCard(context, opponent, "spell_cursed");
-			receiveCard(context, opponent, "spell_fireball");
+			receiveCard(context, opponent, "spell_test_deal_6");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			context.performAction(opponent.getId(), action);
@@ -420,7 +420,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Minion doomsayer = playMinionCard(context, player, "minion_doomsayer");
 			context.endTurn();
 			playMinionCard(context, opponent, "minion_kobold_geomancer");
-			receiveCard(context, opponent, "spell_fireball");
+			receiveCard(context, opponent, "spell_test_deal_6");
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
