@@ -12,7 +12,8 @@
       "class": "AfterSpellCastedTrigger"
     },
     "spell": {
-      "class": "MissilesSpell"
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS"
     }
   },
   "passiveTriggers": [

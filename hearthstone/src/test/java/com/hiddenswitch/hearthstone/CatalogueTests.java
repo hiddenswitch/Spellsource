@@ -1,6 +1,5 @@
 package com.hiddenswitch.hearthstone;
 
-import com.hiddenswitch.spellsource.client.models.CardRecord;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.*;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class CatalogueTests {
 		URL url = new URL(currentCards);
 		URLConnection connection = url.openConnection();
 		connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15");
-		String cards = IOUtils.toString(connection.getInputStream());
+		String cards = IOUtils.toString(connection.getInputStream(), Charset.defaultCharset());
 
 
 		JsonArray json = new JsonArray(cards);
@@ -77,7 +77,7 @@ public class CatalogueTests {
 		Card card = null;
 		try {
 			for (CardCatalogueRecord record : CardCatalogue.getRecords().values()) {
-				if (record.getDesc().getSet().isHearthstoneSet()
+				if (CardSet.isHearthstoneSet(record.getDesc().getSet())
 						&& record.getDesc().isCollectible()
 						&& record.getDesc().getName().equals(cardObject.getString("name").replace("Ã±", "\\u00f1"))) {
 					card = record.getDesc().create();

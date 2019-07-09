@@ -50,8 +50,7 @@ public interface Cards {
 			response = new QueryCardsResponse()
 					.withRecords(request.getCardIds().stream().map(CardCatalogue.getRecords()::get).collect(toList()));
 		} else {
-			final Set<String> sets = Collections.emptySet();
-			sets.addAll(Arrays.asList(request.getSets()));
+			final Set<String> sets = new HashSet<>(Arrays.asList(request.getSets()));
 
 			List<CardCatalogueRecord> results = CardCatalogue.getRecords().values().stream().filter(r -> {
 				boolean passes = true;
@@ -62,7 +61,7 @@ public interface Cards {
 				passes &= sets.contains(desc.getSet());
 
 				if (request.getRarity() != null) {
-					passes &= desc.getRarity().isRarity(request.getRarity());
+					passes &= desc.getRarity() != null && desc.getRarity().isRarity(request.getRarity());
 				}
 
 				return passes;

@@ -19,7 +19,6 @@ public class CardsTest extends SpellsourceTestBase {
 	public void testQuery(TestContext context) {
 		sync(() -> {
 			// Query for a bunch of different things and compare the values
-
 			List<CardCatalogueRecord> commons = Cards.query(new QueryCardsRequest()
 					.withSets("BASIC", "CLASSIC")
 					.withRarity(Rarity.COMMON)).getRecords();

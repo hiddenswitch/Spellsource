@@ -486,8 +486,10 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
-			shuffleToDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context,opponent,"spell_lunstone");
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			opponent.getDeck().get(1).getAttributes().put(Attribute.STARTED_IN_DECK, false);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
 					choices.stream()
 							.filter(da -> da.getCard().getCardId().equals(rightCardId))
@@ -503,8 +505,10 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
-			shuffleToDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context,opponent,"spell_lunstone");
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			opponent.getDeck().get(1).getAttributes().put(Attribute.STARTED_IN_DECK, false);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
 					choices.stream()
 							.filter(da -> !da.getCard().getCardId().equals(rightCardId))

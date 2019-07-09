@@ -129,7 +129,12 @@ public abstract class SpellsourceTestBase {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
 			vertx.runOnContext(suspendableHandler(v2 -> {
-				action.run();
+				try {
+					action.run();
+				} catch (Throwable throwable) {
+					fail();
+				}
+
 				latch.countDown();
 			}));
 		});

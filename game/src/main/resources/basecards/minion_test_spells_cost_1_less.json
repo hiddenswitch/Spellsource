@@ -4,6 +4,7 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
+  "rarity": "FREE",
   "baseHp": 1,
   "description": "Your spells cost (1) less.",
   "cardCostModifier": {

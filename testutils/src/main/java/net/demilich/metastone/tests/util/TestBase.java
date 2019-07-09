@@ -305,7 +305,7 @@ public class TestBase {
 		clearZone(context, opponent.getDeck());
 		clearZone(context, player.getGraveyard());
 		clearZone(context, opponent.getGraveyard());
-		context.setDeckFormat(DeckFormat.getFormat("Custom"));
+		context.setDeckFormat(DeckFormat.getFormat("Custom").addSet("TEST"));
 
 		consumer.run(context, player, opponent);
 	}

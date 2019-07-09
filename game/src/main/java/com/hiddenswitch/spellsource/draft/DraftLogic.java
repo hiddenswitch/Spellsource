@@ -55,14 +55,7 @@ public class DraftLogic {
 	}
 
 	private List<String> createHeroChoices() {
-		List<String> classes = HeroClass.getBaseClasses(DeckFormat.getFormat("All"));
-
-		// For now, simply return all the classes
-		return classes;
-		/*
-		Collections.shuffle(classes, getRandom());
-		return Arrays.asList(classes.get(0), classes.get(1), classes.get(2));
-		*/
+		return HeroClass.getBaseClasses(DeckFormat.spellsource());
 	}
 
 	private List<List<String>> createDraftCards(String hero) {
