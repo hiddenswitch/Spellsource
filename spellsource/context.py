@@ -75,7 +75,9 @@ class Context(contextlib.AbstractContextManager):
                               ('targeting', 'net.demilich.metastone.game.targeting.*'),
                               ('utils', 'net.demilich.metastone.game.utils.*'),
                               ('behaviour', 'net.demilich.metastone.game.behaviour.*'),
-                              ('spellsource', 'com.hiddenswitch.spellsource.*')):
+                              ('spellsource', 'com.hiddenswitch.spellsource.*'),
+                              ('applications', 'com.hiddenswitch.spellsource.applications.*'),
+                              ('util', 'java.util.*')):
             view = self._gateway.new_jvm_view(name)
             java_import(view, package)
             setattr(self, name, view)
@@ -102,8 +104,8 @@ class Context(contextlib.AbstractContextManager):
         self.Zones = self.targeting.Zones
         self.HeroClass = self.entities.heroes.HeroClass
         self.CardCatalogue = self.cards.CardCatalogue
-        self.PythonBridge = self._gateway.jvm.com.hiddenswitch.spellsource.applications.PythonBridge
-        self.ArrayList = self._gateway.jvm.java.util.ArrayList
+        self.PythonBridge = self.applications.PythonBridge
+        self.ArrayList = self.util.ArrayList
         self.Spellsource = self.spellsource.Spellsource
 
         self.CardCatalogue.loadCardsFromPackage()

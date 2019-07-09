@@ -162,6 +162,18 @@ public class CardCatalogue {
 		return query(deckFormat, cardType, rarity, heroClass, tag, null);
 	}
 
+	/**
+	 * Queries the card catalogue for cards that match the specified filters.
+	 *
+	 * @param deckFormat
+	 * @param cardType
+	 * @param rarity
+	 * @param heroClass
+	 * @param tag
+	 * @param actualHeroClass
+	 * @return
+	 */
+	@NotNull
 	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, String actualHeroClass) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {

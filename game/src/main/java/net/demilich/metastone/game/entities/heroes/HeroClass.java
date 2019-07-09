@@ -14,8 +14,6 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.
- * <p>
- * In ord
  */
 public class HeroClass {
 
@@ -23,63 +21,15 @@ public class HeroClass {
 	public static final String SELF = "SELF";
 	public static final String OPPONENT = "OPPONENT";
 	public static final String ANY = "ANY";
-
-	/*
-	 case "BROWN":
-	 return CardCatalogue.getCardById("hero_malfurion");
-	 case "GREEN":
-	 return CardCatalogue.getCardById("hero_rexxar");
-	 case "BLUE":
-	 return CardCatalogue.getCardById("hero_jaina");
-	 case "GOLD":
-	 return CardCatalogue.getCardById("hero_uther");
-	 case "WHITE":
-	 return CardCatalogue.getCardById("hero_anduin");
-	 case "BLACK":
-	 return CardCatalogue.getCardById("hero_valeera");
-	 case "SILVER":
-	 return CardCatalogue.getCardById("hero_thrall");
-	 case "VIOLET":
-	 return CardCatalogue.getCardById("hero_guldan");
-	 case "RED":
-	 return CardCatalogue.getCardById("hero_garrosh");
-	 case "JADE":
-	 return CardCatalogue.getCardById("hero_mienzhou");
-	 case "ROSE":
-	 return CardCatalogue.getCardById("hero_senzaku");
-	 case "NAVY":
-	 return CardCatalogue.getCardById("hero_baron_aldus");
-	 case "LEATHER":
-	 return CardCatalogue.getCardById("hero_quarnassio");
-	 case "EGGPLANT":
-	 return CardCatalogue.getCardById("hero_mephilia");
-	 case "ICE":
-	 return CardCatalogue.getCardById("hero_darion");
-	 case "RUST":
-	 return CardCatalogue.getCardById("hero_alder_ravenwald");
-	 case "OBSIDIAN":
-	 return CardCatalogue.getCardById("hero_nerzhul");
-	 case "AMBER":
-	 return CardCatalogue.getCardById("hero_zara");
-	 case "TOAST":
-	 return CardCatalogue.getCardById("hero_warchef_gordo");
-	 case "BRASS":
-	 return CardCatalogue.getCardById("hero_brass");
-	 case "ICECREAM":
-	 return CardCatalogue.getCardById("hero_kel_thuzad");
-	 case "BLOOD":
-	 return CardCatalogue.getCardById("hero_koltira");
-	 case "NEONGREEN":
-	 return CardCatalogue.getCardById("hero_oth");
-	 case "DARKGREEN":
-	 return CardCatalogue.getCardById("hero_jikr");
-	 case "TEAL":
-	 return CardCatalogue.getCardById("hero_lady_vashj_sea_witch");
-	 case "PURPLE":
-	 return CardCatalogue.getCardById("hero_illidan");
-	 case "TIME":
-	 return CardCatalogue.getCardById("hero_atropos");
-	 */
+	public static final String BROWN = "BROWN";
+	public static final String GREEN = "GREEN";
+	public static final String BLUE = "BLUE";
+	public static final String GOLD = "GOLD";
+	public static final String WHITE = "WHITE";
+	public static final String BLACK = "BLACK";
+	public static final String SILVER = "SILVER";
+	public static final String VIOLET = "VIOLET";
+	public static final String RED = "RED";
 
 
 	/**
@@ -98,20 +48,36 @@ public class HeroClass {
 	}
 
 
+	/**
+	 * Gets all the classes (a list of strings) in the card catalogue.
+	 *
+	 * @param deckFormat
+	 * @return
+	 */
 	@NotNull
 	public static List<String> getBaseClasses(DeckFormat deckFormat) {
 		return getClassCards(deckFormat).filtered(Card::isCollectible).stream().map(Card::getHeroClass).collect(Collectors.toList());
 	}
 
+	/**
+	 * Gets a list of cards that define a class (a champion, a color and additional description or key information).
+	 *
+	 * @param deckFormat
+	 * @return
+	 */
+	@NotNull
 	public static CardList getClassCards(DeckFormat deckFormat) {
 		return CardCatalogue.query(deckFormat, CardType.CLASS);
 	}
 
-
+	/**
+	 * Retrieves a random hero in the specified {@code deckFormat}
+	 *
+	 * @param deckFormat
+	 * @return
+	 */
 	public static String random(DeckFormat deckFormat) {
 		List<String> baseHeroes = getBaseClasses(deckFormat);
 		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 	}
-
-
 }
