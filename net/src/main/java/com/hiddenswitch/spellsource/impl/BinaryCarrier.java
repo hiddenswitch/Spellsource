@@ -18,6 +18,7 @@ public class BinaryCarrier implements Binary {
 
 	/**
 	 * Creates the binary carrier for extraction
+	 *
 	 * @param existingBytes
 	 */
 	public BinaryCarrier(byte[] existingBytes) {
@@ -36,6 +37,9 @@ public class BinaryCarrier implements Binary {
 	}
 
 	public byte[] getBytes() {
+		if (buffer == null) {
+			return new byte[0];
+		}
 		return buffer.array();
 	}
 }

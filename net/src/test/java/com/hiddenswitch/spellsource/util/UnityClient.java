@@ -23,6 +23,7 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
+import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.propagation.Format;
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
@@ -44,7 +45,7 @@ public class UnityClient implements AutoCloseable {
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
 	public static String BASE_PATH = BASE + Integer.toString(Port.port());
-	private final Tracer tracer = Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0);
+	private final Tracer tracer = NoopTracerFactory.create(); /*Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0)*/
 	private int id;
 	private ApiClient apiClient;
 	private DefaultApi api;
