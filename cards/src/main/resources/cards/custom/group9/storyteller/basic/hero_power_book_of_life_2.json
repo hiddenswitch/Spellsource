@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "OLIVE",
   "rarity": "FREE",
-  "description": "Add a spell to your hand that restores 3 Health.",
+  "description": "Add a spell to your hand that restores 5 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
