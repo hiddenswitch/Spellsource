@@ -20,10 +20,9 @@
       "class": "HealSpell",
       "value": {
         "class": "AttributeValueProvider",
-        "target": "TARGET",
         "attribute": "MAX_HP"
       }
-	}
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

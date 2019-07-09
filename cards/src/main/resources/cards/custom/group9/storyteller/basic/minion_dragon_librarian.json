@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Battlecry: Summon two 1/1 Pagelings. Draw a card.",
+  "description": "Opener: Summon two 1/1 Pagelings. Draw a card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,10 +15,13 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "cards": [
-            "token_pageling",
-            "token_pageling"
-          ]
+          "boardPositionRelative": "RIGHT",
+          "card": "token_pageling"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_pageling"
         },
         {
           "class": "DrawCardSpell",

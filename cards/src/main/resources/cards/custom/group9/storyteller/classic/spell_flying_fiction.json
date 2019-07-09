@@ -14,12 +14,12 @@
         "cards": [
           "token_pageling",
           "token_pageling"
-        ]
-      },
-      {
-        "class": "AddAttributeSpell",
-        "target": "OUTPUT",
-        "attribute": "RUSH"
+        ],
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "RUSH"
+        }
       }
     ]
   },
