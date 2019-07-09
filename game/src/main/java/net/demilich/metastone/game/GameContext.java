@@ -85,7 +85,7 @@ import static java.util.stream.Collectors.toList;
  * GameContext context = new GameContext();
  * for (int playerId : new int[] {GameContext.PLAYER_1, GameContext.PLAYER_2}) {
  *   context.setBehaviour(playerId, new GameStateValueProvider());
- *   context.setDeck(playerId, Deck.randomDeck(HeroClass.RED, DeckFormat.STANDARD));
+ *   context.setDeck(playerId, Deck.randomDeck("RED", DeckFormat.getFormat("Standard")));
  * }
  * context.play();
  * }
@@ -233,7 +233,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.STANDARD);
+		setDeckFormat(DeckFormat.getFormat("Standard"));
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -283,7 +283,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param heroClasses The player's hero classes.
 	 */
-	public GameContext(HeroClass... heroClasses) {
+	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
 			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
@@ -297,7 +297,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param card The card to add, typically made with code.
 	 */
 	public void addTempCard(Card card) {
-		getTempCards().addCard(card);
+		getTempCards().addCard(card.clone());
 	}
 
 	/**

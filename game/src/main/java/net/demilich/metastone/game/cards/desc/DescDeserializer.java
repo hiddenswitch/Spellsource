@@ -97,7 +97,7 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 
 	@SuppressWarnings("unchecked")
 	public T deserialize(com.fasterxml.jackson.core.JsonParser p, DeserializationContext ctxt) throws IOException {
-		JsonNode node = p.readValueAsTree();
+		JsonNode node = ctxt.readValue(p, JsonNode.class);
 
 		return innerDeserialize(ctxt, node);
 	}

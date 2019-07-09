@@ -39,10 +39,10 @@ public class JourneyToUngoroTests extends TestBase {
 	public void testStonehillDefender() {
 		for (int i = 0; i < 1000; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.ALL);
+				context.setDeckFormat(DeckFormat.getFormat("All"));
 				// Check that stonehill never gets a spellsource minion
 				overrideDiscoverChoice(da -> {
-					assertTrue(da.stream().noneMatch(c -> c.getCard().getCardSet() == CardSet.SPELLSOURCE && c.getCard().getCardSet() == CardSet.TEST));
+					assertTrue(da.stream().noneMatch(c -> c.getCard().getCardSet() == "SPELLSOURCE" && c.getCard().getCardSet() == "TEST"));
 					return da.get(0);
 				});
 				playMinionCard(context, player, "minion_stonehill_defender");
@@ -486,8 +486,10 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
-			shuffleToDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context,opponent,"spell_lunstone");
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			opponent.getDeck().get(1).getAttributes().put(Attribute.STARTED_IN_DECK, false);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
 					choices.stream()
 							.filter(da -> da.getCard().getCardId().equals(rightCardId))
@@ -503,8 +505,10 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
-			shuffleToDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context, opponent, rightCardId);
+			putOnTopOfDeck(context,opponent,"spell_lunstone");
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			opponent.getDeck().get(1).getAttributes().put(Attribute.STARTED_IN_DECK, false);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
 					choices.stream()
 							.filter(da -> !da.getCard().getCardId().equals(rightCardId))
@@ -861,6 +865,7 @@ public class JourneyToUngoroTests extends TestBase {
 
 	@Test
 	public void testLivingMana() {
+		// Check correct summon count
 		zip(Stream.of(5, 6, 7, 8, 9, 10), Stream.of(5, 6, 7, 7, 7, 7), (mana, maxMinionsSummoned) -> {
 			for (int i = 0; i <= 7; i++) {
 				int finalI = i;
@@ -868,19 +873,17 @@ public class JourneyToUngoroTests extends TestBase {
 					for (int j = 0; j < finalI; j++) {
 						playMinionCard(context, player, "minion_wisp");
 					}
-
 					player.setMaxMana(mana);
 					player.setMana(mana);
 					playCard(context, player, "spell_living_mana");
-					int minionsOnBoard = Math.min((int) maxMinionsSummoned + finalI, 7);
+					int minionsOnBoard = Math.min(maxMinionsSummoned + finalI, 7);
 					int minionsSummonedByLivingMana = Math.min(7, minionsOnBoard - finalI);
 					assertEquals(player.getMinions().size(), minionsOnBoard);
 					assertEquals(player.getMaxMana(), mana - minionsSummonedByLivingMana,
 							String.format("Prior max mana: %d, prior minions on  board: %d", mana, finalI));
 				}));
+
 			}
-
-
 			return null;
 		}).collect(toList());
 	}
@@ -967,7 +970,7 @@ public class JourneyToUngoroTests extends TestBase {
 
 	@Test
 	public void testFreeFromAmber() {
-		GameContext context = createContext(HeroClass.WHITE, HeroClass.WHITE);
+		GameContext context = createContext("WHITE", "WHITE");
 		Player player = context.getActivePlayer();
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];

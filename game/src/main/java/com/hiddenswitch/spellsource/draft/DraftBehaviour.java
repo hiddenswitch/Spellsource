@@ -10,7 +10,7 @@ import java.util.List;
  * Created by bberman on 12/14/16.
  */
 public interface DraftBehaviour {
-	void chooseHeroAsync(List<HeroClass> classes, Handler<AsyncResult<HeroClass>> result);
+	void chooseHeroAsync(List<String> classes, Handler<AsyncResult<String>> result);
 
 	void chooseCardAsync(List<String> cards, Handler<AsyncResult<Integer>> selectedCardIndex);
 

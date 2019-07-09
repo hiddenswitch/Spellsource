@@ -1,0 +1,16 @@
+{
+  "name": "Lunstone",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Gain 1 Lun this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": 1
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

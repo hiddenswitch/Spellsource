@@ -254,8 +254,6 @@ public class ParseUtils {
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
 			case RACE:
 				return Enum.valueOf(Race.class, jsonData.asText());
-			case CARD_SET:
-				return Enum.valueOf(CardSet.class, jsonData.asText());
 			case SPELL:
 				return spellParser.innerDeserialize(ctxt, jsonData);
 			case SPELL_ARRAY: {
@@ -273,18 +271,8 @@ public class ParseUtils {
 				return Enum.valueOf(PlayerAttribute.class, jsonData.asText());
 			case RARITY:
 				return Enum.valueOf(Rarity.class, jsonData.asText());
-			case HERO_CLASS:
-				return Enum.valueOf(HeroClass.class, jsonData.asText());
 			case GAME_VALUE:
 				return Enum.valueOf(GameValue.class, jsonData.asText());
-			case HERO_CLASS_ARRAY: {
-				ArrayNode jsonArray = (ArrayNode) jsonData;
-				HeroClass[] array = new HeroClass[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).asText());
-				}
-				return array;
-			}
 			case BOARD_POSITION_RELATIVE:
 				return Enum.valueOf(BoardPositionRelative.class, jsonData.asText());
 			case CARD_LOCATION:

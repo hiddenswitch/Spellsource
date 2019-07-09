@@ -3,10 +3,7 @@ package com.hiddenswitch.spellsource;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.AttributeMap;
-import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.CardParser;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.io.FileUtils;
@@ -45,7 +42,9 @@ public class CardValidation {
 
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
-			Assert.assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
+			if (record.getDesc().type != CardType.FORMAT) {
+				Assert.assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
+			}
 			String description = record.getDesc().getDescription();
 			if (description != null) {
 				AttributeMap attributes = record.getDesc().getAttributes();

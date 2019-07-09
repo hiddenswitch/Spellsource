@@ -50,8 +50,7 @@ public interface Cards {
 			response = new QueryCardsResponse()
 					.withRecords(request.getCardIds().stream().map(CardCatalogue.getRecords()::get).collect(toList()));
 		} else {
-			final EnumSet<CardSet> sets = EnumSet.noneOf(CardSet.class);
-			sets.addAll(Arrays.asList(request.getSets()));
+			final Set<String> sets = new HashSet<>(Arrays.asList(request.getSets()));
 
 			List<CardCatalogueRecord> results = CardCatalogue.getRecords().values().stream().filter(r -> {
 				boolean passes = true;
@@ -62,7 +61,7 @@ public interface Cards {
 				passes &= sets.contains(desc.getSet());
 
 				if (request.getRarity() != null) {
-					passes &= desc.getRarity().isRarity(request.getRarity());
+					passes &= desc.getRarity() != null && desc.getRarity().isRarity(request.getRarity());
 				}
 
 				return passes;
@@ -101,7 +100,7 @@ public interface Cards {
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)
-				.filter(cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getSet())
+				.filter(cd -> DeckFormat.getFormat("Greater Custom").isInFormat(cd.getSet())
 						&& cd.type != CardType.GROUP
 						&& cd.type != CardType.HERO_POWER
 						&& cd.type != CardType.ENCHANTMENT)
@@ -122,7 +121,7 @@ public interface Cards {
 	 */
 	@Suspendable
 	static void invalidateCardCache() {
-		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards::cards");
+		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards/cards");
 		// Invalidate the cache here
 		cache.put("cards-version", Vertx.currentContext().deploymentID());
 		cache.put("cards-last-modified", Gateway.DATE_TIME_FORMATTER.format(new Date()));

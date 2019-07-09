@@ -1,0 +1,11 @@
+{
+  "name": "Death Knight",
+  "type": "CLASS",
+  "hero": "hero_nerzhul",
+  "heroClass": "OBSIDIAN",
+  "color": [70, 80, 90],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

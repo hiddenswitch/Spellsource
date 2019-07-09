@@ -119,12 +119,12 @@ class RekognitionGenerator(Iterable[DetectTextResponse]):
                 yield image
                 continue
             if isinstance(image, Mapping):
-                yield DetectTextResponse.from_boto_dict(image)
+                yield DetectTextResponse.from_boto(image)
                 continue
 
             # Check if we already have the exact URI result locally
             if image in self._requests:
-                yield DetectTextResponse.from_boto_dict(self._requests[image])
+                yield DetectTextResponse.from_boto(self._requests[image])
                 continue
 
             uri = urlparse(image)  # type: ParseResult
@@ -146,7 +146,7 @@ class RekognitionGenerator(Iterable[DetectTextResponse]):
                 # Return this json dict as the result
                 assert rekognition_res_s3.content_type in ('application/json', 'text/json', 'text/plain')
                 self._requests[image] = loads(rekognition_res_s3.body.read())
-                yield DetectTextResponse.from_boto_dict(self._requests[image])
+                yield DetectTextResponse.from_boto(self._requests[image])
                 continue
 
             # Figure out if we need to upload

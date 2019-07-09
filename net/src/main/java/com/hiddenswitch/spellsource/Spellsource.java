@@ -517,8 +517,6 @@ public class Spellsource {
 							changeCardId("spell_effuse", "spell_springs_of_ebisu");
 							changeCardId("spell_dampen_harm", "spell_steadfast_defense");
 							changeCardId("spell_breath_of_fire", "spell_windswept_strike");
-							changeCardId("spell_storm_spirit", "spell_bellowing_spirit");
-							changeCardId("spell_fire_spirit", "spell_burning_spirit");
 							changeCardId("token_xuen_the_white_tiger", "token_kumiho_nine_tailed_kitsune");
 							changeCardId("token_chi_ji_the_red_crane", "token_shitakiri_slit_tongue_suzume");
 							changeCardId("token_tiny_alemental", "token_stony_elemental");
@@ -535,7 +533,14 @@ public class Spellsource {
 							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
 							changeCardId("spell_ahnqiraj_portal", "spell_ancient_waygate");
 						}))
-				.migrateTo(32, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(33)
+						.withUp(thisVertx -> {
+							changeCardId("minion_jade_serpent_statue", "minion_jade_cloud_serpent");
+							changeCardId("token_storm_spirit", "token_bellowing_spirit");
+							changeCardId("token_fire_spirit", "token_burning_spirit");
+						}))
+				.migrateTo(33, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -673,6 +678,12 @@ public class Spellsource {
 		return gameTriggers;
 	}
 
+	/**
+	 * A map of spells that can be cast by {@link net.demilich.metastone.game.spells.desc.SpellArg#NAME} using a {@link
+	 * DelegateSpell}.
+	 *
+	 * @return
+	 */
 	public Map<String, Spell> getSpells() {
 		return spells;
 	}
