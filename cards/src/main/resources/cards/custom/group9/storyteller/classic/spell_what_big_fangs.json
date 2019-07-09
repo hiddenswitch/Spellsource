@@ -12,7 +12,8 @@
       "eventTrigger": {
         "class": "PhysicalAttackTrigger",
         "sourceEntityType": "MINION",
-        "sourcePlayer": "SELF"
+        "sourcePlayer": "SELF",
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
       },
       "spell": {
         "class": "DamageSpell",

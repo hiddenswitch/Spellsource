@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Battlecry: This turn, your healing effects deal damage instead.",
+  "description": "Opener: This turn, your healing effects deal damage instead.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
