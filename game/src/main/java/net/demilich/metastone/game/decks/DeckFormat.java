@@ -165,13 +165,13 @@ public class DeckFormat implements Serializable, Cloneable {
 		FORMATS.put("All", ALL);
 		for (Card formatCard : formatCards) {
 			FORMATS.put(formatCard.getName(), new DeckFormat()
-				.withName(formatCard.getName())
-				.withCardSets(formatCard.getCardSets()));
+					.withName(formatCard.getName())
+					.withCardSets(formatCard.getCardSets()));
 		}
 	}
 
 	public static DeckFormat getFormat(String name) {
-		return FORMATS.getOrDefault(name, ALL);
+		return FORMATS.getOrDefault(name, ALL).clone();
 	}
 
 	public static Map<String, DeckFormat> formats() {
@@ -213,14 +213,21 @@ public class DeckFormat implements Serializable, Cloneable {
 		sets = new HashSet<>();
 	}
 
-	public void addSet(String cardSet) {
+	public static DeckFormat spellsource() {
+		return getFormat("Spellsource");
+	}
+
+	public DeckFormat addSet(String cardSet) {
 		sets.add(cardSet);
+		return this;
 	}
 
 	public boolean isInFormat(Card card) {
 		if (sets.contains(card.getCardSet())) {
 			return true;
-		} else return false;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean isInFormat(String set) {
@@ -264,7 +271,7 @@ public class DeckFormat implements Serializable, Cloneable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof DeckFormat)) {
+		if (!(obj instanceof DeckFormat)) {
 			return false;
 		}
 
@@ -273,8 +280,14 @@ public class DeckFormat implements Serializable, Cloneable {
 	}
 
 	@Override
-	public DeckFormat clone() throws CloneNotSupportedException {
-		return (DeckFormat) super.clone();
+	public DeckFormat clone() {
+		try {
+			DeckFormat clone = (DeckFormat) super.clone();
+			clone.sets = new HashSet<>(this.sets);
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
 

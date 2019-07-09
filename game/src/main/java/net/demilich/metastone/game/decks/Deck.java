@@ -36,7 +36,6 @@ public interface Deck extends Cloneable {
 
 	static @NotNull
 	GameDeck randomDeck() {
-		List<String> baseClasses = HeroClass.getBaseClasses(DeckFormat.getFormat("Custom"));
 		return new RandomDeck(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
 	}
 

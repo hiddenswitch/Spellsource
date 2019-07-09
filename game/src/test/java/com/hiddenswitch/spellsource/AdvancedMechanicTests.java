@@ -524,42 +524,41 @@ public class AdvancedMechanicTests extends TestBase {
 			context.endTurn();
 			assertEquals(player.getMana(), 4);
 		});
-
 	}
 
 	@Test
 	public void testSetHpPlusSilence() {
-		GameContext context = createContext("GREEN", "RED");
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		runGym((context, player, opponent) -> {
 
-		int baseHp = 5;
-		// summon a minion and check the base hp
-		playCard(context, opponent, new TestMinionCard(4, baseHp));
-		Actor minion = getSingleMinion(opponent.getMinions());
-		assertEquals(minion.getHp(), baseHp);
+			int baseHp = 5;
+			// summon a minion and check the base hp
+			playCard(context, opponent, new TestMinionCard(4, baseHp));
+			Actor minion = getSingleMinion(opponent.getMinions());
+			assertEquals(minion.getHp(), baseHp);
 
-		int modifiedHp = 1;
-		// cast a spell on the minion which modifies the hp
-		SpellDesc setHpSpell = SetHpSpell.create(modifiedHp);
-		Card card = new TestSpellCard(setHpSpell);
-		card.setTargetRequirement(TargetSelection.MINIONS);
-		context.getLogic().receiveCard(player.getId(), card);
-		GameAction playSpellCard = card.play();
-		playSpellCard.setTarget(minion);
-		context.performAction(player.getId(), playSpellCard);
-		assertEquals(minion.getHp(), modifiedHp);
-		assertEquals(minion.getMaxHp(), modifiedHp);
+			int modifiedHp = 1;
+			// cast a spell on the minion which modifies the hp
+			SpellDesc setHpSpell = SetHpSpell.create(modifiedHp);
+			Card card = new TestSpellCard(setHpSpell);
+			card.setTargetRequirement(TargetSelection.MINIONS);
+			context.getLogic().receiveCard(player.getId(), card);
+			GameAction playSpellCard = card.play();
+			playSpellCard.setTarget(minion);
+			context.performAction(player.getId(), playSpellCard);
+			assertEquals(minion.getHp(), modifiedHp);
+			assertEquals(minion.getMaxHp(), modifiedHp);
 
-		// silence the creature - hp should be back to original value
-		SpellDesc silenceSpell = SilenceSpell.create();
-		card = new TestSpellCard(silenceSpell);
-		card.setTargetRequirement(TargetSelection.MINIONS);
-		context.getLogic().receiveCard(player.getId(), card);
-		playSpellCard = card.play();
-		playSpellCard.setTarget(minion);
-		context.performAction(player.getId(), playSpellCard);
-		assertEquals(minion.getHp(), baseHp);
+			// silence the creature - hp should be back to original value
+			SpellDesc silenceSpell = SilenceSpell.create();
+			card = new TestSpellCard(silenceSpell);
+			card.getDesc().setSet("TEST");
+			card.setTargetRequirement(TargetSelection.MINIONS);
+			context.getLogic().receiveCard(player.getId(), card);
+			playSpellCard = card.play();
+			playSpellCard.setTarget(minion);
+			context.performAction(player.getId(), playSpellCard);
+			assertEquals(minion.getHp(), baseHp);
+		}, "GREEN", "RED");
 	}
 
 	@Test

@@ -40,4 +40,7 @@ public enum CardSet {
 	SPELLSOURCE_BASIC,
 	SPELLSOURCE;
 
+	public static boolean isHearthstoneSet(String set) {
+		return DeckFormat.getFormat("Wild").isInFormat(set);
+	}
 }

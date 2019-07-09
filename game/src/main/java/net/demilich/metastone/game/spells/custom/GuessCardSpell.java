@@ -65,7 +65,7 @@ public final class GuessCardSpell extends Spell {
 		List<Card> others = CardCatalogue.query(new DeckFormat().withCardSets(DeckFormat.latestHearthstoneExpansion(), "BASIC", "CLASSIC")/*prefer the latest expansion*/)
 				.shuffle(context.getLogic().getRandom())
 				.stream()
-				.filter(c -> c.getHeroClass() == correctClass)
+				.filter(c -> c.getHeroClass().equals(correctClass))
 				.filter(c -> !c.getCardId().equals(correctCard.getCardId()))
 				.filter(c -> !startingDeck.contains(c.getCardId()))
 				.limit(2)
