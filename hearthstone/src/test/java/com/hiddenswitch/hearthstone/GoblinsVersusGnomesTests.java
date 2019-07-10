@@ -188,7 +188,7 @@ public class GoblinsVersusGnomesTests extends TestBase {
 			context.performAction(opponent.getId(), action);
 
 			Assert.assertEquals(player.getMinions().size(), 1);
-		}, HeroClass.GOLD, HeroClass.BLACK);
+		}, "GOLD", "BLACK");
 	}
 
 	@Test
@@ -205,6 +205,6 @@ public class GoblinsVersusGnomesTests extends TestBase {
 					.count();
 			assertEquals(actionsBefore, 1);
 			assertEquals(actionsAfter, 4);
-		}, HeroClass.GREEN, HeroClass.GREEN);
+		}, "GREEN", "GREEN");
 	}
 }

@@ -33,91 +33,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class DecksPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  /**
-   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified. 
-   */
-  public enum HeroClassEnum {
-    BROWN("BROWN"),
-    
-    GREEN("GREEN"),
-    
-    BLUE("BLUE"),
-    
-    GOLD("GOLD"),
-    
-    WHITE("WHITE"),
-    
-    BLACK("BLACK"),
-    
-    SILVER("SILVER"),
-    
-    VIOLET("VIOLET"),
-    
-    RED("RED"),
-    
-    JADE("JADE"),
-    
-    NAVY("NAVY"),
-    
-    LEATHER("LEATHER"),
-    
-    RUST("RUST"),
-    
-    EGGPLANT("EGGPLANT"),
-    
-    ICE("ICE"),
-    
-    OBSIDIAN("OBSIDIAN"),
-    
-    ICECREAM("ICECREAM"),
-    
-    AMBER("AMBER"),
-    
-    TOAST("TOAST"),
-    
-    ROSE("ROSE"),
-    
-    BLOOD("BLOOD"),
-    
-    NEONGREEN("NEONGREEN"),
-    
-    TEAL("TEAL"),
-    
-    DARKGREEN("DARKGREEN"),
-    
-    PURPLE("PURPLE"),
-    
-    TIME("TIME");
-
-    private String value;
-
-    HeroClassEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static HeroClassEnum fromValue(String text) {
-      for (HeroClassEnum b : HeroClassEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("heroClass")
-  private HeroClassEnum heroClass = null;
+  private String heroClass = null;
 
   @JsonProperty("name")
   private String name = null;
@@ -125,54 +42,13 @@ public class DecksPutRequest implements Serializable {
   @JsonProperty("inventoryIds")
   private List<String> inventoryIds = null;
 
-  /**
-   * The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. 
-   */
-  public enum FormatEnum {
-    STANDARD("Standard"),
-    
-    WILD("Wild"),
-    
-    CUSTOM("Custom"),
-    
-    SPELLSOURCE("Spellsource"),
-    
-    ALL("All");
-
-    private String value;
-
-    FormatEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static FormatEnum fromValue(String text) {
-      for (FormatEnum b : FormatEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("format")
-  private FormatEnum format = null;
+  private String format = null;
 
   @JsonProperty("deckList")
   private String deckList = null;
 
-  public DecksPutRequest heroClass(HeroClassEnum heroClass) {
+  public DecksPutRequest heroClass(String heroClass) {
     this.heroClass = heroClass;
     return this;
   }
@@ -182,11 +58,11 @@ public class DecksPutRequest implements Serializable {
    * @return heroClass
   **/
   @ApiModelProperty(value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified. ")
-  public HeroClassEnum getHeroClass() {
+  public String getHeroClass() {
     return heroClass;
   }
 
-  public void setHeroClass(HeroClassEnum heroClass) {
+  public void setHeroClass(String heroClass) {
     this.heroClass = heroClass;
   }
 
@@ -234,7 +110,7 @@ public class DecksPutRequest implements Serializable {
     this.inventoryIds = inventoryIds;
   }
 
-  public DecksPutRequest format(FormatEnum format) {
+  public DecksPutRequest format(String format) {
     this.format = format;
     return this;
   }
@@ -244,11 +120,11 @@ public class DecksPutRequest implements Serializable {
    * @return format
   **/
   @ApiModelProperty(value = "The format of this deck. Format specifies which cards are allowable in this deck for validation. It also specifies which cards will appear in discovers during matchmaking.  Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest possible format encompassing both decks in a match is selected when the formats of the decks do not match.  Certain queues only support certain formats. Typically, when requesting the listing of queues with matchmakingGet, the queues will specify which current decks can be chosen. ")
-  public FormatEnum getFormat() {
+  public String getFormat() {
     return format;
   }
 
-  public void setFormat(FormatEnum format) {
+  public void setFormat(String format) {
     this.format = format;
   }
 

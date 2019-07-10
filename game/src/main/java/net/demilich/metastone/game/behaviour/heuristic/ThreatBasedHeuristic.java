@@ -64,13 +64,13 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 	private static int getHeroDamage(Hero hero) {
 		int heroDamage = 0;
-		if (hero.getHeroClass() == HeroClass.BLUE) {
+		if (hero.getHeroClass().equals("BLUE")) {
 			heroDamage += 1;
-		} else if (hero.getHeroClass() == HeroClass.GREEN) {
+		} else if (hero.getHeroClass().equals("GREEN")) {
 			heroDamage += 2;
-		} else if (hero.getHeroClass() == HeroClass.BROWN) {
+		} else if (hero.getHeroClass().equals("BROWN")) {
 			heroDamage += 1;
-		} else if (hero.getHeroClass() == HeroClass.BLACK) {
+		} else if (hero.getHeroClass().equals("BLACK")) {
 			heroDamage += 1;
 		}
 		if (hero.getWeapon() != null) {

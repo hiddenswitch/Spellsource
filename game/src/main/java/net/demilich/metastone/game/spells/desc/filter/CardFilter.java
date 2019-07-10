@@ -38,10 +38,10 @@ public final class CardFilter extends EntityFilter {
 		super(desc);
 	}
 
-	private boolean heroClassTest(GameContext context, Player player, Card card, HeroClass heroClass) {
-		if (heroClass == HeroClass.OPPONENT) {
+	private boolean heroClassTest(GameContext context, Player player, Card card, String heroClass) {
+		if (heroClass.equals(HeroClass.OPPONENT)) {
 			heroClass = context.getOpponent(player).getHero().getHeroClass();
-		} else if (heroClass == HeroClass.SELF) {
+		} else if (heroClass.equals(HeroClass.SELF)) {
 			heroClass = player.getHero().getHeroClass();
 		}
 
@@ -71,10 +71,10 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		HeroClass[] heroClasses = (HeroClass[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
+		String[] heroClasses = (String[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
-			for (HeroClass heroClass : heroClasses) {
+			for (String heroClass : heroClasses) {
 				test |= !heroClassTest(context, player, card, heroClass);
 			}
 			if (!test) {
@@ -82,7 +82,7 @@ public final class CardFilter extends EntityFilter {
 			}
 		}
 
-		HeroClass heroClass = (HeroClass) getDesc().get(EntityFilterArg.HERO_CLASS);
+		String heroClass = (String) getDesc().get(EntityFilterArg.HERO_CLASS);
 		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
 			return false;
 		}
@@ -99,8 +99,8 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
-		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+		String cardSet = (String) getDesc().get(EntityFilterArg.CARD_SET);
+		if (cardSet != null && !cardSet.equals("ANY") && !card.getCardSet().equals(cardSet)) {
 			return false;
 		}
 

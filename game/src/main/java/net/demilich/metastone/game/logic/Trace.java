@@ -43,12 +43,14 @@ public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 3L;
 	private long seed;
 	private int catalogueVersion;
-	private HeroClass[] heroClasses;
+	private String[] heroClasses;
 	private String[][] deckCardIds;
 	private String deckFormatName;
-	private CardSet[] deckFormatSets;
+	private String[] deckFormatSets;
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
+	@JsonIgnore
+	private transient List<GameAction> rawActions = new ArrayList<>();
 	private transient List<String> log = new ArrayList<>();
 	private String id;
 
@@ -58,9 +60,9 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
 		Player[] players = new Player[]{gameState.player1, gameState.player2};
-		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new CardSet[0]);
+		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new String[0]);
 		deckFormatName = gameState.deckFormat.getName();
-		setHeroClasses(new HeroClass[2]);
+		setHeroClasses(new String[2]);
 		setDeckCardIds(new String[2][]);
 		for (int i = 0; i < 2; i++) {
 			getHeroClasses()[i] = players[i].getHero().getHeroClass();
@@ -91,6 +93,7 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void addAction(int actionId, GameAction action, GameContext context) {
 		actions.add(actionId);
+		rawActions.add(action);
 		if (context == null) {
 			log.add(action.toString());
 		} else {
@@ -165,7 +168,7 @@ public class Trace implements Serializable, Cloneable {
 		if (deckFormatSets != null && deckFormatName != null) {
 			context.setDeckFormat(new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets));
 		} else {
-			context.setDeckFormat(DeckFormat.STANDARD);
+			context.setDeckFormat(DeckFormat.getFormat("Standard"));
 		}
 
 		GameLogic logic = new GameLogic((IdFactoryImpl) context.getLogic().getIdFactory(), getSeed());
@@ -208,11 +211,11 @@ public class Trace implements Serializable, Cloneable {
 		return log;
 	}
 
-	public HeroClass[] getHeroClasses() {
+	public String[] getHeroClasses() {
 		return heroClasses;
 	}
 
-	public Trace setHeroClasses(HeroClass[] heroClasses) {
+	public Trace setHeroClasses(String[] heroClasses) {
 		this.heroClasses = heroClasses;
 		return this;
 	}
@@ -235,11 +238,11 @@ public class Trace implements Serializable, Cloneable {
 		return this;
 	}
 
-	public CardSet[] getDeckFormatSets() {
+	public String[] getDeckFormatSets() {
 		return deckFormatSets;
 	}
 
-	public Trace setDeckFormatSets(CardSet[] deckFormatSets) {
+	public Trace setDeckFormatSets(String[] deckFormatSets) {
 		this.deckFormatSets = deckFormatSets;
 		return this;
 	}
@@ -267,5 +270,10 @@ public class Trace implements Serializable, Cloneable {
 		return new ToStringBuilder(this)
 				.append("id", getId())
 				.toString();
+	}
+
+	@JsonIgnore
+	public List<GameAction> getRawActions() {
+		return rawActions;
 	}
 }
