@@ -1,0 +1,11 @@
+{
+  "name": "Ice Knight",
+  "type": "CLASS",
+  "hero": "hero_darion",
+  "heroClass": "ICE",
+  "color": [185, 247, 247],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

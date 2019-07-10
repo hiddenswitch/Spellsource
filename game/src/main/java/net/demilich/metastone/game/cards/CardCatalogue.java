@@ -118,7 +118,7 @@ public class CardCatalogue {
 		return null;
 	}
 
-	public static Card getCardByName(String name, HeroClass heroClass) {
+	public static Card getCardByName(String name, String heroClass) {
 		List<CardCatalogueRecord> namedCards = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).collect(Collectors.toList());
 		if (!namedCards.isEmpty()) {
 			if (namedCards.size() > 1) {
@@ -135,34 +135,46 @@ public class CardCatalogue {
 	}
 
 	public static CardList getHeroes() {
-		return query(null, card -> card.getCardSet() == CardSet.BASIC && card.getCardType() == CardType.HERO);
+		return query(null, card -> card.getCardSet().equals("BASIC") && card.getCardType() == CardType.HERO);
 	}
 
 	public static CardList query(DeckFormat deckFormat) {
-		return query(deckFormat, (CardType) null, (Rarity) null, (HeroClass) null, (Attribute) null);
+		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null);
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType) {
-		return query(deckFormat, cardType, (Rarity) null, (HeroClass) null, (Attribute) null);
+		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, HeroClass heroClass) {
+	public static CardList query(DeckFormat deckFormat, String heroClass) {
 		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass) {
 		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, HeroClass heroClass, HeroClass actualHeroClass) {
+	public static CardList query(DeckFormat deckFormat, String heroClass, String actualHeroClass) {
 		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, actualHeroClass);
 	}
 
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag) {
 		return query(deckFormat, cardType, rarity, heroClass, tag, null);
 	}
 
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
+	/**
+	 * Queries the card catalogue for cards that match the specified filters.
+	 *
+	 * @param deckFormat
+	 * @param cardType
+	 * @param rarity
+	 * @param heroClass
+	 * @param tag
+	 * @param actualHeroClass
+	 * @return
+	 */
+	@NotNull
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, String actualHeroClass) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			if (card.getDesc().getFileFormatVersion() > version) {
@@ -178,8 +190,10 @@ public class CardCatalogue {
 			if (cardType != null && !card.getCardType().isCardType(cardType)) {
 				continue;
 			}
-			// per default, do not include hero powers
-			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.isQuest()) {
+			// per default, do not include hero powers, quests, classes, and formats
+			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.isQuest() ||
+					(card.getCardType().isCardType(CardType.CLASS) && cardType != CardType.CLASS) ||
+					(card.getCardType().isCardType(CardType.FORMAT) && cardType != CardType.FORMAT)) {
 				continue;
 			}
 			if (rarity != null && !card.getRarity().isRarity(rarity)) {
@@ -236,6 +250,17 @@ public class CardCatalogue {
 				cards.put(instance.getCardId(), instance);
 			}
 
+			List<String> sets = new ArrayList<>();
+			cards.forEach((s, card) -> {
+				if (!sets.contains(card.getCardSet())) {
+					sets.add(card.getCardSet());
+				}
+			});
+			DeckFormat.populateAll(sets);
+			DeckFormat.populateFormats(new CardArrayList(cards.values().stream()
+					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList())));
+
+
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -246,6 +271,10 @@ public class CardCatalogue {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			if (card.getDesc().getFileFormatVersion() > version) {
+				continue;
+			}
+
+			if (card.getCardType().isCardType(CardType.CLASS) || card.getCardType().isCardType(CardType.FORMAT)) {
 				continue;
 			}
 

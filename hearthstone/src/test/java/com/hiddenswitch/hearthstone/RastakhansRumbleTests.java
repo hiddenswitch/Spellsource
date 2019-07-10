@@ -29,7 +29,7 @@ public class RastakhansRumbleTests extends TestBase {
 	}
 
 	@Test
-	public void testHallazhealSoupVendorCorruptedBloodInteraction() {
+	public void testHallazealSoupVendorCorruptedBloodInteraction() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_hallazeal_the_ascended");
 			playMinionCard(context, player, "minion_soup_vendor");
@@ -37,6 +37,7 @@ public class RastakhansRumbleTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			playCard(context, player, "spell_far_sight");
+			assertTrue(player.getHero().isDestroyed());
 		});
 	}
 
@@ -221,7 +222,7 @@ public class RastakhansRumbleTests extends TestBase {
 			for (int i = 0; i < 3; i++) {
 				assertEquals(opponent.getMinions().get(i).getHp(), 13, i + "");
 			}
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test

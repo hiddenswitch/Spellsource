@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.EntityLocation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -202,7 +204,11 @@ public class EntityState implements Serializable {
     
     HERO_POWER("HERO_POWER"),
     
-    CHOOSE_ONE("CHOOSE_ONE");
+    CHOOSE_ONE("CHOOSE_ONE"),
+    
+    CLASS("CLASS"),
+    
+    FORMAT("FORMAT");
 
     private String value;
 
@@ -294,6 +300,15 @@ public class EntityState implements Serializable {
 
   @JsonProperty("gameStarted")
   private Boolean gameStarted = false;
+
+  @JsonProperty("color")
+  private List<Float> color = null;
+
+  @JsonProperty("blackText")
+  private Boolean blackText = false;
+
+  @JsonProperty("cardSets")
+  private List<String> cardSets = null;
 
   public EntityState location(EntityLocation location) {
     this.location = location;
@@ -1357,6 +1372,76 @@ public class EntityState implements Serializable {
     this.gameStarted = gameStarted;
   }
 
+  public EntityState color(List<Float> color) {
+    this.color = color;
+    return this;
+  }
+
+  public EntityState addColorItem(Float colorItem) {
+    if (this.color == null) {
+      this.color = new ArrayList<>();
+    }
+    this.color.add(colorItem);
+    return this;
+  }
+
+   /**
+   * The color for the class 
+   * @return color
+  **/
+  @ApiModelProperty(value = "The color for the class ")
+  public List<Float> getColor() {
+    return color;
+  }
+
+  public void setColor(List<Float> color) {
+    this.color = color;
+  }
+
+  public EntityState blackText(Boolean blackText) {
+    this.blackText = blackText;
+    return this;
+  }
+
+   /**
+   * Whether the class should use black text instead of the default white 
+   * @return blackText
+  **/
+  @ApiModelProperty(value = "Whether the class should use black text instead of the default white ")
+  public Boolean isBlackText() {
+    return blackText;
+  }
+
+  public void setBlackText(Boolean blackText) {
+    this.blackText = blackText;
+  }
+
+  public EntityState cardSets(List<String> cardSets) {
+    this.cardSets = cardSets;
+    return this;
+  }
+
+  public EntityState addCardSetsItem(String cardSetsItem) {
+    if (this.cardSets == null) {
+      this.cardSets = new ArrayList<>();
+    }
+    this.cardSets.add(cardSetsItem);
+    return this;
+  }
+
+   /**
+   * The card sets listed by the card 
+   * @return cardSets
+  **/
+  @ApiModelProperty(value = "The card sets listed by the card ")
+  public List<String> getCardSets() {
+    return cardSets;
+  }
+
+  public void setCardSets(List<String> cardSets) {
+    this.cardSets = cardSets;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1425,12 +1510,15 @@ public class EntityState implements Serializable {
         Objects.equals(this.countUntilCast, entityState.countUntilCast) &&
         Objects.equals(this.cardSet, entityState.cardSet) &&
         Objects.equals(this.rarity, entityState.rarity) &&
-        Objects.equals(this.gameStarted, entityState.gameStarted);
+        Objects.equals(this.gameStarted, entityState.gameStarted) &&
+        Objects.equals(this.color, entityState.color) &&
+        Objects.equals(this.blackText, entityState.blackText) &&
+        Objects.equals(this.cardSets, entityState.cardSets);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText, cardSets);
   }
 
 
@@ -1498,6 +1586,9 @@ public class EntityState implements Serializable {
     sb.append("    cardSet: ").append(toIndentedString(cardSet)).append("\n");
     sb.append("    rarity: ").append(toIndentedString(rarity)).append("\n");
     sb.append("    gameStarted: ").append(toIndentedString(gameStarted)).append("\n");
+    sb.append("    color: ").append(toIndentedString(color)).append("\n");
+    sb.append("    blackText: ").append(toIndentedString(blackText)).append("\n");
+    sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
     sb.append("}");
     return sb.toString();
   }

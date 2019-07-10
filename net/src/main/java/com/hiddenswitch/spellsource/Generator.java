@@ -60,7 +60,7 @@ public class Generator {
 			return new JsonObject(args)
 					.put("RANK", rank)
 					.put("BASE_MANA_COST", baseManaCost)
-					.put("HERO_CLASS", HeroClass.valueOf(heroClass).ordinal())
+					.put("HERO_CLASS", heroClass)
 					.put("HERO_CLASS_LABEL", heroClass)
 					.put("RARITY", rarity)
 					.put("RARITY_LABEL", Rarity.values()[rarity]);

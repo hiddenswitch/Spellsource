@@ -9,17 +9,26 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
 
 @RunWith(VertxUnitRunner.class)
 public class BroadcastTest {
+	private static Logger LOGGER = LoggerFactory.getLogger(BroadcastTest.class);
 	@Rule
 	public RunTestOnContext contextRule = new RunTestOnContext();
 
 	@Test
-	public void testBroadcastCallResponse(TestContext context) throws SocketException {
+	public void testBroadcastCallResponse(TestContext context) {
+		// On Travis, UDP broadcast is disabled.
+		if (System.getenv().containsKey("CI")) {
+			LOGGER.warn("UDP broadcast will not test correctly in the Travis environment.");
+			return;
+		}
+
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		final Vertx vertx = contextRule.vertx();
 		vertx.exceptionHandler(context.exceptionHandler());

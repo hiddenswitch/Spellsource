@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.common;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.impl.server.ClientConnectionHandler;
+import io.opentracing.SpanContext;
 
 import java.util.Random;
 
@@ -38,4 +39,6 @@ public interface Server extends ClientConnectionHandler {
 	Random getRandom();
 
 	String getGameId();
+
+	SpanContext getSpanContext();
 }
