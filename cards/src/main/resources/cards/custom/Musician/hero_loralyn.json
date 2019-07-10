@@ -10,21 +10,6 @@
     "HP": 30,
     "MAX_HP": 30
   },
-  "aura": {
-    "class": "TargetSelectionOverrideAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "targetSelection": "MINIONS",
-    "filter": {
-      "class": "TargetSelectionFilter",
-      "targetSelection": "NONE"
-    },
-    "condition": {
-      "class": "MinionCountCondition",
-      "targetPlayer": "SELF",
-      "value": 1,
-      "operation": "GREATER_OR_EQUAL"
-    }
-  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
