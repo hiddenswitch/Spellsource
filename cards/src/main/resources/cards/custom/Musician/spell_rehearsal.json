@@ -28,7 +28,8 @@
           },
           "operation": "SUBTRACT"
         }
-      }
+      },
+      "maxFires": 1
     }
   },
   "collectible": true,

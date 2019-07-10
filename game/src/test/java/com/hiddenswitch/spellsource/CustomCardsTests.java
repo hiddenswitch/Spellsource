@@ -7502,10 +7502,10 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 0);
 			context.endTurn();
 			assertEquals(player.getHand().size(), 1);
-			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_the_coin");
+			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_lunstone");
 			context.endTurn();
 			assertEquals(player.getHand().size(), 1);
-			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_the_coin");
+			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_lunstone");
 		});
 	}
 
@@ -7527,9 +7527,9 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_frazzled_barmaid");
 			player.getHero().setHp(20);
-			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_lunstone");
 			assertEquals(player.getHero().getHp(), 24);
-			playCard(context, opponent, "spell_the_coin");
+			playCard(context, opponent, "spell_lunstone");
 			assertEquals(player.getHero().getHp(), 24);
 			playCard(context, player, "spell_mind_blast");
 			assertEquals(player.getHero().getHp(), 24);
@@ -7540,17 +7540,17 @@ public class CustomCardsTests extends TestBase {
 	public void testStreetPerformerCoral() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_street_performer_coral");
-			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_lunstone");
 			Minion composer1 = playMinionCard(context, player, "minion_composer");
 			Minion composer2 = playMinionCard(context, player, "minion_composer");
 
-			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_lunstone");
 			assertEquals(composer1.getAttack(), composer1.getBaseAttack() + 1);
 			assertEquals(composer1.getHp(), composer1.getBaseHp() + 1);
 			assertEquals(composer2.getAttack(), composer2.getBaseAttack() + 1);
 			assertEquals(composer2.getHp(), composer2.getBaseHp() + 1);
 
-			playCard(context, opponent, "spell_the_coin");
+			playCard(context, opponent, "spell_lunstone");
 			assertEquals(composer1.getAttack(), composer1.getBaseAttack() + 1);
 			assertEquals(composer1.getHp(), composer1.getBaseHp() + 1);
 			assertEquals(composer2.getAttack(), composer2.getBaseAttack() + 1);
@@ -7624,8 +7624,8 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(composer.getAttack(), composer.getBaseAttack() + 1);
 			assertEquals(composer.getHp(), composer.getBaseHp() + 1);
 			assertEquals(player.getHand().size(), 2);
-			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_the_coin");
-			assertEquals(player.getHand().get(1).getSourceCard().getCardId(), "spell_the_coin");
+			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_lunstone");
+			assertEquals(player.getHand().get(1).getSourceCard().getCardId(), "spell_lunstone");
 		});
 	}
 }
