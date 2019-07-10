@@ -6,14 +6,14 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Whenever you play a Coin, restore 4 Health to your champion.",
+  "description": "Whenever you play a Lunstone, restore #4 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
       "queueCondition": {
         "class": "CardPropertyCondition",
         "target": "EVENT_SOURCE",
-        "card": "spell_the_coin"
+        "card": "spell_lunstone"
       },
       "sourcePlayer": "SELF"
     },

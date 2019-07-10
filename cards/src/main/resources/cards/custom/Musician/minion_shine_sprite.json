@@ -6,13 +6,13 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Opener: Add four Coins to your hand.",
+  "description": "Opener: Add four Lunstones to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 4,
-      "card": "spell_the_coin"
+      "card": "spell_lunstone"
     }
   },
   "attributes": {

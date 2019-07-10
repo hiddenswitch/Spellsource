@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Your spells are cast twice.",
+  "description": "Your spells cast twice.",
   "attributes": {
     "SPELLS_CAST_TWICE": true
   },

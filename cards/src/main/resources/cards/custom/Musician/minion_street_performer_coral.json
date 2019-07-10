@@ -6,14 +6,14 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Whenever you play a Coin, give your other minions +1/+1.",
+  "description": "Whenever you play a Lunstone, give your other minions +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
       "fireCondition": {
         "class": "CardPropertyCondition",
         "target": "EVENT_SOURCE",
-        "card": "spell_the_coin"
+        "card": "spell_lunstone"
       },
       "sourcePlayer": "SELF"
     },
