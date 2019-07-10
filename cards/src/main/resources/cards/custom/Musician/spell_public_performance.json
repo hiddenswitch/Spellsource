@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "COMMON",
-  "description": "Give a minion +1/+1. Add two Coins to your hand.",
+  "description": "Give a minion +1/+1. Add two Lunstones to your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -15,9 +15,9 @@
         "hpBonus": 1
       },
       {
-    "class": "ReceiveCardSpell",
-    "value": 2,
-    "card": "spell_the_coin"
+        "class": "ReceiveCardSpell",
+        "value": 2,
+        "card": "spell_lunstone"
       }
     ]
   },

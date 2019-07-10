@@ -28,8 +28,7 @@
           },
           "operation": "SUBTRACT"
         }
-      },
-      "oneTurn": true
+      }
     }
   },
   "collectible": true,

@@ -30,8 +30,7 @@
             },
             "operation": "SUBTRACT"
           }
-        },
-        "oneTurn": true
+        }
       }
     }
   },
