@@ -7,6 +7,7 @@ permalink: /whats-new/
 ### 0.8.37-2.0.32 (In Progress)
 
 Bug fixes.
+Warden Saihan now correctly labeled as a Monk Legendary. (1227)
 
 ##### Content Fixes:
 
