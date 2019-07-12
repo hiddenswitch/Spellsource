@@ -43,9 +43,12 @@ For Python users, the build is now compatible with Java 11.
  - Living Mana no longer puts you into negative mana. (1026)
  - Mollusk Meister now has the correct effects. (1115)
 
+ 
 ### 0.8.35-2.0.31 (July 1st, 2019)
 
 Fixing issues with cards not being found or detected after their IDs were changed.
+
+Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
 
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
