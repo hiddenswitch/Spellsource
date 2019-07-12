@@ -1,0 +1,13 @@
+{
+  "name": "Pageling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

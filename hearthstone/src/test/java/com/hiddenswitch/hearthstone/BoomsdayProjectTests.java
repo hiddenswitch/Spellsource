@@ -109,13 +109,20 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getMinions().size(), 2, "minions");
 		});
 
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_dr__morrigan");
+			playCard(context, player, "minion_knife_juggler");
+			playCard(context, player, "minion_spiritsinger_umbra");
+			playCard(context, player, "minion_dr__morrigan");
+			assertTrue(opponent.getHero().isDestroyed());
+		});
 
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_dr__morrigan");
 			playCard(context, player, "minion_spiritsinger_umbra");
 			playCard(context, player, "minion_knife_juggler");
 			playCard(context, player, "minion_dr__morrigan");
-			assertTrue(opponent.getHero().isDestroyed());
+			assertFalse(opponent.getHero().isDestroyed());
 		});
 	}
 

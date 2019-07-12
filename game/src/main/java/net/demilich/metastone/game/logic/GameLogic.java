@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -788,8 +789,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		Entity override = targetAcquisition(player, source, sourceAction);
 		if (override != null && !spellDesc.hasPredefinedTarget()) {
-			targets = Collections.singletonList(override);
+			targets = new ArrayList<>();
+			targets.add(override);
 			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
+		}
+
+		// Spell effects should never be cast on the old reference to a transform.
+		if (targets != null && !targets.isEmpty()) {
+			for (int i = 0; i < targets.size(); i++) {
+				if (targets.get(i).getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
+					targets.set(i, targets.get(i).transformResolved(context));
+				}
+			}
 		}
 
 		Spell spell = spellDesc.create();
@@ -2771,10 +2782,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			player.getDeck().get(i).setAttribute(Attribute.STARTING_INDEX, i);
 		}
 
-		// second player gets the coin additionally
+		// second player gets specified bonus cards in this format
 		if (!begins) {
-			Card theCoin = CardCatalogue.getCardById("spell_the_coin");
-			receiveCard(player.getId(), theCoin);
+			for (String cardId : context.getDeckFormat().getSecondPlayerBonusCards()) {
+				receiveCard(player.getId(), context.getCardById(cardId));
+			}
 		}
 	}
 
@@ -4333,58 +4345,55 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see net.demilich.metastone.game.spells.TransformMinionSpell for the complete transformation logic.
 	 */
 	@Suspendable
-	public void transformMinion(Minion minion, Minion newMinion) {
+	public void transformMinion(@NotNull Minion minion, @NotNull Minion newMinion) {
+		Objects.requireNonNull(newMinion);
 		// Remove any spell triggers associated with the old minion.
 		removeEnchantments(minion);
 
 		Player owner = context.getPlayer(minion.getOwner());
-		int index = -1;
-		// Tracking of old zone implements Sherazin, Seed
+		// We may be transforming minions before they hit the board.
+		int index = owner.getMinions().size() - 1;
+		// Tracking of old index implements Sherazin, Seed
 		Zones oldZone = minion.getZone();
-		if (!minion.getEntityLocation().equals(EntityLocation.UNASSIGNED)
-				&& owner != null) {
+		// It's okay to transform in the battlefield or graveyard (handles Sherazin)
+		if (minion.getZone() == Zones.BATTLEFIELD || minion.getZone() == Zones.GRAVEYARD) {
 			index = minion.getEntityLocation().getIndex();
 			owner.getZone(minion.getEntityLocation().getZone()).remove(index);
+		} else {
+			// Transforming a minion before it hits the board? Probably a bug
+			throw new UnsupportedOperationException("not on board");
 		}
 
 		// If we want to straight up remove a minion from existence without
 		// killing it, this would be the best way.
-		if (newMinion != null) {
-			// Give the new minion an ID.
-			newMinion.setId(generateId());
-			newMinion.setOwner(owner.getId());
+		// Give the new minion an ID.
+		newMinion.setId(generateId());
+		newMinion.setOwner(owner.getId());
 
-			minion.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newMinion.getReference());
-			// If the minion being transforms is being summoned, replace the old
-			// minion on the stack.
-			// Otherwise, summon the add the new minion.
-			// However, do not give a summon event.
-			if (!context.getSummonReferenceStack().isEmpty() && context.getSummonReferenceStack().peek().equals(minion.getReference())
-					&& !context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE)) {
-				context.getEnvironment().put(Environment.TRANSFORM_REFERENCE, newMinion.getReference());
-				owner.getMinions().add(index, newMinion);
-
-				// It's quite possible that this is actually supposed to add the
-				// minion to the zone it was originally in.
-				// This means minions in the SetAsideZone or the Graveyard that are
-				// targeted (through bizarre mechanics)
-				// add the minion to there. This will be tested eventually with
-				// Resurrect, Recombobulator, and Illidan.
-				// Since this is unknown, this is the patch for it.
-			} else if (!owner.getSetAsideZone().contains(minion)) {
-				if (index < 0 || index >= owner.getMinions().size()) {
-					owner.getMinions().add(newMinion);
-				} else {
-					owner.getMinions().add(index, newMinion);
-				}
-
-				newMinionOnBattlefield(newMinion, owner);
+		minion.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newMinion.getReference());
+		// If minion is currently being summoned, newMinion gets summoned instead. The fact that newMinion is summoned
+		// instead is communicated back to the summon function via Environment.TRANSFORM_REFERENCE
+		if (!context.getSummonReferenceStack().isEmpty()
+				&& Objects.equals(context.getSummonReferenceStack().peek(), minion.getReference())
+				&& !context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE)) {
+			context.getEnvironment().put(Environment.TRANSFORM_REFERENCE, newMinion.getReference());
+			owner.getMinions().add(index, newMinion);
+			// Otherwise, if the set aside zone does not contain the minion (it is definitely not on the battlefield or in
+			// the graveyard and we are not transforming something being returned to hand), we have removed the old minion here
+			// and can now drop in the new minion.
+		} else if (!owner.getSetAsideZone().contains(minion)) {
+			if (index < 0 || index >= owner.getMinions().size()) {
+				owner.getMinions().add(newMinion);
 			} else {
-				owner.getSetAsideZone().add(newMinion);
-				removeEnchantments(newMinion);
-				return;
+				owner.getMinions().add(index, newMinion);
 			}
 
+			newMinionOnBattlefield(newMinion, owner);
+		} else {
+			// Not sure if this ever happens, it's related to whether the minion still belongs to its owner?
+			owner.getSetAsideZone().add(newMinion);
+			removeEnchantments(newMinion);
+			return;
 		}
 
 		// Special case for Sherazin, Seed
