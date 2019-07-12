@@ -83,7 +83,7 @@ public class DeckTest extends SpellsourceTestBase {
 			CreateAccountResponse player1 = createRandomAccount();
 			final String userId = player1.getUserId();
 			CreateCollectionResponse emptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", HeroClass.BLACK));
+			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", "BLACK"));
 			DeckUpdateResponse update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
 					.pushCardIds(new DecksUpdateCommandPushCardIds()
 							.addEachItem("spell_mirror_image")

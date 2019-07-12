@@ -40,7 +40,7 @@ import static java.util.stream.Collectors.toList;
 public class TycheBehaviour extends IntelligentBehaviour {
 	public final static DeckCreateRequest midrangeShaman() {
 		return new DeckCreateRequest().withFormat("Standard")
-				.withHeroClass(HeroClass.SILVER)
+				.withHeroClass("SILVER")
 				.withCardIds(Arrays.asList(
 						"minion_tunnel_trogg",
 						"minion_tunnel_trogg",
@@ -920,17 +920,17 @@ public class TycheBehaviour extends IntelligentBehaviour {
 			System.arraycopy(values, 0, weights, 0, values.length);
 		}
 
-		static StateWeights getHeroBased(HeroClass playerHeroClass, HeroClass opponentHeroClass) {
+		static StateWeights getHeroBased(String playerHeroClass, String opponentHeroClass) {
 			switch (playerHeroClass) {
-				case RED:
+				case "RED":
 					return new StateWeights(6.083261d, 3.697277d, 3.603937d, 9.533023d, 8.534495d, 8.220309d);
-				case SILVER:
+				case "SILVER":
 					return new StateWeights(3.168855d, 5.913401d, 3.937068d, 9.007857d, 8.526226d, 5.678857d);
-				case BLUE:
+				case "BLUE":
 					return new StateWeights(3.133729d, 9.927018d, 2.963968d, 6.498888d, 4.516192d, 4.645887d);
-				case BROWN:
+				case "BROWN":
 					return new StateWeights(1.995913d, 4.501529d, 1.888616d, 1.096681d, 3.516505d, 1.0d);
-				case VIOLET:
+				case "VIOLET":
 					return new StateWeights(6.338876d, 8.568761d, 1.863452d, 3.182807d, 4.967152d, 1.0d);
 				default:
 					return getDefault();

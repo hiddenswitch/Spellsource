@@ -57,7 +57,7 @@ public final class CardPropertyCondition extends Condition {
 			return false;
 		}
 
-		HeroClass heroClass = (HeroClass) desc.get(ConditionArg.HERO_CLASS);
+		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
 		if (heroClass != null && !card.hasHeroClass(heroClass)) {
 			return false;
 		}

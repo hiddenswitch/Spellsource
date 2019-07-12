@@ -1,0 +1,11 @@
+{
+  "name": "Baron",
+  "type": "CLASS",
+  "hero": "hero_baron_aldus",
+  "heroClass": "NAVY",
+  "color": [70, 120, 205],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

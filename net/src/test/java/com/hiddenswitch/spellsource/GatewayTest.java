@@ -15,6 +15,7 @@ import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.test.core.Repeat;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -143,6 +144,7 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 	@Test(timeout = 32000L)
+	@Repeat(times = 10)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		// Play twice
 		UnityClient client = new UnityClient(context);
@@ -281,8 +283,12 @@ public class GatewayTest extends SpellsourceTestBase {
 		DefaultApi defaultApi = getApi();
 
 		GetCardsResponse response1 = defaultApi.getCards(null);
+		// The game is now sending formats and classes to the client
 		final long count = CardCatalogue.getRecords().values().stream().filter(
-				cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getDesc().getSet()) && cd.getDesc().type != CardType.GROUP && cd.getDesc().type != CardType.HERO_POWER && cd.getDesc().type != CardType.ENCHANTMENT).count();
+				cd -> DeckFormat.getFormat("Greater Custom").isInFormat(cd.getDesc().getSet())
+						&& cd.getDesc().type != CardType.GROUP
+						&& cd.getDesc().type != CardType.HERO_POWER
+						&& cd.getDesc().type != CardType.ENCHANTMENT).count();
 		context.assertEquals((long) response1.getCards().size(), count);
 		String etag = defaultApi.getApiClient().getResponseHeaders().get("ETag").get(0);
 		try {
