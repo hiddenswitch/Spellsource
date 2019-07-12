@@ -62,8 +62,8 @@ public final class CardPropertyCondition extends Condition {
 			return false;
 		}
 
-		Race race = (Race) desc.get(ConditionArg.RACE);
-		if (race != null && !card.getRace().hasRace(race)) {
+		String race = (String) desc.get(ConditionArg.RACE);
+		if (race != null && !Race.hasRace(card.getRace(), race)) {
 			return false;
 		}
 

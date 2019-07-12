@@ -1,38 +1,37 @@
 package net.demilich.metastone.game.entities.minions;
 
-public enum Race {
-	NONE,
-	BEAST,
-	BEAST_DRAGON,
-	MURLOC,
-	PIRATE,
-	DEMON,
-	DRAGON,
-	TOTEM,
-	MECH,
-	ELEMENTAL,
-	TITAN,
-	FAE,
-	ALL;
+import java.util.Objects;
 
-	public boolean hasRace(Race comparedTo) {
-		if (this == ALL && comparedTo != NONE && comparedTo != null) {
+public class Race {
+
+	public static final String NONE = "NONE";
+	public static final String ALL = "ALL";
+
+	public static boolean hasRace(String og, String comparedTo) {
+		if (Objects.equals(og, ALL) && !Objects.equals(comparedTo, NONE)) {
+			return true;
+		}
+		if (Objects.equals(comparedTo, ALL) && !Objects.equals(og, NONE)) {
 			return true;
 		}
 
-		if (comparedTo == ALL
-				&& this != NONE) {
-			return true;
+		if (og.contains("&")) {
+			String[] races = og.split("&");
+			for (String race : races) {
+				if (Objects.equals(race, comparedTo)) {
+					return true;
+				}
+			}
+		}
+		if (comparedTo.contains("&")) {
+			String[] races = comparedTo.split("&");
+			for (String race : races) {
+				if (Objects.equals(race, og)) {
+					return true;
+				}
+			}
 		}
 
-		if (this == BEAST_DRAGON && (comparedTo == BEAST || comparedTo == DRAGON)) {
-			return true;
-		}
-
-		if ((this == DRAGON || this == BEAST) && comparedTo == BEAST_DRAGON) {
-			return true;
-		}
-
-		return this == comparedTo;
+		return Objects.equals(og, comparedTo);
 	}
 }

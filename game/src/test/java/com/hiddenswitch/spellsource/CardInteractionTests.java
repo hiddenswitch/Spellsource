@@ -225,7 +225,7 @@ public class CardInteractionTests extends TestBase {
 			Card jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 			// first, just play Jaraxxus on an empty board
 			playCard(context, player, jaraxxus);
-			assertEquals(player.getHero().getRace(), Race.DEMON);
+			assertEquals(player.getHero().getRace(), "DEMON");
 			assertEquals(player.getHero().getHp(), 15);
 			assertNotNull(player.getHero().getWeapon());
 			// There should be no minions on the board in this case
@@ -241,7 +241,7 @@ public class CardInteractionTests extends TestBase {
 			context.endTurn();
 			jaraxxus = CardCatalogue.getCardById("minion_lord_jaraxxus");
 			playCard(context, player, jaraxxus);
-			assertEquals(player.getHero().getRace(), Race.DEMON);
+			assertEquals(player.getHero().getRace(), "DEMON");
 			// Jaraxxus should be affected by Repentance, bringing him down to 1 hp
 			assertEquals(player.getHero().getHp(), 1);
 			assertNotNull(player.getHero().getWeapon());
