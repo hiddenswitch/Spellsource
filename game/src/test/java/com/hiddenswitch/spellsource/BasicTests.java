@@ -6,6 +6,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -184,7 +185,7 @@ public class BasicTests extends TestBase {
 
 	@Test
 	public void testTheCoin() {
-		GameContext context = createContext("BLUE", "RED");
+		GameContext context = createContext("BLUE", "RED", true, DeckFormat.getFormat("Standard"));
 		Player mage = context.getPlayer1();
 		Player warrior = context.getPlayer2();
 

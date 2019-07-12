@@ -15,7 +15,7 @@ public class CardDrawnTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		DrawCardEvent drawEvent = (DrawCardEvent) event;
 
 		CardType sourceType = (CardType) getDesc().get(EventTriggerArg.SOURCE_TYPE);

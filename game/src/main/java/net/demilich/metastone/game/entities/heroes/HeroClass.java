@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +30,7 @@ public class HeroClass {
 	public static final String SILVER = "SILVER";
 	public static final String VIOLET = "VIOLET";
 	public static final String RED = "RED";
+	public static final String OLIVE = "OLIVE";
 
 
 	/**
