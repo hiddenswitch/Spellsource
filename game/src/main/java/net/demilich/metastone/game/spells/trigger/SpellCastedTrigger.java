@@ -17,8 +17,8 @@ public final class SpellCastedTrigger extends AbstractCardTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
-		return super.fire(event, host);
+	protected boolean innerQueues(GameEvent event, Entity host) {
+		return super.innerQueues(event, host);
 	}
 
 	@Override

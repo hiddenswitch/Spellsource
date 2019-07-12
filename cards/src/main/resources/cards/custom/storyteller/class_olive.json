@@ -1,0 +1,11 @@
+{
+  "name": "Storyteller",
+  "type": "CLASS",
+  "hero": "hero_lomenia",
+  "heroClass": "OLIVE",
+  "color": [130, 120, 5],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
