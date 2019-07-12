@@ -66,8 +66,8 @@ public final class CardFilter extends EntityFilter {
 		if (cardType != null && !card.getCardType().isCardType(cardType)) {
 			return false;
 		}
-		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
-		if (race != null && !card.getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EntityFilterArg.RACE);
+		if (race != null && !Race.hasRace(card.getRace(), race)) {
 			return false;
 		}
 
@@ -141,7 +141,7 @@ public final class CardFilter extends EntityFilter {
 		return create(cardType, null);
 	}
 
-	public static CardFilter create(CardType cardType, Race race) {
+	public static CardFilter create(CardType cardType, String race) {
 		EntityFilterDesc arguments = new EntityFilterDesc(CardFilter.class);
 		if (cardType != null) {
 			arguments.put(EntityFilterArg.CARD_TYPE, cardType);

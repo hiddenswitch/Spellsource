@@ -161,8 +161,8 @@ public class MonkTests extends TestBase {
 			shuffleToDeck(context, player, "minion_thunderhead");
 			playMinionCard(context, player, "minion_the_uncasked");
 			assertEquals(player.getHand().size(), 2);
-			assertEquals(player.getHand().get(0).getRace(), Race.ELEMENTAL);
-			assertEquals(player.getHand().get(1).getRace(), Race.ELEMENTAL);
+			assertEquals(player.getHand().get(0).getRace(), "ELEMENTAL");
+			assertEquals(player.getHand().get(1).getRace(), "ELEMENTAL");
 		}));
 	}
 

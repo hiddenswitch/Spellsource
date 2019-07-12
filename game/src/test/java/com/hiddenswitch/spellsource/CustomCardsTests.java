@@ -1358,8 +1358,8 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_murloc_fixpicker");
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(player.getHand().size(), 2);
-			assertTrue(player.getHand().get(0).getRace().hasRace(Race.FAE));
-			assertTrue(player.getHand().get(1).getRace().hasRace(Race.FAE));
+			assertTrue(Race.hasRace(player.getHand().get(0).getRace(), "FAE"));
+			assertTrue(Race.hasRace(player.getHand().get(1).getRace(), "FAE"));
 			assertEquals(player.getDeck().size(), 0);
 		});
 	}
@@ -4315,7 +4315,7 @@ public class CustomCardsTests extends TestBase {
 
 			for (Card card : player.getHand().subList(0, 2)) {
 				assertEquals(card.getCardId(), "minion_virmen_sensei");
-				assertEquals(card.getRace(), Race.BEAST);
+				assertEquals(card.getRace(), "BEAST");
 			}
 
 			final Card boulderfist = player.getHand().get(2);
@@ -5345,7 +5345,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(card.getCardId(), "minion_malorne");
 			int baseMana = card.getBaseManaCost();
 			assertEquals(baseMana, 7);
-			assertEquals(card.getRace(), Race.BEAST);
+			assertEquals(card.getRace(), "BEAST");
 			assertEquals(costOf(context, player, card), baseMana - 2);
 		});
 	}
@@ -6296,7 +6296,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			playCard(context, player, "spell_slain_party");
 			for (Minion minion : player.getMinions()) {
-				assertTrue(minion.getRace().hasRace(Race.MURLOC));
+				assertTrue(Race.hasRace(minion.getRace(), "MURLOC"));
 			}
 		});
 	}
@@ -6348,7 +6348,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference()));
 			useHeroPower(context, player);
-			assertTrue(player.getMinions().get(0).getRace().hasRace(Race.MURLOC));
+			assertTrue(Race.hasRace(player.getMinions().get(0).getRace(), "MURLOC"));
 		});
 	}
 

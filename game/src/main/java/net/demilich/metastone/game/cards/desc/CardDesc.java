@@ -118,7 +118,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int damage;
 	public int durability;
 	public Rarity rarity;
-	public Race race;
+	public String race;
 	public String description;
 	public TargetSelection targetSelection;
 	public EventTriggerDesc secret;
@@ -704,11 +704,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	/**
 	 * The actor's race, or "tribe."
 	 */
-	public Race getRace() {
+	public String getRace() {
 		return race;
 	}
 
-	public void setRace(Race race) {
+	public void setRace(String race) {
 		this.race = race;
 	}
 

@@ -445,8 +445,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	@NotNull
 	@Override
-	public Race getRace() {
-		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
+	public String getRace() {
+		return (String) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
 	}
 
 	/**
@@ -961,7 +961,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public Actor applyText(Actor instance) {
 		instance.setBattlecry(getDesc().getBattlecry());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
-				(Race) getAttribute(Attribute.RACE) :
+				(String) getAttribute(Attribute.RACE) :
 				getDesc().getRace());
 
 		if (getDesc().getDeathrattle() != null) {
