@@ -48,7 +48,7 @@ public class CreateSummonSpell extends Spell {
 		if (attribute != null) {
 			cardDesc.getAttributes().put(attribute, true);
 		}
-		cardDesc.setSet(CardSet.BASIC);
+		cardDesc.setSet("BASIC");
 		cardDesc.setCollectible(false);
 		cardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
 		Card newCard = cardDesc.create();

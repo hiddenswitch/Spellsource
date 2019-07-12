@@ -104,6 +104,6 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 			// This is a depth 6 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
 			assertTrue(context.updateAndGetGameOver());
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 }

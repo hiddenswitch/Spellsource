@@ -1,0 +1,16 @@
+{
+  "name": "Hone Reflexes",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "COMMON",
+  "description": "Your Hero Power becomes 'Gain +3 Attack this turn.'",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ChangeHeroPowerSpell",
+    "card": "hero_power_hone_reflexes"
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

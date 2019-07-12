@@ -156,7 +156,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param heroClass
 	 */
-	public Player(HeroClass heroClass) {
+	public Player(String heroClass) {
 		this();
 		this.setHero(HeroClass.getHeroCard(heroClass).createHero());
 	}

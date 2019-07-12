@@ -12,7 +12,7 @@ public class OverloadTrigger extends EventTrigger {
 	}
 
 	@Override
-	public boolean fire(GameEvent event, Entity host) {
+	public boolean innerQueues(GameEvent event, Entity host) {
 		return true;
 	}
 

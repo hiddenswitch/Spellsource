@@ -51,7 +51,7 @@ public class TheGrandTournamentTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_sideshow_spelleater");
 			Assert.assertEquals(player.getHero().getHeroPower().getHeroClass(), opponent.getHero().getHeroPower().getHeroClass());
-		}, HeroClass.BLACK, HeroClass.VIOLET);
+		}, "BLACK", "VIOLET");
 	}
 
 	@Test
@@ -107,7 +107,7 @@ public class TheGrandTournamentTests extends TestBase {
 
 			// warrior casted a spell on Eydis - nothing should happen
 			Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);
-		}, HeroClass.WHITE, HeroClass.RED);
+		}, "WHITE", "RED");
 	}
 
 	@Test

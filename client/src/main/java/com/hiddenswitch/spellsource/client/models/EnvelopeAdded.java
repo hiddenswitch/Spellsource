@@ -21,6 +21,7 @@ import com.hiddenswitch.spellsource.client.models.ChatMessage;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.Invite;
 import com.hiddenswitch.spellsource.client.models.Match;
+import com.hiddenswitch.spellsource.client.models.SpanContext;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -46,6 +47,9 @@ public class EnvelopeAdded implements Serializable {
 
   @JsonProperty("match")
   private Match match = null;
+
+  @JsonProperty("spanContext")
+  private SpanContext spanContext = null;
 
   public EnvelopeAdded chatMessage(ChatMessage chatMessage) {
     this.chatMessage = chatMessage;
@@ -119,6 +123,24 @@ public class EnvelopeAdded implements Serializable {
     this.match = match;
   }
 
+  public EnvelopeAdded spanContext(SpanContext spanContext) {
+    this.spanContext = spanContext;
+    return this;
+  }
+
+   /**
+   * Get spanContext
+   * @return spanContext
+  **/
+  @ApiModelProperty(value = "")
+  public SpanContext getSpanContext() {
+    return spanContext;
+  }
+
+  public void setSpanContext(SpanContext spanContext) {
+    this.spanContext = spanContext;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -132,12 +154,13 @@ public class EnvelopeAdded implements Serializable {
     return Objects.equals(this.chatMessage, envelopeAdded.chatMessage) &&
         Objects.equals(this.friend, envelopeAdded.friend) &&
         Objects.equals(this.invite, envelopeAdded.invite) &&
-        Objects.equals(this.match, envelopeAdded.match);
+        Objects.equals(this.match, envelopeAdded.match) &&
+        Objects.equals(this.spanContext, envelopeAdded.spanContext);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatMessage, friend, invite, match);
+    return Objects.hash(chatMessage, friend, invite, match, spanContext);
   }
 
 
@@ -150,6 +173,7 @@ public class EnvelopeAdded implements Serializable {
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
     sb.append("    match: ").append(toIndentedString(match)).append("\n");
+    sb.append("    spanContext: ").append(toIndentedString(spanContext)).append("\n");
     sb.append("}");
     return sb.toString();
   }

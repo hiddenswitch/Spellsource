@@ -1,16 +1,30 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.AbstractQueuedSynchronizer;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.BinaryCarrier;
 import com.hiddenswitch.spellsource.impl.UserId;
+import io.jaegertracing.internal.samplers.GuaranteedThroughputSampler;
+import io.jaegertracing.internal.samplers.ProbabilisticSampler;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.log.Fields;
+import io.opentracing.noop.NoopTracerFactory;
+import io.opentracing.propagation.Format;
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
@@ -20,10 +34,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,6 +45,7 @@ public class UnityClient implements AutoCloseable {
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
 	public static String BASE_PATH = BASE + Integer.toString(Port.port());
+	private final Tracer tracer = NoopTracerFactory.create(); /*Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0)*/
 	private int id;
 	private ApiClient apiClient;
 	private DefaultApi api;
@@ -51,23 +63,24 @@ public class UnityClient implements AutoCloseable {
 	protected CountDownLatch gameOverLatch = new CountDownLatch(1);
 	// No op lock for now
 	protected ReentrantLock messagingLock = new NoOpLock();
-	protected CountDownLatch receivedAtLeastOneMessage;
 	private boolean receivedGameOverMessage;
 	private AtomicInteger turnsPlayed = new AtomicInteger();
 
-
-	public UnityClient(TestContext context) {
+	private UnityClient() {
+		id = ids.getAndIncrement();
 		apiClient = new ApiClient();
 		thisUrl = BASE_PATH;
 		apiClient.setBasePath(BASE_PATH);
 		api = new DefaultApi(apiClient);
-		id = ids.getAndIncrement();
+	}
+
+	public UnityClient(TestContext context) {
+		this();
 		this.context = context;
 	}
 
 	public UnityClient(TestContext context, int port) {
 		this(context);
-		apiClient = new ApiClient();
 		thisUrl = BASE + Integer.toString(port);
 		apiClient.setBasePath(thisUrl);
 		api = new DefaultApi(apiClient);
@@ -97,6 +110,7 @@ public class UnityClient implements AutoCloseable {
 			context.assertTrue(account.getDecks().size() > 0);
 			LOGGER.debug("createUserAccount {} {}: Created account", id, car.getAccount().getId());
 		} catch (ApiException e) {
+//			close();
 			context.fail(e.getMessage());
 		}
 		return this;
@@ -147,19 +161,42 @@ public class UnityClient implements AutoCloseable {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
-				LOGGER.debug("ensureConnected {}: Connecting...", id);
+				AtomicReference<Span> span = new AtomicReference<>(tracer.buildSpan("ServerGameContext/play")
+						.start());
+				span.get().log("connecting");
+				span.get().setTag("userId", getAccount().getId());
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 				CountDownLatch firstMessage = new CountDownLatch(1);
 				LOGGER.debug("ensureConnected {}: Connected", id);
 				realtime.setMessageHandler((String message) -> {
-					LOGGER.trace("ensureConnected {}: Handling realtime message for userId {}", id, getUserId());
-					firstMessage.countDown();
+					Scope s = tracer.activateSpan(span.get());
 					try {
-						messagingLock.lock();
-
-						this.handleMessage(Json.decodeValue(message, Envelope.class));
+						Envelope env = Json.decodeValue(message, Envelope.class);
+						if (env.getAdded() != null && env.getAdded().getSpanContext() != null) {
+							// Finish the current span, then create another.
+							span.get().finish();
+							s.close();
+							span.set(tracer.buildSpan("ServerGameContext/play")
+									.asChildOf(tracer.extract(Format.Builtin.BINARY, new BinaryCarrier(env.getAdded().getSpanContext().getData())))
+									.start());
+							s = tracer.activateSpan(span.get());
+							span.get().setTag("userId", getAccount().getId());
+						}
+						span.get().log(ImmutableMap.of(Fields.EVENT, "received",
+								"messageType", env.getGame() == null ? "" : env.getGame().getServerToClient().getMessageType().toString()));
+						firstMessage.countDown();
+						try {
+							messagingLock.lock();
+							this.handleMessage(env);
+						} finally {
+							messagingLock.unlock();
+						}
+					} catch (RuntimeException runtimeException) {
+						Tracing.error(runtimeException, span.get(), true);
+//						close();
+						context.fail(runtimeException);
 					} finally {
-						messagingLock.unlock();
+						s.close();
 					}
 				});
 				realtime.connect();
@@ -167,7 +204,7 @@ public class UnityClient implements AutoCloseable {
 				context.assertTrue(firstMessage.getCount() <= 0);
 			}
 		} catch (Throwable any) {
-			LOGGER.error("ensureConnected: ", any);
+//			close();
 			context.fail(any);
 		} finally {
 			messagingLock.unlock();
@@ -182,104 +219,104 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	protected void handleMatchmaking(Envelope env) {
-		if (env.equals(Matchmaking.gameReadyMessage())) {
-			if (matchmakingFut.get().isCancelled()) {
-				context.fail(new IllegalStateException("matchmaking was cancelled"));
-			}
-
-			// Might have been cancelled
-			context.assertFalse(matchmakingFut.get().isDone());
-			matchmakingFut.get().complete(null);
+		if (!env.equals(Matchmaking.gameReadyMessage())) {
+			return;
 		}
+
+		if (matchmakingFut.get().isCancelled()) {
+//			close();
+			context.fail(new IllegalStateException("matchmaking was cancelled"));
+		}
+
+		// Might have been cancelled
+		context.assertFalse(matchmakingFut.get().isDone());
+		matchmakingFut.get().complete(null);
 	}
 
 	@Suspendable
 	protected void handleGameMessages(Envelope env) {
-		if (env.getGame() != null && env.getGame().getServerToClient() != null) {
-			ServerToClientMessage message = env.getGame().getServerToClient();
-			messagingLock.lock();
-			try {
-				for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
-					if (handler != null) {
-						handler.accept(message);
-					}
-				}
-				if (turnsToPlay.get() <= 0) {
-					if (!gameOver && onGameOver != null) {
-						onGameOver.handle(this);
-					}
-					if (!gameOver) {
-						gameOverLatch.countDown();
-					}
-					gameOver = true;
-					if (shouldDisconnect) {
-						disconnect();
-					}
-					return;
-				}
+		if (env.getGame() == null || env.getGame().getServerToClient() == null) {
+			return;
+		}
 
-				LOGGER.trace("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
-				switch (message.getMessageType()) {
-					case ON_TURN_END:
-						turnsPlayed.incrementAndGet();
-						if (turnsToPlay.getAndDecrement() <= 0
-								&& shouldDisconnect) {
-							disconnect();
-						}
-						break;
-					case ON_UPDATE:
-						assertValidStateAndChanges(message);
-						break;
-					case ON_GAME_EVENT:
-						context.assertNotNull(message.getEvent());
-						assertValidStateAndChanges(message);
-						break;
-					case ON_MULLIGAN:
-						onMulligan(message);
-						if (turnsToPlay.get() == 0 && shouldDisconnect) {
-							// don't respond to the mulligan attempt
-							disconnect();
-							gameOverLatch.countDown();
-							break;
-						}
-						context.assertNotNull(message.getStartingCards());
-						context.assertTrue(message.getStartingCards().size() > 0);
-						realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
-								.messageType(MessageType.UPDATE_MULLIGAN)
-								.repliesTo(message.getId())
-								.discardedCardIndices(Collections.singletonList(0))))));
-						break;
-					case ON_REQUEST_ACTION:
-						if (!onRequestAction(message)) {
-							break;
-						}
-						assertValidActions(message);
-						assertValidStateAndChanges(message);
-						context.assertNotNull(message.getGameState());
-						context.assertNotNull(message.getChanges());
-						context.assertNotNull(message.getActions());
-						respondRandomAction(message);
-						break;
-					case ON_GAME_END:
-						// The game has ended.
-						this.receivedGameOverMessage = true;
-						this.gameOver = true;
-						// TODO: Should we disconnect realtime here?
-						if (shouldDisconnect) {
-							disconnect();
-						}
-						gameOverLatch.countDown();
-						if (onGameOver != null) {
-							onGameOver.handle(this);
-						}
-						LOGGER.debug("play {} {}: received game end message.", id, getUserId());
-						break;
-				}
-				LOGGER.trace("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
-			} finally {
-				messagingLock.unlock();
+		ServerToClientMessage message = env.getGame().getServerToClient();
+		for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
+			if (handler != null) {
+				handler.accept(message);
 			}
 		}
+		if (turnsToPlay.get() <= 0) {
+			if (!gameOver && onGameOver != null) {
+				onGameOver.handle(this);
+			}
+			if (!gameOver) {
+				gameOverLatch.countDown();
+			}
+			gameOver = true;
+			if (shouldDisconnect) {
+				disconnect();
+			}
+			return;
+		}
+
+		switch (message.getMessageType()) {
+			case ON_TURN_END:
+				turnsPlayed.incrementAndGet();
+				if (turnsToPlay.getAndDecrement() <= 0
+						&& shouldDisconnect) {
+					disconnect();
+				}
+				break;
+			case ON_UPDATE:
+				assertValidStateAndChanges(message);
+				break;
+			case ON_GAME_EVENT:
+				context.assertNotNull(message.getEvent());
+				assertValidStateAndChanges(message);
+				break;
+			case ON_MULLIGAN:
+				onMulligan(message);
+				if (turnsToPlay.get() == 0 && shouldDisconnect) {
+					// don't respond to the mulligan attempt
+					disconnect();
+					gameOverLatch.countDown();
+					break;
+				}
+				context.assertNotNull(message.getStartingCards());
+				context.assertTrue(message.getStartingCards().size() > 0);
+				realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
+						.messageType(MessageType.UPDATE_MULLIGAN)
+						.repliesTo(message.getId())
+						.discardedCardIndices(Collections.singletonList(0))))));
+				break;
+			case ON_REQUEST_ACTION:
+				if (!onRequestAction(message)) {
+					break;
+				}
+				assertValidActions(message);
+				assertValidStateAndChanges(message);
+				context.assertNotNull(message.getGameState());
+				context.assertNotNull(message.getChanges());
+				context.assertNotNull(message.getActions());
+				respondRandomAction(message);
+				break;
+			case ON_GAME_END:
+				// The game has ended.
+				this.receivedGameOverMessage = true;
+				this.gameOver = true;
+				// TODO: Should we disconnect realtime here?
+				if (shouldDisconnect) {
+					disconnect();
+				}
+				gameOverLatch.countDown();
+				if (onGameOver != null) {
+					onGameOver.handle(this);
+				}
+				LOGGER.debug("play {} {}: received game end message.", id, getUserId());
+				tracer.activeSpan().finish();
+				break;
+		}
+		LOGGER.trace("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 	}
 
 	@Suspendable
@@ -307,6 +344,7 @@ public class UnityClient implements AutoCloseable {
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
 		} catch (TimeoutException e) {
+//			close();
 			context.fail(e);
 		}
 	}
@@ -484,6 +522,7 @@ public class UnityClient implements AutoCloseable {
 		try {
 			gameOverLatch.await(90L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
+//			close();
 			throw new AssertionError(e);
 		}
 		return this;
@@ -497,6 +536,7 @@ public class UnityClient implements AutoCloseable {
 			account = lr.getAccount();
 			context.assertNotNull(account);
 		} catch (ApiException e) {
+//			close();
 			context.fail(e.getMessage());
 		}
 		return this;
@@ -526,8 +566,12 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		disconnect();
+		if (tracer.activeSpan() != null) {
+			tracer.activeSpan().finish();
+		}
+		tracer.close();
 	}
 
 	public boolean receivedGameOverMessage() {

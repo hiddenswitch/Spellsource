@@ -3,7 +3,9 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
+
 import net.demilich.metastone.game.entities.minions.Minion;
+
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -221,4 +223,59 @@ public class WitchDoctorTests extends TestBase {
 			assertEquals(costOf(context, player, coin), 1);
 		});
 	}
+
+	// Secretive Chanter: "Opener: Transform all Voodoo spells in your hand into Emerald Secrets."
+	@Test
+	public void testSecretiveChanter() {
+		runGym((context, player, opponent) -> {
+			Card v1 = receiveCard(context, player, "spell_divination");
+			Card v2 = receiveCard(context, player, "spell_frenzy");
+			Card v3 = receiveCard(context, player, "spell_hex_bolt");
+			Card v4 = receiveCard(context, player, "spell_spirit_bind");
+			Card v5 = receiveCard(context, player, "spell_spirit_bind");
+			Card nonv = receiveCard(context, player, "spell_test_deal_6");
+			playMinionCard(context, player, "minion_secretive_chanter");
+			// Check whether all Voodoo spells have been transformed
+			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(3).getCardId().contains("secret_secret_of"));
+			assertTrue(player.getHand().get(4).getCardId().contains("secret_secret_of"));
+			assertEquals(player.getHand().get(5).getCardId(), "spell_test_deal_6");
+		});
+	}
+
+	// High Shaman Mawliki: "Your spells have Toxic. Your healing is doubled. Your other minions have Elusive and Guard."
+	@Test
+	public void testHighShamanMawliki() {
+		runGym((context, player, opponent) -> {
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion friend2 = playMinionCard(context, player, "minion_neutral_test_14");
+			playMinionCard(context, player, "minion_high_shaman_mawliki");
+			// Check for guard and elusive
+			assertTrue(friend1.hasAttribute(Attribute.AURA_TAUNT));
+			assertTrue(friend2.hasAttribute(Attribute.AURA_TAUNT));
+			assertTrue(friend1.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+			assertTrue(friend2.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+			context.endTurn();
+			Minion enemy1 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
+			Minion enemy2 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
+			Minion enemy3 = playMinionCard(context, opponent, "minion_armageddon_wyvern");
+			context.endTurn();
+			// Check for toxic spells
+			playCard(context, player, "spell_test_deal_6", enemy1);
+			playCard(context, player, "spell_test_deal_6", enemy2);
+			assertTrue(enemy1.isDestroyed());
+			assertTrue(enemy2.isDestroyed());
+			assertEquals(opponent.getMinions().size(), 1);
+			context.endTurn();
+			attack(context, opponent, enemy3, friend2);
+			assertEquals(friend2.getHp(), 4);
+			context.endTurn();
+			// Check for double healing effect
+			playCard(context, player, "spell_crystal_power_2", friend2);
+			assertEquals(friend2.getHp(), 14);
+		});
+	}
+
 }

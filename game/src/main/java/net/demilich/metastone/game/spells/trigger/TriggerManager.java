@@ -118,7 +118,7 @@ public class TriggerManager implements Cloneable, Serializable {
 			}
 
 			if (trigger.interestedIn(event.getEventType())
-					&& triggers.contains(trigger) && trigger.canFire(event)) {
+					&& triggers.contains(trigger) && trigger.queues(event)) {
 				eventTriggers.add(trigger);
 			}
 			event.getGameContext().getTriggerHostStack().pop();
@@ -132,7 +132,7 @@ public class TriggerManager implements Cloneable, Serializable {
 
 			event.getGameContext().getTriggerHostStack().push(hostReference);
 
-			if (trigger.canFireCondition(event) && triggers.contains(trigger)) {
+			if (trigger.fires(event) && triggers.contains(trigger)) {
 				trigger.onGameEvent(event);
 			}
 
