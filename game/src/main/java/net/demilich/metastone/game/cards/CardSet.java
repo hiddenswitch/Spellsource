@@ -5,6 +5,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 /**
  * An enumeration of card sets from various games.
  */
+@Deprecated
 public enum CardSet {
 	ANY,
 	BASIC,
@@ -39,11 +40,7 @@ public enum CardSet {
 	SPELLSOURCE_BASIC,
 	SPELLSOURCE;
 
-	public static CardSet latestHearthstoneExpansion() {
-		return RISE_OF_SHADOWS;
-	}
-
-	public boolean isHearthstoneSet() {
-		return DeckFormat.WILD.isInFormat(this);
+	public static boolean isHearthstoneSet(String set) {
+		return DeckFormat.getFormat("Wild").isInFormat(set);
 	}
 }

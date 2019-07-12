@@ -93,7 +93,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertTrue(bloodfenRaptor.isDestroyed());
 			assertEquals(player.getHero().getArmor(), 0);
 			assertEquals(weapon.getAttack(), 0);
-		}, HeroClass.RED, HeroClass.RED);
+		}, "RED", "RED");
 	}
 
 	@Test
@@ -186,7 +186,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			final int i = j;
 			final int expectedCost = Math.min(10, i);
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+				context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 				context.getLogic().gainArmor(player, i);
 				playCard(context, player, "minion_geosculptor_yip");
 				context.endTurn();
@@ -280,7 +280,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
 	public void testUnidentifiedElixirStartsInHand() {
-		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck ->
 				Stream.generate(() -> "spell_unidentified_elixir")
@@ -298,7 +298,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
 			playCard(context, player, "minion_flame_imp");
 			assertEquals(player.getHand().get(0).getCardId(), "spell_amethyst_spellstone");
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 
 		// Amethyst should not trigger on warlock hero power
 		// Also tests that amethyst doesn't trigger on fatigue
@@ -306,7 +306,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			receiveCard(context, player, "spell_lesser_amethyst_spellstone");
 			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_amethyst_spellstone");
-		}, HeroClass.VIOLET, HeroClass.VIOLET);
+		}, "VIOLET", "VIOLET");
 	}
 
 	@Test
@@ -527,7 +527,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testUnstableEvolution() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC"));
 			Minion minion = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_unstable_evolution", minion);
 			assertEquals(player.getHand().size(), 1);
@@ -848,7 +848,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertEquals(player.getHand().size(), GameLogic.MAX_HAND_CARDS);
 			assertEquals(player.getHand().stream()
 					.filter(c -> c.getCardType() == CardType.SPELL)
-					.filter(c -> c.getHeroClass() == HeroClass.GREEN)
+					.filter(c -> c.getHeroClass().equals("GREEN"))
 					.count(), 10L);
 		});
 	}

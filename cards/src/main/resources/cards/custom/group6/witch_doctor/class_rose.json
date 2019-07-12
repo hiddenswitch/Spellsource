@@ -1,0 +1,11 @@
+{
+  "name": "Witch Doctor",
+  "type": "CLASS",
+  "hero": "hero_senzaku",
+  "heroClass": "ROSE",
+  "color": [244, 194, 194],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

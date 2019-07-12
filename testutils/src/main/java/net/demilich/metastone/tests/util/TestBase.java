@@ -41,6 +41,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static org.junit.Assert.fail;
+
 
 public class TestBase {
 
@@ -223,6 +225,48 @@ public class TestBase {
 		return context.getLogic().getModifiedManaCost(player, deckCard);
 	}
 
+	public static void assertThrows(ThrowingRunnable runnable) {
+		assertThrows(Throwable.class, runnable);
+	}
+
+	/**
+	 * Asserts that {@code runnable} throws an exception of type {@code throwableClass} when executed. If it does not
+	 * throw an exception, an {@link AssertionError} is thrown. If it throws the wrong type of exception, an {@code
+	 * AssertionError} is thrown describing the mismatch; the exception that was actually thrown can be obtained by
+	 * calling {@link AssertionError#getCause}.
+	 *
+	 * @param throwableClass the expected type of the exception
+	 * @param runnable       A function that is expected to throw an exception when invoked
+	 * @since 6.9.5
+	 */
+	@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+	@Suspendable
+	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
+		expectThrows(throwableClass, runnable);
+	}
+
+	@Suspendable
+	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
+		try {
+			runnable.run();
+		} catch (Throwable t) {
+			if (throwableClass.isInstance(t)) {
+				return throwableClass.cast(t);
+			} else {
+				String mismatchMessage = String.format("Expected %s to be thrown, but %s was thrown",
+						throwableClass.getSimpleName(), t.getClass().getSimpleName());
+
+				final AssertionError cause = new AssertionError(mismatchMessage, t);
+				fail(cause.getMessage());
+				return null;
+			}
+		}
+		String message = String.format("Expected %s to be thrown, but nothing was thrown",
+				throwableClass.getSimpleName());
+		fail(new AssertionError(message).getMessage());
+		return null;
+	}
+
 	@FunctionalInterface
 	public interface GymConsumer {
 		@Suspendable
@@ -251,8 +295,8 @@ public class TestBase {
 	}
 
 	@Suspendable
-	public static void runGym(GymConsumer consumer, HeroClass heroClass1, HeroClass heroClass2) {
-		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
+	public static void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
+		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets("BASIC", "CLASSIC"));
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 		clearHand(context, player);
@@ -261,7 +305,7 @@ public class TestBase {
 		clearZone(context, opponent.getDeck());
 		clearZone(context, player.getGraveyard());
 		clearZone(context, opponent.getGraveyard());
-		context.setDeckFormat(DeckFormat.CUSTOM);
+		context.setDeckFormat(DeckFormat.getFormat("Custom").addSet("TEST"));
 
 		consumer.run(context, player, opponent);
 	}
@@ -290,7 +334,7 @@ public class TestBase {
 
 	@Suspendable
 	public static void runGym(GymConsumer consumer) {
-		runGym(consumer, HeroClass.BLUE, HeroClass.BLUE);
+		runGym(consumer, "BLUE", "BLUE");
 	}
 
 	public static void clearHand(GameContext context, Player player) {
@@ -368,11 +412,11 @@ public class TestBase {
 		context.performAction(player.getId(), physicalAttackAction);
 	}
 
-	public static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
-		return createContext(hero1, hero2, true, DeckFormat.CUSTOM);
+	public static DebugContext createContext(String hero1, String hero2) {
+		return createContext(hero1, hero2, true, DeckFormat.getFormat("Custom"));
 	}
 
-	public static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit, DeckFormat deckFormat) {
+	public static DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
 		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
 		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
 
@@ -486,4 +530,8 @@ public class TestBase {
 	}
 
 
+	public interface ThrowingRunnable {
+		@Suspendable
+		void run() throws Throwable;
+	}
 }
