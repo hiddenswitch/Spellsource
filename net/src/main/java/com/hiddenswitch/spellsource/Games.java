@@ -71,7 +71,7 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES_PLAYERS_MAP = "Games::players";
+	String GAMES_PLAYERS_MAP = "Games/players";
 	String GAMES = "games";
 
 	/**
@@ -92,7 +92,7 @@ public interface Games extends Verticle {
 	 * @param heroClass The hero class of the secret
 	 * @return A censored secret card.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, HeroClass heroClass) {
+	static com.hiddenswitch.spellsource.client.models.Entity getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String heroClass) {
 		return new com.hiddenswitch.spellsource.client.models.Entity()
 				.cardId("hidden")
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.CARD)
@@ -631,7 +631,7 @@ public interface Games extends Verticle {
 	 * @return A map.
 	 */
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games::connections");
+		return SuspendableMap.getOrCreate("Games/connections");
 	}
 
 	/**
@@ -1118,7 +1118,7 @@ public interface Games extends Verticle {
 		entityState.collectible(card.isCollectible());
 		// TODO: A little too underperformant so we're going to skip this
 		// entityState.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
-		HeroClass heroClass = card.getHeroClass();
+		String heroClass = card.getHeroClass();
 
 		// Handles tri-class cards correctly
 		if (heroClass == null) {
@@ -1189,7 +1189,17 @@ public interface Games extends Verticle {
 			case CHOOSE_ONE:
 				// TODO: Handle choose one cards
 				break;
+			case CLASS:
+				entityState.blackText(card.isBlackText());
+				if (card.getColor() != null) {
+					entityState.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
+				}
+				break;
+			case FORMAT:
+				entityState.cardSets(Arrays.asList(card.getCardSets()));
+				break;
 		}
+
 		entity.state(entityState);
 		return entity;
 	}
@@ -1306,7 +1316,7 @@ public interface Games extends Verticle {
 			// Append the final game states / deltas.
 			augmentReplayWithCtx.accept(replayCtx);
 		} catch (Throwable any) {
-			LOGGER.error("replayFromGameContext {}:", originalCtx.getGameId(), any);
+			Tracing.error(any);
 		}
 
 		return replay;

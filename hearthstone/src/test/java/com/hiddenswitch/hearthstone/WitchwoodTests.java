@@ -95,7 +95,7 @@ public class WitchwoodTests extends TestBase {
 			});
 			playCard(context, player, "minion_arcane_keysmith");
 			assertEquals(player.getSecrets().size(), 2, "Both Counterspell and Duplicate should be in play now.");
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test
@@ -308,7 +308,7 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(willReplay.size(), 0);
 			Assert.assertFalse(battlecryTarget.hasAttribute(Attribute.RESERVED_BOOLEAN_2), "The battlecries should not have been resolved.");
 			Assert.assertFalse(context.getEntities().anyMatch(e -> e.hasAttribute(Attribute.RESERVED_BOOLEAN_3)), "There should have never been a valid target for the spell that adds this attribute.");
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test
@@ -320,13 +320,13 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp(), "Should not have triggered Flamewaker");
 			playCard(context, player, "spell_any_black_test", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2, "Should have triggered Flamewaker");
-		}, HeroClass.BLUE, HeroClass.BLUE);
+		}, "BLUE", "BLUE");
 	}
 
 	@Test
 	public void testGennGreymane() {
 		{
-			DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Standard"));
 			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				Stream.generate(() -> "minion_bloodfen_raptor")
@@ -347,7 +347,7 @@ public class WitchwoodTests extends TestBase {
 		}
 
 		{
-			DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Standard"));
 			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				Stream.generate(() -> "minion_argent_squire")
@@ -459,7 +459,7 @@ public class WitchwoodTests extends TestBase {
 	public void testMalchezaarBaku() {
 		int success = 0;
 		for (int i = 0; i < 100; i++) {
-			DebugContext debug = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.ALL);
+			DebugContext debug = createContext("BLUE", "BLUE", false, DeckFormat.getFormat("All"));
 			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				for (int j = 0; j < 10; j++) {

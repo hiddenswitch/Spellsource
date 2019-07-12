@@ -132,7 +132,7 @@ public class BlackrockMountainTests extends TestBase {
 			shuffleToDeck(context, player, "spell_The_coin");
 			shuffleToDeck(context, player, "spell_The_coin");
 			shuffleToDeck(context, player, "spell_The_coin");
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC"));
 			assertEquals(player.getHand().getCount(), 0);
 
 			playMinionCard(context, player, "minion_chromaggus");
@@ -223,7 +223,7 @@ public class BlackrockMountainTests extends TestBase {
 	@Test
 	public void testDragonkinSorceror() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC, CardSet.BLACKROCK_MOUNTAIN));
+			context.setDeckFormat(new DeckFormat().withCardSets("BASIC", "CLASSIC", "BLACKROCK_MOUNTAIN"));
 			final int ATTACK_BONUS = 1;
 			final int HP_BONUS = 1;
 

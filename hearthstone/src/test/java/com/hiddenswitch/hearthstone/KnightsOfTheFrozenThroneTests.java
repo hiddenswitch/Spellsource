@@ -69,7 +69,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Stream.of(left, target, right).forEach(minion -> {
 				assertEquals(minion.getHp(), minion.getBaseHp() - CardCatalogue.getCardById("weapon_shadowmourne").getBaseDamage() - 1);
 			});
-		}, HeroClass.BROWN, HeroClass.BROWN);
+		}, "BROWN", "BROWN");
 	}
 
 	@Test
@@ -108,7 +108,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	public void testEvolveHowlfiendInteraction() {
 		for (int i = 0; i < 100; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.WILD);
+				context.setDeckFormat(DeckFormat.getFormat("Wild"));
 				Minion howlfiend = playMinionCard(context, player, "minion_howlfiend");
 				playCard(context, player, "spell_evolve");
 				assertEquals(howlfiend.transformResolved(context).getSourceCard().getBaseManaCost(), CardCatalogue.getCardById("minion_howlfiend").getBaseManaCost() + 1);
@@ -117,7 +117,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 		for (int i = 0; i < 100; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.WILD);
+				context.setDeckFormat(DeckFormat.getFormat("Wild"));
 				Card howlfiendCard = receiveCard(context, player, "minion_howlfiend");
 				playCard(context, player, "minion_emperor_thaurissan");
 				for (int j = 0; j < 3; j++) {
@@ -440,7 +440,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_the_lich_king");
 			context.endTurn();
-			assertEquals(player.getHand().get(0).getHeroClass(), HeroClass.SPIRIT);
+			assertEquals(player.getHand().get(0).getHeroClass(), "SPIRIT");
 		});
 	}
 
@@ -811,23 +811,23 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		// Notes on interaction from https://twitter.com/ThePlaceMatt/status/891810684551311361
 		// Any Hero Power that targets will also freeze that target. So it does work with Frost Lich Jaina. (And even
 		// works with Anduin's basic HP!)
-		checkIceWalker(true, new HeroClass[]{
-				HeroClass.BLUE,
-				HeroClass.WHITE
+		checkIceWalker(true, new String[]{
+				"BLUE",
+				"WHITE"
 		});
-		checkIceWalker(false, new HeroClass[]{
-				HeroClass.BLACK,
-				HeroClass.VIOLET,
-				HeroClass.BROWN,
-				HeroClass.GOLD,
-				HeroClass.SILVER,
-				HeroClass.RED,
-				HeroClass.GREEN
+		checkIceWalker(false, new String[]{
+				"BLACK",
+				"VIOLET",
+				"BROWN",
+				"GOLD",
+				"SILVER",
+				"RED",
+				"GREEN"
 		});
 	}
 
-	private void checkIceWalker(final boolean expected, final HeroClass[] classes) {
-		for (HeroClass heroClass : classes) {
+	private void checkIceWalker(final boolean expected, final String[] classes) {
+		for (String heroClass : classes) {
 			runGym((context, player, opponent) -> {
 				player.setMaxMana(2);
 				player.setMana(2);
@@ -865,14 +865,14 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 				} else {
 					Assert.assertFalse(target.hasAttribute(Attribute.FROZEN));
 				}
-			}, heroClass, HeroClass.BLUE);
+			}, heroClass, "BLUE");
 		}
 	}
 
 	@Test
 	public void testSpreadingPlague() {
 		Stream.of(0, 3, 7).forEach(minionCount -> {
-			GameContext context = createContext(HeroClass.BROWN, HeroClass.BROWN);
+			GameContext context = createContext("BROWN", "BROWN");
 			Player player = context.getActivePlayer();
 			Player opponent = context.getOpponent(player);
 			context.endTurn();
@@ -922,7 +922,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.map(actionGetter -> {
 						Card malfurion = (Card) CardCatalogue.getCardById("hero_malfurion_the_pestilent");
 
-						GameContext context1 = createContext(HeroClass.BROWN, HeroClass.RED);
+						GameContext context1 = createContext("BROWN", "RED");
 						Player player = context1.getPlayer1();
 						clearHand(context1, player);
 						clearZone(context1, player.getDeck());

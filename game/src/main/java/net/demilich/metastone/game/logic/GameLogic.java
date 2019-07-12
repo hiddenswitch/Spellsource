@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -788,8 +789,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		Entity override = targetAcquisition(player, source, sourceAction);
 		if (override != null && !spellDesc.hasPredefinedTarget()) {
-			targets = Collections.singletonList(override);
+			targets = new ArrayList<>();
+			targets.add(override);
 			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
+		}
+
+		// Spell effects should never be cast on the old reference to a transform.
+		if (targets != null && !targets.isEmpty()) {
+			for (int i = 0; i < targets.size(); i++) {
+				if (targets.get(i).getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
+					targets.set(i, targets.get(i).transformResolved(context));
+				}
+			}
 		}
 
 		Spell spell = spellDesc.create();
@@ -924,7 +935,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		final Hero previousHero = player.getHero();
 		hero.setId(generateId());
 		hero.setOwner(player.getId());
-		if (hero.getHeroClass() == null || hero.getHeroClass() == HeroClass.ANY) {
+		if (hero.getHeroClass() == null || hero.getHeroClass().equals(HeroClass.ANY)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
 
@@ -937,7 +948,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
-		if (hero.getHeroPower().getHeroClass() == HeroClass.INHERIT) {
+		if (Objects.equals(hero.getHeroPower().getHeroClass(), HeroClass.INHERIT)) {
 			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
 		}
 		// Set hero power ID before events trigger to prevent issues
@@ -1168,8 +1179,41 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, DamageType damageType) {
+		return damage(player, target, baseDamage, source, ignoreSpellDamage, false, damageType);
+	}
+
+	/**
+	 * Deals damage to a target.
+	 * <p>
+	 * Damage is measured by a number which is deducted from the armor first, followed by hitpoints, of an {@link Actor}.
+	 * If the {@link Actor#getHp()} is reduced to zero (or below), it will be killed. Note that other types of harm that
+	 * can be inflicted to characters (such as a {@link DestroySpell}, freeze effects and the card Equality) are not
+	 * considered damage for game purposes and, although most damage is dealt through {@link #fight(Player, Actor, Actor,
+	 * PhysicalAttackAction)}, dealing damage is not considered an "fight" for game purposes.
+	 * <p>
+	 * Damage can activate a number of triggered effects, both from receiving it (such as Acolyte of Pain's {@link
+	 * DamageReceivedTrigger}) and from dealing it (such as Lightning Automaton's {@link DamageCausedTrigger}). However,
+	 * damage negated by an {@link Actor} with {@link Attribute#DIVINE_SHIELD} or {@link Attribute#IMMUNE} effects is not
+	 * considered to have been successfully dealt, and thus will not trigger any on-damage triggered effects.
+	 * <p>
+	 * A {@link Hero} with nonzero {@link Hero#getArmor()} will have any damage deducted from their armor before their
+	 * hitpoints: any damage beyond the {@link Actor}'s current Armor will be deducted from their hitpoints. Armor will
+	 * not prevent damage from being dealt: damage dealt only to Armor still counts as damage for the purpose of effects
+	 * such as Lightning Automaton and Floating Watcher.
+	 *
+	 * @param player            The originating player of the damage.
+	 * @param target            The target to damage.
+	 * @param baseDamage        The base amount of damage to deal.
+	 * @param source            The source of the damage.
+	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
+	 * @param ignoreLifesteal
+	 * @param damageType        The type of damage dealt ot the target.
+	 * @return The amount of damage that was actually dealt
+	 */
+	@Suspendable
+	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, boolean ignoreLifesteal, DamageType damageType) {
 		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage);
-		resolveDamageEvent(player, target, source, damageDealt, damageType);
+		resolveDamageEvent(player, target, source, damageDealt, ignoreLifesteal, damageType);
 		if (source.getEntityType() == EntityType.CARD) {
 			Card card = (Card) source;
 			if (card.isHeroPower()) {
@@ -1181,6 +1225,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, DamageType damageType) {
+		resolveDamageEvent(player, target, source, damageDealt, false, damageType);
+	}
+
+	@Suspendable
+	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, boolean ignoreLifesteal, DamageType damageType) {
 		if (damageDealt > 0) {
 			// Keyword effects for lifesteal and poisonous will come BEFORE all other events
 			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
@@ -1195,7 +1244,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			// Implement lifesteal
-			if ((source.hasAttribute(Attribute.LIFESTEAL) || source.hasAttribute(Attribute.AURA_LIFESTEAL))
+			if (!ignoreLifesteal
+					&& (source.hasAttribute(Attribute.LIFESTEAL) || source.hasAttribute(Attribute.AURA_LIFESTEAL))
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
 					&& (((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL)
@@ -1533,8 +1583,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
 		fatigue++;
 		player.setAttribute(Attribute.FATIGUE, fatigue);
-		if (!player.hasAttribute(Attribute.DISABLE_FATIGUE)) {
-			damage(player, hero, fatigue, hero, true, DamageType.FATIGUE);
+		if (!player.hasAttribute(Attribute.DISABLE_FATIGUE) && !hero.isDestroyed()) {
+			damage(player, hero, fatigue, player, true, true, DamageType.FATIGUE);
 			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 			player.getStatistics().fatigueDamage(fatigue);
 		}
@@ -2732,10 +2782,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			player.getDeck().get(i).setAttribute(Attribute.STARTING_INDEX, i);
 		}
 
-		// second player gets the coin additionally
+		// second player gets specified bonus cards in this format
 		if (!begins) {
-			Card theCoin = CardCatalogue.getCardById("spell_the_coin");
-			receiveCard(player.getId(), theCoin);
+			for (String cardId : context.getDeckFormat().getSecondPlayerBonusCards()) {
+				receiveCard(player.getId(), context.getCardById(cardId));
+			}
 		}
 	}
 
@@ -3031,7 +3082,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return action;
 		/*
 		Card heroPower = player.getHero().getHeroPower();
-		if (heroPower.getHeroClass() != HeroClass.GREEN) {
+		if (heroPower.getHeroClass() != "GREEN") {
 			return;
 		}
 		if (action.getActionType() == ActionType.HERO_POWER && hasAttribute(player, Attribute.HERO_POWER_CAN_TARGET_MINIONS)) {
@@ -4294,58 +4345,55 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see net.demilich.metastone.game.spells.TransformMinionSpell for the complete transformation logic.
 	 */
 	@Suspendable
-	public void transformMinion(Minion minion, Minion newMinion) {
+	public void transformMinion(@NotNull Minion minion, @NotNull Minion newMinion) {
+		Objects.requireNonNull(newMinion);
 		// Remove any spell triggers associated with the old minion.
 		removeEnchantments(minion);
 
 		Player owner = context.getPlayer(minion.getOwner());
-		int index = -1;
-		// Tracking of old zone implements Sherazin, Seed
+		// We may be transforming minions before they hit the board.
+		int index = owner.getMinions().size() - 1;
+		// Tracking of old index implements Sherazin, Seed
 		Zones oldZone = minion.getZone();
-		if (!minion.getEntityLocation().equals(EntityLocation.UNASSIGNED)
-				&& owner != null) {
+		// It's okay to transform in the battlefield or graveyard (handles Sherazin)
+		if (minion.getZone() == Zones.BATTLEFIELD || minion.getZone() == Zones.GRAVEYARD) {
 			index = minion.getEntityLocation().getIndex();
 			owner.getZone(minion.getEntityLocation().getZone()).remove(index);
+		} else {
+			// Transforming a minion before it hits the board? Probably a bug
+			throw new UnsupportedOperationException("not on board");
 		}
 
 		// If we want to straight up remove a minion from existence without
 		// killing it, this would be the best way.
-		if (newMinion != null) {
-			// Give the new minion an ID.
-			newMinion.setId(generateId());
-			newMinion.setOwner(owner.getId());
+		// Give the new minion an ID.
+		newMinion.setId(generateId());
+		newMinion.setOwner(owner.getId());
 
-			minion.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newMinion.getReference());
-			// If the minion being transforms is being summoned, replace the old
-			// minion on the stack.
-			// Otherwise, summon the add the new minion.
-			// However, do not give a summon event.
-			if (!context.getSummonReferenceStack().isEmpty() && context.getSummonReferenceStack().peek().equals(minion.getReference())
-					&& !context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE)) {
-				context.getEnvironment().put(Environment.TRANSFORM_REFERENCE, newMinion.getReference());
-				owner.getMinions().add(index, newMinion);
-
-				// It's quite possible that this is actually supposed to add the
-				// minion to the zone it was originally in.
-				// This means minions in the SetAsideZone or the Graveyard that are
-				// targeted (through bizarre mechanics)
-				// add the minion to there. This will be tested eventually with
-				// Resurrect, Recombobulator, and Illidan.
-				// Since this is unknown, this is the patch for it.
-			} else if (!owner.getSetAsideZone().contains(minion)) {
-				if (index < 0 || index >= owner.getMinions().size()) {
-					owner.getMinions().add(newMinion);
-				} else {
-					owner.getMinions().add(index, newMinion);
-				}
-
-				newMinionOnBattlefield(newMinion, owner);
+		minion.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newMinion.getReference());
+		// If minion is currently being summoned, newMinion gets summoned instead. The fact that newMinion is summoned
+		// instead is communicated back to the summon function via Environment.TRANSFORM_REFERENCE
+		if (!context.getSummonReferenceStack().isEmpty()
+				&& Objects.equals(context.getSummonReferenceStack().peek(), minion.getReference())
+				&& !context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE)) {
+			context.getEnvironment().put(Environment.TRANSFORM_REFERENCE, newMinion.getReference());
+			owner.getMinions().add(index, newMinion);
+			// Otherwise, if the set aside zone does not contain the minion (it is definitely not on the battlefield or in
+			// the graveyard and we are not transforming something being returned to hand), we have removed the old minion here
+			// and can now drop in the new minion.
+		} else if (!owner.getSetAsideZone().contains(minion)) {
+			if (index < 0 || index >= owner.getMinions().size()) {
+				owner.getMinions().add(newMinion);
 			} else {
-				owner.getSetAsideZone().add(newMinion);
-				removeEnchantments(newMinion);
-				return;
+				owner.getMinions().add(index, newMinion);
 			}
 
+			newMinionOnBattlefield(newMinion, owner);
+		} else {
+			// Not sure if this ever happens, it's related to whether the minion still belongs to its owner?
+			owner.getSetAsideZone().add(newMinion);
+			removeEnchantments(newMinion);
+			return;
 		}
 
 		// Special case for Sherazin, Seed

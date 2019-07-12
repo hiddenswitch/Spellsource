@@ -15,29 +15,28 @@ public interface Deck extends Cloneable {
 	 * <p>
 	 * The random deck creation function tries to make a balance of 50% class cards and 50% neutrals.
 	 *
-	 * @param heroClass  A hero class that is {@link HeroClass#isBaseClass()}.
+	 * @param heroClass  A hero class that is a base class
 	 * @param deckFormat A deck format, like {@link DeckFormat#STANDARD}.
 	 * @return
 	 */
 	static @NotNull
-	GameDeck randomDeck(@NotNull HeroClass heroClass, @NotNull DeckFormat deckFormat) {
+	GameDeck randomDeck(@NotNull String heroClass, @NotNull DeckFormat deckFormat) {
 		return new RandomDeck(heroClass, deckFormat);
 	}
 
 	static @NotNull
 	GameDeck randomDeck(@NotNull DeckFormat deckFormat) {
-		return new RandomDeck(HeroClass.random(), deckFormat);
+		return new RandomDeck(HeroClass.random(deckFormat), deckFormat);
 	}
 
 	static @NotNull
-	GameDeck randomDeck(@NotNull HeroClass heroClass) {
-		return new RandomDeck(heroClass, DeckFormat.CUSTOM);
+	GameDeck randomDeck(@NotNull String heroClass) {
+		return new RandomDeck(heroClass, DeckFormat.getFormat("Custom"));
 	}
 
 	static @NotNull
 	GameDeck randomDeck() {
-		List<HeroClass> baseClasses = HeroClass.getBaseClasses();
-		return new RandomDeck(HeroClass.random(), DeckFormat.CUSTOM);
+		return new RandomDeck(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
 	}
 
 	/**

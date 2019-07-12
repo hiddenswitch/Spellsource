@@ -20,7 +20,7 @@ public final class CreateCollectionRequest implements Serializable {
 	private List<String> inventoryIds;
 	private String name;
 	private QueryCardsRequest queryCardsRequest;
-	private HeroClass heroClass;
+	private String heroClass;
 	private boolean draft;
 	private int copies = 1;
 	private String heroCardId;
@@ -30,7 +30,7 @@ public final class CreateCollectionRequest implements Serializable {
 	private CreateCollectionRequest() {
 	}
 
-	public static CreateCollectionRequest deck(String userId, String name, HeroClass heroClass, List<String> inventoryIds, boolean draft) {
+	public static CreateCollectionRequest deck(String userId, String name, String heroClass, List<String> inventoryIds, boolean draft) {
 		return new CreateCollectionRequest()
 				.withType(CollectionTypes.DECK)
 				.withName(name)
@@ -160,15 +160,15 @@ public final class CreateCollectionRequest implements Serializable {
 		return this;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
-	public CreateCollectionRequest withHeroClass(HeroClass heroClass) {
+	public CreateCollectionRequest withHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}

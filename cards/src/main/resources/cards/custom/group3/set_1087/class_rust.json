@@ -1,0 +1,11 @@
+{
+  "name": "Dragoon",
+  "type": "CLASS",
+  "hero": "hero_alder_ravenwald",
+  "heroClass": "RUST",
+  "color": [183, 65, 14],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

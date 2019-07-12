@@ -35,13 +35,13 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 /**
  * An enchantment is a type of entity that reacts to certain events using a trigger by casting a spell.
  * <p>
- * Enchantments live inside {@link TriggerManager#triggers}; some enchantments, like {@link Secret} and {@link Quest},
- * live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in Hearthstone,
- * enchantments are generally not targetable and do not "live" on cards or in zones.
+ * Enchantments live inside {@link TriggerManager#getTriggers()}; some enchantments, like {@link Secret} and {@link
+ * Quest}, live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in
+ * Hearthstone, enchantments are generally not targetable and do not "live" on cards or in zones.
  * <p>
  * Enchantments consistent of two important features: a {@link EventTrigger} built from an {@link EventTriggerDesc}, and
  * a {@link SpellDesc} indicating which spell should be cast when the enchantment's {@link EventTrigger} and its
- * conditions {@link EventTrigger#fire(GameEvent, Entity)}.
+ * conditions {@link EventTrigger#innerQueues(GameEvent, Entity)}.
  * <p>
  * Enchantments are specified by a {@link EnchantmentDesc} in the card JSON. They can also be specified as fields in
  * e.g., {@link AddEnchantmentSpell}.
@@ -62,7 +62,6 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * @see EnchantmentDesc for a description of the format of an enchantment.
  */
 public class Enchantment extends Entity implements Trigger {
-	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	protected List<EventTrigger> triggers = new ArrayList<>();
 	protected SpellDesc spell;
 	protected EntityReference hostReference;
@@ -292,25 +291,22 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	public boolean canFire(GameEvent event) {
+	public final boolean queues(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
 		for (EventTrigger trigger : triggers) {
-			if (triggerFires(trigger, event, host)) {
+			if (trigger == null) {
+				continue;
+			}
+			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
+				continue;
+			}
+			if (trigger.queues(event, host)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean triggerFires(EventTrigger trigger, GameEvent event, Entity host) {
-		if (trigger == null) {
-			return false;
-		}
-		if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
-			return false;
-		}
-		return trigger.fires(event, host);
-	}
 
 	public boolean hasPersistentOwner() {
 		return persistentOwner;
@@ -324,13 +320,14 @@ public class Enchantment extends Entity implements Trigger {
 		return oneTurn;
 	}
 
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
+		// Expired
 		if (isExpired()) {
 			return false;
 		}
 
 		for (EventTrigger trigger : triggers) {
-			if (trigger.canFireCondition(event)) {
+			if (trigger.fires(event)) {
 				return true;
 			}
 		}

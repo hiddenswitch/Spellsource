@@ -15,13 +15,13 @@ public final class BattlecryResolvedTrigger extends MinionPlayedTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
 		if (!summonEvent.isResolvedBattlecry()
 				|| Objects.equals(summonEvent.getBattlecryActions(), BattlecryAction.NONE)) {
 			return false;
 		}
-		return super.fire(event, host);
+		return super.innerQueues(event, host);
 	}
 
 }

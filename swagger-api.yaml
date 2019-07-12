@@ -58,6 +58,8 @@ definitions:
             $ref: '#/definitions/Invite'
           match:
             $ref: '#/definitions/Match'
+          spanContext:
+            $ref: '#/definitions/SpanContext'
       changed:
         description: |
           Indicates that a record's fields have changed.
@@ -412,33 +414,6 @@ definitions:
           A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
           otherwise specified.
         type: 'string'
-        enum:
-          - 'BROWN'
-          - 'GREEN'
-          - 'BLUE'
-          - 'GOLD'
-          - 'WHITE'
-          - 'BLACK'
-          - 'SILVER'
-          - 'VIOLET'
-          - 'RED'
-          - 'JADE'
-          - 'NAVY'
-          - 'LEATHER'
-          - 'RUST'
-          - 'EGGPLANT'
-          - 'ICE'
-          - 'OBSIDIAN'
-          - 'ICECREAM'
-          - 'AMBER'
-          - 'TOAST'
-          - 'ROSE'
-          - 'BLOOD'
-          - 'NEONGREEN'
-          - 'TEAL'
-          - 'DARKGREEN'
-          - 'PURPLE'
-          - 'TIME'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -462,12 +437,6 @@ definitions:
           Certain queues only support certain formats. Typically, when requesting the listing of queues with
           matchmakingGet, the queues will specify which current decks can be chosen.
         type: 'string'
-        enum:
-          - 'Standard'
-          - 'Wild'
-          - 'Custom'
-          - 'Spellsource'
-          - 'All'
       deckList:
         type: 'string'
         description: |
@@ -1736,6 +1705,8 @@ definitions:
           - 'WEAPON'
           - 'HERO_POWER'
           - 'CHOOSE_ONE'
+          - 'CLASS'
+          - 'FORMAT'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1773,6 +1744,24 @@ definitions:
           turn 0.
         type: 'boolean'
         default: false
+      color:
+        description: |
+          The color for the class
+        type: 'array'
+        items:
+          type: 'number'
+          format: 'float'
+      blackText:
+        description: |
+          Whether the class should use black text instead of the default white
+        type: 'boolean'
+        default: false
+      cardSets:
+        description: |
+          The card sets listed by the card
+        type: 'array'
+        items:
+          type: 'string'
   DraftsChooseCardRequest:
     type: 'object'
     required:
@@ -2042,6 +2031,15 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+  SpanContext:
+    type: 'object'
+    description: |
+      A piece of data that assists in OpenTracing from the client.
+    properties:
+      data:
+        type: 'string'
+        format: 'binary'
+        description: Binary carried opentracing span context
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
