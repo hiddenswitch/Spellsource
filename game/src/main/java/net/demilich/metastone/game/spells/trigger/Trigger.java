@@ -29,12 +29,12 @@ public interface Trigger extends Serializable {
 	Trigger clone();
 
 	/**
-	 * Checks if a trigger can fire in response to a specific event.
+	 * Checks if a trigger should queue in response to a specific event.
 	 *
 	 * @param event A game event.
-	 * @return {@code true} if the trigger can fire in response to this event.
+	 * @return {@code true} if the trigger shoudl queue in response to this event.
 	 */
-	boolean canFire(GameEvent event);
+	boolean queues(GameEvent event);
 
 	/**
 	 * Gets a reference to the {@link Entity} that is "hosting," or owning, the trigger.
@@ -55,7 +55,7 @@ public interface Trigger extends Serializable {
 	 *
 	 * @param eventType The event type.
 	 * @return {@code true} if this trigger wants its {@link #onGameEvent(GameEvent)} method called whenever it {@link
-	 * 		#canFire(GameEvent)} to the specified {@code eventType}.
+	 *    #queues(GameEvent)} to the specified {@code eventType}.
 	 */
 	boolean interestedIn(GameEventType eventType);
 
@@ -75,7 +75,7 @@ public interface Trigger extends Serializable {
 	void onAdd(GameContext context);
 
 	/**
-	 * Handles an event this trigger {@link #canFire(GameEvent)} for and is {@link #interestedIn(GameEventType)}.
+	 * Handles an event this trigger {@link #queues(GameEvent)} for and is {@link #interestedIn(GameEventType)}.
 	 *
 	 * @param event The game event this trigger is now processing.
 	 */
@@ -127,13 +127,14 @@ public interface Trigger extends Serializable {
 	void expire();
 
 	/**
-	 * Returns {@code true} if the trigger can fire in response to the given {@link GameEvent} given a possible {@link
-	 * net.demilich.metastone.game.spells.desc.condition.Condition}
+	 * Returns {@code true} if the trigger fire in response to the given {@link GameEvent}.
+	 * <p>
+	 * It is already queued in this situation.
 	 *
 	 * @param event The currently raised event.
 	 * @return {@code true} if the trigger can fire.
 	 */
-	default boolean canFireCondition(GameEvent event) {
-		return canFire(event);
+	default boolean fires(GameEvent event) {
+		return queues(event);
 	}
 }

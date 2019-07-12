@@ -30,5 +30,8 @@
     "SPELLSOURCE_BASIC",
     "CUSTOM"
   ],
+  "secondPlayerBonusCards": [
+    "spell_lunstone"
+  ],
   "fileFormatVersion": 1
 }

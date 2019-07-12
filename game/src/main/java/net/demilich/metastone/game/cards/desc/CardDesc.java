@@ -161,6 +161,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String hero;
 	public int[] color;
 	public boolean blackText;
+	public String[] secondPlayerBonusCards;
 	public CardDesc() {
 		super();
 	}
@@ -1100,5 +1101,14 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public boolean isBlackText() {
 		return blackText;
+	}
+
+	public String[] getSecondPlayerBonusCards() {
+		return secondPlayerBonusCards;
+	}
+
+	public CardDesc setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
 	}
 }
