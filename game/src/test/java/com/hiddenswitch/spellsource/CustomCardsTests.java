@@ -7299,9 +7299,9 @@ public class CustomCardsTests extends TestBase {
 		CardCatalogue.getCardById("spell_honed_potion");
 		CardCatalogue.getCardById("token_bellowing_spirit");
 		CardCatalogue.getCardById("token_burning_spirit");
-  }
+	}
 
- 	@Test
+	@Test
 	public void testThitazov() {
 		// attacker from friendly side dies, won't get buffed
 		runGym(((context, player, opponent) -> {
@@ -7335,7 +7335,7 @@ public class CustomCardsTests extends TestBase {
 		}));
 	}
 
-  @Test
+	@Test
 	public void testStanceChange() {
 		runGym(((context, player, opponent) -> {
 			Minion test32 = playMinionCard(context, player, "minion_test_3_2");
@@ -7400,4 +7400,3 @@ public class CustomCardsTests extends TestBase {
 		}));
 	}
 }
-
