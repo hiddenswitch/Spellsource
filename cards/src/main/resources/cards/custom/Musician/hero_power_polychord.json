@@ -5,21 +5,27 @@
   "heroClass": "CORAL",
   "rarity": "FREE",
   "description": "Give a minion +2/+1. If you have none, summon two 1/1 Patrons.",
-  "aura": {
-    "class": "TargetSelectionOverrideAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "targetSelection": "MINIONS",
-    "filter": {
-      "class": "TargetSelectionFilter",
-      "targetSelection": "NONE"
-    },
-    "condition": {
-      "class": "MinionCountCondition",
-      "targetPlayer": "SELF",
-      "value": 1,
-      "operation": "GREATER_OR_EQUAL"
+  "passiveAuras": [
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "TRIGGER_HOST",
+      "targetSelection": "MINIONS",
+      "condition": {
+        "class": "MinionCountCondition",
+        "targetPlayer": "SELF",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "triggers": [
+        {
+          "class": "CardReceivedTrigger"
+        },
+        {
+          "class": "CardPlayedTrigger"
+        }
+      ]
     }
-  },
+  ],
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {

@@ -66,6 +66,7 @@ public class SwapCardsSpell extends Spell {
 			switch (entity.getZone()) {
 				case HAND:
 					context.getLogic().processPassiveTriggers(context.getPlayer(entity.getOwner()), (Card) entity);
+					context.getLogic().processPassiveAuras(context.getPlayer(entity.getOwner()), (Card) entity);
 					break;
 				case DECK:
 					context.getLogic().processDeckTriggers(context.getPlayer(entity.getOwner()), (Card) entity);

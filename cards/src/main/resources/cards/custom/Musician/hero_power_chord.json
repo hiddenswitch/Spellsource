@@ -7,21 +7,27 @@
   "rarity": "FREE",
   "targetSelection": "NONE",
   "description": "Give a minion +1/+1. If you have none, summon a 1/1 Patron.",
-  "aura": {
-    "class": "TargetSelectionOverrideAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "targetSelection": "MINIONS",
-    "filter": {
-      "class": "TargetSelectionFilter",
-      "targetSelection": "NONE"
-    },
-    "condition": {
-      "class": "MinionCountCondition",
-      "targetPlayer": "SELF",
-      "value": 1,
-      "operation": "GREATER_OR_EQUAL"
+  "passiveAuras": [
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "TRIGGER_HOST",
+      "targetSelection": "MINIONS",
+      "condition": {
+        "class": "MinionCountCondition",
+        "targetPlayer": "SELF",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "triggers": [
+        {
+          "class": "CardReceivedTrigger"
+        },
+        {
+          "class": "CardPlayedTrigger"
+        }
+      ]
     }
-  },
+  ],
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
