@@ -1003,7 +1003,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		processGameTriggers(player, hero);
 		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
-		processAuras(player, hero.getHeroPower());
+		processPassiveAuras(player, hero.getHeroPower());
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -2368,6 +2368,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		processGameTriggers(player, player.getHero().getHeroPower());
 		processPassiveTriggers(player, player.getHero().getHeroPower());
+		processPassiveAuras(player, player.getHero().getHeroPower());
 
 		for (Card card : player.getDeck()) {
 			processGameTriggers(player, card);
@@ -2377,6 +2378,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		for (Card card : player.getHand()) {
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
+			processPassiveAuras(player, player.getHero().getHeroPower());
 		}
 
 		context.fireGameEvent(new PreGameStartEvent(context, player.getId()));
@@ -2424,6 +2426,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
+		processPassiveAuras(player, hero.getHeroPower());
 
 		// Populate both player's hands here first to prevent consuming random resources
 		int numberOfStarterCards = begins ? getStarterCards() : getStarterCards() + getSecondPlayerBonusStarterCards();
@@ -3049,35 +3052,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		List<TargetSelectionOverrideAura> auras = SpellUtils.getAuras(context, entity.getOwner(), TargetSelectionOverrideAura.class);
 		if (!auras.isEmpty()) {
 			for (TargetSelectionOverrideAura aura : auras) {
-				if (!aura.getAffectedEntities().contains(entity.getId())) {
-					continue;
-				}
-
-				TargetSelection targetSelection = aura.getTargetSelection();
-				switch (action.getActionType()) {
-					case HERO_POWER:
-					case SPELL:
-						if (action instanceof PlayChooseOneCardAction) {
-							PlayChooseOneCardAction chooseOneCardAction = (PlayChooseOneCardAction) action;
-							if (chooseOneCardAction.getSpell().hasPredefinedTarget()) {
-								SpellDesc targetChangedSpell = chooseOneCardAction.getSpell().removeArg(SpellArg.TARGET);
-								chooseOneCardAction.setSpell(targetChangedSpell);
-							}
-						} else {
-							PlaySpellCardAction spellCardAction = (PlaySpellCardAction) action;
-							if (spellCardAction.getSpell().hasPredefinedTarget()) {
-								SpellDesc targetChangedSpell = spellCardAction.getSpell().removeArg(SpellArg.TARGET);
-								spellCardAction.setSpell(targetChangedSpell);
-							}
-						}
-						break;
-					default:
-						break;
-				}
-				action.setTargetRequirement(targetSelection);
+				aura.processTargetModification(entity, action);
 			}
 		}
-
 
 		return action;
 		/*
@@ -3263,6 +3240,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			card.getAttributes().remove(Attribute.DISCARDED);
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
+			processPassiveAuras(player, card);
 			card.getAttributes().put(Attribute.RECEIVED_ON_TURN, context.getTurn());
 			card.moveOrAddTo(context, Zones.HAND);
 			CardType sourceType = null;
@@ -3531,6 +3509,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		processGameTriggers(player, newCard);
 		if (zone.getZone() == Zones.HAND) {
 			processPassiveTriggers(player, newCard);
+			processPassiveAuras(player, newCard);
 			context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, newCard.getCardType(), false));
 		} else if (zone.getZone() == Zones.DECK) {
 			processDeckTriggers(player, newCard);
@@ -4615,12 +4594,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
-	public void processAuras(Player player, Card card) {
-		if (card.getDesc().getAura() != null) {
-			addGameEventListener(player, card.getDesc().getAura().create(), card);
-		}
-		if (card.getDesc().getAuras() != null) {
-			for (AuraDesc aura : card.getDesc().getAuras()) {
+	public void processPassiveAuras(Player player, Card card) {
+		if (card.getDesc().getPassiveAuras() != null) {
+			for (AuraDesc aura : card.getDesc().getPassiveAuras()) {
 				addGameEventListener(player, aura.create(), card);
 			}
 		}

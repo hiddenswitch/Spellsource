@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Additions:
 
  - Introducing Storyteller's Basic and Classic cards, with a big thanks to @Skurleton! (1221)
+ - Introducing Musician, with a big thanks to @Samswize! (1210, 1218)
 
 ##### Content Fixes:
 
@@ -43,7 +44,6 @@ For Python users, the build is now compatible with Java 11.
  - Living Mana no longer puts you into negative mana. (1026)
  - Mollusk Meister now has the correct effects. (1115)
 
- 
 ### 0.8.35-2.0.31 (July 1st, 2019)
 
 Fixing issues with cards not being found or detected after their IDs were changed.
