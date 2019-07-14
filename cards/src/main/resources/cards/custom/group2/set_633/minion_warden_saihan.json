@@ -2,7 +2,7 @@
   "name": "Warden Saihan",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "JADE",
   "baseAttack": 3,
   "baseHp": 12,
   "rarity": "LEGENDARY",
