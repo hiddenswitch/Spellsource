@@ -3,7 +3,10 @@ package com.hiddenswitch.spellsource;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -893,6 +896,17 @@ public class CustomCardsTests extends TestBase {
 			target2 = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_test_deal_6", intendedTarget);
 			assertTrue(intendedTarget.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion intendedTarget = playMinionCard(context, player, "minion_neutral_test");
+			Minion target1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_forgotten_science");
+			playCard(context, player, "spell_moonfire", intendedTarget);
+			assertFalse(intendedTarget.isDestroyed());
 			assertFalse(target1.isDestroyed());
 			assertFalse(target2.isDestroyed());
 		});
@@ -7084,7 +7098,6 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-
 	// Mollusk Meister: "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
 	@Test
 	public void testMolluskMeister() {
@@ -7278,7 +7291,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(opponent.getHand().containsCard("minion_dragonling_pet"));
 		}), dragonDeck, dragonDeck);
 	}
-  
+
 	@Test
 	public void testProperCardIds() {
 		CardCatalogue.loadCardsFromPackage();

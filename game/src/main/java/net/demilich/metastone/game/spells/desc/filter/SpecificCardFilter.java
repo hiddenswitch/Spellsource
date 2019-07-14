@@ -65,6 +65,5 @@ public class SpecificCardFilter extends EntityFilter {
 
 		return requiredCardIds.contains(cardId);
 	}
-
 }
 

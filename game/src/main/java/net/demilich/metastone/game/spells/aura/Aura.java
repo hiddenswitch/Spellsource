@@ -184,7 +184,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		Player owner = context.getPlayer(getOwner());
 		Entity source = context.resolveSingleTarget(getHostReference());
 		List<Entity> resolvedTargets = context.resolveTarget(owner, source, targets);
-		List<Entity> relevantTargets = new ArrayList<Entity>(resolvedTargets);
+		List<Entity> relevantTargets = new ArrayList<>(resolvedTargets);
 		for (Iterator<Integer> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
 			int entityId = iterator.next();
 
@@ -194,7 +194,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			if (currentlyAffectedEntity == null) {
 				LOGGER.warn("onGameEvent {} {}: {} could not be found by the target logic", context.getGameId(), source, entityId);
 				iterator.remove();
-			} else {
+			} else if (!relevantTargets.contains(currentlyAffectedEntity)) {
 				relevantTargets.add(currentlyAffectedEntity);
 			}
 		}
