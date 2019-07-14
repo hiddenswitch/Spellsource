@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Quick Draw: Draw 2 cards and destroy this.",
+  "description": "Quick Draw: Destroy this. Then, draw 2 cards.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -16,15 +16,19 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "DrawCardSpell",
-          "value": 2
-        },
-        {
           "class": "DestroySpell",
           "target": "SELF"
+        },
+        {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "DrawCardSpell",
+            "value": 2
+          }
         }
       ]
-    }
+    },
+    "maxFires": 1
   },
   "attributes": {
     "QUICK_DRAW": true
