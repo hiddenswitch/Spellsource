@@ -12,6 +12,7 @@ Bug fixes.
 
  - Introducing Storyteller's Basic and Classic cards, with a big thanks to @Skurleton! (1221)
  - Introducing Musician, with a big thanks to @Samswize! (1210, 1218)
+ - Introducing Outlaw, with a big thanks to @JDude60! His keyword, Quick Draw, means: Whenever a card is drawn...
 
 ##### Content Fixes:
 
@@ -119,6 +120,7 @@ The Skill is a spell that is playable once per turn specific to your champion.
  - Litedrain: Restores health for each damage dealt.
  - Opener: Occurs whenever the card is played from the hand.
  - Quad Strike: A character can attack four times.
+ - Quick Draw: This happens whenever a card is drawn.
  - Reservoir (X): Occurs when your deck is larger than this amount.
  - Roast: Remove a card from the top of your deck.
  - Sacrifice: Occurs whenever a friendly minion dies.
