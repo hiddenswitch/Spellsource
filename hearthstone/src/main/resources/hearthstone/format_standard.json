@@ -3,13 +3,16 @@
   "description": "An annually rotating set of the most recent Hearthstone expansions, alongside Basic and Clasic",
   "type": "FORMAT",
   "collectible": true,
-  "sets":[
+  "sets": [
     "BASIC",
-		"CLASSIC",
-		"WITCHWOOD",
-		"BOOMSDAY_PROJECT",
-		"RASTAKHANS_RUMBLE",
-		"RISE_OF_SHADOWS"
+    "CLASSIC",
+    "WITCHWOOD",
+    "BOOMSDAY_PROJECT",
+    "RASTAKHANS_RUMBLE",
+    "RISE_OF_SHADOWS"
+  ],
+  "secondPlayerBonusCards": [
+    "spell_the_coin"
   ],
   "fileFormatVersion": 1
 }
