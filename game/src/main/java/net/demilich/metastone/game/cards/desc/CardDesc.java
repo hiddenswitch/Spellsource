@@ -131,6 +131,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public EnchantmentDesc[] triggers;
 	public AuraDesc aura;
 	public AuraDesc[] auras;
+	public AuraDesc[] passiveAuras;
 	public CardCostModifierDesc cardCostModifier;
 	public BattlecryDesc[] chooseOneBattlecries;
 	public BattlecryDesc chooseBothBattlecry;
@@ -161,6 +162,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String hero;
 	public int[] color;
 	public boolean blackText;
+	public String[] secondPlayerBonusCards;
 	public CardDesc() {
 		super();
 	}
@@ -1002,6 +1004,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.DEATHRATTLE, deathrattle),
 				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(trigger, triggers, EnchantmentDesc.class)),
 				immutableEntry(CardDescArg.AURAS, auras),
+				immutableEntry(CardDescArg.PASSIVE_AURAS, passiveAuras),
 				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
 				immutableEntry(CardDescArg.BASE_HP, baseHp),
 				immutableEntry(CardDescArg.DAMAGE, damage),
@@ -1100,5 +1103,22 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public boolean isBlackText() {
 		return blackText;
+	}
+
+	public String[] getSecondPlayerBonusCards() {
+		return secondPlayerBonusCards;
+	}
+
+	public CardDesc setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
+	}
+
+	public AuraDesc[] getPassiveAuras() {
+		return passiveAuras;
+	}
+
+	public void setPassiveAuras(AuraDesc[] passiveAuras) {
+		this.passiveAuras=passiveAuras;
 	}
 }
