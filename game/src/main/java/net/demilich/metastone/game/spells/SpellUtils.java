@@ -58,23 +58,20 @@ public class SpellUtils {
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		EntityReference targetReference = spell.getTarget();
+
 		// Inherit target
 		if (targetReference == null && target != null) {
 			targetReference = target.getReference();
 		}
+
 		if (sourceReference == null) {
 			sourceReference = EntityReference.NONE;
 		}
+
 		if (targetReference == null) {
 			targetReference = EntityReference.NONE;
 		}
-		// Determine casting player here
-		/*
-		if (spell.containsKey(SpellArg.TARGET_PLAYER)) {
-			CastRandomSpellSpell.DetermineCastingPlayer castingPlayer = determineCastingPlayer(context, player, source, spell.getTargetPlayer());
-			player = castingPlayer.getCastingPlayer();
-		}
-		*/
+
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
 
@@ -803,7 +800,7 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves all of the unexpired, active auras that are instances of the {@code auraClass} hosted by {@link
-	 * Entity#isInPlay()} entities belonging to the {@code playerId}.
+	 * Entity#isInPlay()} entities belonging to the {@code playerId} or passive auras hosted by hero powers and cards.
 	 *
 	 * @param context
 	 * @param playerId
@@ -813,7 +810,7 @@ public class SpellUtils {
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.filter(e -> e.getOwner() == playerId && (e.isInPlay() || e.getZone() == Zones.HAND || e.getZone() == Zones.HERO_POWER))
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
 				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()

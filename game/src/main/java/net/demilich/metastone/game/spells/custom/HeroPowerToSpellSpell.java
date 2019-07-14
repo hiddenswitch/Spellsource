@@ -86,12 +86,15 @@ public final class HeroPowerToSpellSpell extends Spell {
 			spellCardDesc.setHeroClass(heroPower.getHeroClass());
 			spellCardDesc.setSet(heroPower.getCardSet());
 			spellCardDesc.setCollectible(false);
-
+			if (heroPower.getDesc().getPassiveAuras() != null) {
+				spellCardDesc.setPassiveAuras(heroPower.getDesc().getPassiveAuras());
+			}
 			spellCard = spellCardDesc.create();
 			context.addTempCard(spellCard);
 			if (heroPower.hasAttribute(Attribute.LIFESTEAL)) {
 				spellCard.setAttribute(Attribute.LIFESTEAL);
 			}
+
 		}
 		context.getLogic().receiveCard(player.getId(), spellCard);
 	}
