@@ -20,134 +20,7 @@ import java.util.stream.Stream;
 public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<String> sets;
-
-	/*
-	public static final DeckFormat STANDARD = new DeckFormat()
-			.withName("Standard")
-			.withCardSets(List.of(
-					"BASIC",
-					"CLASSIC",
-					"WITCHWOOD",
-					"BOOMSDAY_PROJECT",
-					"RASTAKHANS_RUMBLE",
-					"RISE_OF_SHADOWS"
-			));
-
-	public static final DeckFormat WILD = new DeckFormat()
-			.withName("Wild")
-			.withCardSets(List.of(
-					"BASIC",
-					"CLASSIC",
-					"REWARD",
-					"PROMO",
-					"NAXXRAMAS",
-					"GOBLINS_VS_GNOMES",
-					"BLACKROCK_MOUNTAIN",
-					"THE_GRAND_TOURNAMENT",
-					"LEAGUE_OF_EXPLORERS",
-					"THE_OLD_GODS",
-					"ONE_NIGHT_IN_KARAZHAN",
-					"MEAN_STREETS_OF_GADGETZAN",
-					"JOURNEY_TO_UNGORO",
-					"KNIGHTS_OF_THE_FROZEN_THRONE",
-					"KOBOLDS_AND_CATACOMBS",
-					"WITCHWOOD",
-					"BOOMSDAY_PROJECT",
-					"RASTAKHANS_RUMBLE",
-					"RISE_OF_SHADOWS",
-					"HALL_OF_FAME"
-			));
-
-	public static final DeckFormat PAST = new DeckFormat()
-			.withName("Past")
-			.withCardSets(List.of(
-					"REWARD",
-					"PROMO",
-					"NAXXRAMAS",
-					"GOBLINS_VS_GNOMES",
-					"BLACKROCK_MOUNTAIN",
-					"THE_GRAND_TOURNAMENT",
-					"LEAGUE_OF_EXPLORERS",
-					"THE_OLD_GODS",
-					"ONE_NIGHT_IN_KARAZHAN",
-					"MEAN_STREETS_OF_GADGETZAN",
-					"HALL_OF_FAME"
-			));
-
-	public static final DeckFormat CUSTOM = new DeckFormat()
-			.withName("Custom")
-			.withCardSets(List.of(
-					"BASIC",
-					"CLASSIC",
-					"REWARD",
-					"PROMO",
-					"NAXXRAMAS",
-					"GOBLINS_VS_GNOMES",
-					"BLACKROCK_MOUNTAIN",
-					"THE_GRAND_TOURNAMENT",
-					"LEAGUE_OF_EXPLORERS",
-					"THE_OLD_GODS",
-					"ONE_NIGHT_IN_KARAZHAN",
-					"MEAN_STREETS_OF_GADGETZAN",
-					"JOURNEY_TO_UNGORO",
-					"KNIGHTS_OF_THE_FROZEN_THRONE",
-					"KOBOLDS_AND_CATACOMBS",
-					"WITCHWOOD",
-					"BOOMSDAY_PROJECT",
-					"RASTAKHANS_RUMBLE",
-					"RISE_OF_SHADOWS",
-					"BATTLE_FOR_ASHENVALE",
-					"SANDS_OF_TIME",
-					"VERDANT_DREAMS",
-					"HALL_OF_FAME",
-					"SPELLSOURCE_BASIC",
-					"CUSTOM"
-			));
-
-	public static final DeckFormat GREATER_CUSTOM = new DeckFormat()
-			.withName("Greater Custom")
-			.withCardSets(List.of(
-					"BASIC",
-					"CLASSIC",
-					"REWARD",
-					"PROMO",
-					"NAXXRAMAS",
-					"GOBLINS_VS_GNOMES",
-					"BLACKROCK_MOUNTAIN",
-					"THE_GRAND_TOURNAMENT",
-					"LEAGUE_OF_EXPLORERS",
-					"THE_OLD_GODS",
-					"ONE_NIGHT_IN_KARAZHAN",
-					"MEAN_STREETS_OF_GADGETZAN",
-					"JOURNEY_TO_UNGORO",
-					"KNIGHTS_OF_THE_FROZEN_THRONE",
-					"KOBOLDS_AND_CATACOMBS",
-					"WITCHWOOD",
-					"BOOMSDAY_PROJECT",
-					"RASTAKHANS_RUMBLE",
-					"RISE_OF_SHADOWS",
-					"BATTLE_FOR_ASHENVALE",
-					"SANDS_OF_TIME",
-					"VERDANT_DREAMS",
-					"HALL_OF_FAME",
-					"ALTERNATIVE",
-					"UNNERFED",
-					"BLIZZARD_ADVENTURE",
-					"SPELLSOURCE_BASIC",
-					"CUSTOM"
-			));
-
-	public static final DeckFormat SPELLSOURCE = new DeckFormat()
-			.withName("Spellsource")
-			.withCardSets(List.of(
-					"SPELLSOURCE_BASIC",
-					"VERDANT_DREAMS",
-					"SANDS_OF_TIME",
-					"BATTLE_FOR_ASHENVALE",
-					"CUSTOM"
-			));
-
-	 */
+	private String[] secondPlayerBonusCards = new String[0];
 
 	public static DeckFormat ALL = new DeckFormat()
 			.withName("All");
@@ -165,6 +38,7 @@ public class DeckFormat implements Serializable, Cloneable {
 		FORMATS.put("All", ALL);
 		for (Card formatCard : formatCards) {
 			FORMATS.put(formatCard.getName(), new DeckFormat()
+					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
 					.withName(formatCard.getName())
 					.withCardSets(formatCard.getCardSets()));
 		}
@@ -288,6 +162,15 @@ public class DeckFormat implements Serializable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public String[] getSecondPlayerBonusCards() {
+		return secondPlayerBonusCards;
+	}
+
+	public DeckFormat setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
 	}
 }
 
