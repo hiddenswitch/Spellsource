@@ -5,7 +5,7 @@
   "heroClass": "ICECREAM",
   "color": [0, 191, 255],
   "blackText": true,
-  "collectible": true,
-  "set": "CUSTOM",
+  "collectible": false,
+  "set": "GRAVEYARD",
   "fileFormatVersion": 1
 }
