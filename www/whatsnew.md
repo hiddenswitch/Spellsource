@@ -7,12 +7,12 @@ permalink: /whats-new/
 ### 0.8.37-2.0.32 (In Progress)
 
 Bug fixes.
-Warden Saihan now correctly labeled as a Monk Legendary. (1227)
 
 ##### Content Fixes:
 
  - Roll and Immortal Prelate no longer crash shuffling minions that have gained Auras into the hand or deck. (1124)
  - Rafaam, Archivist can now discover cards from other classes that are in 'The Supreme Archive'. (1225)
+ - Warden Saihan now correctly labeled as a Monk Legendary. (1227)
 
 ### 0.8.36-2.0.32 (July 6th, 2019)
 
