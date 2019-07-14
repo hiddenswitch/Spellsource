@@ -1,0 +1,22 @@
+{
+  "name": "Cull the Herd",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "description": "Destroy all minions with 2 or less Attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 2,
+      "attribute": "ATTACK",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
