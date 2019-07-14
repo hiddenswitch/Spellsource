@@ -1059,7 +1059,7 @@ public enum Attribute {
      * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
      */
     SURGE,
-    DYNAMIC_DESCRIPTION;
+    DYNAMIC_DESCRIPTION, PASSIVE_AURAS;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

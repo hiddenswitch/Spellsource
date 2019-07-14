@@ -249,7 +249,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
 		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
-		setDeckFormat(fromContext.getDeckFormat());
+		setDeckFormat(fromContext.getDeckFormat().clone());
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
 

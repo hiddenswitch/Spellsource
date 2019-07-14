@@ -1,0 +1,16 @@
+{
+  "name": "Restorative Passage",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "description": "Restore #5 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 5
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

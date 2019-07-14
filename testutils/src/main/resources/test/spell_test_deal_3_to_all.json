@@ -1,0 +1,17 @@
+{
+  "name": "",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ALL_CHARACTERS",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

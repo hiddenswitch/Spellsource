@@ -1,0 +1,11 @@
+{
+  "seed" : -6643987391359293989,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "NAVY", "CORAL" ],
+  "deckCardIds" : [ [ "minon_lotus_knight", "spell_double_down", "minion_booty_bay_porter", "minion_landsieged_drake", "minion_gazlowe", "spell_avenging_forces", "minion_doomgunners", "minion_ancient_watcher", "minion_tribemaster", "spell_bewitch", "minion_mari_anette", "minion_savage_worgen", "minion_sunwalker", "minion_jastor_gallywyx", "spell_cursed_grips", "minion_backstreet_blowup", "minion_perplexed_courtsman", "minion_emerald_reaver", "minion_bright_eyed_scout", "minion_underworld_keeper", "minion_old_ratmother", "spell_redeem", "minion_unstable_artifact", "minion_magister_umbric", "minion_nightmare_dragonflight", "minion_bolf_ramshield", "minion_owlbear_mother", "minion_landsieged_drake", "spell_reinforcements", "minion_fungalmancer" ], [ "spell_uplifting_melody", "minion_small-time_buccaneer", "minion_batterhead", "minion_crystal_giant", "spell_sheet_music", "weapon_storm_guitar", "minion_street_performer_coral", "minion_street_performer_coral", "minion_grim_necromancer", "spell_crescendo", "minion_kobold_apprentice", "spell_crescendo", "spell_groupies", "weapon_storm_guitar", "minion_coppertail_imposter", "spell_charm", "spell_healing_hymn", "minion_travelling_healer", "minion_spirited_announcer", "minion_frigid_bones", "minion_lundurr_the_reborn", "spell_enchanting_tune", "minion_alluring_minstrel", "spell_uplifting_melody", "minion_ancient_shade", "minion_evil_cable_rat", "minion_galvanizer", "minion_spirited_announcer", "spell_fortissimo", "minion_injured_blademaster" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BATTLE_FOR_ASHENVALE", "RASTAKHANS_RUMBLE", "WITCHWOOD", "VERDANT_DREAMS", "JOURNEY_TO_UNGORO", "GOBLINS_VS_GNOMES", "BOOMSDAY_PROJECT", "HALL_OF_FAME", "RISE_OF_SHADOWS", "NAXXRAMAS", "ONE_NIGHT_IN_KARAZHAN", "KNIGHTS_OF_THE_FROZEN_THRONE", "CLASSIC", "KOBOLDS_AND_CATACOMBS", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "REWARD", "LEAGUE_OF_EXPLORERS", "PROMO", "THE_GRAND_TOURNAMENT", "BLACKROCK_MOUNTAIN", "SPELLSOURCE_BASIC", "CUSTOM", "SANDS_OF_TIME", "BASIC" ],
+  "mulligans" : [ [ 12, 14 ], [ 43, 62 ] ],
+  "actions" : [ 0, 0, 2, 4, 2, 0, 0, 0, 4, 2, 4, 2, 9, 4, 1, 2, 0, 2 ],
+  "id" : null
+}
