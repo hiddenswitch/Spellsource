@@ -221,7 +221,6 @@ public class CardCatalogue {
 		}
 
 		try {
-			Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 			InjectedCardResources cardResources = INJECTOR.getInstance(InjectedCardResources.class);
 			Collection<ResourceInputStream> inputStreams = cardResources.cardResources.stream().flatMap(resource -> resource.getResources().stream()).map(resource -> ((CardResource) resource)).map(resource -> (ResourceInputStream) resource).collect(Collectors.toList());
 			Map<String, CardDesc> cardDesc = new HashMap<>();

@@ -73,6 +73,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setHost("0.0.0.0")
 				.setPort(port)
 				.setMaxWebsocketFrameSize(65536)
+				.setWebsocketAllowServerNoContext(true)
+				.setWebsocketPreferredClientNoContext(true)
 				.setMaxWebsocketMessageSize(100 * 65536)
 				.setPerFrameWebsocketCompressionSupported(true)
 				.setPerMessageWebsocketCompressionSupported(true)

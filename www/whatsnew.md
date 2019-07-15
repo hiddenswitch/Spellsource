@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.39-2.0.34 (In Progress)
+
+Some forms of network lag should be addressed in this update, because the server and client now exchange as little as 20% of the data they did previously.
+
 ### 0.8.38-2.0.33 (July 14th, 2019)
 
 Hot fixing the removal of the bot decklists that contain old cards.
