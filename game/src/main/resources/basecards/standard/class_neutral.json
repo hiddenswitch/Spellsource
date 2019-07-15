@@ -3,7 +3,7 @@
   "type": "CLASS",
   "hero": "hero_neutral",
   "heroClass": "ANY",
-  "color": [128, 128, 128],
+  "color": [221, 211, 204],
   "blackText": true,
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
