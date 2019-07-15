@@ -4,9 +4,9 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.37-2.0.32 (In Progress)
+### 0.8.37-2.0.33 (July 14th, 2019)
 
-Bug fixes.
+New content and bug fixes!
 
 ##### Content Additions:
 
