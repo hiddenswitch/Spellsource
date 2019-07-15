@@ -4328,7 +4328,7 @@ public class CustomCardsTests extends TestBase {
 
 			for (Card card : player.getHand().subList(0, 2)) {
 				assertEquals(card.getCardId(), "minion_test_race_filtered_opener");
-				assertEquals(card.getRace(), Race.FAE);
+				assertEquals(card.getRace(), "FAE");
 			}
 
 			final Card blank = player.getHand().get(2);
