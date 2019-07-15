@@ -77,6 +77,8 @@ public class SpellUtils {
 
 	/**
 	 * Plays a card "randomly."
+	 * <p>
+	 * This will cause it to select random targets if, after target selection modification, it accepts targets.
 	 *
 	 * @param context
 	 * @param player
@@ -183,7 +185,11 @@ public class SpellUtils {
 				actionWithBattlecry.setBattlecry(nullBattlecry);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
-			// This is some other kind of action that takes a target
+			// This is some other kind of action that takes a target. Process possible target modification first.
+			if (!card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+				action.setSourceReference(card.getReference());
+				context.getLogic().processTargetModifiers(action);
+			}
 			if (action.getTargetRequirement() != null && action.getTargetRequirement() != TargetSelection.NONE) {
 				List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 				EntityReference randomTarget = null;

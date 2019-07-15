@@ -3057,18 +3057,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		return action;
-		/*
-		Card heroPower = player.getHero().getHeroPower();
-		if (heroPower.getHeroClass() != "GREEN") {
-			return;
-		}
-		if (action.getActionType() == ActionType.HERO_POWER && hasAttribute(player, Attribute.HERO_POWER_CAN_TARGET_MINIONS)) {
-			PlaySpellCardAction spellCardAction = (PlaySpellCardAction) action;
-			SpellDesc targetChangedSpell = spellCardAction.getSpell().removeArg(SpellArg.TARGET);
-			spellCardAction.setSpell(targetChangedSpell);
-			spellCardAction.setTargetRequirement(TargetSelection.ANY);
-		}
-		*/
 	}
 
 	/**
