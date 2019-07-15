@@ -13,12 +13,15 @@
         "value": 1
       },
       {
-        "class": "AddDeathrattleSpell",
-        "target": "ALL_OTHER_MINIONS",
-        "card": "enchantment_rending_curse",
-        "filter": {
-          "class": "IsDestroyedFilter",
-          "invert": true
+        "class": "CastAfterSequenceSpell",
+        "spell": {
+          "class": "AddDeathrattleSpell",
+          "target": "ALL_OTHER_MINIONS",
+          "card": "enchantment_rending_curse",
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          }
         }
       }
     ]

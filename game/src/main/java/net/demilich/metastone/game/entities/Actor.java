@@ -27,7 +27,7 @@ import java.util.List;
 public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
 	private Card sourceCard;
-	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
+	private List<Enchantment> enchantments = new ArrayList<>();
 	private CardCostModifier cardCostModifier;
 
 	public Actor(Card sourceCard) {

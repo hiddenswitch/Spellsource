@@ -102,8 +102,8 @@ public interface Games extends Verticle {
 				.state(new EntityState()
 						.owner(owner)
 						.cardType(EntityState.CardTypeEnum.SPELL)
-						.heroClass(heroClass.toString())
-						.location(toClientLocation(location)));
+						.heroClass(heroClass)
+						.l(toClientLocation(location)));
 	}
 
 	/**
@@ -220,7 +220,7 @@ public interface Games extends Verticle {
 								}
 
 								entity.id(id).getState().playable(true)
-										.location(Games.toClientLocation(sourceCardLocation));
+										.l(Games.toClientLocation(sourceCardLocation));
 
 								summon.addEntitiesItem(entity);
 								summon.addSummonsItem(summonAction);
@@ -277,7 +277,7 @@ public interface Games extends Verticle {
 								entity.id(id)
 										.description(battlecryDescription)
 										.getState().playable(true)
-										.location(Games.toClientLocation(sourceCardLocation));
+										.l(Games.toClientLocation(sourceCardLocation));
 
 								hero.addEntitiesItem(entity);
 								hero.addHeroesItem(spellAction);
@@ -413,7 +413,7 @@ public interface Games extends Verticle {
 			// Use the source card location
 			entity.id(id)
 					.getState().playable(true)
-					.location(Games.toClientLocation(sourceCardLocation));
+					.l(Games.toClientLocation(sourceCardLocation));
 			SpellAction choiceSpell = getSpellAction(id, choiceActions);
 
 			spell.addEntitiesItem(entity);
@@ -791,7 +791,7 @@ public interface Games extends Verticle {
 					.state(new EntityState()
 							.owner(secret.getOwner())
 							.heroClass(secret.getSourceCard().getHeroClass().toString())
-							.location(Games.toClientLocation(secret.getEntityLocation())));
+							.l(Games.toClientLocation(secret.getEntityLocation())));
 			opposingSecrets.add(entity);
 		}
 
@@ -816,7 +816,7 @@ public interface Games extends Verticle {
 							.lockedMana(player.getLockedMana())
 							.maxMana(player.getMaxMana())
 							.mana(player.getMana())
-							.location(Games.toClientLocation(player.getEntityLocation()))
+							.l(Games.toClientLocation(player.getEntityLocation()))
 							.gameStarted(player.hasAttribute(Attribute.GAME_STARTED)));
 			playerEntities.add(playerEntity);
 			// The heroes may have wound up in the graveyard
@@ -878,7 +878,7 @@ public interface Games extends Verticle {
 				.id(e.getId())
 				.cardId("hidden")
 				.state(new EntityState()
-						.location(toClientLocation(e.getEntityLocation())))
+						.l(toClientLocation(e.getEntityLocation())))
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(toList()));
 
 		// Sort the entities by ID
@@ -958,7 +958,7 @@ public interface Games extends Verticle {
 		}
 
 		entityState.owner(actor.getOwner());
-		entityState.location(Games.toClientLocation(actor.getEntityLocation()));
+		entityState.l(Games.toClientLocation(actor.getEntityLocation()));
 		entityState.manaCost(card.getBaseManaCost());
 		entityState.heroClass(card.getHeroClass().toString());
 		entityState.cardSet(Objects.toString(card.getCardSet()));
@@ -1049,7 +1049,7 @@ public interface Games extends Verticle {
 		entity.id(enchantment.getId())
 				.entityType(entityType)
 				.getState()
-				.location(Games.toClientLocation(enchantment.getEntityLocation()))
+				.l(Games.toClientLocation(enchantment.getEntityLocation()))
 				.owner(enchantment.getOwner())
 				.playable(false);
 		return entity;
@@ -1109,7 +1109,7 @@ public interface Games extends Verticle {
 		entityState.owner(card.getOwner());
 		entityState.cardSet(Objects.toString(card.getCardSet()));
 		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
-		entityState.location(Games.toClientLocation(card.getEntityLocation()));
+		entityState.l(Games.toClientLocation(card.getEntityLocation()));
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.uncensored(card.hasAttribute(Attribute.UNCENSORED));
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
@@ -1212,9 +1212,9 @@ public interface Games extends Verticle {
 	 */
 	static com.hiddenswitch.spellsource.client.models.EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
 		return new com.hiddenswitch.spellsource.client.models.EntityLocation()
-				.zone(com.hiddenswitch.spellsource.client.models.EntityLocation.ZoneEnum.valueOf(location.getZone().toString()))
-				.index(location.getIndex())
-				.player(location.getPlayer());
+				.z(com.hiddenswitch.spellsource.client.models.EntityLocation.ZEnum.valueOf(location.getZone().getSerialized()))
+				.i(location.getIndex())
+				.p(location.getPlayer());
 	}
 
 	/**
@@ -1250,21 +1250,21 @@ public interface Games extends Verticle {
 				.id(i.getKey())
 				.op(EntityChangeSetInner.OpEnum.C)
 				.p1(new EntityState()
-						.location(Games.toClientLocation(i.getValue().rightValue())))
+						.l(Games.toClientLocation(i.getValue().rightValue())))
 				.p0(new EntityState()
-						.location(Games.toClientLocation(i.getValue().leftValue()))))
+						.l(Games.toClientLocation(i.getValue().leftValue()))))
 				.forEach(changes::add);
 
 		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
 				.op(EntityChangeSetInner.OpEnum.A)
 				.p1(new EntityState()
-						.location(Games.toClientLocation(i.getValue()))))
+						.l(Games.toClientLocation(i.getValue()))))
 				.forEach(changes::add);
 
 		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
 				.op(EntityChangeSetInner.OpEnum.R)
 				.p1(new EntityState()
-						.location(Games.toClientLocation(i.getValue()))))
+						.l(Games.toClientLocation(i.getValue()))))
 				.forEach(changes::add);
 
 		return changes;

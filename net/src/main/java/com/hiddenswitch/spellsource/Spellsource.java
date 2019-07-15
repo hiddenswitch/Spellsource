@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
@@ -14,6 +15,7 @@ import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.*;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
@@ -65,6 +67,10 @@ public class Spellsource {
 	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
 	private Map<String, Trigger> gameTriggers = new HashMap<>();
 	private Map<String, Spell> spells = new HashMap<>();
+
+	static {
+		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+	}
 
 	private Spellsource() {
 	}
@@ -540,7 +546,13 @@ public class Spellsource {
 							changeCardId("token_storm_spirit", "token_bellowing_spirit");
 							changeCardId("token_fire_spirit", "token_burning_spirit");
 						}))
-				.migrateTo(33, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(34)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(34, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

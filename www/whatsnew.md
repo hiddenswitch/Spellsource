@@ -4,14 +4,33 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.37-2.0.32 (In Progress)
+### 0.8.39-2.0.34 (July 15th, 2019)
 
-Bug fixes.
+Some forms of network lag should be addressed in this update, because the server and client now exchange as little as 20% of the data they did previously.
+
+### 0.8.38-2.0.33 (July 14th, 2019)
+
+Hot fixing the removal of the bot decklists that contain old cards.
+
+### 0.8.37-2.0.33 (July 14th, 2019)
+
+New content and bug fixes!
+
+##### Content Additions:
+
+ - Introducing Storyteller's Basic and Classic cards, with a big thanks to @Skurleton! (1221)
+ - Introducing Musician, with a big thanks to @Samswize! (1210, 1218)
+ - Introducing Outlaw, with a big thanks to @JDude60! His keyword, Quick Draw, means: Whenever a card is drawn...
 
 ##### Content Fixes:
 
  - Roll and Immortal Prelate no longer crash shuffling minions that have gained Auras into the hand or deck. (1124)
  - Rafaam, Archivist can now discover cards from other classes that are in 'The Supreme Archive'. (1225)
+ - Warden Saihan now correctly labeled as a Monk Legendary. (1227)
+ - Effects which remove minions from the board no longer cause crashes when other summon triggers attempt to remove those minions.
+ - Catta the Merciless no longer causes an infinite loop with minions that deal zero damage.
+ - Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
+ - Icecream Lich and the Technician are now removed from your collections.
 
 ### 0.8.36-2.0.32 (July 6th, 2019)
 
@@ -36,7 +55,6 @@ For Python users, the build is now compatible with Java 11.
  - Living Mana no longer puts you into negative mana. (1026)
  - Mollusk Meister now has the correct effects. (1115)
 
- 
 ### 0.8.35-2.0.31 (July 1st, 2019)
 
 Fixing issues with cards not being found or detected after their IDs were changed.
@@ -112,6 +130,7 @@ The Skill is a spell that is playable once per turn specific to your champion.
  - Litedrain: Restores health for each damage dealt.
  - Opener: Occurs whenever the card is played from the hand.
  - Quad Strike: A character can attack four times.
+ - Quick Draw: This happens whenever a card is drawn.
  - Reservoir (X): Occurs when your deck is larger than this amount.
  - Roast: Remove a card from the top of your deck.
  - Sacrifice: Occurs whenever a friendly minion dies.

@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 3.0.5
+  version: 4.0.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -596,7 +596,6 @@ definitions:
         description: |
           When true, indicates this is a standard deck provided by the server.
         type: 'boolean'
-        default: false
       inventory:
         type: 'array'
         items:
@@ -776,36 +775,32 @@ definitions:
   EntityLocation:
     type: 'object'
     required:
-      - zone
-      - index
-      - player
+      - z
+      - i
+      - p
     properties:
-      player:
+      p:
         type: 'integer'
-        enum:
-          - -1
-          - 0
-          - 1
-      index:
+      i:
         type: 'integer'
-      zone:
+      z:
         type: 'string'
         enum:
-          - 'NONE'
-          - 'HAND'
-          - 'DECK'
-          - 'GRAVEYARD'
-          - 'BATTLEFIELD'
-          - 'SECRET'
-          - 'QUEST'
-          - 'HERO_POWER'
-          - 'HERO'
-          - 'WEAPON'
-          - 'SET_ASIDE_ZONE'
-          - 'HIDDEN'
-          - 'DISCOVER'
-          - 'REMOVED_FROM_PLAY'
-          - 'PLAYER'
+          - 'N' # 'NONE'
+          - 'H' # 'HAND'
+          - 'D' # 'DECK'
+          - 'G' # 'GRAVEYARD'
+          - 'B' # 'BATTLEFIELD'
+          - 'S' # 'SECRET'
+          - 'Q' # 'QUEST'
+          - 'K' # 'HERO_POWER'
+          - 'E' # 'HERO'
+          - 'W' # 'WEAPON'
+          - 'A' # 'SET_ASIDE_ZONE'
+          - 'Z' # 'HIDDEN'
+          - 'V' # 'DISCOVER'
+          - 'R' # 'REMOVED_FROM_PLAY'
+          - 'P' # 'PLAYER'
   EntityChangeSet:
     description: |
       An abbreviated description of changes since the last change set this client received.
@@ -1457,7 +1452,7 @@ definitions:
       The entity state contains all the mutable values of an entity. In the future, the server will provide a list of
       exact changes to this state.
     properties:
-      location:
+      l:
         $ref: '#/definitions/EntityLocation'
       background:
         description: |

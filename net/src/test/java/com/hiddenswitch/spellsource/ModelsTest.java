@@ -91,7 +91,6 @@ public class ModelsTest {
 			assertEquals(2, player.getQuests().get(0).getFires());
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
 			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getState().getFires() == 2));
-			Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 			JsonObject jsonObject = JsonObject.mapFrom(state);
 			Assert.assertTrue(jsonObject.getJsonArray("entities").stream().anyMatch(obj -> {
 				JsonObject jo = (JsonObject) obj;
@@ -137,7 +136,7 @@ public class ModelsTest {
 			context.performAction(player.getId(), roll);
 			context = context.clone();
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
-			Entity entity = state.getEntities().stream().filter(e -> e.getState().getLocation().getZone() == EntityLocation.ZoneEnum.HAND && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
+			Entity entity = state.getEntities().stream().filter(e -> e.getState().getL().getZ() == EntityLocation.ZEnum.H && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
 			assertEquals(3L, (long) entity.getState().getAttack());
 			assertEquals(3L, (long) entity.getState().getHp());
 		});

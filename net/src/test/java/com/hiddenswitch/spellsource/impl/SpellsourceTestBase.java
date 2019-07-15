@@ -52,7 +52,6 @@ public abstract class SpellsourceTestBase {
 	@BeforeClass
 	@Suspendable
 	public static void setUp(TestContext context) {
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));

@@ -11,13 +11,13 @@ public class WeaponPlayedTrigger extends WeaponEquippedTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		WeaponEquippedEvent weaponEvent = (WeaponEquippedEvent) event;
 
 		if (weaponEvent.getSource() == null) {
 			return false;
 		}
 
-		return super.fire(event, host);
+		return super.innerQueues(event, host);
 	}
 }

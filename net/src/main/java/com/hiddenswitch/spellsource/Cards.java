@@ -108,7 +108,7 @@ public interface Cards {
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> {
 					// Don't waste space storing locations on these
-					entity.getState().location(null);
+					entity.getState().l(null);
 					return new CardRecord()
 							.id(entity.getCardId())
 							.entity(entity);
