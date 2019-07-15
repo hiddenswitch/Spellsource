@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.38-2.0.33 (July 14th, 2019)
+
+Hot fixing the removal of the bot decklists that contain old cards.
+
 ### 0.8.37-2.0.33 (July 14th, 2019)
 
 New content and bug fixes!

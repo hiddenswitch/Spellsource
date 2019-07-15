@@ -540,7 +540,13 @@ public class Spellsource {
 							changeCardId("token_storm_spirit", "token_bellowing_spirit");
 							changeCardId("token_fire_spirit", "token_burning_spirit");
 						}))
-				.migrateTo(33, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(34)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(34, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
