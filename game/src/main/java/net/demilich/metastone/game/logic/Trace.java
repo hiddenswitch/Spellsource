@@ -3,20 +3,15 @@ package net.demilich.metastone.game.logic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.util.Serialization;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -47,12 +42,12 @@ public class Trace implements Serializable, Cloneable {
 	private String[][] deckCardIds;
 	private String deckFormatName;
 	private String[] deckFormatSets;
+	private String[] secondPlayerBonusCards;
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
+	private String id;
 	@JsonIgnore
 	private transient List<GameAction> rawActions = new ArrayList<>();
-	private transient List<String> log = new ArrayList<>();
-	private String id;
 
 	public Trace() {
 	}
@@ -60,8 +55,9 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
 		Player[] players = new Player[]{gameState.player1, gameState.player2};
-		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new String[0]);
+		deckFormatSets = gameState.deckFormat.getCardSets().toArray(String[]::new);
 		deckFormatName = gameState.deckFormat.getName();
+		secondPlayerBonusCards = gameState.deckFormat.getSecondPlayerBonusCards();
 		setHeroClasses(new String[2]);
 		setDeckCardIds(new String[2][]);
 		for (int i = 0; i < 2; i++) {
@@ -94,11 +90,6 @@ public class Trace implements Serializable, Cloneable {
 	public void addAction(int actionId, GameAction action, GameContext context) {
 		actions.add(actionId);
 		rawActions.add(action);
-		if (context == null) {
-			log.add(action.toString());
-		} else {
-			log.add(action.getDescription(context, context.getActivePlayerId()));
-		}
 	}
 
 	@JsonIgnore
@@ -124,32 +115,26 @@ public class Trace implements Serializable, Cloneable {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = getStartingGameContext();
+		GameContext gameContext = new GameContext();
+		restoreStartingStateTo(gameContext);
 
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
 
-		stateRestored.setBehaviour(
+		gameContext.setBehaviour(
 				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
-		stateRestored.setBehaviour(
+		gameContext.setBehaviour(
 				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
 
 		try {
-			stateRestored.init();
-			stateRestored.resume();
+			gameContext.init();
+			gameContext.resume();
 		} catch (CancellationException ex) {
 			// DO NOT REMOVE, resume throws cancellation on purpose.
 		}
 		CardCatalogue.setVersion(originalCatalogueVersion);
-		return stateRestored;
-	}
-
-	@NotNull
-	private GameContext getStartingGameContext() {
-		GameContext gameContext = new GameContext();
-		restoreStartingStateTo(gameContext);
 		return gameContext;
 	}
 
@@ -165,11 +150,27 @@ public class Trace implements Serializable, Cloneable {
 			context.setPlayer(1, new Player());
 		}
 
-		if (deckFormatSets != null && deckFormatName != null) {
-			context.setDeckFormat(new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets));
-		} else {
-			context.setDeckFormat(DeckFormat.getFormat("Standard"));
+		// Compatibility with previous deck formats
+		DeckFormat deckFormat = new DeckFormat();
+		if (secondPlayerBonusCards != null) {
+			deckFormat.setSecondPlayerBonusCards(secondPlayerBonusCards);
 		}
+		if (deckFormatSets != null) {
+			deckFormat.withCardSets(deckFormatSets);
+		}
+		if (deckFormatName != null) {
+			if (deckFormatSets == null || deckFormatSets.length == 0) {
+				deckFormat = DeckFormat.getFormat(deckFormatName);
+			} else {
+				deckFormat.setName(deckFormatName);
+			}
+		}
+
+		// Compatibility with previous traces
+		if (getCatalogueVersion() == 1 && secondPlayerBonusCards == null) {
+			deckFormat.setSecondPlayerBonusCards(new String[]{"spell_the_coin"});
+		}
+		context.setDeckFormat(deckFormat);
 
 		GameLogic logic = new GameLogic((IdFactoryImpl) context.getLogic().getIdFactory(), getSeed());
 		logic.setContext(context);
@@ -204,11 +205,6 @@ public class Trace implements Serializable, Cloneable {
 		} catch (Exception ex) {
 			return null;
 		}
-	}
-
-	@JsonIgnore
-	public List<String> getLog() {
-		return log;
 	}
 
 	public String[] getHeroClasses() {
@@ -275,5 +271,14 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public List<GameAction> getRawActions() {
 		return rawActions;
+	}
+
+	public String[] getSecondPlayerBonusCards() {
+		return secondPlayerBonusCards;
+	}
+
+	public Trace setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
 	}
 }

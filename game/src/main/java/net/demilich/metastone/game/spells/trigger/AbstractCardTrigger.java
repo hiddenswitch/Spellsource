@@ -15,7 +15,7 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		HasCard cardPlayedEvent = (HasCard) event;
 		CardType cardType = (CardType) getDesc().get(EventTriggerArg.CARD_TYPE);
 		if (cardType != null && !cardPlayedEvent.getCard().getCardType().isCardType(cardType)) {

@@ -3,12 +3,15 @@
   "description": "The format with Custom made cards ONLY.",
   "type": "FORMAT",
   "collectible": true,
-  "sets":[
-		"SPELLSOURCE_BASIC",
-		"VERDANT_DREAMS",
-		"SANDS_OF_TIME",
-		"BATTLE_FOR_ASHENVALE",
-		"CUSTOM"
+  "sets": [
+    "SPELLSOURCE_BASIC",
+    "VERDANT_DREAMS",
+    "SANDS_OF_TIME",
+    "BATTLE_FOR_ASHENVALE",
+    "CUSTOM"
+  ],
+  "secondPlayerBonusCards": [
+    "spell_lunstone"
   ],
   "fileFormatVersion": 1
 }

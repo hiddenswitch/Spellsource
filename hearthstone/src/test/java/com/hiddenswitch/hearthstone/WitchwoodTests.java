@@ -326,7 +326,7 @@ public class WitchwoodTests extends TestBase {
 	@Test
 	public void testGennGreymane() {
 		{
-			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
+			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Standard"));
 			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				Stream.generate(() -> "minion_bloodfen_raptor")
@@ -347,7 +347,7 @@ public class WitchwoodTests extends TestBase {
 		}
 
 		{
-			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
+			DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Standard"));
 			context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				Stream.generate(() -> "minion_argent_squire")

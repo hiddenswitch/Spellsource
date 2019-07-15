@@ -15,7 +15,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
-import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
@@ -197,7 +196,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	 * @return {@code true}.
 	 */
 	@Override
-	public boolean canFire(GameEvent event) {
+	public boolean queues(GameEvent event) {
 		return true;
 	}
 
@@ -299,7 +298,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	@Override
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
-		if (expirationTrigger != null && event.getEventType() == expirationTrigger.interestedIn() && expirationTrigger.fires(event, host)) {
+		if (expirationTrigger != null && event.getEventType() == expirationTrigger.interestedIn() && expirationTrigger.queues(event, host)) {
 			expire();
 		}
 	}
@@ -342,9 +341,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
 		if (expirationTrigger != null) {
-			return expirationTrigger.canFireCondition(event);
+			return expirationTrigger.fires(event);
 		}
 		return true;
 	}

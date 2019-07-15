@@ -27,8 +27,8 @@ public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
-		boolean minionPlayed = super.fire(event, host);
+	protected boolean innerQueues(GameEvent event, Entity host) {
+		boolean minionPlayed = super.innerQueues(event, host);
 		if (!minionPlayed) {
 			return false;
 		}

@@ -1,6 +1,6 @@
 {
   "name": "",
-  "baseManaCost": 1,
+  "baseManaCost": 3,
   "type": "WEAPON",
   "heroClass": "RED",
   "damage": 3,

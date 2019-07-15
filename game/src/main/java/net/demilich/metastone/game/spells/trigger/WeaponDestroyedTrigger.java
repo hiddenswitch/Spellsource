@@ -13,7 +13,7 @@ public class WeaponDestroyedTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		WeaponDestroyedEvent weaponDestroyedEvent = (WeaponDestroyedEvent) event;
 		return weaponDestroyedEvent.getWeapon().getOwner() == host.getOwner();
 	}

@@ -214,6 +214,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			}
 		}
 
+		if (getDesc().getPassiveAuras() != null && getDesc().getPassiveAuras().length > 0) {
+			for (AuraDesc auraDesc : getDesc().getPassiveAuras()) {
+				enchantments.add(auraDesc.create());
+			}
+		}
+
 		// If there is no enchantment, create a dummy one
 		if (enchantments.isEmpty()) {
 			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
@@ -528,8 +534,9 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
-	 * Gets the original {@link CardDesc} that was used to create this card. Modifying this description does not modify
-	 * the card, and the {@link CardDesc} may be referenced by multiple instances of {@link Card}.
+	 * Gets the original {@link CardDesc} that was used to create this card <b>or</b> the desc of the card described by
+	 * the {@link CardAttributeMap#getOverrideCardId()} overridden card ID. Modifying this description does not modify the
+	 * card, and the {@link CardDesc} may be referenced by multiple instances of {@link Card}.
 	 *
 	 * @return A {@link CardDesc}
 	 */
@@ -539,6 +546,15 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 		// Prevents copying here
 		return CardCatalogue.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
+	}
+
+	/**
+	 * Returns the {@link CardDesc} ignoring the {@link Attribute#AURA_CARD_ID} and {@link Attribute#CARD_ID} values.
+	 *
+	 * @return
+	 */
+	public CardDesc getNonOverriddenDesc() {
+		return desc;
 	}
 
 	/**
