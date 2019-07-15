@@ -136,7 +136,7 @@ public class ModelsTest {
 			context.performAction(player.getId(), roll);
 			context = context.clone();
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
-			Entity entity = state.getEntities().stream().filter(e -> e.getState().getLocation().getZone() == EntityLocation.ZEnum.HAND && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
+			Entity entity = state.getEntities().stream().filter(e -> e.getState().getL().getZ() == EntityLocation.ZEnum.H && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
 			assertEquals(3L, (long) entity.getState().getAttack());
 			assertEquals(3L, (long) entity.getState().getHp());
 		});
