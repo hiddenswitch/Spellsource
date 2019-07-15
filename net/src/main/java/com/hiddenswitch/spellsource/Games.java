@@ -1004,7 +1004,7 @@ public interface Games extends Verticle {
 		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
 		entityState.permanent(actor.hasAttribute(Attribute.PERMANENT));
 		entityState.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
-		entityState.tribe(actor.getRace() != null ? actor.getRace().name() : null);
+		entityState.tribe(actor.getRace());
 		List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
 		entityState.hostsTrigger(triggers.size() > 0);
 		entity.state(entityState);
@@ -1149,7 +1149,7 @@ public interface Games extends Verticle {
 				entityState.underAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
-				entityState.tribe(card.getRace().name());
+				entityState.tribe(card.getRace());
 				// Include handbuffs from WhereverTheyAre enchantments. Also use this for other effects!
 				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entityState);
 				break;
