@@ -108,7 +108,7 @@ public enum Zones {
 	 * 		for more about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */
-	DISCOVER("D"),
+	DISCOVER("V"),
 	/**
 	 * An {@link Entity} in this zone is "deleted" in the sense that it will never appear in any {@link EntityFilter}
 	 * filters or targeting lists.
