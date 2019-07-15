@@ -450,7 +450,7 @@ public class UnityClient implements AutoCloseable {
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() >= 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
 				e.getEntityType() == Entity.EntityTypeEnum.HERO
-						&& e.getState().getLocation().getZone() == EntityLocation.ZoneEnum.HERO
+						&& e.getState().getL().getZ() == EntityLocation.ZEnum.E
 		).allMatch(h ->
 				null != h.getState().getMaxMana()));
 		context.assertNotNull(message.getGameState().getTurnNumber());

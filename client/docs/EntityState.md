@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**location** | [**EntityLocation**](EntityLocation.md) |  |  [optional]
+**l** | [**EntityLocation**](EntityLocation.md) |  |  [optional]
 **background** | **String** | When not null, override the default background for this entity&#39;s card ID with this key corresponding to backgrounds from the server.  |  [optional]
 **portrait** | **String** | When not null, override the default portrait for this entity&#39;s card ID with this key corresponding to portraits from the server.  |  [optional]
 **gold** | **Boolean** | Render this entity with a \&quot;gold\&quot; effect. |  [optional]

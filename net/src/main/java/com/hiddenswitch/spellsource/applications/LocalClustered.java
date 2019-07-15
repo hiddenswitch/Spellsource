@@ -38,7 +38,6 @@ public class LocalClustered {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		LoggerFactory.initialise();
 
 
