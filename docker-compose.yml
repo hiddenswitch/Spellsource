@@ -48,9 +48,6 @@ services:
       - web
       - backend
     deploy:
-      restart_policy:
-        condition: on-failure
-        window: 30s
       labels:
         - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
         - "traefik.versionedhost.frontend.entryPoints=http,https"
@@ -62,11 +59,6 @@ services:
         - "traefik.enable=true"
       placement:
         constraints: [node.platform.arch == x86_64]
-    healthcheck:
-      test: curl --fail -s http://localhost:80/ || exit 1
-      interval: 8s
-      timeout: 4s
-      retries: 3
   launcher:
     image: doctorpangloss/launcher:latest
     networks:
