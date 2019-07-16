@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41-2.0.35 (In Progress)
+
+All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
+
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
 Bug fixes for network lag.
