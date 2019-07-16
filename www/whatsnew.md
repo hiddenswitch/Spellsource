@@ -10,6 +10,7 @@ Storyteller bugfixes (1233):
 
 - Manly Mountaineer now properly has Dash.
 - Tome of Secrets now works properly.
+- Dramatic Playwright now only changes the attack of one enemy minion.
 
 ### 0.8.39-2.0.34 (July 15th, 2019)
 
