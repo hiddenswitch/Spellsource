@@ -104,6 +104,8 @@ public class InvitesTest extends SpellsourceTestBase {
 			assertEquals(1, updatedSender.getAccounts().get(0).getFriends().size());
 			assertEquals(sender.getUserId().toString(), updatedRecipient.getAccounts().get(0).getFriends().get(0).getFriendId());
 			assertEquals(recipient.getUserId().toString(), updatedSender.getAccounts().get(0).getFriends().get(0).getFriendId());
+			sender.close();
+			recipient.close();
 		});
 	}
 
@@ -179,6 +181,8 @@ public class InvitesTest extends SpellsourceTestBase {
 			GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
 			assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
 			assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
+			sender.close();
+			recipient.close();
 		});
 	}
 
