@@ -56,7 +56,8 @@ public class BotsTest extends SpellsourceTestBase {
 				RequestActionRequest requestActionRequest = new RequestActionRequest(new GameId(context1.getGameId()),
 						context1.getActivePlayerId(),
 						context1.getValidActions(),
-						context1.getDeckFormat(), context1.getGameStateCopy());
+						context1.getDeckFormat(), context1.getGameStateCopy(),
+						null);
 
 				RequestActionResponse response = Bots.requestAction(requestActionRequest);
 				gameAction = response.gameAction;

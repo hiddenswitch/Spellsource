@@ -61,7 +61,7 @@ public abstract class SpellsourceTestBase {
 					.setBlockedThreadCheckInterval(999999)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
-				GlobalTracer.registerIfAbsent(NoopTracerFactory.create());
+				Tracing.initializeGlobal(vertx);
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
 					vertx.executeBlocking(fut -> {

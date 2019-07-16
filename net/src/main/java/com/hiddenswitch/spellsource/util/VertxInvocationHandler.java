@@ -138,9 +138,9 @@ final class VertxInvocationHandler<T> implements InvocationHandler, Serializable
 	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, RpcOptions.Serialization serialization, Handler<AsyncResult<Object>> next, Method method) {
 		Object message = null;
 
-		String address = name + "::" + methodName;
+		String address = name + "/" + methodName;
 		if (deploymentId != null) {
-			address = deploymentId + "::" + address;
+			address = deploymentId + "/" + address;
 		}
 
 		SuspendableAction1<AsyncResult<Message<Object>>> handler;

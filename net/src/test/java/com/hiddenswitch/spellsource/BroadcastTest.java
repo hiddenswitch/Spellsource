@@ -6,6 +6,7 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ public class BroadcastTest {
 	public RunTestOnContext contextRule = new RunTestOnContext();
 
 	@Test
+	@Ignore("unreliable")
 	public void testBroadcastCallResponse(TestContext context) {
 		// On Travis, UDP broadcast is disabled.
 		if (System.getenv().containsKey("CI")) {

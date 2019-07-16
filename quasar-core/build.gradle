@@ -85,6 +85,10 @@ sourceSets {
     }
 }
 
+compileJava {
+    options.warnings = false;
+}
+
 dependencies {
     if (project.ext.java8) {
         compile files(fileTree(dir: 'baselib', includes: ['*.jar']))
@@ -161,11 +165,6 @@ dependencies {
     // annotationProcessor 'com.google.auto.service:auto-service:1.0-rc1' // same as metainf-services
     // markdownDoclet "ch.raffael.pegdown-doclet:pegdown-doclet:1.1.1"
 }
-
-//    tasks.withType(JavaCompile) {
-//        // options.compilerArgs << "-Xlint:unchecked"
-//        // options.compilerArgs << "-Xlint:deprecation"
-//    }
 
 compileJava.dependsOn processResources
 compileJava {
