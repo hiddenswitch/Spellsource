@@ -223,7 +223,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			// Send an envelope to indicate that the connection is ready.
 			connection.write(new Envelope());
 		} catch (RuntimeException runtimeException) {
-			Tracing.error(runtimeException, span, false);
+			Tracing.error(runtimeException, span, true);
 			// This also closes the socket and cleans up its handlers
 			connection.close(Future.future());
 		}

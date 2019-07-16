@@ -101,6 +101,7 @@ public class ConnectionImpl implements Connection {
 
 		socket.endHandler(suspendableHandler(v1 -> {
 			try {
+				span.log("ending");
 				for (Handler<Void> handler : endHandlers) {
 					handler.handle(v1);
 				}
@@ -110,6 +111,7 @@ public class ConnectionImpl implements Connection {
 				endHandlers.clear();
 				consumer.unregister();
 				closeConsumer.unregister();
+				span.log("ended");
 			} catch (Throwable any) {
 				Tracing.error(any, span, true);
 			} finally {
