@@ -99,7 +99,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	static String toBusAddress(String userId) {
-		return "Connection/clusteredConsumer[" + userId + "]";
+		return "Connection/clusteredConsumer/" + userId;
 	}
 
 	/**
@@ -153,7 +153,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	@Suspendable
 	static SuspendableLock methodLock(String userId) {
-		return SuspendableLock.lock("Connection/method-ordering-lock[" + userId + "]");
+		return SuspendableLock.lock("Connection/method-ordering-lock/" + userId);
 	}
 
 	/**
@@ -235,7 +235,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	static void registerCodecs() {
 		Vertx owner = Vertx.currentContext().owner();
-		if (CODECS_REGISTERED.putIfAbsent(((VertxInternal) owner).getNodeID(), true) == null) {
+		String nodeId;
+		try {
+			nodeId = ((VertxInternal) owner).getNodeID();
+		} catch (NullPointerException noNodeId) {
+			nodeId = owner.toString();
+		}
+
+		if (CODECS_REGISTERED.putIfAbsent(nodeId, true) == null) {
 			owner.eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
 			owner.eventBus().registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
 			owner.eventBus().registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());

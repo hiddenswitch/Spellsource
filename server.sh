@@ -3,7 +3,7 @@
 # This file executes the shadow / fat jar of the server on its docker image, using PORT=80 by default.
 
 if [[ -z "${SPELLSOURCE_APPLICATION+x}" ]]; then
-  SPELLSOURCE_APPLICATION="Clustered"
+  SPELLSOURCE_APPLICATION="Local"
 fi
 
 if [[ -z "${SPELLSOURCE_VERSION+x}" ]]; then

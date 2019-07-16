@@ -239,7 +239,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		}
 	}
 
-	@Test(timeout = 45000L)
+	@Test(timeout = 14000L)
 	public void testGameDoesntCloseAfterActivity(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
@@ -260,13 +260,24 @@ public class GatewayTest extends SpellsourceTestBase {
 				// Spend 7 seconds waiting to send the first action
 				if (counter.getAndIncrement() == 0) {
 					startTime.set(System.currentTimeMillis());
-					vertx.setTimer(7000L, ignored -> {
-						this.respondRandomAction(message);
+					vertx.runOnContext(v -> {
+						vertx.setTimer(7000L, ignored -> {
+							this.respondRandomAction(message);
+						});
+					});
+
+				} else if (counter.getAndIncrement() == 1) {
+					// Otherwise, slow things down only a little bit
+					vertx.runOnContext(v -> {
+						vertx.setTimer(1000L, ignored -> {
+							this.respondRandomAction(message);
+						});
 					});
 				} else {
-					// Otherwise, slow things down only a little bit
-					vertx.setTimer(150L, ignored -> {
-						this.respondRandomAction(message);
+					vertx.runOnContext(v -> {
+						vertx.setTimer(150L, ignored -> {
+							this.respondRandomAction(message);
+						});
 					});
 				}
 				return false;

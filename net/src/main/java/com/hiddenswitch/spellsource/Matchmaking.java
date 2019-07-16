@@ -20,6 +20,7 @@ import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -150,24 +151,23 @@ public interface Matchmaking extends Verticle {
 	@Suspendable
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration queueConfiguration) throws SuspendExecution {
 		CountDownLatch awaitReady = new CountDownLatch(1);
-		Fiber<Void> fiber = new Fiber<>("Matchmaking/queues[" + queueId + "]", getContextScheduler(), () -> {
+		Fiber<Void> fiber = new Fiber<>("Matchmaking/queues/" + queueId, getContextScheduler(), () -> {
 			long gamesCreated = 0;
 			// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
 			SuspendableLock lock = null;
 			SuspendableQueue<MatchmakingQueueEntry> queue = null;
 			Tracer tracer = GlobalTracer.get();
+			Span span = tracer.buildSpan("Matchmaking/startMatchmaker/loop").start();
+			span.setTag("queueId", queueId);
+			span.log(json(queueConfiguration).getMap());
 
 			try {
-				lock = SuspendableLock.lock("Matchmaking/queues[" + queueId + "]");
-				LOGGER.info("startMatchmaker {}: Hazelcast node ID={} is running this queue", queueId, Hazelcast.getClusterManager().getNodeID());
-				queue = SuspendableQueue.get(queueId);
+				lock = SuspendableLock.lock("Matchmaking/queues/" + queueId);
+				queue = SuspendableQueue.getOrCreate(queueId);
 				SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
 
 				// Dequeue requests
 				do {
-					Span span = tracer.buildSpan("Matchmaking/startMatchmaker/loop").start();
-					span.setTag("queueId", queueId);
-					span.log(json(queueConfiguration).getMap());
 					try (Scope s2 = tracer.activateSpan(span)) {
 						List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
 						awaitReady.countDown();
@@ -298,6 +298,9 @@ public interface Matchmaking extends Verticle {
 				} while (/*Queues that run once are typically private games*/!queueConfiguration.isOnce());
 			} catch (VertxException | InterruptedException ex) {
 				// Cancelled
+			} catch (RuntimeException runtimeException) {
+				Tracing.error(runtimeException, span, true);
+				throw runtimeException;
 			} finally {
 				if (lock != null) {
 					lock.release();
