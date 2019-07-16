@@ -94,6 +94,23 @@ public class StorytellerTests extends TestBase {
 			destroy(context, playwright);
 			assertEquals(raptor.getAttack(), raptor.getBaseAttack());
 		}));
+
+		runGym(((context, player, opponent) -> {
+			List<Minion> raptors = new ArrayList<>();
+			for (int i = 0; i < 7; i++) {
+				raptors.add(playMinionCard(context, opponent, "minion_test_3_2"));
+			}
+			Minion playwright = playMinionCard(context, player, "minion_dramatic_playwright");
+			destroy(context, playwright);
+			int count = 0;
+			for (Minion raptor : raptors) {
+				if (raptor.getBaseAttack() != raptor.getAttack()) {
+					count++;
+				}
+			}
+			assertEquals(count, 1);
+		}
+		));
 	}
 
 	@Test
@@ -201,9 +218,9 @@ public class StorytellerTests extends TestBase {
 			player.setMaxMana(5);
 			int originalMana = player.getMaxMana();
 			playCard(context, player, "spell_tome_of_secrets");
-		  assertEquals(player.getSecrets().size(), 1);
-		  assertEquals(player.getSecrets().get(0).getSourceCard().getHeroClass(), "OLIVE");
-		  assertEquals(player.getMaxMana(), originalMana + 1);
+			assertEquals(player.getSecrets().size(), 1);
+			assertEquals(player.getSecrets().get(0).getSourceCard().getHeroClass(), "OLIVE");
+			assertEquals(player.getMaxMana(), originalMana + 1);
 		});
 	}
 }
