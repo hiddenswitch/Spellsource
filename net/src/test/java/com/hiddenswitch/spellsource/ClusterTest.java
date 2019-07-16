@@ -27,6 +27,7 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 public class ClusterTest extends SpellsourceTestBase {
 	@Test
+	@Ignore
 	public void testArrayQueueOverCluster(TestContext context) {
 		Async latch = context.async(3);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
@@ -77,6 +78,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	}
 
 	@Test(timeout = 90000L)
+	@Ignore
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster

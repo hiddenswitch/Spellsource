@@ -46,7 +46,6 @@ import static org.junit.Assert.fail;
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
 	protected static AtomicBoolean initialized = new AtomicBoolean();
-	protected static HazelcastInstance hazelcastInstance;
 	protected static Vertx vertx;
 
 	@BeforeClass
@@ -54,26 +53,24 @@ public abstract class SpellsourceTestBase {
 	public static void setUp(TestContext context) {
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
 			final Async async = context.async();
 
-			Vertx.clusteredVertx(new VertxOptions()
+			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
-					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
-					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
-				Tracing.initializeGlobal(vertx);
-				SpellsourceTestBase.vertx = vertx;
-				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
+					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
+			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+			vertx.runOnContext(v1 -> {
+				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v2 -> {
 					vertx.executeBlocking(fut -> {
 						Mongo.mongo().connectWithEnvironment(vertx);
 						fut.complete();
-					}, context.asyncAssertSuccess(v2 -> {
-						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v3 -> {
+					}, context.asyncAssertSuccess(v3 -> {
+						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v4 -> {
 							async.complete();
 						}));
 					}));
 				}));
-			}));
+			});
 		}
 	}
 
@@ -150,15 +147,11 @@ public abstract class SpellsourceTestBase {
 	@AfterClass
 	public static void tearDown(TestContext context) {
 		GlobalTracer.get().close();
-		/*
-		if (initialized.compareAndSet(true, false)) {
-			final Async async = context.async();
-			vertx.close(context.asyncAssertSuccess(then -> {
-				hazelcastInstance.shutdown();
-
-				async.complete();
-			}));
-		}
-		*/
+		Async async = context.async();
+		vertx.close(v -> {
+			initialized.compareAndSet(true, false);
+			async.complete();
+		});
+		vertx=null;
 	}
 }

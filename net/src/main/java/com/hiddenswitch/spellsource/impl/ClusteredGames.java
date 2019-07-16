@@ -103,7 +103,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			CreateGameSessionResponse connection = connections.putIfAbsent(request.getGameId(), pending);
 			// If we're the ones deploying this match...
 			if (connection == null) {
-				Games.LOGGER.debug("createGameSession: deploymentID={} hazelcastNodeId={} is responsible for deploying this match.", deploymentID(), Hazelcast.getClusterManager().getNodeID());
 				ServerGameContext context = new ServerGameContext(
 						request.getGameId(),
 						new VertxScheduler(Vertx.currentContext().owner()),
