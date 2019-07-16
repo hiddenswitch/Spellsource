@@ -13,6 +13,7 @@ import io.vertx.core.VertxOptions;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 import java.time.Duration;
@@ -52,6 +53,7 @@ public class LocalClustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
+				.setMetricsOptions(Clustered.getMetrics())
 				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 40)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 40), then -> {

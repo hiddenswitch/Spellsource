@@ -302,7 +302,7 @@ public class InvitesTest extends SpellsourceTestBase {
 			recipient.ensureConnected();
 
 			// Friend them coercively
-			Friends.putFriend(Accounts.get(sender.getUserId()), new FriendPutRequest().friendId(recipient.getUserId().toString()).usernameWithToken(recipient.getAccount().getName()));
+			Friends.putFriend(Accounts.get(sender.getUserId().toString()), new FriendPutRequest().friendId(recipient.getUserId().toString()).usernameWithToken(recipient.getAccount().getName()));
 
 			// Send a 1v1 invite
 			InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()

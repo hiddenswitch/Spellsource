@@ -3,12 +3,8 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import co.paralleluniverse.strands.concurrent.CyclicBarrier;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.*;
 import com.hiddenswitch.spellsource.impl.DeckId;
@@ -17,14 +13,11 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
-import io.jaegertracing.internal.JaegerSpanContext;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
-import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -240,7 +233,7 @@ public interface Matchmaking extends Verticle {
 										// TODO: Move this lock into pollBotId
 										// The player has been waiting too long. Match to an AI.
 										// Retrieve a bot and use it to play against the opponent
-										UserRecord bot = Accounts.get(Bots.pollBotId());
+										UserRecord bot = Accounts.get(Bots.pollBotId().toString());
 
 										DeckId botDeckId = user.getBotDeckId() == null
 												? new DeckId(Bots.getRandomDeck(bot))

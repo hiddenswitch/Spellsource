@@ -11,6 +11,10 @@ import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
@@ -39,9 +43,8 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * A service that processes bot actions, mulligans and conveniently creates bot games.
  */
 public interface Bots {
-	Logger LOGGER = LoggerFactory.getLogger(Bots.class);
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
-	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<List<Integer>>() {
+	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {
 	};
 
 	/**
@@ -52,9 +55,12 @@ public interface Bots {
 	 */
 	@Suspendable
 	static MulliganResponse mulligan(MulliganRequest request) {
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Bots/mulligan").start();
 		// Reject cards that cost more than 3
 		MulliganResponse response = new MulliganResponse();
 		response.discardedCards = request.cards.stream().filter(c -> c.getBaseManaCost() > 3).collect(Collectors.toList());
+		span.finish();
 		return response;
 	}
 
@@ -66,32 +72,44 @@ public interface Bots {
 	 */
 	@Suspendable
 	static RequestActionResponse requestAction(RequestActionRequest request) {
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Bots/requestAction")
+				.withTag("gameId", request.gameId.toString())
+				.asChildOf(request.spanContext)
+				.start();
+		Scope scope = tracer.activateSpan(span);
 		RequestActionResponse response;
-		// Use execute blocking to yield here
-		LOGGER.debug("requestAction: Requesting action from behaviour.");
-		final Behaviour behaviour = getBehaviour().get();
-		// See if there's a cache of bot plans for this action
-		if (behaviour instanceof GameStateValueBehaviour) {
-			GameStateValueBehaviour gsvb = (GameStateValueBehaviour) behaviour;
-			SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate("Bots/indexPlans");
-			GameId gameId = request.gameId;
-			Buffer buf = map.get(gameId);
-			if (buf != null) {
-				List<Integer> indexPlan = Json.decodeValue(buf, LIST_INTEGER_TYPE);
-				gsvb.setIndexPlan(new ArrayDeque<>(indexPlan));
-			}
 
-			response = delegateRequestAction(request, gsvb);
+		try {
+			// Use execute blocking to yield here
+			final Behaviour behaviour = getBehaviour().get();
+			// See if there's a cache of bot plans for this action
+			if (behaviour instanceof GameStateValueBehaviour) {
+				GameStateValueBehaviour gsvb = (GameStateValueBehaviour) behaviour;
+				SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate("Bots/indexPlans");
+				GameId gameId = request.gameId;
+				Buffer buf = map.get(gameId);
+				if (buf != null) {
+					List<Integer> indexPlan = Json.decodeValue(buf, LIST_INTEGER_TYPE);
+					gsvb.setIndexPlan(new ArrayDeque<>(indexPlan));
+					span.setTag("indexPlan", indexPlan.size());
+				}
+				response = delegateRequestAction(request, gsvb);
+				span.log("responseReceived");
 
-			// Save the new index plan
-			Deque<Integer> indexPlan = gsvb.getIndexPlan();
-			if (indexPlan != null) {
-				map.put(gameId, Json.encodeToBuffer(new ArrayList<>(indexPlan)));
+				// Save the new index plan
+				Deque<Integer> indexPlan = gsvb.getIndexPlan();
+				if (indexPlan != null) {
+					map.put(gameId, Json.encodeToBuffer(new ArrayList<>(indexPlan)));
+				} else {
+					map.remove(gameId);
+				}
 			} else {
-				map.remove(gameId);
+				response = delegateRequestAction(request, behaviour);
 			}
-		} else {
-			response = delegateRequestAction(request, behaviour);
+		} finally {
+			span.finish();
+			scope.close();
 		}
 
 		return response;
@@ -99,6 +117,8 @@ public interface Bots {
 
 	@Suspendable
 	static RequestActionResponse delegateRequestAction(RequestActionRequest request, Behaviour behaviour) {
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.activeSpan();
 		RequestActionResponse response = new RequestActionResponse();
 		final GameContext context = new GameContext();
 		context.setLogic(new GameLogic());
@@ -124,37 +144,45 @@ public interface Bots {
 				}
 			}, false, res));
 
-			LOGGER.debug("requestAction: Bot successfully chose action");
 			response.gameAction = result;
-		} catch (Throwable t) {
-			LOGGER.error("requestAction: Bot failed to choose an action due to an exception", t);
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span);
 			response.gameAction = request.validActions.get(0);
 		}
 		return response;
 	}
 
 	static UserId pollBotId() throws SuspendExecution, InterruptedException {
-		// TODO: Contains synchronization issues, but the worst that will happen is that a single bot plays multiple games
-		List<String> bots = getBotIds();
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Bots/pollBotId")
+				.start();
+		try {
+			List<String> bots = getBotIds();
 
-		Collections.shuffle(bots);
-		SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
+			Collections.shuffle(bots);
+			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
-		for (String id : bots) {
-			UserId key = new UserId(id);
-			if (!games.containsKey(key)) {
-				return key;
+			for (String id : bots) {
+				UserId key = new UserId(id);
+				if (!games.containsKey(key)) {
+					return key;
+				}
 			}
+
+			CreateAccountResponse response = Accounts.createAccount(new CreateAccountRequest()
+					.withName("Botcharles")
+					.withEmailAddress("botid" + RandomStringUtils.randomAlphanumeric(32) + "@hiddenswitch.com")
+					.withPassword("securebotpassword")
+					.withBot(true));
+
+			Logic.initializeUser(InitializeUserRequest.create(response.getUserId()));
+			return new UserId(response.getUserId());
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
 		}
-
-		CreateAccountResponse response = Accounts.createAccount(new CreateAccountRequest()
-				.withName("Botcharles")
-				.withEmailAddress("botid" + RandomStringUtils.randomAlphanumeric(32) + "@hiddenswitch.com")
-				.withPassword("securebotpassword")
-				.withBot(true));
-
-		Logic.initializeUser(InitializeUserRequest.create(response.getUserId()));
-		return new UserId(response.getUserId());
 	}
 
 	static List<String> getBotIds() throws SuspendExecution, InterruptedException {
@@ -192,16 +220,28 @@ public interface Bots {
 	 */
 	@Suspendable
 	static void updateBotDeckList() throws SuspendExecution, InterruptedException {
-		// Refresh the bot decks
-		List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("decks", 1)));
-		for (JsonObject bot : bots) {
-			for (Object obj : bot.getJsonArray("decks")) {
-				String deckId = (String) obj;
-				Decks.deleteDeck(DeckDeleteRequest.create(deckId));
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Bots/updateBotDeckList")
+				.start();
+		Scope scope = tracer.activateSpan(span);
+		try {
+			// Refresh the bot decks
+			List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("decks", 1)));
+			for (JsonObject bot : bots) {
+				for (Object obj : bot.getJsonArray("decks")) {
+					String deckId = (String) obj;
+					Decks.deleteDeck(DeckDeleteRequest.create(deckId));
+				}
+				for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
+					Decks.createDeck(req.withUserId(bot.getString("_id")));
+				}
 			}
-			for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
-				Decks.createDeck(req.withUserId(bot.getString("_id")));
-			}
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
 		}
 	}
 }

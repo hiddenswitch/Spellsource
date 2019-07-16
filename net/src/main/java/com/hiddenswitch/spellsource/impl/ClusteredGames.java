@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.util.Registration;
@@ -85,7 +86,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					configuration.setDeck(deck);
 				}
 
-				String username = Accounts.findOne(configuration.getUserId()).getUsername();
+				String username = mongo().findOne(Accounts.USERS, json("_id", configuration.getUserId().toString()), UserRecord.class).getUsername();
 				configuration.setName(username);
 				// TODO: Get more attributes from database
 				AttributeMap playerAttributes = new AttributeMap();
