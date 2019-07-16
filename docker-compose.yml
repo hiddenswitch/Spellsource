@@ -35,9 +35,7 @@ services:
     image: doctorpangloss/spellsource:latest
     environment:
       - MONGO_URL=mongodb://mongo:27017/metastone
-      - HAZELCAST_URLS=spellsource-server_game_1:5701
-      - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
-      - SPELLSOURCE_APPLICATION=${SPELLSOURCE_APPLICATION}
+      - SPELLSOURCE_APPLICATION=Local
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - SMTP_HOST=${SMTP_HOST}
@@ -114,21 +112,6 @@ services:
       interval: 8s
       timeout: 4s
       retries: 3
-  hazelcastmancenter:
-    image: hazelcast/management-center
-    networks:
-      - backend
-    volumes:
-      - mancenterdata:/data
-    environment:
-      - MC_CONTEXT=/admin/mancenter
-      - MANCENTER_DATA=/data
-      - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
-    deploy:
-      labels:
-        - "traefik.enable=false"
-      placement:
-        constraints: [node.platform.arch == x86_64]
   mediawiki:
     image: "doctorpangloss/wiki:latest"
     networks:
