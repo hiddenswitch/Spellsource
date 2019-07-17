@@ -20,40 +20,41 @@ public class GamesTest extends SpellsourceTestBase {
 	@Test
 	public void testReconnectsResumesMulligan(TestContext context) throws InterruptedException {
 		AtomicInteger mulligans = new AtomicInteger(0);
-		UnityClient client = new UnityClient(context) {
+		try (UnityClient client = new UnityClient(context) {
 			@Override
 			protected void onMulligan(ServerToClientMessage message) {
 				super.onMulligan(message);
 				mulligans.incrementAndGet();
 			}
-		};
-		client.createUserAccount();
-		client.setShouldDisconnect(true);
-		client.getTurnsToPlay().set(0);
-		client.matchmakeQuickPlay(null);
-		client.waitUntilDone();
-		Thread.sleep(100L);
-		context.assertFalse(client.isConnected());
-		sync(() -> {
-			Strand.sleep(100L);
-			// Game should still be running
-			context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
-			Strand.sleep(100L);
-		});
-		// Reconnect
-		client.getTurnsToPlay().set(999);
-		client.play();
-		client.waitUntilDone();
-		context.assertTrue(client.getTurnsPlayed() > 0);
-		context.assertTrue(client.isGameOver());
-		context.assertEquals(mulligans.get(), 1);
+		}) {
+			client.createUserAccount();
+			client.setShouldDisconnect(true);
+			client.getTurnsToPlay().set(0);
+			client.matchmakeQuickPlay(null);
+			client.waitUntilDone();
+			Thread.sleep(100L);
+			context.assertFalse(client.isConnected());
+			sync(() -> {
+				Strand.sleep(100L);
+				// Game should still be running
+				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
+				Strand.sleep(100L);
+			});
+			// Reconnect
+			client.getTurnsToPlay().set(999);
+			client.play();
+			client.waitUntilDone();
+			context.assertTrue(client.getTurnsPlayed() > 0);
+			context.assertTrue(client.isGameOver());
+			context.assertEquals(mulligans.get(), 1);
+		}
 	}
 
 	@Test
 	public void testReconnectsResumesNormalActions(TestContext context) throws InterruptedException {
 		AtomicInteger requests = new AtomicInteger();
 		List<Integer> actions = new ArrayList<>();
-		UnityClient client = new UnityClient(context) {
+		try (UnityClient client = new UnityClient(context) {
 			@Override
 			protected boolean onRequestAction(ServerToClientMessage message) {
 				int reqs = requests.getAndIncrement();
@@ -68,23 +69,23 @@ public class GamesTest extends SpellsourceTestBase {
 
 				return true;
 			}
-		};
-
-		client.createUserAccount();
-		client.matchmakeQuickPlay(null);
-		client.waitUntilDone();
-		Thread.sleep(100L);
-		context.assertFalse(client.isConnected());
-		sync(() -> {
-			Strand.sleep(100L);
-			// Game should still be running
-			context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
-			Strand.sleep(100L);
-		});
-		// Reconnect
-		client.play();
-		client.waitUntilDone();
-		context.assertTrue(client.getTurnsPlayed() > 0);
-		context.assertTrue(client.isGameOver());
+		}) {
+			client.createUserAccount();
+			client.matchmakeQuickPlay(null);
+			client.waitUntilDone();
+			Thread.sleep(100L);
+			context.assertFalse(client.isConnected());
+			sync(() -> {
+				Strand.sleep(100L);
+				// Game should still be running
+				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
+				Strand.sleep(100L);
+			});
+			// Reconnect
+			client.play();
+			client.waitUntilDone();
+			context.assertTrue(client.getTurnsPlayed() > 0);
+			context.assertTrue(client.isGameOver());
+		}
 	}
 }

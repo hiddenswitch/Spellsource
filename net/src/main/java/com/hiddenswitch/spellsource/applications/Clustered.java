@@ -15,6 +15,9 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
+import io.vertx.ext.dropwizard.Match;
+import io.vertx.ext.dropwizard.MatchType;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 import java.time.Duration;
@@ -51,6 +54,7 @@ public class Clustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
+				.setMetricsOptions(getMetrics())
 				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 400)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 400), then -> {
@@ -78,6 +82,11 @@ public class Clustered {
 				}
 			});
 		});
+	}
+
+	public static DropwizardMetricsOptions getMetrics() {
+		return new DropwizardMetricsOptions().setEnabled(true)
+				.addMonitoredEventBusHandler(new Match().setValue("\\w+/.*").setType(MatchType.REGEX));
 	}
 }
 
