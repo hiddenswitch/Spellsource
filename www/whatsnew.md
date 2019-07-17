@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
+
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
 Bug fixes for network lag.
