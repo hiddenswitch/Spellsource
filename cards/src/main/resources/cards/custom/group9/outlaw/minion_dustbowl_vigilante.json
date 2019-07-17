@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "COPPER",
   "baseAttack": 3,
-  "baseHp": 6,
+  "baseHp": 4,
   "rarity": "RARE",
   "description": "Quick Draw: Deal 3 damage randomly split among all enemies",
   "trigger": {
