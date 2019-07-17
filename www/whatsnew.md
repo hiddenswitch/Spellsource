@@ -12,6 +12,8 @@ Bug fixes.
 
  - All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
  - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
+ - Strengthen Core (Honed Potion) now gives a minion deflect, draws a card and costs (2). (1245)
+ - Enchanted Springs (Springs of Ebisu) now costs (0). (1245)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
