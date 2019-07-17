@@ -1,6 +1,6 @@
 {
-  "name": "Springs of Ebisu",
-  "baseManaCost": 2,
+  "name": "Enchanted Springs",
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "COMMON",
