@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41 (In Progress)
+
+The spell Dramatic Entrance now properly procs before a minion's Opener instead of after. (1252)
+
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
 Bug fixes for network lag.
