@@ -13,7 +13,7 @@ public final class SupremacyTrigger extends AfterPhysicalAttackTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		return event.getEventTarget() != null && event.getEventTarget().getEntityType() == EntityType.MINION;
 	}
 
@@ -27,7 +27,7 @@ public final class SupremacyTrigger extends AfterPhysicalAttackTrigger {
 	}
 
 	@Override
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
 		return event.getEventTarget() != null && event.getEventTarget().isDestroyed();
 	}
 }

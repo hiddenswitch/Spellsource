@@ -39,12 +39,20 @@ public class DuelSpell extends FightSpell {
 	@Suspendable
 	protected void duel(GameContext context, Player player, Entity source, List<Entity> validAttackers, List<Entity> validDefenders) {
 		for (Entity attacker : validAttackers) {
+			if (!attacker.isInPlay() || attacker.isDestroyed()) {
+				continue;
+			}
+
 			if (!(attacker instanceof Actor)) {
 				logger.error("onCast {} {}: Tried to duel attacker {} which is not an actor.", context.getGameId(), source, attacker);
 				continue;
 			}
 
-			List<Entity> validDefendersWithoutAttacker = validDefenders.stream().filter(e -> e.getId() != attacker.getId()).collect(Collectors.toList());
+			List<Entity> validDefendersWithoutAttacker = validDefenders.stream().filter(
+					e -> e.getId() != attacker.getId()
+					&& !e.isDestroyed()
+					&& e.isInPlay()
+			).collect(Collectors.toList());
 
 			if (validDefendersWithoutAttacker.isEmpty()) {
 				logger.debug("onCast {} {}: Valid defenders are empty without the attacker", context.getGameId(), source);

@@ -1,0 +1,36 @@
+{
+  "name": "Silver Warmaiden",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Damage an enemy minion until it has 1 Health.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "RecastWhileSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "TARGET",
+        "filter": {
+          "class": "AttributeFilter",
+          "value": 1,
+          "attribute": "HP",
+          "operation": "GREATER"
+        }
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

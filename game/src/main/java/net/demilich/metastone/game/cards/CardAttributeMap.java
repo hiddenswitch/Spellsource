@@ -48,6 +48,9 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		if (desc.getPassiveTrigger() != null || (desc.getPassiveTriggers() != null && desc.getPassiveTriggers().length > 0)) {
 			keys.add(Attribute.PASSIVE_TRIGGERS);
 		}
+		if (desc.getAuras() != null && desc.getAuras().length > 0) {
+			keys.add(Attribute.PASSIVE_AURAS);
+		}
 		if (desc.getDeckTrigger() != null
 				|| desc.getDeckTriggers() != null) {
 			keys.add(Attribute.DECK_TRIGGERS);
@@ -116,6 +119,8 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 					return HasEntrySet.link(desc.deckTrigger, desc.deckTriggers, EnchantmentDesc.class);
 				case GAME_TRIGGERS:
 					return desc.getGameTriggers();
+				case PASSIVE_AURAS:
+					return desc.getPassiveAuras();
 				case RACE:
 					return desc.getRace() == null ? Race.NONE : desc.getRace();
 				case SECRET:
@@ -172,6 +177,8 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 				return desc.getManaCostModifier() != null;
 			case PASSIVE_TRIGGERS:
 				return desc.passiveTrigger != null || (desc.passiveTriggers != null && desc.passiveTriggers.length > 0);
+			case PASSIVE_AURAS:
+				return desc.passiveAuras != null && desc.passiveAuras.length > 0;
 			case DECK_TRIGGERS:
 				return desc.deckTrigger != null || (desc.deckTriggers != null && desc.deckTriggers.length > 0);
 			case GAME_TRIGGERS:
@@ -223,6 +230,12 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		return unsafe;
 	}
 
+	/**
+	 * Returns the card ID from the {@link Attribute#AURA_CARD_ID} or {@link Attribute#CARD_ID}, attributes that can
+	 * override the card's ID and change how it behaves.
+	 *
+	 * @return
+	 */
 	String getOverrideCardId() {
 		String cardId = (String) super.get(Attribute.AURA_CARD_ID);
 		if (cardId == null) {

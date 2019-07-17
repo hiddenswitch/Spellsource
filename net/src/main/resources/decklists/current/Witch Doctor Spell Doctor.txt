@@ -2,13 +2,13 @@
 # Class: ROSE
 # Format: Spellsource
 #
-# 2x (1) Bone Bond
+# 2x (1) Wicked Insight
 # 2x (1) Devil Within
 # 2x (1) Hypnotic Chameleon
 # 2x (1) Tiki Tokens
 # 2x (2) Devilry Flare
 # 2x (2) Dreamwing Scout
-# 2x (2) Energized Spectre
+# 2x (2) Undergrowth Spirit
 # 2x (2) Ghostly Essence
 # 2x (2) Possessed Madness
 # 2x (2) Sliver of Silver

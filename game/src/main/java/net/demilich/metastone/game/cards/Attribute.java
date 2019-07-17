@@ -525,7 +525,8 @@ public enum Attribute {
 	 */
 	GAME_TRIGGERS,
 	/**
-	 * This attribute keeps track of how many times the hero power was used this turn.
+	 * This attribute indicates the maximum number of times a hero power can be used in a turn. It is an aura effect. The
+	 * number of times a hero power can be used will be the max value found among in-play entities owned by the player.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
 	 * 		a hero power card, can be played.
@@ -977,6 +978,10 @@ public enum Attribute {
 	 */
 	BEING_PLAYED,
 	/**
+	 * Marks a card as using a "Quick Draw" effect for the Outlaw class
+	 */
+	QUICK_DRAW,
+	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
 	 */
@@ -1054,7 +1059,7 @@ public enum Attribute {
      * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
      */
     SURGE,
-    DYNAMIC_DESCRIPTION;
+    DYNAMIC_DESCRIPTION, PASSIVE_AURAS;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

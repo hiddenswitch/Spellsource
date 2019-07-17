@@ -97,12 +97,12 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 	@NotNull
 	@Suspendable
 	private SuspendableCondition notEmpty() {
-		return SuspendableCondition.getOrCreate("SuspendableArrayQueue::arrayQueues[" + name + "]__notEmpty");
+		return SuspendableCondition.getOrCreate("SuspendableArrayQueue/arrayQueues/" + name + "/notEmpty");
 	}
 
 	@Suspendable
 	private SuspendableLock lock() {
-		return SuspendableLock.lock("SuspendableArrayQueue::arrayQueues[" + name + "]__lock");
+		return SuspendableLock.lock("SuspendableArrayQueue/arrayQueues/" + name + "/lock");
 	}
 
 	@Override
@@ -228,19 +228,19 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 	@NotNull
 	@Suspendable
 	private SuspendableCondition notFull() {
-		return SuspendableCondition.getOrCreate("SuspendableArrayQueue::arrayQueues[" + name + "]__notFull");
+		return SuspendableCondition.getOrCreate("SuspendableArrayQueue/arrayQueues/" + name + "/notFull");
 	}
 
 	@NotNull
 	@Suspendable
 	public static SuspendableMap<String, SuspendableArrayQueueHeader> getArrayQueues() {
-		return SuspendableMap.getOrCreate("SuspendableArrayQueue::arrayQueues");
+		return SuspendableMap.getOrCreate("SuspendableArrayQueue/arrayQueues");
 	}
 
 	@NotNull
 	@Suspendable
 	private static void getArrayQueues(Handler<AsyncResult<AsyncMap<String, SuspendableArrayQueueHeader>>> handler) {
-		SuspendableMap.getOrCreate("SuspendableArrayQueue::arrayQueues", handler);
+		SuspendableMap.getOrCreate("SuspendableArrayQueue/arrayQueues", handler);
 	}
 
 	@Override

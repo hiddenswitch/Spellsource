@@ -1,0 +1,29 @@
+{
+  "name": "Hexcrazed Vessel",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "After you cast a spell on this, add a random Witch Doctor spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "ROSE",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

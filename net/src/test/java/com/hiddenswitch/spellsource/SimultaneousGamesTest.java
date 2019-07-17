@@ -51,19 +51,17 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 		AtomicInteger checkpoints = new AtomicInteger(0);
 		for (int i = 0; i < count; i++) {
 			Thread thread = new Thread(() -> {
-				try {
-					UnityClient client = new UnityClient(context) {
-						@Override
-						protected int getActionIndex(ServerToClientMessage message) {
-							// Always return end turn so that we end the game in a fatigue duel
-							if (message.getActions().getEndTurn() != null) {
-								return message.getActions().getEndTurn();
-							} else {
-								return super.getActionIndex(message);
-							}
+				try (UnityClient client = new UnityClient(context) {
+					@Override
+					protected int getActionIndex(ServerToClientMessage message) {
+						// Always return end turn so that we end the game in a fatigue duel
+						if (message.getActions().getEndTurn() != null) {
+							return message.getActions().getEndTurn();
+						} else {
+							return super.getActionIndex(message);
 						}
-					};
-
+					}
+				}) {
 					client.createUserAccount(null);
 					String userId = client.getAccount().getId();
 					logger.trace("testSimultaneousGames: {} 1st Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);

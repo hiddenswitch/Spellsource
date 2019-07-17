@@ -1,0 +1,19 @@
+{
+  "name": "Creation",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Look at 10 random cards and add one to your hand. Choose another after playing it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.CreationSpell",
+    "value": 10,
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

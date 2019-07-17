@@ -16,7 +16,7 @@
       },
       "spell": {
         "class": "ReceiveCardSpell",
-        "card": "spell_tiger_palm_strike"
+        "card": "spell_palm_strike"
       },
       "oneTurn": true
     }

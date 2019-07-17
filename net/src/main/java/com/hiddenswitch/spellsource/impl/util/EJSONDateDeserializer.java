@@ -18,7 +18,7 @@ public class EJSONDateDeserializer extends StdDeserializer<Date> {
 
 	@Override
 	public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		ObjectNode dateEJSON = p.readValueAsTree();
+		ObjectNode dateEJSON = ctxt.readValue(p, ObjectNode.class);
 		if (dateEJSON == null) {
 			return null;
 		}
