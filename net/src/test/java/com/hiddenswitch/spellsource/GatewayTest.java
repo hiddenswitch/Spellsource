@@ -147,55 +147,59 @@ public class GatewayTest extends SpellsourceTestBase {
 	@Repeat(times = 10)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
 		// Play twice
-		UnityClient client = new UnityClient(context);
-		client.createUserAccount(null);
-		client.matchmakeQuickPlay(null);
-		client.waitUntilDone();
-		assertTrue(client.getTurnsPlayed() > 0);
-		assertTrue(client.isGameOver());
-		client.matchmakeQuickPlay(null);
-		client.waitUntilDone();
-		assertTrue(client.getTurnsPlayed() > 0);
-		assertTrue(client.isGameOver());
+		try (UnityClient client = new UnityClient(context)) {
+			client.createUserAccount(null);
+			client.matchmakeQuickPlay(null);
+			client.waitUntilDone();
+			assertTrue(client.getTurnsPlayed() > 0);
+			assertTrue(client.isGameOver());
+			client.matchmakeQuickPlay(null);
+			client.waitUntilDone();
+			assertTrue(client.getTurnsPlayed() > 0);
+			assertTrue(client.isGameOver());
+			client.disconnect();
+		}
 	}
 
 
 	@Test(timeout = 35000L)
 	public void testConcede(TestContext context) {
 		sync(() -> {
-			UnityClient client = new UnityClient(context);
-			Sync.invoke0(() -> {
-				client.createUserAccount();
-				client.getTurnsToPlay().set(1);
-				client.matchmakeQuickPlay(null);
-			});
+			try (UnityClient client = new UnityClient(context)) {
+				Sync.invoke0(() -> {
+					client.createUserAccount();
+					client.getTurnsToPlay().set(1);
+					client.matchmakeQuickPlay(null);
+				});
 
-			Strand.sleep(3000L);
-			// 1 turn was played, concede
-			client.concede();
-			// You must wait until you receive the end game message to be confident you can requeue
-			client.waitUntilDone();
-			GetAccountsResponse account = invoke(client.getApi()::getAccount, client.getAccount().getId());
-			assertFalse(account.getAccounts().get(0).isInMatch());
-			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
-			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
-			context.assertFalse(hasUser);
-
-			// Can go into another game
-			Sync.invoke0(() -> {
-				try {
-					Strand.sleep(200L);
-				} catch (SuspendExecution | InterruptedException execution) {
-					context.fail(execution);
-					return;
-				}
-
-				client.getTurnsToPlay().set(999);
-				client.matchmakeQuickPlay(null);
+				Strand.sleep(3000L);
+				// 1 turn was played, concede
+				client.concede();
+				// You must wait until you receive the end game message to be confident you can requeue
 				client.waitUntilDone();
-				context.assertTrue(client.getTurnsPlayed() > 0);
-				context.assertTrue(client.isGameOver());
-			});
+				GetAccountsResponse account = invoke(client.getApi()::getAccount, client.getAccount().getId());
+				assertFalse(account.getAccounts().get(0).isInMatch());
+				SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
+				boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
+				context.assertFalse(hasUser);
+
+				// Can go into another game
+				Sync.invoke0(() -> {
+					try {
+						Strand.sleep(200L);
+					} catch (SuspendExecution | InterruptedException execution) {
+						context.fail(execution);
+						return;
+					}
+
+					client.getTurnsToPlay().set(999);
+					client.matchmakeQuickPlay(null);
+					client.waitUntilDone();
+					context.assertTrue(client.getTurnsPlayed() > 0);
+					context.assertTrue(client.isGameOver());
+				});
+			}
+
 		});
 	}
 
@@ -204,43 +208,44 @@ public class GatewayTest extends SpellsourceTestBase {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
-		UnityClient client = new UnityClient(context);
-		client.setShouldDisconnect(true);
-		client.getTurnsToPlay().set(1);
-		client.createUserAccount(null);
-		final String token = client.getToken();
-		final String userId = client.getAccount().getId();
-		client.matchmakeQuickPlay(null);
+		try (UnityClient client = new UnityClient(context)) {
+			client.setShouldDisconnect(true);
+			client.getTurnsToPlay().set(1);
+			client.createUserAccount(null);
+			final String token = client.getToken();
+			final String userId = client.getAccount().getId();
+			client.matchmakeQuickPlay(null);
 
-		// Assert that session was closed
-		sync(() -> {
-			// wait 10 seconds
-			Strand.sleep(10000L);
-			assertNull(Games.getUsersInGames().get(new UserId(userId)));
+			// Assert that session was closed
+			sync(() -> {
+				// wait 10 seconds
+				Strand.sleep(10000L);
+				assertNull(Games.getUsersInGames().get(new UserId(userId)));
 
-			Boolean done = invoke(() -> {
-				UnityClient client2 = new UnityClient(context, token);
-				try {
-					return client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
-				} catch (ApiException e) {
-					throw new AssertionError();
-				}
+				Boolean done = invoke(() -> {
+					UnityClient client2 = new UnityClient(context, token);
+					try {
+						return client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
+					} catch (ApiException e) {
+						throw new AssertionError();
+					}
+				});
+
+				assertEquals(false, done);
 			});
 
-			assertEquals(false, done);
-		});
-
-		// Should not have received end game message
-		assertFalse(client.receivedGameOverMessage());
+			// Should not have received end game message
+			assertFalse(client.receivedGameOverMessage());
+		}
 	}
 
-	@Test(timeout = 45000L)
+	@Test(timeout = 14000L)
 	public void testGameDoesntCloseAfterActivity(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 		AtomicInteger counter = new AtomicInteger();
 		AtomicLong startTime = new AtomicLong();
-		UnityClient client = new UnityClient(context) {
+		try (UnityClient client = new UnityClient(context) {
 			@Override
 			protected int getActionIndex(ServerToClientMessage message) {
 				if (message.getActions().getEndTurn() != null) {
@@ -255,26 +260,36 @@ public class GatewayTest extends SpellsourceTestBase {
 				// Spend 7 seconds waiting to send the first action
 				if (counter.getAndIncrement() == 0) {
 					startTime.set(System.currentTimeMillis());
-					vertx.setTimer(7000L, ignored -> {
-						this.respondRandomAction(message);
+					vertx.runOnContext(v -> {
+						vertx.setTimer(7000L, ignored -> {
+							this.respondRandomAction(message);
+						});
+					});
+
+				} else if (counter.getAndIncrement() == 1) {
+					// Otherwise, slow things down only a little bit
+					vertx.runOnContext(v -> {
+						vertx.setTimer(1000L, ignored -> {
+							this.respondRandomAction(message);
+						});
 					});
 				} else {
-					// Otherwise, slow things down only a little bit
-					vertx.setTimer(150L, ignored -> {
-						this.respondRandomAction(message);
+					vertx.runOnContext(v -> {
+						vertx.setTimer(150L, ignored -> {
+							this.respondRandomAction(message);
+						});
 					});
 				}
 				return false;
 			}
-		};
-
-
-		client.createUserAccount(null);
-		client.matchmakeQuickPlay(null);
-		client.waitUntilDone();
-		assertTrue(System.currentTimeMillis() - startTime.get() > 8000L);
-		assertTrue(client.getTurnsPlayed() > 0);
-		assertTrue(client.isGameOver());
+		}) {
+			client.createUserAccount(null);
+			client.matchmakeQuickPlay(null);
+			client.waitUntilDone();
+			assertTrue(System.currentTimeMillis() - startTime.get() > 8000L);
+			assertTrue(client.getTurnsPlayed() > 0);
+			assertTrue(client.isGameOver());
+		}
 	}
 
 
@@ -306,17 +321,19 @@ public class GatewayTest extends SpellsourceTestBase {
 
 	@Test
 	public void testMatchmakingCancellation(TestContext context) throws ApiException, InterruptedException {
-		UnityClient client1 = new UnityClient(context);
-		client1.createUserAccount();
-		java.util.concurrent.Future<Void> matchmaking = client1.matchmake(null, "constructed");
-		Thread.sleep(2000L);
-		matchmaking.cancel(true);
-		UnityClient client2 = new UnityClient(context);
-		client2.createUserAccount();
-		java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
-		Thread.sleep(2000L);
-		sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))));
-		other.cancel(true);
-		Thread.sleep(2000L);
+		try (UnityClient client1 = new UnityClient(context)) {
+			client1.createUserAccount();
+			java.util.concurrent.Future<Void> matchmaking = client1.matchmake(null, "constructed");
+			Thread.sleep(2000L);
+			matchmaking.cancel(true);
+			try (UnityClient client2 = new UnityClient(context)) {
+				client2.createUserAccount();
+				java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
+				Thread.sleep(2000L);
+				sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))));
+				other.cancel(true);
+				Thread.sleep(2000L);
+			}
+		}
 	}
 }

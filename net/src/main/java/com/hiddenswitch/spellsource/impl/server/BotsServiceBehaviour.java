@@ -3,9 +3,11 @@ package com.hiddenswitch.spellsource.impl.server;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Bots;
 import com.hiddenswitch.spellsource.impl.GameId;
+import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.MulliganRequest;
 import com.hiddenswitch.spellsource.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.models.RequestActionResponse;
+import io.opentracing.SpanContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -33,7 +35,11 @@ public class BotsServiceBehaviour extends UtilityBehaviour {
 	@Override
 	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-		RequestActionRequest request = new RequestActionRequest(new GameId(context.getGameId()), player.getId(), validActions, context.getDeckFormat(), context.getGameStateCopy());
+		SpanContext spanContext = null;
+		if (context instanceof ServerGameContext) {
+			spanContext = ((ServerGameContext) context).getSpanContext();
+		}
+		RequestActionRequest request = new RequestActionRequest(new GameId(context.getGameId()), player.getId(), validActions, context.getDeckFormat(), context.getGameStateCopy(), spanContext);
 
 		try {
 			RequestActionResponse response = Bots.requestAction(request);
