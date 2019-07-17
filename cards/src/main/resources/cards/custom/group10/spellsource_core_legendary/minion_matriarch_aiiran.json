@@ -28,16 +28,26 @@
   },
   "dynamicDescription": [
     {
-      "class": "ValueDescription",
-      "value": {
-        "class": "CardCountValueProvider",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "DRAGON"
-        },
-        "multiplier": 2,
-        "offset": -2
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "SELF",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "operation": "HAS"
+      },
+      "description1": "X",
+      "description2": {
+        "class": "ValueDescription",
+        "value": {
+          "class": "CardCountValueProvider",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "race": "DRAGON"
+          },
+          "multiplier": 2,
+          "offset": -2
+        }
       }
     }
   ],
