@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41 (In Progress)
+
+Desciple of Shitakiri functionality remains unchanged, but  now reads "Whenever another friendly minion Deflects, gain +2 Attack." (1239)
+
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
 Bug fixes for network lag.
