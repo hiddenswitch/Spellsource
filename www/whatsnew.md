@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41 (In Progress)
+
+Fassnu Avenger no longer gains every deathrattle twice. (1248)
+
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
 Bug fixes for network lag.
