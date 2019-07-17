@@ -2,7 +2,7 @@
   "name": "Cadenza",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "CORAL",
   "baseAttack": 2,
   "baseHp": 7,
   "rarity": "LEGENDARY",

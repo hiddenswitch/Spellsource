@@ -2,7 +2,7 @@
   "name": "Six-shooter",
   "baseManaCost": 5,
   "type": "WEAPON",
-  "heroClass": "ANY",
+  "heroClass": "COPPER",
   "damage": 1,
   "durability": 6,
   "rarity": "RARE",
