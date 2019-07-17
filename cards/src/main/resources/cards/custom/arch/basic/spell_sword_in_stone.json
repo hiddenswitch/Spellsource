@@ -1,0 +1,21 @@
+{
+  "name": "Sword in Stone",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+   "description": "Draw a weapon from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    }
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

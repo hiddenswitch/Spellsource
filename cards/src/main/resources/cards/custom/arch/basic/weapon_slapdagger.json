@@ -1,0 +1,13 @@
+{
+  "name": "Slapdagger",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

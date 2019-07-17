@@ -1,0 +1,21 @@
+{
+  "name": "Awaken Defenders",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "RARE",
+   "description": "Summon two 4/6 Elementals with <b>Guard<b>.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_shielding_smasher",
+      "minion_shielding_smasher"
+    ]
+  },
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

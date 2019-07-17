@@ -1,0 +1,13 @@
+{
+  "name": "Spirit",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
