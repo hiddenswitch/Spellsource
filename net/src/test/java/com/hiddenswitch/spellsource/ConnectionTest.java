@@ -40,7 +40,7 @@ public class ConnectionTest extends SpellsourceTestBase {
 		});
 	}
 
-	@Test
+	@Test(timeout = 15000)
 	public void testConnectionWithAuthSuceeds(TestContext testContext) {
 		sync(() -> {
 			WebSocket socket = null;

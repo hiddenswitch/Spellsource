@@ -10,6 +10,10 @@ import com.hiddenswitch.spellsource.util.PasswordResetRecord;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
@@ -36,11 +40,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -68,89 +68,6 @@ public interface Accounts {
 	 */
 	Pattern USERNAME_PATTERN = Pattern.compile("[A-Za-z0-9_]+");
 	Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
-
-	/**
-	 * Updates an account. Useful for joining data into the account object, like deck or statistics information.
-	 *
-	 * @param client        A database client
-	 * @param userId        The user's ID
-	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
-	 * @return The mongo client update result
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static MongoClientUpdateResult update(MongoClient client, String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
-		return awaitResult(h -> client.updateCollection(Accounts.USERS, json("_id", userId), updateCommand, h));
-	}
-
-	/**
-	 * Updates an account. Useful for joining data into the account object, like deck or statistics information.
-	 *
-	 * @param userId        The user's ID
-	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
-	 * @return The mongo client update result
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static MongoClientUpdateResult update(String userId, JsonObject updateCommand) throws SuspendExecution, InterruptedException {
-		return mongo().updateCollection(Accounts.USERS, json("_id", userId), updateCommand);
-	}
-
-	/**
-	 * Update multiple accounts. Useful for joining data into the account object, like deck or statistics information.
-	 *
-	 * @param query         A JSON object corresponding to a query on the user's collection.
-	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
-	 * @return The mongo client update result
-	 * @throws SuspendExecution
-	 */
-	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution {
-		return mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
-	}
-
-	/**
-	 * Finds a user account with the given options.
-	 *
-	 * @param client  A database client
-	 * @param query   The user's ID
-	 * @param options Mongo FindOptions
-	 * @return Documents with the specified fields.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static List<JsonObject> find(MongoClient client, JsonObject query, FindOptions options) throws SuspendExecution, InterruptedException {
-		return awaitResult(h -> client.findWithOptions(Accounts.USERS, query, options, h));
-	}
-
-	/**
-	 * Finds a user account with the given user ID.
-	 *
-	 * @param userId The ID of the user to find.
-	 * @return The {@link UserRecord}, or {@code null} if no user record exists.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static UserRecord findOne(String userId) throws SuspendExecution, InterruptedException {
-		return mongo().findOne(Accounts.USERS, json("_id", userId), UserRecord.class);
-	}
-
-	static UserRecord findOne(UserId userId) throws SuspendExecution, InterruptedException {
-		return findOne(userId.toString());
-	}
-
-	/**
-	 * Finds user accounts with the given options.
-	 *
-	 * @param client A database client
-	 * @param query  The user's ID
-	 * @return User records with all the fields. Careful with these documents, since they contain password hashes.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static List<UserRecord> find(MongoClient client, JsonObject query) throws SuspendExecution, InterruptedException {
-		List<JsonObject> records = awaitResult(h -> client.find(Accounts.USERS, query, h));
-		return QuickJson.fromJson(records, UserRecord.class);
-	}
 
 	/**
 	 * Applies a SHA256 hash to the specified text and returns a base64 string (digest) matching this format.
@@ -195,62 +112,82 @@ public interface Accounts {
 	 * @throws InterruptedException
 	 */
 	@NotNull
-	static CreateAccountResponse createAccount(CreateAccountRequest request) throws SuspendExecution, InterruptedException {
-		CreateAccountResponse response = new CreateAccountResponse();
+	static CreateAccountResponse createAccount(@NotNull CreateAccountRequest request) throws SuspendExecution, InterruptedException {
+		Objects.requireNonNull(request);
 
-		if (!isValidName(request.getName())) {
-			response.setInvalidName(true);
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Accounts/createAccount")
+				.withTag("name", request.getName())
+				.withTag("emailAddres", request.getEmailAddress())
+				.withTag("isBot", request.isBot())
+				.start();
+		Scope scope = tracer.activateSpan(span);
+		try {
+			CreateAccountResponse response = new CreateAccountResponse();
+
+			if (!isValidName(request.getName())) {
+				response.setInvalidName(true);
+				return response;
+			}
+
+			if (!isValidEmailAddress(request.getEmailAddress())
+					|| emailExists(request.getEmailAddress())) {
+				response.setInvalidEmailAddress(true);
+				span.setTag("invalidEmailAddress", true);
+				return response;
+			}
+
+			final String password = request.getPassword();
+			if (!isValidPassword(password)) {
+				response.setInvalidPassword(true);
+				span.setTag("invalidPassword", true);
+				return response;
+			}
+
+			final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
+			UserRecord record = new UserRecord(userId);
+			EmailRecord email = new EmailRecord();
+			email.setAddress(request.getEmailAddress());
+			record.setEmails(Collections.singletonList(email));
+			record.setDecks(new ArrayList<>());
+			record.setFriends(new ArrayList<>());
+			record.setUsername(request.getName());
+			record.setBot(request.isBot());
+			record.setCreatedAt(Date.from(Instant.now()));
+			record.setPrivacyToken(RandomStringUtils.randomNumeric(4));
+
+			String scrypt = securedPassword(password);
+			LoginToken forUser = LoginToken.createSecure(userId);
+
+			HashedLoginTokenRecord loginToken = new HashedLoginTokenRecord(forUser);
+			record.setServices(new ServicesRecord());
+			ResumeRecord resume = new ResumeRecord();
+			resume.setLoginTokens(Collections.singletonList(loginToken));
+			record.getServices().setResume(resume);
+			PasswordRecord passwordRecord = new PasswordRecord();
+			passwordRecord.setScrypt(scrypt);
+			record.getServices().setPassword(passwordRecord);
+
+			// The first user on the server is automatically the administrator
+			if (mongo().count(USERS, json()) == 0L) {
+				span.setTag("administrative", true);
+				record.getRoles().add(Authorities.ADMINISTRATIVE.name());
+			}
+
+			mongo().insert(USERS, mapFrom(record));
+
+			response.setUserId(userId);
+			response.setLoginToken(forUser);
+			response.setRecord(record);
+
 			return response;
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
 		}
-
-		if (!isValidEmailAddress(request.getEmailAddress())
-				|| emailExists(request.getEmailAddress())) {
-			response.setInvalidEmailAddress(true);
-			return response;
-		}
-
-		final String password = request.getPassword();
-		if (!isValidPassword(password)) {
-			response.setInvalidPassword(true);
-			return response;
-		}
-
-		final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
-		UserRecord record = new UserRecord(userId);
-		EmailRecord email = new EmailRecord();
-		email.setAddress(request.getEmailAddress());
-		record.setEmails(Collections.singletonList(email));
-		record.setDecks(new ArrayList<>());
-		record.setFriends(new ArrayList<>());
-		record.setUsername(request.getName());
-		record.setBot(request.isBot());
-		record.setCreatedAt(Date.from(Instant.now()));
-		record.setPrivacyToken(RandomStringUtils.randomNumeric(4));
-
-		final String scrypt = securedPassword(password);
-		LoginToken forUser = LoginToken.createSecure(userId);
-
-		HashedLoginTokenRecord loginToken = new HashedLoginTokenRecord(forUser);
-		record.setServices(new ServicesRecord());
-		ResumeRecord resume = new ResumeRecord();
-		resume.setLoginTokens(Collections.singletonList(loginToken));
-		record.getServices().setResume(resume);
-		PasswordRecord passwordRecord = new PasswordRecord();
-		passwordRecord.setScrypt(scrypt);
-		record.getServices().setPassword(passwordRecord);
-
-		// The first user on the server is automatically the administrator
-		if (mongo().count(USERS, json()) == 0L) {
-			record.getRoles().add(Authorities.ADMINISTRATIVE.name());
-		}
-
-		mongo().insert(USERS, mapFrom(record));
-
-		response.setUserId(userId);
-		response.setLoginToken(forUser);
-		response.setRecord(record);
-
-		return response;
 	}
 
 	/**
@@ -260,7 +197,14 @@ public interface Accounts {
 	 * @return The SCrypted password.
 	 */
 	static String securedPassword(String password) {
-		return SCryptUtil.scrypt(password, 16384, 8, 1);
+		Span span = GlobalTracer.get().buildSpan("Accounts/securedPassword")
+				.withTag("length", password.length())
+				.start();
+		try {
+			return SCryptUtil.scrypt(password, 16384, 8, 1);
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -321,6 +265,16 @@ public interface Accounts {
 		return USERNAME_PATTERN;
 	}
 
+	/**
+	 * Creates an account.
+	 *
+	 * @param emailAddress
+	 * @param password
+	 * @param username
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static CreateAccountResponse createAccount(String emailAddress, String password, String username) throws SuspendExecution, InterruptedException {
 		CreateAccountRequest request = new CreateAccountRequest();
 		request.setEmailAddress(emailAddress);
@@ -329,11 +283,24 @@ public interface Accounts {
 		return Accounts.createAccount(request);
 	}
 
+	/**
+	 * Gets a user's database record using their email address.
+	 *
+	 * @param email
+	 * @return
+	 */
 	@Suspendable
 	static UserRecord getWithEmail(String email) {
 		return mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
 	}
 
+	/**
+	 * Login with the specified email and password, returning a secret token.
+	 *
+	 * @param email
+	 * @param password
+	 * @return
+	 */
 	@Suspendable
 	static LoginResponse login(String email, String password) {
 		LoginRequest request = new LoginRequest();
@@ -342,6 +309,15 @@ public interface Accounts {
 		return login(request);
 	}
 
+	/**
+	 * Determines if the specified secret authorizes the caller for the specified user ID.
+	 *
+	 * @param userId
+	 * @param secret
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	@SuppressWarnings("unchecked")
 	static boolean isAuthorizedWithToken(String userId, String secret) throws SuspendExecution, InterruptedException {
 		if (secret == null
@@ -363,6 +339,14 @@ public interface Accounts {
 		return isTokenInList(secret, tokens);
 	}
 
+	/**
+	 * Determines if the specified secret appears in the user's token list in their user record fetched from the
+	 * database.
+	 *
+	 * @param record
+	 * @param secret
+	 * @return
+	 */
 	static boolean isAuthorizedWithToken(UserRecord record, String secret) {
 		if (record == null || record.getServices() == null || record.getServices().getResume() == null
 				|| record.getServices().getResume().getLoginTokens() == null
@@ -372,6 +356,13 @@ public interface Accounts {
 		return isTokenInList(secret, record.getServices().getResume().getLoginTokens());
 	}
 
+	/**
+	 * Determines whether the specified token is in the list of hashed tokens.
+	 *
+	 * @param secret
+	 * @param hashedSecrets
+	 * @return
+	 */
 	static boolean isTokenInList(String secret, List<HashedLoginTokenRecord> hashedSecrets) {
 		for (HashedLoginTokenRecord loginToken : hashedSecrets) {
 			if (loginToken.check(secret)) {
@@ -392,127 +383,227 @@ public interface Accounts {
 	 */
 	@Suspendable
 	static LoginResponse login(LoginRequest request) {
-		if (request.getEmail() == null) {
-			return new LoginResponse(true, false);
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Accounts/login")
+				.withTag("email", request.getEmail())
+				.start();
+		Scope scope = tracer.activateSpan(span);
+		try {
+			if (request.getEmail() == null) {
+				span.setTag("badEmail", true);
+				return new LoginResponse(true, false);
+			}
+			if (request.getPassword() == null) {
+				span.setTag("badPassword", true);
+				return new LoginResponse(false, true);
+			}
+
+			String email = request.getEmail();
+			UserRecord userRecord = getWithEmail(email);
+
+			if (userRecord == null) {
+				span.setTag("badEmail", true);
+				return new LoginResponse(true, false);
+			}
+
+			if (request.getPassword() != null
+					&& !SCryptUtil.check(request.getPassword(), userRecord.getServices().getPassword().getScrypt())) {
+				span.setTag("badPassword", true);
+				return new LoginResponse(false, true);
+			}
+
+			// Since we don't store the tokens unhashed, we have to add this token always. We slice down five tokens.
+			LoginToken token = LoginToken.createSecure(userRecord.getId());
+			HashedLoginTokenRecord hashedLoginTokenRecord = new HashedLoginTokenRecord(token);
+			int sliceLastFiveElements = -5;
+
+			// Update the record with the new token.
+			MongoClientUpdateResult updateResult = mongo().updateCollection(USERS,
+					json("_id", userRecord.getId()),
+					json("$push",
+							json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS,
+									json("$each",
+											Collections.singletonList(mapFrom(hashedLoginTokenRecord)),
+											"$slice",
+											sliceLastFiveElements))));
+
+			if (updateResult.getDocModified() == 0) {
+				throw new RuntimeException("login failed");
+			}
+
+			span.setTag("userId", userRecord.getId());
+			return new LoginResponse(token, userRecord);
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
 		}
-		if (request.getPassword() == null) {
-			return new LoginResponse(false, true);
-		}
-
-		final String email = request.getEmail();
-		UserRecord userRecord = getWithEmail(email);
-
-		if (userRecord == null) {
-			return new LoginResponse(true, false);
-		}
-
-		if (request.getPassword() != null
-				&& !SCryptUtil.check(request.getPassword(), userRecord.getServices().getPassword().getScrypt())) {
-			return new LoginResponse(false, true);
-		}
-
-		// Since we don't store the tokens unhashed, we have to add this token always. We slice down five tokens.
-		LoginToken token = LoginToken.createSecure(userRecord.getId());
-		HashedLoginTokenRecord hashedLoginTokenRecord = new HashedLoginTokenRecord(token);
-		final int sliceLastFiveElements = -5;
-
-		// Update the record with the new token.
-		MongoClientUpdateResult updateResult = mongo().updateCollection(USERS,
-				json("_id", userRecord.getId()),
-				json("$push",
-						json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS,
-								json("$each",
-										Collections.singletonList(mapFrom(hashedLoginTokenRecord)),
-										"$slice",
-										sliceLastFiveElements))));
-
-		if (updateResult.getDocModified() == 0) {
-			throw new RuntimeException();
-		}
-
-		return new LoginResponse(token, userRecord);
 	}
 
+	/**
+	 * Gets a user given a token of the form userId:secret.
+	 *
+	 * @param token
+	 * @return
+	 */
 	@Suspendable
 	static UserRecord getWithToken(String token) {
-		final String[] components = token.split(":");
-		final String userId = components[0];
-		final String secret = components[1];
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Accounts/getWithToken").start();
+		Scope scope = tracer.activateSpan(span);
+		try {
+			String[] components = token.split(":");
+			String userId = components[0];
+			String secret = components[1];
 
-		UserRecord record = Accounts.get(userId);
-		if (Accounts.isAuthorizedWithToken(record, secret)) {
-			return record;
-		} else {
-			return null;
+			UserRecord record = Accounts.get(userId);
+			if (Accounts.isAuthorizedWithToken(record, secret)) {
+				span.setTag("userId", userId);
+				return record;
+			} else {
+				return null;
+			}
+		} finally {
+			span.finish();
+			scope.close();
 		}
 	}
 
+	/**
+	 * Gets a user by the specified user ID.
+	 *
+	 * @param userId
+	 * @return
+	 */
 	@Suspendable
 	static UserRecord get(String userId) {
 		return mongo().findOne(USERS, json("_id", userId), UserRecord.class);
 	}
 
-	@Suspendable
-	static UserRecord get(UserId userId) {
-		return get(userId.toString());
-	}
-
+	/**
+	 * Changes the specified user's password. This does not consume an authorization token.
+	 *
+	 * @param request
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	@Suspendable
 	static ChangePasswordResponse changePassword(ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
-		if (request.getUserId() == null) {
-			throw new NullPointerException("No user specified.");
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Accounts/changePassword")
+				.withTag("userId", request.getUserId().toString())
+				.start();
+		Scope scope = tracer.activateSpan(span);
+
+		try {
+			if (request.getUserId() == null) {
+				throw new NullPointerException("No user specified.");
+			}
+
+			UserRecord record = get(request.getUserId().toString());
+			if (record == null) {
+				throw new NullPointerException("User not found.");
+			}
+
+			if (!Accounts.isValidPassword(request.getPassword())) {
+				throw new SecurityException("Invalid password.");
+			}
+
+			final String scrypt = Accounts.securedPassword(request.getPassword());
+
+			MongoClientUpdateResult result = mongo().updateCollection(USERS,
+					json(MongoRecord.ID, record.getId()),
+					json("$set", json(
+							UserRecord.SERVICES_PASSWORD_SCRYPT, scrypt
+					)));
+			LOGGER.debug("changePassword: Changed password for userId={}, username={}", record.getId(), record.getUsername());
+
+			if (result.getDocModified() == 0) {
+				throw new IllegalStateException("Unable to save the password change at this time.");
+			}
+
+			return new ChangePasswordResponse();
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
 		}
 
-		UserRecord record = get(request.getUserId().toString());
-		if (record == null) {
-			throw new NullPointerException("User not found.");
-		}
-
-		if (!Accounts.isValidPassword(request.getPassword())) {
-			throw new SecurityException("Invalid password.");
-		}
-
-		final String scrypt = Accounts.securedPassword(request.getPassword());
-
-		MongoClientUpdateResult result = mongo().updateCollection(USERS,
-				json(MongoRecord.ID, record.getId()),
-				json("$set", json(
-						UserRecord.SERVICES_PASSWORD_SCRYPT, scrypt
-				)));
-		LOGGER.debug("changePassword: Changed password for userId={}, username={}", record.getId(), record.getUsername());
-
-		if (result.getDocModified() == 0) {
-			throw new IllegalStateException("Unable to save the password change at this time.");
-		}
-
-		return new ChangePasswordResponse();
 	}
 
-	static boolean removeAccount(UserId id) throws SuspendExecution {
-		UserRecord record = get(id.toString());
-		if (record == null) {
-			return false;
+	/**
+	 * Removes the specified user account by its ID, removing inventory and collection entries too
+	 *
+	 * @param id
+	 * @return
+	 * @throws SuspendExecution
+	 */
+	static boolean removeAccount(@NotNull UserId id) throws SuspendExecution {
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Accounts/removeAccount")
+				.withTag("userId", id.toString())
+				.start();
+		Scope scope = tracer.activateSpan(span);
+
+		try {
+			UserRecord record = get(id.toString());
+			if (record == null) {
+				return false;
+			}
+
+			// Remove all collections
+			mongo().removeDocuments(Inventory.COLLECTIONS, json("userId", record.getId()));
+			// Remove all inventory records
+			mongo().removeDocuments(Inventory.INVENTORY, json("userId", record.getId()));
+			// Remove the user document
+			mongo().removeDocument(Accounts.USERS, json("_id", record.getId()));
+			return true;
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
 		}
-
-		// Remove all collections
-		mongo().removeDocuments(Inventory.COLLECTIONS, json("userId", record.getId()));
-		// Remove all inventory records
-		mongo().removeDocuments(Inventory.INVENTORY, json("userId", record.getId()));
-		// Remove the user document
-		mongo().removeDocument(Accounts.USERS, json("_id", record.getId()));
-
-		return true;
 	}
 
+	/**
+	 * Removes the specified user accounts en-masse using bulk writes.
+	 *
+	 * @param ids
+	 * @return
+	 * @throws SuspendExecution
+	 */
 	static long removeAccounts(List<UserId> ids) throws SuspendExecution {
-		JsonArray userIds = new JsonArray(ids.stream().map(UserId::toString).collect(Collectors.toList()));
-		// Remove all collections
-		mongo().removeDocuments(Inventory.COLLECTIONS, json("userId", json("$in", userIds)));
-		// Remove all inventory records
-		mongo().removeDocuments(Inventory.INVENTORY, json("userId", json("$in", userIds)));
-		// Remove the user document
-		MongoClientDeleteResult result = mongo().removeDocuments(Accounts.USERS, json("_id", json("$in", userIds)));
-		return result.getRemovedCount();
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Accounts/removeAccounts")
+				.withTag("userIds", ids.toString())
+				.start();
+		Scope scope = tracer.activateSpan(span);
+
+		try {
+			JsonArray userIds = new JsonArray(ids.stream().map(UserId::toString).collect(Collectors.toList()));
+			// Remove all collections
+			mongo().removeDocuments(Inventory.COLLECTIONS, json("userId", json("$in", userIds)));
+			// Remove all inventory records
+			mongo().removeDocuments(Inventory.INVENTORY, json("userId", json("$in", userIds)));
+			// Remove the user document
+			MongoClientDeleteResult result = mongo().removeDocuments(Accounts.USERS, json("_id", json("$in", userIds)));
+			return result.getRemovedCount();
+
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
+		}
+
 	}
 
 	/**
