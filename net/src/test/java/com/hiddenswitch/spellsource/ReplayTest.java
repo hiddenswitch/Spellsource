@@ -63,7 +63,7 @@ public class ReplayTest extends SpellsourceTestBase {
 			context.assertEquals(gameIds.getGameIds().size(), 1);
 			GetGameRecordResponse gameRecordResponse = invoke(player.getApi()::getGameRecord, gameIds.getGameIds().get(0));
 			context.assertNotNull(gameRecordResponse.getReplay());
-
+			player.close();
 			/*
 			// Check that every state we received was in this response
 			Set<GameState> firsts = gameRecordResponse.getReplay().getGameStates().stream().map(ReplayGameStates::getFirst).collect(Collectors.toSet());

@@ -23,6 +23,7 @@ import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.Json;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -75,8 +76,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final ReentrantLock requestsLock = new NoOpLock();
-	private WriteStream<ServerToClientMessage> writer;
-	private Server server;
+	private final ReadStream<ClientToServerMessage> reader;
+	private final WriteStream<ServerToClientMessage> writer;
+	private final Server server;
 
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
@@ -93,6 +95,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
+		this.reader = reader;
 		this.writer = writer;
 		this.userId = userId;
 		this.playerId = playerId;
@@ -741,16 +744,29 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		try {
+			span.log("closing");
 			for (ActivityMonitor activityMonitor : activityMonitors) {
 				activityMonitor.cancel();
 			}
 			activityMonitors.clear();
-
 			requests.clear();
 			messageBuffer.clear();
-			server = null;
-			writer = null;
+			try {
+				writer.end();
+			} catch (IllegalStateException alreadyClosed) {
+			}
+
+			if (reader instanceof Closeable) {
+				((Closeable) reader).close(Future.future());
+			}
+
+			if (reader instanceof MessageConsumer) {
+				((MessageConsumer) reader).unregister();
+			}
+
+			span.log("closed");
 		} catch (Throwable ignore) {
+			Tracing.error(ignore, span, true);
 			LOGGER.error("close {}", getUserId(), ignore);
 		} finally {
 			span.finish();

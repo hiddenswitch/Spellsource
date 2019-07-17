@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.40-2.0.35 (July 16th, 2019)
+
+Bug fixes for network lag.
+
 ### 0.8.39-2.0.34 (July 15th, 2019)
 
 Some forms of network lag should be addressed in this update, because the server and client now exchange as little as 20% of the data they did previously.

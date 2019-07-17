@@ -14,9 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-/**
- * Created by bberman on 1/22/17.
- */
 @RunWith(VertxUnitRunner.class)
 public class InventoryTest extends SpellsourceTestBase {
 
