@@ -14,6 +14,7 @@ Bug fixes.
  - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
  - Strengthen Core (Honed Potion) now gives a minion deflect, draws a card and costs (2). (1245)
  - Enchanted Springs (Springs of Ebisu) now costs (0). (1245)
+ - Fassnu Avenger no longer gains every deathrattle twice. (1248)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
