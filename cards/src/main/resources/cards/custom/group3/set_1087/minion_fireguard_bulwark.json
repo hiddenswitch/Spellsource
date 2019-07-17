@@ -20,5 +20,8 @@
       "class": "RaceFilter",
       "race": "DRAGON"
     }
+  },
+  "attributes": {
+    "TAUNT": true
   }
 }

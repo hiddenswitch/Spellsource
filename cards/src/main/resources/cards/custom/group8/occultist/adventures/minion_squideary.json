@@ -14,7 +14,10 @@
     "hpBonus": 1,
     "filter": {
       "class": "SpecificCardFilter",
-      "card": "token_tentacle"
+      "cards": [
+        "token_tauntentacle",
+        "token_tentacle"
+      ]
     }
   },
   "attributes": {

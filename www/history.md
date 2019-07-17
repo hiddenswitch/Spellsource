@@ -3,6 +3,137 @@ layout: page
 title: History
 permalink: /history/
 ---
+
+### 0.8.33-2.0.31 (June 18th, 2019)
+
+Bug fixes.
+
+Visit the new Windows development guide at [http://playspellsource.com/windows-development/](http://playspellsource.com/windows-development/) for more about editing and authoring your own cards using the tools the developers use.
+
+##### Usability Fixes:
+
+ - Secrets and quests appear in the client again. (1029)
+ - Weapons now disappear when they are destroyed. (910)
+ - Challenges to play a match or make a friend invite now correctly pop up. 
+
+##### Content Additions:
+
+ - 14 new cards in the Dragoon class. (1118, 1172)
+
+##### Content Fixes:
+
+ - Oppressor Defender now costs 6 Mana, a 2/2 minion. (1112)
+ - Unnerving Spectre now costs 4 Mana, a 2/2 minion. (1112)
+ - Abholos now correctly destroys only friendly minions and summons another Abholos. (1133)
+ - Hypnotic Beetle now costs 4 mana. (1114)
+ - Sharper Claws (Upgraded Skill) now renamed to Hone Claws. (1118)
+ - Both Hero Powers no longer restore Health now. (1118)
+ - Majestic Fennec is now a 4/6 Beast that restores 4 Health. (1118)
+ - Alder, Death Baron's Skill deals only 3 damage now. (1118)
+ - Venom Breath now costs 11 Mana. (1118)
+ - Conflagration now only deals 3 damage to a minion and the minions next to it. (1118)
+
+### 0.8.32-2.0.30 (June 5th, 2019)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Klive Icetooth now correctly plays its Opener. (1124)
+ - The End now applies to both player's hands and the stats effect applies before the Opener is evaluated. (1126)
+ - Uccian Hydra now correctly triggers. (1125)
+ - Yokai Bonder now reads, "Dash. Whenever this attacks, draw a Beast from your deck." (1123)
+ - Bogovanis now puts the Sourcestone into the opponent's deck. (1120)
+
+### 0.8.31-2.0.30 (May 28th, 2019)
+
+Updates from @Logovaz for Witch Doctor.
+
+New cards from @Muhframos for Occultist too!
+
+##### Content Additions:
+
+ - Significant additions to Occultist. (1057)
+
+##### Content Fixes:
+
+ - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
+ - Hatches the Dragon is no longer collectible. (1094)
+ - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
+ - Nature Rager now gains +1 Health instead of +1/+1. (1077)
+ - Ending the turn with an Infinite Warden on the board without an End Time on the board no longer crashes the game.
+
+### 0.8.30-2.0.30 (May 27th, 2019)
+
+Introducing the Spellsource Legendaries!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - New Spellsource Legendaries. (1074)
+
+##### Content Fixes:
+
+ - Daring Duelist now only draws a card when it survives damage. (1111)
+ - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
+ - Copying minions that have jailed other minions no longer causes errors.
+
+### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
+
+Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together the fixes flawlessly.
+
+##### Content Fixes:
+
+ - Disco Inferno now swaps stats with a friendly minion. (1109)
+ - Ninjarcher now deals 2 damage to a random enemy. (1101)
+ - Malicious Magpie now deals damage only when other minions attack. (1100)
+ - Bloody Blade is now a 3/2. (1102)
+ - Redhide Butcher now has the correct effect and rarity. (1104)
+ - Sly Conquistador now has Dodge. (1107)
+ - Terrified Tanooki now gains +1 attack. (1108)
+ - Attrition Master now affects minions during both player's turns.
+ - Gurubashi Berserker now transforms once into a Rage Behemoth without incorrectly summoning more tokens. (1110)
+ - Northot, Necromaster no longer has an infinite loop interaction with your Falling Crusader (for your troubles).
+ - Shapeseeper now correctly buffs its stats. (1106)
+ - Doomed Diver now triggers correctly. (1103)
+
+### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
+
+Hearthstone updates. Thanks to @doombubbles for the great contribution!
+
+The 0.8 series will be the last to receive Hearthstone updates.
+
+##### Content Additions:
+
+ - The Rise of Shadows set for Hearthstone
+ - Standard rotation into Year of the Dragon
+
+### 0.8.27-2.0.30 (Thursday, May 23rd, 2019)
+
+Thanks to @Phyley for contributing new fixes to Vermancer!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - 9 new cards in the Vermancer class.
+
+##### Content Fixes:
+
+ - Various changes to Vermancer cards.
+ - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
+ - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
+ - Kraken's Call, Gilblin Plunderer, Calm Currents, Condensation, Finding Mobus, Three Fathoms Below and Water Blast all shuffle the correct number of Ocean Depths into the deck now.
+ - Gilblin Plunderer's text is now correct.
+ - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
+ - Evaporation now deals 3 damage to all enemy minions.
+ - Wrath of the Occult no longer requires targeting.
+
+##### Usability Fixes:
+
+ - It is no longer possible to select a neutral champion in the deck creation screen.
+
 ### 0.8.26-2.0.29 (Tuesday, May 21st, 2019)
 
 Bullet Bull is now correctly named.

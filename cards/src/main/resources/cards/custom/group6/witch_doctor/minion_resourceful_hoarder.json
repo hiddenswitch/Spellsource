@@ -1,0 +1,22 @@
+{
+  "name": "Resourceful Hoarder",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Opener: Add a copy of your hand to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "FRIENDLY_HAND"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

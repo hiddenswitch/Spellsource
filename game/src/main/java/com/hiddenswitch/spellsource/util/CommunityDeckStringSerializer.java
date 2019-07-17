@@ -91,7 +91,7 @@ public class CommunityDeckStringSerializer {
 			name = "Netdeck";
 		}
 
-		HeroClass heroClass = getRecord(heroCardId).getHeroClass();
+		String heroClass = getRecord(heroCardId).getHeroClass();
 
 		return DeckCreateRequest.empty(userId, name, heroClass)
 				.withFormat(format)

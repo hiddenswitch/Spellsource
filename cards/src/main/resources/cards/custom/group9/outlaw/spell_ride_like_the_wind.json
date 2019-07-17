@@ -1,0 +1,25 @@
+{
+  "name": "Ride like the Wind!",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "description": "Give a minion +2 Attack. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

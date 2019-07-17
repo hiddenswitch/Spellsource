@@ -22,7 +22,7 @@ public class DraftContextTest {
 		DraftContext context = new DraftContext()
 				.withBehaviour(new DraftBehaviour() {
 					@Override
-					public void chooseHeroAsync(List<HeroClass> classes, Handler<AsyncResult<HeroClass>> result) {
+					public void chooseHeroAsync(List<String> classes, Handler<AsyncResult<String>> result) {
 						result.handle(Future.succeededFuture(classes.get(0)));
 					}
 

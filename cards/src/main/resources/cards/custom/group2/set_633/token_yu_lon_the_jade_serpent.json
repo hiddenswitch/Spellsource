@@ -10,13 +10,13 @@
   "description": "Deflect. At the end of your turn, summon two Blessed Koi Statues.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnSEndTrigger",
+      "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
       "class": "SummonSpell",
       "value": 2,
-      "card": "minion_jade_serpent_statue"
+      "card": "minion_blessed_koi_statue"
     }
   },
   "attributes": {

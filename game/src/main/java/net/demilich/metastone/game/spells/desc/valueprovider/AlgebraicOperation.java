@@ -7,6 +7,7 @@ public enum AlgebraicOperation {
 	MULTIPLY,
 	DIVIDE,
 	DIVIDE_ROUNDED,
+	POWER,
 	SET,
 	NEGATE,
 	MODULO,
@@ -44,6 +45,8 @@ public enum AlgebraicOperation {
 				return num2;
 			case SUBTRACT:
 				return num1 - num2;
+			case POWER:
+				return (int)Math.pow(num1,num2);
 			default:
 				return num1;
 		}

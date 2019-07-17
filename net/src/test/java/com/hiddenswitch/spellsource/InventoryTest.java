@@ -14,9 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-/**
- * Created by bberman on 1/22/17.
- */
 @RunWith(VertxUnitRunner.class)
 public class InventoryTest extends SpellsourceTestBase {
 
@@ -38,7 +35,7 @@ public class InventoryTest extends SpellsourceTestBase {
 			CreateAccountResponse user = createRandomAccount();
 			final String userId = user.getUserId();
 			CreateCollectionResponse createEmptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", HeroClass.BLACK, Collections.emptyList(), false));
+			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "BLACK", Collections.emptyList(), false));
 			final String deckId = createEmptyDeck.getCollectionId();
 			AddToCollectionResponse addToCollectionResponse = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("minion_bloodfen_raptor", "minion_bloodfen_raptor")));
 			context.assertEquals(2, addToCollectionResponse.getInventoryIds().size(), "Two Bloodfen Raptors should have been added");
@@ -95,7 +92,7 @@ public class InventoryTest extends SpellsourceTestBase {
 							&& record.getCollectionIds().stream().noneMatch(cid -> cid.equals(deckId))).count());
 
 			// Add a fireball to another deck, remove it, and assert as a side effect the unchanged deck was unaffected.
-			CreateCollectionResponse newDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", HeroClass.BLACK, Collections.emptyList(), false));
+			CreateCollectionResponse newDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "BLACK", Collections.emptyList(), false));
 			context.assertNotEquals(newDeck.getCollectionId(), deckId);
 			AddToCollectionResponse addOneFireballToNewDeck = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, newDeck.getCollectionId(), Arrays.asList("spell_fireball")));
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));

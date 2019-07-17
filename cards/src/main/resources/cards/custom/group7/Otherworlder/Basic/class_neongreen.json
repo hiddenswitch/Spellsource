@@ -1,0 +1,11 @@
+{
+  "name": "Otherworlder",
+  "type": "CLASS",
+  "hero": "hero_oth",
+  "heroClass": "NEONGREEN",
+  "color": [102, 245, 15],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

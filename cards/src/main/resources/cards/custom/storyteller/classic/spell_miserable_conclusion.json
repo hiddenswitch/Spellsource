@@ -1,0 +1,21 @@
+{
+  "name": "Miserable Conclusion",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "EPIC",
+  "description": "Destroy all minions except the opponent's highest Attack minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroyAllExceptOneSpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "HighestAttributeFilter",
+      "target": "ENEMY_MINIONS",
+      "attribute": "ATTACK"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

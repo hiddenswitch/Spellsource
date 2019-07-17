@@ -55,7 +55,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	private static Logger logger = LoggerFactory.getLogger(Card.class);
 
-	protected static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
+	public static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
 			Arrays.asList(
 					Attribute.PASSIVE_TRIGGERS,
 					Attribute.DECK_TRIGGERS,
@@ -87,6 +87,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	private CardDesc desc;
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
 	private List<EnchantmentDesc> storedEnchantments = new ArrayList<>();
+	private List<BattlecryDesc> battlecryEnchantments = new ArrayList<>();
 
 	protected Card() {
 		attributes = new CardAttributeMap(this);
@@ -213,6 +214,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			}
 		}
 
+		if (getDesc().getPassiveAuras() != null && getDesc().getPassiveAuras().length > 0) {
+			for (AuraDesc auraDesc : getDesc().getPassiveAuras()) {
+				enchantments.add(auraDesc.create());
+			}
+		}
+
 		// If there is no enchantment, create a dummy one
 		if (enchantments.isEmpty()) {
 			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
@@ -249,10 +256,16 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.setDeathrattleEnchantments(new ArrayList<>());
+		clone.setBattlecryEnchantments(new ArrayList<>());
 		getDeathrattleEnchantments().forEach(de -> clone.getDeathrattleEnchantments().add(de.clone()));
+		getBattlecryEnchantments().forEach(be -> clone.addBattlecry(be.clone()));
 		clone.setStoredEnchantments(new ArrayList<>());
 		clone.getStoredEnchantments().addAll(getStoredEnchantments());
 		return clone;
+	}
+
+	protected void setBattlecryEnchantments(ArrayList<BattlecryDesc> objects) {
+		battlecryEnchantments = objects;
 	}
 
 	/**
@@ -278,13 +291,26 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 	}
 
+	public String getHero() {
+		return getDesc().getHero();
+	}
+
 	/**
 	 * Gets the set that the card belongs to.
 	 *
 	 * @return The card set
 	 */
-	public CardSet getCardSet() {
+	public String getCardSet() {
 		return getDesc().getSet();
+	}
+
+	/**
+	 * Gets the sets that this card lists.
+	 *
+	 * @return The card sets
+	 */
+	public String[] getCardSets() {
+		return getDesc().getSets();
 	}
 
 	/**
@@ -301,11 +327,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return The hero class
 	 */
-	public HeroClass getHeroClass() {
-		return (HeroClass) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
+	public String getHeroClass() {
+		return (String) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		getAttributes().put(Attribute.HERO_CLASS, heroClass);
 	}
 
@@ -314,7 +340,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return The hero classes (the gang)
 	 */
-	public HeroClass[] getHeroClasses() {
+	public String[] getHeroClasses() {
 		return getDesc().getHeroClasses();
 	}
 
@@ -435,16 +461,16 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @param heroClass The {@link HeroClass} to search.
 	 * @return <code>True</code> if this card has the specified class.
 	 */
-	public boolean hasHeroClass(HeroClass heroClass) {
+	public boolean hasHeroClass(String heroClass) {
 		if (getHeroClasses() != null) {
-			for (HeroClass h : getHeroClasses()) {
+			for (String h : getHeroClasses()) {
 				if (heroClass.equals(h)) {
 					return true;
 				}
 			}
-		} else if (heroClass == getHeroClass()) {
+		} else if (Objects.equals(heroClass, getHeroClass())) {
 			return true;
-		} else if (heroClass == HeroClass.INHERIT) {
+		} else if (Objects.equals(heroClass, HeroClass.INHERIT)) {
 			return true;
 		}
 		return false;
@@ -489,8 +515,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				return new HeroPowerAction(getSpell(), this, getTargetSelection());
 			case GROUP:
 				throw new UnsupportedOperationException("The method .play() should not be called for GroupCard");
+			case CLASS:
+				throw new UnsupportedOperationException("The method .play() should not be called for ClassCard");
+			case FORMAT:
+				throw new UnsupportedOperationException("The method .play() should not be called for FormatCard");
 		}
-		System.out.println(getCardType() + " " + getName());
 		throw new UnsupportedOperationException();
 	}
 
@@ -505,8 +534,9 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
-	 * Gets the original {@link CardDesc} that was used to create this card. Modifying this description does not modify
-	 * the card, and the {@link CardDesc} may be referenced by multiple instances of {@link Card}.
+	 * Gets the original {@link CardDesc} that was used to create this card <b>or</b> the desc of the card described by
+	 * the {@link CardAttributeMap#getOverrideCardId()} overridden card ID. Modifying this description does not modify the
+	 * card, and the {@link CardDesc} may be referenced by multiple instances of {@link Card}.
 	 *
 	 * @return A {@link CardDesc}
 	 */
@@ -516,6 +546,15 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 		// Prevents copying here
 		return CardCatalogue.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
+	}
+
+	/**
+	 * Returns the {@link CardDesc} ignoring the {@link Attribute#AURA_CARD_ID} and {@link Attribute#CARD_ID} values.
+	 *
+	 * @return
+	 */
+	public CardDesc getNonOverriddenDesc() {
+		return desc;
 	}
 
 	/**
@@ -660,7 +699,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 				PlayCardAction[] actions = new PlayCardAction[getChooseOneBattlecries().length];
 				for (int i = 0; i < getChooseOneBattlecries().length; i++) {
-					BattlecryAction battlecry = getChooseOneBattlecries()[i].toBattlecryAction();
+					BattlecryDesc battlecry = getChooseOneBattlecries()[i];
 					PlayCardAction option;
 					if (getCardType() == CardType.MINION) {
 						option = new PlayMinionCardAction(getReference(), battlecry);
@@ -678,6 +717,10 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				return actions;
 			case GROUP:
 				throw new UnsupportedOperationException("group");
+			case CLASS:
+				throw new UnsupportedOperationException("class");
+			case FORMAT:
+				throw new UnsupportedOperationException("format");
 		}
 		return new PlayCardAction[0];
 	}
@@ -724,15 +767,13 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				action = new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
 				break;
 			case WEAPON:
-				action = new PlayWeaponCardAction(getReference(), getDesc().getChooseBothBattlecry().toBattlecryAction());
+				action = new PlayWeaponCardAction(getReference(), getDesc().getChooseBothBattlecry());
 				break;
 			case HERO:
-				action = new PlayHeroCardAction(getReference(), getDesc().getChooseBothBattlecry().toBattlecryAction());
+				action = new PlayHeroCardAction(getReference(), getDesc().getChooseBothBattlecry());
 				break;
 			case MINION:
-				BattlecryDesc battlecryOption = getDesc().getChooseBothBattlecry();
-				BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.getSpell(), battlecryOption.getTargetSelection());
-				action = new PlayMinionCardAction(getReference(), battlecry);
+				action = new PlayMinionCardAction(getReference(), getDesc().getChooseBothBattlecry());
 				break;
 			case GROUP:
 				throw new UnsupportedOperationException("group");
@@ -934,7 +975,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @return The provided actor.
 	 */
 	public Actor applyText(Actor instance) {
-		instance.setBattlecry(getDesc().getBattlecryAction());
+		instance.setBattlecry(getDesc().getBattlecry());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
 				(Race) getAttribute(Attribute.RACE) :
 				getDesc().getRace());
@@ -944,8 +985,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			instance.addDeathrattle(getDesc().getDeathrattle());
 		}
 
-		if (getDeathrattleEnchantments().size() > 0) {
+		if (!getDeathrattleEnchantments().isEmpty()) {
 			getDeathrattleEnchantments().forEach(instance::addDeathrattle);
+		}
+
+		if (!getBattlecryEnchantments().isEmpty()) {
+			getBattlecryEnchantments().forEach(instance::addBattlecry);
 		}
 
 		if (getDesc().getTrigger() != null) {
@@ -1010,6 +1055,14 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public void addDeathrattle(SpellDesc deathrattle) {
 		// TODO: Should Forlorn Stalker affect cards with deathrattle added this way?
 		getDeathrattleEnchantments().add(deathrattle);
+	}
+
+	public void addBattlecry(BattlecryDesc battlecry) {
+		getBattlecryEnchantments().add(battlecry);
+	}
+
+	public List<BattlecryDesc> getBattlecryEnchantments() {
+		return battlecryEnchantments;
 	}
 
 	public void addStoredEnchantment(EnchantmentDesc enchantmentDesc) {
@@ -1199,5 +1252,13 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public Card setStoredEnchantments(List<EnchantmentDesc> storedEnchantments) {
 		this.storedEnchantments = storedEnchantments;
 		return this;
+	}
+
+	public boolean isBlackText() {
+		return getDesc().isBlackText();
+	}
+
+	public int[] getColor() {
+		return getDesc().getColor();
 	}
 }

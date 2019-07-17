@@ -52,9 +52,39 @@
               "attribute": "RESERVED_INTEGER_1"
             },
             {
-              "class": "FightSpell",
-              "target": "EVENT_TARGET",
-              "secondaryTarget": "EVENT_SOURCE"
+              "class": "ConditionalSpell",
+              "condition": {
+                "class": "OrCondition",
+                "conditions": [
+                  {
+                    "class": "ComparisonCondition",
+                    "value1": {
+                      "class": "AttributeValueProvider",
+                      "target": "EVENT_SOURCE",
+                      "attribute": "LAST_HIT"
+                    },
+                    "value2": 0,
+                    "operation": "EQUAL",
+                    "invert": true
+                  },
+                  {
+                    "class": "ComparisonCondition",
+                    "value1": {
+                      "class": "AttributeValueProvider",
+                      "target": "EVENT_TARGET",
+                      "attribute": "LAST_HIT"
+                    },
+                    "value2": 0,
+                    "operation": "EQUAL",
+                    "invert": true
+                  }
+                ]
+              },
+              "spell": {
+                "class": "FightSpell",
+                "target": "EVENT_TARGET",
+                "secondaryTarget": "EVENT_SOURCE"
+              }
             }
           ]
         },

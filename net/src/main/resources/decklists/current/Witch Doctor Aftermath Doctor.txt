@@ -5,8 +5,8 @@
 # 2x (1) Frightful Vision
 # 2x (1) Marked for Sacrifice
 # 2x (1) Nostalgia
-# 2x (1) Tunnel Soulfinder
-# 2x (2) Blood Transfuser
+# 2x (1) Jungle Soulfinder
+# 2x (2) Forgotten Ancestor
 # 2x (2) Morbid Mockery
 # 2x (2) Ritual Dagger
 # 1x (3) Berserk
