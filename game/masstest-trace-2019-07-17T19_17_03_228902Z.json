@@ -1,0 +1,12 @@
+{
+  "seed" : -2462011293383996763,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "LEATHER", "NEONGREEN" ],
+  "deckCardIds" : [ [ "minion_mountain_nightmare", "minion_hypnotist", "spell_dead_or_alive", "minion_darkshard_duelist", "minion_abandoned_geneticist", "weapon_sharp_a_practice", "minion_mari_anette", "minion_garbasu_monster", "minion_mutated_brute", "minion_gnoll_scout", "minion_giants_toad", "spell_distract", "minion_highwayman", "spell_escape_position", "minion_rotorblade_chopper", "weapon_scissors_of_dots", "spell_countershot", "spell_focus_fire", "spell_escape_position", "minion_drakonid_brute", "minion_infinite_behemoth", "minion_rotorblade_chopper", "minion_novice_enchantress", "minion_timebidding_magi", "minion_red_agressor", "minion_cinderslinger", "spell_extermination_team", "minion_garbasu_monster", "spell_multiple_strike", "spell_supply_sabotage" ], [ "minion_degenerator", "minion_dreamwing_scout", "spell_xenobulwark", "minion_jabberwocky", "permanent_formless_rancour", "minion_deranged_greengill", "minion_yokai_bonder", "minion_degenerator", "minion_alemental", "minion_macabre_samaritan", "minion_chaotic_cutthroat", "minion_zilch_god_of_nothing", "minion_zealous_deckhand", "minion_hope_eater", "minion_hostile_snapdragon", "spell_chaos_bolts", "minion_oni_entrapper", "minion_captain_cookie", "minion_hard_puncher", "minion_southsea_giant", "minion_hope_eater", "minion_treeleach", "spell_feeding_frenzy", "minion_disco_inferno", "minion_guardian_kirin", "minion_holdout_soldier", "minion_tribemaster", "spell_xenobulwark", "minion_nebulous_entity", "minion_purity_keeper" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 15, 22, 4 ], [ 60, 44, 46 ] ],
+  "actions" : [ 0, 0, 1, 0, 0, 3, 2, 0, 0, 0, 1, 0, 2, 0, 0, 7, 0, 0, 7, 3, 10, 0, 0, 0, 9, 0, 3, 0, 16, 9, 2, 3, 4, 8, 2 ],
+  "id" : null
+}

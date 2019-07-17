@@ -1,0 +1,12 @@
+{
+  "seed" : 9147874131302396236,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ANY", "TIME" ],
+  "deckCardIds" : [ [ "minion_onis_eye", "minion_mosshorn", "minion_emissary_of_the_end", "minion_pumpkin_abomination", "minion_redhide_butcher", "minion_bookkeeper", "minion_guild_guard", "minion_verdant_dreams_dracomancer", "minion_fiendish_giant", "minion_dreamwing_scout", "minion_nightmare_dragon", "minion_skeletal_warrior", "minion_inora_spellbound", "minion_kawarimi_headbasher", "minion_sourcing_specialist", "minion_gracious_timekeeper", "minion_reckless_hero", "minion_articus__dragon_giant", "minion_miniature_gunner", "minion_deep_borer", "minion_amathyst_panther", "minion_jungle_wanderer", "minion_lightning_elemental", "minion_holy_giant", "minion_champion_of_death", "permanent_escape_from_durnholde", "minion_alemental", "minion_natural_convert", "minion_ironplate_samurai", "minion_draining_ooze" ], [ "minion_giant_reaper", "minion_reload_rodger", "minion_mystic_weaver", "spell_sudden_storm", "minion_hungry_caterpillar", "minion_clash_flamecore", "minion_costume_seller", "minion_owlbear_mother", "minion_twilight_mercenary", "secret_moments_hesitation", "spell_sudden_storm", "minion_cursing_chimp", "spell_pacify", "spell_banish", "minion_phantom_advisor", "minion_pixie_knight", "minion_corvana_the_seamstress", "spell_firesilk_chrysalis", "spell_astral_shockwave", "minion_metalic_manadrake", "minion_mindswapper", "spell_flicker_across_the_veil", "spell_trials_of_the_weave", "minion_tempest_elemental", "minion_mrs_merria", "minion_alien_invader", "spell_destined_to_repeat", "minion_augmented_pixie", "minion_sourcing_specialist", "minion_q_captain_q_cookie" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 20 ], [ 39 ] ],
+  "actions" : [ 0, 0, 0, 2, 0, 0, 0, 0, 5, 0, 0, 0, 4, 2, 0, 0, 0, 4, 2, 5, 2, 0, 3, 2, 0, 24, 3, 3, 2, 2, 9, 6, 2, 0, 4, 0, 23, 2, 11, 27, 9, 0, 1, 0, 19, 1, 1, 0, 0, 1, 5, 2, 1 ],
+  "id" : null
+}

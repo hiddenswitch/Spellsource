@@ -1,0 +1,12 @@
+{
+  "seed" : 8361864463178114264,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ANY", "OLIVE" ],
+  "deckCardIds" : [ [ "minion_twilight_mercenary", "minion_little_helper", "minion_flamerunner", "minion_storm_giant", "minion_chief_vigilante", "minion_guild_guard", "minion_wyrmrest_sniper", "minion_swift_stinger", "minion_brawler_bushi", "minion_mrrrine", "minion_stubborn_stegodon", "minion_lava_manticore", "minion_perplexed_courtsman", "minion_timelost_sarcophagus", "minion_cursing_disciple", "minion_captain_of_the_guard", "minion_floating_crystal", "minion_articus__dragon_giant", "minion_giant_disappointment", "minion_cursing_disciple", "minion_dead_horse", "minion_nightmare_dragon", "minion_gracious_timekeeper", "minion_hold_hunter", "minion_hooded_ritualist", "minion_flare_fireworker", "minion_sonorous_spectre", "minion_magishire_wildcat", "minion_darkshard_duelist", "minion_oni_entrapper" ], [ "minion_dragon_librarian", "minion_matriarch_aiiran", "minion_dramatic_playwright", "minion_ambushing_rose", "minion_tick_and_tock", "spell_tome_of_power", "minion_cursebrewing_witch", "spell_flying_fiction", "minion_mutamite_terror", "minion_experiment_recorder", "spell_magic_word_mishap", "minion_experiment_recorder", "minion_barside_slinker", "minion_bramblebound_warrior", "spell_tome_of_secrets", "minion_fumewalker_zin", "spell_what_big_fangs", "minion_stallius_the_horned", "minion_end_reveler", "secret_house_of_candy", "minion_lingering_spirit", "spell_magic_word_mishap", "spell_tome_of_secrets", "minion_dragon_librarian", "minion_sky_high_surveyor", "minion_nice_cream", "minion_worrisome_scribe", "minion_haunted_armor", "minion_blubber_behemoth", "minion_sleepy_sprite" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 6, 19, 27 ], [ 49, 63, 51 ] ],
+  "actions" : [ 0, 1, 0, 0, 0, 0, 2, 2, 5, 0, 0, 0, 3, 1, 0, 1, 0, 0, 5, 1, 0, 1, 9, 8, 0, 9, 1, 8, 11, 0, 27, 10, 2, 5, 0, 0, 11, 11, 1, 1, 0, 8, 3, 8, 8, 9, 2, 8, 13, 2, 6, 0, 9, 13, 33, 17, 10, 3, 3, 0, 0, 0, 32, 26, 1, 6, 29, 38, 7, 0, 8, 1, 1, 0, 11, 6, 19, 8, 2, 11, 0, 0, 15, 5, 3, 1, 0, 2, 1, 0, 9, 10, 4, 6, 2, 0, 8, 4, 2, 5, 3, 10, 2, 1, 6 ],
+  "id" : null
+}

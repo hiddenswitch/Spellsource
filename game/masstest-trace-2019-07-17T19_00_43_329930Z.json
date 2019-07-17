@@ -1,0 +1,12 @@
+{
+  "seed" : 8063071166548105777,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "CORAL", "TIME" ],
+  "deckCardIds" : [ [ "minion_novice_time_traveler", "minion_tetradimensionalist", "minion_gold_picaroon", "minion_street_performer_coral", "minion_primalist_kirra", "minion_little_helper", "minion_krentiaxx_tyrant", "spell_groupies", "minion_clumsy_dryad", "minion_frazzled_barmaid", "minion_klive_icetooth", "minion_myra_the_masterful", "minion_crystal_golem", "spell_healing_hymn", "minion_crew_commander", "minion_frazzled_barmaid", "minion_street_performer_coral", "minion_oni_entrapper", "minion_spirited_announcer", "weapon_crowd_pleaser", "minion_q_captain_q_cookie", "minion_captain_of_the_guard", "minion_spirited_announcer", "spell_fortissimo", "weapon_storm_guitar", "minion_songbird", "minion_emissary_of_the_end", "minion_brawler_bushi", "minion_deep_borer", "minion_tick_and_tock" ], [ "minion_prince_tenris", "minion_corvana_the_seamstress", "minion_dragonling_pet", "minion_chromie", "minion_mighty_mufunga", "minion_bittertide_crab", "minion_arcane_accelerator", "minion_nightmare_whelp", "spell_trials_of_the_weave", "minion_arcane_accelerator", "minion_molten_cauterizer", "minion_hungry_caterpillar", "minion_lightning_elemental", "spell_lesser_marble_spellstone", "minion_mystic_weaver", "minion_metalic_manadrake", "minion_sunbender", "minion_skeletower", "minion_roadblock_pufferfish", "minion_bone_guard", "spell_banish", "minion_dante_the_outlaw", "minion_hungry_caterpillar", "minion_cinderslinger", "minion_shadownest_arachne", "minion_cinderslinger", "minion_whiptail_gatherer", "spell_astral_shockwave", "minion_chaotic_cutthroat", "secret_afterimage" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 18, 13, 28 ], [ 51, 48, 38 ] ],
+  "actions" : [ 1, 0, 0, 0, 1, 0, 4, 2, 1, 3, 2, 2, 1, 0, 6, 0, 2, 1, 2 ],
+  "id" : null
+}

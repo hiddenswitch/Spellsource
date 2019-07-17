@@ -1,0 +1,12 @@
+{
+  "seed" : 5549115361906008620,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "RUST", "OLIVE" ],
+  "deckCardIds" : [ [ "minion_mountain_whelp", "minion_blastflame_dragon", "minion_ravenous_lookout", "minion_dawn_drake", "minion_lord_cookie", "minion_flamewarper", "minion_savage_ogreseer", "minion_squirrel_knight", "minion_tanglefer_of_the_jungle", "minion_scarlet_magiserpent", "minion_drakonid_commander", "minion_faerie_nightmare", "minion_plunderogue", "minion_verdant_squire", "minion_oppressor_defender", "minion_aegwynn", "minion_spectral_steed", "minion_lundurr_the_reborn", "spell_primal_rage", "minion_lord_xah_dorah", "minion_hard_puncher", "minion_demonic_frontrunner", "minion_flamerunner", "minion_exotic_menace", "minion_champion_of_death", "minion_bone_guard", "spell_lesser_garnet_spellstone", "minion_crimson_general", "minion_pumpkin_abomination", "minion_holdover_lich" ], [ "minion_tempest_elemental", "minion_big_bad_coyote", "spell_bored_to_death", "minion_bromeliad_pup", "minion_sonorous_spectre", "spell_what_big_fangs", "spell_relaxing_read", "spell_miserable_conclusion", "secret_house_of_candy", "spell_bored_to_death", "permanent_escape_from_durnholde", "minion_streetwise_specialist", "minion_bugbiter", "secret_house_of_candy", "minion_big_bad_coyote", "minion_deep_borer", "spell_magic_word_mishap", "minion_timewalker_necrolyte", "minion_grassroot_mossling", "spell_writers_block", "minion_rafaam_philanthropist", "weapon_stick", "spell_miserable_conclusion", "minion_cursebrewing_witch", "minion_dante_the_outlaw", "minion_death_s_messenger", "minion_experiment_recorder", "minion_chronocaller", "minion_snappy_author", "minion_spirited_bomber" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 17, 29 ], [ 48 ] ],
+  "actions" : [ 0, 0, 2, 2, 0, 0, 0, 0, 1, 4, 0, 0, 0, 7, 1, 0, 2, 2, 5, 7, 2, 2, 8, 7, 1, 10, 0, 3, 1, 2 ],
+  "id" : null
+}

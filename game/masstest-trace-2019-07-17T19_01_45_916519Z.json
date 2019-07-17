@@ -1,0 +1,12 @@
+{
+  "seed" : 4915707468746665148,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TEAL", "ICE" ],
+  "deckCardIds" : [ [ "minion_kawarimi_headbasher", "minion_burst_bug", "spell_water_blast", "minion_freyas_familliar", "minion_uccian_hydra", "minion_nazjatar_seahorseman", "minion_fae_trickster", "spell_murloc_mating_call", "minion_holy_bulwark", "spell_evaporation", "spell_storm", "spell_calm_currents", "spell_condensation", "spell_finding_mobus", "minion_sea_elemental", "minion_expert_explorer", "minion_floating_crystal", "spell_scry_me_a_river", "spell_storm", "minion_crystal_shatterer", "spell_salt_the_wound", "minion_tidal_rager", "weapon_stick", "minion_giant_serpent", "weapon_brine_crossbolter", "minion_ambushing_rose", "spell_water_blast", "minion_twilight_mercenary", "spell_salt_the_wound", "minion_chromie" ], [ "minion_headless_horseman", "minion_flesh_giant", "spell_tremble_before_me", "spell_dark_transformation", "spell_heartstrike", "minion_lord_of_the_sea", "secret_anti_magic_zone", "minion_timebidding_magi", "minion_pixie_knight", "minion_rimefang", "secret_anti_magic_zone", "minion_antique_collector", "minion_nature_rager", "minion_captain_cookie", "minion_choronus_fangalmouth", "spell_chains_of_ice", "minion_flesh_giant", "minion_nightmare_whelp", "spell_lingering_apparition", "minion_yokai_shapeshifter", "spell_winter_is_coming", "minion_bromeliad_pup", "minion_bolsterous_gesit", "minion_holy_giant", "spell_death_strike", "minion_squirrel_knight", "minion_faerie_nightmare", "spell_frost_strike", "minion_amathyst_panther", "minion_kodama_bulwark" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 4, 32 ], [ 55, 45 ] ],
+  "actions" : [ 0, 0, 0, 0, 3, 6, 1, 0, 0, 0, 4, 0, 0, 0, 6, 12, 2, 1, 1, 2, 5, 1, 21, 12, 1 ],
+  "id" : null
+}

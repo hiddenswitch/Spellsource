@@ -1,0 +1,12 @@
+{
+  "seed" : 3834847792300760064,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ICE", "NAVY" ],
+  "deckCardIds" : [ [ "weapon_ebon_blade_greatsword", "minion_dead_horse", "minion_treeleach", "weapon_runic_claymore", "spell_path_of_frost", "minion_blubber_behemoth", "minion_mossy_giant", "spell_chains_of_ice", "spell_heartstrike", "minion_sly_conquistador", "spell_winter_is_coming", "minion_necksnapper", "minion_throat_cutter", "minion_fiendish_giant", "minion_shambling_horror", "minion_cybernetic_rager", "minion_throat_cutter", "spell_all_will_serve", "spell_rime", "minion_bighand_brute", "spell_unholy_frenzy", "secret_anti_magic_zone", "spell_abominations_might", "spell_blood_boil", "spell_rime", "minion_death_s_messenger", "spell_blood_boil", "minion_bolsterous_gesit", "spell_acherus_deathgate", "minion_sleepy_sprite" ], [ "minion_clash_flamecore", "minion_chronocaller", "minion_weak_challenger", "minion_scurvy_assassin", "minion_spellquaker", "minion_grassroot_mossling", "minion_kodama_bulwark", "minion_mindswapper", "minion_garbasu_monster", "minion_general_drekthar", "spell_forces_unite", "minion_chromatic_vohlok", "minion_siege_elephant", "minion_haunted_berserker", "minion_general_lauren", "minion_cadenza", "minion_captain_stashin", "minion_doomed_diver", "minion_gorthal_the_ravager", "minion_wavering_diabloist", "spell_midsummer_mirage", "spell_double_down", "minion_darkbent_drake", "minion_flare_fireworker", "minion_flare_fireworker", "minion_death_s_messenger", "minion_savage_worgen", "minion_flutterer", "minion_holy_bulwark", "spell_hidden_treasure" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 20, 24, 13 ], [ 60, 59, 43 ] ],
+  "actions" : [ 0, 1 ],
+  "id" : null
+}

@@ -1,0 +1,12 @@
+{
+  "seed" : -5993299556295354000,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "RUST", "OLIVE" ],
+  "deckCardIds" : [ [ "minion_selfburner", "minion_fumewalker_zin", "minion_hypnotic_beetle", "spell_dawns_might", "minion_erudite_drakonid", "minion_tharon_ja__the_serpent", "minion_draining_ooze", "minion_drakonid_bruiser", "spell_dawns_might", "minion_smogg", "minion_nava__amp__thanatos", "spell_beast_hunting", "minion_crystal_shatterer", "minion_mecha_rager", "weapon_six_shooter", "spell_ready_to_shakedown", "minion_scarlet_magiserpent", "minion_shedding_chameleon", "minion_chromie", "spell_smash_n_run", "minion_acolyte_of_peroth'arn", "minion_chief_vigilante", "minion_bittertide_crab", "minion_illia_the_marionette", "minion_fireguard_bulwark", "minion_drakonid_commander", "minion_zealous_deckhand", "minion_omega_dragon", "minion_nice_cream", "minion_murozond" ], [ "spell_magic_word_mishap", "minion_big_bad_coyote", "spell_tome_of_power", "minion_worrisome_scribe", "minion_whiptail_gatherer", "spell_writers_block", "minion_sonorous_spectre", "minion_nightmare_whelp", "spell_mind_meld", "minion_champion_of_death", "minion_eyeweaver", "spell_flying_fiction", "spell_engaging_story", "minion_flare_fireworker", "minion_pixie_knight", "minion_timebidding_magi", "secret_house_of_candy", "minion_magedrainer", "minion_amathyst_panther", "spell_bored_to_death", "minion_dragon_librarian", "minion_ninja_aspirants", "spell_tome_of_secrets", "minion_snappy_author", "minion_worrisome_scribe", "minion_mecha_rager", "minion_queen_cinderella", "secret_tall_tale", "minion_crew_commander", "spell_miserable_conclusion" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 8, 16 ], [ 61 ] ],
+  "actions" : [ 0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 8, 6, 4, 0, 3, 0, 0, 0, 7, 0, 15, 0, 2, 5, 1, 0, 0, 5, 3, 3, 0, 0, 16, 0, 3, 9, 23, 12, 20, 11, 5, 1, 0, 11, 3, 3, 0, 0, 15, 28, 14, 1, 9, 3, 20 ],
+  "id" : null
+}

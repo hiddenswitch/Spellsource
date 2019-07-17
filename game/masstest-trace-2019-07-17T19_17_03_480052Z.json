@@ -1,0 +1,12 @@
+{
+  "seed" : 7145963486176630408,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "AMBER" ],
+  "deckCardIds" : [ [ "minion_stallius_the_horned", "minion_lady_bug", "minion_skeletal_warrior", "spell_golden_scarab", "secret_obvious_ambush", "minion_swarmlord", "weapon_stick", "spell_incubation", "spell_web_wrap", "minion_hercules", "spell_fill_the_stands", "spell_boss_fight", "minion_micro_raptors", "minion_babee", "minion_wee_whelp", "minion_bramblebound_warrior", "spell_rush_production", "minion_cloud_serpent_hatchling", "minion_mecha_rager", "spell_bee_squad", "spell_encased_in_amber", "spell_pheromones", "spell_web_wrap", "minion_strike_mantis", "minion_big_ol_beetle", "minion_nursery_guard", "spell_scarab_shield", "spell_venom_drench", "minion_matriarch_aiiran", "minion_toothpick_fighter" ], [ "minion_wee_whelp", "minion_skeletower", "minion_queen_beetrice", "minion_colossal_spider", "minion_necksnapper", "minion_expert_explorer", "minion_gustbreaker", "minion_die_insect", "minion_grand_guardian", "minion_mari_anette", "spell_pheromones", "minion_beloved_benji", "minion_shadownest_arachne", "minion_kawarimi_headbasher", "minion_spirited_bomber", "minion_gustbreaker", "minion_micro_raptors", "spell_pincer_attack", "minion_divine_cleric", "spell_teamwork", "spell_locust_swarm", "minion_shadownest_arachne", "minion_fairytale_tracker", "minion_eyeweaver", "minion_crew_commander", "minion_deranged_greengill", "minion_fel_manticore", "minion_beholder_of_the_beginning", "minion_colossal_spider", "spell_bee_squad" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 17, 19 ], [ 38, 59 ] ],
+  "actions" : [ 0, 1, 1, 2, 1, 0, 3, 1, 2, 8, 5, 1, 0, 0, 10, 0, 1, 9, 7, 15, 1, 7, 0, 0, 0, 4, 2, 2, 1, 0, 5, 3, 2, 0, 0, 1, 7, 0, 0, 12, 10, 1, 2, 9, 1, 0, 15, 0 ],
+  "id" : null
+}

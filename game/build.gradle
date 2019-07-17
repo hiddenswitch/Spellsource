@@ -27,7 +27,6 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
 
     testCompile project(':cards')
-    testCompile project(':hearthstone')
     testCompile project(':testutils')
 }
 

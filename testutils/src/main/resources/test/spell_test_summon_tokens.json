@@ -1,0 +1,19 @@
+{
+  "name": "Test Summon Tokens",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_neutral_test_1",
+      "minion_neutral_test_1"
+    ]
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

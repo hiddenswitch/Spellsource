@@ -1,0 +1,12 @@
+{
+  "seed" : 2496154901704735405,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "DARKGREEN", "NAVY" ],
+  "deckCardIds" : [ [ "minion_corrupted_challenger", "minion_reckless_hero", "minion_bronze_timekeeper", "minion_tiny_persecutor", "minion_occult_wrecker", "spell_sunken_ritual", "minion_kairozdormu", "minion_shub-rhogog", "minion_occult_wrecker", "minion_reader_eater", "minion_chanting_cultist", "minion_treeleach", "minion_end_reveler", "minion_shuffling_horror", "minion_timewalker_necrolyte", "spell_vicious_mutation", "minion_fiery_tyrant", "minion_shuffling_horror", "minion_eyeweaver", "minion_death_s_messenger", "minion_skytearer", "minion_perplexed_courtsman", "spell_corrupting_tome", "minion_deranged_greengill", "spell_bloody_blow", "minion_siege_elephant", "minion_wicked_devotee", "minion_gustbreaker", "spell_evil_rises", "minion_warped_warrior" ], [ "minion_giant_reaper", "minion_dragonling_pet", "minion_emerald_dreamer", "minion_fumewalker_zin", "weapon_the_transmogrifter", "minion_wink_dog", "minion_darkshard_duelist", "minion_old_ratmother", "minion_novice_enchantress", "minion_delivery_dealer", "minion_automatrainer", "minion_lonely_whelpling", "minion_the_jekka_tree", "spell_fend_off", "spell_gather_strength", "minion_fleeting_firebug", "minion_deadeyed_ravager", "minion_unstable_artifact", "minion_savage_worgen", "minion_the_grudge", "minion_faldoran_the_ninja", "minion_doomgunners", "minion_skeletower", "minion_rhunok_the_bear", "minion_luteflayer", "minion_pint_sized_destroyer", "minion_sparkly_messenger", "spell_black_plague", "minion_harbinger_of_hope", "minion_skeletal_warrior" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 17, 16 ], [ 47, 60, 44 ] ],
+  "actions" : [ 0, 1, 2, 0, 0, 2, 2, 2, 1, 2, 0, 5, 2, 1, 5, 2, 0, 0, 4, 8, 0, 0, 14, 6, 0, 9, 1, 7, 19, 0, 2, 0, 4, 6, 1, 1, 1, 6, 11, 12 ],
+  "id" : null
+}

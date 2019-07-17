@@ -1,0 +1,12 @@
+{
+  "seed" : -4476222984374076025,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ICE", "RUST" ],
+  "deckCardIds" : [ [ "spell_howling_blast", "minion_gilnean_witchhuntress", "spell_rune_tap", "minion_expert_explorer", "minion_oppressor_defender", "minion_magishire_wildcat", "minion_hooded_ritualist", "minion_chief_vigilante", "minion_tombstone", "minion_gasbelly_oni", "minion_shambling_horror", "minion_ghoul", "minion_mossy_giant", "minion_shambling_horror", "minion_ghoul", "spell_runic_corruption", "minion_ebon_blade_worgen", "minion_sunbender", "minion_gilnean_witchhuntress", "minion_acolyte_of_peroth'arn", "spell_dark_transformation", "minion_choronus_fangalmouth", "minion_red_agressor", "minion_end", "minion_squirrel_knight", "minion_perplexed_courtsman", "spell_rune_tap", "minion_end_reveler", "spell_bone_shield", "spell_tremble_before_me" ], [ "minion_swift_stinger", "minion_darkbent_drake", "spell_big_bad_assault", "minion_hunchback_supplier", "minion_ethereal_knight", "minion_flamerunner", "minion_molten_whelp", "minion_fel_manticore", "minion_faceless_envoy", "spell_venom_breath", "minion_lava_manticore", "minion_molten_whelp", "minion_bone_guard", "spell_vehemence", "minion_darkshard_duelist", "spell_overwhelming_strength", "spell_inciendary_break", "minion_fiery_tyrant", "minion_hard_puncher", "spell_ascendancy", "minion_rousing_commander", "minion_onis_eye", "permanent_call_of_the_crusade", "minion_scarlet_dragon", "minion_magedrainer", "minion_captain_stashin", "spell_incinerate", "minion_faceless_envoy", "minion_phantom_advisor", "minion_mind_controlled_mech" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 29, 25 ], [ 64, 43 ] ],
+  "actions" : [ 0, 0, 1, 0, 2, 2, 1, 0, 0, 0, 9, 6, 0, 8, 0, 4, 8, 5, 0, 4, 10, 6, 8, 6, 0, 0, 3, 12, 0, 0, 16, 15, 18, 23, 17, 7, 10, 3, 0, 1, 18, 21, 5, 5, 13, 0, 15, 11, 8, 7 ],
+  "id" : null
+}

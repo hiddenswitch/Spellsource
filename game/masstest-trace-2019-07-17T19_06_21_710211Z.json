@@ -1,0 +1,12 @@
+{
+  "seed" : 5392166748547979201,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "DARKGREEN", "EGGPLANT" ],
+  "deckCardIds" : [ [ "minion_unearthed_horror", "minion_reader_eater", "minion_eater_of_sacrifices", "minion_articus__dragon_giant", "minion_crouching_tiger", "spell_chilling_warcry", "spell_sacrifire", "spell_spawn_of_evil", "minion_eranikus", "minion_unnerving_spectre", "minion_scourge_cultist", "minion_spirited_bomber", "minion_chanting_cultist", "minion_dante_the_outlaw", "minion_monolith_of_doom", "spell_sacrifire", "minion_cult_promoter", "minion_squideary", "spell_eldritch_scroll", "minion_dreamwing_scout", "spell_lash_out", "spell_awakening_the_horror", "minion_throat_cutter", "minion_blood_cultist", "minion_shouting_soldier", "minion_ghahnb_the_judicator", "minion_pelagic_parasite", "minion_drowned_fishman", "spell_abduct", "minion_unearthed_horror" ], [ "minion_dreadscale_evoker", "minion_purifying_ooze", "minion_lundurr_the_reborn", "minion_vengeful_ghoul", "minion_corrupt_forerunner", "minion_lightning_elemental", "spell_take_down", "minion_fortuna_hunter", "minion_fel_manticore", "minion_primordial_pebble", "minion_dreadmire_hexxer", "minion_divine_cleric", "minion_disco_inferno", "minion_clamouring_crusher", "minion_captain_cookie", "minion_grave_smasher", "minion_docile_boulder", "minion_magma_spewer", "spell_plague_of_rats", "minion_polycephalos", "minion_divine_cleric", "minion_mosshorn", "spell_potion_of_creation", "spell_army_of_darkness", "minion_vengeful_ghoul", "spell_lesser_citrine_spellstone", "minion_souldrinker_drake", "spell_rummage", "minion_bogovanis", "minion_magma_hound" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33, 32 ], [ 37, 64, 38 ] ],
+  "actions" : [ 0, 0, 0, 2, 3, 1, 0, 3, 1, 3, 0, 4, 2, 2, 4, 0, 1, 9, 2, 1, 0, 13, 12, 1, 0, 0, 1, 3, 1, 11, 3, 1, 1, 1, 0, 0, 5, 0, 23, 8, 3, 6, 2, 1, 0, 13, 7, 0, 2, 2, 3, 11, 1, 4, 1, 1, 1, 12, 5, 3, 1, 0, 0, 17, 7, 9, 2, 0, 0, 2, 8, 4, 5, 1, 1, 0, 1, 0, 0, 2, 0, 5, 7, 3, 2, 0, 0, 6, 3, 1, 3, 1, 2, 0, 0, 0, 0, 0, 6, 2, 9, 6, 2, 0, 15 ],
+  "id" : null
+}

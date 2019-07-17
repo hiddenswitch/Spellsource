@@ -1,0 +1,12 @@
+{
+  "seed" : 5233699961995922034,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "AMBER" ],
+  "deckCardIds" : [ [ "spell_venom_drench", "minion_gemstone_giant", "spell_reinforced_shell", "permanent_the_end_time", "minion_barnacled_dweller", "minion_chainwrecker_corsair", "minion_sp1der", "minion_weaponweaver", "minion_magelight_dragon", "minion_krentiaxx_tyrant", "spell_second_wave", "minion_grand_guardian", "minion_polychrome_hydra", "minion_rainbow_runner", "minion_doodles", "minion_shedding_chameleon", "minion_bait", "minion_daring_duelist", "spell_scarab_shield", "minion_morris", "minion_wink_dog", "spell_shell_reclamation", "minion_channeled_spirit", "spell_into_the_parlor", "spell_pincer_attack", "minion_massive_egg", "minion_wee_whelp", "minion_lounge_brownie", "minion_mollusk_meister", "spell_forest_calling" ], [ "minion_broodguard", "minion_mountain_nightmare", "spell_spiderbomb", "minion_timewalker_stormlord", "minion_savage_sprite", "minion_deranged_greengill", "spell_two_by_two", "minion_menagerie_caretaker", "minion_weaponweaver", "minion_owlbear_mother", "minion_selfburner", "minion_creepy_crawler", "minion_abandoned_geneticist", "minion_gentleman_s_giant", "spell_healing_honey", "spell_rush_production", "minion_nightmare_dragon", "minion_giants_toad", "minion_wolfcrier", "minion_bug_boss", "minion_dragon_pod", "minion_visionary", "minion_the_grudge", "spell_extreme_evolution", "spell_extreme_evolution", "minion_skeletower", "minion_servant_wasp", "minion_harbinger_of_hope", "spell_protect_the_hive", "minion_sleepy_scarecrow" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 29, 12, 17 ], [ 52 ] ],
+  "actions" : [ 0, 2, 0, 0, 2, 0, 0, 2, 0, 4, 5, 1, 0, 0, 4, 1 ],
+  "id" : null
+}

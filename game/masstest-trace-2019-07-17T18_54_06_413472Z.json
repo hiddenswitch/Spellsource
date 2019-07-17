@@ -1,0 +1,12 @@
+{
+  "seed" : -4858521925494421601,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ROSE", "TIME" ],
+  "deckCardIds" : [ [ "minion_dimensional_courier", "minion_jungle_soulfinder", "minion_alemental", "spell_possessed_madness", "weapon_spiritbinder", "minion_crones_attendant", "minion_forgotten_ancestor", "minion_corona_fae_defender", "spell_corvid_call", "spell_rage_ascension", "minion_oppressor_defender", "minion_eyeweaver", "minion_zilch_god_of_nothing", "spell_unearthly_haunting", "minion_tormentaxx_hulk", "minion_miniature_gunner", "spell_rotten_curse", "secret_devils_deal", "spell_voodoo_infusion", "minion_chant_leader", "spell_jungles_guidance", "secret_greater_good", "secret_devils_deal", "minion_fiendish_giant", "secret_shallow_grave", "spell_mojo_curse", "minion_articus__dragon_giant", "secret_black_magic", "secret_greater_good", "minion_dreamwing_scout" ], [ "spell_firesilk_chrysalis", "spell_good_omens", "minion_demonic_frontrunner", "secret_moments_hesitation", "permanent_call_of_the_crusade", "spell_lone_survivor", "minion_shadownest_arachne", "minion_pixie_knight", "minion_darkbent_drake", "minion_holdover_lich", "minion_stalwart_sculptor", "minion_chaotic_cutthroat", "minion_reload_rodger", "minion_giants_toad", "minion_fumewalker_zin", "spell_band_of_brothers", "minion_blackflame_bomber", "minion_alien_ravager", "spell_lone_survivor", "spell_temporal_echoes", "minion_blue_nestwatcher", "minion_corvana_the_seamstress", "minion_fae_horncaster", "spell_peace_in_nothing", "minion_chief_vigilante", "weapon_scepter_of_the_first_king", "spell_overclock_timeweaver", "spell_flicker_across_the_veil", "spell_banish", "minion_bogovanis" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 11, 12 ], [ 59, 39, 50 ] ],
+  "actions" : [ 0, 1, 1, 0, 0, 6, 1, 2, 0, 2, 1, 0, 4, 0, 6, 0, 0, 0, 13, 5, 0, 0, 9, 2, 5, 1, 1, 18, 3, 2, 1, 0, 4, 5, 0, 4, 2, 0, 5, 1, 0, 10, 14, 10, 3, 0, 1, 26, 10, 7, 10, 9, 2, 0, 3, 2, 1, 5, 1, 0, 9, 0, 7, 2, 0, 0, 2, 9, 12, 8, 9, 4, 6, 3, 15, 2, 2, 2, 8, 11, 3, 5, 15, 1, 17, 11, 1, 0, 1, 0, 0, 6, 5, 1, 43, 41, 3, 1, 8, 16, 2, 3, 1, 0, 1, 5, 1, 0, 20, 16, 15, 3, 14, 8, 6, 1 ],
+  "id" : null
+}

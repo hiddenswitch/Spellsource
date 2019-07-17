@@ -1,0 +1,12 @@
+{
+  "seed" : -4181053087393730700,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "BLOOD", "AMBER" ],
+  "deckCardIds" : [ [ "spell_rending_curse", "minion_festivity_golem", "minion_thassarian", "minion_veindrake", "minion_prince_tenris", "minion_nightmare_dragon", "spell_blood_plague_blood_knight", "minion_fifi_fizzlewarp", "minion_phantom_advisor", "minion_cybernetic_rager", "minion_flamerunner", "minion_guild_guard", "spell_soul_corruption", "minion_lightning_elemental", "spell_red_lightning", "weapon_voltsaber", "minion_bronze_timekeeper", "spell_merciless_strike", "minion_kodama_bulwark", "minion_mossy_giant", "minion_whiptail_gatherer", "minion_savage_sprite", "spell_deaths_caress", "weapon_souldrinker_axe", "minion_runic_sorceress", "minion_ambushing_rose", "minion_jungle_king", "minion_runic_sorceress", "spell_soul_corruption", "spell_grim_awakening" ], [ "minion_mrrrine", "spell_ancient_catching", "minion_dragon_pod", "spell_pincer_attack", "minion_sourcing_specialist", "minion_cursing_disciple", "minion_aegwynn", "minion_samureetle", "spell_two_by_two", "minion_colossal_spider", "minion_infested_murloc", "spell_encased_in_amber", "minion_sky_high_surveyor", "token_abera_swarm_evolver", "minion_nightmare_warden", "minion_roadblock_pufferfish", "minion_tanglefer_of_the_jungle", "minion_antique_collector", "minion_stallius_the_horned", "minion_lord_cookie", "minion_macabre_samaritan", "minion_creepy_crawler", "minion_rafaam_archivist", "minion_giant_reaper", "minion_rafaam_philanthropist", "minion_crouching_tiger", "token_bug_worker", "minion_queen_beetrice", "minion_flare_fireworker", "minion_plunderogue" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 17, 31, 14 ], [ 39, 55 ] ],
+  "actions" : [ 0, 0, 1, 0, 3, 2, 3, 0, 1, 4, 1, 1, 0, 0, 5, 0, 0, 0, 9 ],
+  "id" : null
+}

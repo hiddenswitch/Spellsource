@@ -90,7 +90,6 @@ dependencies {
 
     compile project(':game')
     compile project(':cards')
-    compile project(':hearthstone')
     compile project(':client')
     compile project(':vertx-sync')
 

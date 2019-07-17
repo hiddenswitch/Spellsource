@@ -1,0 +1,12 @@
+{
+  "seed" : 210657330768451991,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NAVY", "RUST" ],
+  "deckCardIds" : [ [ "minion_dark_order_knight", "spell_reinforcements", "minion_weak_challenger", "minion_doom_sergeant", "minion_seven_shot_gunner", "minion_sourceborn_aelin", "spell_swarms_of_time", "minion_oni_entrapper", "minion_abandoned_geneticist", "minion_sparkgunner", "minion_prince_tenris", "minion_oppressor_defender", "minion_sparkgunner", "minion_fae_horncaster", "minion_ticking_giant", "spell_final_defenses", "minion_gentleman_s_giant", "minion_oni_entrapper", "quest_forces_of_gilneas", "minion_mother_matron", "minion_trigger_happy_survivor", "minion_blubber_behemoth", "minion_hapless_knight", "minion_windup_offender", "minion_little_purrsuer", "minion_mosshorn", "minion_forest_magistrate", "minion_sleepy_scarecrow", "minion_bogovanis", "minion_tower_titan" ], [ "minion_captain_of_the_guard", "minion_dawn_drake", "weapon_the_dreadtalon", "minion_dante_the_outlaw", "weapon_marrow_cleaver", "minion_forgotten_hero", "minion_tree_giant", "minion_magma_hound", "minion_lord_cookie", "minion_flaxen_whelp", "minion_amathyst_panther", "minion_tempest_elemental", "minion_doctor_hatchett", "minion_timewalker_initiate", "minion_alien_ravager", "weapon_silverbone_claw", "minion_sweeper_drake", "minion_xavius", "minion_draining_ooze", "minion_massive_egg", "minion_menacing_dragotron", "spell_lesser_garnet_spellstone", "minion_steel_smold_a_bot", "minion_kodama_bulwark", "minion_dragon_pod", "minion_demonic_frontrunner", "minion_dragon_caretaker", "minion_tharon_ja__the_serpent", "minion_grape_merchant", "minion_tick_and_tock" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 22, 24 ], [ 50, 45, 57 ] ],
+  "actions" : [ 0, 0, 0, 0, 0, 8, 0, 5, 7 ],
+  "id" : null
+}

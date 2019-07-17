@@ -1,0 +1,12 @@
+{
+  "seed" : -7683817869556159327,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NEONGREEN", "TOAST" ],
+  "deckCardIds" : [ [ "minion_chaotic_cutthroat", "minion_recurring_torrent", "minion_timebidding_magi", "minion_costume_seller", "minion_champion_of_death", "spell_cull_and_reap", "minion_wee_squashling", "minion_prince_tenris", "spell_warp", "minion_tanglefer_of_the_jungle", "minion_expert_explorer", "minion_fel_manticore", "minion_daring_duelist", "spell_malignancy", "permanent_formless_celerity", "minion_grandmother_vratta", "permanent_formless_immortal", "minion_eranikus", "minion_blue_nestwatcher", "minion_undead_trickster", "minion_skeletal_warrior", "minion_giant_reaper", "spell_daunting_carapace", "spell_asteroid_impact", "spell_cellular_overdrive", "minion_magic_muffler", "minion_void_reaper", "spell_cellular_overdrive", "spell_malignancy", "spell_cull_and_reap" ], [ "spell_mass_extinction", "minion_unsatisfied_customer", "spell_elemental_soup", "spell_tuskarr_provisions", "spell_tuskarr_provisions", "minion_lingering_spirit", "minion_zilch_god_of_nothing", "minion_void_reaper", "minion_wolfcrier", "minion_meat_tenderizer", "minion_pastry_cook", "minion_onis_eye", "minion_recurring_torrent", "minion_timewalker_mistweaver", "minion_commander_gareth", "minion_baul_pocuse", "minion_roasting_drake", "minion_expert_explorer", "minion_inedible_ghoul", "spell_roast", "spell_mass_extinction", "minion_magma_hound", "spell_toxic_mushroom", "minion_rafaam_archivist", "minion_myra_tyrngaarde", "spell_primal_seasoning", "minion_novice_time_traveler", "spell_top_chef", "minion_inedible_ghoul", "spell_al_dente" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 12 ], [ 55, 47 ] ],
+  "actions" : [ 0, 1, 1, 4, 5, 7, 6, 4, 2, 10, 7, 2, 1, 1, 1, 1, 8, 6, 2, 0, 9, 0, 0, 2, 0, 10, 15, 0, 0, 0, 0, 7, 3, 2, 0, 10, 1, 10, 0, 0, 0, 14, 11, 3, 2, 1, 8, 30, 10, 0, 0, 4, 0, 44, 4, 11, 25, 19, 14, 2, 5, 0, 18, 20, 10, 7, 0, 2, 22, 0, 1, 0, 3, 0, 0, 20, 4, 15, 2, 1, 0, 2, 2, 0, 9, 3, 4, 0, 1, 1, 0, 7, 20, 0, 4, 0, 0, 18, 8, 18, 0, 18, 1, 1, 4, 0, 0, 2, 5, 17, 0, 2, 24, 13, 6, 8, 9, 0, 5 ],
+  "id" : null
+}

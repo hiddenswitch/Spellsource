@@ -1,0 +1,12 @@
+{
+  "seed" : 7328193150289120572,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "BLOOD", "AMBER" ],
+  "deckCardIds" : [ [ "minion_flutterer", "minion_flamerunner", "minion_massive_turtle", "spell_blood_plague_blood_knight", "weapon_souldrinker_axe", "minion_cinderslinger", "spell_scarlet_thirst", "minion_peacock_mystic", "minion_stalwart_sculptor", "minion_eranikus", "minion_sparkly_messenger", "minion_bramblebound_warrior", "minion_mutated_brute", "weapon_midnight_blade", "spell_scarlet_thirst", "minion_spirited_bomber", "minion_bloodrider", "minion_hooded_ritualist", "minion_yokai_bonder", "minion_bloodrider", "weapon_souldrinker_axe", "spell_red_lightning", "minion_lightning_elemental", "minion_crystal_golem", "minion_disco_inferno", "minion_highmountain_primalist", "minion_massive_turtle", "minion_floating_crystal", "minion_quest_giver", "minion_burst_bug" ], [ "minion_backwater_wise", "minion_polycephalos", "minion_cadenza", "minion_eranikus", "minion_birdbrain", "spell_encased_in_amber", "minion_burst_bug", "minion_wyrmrest_sniper", "minion_blood_cultist", "spell_teamwork", "minion_flare_fireworker", "minion_polychrome_hydra", "spell_encased_in_amber", "spell_healing_honey", "minion_lumina", "spell_spiderbomb", "minion_bone_guard", "spell_healing_honey", "minion_q_captain_q_cookie", "minion_petal_knight", "minion_ambushing_rose", "minion_dawn_drake", "minion_forest_magistrate", "minion_worker_queen", "minion_desert_cactus", "minion_vizier", "minion_clumsy_dryad", "minion_smogg", "minion_crystal_golem", "spell_pheromones" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 20 ], [ 44 ] ],
+  "actions" : [ 1, 0, 1, 0, 0, 1, 0, 4, 0, 0, 7, 0, 8, 0, 2, 7, 4, 2, 0, 12, 6, 3, 0, 9, 7, 4, 2, 0, 16, 11, 3, 1, 0, 18, 3, 16, 0, 8, 7, 17, 0, 0, 0, 1, 1, 11, 9, 10, 0, 8, 3, 7, 10, 10, 23, 12, 2, 2 ],
+  "id" : null
+}

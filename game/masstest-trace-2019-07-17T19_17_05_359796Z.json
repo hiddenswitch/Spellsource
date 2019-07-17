@@ -1,0 +1,12 @@
+{
+  "seed" : -4347709925588868138,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_disco_inferno", "minion_cursing_disciple", "minion_broodguard", "spell_second_wave", "minion_shadowveiler", "minion_worker_queen", "spell_fill_the_stands", "minion_visionary", "spell_beetle_bash", "minion_bullet_bull", "spell_forest_whispers", "minion_abandoned_geneticist", "spell_spawning_pool", "spell_locust_swarm", "minion_sleepy_scarecrow", "spell_backyard_portal", "spell_pincer_attack", "minion_fiery_warchief", "minion_chaotic_cutthroat", "minion_haunted_armor", "spell_web_wrap", "minion_cursing_chimp", "minion_doctosaur", "minion_darkbent_drake", "minion_novice_enchantress", "minion_mantis_guard", "minion_bittertide_crab", "minion_warclub_ruffian", "minion_emerald_dreamer", "minion_vizier" ], [ "minion_swarmed_captive", "spell_distract", "minion_flamerunner", "minion_burst_bug", "minion_gasbelly_oni", "minion_mollusk_meister", "minion_treasure_mimic", "minion_one_handed_butcher", "spell_multiple_strike", "spell_amber_drop", "spell_dead_or_alive", "minion_mr_smith", "minion_magic_muffler", "minion_krentiaxx_tyrant", "minion_shouting_soldier", "minion_one_handed_butcher", "spell_escape_position", "spell_escape_position", "minion_hold_hunter", "minion_treasure_mimic", "weapon_handsized_flamethrower", "minion_little_purrsuer", "minion_twilight_annihilator", "spell_defensive_position", "weapon_scissors_of_dots", "minion_mossy_giant", "minion_westlands_mugger", "minion_chainwrecker_corsair", "minion_little_purrsuer", "minion_sneaky_kaeru" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 22, 20 ], [ 46 ] ],
+  "actions" : [ 0, 1, 1, 1, 0, 2, 1, 0, 0, 0, 2, 2, 1, 5, 2, 0, 0, 0, 1, 0, 0, 14, 0, 0, 8, 9, 4, 1, 1, 7, 1, 0, 12, 13, 4, 2, 4, 2, 1, 0, 13, 5, 4, 3, 19, 22, 3, 7, 0, 4, 8, 0, 5, 47, 29, 6, 3, 3, 3, 19, 6, 1, 5, 4, 41, 1, 25, 24, 15, 11, 2, 5, 2, 0, 17, 1, 11, 0, 0, 13, 20, 6, 2, 1, 2, 1, 38, 21, 4, 14, 12, 35, 0, 17, 11, 12, 6, 2, 0, 23, 8, 6, 3, 21, 9, 8, 5, 2, 2, 1, 0, 11, 1, 11, 5, 1, 1, 4, 8, 15, 13, 7, 9, 0, 5, 9 ],
+  "id" : null
+}

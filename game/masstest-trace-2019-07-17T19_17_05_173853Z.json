@@ -1,0 +1,12 @@
+{
+  "seed" : -5208362117511344132,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NEONGREEN", "BLOOD" ],
+  "deckCardIds" : [ [ "spell_xenobulwark", "permanent_formless_immortal", "minion_sleepy_scarecrow", "spell_feeding_frenzy", "minion_fiery_tyrant", "minion_treasure_hunter", "spell_asteroid_impact", "minion_pixie_knight", "minion_primalist_kirra", "minion_doomed_diver", "minion_mrs_merria", "spell_primordial_supremacy", "minion_amathyst_panther", "permanent_formless_rancour", "minion_mind_harvester", "spell_feeding_frenzy", "permanent_formless_rancour", "minion_enhancing_shaman", "minion_hybreeder", "spell_reconnoitre", "minion_demonic_frontrunner", "minion_tetradimensionalist", "minion_enhancing_shaman", "permanent_formless_celerity", "minion_mind_harvester", "spell_primordial_supremacy", "spell_cull_and_reap", "spell_cellular_overdrive", "minion_stone_sentinel_basic", "minion_nebulous_entity" ], [ "minion_lightning_elemental", "minion_bittertide_crab", "spell_hemoshield", "minion_bloodrider", "minion_gustbreaker", "minion_the_imperial_soul", "minion_onis_eye", "minion_runic_sorceress", "minion_massive_egg", "spell_rending_curse", "minion_hoffis_the_dunewalker", "spell_systemic_transfer", "minion_prince_tenris", "weapon_voltsaber", "minion_aegwynn", "minion_cybernetic_rager", "minion_fae_trickster", "minion_lifetaker", "minion_goblin_harpooner", "spell_hemoblast", "minion_vampiric_savage", "weapon_voltsaber", "minion_sly_conquistador", "minion_purity_keeper", "weapon_midnight_blade", "minion_ravenous_lookout", "spell_death_chain", "minion_fassnu_avenger", "minion_timewalker_initiate", "minion_giant_disappointment" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 11 ], [ 64, 42, 55 ] ],
+  "actions" : [ 0, 1, 2, 1, 1, 1, 0, 0, 0, 7, 3, 0, 10, 6, 1, 2, 10, 7, 3, 0, 0, 1, 0, 0, 8, 1, 7, 0, 5, 0, 0, 18, 1, 2, 3, 5, 1, 0, 1, 2, 1, 1, 3, 0, 0, 6, 1, 9, 5, 0, 3, 11, 5, 1, 13, 7, 1, 3, 0, 0, 0, 8, 0, 5, 19, 5, 0, 5, 0, 18, 4, 4, 0, 10, 10, 7, 4, 3, 3, 2, 2, 3, 4, 0, 1, 0, 1, 0, 0, 3, 1, 0, 1, 8, 4, 2, 0, 0, 2, 1, 0, 0, 8, 6, 14, 4, 0, 0, 0, 10, 13, 2, 0, 0, 0, 23, 8, 6, 12, 2, 3, 10, 6, 0, 10, 3, 0, 7, 7, 2, 1 ],
+  "id" : null
+}

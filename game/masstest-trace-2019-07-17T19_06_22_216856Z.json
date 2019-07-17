@@ -1,0 +1,12 @@
+{
+  "seed" : -5205502080660970708,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "OBSIDIAN", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_gold_picaroon", "minion_mindswapper", "minion_infinite_futurist", "minion_nice_cream", "minion_stubborn_stegodon", "minion_spectral_warrior", "minion_mad_icicler", "weapon_dual_chillblades", "minion_stubborn_stegodon", "minion_sunbender", "spell_deaths_embrace", "minion_sacred_tombstone", "spell_marrowrend", "minion_deranged_greengill", "spell_collectible_obliterate", "spell_geronimo", "minion_bob_the_undying", "minion_infinite_futurist", "spell_six_feet_under", "minion_dawn_drake", "minion_frost_wyrm", "spell_horn_of_winter", "spell_lesser_obsidian_spellstone", "minion_purity_keeper", "minion_grassroot_mossling", "minion_marrowling", "minion_deranged_shifter", "spell_heartstop_aura", "minion_prince_tenris", "minion_toxic_gargoyle" ], [ "minion_zealous_deckhand", "minion_fumewalker_zin", "minion_warclub_ruffian", "weapon_sharp_a_practice", "minion_kodama_bulwark", "spell_party_poppers", "permanent_ravaging_of_outland", "spell_take_a_drink", "minion_zarmull_the_silent_mercenary", "weapon_handsized_flamethrower", "spell_extermination_team", "minion_westlands_mugger", "minion_infinite_futurist", "minion_rotorblade_chopper", "spell_distract", "spell_new_arrival", "spell_escape_position", "minion_whiptail_gatherer", "minion_snapshooter", "minion_slitherbow", "minion_crystal_shatterer", "minion_mr_smith", "minion_colrum", "minion_drakonid_brute", "minion_trigger_happy_survivor", "spell_reload", "minion_divine_cleric", "secret_hidden_trap", "minion_drakonid_brute", "spell_dead_or_alive" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 31, 33 ], [ 41 ] ],
+  "actions" : [ 2, 0 ],
+  "id" : null
+}

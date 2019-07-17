@@ -1,0 +1,12 @@
+{
+  "seed" : -9031278672419628108,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "CORAL", "ANY" ],
+  "deckCardIds" : [ [ "spell_front_row_tickets", "spell_enchanting_tune", "weapon_crowd_pleaser", "weapon_storm_guitar", "spell_fortissimo", "minion_composer", "minion_frazzled_barmaid", "minion_hypnotist", "minion_shine_sprite", "minion_deepwood_barghest", "minion_captain_stashin", "minion_whiptail_gatherer", "minion_whizbang_the_plunderful", "spell_fortissimo", "minion_purifying_ooze", "spell_encore", "minion_treasure_hunter", "minion_alluring_minstrel", "minion_frazzled_barmaid", "minion_myra_the_masterful", "minion_hybreeder", "spell_song_of_strength", "minion_nezumi_master", "minion_whiptail_gatherer", "minion_flare_fireworker", "minion_faerie_nightmare", "minion_crouching_tiger", "minion_storm_giant", "minion_fiendish_giant", "spell_uplifting_melody" ], [ "minion_dawnrisen_harpy", "minion_cacodemon", "minion_the_grudge", "minion_hunchback_supplier", "minion_whiptail_gatherer", "minion_barnacled_dweller", "minion_fifi_fizzlewarp", "minion_little_helper", "minion_stone_sentinel_basic", "minion_parallel_protector", "minion_timewalker_mistweaver", "minion_skeletal_warrior", "minion_mecha_rager", "minion_eranikus", "minion_owlbear_mother", "minion_uccian_hydra", "minion_roadblock_pufferfish", "minion_micro_raptors", "minion_emerald_dreamer", "minion_smug_theorist", "minion_cursing_disciple", "minion_hooded_ritualist", "minion_roadblock_pufferfish", "minion_lord_cookie", "minion_holdout_soldier", "minion_perplexed_courtsman", "minion_festivity_golem", "weapon_stick", "minion_smogg", "minion_emerald_cleanser" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33 ], [ 48, 66 ] ],
+  "actions" : [ 1, 0, 3, 2, 3, 1, 0, 0, 1, 0, 0, 11, 2, 0, 6, 2, 1, 0, 9, 1, 1, 0, 2, 12, 20, 1, 2, 2, 1, 1, 10, 2, 5, 12, 4, 1, 1, 0, 13, 10, 5, 6, 3, 4, 0, 4, 1, 1, 0, 3, 0, 0, 0, 19, 32, 1, 18, 2, 2, 8, 5, 3, 1, 2, 1, 6, 5, 24, 17, 3, 0, 11, 6, 7, 0, 2, 0, 0, 4, 23, 14, 4, 7, 13, 9, 7, 3, 4, 5, 1, 0, 10, 2, 8, 3, 0, 2, 2, 11, 2, 3, 5, 3, 20, 12, 4, 12, 21, 12, 8, 11 ],
+  "id" : null
+}

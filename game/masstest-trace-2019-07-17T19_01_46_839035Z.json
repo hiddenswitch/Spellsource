@@ -1,0 +1,12 @@
+{
+  "seed" : 5411851849189996045,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "OBSIDIAN", "OBSIDIAN" ],
+  "deckCardIds" : [ [ "minion_deranged_shifter", "minion_trapped_soul", "minion_fruitful_bat", "minion_flutterer", "minion_mad_icicler", "minion_tree_giant", "minion_dreamwing_scout", "spell_continuity", "minion_soup_savant", "spell_pay_respects", "minion_doctosaur", "minion_lifebinder", "spell_heartstop_aura", "minion_crypt_fiend", "minion_lord_marrowgar", "minion_hulking_fleshbag", "minion_powerbringer", "spell_collectible_doom_pact", "minion_magishire_wildcat", "spell_six_feet_under", "weapon_ashbringer_corrupted", "minion_enhancing_shaman", "minion_hardened_initiate", "spell_collectible_death_and_decay", "spell_bone_storm", "minion_gargoyle_warden", "minion_ghuun", "minion_fiery_warchief", "minion_spectral_warrior", "minion_little_helper" ], [ "minion_hybreeder", "minion_augmented_pixie", "spell_lesser_obsidian_spellstone", "minion_crypt_fiend", "spell_shadow_infusion", "minion_forest_magistrate", "minion_crypt_fiend", "minion_general_vezax", "spell_volatile_rune", "permanent_call_of_the_crusade", "spell_collectible_army_of_the_dead", "spell_brain_freeze", "spell_continuity", "minion_hold_hunter", "minion_treeleach", "minion_archerus_deathcharger", "minion_doctosaur", "minion_icy_debris", "minion_highmountain_primalist", "minion_molten_cauterizer", "minion_ticking_giant", "spell_icecap", "weapon_ashbringer_corrupted", "minion_hardened_initiate", "minion_graveguard", "minion_treeleach", "minion_timelost_sarcophagus", "spell_icecap", "minion_grassroot_mossling", "minion_bighand_brute" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 17, 33, 32 ], [ 37 ] ],
+  "actions" : [ 0, 1, 0, 1, 4, 5, 6, 0, 3, 7, 1, 2, 0, 4, 3, 0, 1, 0, 6, 7, 3, 15, 11, 5, 2, 1, 8, 4, 5, 0, 0, 3, 6, 5, 2, 5, 1, 0, 5, 15, 5, 3, 2, 1, 10, 2, 12, 3, 0, 13, 5, 2, 1, 2, 7, 2, 1, 1, 10, 11, 2, 3, 0, 19, 12, 15, 8, 6, 2, 0, 18, 3, 0, 1, 0, 7, 3, 6, 3, 2, 7, 6, 11, 6, 3, 4, 12, 0, 8, 5, 1, 0 ],
+  "id" : null
+}

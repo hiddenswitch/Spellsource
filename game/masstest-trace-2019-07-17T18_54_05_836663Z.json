@@ -1,0 +1,12 @@
+{
+  "seed" : 1739891000784702831,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "ANY" ],
+  "deckCardIds" : [ [ "spell_parasites", "minion_big_ol_beetle", "minion_streetwise_specialist", "minion_zealous_deckhand", "minion_matriarch_aiiran", "spell_locust_swarm", "minion_flare_fireworker", "minion_chronocaller", "minion_roadblock_pufferfish", "minion_giant_reaper", "minion_dawnrisen_harpy", "minion_torchbug_vermancer", "minion_nursery_guard", "minion_big_ol_beetle", "minion_bait", "minion_die_insect", "secret_obvious_ambush", "minion_channeled_spirit", "spell_spider_surveillance", "minion_deepwood_barghest", "minion_petal_knight", "minion_babee", "minion_strike_mantis", "minion_nursery_guard", "spell_forest_calling", "spell_pollinate", "minion_kiljaeden_deceiver", "minion_nice_cream", "minion_giant_reaper", "minion_timelost_sarcophagus" ], [ "minion_trigger_happy_survivor", "minion_sly_conquistador", "minion_sourceborn_aelin", "minion_sneaky_kaeru", "minion_macabre_samaritan", "minion_forgotten_hero", "minion_frigid_bones", "minion_aegwynn", "minion_blood_cultist", "minion_doomed_diver", "minion_spirited_bomber", "minion_wild_pyrodancer", "minion_jungle_wanderer", "minion_purity_keeper", "minion_yokai_bonder", "minion_spirited_bomber", "minion_perplexed_courtsman", "minion_crouching_tiger", "minion_shadownest_arachne", "minion_corona_fae_defender", "minion_krentiaxx_tyrant", "minion_kairozdormu", "minion_necksnapper", "minion_demonic_frontrunner", "minion_mossy_giant", "minion_faerie_nightmare", "minion_glass_memory_golem", "minion_massive_egg", "minion_flashbulb_spider", "minion_corrupt_sentinel" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 6 ], [ 45, 36 ] ],
+  "actions" : [ 1, 1, 2, 3, 2 ],
+  "id" : null
+}

@@ -1,0 +1,12 @@
+{
+  "seed" : 1088512620568023796,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "CORAL", "ROSE" ],
+  "deckCardIds" : [ [ "minion_shine_sprite", "spell_groupies", "spell_song_of_strength", "minion_songbird", "minion_slitherbow", "minion_frazzled_barmaid", "spell_charm", "spell_healing_hymn", "spell_soundwave", "minion_street_performer_coral", "weapon_crowd_pleaser", "minion_rainbow_runner", "minion_trigger_happy_survivor", "spell_uplifting_melody", "weapon_storm_guitar", "minion_street_performer_coral", "spell_healing_hymn", "minion_spirited_announcer", "spell_charm", "spell_uplifting_melody", "minion_mighty_mufunga", "minion_onis_eye", "minion_little_helper", "weapon_storm_guitar", "minion_smogg", "minion_kiljaeden_deceiver", "minion_yaungol_guardian", "minion_giants_toad", "minion_bone_guard", "minion_twilight_mercenary" ], [ "minion_clumsy_dryad", "minion_crouching_tiger", "minion_cursing_disciple", "minion_mecha_rager", "minion_doomed_diver", "minion_dreamshaker", "minion_little_purrsuer", "minion_centaur_acumen", "spell_ghostly_essence", "minion_guild_guard", "spell_split_personality", "spell_stolen_scarabs", "secret_black_magic", "spell_manic_outburst", "minion_oni_entrapper", "spell_wicked_insight", "secret_soul_split", "minion_floating_crystal", "minion_kairozdormu", "spell_haunted_happenings", "spell_morbid_mockery", "minion_hostile_snapdragon", "minion_novice_time_traveler", "minion_mecha_rager", "minion_vitality_thrower", "secret_devils_deal", "minion_zalmah", "minion_dreamshaker", "spell_stolen_scarabs", "minion_daring_duelist" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 5, 13 ], [ 62, 53 ] ],
+  "actions" : [ 0, 2, 1, 2, 1, 1, 2, 1, 0, 0, 1, 20, 3, 0, 0, 0, 1, 2, 25, 8, 7, 1, 1, 0, 7, 5, 4, 0, 2, 8, 2, 2, 0, 13, 15, 5, 4, 0, 1, 2, 8, 4, 1, 4, 2, 3, 1, 30, 16 ],
+  "id" : null
+}

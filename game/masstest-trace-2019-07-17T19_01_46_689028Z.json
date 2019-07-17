@@ -1,0 +1,12 @@
+{
+  "seed" : 3996378740014386184,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TEAL", "OLIVE" ],
+  "deckCardIds" : [ [ "weapon_serpentcrest_staff", "weapon_serpentcrest_staff", "minion_cadenza", "minion_mrrrine", "minion_gracious_timekeeper", "minion_tidal_rager", "minion_flashbulb_spider", "minion_onis_eye", "spell_water_blast", "spell_murloc_mating_call", "weapon_cerith_scepter", "minion_matriarch_aiiran", "spell_highborne_grace", "minion_zilch_god_of_nothing", "minion_steamvault_bruiser", "minion_pumpkin_abomination", "minion_warlord_kalithresh", "weapon_saltspring_wand", "spell_murloc_mating_call", "minion_aberrant_tinyfin", "spell_regal_gaze", "minion_emissary_of_the_end", "minion_swarmed_captive", "minion_doodles", "minion_lord_of_the_sea", "minion_bramblebound_warrior", "minion_cinderslinger", "minion_defender_of_tomorrow", "spell_regal_gaze", "minion_aberrant_tinyfin" ], [ "spell_miserable_conclusion", "minion_cybernetic_rager", "minion_chromie", "minion_lord_of_the_sea", "minion_shadownest_arachne", "minion_dramatic_playwright", "minion_queen_cinderella", "minion_whiptail_gatherer", "minion_warclub_ruffian", "minion_snappy_author", "minion_big_bad_coyote", "minion_sand_giant", "spell_mind_meld", "minion_experiment_recorder", "minion_dragon_librarian", "secret_woodlands_music", "minion_garbasu_monster", "minion_bullet_bull", "minion_wee_squashling", "minion_ursol_the_wise", "spell_relaxing_read", "secret_house_of_candy", "minion_emerald_cleanser", "minion_big_bad_coyote", "minion_throat_cutter", "minion_dragon_librarian", "spell_magic_word_mishap", "minion_dramatic_playwright", "spell_tome_of_secrets", "minion_polychrome_hydra" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33, 30, 10 ], [ 62 ] ],
+  "actions" : [ 0, 1, 3, 2, 1, 1, 5, 2, 1, 0, 1, 2, 1, 1, 12, 3, 0, 0, 0, 6, 1, 0, 3, 2, 5, 4, 3, 2, 0, 9, 7, 6, 7, 8, 0, 0, 20, 5, 1, 5, 17, 12, 1, 17, 4, 3, 7, 6, 22, 12, 0, 0, 7, 8, 0, 5, 1, 0, 10, 3, 4, 1, 3, 1, 0, 2, 28, 4, 26, 1, 5, 2, 7, 8 ],
+  "id" : null
+}

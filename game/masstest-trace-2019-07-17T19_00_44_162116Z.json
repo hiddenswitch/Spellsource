@@ -1,0 +1,12 @@
+{
+  "seed" : -5135762330733692856,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NEONGREEN", "TOAST" ],
+  "deckCardIds" : [ [ "minion_bramblebound_warrior", "minion_treeleach", "permanent_formless_rancour", "minion_dawn_drake", "spell_primordial_supremacy", "minion_realm_parasite", "minion_mosshorn", "spell_asteroid_impact", "spell_distort", "spell_cannibalize", "spell_reconnoitre", "spell_quasar_blast", "minion_storm_giant", "permanent_formless_immortal", "spell_feeding_frenzy", "minion_centaur_acumen", "permanent_formless_rancour", "minion_blood_cultist", "minion_knight_eternal", "spell_cull_and_reap", "spell_distort", "minion_boar_brawler", "minion_primalist_kirra", "minion_tribemaster", "minion_gold_picaroon", "minion_deranged_greengill", "minion_bronze_timekeeper", "minion_emissary_of_the_end", "spell_xenobulwark", "permanent_formless_immortal" ], [ "spell_massive_burp", "minion_slitherbow", "minion_reckless_giant", "weapon_banana_juice_bottle", "minion_smug_theorist", "minion_natural_convert", "weapon_fu_zan", "minion_stallius_the_horned", "minion_forest_magistrate", "minion_meat_tenderizer", "minion_reckless_giant", "spell_haute_cuisine", "minion_void_reaper", "spell_orgrimmar_portal", "minion_nezumi_master", "minion_bullet_bull", "minion_rafaam_archivist", "minion_slitherbow", "minion_daring_duelist", "spell_primal_seasoning", "spell_piece_of_cake", "minion_blubber_behemoth", "minion_skilled_cook", "spell_elemental_soup", "minion_rainbow_runner", "quest_the_ultimate_recipe", "spell_blood_thirst", "spell_old_school_cooking", "minion_guerrilla_chef", "minion_costume_seller" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 16, 17, 21 ], [ 38, 61 ] ],
+  "actions" : [ 0, 1, 0, 0, 0, 0, 5, 0, 3, 0, 0, 3, 6, 1, 1, 0, 1 ],
+  "id" : null
+}

@@ -1,0 +1,12 @@
+{
+  "seed" : -6507154736322583178,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "RUST", "OBSIDIAN" ],
+  "deckCardIds" : [ [ "minion_fireguard_bulwark", "minion_beloved_benji", "minion_bullfrog", "minion_throat_cutter", "minion_massive_turtle", "minion_alemental", "minion_mrrrine", "minion_mindswapper", "minion_stone_sentinel_basic", "minion_mindswapper", "minion_cacodemon", "minion_uccian_hydra", "minion_holdover_lich", "minion_blastflame_dragon", "spell_dragonforce", "minion_nightmare_whelp", "spell_lacerate", "minion_blood_cultist", "minion_nezumi_master", "spell_venom_breath", "spell_dragon_pendant", "minion_fae_horncaster", "minion_smug_smuggler", "minion_shapeseeper", "minion_uccian_hydra", "minion_chainwrecker_corsair", "minion_exotic_menace", "minion_giant_reaper", "minion_molten_whelp", "minion_nightmare_dragonflight" ], [ "minion_cadenza", "minion_tetradimensionalist", "minion_bonefetcher", "minion_tombstone_terror", "minion_articus__dragon_giant", "spell_permafrost", "spell_bloody_boil", "minion_the_imperial_soul", "minion_clash_flamecore", "minion_teron_gorefiend", "minion_faerie_nightmare", "minion_spectral_steed", "weapon_ashbringer_corrupted", "minion_marrowling", "spell_continuity", "spell_shadow_infusion", "minion_flingin_alchemist", "spell_chain_hook", "minion_plunderogue", "minion_forgotten_hero", "weapon_six_shooter", "minion_yaungol_guardian", "minion_swift_stinger", "spell_power_for_a_price", "minion_void_reaper", "minion_swarmed_captive", "spell_collectible_anti_magic_shell", "minion_stowaway_scoundrel", "minion_mournful_gravetender", "minion_grassroot_mossling" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 25, 19, 27 ], [ 56 ] ],
+  "actions" : [ 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 5, 0, 3, 0, 0, 0, 10, 0, 0, 8, 2, 4, 15, 0, 1, 8, 0, 0, 6, 0, 0, 37, 0, 17, 6, 2, 3, 8, 1, 5, 7, 0, 3, 17, 11, 1, 3, 0, 17, 16, 7, 7, 20, 2, 6, 16, 2, 2, 4, 6, 9, 2, 3, 1, 1, 0, 8, 7, 2, 1, 0, 22, 21, 21, 16, 3, 3, 0, 17, 10, 17, 3, 2, 4, 2, 0, 14, 5, 14, 0, 2, 1, 1, 19, 23, 3, 2, 6, 18, 10, 7 ],
+  "id" : null
+}

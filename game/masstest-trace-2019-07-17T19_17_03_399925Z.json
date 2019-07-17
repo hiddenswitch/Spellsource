@@ -1,0 +1,12 @@
+{
+  "seed" : 9086732820796869274,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "OLIVE", "ROSE" ],
+  "deckCardIds" : [ [ "spell_mind_meld", "minion_big_bad_coyote", "minion_dead_horse", "minion_gustbreaker", "minion_queen_cinderella", "minion_gustbreaker", "minion_volcanic_elemental", "spell_tome_of_power", "minion_little_helper", "minion_piglet_knight", "minion_magelight_dragon", "minion_mighty_mufunga", "minion_hard_puncher", "minion_kawarimi_headbasher", "minion_worrisome_scribe", "minion_sly_conquistador", "minion_squirrel_knight", "minion_rainbow_runner", "secret_tall_tale", "secret_woodlands_music", "minion_hostile_snapdragon", "minion_timewalker_strider", "spell_what_big_fangs", "minion_alien_ravager", "minion_bullet_bull", "minion_manly_mountaineer", "minion_zealous_deckhand", "minion_throat_cutter", "spell_tome_of_secrets", "minion_eranikus" ], [ "minion_barnacled_dweller", "spell_abduction", "minion_polychrome_hydra", "minion_tiki_tokens", "minion_timewalker_mistweaver", "spell_law_of_the_jungle", "minion_vitality_thrower", "minion_ticking_giant", "minion_bugbiter", "spell_law_of_the_jungle", "spell_shadow_puppetry", "spell_manic_outburst", "minion_faerie_nightmare", "minion_jungle_wanderer", "minion_perplexed_courtsman", "minion_vexspewer", "minion_redhide_butcher", "spell_spiritual_diffusion", "spell_berserk", "permanent_the_end_time", "minion_reckless_giant", "spell_shangas_spirit_brew", "minion_zalmah", "minion_recurring_torrent", "minion_spirited_bomber", "minion_underbrush_protector", "minion_guild_guard", "minion_prized_boar", "minion_cursing_disciple", "minion_mollusk_meister" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 21 ], [ 57, 43 ] ],
+  "actions" : [ 1, 2, 1, 0, 2, 4, 2, 4, 0, 4, 4, 0, 0, 5, 0, 11, 4, 6, 1, 3, 5, 2, 8, 6, 5, 1, 0, 0, 1, 1, 5, 7, 2, 7, 3, 5, 2, 3, 0, 20, 28, 13, 2, 0, 0, 24, 21, 11, 6, 4, 12, 14, 2, 4, 1, 0, 0, 15, 9 ],
+  "id" : null
+}

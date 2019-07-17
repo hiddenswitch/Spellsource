@@ -1,0 +1,12 @@
+{
+  "seed" : -6539179896642020548,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "BLOOD", "DARKGREEN" ],
+  "deckCardIds" : [ [ "minion_holdover_lich", "minion_wink_dog", "weapon_midnight_blade", "minion_aeonus", "minion_timewalker_stormlord", "minion_veindrake", "permanent_call_of_the_crusade", "spell_rending_curse", "minion_fumewalker_zin", "minion_dreamwing_scout", "minion_onis_eye", "spell_siphoning_strike", "minion_goblin_harpooner", "weapon_heartpiercer", "minion_streetwise_specialist", "minion_timewalker_mistweaver", "spell_red_lightning", "minion_tiny_persecutor", "spell_hemoshield", "spell_soul_corruption", "minion_freyas_familliar", "minion_nightmare_dragonflight", "minion_hands_on_historian", "minion_seeker_of_knowledge", "minion_holdover_lich", "minion_vampiric_savage", "minion_colrum", "spell_feed_the_flames", "weapon_voltsaber", "spell_rending_curse" ], [ "minion_rootless_brute", "minion_verdant_dreams_dracomancer", "minion_plunderogue", "spell_void_curse", "minion_dreadmire_hexxer", "spell_deep_madness", "minion_merciless_corruptor", "minion_burst_bug", "minion_seeker_of_knowledge_occultist", "spell_doom_project", "minion_ghahnb_the_judicator", "minion_warclub_ruffian", "minion_fae_horncaster", "minion_cursing_chimp", "minion_grassroot_mossling", "weapon_stick", "minion_amathyst_panther", "minion_cybernetic_rager", "minion_tiny_persecutor", "minion_thuggish_fae", "minion_magelight_dragon", "minion_chief_vigilante", "minion_sky_high_surveyor", "minion_enhancing_shaman", "minion_timewalker_strider", "minion_eldritech", "spell_profane_disfiguration", "minion_lesser_old_one", "minion_wink_dog", "spell_call_of_the_deep_occultist" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 5, 24 ], [ 40 ] ],
+  "actions" : [ 0, 0, 0, 6, 2, 0, 6, 0, 0, 7, 0, 2, 16, 9, 3, 1, 0, 0, 21, 28, 12, 3, 24, 3, 0, 0, 20, 17, 8, 6, 13, 1, 9, 4, 0, 1, 10, 28, 8, 1, 12, 0, 0, 0, 20, 1, 9, 7, 1, 18, 2, 3, 0, 2, 1, 4, 4, 2, 1, 8, 8, 1, 11, 2, 0, 15, 6, 1, 4, 3, 0, 0, 0, 8, 4, 7, 5, 4, 7, 14, 5, 7, 4, 1, 0, 0, 0, 3, 1, 6, 4, 5, 0, 0, 0, 20, 17, 12, 3, 4, 3, 3 ],
+  "id" : null
+}

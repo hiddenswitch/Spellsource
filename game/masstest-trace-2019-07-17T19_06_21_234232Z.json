@@ -1,0 +1,12 @@
+{
+  "seed" : 3018437857068064616,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ROSE", "COPPER" ],
+  "deckCardIds" : [ [ "weapon_ritual_dagger", "minion_forgotten_hero", "minion_spectral_steed", "minion_gaitha_the_protector", "spell_morbid_mockery", "minion_inora_spellbound", "spell_hunting_ground", "minion_festivity_golem", "minion_vitality_thrower", "minion_cinderslinger", "minion_boar_brawler", "secret_soul_split", "minion_cursing_disciple", "minion_witching_traveler", "spell_shadow_puppetry", "minion_vexspewer", "minion_end", "secret_greater_good", "minion_eyeweaver", "minion_reckless_hero", "minion_timewalker_strider", "minion_corona_fae_defender", "minion_dreamshaker", "weapon_sacrificial_blade", "secret_black_magic", "minion_terrified_tanooki", "minion_hexcrazed_vessel", "minion_tainted_raven", "minion_spellquaker", "minion_dimensional_courier" ], [ "minion_murozond", "spell_pass_cutoff", "minion_hired_gunsmith", "minion_magishire_wildcat", "minion_inspiring_sentry", "spell_bullet_with_your_name", "minion_captain_karver", "minion_forged_defender", "spell_death_blow", "minion_captain_cookie", "minion_gargoyle_warden", "spell_mass_betrayal", "minion_mcgrief", "minion_hired_gunsmith", "minion_inspiring_sentry", "minion_mechanical_golem", "minion_novice_enchantress", "minion_sneaky_kaeru", "spell_sheriffs_badge", "minion_bittertide_crab", "minion_mechanical_golem", "minion_crew_commander", "weapon_silvershot_pistol", "minion_doctosaur", "spell_bang", "minion_shady_stranger", "spell_death_blow", "spell_bullet_with_your_name", "minion_faldoran_the_ninja", "minion_spooky_turret" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 31, 27, 28 ], [ 53, 45 ] ],
+  "actions" : [ 0, 0, 1, 0, 0, 0, 1, 1, 0, 5, 4, 1, 0, 1, 4, 0, 0, 1, 0, 3, 0, 5, 7, 3, 0, 0, 6 ],
+  "id" : null
+}

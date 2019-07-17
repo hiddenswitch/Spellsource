@@ -1,0 +1,12 @@
+{
+  "seed" : -6266613880670475539,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "COPPER", "TIME" ],
+  "deckCardIds" : [ [ "minion_stowaway_scoundrel", "minion_hooded_ritualist", "spell_shootout", "minion_dustbowl_vigilante", "spell_one_in_the_chamber", "minion_buffeting_elemental", "minion_bromeliad_pup", "minion_bronze_warden", "minion_costume_seller", "minion_mutamite_terror", "minion_dustytown_defender", "spell_death_blow", "spell_ride_like_the_wind", "minion_chronocaller", "minion_shady_stranger", "spell_noble_stallion", "minion_end", "minion_flare_fireworker", "minion_ambushing_rose", "minion_hired_gunsmith", "minion_spooky_turret", "minion_tanglefer_of_the_jungle", "minion_forged_defender", "minion_towering_treant", "spell_crate_of_dynamite", "minion_cheating_wrangler", "weapon_silvershot_pistol", "minion_centaur_acumen", "minion_disco_inferno", "minion_dragon_pod" ], [ "minion_deepwood_barghest", "spell_tangled_destiny", "minion_timewalker_strider", "secret_desperation", "minion_ambushing_rose", "spell_destined_to_repeat", "minion_oppressor_defender", "secret_desperation", "minion_reload_rodger", "spell_firesilk_chrysalis", "spell_trials_of_the_weave", "minion_shouting_soldier", "spell_destined_to_repeat", "minion_doctor_hatchett", "minion_uccian_hydra", "minion_dreadmire_hexxer", "spell_flicker_across_the_veil", "minion_stowaway_scoundrel", "spell_sudden_storm", "minion_redhide_butcher", "minion_prince_tenris", "minion_molten_cauterizer", "spell_fortuna_abounding", "minion_wee_squashling", "spell_bullet_time", "minion_magma_hound", "secret_moments_hesitation", "minion_ironplate_samurai", "minion_cacodemon", "minion_wolfcrier" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 28, 24 ], [ 62 ] ],
+  "actions" : [ 1, 2, 1, 3, 3, 1, 5, 1, 0, 3, 0, 0, 20, 1, 0, 0, 1, 4 ],
+  "id" : null
+}

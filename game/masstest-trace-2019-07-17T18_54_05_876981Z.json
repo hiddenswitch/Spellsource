@@ -1,0 +1,12 @@
+{
+  "seed" : -7757392581723196683,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "LEATHER", "BLOOD" ],
+  "deckCardIds" : [ [ "minion_dawnrisen_harpy", "minion_rotorblade_chopper", "minion_recurring_torrent", "spell_defensive_position", "spell_supply", "weapon_sharp_a_practice", "minion_rakanishu", "minion_chronocaller", "spell_defensive_position", "minion_primal_mother", "quest_forge_it", "minion_highwayman", "spell_party_poppers", "minion_mr_smith", "minion_holdover_lich", "minion_hypnotic_beetle", "spell_take_a_drink", "spell_focus_fire", "minion_highwayman", "spell_multiple_strike", "minion_treasure_mimic", "minion_ticking_giant", "spell_countershot", "minion_necksnapper", "minion_tick_and_tock", "minion_nightmare_warden", "minion_crystal_golem", "minion_snapshooter", "minion_tikrakazz", "minion_sourcing_specialist" ], [ "minion_gasbelly_oni", "minion_forest_magistrate", "minion_lifetaker", "minion_birdbrain", "minion_ninja_aspirants", "weapon_voltsaber", "minion_blackflame_bomber", "minion_knight_eternal", "weapon_heartpiercer", "minion_wild_pyrodancer", "minion_tiny_persecutor", "minion_darkshard_duelist", "minion_the_blood_engine", "minion_lingering_spirit", "minion_thassarian", "minion_boar_brawler", "spell_soul_corruption", "spell_soul_corruption", "weapon_voltsaber", "minion_dawnrisen_harpy", "spell_crimson_flow", "spell_blood_moon_rising", "spell_red_lightning", "spell_merciless_strike", "minion_the_imperial_soul", "minion_hypnotic_beetle", "spell_systemic_transfer", "minion_lightning_elemental", "spell_siphoning_strike", "minion_mindshaper" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 22, 19 ], [ 57, 38, 45 ] ],
+  "actions" : [ 1, 1, 1, 0, 0, 1, 1, 3, 1, 1, 3, 0, 0, 4, 6, 0, 0, 2, 0, 1, 2, 1, 2, 0, 0, 0, 1, 0, 0, 10, 1, 2, 2, 3, 0, 0, 7, 1, 4, 9, 0, 0, 16, 6, 3, 0, 0, 6, 0, 5 ],
+  "id" : null
+}

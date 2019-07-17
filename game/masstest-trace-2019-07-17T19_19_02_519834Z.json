@@ -1,0 +1,12 @@
+{
+  "seed" : -323873780145775246,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NAVY", "RUST" ],
+  "deckCardIds" : [ [ "minion_doomed_diver", "minion_tower_titan", "minion_fleeting_firebug", "spell_open_the_gates", "minion_weak_challenger", "minion_the_jekka_tree", "spell_alternate_timeline", "minion_mosshorn", "minion_lost_legionnaire", "minion_delivery_dealer", "minion_gilded_swarmer", "minion_deathrider", "spell_open_the_gates", "minion_squirrel_knight", "minion_double_defender", "minion_amathyst_panther", "minion_sea_stowaway", "minion_kairozdormu", "minion_guardian_kirin", "minion_magma_hound", "spell_immunize", "minion_mind_controlled_mech", "minion_mollusk_meister", "minion_magic_muffler", "spell_battlefield", "minion_polychrome_hydra", "minion_corrupt_sentinel", "minion_soup_savant", "minion_automatrainer", "minion_luteflayer" ], [ "minion_dragonfruit_whelp", "minion_phantom_advisor", "minion_sinestra", "minion_mutated_brute", "minion_gustbreaker", "minion_grimestreet_vigilante", "minion_bilescale_drake", "weapon_no_man_s_maul", "minion_glacial_wyvern", "minion_fae_trickster", "minion_bookkeeper", "minion_blastflame_dragon", "weapon_marrow_cleaver", "minion_thitazov", "minion_holdover_lich", "minion_wild_pyrodancer", "minion_wraith_of_y_shaarj", "weapon_the_dreadtalon", "weapon_stick", "minion_savage_ogreseer", "minion_gearscrapper", "minion_gemstone_giant", "minion_macabre_samaritan", "minion_crimson_general", "minion_grimestreet_vigilante", "minion_corrupt_sentinel", "minion_fairytale_tracker", "spell_big_bad_assault", "minion_murozond", "minion_scarlet_dragon" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 24 ], [ 48 ] ],
+  "actions" : [ 1, 0, 2, 1, 2, 3, 0, 0, 1, 0, 2, 0, 0, 6, 1, 1, 4, 0, 1, 0, 10, 0, 0, 0, 9, 0, 12, 3, 6, 1, 0, 2, 5, 7, 1, 1, 11, 15, 0, 10, 3, 3, 14, 0, 3, 0, 18, 3, 1, 1, 1, 2, 0, 0, 6, 9, 7, 5, 4, 12, 0, 0, 25, 4 ],
+  "id" : null
+}
