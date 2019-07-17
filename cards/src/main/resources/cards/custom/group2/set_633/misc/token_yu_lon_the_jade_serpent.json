@@ -1,0 +1,28 @@
+{
+  "name": "Ebisu, Prosperous Koi",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 8,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Deflect. At the end of your turn, summon two Blessed Koi Statues.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": 2,
+      "card": "minion_blessed_koi_statue"
+    }
+  },
+  "attributes": {
+    "DEFLECT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

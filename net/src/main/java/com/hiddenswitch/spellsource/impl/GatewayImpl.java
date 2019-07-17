@@ -73,6 +73,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setHost("0.0.0.0")
 				.setPort(port)
 				.setMaxWebsocketFrameSize(65536)
+				.setWebsocketAllowServerNoContext(true)
+				.setWebsocketPreferredClientNoContext(true)
 				.setMaxWebsocketMessageSize(100 * 65536)
 				.setPerFrameWebsocketCompressionSupported(true)
 				.setPerMessageWebsocketCompressionSupported(true)
@@ -450,7 +452,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		DeckCreateRequest createRequest;
 		if (request.getDeckList() == null
 				|| request.getDeckList().equals("")) {
-			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass().name());
+			final String heroClass = request.getHeroClass();
 
 			createRequest = new DeckCreateRequest()
 					.withName(request.getName())
@@ -695,7 +697,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards::cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
 
 		String cardsVersion = cache.get("cards-version");
 		String lastModified = cache.get("cards-last-modified");

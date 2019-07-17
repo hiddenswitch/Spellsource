@@ -11,13 +11,14 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "target": "BOTH_HANDS",
+    "targetPlayer": "BOTH",
     "operation": "SET",
     "cardType": "MINION",
     "value": 10
   },
   "trigger": {
     "eventTrigger": {
-      "class": "MinionPlayedTrigger",
+      "class": "BeforeMinionPlayedTrigger",
       "targetPlayer": "BOTH"
     },
     "spell": {

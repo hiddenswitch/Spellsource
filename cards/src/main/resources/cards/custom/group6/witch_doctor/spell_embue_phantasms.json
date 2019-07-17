@@ -10,20 +10,19 @@
     "class": "DrawCardSpell",
     "value": 2,
     "spell": {
-      "class": "ConditionalSpell",
       "target": "OUTPUT",
+      "class": "ConditionalSpell",
       "condition": {
         "class": "CardPropertyCondition",
         "cardType": "MINION"
       },
       "spell": {
         "class": "AddDeathrattleSpell",
-		"target": "OUTPUT",
         "spell": {
           "class": "SummonSpell",
-          "cards": [
-            "token_voodoo_spirit"
-		  ]
+          "card": "token_voodoo_spirit"
+        }
+      }
     }
   },
   "collectible": true,

@@ -7,7 +7,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
@@ -19,7 +18,6 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -329,13 +327,13 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// This is a depth 6 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
 			assertTrue(context.updateAndGetGameOver());
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 
 	@Test
 	public void testDestroyAt2HP() {
 		runGym((context, player, opponent) -> {
-			Card fireball = receiveCard(context, player, "spell_fireball");
+			Card fireball = receiveCard(context, player, "spell_test_deal_6");
 			player.setMana(4);
 			player.setMaxMana(4);
 			opponent.getHero().setHp(2);
@@ -348,7 +346,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			GameAction chosen = behaviour.requestAction(context, player, actions);
 			Assert.assertEquals(chosen.getSourceReference(), fireball.getReference(), "The AI should have chosen to play the Fireball");
 			Assert.assertEquals(chosen.getTargetReference(), opponent.getHero().getReference(), "The AI should have chosen to cast it against the enemy hero.");
-		}, /*Set hero class to mage for fireblast hero power*/ HeroClass.BLUE, HeroClass.BLUE);
+		}, /*Set hero class to mage for fireblast hero power*/ "BLUE", "BLUE");
 	}
 
 
@@ -383,7 +381,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			opponent.setMana(4);
 			opponent.setMaxMana(4);
 			Card cursed = receiveCard(context, opponent, "spell_cursed");
-			receiveCard(context, opponent, "spell_fireball");
+			receiveCard(context, opponent, "spell_test_deal_6");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			context.performAction(opponent.getId(), action);
@@ -422,7 +420,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Minion doomsayer = playMinionCard(context, player, "minion_doomsayer");
 			context.endTurn();
 			playMinionCard(context, opponent, "minion_kobold_geomancer");
-			receiveCard(context, opponent, "spell_fireball");
+			receiveCard(context, opponent, "spell_test_deal_6");
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();

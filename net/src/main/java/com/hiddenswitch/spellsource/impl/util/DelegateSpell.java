@@ -8,6 +8,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Casts a spell written in Java by its {@link SpellArg#NAME}, registerd with {@link Spellsource#getSpells()}.
+ */
 public class DelegateSpell extends net.demilich.metastone.game.spells.Spell {
 	@Override
 	@Suspendable

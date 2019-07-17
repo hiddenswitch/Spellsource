@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 3.0.4
+  version: 4.0.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -58,6 +58,8 @@ definitions:
             $ref: '#/definitions/Invite'
           match:
             $ref: '#/definitions/Match'
+          spanContext:
+            $ref: '#/definitions/SpanContext'
       changed:
         description: |
           Indicates that a record's fields have changed.
@@ -412,33 +414,6 @@ definitions:
           A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
           otherwise specified.
         type: 'string'
-        enum:
-          - 'BROWN'
-          - 'GREEN'
-          - 'BLUE'
-          - 'GOLD'
-          - 'WHITE'
-          - 'BLACK'
-          - 'SILVER'
-          - 'VIOLET'
-          - 'RED'
-          - 'JADE'
-          - 'NAVY'
-          - 'LEATHER'
-          - 'RUST'
-          - 'EGGPLANT'
-          - 'ICE'
-          - 'OBSIDIAN'
-          - 'ICECREAM'
-          - 'AMBER'
-          - 'TOAST'
-          - 'ROSE'
-          - 'BLOOD'
-          - 'NEONGREEN'
-          - 'TEAL'
-          - 'DARKGREEN'
-          - 'PURPLE'
-          - 'TIME'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -462,12 +437,6 @@ definitions:
           Certain queues only support certain formats. Typically, when requesting the listing of queues with
           matchmakingGet, the queues will specify which current decks can be chosen.
         type: 'string'
-        enum:
-          - 'Standard'
-          - 'Wild'
-          - 'Custom'
-          - 'Spellsource'
-          - 'All'
       deckList:
         type: 'string'
         description: |
@@ -627,7 +596,6 @@ definitions:
         description: |
           When true, indicates this is a standard deck provided by the server.
         type: 'boolean'
-        default: false
       inventory:
         type: 'array'
         items:
@@ -807,36 +775,32 @@ definitions:
   EntityLocation:
     type: 'object'
     required:
-      - zone
-      - index
-      - player
+      - z
+      - i
+      - p
     properties:
-      player:
+      p:
         type: 'integer'
-        enum:
-          - -1
-          - 0
-          - 1
-      index:
+      i:
         type: 'integer'
-      zone:
+      z:
         type: 'string'
         enum:
-          - 'NONE'
-          - 'HAND'
-          - 'DECK'
-          - 'GRAVEYARD'
-          - 'BATTLEFIELD'
-          - 'SECRET'
-          - 'QUEST'
-          - 'HERO_POWER'
-          - 'HERO'
-          - 'WEAPON'
-          - 'SET_ASIDE_ZONE'
-          - 'HIDDEN'
-          - 'DISCOVER'
-          - 'REMOVED_FROM_PLAY'
-          - 'PLAYER'
+          - 'N' # 'NONE'
+          - 'H' # 'HAND'
+          - 'D' # 'DECK'
+          - 'G' # 'GRAVEYARD'
+          - 'B' # 'BATTLEFIELD'
+          - 'S' # 'SECRET'
+          - 'Q' # 'QUEST'
+          - 'K' # 'HERO_POWER'
+          - 'E' # 'HERO'
+          - 'W' # 'WEAPON'
+          - 'A' # 'SET_ASIDE_ZONE'
+          - 'Z' # 'HIDDEN'
+          - 'V' # 'DISCOVER'
+          - 'R' # 'REMOVED_FROM_PLAY'
+          - 'P' # 'PLAYER'
   EntityChangeSet:
     description: |
       An abbreviated description of changes since the last change set this client received.
@@ -908,6 +872,7 @@ definitions:
           - 'CARD_ADDED_TO_DECK'
           - 'CARD_SHUFFLED'
           - 'DAMAGE'
+          - 'DID_END_SEQUENCE'
           - 'DISCARD'
           - 'DRAIN'
           - 'DRAW_CARD'
@@ -1487,7 +1452,7 @@ definitions:
       The entity state contains all the mutable values of an entity. In the future, the server will provide a list of
       exact changes to this state.
     properties:
-      location:
+      l:
         $ref: '#/definitions/EntityLocation'
       background:
         description: |
@@ -1735,6 +1700,8 @@ definitions:
           - 'WEAPON'
           - 'HERO_POWER'
           - 'CHOOSE_ONE'
+          - 'CLASS'
+          - 'FORMAT'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1772,6 +1739,24 @@ definitions:
           turn 0.
         type: 'boolean'
         default: false
+      color:
+        description: |
+          The color for the class
+        type: 'array'
+        items:
+          type: 'number'
+          format: 'float'
+      blackText:
+        description: |
+          Whether the class should use black text instead of the default white
+        type: 'boolean'
+        default: false
+      cardSets:
+        description: |
+          The card sets listed by the card
+        type: 'array'
+        items:
+          type: 'string'
   DraftsChooseCardRequest:
     type: 'object'
     required:
@@ -2041,6 +2026,15 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+  SpanContext:
+    type: 'object'
+    description: |
+      A piece of data that assists in OpenTracing from the client.
+    properties:
+      data:
+        type: 'string'
+        format: 'binary'
+        description: Binary carried opentracing span context
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.

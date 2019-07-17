@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SetAttackSpell",
+    "value": 1
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

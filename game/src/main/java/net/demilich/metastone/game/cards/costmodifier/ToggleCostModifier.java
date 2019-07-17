@@ -54,9 +54,9 @@ public final class ToggleCostModifier extends CardCostModifier {
 	@Override
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
-		if (toggleOnTrigger.interestedIn() == event.getEventType() && toggleOnTrigger.fires(event, host)) {
+		if (toggleOnTrigger.interestedIn() == event.getEventType() && toggleOnTrigger.queues(event, host)) {
 			ready = true;
-		} else if (toggleOffTrigger.interestedIn() == event.getEventType() && toggleOffTrigger.fires(event, host)) {
+		} else if (toggleOffTrigger.interestedIn() == event.getEventType() && toggleOffTrigger.queues(event, host)) {
 			ready = false;
 		}
 	}

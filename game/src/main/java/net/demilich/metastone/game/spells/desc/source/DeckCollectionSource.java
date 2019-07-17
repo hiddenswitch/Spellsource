@@ -17,7 +17,7 @@ import java.io.Serializable;
  * Uses the {@link GameContext#getDeck(Player, String)} method, which provides an implementation in server game
  * contexts.
  */
-public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects, HasWeights {
+public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects {
 
 	public DeckCollectionSource(CardSourceDesc desc) {
 		super(desc);

@@ -1,0 +1,31 @@
+{
+  "name": "Bored to Death",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "description": "Destroy a minion with 4 or less Attack.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 4,
+      "attribute": "ATTACK",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 4,
+      "attribute": "ATTACK",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

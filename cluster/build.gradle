@@ -1,14 +1,6 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.0.RC2"
-    }
+plugins {
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -23,12 +15,6 @@ repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.52'
-    }
-}
-
 configurations.all {
     exclude module: 'slf4j-log4j12'
 }
@@ -37,16 +23,8 @@ dependencies {
     compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.52'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-ec2', version: '1.11.52'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.52'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-emr', version: '1.11.52'
-    compile group: 'org.apache.hadoop', name: 'hadoop-aws', version: '2.7.3'
     compile group: 'io.jenetics', name: 'jenetics', version: '4.1.0'
     compile group: 'io.jenetics', name: 'jenetics.ext', version: '4.1.0'
-//    compile group: 'org.tensorflow', name: 'tensorflow', version: '1.12.0'
-//    compile group: 'org.deeplearning4j', name: 'deeplearning4j-core', version: '0.9.1'
-//    compile group: 'org.nd4j', name: 'nd4j-native-platform', version: '0.9.1'
     compile project(':net')
     testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
 }

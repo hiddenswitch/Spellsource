@@ -27,7 +27,7 @@ import java.util.List;
 public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
 	private Card sourceCard;
-	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
+	private List<Enchantment> enchantments = new ArrayList<>();
 	private CardCostModifier cardCostModifier;
 
 	public Actor(Card sourceCard) {
@@ -301,7 +301,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		setAttribute(Attribute.MAX_HP, value);
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return getSourceCard().getHeroClass();
 	}
 

@@ -15,6 +15,9 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.opentracing.noop.NoopTracer;
+import io.opentracing.noop.NoopTracerFactory;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.json.Json;
@@ -43,34 +46,31 @@ import static org.junit.Assert.fail;
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
 	protected static AtomicBoolean initialized = new AtomicBoolean();
-	protected static HazelcastInstance hazelcastInstance;
 	protected static Vertx vertx;
 
 	@BeforeClass
 	@Suspendable
 	public static void setUp(TestContext context) {
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
 			final Async async = context.async();
 
-			Vertx.clusteredVertx(new VertxOptions()
+			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
-					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
-					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
-				SpellsourceTestBase.vertx = vertx;
-				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
+					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
+			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+			vertx.runOnContext(v1 -> {
+				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v2 -> {
 					vertx.executeBlocking(fut -> {
 						Mongo.mongo().connectWithEnvironment(vertx);
 						fut.complete();
-					}, context.asyncAssertSuccess(v2 -> {
-						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v3 -> {
+					}, context.asyncAssertSuccess(v3 -> {
+						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v4 -> {
 							async.complete();
 						}));
 					}));
 				}));
-			}));
+			});
 		}
 	}
 
@@ -80,7 +80,7 @@ public abstract class SpellsourceTestBase {
 		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
 		return Decks.createDeck(new DeckCreateRequest()
 				.withUserId(userId)
-				.withHeroClass(HeroClass.RED)
+				.withHeroClass("RED")
 				.withName("Test Deck")
 				.withFormat("Wild")
 				.withInventoryIds(inventoryIds));
@@ -127,7 +127,12 @@ public abstract class SpellsourceTestBase {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
 			vertx.runOnContext(suspendableHandler(v2 -> {
-				action.run();
+				try {
+					action.run();
+				} catch (Throwable throwable) {
+					fail();
+				}
+
 				latch.countDown();
 			}));
 		});
@@ -141,15 +146,12 @@ public abstract class SpellsourceTestBase {
 
 	@AfterClass
 	public static void tearDown(TestContext context) {
-		/*
-		if (initialized.compareAndSet(true, false)) {
-			final Async async = context.async();
-			vertx.close(context.asyncAssertSuccess(then -> {
-				hazelcastInstance.shutdown();
-
-				async.complete();
-			}));
-		}
-		*/
+		GlobalTracer.get().close();
+		Async async = context.async();
+		vertx.close(v -> {
+			initialized.compareAndSet(true, false);
+			async.complete();
+		});
+		vertx=null;
 	}
 }

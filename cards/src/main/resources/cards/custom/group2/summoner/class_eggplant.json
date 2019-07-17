@@ -1,0 +1,11 @@
+{
+  "name": "Summoner",
+  "type": "CLASS",
+  "hero": "hero_mephilia",
+  "heroClass": "EGGPLANT",
+  "color": [135, 94, 115],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
