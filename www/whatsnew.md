@@ -4,6 +4,15 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41 (In Progress)
+
+Outlaw Changes (1251)
+
+- Trigger Happy Rebel changed from a 2/4 to a 2/3.
+- Dustbowl Vigilante moved from a 3/6 to a 3/4.
+- Skill now deals 1 targeted damage.
+    - Upgraded Skill deals 2 targeted damage
+
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
 Bug fixes for network lag.
