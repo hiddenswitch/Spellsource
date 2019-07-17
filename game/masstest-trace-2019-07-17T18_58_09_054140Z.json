@@ -1,0 +1,12 @@
+{
+  "seed" : 2341560656573010010,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "OLIVE", "CORAL" ],
+  "deckCardIds" : [ [ "spell_miserable_conclusion", "spell_what_big_fangs", "minion_warclub_ruffian", "minion_experiment_recorder", "minion_blackboar", "spell_what_big_fangs", "minion_forgotten_hero", "minion_dramatic_playwright", "minion_gustbreaker", "minion_dragon_librarian", "spell_relaxing_read", "minion_dragon_librarian", "minion_mind_controlled_mech", "spell_flying_fiction", "minion_alien_ravager", "minion_magishire_wildcat", "minion_boar_brawler", "minion_gasbelly_oni", "minion_dramatic_playwright", "secret_house_of_candy", "permanent_battle_for_mount_hyjal", "minion_holy_giant", "minion_zilch_god_of_nothing", "minion_mutamite_terror", "minion_massive_egg", "spell_whimsical_generator", "minion_fumewalker_zin", "spell_tome_of_power", "secret_house_of_candy", "minion_headless_horseman_revengeance" ], [ "minion_spirited_announcer", "spell_song_of_strength", "minion_sand_giant", "minion_backup_bard", "minion_shine_sprite", "spell_uplifting_melody", "minion_alluring_minstrel", "spell_power_chord", "minion_myra_the_masterful", "weapon_storm_guitar", "minion_lounge_brownie", "minion_purity_keeper", "spell_soundwave", "minion_quest_giver", "spell_groupies", "minion_stallius_the_horned", "minion_sneaky_kaeru", "minion_frazzled_barmaid", "minion_fairytale_tracker", "spell_groupies", "permanent_call_of_the_crusade", "minion_chief_vigilante", "minion_fassnu_avenger", "spell_rehearsal", "spell_power_chord", "minion_abandoned_geneticist", "spell_healing_hymn", "minion_inspiring_hero", "minion_composer", "spell_rehearsal" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 23, 29, 32 ], [ 55, 44, 60 ] ],
+  "actions" : [ 0, 0, 1, 0, 0, 4, 1, 1, 1, 0, 0, 0, 0, 1, 2, 3, 0, 3, 0, 7, 1, 8, 0, 3, 0, 0, 7, 14, 8, 7, 1, 0, 9, 14, 0, 9, 5, 2, 2, 8, 15, 6, 8, 3, 7, 1, 2, 0, 17, 11, 13, 5, 4, 0, 2, 4, 17, 5, 0, 0, 0, 2, 18, 13, 8, 7, 2, 12 ],
+  "id" : null
+}

@@ -1,0 +1,12 @@
+{
+  "seed" : -3491531308227390324,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NAVY", "OLIVE" ],
+  "deckCardIds" : [ [ "minion_twilight_mercenary", "minion_unstable_artifact", "minion_mutating_boa", "minion_general_lauren", "spell_army_recruits", "minion_luteflayer", "minion_automatrainer", "minion_timewalker_stormlord", "minion_trophy_huntress", "spell_final_defenses", "spell_swarms_of_time", "minion_champion_of_death", "minion_lounge_brownie", "spell_self_appoint", "spell_black_plague", "minion_cursing_chimp", "weapon_booty_bay_conscription", "minion_faceless_duplicator", "minion_garbasu_monster", "minion_chaotic_cutthroat", "permanent_ravaging_of_outland", "minion_ironplate_samurai", "minion_tower_titan", "spell_deepholm_portal", "minion_gravtisk_the_ancient", "spell_weak_point", "minion_sunbender", "spell_siege_the_castle", "permanent_battle_for_mount_hyjal", "minion_the_jekka_tree" ], [ "minion_champion_of_death", "minion_cursebrewing_witch", "secret_tall_tale", "secret_house_of_candy", "minion_reckless_giant", "minion_pumpkin_abomination", "spell_flying_fiction", "minion_bugbiter", "minion_emerald_dreamer", "minion_dreamwing_scout", "minion_sparkly_messenger", "spell_engaging_story", "minion_cursebrewing_witch", "minion_dreamwing_scout", "minion_dramatic_playwright", "minion_dramatic_playwright", "spell_flying_fiction", "spell_whimsical_generator", "minion_timeworn_archivist", "minion_zealous_deckhand", "minion_manly_mountaineer", "minion_mari_anette", "minion_inora_spellbound", "minion_siege_elephant", "minion_burst_bug", "minion_seeker_of_knowledge", "spell_whimsical_generator", "minion_wyrmrest_sniper", "minion_forest_magistrate", "permanent_call_of_the_crusade" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 9, 32, 12 ], [ 38, 61, 36 ] ],
+  "actions" : [ 0, 0, 0, 6, 2, 0, 2, 1, 0, 0, 2, 0, 5, 0, 2, 0, 0, 4, 3, 0, 0, 3, 13, 6, 2, 0, 1, 5, 3, 10, 8, 9, 1, 1, 0, 2, 5, 7, 24, 0, 4, 14, 31 ],
+  "id" : null
+}

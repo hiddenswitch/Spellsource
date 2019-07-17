@@ -1,0 +1,12 @@
+{
+  "seed" : 5972627767991603719,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ROSE", "RUST" ],
+  "deckCardIds" : [ [ "spell_bottled_spirit", "minion_doctor_hatchett", "minion_draining_ooze", "minion_sleepy_scarecrow", "permanent_escape_from_durnholde", "minion_owlbear_mother", "minion_entranced_dancer", "minion_magedrainer", "minion_doctor_rigo_morti", "minion_void_reaper", "minion_darkbent_drake", "minion_shimmerscale", "spell_pandoras_box", "spell_alter_ego", "minion_bullet_bull", "minion_mindswapper", "minion_flingin_alchemist", "minion_sky_high_surveyor", "minion_blood_cultist", "minion_servant_of_twilight", "minion_birdbrain", "minion_spectral_steed", "minion_costume_seller", "minion_chant_leader", "minion_jeering_troll", "spell_bat-talion", "minion_eranikus", "minion_the_imperial_soul", "minion_bullet_bull", "minion_miniature_gunner" ], [ "minion_lightning_elemental", "spell_awakening", "minion_thuggish_fae", "minion_defender_of_tomorrow", "spell_spectral_fervor", "spell_zagroz__inferno_bomb", "spell_fissure", "weapon_seething_axe", "minion_ravenous_lookout", "minion_bone_guard", "minion_sweeper_drake", "spell_igneous_hatchery", "weapon_blade_of_eventide", "minion_hybreeder", "minion_chromie", "minion_spirit_of_the_serpent", "weapon_lava_saber", "spell_wyrm_s_sphere", "minion_yokai_shapeshifter", "minion_armored_challenger", "minion_fiery_warchief", "minion_divine_cleric", "minion_bronze_timekeeper", "minion_alemental", "minion_tower_ophidian", "minion_twilight_mercenary", "minion_bibliothecat", "weapon_energized_spear", "minion_nightfall_dragoon", "minion_runt_leader" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 22, 30, 7 ], [ 41, 53, 36 ] ],
+  "actions" : [ 0, 1, 0, 0, 1, 1, 1, 0, 7, 5, 1, 10, 1, 0, 0, 9, 2, 0, 1, 11, 1 ],
+  "id" : null
+}

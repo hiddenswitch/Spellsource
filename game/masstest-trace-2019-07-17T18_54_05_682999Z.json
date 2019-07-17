@@ -1,0 +1,12 @@
+{
+  "seed" : -8084776359447317097,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TOAST", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_red_proto_whelp", "minion_stormwind_chef", "minion_hypnotic_beetle", "minion_red_agressor", "spell_butcher", "minion_galakrond", "spell_massive_burp", "minion_aeonus", "spell_primal_seasoning", "minion_freyas_familliar", "minion_crew_commander", "minion_tribemaster", "minion_inedible_ghoul", "minion_big_businessman", "spell_cannibalism", "spell_conjured_table", "spell_cannibalism", "spell_summoned_table", "spell_mass_extinction", "minion_fumewalker_zin", "minion_daring_duelist", "spell_blood_thirst", "minion_chief_vigilante", "minion_kosumoth_the_hungering", "quest_the_ultimate_recipe", "minion_sneaky_kaeru", "minion_quest_giver", "spell_butcher", "minion_holdover_lich", "minion_sparkly_messenger" ], [ "minion_oppressor_defender", "minion_gemstone_giant", "minion_gnoll_scout", "minion_gnoll_scout", "minion_snapshooter", "minion_skilled_hunter", "spell_demand", "minion_channeled_spirit", "spell_escape_position", "minion_festivity_golem", "minion_rakanishu", "weapon_scissors_of_dots", "minion_yokai_shapeshifter", "minion_captain_of_the_guard", "minion_uccian_hydra", "minion_sleepy_scarecrow", "quest_forge_it", "minion_skeletal_warrior", "minion_prince_tenris", "spell_escape_position", "minion_skilled_hunter", "minion_highwayman", "minion_treasure_mimic", "spell_party_portal", "spell_reload", "minion_burst_bug", "minion_hybreeder", "spell_amber_drop", "minion_frigid_bones", "minion_rafaam_archivist" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 23 ], [ 42, 39 ] ],
+  "actions" : [ 1, 0, 1, 0, 0, 1, 1, 3 ],
+  "id" : null
+}

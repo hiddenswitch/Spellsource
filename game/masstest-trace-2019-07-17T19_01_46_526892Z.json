@@ -1,0 +1,12 @@
+{
+  "seed" : -5781559888664730184,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "RUST", "BLOOD" ],
+  "deckCardIds" : [ [ "minion_yokai_shapeshifter", "minion_bullfrog", "minion_barnacled_dweller", "minion_gentleman_s_giant", "minion_gearscrapper", "weapon_the_dreadtalon", "minion_soup_savant", "minion_infinite_behemoth", "spell_smash_n_run", "minion_witchwood_harpy", "minion_murloc_jek", "spell_united_retaliation", "minion_purifying_ooze", "minion_heavy_duty_dragoon", "minion_nightmare_warden", "spell_conflagration", "minion_forgotten_hero", "minion_throat_cutter", "minion_glass_golem", "minion_armored_challenger", "minion_doodles", "spell_inciendary_break", "spell_beast_hunting", "minion_magnataur_brutalist", "minion_mindswapper", "spell_magical_haze", "minion_bone_whelp", "minion_mutated_brute", "minion_mechanical_monstrosity", "minion_rapier_rodent" ], [ "minion_bighand_brute", "minion_hypnotic_beetle", "permanent_battle_for_mount_hyjal", "minion_nature_rager", "minion_grape_merchant", "minion_bloodrider", "minion_doodles", "spell_hemoshield", "spell_death_chain", "minion_sonorous_spectre", "minion_fel_manticore", "spell_hemoblast", "minion_inora_spellbound", "spell_hemoshield", "minion_runic_sorceress", "minion_skeletower", "minion_assimilator", "minion_captain_of_the_guard", "minion_nilfheim_needlegunner", "weapon_heartpiercer", "minion_novice_time_traveler", "minion_prince_tenris", "minion_runic_sorceress", "minion_kawarimi_headbasher", "minion_swarmed_captive", "spell_rending_curse", "spell_harness_suffering", "spell_scarlet_thirst", "minion_giant_disappointment", "spell_scarlet_thirst" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 30, 4 ], [ 63, 40 ] ],
+  "actions" : [ 0, 1, 4, 3, 1, 1, 2, 3, 4, 0, 4, 1, 16, 11, 1, 7, 4, 1, 7, 1, 0, 2, 1, 10, 2, 6, 7 ],
+  "id" : null
+}

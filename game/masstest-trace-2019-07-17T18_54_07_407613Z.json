@@ -1,0 +1,12 @@
+{
+  "seed" : -1060557953672188483,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ROSE", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_wee_squashling", "minion_pumpkin_abomination", "minion_rafaam_philanthropist", "minion_glass_golem", "minion_ritual_shaman", "minion_streetwise_specialist", "minion_ironplate_samurai", "minion_ptero_max", "spell_embue_phantasms", "minion_mighty_mufunga", "minion_hands_on_historian", "minion_crones_attendant", "minion_doctor_rigo_morti", "minion_kairozdormu", "minion_ritual_shaman", "minion_grim_clairvoyant", "minion_entranced_dancer", "secret_greater_good", "minion_gracious_timekeeper", "spell_evocation_witchdoctor", "minion_jack_in_the_box", "spell_jungles_guidance", "weapon_six_shooter", "weapon_spiritbinder", "minion_shedding_chameleon", "weapon_spiritbinder", "minion_dragon_pod", "spell_devilry_flare", "minion_underbrush_protector", "minion_deepwood_barghest" ], [ "spell_new_arrival", "spell_reload", "spell_multiple_strike", "minion_wolfcrier", "minion_cacodemon", "minion_rapier_rodent", "minion_highwayman", "minion_timebidding_magi", "minion_mari_anette", "spell_escape_position", "minion_mr_smith", "minion_bighand_brute", "minion_channeled_spirit", "minion_magedrainer", "minion_hooded_ritualist", "spell_take_a_drink", "minion_recurring_torrent", "spell_amber_drop", "minion_spellquaker", "minion_flashbulb_spider", "minion_molten_cauterizer", "minion_infinite_behemoth", "minion_guild_guard", "minion_tikrakazz", "minion_cacodemon", "quest_forge_it", "minion_wavering_diabloist", "minion_magedrainer", "spell_supply", "minion_snapshooter" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 5, 15, 29 ], [ 61, 58, 50 ] ],
+  "actions" : [ 0, 0, 0, 1, 0, 1, 5, 1, 2, 2, 0, 0, 0, 4, 0, 4, 1, 0, 2, 0, 6, 5 ],
+  "id" : null
+}

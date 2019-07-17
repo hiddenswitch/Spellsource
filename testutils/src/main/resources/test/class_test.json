@@ -1,0 +1,11 @@
+{
+  "name": "Test",
+  "type": "CLASS",
+  "hero": "hero_sandbox",
+  "heroClass": "TEST",
+  "color": [0, 0, 0],
+  "blackText": false,
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

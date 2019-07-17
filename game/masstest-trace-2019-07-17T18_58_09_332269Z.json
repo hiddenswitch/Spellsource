@@ -1,0 +1,12 @@
+{
+  "seed" : -7030699486581978621,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NEONGREEN", "NAVY" ],
+  "deckCardIds" : [ [ "minion_realm_parasite", "minion_buffeting_elemental", "minion_holy_bulwark", "spell_cull_and_reap", "minion_corona_fae_defender", "minion_captain_stashin", "minion_bullet_bull", "spell_quasar_blast", "spell_feeding_frenzy", "minion_sparkly_messenger", "spell_distort", "spell_xenobulwark", "minion_flutterer", "permanent_formless_rancour", "spell_feeding_frenzy", "minion_grandmother_vratta", "minion_savage_sprite", "spell_distort", "spell_observer", "permanent_formless_celerity", "spell_warp", "spell_cannibalize", "permanent_formless_immortal", "minion_death_s_messenger", "spell_cellular_overdrive", "minion_blackflame_bomber", "permanent_ravaging_of_outland", "minion_whiptail_gatherer", "minion_the_grudge", "spell_observer" ], [ "minion_daring_duelist", "minion_giant_disappointment", "minion_general_lauren", "spell_bewitch", "spell_army_recruits", "minion_valiant_protector", "minion_death_s_messenger", "minion_selfburner", "minion_yokai_bonder", "minion_refracting_golem", "minion_deranged_greengill", "minion_centaur_acumen", "minion_fairytale_tracker", "spell_call_for_backup", "quest_forces_of_gilneas", "spell_hidden_treasure", "minion_treeleach", "spell_duplimancy", "minion_frigid_bones", "minion_skeletower", "minion_deathrider", "minion_hunting_terradon", "minion_undead_intern", "minion_flashbulb_spider", "minion_end_reveler", "minion_sparkly_messenger", "minion_malicious_magpie", "minion_titanic_terror", "minion_flingin_alchemist", "minion_ghuun" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 4, 22, 9 ], [ 63 ] ],
+  "actions" : [ 2, 0, 0, 0, 0, 2, 0, 0, 3, 1, 9, 0, 0, 1, 0, 3, 3, 2, 1, 1, 0, 0, 2, 4, 7, 2, 1, 0, 9, 4, 10, 3, 3, 8, 3, 1, 0, 1, 0, 5, 9, 6, 13, 4, 4, 0, 6, 0, 0, 20, 15, 0, 3, 7, 0, 26, 7, 36, 1, 3, 9, 0, 11, 5 ],
+  "id" : null
+}

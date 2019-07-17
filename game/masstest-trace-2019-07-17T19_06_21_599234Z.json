@@ -1,0 +1,12 @@
+{
+  "seed" : 7920637828201562877,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TEAL", "EGGPLANT" ],
+  "deckCardIds" : [ [ "minion_aberrant_tinyfin", "minion_stone_sentinel_basic", "minion_jungle_wanderer", "minion_nightmare_warden", "minion_dreamway_whale", "minion_abandoned_geneticist", "minion_sonorous_spectre", "minion_expert_explorer", "weapon_brine_crossbolter", "spell_squid_ward", "minion_shouting_soldier", "spell_murloc_mating_call", "spell_gift_of_the_queen", "spell_murloc_mating_call", "minion_savage_sprite", "minion_mari_anette", "spell_evaporation", "minion_rainbow_runner", "minion_fae_trickster", "weapon_serpentcrest_staff", "minion_gustbreaker", "minion_cybernetic_rager", "minion_sea_elemental", "minion_glintscale_stormseer", "minion_stallius_the_horned", "spell_calm_currents", "spell_squid_ward", "minion_captain_cookie", "weapon_serpentcrest_staff", "minion_southsea_giant" ], [ "minion_recurring_torrent", "weapon_monster_manual", "minion_sleepy_sprite", "spell_evil_laughter", "minion_swarmed_captive", "spell_lesser_citrine_spellstone", "minion_baby_gryphon", "minion_timewalker_necrolyte", "minion_guardian_kirin", "minion_crystal_giant", "minion_savage_sprite", "spell_signs_of_the_end", "minion_ambushing_rose", "minion_careless_messenger", "minion_skugg_the_unclean", "minion_cinderslinger", "minion_hypnotist", "minion_nilfheim_needlegunner", "minion_fifi_fizzlewarp", "minion_shadownest_arachne", "minion_cybernetic_rager", "spell_lackey_break", "minion_horned_jouster", "minion_hoardling_of_tolin", "minion_purifying_ooze", "minion_champion_tangler", "spell_potion_of_creation", "minion_giant_disappointment", "minion_haunted_armor", "minion_firespine_ravager" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33 ], [ 65 ] ],
+  "actions" : [ 0, 1, 4, 0, 1, 4, 0, 0, 0, 0, 7, 1, 2, 2, 3, 4, 3, 3, 3, 0, 16, 12, 2, 6, 2, 2, 11, 3, 0, 8, 8, 6, 2, 3 ],
+  "id" : null
+}

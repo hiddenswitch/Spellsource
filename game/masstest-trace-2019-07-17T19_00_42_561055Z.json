@@ -1,0 +1,12 @@
+{
+  "seed" : -5231578811108071402,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TIME", "RUST" ],
+  "deckCardIds" : [ [ "secret_delay_fate", "minion_mechanical_monstrosity", "minion_nezumi_master", "minion_justin_thyme_explorer1", "spell_pluck_the_weave", "minion_twilight_annihilator", "minion_tetradimensionalist", "minion_hungry_caterpillar", "spell_power_everlasting", "minion_cursing_disciple", "minion_reload_rodger", "minion_ragtag_rescuer", "spell_snip_the_cord", "spell_pluck_the_weave", "minion_freyas_familliar", "minion_metalic_manadrake", "minion_seeker_of_knowledge", "minion_chaotic_cutthroat", "minion_fiery_tyrant", "spell_tangled_destiny", "minion_blackboar", "minion_faerie_nightmare", "spell_destined_to_repeat", "minion_hungry_caterpillar", "quest_the_impossible_harvest", "spell_fortuna_abounding", "minion_darkbent_drake", "spell_snip_the_cord", "minion_mystic_weaver", "spell_band_of_brothers" ], [ "minion_devouring_devilsaur", "minion_runt_leader", "minion_rousing_commander", "minion_exotic_menace", "minion_headhunter", "minion_grimestreet_corporal", "minion_darkmire_drake", "minion_champion_of_death", "minion_mechanical_monstrosity", "minion_treeleach", "minion_giant_reaper", "minion_devouring_devilsaur", "spell_overwhelming_strength", "minion_oni_entrapper", "minion_tempest_elemental", "minion_gentleman_s_giant", "minion_treasure_hunter", "minion_timewalker_necrolyte", "spell_lesser_garnet_spellstone", "minion_neltharion", "spell_dawns_might", "minion_garbasu_monster", "minion_vanal_petkiper", "minion_divine_cleric", "minion_magma_hound", "minion_thuggish_fae", "weapon_marrow_cleaver", "minion_antique_collector", "spell_overwhelming_strength", "minion_dreadmire_hexxer" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 5, 20 ], [ 49, 63 ] ],
+  "actions" : [ 0, 1, 2, 2, 1 ],
+  "id" : null
+}

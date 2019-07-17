@@ -1,0 +1,12 @@
+{
+  "seed" : -4302870013187000394,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TOAST", "RUST" ],
+  "deckCardIds" : [ [ "minion_voracious_toadosaur", "minion_timebidding_magi", "minion_sand_giant", "spell_roast", "minion_streetwise_specialist", "minion_birdbrain", "minion_twilight_mercenary", "minion_chainwrecker_corsair", "quest_the_ultimate_recipe", "minion_difficult_child", "minion_hypnotist", "minion_jack_in_the_box", "minion_demonic_frontrunner", "minion_ragnaros_kitchenlord", "minion_galakrond", "minion_smogg", "minion_undead_trickster", "minion_meat_tenderizer", "minion_food_critic", "minion_void_reaper", "minion_mighty_mufunga", "spell_massive_burp", "spell_romantic_picnic", "minion_rotten_egg", "spell_feast_of_winter_veil", "minion_thuggish_fae", "minion_nightmare_warden", "spell_twilight_cookbook", "spell_halitosis", "minion_baby_griffin" ], [ "spell_the_little_swarm", "spell_inciendary_break", "minion_fae_trickster", "minion_grimestreet_vigilante", "minion_murloc_jek", "minion_colosseum_behemoth", "minion_throat_cutter", "minion_smug_theorist", "minion_flutterer", "weapon_energized_spear", "minion_sonorous_spectre", "minion_tetradimensionalist", "minion_hypnotist", "minion_hooded_ritualist", "minion_fireguard_bulwark", "spell_conflagration", "minion_the_imperial_soul", "weapon_seething_axe", "minion_armageddon_wyvern", "minion_marauder_hussar", "spell_plunderer_abound", "minion_ankylo_devotee", "minion_garbasu_monster", "spell_lesser_garnet_spellstone", "spell_beast_hunting", "spell_igneous_hatchery", "minion_antique_collector", "minion_plucky_pyromancer", "minion_verdant_squire", "weapon_energized_spear" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 16 ], [ 38 ] ],
+  "actions" : [ 1, 0, 1, 1, 0, 1, 1, 0, 0, 2, 1, 1, 2, 0, 0, 2, 2, 5, 2, 0, 20, 2, 0, 0, 17, 5, 3, 1, 3, 5, 2, 1, 0, 5, 3, 3, 17, 1, 4, 6, 0, 1, 1, 0, 6, 5, 31, 1, 2 ],
+  "id" : null
+}

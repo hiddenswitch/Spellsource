@@ -1,0 +1,12 @@
+{
+  "seed" : 7507069075235065407,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "LEATHER", "TIME" ],
+  "deckCardIds" : [ [ "minion_burst_bug", "minion_antique_collector", "spell_supply_sabotage", "spell_reload", "spell_reload", "quest_forge_it", "spell_party_poppers", "minion_warclub_ruffian", "minion_glass_golem", "minion_bogovanis", "spell_focus_fire", "minion_stallius_the_horned", "spell_take_a_drink", "spell_focus_fire", "minion_rotorblade_chopper", "minion_baby_griffin", "minion_petal_knight", "minion_sourcing_specialist", "spell_party_portal", "spell_defensive_position", "spell_distract", "minion_mr_smith", "minion_one_handed_butcher", "minion_bone_guard", "spell_defensive_position", "minion_nightmare_warden", "minion_jungle_wanderer", "minion_skilled_hunter", "minion_rakanishu", "minion_highwayman" ], [ "minion_smogg", "spell_power_everlasting", "minion_meek_inheritor", "spell_lone_survivor", "minion_demonic_frontrunner", "minion_hungry_caterpillar", "minion_defender_of_tomorrow", "minion_corvana_the_seamstress", "quest_the_impossible_harvest", "weapon_blistering_blade", "spell_firesilk_chrysalis", "minion_hybreeder", "minion_blue_nestwatcher", "minion_kairozdormu", "minion_jungle_king", "minion_ironplate_samurai", "minion_sneaky_kaeru", "spell_good_omens", "minion_seeker_of_knowledge", "minion_soup_savant", "minion_servant_of_twilight", "minion_sleepy_sprite", "secret_desperation", "minion_kawarimi_headbasher", "minion_deranged_greengill", "spell_banish", "minion_yaungol_guardian", "spell_good_omens", "minion_bugbiter", "minion_fel_manticore" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 16, 20 ], [ 38, 47, 48 ] ],
+  "actions" : [ 0, 0, 2, 1, 0, 0, 2, 2, 0, 0, 1, 1, 0, 0, 0, 2, 0, 0, 6, 6, 3, 0, 1, 4, 2, 0, 4, 1, 16, 0, 2, 3, 10, 0, 5, 5, 22, 15, 0, 1, 0, 3, 1, 5, 0, 9, 24, 4, 17, 3, 6, 0, 2, 2, 2, 7, 7, 6, 4, 46, 10, 3, 0, 5, 0 ],
+  "id" : null
+}

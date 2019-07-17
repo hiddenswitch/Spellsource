@@ -1,0 +1,12 @@
+{
+  "seed" : -8769045706039633725,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "BLOOD" ],
+  "deckCardIds" : [ [ "minion_antique_collector", "minion_lord_cookie", "minion_gemstone_giant", "minion_siege_elephant", "spell_bee_squad", "spell_boss_fight", "token_bug_worker", "minion_strike_mantis", "minion_infested_murloc", "minion_menagerie_caretaker", "spell_spiderbomb", "spell_beetle_bash", "minion_anobii", "minion_giant", "minion_massive_turtle", "minion_deep_borer", "spell_forest_whispers", "minion_bug_collector", "minion_dimensional_courier", "minion_mutated_brute", "minion_gracious_timekeeper", "minion_deranged_greengill", "minion_holy_giant", "minion_flamerunner", "minion_nursery_guard", "minion_q_captain_q_cookie", "spell_backyard_portal", "spell_backyard_portal", "minion_treasure_hunter", "minion_antique_collector" ], [ "minion_tiny_persecutor", "spell_death_chain", "minion_marrow_render", "spell_rending_curse", "minion_ironplate_samurai", "spell_hemoshield", "minion_thassarian", "minion_blood_elf_champion", "minion_knight_eternal", "minion_gentleman_s_giant", "minion_nightmare_dragonflight", "minion_fel_manticore", "minion_dreadmire_hexxer", "spell_sweet_sustenance", "spell_soul_corruption", "spell_hemoblast", "spell_hemoblast", "minion_veindrake", "spell_red_lightning", "weapon_heartpiercer", "minion_skeletal_warrior", "minion_mossy_giant", "minion_holdover_lich", "spell_blood_plague_blood_knight", "minion_oppressor_defender", "minion_veindrake", "weapon_heartpiercer", "minion_captain_cookie", "spell_blood_moon_rising", "minion_goblin_harpooner" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 10, 14, 19 ], [ 38, 54, 46 ] ],
+  "actions" : [ 0, 1, 1, 0, 0, 0, 1, 0, 4, 0, 2, 0, 0, 3, 0, 3, 0, 3, 4, 1, 8, 0, 0, 8, 3, 0, 4, 5, 2, 5, 1, 3, 3, 2, 0, 0, 1, 3, 4, 0, 9, 6, 12, 3, 18, 15, 1, 0, 0, 1, 1, 0, 30, 10, 3, 0, 1, 1 ],
+  "id" : null
+}

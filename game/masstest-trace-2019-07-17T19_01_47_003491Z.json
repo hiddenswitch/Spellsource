@@ -1,0 +1,12 @@
+{
+  "seed" : -375638480048577750,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "OLIVE", "BLOOD" ],
+  "deckCardIds" : [ [ "minion_big_bad_coyote", "minion_ursol_the_wise", "permanent_battle_for_mount_hyjal", "spell_whimsical_generator", "spell_what_big_fangs", "spell_tome_of_power", "minion_streetwise_specialist", "minion_ragtag_rescuer", "minion_cursebrewing_witch", "minion_ninja_aspirants", "minion_faldoran_the_ninja", "spell_what_big_fangs", "minion_snappy_author", "minion_soup_savant", "secret_house_of_candy", "minion_volcanic_elemental", "secret_woodlands_music", "minion_little_helper", "minion_mosshorn", "minion_soup_savant", "secret_woodlands_music", "minion_dramatic_playwright", "minion_shadowveiler", "spell_tome_of_secrets", "spell_tome_of_secrets", "minion_mari_anette", "spell_engaging_story", "spell_mind_meld", "minion_death_s_messenger", "spell_relaxing_read" ], [ "spell_blood_moon_rising", "minion_stubborn_stegodon", "minion_mindshaper", "weapon_voltsaber", "spell_death_chain", "minion_timewalker_mistweaver", "minion_dreamway_whale", "spell_soul_corruption", "minion_barside_slinker", "spell_hemoblast", "minion_harbinger_of_hope", "minion_infinite_futurist", "minion_mindshaper", "minion_oppressor_defender", "weapon_voltsaber", "minion_lifetaker", "spell_red_lightning", "spell_sweet_sustenance", "minion_massive_turtle", "minion_matriarch_aiiran", "minion_veindrake", "minion_dawn_drake", "spell_blood_plague_blood_knight", "minion_cursing_disciple", "spell_sweet_sustenance", "minion_selfburner", "minion_lava_manticore", "spell_soul_corruption", "minion_sparkly_messenger", "minion_streetwise_specialist" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 26, 15, 10 ], [ 57, 50, 51 ] ],
+  "actions" : [ 1, 0, 0, 0, 1, 0, 2, 1, 0, 0, 7, 6 ],
+  "id" : null
+}

@@ -34,7 +34,7 @@ public class BfsTests {
 
 	@Test
 	public void testAccurateSummoningBattlecry() {
-		Card card = CardCatalogue.getCardById("minion_dragonling_mechanic");
+		Card card = CardCatalogue.getCardById("minion_test_opener_summon");
 		Stream.Builder<HasEntrySet.BfsNode<Enum, Object>> bfs = card.getDesc().bfs();
 
 		boolean shouldMatch = bfs.build()
@@ -42,7 +42,7 @@ public class BfsTests {
 						&& SummonSpell.class.isAssignableFrom((Class) node.getValue())
 						&& node.predecessors().anyMatch(pred -> pred.getKey().equals(BattlecryDescArg.SPELL)));
 
-		Assert.assertTrue(shouldMatch, "Dragonling Mechanic should match");
+		Assert.assertTrue(shouldMatch, "Minion should match");
 	}
 
 	@Test

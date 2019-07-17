@@ -1,0 +1,12 @@
+{
+  "seed" : 732336585022683476,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NAVY", "TEAL" ],
+  "deckCardIds" : [ [ "spell_hidden_treasure", "minion_hapless_knight", "spell_whelp_encounter", "minion_malicious_magpie", "minion_blubber_behemoth", "minion_ragtag_rescuer", "minion_weak_challenger", "minion_dawnrisen_harpy", "minion_perplexed_courtsman", "spell_deepsea_duel", "minion_nezumi_master", "minion_raid_boss_gnaxx", "minion_spirit_of_the_bear", "minion_ninja_aspirants", "spell_swarms_of_time", "minion_costume_seller", "minion_smug_theorist", "minion_infinite_futurist", "minion_lonely_whelpling", "minion_gustbreaker", "minion_sparkgunner", "minion_hybreeder", "permanent_call_of_the_crusade", "minion_haunted_armor", "minion_murloc_fixpicker", "minion_owlbear_mother", "minion_siege_elephant", "spell_alternate_timeline", "minion_fiendish_giant", "spell_warfare_project" ], [ "minion_glass_memory_golem", "spell_storm", "minion_deep_borer", "minion_sea_elemental", "weapon_brine_crossbolter", "minion_the_imperial_soul", "spell_evaporation", "minion_crystal_giant", "minion_timebidding_magi", "spell_scry_me_a_river", "minion_ankylo_devotee", "minion_chainwrecker_corsair", "minion_gilblin_plunderer", "minion_krentiaxx_tyrant", "minion_coilfang_battlemaiden", "minion_warlord_kalithresh", "weapon_brine_crossbolter", "minion_sonorous_spectre", "minion_cacodemon", "spell_highborne_grace", "minion_lava_manticore", "spell_scry_me_a_river", "minion_glintscale_stormseer", "minion_glintscale_stormseer", "minion_steamvault_bruiser", "minion_spectral_steed", "minion_ravenous_lookout", "minion_kawarimi_headbasher", "minion_dreamway_whale", "minion_peacock_mystic" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 28, 22 ], [ 51 ] ],
+  "actions" : [ 0, 0, 0, 1, 0, 0, 0, 0, 0, 5, 1 ],
+  "id" : null
+}

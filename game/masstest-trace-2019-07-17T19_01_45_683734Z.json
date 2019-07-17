@@ -1,0 +1,12 @@
+{
+  "seed" : 8174028246484119486,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TIME", "TEAL" ],
+  "deckCardIds" : [ [ "minion_shouting_soldier", "spell_overclock_timeweaver", "minion_matriarch_aiiran", "minion_corvana_the_seamstress", "minion_mysterious_questgiver", "quest_the_impossible_harvest", "minion_abandoned_geneticist", "minion_mind_controlled_mech", "minion_swift_stinger", "minion_mysterious_questgiver", "spell_destined_to_repeat", "minion_swarmed_captive", "minion_arcane_accelerator", "minion_sourcing_specialist", "spell_lone_survivor", "spell_sudden_storm", "minion_molten_cauterizer", "minion_spellquaker", "minion_holy_bulwark", "weapon_iceblade_giantslayer", "minion_chief_vigilante", "spell_good_omens", "minion_ambushing_rose", "minion_ambushing_rose", "spell_snip_the_cord", "minion_fumewalker_zin", "minion_justin_thyme_explorer1", "minion_costume_seller", "weapon_iceblade_giantslayer", "spell_bullet_time" ], [ "spell_regal_gaze", "weapon_saltspring_wand", "minion_fiery_tyrant", "spell_frostfire", "weapon_brine_crossbolter", "minion_dragon_pod", "spell_murloc_mating_call", "minion_dreadmire_hexxer", "minion_gasbelly_oni", "spell_condensation", "minion_warlord_kalithresh", "spell_salt_the_wound", "minion_darkshard_duelist", "minion_magedrainer", "spell_salt_the_wound", "minion_doctor_hatchett", "minion_ambushing_rose", "minion_sea_elemental", "minion_steamvault_bruiser", "minion_dante_the_outlaw", "minion_steamvault_bruiser", "minion_primalist_kirra", "spell_gift_of_the_queen", "spell_they_came_from_below", "spell_calm_currents", "minion_nazjatar_seahorseman", "spell_evaporation", "minion_bookkeeper", "minion_nightmare_whelp", "minion_bugbiter" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 25, 33, 9 ], [ 39, 49 ] ],
+  "actions" : [ 0, 0, 1, 3, 0, 0, 2, 0, 4, 5, 2, 0, 0, 6, 1, 2, 0, 0, 2, 0, 7, 3, 0, 14, 3, 0, 5, 2, 5, 3, 0, 1, 0 ],
+  "id" : null
+}

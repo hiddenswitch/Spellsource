@@ -1,0 +1,12 @@
+{
+  "seed" : -3492884174499814919,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "EGGPLANT", "DARKGREEN" ],
+  "deckCardIds" : [ [ "minion_feral_child", "minion_docile_boulder", "minion_doodles", "minion_recurring_torrent", "minion_pixie_knight", "spell_monologue", "minion_buddybot", "minion_squeak_freak", "minion_squeak_freak", "minion_kofko_the_dragon", "minion_souldrinker_drake", "minion_plunderogue", "minion_glibbi_the_infused", "spell_contemplate", "minion_aegwynn", "permanent_ravaging_of_outland", "secret_rebirth", "secret_reactive_potion", "minion_berry_hoarder", "spell_evil_laughter", "spell_great_escape", "minion_gargoyle_warden", "minion_grave_smasher", "minion_flingin_alchemist", "spell_plague_of_rats", "minion_pixie_knight", "minion_feral_child", "minion_forgotten_hero", "minion_timewalker_stormlord", "minion_flingin_alchemist" ], [ "minion_doomed_diver", "minion_eldritch_scholar", "minion_little_purrsuer", "spell_will_of_the_eldritch", "minion_kahl_of_the_deep", "minion_ominous_obliterator", "minion_doomed_diver", "minion_lesser_old_one", "spell_godsize", "minion_trigger_happy_survivor", "minion_garbasu_monster", "spell_deep_exploration", "spell_lash_out", "minion_ancient_abomination", "minion_shedding_chameleon", "minion_bronze_warden", "spell_eldritch_bait", "spell_imperfect_duplicate", "spell_freezing_over", "spell_underwater_horrors", "spell_freezing_over", "spell_doomed_expedition", "minion_towering_horror", "minion_bramblebound_warrior", "minion_distortoise", "minion_divine_cleric", "spell_yig_mastermind", "minion_nilfheim_needlegunner", "minion_acolyte_of_peroth'arn", "minion_skytearer" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 27, 22, 10 ], [ 44, 40 ] ],
+  "actions" : [ 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 6, 8, 11, 0, 21, 5, 0, 1, 0, 8, 0, 21, 8, 8, 4, 7, 3, 0, 30, 0, 6, 3, 5, 4, 11, 3 ],
+  "id" : null
+}

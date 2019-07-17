@@ -1,0 +1,12 @@
+{
+  "seed" : -7337207223328455372,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "OLIVE" ],
+  "deckCardIds" : [ [ "spell_refang", "minion_springer", "minion_broodmother_narvina", "minion_giant_reaper", "spell_incubation", "minion_gentleman_s_giant", "minion_cadenza", "minion_dimensional_courier", "minion_servant_wasp", "spell_second_wave", "spell_reinforced_shell", "spell_spider_surveillance", "minion_ambushing_rose", "minion_dante_the_outlaw", "minion_wee_whelp", "minion_sand_giant", "minion_queen_beetrice", "minion_dragonfly", "minion_mari_anette", "spell_extreme_evolution", "permanent_ravaging_of_outland", "minion_trigger_happy_survivor", "minion_jabberwocky", "spell_level_1_encounter", "minion_forest_fairy", "minion_shifting_sands", "minion_ironplate_samurai", "minion_ursol_the_wise", "minion_primal_mother", "spell_two_by_two" ], [ "minion_timeworn_archivist", "spell_whimsical_generator", "minion_wolfcrier", "minion_queen_cinderella", "minion_dragon_librarian", "minion_hands_on_historian", "spell_writers_block", "minion_flutterer", "spell_magic_word_mishap", "minion_hard_puncher", "minion_the_imperial_soul", "spell_engaging_story", "spell_whimsical_generator", "minion_ambushing_rose", "minion_snappy_author", "spell_engaging_story", "minion_ankylo_devotee", "minion_dragon_librarian", "spell_tome_of_secrets", "minion_inora_spellbound", "minion_guardian_kirin", "minion_wee_squashling", "spell_magic_word_mishap", "minion_big_bad_coyote", "minion_big_bad_coyote", "minion_stone_sentinel_basic", "minion_demonic_frontrunner", "spell_miserable_conclusion", "minion_bromeliad_pup", "minion_darkbent_drake" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 12, 11, 25 ], [ 50 ] ],
+  "actions" : [ 1, 0, 0, 2, 3, 4, 0, 3, 2, 3, 0, 3, 8, 0, 3, 0, 1, 10, 6, 1, 0, 0, 4, 0, 27, 17, 3, 6, 2, 2, 27, 25, 0, 9, 0, 0, 28, 2, 0, 5, 3, 0, 0, 8, 41, 11, 4, 8, 11 ],
+  "id" : null
+}

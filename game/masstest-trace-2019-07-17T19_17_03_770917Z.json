@@ -1,0 +1,12 @@
+{
+  "seed" : 1167381841384383786,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ROSE", "COPPER" ],
+  "deckCardIds" : [ [ "minion_micro_raptors", "minion_rallying_elder", "minion_inora_spellbound", "minion_shimmerscale", "minion_bronze_timekeeper", "spell_false_promise", "minion_tribemaster", "weapon_hexcarver", "weapon_sacrificial_blade", "minion_massive_turtle", "minion_gasbelly_oni", "spell_abduction", "minion_secretive_chanter", "minion_tribemaster", "minion_ritual_shaman", "minion_blackflame_bomber", "minion_hybreeder", "weapon_spiritbinder", "minion_nezumi_master", "minion_kinru_the_benevolent", "minion_hunchback_supplier", "minion_fae_trickster", "minion_doctor_rigo_morti", "minion_chaotic_cutthroat", "minion_trophy_huntress", "minion_fading_berserker", "minion_shadownest_arachne", "minion_secretive_chanter", "minion_colrum", "spell_rotten_curse" ], [ "minion_saloon_barkeep", "spell_reloading", "spell_cull_the_herd", "permanent_the_end_time", "minion_timewalker_initiate", "minion_whiptail_gatherer", "spell_shootout", "minion_bramblebound_warrior", "minion_captain_stashin", "minion_forged_defender", "minion_treasure_hunter", "minion_perplexed_courtsman", "spell_bang", "minion_shady_stranger", "minion_smogg", "minion_forged_defender", "minion_mcgrief", "minion_beholder_of_the_beginning", "minion_burst_bug", "minion_cheating_wrangler", "minion_spooky_turret", "weapon_stick", "minion_emissary_of_the_end", "minion_hired_gunsmith", "minion_inspiring_sentry", "minion_shouting_soldier", "minion_petal_knight", "spell_shootout", "minion_inspiring_sentry", "spell_crate_of_dynamite" ] ],
+  "deckFormatName" : "All",
+  "deckFormatSets" : [ "SANDS_OF_TIME", "SPELLSOURCE", "WITCHWOOD", "BLIZZARD_ADVENTURE", "LEAGUE_OF_EXPLORERS", "BASIC", "SPELLSOURCE_BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "MEAN_STREETS_OF_GADGETZAN", "TEST", "CUSTOM", "GRAVEYARD", "KOBOLDS_AND_CATACOMBS", "THE_GRAND_TOURNAMENT", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE" ],
+  "secondPlayerBonusCards" : [ ],
+  "mulligans" : [ [ 10, 14 ], [ 44, 37, 59 ] ],
+  "actions" : [ 0, 0, 2, 1, 0, 2, 2, 2, 0, 1, 3, 8, 9, 0, 0, 4, 0, 1, 11, 4, 1, 9, 0, 0, 25, 11, 1, 3, 4, 2, 2, 21, 2, 18, 3, 2, 3, 0, 1, 3, 2, 0, 0, 0, 10, 0, 8, 0, 1, 4, 7, 9, 1, 2, 8, 5, 27, 19, 7, 7, 0, 3, 0, 0, 8, 17, 9, 2, 3, 3, 1, 0, 0, 7, 0, 4, 2, 0, 2, 9, 0, 5, 11, 14, 0, 7, 3, 2, 6, 9, 21, 16, 10, 10, 17, 16, 7, 1, 13, 11, 1, 0, 7, 29, 18, 28, 24, 10, 11, 6, 4, 2, 0, 13, 12, 8, 6, 0, 5, 0, 20 ],
+  "id" : null
+}

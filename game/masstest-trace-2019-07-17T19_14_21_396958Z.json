@@ -1,0 +1,12 @@
+{
+  "seed" : 8864737399017323018,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "OBSIDIAN", "LEATHER" ],
+  "deckCardIds" : [ [ "spell_volatile_rune", "permanent_puzzle_box", "minion_darkbent_drake", "minion_zilch_god_of_nothing", "spell_six_feet_under", "minion_bogovanis", "minion_ninja_aspirants", "spell_outbreak", "minion_lady_deathwhisper2", "minion_little_purrsuer", "minion_calcified_champion", "minion_echoweb_lurker", "spell_collectible_death_coil", "minion_stalwart_sculptor", "minion_commander_gareth", "minion_hooded_ritualist", "minion_bone_whelp2", "minion_doomed_diver", "minion_saronite_drake", "spell_power_for_a_price", "minion_the_grudge", "minion_deaf_knife", "minion_bloodbeast", "spell_pay_respects", "minion_giant_serpent", "minion_sacred_tombstone", "minion_perplexed_courtsman", "minion_zealous_deckhand", "minion_stallius_the_horned", "spell_collectible_army_of_the_dead" ], [ "minion_flutterer", "minion_harbinger_of_hope", "minion_mutated_brute", "minion_darkshard_duelist", "minion_squirrel_knight", "weapon_sharp_a_practice", "minion_doomed_diver", "minion_drakonid_brute", "minion_sourceborn_aelin", "weapon_sharp_a_practice", "minion_glass_golem", "spell_defensive_position", "minion_xavius", "minion_volcanic_elemental", "minion_red_agressor", "permanent_escape_from_durnholde", "minion_novice_enchantress", "spell_reload", "minion_hands_on_historian", "weapon_handsized_flamethrower", "spell_demand", "spell_escape_position", "spell_focus_fire", "minion_zarmull_the_silent_mercenary", "minion_unnerving_spectre", "minion_fel_manticore", "minion_tanglefer_of_the_jungle", "minion_ninja_aspirants", "minion_volcanic_elemental", "minion_kodama_bulwark" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 15, 9 ], [ 43, 48 ] ],
+  "actions" : [ 0, 1, 0, 0, 1, 1, 0, 0, 1, 3, 0, 0, 0, 2, 0, 3, 1, 0, 9, 1, 3, 3, 1, 13, 1, 7, 24, 10, 3, 5, 3, 1 ],
+  "id" : null
+}

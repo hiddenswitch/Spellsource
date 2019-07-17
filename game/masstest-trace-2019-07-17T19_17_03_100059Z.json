@@ -1,0 +1,12 @@
+{
+  "seed" : -7382790721374554132,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "AMBER", "ANY" ],
+  "deckCardIds" : [ [ "minion_sky_high_surveyor", "spell_locust_swarm", "minion_magishire_wildcat", "minion_creepy_crawler", "minion_little_helper", "minion_yaungol_guardian", "spell_extreme_evolution", "minion_mindswapper", "spell_refang", "minion_lingering_spirit", "minion_ultrabug", "spell_your_heart_will_explode", "minion_borer_beetle", "spell_forest_whispers", "spell_two_by_two", "spell_ancient_catching", "minion_chromatic_vohlok", "minion_visionary", "minion_chronocaller", "minion_pumpkin_abomination", "minion_serv-ant", "minion_sp1der", "spell_venom_drench", "minion_holdover_lich", "spell_fill_the_stands", "minion_tiger_ant", "minion_chainwrecker_corsair", "minion_novice_time_traveler", "minion_die_insect", "minion_giant_reaper" ], [ "minion_molten_cauterizer", "minion_channeled_spirit", "minion_crystal_shatterer", "minion_roadblock_pufferfish", "minion_chromie", "minion_champion_of_death", "minion_cloud_serpent_hatchling", "minion_magedrainer", "minion_holy_bulwark", "minion_ankylo_devotee", "minion_novice_enchantress", "permanent_escape_from_durnholde", "minion_bogovanis", "minion_birdbrain", "minion_sourceborn_aelin", "minion_purity_keeper", "minion_nightmare_dragonflight", "minion_treeleach", "minion_colrum", "minion_nightmare_warden", "minion_disco_inferno", "minion_whiptail_gatherer", "minion_purifying_ooze", "minion_shifting_sands", "minion_beholder_of_the_beginning", "minion_freyas_familliar", "minion_tree_giant", "minion_festivity_golem", "minion_southsea_giant", "minion_eyeweaver" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33, 23, 32 ], [ 56, 60, 57 ] ],
+  "actions" : [ 1, 1, 0, 0, 2, 3, 3, 3, 0, 0, 1, 1, 4, 10, 6, 1, 0, 10, 3, 0, 0, 16, 11, 3, 0, 0, 0, 1, 12, 1, 0, 13, 10, 0 ],
+  "id" : null
+}

@@ -1,0 +1,12 @@
+{
+  "seed" : -4875934329792018380,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "ROSE", "TOAST" ],
+  "deckCardIds" : [ [ "minion_pawshop_trader", "minion_jungle_operative", "minion_thelia_silentdreamer", "minion_forgotten_hero", "minion_spellquaker", "spell_marked_for_sacrifice", "spell_spiritual_diffusion", "minion_roadblock_pufferfish", "minion_inora_spellbound", "minion_barside_slinker", "minion_smug_theorist", "minion_centaur_acumen", "weapon_sliver_of_silver", "minion_wink_dog", "minion_shimmerscale", "weapon_twistbark_staff", "minion_dawnrisen_harpy", "minion_sleepy_scarecrow", "minion_kawarimi_headbasher", "spell_shangas_spirit_brew", "spell_unearthly_haunting", "minion_timewalker_initiate", "minion_unnerving_spectre", "minion_mrs_merria", "minion_mountain_nightmare", "spell_bottled_spirit", "minion_trigger_happy_survivor", "spell_evocation_witchdoctor", "minion_q_captain_q_cookie", "minion_soulcaller_roten" ], [ "spell_haute_cuisine", "minion_treeleach", "minion_cursing_disciple", "spell_massive_burp", "minion_cannibal_cake", "minion_skilled_cook", "minion_bronze_timekeeper", "minion_the_rokk", "minion_peacock_mystic", "spell_cannibalism", "minion_picky_lookout", "minion_smug_theorist", "minion_toothpick_fighter", "minion_skilled_cook", "minion_cromwell", "spell_butcher", "minion_primalist_kirra", "spell_massive_burp", "spell_romantic_picnic", "weapon_dry_baguette", "minion_the_grudge", "minion_pastry_cook", "minion_head_of_the_caravan", "spell_party_night", "minion_crystal_golem", "spell_old_school_cooking", "minion_lingering_spirit", "minion_big_businessman", "minion_doodles", "weapon_dry_baguette" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 17, 12 ], [ 62 ] ],
+  "actions" : [ 1, 1, 1, 1, 1, 2, 7, 0, 1, 9, 13, 2, 0, 2, 7, 1, 5, 0, 1, 0, 0, 1, 3, 0, 0, 17, 10, 5, 1, 2, 10, 4 ],
+  "id" : null
+}

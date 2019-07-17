@@ -1,0 +1,12 @@
+{
+  "seed" : -1289893442265414128,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TEAL", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_steamvault_bruiser", "minion_captain_cookie", "minion_crystal_shatterer", "minion_articus__dragon_giant", "minion_glintscale_stormseer", "minion_warlord_kalithresh", "minion_yokai_shapeshifter", "minion_coilfang_battlemaiden", "spell_evaporation", "minion_harbinger_of_hope", "minion_sea_elemental", "minion_timebidding_magi", "minion_chief_vigilante", "minion_aberrant_tinyfin", "minion_fae_horncaster", "minion_molten_cauterizer", "spell_they_came_from_below", "minion_spirited_bomber", "minion_dead_horse", "minion_aberrant_tinyfin", "spell_regal_gaze", "minion_dreamway_whale", "spell_murloc_mating_call", "minion_spellquaker", "minion_coilfang_battlemaiden", "minion_stalwart_sculptor", "minion_glintscale_stormseer", "minion_hunchback_supplier", "minion_jack_in_the_box", "spell_gift_of_the_queen" ], [ "weapon_sharp_a_practice", "minion_snapshooter", "spell_reload", "spell_new_arrival", "minion_fiery_tyrant", "spell_take_a_drink", "minion_birdbrain", "minion_natural_convert", "minion_chief_vigilante", "spell_triple_shot", "permanent_escape_from_durnholde", "minion_petal_knight", "minion_drakonid_brute", "minion_treasure_hunter", "minion_massive_turtle", "spell_supply_sabotage", "minion_magelight_dragon", "minion_terrified_tanooki", "minion_faerie_nightmare", "minion_skilled_hunter", "spell_extermination_team", "minion_murozond", "spell_triple_shot", "minion_skilled_hunter", "minion_timebidding_magi", "minion_tikrakazz", "minion_treasure_mimic", "minion_swarmed_captive", "minion_spirited_bomber", "weapon_scissors_of_dots" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 29 ], [ 55 ] ],
+  "actions" : [ 0, 1, 0, 0, 3, 1, 4, 2, 2, 1, 0, 0, 12, 4, 0, 0, 0, 7, 0, 10 ],
+  "id" : null
+}

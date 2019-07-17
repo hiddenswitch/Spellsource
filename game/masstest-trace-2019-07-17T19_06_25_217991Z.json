@@ -1,0 +1,12 @@
+{
+  "seed" : 8766467447179676195,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NEONGREEN", "ANY" ],
+  "deckCardIds" : [ [ "minion_forest_magistrate", "minion_southsea_giant", "minion_blackboar", "spell_wither_test", "minion_abandoned_geneticist", "spell_chaos_bolts", "minion_hypnotic_beetle", "spell_observer", "permanent_formless_wormhole", "minion_mind_harvester", "minion_nebulous_entity", "spell_malignancy", "minion_abandoned_geneticist", "spell_primordial_supremacy", "permanent_formless_wormhole", "minion_draining_ooze", "spell_reconnoitre", "spell_reconnoitre", "minion_mind_harvester", "weapon_six_shooter", "minion_hoffis_the_dunewalker", "spell_wither_test", "spell_distort", "minion_realm_parasite", "minion_oni_entrapper", "spell_observer", "minion_gold_picaroon", "minion_wink_dog", "minion_nebulous_entity", "minion_gemstone_giant" ], [ "minion_boar_brawler", "minion_doomed_diver", "minion_the_grudge", "minion_void_reaper", "minion_nightmare_dragonflight", "minion_deepwood_barghest", "minion_zealous_deckhand", "minion_thuggish_fae", "minion_mecha_rager", "minion_holdover_lich", "minion_rainbow_runner", "minion_sky_high_surveyor", "minion_gasbelly_oni", "minion_darkbent_drake", "minion_tanglefer_of_the_jungle", "minion_barside_slinker", "minion_aegwynn", "minion_glass_golem", "minion_emissary_of_the_end", "minion_hunchback_supplier", "permanent_call_of_the_crusade", "minion_darkshard_duelist", "minion_lounge_brownie", "minion_shifting_sands", "minion_harbinger_of_hope", "minion_spectral_steed", "minion_deep_borer", "minion_roadblock_pufferfish", "minion_champion_of_death", "minion_hold_hunter" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 32, 24 ], [ 65, 41 ] ],
+  "actions" : [ 0, 0, 2, 1, 0, 0, 0, 5, 0, 1, 0, 1, 1, 0, 5, 3, 10, 5, 4, 12, 4, 4, 3, 9, 12, 14, 3, 1, 0, 7, 14, 2, 0, 24, 14, 3, 7, 3, 2, 8, 6, 2, 0, 20, 17, 5, 1, 0, 1, 4, 2, 0, 0 ],
+  "id" : null
+}

@@ -1,0 +1,12 @@
+{
+  "seed" : -8296087814874602923,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NAVY", "TIME" ],
+  "deckCardIds" : [ [ "spell_clash", "minion_naga_illusionist", "minion_lingering_spirit", "minion_worgen_petkeeper", "minion_bogovanis", "minion_stone_obelisk", "minion_tick_and_tock", "minion_weak_challenger", "minion_barside_slinker", "minion_ninjarcher", "spell_one_on_one", "minion_phantom_advisor", "minion_trisword_swinger", "spell_one_for_all", "minion_gustbreaker", "minion_lord_cookie", "minion_field_supplier", "minion_king_blackstrom", "minion_captain_of_the_guard", "minion_highmountain_primalist", "minion_haunted_berserker", "minion_reckless_hero", "minion_bronze_warden", "minion_hard_puncher", "minion_sparkgunner", "minion_nightmare_whelp", "minion_hostile_snapdragon", "spell_ensnare", "spell_alternate_timeline", "spell_fight" ], [ "spell_banish", "minion_forgotten_hero", "minion_spellquaker", "minion_thuggish_fae", "minion_skeletal_warrior", "minion_savage_sprite", "minion_mighty_mufunga", "minion_justin_thyme_explorer1", "minion_meek_inheritor", "spell_lesser_marble_spellstone", "spell_snip_the_cord", "minion_cinderslinger", "minion_little_helper", "minion_corvana_the_seamstress", "minion_bookkeeper", "minion_mysterious_questgiver", "spell_snip_the_cord", "minion_onis_eye", "minion_sonorous_spectre", "minion_disco_inferno", "spell_trials_of_the_weave", "minion_klive_icetooth", "spell_firesilk_chrysalis", "spell_overclock_timeweaver", "minion_rafaam_philanthropist", "minion_fassnu_avenger", "spell_leyline_tap", "minion_cacodemon", "spell_firesilk_chrysalis", "minion_oni_entrapper" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 18, 6 ], [ 63, 65, 49 ] ],
+  "actions" : [ 0, 0, 2, 1, 1, 0, 2, 0, 0, 0, 0, 5, 0, 1, 0, 6, 1, 1, 11, 1, 0, 6, 0, 2, 3, 0, 1, 1, 0, 8, 9, 1, 2, 1, 2, 3, 7, 9, 11 ],
+  "id" : null
+}

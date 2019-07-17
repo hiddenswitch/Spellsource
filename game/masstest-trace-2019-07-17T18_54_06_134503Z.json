@@ -1,0 +1,12 @@
+{
+  "seed" : -4803397858829332998,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "RUST", "NAVY" ],
+  "deckCardIds" : [ [ "minion_krentiaxx_tyrant", "minion_thitazov", "spell_defensive_bearing", "minion_nightmare_dragon", "minion_novice_enchantress", "minion_flutterer", "spell_plunderer_abound", "minion_aspect_champion_gar_hok", "minion_cult_reverand", "spell_smash_n_run", "minion_bomber_whelp", "minion_wild_pyrodancer", "minion_mollusk_meister", "minion_dawnrisen_harpy", "minion_massive_egg", "spell_lush_restoration", "minion_defender_of_tomorrow", "minion_ankylo_devotee", "minion_ancient_dragon", "minion_hydraquatom", "minion_dawnrisen_harpy", "minion_thuggish_fae", "spell_ride_the_nuke", "minion_mountain_whelp", "minion_fifi_fizzlewarp", "minion_cadenza", "minion_hunchback_supplier", "minion_silver_warmaiden", "spell_supersonic_roar", "weapon_katar" ], [ "minion_boar_brawler", "minion_towering_treant", "minion_fae_trickster", "minion_aged_enchanter", "minion_forgotten_hero", "minion_cyclotron", "minion_yaungol_guardian", "minion_corrupted_reaver", "minion_mystiva", "minion_lord_cookie", "minion_doodles", "minion_dawn_drake", "minion_stone_obelisk", "minion_kitesail_ravager", "spell_fizzles_dark_duplicator", "minion_twilight_annihilator", "minion_windup_offender", "minion_emerald_cleanser", "minion_fifi_fizzlewarp", "spell_victory_royale", "minion_the_jekka_tree", "minion_prophet_waran", "spell_enchanted_shield", "minion_hold_hunter", "minion_stormwind_commander", "minion_doom_sergeant", "minion_peacock_mystic", "minion_underworld_keeper", "minion_blood_cultist", "minion_bramblebound_warrior" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33, 19, 18 ], [ 44 ] ],
+  "actions" : [ 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 1, 1, 3, 1, 1, 4, 0, 7, 4, 0, 1, 0, 14, 0, 23, 11, 0, 0, 0, 27, 24, 3, 3, 0, 17, 1, 20, 3, 9, 2, 0, 22, 11, 1, 5, 1, 9, 7, 1, 3, 1, 3, 13, 18, 9, 0, 0, 1 ],
+  "id" : null
+}

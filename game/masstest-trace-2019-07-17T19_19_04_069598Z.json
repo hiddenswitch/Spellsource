@@ -1,0 +1,12 @@
+{
+  "seed" : 5984200209397208578,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "TOAST", "NAVY" ],
+  "deckCardIds" : [ [ "spell_feast_of_winter_veil", "spell_feast_of_winter_veil", "spell_butcher", "spell_unidentified_mushroom", "minion_wavering_diabloist", "minion_doctor_hatchett", "minion_wild_pyrodancer", "minion_lounge_brownie", "minion_massive_egg", "minion_alien_ravager", "spell_al_dente", "minion_barnacled_dweller", "minion_galakrond", "spell_chili_dragonbreath", "minion_meat_tenderizer", "minion_big_businessman", "minion_difficult_child", "minion_guerrilla_hooligan", "minion_glass_golem", "minion_hold_hunter", "spell_twilight_cookbook", "minion_harsh_food_critic", "minion_stormwind_chef", "minion_xavius", "minion_garbasu_monster", "spell_conjured_table", "minion_faldoran_the_ninja", "spell_lava_soup", "minion_freyas_familliar", "spell_toxic_mushroom" ], [ "minion_undead_intern", "spell_rat_plague", "minion_rhunok_the_bear", "minion_channeled_spirit", "minion_stormwind_commander", "minion_trojan_horse", "minion_bighand_brute", "minion_trojan_horse", "minion_hooded_ritualist", "spell_extract", "minion_duelmaster_fizzle", "minion_anarking", "minion_chainwrecker_corsair", "minion_gravtisk_the_ancient", "minion_kodama_bulwark", "minion_corona_fae_defender", "minion_ninjarcher", "minion_soulclencher", "minion_grape_merchant", "minion_swarmed_captive", "minion_polychrome_hydra", "minion_ninja_aspirants", "minion_jungle_operative", "spell_siege_the_castle", "minion_rainbow_runner", "minion_sorceress_eka", "minion_sparklefuser", "spell_deepsea_duel", "minion_plunderogue", "minion_attrition_master_rictor" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 19, 23 ], [ 53 ] ],
+  "actions" : [ 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 0, 2, 2, 1, 2, 0, 0, 6, 13, 3, 1, 0, 0, 7, 0, 1, 3, 0, 0, 3, 14, 1, 1, 7, 0, 3, 0, 15, 3, 2, 2, 1, 1, 3, 3, 3, 0, 0, 2, 6, 1, 1, 8, 10, 1, 10, 36, 28, 14, 4, 5, 4, 0, 0, 18, 11, 1, 0, 14, 8, 19, 14, 15 ],
+  "id" : null
+}
