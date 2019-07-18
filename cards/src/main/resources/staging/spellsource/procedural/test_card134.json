@@ -7,14 +7,14 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "(2) Overload. Battlecry: Give your opponent 3 Bananas.",
+  "description": "(2) Overload. Battlecry: Give your opponent 3 Apples.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",
       "cards": [
-        "spell_bananas",
-        "spell_bananas",
-        "spell_bananas"
+        "spell_apple",
+        "spell_apple",
+        "spell_apple"
       ],
       "targetPlayer": "OPPONENT"
     }

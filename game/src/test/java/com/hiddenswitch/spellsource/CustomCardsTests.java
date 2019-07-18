@@ -3011,34 +3011,6 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testEscapeFromDurnholde() {
-		runGym((context, player, opponent) -> {
-			Card shouldntDraw = putOnTopOfDeck(context, player, "spell_test_gain_mana");
-			Card shouldDraw = putOnTopOfDeck(context, player, "spell_test_gain_mana");
-			assertEquals(shouldntDraw.getZone(), Zones.DECK);
-			assertEquals(shouldDraw.getZone(), Zones.DECK);
-			playCard(context, player, "permanent_escape_from_durnholde");
-			context.endTurn();
-			assertEquals(shouldntDraw.getZone(), Zones.DECK);
-			assertEquals(shouldDraw.getZone(), Zones.DECK);
-			context.endTurn();
-			assertEquals(shouldDraw.getZone(), Zones.HAND);
-			assertEquals(shouldntDraw.getZone(), Zones.DECK);
-		});
-
-		runGym((context, player, opponent) -> {
-			Card shouldDraw1 = putOnTopOfDeck(context, player, "spell_test_gain_mana");
-			Card shouldDraw2 = putOnTopOfDeck(context, player, "spell_test_gain_mana");
-			playCard(context, player, "permanent_escape_from_durnholde");
-			playMinionCard(context, player, "minion_test_3_2");
-			context.endTurn();
-			context.endTurn();
-			assertEquals(shouldDraw1.getZone(), Zones.HAND);
-			assertEquals(shouldDraw2.getZone(), Zones.HAND);
-		});
-	}
-
-	@Test
 	public void testHypnotist() {
 		runGym((context, player, opponent) -> {
 			Minion giant = playMinionCard(context, player, "minion_crystal_giant");
@@ -3207,21 +3179,6 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_test_3_2");
 			playCard(context, player, "minion_dimensional_courier");
 			assertEquals(player.getHand().size(), 0);
-		});
-	}
-
-	@Test
-	public void testPermanentCallOfTheCrusade() {
-		runGym((context, player, opponent) -> {
-			playCard(context, player, "permanent_call_of_the_crusade");
-			Minion beast = playMinionCard(context, player, "minion_test_3_2");
-			for (int i = 0; i < 3; i++) {
-				assertEquals(beast.getAttack(), beast.getBaseAttack() + 1);
-				context.endTurn();
-				context.endTurn();
-			}
-			assertEquals(beast.getAttack(), beast.getBaseAttack());
-			assertEquals(player.getMinions().size(), 1);
 		});
 	}
 
@@ -3842,8 +3799,8 @@ public class CustomCardsTests extends TestBase {
 	public void testTrophyHuntress() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion murloc = playMinionCard(context, opponent, "minion_neutral_test_1");
-			murloc.setRace("MURLOC");
+			Minion fae = playMinionCard(context, opponent, "minion_neutral_test_1");
+			fae.setRace("FAE");
 			Minion beast = playMinionCard(context, opponent, "minion_neutral_test_1");
 			beast.setRace("BEAST");
 			Minion dragon = playMinionCard(context, opponent, "minion_neutral_test_1");
@@ -3852,8 +3809,8 @@ public class CustomCardsTests extends TestBase {
 				context.getLogic().setHpAndMaxHp(minion, 4);
 			}
 			context.endTurn();
-			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", murloc);
-			assertEquals(murloc.getHp(), murloc.getMaxHp() - 1);
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", fae);
+			assertEquals(fae.getHp(), fae.getMaxHp() - 1);
 			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", beast);
 			assertEquals(beast.getHp(), beast.getMaxHp() - 2);
 			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", dragon);
