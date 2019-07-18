@@ -29,7 +29,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "card": "token_superior_demon",
+      "card": "token_88_demon",
       "targetPlayer": "OPPONENT"
     }
   },

@@ -1,15 +1,15 @@
 {
-  "name": "Capt'n Cookie",
+  "name": "Capt'n Cookish",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "TOAST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Spellpower +3. Your spells now have random targets.",
   "aura": {
-    "class": "CaptnCookieAura"
+    "class": "CaptnCookishAura"
   },
   "attributes": {
     "SPELL_DAMAGE": 3
