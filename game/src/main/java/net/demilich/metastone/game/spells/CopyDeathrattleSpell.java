@@ -63,8 +63,7 @@ public class CopyDeathrattleSpell extends Spell {
 					deathrattles.add(impliedCard.getDesc().getDeathrattle());
 				}
 			}
-		}
-		if (target instanceof Card) {
+		} else if (target instanceof Card) {
 			final CardDesc actorCardDesc = ((Card) target).getDesc();
 			if (actorCardDesc.getDeathrattle() != null) {
 				deathrattles.add(actorCardDesc.getDeathrattle());
