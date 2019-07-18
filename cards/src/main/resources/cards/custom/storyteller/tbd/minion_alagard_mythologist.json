@@ -1,0 +1,92 @@
+{
+  "name": "Alagard, Mythologist",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Craft a custom Chimera from two Beasts",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.CreateCardFromChoicesSpell",
+      "name": "Chimera",
+      "cardFilters": [
+        {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "HasEffectsFilter"
+            },
+            {
+              "class": "CardFilter",
+              "race": "BEAST",
+              "cardType": "MINION"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 5,
+              "operation": "LESS_OR_EQUAL"
+            },
+            {
+              "class": "OrFilter",
+              "filters": [
+                {
+                  "class": "CardFilter",
+                  "heroClass": "ANY"
+                },
+                {
+                  "class": "CardFilter",
+                  "heroClass": "OLIVE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "HasEffectsFilter",
+              "invert": true
+            },
+            {
+              "class": "CardFilter",
+              "race": "BEAST",
+              "cardType": "MINION"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 5,
+              "operation": "LESS_OR_EQUAL"
+            },
+            {
+              "class": "OrFilter",
+              "filters": [
+                {
+                  "class": "CardFilter",
+                  "heroClass": "ANY"
+                },
+                {
+                  "class": "CardFilter",
+                  "heroClass": "OLIVE"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cardSource": {
+        "class": "CatalogueSource"
+      },
+      "howMany": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
