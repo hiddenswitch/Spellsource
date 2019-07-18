@@ -1,12 +1,12 @@
-### Spell Damage Hocus Pocus
+### Witch Doctor: Spell Damage Hocus Pocus
 # Class: ROSE
 # Format: Spellsource
 #
-# 2x (1) Ashes to Ashes
 # 2x (1) Devil Within
 # 2x (1) Hypnotic Chameleon
 # 2x (1) Marked for Sacrifice
 # 2x (1) Tiki Tokens
+# 2x (2) Devilry Flare
 # 2x (2) Possessed Madness
 # 2x (2) Ritual Dagger
 # 2x (2) Sliver of Silver
