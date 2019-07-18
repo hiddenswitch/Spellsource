@@ -1,0 +1,17 @@
+{
+  "name": "Black Ox Brew",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Your champion can only take 1 damage at a time until the start of your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_brewing"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
