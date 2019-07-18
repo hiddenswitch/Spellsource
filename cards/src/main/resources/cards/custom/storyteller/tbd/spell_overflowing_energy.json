@@ -1,0 +1,45 @@
+{
+  "name": "Overflowing Energy",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "EPIC",
+  "description": "Add two copies of the lowest cost spell in your hand to your hand.'",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "ManaCostFilter",
+          "value": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_HAND",
+            "operation": "MINIMUM",
+            "value1": {
+              "class": "ManaCostProvider"
+            }
+          },
+          "operation": "EQUAL"
+        },
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      ]
+    },
+    "value": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
