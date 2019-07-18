@@ -3,24 +3,19 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "This actor gains taunt. Once its Health drops below 25, its loses Taunt.",
-  "aura": {
-    "class": "AttributeAura",
-    "target": "SELF",
-    "attribute": "AURA_TAUNT"
-  },
+  "description": "This actor gains taunt. Once its Health drops below 25, its loses Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "WillEndSequenceTrigger",
       "fireCondition": {
         "class": "ComparisonCondition",
+        "operation": "LESS",
         "value1": {
           "class": "AttributeValueProvider",
-          "attribute": "HP",
-          "target": "TRIGGER_HOST"
+          "target": "TRIGGER_HOST",
+          "attribute": "HP"
         },
-        "value2": 25,
-        "operation": "LESS"
+        "value2": 25
       },
       "targetPlayer": "BOTH"
     },
@@ -29,6 +24,11 @@
       "target": "SELF",
       "card": "enchantment_hemoshield"
     }
+  },
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "attribute": "AURA_TAUNT"
   },
   "attributes": {},
   "collectible": false,

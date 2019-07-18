@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public final class QueryCardsRequest implements Serializable {
 	private List<QueryCardsRequest> requests;
-	private CardSet[] sets;
+	private String[] sets;
 	private Set<CardFields> fields;
 	private Rarity rarity;
 	private List<String> cardIds;
@@ -49,16 +49,16 @@ public final class QueryCardsRequest implements Serializable {
 		return this;
 	}
 
-	public QueryCardsRequest withSets(CardSet... sets) {
+	public QueryCardsRequest withSets(String... sets) {
 		this.sets = sets;
 		return this;
 	}
 
-	public CardSet[] getSets() {
+	public String[] getSets() {
 		return sets;
 	}
 
-	public void setSets(CardSet[] sets) {
+	public void setSets(String[] sets) {
 		this.sets = sets;
 	}
 

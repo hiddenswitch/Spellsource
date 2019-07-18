@@ -150,7 +150,8 @@ public interface Draft {
 	 */
 	@Suspendable
 	static DraftState toDraftState(PublicDraftState inState) {
-		GameContext workingContext = GameContext.uninitialized(inState.getHeroClass() == null ? HeroClass.RED : inState.getHeroClass(), HeroClass.RED);
+		String playerHero1 = inState.getHeroClass() == null ? "RED" : inState.getHeroClass();
+		GameContext workingContext = new GameContext(playerHero1, "RED");
 		return new DraftState()
 				.cardsRemaining(inState.getCardsRemaining())
 				.currentCardChoices(inState.getCurrentCardChoices() == null ? null :
@@ -165,10 +166,7 @@ public interface Draft {
 								.mapToObj(i -> Games.getEntity(workingContext, HeroClass.getHeroCard(inState.getHeroClassChoices().get(i)), 0).id(i))
 								.collect(Collectors.toList()))
 				.losses(inState.getLosses())
-				.selectedCards(inState.getSelectedCards() == null ? null :
-						IntStream.range(0, inState.getSelectedCards().size())
-								.mapToObj(i -> Games.getEntity(workingContext, CardCatalogue.getCardById(inState.getSelectedCards().get(i)), 0).id(i))
-								.collect(Collectors.toList()))
+				.selectedCardIds(inState.getSelectedCards())
 				.status(DraftState.StatusEnum.valueOf(inState.getStatus().toString()))
 				.wins(inState.getWins());
 	}

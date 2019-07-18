@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Battlecry: Deal [] damage randomly split among all enemies. (Increases for each health your hero Drained your last turn)",
+  "description": "Opener: Deal [0] damage randomly split among all enemies. (Increases for each health your champion Drained your last turn)",
   "battlecry": {
     "spell": {
       "class": "MissilesSpell",
@@ -15,8 +15,8 @@
       "value": 1,
       "howMany": {
         "class": "AttributeValueProvider",
-        "attribute": "DRAINED_LAST_TURN",
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "attribute": "DRAINED_LAST_TURN"
       }
     }
   },
@@ -31,10 +31,9 @@
       "class": "ValueDescription",
       "value": {
         "class": "AttributeValueProvider",
-        "attribute": "DRAINED_LAST_TURN",
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "attribute": "DRAINED_LAST_TURN"
       }
     }
   ]
 }
-  

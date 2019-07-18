@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "EPIC",
-  "description": "Deathrattle: If your deck is empty, resummon this.",
+  "description": "Aftermath: If your deck is empty, resummon this.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

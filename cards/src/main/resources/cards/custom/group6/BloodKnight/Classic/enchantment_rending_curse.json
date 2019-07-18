@@ -3,10 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Deathrattle: Deal 1 damage to all other minions, then give them this Deathrattle.",
-  "attributes": {
-    "DEATHRATTLES": true
-  },
+  "description": "Aftermath: Deal 1 damage to all other minions, then give them this Aftermath.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [
@@ -16,15 +13,21 @@
         "value": 1
       },
       {
-        "class": "AddDeathrattleSpell",
-        "card": "enchantment_rending_curse",
-        "target": "ALL_OTHER_MINIONS",
-        "filter": {
-          "class": "IsDestroyedFilter",
-          "invert": true
+        "class": "CastAfterSequenceSpell",
+        "spell": {
+          "class": "AddDeathrattleSpell",
+          "target": "ALL_OTHER_MINIONS",
+          "card": "enchantment_rending_curse",
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          }
         }
       }
     ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
   },
   "collectible": false,
   "set": "CUSTOM",

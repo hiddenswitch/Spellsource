@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "The next minion you summon this turn has +5 Health and Taunt.",
+  "description": "The next minion you summon this turn has +5 Health and Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "AfterMinionSummonedTrigger",
+        "class": "BeforeMinionSummonedTrigger",
         "targetPlayer": "SELF"
       },
       "spell": {

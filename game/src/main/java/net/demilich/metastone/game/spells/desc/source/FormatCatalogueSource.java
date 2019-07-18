@@ -7,6 +7,11 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 
+/**
+ * Returns a list of cards in the specified {@link CardSourceArg#FORMAT}.
+ *
+ * @see DeckFormat for the formats.
+ */
 public class FormatCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
 	public FormatCatalogueSource(CardSourceDesc desc) {

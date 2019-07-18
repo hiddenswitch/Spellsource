@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Your opponent's Hero Power is \"DIE, INSECT!\"",
+  "description": "Your opponent's Skill is \"DIE, INSECT!\"",
   "aura": {
     "class": "CardAura",
     "target": "ENEMY_HERO_POWER",

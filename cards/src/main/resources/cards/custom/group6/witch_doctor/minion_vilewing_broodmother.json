@@ -1,0 +1,25 @@
+{
+  "name": "Vilewing Broodmother",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Toxic. Aftermath: Summon two 1/1 Hatchlings with Toxic.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_vilewing_hatchling",
+      "token_vilewing_hatchling"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

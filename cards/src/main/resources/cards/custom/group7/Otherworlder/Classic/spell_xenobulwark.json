@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "Summon a 0/2 Xenodrone, then give your Xenodrones <b>Taunt</b>.",
+  "description": "Summon a 0/2 Xenodrone, then give your Xenodrones <b>Guard</b>.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -16,6 +16,7 @@
       {
         "class": "AddAttributeSpell",
         "target": "FRIENDLY_MINIONS",
+        "attribute": "TAUNT",
         "filter": {
           "class": "SpecificCardFilter",
           "cards": [
@@ -23,8 +24,7 @@
             "token_xenodrone_02",
             "token_xenodrone_01"
           ]
-        },
-        "attribute": "TAUNT"
+        }
       }
     ]
   },

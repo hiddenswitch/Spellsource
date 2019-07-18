@@ -1,0 +1,20 @@
+### Summoner: Fifi Summoner
+# Class: EGGPLANT
+# Format: Custom
+#
+# 2x (0) Blackflame Ritual
+# 2x (0) Rapier Rodent
+# 2x (1) Double
+# 2x (1) Hard Puncher
+# 2x (1) Lackey Break
+# 2x (2) Animation Surge
+# 2x (2) Contemplate
+# 1x (2) Fifi Fizzlewarp
+# 2x (2) Thuggish Fae
+# 2x (2) Whispers of Ruin
+# 2x (4) Evil Laughter
+# 1x (4) Monster Manual
+# 2x (4) Mutated Brute
+# 2x (5) Cybernetic Rager
+# 2x (5) Fiery Tyrant
+# 2x (6) Magma Hound

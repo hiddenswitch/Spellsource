@@ -1,0 +1,20 @@
+### Dragoon: Token Dragoon
+# Class: RUST
+# Format: Custom
+#
+# 2x (1) Bone Whelp
+# 2x (1) Eye of The Dragon
+# 2x (1) Flaxen Whelp
+# 1x (1) Hatches the Dragon
+# 2x (2) Haunted Creeper
+# 2x (2) Mountain Whelp
+# 2x (2) Nerubian Egg
+# 2x (2) Vehemence
+# 2x (4) Duskwind Vanguard
+# 2x (4) Lava Saber
+# 2x (5) Ascendancy
+# 2x (5) Azure Drake
+# 2x (5) Blackwing Corruptor
+# 2x (5) Fungalmancer
+# 1x (5) Thitazov
+# 2x (6) Drakonid Bruiser

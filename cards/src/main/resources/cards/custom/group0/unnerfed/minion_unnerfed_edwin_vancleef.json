@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Stealth. Combo: Gain +2/+2 for each card played earlier this turn.",
+  "description": "Hidden. Combo: Gain +2/+2 for each card played earlier this turn.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

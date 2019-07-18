@@ -12,9 +12,10 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import java.util.Map;
 
 /**
- * Forces a minion to deal its damage to adjacent minions.
+ * Deals a {@code target} actor's damage to minions adjacent to the {@code target}.
  * <p>
- * Correctly handles damage dealing effects like lifesteal and poisonous.
+ * Correctly handles damage dealing effects like {@link net.demilich.metastone.game.cards.Attribute#LIFESTEAL} and
+ * {@link net.demilich.metastone.game.cards.Attribute#POISONOUS}.
  * <p>
  * Implements Betrayal.
  */

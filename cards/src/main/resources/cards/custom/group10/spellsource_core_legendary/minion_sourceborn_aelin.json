@@ -1,0 +1,32 @@
+{
+  "name": "Sourceborn Aelin",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, add a random Source spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "cards": [
+        "spell_aelin_apotheosis",
+        "spell_aelin_awakening",
+        "spell_aelin_creation",
+        "spell_aelin_dominate",
+        "spell_aelin_worldsculpt"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "NONE",
-  "description": "Stealth. Battlecry: Gain +1/+1 for each Worgen Ambusher you've played this game.",
+  "description": "Hidden. Opener: Gain +1/+1 for each Worgen Ambusher you've played this game.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

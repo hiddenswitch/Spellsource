@@ -1,0 +1,28 @@
+{
+  "name": "Ceaseless Power",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "RARE",
+  "description": "Deal 3 damage to a friendly minion. If it survives, give it +4/+6.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "attackBonus": 4,
+      "hpBonus": 6
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "This turn, after a friendly minion attacks, summon a random minion from your hand. Give it Rush.",
+  "description": "This turn, after a friendly minion attacks, summon a random minion from your hand. Give it Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

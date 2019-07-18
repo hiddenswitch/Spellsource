@@ -12,6 +12,7 @@ public enum Race {
 	MECH,
 	ELEMENTAL,
 	TITAN,
+	FAE,
 	ALL;
 
 	public boolean hasRace(Race comparedTo) {

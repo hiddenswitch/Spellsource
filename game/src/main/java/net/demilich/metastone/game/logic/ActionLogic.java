@@ -105,8 +105,8 @@ public class ActionLogic implements Serializable {
 		playCardActions.addAll(getHeroPowerActions(context, player));
 
 		for (Card card : player.getHand()) {
-			EntityReference EntityReference = new EntityReference(card.getId());
-			if (!context.getLogic().canPlayCard(player.getId(), EntityReference)) {
+			EntityReference cardReference = card.getReference();
+			if (!context.getLogic().canPlayCard(player.getId(), cardReference)) {
 				continue;
 			}
 

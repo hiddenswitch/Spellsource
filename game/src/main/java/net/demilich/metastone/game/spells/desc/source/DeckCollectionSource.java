@@ -10,7 +10,14 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
 
-public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects, HasWeights {
+/**
+ * Returns the list of cards from the deck in the user's collection named {@link CardSourceArg#COLLECTION_NAME}. The
+ * name must be <b>exact</b> (case-sensitive).
+ * <p>
+ * Uses the {@link GameContext#getDeck(Player, String)} method, which provides an implementation in server game
+ * contexts.
+ */
+public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects {
 
 	public DeckCollectionSource(CardSourceDesc desc) {
 		super(desc);

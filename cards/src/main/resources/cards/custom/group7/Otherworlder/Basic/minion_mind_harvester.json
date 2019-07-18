@@ -10,7 +10,6 @@
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "AnyMatchFilterCondition",
         "target": "ALL_MINIONS",
@@ -20,7 +19,8 @@
           "attribute": "ATTACK",
           "operation": "EQUAL"
         }
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "DrawCardSpell",

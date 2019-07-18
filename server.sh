@@ -2,12 +2,8 @@
 
 # This file executes the shadow / fat jar of the server on its docker image, using PORT=80 by default.
 
-if [[ -z "${SPELLSOURCE_APPLICATION+x}" ]]; then
-  SPELLSOURCE_APPLICATION="Clustered"
-fi
-
 if [[ -z "${SPELLSOURCE_VERSION+x}" ]]; then
-  SPELLSOURCE_VERSION=0.8.11
+  SPELLSOURCE_VERSION=0.8.40
 fi
 
 # Executes the fat jar of the network server using the Embedded application by default
@@ -18,4 +14,4 @@ java --add-modules java.se \
   --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
   --add-opens java.management/sun.management=ALL-UNNAMED \
   --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED \
-  -cp /data/net-${SPELLSOURCE_VERSION}-all.jar com.hiddenswitch.spellsource.applications.${SPELLSOURCE_APPLICATION}
+  -cp /data/net-${SPELLSOURCE_VERSION}.jar com.hiddenswitch.spellsource.applications.Local

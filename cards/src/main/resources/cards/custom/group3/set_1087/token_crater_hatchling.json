@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Charge",
+  "description": "Blitz",
   "attributes": {
     "CHARGE": true
   },

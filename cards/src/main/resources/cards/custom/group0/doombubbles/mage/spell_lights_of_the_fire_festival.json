@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "RARE",
-  "description": "All minions lose Stealth. Add a Fireball, Cinderstorm and Flame Geyser to your hand.",
+  "description": "All minions lose Hidden. Add a Fireball, Cinderstorm and Flame Geyser to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

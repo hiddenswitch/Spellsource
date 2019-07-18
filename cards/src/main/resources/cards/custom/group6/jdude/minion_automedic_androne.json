@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "All healing is converted into Armor (for the target's Hero).",
+  "description": "All healing is converted into Armor.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
@@ -17,7 +17,9 @@
       "class": "SpellOverrideAura",
       "target": "FRIENDLY_PLAYER",
       "applyEffect": {
-        "class": "GainArmorSpell"
+        "class": "GainArmorSpell",
+        "targetPlayer": "OWNER",
+        "target": "FRIENDLY_HERO"
       },
       "removeEffect": {
         "class": "HealSpell"
@@ -27,7 +29,9 @@
       "class": "SpellOverrideAura",
       "target": "ENEMY_PLAYER",
       "applyEffect": {
-        "class": "GainArmorSpell"
+        "class": "GainArmorSpell",
+        "targetPlayer": "OWNER",
+        "target": "FRIENDLY_HERO"
       },
       "removeEffect": {
         "class": "HealSpell"

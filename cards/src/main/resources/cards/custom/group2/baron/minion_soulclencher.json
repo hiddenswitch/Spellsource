@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Give your Knights in your battlefield and hand +2/+2.",
+  "description": "Aftermath: Give your Knights in your battlefield and hand +2/+2.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

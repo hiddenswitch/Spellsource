@@ -6,7 +6,8 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Rush. Battlecry: If you have 10 Mana Crystals, deal 4 damage.",
+  "race": "DRAGON",
+  "description": "Dash. Opener: If you have 10 Mana Crystals, deal 4 damage.",
   "battlecry": {
     "condition": {
       "class": "ManaMaxedCondition"

@@ -18,6 +18,8 @@ import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.tests.util.DebugContext;
+import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -44,9 +46,9 @@ public class BotsTest extends SpellsourceTestBase {
 	@Test
 	public void testRequestAction(TestContext context) {
 		sync(() -> {
-			DebugContext context1 = TestBase.createContext(HeroClass.GREEN, HeroClass.GOLD);
+			DebugContext context1 = TestBase.createContext("GREEN", "GOLD");
 			context1.endTurn();
-			context1.forceStartTurn(context1.getActivePlayerId());
+			context1.startTurn(context1.getActivePlayerId());
 			int startTurn = context1.getTurn();
 			GameAction gameAction = null;
 			while (gameAction == null
@@ -54,12 +56,13 @@ public class BotsTest extends SpellsourceTestBase {
 				RequestActionRequest requestActionRequest = new RequestActionRequest(new GameId(context1.getGameId()),
 						context1.getActivePlayerId(),
 						context1.getValidActions(),
-						context1.getDeckFormat(), context1.getGameStateCopy());
+						context1.getDeckFormat(), context1.getGameStateCopy(),
+						null);
 
 				RequestActionResponse response = Bots.requestAction(requestActionRequest);
 				gameAction = response.gameAction;
 				assertNotNull(gameAction);
-				context1.getLogic().performGameAction(context1.getActivePlayerId(), gameAction);
+				context1.performAction(context1.getActivePlayerId(), gameAction);
 			}
 			assertTrue(context1.getTurn() > startTurn);
 		});
@@ -73,7 +76,7 @@ public class BotsTest extends SpellsourceTestBase {
 			FiberBehaviour fb2 = new FiberBehaviour();
 			gc.setBehaviour(0, fb1);
 			gc.setBehaviour(1, fb2);
-			gc.play();
+			gc.play(true);
 			while (!fb1.getMulliganCards().isEmpty() || !fb2.getMulliganCards().isEmpty()) {
 				fb1.setMulligan(Collections.emptyList());
 				fb2.setMulligan(Collections.emptyList());
@@ -86,35 +89,36 @@ public class BotsTest extends SpellsourceTestBase {
 
 	@Test
 	public void testBotReused(TestContext context) {
-		UnityClient client = new UnityClient(context);
-		client.createUserAccount();
-		NoArgs playAndWait = () -> {
-			client.matchmakeQuickPlay(null);
-			client.waitUntilDone();
-			context.assertTrue(client.isGameOver());
-			context.assertTrue(client.getTurnsPlayed() > 0);
-			try {
-				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
-			} catch (ApiException e) {
-				throw new AssertionError(e);
-			}
-		};
-		sync(() -> {
-			Mongo.mongo().removeDocuments(Accounts.USERS, json("bot", true));
-			Sync.invoke0(playAndWait);
-			List<String> botIds = Bots.getBotIds();
-			assertEquals("Only one bot document should have been created", botIds.size(), 1);
-			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
+		try (UnityClient client = new UnityClient(context)) {
+			client.createUserAccount();
+			NoArgs playAndWait = () -> {
+				client.matchmakeQuickPlay(null);
+				client.waitUntilDone();
+				context.assertTrue(client.isGameOver());
+				context.assertTrue(client.getTurnsPlayed() > 0);
+				try {
+					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+				} catch (ApiException e) {
+					throw new AssertionError(e);
+				}
+			};
+			sync(() -> {
+				Mongo.mongo().removeDocuments(Accounts.USERS, json("bot", true));
+				Sync.invoke0(playAndWait);
+				List<String> botIds = Bots.getBotIds();
+				assertEquals("Only one bot document should have been created", botIds.size(), 1);
+				SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
-			for (String id : botIds) {
-				assertFalse(games.containsKey(new UserId(id)));
-			}
+				for (String id : botIds) {
+					assertFalse(games.containsKey(new UserId(id)));
+				}
 
-			Sync.invoke0(playAndWait);
-			assertEquals("Only one bot document should have been created", botIds.size(), 1);
-			for (String id : botIds) {
-				assertFalse(games.containsKey(new UserId(id)));
-			}
-		});
+				Sync.invoke0(playAndWait);
+				assertEquals("Only one bot document should have been created", botIds.size(), 1);
+				for (String id : botIds) {
+					assertFalse(games.containsKey(new UserId(id)));
+				}
+			});
+		}
 	}
 }

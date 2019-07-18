@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.ShuffledEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
@@ -15,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER} cards
- * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
+ * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER}
+ * cards into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
- * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
- *
+ * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link ShuffledEvent}.
+ * <p>
  * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
  * <pre>
  *   {
@@ -32,6 +33,12 @@ import java.util.Map;
  */
 public class ShuffleToDeckSpell extends Spell {
 
+	public static SpellDesc create(String card) {
+		SpellDesc desc = new SpellDesc(ShuffleToDeckSpell.class);
+		desc.put(SpellArg.CARD, card);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -39,12 +46,16 @@ public class ShuffleToDeckSpell extends Spell {
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
 		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
 
-		if (target != null) {
+		if (target != null
+				&& !desc.containsKey(SpellArg.CARD)
+				&& !desc.containsKey(SpellArg.CARDS)
+				&& !desc.containsKey(SpellArg.CARD_SOURCE)
+				&& !desc.containsKey(SpellArg.CARD_FILTER)) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
 			for (int i = 0; i < copies; i++) {
-				Card copy = CopyCardSpell.copyCard(context, player, target.getSourceCard(), (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+				Card copy = shuffle(context, player, null, target.getSourceCard(), quiet);
 				copy.getAttributes().putAll(map);
 				if (copy.getZone() == Zones.DECK) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
@@ -59,7 +70,7 @@ public class ShuffleToDeckSpell extends Spell {
 		Map<Card, Boolean> didShuffle = new HashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
-				Card copy = CopyCardSpell.copyCard(context, player, original, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+				Card copy = shuffle(context, player, null, original, quiet);
 				didShuffle.put(copy, copy.getZone() == Zones.DECK);
 			}
 		}
@@ -69,6 +80,11 @@ public class ShuffleToDeckSpell extends Spell {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 			}
 		}
+	}
+
+	@Suspendable
+	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean quiet) {
+		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
 	}
 }
 

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Taunt. Can't Attack.",
+  "description": "Guard. Can't Attack.",
   "attributes": {
     "CANNOT_ATTACK": true,
     "TAUNT": true

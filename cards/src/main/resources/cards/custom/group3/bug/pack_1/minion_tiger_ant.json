@@ -1,0 +1,23 @@
+{
+  "name": "Tiger Ant",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Guard. Costs (1) less for each other card in your hand.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "offset": -1,
+    "playerAttribute": "HAND_COUNT",
+    "targetPlayer": "SELF"
+  }
+}

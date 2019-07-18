@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "WHITE",
   "rarity": "FREE",
-  "description": "Give a minion \"Deathrattle: Shuffle this into your deck\"",
+  "description": "Give a minion \"Aftermath: Shuffle this into your deck\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "HeroPowerSpell",

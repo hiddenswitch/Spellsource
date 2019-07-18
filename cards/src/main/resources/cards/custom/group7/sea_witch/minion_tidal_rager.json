@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Deathrattle: Draw a card.",
+  "description": "Aftermath: Draw a card.",
   "deathrattle": {
     "class": "DrawCardSpell",
     "value": 1

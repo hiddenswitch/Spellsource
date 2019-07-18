@@ -29,7 +29,7 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 
 	private double alphaBeta(GameContext context, int playerId, GameAction action, int depth) {
 		GameContext simulation = context.clone();
-		simulation.getLogic().performGameAction(playerId, action);
+		simulation.performAction(playerId, action);
 		if (!evaluatedActions.containsKey(action.getActionType())) {
 			evaluatedActions.put(action.getActionType(), 0);
 		}
@@ -40,7 +40,7 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 
 		List<GameAction> validActions = simulation.getValidActions();
 
-		double score = Float.NEGATIVE_INFINITY;
+		double score = Double.NEGATIVE_INFINITY;
 		if (table.known(simulation)) {
 			return table.getScore(simulation);
 			// logger.info("GameState is known, has score of {}", score);
@@ -133,7 +133,7 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 
 	/*private double simulateAction(GameContext context, int playerId, GameAction action) {
 		GameContext simulation = context.clone();
-		simulation.getLogic().performGameAction(playerId, action);
+		simulation.performAction(playerId, action);
 		if (!evaluatedActions.containsKey(action.getActionType())) {
 			evaluatedActions.put(action.getActionType(), 0);
 		}

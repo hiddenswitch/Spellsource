@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Summon a 1/1 Ghoul with Charge that dies at the end of the turn.",
+  "description": "Summon a 1/1 Ghoul with Blitz that dies at the end of the turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

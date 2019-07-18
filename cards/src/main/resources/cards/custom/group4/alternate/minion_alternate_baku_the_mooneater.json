@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Start of Game: If your deck has only odd-Cost cards, upgrade your Hero Power.",
+  "description": "Start of Game: If your deck has only odd-Cost cards, upgrade your Skill.",
   "collectible": true,
   "set": "ALTERNATIVE",
   "fileFormatVersion": 1,

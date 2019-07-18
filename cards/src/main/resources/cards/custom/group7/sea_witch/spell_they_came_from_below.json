@@ -8,6 +8,10 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "FirstConditionalSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    },
     "conditions": [
       {
         "class": "ReservoirCondition",
@@ -18,6 +22,7 @@
         "value": 25
       }
     ],
+    "exclusive": true,
     "spells": [
       {
         "class": "DestroySpell"
@@ -26,12 +31,7 @@
         "class": "DamageSpell",
         "value": 6
       }
-    ],
-    "spell": {
-      "class": "DamageSpell",
-      "value": 2
-    },
-    "exclusive": true
+    ]
   },
   "attributes": {},
   "collectible": true,

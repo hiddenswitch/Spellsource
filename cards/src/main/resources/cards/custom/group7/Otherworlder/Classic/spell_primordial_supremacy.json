@@ -13,7 +13,6 @@
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
         "attackBonus": 1,
-        "hpBonus": 2,
         "filter": {
           "class": "OrFilter",
           "filters": [
@@ -35,7 +34,8 @@
               "race": "TITAN"
             }
           ]
-        }
+        },
+        "hpBonus": 2
       },
       {
         "class": "DrawCardSpell",

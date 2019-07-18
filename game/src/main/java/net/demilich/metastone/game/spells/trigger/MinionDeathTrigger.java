@@ -40,7 +40,7 @@ public final class MinionDeathTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		KillEvent killEvent = (KillEvent) event;
 		if (killEvent.getVictim().getEntityType() != EntityType.MINION) {
 			return false;

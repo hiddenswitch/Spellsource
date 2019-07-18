@@ -21,8 +21,8 @@
       },
       {
         "class": "DrainSpell",
-        "value": 1,
-        "target": "FRIENDLY_MINIONS"
+        "target": "FRIENDLY_MINIONS",
+        "value": 1
       }
     ]
   },

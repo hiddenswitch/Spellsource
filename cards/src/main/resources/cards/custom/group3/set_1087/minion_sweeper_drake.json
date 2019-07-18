@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Battlecry: Summon two 1/1 Whelps.",
+  "description": "Opener: Summon two 1/1 Whelps.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

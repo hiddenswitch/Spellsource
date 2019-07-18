@@ -1,0 +1,17 @@
+{
+  "name": "Deal 5 Damage to Enemy Hero",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Deal $5 damage to the enemy hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 5
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

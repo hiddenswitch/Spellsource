@@ -10,12 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "fireCondition": {
-        "class": "CardPropertyCondition",
-        "target": "TARGET",
-        "cardType": "MINION"
-      },
-      "sourcePlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "MetaSpell",
@@ -23,20 +19,12 @@
         {
           "class": "AddAttributeSpell",
           "target": "EVENT_SOURCE",
-          "attribute": "COUNTERED"
+          "attribute": "SILENCED"
         },
         {
-          "class": "MetaSpell",
+          "class": "CastCardsSpell",
           "target": "ADJACENT_TO_TARGET",
-          "spells": [
-            {
-              "class": "OverrideTargetSpell"
-            },
-            {
-              "class": "CastCardsSpell",
-              "secondaryTarget": "EVENT_SOURCE"
-            }
-          ]
+          "secondaryTarget": "EVENT_SOURCE"
         }
       ]
     }

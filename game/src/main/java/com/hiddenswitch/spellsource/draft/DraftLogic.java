@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static net.demilich.metastone.game.entities.heroes.HeroClass.*;
 
 /**
  * Progresses a draft.
@@ -42,7 +43,7 @@ public class DraftLogic {
 		notifyPublicStateChanged();
 	}
 
-	public void startDraft(HeroClass heroClass) {
+	public void startDraft(String heroClass) {
 		// Determine the cards available to this player for the draft.
 		// For now, do not make later parts of the draft dependent on earlier parts.
 		getContext().getPublicState().setHeroClass(heroClass);
@@ -53,40 +54,22 @@ public class DraftLogic {
 		notifyPublicStateChanged();
 	}
 
-	private List<HeroClass> createHeroChoices() {
-		List<HeroClass> classes = Arrays.asList(
-				HeroClass.EGGPLANT,
-				HeroClass.ICE,
-				HeroClass.JADE,
-				HeroClass.LEATHER,
-				HeroClass.NAVY,
-				HeroClass.RUST,
-				HeroClass.OBSIDIAN,
-				HeroClass.AMBER,
-				HeroClass.TOAST
-		);
-
-		Collections.shuffle(classes, getRandom());
-		return Arrays.asList(classes.get(0), classes.get(1), classes.get(2));
+	private List<String> createHeroChoices() {
+		return HeroClass.getBaseClasses(DeckFormat.spellsource());
 	}
 
-	private List<List<String>> createDraftCards(HeroClass hero) {
+	private List<List<String>> createDraftCards(String hero) {
 		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
 
-		List<CardSet> equals = Arrays.asList(
-				CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
-				CardSet.WITCHWOOD,
-				CardSet.BOOMSDAY_PROJECT,
-				CardSet.KOBOLDS_AND_CATACOMBS,
-				CardSet.BATTLE_FOR_ASHENVALE,
-				CardSet.SANDS_OF_TIME
+		List<String> equals = Arrays.asList(
+				"VERDANT_DREAMS",
+				"BATTLE_FOR_ASHENVALE",
+				"SANDS_OF_TIME",
+				"SPELLSOURCE_BASIC"
 		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.CUSTOM;
+		String latestExpansion = "CUSTOM";
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
 
@@ -166,11 +149,11 @@ public class DraftLogic {
 				DeckFormat format = new DeckFormat();
 				float latestExpansionOdds = EXPANSION_ODDS_FACTOR / (equals.size() + EXPANSION_ODDS_FACTOR);
 				if (cardSetRoll < latestExpansionOdds) {
-					if (latestExpansion == CardSet.CUSTOM) {
+					if (latestExpansion.equals("CUSTOM")) {
 						// Include the other two custom sets for now
-						format.addSet(CardSet.BATTLE_FOR_ASHENVALE);
-						format.addSet(CardSet.SANDS_OF_TIME);
-						format.addSet(CardSet.ALTERNATIVE);
+						format.addSet("BATTLE_FOR_ASHENVALE");
+						format.addSet("SANDS_OF_TIME");
+						format.addSet("ALTERNATIVE");
 					}
 					format.withCardSets(latestExpansion);
 				} else {

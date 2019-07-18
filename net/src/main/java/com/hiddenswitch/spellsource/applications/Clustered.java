@@ -7,14 +7,17 @@ import com.hazelcast.nio.Address;
 import com.hiddenswitch.spellsource.Cluster;
 import com.hiddenswitch.spellsource.Gateway;
 import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
+import io.vertx.ext.dropwizard.Match;
+import io.vertx.ext.dropwizard.MatchType;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 import java.time.Duration;
@@ -39,6 +42,7 @@ public class Clustered {
 		// Set significantly longer timeouts
 		long nanos = Duration.of(10, ChronoUnit.SECONDS).toNanos();
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getDiscoverySPIConfig("us-west-2"));
+
 		ClusterManager clusterManager = new HazelcastClusterManager(instance);
 		String hostAddress = Gateway.getHostAddress();
 		Logging.root().info("main: Starting a new Spellsource instance on host {}", hostAddress);
@@ -50,11 +54,12 @@ public class Clustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
+				.setMetricsOptions(getMetrics())
 				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 400)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 400), then -> {
-
 			final Vertx vertx = then.result();
+			Tracing.initializeGlobal(vertx);
 
 			Mongo.mongo().connectWithEnvironment(vertx);
 			Spellsource.spellsource().migrate(vertx, v1 -> {
@@ -77,6 +82,11 @@ public class Clustered {
 				}
 			});
 		});
+	}
+
+	public static DropwizardMetricsOptions getMetrics() {
+		return new DropwizardMetricsOptions().setEnabled(true)
+				.addMonitoredEventBusHandler(new Match().setValue("\\w+/.*").setType(MatchType.REGEX));
 	}
 }
 

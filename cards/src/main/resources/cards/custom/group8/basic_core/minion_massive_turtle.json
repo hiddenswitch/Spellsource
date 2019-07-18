@@ -1,0 +1,17 @@
+{
+  "name": "Massive Turtle",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "<b>Guard</b>",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

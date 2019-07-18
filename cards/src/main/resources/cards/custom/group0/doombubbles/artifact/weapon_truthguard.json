@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 8,
   "rarity": "LEGENDARY",
-  "description": "Whene your hero takes damage, this takes it instead. Deathrattle: Resurrect your Divine Shield minions.",
+  "description": "Whene your champion takes damage, this takes it instead. Aftermath: Resurrect your Dodge minions.",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",

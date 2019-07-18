@@ -1,0 +1,27 @@
+{
+  "name": "Writer's Block",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "description": "Enemy spells cost (3) more next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 3,
+      "cardType": "SPELL",
+      "expirationTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "OPPONENT"
+      },
+      "operation": "ADD",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

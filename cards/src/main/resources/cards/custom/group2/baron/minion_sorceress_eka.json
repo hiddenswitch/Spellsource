@@ -6,12 +6,12 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon all minions from your hand.",
+  "description": "Opener: Summon three random minions from your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "RecruitSpell",
-      "value": 6,
+      "value": 3,
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"

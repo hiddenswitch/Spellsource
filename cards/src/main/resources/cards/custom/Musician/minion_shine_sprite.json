@@ -1,0 +1,24 @@
+{
+  "name": "Shine Sprite",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Add four Lunstones to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 4,
+      "card": "spell_lunstone"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

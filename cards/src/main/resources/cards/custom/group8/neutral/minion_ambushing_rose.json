@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Stealth, Poisonous. Deathrattle: Add an Emerald Secret to your hand.",
+  "description": "Hidden, Toxic. Aftermath: Add an Emerald Secret to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [
@@ -19,9 +19,9 @@
     "randomTarget": true
   },
   "attributes": {
-    "STEALTH": true,
+    "DEATHRATTLES": true,
     "POISONOUS": true,
-    "DEATHRATTLES": true
+    "STEALTH": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

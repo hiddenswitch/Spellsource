@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Murlocs to the left have Charge. Murlocs to the right have Taunt.",
+  "description": "Murlocs to the left have Blitz. Murlocs to the right have Guard.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

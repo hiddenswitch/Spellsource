@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
-  "description": "Deathrattle: Give your minions stats equal to your weapon's.",
+  "description": "Aftermath: Give your minions stats equal to your weapon's.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

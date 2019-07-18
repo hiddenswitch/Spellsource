@@ -22,9 +22,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * <pre>
  *   "trigger": {
  *     "eventTrigger": {
- *       "class": "AfterPhysicalAttackTrigger",
- *       "hostTargetType": "IGNORE_OTHER_SOURCES",
- *       "targetEntityType": "MINION"
+ *     	  "class": "DamageCausedTrigger",
+ *       "hostTargetType": "IGNORE_OTHER_SOURCES"
  *     },
  *     "spell": {
  *       "class": "OverkillSpell",
@@ -46,6 +45,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *     }
  *   }
  * </pre>
+ *
+ * If the desc has the {@link SpellArg#EXCLUSIVE} arg set to true, the excess damage will be passed into the spell's {@link SpellArg#VALUE}
  */
 
 public class OverkillSpell extends DamageSpell {
@@ -65,7 +66,7 @@ public class OverkillSpell extends DamageSpell {
 			if (minion.getHp() < 0 && minion.isDestroyed()) {
 				//fire an overkill event?
 				SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-				if (desc.containsKey(SpellArg.EXCLUSIVE)) {
+				if (desc.getBool(SpellArg.EXCLUSIVE)) {
 					spell.put(SpellArg.VALUE, Math.abs(minion.getHp()));
 				}
 				context.getLogic().castSpell(player.getId(), spell, source.getReference(), target.getReference(), true);

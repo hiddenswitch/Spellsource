@@ -16,14 +16,14 @@
       "spell": {
         "class": "SplashDamageSpell",
         "target": "ADJACENT_MINIONS",
-        "filter": {
-          "class": "IsDestroyedFilter",
-          "invert": true
-        },
         "value": {
           "class": "AttributeValueProvider",
           "target": "SELF",
           "attribute": "LAST_HIT"
+        },
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
         }
       },
       "maxFiresPerSequence": 16

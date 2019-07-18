@@ -1,0 +1,33 @@
+{
+  "name": "Hostile Snapdragon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Whenever you draw a card, deal 4 damage to your champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "IsDeadCondition",
+        "target": "TRIGGER_HOST",
+        "invert": true
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 4
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

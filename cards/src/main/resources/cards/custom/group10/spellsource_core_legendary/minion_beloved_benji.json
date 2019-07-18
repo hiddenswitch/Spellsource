@@ -1,0 +1,28 @@
+{
+  "name": "Beloved Benji",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a player casts a spell, add a random neutral card to their hand.",
+  "race": "FAE",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "ANY"
+      },
+      "targetPlayer": "ACTIVE"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

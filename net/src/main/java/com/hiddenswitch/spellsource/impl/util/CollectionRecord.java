@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by bberman on 2/6/17.
+ * A mongodb record of the user's collection metadata. Does not contain the inventory IDs themselves.
  */
 public class CollectionRecord extends MongoRecord {
 	private String userId;
@@ -18,13 +18,14 @@ public class CollectionRecord extends MongoRecord {
 	@JsonProperty
 	private DeckType deckType;
 	private List<String> friendUserIds;
+	private boolean isStandardDeck;
 	private int wins;
 	private int totalGames;
 
 	/**
 	 * Hero class for deck collection records.
 	 */
-	private HeroClass heroClass;
+	private String heroClass;
 
 	/**
 	 * Names for alliance and deck collection records.
@@ -69,7 +70,7 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public static CollectionRecord deck(final String userId, final String name, final HeroClass heroClass, final boolean draft) {
+	public static CollectionRecord deck(final String userId, final String name, final String heroClass, final boolean draft) {
 		return new CollectionRecord()
 				.withDraft(draft)
 				.setUserId(userId)
@@ -165,11 +166,11 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public CollectionRecord setHeroClass(HeroClass heroClass) {
+	public CollectionRecord setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}
@@ -180,6 +181,15 @@ public class CollectionRecord extends MongoRecord {
 
 	public CollectionRecord setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public boolean isStandardDeck() {
+		return isStandardDeck;
+	}
+
+	public CollectionRecord setStandardDeck(boolean standardDeck) {
+		isStandardDeck = standardDeck;
 		return this;
 	}
 }

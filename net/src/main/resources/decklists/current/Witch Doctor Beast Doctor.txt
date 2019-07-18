@@ -1,0 +1,21 @@
+### Witch Doctor: Beast Doctor
+# Class: ROSE
+# Format: Spellsource
+#
+# 2x (1) Dinosoul
+# 2x (1) Marked for Sacrifice
+# 2x (2) Bird-glary
+# 2x (2) Ritual Dagger
+# 2x (2) Shedding Chameleon
+# 2x (3) Corvid Call
+# 2x (3) Nightmare Warden
+# 2x (3) Prolific Tamer
+# 2x (4) Mutamite Terror
+# 2x (4) Prized Boar
+# 2x (4) Shimmerscale
+# 1x (5) Ptero Max
+# 2x (6) Evocation
+# 2x (6) Packmother
+# 1x (7) Gaitha the Protector
+# 2x (7) Jungle King
+#

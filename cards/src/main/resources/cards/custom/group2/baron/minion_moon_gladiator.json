@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "<b>Rush</b>. <b>Overkill:</b> Deal 2 damage to all enemy minions.",
+  "description": "<b>Dash</b>. <b>Overkill:</b> Deal 2 damage to all enemy minions.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

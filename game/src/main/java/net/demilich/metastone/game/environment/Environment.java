@@ -45,6 +45,12 @@ public enum Environment {
 	 */
 	LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE,
 	/**
+	 * This variable stores a reference to the last spell played by each player this turn.
+	 * <p>
+	 * Implements Recurring Torrent.
+	 */
+	LAST_SPELL_PLAYED_THIS_TURN,
+	/**
 	 * This variable stores a stack of attackers.
 	 */
 	ATTACKER_REFERENCE_STACK,

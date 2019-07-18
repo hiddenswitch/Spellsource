@@ -1,0 +1,16 @@
+{
+  "name": "Divine Shield Test",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Divine Shield",
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

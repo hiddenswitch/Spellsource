@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 9,
   "rarity": "RARE",
-  "description": "Taunt. Inspire: Gain 4 Armor.",
+  "description": "Guard. Inspire: Gain 4 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

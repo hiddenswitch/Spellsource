@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICECREAM",
   "rarity": "FREE",
-  "description": "Summon four 2/2 Skeletons with Taunt.",
+  "description": "Summon four 2/2 Skeletons with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
@@ -16,6 +16,6 @@
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GRAVEYARD",
   "fileFormatVersion": 1
 }

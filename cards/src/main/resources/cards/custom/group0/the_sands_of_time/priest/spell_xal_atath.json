@@ -9,6 +9,7 @@
   "spell": {
     "class": "MissilesSpell",
     "value": 3,
+    "target": "TARGET",
     "howMany": {
       "class": "CardCountValueProvider",
       "cardFilter": {

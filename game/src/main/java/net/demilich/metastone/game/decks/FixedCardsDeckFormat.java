@@ -22,7 +22,7 @@ public final class FixedCardsDeckFormat extends DeckFormat {
 	}
 
 	@Override
-	public boolean isInFormat(CardSet set) {
+	public boolean isInFormat(String set) {
 		return false;
 	}
 }

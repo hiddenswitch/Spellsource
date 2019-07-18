@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Supremacy: Summon two 1/1 Whelps.",
+  "description": "Supremacy: Summon a 1/1 Whelps.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -21,7 +21,7 @@
       "class": "SupremacySpell",
       "spell": {
         "class": "SummonSpell",
-        "value": 2,
+        "value": 1,
         "card": "token_whelp"
       }
     }

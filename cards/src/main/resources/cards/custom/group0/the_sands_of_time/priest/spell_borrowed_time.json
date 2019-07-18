@@ -29,7 +29,7 @@
         "trigger": {
           "eventTrigger": {
             "class": "SpellCastedTrigger",
-            "targetPlayer": "SELF"
+            "sourcePlayer": "SELF"
           },
           "spell": {
             "class": "CardCostModifierSpell",
@@ -41,7 +41,7 @@
               "expirationTrigger": {
                 "class": "CardPlayedTrigger",
                 "cardType": "SPELL",
-                "targetPlayer": "SELF"
+                "sourcePlayer": "SELF"
               },
               "operation": "SUBTRACT"
             }

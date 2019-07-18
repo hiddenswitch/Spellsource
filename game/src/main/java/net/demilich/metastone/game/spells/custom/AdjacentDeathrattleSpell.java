@@ -16,6 +16,21 @@ import java.util.List;
 /**
  * Casts {@link net.demilich.metastone.game.spells.desc.SpellArg#SPELL2} on the minions adjacent to the minion whose
  * deathrattle is currently being processed.
+ * <p>
+ * Required for implementing an effect that processes like {@link net.demilich.metastone.game.targeting.EntityReference#ADJACENT_MINIONS}
+ * except from the point of view of a deathrattle, where the minion is typically in the graveyard.
+ * <p>
+ * For example, to implement "Deathrattle: Give adjacent minions Taunt.":
+ * <pre>
+ *   "deathrattle": {
+ *     "class": "custom.AdjacentDeathrattleSpell",
+ *     "target": "SELF",
+ *     "spell2": {
+ *       "class": "AddAttributeSpell",
+ *       "attribute": "TAUNT"
+ *     }
+ *   }
+ * </pre>
  */
 public final class AdjacentDeathrattleSpell extends AdjacentEffectSpell {
 

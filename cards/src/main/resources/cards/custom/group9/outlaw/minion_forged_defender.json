@@ -1,0 +1,31 @@
+{
+  "name": "Forged Defender",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Guard. Has +2 Attack during your opponent's turn.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "SELF",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
+    },
+    "attackBonus": 2,
+    "hpBonus": 0,
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

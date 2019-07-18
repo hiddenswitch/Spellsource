@@ -5,9 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 
-import static net.demilich.metastone.game.spells.desc.condition.ReservoirCondition.reservoirsAlwaysActive;
+import static net.demilich.metastone.game.spells.desc.condition.ReservoirCondition.reservoirsForced;
 
 /**
  * Shorthand for a {@link ConditionalEffectSpell} that only plays the conditional (second) spell if the caster's deck
@@ -20,8 +19,9 @@ import static net.demilich.metastone.game.spells.desc.condition.ReservoirConditi
 public final class ReservoirSpell extends ConditionalEffectSpell {
 	@Override
 	protected boolean isConditionFulfilled(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		if (reservoirsAlwaysActive(context, player, source)) {
-			return true;
+		Boolean forced = reservoirsForced(context, player, source);
+		if (forced != null) {
+			return forced;
 		}
 
 		if (desc.containsKey(SpellArg.SECONDARY_VALUE) && desc.containsKey(SpellArg.VALUE)) {

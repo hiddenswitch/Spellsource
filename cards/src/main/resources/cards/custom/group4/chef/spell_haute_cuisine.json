@@ -20,9 +20,6 @@
         }
       },
       "operation": "EQUAL"
-    },
-    "cardSource": {
-      "class": "DeckSource"
     }
   },
   "attributes": {},

@@ -90,7 +90,7 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 				providingPlayer = player;
 				break;
 		}
-		int multiplier = getDesc().containsKey(ValueProviderArg.MULTIPLIER) ? getDesc().getInt(ValueProviderArg.MULTIPLIER) : 1;
+		int multiplier = getDesc().getValue(ValueProviderArg.MULTIPLIER, context, player, target, host, 1);
 		int offset = getDesc().getValue(ValueProviderArg.OFFSET, context, player, target, host, 0);
 		int value = provideValue(context, providingPlayer, target, host) * multiplier + offset;
 		return value;
@@ -109,3 +109,4 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 		this.desc = (ValueProviderDesc) desc;
 	}
 }
+

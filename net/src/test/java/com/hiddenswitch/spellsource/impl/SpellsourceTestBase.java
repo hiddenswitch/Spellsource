@@ -15,6 +15,9 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.opentracing.noop.NoopTracer;
+import io.opentracing.noop.NoopTracerFactory;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.json.Json;
@@ -37,40 +40,36 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
 	protected static AtomicBoolean initialized = new AtomicBoolean();
-	protected static HazelcastInstance hazelcastInstance;
 	protected static Vertx vertx;
 
 	@BeforeClass
-	@Suspendable
-	public static void setUp(TestContext context) {
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+	public static void setUp() throws InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
-			final Async async = context.async();
 
-			Vertx.clusteredVertx(new VertxOptions()
+			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
-					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
-					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
-				SpellsourceTestBase.vertx = vertx;
-				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
-					vertx.executeBlocking(fut -> {
-						Mongo.mongo().connectWithEnvironment(vertx);
-						fut.complete();
-					}, context.asyncAssertSuccess(v2 -> {
-						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v3 -> {
-							async.complete();
-						}));
-					}));
-				}));
+					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
+			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
+				if (v2.failed()) {
+					throw new AssertionError();
+				}
+				Mongo.mongo().connectWithEnvironment(vertx);
+				Spellsource.spellsource().deployAll(vertx, v4 -> {
+					if (v4.failed()) {
+						throw new AssertionError("failed");
+					}
+					latch.countDown();
+				});
 			}));
+			latch.await(4000L, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -80,7 +79,7 @@ public abstract class SpellsourceTestBase {
 		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
 		return Decks.createDeck(new DeckCreateRequest()
 				.withUserId(userId)
-				.withHeroClass(HeroClass.RED)
+				.withHeroClass("RED")
 				.withName("Test Deck")
 				.withFormat("Wild")
 				.withInventoryIds(inventoryIds));
@@ -124,15 +123,25 @@ public abstract class SpellsourceTestBase {
 
 	@Suspendable
 	public static void sync(SuspendableRunnable action) {
+		sync(action, 90);
+	}
+
+	@Suspendable
+	public static void sync(SuspendableRunnable action, int seconds) {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
 			vertx.runOnContext(suspendableHandler(v2 -> {
-				action.run();
+				try {
+					action.run();
+				} catch (Throwable throwable) {
+					fail();
+				}
+
 				latch.countDown();
 			}));
 		});
 		try {
-			latch.await(90L, TimeUnit.SECONDS);
+			latch.await(seconds, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			fail();
 		}
@@ -140,16 +149,21 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@AfterClass
-	public static void tearDown(TestContext context) {
-		/*
-		if (initialized.compareAndSet(true, false)) {
-			final Async async = context.async();
-			vertx.close(context.asyncAssertSuccess(then -> {
-				hazelcastInstance.shutdown();
-
-				async.complete();
-			}));
+	public static void tearDown() throws InterruptedException {
+		GlobalTracer.get().close();
+		CountDownLatch latch = new CountDownLatch(1);
+		if (vertx == null) {
+			latch.countDown();
+		} else {
+			vertx.close(v -> {
+				initialized.compareAndSet(true, false);
+				latch.countDown();
+				vertx = null;
+			});
 		}
-		*/
+
+		latch.await(3000L, TimeUnit.MILLISECONDS);
+		assertEquals(latch.getCount(), 0);
+		assertNull(vertx);
 	}
 }

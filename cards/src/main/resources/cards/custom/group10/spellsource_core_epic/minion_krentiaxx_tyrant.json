@@ -1,0 +1,24 @@
+{
+  "name": "Krentiaxx Tyrant",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Opener: Return your other minions to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "OTHER_FRIENDLY_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

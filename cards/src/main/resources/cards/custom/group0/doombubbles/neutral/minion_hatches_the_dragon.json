@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Taunt. After you play a dragon, summon this minion from your deck.",
+  "description": "Guard. After you play a dragon, summon this minion from your deck.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
@@ -41,7 +41,7 @@
   "attributes": {
     "TAUNT": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
