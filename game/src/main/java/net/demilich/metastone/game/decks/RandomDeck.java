@@ -7,18 +7,13 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.decks.validation.DeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.commons.lang3.RandomUtils;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * A deck that was randomly created.
  */
-public final class RandomDeck extends GameDeck {
+final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -27,7 +22,7 @@ public final class RandomDeck extends GameDeck {
 	 * @param heroClass  The hero class
 	 * @param deckFormat The format
 	 */
-	public RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
+	RandomDeck(String heroClass, DeckFormat deckFormat) {
 		super(heroClass);
 		populate(deckFormat);
 	}
@@ -38,29 +33,24 @@ public final class RandomDeck extends GameDeck {
 	 *
 	 * @param deckFormat
 	 */
-	public RandomDeck(DeckFormat deckFormat) {
-		this(getRandomHeroClass(), deckFormat);
+	RandomDeck(DeckFormat deckFormat) {
+		this(HeroClass.random(deckFormat), deckFormat);
 	}
 
 	/**
 	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the {@link
 	 * DeckFormat#CUSTOM} format.
 	 */
-	public RandomDeck() {
-		this(getRandomHeroClass(), DeckFormat.CUSTOM);
+	RandomDeck() {
+		this(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
 	}
 
 	/**
 	 * Creates a random deck with the specified hero class and a balance of 50% Class cards and Neutral cards in the
 	 * {@link DeckFormat#CUSTOM} format.
 	 */
-	public RandomDeck(HeroClass heroClass) {
-		this(heroClass, DeckFormat.CUSTOM);
-	}
-
-	private static HeroClass getRandomHeroClass() {
-		List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
-		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+	public RandomDeck(String heroClass) {
+		this(heroClass, DeckFormat.getFormat("Custom"));
 	}
 
 	private void populate(DeckFormat deckFormat) {
@@ -68,10 +58,14 @@ public final class RandomDeck extends GameDeck {
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)
+				&& !card.getCardType().isCardType(CardType.CLASS)
+				&& !card.getCardType().isCardType(CardType.FORMAT)
 				&& card.hasHeroClass(getHeroClass()));
 		CardList neutralCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)
+				&& !card.getCardType().isCardType(CardType.CLASS)
+				&& !card.getCardType().isCardType(CardType.FORMAT)
 				&& card.hasHeroClass(HeroClass.ANY));
 
 		while (!this.isComplete()) {

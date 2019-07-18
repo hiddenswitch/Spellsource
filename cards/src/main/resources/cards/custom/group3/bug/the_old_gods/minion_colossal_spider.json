@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Taunt. Poisonous.",
+  "description": "Guard. Toxic.",
   "attributes": {
     "POISONOUS": true,
     "TAUNT": true

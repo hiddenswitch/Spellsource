@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class AddAttributeSpell extends RevertableSpell {
 
-	private static Logger logger = LoggerFactory.getLogger(AddAttributeSpell.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(AddAttributeSpell.class);
 
 	/**
 	 * Creates an instance of this spell without a target specified.
@@ -105,7 +105,11 @@ public class AddAttributeSpell extends RevertableSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
+		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
+		if (desc.containsKey(SpellArg.VALUE)) {
+			LOGGER.error("onCast {} {}: Cannot use an integer value in an AddAttributeSpell. Use ModifyAttributeSpell instead.", context.getGameId(), source);
+			throw new IllegalArgumentException("VALUE");
+		}
 		Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		context.getLogic().applyAttribute(target, tag, source);
 		super.onCast(context, player, desc, source, target);

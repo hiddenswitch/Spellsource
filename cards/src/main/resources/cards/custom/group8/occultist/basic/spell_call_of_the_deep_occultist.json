@@ -1,0 +1,33 @@
+{
+  "name": "Call of the Deep",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Deal $4 damage to your champion. Summon four 1/1 Tentacles with Guard.",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 4
+      },
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_tauntentacle",
+          "token_tauntentacle",
+          "token_tauntentacle",
+          "token_tauntentacle"
+        ]
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

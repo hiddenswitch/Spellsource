@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Taunt. Battlecry: Shuffle 7 'Ocean Depths' into your deck. Draw 2 cards.",
+  "description": "Guard. Opener: Shuffle 7 'Ocean Depths' into your deck. Draw 2 cards.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -14,7 +14,7 @@
       "spells": [
         {
           "class": "ShuffleToDeckSpell",
-          "value": 7,
+          "howMany": 7,
           "card": "spell_ocean_depths"
         },
         {

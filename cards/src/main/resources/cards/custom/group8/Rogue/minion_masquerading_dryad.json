@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Deathrattle: Add two random class cards to your hand (from your opponent's class).",
+  "description": "Aftermath: Add two random class cards to your hand (from your opponent's class).",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "value": 2,

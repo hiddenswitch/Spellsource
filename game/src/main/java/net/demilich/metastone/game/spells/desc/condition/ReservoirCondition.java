@@ -4,10 +4,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.aura.DoubleBattlecriesAura;
 import net.demilich.metastone.game.spells.aura.ReservoirsAlwaysActiveAura;
+import net.demilich.metastone.game.spells.aura.ReservoirsNeverActiveAura;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Evaluates to {@code true} when the number of cards in the player's deck is greater or equal to the {@link
@@ -24,8 +26,9 @@ public class ReservoirCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		if (reservoirsAlwaysActive(context, player, source)) {
-			return true;
+		Boolean forced = reservoirsForced(context, player, source);
+		if (forced != null) {
+			return forced;
 		}
 
 		if (desc.containsKey(ConditionArg.VALUE1) && desc.containsKey(ConditionArg.VALUE2)) {
@@ -36,13 +39,12 @@ public class ReservoirCondition extends Condition {
 		}
 	}
 
-	public static boolean reservoirsAlwaysActive(GameContext context, Player player, Entity source) {
-		List<ReservoirsAlwaysActiveAura> auras = SpellUtils.getAuras(context, player.getId(), ReservoirsAlwaysActiveAura.class);
-		for (ReservoirsAlwaysActiveAura aura : auras) {
-			if (aura.getAffectedEntities().contains(source.getId())) {
-				return true;
-			}
-		}
-		return false;
+	public static Boolean reservoirsForced(GameContext context, Player player, Entity source) {
+		List<ReservoirsAlwaysActiveAura> activeAuras = SpellUtils.getAuras(context, player.getId(), ReservoirsAlwaysActiveAura.class);
+		List<ReservoirsNeverActiveAura> inactiveAuras = SpellUtils.getAuras(context, player.getId(), ReservoirsNeverActiveAura.class);
+		return Stream.concat(activeAuras.stream(), inactiveAuras.stream())
+				.min(Comparator.comparingInt(aura -> aura.getHostReference().getId()))
+				.map(aura -> aura instanceof ReservoirsAlwaysActiveAura)
+				.orElse(null);
 	}
 }

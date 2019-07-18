@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Summon every minion that died while this minion was alive.",
+  "description": "Aftermath: Summon every minion that died while this minion was alive.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

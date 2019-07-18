@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Taunt. At the end of your turn, gain \"Deathrattle: Summon two 1/1 Saplings.\"",
+  "description": "Guard. At the end of your turn, gain \"Aftermath: Summon two 1/1 Saplings.\"",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

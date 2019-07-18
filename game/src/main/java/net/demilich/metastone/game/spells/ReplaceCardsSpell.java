@@ -48,7 +48,7 @@ public class ReplaceCardsSpell extends Spell {
 			logger.warn("onCast {} {}: No cards found to replace with.", source, context.getGameId());
 			return;
 		}
-		Card replacement = cards.get(0);
+		Card replacement = cards.get(0).getCopy();
 
 		replacement = context.getLogic().replaceCard(target.getOwner(), (Card) target, replacement);
 		final Card output = replacement;

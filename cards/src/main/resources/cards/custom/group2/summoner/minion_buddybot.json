@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Battlecry: Give the next Mech you summon this turn +2/+2.",
+  "description": "Opener: Give the next Mech you summon this turn +2/+2.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

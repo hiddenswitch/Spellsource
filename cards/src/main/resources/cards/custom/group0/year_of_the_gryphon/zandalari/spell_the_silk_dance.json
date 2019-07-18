@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "EPIC",
-  "description": "Give your minions \"Deathrattle: Shuffle this into your deck. It costs (1).\"",
+  "description": "Give your minions \"Aftermath: Shuffle this into your deck. It costs (1).\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",

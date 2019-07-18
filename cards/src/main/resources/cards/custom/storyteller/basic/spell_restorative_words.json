@@ -1,0 +1,16 @@
+{
+  "name": "Restorative Words",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "description": "Restore #3 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

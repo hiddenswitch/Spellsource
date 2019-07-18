@@ -7,20 +7,26 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -104,6 +110,12 @@ public class TargetLogic implements Serializable {
 		if (entity.isPresent()) {
 			return entity.get();
 		} else {
+			// Check the triggers
+			for (Trigger trigger : context.getTriggerManager().getTriggers()) {
+				if (trigger instanceof Enchantment && ((Enchantment) trigger).getId() == targetId) {
+					return (Entity) trigger;
+				}
+			}
 			throw new NullPointerException("Target not found exception: " + targetKey);
 		}
 	}
@@ -246,6 +258,26 @@ public class TargetLogic implements Serializable {
 				return new ArrayList<>();
 			}
 			return new ArrayList<>(player.getHand().subList(0, 1));
+		} else if (targetKey.equals(EntityReference.LEFTMOST_ENEMY_CARD_HAND)) {
+			player = context.getOpponent(player);
+			if (player.getHand().size() == 0) {
+				return new ArrayList<>();
+			}
+			return new ArrayList<>(player.getHand().subList(0, 1));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN)) {
+			EntityReference value = context.getLastSpellPlayedThisTurnMap().getOrDefault(player.getId(), null);
+			if (value == null) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(context.resolveSingleTarget(value));
+			}
+		} else if (targetKey.equals(EntityReference.RIGHTMOST_FRIENDLY_CARD_HAND)) {
+			if (player.getHand().size() == 0) {
+				return new ArrayList<>();
+			}
+			ArrayList<Entity> entities = new ArrayList<>();
+			entities.add(player.getHand().get(player.getHand().size() - 1));
+			return entities;
 		} else if (targetKey.equals(EntityReference.ALL_OTHER_CHARACTERS)) {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.ANY);
 			targets.remove(source);
@@ -481,6 +513,24 @@ public class TargetLogic implements Serializable {
 				matching.add(opponent.getMinions().get(i));
 			}
 			return matching;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_MINION_PLAYED)) {
+			// Nowadays cards are only moved into graveyard after they have been played. The currently played card is in the
+			// set-aside zone, so the most recently added card to the graveyard is guaranteed to be the one most recently
+			// played.
+			List<Entity> minionCardsPlayed = player.getGraveyard().stream()
+					.filter(e -> e.getEntityType() == EntityType.CARD
+							&& e.getSourceCard().getCardType() == CardType.MINION
+							&& e.hasAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK))
+					.collect(Collectors.toList());
+			if (minionCardsPlayed.isEmpty()) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(minionCardsPlayed.get(minionCardsPlayed.size() - 1));
+			}
+		} else if (targetKey.equals(EntityReference.OTHER_FRIENDLY_CHARACTERS)) {
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
+			targets.remove(source);
+			return targets;
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

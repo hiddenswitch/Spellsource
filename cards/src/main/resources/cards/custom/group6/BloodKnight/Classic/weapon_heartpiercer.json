@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "Deathrattle: Your hero Drains the Health of all minions damaged by this weapon.",
+  "description": "Aftermath: Your champion Drains the Health of all minions damaged by this weapon.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",
@@ -16,20 +16,20 @@
     },
     "spell": {
       "class": "AddEnchantmentSpell",
-      "card": "enchantment_heartpierced",
-      "target": "EVENT_TARGET"
+      "target": "EVENT_TARGET",
+      "card": "enchantment_heartpierced"
     }
   },
   "deathrattle": {
     "class": "DrainSpell",
     "target": "ALL_MINIONS",
-    "filter": {
-      "class": "HasEnchantmentFilter",
-      "card": "enchantment_heartpierced"
-    },
     "value": {
       "class": "AttributeValueProvider",
       "attribute": "HP"
+    },
+    "filter": {
+      "class": "HasEnchantmentFilter",
+      "card": "enchantment_heartpierced"
     }
   },
   "attributes": {

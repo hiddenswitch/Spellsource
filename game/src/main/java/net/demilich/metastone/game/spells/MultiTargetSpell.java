@@ -14,6 +14,9 @@ import java.util.Map;
 /**
  * Casts {@link SpellArg#SPELL} on a random target from the list of targets in {@link SpellArg#TARGET} at most {@link
  * SpellArg#VALUE} times or until random targets are exhausted, whichever comes first.
+ * <p>
+ * Valid targets are those that are not mortally wounded. However, deathrattles are evaluated at the end of the sequence
+ * as normal.
  */
 public class MultiTargetSpell extends Spell {
 

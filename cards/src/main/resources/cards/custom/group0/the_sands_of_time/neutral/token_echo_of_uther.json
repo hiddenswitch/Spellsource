@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Give a minion +4/+4 and Divine Shield. If it already has Divine Shield, +8/+8 instead.",
+  "description": "Opener: Give a minion +4/+4 and Dodge. If it already has Dodge, +8/+8 instead.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

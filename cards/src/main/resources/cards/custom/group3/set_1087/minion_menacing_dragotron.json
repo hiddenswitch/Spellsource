@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Deathrattle: Destroy all minions with less Attack than this minion.",
+  "description": "Aftermath: Destroy all minions with less Attack than this minion.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "ALL_MINIONS",

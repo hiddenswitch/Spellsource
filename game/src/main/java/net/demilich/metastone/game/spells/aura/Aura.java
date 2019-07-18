@@ -22,6 +22,8 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -80,6 +82,8 @@ import java.util.*;
  * @see CardAura that temporarily makes one card behave like another
  */
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(Aura.class);
 	private EntityReference targets;
 	protected SpellDesc applyAuraEffect;
 	protected SpellDesc removeAuraEffect;
@@ -92,6 +96,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		this(desc.getSecondaryTrigger() == null ? new WillEndSequenceTrigger() : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
 		setEntityFilter(desc.getFilter());
 		setCondition(desc.getCondition());
+		setPersistentOwner(desc.getBool(AuraArg.PERSISTENT_OWNER));
 		setDesc(desc);
 	}
 
@@ -133,6 +138,10 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
+		// Auras by default never affect targets removed from play
+		if (target.getZone() == Zones.REMOVED_FROM_PLAY) {
+			return false;
+		}
 		Entity source = context.resolveSingleTarget(getHostReference());
 		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, source)) {
 			return false;
@@ -167,39 +176,65 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	@Suspendable
 	@Override
 	public void onGameEvent(GameEvent event) {
+		// During an aura's processing of a trigger, targets may have been transformed, removed from play, etc.
+		// Transformations are particularly tough, because the resolved target will have changed from under the aura. It's
+		// important to check if existing affected entities have been transformed or legitimately removed. Entities, in any
+		// case, are never straight up inaccessibly deleted!
 		GameContext context = event.getGameContext();
 		Player owner = context.getPlayer(getOwner());
 		Entity source = context.resolveSingleTarget(getHostReference());
 		List<Entity> resolvedTargets = context.resolveTarget(owner, source, targets);
-		List<Entity> relevantTargets = new ArrayList<Entity>(resolvedTargets);
+		List<Entity> relevantTargets = new ArrayList<>(resolvedTargets);
 		for (Iterator<Integer> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
 			int entityId = iterator.next();
 
 			EntityReference entityReference = new EntityReference(entityId);
-			Entity affectedEntity = context.tryFind(entityReference);
-			if (affectedEntity == null) {
-				// It was removed from play or otherwise could not be found.
+			// This will retrieve entities that have been removed from play due to transformation
+			Entity currentlyAffectedEntity = context.getTargetLogic().findEntity(context, entityReference);
+			if (currentlyAffectedEntity == null) {
+				LOGGER.warn("onGameEvent {} {}: {} could not be found by the target logic", context.getGameId(), source, entityId);
 				iterator.remove();
-			} else {
-				relevantTargets.add(affectedEntity);
+			} else if (!relevantTargets.contains(currentlyAffectedEntity)) {
+				relevantTargets.add(currentlyAffectedEntity);
 			}
 		}
 
-		boolean alwaysApply = getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+		boolean alwaysApply = alwaysApply();
 
 		for (Entity target : relevantTargets) {
 			if (affects(context, owner, target, resolvedTargets) && (!affectedEntities.contains(target.getId()) || alwaysApply)) {
 				affectedEntities.add(target.getId());
-				context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
+				applyAuraEffect(context, target);
 				// target is not affected anymore, remove effect
 			} else if (!affects(context, owner, target, resolvedTargets) && affectedEntities.contains(target.getId())) {
 				affectedEntities.remove(target.getId());
-				if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
-					continue;
-				}
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+				removeAuraEffect(context, target);
 			}
 		}
+	}
+
+	protected boolean alwaysApply() {
+		return getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+	}
+
+	@Suspendable
+	protected void removeAuraEffect(GameContext context, Entity target) {
+		// By default, never cast this on targets that have been removed from play. It is generally safe for auras to be
+		// removed from actors in the graveyard
+		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
+			return;
+		}
+		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+	}
+
+	@Suspendable
+	protected void applyAuraEffect(GameContext context, Entity target) {
+		// By default, never cast on targets that have been removed from play. This prevents auras from casting twice on the
+		// same target, once on the original target and again on its transformed replacement.
+		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
+			return;
+		}
+		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
 	}
 
 	@Override
@@ -209,7 +244,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			EntityReference targetKey = new EntityReference(targetId);
 			Entity target = context.tryFind(targetKey);
 			if (target != null) {
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+				removeAuraEffect(context, target);
 			}
 		}
 		affectedEntities.clear();
@@ -248,6 +283,11 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	public SpellDesc getApplyEffect() {
 		return applyAuraEffect;
+	}
+
+	@Override
+	public boolean hasPersistentOwner() {
+		return getDesc() != null && getDesc().getBool(AuraArg.PERSISTENT_OWNER);
 	}
 }
 

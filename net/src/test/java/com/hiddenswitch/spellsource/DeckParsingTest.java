@@ -119,7 +119,7 @@ public class DeckParsingTest {
 						org.junit.Assert.assertEquals(validRequest.getCardIds().stream().filter(cid::equals).count(), 2L);
 					});
 
-					org.junit.Assert.assertEquals(validRequest.getHeroClass(), HeroClass.BLACK);
+					org.junit.Assert.assertEquals(validRequest.getHeroClass(), "BLACK");
 					Assert.assertEquals(validRequest.getFormat(), "Standard");
 				});
 

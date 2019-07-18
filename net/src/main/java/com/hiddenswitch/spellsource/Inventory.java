@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
@@ -48,13 +49,13 @@ public interface Inventory {
 	static OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws InterruptedException, SuspendExecution {
 		QueryCardsRequest commons = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
-				.withSets(CardSet.SPELLSOURCE)
+				.withSets("SPELLSOURCE")
 				.withRarity(Rarity.COMMON)
 				.withRandomCount((request.getCardsPerPack() - 1) * request.getNumberOfPacks());
 
 		QueryCardsRequest allianceRares = new QueryCardsRequest()
 				.withFields(CardFields.ALL)
-				.withSets(CardSet.SPELLSOURCE)
+				.withSets("SPELLSOURCE")
 				.withRarity(Rarity.ALLIANCE)
 				.withRandomCount(request.getNumberOfPacks());
 
@@ -99,6 +100,7 @@ public interface Inventory {
 				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
 				record1.setHeroCardId(request.getHeroCardId());
 				record1.setFormat(request.getFormat());
+				record1.setStandardDeck(request.isStandard());
 				final String deckId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record1));
 
 				if (request.getInventoryIds() != null
@@ -113,7 +115,7 @@ public interface Inventory {
 				return CreateCollectionResponse.deck(deckId);
 			case ALLIANCE:
 				CollectionRecord record2 = CollectionRecord.alliance(request.getAllianceId(), userId);
-				final String allianceId = awaitResult(h -> mongo().client().insert(COLLECTIONS, JsonObject.mapFrom(record2), h));
+				String allianceId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record2));
 
 				return CreateCollectionResponse.alliance(allianceId);
 			default:
@@ -343,7 +345,8 @@ public interface Inventory {
 
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
-				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed())
+						.setStandard(record.isStandardDeck()));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -368,12 +371,13 @@ public interface Inventory {
 			throw new NullPointerException("No collection was specified");
 		}
 
-		List<JsonObject> results = awaitResult(h -> mongo().client().find(INVENTORY, json("collectionIds", collectionId), h));
+		List<JsonObject> results = mongo().find(INVENTORY, json("collectionIds", collectionId));
 		final List<InventoryRecord> inventoryRecords = results.stream().map(r -> QuickJson.fromJson(r, InventoryRecord.class)).collect(toList());
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed())
+					.setStandard(deck.isStandardDeck());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(userId, inventoryRecords);
 		} /*  else {
@@ -385,50 +389,35 @@ public interface Inventory {
 	static TrashCollectionResponse trashCollection(TrashCollectionRequest request) throws SuspendExecution, InterruptedException {
 		final String collectionId = request.getCollectionId();
 
-		MongoClientUpdateResult result1 = awaitResult(h -> mongo().client()
+		MongoClientUpdateResult result1 = mongo()
 				.updateCollection(COLLECTIONS,
 						json("_id", collectionId, "trashed", false),
-						json("$set", json("trashed", true)), h));
+						json("$set", json("trashed", true)));
 
-		MongoClientUpdateResult result2 = awaitResult(h -> mongo().client()
+		MongoClientUpdateResult result2 = mongo()
 				.updateCollectionWithOptions(INVENTORY,
 						json("collectionIds", collectionId),
 						json("$pull", json("collectionIds", collectionId)),
-						new UpdateOptions().setMulti(true), h));
+						new UpdateOptions().setMulti(true));
 
 		return new TrashCollectionResponse(result1.getDocModified() == 1, result2.getDocModified());
 	}
 
 	static SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException {
 		String collectionId = setCollectionRequest.getCollectionId();
-		MongoClientUpdateResult r = awaitResult(h -> mongo().client()
+		MongoClientUpdateResult r = mongo()
 				.updateCollectionWithOptions(Inventory.INVENTORY,
 						json("collectionId", collectionId, "_id", json("$nin", setCollectionRequest.getInventoryIds())),
 						json("$pull", json("collectionIds", collectionId)),
-						new UpdateOptions().setMulti(true), h));
+						new UpdateOptions().setMulti(true));
 
-		MongoClientUpdateResult r2 = awaitResult(h -> mongo().client()
+		MongoClientUpdateResult r2 = mongo()
 				.updateCollectionWithOptions(Inventory.INVENTORY,
 						json("_id", json("$in", setCollectionRequest.getInventoryIds())),
 						json("$addToSet", json("collectionIds", collectionId)),
-						new UpdateOptions().setMulti(true), h));
+						new UpdateOptions().setMulti(true));
 
 		return new SetCollectionResponse(r2, r);
-	}
-
-	@Suspendable
-	static MongoClientUpdateResult update(MongoClient client, JsonObject query, JsonObject update) {
-		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, query, update, new UpdateOptions().setMulti(true), h));
-	}
-
-	@Suspendable
-	static MongoClientUpdateResult update(MongoClient client, String inventoryId, JsonObject update) {
-		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, json("_id", inventoryId), update, new UpdateOptions().setMulti(true), h));
-	}
-
-	@Suspendable
-	static MongoClientUpdateResult update(MongoClient client, List<String> inventoryIds, JsonObject update) {
-		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, json("_id", json("$in", inventoryIds)), update, new UpdateOptions().setMulti(true), h));
 	}
 
 	@Suspendable

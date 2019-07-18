@@ -1,0 +1,24 @@
+{
+  "name": "Whiptail Gatherer",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "At the end of your turn, add a Berry to your hand that restores 3 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "token_berry"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

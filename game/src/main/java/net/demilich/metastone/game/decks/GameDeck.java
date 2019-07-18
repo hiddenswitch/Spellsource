@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 	protected CardList cards = new CardArrayList();
 
 	private String name = "";
-	private HeroClass heroClass;
+	private String heroClass;
 	private Card heroCard;
 	private DeckFormat format;
 	private String description;
@@ -40,13 +41,20 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 	public GameDeck() {
 	}
 
-	public GameDeck(HeroClass heroClass) {
+	public GameDeck(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
-	public GameDeck(HeroClass heroClass, boolean arbitrary) {
+	public GameDeck(String heroClass, boolean arbitrary) {
 		this.heroClass = heroClass;
 		this.arbitrary = arbitrary;
+	}
+
+	public GameDeck(String heroClass1, List<String> cardIds1) {
+		this.heroClass = heroClass1;
+		for (String cardId : cardIds1) {
+			getCards().addCard(cardId);
+		}
 	}
 
 	public int containsHowMany(Card card) {
@@ -71,7 +79,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return description;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
@@ -111,7 +119,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		this.filename = filename;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -144,7 +152,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 	public DeckFormat getFormat() {
 		if (format == null) {
 			// Retrieve the format that is implied by the cards inside this deck.
-			Set<CardSet> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
+			Set<String> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
 			return DeckFormat.getSmallestSupersetFormat(cardSets);
 		}
 

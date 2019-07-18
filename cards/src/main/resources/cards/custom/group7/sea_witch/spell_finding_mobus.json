@@ -4,14 +4,13 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "RARE",
-  "description": "Shuffle a 7/7 Whale Shark with Taunt into your deck. Draw a card.",
+  "description": "Shuffle a 7/7 Whale Shark with Guard into your deck. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "ShuffleToDeckSpell",
-        "value": 1,
         "card": "token_whale_shark"
       },
       {

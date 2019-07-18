@@ -1,0 +1,25 @@
+{
+  "name": "Failed Experiment",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Aftermath: Transform a random friendly minion into an Infectious Zombie.",
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "card": "minion_infectious_zombie",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "NAXXRAMAS"
+  ]
+}

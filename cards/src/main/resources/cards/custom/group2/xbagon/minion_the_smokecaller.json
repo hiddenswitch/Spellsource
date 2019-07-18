@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Give all minions in your opponent's hand and deck -1/-1.",
+  "description": "Opener: Give all minions in your opponent's hand and deck -1/-1.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

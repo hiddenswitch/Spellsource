@@ -35,7 +35,6 @@ import java.io.Serializable;
  * </pre>
  */
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
-
 	private int owner = -1;
 	private EventTriggerDesc desc;
 
@@ -48,7 +47,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		return (EventTrigger) super.clone();
 	}
 
-	protected boolean determineTargetPlayer(GameEvent event, TargetPlayer targetPlayer, Entity host, int targetPlayerId) {
+	private boolean determineTargetPlayer(GameEvent event, TargetPlayer targetPlayer, Entity host, int targetPlayerId) {
 		if (targetPlayerId == -1 || targetPlayer == null) {
 			return true;
 		}
@@ -75,9 +74,16 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		return false;
 	}
 
-	protected abstract boolean fire(GameEvent event, Entity host);
+	/**
+	 * When an event this trigger is {@link #interestedIn()} occurs, this test indicates whether or not the trigger should
+	 * enter the queue of effects that should be evaluated. This is distinct from whether or not
+	 * @param event
+	 * @param host
+	 * @return
+	 */
+	protected abstract boolean innerQueues(GameEvent event, Entity host);
 
-	public final boolean fires(GameEvent event, Entity host) {
+	public final boolean queues(GameEvent event, Entity host) {
 		TargetPlayer targetPlayer = getDesc().getTargetPlayer();
 		if (targetPlayer != null && !determineTargetPlayer(event, targetPlayer, host, event.getTargetPlayerId())) {
 			return false;
@@ -93,12 +99,14 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		}
 
 		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
-		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()) {
+		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()
+				|| (event.getSource() == null && sourceEntityType != null)) {
 			return false;
 		}
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if (event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType()) {
+		if ((event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType())
+				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}
 
@@ -115,7 +123,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 				&& event.getGameContext().getLogic().heroPowersDisabled()) {
 			return false;
 		}
-		return fire(event, host);
+		return innerQueues(event, host);
 	}
 
 	protected boolean hostConditionMet(GameEvent event, Entity host) {
@@ -126,7 +134,11 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE_CARD && event.getEventSource() == host.getSourceCard()) {
 			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_TARGET_CARD && event.getEventTarget() == host.getSourceCard()) {
+			return false;
 		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGET_CARDS && event.getEventTarget() != host.getSourceCard()) {
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {
 			return false;
@@ -149,7 +161,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		return "[" + getClass().getSimpleName() + " owner:" + owner + "]";
 	}
 
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
 		Condition condition = (Condition) getDesc().get(EventTriggerArg.FIRE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
 		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {

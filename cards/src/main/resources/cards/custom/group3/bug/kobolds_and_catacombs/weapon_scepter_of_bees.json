@@ -1,0 +1,31 @@
+{
+  "name": "Scepter of Larva",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "AMBER",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "After your champion attacks, summon a 1/1 Larva for each card in your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      },
+      "card": "token_spiderling"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -32,5 +32,4 @@ public class Logging {
 		setLoggingLevelForClass(WebSocket08FrameDecoder.class, Level.ERROR);
 		setLoggingLevelForClass(WebSocketServerHandshaker.class, Level.ERROR);
 	}
-
 }

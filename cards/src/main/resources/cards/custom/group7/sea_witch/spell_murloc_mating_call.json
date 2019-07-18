@@ -4,12 +4,12 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Summon two 2/1 Murlocs with Charge.",
+  "description": "Summon two 2/1 Murlocs with Blitz.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "minion_bluegill_warrior",
-    "value": 2
+    "value": 2,
+    "card": "minion_bluegill_warrior"
   },
   "attributes": {},
   "collectible": true,

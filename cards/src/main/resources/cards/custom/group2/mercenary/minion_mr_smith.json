@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry and Deathrattle: Add a random weapon to your hand.",
+  "description": "Opener and Aftermath: Add a random weapon to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

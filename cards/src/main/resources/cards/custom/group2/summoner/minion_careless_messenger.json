@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: If you control a Secret, draw a card.",
+  "description": "Opener: If you control a Secret, draw a card.",
   "battlecry": {
     "condition": {
       "class": "ControlsSecretCondition"

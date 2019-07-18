@@ -2,13 +2,14 @@ package com.hiddenswitch.spellsource.common;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
+import io.vertx.core.Closeable;
 import net.demilich.metastone.game.events.GameEvent;
 
 /**
  * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a networking
  * channel like a websocket or a plain TCP socket.
  */
-public interface Client extends ActionListener, GameEventListener, HasElapsableTurns {
+public interface Client extends ActionListener, GameEventListener, HasElapsableTurns, Closeable {
 
 	/**
 	 * Send an emote to a client. By default, there's no implementation except for Unity clients.

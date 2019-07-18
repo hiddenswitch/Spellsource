@@ -26,7 +26,7 @@ public final class GetCollectionResponse implements Serializable {
 	private List<GetCollectionResponse> responses;
 	private List<InventoryRecord> inventoryRecords;
 	private CollectionTypes collectionType;
-	private HeroClass heroClass;
+	private String heroClass;
 	private String name;
 	private String collectionId;
 	private String userId;
@@ -34,6 +34,7 @@ public final class GetCollectionResponse implements Serializable {
 	private DeckType deckType;
 	private String heroCardId;
 	private String format;
+	private boolean standard;
 
 	private GetCollectionResponse() {
 	}
@@ -51,7 +52,7 @@ public final class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, String heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
 		return new GetCollectionResponse()
 				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
@@ -91,11 +92,11 @@ public final class GetCollectionResponse implements Serializable {
 		this.inventoryRecords = inventoryRecords;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -104,7 +105,7 @@ public final class GetCollectionResponse implements Serializable {
 		return this;
 	}
 
-	public GetCollectionResponse withHeroClass(final HeroClass heroClass) {
+	public GetCollectionResponse withHeroClass(final String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}
@@ -186,8 +187,8 @@ public final class GetCollectionResponse implements Serializable {
 			displayName = getName();
 		}
 
-		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
-		GameContext emptyContext = GameContext.uninitialized(fakeHeroClass, fakeHeroClass);
+		final String fakeHeroClass = getHeroClass() == null ? "RED" : getHeroClass();
+		GameContext emptyContext = new GameContext(fakeHeroClass, fakeHeroClass);
 
 		List<InventoryRecord> inventoryRecords = getInventoryRecords();
 		List<CardRecord> records = new ArrayList<>();
@@ -214,6 +215,7 @@ public final class GetCollectionResponse implements Serializable {
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
+				.isStandardDeck(isStandard())
 				.inventory(records);
 
 		if (getHeroClass() != null) {
@@ -303,6 +305,15 @@ public final class GetCollectionResponse implements Serializable {
 
 	public GetCollectionResponse withFormat(String format) {
 		this.format = format;
+		return this;
+	}
+
+	public boolean isStandard() {
+		return standard;
+	}
+
+	public GetCollectionResponse setStandard(boolean standard) {
+		this.standard = standard;
 		return this;
 	}
 }

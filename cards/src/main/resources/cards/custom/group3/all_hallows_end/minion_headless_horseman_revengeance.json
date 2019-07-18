@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Taunt. Deathrattle: Summon the Headless Horseman's Head",
+  "description": "Guard. Aftermath: Summon the Headless Horseman's Head",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "permanent_headless_horsemans_head"

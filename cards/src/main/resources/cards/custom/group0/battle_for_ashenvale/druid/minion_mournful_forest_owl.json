@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Choose One - Give your hero +1 Attack this turn; or gain 3 Armor.",
+  "description": "Choose One - Give your champion +1 Attack this turn; or gain 3 Armor.",
   "chooseOneBattlecries": [
     {
       "description": "+1 Attack",

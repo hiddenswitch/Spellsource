@@ -12,7 +12,7 @@
     "spells": [
       {
         "class": "RemoveCardSpell",
-        "target": "FRIENDLY_DECK_TOP"
+        "target": "FRIENDLY_TOP_CARD"
       },
       {
         "class": "ReceiveCardSpell",

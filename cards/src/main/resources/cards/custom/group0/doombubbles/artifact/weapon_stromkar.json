@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Damage all minions so that they have 1 Health remaining.",
+  "description": "Opener: Damage all minions so that they have 1 Health remaining.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

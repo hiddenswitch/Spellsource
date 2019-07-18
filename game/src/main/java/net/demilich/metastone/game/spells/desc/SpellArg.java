@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.DescDeserializer;
 import net.demilich.metastone.game.entities.Actor;
@@ -170,7 +171,6 @@ public enum SpellArg {
 	/**
 	 * Multiple card filters that are used by effects like {@link DiscoverFilteredCardSpell}. Considered obsolete.
 	 */
-	@Deprecated
 	CARD_FILTERS,
 	/**
 	 * A value from {@link Zones} that represents a place to or from a card will be affected.
@@ -189,6 +189,7 @@ public enum SpellArg {
 	 * @see CardSource for more about card sources.
 	 */
 	CARD_SOURCE,
+	CARD_SOURCES,
 	/**
 	 * Used by the {@link CreateCardSpell} to determine what kind of card to make. Considered obsolete.
 	 */
@@ -444,6 +445,16 @@ public enum SpellArg {
 	 */
 	TARGET,
 	/**
+	 * Overrides the source of an effect with the specified {@link EntityReference}, which must resolve to zero to one
+	 * targets.
+	 * <p>
+	 * Some references are still "group references" that typically refer to exactly one entity if it exists, or zero if it
+	 * does not. For example, {@link EntityReference#FRIENDLY_WEAPON}. This is an appropriate specifier for source.
+	 *
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for more about how this argument is used.
+	 */
+	SOURCE,
+	/**
 	 * Indicates whose point of view this spell should be cast from. Typically becomes the {@code player} object in the
 	 * spell's Spell#cast(GameContext, Player, SpellDesc, Entity, List) implementation {@code onCast}.
 	 */
@@ -451,7 +462,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to indicate the card's target selection. Considered obsolete.
 	 */
-	@Deprecated
 	TARGET_SELECTION,
 	/**
 	 * Specifies the {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} enchantment that should be
@@ -483,5 +493,14 @@ public enum SpellArg {
 	/**
 	 * Specifies a battlecry as a {@link BattlecryDesc} that will soon be added by a {@code AddBattlecrySpell}.
 	 */
-	BATTLECRY
+	BATTLECRY,
+	/**
+	 * Specifies a unique integer ID for a {@link SpellDesc} that is also a deathrattle, to allow deathrattles to identify
+	 * themselves inside iterators for {@link HasDeathrattleEnchantments#getDeathrattleEnchantments()}.
+	 */
+	DEATHRATTLE_ID,
+	/**
+	 * Specifies which zones the spell's effects apply to. The interpretation may depend on the spell.
+	 */
+	ZONES
 }

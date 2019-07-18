@@ -1,0 +1,14 @@
+{
+  "name": "Deluging Spirit",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

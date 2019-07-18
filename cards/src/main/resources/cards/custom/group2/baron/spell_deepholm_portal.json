@@ -1,10 +1,10 @@
 {
-  "name": "Deepholm Portal",
+  "name": "Conjured Duelers",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Summon a random 3-Cost minion for both heroes.",
+  "description": "Summon a random 3-Cost minion for both champions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

@@ -1,0 +1,35 @@
+{
+  "name": "Crew Commander",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Choose an enemy minion. Summon three 1/1 Pirates to attack it.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "SummonSpell",
+      "spell": {
+        "class": "FightSpell",
+        "target": "TARGET",
+        "spell": {
+          "class": "ForceDeathPhaseSpell"
+        },
+        "secondaryTarget": "OUTPUT"
+      },
+      "cards": [
+        "token_crew_member",
+        "token_crew_member",
+        "token_crew_member"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

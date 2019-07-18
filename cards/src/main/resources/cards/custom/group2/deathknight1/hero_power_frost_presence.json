@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Passive Hero Power. Your minions Freeze any characters they damage this turn.",
+  "description": "Passive Skill. Your minions Freeze any characters they damage this turn.",
   "passiveTriggers": [
     {
       "eventTrigger": {

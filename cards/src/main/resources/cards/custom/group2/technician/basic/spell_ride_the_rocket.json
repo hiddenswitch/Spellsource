@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BRASS",
   "rarity": "FREE",
-  "description": "Deal $7 damage to the enemy hero.",
+  "description": "Deal $7 damage to the enemy champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
@@ -12,6 +12,6 @@
     "value": 5
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GRAVEYARD",
   "fileFormatVersion": 1
 }

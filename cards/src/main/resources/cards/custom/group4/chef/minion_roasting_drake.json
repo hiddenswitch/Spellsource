@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Battlecry: If your deck contains 15 or fewer cards, deal 4 damage.",
+  "description": "Opener: If your deck contains 15 or fewer cards, deal 4 damage.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

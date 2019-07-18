@@ -1,0 +1,47 @@
+{
+  "name": "Yokai Shapeshifter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Opener: Transform a minion and adjacent minions into minions of the same Cost.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "spell1": {
+        "class": "TransformToRandomMinionSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": {
+            "class": "AttributeValueProvider",
+            "target": "TARGET",
+            "attribute": "BASE_MANA_COST"
+          }
+        }
+      },
+      "spell2": {
+        "class": "TransformToRandomMinionSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": {
+            "class": "AttributeValueProvider",
+            "target": "TARGET",
+            "attribute": "BASE_MANA_COST"
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

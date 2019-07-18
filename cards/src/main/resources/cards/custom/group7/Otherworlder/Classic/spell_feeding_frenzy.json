@@ -26,15 +26,15 @@
           "operation": "GREATER",
           "targetPlayer": "SELF"
         },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "randomTarget": true
+        },
         "howMany": {
           "class": "AttributeValueProvider",
           "attribute": "ATTACK"
-        },
-        "spell": {
-          "class": "BuffSpell",
-          "attackBonus": 1,
-          "randomTarget": true,
-          "target": "FRIENDLY_MINIONS"
         }
       },
       {
@@ -45,15 +45,15 @@
           "operation": "GREATER",
           "targetPlayer": "SELF"
         },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "hpBonus": 1,
+          "randomTarget": true
+        },
         "howMany": {
           "class": "AttributeValueProvider",
           "attribute": "HP"
-        },
-        "spell": {
-          "class": "BuffSpell",
-          "hpBonus": 1,
-          "randomTarget": true,
-          "target": "FRIENDLY_MINIONS"
         }
       },
       {

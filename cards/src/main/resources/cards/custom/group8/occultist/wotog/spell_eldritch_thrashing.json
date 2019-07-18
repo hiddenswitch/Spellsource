@@ -1,0 +1,24 @@
+{
+  "name": "Eldritch Thrashing",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Give your Tentacles +2/+2.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 2,
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cards": ["token_tauntentacle","token_tentacle"]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ]
+}
