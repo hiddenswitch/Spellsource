@@ -1,23 +1,31 @@
 package com.hiddenswitch.hearthstone;
 
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.events.GameStartEvent;
+import net.demilich.metastone.game.events.TurnEndEvent;
+import net.demilich.metastone.game.events.TurnStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -28,13 +36,17 @@ import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
@@ -1522,7 +1534,7 @@ public class CustomHearthstoneTests extends TestBase {
             Mockito.doAnswer(invocation ->
                     CardCatalogue.getCardById("minion_malorne"))
                     .when(spiedLogic)
-                    .removeRandom(Mockito.anyList());
+                    .removeRandom(anyList());
 
             playCard(context, player, "spell_stable_portal");
             Card card = player.getHand().get(0);
@@ -2804,6 +2816,51 @@ public class CustomHearthstoneTests extends TestBase {
             assertEquals(winner.getAttack(), winner.getBaseAttack() + 2);
             assertEquals(winner.getMaxHp(), winner.getBaseHp() + 2);
             assertEquals(winner.getHp(), winner.getBaseHp() + 2 - loser.getAttack());
+        });
+    }
+
+
+
+    @Test
+    public void testEscapeFromDurnholde() {
+        runGym((context, player, opponent) -> {
+            Card shouldntDraw = putOnTopOfDeck(context, player, "spell_test_gain_mana");
+            Card shouldDraw = putOnTopOfDeck(context, player, "spell_test_gain_mana");
+            assertEquals(shouldntDraw.getZone(), Zones.DECK);
+            assertEquals(shouldDraw.getZone(), Zones.DECK);
+            playCard(context, player, "permanent_escape_from_durnholde");
+            context.endTurn();
+            assertEquals(shouldntDraw.getZone(), Zones.DECK);
+            assertEquals(shouldDraw.getZone(), Zones.DECK);
+            context.endTurn();
+            assertEquals(shouldDraw.getZone(), Zones.HAND);
+            assertEquals(shouldntDraw.getZone(), Zones.DECK);
+        });
+
+        runGym((context, player, opponent) -> {
+            Card shouldDraw1 = putOnTopOfDeck(context, player, "spell_test_gain_mana");
+            Card shouldDraw2 = putOnTopOfDeck(context, player, "spell_test_gain_mana");
+            playCard(context, player, "permanent_escape_from_durnholde");
+            playMinionCard(context, player, "minion_test_3_2");
+            context.endTurn();
+            context.endTurn();
+            assertEquals(shouldDraw1.getZone(), Zones.HAND);
+            assertEquals(shouldDraw2.getZone(), Zones.HAND);
+        });
+    }
+
+    @Test
+    public void testPermanentCallOfTheCrusade() {
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "permanent_call_of_the_crusade");
+            Minion beast = playMinionCard(context, player, "minion_test_3_2");
+            for (int i = 0; i < 3; i++) {
+                assertEquals(beast.getAttack(), beast.getBaseAttack() + 1);
+                context.endTurn();
+                context.endTurn();
+            }
+            assertEquals(beast.getAttack(), beast.getBaseAttack());
+            assertEquals(player.getMinions().size(), 1);
         });
     }
 
