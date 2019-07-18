@@ -1,6 +1,8 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
@@ -20,9 +22,10 @@ import static org.junit.Assert.*;
 
 public class InvitesTest extends SpellsourceTestBase {
 
-	@Test(timeout = 15000L)
+	@Test(timeout = 18000L)
 	@Suspendable
-	public void testFriendInvite(TestContext testContext) {
+	public void testFriendInvite(TestContext testContext) throws InterruptedException, SuspendExecution {
+		Strand.sleep(1000L);
 		sync(() -> {
 			// Regular friending.
 			CountDownLatch friended = new CountDownLatch(1);
@@ -42,14 +45,21 @@ public class InvitesTest extends SpellsourceTestBase {
 
 							if (message.getAdded() != null && message.getAdded().getInvite() != null) {
 								Invite invite = message.getAdded().getInvite();
-								assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(invite.getStatus()));
-								inviteChecks.decrementAndGet();
+								if (invite.getStatus()== Invite.StatusEnum.ACCEPTED) {
+									inviteChecks.decrementAndGet();
+									inviteChecks.decrementAndGet();
+								} else {
+									assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(invite.getStatus()));
+									inviteChecks.decrementAndGet();
+								}
 							}
 
 							if (message.getChanged() != null && message.getChanged().getInvite() != null) {
 								Invite invite = message.getChanged().getInvite();
-								assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
-								inviteChecks.decrementAndGet();
+								if (inviteChecks.get()==1) {
+									assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
+									inviteChecks.decrementAndGet();
+								}
 							}
 						}
 					}) {
@@ -105,12 +115,13 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertEquals(recipient.getUserId().toString(), updatedSender.getAccounts().get(0).getFriends().get(0).getFriendId());
 				}
 			}
-		});
+		}, 18);
 	}
 
-	@Test(timeout = 15000L)
+	@Test(timeout = 18000L)
 	@Suspendable
-	public void testRecipientRejectsFriend(TestContext testContext) {
+	public void testRecipientRejectsFriend(TestContext testContext) throws InterruptedException, SuspendExecution {
+		Strand.sleep(1000L);
 		sync(() -> {
 			CountDownLatch rejected = new CountDownLatch(1);
 			AtomicInteger inviteChecks = new AtomicInteger(2);
@@ -180,12 +191,13 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
 				}
 			}
-		});
+		}, 18);
 	}
 
-	@Test(timeout = 15000L)
+	@Test(timeout = 18000L)
 	@Suspendable
-	public void testSenderCancelsFriend(TestContext testContext) {
+	public void testSenderCancelsFriend(TestContext testContext) throws InterruptedException, SuspendExecution {
+		Strand.sleep(1000L);
 		sync(() -> {
 			CountDownLatch receivedInvite = new CountDownLatch(1);
 			CountDownLatch inviteChecks = new CountDownLatch(2);
@@ -252,11 +264,12 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
 				}
 			}
-		});
+		}, 18);
 	}
 
-	@Test(timeout = 15000L)
-	public void testPrivateGameInvite(TestContext context) {
+	@Test(timeout = 18000L)
+	public void testPrivateGameInvite(TestContext context) throws InterruptedException, SuspendExecution {
+		Strand.sleep(1000L);
 		sync(() -> {
 			CountDownLatch receivedInvite = new CountDownLatch(1);
 			try (UnityClient sender = new UnityClient(context) {
@@ -287,7 +300,9 @@ public class InvitesTest extends SpellsourceTestBase {
 					@Override
 					protected void handleMessage(Envelope env) {
 						if (env.getAdded() != null && env.getAdded().getInvite() != null) {
-							receivedInvite.countDown();
+							if (env.getAdded().getInvite().getStatus() == Invite.StatusEnum.PENDING) {
+								receivedInvite.countDown();
+							}
 						}
 
 						handleGameMessages(env);
@@ -339,6 +354,6 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertFalse("Neither players should be in a game now", Games.getUsersInGames().containsKey(sender.getUserId()));
 				}
 			}
-		});
+		}, 18);
 	}
 }
