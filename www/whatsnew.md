@@ -6,7 +6,13 @@ permalink: /whats-new/
 
 ### 0.8.41-2.0.35 (In Progress)
 
+New Storyteller cards thanks to @Skurleton!
+
 Bug fixes.
+
+##### Content Additions:
+
+ - New Storyteller cards. (1237)
 
 ##### Content Fixes:
 
