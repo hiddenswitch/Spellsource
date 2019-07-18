@@ -1,0 +1,128 @@
+{
+  "name": "Discarded Creation",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 9,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "If you cast at least 2 spells this turn, gain Dash. If you cast at least 4, gain Blitz instead.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "conditions": [
+        {
+          "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
+          "value1": {
+            "class": "CardCountValueProvider",
+            "cardFilter": {
+              "class": "AndFilter",
+              "filters": [
+                {
+                  "class": "CardFilter",
+                  "cardType": "SPELL"
+                },
+                {
+                  "class": "AttributeFilter",
+                  "value": {
+                    "class": "CurrentTurnValueProvider"
+                  },
+                  "attribute": "PLAYED_FROM_HAND_OR_DECK",
+                  "operation": "EQUAL"
+                }
+              ]
+            },
+            "cardSource": {
+              "class": "GraveyardCardsSource",
+              "targetPlayer": "SELF"
+            }
+          },
+          "value2": 4
+        },
+        {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "ComparisonCondition",
+              "operation": "GREATER_OR_EQUAL",
+              "value1": {
+                "class": "CardCountValueProvider",
+                "cardFilter": {
+                  "class": "AndFilter",
+                  "filters": [
+                    {
+                      "class": "CardFilter",
+                      "cardType": "SPELL"
+                    },
+                    {
+                      "class": "AttributeFilter",
+                      "value": {
+                        "class": "CurrentTurnValueProvider"
+                      },
+                      "attribute": "PLAYED_FROM_HAND_OR_DECK",
+                      "operation": "EQUAL"
+                    }
+                  ]
+                },
+                "cardSource": {
+                  "class": "GraveyardCardsSource",
+                  "targetPlayer": "SELF"
+                }
+              },
+              "value2": 2
+            },
+            {
+              "class": "ComparisonCondition",
+              "operation": "LESS",
+              "value1": {
+                "class": "CardCountValueProvider",
+                "cardFilter": {
+                  "class": "AndFilter",
+                  "filters": [
+                    {
+                      "class": "CardFilter",
+                      "cardType": "SPELL"
+                    },
+                    {
+                      "class": "AttributeFilter",
+                      "value": {
+                        "class": "CurrentTurnValueProvider"
+                      },
+                      "attribute": "PLAYED_FROM_HAND_OR_DECK",
+                      "operation": "EQUAL"
+                    }
+                  ]
+                },
+                "cardSource": {
+                  "class": "GraveyardCardsSource",
+                  "targetPlayer": "SELF"
+                }
+              },
+              "value2": 4
+            }
+          ]
+        }
+      ],
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "CHARGE"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "RUSH"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

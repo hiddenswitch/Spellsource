@@ -40,8 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
@@ -49,28 +48,28 @@ public abstract class SpellsourceTestBase {
 	protected static Vertx vertx;
 
 	@BeforeClass
-	@Suspendable
-	public static void setUp(TestContext context) {
+	public static void setUp() throws InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			final Async async = context.async();
 
 			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
 			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
-			vertx.runOnContext(v1 -> {
-				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v2 -> {
-					vertx.executeBlocking(fut -> {
-						Mongo.mongo().connectWithEnvironment(vertx);
-						fut.complete();
-					}, context.asyncAssertSuccess(v3 -> {
-						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v4 -> {
-							async.complete();
-						}));
-					}));
-				}));
-			});
+			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
+				if (v2.failed()) {
+					throw new AssertionError();
+				}
+				Mongo.mongo().connectWithEnvironment(vertx);
+				Spellsource.spellsource().deployAll(vertx, v4 -> {
+					if (v4.failed()) {
+						throw new AssertionError("failed");
+					}
+					latch.countDown();
+				});
+			}));
+			latch.await(4000L, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -124,6 +123,11 @@ public abstract class SpellsourceTestBase {
 
 	@Suspendable
 	public static void sync(SuspendableRunnable action) {
+		sync(action, 90);
+	}
+
+	@Suspendable
+	public static void sync(SuspendableRunnable action, int seconds) {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
 			vertx.runOnContext(suspendableHandler(v2 -> {
@@ -137,7 +141,7 @@ public abstract class SpellsourceTestBase {
 			}));
 		});
 		try {
-			latch.await(90L, TimeUnit.SECONDS);
+			latch.await(seconds, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			fail();
 		}
@@ -145,13 +149,21 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@AfterClass
-	public static void tearDown(TestContext context) {
+	public static void tearDown() throws InterruptedException {
 		GlobalTracer.get().close();
-		Async async = context.async();
-		vertx.close(v -> {
-			initialized.compareAndSet(true, false);
-			async.complete();
-		});
-		vertx=null;
+		CountDownLatch latch = new CountDownLatch(1);
+		if (vertx == null) {
+			latch.countDown();
+		} else {
+			vertx.close(v -> {
+				initialized.compareAndSet(true, false);
+				latch.countDown();
+				vertx = null;
+			});
+		}
+
+		latch.await(3000L, TimeUnit.MILLISECONDS);
+		assertEquals(latch.getCount(), 0);
+		assertNull(vertx);
 	}
 }
