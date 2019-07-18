@@ -7400,5 +7400,13 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(test32.getHp(), test32.getMaxHp());
 			assertEquals(warden.getHp(), warden.getMaxHp() - 6);
 		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion warden1 = playMinionCard(context, player, "minion_warden_saihan");
+			Minion warden2 = playMinionCard(context, player, "minion_warden_saihan");
+			playCard(context, player, "spell_test_deal_6", warden1);
+			assertEquals(warden1.getHp(), warden1.getMaxHp() - 6);
+			assertEquals(warden2.getHp(), warden2.getMaxHp());
+		}));
 	}
 }
