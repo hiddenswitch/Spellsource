@@ -132,16 +132,17 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// should not play wild growth
 			context.endTurn();
 			// Set hp to yellow threat
-			player.getHero().setHp(1);
+			player.getHero().setHp(3);
 			receiveCard(context, player, "spell_test_ramp_mana");
-			receiveCard(context, player, "minion_test_3_2");
+			receiveCard(context, player, "minion_test_taunts");
+			receiveCard(context, player, "minion_test_taunts");
 			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 
 			while (context.takeActionInTurn()) {
 			}
 
 			// Note: this is turn 2 for the player
-			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_test_3_2");
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_test_taunts");
 			assertEquals(player.getMaxMana(), 2);
 		});
 	}
@@ -254,7 +255,8 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			context.endTurn();
 			opponent.setMana(2);
 			opponent.setMaxMana(2);
-			receiveCard(context, opponent, "spell_test_curse");
+			Card curse = receiveCard(context, opponent, "spell_test_curse");
+			assertTrue(curse.hasAttribute(Attribute.CURSE));
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);

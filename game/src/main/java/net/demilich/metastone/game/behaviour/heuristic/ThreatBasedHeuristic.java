@@ -181,7 +181,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 				score += weights.get(WeightedFeature.HARD_REMOVAL_VALUE);
 			}
 
-			if (card.getCardId().equals("spell_cursed")) {
+			if (card.hasAttribute(Attribute.CURSE)) {
 				score += weights.get(WeightedFeature.CURSED_FACTOR);
 			}
 		}

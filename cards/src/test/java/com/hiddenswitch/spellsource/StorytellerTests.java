@@ -106,11 +106,12 @@ public class StorytellerTests extends TestBase {
 	public void testTallTale() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "secret_tall_tale");
+			playCard(context, player, "spell_test_deal_5_to_enemy_hero");
 			assertEquals(player.getSecrets().size(), 1);
 			playCard(context, player, "spell_frostfire", opponent.getHero());
 			assertEquals(player.getSecrets().size(), 1);
 			context.endTurn();
-			playCard(context, opponent, "spell_5_to_enemy");
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			assertEquals(player.getSecrets().size(), 1);
 			playCard(context, opponent, "spell_frostfire", player.getHero());
 			assertEquals(player.getSecrets().size(), 0);
