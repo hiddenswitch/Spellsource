@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class SimultaneousGamesTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(SimultaneousGamesTest.class);
 
-	@Test(timeout = 185000L)
+	@Test(timeout = 210000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		// Make sure the queues are empty when this starts
 		sync(() -> {
@@ -93,7 +93,7 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 		}
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(185L, TimeUnit.SECONDS);
+		latch.await(210L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 		for (Thread thread : threads) {
 			if (thread.isAlive()) {
