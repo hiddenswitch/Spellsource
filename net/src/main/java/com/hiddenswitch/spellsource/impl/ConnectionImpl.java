@@ -18,6 +18,7 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
+import io.vertx.core.streams.WriteStream;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -55,9 +56,11 @@ public class ConnectionImpl implements Connection {
 				.start();
 
 		// Write to the socket when we receive a message on the event bus
-		consumer.handler(msg -> {
-			socket.write(Buffer.buffer(Json.encode(msg.body())));
-		});
+		consumer.handler(msg -> socket.write(Json.encodeToBuffer(msg.body()), written -> {
+			if (!written.succeeded()) {
+				msg.fail(-1, written.cause().getMessage());
+			}
+		}));
 
 		MessageConsumer<Buffer> closeConsumer = eventBus.consumer(getEventBusCloserAddress());
 		closeConsumer.handler(msg -> {
@@ -138,7 +141,13 @@ public class ConnectionImpl implements Connection {
 
 	@Override
 	public Connection write(@NotNull Envelope data) {
-		socket.write(Buffer.buffer(Json.encode(data)));
+		socket.write(Json.encodeToBuffer(data));
+		return this;
+	}
+
+	@Override
+	public Connection write(Envelope data, Handler<AsyncResult<Void>> handler) {
+		socket.write(Json.encodeToBuffer(data), handler);
 		return this;
 	}
 
@@ -146,6 +155,13 @@ public class ConnectionImpl implements Connection {
 	public void end() {
 		if (socket != null) {
 			socket.end();
+		}
+	}
+
+	@Override
+	public void end(Handler<AsyncResult<Void>> handler) {
+		if (socket != null) {
+			socket.end(handler);
 		}
 	}
 
@@ -211,12 +227,7 @@ public class ConnectionImpl implements Connection {
 
 	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
-		try {
-			end();
-			completionHandler.handle(Future.succeededFuture());
-		} catch (Throwable t) {
-			completionHandler.handle(Future.failedFuture(t));
-		}
+		end(completionHandler);
 	}
 
 	public String getEventBusAddress() {
