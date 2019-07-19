@@ -200,7 +200,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				});
 			}
 
-		});
+		}, context);
 	}
 
 	@Test(timeout = 25000L)
@@ -232,7 +232,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				});
 
 				assertEquals(false, done);
-			});
+			}, context);
 
 			// Should not have received end game message
 			assertFalse(client.receivedGameOverMessage());
@@ -330,7 +330,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				client2.createUserAccount();
 				java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
 				Thread.sleep(2000L);
-				sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))));
+				sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))), context);
 				other.cancel(true);
 				Thread.sleep(2000L);
 			}

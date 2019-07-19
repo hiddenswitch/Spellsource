@@ -115,7 +115,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertEquals(recipient.getUserId().toString(), updatedSender.getAccounts().get(0).getFriends().get(0).getFriendId());
 				}
 			}
-		}, 18);
+		}, 18, testContext);
 	}
 
 	@Test(timeout = 18000L)
@@ -191,7 +191,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
 				}
 			}
-		}, 18);
+		}, 18, testContext);
 	}
 
 	@Test(timeout = 18000L)
@@ -264,7 +264,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
 				}
 			}
-		}, 18);
+		}, 18, testContext);
 	}
 
 	@Test(timeout = 18000L)
@@ -354,6 +354,6 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertFalse("Neither players should be in a game now", Games.getUsersInGames().containsKey(sender.getUserId()));
 				}
 			}
-		}, 18);
+		}, 18, context);
 	}
 }
