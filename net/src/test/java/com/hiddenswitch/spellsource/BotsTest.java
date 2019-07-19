@@ -37,7 +37,7 @@ public class BotsTest extends SpellsourceTestBase {
 							CardCatalogue.getCardById("minion_test_3_2"),
 							CardCatalogue.getCardById("spell_test_summon_tokens")));
 			assertEquals(1, Bots.mulligan(request).discardedCards.size());
-		});
+		}, context);
 	}
 
 	@Test
