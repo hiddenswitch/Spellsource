@@ -71,6 +71,6 @@ public class ConversationTest extends SpellsourceTestBase {
 			} finally {
 				context.assertEquals(latch.getCount(), 0L);
 			}
-		});
+		}, context);
 	}
 }
