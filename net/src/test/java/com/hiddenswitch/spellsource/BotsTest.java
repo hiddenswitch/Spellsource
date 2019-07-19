@@ -6,7 +6,6 @@ import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.MulliganRequest;
-import com.hiddenswitch.spellsource.models.MulliganResponse;
 import com.hiddenswitch.spellsource.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.models.RequestActionResponse;
 import com.hiddenswitch.spellsource.util.*;
@@ -16,8 +15,6 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Test;
@@ -65,7 +62,7 @@ public class BotsTest extends SpellsourceTestBase {
 				context1.performAction(context1.getActivePlayerId(), gameAction);
 			}
 			assertTrue(context1.getTurn() > startTurn);
-		});
+		}, context);
 	}
 
 	@Test
@@ -84,7 +81,7 @@ public class BotsTest extends SpellsourceTestBase {
 			FiberBehaviour active = (FiberBehaviour) gc.getBehaviours().get(gc.getActivePlayerId());
 			assertTrue(!active.getValidActions().isEmpty());
 			active.setAction(active.getValidActions().get(0));
-		});
+		}, context);
 	}
 
 	@Test
@@ -118,7 +115,7 @@ public class BotsTest extends SpellsourceTestBase {
 				for (String id : botIds) {
 					assertFalse(games.containsKey(new UserId(id)));
 				}
-			});
+			}, context);
 		}
 	}
 }

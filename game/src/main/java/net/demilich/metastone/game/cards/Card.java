@@ -441,6 +441,9 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @return A {@link Rarity}
 	 */
 	public Rarity getRarity() {
+		if (getDesc().getRarity() == null) {
+			return Rarity.FREE;
+		}
 		return getDesc().getRarity();
 	}
 

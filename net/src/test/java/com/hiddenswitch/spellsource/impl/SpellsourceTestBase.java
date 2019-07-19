@@ -4,9 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -15,18 +12,13 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.opentracing.noop.NoopTracer;
 import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.json.Json;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -90,8 +82,8 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@Before
-	public void setUpEach(TestContext context) {
-		vertx.exceptionHandler(context.exceptionHandler());
+	public void setUpEach(TestContext testContext) {
+		vertx.exceptionHandler(testContext.exceptionHandler());
 		// Cleanup anything else that might be going on
 		sync(() -> {
 			for (UserId key : Matchmaking.getUsersInQueues().keySet()) {
@@ -106,7 +98,7 @@ public abstract class SpellsourceTestBase {
 			for (UserId connected : Connection.getConnections().keySet()) {
 				Void t = awaitResult(h -> Connection.close(connected.toString(), h));
 			}*/
-		});
+		}, testContext);
 	}
 
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
@@ -122,30 +114,41 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@Suspendable
-	public static void sync(SuspendableRunnable action) {
-		sync(action, 90);
+	public static void sync(SuspendableRunnable action, TestContext testContext) {
+		sync(action, 90, testContext);
 	}
 
 	@Suspendable
-	public static void sync(SuspendableRunnable action, int seconds) {
+	public static void sync(SuspendableRunnable action, int seconds, TestContext testContext) {
 		CountDownLatch latch = new CountDownLatch(1);
-		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(suspendableHandler(v2 -> {
+		if (Vertx.currentContext() == null) {
+			vertx.runOnContext(v1 -> {
+				vertx.runOnContext(suspendableHandler(v2 -> {
+					try {
+						action.run();
+					} catch (Throwable throwable) {
+						testContext.fail(throwable);
+					}
+
+					latch.countDown();
+				}));
+			});
+		} else {
+			Vertx.currentContext().runOnContext(suspendableHandler(v -> {
 				try {
 					action.run();
 				} catch (Throwable throwable) {
-					fail();
+					testContext.fail(throwable);
 				}
-
-				latch.countDown();
 			}));
-		});
+		}
+
 		try {
 			latch.await(seconds, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-			fail();
+			testContext.fail(e);
 		}
-		assertEquals(0L, latch.getCount());
+		testContext.assertEquals(0L, latch.getCount());
 	}
 
 	@AfterClass
