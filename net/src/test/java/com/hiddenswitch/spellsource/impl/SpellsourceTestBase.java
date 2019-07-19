@@ -16,6 +16,7 @@ import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
@@ -33,6 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.*;
 
 @RunWith(VertxUnitRunner.class)
@@ -41,29 +43,36 @@ public abstract class SpellsourceTestBase {
 	protected static Vertx vertx;
 
 	@BeforeClass
-	public static void setUp() throws InterruptedException {
+	public static void setUp(TestContext testContext) throws InterruptedException {
 		CountDownLatch latch = new CountDownLatch(1);
+		Async async = testContext.async();
 		if (initialized.compareAndSet(false, true)) {
 			CardCatalogue.loadCardsFromPackage();
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 
+			if (vertx != null) {
+				testContext.fail(new AssertionError());
+			}
 			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
 			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
 				if (v2.failed()) {
-					throw new AssertionError();
+					testContext.fail(new AssertionError());
 				}
 				Mongo.mongo().connectWithEnvironment(vertx);
 				Spellsource.spellsource().deployAll(vertx, v4 -> {
 					if (v4.failed()) {
-						throw new AssertionError("failed");
+						testContext.fail(new AssertionError());
 					}
+					async.complete();
 					latch.countDown();
 				});
 			}));
 			latch.await(12000L, TimeUnit.MILLISECONDS);
+		} else {
+			async.complete();
 		}
 	}
 
@@ -85,6 +94,9 @@ public abstract class SpellsourceTestBase {
 
 	@Before
 	public void setUpEach(TestContext testContext) {
+		if (vertx == null) {
+			testContext.fail(new AssertionError());
+		}
 		vertx.exceptionHandler(testContext.exceptionHandler());
 		// Cleanup anything else that might be going on
 		sync(() -> {
@@ -92,14 +104,9 @@ public abstract class SpellsourceTestBase {
 				Matchmaking.dequeue(key);
 			}
 
-			for (GameId games : Games.getConnections().keySet()) {
-				Games.endGame(games);
+			for (GameId gameId : Games.getConnections().keySet()) {
+				Games.endGame(gameId);
 			}
-
-			/*
-			for (UserId connected : Connection.getConnections().keySet()) {
-				Void t = awaitResult(h -> Connection.close(connected.toString(), h));
-			}*/
 		}, 8, testContext);
 	}
 
@@ -155,6 +162,7 @@ public abstract class SpellsourceTestBase {
 
 	@AfterClass
 	public static void tearDown() throws InterruptedException {
+		/*
 		GlobalTracer.get().close();
 		CountDownLatch latch = new CountDownLatch(1);
 		if (vertx == null) {
@@ -169,6 +177,6 @@ public abstract class SpellsourceTestBase {
 
 		latch.await(3000L, TimeUnit.MILLISECONDS);
 		assertEquals(latch.getCount(), 0);
-		assertNull(vertx);
+		assertNull(vertx);*/
 	}
 }
