@@ -22,6 +22,7 @@
          "target": "FRIENDLY_HERO",
          "value": 3
        }
+       ]
   },
   "collectible": true,
   "fileFormatVersion": 1,
