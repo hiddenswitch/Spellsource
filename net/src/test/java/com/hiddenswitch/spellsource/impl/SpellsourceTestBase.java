@@ -19,6 +19,7 @@ import io.vertx.core.VertxOptions;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,6 +44,7 @@ public abstract class SpellsourceTestBase {
 	public static void setUp() throws InterruptedException {
 		CountDownLatch latch = new CountDownLatch(1);
 		if (initialized.compareAndSet(false, true)) {
+			CardCatalogue.loadCardsFromPackage();
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 
 			vertx = Vertx.vertx(new VertxOptions()
@@ -61,7 +63,7 @@ public abstract class SpellsourceTestBase {
 					latch.countDown();
 				});
 			}));
-			latch.await(4000L, TimeUnit.MILLISECONDS);
+			latch.await(12000L, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -98,7 +100,7 @@ public abstract class SpellsourceTestBase {
 			for (UserId connected : Connection.getConnections().keySet()) {
 				Void t = awaitResult(h -> Connection.close(connected.toString(), h));
 			}*/
-		}, testContext);
+		}, 8, testContext);
 	}
 
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
