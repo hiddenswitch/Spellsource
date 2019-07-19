@@ -300,7 +300,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		GetCardsResponse response1 = defaultApi.getCards(null);
 		// The game is now sending formats and classes to the client
 		final long count = CardCatalogue.getRecords().values().stream().filter(
-				cd -> DeckFormat.getFormat("Greater Custom").isInFormat(cd.getDesc().getSet())
+				cd -> DeckFormat.getFormat("Spellsource").isInFormat(cd.getDesc().getSet())
 						&& cd.getDesc().type != CardType.GROUP
 						&& cd.getDesc().type != CardType.HERO_POWER
 						&& cd.getDesc().type != CardType.ENCHANTMENT).count();

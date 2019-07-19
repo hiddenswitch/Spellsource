@@ -13,7 +13,7 @@
       "minion_neutral_test_1"
     ]
   },
-  "collectible": false,
+  "collectible": true,
   "set": "TEST",
   "fileFormatVersion": 1
 }

@@ -83,25 +83,25 @@ public class DeckTest extends SpellsourceTestBase {
 			CreateAccountResponse player1 = createRandomAccount();
 			final String userId = player1.getUserId();
 			CreateCollectionResponse emptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", "BLACK"));
+			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", "TEST"));
 			DeckUpdateResponse update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
 					.pushCardIds(new DecksUpdateCommandPushCardIds()
-							.addEachItem("spell_mirror_image")
-							.addEachItem("spell_mirror_image")
-							.addEachItem("spell_mirror_image")
-							.addEachItem("minion_bloodfen_raptor"))));
+							.addEachItem("spell_test_summon_tokens")
+							.addEachItem("spell_test_summon_tokens")
+							.addEachItem("spell_test_summon_tokens")
+							.addEachItem("minion_test_3_2"))));
 
 
 			context.assertEquals(4L, update.getAddedInventoryIds().stream().distinct().count());
 			GetCollectionResponse userCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
-			context.assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
-			context.assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
+			context.assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
+			context.assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
 			update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
-					.pullAllCardIds(Arrays.asList("spell_mirror_image", "spell_mirror_image", "minion_bloodfen_raptor"))));
+					.pullAllCardIds(Arrays.asList("spell_test_summon_tokens", "spell_test_summon_tokens", "minion_test_3_2"))));
 			context.assertEquals(3L, update.getRemovedInventoryIds().stream().distinct().count());
 			GetCollectionResponse updatedDeck = Inventory.getCollection(GetCollectionRequest.deck(deck.getDeckId()));
-			context.assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
-			context.assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
+			context.assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
+			context.assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
 		});
 	}
 

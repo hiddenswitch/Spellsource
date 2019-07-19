@@ -381,7 +381,7 @@ public class CustomCardsTests extends TestBase {
 			Minion fassnu = playMinionCard(context, player, "minion_fassnu_avenger");
 			destroy(context, toDestroy);
 			Card shouldBeDrawn = shuffleToDeck(context, player, "spell_cost_2_card");
-			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
+			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_lunstone");
 			destroy(context, fassnu);
 			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
