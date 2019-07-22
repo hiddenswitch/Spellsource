@@ -1,4 +1,4 @@
-### STORYTELLER??? 2.0
+### Basic Storyteller
 # Class: OLIVE
 # Format: Spellsource
 #
