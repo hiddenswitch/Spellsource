@@ -3,7 +3,7 @@
   "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "NAVY",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Summon a copy of a minion and give it +2/+2.",
   "targetSelection": "MINIONS",
   "spell": {
