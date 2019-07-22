@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Taunt. Battlecry: Give all Dragons in your hand +2/+2.",
+  "description": "Guard. Opener: Give all Dragons in your hand +2/+2.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

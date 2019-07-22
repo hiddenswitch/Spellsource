@@ -1,0 +1,18 @@
+{
+  "name": "Big Bad Coyote",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Dash. Guard.",
+  "attributes": {
+    "RUSH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

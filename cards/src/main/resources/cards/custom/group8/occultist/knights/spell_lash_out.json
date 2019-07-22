@@ -4,14 +4,10 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to all enemies. Summon a 1/1 Tentacle with Taunt for each.",
+  "description": "Deal $1 damage to all enemies. Summon two 1/1 Tentacles with Guard",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-    "value": {
-      "class": "EntityCounter",
-      "target": "ENEMY_CHARACTERS"
-    },
     "spells": [
       {
         "class": "DamageSpell",
@@ -20,10 +16,7 @@
       },
       {
         "class": "SummonSpell",
-        "value": {
-          "class": "GameValueProvider",
-          "gameValue": "SPELL_VALUE"
-        },
+        "value": 2,
         "card": "token_tauntentacle"
       }
     ]

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Discover a Secret, Mage minion, or Arcane Intellect. It costs (2) less.",
+  "description": "Opener: Discover a Secret, Mage minion, or Arcane Intellect. It costs (2) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -25,6 +25,18 @@
         },
         "targetPlayer": "SELF"
       },
+      "cardSources": [
+        {
+          "class": "SecretSource",
+          "heroClass": "BLUE"
+        },
+        {
+          "class": "CatalogueSource"
+        },
+        {
+          "class": "CatalogueSource"
+        }
+      ],
       "cardFilters": [
         {
           "class": "CardFilter",

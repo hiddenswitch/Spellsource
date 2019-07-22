@@ -11,7 +11,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Choose a friendly minion. Draw a card with the same tribe.",
+  "description": "Opener: Choose a friendly minion. Draw a card with the same tribe.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
@@ -51,6 +51,10 @@
         {
           "class": "RaceCondition",
           "race": "TOTEM"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "FAE"
         }
       ],
       "filter": {
@@ -90,6 +94,10 @@
           {
             "class": "RaceFilter",
             "race": "TOTEM"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "FAE"
           }
         ]
       },
@@ -181,6 +189,15 @@
           "cardFilter": {
             "class": "CardFilter",
             "race": "TOTEM",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "FAE",
             "cardType": "MINION"
           }
         }

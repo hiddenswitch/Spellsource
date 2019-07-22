@@ -1,0 +1,11 @@
+{
+  "seed" : -8699196538258869748,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "ICE", "JADE" ],
+  "deckCardIds" : [ [ "minion_dawnrisen_harpy", "spell_icy_talon", "minion_gilnean_witchhuntress", "minion_book_wyrm", "spell_winter_is_coming", "spell_blood_plague", "minion_headless_horseman", "minion_stegodon", "spell_blood_boil", "minion_mountain_giant", "spell_runic_empowerment", "minion_divine_cleric", "minion_ghoul", "spell_lingering_apparition", "minion_ornery_tortoise", "minion_jabberwocky", "spell_lingering_apparition", "minion_toshley", "minion_twisted_worgen", "spell_rune_tap", "spell_winter_is_coming", "minion_trogg_gloomeater", "minion_psych-o-tron", "minion_skeram_cultist", "minion_reckless_hero", "spell_chains_of_ice", "spell_anti_magic_barrier", "minion_timebidding_magi", "minion_shambling_horror", "minion_chief_inspector" ], [ "minion_master_jigen", "minion_lord_of_the_arena", "minion_lungrath_hunter", "spell_axe_kick", "minion_gorillabot_a3", "minion_breezecatcher", "minion_goblin_sapper", "minion_beholder_of_the_beginning", "spell_touch_of_karma", "minion_shy_sprite", "spell_mark_of_despair", "minion_ultrasaur", "minion_soup_savant", "minion_murloc_tidehunter", "spell_touch_of_karma", "spell_hone_reflexes", "minion_hold_hunter", "minion_limber_combatant", "spell_sleight_of_hand", "minion_deepwoods_elemental", "minion_jungle_panther", "minion_artificial_life_cocoon", "minion_limber_combatant", "spell_roll", "spell_black_ox_brew", "minion_white_tiger_statue", "minion_lake_elemental", "spell_chi_restoration", "minion_marsh_drake", "minion_zen-noy-o-tron" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BASIC", "BLACKROCK_MOUNTAIN", "LEAGUE_OF_EXPLORERS", "BATTLE_FOR_ASHENVALE", "THE_GRAND_TOURNAMENT", "KNIGHTS_OF_THE_FROZEN_THRONE", "RISE_OF_SHADOWS", "BOOMSDAY_PROJECT", "SANDS_OF_TIME", "THE_OLD_GODS", "SPELLSOURCE_BASIC", "VERDANT_DREAMS", "PROMO", "REWARD", "MEAN_STREETS_OF_GADGETZAN", "RASTAKHANS_RUMBLE", "KOBOLDS_AND_CATACOMBS", "CLASSIC", "ONE_NIGHT_IN_KARAZHAN", "JOURNEY_TO_UNGORO", "WITCHWOOD", "NAXXRAMAS", "HALL_OF_FAME", "GOBLINS_VS_GNOMES", "CUSTOM" ],
+  "mulligans" : [ [ 27, 21, 23 ], [ 44 ] ],
+  "actions" : [ 0, 0, 0, 0, 3, 0, 0, 4, 2, 3, 2, 1, 2, 0, 14, 17, 11, 4, 2, 0, 13, 8, 1, 0, 0, 7, 0, 7, 3, 6, 8 ],
+  "id" : null
+}

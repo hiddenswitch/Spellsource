@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Discover a Beast, Dragon or Murloc.",
+  "description": "Opener: Discover a Beast, Dragon or Murloc.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

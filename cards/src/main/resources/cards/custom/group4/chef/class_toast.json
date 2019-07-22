@@ -1,0 +1,11 @@
+{
+  "name": "Chef",
+  "type": "CLASS",
+  "hero": "hero_warchef_gordo",
+  "heroClass": "TOAST",
+  "color": [247, 201, 135],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

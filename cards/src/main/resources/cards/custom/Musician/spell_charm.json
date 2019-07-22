@@ -1,0 +1,22 @@
+{
+  "name": "Charm",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "RARE",
+  "description": "Give all enemy minions -2 Attack until your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ModifyAttributeSpell",
+    "target": "ENEMY_MINIONS",
+    "value": -2,
+    "attribute": "ATTACK_BONUS",
+    "revertTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

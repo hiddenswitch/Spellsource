@@ -1,0 +1,40 @@
+{
+  "name": "Blue Nestwatcher",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 12,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Opener: Add [0] 1/1 Whelps to your hand. (Increases for each other card in your hand)",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      },
+      "card": "token_blue_whelp"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF",
+        "offset": -1
+      }
+    }
+  ]
+}

@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Hero Power: Give a character +1 Health.",
+  "description": "Skill: Give a character +1 Health.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

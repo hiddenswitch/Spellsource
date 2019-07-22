@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.AfterSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
@@ -26,8 +27,8 @@ public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
-		boolean minionPlayed = super.fire(event, host);
+	protected boolean innerQueues(GameEvent event, Entity host) {
+		boolean minionPlayed = super.innerQueues(event, host);
 		if (!minionPlayed) {
 			return false;
 		}
@@ -40,7 +41,8 @@ public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 		// on our enchantment
 		int max = (int) host.getAttributes().getOrDefault(Attribute.RESERVED_INTEGER_1, 0);
 		Map<EntityReference, Entity> entities = context.getEntities()
-				.filter(entity -> !entity.getSourceCard().getCardType().isCardType(CardType.CHOOSE_ONE))
+				.filter(entity -> !entity.getSourceCard().getCardType().isCardType(CardType.CHOOSE_ONE)
+						&& entity.getEntityType() != EntityType.ENCHANTMENT)
 				.collect(toMap(Entity::getReference, Function.identity()));
 		Map<String, Long> counts = list.getReferences(context, host)
 				.stream()

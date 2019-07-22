@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "After you play a minion, give it a random Deathrattle from a minion in your hand.",
+  "description": "After you play a minion, give it a random Aftermath from a minion in your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

@@ -8,7 +8,7 @@
       "class": "MetaSpell",
       "target": "SELF",
       "name": "Stalk Your Prey",
-      "description": "Gain +2/+1 and Stealth.",
+      "description": "Gain +2/+1 and Hidden.",
       "spells": [
         {
           "class": "BuffSpell",

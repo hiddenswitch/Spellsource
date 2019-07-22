@@ -1,0 +1,15 @@
+{
+  "name": "Shuffle Minion to Deck",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ShuffleMinionToDeckSpell"
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

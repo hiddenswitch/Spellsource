@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Summon a [7/7] Beast. Lasts [8 turns]. (Increase by killing minions, decreases if opponent does)",
+  "description": "Aftermath: Summon a [7/7] Beast. Lasts [8 turns]. (Increase by killing minions, decreases if opponent does)",
   "triggers": [
     {
       "countUntilCast": 8,

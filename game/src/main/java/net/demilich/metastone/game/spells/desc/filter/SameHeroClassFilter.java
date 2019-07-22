@@ -22,7 +22,7 @@ public class SameHeroClassFilter extends EntityFilter {
 			entities = Collections.singletonList(player.getHero());
 		}
 
-		HeroClass targetClass = entities.get(0).getSourceCard().getHeroClass();
+		String targetClass = entities.get(0).getSourceCard().getHeroClass();
 		return entity.getSourceCard().hasHeroClass(targetClass);
 	}
 }

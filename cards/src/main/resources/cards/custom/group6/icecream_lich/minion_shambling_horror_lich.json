@@ -6,11 +6,11 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "Taunt",
+  "description": "Guard",
   "attributes": {
     "TAUNT": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GRAVEYARD",
   "fileFormatVersion": 1
 }

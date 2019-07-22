@@ -1,0 +1,22 @@
+{
+  "name": "Mind Controlled Mech",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Can't attack. Your Hero Power is 'Choose a target. Your Mind Controlled Mechs attack it'.",
+  "aura": {
+    "class": "CardAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "card": "hero_power_mental_command"
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Give a minion +2 Attack this turn.",
+  "description": "Opener: Give a minion +2 Attack this turn.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

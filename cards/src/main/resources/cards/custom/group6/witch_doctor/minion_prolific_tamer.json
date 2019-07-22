@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: If you have 5 or more Beasts in your deck, draw one.",
+  "description": "Opener: If you have 5 or more Beasts in your deck, draw one.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

@@ -11,6 +11,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
+import java.util.Map;
+
 /**
  * Casts the specified {@link SpellArg#CARD} or the card targeted by {@link SpellArg#SECONDARY_TARGET} onto the {@code
  * target}. Currently only tested with spell cards.
@@ -31,6 +33,12 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * </pre>
  */
 public final class CastCardsSpell extends Spell {
+
+	public static SpellDesc create(String card) {
+		Map<SpellArg, Object> arguments = new SpellDesc(CastCardsSpell.class);
+		arguments.put(SpellArg.CARD, card);
+		return new SpellDesc(arguments);
+	}
 
 	@Override
 	@Suspendable

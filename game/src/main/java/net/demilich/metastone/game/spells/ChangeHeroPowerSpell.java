@@ -56,12 +56,12 @@ public class ChangeHeroPowerSpell extends Spell {
 		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), true, false);
 		oldHeroPower.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.getLogic().removeCard(oldHeroPower);
-		if (heroPower.getHeroClass() == HeroClass.INHERIT) {
+		if (heroPower.getHeroClass().equals(HeroClass.INHERIT)) {
 			heroPower.setHeroClass(hero.getHeroClass());
 		}
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
 		context.getLogic().processGameTriggers(player, heroPower);
 		context.getLogic().processPassiveTriggers(player, heroPower);
-		context.getLogic().processAuras(player, heroPower);
+		context.getLogic().processPassiveAuras(player, heroPower);
 	}
 }

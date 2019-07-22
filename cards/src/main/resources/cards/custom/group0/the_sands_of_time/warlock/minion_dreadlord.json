@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "RARE",
-  "description": "Costs (1) less for each damage your hero has taken this turn.",
+  "description": "Costs (1) less for each damage your champion has taken this turn.",
   "collectible": true,
   "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1,

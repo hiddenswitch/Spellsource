@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If your deck has no 1-Cost cards, your hero has +1 Attack for the rest of the game.",
+  "description": "Opener: If your deck has no 1-Cost cards, your champion has +1 Attack for the rest of the game.",
   "battlecry": {
     "condition": {
       "class": "DeckContainsCondition",

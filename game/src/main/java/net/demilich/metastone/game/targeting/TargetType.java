@@ -30,6 +30,11 @@ public enum TargetType {
 	 */
 	IGNORE_OTHER_TARGETS,
 	/**
+	 * Indicates that the trigger fires only if the {@link EntityReference#EVENT_TARGET} is this trigger's host's source
+	 * card.
+	 */
+	IGNORE_OTHER_TARGET_CARDS,
+	/**
 	 * Indicates that the trigger fires only if the {@link EntityReference#EVENT_SOURCE} is this trigger's host.
 	 */
 	IGNORE_OTHER_SOURCES

@@ -2,6 +2,10 @@ package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.Tracing;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -10,6 +14,8 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.Sync;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,16 +36,19 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * @param <T> The service to which this invocation handler makes calls.
  * @see InvocationHandler for more about proxies.
  */
-class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
+final class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 	private static Logger LOGGER = LoggerFactory.getLogger(VertxInvocationHandler.class);
-	final String deploymentId;
-	final String name;
-	final EventBus eb;
-	final boolean sync;
-	final Handler<AsyncResult<Object>> next;
+	@Nullable
+	private final String deploymentId;
+	@NotNull
+	private final String name;
+	@NotNull
+	private final EventBus eb;
+	private final boolean sync;
+	private final Handler<AsyncResult<Object>> next;
 	long timeout;
 
-	VertxInvocationHandler(String deploymentId, EventBus eb, boolean sync, Handler<AsyncResult<Object>> next, String name) {
+	VertxInvocationHandler(@Nullable String deploymentId, @NotNull EventBus eb, boolean sync, Handler<AsyncResult<Object>> next, @NotNull String name) {
 		this.deploymentId = deploymentId;
 		this.name = name;
 		this.eb = eb;
@@ -63,63 +72,75 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public Object invoke(Object proxy, Method method, Object[] args) throws VertxException, IllegalAccessException, InvocationTargetException {
-		// Call default methods normally
-		if (Objects.equals(method.getName(), "toString")) {
-			return "Proxy Object for " + name;
+		Tracer tracer = GlobalTracer.get();
+		Tracer.SpanBuilder spanBuilder = tracer.buildSpan("VertxInvocationHandler/invoke/" + name);
+		for (int i = 0; i < args.length; i++) {
+			spanBuilder.withTag("arg" + i, args[i].getClass().getName());
 		}
-
-		if (method.isDefault()) {
-			// Invoked with the proxy instance, which shouldn't matter for anything that is a default method on an interface
-			return method.invoke(proxy, args);
-		}
-
-		final boolean sync = this.sync;
-		final Handler<AsyncResult<Object>> next = this.next;
-
-		final String methodName = method.getName();
-		if (next == null
-				&& !sync) {
-			throw new RuntimeException();
-		}
-
-		if (eb == null) {
-			throw new RuntimeException();
-		}
-		Object result = null;
-		final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(timeout);
-		RpcOptions options = method.getAnnotation(RpcOptions.class);
-		RpcOptions.Serialization serialization = Rpc.defaultSerialization();
-
-		if (options != null) {
-			deliveryOptions.setSendTimeout(options.sendTimeoutMS());
-			serialization = options.serialization();
-		}
-
-		if (sync) {
-			final RpcOptions.Serialization finalSerialization = serialization;
-			try {
-				result = awaitFiber(done -> {
-					call(methodName, args, deliveryOptions, finalSerialization, done, method);
-				});
-			} catch (VertxException any) {
-				LOGGER.error("vertxInvocationHandler invoke {}: DeploymentIds={}", this.toString(), Vertx.currentContext().owner().deploymentIDs());
-				throw any;
+		Span span = spanBuilder
+				.start();
+		try {
+			// Call default methods normally
+			if (Objects.equals(method.getName(), "toString")) {
+				return "Proxy Object for " + name;
 			}
 
-		} else {
-			call(methodName, args, deliveryOptions, serialization, next, method);
-		}
+			if (method.isDefault()) {
+				// Invoked with the proxy instance, which shouldn't matter for anything that is a default method on an interface
+				return method.invoke(proxy, args);
+			}
 
-		return result;
+			final boolean sync = this.sync;
+			final Handler<AsyncResult<Object>> next = this.next;
+
+			final String methodName = method.getName();
+			if (next == null
+					&& !sync) {
+				throw new RuntimeException();
+			}
+
+			Object result = null;
+			final DeliveryOptions deliveryOptions = new DeliveryOptions().setSendTimeout(timeout);
+			RpcOptions options = method.getAnnotation(RpcOptions.class);
+			RpcOptions.Serialization serialization = Rpc.defaultSerialization();
+
+			if (options != null) {
+				deliveryOptions.setSendTimeout(options.sendTimeoutMS());
+				serialization = options.serialization();
+			}
+
+			if (sync) {
+				final RpcOptions.Serialization finalSerialization = serialization;
+				result = awaitFiber(done -> call(methodName, args, deliveryOptions, finalSerialization, done, method));
+			} else {
+				call(methodName, args, deliveryOptions, serialization, (res) -> {
+					try {
+						next.handle(res);
+					} catch (RuntimeException runtimeException) {
+						Tracing.error(runtimeException, span, true);
+						throw runtimeException;
+					} finally {
+						span.finish();
+					}
+				}, method);
+			}
+
+			return result;
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	private void call(String methodName, Object[] args, final DeliveryOptions deliveryOptions, RpcOptions.Serialization serialization, Handler<AsyncResult<Object>> next, Method method) {
 		Object message = null;
 
-		String address = name + "::" + methodName;
+		String address = name + "/" + methodName;
 		if (deploymentId != null) {
-			address = deploymentId + "::" + address;
+			address = deploymentId + "/" + address;
 		}
 
 		SuspendableAction1<AsyncResult<Message<Object>>> handler;

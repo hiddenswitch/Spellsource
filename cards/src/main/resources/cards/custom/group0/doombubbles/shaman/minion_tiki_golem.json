@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "TOTEM",
-  "description": "Battlecry: Discover a basic Totem.",
+  "description": "Opener: Discover a basic Totem.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

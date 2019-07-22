@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Return your other minions to your hand. They cost (1).",
+  "description": "Opener: Return your other minions to your hand. They cost (1).",
   "battlecry": {
     "spell": {
       "class": "ReturnTargetToHandSpell",

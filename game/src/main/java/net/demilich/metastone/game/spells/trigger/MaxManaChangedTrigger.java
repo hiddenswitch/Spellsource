@@ -13,7 +13,7 @@ public final class MaxManaChangedTrigger extends EventTrigger {
 
 	@Override
 	@Suspendable
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		return true;
 	}
 

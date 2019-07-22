@@ -54,7 +54,7 @@ public class Encode {
 		ListMultimap<String, JsonObject> records = LinkedListMultimap.create();
 
 		for (Card card : CardCatalogue.getAll()) {
-			if (!DeckFormat.CUSTOM.isInFormat(card.getCardSet())) {
+			if (!DeckFormat.getFormat("Custom").isInFormat(card.getCardSet())) {
 				continue;
 			}
 
@@ -118,6 +118,7 @@ public class Encode {
 			subComponents.put("triggers", process(desc.trigger, desc.triggers, 0, "CardDesc"));
 			subComponents.put("manaCostModifiers", process(desc.manaCostModifier, null, 0, "CardDesc"));
 			subComponents.put("auras", process(desc.aura, desc.auras, 0, "CardDesc"));
+			subComponents.put("passiveAuras", process(null, desc.passiveAuras, 0, "CardDesc"));
 			subComponents.put("passiveTriggers", process(desc.passiveTrigger, desc.passiveTriggers, 0, "CardDesc"));
 			subComponents.put("deckTriggers", process(desc.deckTrigger, desc.deckTriggers, 0, "CardDesc"));
 			subComponents.put("gameTriggers", process(null, desc.gameTriggers, 0, "CardDesc"));

@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Ozumat's Nightmare comes into play (permanently).",
+  "description": "Opener: Ozumat's Nightmare comes into play (permanently).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

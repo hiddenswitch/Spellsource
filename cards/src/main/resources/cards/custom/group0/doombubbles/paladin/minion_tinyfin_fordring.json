@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Divine Shield. Taunt. Deathrattle: Equip a 1/4 Light's Justice.",
+  "description": "Dodge. Guard. Aftermath: Equip a 1/4 Light's Justice.",
   "deathrattle": {
     "class": "EquipWeaponSpell",
     "card": "weapon_lights_justice"

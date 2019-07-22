@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "BROWN",
   "rarity": "FREE",
-  "description": "Passive Hero Power: After you play a Choose One minion, add a Dream Card to your hand.",
+  "description": "Passive Skill: After you play a Choose One minion, add a Dream Card to your hand.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

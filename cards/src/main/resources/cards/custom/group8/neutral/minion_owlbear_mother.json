@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "<b>Deathrattle:</b> Summon two 0/1 Owlbear Babies.",
+  "description": "<b>Aftermath:</b> Summon two 0/1 Owlbear Babies.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

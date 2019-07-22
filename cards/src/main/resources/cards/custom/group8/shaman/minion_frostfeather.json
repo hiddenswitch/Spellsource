@@ -4,10 +4,10 @@
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 3,
-  "baseHp": 4,
+  "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "After this survives damage, Freeze it. Deathrattle: If this is Frozen, resummon it.",
+  "description": "After this survives damage, Freeze it. Aftermath: If this is Frozen, resummon it.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

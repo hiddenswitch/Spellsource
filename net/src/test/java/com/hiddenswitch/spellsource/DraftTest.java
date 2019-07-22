@@ -9,8 +9,8 @@ import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.DraftActionRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.Future;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 public class DraftTest extends SpellsourceTestBase {
 	@Test
-	public void testDraftService() {
+	public void testDraftService(TestContext context) {
 		sync(() -> {
 			// Create an account
 			CreateAccountResponse car = createRandomAccount();
@@ -29,7 +29,7 @@ public class DraftTest extends SpellsourceTestBase {
 
 			// Choose a hero
 			assertNotNull(response.getPublicDraftState().getHeroClassChoices());
-			assertEquals(HeroClass.getBaseClasses().size(), response.getPublicDraftState().getHeroClassChoices().size());
+			assertEquals(HeroClass.getBaseClasses(DeckFormat.spellsource()).size(), response.getPublicDraftState().getHeroClassChoices().size());
 
 			response = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(car.getUserId())
@@ -44,7 +44,7 @@ public class DraftTest extends SpellsourceTestBase {
 			}
 
 			assertNotNull(response.getPublicDraftState().getDeckId());
-		});
+		}, context);
 	}
 
 
@@ -95,12 +95,14 @@ public class DraftTest extends SpellsourceTestBase {
 
 		final String deckId = state.getDeckId();
 
-		UnityClient client = new UnityClient(context);
-		client.loginWithUserAccount(name, "testpass");
-		client.ensureConnected();
-		client.matchmakeQuickPlay(deckId);
-		client.waitUntilDone();
-		context.assertTrue(client.getTurnsPlayed() > 0);
+
+		try (UnityClient client = new UnityClient(context)) {
+			client.loginWithUserAccount(name, "testpass");
+			client.ensureConnected();
+			client.matchmakeQuickPlay(deckId);
+			client.waitUntilDone();
+			context.assertTrue(client.getTurnsPlayed() > 0);
+		}
 
 		DraftState newState = null;
 		try {

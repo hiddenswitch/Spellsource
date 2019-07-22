@@ -22,9 +22,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * <pre>
  *   "trigger": {
  *     "eventTrigger": {
- *       "class": "AfterPhysicalAttackTrigger",
- *       "hostTargetType": "IGNORE_OTHER_SOURCES",
- *       "targetEntityType": "MINION"
+ *     	  "class": "DamageCausedTrigger",
+ *       "hostTargetType": "IGNORE_OTHER_SOURCES"
  *     },
  *     "spell": {
  *       "class": "OverkillSpell",

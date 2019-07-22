@@ -1,0 +1,32 @@
+{
+  "name": "Hold Hunter",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Dash. Opener: If the opposing battlefield is empty, gain Dodge.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 0,
+      "operation": "EQUAL",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

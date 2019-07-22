@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "MURLOC",
-  "description": "Battlecry: If you control another Murloc, deal 2 damage.",
+  "description": "Opener: If you control another Murloc, deal 2 damage.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

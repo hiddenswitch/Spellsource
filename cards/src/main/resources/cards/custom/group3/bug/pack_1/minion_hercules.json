@@ -1,0 +1,30 @@
+{
+  "name": "Hercules the Titan",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Dash, Guard. Opener: Gain Health equal to your Armor.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "ARMOR"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

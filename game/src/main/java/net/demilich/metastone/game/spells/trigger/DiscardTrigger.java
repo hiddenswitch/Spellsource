@@ -18,7 +18,7 @@ public class DiscardTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		DiscardEvent discardEvent = (DiscardEvent) event;
 		EntityReference target = (EntityReference) getDesc().get(EventTriggerArg.TARGET);
 		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EventTriggerArg.TARGET_PLAYER);

@@ -22,10 +22,10 @@ public interface SuspendableMap<K, V> {
 		final Vertx vertx = Vertx.currentContext().owner();
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {
-			AsyncMap<K, V> map = awaitResult(done -> client.<K, V>getClusterWideMap(name, done));
+			AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
 			return new SuspendableAsyncMap<>(map);
 		} else {
-			return new SuspendableWrappedMap<>(client.<K, V>getLocalMap(name));
+			return new SuspendableWrappedMap<>(client.getLocalMap(name));
 		}
 	}
 

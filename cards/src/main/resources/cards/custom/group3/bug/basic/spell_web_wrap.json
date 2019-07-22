@@ -1,25 +1,33 @@
 {
   "name": "Web Wrap",
-  "baseManaCost": 3,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Return two random enemy minions to your opponent's hand.",
+  "description": "Return an enemy minion and a random enemy minion to your opponent's hand.",
   "condition": {
     "class": "MinionCountCondition",
-    "value": 1,
+    "value": 2,
     "operation": "GREATER",
     "targetPlayer": "OPPONENT"
   },
-  "targetSelection": "NONE",
+  "targetSelection": "ENEMY_MINIONS",
   "spell": {
-    "class": "MultiTargetSpell",
-    "target": "ENEMY_MINIONS",
-    "value": 2,
-    "spell": {
-      "class": "ReturnTargetToHandSpell"
-    }
-  },
+    "class": "MetaSpell",
+    "spells": [
+	  {
+		  "class": "ReturnTargetToHandSpell"
+	  },
+	  {
+		  "class": "MultiTargetSpell",
+		  "target": "ENEMY_MINIONS",
+		  "value": 1,
+		  "spell": {
+		    "class": "ReturnTargetToHandSpell"
+		  }
+	  } 
+	]
+  },      
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

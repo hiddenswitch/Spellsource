@@ -1,0 +1,29 @@
+{
+  "name": "Street Performer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Whenever you play a Lunstone, give your other minions +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "target": "EVENT_SOURCE",
+        "card": "spell_lunstone"
+      },
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
