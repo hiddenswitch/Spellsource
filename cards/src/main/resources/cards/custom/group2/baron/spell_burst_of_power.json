@@ -3,7 +3,7 @@
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "NAVY",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Give all minions +3/+2.",
   "targetSelection": "NONE",
   "spell": {
