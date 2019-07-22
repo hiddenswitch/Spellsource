@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -79,6 +80,12 @@ public class ParseUtils {
 				return EntityReference.OTHER_ENEMY_MINIONS;
 			case "leftmost_friendly_card_hand":
 				return EntityReference.LEFTMOST_FRIENDLY_CARD_HAND;
+			case "leftmost_enemy_card_hand":
+				return EntityReference.LEFTMOST_ENEMY_CARD_HAND;
+			case "friendly_last_spell_played_this_turn":
+				return EntityReference.FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN;
+			case "rightmost_friendly_card_hand":
+				return EntityReference.RIGHTMOST_FRIENDLY_CARD_HAND;
 			case "last_card_played":
 				return EntityReference.LAST_CARD_PLAYED;
 			case "friendly_last_card_played":
@@ -215,7 +222,7 @@ public class ParseUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) {
+	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) throws JsonMappingException {
 		switch (valueType) {
 			case INTEGER:
 				return jsonData.asInt();
@@ -247,8 +254,6 @@ public class ParseUtils {
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
 			case RACE:
 				return Enum.valueOf(Race.class, jsonData.asText());
-			case CARD_SET:
-				return Enum.valueOf(CardSet.class, jsonData.asText());
 			case SPELL:
 				return spellParser.innerDeserialize(ctxt, jsonData);
 			case SPELL_ARRAY: {
@@ -266,18 +271,8 @@ public class ParseUtils {
 				return Enum.valueOf(PlayerAttribute.class, jsonData.asText());
 			case RARITY:
 				return Enum.valueOf(Rarity.class, jsonData.asText());
-			case HERO_CLASS:
-				return Enum.valueOf(HeroClass.class, jsonData.asText());
 			case GAME_VALUE:
 				return Enum.valueOf(GameValue.class, jsonData.asText());
-			case HERO_CLASS_ARRAY: {
-				ArrayNode jsonArray = (ArrayNode) jsonData;
-				HeroClass[] array = new HeroClass[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).asText());
-				}
-				return array;
-			}
 			case BOARD_POSITION_RELATIVE:
 				return Enum.valueOf(BoardPositionRelative.class, jsonData.asText());
 			case CARD_LOCATION:
@@ -396,6 +391,13 @@ public class ParseUtils {
 					}
 				}
 				return dynamicDescriptions;
+			case ZONES:
+				ArrayNode zoneArray = (ArrayNode) jsonData;
+				Zones[] zones = new Zones[zoneArray.size()];
+				for (int i = 0; i < zoneArray.size(); i++) {
+					zones[i] = Enum.valueOf(Zones.class, jsonData.get(i).asText());
+				}
+				return zones;
 			default:
 				break;
 		}

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "NONE",
-  "description": "Battlecry: Put a Coin on top of your deck",
+  "description": "Opener: Put a Coin on top of your deck",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
-  "description": "Battlecry: For the rest of the game, your weapons have +1 Durability.",
+  "description": "Opener: For the rest of the game, your weapons have +1 Durability.",
   "battlecry": {
     "spell": {
       "class": "AddEnchantmentSpell",

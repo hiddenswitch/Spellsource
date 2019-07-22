@@ -1,0 +1,15 @@
+{
+  "name": "",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Costs (3)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

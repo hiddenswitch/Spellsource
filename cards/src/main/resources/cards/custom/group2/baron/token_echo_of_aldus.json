@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon two copies of a minion.",
+  "description": "Opener: Summon two copies of a minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

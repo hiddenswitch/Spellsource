@@ -22,7 +22,7 @@ public final class Minion extends Actor {
 
 	@Override
 	public int getAttack() {
-		if (hasAttribute(Attribute.ATTACK_EQUALS_HP)) {
+		if (hasAttribute(Attribute.ATTACK_EQUALS_HP) || hasAttribute(Attribute.AURA_ATTACK_EQUALS_HP)) {
 			return getHp();
 		}
 		return super.getAttack();

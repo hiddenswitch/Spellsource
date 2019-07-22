@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Battlecry: Discard a Banana to deal 3 damage to an enemy minion.",
+  "description": "Opener: Discard a Banana to deal 3 damage to an enemy minion.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

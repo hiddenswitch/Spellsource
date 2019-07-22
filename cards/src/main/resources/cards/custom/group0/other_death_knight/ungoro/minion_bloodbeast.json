@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "At the end of each turn, restore #2 Health to your hero.",
+  "description": "At the end of each turn, restore #2 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger"

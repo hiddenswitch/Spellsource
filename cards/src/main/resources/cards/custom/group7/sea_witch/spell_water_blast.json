@@ -15,7 +15,6 @@
     },
     "spell2": {
       "class": "ShuffleToDeckSpell",
-      "value": 1,
       "card": "spell_water_blast"
     }
   },

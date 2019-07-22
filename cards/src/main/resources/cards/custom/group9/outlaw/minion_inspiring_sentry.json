@@ -1,0 +1,22 @@
+{
+  "name": "Inspiring Sentry",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Whenever you use your Skill, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

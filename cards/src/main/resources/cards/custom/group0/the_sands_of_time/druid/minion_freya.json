@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Plant the Seed of Nordrassil. Play minions with a total of 40 stats to awaken it.",
+  "description": "Opener: Plant the Seed of Nordrassil. Play minions with a total of 40 stats to awaken it.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

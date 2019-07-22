@@ -1,13 +1,13 @@
 {
   "name": "Tainted Raven",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 2,
-  "baseHp": 2,
+  "baseHp": 4,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Has Spell Damage +2 while your opponent has 6 or more cards in hand.",
+  "description": "Has Spellpower +2 while your opponent has 5 or more cards in hand.",
   "aura": {
     "class": "AttributeValueAura",
     "target": "SELF",
@@ -20,7 +20,7 @@
     ],
     "condition": {
       "class": "CardCountCondition",
-      "value": 6,
+      "value": 5,
       "operation": "GREATER_OR_EQUAL",
       "targetPlayer": "OPPONENT"
     },

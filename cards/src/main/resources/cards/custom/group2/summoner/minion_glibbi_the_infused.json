@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If your deck has no duplicates, copy your hand.",
+  "description": "Opener: If your deck has no duplicates, copy your hand.",
   "battlecry": {
     "condition": {
       "class": "HighlanderDeckCondition"

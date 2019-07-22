@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "NONE",
-  "description": "Rush. Battlecry: Immune this turn.",
+  "description": "Dash. Opener: Immune this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

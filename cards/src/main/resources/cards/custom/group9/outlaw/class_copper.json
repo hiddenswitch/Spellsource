@@ -1,0 +1,11 @@
+{
+  "name": "Outlaw",
+  "type": "CLASS",
+  "hero": "hero_handsome_joe",
+  "heroClass": "COPPER",
+  "color": [184, 115, 51],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

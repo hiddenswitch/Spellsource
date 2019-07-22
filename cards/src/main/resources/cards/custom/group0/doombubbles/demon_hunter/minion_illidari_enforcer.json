@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: If your opponent played a spell last turn, gain +1/+1 and Taunt",
+  "description": "Opener: If your opponent played a spell last turn, gain +1/+1 and Guard",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition",

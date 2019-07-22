@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, summon a 2/2 Infinite Warden. Lasts [40 turns], then destroys all enemies.",
+  "description": "At the end of your turn, summon a 2/2 Infinite Warden. Lasts [40 turns].",
   "triggers": [
     {
       "eventTrigger": {
@@ -46,12 +46,7 @@
       }
     }
   ],
-  "deathrattle": {
-    "class": "DestroySpell",
-    "target": "ENEMY_CHARACTERS"
-  },
   "attributes": {
-    "DEATHRATTLES": true,
     "PERMANENT": true,
     "RESERVED_INTEGER_1": 40
   },

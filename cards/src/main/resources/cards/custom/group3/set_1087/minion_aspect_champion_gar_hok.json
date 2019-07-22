@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replay the last 5 cards you've played this game (targets chosen randomly).",
+  "description": "Opener: Replay the last 5 cards you've played this game (targets chosen randomly).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

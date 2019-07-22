@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "PIRATE",
-  "description": "Battlecry and Deathrattle: Deal 1 damage to a random enemy.",
+  "description": "Opener and Aftermath: Deal 1 damage to a random enemy.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

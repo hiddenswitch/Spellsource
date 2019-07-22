@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Start of Game: If your deck has only even-Cost cards, your Hero Power costs (1) less this game.",
+  "description": "Start of Game: If your deck has only even-Cost cards, your Skill costs (1) less this game.",
   "collectible": true,
   "set": "ALTERNATIVE",
   "fileFormatVersion": 1,

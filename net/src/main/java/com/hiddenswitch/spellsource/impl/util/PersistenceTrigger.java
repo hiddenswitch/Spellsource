@@ -75,7 +75,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean canFire(GameEvent event) {
+	public boolean queues(GameEvent event) {
 		return true;
 	}
 
@@ -131,7 +131,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
 		return true;
 	}
 

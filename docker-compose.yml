@@ -2,6 +2,8 @@ version: '3'
 services:
   loadbalancer:
     image: traefik:alpine
+    networks:
+      - web
     command: |
       --docker \
       --entryPoints="Name:http Address::80 Redirect.EntryPoint:https" \
@@ -14,6 +16,7 @@ services:
       --acme.entrypoint="https" \
       --acme.ondemand=true \
       --docker.swarmmode \
+      --docker.network=web \
       --docker.watch \
       --docker.exposedbydefault=false
     ports:
@@ -26,23 +29,25 @@ services:
       restart_policy:
         condition: on-failure
         window: 8s
+      placement:
+        constraints: [node.platform.arch == x86_64]
   game:
     image: doctorpangloss/spellsource:latest
     environment:
       - MONGO_URL=mongodb://mongo:27017/metastone
-      - HAZELCAST_URLS=spellsource-server_game_1:5701
-      - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
-      - SPELLSOURCE_APPLICATION=${SPELLSOURCE_APPLICATION}
+      - SPELLSOURCE_APPLICATION=Local
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - REPORTER_GRPC_HOST_PORT=jaeger-collector:14250
+    networks:
+      - web
+      - backend
     deploy:
-      restart_policy:
-        condition: on-failure
-        window: 30s
       labels:
         - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
         - "traefik.versionedhost.frontend.entryPoints=http,https"
@@ -52,13 +57,13 @@ services:
         - "traefik.backend.loadbalancer.stickiness=true"
         - "traefik.port=80"
         - "traefik.enable=true"
-    healthcheck:
-      test: curl --fail -s http://localhost:80/ || exit 1
-      interval: 8s
-      timeout: 4s
-      retries: 3
+      placement:
+        constraints: [node.platform.arch == x86_64]
   launcher:
     image: doctorpangloss/launcher:latest
+    networks:
+      - web
+      - backend
     environment:
       - MONGO_URL=mongodb://mongo:27017/launcher
       - ROOT_URL=https://launcher.hiddenswitch.com
@@ -73,6 +78,8 @@ services:
         - "traefik.backend.loadbalancer.stickiness=true"
         - "traefik.port=3000"
         - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     healthcheck:
       test: curl --fail -s http://localhost:3000/ || exit 1
       interval: 8s
@@ -80,6 +87,8 @@ services:
       retries: 3
   mongo:
     image: "mongo:3.6"
+    networks:
+      - backend
     volumes:
       - mongodata:/data/db
     deploy:
@@ -88,24 +97,18 @@ services:
         window: 10s
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/metastone --quiet
       interval: 8s
       timeout: 4s
       retries: 3
-  hazelcastmancenter:
-    image: hazelcast/management-center
-    volumes:
-      - mancenterdata:/data
-    environment:
-      - MC_CONTEXT=/admin/mancenter
-      - MANCENTER_DATA=/data
-      - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
-    deploy:
-      labels:
-        - "traefik.enable=false"
   mediawiki:
     image: "doctorpangloss/wiki:latest"
+    networks:
+      - web
+      - backend
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -137,21 +140,31 @@ services:
         - "traefik.frontend.entryPoints=http,https"
         - "traefik.port=80"
         - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
   parsoid:
     image: "thenets/parsoid:0.10.0"
+    networks:
+      - backend
     deploy:
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     environment:
       - PARSOID_DOMAIN_mediawiki=http://mediawiki/api.php
   mariadb:
     image: mariadb:10.4.1
+    networks:
+      - backend
     deploy:
       restart_policy:
         condition: on-failure
         window: 15s
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     environment:
       - MYSQL_DATABASE=spellsource
       - MYSQL_PASSWORD=password
@@ -160,9 +173,68 @@ services:
       - MYSQL_ROOT_HOST=%
     volumes:
       - mariadbdata:/var/lib/mysql
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:1.13
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+    networks:
+      - backend
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/api/traces"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=14268"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
+  jaeger-query:
+    image: jaegertracing/jaeger-query:1.13
+    environment:
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+      - QUERY_BASE_PATH=/jaeger
+    networks:
+      - backend
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/jaeger"
+        - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=16686"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.2
+    networks:
+      - backend
+    volumes:
+      - elasticsearchdata:/usr/share/elasticsearch/data
+    environment:
+      - cluster.name=docker-cluster
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    healthcheck:
+      test: curl --fail -s http://127.0.0.1:9200/_cat/health || exit 1
 volumes:
   mongodata:
   mancenterdata:
   loadbalancerdata:
   mediawikidata:
   mariadbdata:
+  elasticsearchdata:
+networks:
+  web:
+    external: true
+  backend:
+    external: true

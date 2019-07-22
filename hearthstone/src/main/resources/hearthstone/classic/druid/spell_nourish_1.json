@@ -1,0 +1,17 @@
+{
+  "name": "Rampant Growth",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Gain 2 Mana Crystals.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ModifyMaxManaSpell",
+    "value": 2,
+    "fullManaCrystals": true
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

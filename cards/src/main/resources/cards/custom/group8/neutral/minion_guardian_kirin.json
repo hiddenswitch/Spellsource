@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Taunt. Deathrattle: Give adjacent minions Taunt.",
+  "description": "Guard. Aftermath: Give adjacent minions Guard.",
   "deathrattle": {
     "class": "custom.AdjacentDeathrattleSpell",
     "target": "SELF",

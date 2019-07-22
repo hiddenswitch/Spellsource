@@ -73,6 +73,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setHost("0.0.0.0")
 				.setPort(port)
 				.setMaxWebsocketFrameSize(65536)
+				.setWebsocketAllowServerNoContext(true)
+				.setWebsocketPreferredClientNoContext(true)
 				.setMaxWebsocketMessageSize(100 * 65536)
 				.setPerFrameWebsocketCompressionSupported(true)
 				.setPerMessageWebsocketCompressionSupported(true)
@@ -450,7 +452,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		DeckCreateRequest createRequest;
 		if (request.getDeckList() == null
 				|| request.getDeckList().equals("")) {
-			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass().name());
+			final String heroClass = request.getHeroClass();
 
 			createRequest = new DeckCreateRequest()
 					.withName(request.getName())
@@ -666,7 +668,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<InviteResponse> deleteInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
-		return WebResult.succeeded(Invites.deleteInvite(new InviteId(inviteId), (UserRecord) context.user()));
+		return WebResult.succeeded(Invites.deleteInvite(new InviteId(inviteId), new UserId(userId)));
 	}
 
 	@Override
@@ -695,7 +697,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards::cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
 
 		String cardsVersion = cache.get("cards-version");
 		String lastModified = cache.get("cards-last-modified");
@@ -787,7 +789,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
-				.inMatch(Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
+				.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))
 				.name(displayName + "#" + record.getPrivacyToken())
 				.privacyToken(record.getPrivacyToken());
 	}

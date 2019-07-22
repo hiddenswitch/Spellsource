@@ -26,7 +26,7 @@ public final class GetCollectionResponse implements Serializable {
 	private List<GetCollectionResponse> responses;
 	private List<InventoryRecord> inventoryRecords;
 	private CollectionTypes collectionType;
-	private HeroClass heroClass;
+	private String heroClass;
 	private String name;
 	private String collectionId;
 	private String userId;
@@ -52,7 +52,7 @@ public final class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, String heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
 		return new GetCollectionResponse()
 				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
@@ -92,11 +92,11 @@ public final class GetCollectionResponse implements Serializable {
 		this.inventoryRecords = inventoryRecords;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -105,7 +105,7 @@ public final class GetCollectionResponse implements Serializable {
 		return this;
 	}
 
-	public GetCollectionResponse withHeroClass(final HeroClass heroClass) {
+	public GetCollectionResponse withHeroClass(final String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}
@@ -187,7 +187,7 @@ public final class GetCollectionResponse implements Serializable {
 			displayName = getName();
 		}
 
-		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
+		final String fakeHeroClass = getHeroClass() == null ? "RED" : getHeroClass();
 		GameContext emptyContext = new GameContext(fakeHeroClass, fakeHeroClass);
 
 		List<InventoryRecord> inventoryRecords = getInventoryRecords();

@@ -46,7 +46,9 @@ public class TraceTests {
 				.sorted(Comparator.comparing(URL::getFile).reversed())
 				.map(c -> {
 					try {
-						return Trace.load(Resources.toString(c, Charset.defaultCharset()));
+						Trace trace = Trace.load(Resources.toString(c, Charset.defaultCharset()));
+						trace.setId(c.toString());
+						return trace;
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
@@ -70,7 +72,7 @@ public class TraceTests {
 			Player player1 = new Player(Deck.randomDeck(), "Player 1");
 			Player player2 = new Player(Deck.randomDeck(), "Player 2");
 			GameContext context1 = new GameContext();
-			context1.setDeckFormat(DeckFormat.CUSTOM);
+			context1.setDeckFormat(DeckFormat.getFormat("Custom"));
 			context1.setPlayer(0, player1);
 			context1.setPlayer(1, player2);
 			context1.play();
@@ -95,7 +97,7 @@ public class TraceTests {
 			GameContext context1 = new GameContext();
 			context1.setPlayer(0, player1);
 			context1.setPlayer(1, player2);
-			context1.setDeckFormat(DeckFormat.STANDARD);
+			context1.setDeckFormat(DeckFormat.getFormat("Standard"));
 			context1.play();
 			Trace trace = context1.getTrace();
 			try {

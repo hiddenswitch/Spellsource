@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -84,7 +85,7 @@ import static java.util.stream.Collectors.toList;
  * GameContext context = new GameContext();
  * for (int playerId : new int[] {GameContext.PLAYER_1, GameContext.PLAYER_2}) {
  *   context.setBehaviour(playerId, new GameStateValueProvider());
- *   context.setDeck(playerId, Deck.randomDeck(HeroClass.RED, DeckFormat.STANDARD));
+ *   context.setDeck(playerId, Deck.randomDeck("RED", DeckFormat.getFormat("Standard")));
  * }
  * context.play();
  * }
@@ -162,7 +163,7 @@ import static java.util.stream.Collectors.toList;
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
  * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
- * <li>{@link GameLogic#resolveBattlecry(int, Actor)}},
+ * <li>{@link GameLogic#resolveBattlecries(int, Actor)}},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
  * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all
@@ -186,10 +187,10 @@ import static java.util.stream.Collectors.toList;
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
  * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
  * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- * 		{@link Behaviour#requestAction(GameContext, Player, List)}.
+ *    {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- * 		GameContext} because it manipulates the state stored in it.
+ *    GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -232,7 +233,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.STANDARD);
+		setDeckFormat(DeckFormat.getFormat("Standard"));
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -248,7 +249,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
 		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
-		setDeckFormat(fromContext.getDeckFormat());
+		setDeckFormat(fromContext.getDeckFormat().clone());
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
 
@@ -282,7 +283,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param heroClasses The player's hero classes.
 	 */
-	public GameContext(HeroClass... heroClasses) {
+	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
 			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
@@ -296,7 +297,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param card The card to add, typically made with code.
 	 */
 	public void addTempCard(Card card) {
-		getTempCards().addCard(card);
+		getTempCards().addCard(card.clone());
 	}
 
 	/**
@@ -1183,6 +1184,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setLogic(GameLogic logic) {
+		if (this.logic != null && logic.getInternalId() != this.logic.getInternalId()) {
+			throw new IllegalArgumentException("logic.getInternalId() != this.logic.getInternalId()");
+		}
 		this.logic = logic;
 		logic.setContext(this);
 	}
@@ -1431,6 +1435,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return getLastCardPlayedMap().get(IdFactory.UNASSIGNED);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<Integer, EntityReference> getLastSpellPlayedThisTurnMap() {
+		if (!getEnvironment().containsKey(Environment.LAST_SPELL_PLAYED_THIS_TURN)) {
+			getEnvironment().put(Environment.LAST_SPELL_PLAYED_THIS_TURN, new EnvironmentMap<>());
+		}
+		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_SPELL_PLAYED_THIS_TURN);
+	}
+
+	public void setLastSpellPlayedThisTurn(int playerId, EntityReference cardReference) {
+		getLastSpellPlayedThisTurnMap().put(IdFactory.UNASSIGNED, cardReference);
+		getLastSpellPlayedThisTurnMap().put(playerId, cardReference);
+	}
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence() {
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(IdFactory.UNASSIGNED);

@@ -25,9 +25,10 @@ import java.util.Map;
  */
 public class CatalogueSource extends CardSource implements HasCardCreationSideEffects, HasWeights {
 
+	private static CatalogueSource INSTANCE = new CatalogueSource(new CardSourceDesc(CatalogueSource.class));
+
 	public static CatalogueSource create() {
-		Map<CardSourceArg, Object> args = new CardSourceDesc(CatalogueSource.class);
-		return new CatalogueSource(new CardSourceDesc(args));
+		return INSTANCE;
 	}
 
 	public CatalogueSource(CardSourceDesc desc) {

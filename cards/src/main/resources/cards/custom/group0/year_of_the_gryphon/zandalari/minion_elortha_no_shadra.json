@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Battlecry: Give all minions in your hand, deck, and battlefield \"Deathrattle: Resummon this.\"",
+  "description": "Opener: Give all minions in your hand, deck, and battlefield \"Aftermath: Resummon this.\"",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

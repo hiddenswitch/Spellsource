@@ -7,6 +7,10 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
+/**
+ * Evaluates to {@code true} if the {@link ConditionArg#TARGET_PLAYER} has card-count [ {@link ConditionArg#OPERATION} ]
+ * {@link ConditionArg#VALUE} cards in their hand.
+ */
 public class CardCountCondition extends Condition {
 
 	public CardCountCondition(ConditionDesc desc) {

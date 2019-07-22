@@ -1,12 +1,12 @@
 {
   "name": "Glacial Cleaver",
-  "baseManaCost": 5,
+  "baseManaCost": 7,
   "type": "WEAPON",
   "heroClass": "SILVER",
   "damage": 4,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "After your hero attacks, Freeze all friendly minions and give them +1/+1",
+  "description": "After your champion attacks, Freeze all friendly minions and give them +1/+1",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

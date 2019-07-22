@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "LEGENDARY",
-  "description": "When the game starts, replace your Hero with a random Adventure Boss.",
+  "description": "When the game starts, replace your Champion with a random Adventure Boss.",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"

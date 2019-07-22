@@ -11,6 +11,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE",
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"
     },

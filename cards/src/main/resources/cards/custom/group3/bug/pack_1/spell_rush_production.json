@@ -1,0 +1,30 @@
+{
+  "name": "Rush Production",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Summon all Larva from your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "SUBTRACT",
+      "value1": 7,
+      "value2": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+      }
+    },
+    "cardFilter": {
+      "class": "SpecificCardFilter",
+      "card": "token_spiderling"
+    },
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

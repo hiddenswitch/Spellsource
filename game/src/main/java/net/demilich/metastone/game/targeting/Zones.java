@@ -37,19 +37,19 @@ public enum Zones {
 	/**
 	 * This zone specifies the entity belongs to no zone or the zone is not yet assigned.
 	 */
-	NONE,
+	NONE("N"),
 	/**
 	 * This zone is a player's hand. Only {@link Card} entities can be in this zone.
 	 *
 	 * @see net.demilich.metastone.game.cards.CardZone for some special rules about zones that contain only cards.
 	 */
-	HAND,
+	HAND("H"),
 	/**
 	 * This zone is a player's deck. Only {@link Card} entities can be in this zone.
 	 *
 	 * @see net.demilich.metastone.game.cards.CardZone for some special rules about zones that contain only cards.
 	 */
-	DECK,
+	DECK("D"),
 	/**
 	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference, EntityReference)} goes;
 	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes. A {@link
@@ -59,45 +59,45 @@ public enum Zones {
 	 * @see #REMOVED_FROM_PLAY for the alternative location for "destroyed" entities.
 	 * @see GameLogic#destroy(Actor...) for more about destroying actors.
 	 */
-	GRAVEYARD,
+	GRAVEYARD("G"),
 	/**
 	 * A {@link Minion} is typically summoned into this zone. Anything in this zone is targetable by physical attacks.
 	 */
-	BATTLEFIELD,
+	BATTLEFIELD("B"),
 	/**
 	 * This zone is where a {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} entity goes. Its contents
 	 * are not visible to the opponent.
 	 *
 	 * @see GameLogic#playSecret(Player, Secret, boolean) for more about secrets.
 	 */
-	SECRET,
+	SECRET("S"),
 	/**
 	 * This zone is  where {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} entities go, which behave like
 	 * secrets that are visible to the opponent and do not go away the first time they  are triggered.
 	 *
 	 * @see GameLogic#playQuest(Player, Quest) for more about quests.
 	 */
-	QUEST,
+	QUEST("Q"),
 	/**
 	 * The hero power zone stores the hero power for a corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}.
 	 * Only one such card can be in the zone at a time.
 	 *
 	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
 	 */
-	HERO_POWER,
+	HERO_POWER("K"),
 	/**
 	 * The hero zone stores the {@link Hero} actor that represents a player's targetable avatar in the game.
 	 *
 	 * @see Hero for more about heroes.
 	 */
-	HERO,
+	HERO("E"),
 	/**
 	 * The weapon zone stores the {@link net.demilich.metastone.game.entities.weapons.Weapon} that a {@link Hero} has
 	 * equipped.
 	 *
 	 * @see net.demilich.metastone.game.entities.weapons.Weapon for more about weapons.
 	 */
-	WEAPON,
+	WEAPON("W"),
 	/**
 	 * The discover zone has any cards that are being currently chosen by the player as part of a {@link
 	 * net.demilich.metastone.game.actions.DiscoverAction}.
@@ -108,14 +108,14 @@ public enum Zones {
 	 * 		for more about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */
-	DISCOVER,
+	DISCOVER("V"),
 	/**
 	 * An {@link Entity} in this zone is "deleted" in the sense that it will never appear in any {@link EntityFilter}
 	 * filters or targeting lists.
 	 *
 	 * @see #GRAVEYARD for the usual place entities go when they are destroyed by effects rather than deleted.
 	 */
-	REMOVED_FROM_PLAY,
+	REMOVED_FROM_PLAY("R"),
 	/**
 	 * The set aside zone holds an {@link Entity} existing in any intermediate or "not really on the board" state, like
 	 * the original minion after Recycle puts a new copy in the deck, the prior state of transformed minions and Lord
@@ -127,7 +127,7 @@ public enum Zones {
 	 * @see GameLogic#removeActor(Actor, boolean) for an example of usage of a set aside zone (when the method is called
 	 * 		with {@code peacefully = false;}.
 	 */
-	SET_ASIDE_ZONE,
+	SET_ASIDE_ZONE("A"),
 	/**
 	 * Metastone originally used the same object for what is now the {@link Player} and {@link Hero} entity. Since the
 	 * {@link Player} is still targetable (primarily by special buffing spells), it needs a {@link Zones} zone to belong
@@ -135,7 +135,7 @@ public enum Zones {
 	 *
 	 * @see Player for more about player entities.
 	 */
-	PLAYER;
+	PLAYER("P");
 
 	/**
 	 * These zones are public for notification purposes: both players ought to see their contents.
@@ -146,4 +146,14 @@ public enum Zones {
 	 * from that zone.
 	 */
 	public static final Set<Zones> PRIVATE = EnumSet.of(Zones.DISCOVER, Zones.HAND, Zones.DECK, Zones.SET_ASIDE_ZONE, Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
+	private String serialized;
+
+
+	Zones(String serialized) {
+		this.serialized = serialized;
+	}
+
+	public String getSerialized() {
+		return serialized;
+	}
 }

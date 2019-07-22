@@ -1,0 +1,19 @@
+{
+  "name": "Shimmerscale",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Hidden, Dodge. Elusive.",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "STEALTH": true,
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

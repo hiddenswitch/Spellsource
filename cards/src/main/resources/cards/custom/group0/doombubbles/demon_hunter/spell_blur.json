@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "PURPLE",
   "rarity": "RARE",
-  "description": "Give your hero Stealth until your next turn.",
+  "description": "Give your champion Hidden until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

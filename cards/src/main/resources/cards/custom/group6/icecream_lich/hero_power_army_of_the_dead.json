@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICECREAM",
   "rarity": "FREE",
-  "description": "Summon two 1/1 Ghouls with Charge that dies at the end of the turn.",
+  "description": "Summon two 1/1 Ghouls with Blitz that die at the end of the turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
@@ -17,6 +17,6 @@
     }
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "set": "GRAVEYARD",
   "fileFormatVersion": 1
 }

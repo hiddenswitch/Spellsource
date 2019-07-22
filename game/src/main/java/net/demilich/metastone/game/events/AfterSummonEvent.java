@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class AfterSummonEvent extends SummonEvent {
 
-	public AfterSummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean didResolveBattlecry, BattlecryAction battlecryAction) {
-		super(context, minion, source, didResolveBattlecry, battlecryAction);
+	public AfterSummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean didResolveBattlecry, BattlecryAction... battlecryActions) {
+		super(context, minion, source, didResolveBattlecry, battlecryActions);
 	}
 
 	@Override

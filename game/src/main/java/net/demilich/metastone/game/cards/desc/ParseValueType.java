@@ -126,14 +126,6 @@ public enum ParseValueType {
 	 */
 	RARITY,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.entities.heroes.HeroClass} enum.
-	 */
-	HERO_CLASS,
-	/**
-	 * An array of strings matching the name of a {@link net.demilich.metastone.game.entities.heroes.HeroClass} enum.
-	 */
-	HERO_CLASS_ARRAY,
-	/**
 	 * An integer, or a {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc}.
 	 */
 	VALUE,
@@ -162,10 +154,6 @@ public enum ParseValueType {
 	 */
 	TRIGGERS,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.cards.CardSet} enum.
-	 */
-	CARD_SET,
-	/**
 	 * An {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} that should be interpreted as a {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Quest}.
 	 */
@@ -189,5 +177,12 @@ public enum ParseValueType {
 	 * The array version of {@link #EVENT_TRIGGER}.
 	 */
 	EVENT_TRIGGER_ARRAY,
+	/**
+	 * An array of {@link net.demilich.metastone.game.targeting.Zones} enum values.
+	 */
+	ZONES,
+	/**
+	 * An array of {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc} objects.
+	 */
 	DYNAMIC_DESCRIPTION_ARRAY
 }

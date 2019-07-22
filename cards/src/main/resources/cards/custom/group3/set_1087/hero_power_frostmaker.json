@@ -4,13 +4,13 @@
   "type": "HERO_POWER",
   "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "Deal $4 damage. (Against minions, deals any excess to adjacent minions)",
+  "description": "Deal 3 damage. (Against minions, deals any excess to adjacent minions)",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
       "class": "ExcessDamageSpell",
-      "value": 4,
+      "value": 3,
       "secondaryTarget": "ADJACENT_TO_TARGET"
     }
   },

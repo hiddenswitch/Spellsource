@@ -7,7 +7,7 @@
   "description": "Give a random friendly minion +4/+4. (Shuffle a card to upgrade)",
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "CardShuffledTrigger",
+      "class": "ShuffledTrigger",
       "hostTargetType": "IGNORE_AS_SOURCE",
       "queueCondition": {
         "class": "OwnedByPlayerCondition",

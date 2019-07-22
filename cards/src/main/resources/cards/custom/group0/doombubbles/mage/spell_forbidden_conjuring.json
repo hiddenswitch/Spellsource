@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Spend all your mana. Summon that many 0/2 Mirror Images with Taunt.",
+  "description": "Spend all your mana. Summon that many 0/2 Mirror Images with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalSpell",

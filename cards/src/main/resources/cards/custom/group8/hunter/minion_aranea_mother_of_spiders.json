@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Costs ([0]) less. Battlecry: Summon [0 1/1 Webspinners]. (Increases with each spell cast this turn)",
+  "description": "Costs ([0]) less. Opener: Summon [0 1/1 Webspinners]. (Increases for each spell cast this turn)",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

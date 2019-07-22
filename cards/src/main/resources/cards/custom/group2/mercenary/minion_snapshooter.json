@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Deal 4 damage to a Marked minion.",
+  "description": "Opener: Deal 4 damage to a Marked minion.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {
