@@ -19,7 +19,7 @@
         "cardFilter": {
           "class": "SpecificCardFilter",
           "card": "minion_rejan_last_defender"
-        },
+        }
       },
       "spell1": {
         "class": "AddAttributeSpell",

@@ -7,7 +7,7 @@
   "description": "Add a random Fossil to your hand.",
   "targetSelection": "NONE",
   "spell": {
-     "spell": {
+    "spell": {
       "class": "ReceiveCardSpell",
       "cards": [
         "token_bone_bouncer",
@@ -16,6 +16,7 @@
       ],
       "randomTarget": true
     }
+  },
   "sets": [
     "CUSTOM",
     "BASIC"
