@@ -552,7 +552,13 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(34, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(35)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(35, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
