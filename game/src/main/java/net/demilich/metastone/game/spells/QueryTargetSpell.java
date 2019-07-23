@@ -109,7 +109,6 @@ public class QueryTargetSpell extends Spell {
 			target = context.resolveSingleTarget(player, source, EntityReference.EVENT_TARGET);
 		}
 
-		int limit = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, targets.size());
 		int skip = desc.getValue(SpellArg.SECONDARY_VALUE, context, player, target, source, 0);
 		boolean shuffled = desc.getBool(SpellArg.RANDOM_TARGET);
 		EntityFilter filter = desc.getEntityFilter();
@@ -143,6 +142,8 @@ public class QueryTargetSpell extends Spell {
 			targets.sort(Comparator.comparingInt(t -> desc.getValue(SpellArg.VALUE, context, player, t, source, t.getIndex())));
 		}
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
+
+		int limit = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, targets.size());
 		for (int i = skip; i < targets.size() && i < skip + limit; i++) {
 			if (condition != null && !condition.isFulfilled(context, player, source, targets.get(i))) {
 				break;
