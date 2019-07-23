@@ -28,6 +28,10 @@ Bug fixes.
  - Dramatic Entrance now processed before a minion's Opener instead of after. (1252)
  - Plucky Pilgrim changed from a 1/2 to a 2/1. (1260)
  - Terrified Tanooki renamed to Terrified Tanuki. (1261)
+ - Some Baron cards have had their rarities changed. (1257)
+ - Darkshard Duelist is now a 7/7, up from 5/5. (1257)
+ - Might Mufunga now costs (9), up from (8). (1257)
+ - Guild Guard now costs (5), up from (4). (1257)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
