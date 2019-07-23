@@ -11,10 +11,7 @@
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",
-      "cardFilter": {
-        "class": "RaceFilter",
-        "race": "DRAGON"
-      }
+      "value": 3
     },
     "targetSelection": "NONE",
     "spell": {

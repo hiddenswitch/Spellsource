@@ -1,0 +1,26 @@
+{
+  "name": "Dig Up Shovel",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "COMMON",
+   "description": "<b>Decay<b> At the end of your turn, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+  "DECAY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Scope Out",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "EPIC",
+   "description": "Draw 2 cards. If either one of them costs (5) or more, draw 2 more.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+        "class": "ManaCostCondition",
+        "value": 5,
+        "operation": "GREATER_OR_EQUAL"
+      },
+    "spell1": {
+      "class": "DrawCardSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  },
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
