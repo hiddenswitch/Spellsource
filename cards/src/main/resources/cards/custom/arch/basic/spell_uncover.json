@@ -17,6 +17,7 @@
       "randomTarget": true
     }
   },
+  "collectible": true,
   "sets": [
     "CUSTOM",
     "BASIC"

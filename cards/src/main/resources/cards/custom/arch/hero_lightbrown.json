@@ -1,0 +1,11 @@
+{
+  "name": "Archaeologist",
+  "type": "CLASS",
+  "hero": "hero_izzy_jameson",
+  "heroClass": "LIGHTBROWN",
+  "color": [165, 42, 42],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
