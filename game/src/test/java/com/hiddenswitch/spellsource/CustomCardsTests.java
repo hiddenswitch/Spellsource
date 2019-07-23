@@ -382,8 +382,10 @@ public class CustomCardsTests extends TestBase {
 			Minion fassnu = playMinionCard(context, player, "minion_fassnu_avenger");
 			destroy(context, toDestroy);
 			Card shouldBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
+			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
 			destroy(context, fassnu);
 			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
+			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
 		});
 	}
 
@@ -7397,6 +7399,14 @@ public class CustomCardsTests extends TestBase {
 			assertFalse(test32.isDestroyed());
 			assertEquals(test32.getHp(), test32.getMaxHp());
 			assertEquals(warden.getHp(), warden.getMaxHp() - 6);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion warden1 = playMinionCard(context, player, "minion_warden_saihan");
+			Minion warden2 = playMinionCard(context, player, "minion_warden_saihan");
+			playCard(context, player, "spell_test_deal_6", warden1);
+			assertEquals(warden1.getHp(), warden1.getMaxHp() - 6);
+			assertEquals(warden2.getHp(), warden2.getMaxHp());
 		}));
 	}
 }

@@ -5,8 +5,7 @@
   "heroClass": "NAVY",
   "baseAttack": 1,
   "baseHp": 1,
-  "rarity": "COMMON",
-  "race": "ELEMENTAL",
+  "rarity": "FREE",
   "description": "Opener: Add a 2/2 Knight to your hand.",
   "battlecry": {
     "targetSelection": "NONE",

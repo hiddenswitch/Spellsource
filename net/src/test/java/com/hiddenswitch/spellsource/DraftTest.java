@@ -9,7 +9,6 @@ import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.DraftActionRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.Future;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -20,7 +19,7 @@ import static org.junit.Assert.*;
 
 public class DraftTest extends SpellsourceTestBase {
 	@Test
-	public void testDraftService() {
+	public void testDraftService(TestContext context) {
 		sync(() -> {
 			// Create an account
 			CreateAccountResponse car = createRandomAccount();
@@ -45,7 +44,7 @@ public class DraftTest extends SpellsourceTestBase {
 			}
 
 			assertNotNull(response.getPublicDraftState().getDeckId());
-		});
+		}, context);
 	}
 
 
@@ -96,12 +95,14 @@ public class DraftTest extends SpellsourceTestBase {
 
 		final String deckId = state.getDeckId();
 
-		UnityClient client = new UnityClient(context);
-		client.loginWithUserAccount(name, "testpass");
-		client.ensureConnected();
-		client.matchmakeQuickPlay(deckId);
-		client.waitUntilDone();
-		context.assertTrue(client.getTurnsPlayed() > 0);
+
+		try (UnityClient client = new UnityClient(context)) {
+			client.loginWithUserAccount(name, "testpass");
+			client.ensureConnected();
+			client.matchmakeQuickPlay(deckId);
+			client.waitUntilDone();
+			context.assertTrue(client.getTurnsPlayed() > 0);
+		}
 
 		DraftState newState = null;
 		try {

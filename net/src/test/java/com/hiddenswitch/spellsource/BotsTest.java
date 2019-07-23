@@ -6,7 +6,6 @@ import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.MulliganRequest;
-import com.hiddenswitch.spellsource.models.MulliganResponse;
 import com.hiddenswitch.spellsource.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.models.RequestActionResponse;
 import com.hiddenswitch.spellsource.util.*;
@@ -16,8 +15,6 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Test;
@@ -40,7 +37,7 @@ public class BotsTest extends SpellsourceTestBase {
 							CardCatalogue.getCardById("spell_arcane_missiles"),
 							CardCatalogue.getCardById("spell_assassinate")));
 			assertEquals(2, Bots.mulligan(request).discardedCards.size());
-		});
+		}, context);
 	}
 
 	@Test
@@ -56,7 +53,8 @@ public class BotsTest extends SpellsourceTestBase {
 				RequestActionRequest requestActionRequest = new RequestActionRequest(new GameId(context1.getGameId()),
 						context1.getActivePlayerId(),
 						context1.getValidActions(),
-						context1.getDeckFormat(), context1.getGameStateCopy());
+						context1.getDeckFormat(), context1.getGameStateCopy(),
+						null);
 
 				RequestActionResponse response = Bots.requestAction(requestActionRequest);
 				gameAction = response.gameAction;
@@ -64,7 +62,7 @@ public class BotsTest extends SpellsourceTestBase {
 				context1.performAction(context1.getActivePlayerId(), gameAction);
 			}
 			assertTrue(context1.getTurn() > startTurn);
-		});
+		}, context);
 	}
 
 	@Test
@@ -83,40 +81,41 @@ public class BotsTest extends SpellsourceTestBase {
 			FiberBehaviour active = (FiberBehaviour) gc.getBehaviours().get(gc.getActivePlayerId());
 			assertTrue(!active.getValidActions().isEmpty());
 			active.setAction(active.getValidActions().get(0));
-		});
+		}, context);
 	}
 
 	@Test
 	public void testBotReused(TestContext context) {
-		UnityClient client = new UnityClient(context);
-		client.createUserAccount();
-		NoArgs playAndWait = () -> {
-			client.matchmakeQuickPlay(null);
-			client.waitUntilDone();
-			context.assertTrue(client.isGameOver());
-			context.assertTrue(client.getTurnsPlayed() > 0);
-			try {
-				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
-			} catch (ApiException e) {
-				throw new AssertionError(e);
-			}
-		};
-		sync(() -> {
-			Mongo.mongo().removeDocuments(Accounts.USERS, json("bot", true));
-			Sync.invoke0(playAndWait);
-			List<String> botIds = Bots.getBotIds();
-			assertEquals("Only one bot document should have been created", botIds.size(), 1);
-			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
+		try (UnityClient client = new UnityClient(context)) {
+			client.createUserAccount();
+			NoArgs playAndWait = () -> {
+				client.matchmakeQuickPlay(null);
+				client.waitUntilDone();
+				context.assertTrue(client.isGameOver());
+				context.assertTrue(client.getTurnsPlayed() > 0);
+				try {
+					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+				} catch (ApiException e) {
+					throw new AssertionError(e);
+				}
+			};
+			sync(() -> {
+				Mongo.mongo().removeDocuments(Accounts.USERS, json("bot", true));
+				Sync.invoke0(playAndWait);
+				List<String> botIds = Bots.getBotIds();
+				assertEquals("Only one bot document should have been created", botIds.size(), 1);
+				SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
-			for (String id : botIds) {
-				assertFalse(games.containsKey(new UserId(id)));
-			}
+				for (String id : botIds) {
+					assertFalse(games.containsKey(new UserId(id)));
+				}
 
-			Sync.invoke0(playAndWait);
-			assertEquals("Only one bot document should have been created", botIds.size(), 1);
-			for (String id : botIds) {
-				assertFalse(games.containsKey(new UserId(id)));
-			}
-		});
+				Sync.invoke0(playAndWait);
+				assertEquals("Only one bot document should have been created", botIds.size(), 1);
+				for (String id : botIds) {
+					assertFalse(games.containsKey(new UserId(id)));
+				}
+			}, context);
+		}
 	}
 }

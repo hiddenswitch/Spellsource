@@ -2,7 +2,9 @@ package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.impl.LocalQueue;
 import com.hiddenswitch.spellsource.concurrent.impl.SuspendableArrayQueue;
+import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 
 public interface SuspendableQueue<V> {
@@ -19,13 +21,16 @@ public interface SuspendableQueue<V> {
 	 *                 or if {@code 0} or negative, no bound is specified.
 	 * @param <V>      The type of the items.
 	 * @return A reference to a suspendable queue. Until a method is called on it, its underlying data structures in the
-	 * cluster may not be created.
+	 * 		cluster may not be created.
 	 * @see #get(String) for an unbounded version of this method.
 	 */
 	@Suspendable
 	static <V> SuspendableQueue<V> get(String name, int capacity) throws SuspendExecution {
-//		return SuspendableLinkedQueue.getOrCreate(name, capacity <= 0 ? Integer.MAX_VALUE : capacity);
-		return new SuspendableArrayQueue<>(name, capacity);
+		if (Vertx.currentContext().owner().isClustered()) {
+			return new SuspendableArrayQueue<>(name, capacity);
+		} else {
+			return LocalQueue.get(name, capacity);
+		}
 	}
 
 	/**
@@ -38,8 +43,20 @@ public interface SuspendableQueue<V> {
 	 */
 	@Suspendable
 	static <V> SuspendableQueue<V> get(String name) throws SuspendExecution {
-		return new SuspendableArrayQueue<>(name);
-//		return SuspendableLinkedQueue.getOrCreate(name);
+		if (Vertx.currentContext().owner().isClustered()) {
+			return new SuspendableArrayQueue<>(name);
+		} else {
+			return LocalQueue.get(name, 64);
+		}
+	}
+
+	@Suspendable
+	static <V> SuspendableQueue<V> getOrCreate(String name) throws SuspendExecution {
+		if (Vertx.currentContext().owner().isClustered()) {
+			return new SuspendableArrayQueue<>(name);
+		} else {
+			return LocalQueue.getOrCreateLocalQueue(name, 64);
+		}
 	}
 
 	@Suspendable
@@ -99,6 +116,10 @@ public interface SuspendableQueue<V> {
 	 */
 	@Suspendable
 	static boolean exists(String name) {
-		return SuspendableArrayQueue.getArrayQueues().containsKey(name);
+		if (Vertx.currentContext().owner().isClustered()) {
+			return SuspendableArrayQueue.getArrayQueues().containsKey(name);
+		} else {
+			return LocalQueue.containsKey(name);
+		}
 	}
 }

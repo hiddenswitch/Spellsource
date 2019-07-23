@@ -4,6 +4,39 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.41-2.0.35 (In Progress)
+
+New Storyteller cards thanks to @Skurleton!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - New Storyteller cards. (1237)
+
+##### Content Fixes:
+
+ - All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
+ - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
+ - Strengthen Core (Honed Potion) now gives a minion deflect, draws a card and costs (2). (1245)
+ - Enchanted Springs (Springs of Ebisu) now costs (0). (1245)
+ - Fassnu Avenger no longer gains every deathrattle twice. (1248)
+ - Trigger Happy Rebel changed from a 2/4 to a 2/3. (1251)
+ - Dustbowl Vigilante changed from a 3/6 to a 3/4. (1251)
+ - Outlaw's skill now deals 1 targeted damage. The upgraded skill deals 2 targeted damage. (1251)
+ - Warden Saihan's ability no longer triggers off of itself taking damage. (1250)
+ - Dramatic Entrance now processed before a minion's Opener instead of after. (1252)
+ - Plucky Pilgrim changed from a 1/2 to a 2/1. (1260)
+ - Terrified Tanooki renamed to Terrified Tanuki. (1261)
+ - Some Baron cards have had their rarities changed. (1257)
+ - Darkshard Duelist is now a 7/7, up from 5/5. (1257)
+ - Might Mufunga now costs (9), up from (8). (1257)
+ - Guild Guard now costs (5), up from (4). (1257)
+
+### 0.8.40-2.0.35 (July 16th, 2019)
+
+Bug fixes for network lag.
+
 ### 0.8.39-2.0.34 (July 15th, 2019)
 
 Some forms of network lag should be addressed in this update, because the server and client now exchange as little as 20% of the data they did previously.
