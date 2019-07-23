@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1,
+  "attributes": {
+    "DECAY": true
+  }
+}
