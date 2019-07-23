@@ -1,0 +1,28 @@
+{
+  "name": "Earthshake",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+    "description": "Deal 2 damage to all enemy minions. Draw 2 cards",
+  "targetSelection": "NON",
+   "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+		"target": "ENEMY_MINIONS",
+        "value": 2
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      }
+    ]
+  },
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

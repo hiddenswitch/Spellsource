@@ -5,7 +5,7 @@
   "heroClass": "DARKGREEN",
   "baseAttack": 3,
   "baseHp": 3,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Opener: Draw two cards.",
   "battlecry": {
     "spell": {
@@ -16,10 +16,9 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "sets": [
-    "CUSTOM",
-    "BASIC"
+    "CUSTOM"
   ]
 }
