@@ -1,13 +1,13 @@
 {
-  "name": "Master Eroder",  
+  "name": "Master Eroder",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-   "description": "Opener: Give all enemy minions <b>Decay<b>.",
-     "battlecry": {
+  "description": "Opener: Give all enemy minions <b>Decay<b>.",
+  "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
@@ -15,12 +15,12 @@
     }
   },
   "attributes": {
-  "BATTLECRY": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "sets": [
-  "CUSTOM",
-  "CLASSIC"
+    "CUSTOM",
+    "CLASSIC"
   ],
-  "fileFormatVersion": 1,
+  "fileFormatVersion": 1
 }

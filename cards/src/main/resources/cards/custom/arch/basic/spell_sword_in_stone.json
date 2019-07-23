@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-   "description": "Draw a weapon from your deck.",
+  "description": "Draw a weapon from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
@@ -13,6 +13,7 @@
       "class": "CardFilter",
       "cardType": "WEAPON"
     }
+  },
   "sets": [
     "CUSTOM",
     "BASIC"

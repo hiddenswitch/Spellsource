@@ -10,7 +10,7 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "Damagepell",
+        "class": "DamageSpell",
         "target": "FRINDLY_HERO",
         "value": 2
       },
