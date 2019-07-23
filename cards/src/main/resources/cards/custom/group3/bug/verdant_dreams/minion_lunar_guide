@@ -1,0 +1,28 @@
+{
+  "name": "Lunar Guide",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST"
+  "description": "Battlecry: Add a random Emerald Secret to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+       "class": "ReceiveCardSpell",
+       "cards": [
+         "secret_secret_of_winter",
+         "secret_secret_of_spring",
+         "secret_secret_of_summer",
+         "secret_secret_of_autumn",
+         "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
+    }
+  },  
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
