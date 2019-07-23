@@ -27,6 +27,7 @@ Bug fixes.
  - Warden Saihan's ability no longer triggers off of itself taking damage. (1250)
  - Dramatic Entrance now processed before a minion's Opener instead of after. (1252)
  - Plucky Pilgrim changed from a 1/2 to a 2/1. (1260)
+ - Terrified Tanooki renamed to Terrified Tanuki. (1261)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
