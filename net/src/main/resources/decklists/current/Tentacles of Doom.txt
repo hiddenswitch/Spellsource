@@ -1,6 +1,6 @@
 ### Occultist: Tentacles of Doom
 # Class: DARKGREEN
-# Format: All
+# Format: Spellsource
 #
 # 2x (1) Chilling Warcry
 # 2x (1) Sparkly Messenger
@@ -15,6 +15,6 @@
 # 2x (3) Skeletal Warrior
 # 2x (4) Guild Guard
 # 2x (6) Rain of Tentacles
-# 2x (7) Raise Dead
+# 2x (7) Raise the Dead
 # 2x (8) Mighty Mufunga
 #

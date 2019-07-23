@@ -1,0 +1,12 @@
+{
+  "seed" : -8803134374530054486,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "EGGPLANT", "LEATHER" ],
+  "deckCardIds" : [ [ "minion_burly_shovelfist", "secret_conjured_assistance", "minion_apprentice_animator", "minion_kofko_the_dragon", "minion_lowly_squire", "minion_skugg_the_unclean", "secret_conjured_assistance", "minion_skeletal_warrior", "secret_replicate", "minion_glass_golem", "spell_evil_laughter", "secret_monster_ambush", "minion_trigger_happy_survivor", "secret_monster_ambush", "minion_zoobot", "minion_argent_horserider", "minion_pumpkin_abomination", "minion_sourceborn_aelin", "minion_violet_illusionist", "minion_micro_raptors", "spell_savage_anger", "minion_zealous_initiate", "minion_dreadmire_hexxer", "minion_mad_prophet_rosea", "minion_ravenous_lasher", "minion_ankylo_devotee", "minion_magma_spewer", "minion_squeak_freak", "minion_elite_tauren_chieftain", "minion_silver_hand_regent" ], [ "minion_whizbang_the_wonderful", "minion_snapshooter", "minion_mr_smith", "minion_twilight_elder", "spell_supply", "minion_hecklebot", "minion_zarmull_the_silent_mercenary", "minion_grand_crusader", "minion_gadgetzan_auctioneer", "minion_arcane_anomaly", "permanent_ravaging_of_outland", "spell_supply_sabotage", "minion_champion_of_death", "minion_maexxna", "minion_hoffis_the_dunewalker", "minion_macabre_samaritan", "minion_grand_archivist", "spell_extermination_team", "minion_stalagg", "minion_tikrakazz", "minion_beast_king", "spell_reload", "minion_rakanishu", "minion_doodles", "minion_priestess_of_elune", "minion_leatherclad_hogleader", "quest_forge_it", "weapon_sharp_a_practice", "minion_dollmaster_dorian", "minion_westlands_mugger" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "LEAGUE_OF_EXPLORERS", "REWARD", "BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "THE_OLD_GODS", "BATTLE_FOR_ASHENVALE", "RASTAKHANS_RUMBLE", "CUSTOM", "ONE_NIGHT_IN_KARAZHAN", "KOBOLDS_AND_CATACOMBS", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "PROMO", "SANDS_OF_TIME", "WITCHWOOD", "HALL_OF_FAME", "BLACKROCK_MOUNTAIN", "GOBLINS_VS_GNOMES", "RISE_OF_SHADOWS", "NAXXRAMAS", "SPELLSOURCE_BASIC", "BOOMSDAY_PROJECT", "MEAN_STREETS_OF_GADGETZAN", "THE_GRAND_TOURNAMENT" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 7, 21, 33 ], [ 38 ] ],
+  "actions" : [ 0, 1, 0, 0, 1, 0, 2, 0, 3, 0, 0, 0, 1, 1, 0, 0, 1, 0, 2, 1, 4, 8, 2, 0, 5, 1, 2, 18, 5, 7, 18, 0, 1, 4, 19, 9, 2, 4, 4, 3, 4, 2, 6, 1, 5, 8, 6, 9, 0, 0, 2, 2, 9, 0, 1, 0, 39, 26 ],
+  "id" : null
+}
