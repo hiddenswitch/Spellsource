@@ -10,7 +10,7 @@
     "class": "MetaSpell",
     "value": {
       "class": "SpellDamageValueProvider",
-      "offset": 3
+      "value": 3
     },
     "spells": [
       {

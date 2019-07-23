@@ -120,20 +120,21 @@ public class StorytellerTests extends TestBase {
 		}));
 	}
 
+	@Test
 	public void testMiserableConclusion() {
 		runGym((context, player, opponent) -> {
-			List<Minion> raptors = new ArrayList<>();
-			for (int i = 0; i < 6; i++) {
-				raptors.add(playMinionCard(context, player, "minion_test_3_2"));
-				raptors.add(playMinionCard(context, opponent, "minion_test_3_2"));
+			List<Minion> minionTest32 = new ArrayList<>();
+			for (int i = 0; i < 5; i++) {
+				minionTest32.add(playMinionCard(context, player, "minion_test_3_2"));
+				minionTest32.add(playMinionCard(context, opponent, "minion_test_3_2"));
 			}
-			raptors.add(playMinionCard(context, player, "minion_test_3_2"));
-			Minion yeti = playMinionCard(context, opponent, "minion_test_4_5");
+			minionTest32.add(playMinionCard(context, player, "minion_test_3_2"));
+			Minion minion45 = playMinionCard(context, opponent, "minion_test_4_5");
 			playCard(context, player, "spell_miserable_conclusion");
-			for (Minion raptor : raptors) {
-				assertTrue(raptor.isDestroyed());
+			for (Minion minion : minionTest32) {
+				assertTrue(minion.isDestroyed());
 			}
-			assertFalse(yeti.isDestroyed());
+			assertFalse(minion45.isDestroyed());
 		});
 	}
 

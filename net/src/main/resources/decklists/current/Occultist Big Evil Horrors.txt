@@ -1,0 +1,22 @@
+### Big Evil Horrors
+# Class: DARKGREEN
+# Format: Spellsource
+#
+# 2x (2) Aid of the Ancient
+# 2x (3) Dragonfruit Whelp
+# 2x (3) Horrible Hallucination
+# 2x (3) Stubborn Stegodon
+# 2x (3) Warped Warrior
+# 2x (5) Divine Cleric
+# 2x (6) Rain of Tentacles
+# 2x (6) Wrath of the Occult
+# 2x (7) Ancient Abomination
+# 1x (7) Massive Turtle
+# 2x (8) Mighty Mufunga
+# 1x (8) Primalist Kirra
+# 2x (9) Macabre Samaritan
+# 1x (10) End
+# 1x (10) Sourceborn Aelin
+# 2x (10) Stone Sentinel
+# 2x (10) Unseen Horrors
+#

@@ -8,7 +8,7 @@ permalink: /whats-new/
 
 New Storyteller cards thanks to @Skurleton!
 
-Bug fixes.
+The bot will now play more new decks in its rotation. Additionally, there are bug fixes.
 
 ##### Content Additions:
 
@@ -26,6 +26,13 @@ Bug fixes.
  - Outlaw's skill now deals 1 targeted damage. The upgraded skill deals 2 targeted damage. (1251)
  - Warden Saihan's ability no longer triggers off of itself taking damage. (1250)
  - Dramatic Entrance now processed before a minion's Opener instead of after. (1252)
+ - Plucky Pilgrim changed from a 1/2 to a 2/1. (1260)
+ - Terrified Tanooki renamed to Terrified Tanuki. (1261)
+ - Some Baron cards have had their rarities changed. (1257)
+ - Darkshard Duelist is now a 7/7, up from 5/5. (1257)
+ - Might Mufunga now costs (9), up from (8). (1257)
+ - Guild Guard now costs (5), up from (4). (1257)
+ - Miserable Conclusion now correctly destroys all minions except the opponent's highest attack minion.
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
