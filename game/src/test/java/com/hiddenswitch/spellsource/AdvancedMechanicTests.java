@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -638,5 +639,31 @@ public class AdvancedMechanicTests extends TestBase {
 				assertTrue(ninja.hasAttribute(Attribute.TAUNT));
 			}
 		}));
+	}
+
+	@Test
+	public void testDecay() {
+		runGym((context, player, opponent) -> {
+			Minion testMinion = playMinionCard(context, player, "minion_test_decay");
+			playCard(context, player, "weapon_test_decay");
+			Weapon weapon = player.getWeaponZone().get(0);
+			assertEquals(testMinion.getHp(), testMinion.getMaxHp());
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability());
+
+			// End own first turn, should deal damage
+			context.endTurn();
+			assertEquals(testMinion.getHp(), testMinion.getMaxHp() - 1);
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability() - 1);
+
+			// End opponent first turn, should not deal damage
+			context.endTurn();
+			assertEquals(testMinion.getHp(), testMinion.getMaxHp() - 1);
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability() - 1);
+
+			// End own second turn, should destroy both
+			context.endTurn();
+			assertTrue(testMinion.isDestroyed());
+			assertTrue(weapon.isBroken());
+		});
 	}
 }

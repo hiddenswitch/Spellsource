@@ -24,5 +24,10 @@ public enum DamageType {
 	/**
 	 * Magical damage is caused by spells and effects. It is typically rendered by missiles in the client.
 	 */
-	MAGICAL
+	MAGICAL,
+	/**
+	 * Decay damage is specific to the DECAY keyword. It deals one damage to the entity at the end of every one
+	 * of its owner's turns
+	 */
+	DECAY
 }
