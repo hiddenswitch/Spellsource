@@ -49,13 +49,13 @@ public class StorytellerTests extends TestBase {
 	public void testMagicWordMishap() {
 		runGym(((context, player, opponent) -> {
 			Minion yeti = playMinionCard(context, player, "minion_test_4_5");
-			Minion raptor = playMinionCard(context, player, "minion_test_3_2");
+			Minion minion = playMinionCard(context, player, "minion_test_3_2");
 			yeti.setHp(3);
 			playCard(context, player, "spell_magic_word_mishap", yeti);
-			playCard(context, player, "spell_magic_word_mishap", raptor);
+			playCard(context, player, "spell_magic_word_mishap", minion);
 			assertEquals(yeti.getHp(), yeti.getBaseHp());
 			assertFalse(yeti.isDestroyed());
-			assertTrue(raptor.isDestroyed());
+			assertTrue(minion.isDestroyed());
 		}));
 	}
 
@@ -78,33 +78,33 @@ public class StorytellerTests extends TestBase {
 	@Test
 	public void testDramaticPlaywright() {
 		runGym(((context, player, opponent) -> {
-			Minion raptor = playMinionCard(context, opponent, "minion_test_3_2");
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
 			Minion playwright = playMinionCard(context, player, "minion_dramatic_playwright");
 			destroy(context, playwright);
-			assertEquals(raptor.getAttack(), 1);
+			assertEquals(minion.getAttack(), 1);
 			context.endTurn();
-			assertEquals(raptor.getAttack(), 1);
+			assertEquals(minion.getAttack(), 1);
 			context.endTurn();
-			assertEquals(raptor.getAttack(), raptor.getBaseAttack());
+			assertEquals(minion.getAttack(), minion.getBaseAttack());
 		}));
 
 		runGym(((context, player, opponent) -> {
-			Minion raptor = playMinionCard(context, player, "minion_test_3_2");
+			Minion minion = playMinionCard(context, player, "minion_test_3_2");
 			Minion playwright = playMinionCard(context, player, "minion_dramatic_playwright");
 			destroy(context, playwright);
-			assertEquals(raptor.getAttack(), raptor.getBaseAttack());
+			assertEquals(minion.getAttack(), minion.getBaseAttack());
 		}));
 
 		runGym(((context, player, opponent) -> {
-			List<Minion> raptors = new ArrayList<>();
+			List<Minion> minions = new ArrayList<>();
 			for (int i = 0; i < 7; i++) {
-				raptors.add(playMinionCard(context, opponent, "minion_test_3_2"));
+				minions.add(playMinionCard(context, opponent, "minion_test_3_2"));
 			}
 			Minion playwright = playMinionCard(context, player, "minion_dramatic_playwright");
 			destroy(context, playwright);
 			int count = 0;
-			for (Minion raptor : raptors) {
-				if (raptor.getBaseAttack() != raptor.getAttack()) {
+			for (Minion minion : minions) {
+				if (minion.getBaseAttack() != minion.getAttack()) {
 					count++;
 				}
 			}
@@ -132,16 +132,16 @@ public class StorytellerTests extends TestBase {
 
 	public void testMiserableConclusion() {
 		runGym((context, player, opponent) -> {
-			List<Minion> raptors = new ArrayList<>();
+			List<Minion> minions = new ArrayList<>();
 			for (int i = 0; i < 6; i++) {
-				raptors.add(playMinionCard(context, player, "minion_test_3_2"));
-				raptors.add(playMinionCard(context, opponent, "minion_test_3_2"));
+				minions.add(playMinionCard(context, player, "minion_test_3_2"));
+				minions.add(playMinionCard(context, opponent, "minion_test_3_2"));
 			}
-			raptors.add(playMinionCard(context, player, "minion_test_3_2"));
+			minions.add(playMinionCard(context, player, "minion_test_3_2"));
 			Minion yeti = playMinionCard(context, opponent, "minion_test_4_5");
 			playCard(context, player, "spell_miserable_conclusion");
-			for (Minion raptor : raptors) {
-				assertTrue(raptor.isDestroyed());
+			for (Minion minion : minions) {
+				assertTrue(minion.isDestroyed());
 			}
 			assertFalse(yeti.isDestroyed());
 		});
@@ -166,8 +166,8 @@ public class StorytellerTests extends TestBase {
 			mountaineer.setHp(4);
 			attack(context, player, mountaineer, opponent.getHero());
 			assertEquals(mountaineer.getHp(), 4);
-			Minion raptor = playMinionCard(context, opponent, "minion_test_3_2");
-			attack(context, player, mountaineer, raptor);
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			attack(context, player, mountaineer, minion);
 			assertEquals(mountaineer.getHp(), 5);
 			Minion mountaineer2 = playMinionCard(context, opponent, "minion_manly_mountaineer");
 			attack(context, player, mountaineer, mountaineer2);
@@ -178,19 +178,19 @@ public class StorytellerTests extends TestBase {
 	@Test
 	public void testWhimsicalGenerator() {
 		runGym((context, player, opponent) -> {
-			Minion raptor1 = playMinionCard(context, player, "minion_test_3_2");
-			Minion raptor2 = playMinionCard(context, player, "minion_test_3_2");
-			Minion raptor3 = playMinionCard(context, player, "minion_test_3_2");
-			playCard(context, player, "spell_whimsical_generator", raptor2);
-			assertEquals(raptor1.getAttack(), raptor1.getBaseAttack() + 3);
-			assertEquals(raptor2.getAttack(), raptor2.getBaseAttack() + 3);
-			assertEquals(raptor3.getAttack(), raptor3.getBaseAttack() + 3);
-			assertEquals(raptor1.getHp(), raptor1.getBaseHp() + 4);
-			assertEquals(raptor2.getHp(), raptor2.getBaseHp() + 4);
-			assertEquals(raptor3.getHp(), raptor3.getBaseHp() + 4);
-			assertTrue(raptor1.hasAttribute(Attribute.TAUNT));
-			assertTrue(raptor2.hasAttribute(Attribute.TAUNT));
-			assertTrue(raptor3.hasAttribute(Attribute.TAUNT));
+			Minion minion1 = playMinionCard(context, player, "minion_test_3_2");
+			Minion minion2 = playMinionCard(context, player, "minion_test_3_2");
+			Minion minion3 = playMinionCard(context, player, "minion_test_3_2");
+			playCard(context, player, "spell_whimsical_generator", minion2);
+			assertEquals(minion1.getAttack(), minion1.getBaseAttack() + 3);
+			assertEquals(minion2.getAttack(), minion2.getBaseAttack() + 3);
+			assertEquals(minion3.getAttack(), minion3.getBaseAttack() + 3);
+			assertEquals(minion1.getHp(), minion1.getBaseHp() + 4);
+			assertEquals(minion2.getHp(), minion2.getBaseHp() + 4);
+			assertEquals(minion3.getHp(), minion3.getBaseHp() + 4);
+			assertTrue(minion1.hasAttribute(Attribute.TAUNT));
+			assertTrue(minion2.hasAttribute(Attribute.TAUNT));
+			assertTrue(minion3.hasAttribute(Attribute.TAUNT));
 		});
 	}
 
@@ -198,7 +198,7 @@ public class StorytellerTests extends TestBase {
 	public void testHouseOfCandy() {
 		runGym(((context, player, opponent) -> {
 			context.endTurn();
-			Minion raptor = playMinionCard(context, opponent, "minion_test_3_2");
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
 			context.endTurn();
 			playCard(context, player, "secret_house_of_candy");
 			context.endTurn();
@@ -208,7 +208,7 @@ public class StorytellerTests extends TestBase {
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(opponent.getMinions().size(), 2);
 			assertTrue(opponent.getMinions().contains(yeti));
-			assertTrue(opponent.getMinions().contains(raptor));
+			assertTrue(opponent.getMinions().contains(minion));
 		}));
 	}
 
