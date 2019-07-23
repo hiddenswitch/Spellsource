@@ -8,7 +8,7 @@ permalink: /whats-new/
 
 New Storyteller cards thanks to @Skurleton!
 
-Bug fixes.
+The bot will now play more new decks in its rotation. Additionally, there are bug fixes.
 
 ##### Content Additions:
 
