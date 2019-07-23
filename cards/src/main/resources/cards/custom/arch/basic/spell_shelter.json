@@ -18,6 +18,7 @@
       }
     ]
   },
+  "collectible": true,
   "sets": [
     "CUSTOM",
     "BASIC"
