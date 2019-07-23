@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Change a minion's Health to be equal to its Attack.",
   "targetSelection": "MINIONS",
   "spell": {
