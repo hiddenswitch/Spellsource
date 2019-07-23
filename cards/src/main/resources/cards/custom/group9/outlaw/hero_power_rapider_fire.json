@@ -4,15 +4,13 @@
   "type": "HERO_POWER",
   "heroClass": "COPPER",
   "rarity": "FREE",
-  "description": "Deal $3 damage randomly split among all enemies.",
-  "targetSelection": "NONE",
+  "description": "Deal $2 damage.",
+  "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 3
+      "class": "DamageSpell",
+      "value": 2
     }
   },
   "collectible": false,

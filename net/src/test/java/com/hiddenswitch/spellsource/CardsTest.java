@@ -28,7 +28,7 @@ public class CardsTest extends SpellsourceTestBase {
 					.getCount();
 
 			assertEquals(expectedCount, commons.size());
-		});
+		}, context);
 	}
 
 	@Test

@@ -6,7 +6,6 @@ import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.LoginRequest;
 import com.hiddenswitch.spellsource.models.LoginResponse;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.tests.util.TestBase;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -28,7 +27,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			assertFalse(response.isInvalidPassword());
 			assertNotNull(response.getLoginToken().getToken());
 			assertTrue(response.getLoginToken().getExpiresAt().after(Date.from(Instant.now())));
-		});
+		}, context);
 	}
 
 	@Test
@@ -55,7 +54,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			LoginResponse basPasswordResponse = Accounts.login(badPassword);
 			assertTrue(basPasswordResponse.isBadPassword());
 			assertNull(basPasswordResponse.getToken());
-		});
+		}, context);
 	}
 
 	@NotNull
@@ -75,7 +74,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			assertFalse(Accounts.isAuthorizedWithToken("A", null));
 			assertFalse(Accounts.isAuthorizedWithToken("A", ""));
 			assertFalse(Accounts.isAuthorizedWithToken("A", "b"));
-		});
+		}, context);
 	}
 
 	@NotNull
@@ -95,7 +94,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			assertEquals(profile.getUsername(), username);
 			assertThrows(() -> Accounts.get("a"));
 			assertThrows(() -> Accounts.get((String) null));
-		});
+		}, context);
 	}
 
 }

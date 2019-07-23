@@ -4,9 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -15,18 +12,15 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.opentracing.noop.NoopTracer;
 import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.json.Json;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -40,40 +34,45 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static org.junit.Assert.*;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
 	protected static AtomicBoolean initialized = new AtomicBoolean();
-	protected static HazelcastInstance hazelcastInstance;
 	protected static Vertx vertx;
 
 	@BeforeClass
-	@Suspendable
-	public static void setUp(TestContext context) {
+	public static void setUp(TestContext testContext) throws InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1);
+		Async async = testContext.async();
 		if (initialized.compareAndSet(false, true)) {
+			CardCatalogue.loadCardsFromPackage();
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
-			final Async async = context.async();
 
-			Vertx.clusteredVertx(new VertxOptions()
+			if (vertx != null) {
+				testContext.fail(new AssertionError());
+			}
+			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
-					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
-					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
-				GlobalTracer.registerIfAbsent(NoopTracerFactory.create());
-				SpellsourceTestBase.vertx = vertx;
-				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
-					vertx.executeBlocking(fut -> {
-						Mongo.mongo().connectWithEnvironment(vertx);
-						fut.complete();
-					}, context.asyncAssertSuccess(v2 -> {
-						Spellsource.spellsource().deployAll(vertx, context.asyncAssertSuccess(v3 -> {
-							async.complete();
-						}));
-					}));
-				}));
+					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
+			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
+				if (v2.failed()) {
+					testContext.fail(new AssertionError());
+				}
+				Mongo.mongo().connectWithEnvironment(vertx);
+				Spellsource.spellsource().deployAll(vertx, v4 -> {
+					if (v4.failed()) {
+						testContext.fail(new AssertionError());
+					}
+					async.complete();
+					latch.countDown();
+				});
 			}));
+			latch.await(12000L, TimeUnit.MILLISECONDS);
+		} else {
+			async.complete();
 		}
 	}
 
@@ -94,23 +93,21 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@Before
-	public void setUpEach(TestContext context) {
-		vertx.exceptionHandler(context.exceptionHandler());
+	public void setUpEach(TestContext testContext) {
+		if (vertx == null) {
+			testContext.fail(new AssertionError());
+		}
+		vertx.exceptionHandler(testContext.exceptionHandler());
 		// Cleanup anything else that might be going on
 		sync(() -> {
 			for (UserId key : Matchmaking.getUsersInQueues().keySet()) {
 				Matchmaking.dequeue(key);
 			}
 
-			for (GameId games : Games.getConnections().keySet()) {
-				Games.endGame(games);
+			for (GameId gameId : Games.getConnections().keySet()) {
+				Games.endGame(gameId);
 			}
-
-			/*
-			for (UserId connected : Connection.getConnections().keySet()) {
-				Void t = awaitResult(h -> Connection.close(connected.toString(), h));
-			}*/
-		});
+		}, 8, testContext);
 	}
 
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
@@ -126,39 +123,60 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@Suspendable
-	public static void sync(SuspendableRunnable action) {
+	public static void sync(SuspendableRunnable action, TestContext testContext) {
+		sync(action, 90, testContext);
+	}
+
+	@Suspendable
+	public static void sync(SuspendableRunnable action, int seconds, TestContext testContext) {
 		CountDownLatch latch = new CountDownLatch(1);
-		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(suspendableHandler(v2 -> {
+		if (Vertx.currentContext() == null) {
+			vertx.runOnContext(v1 -> {
+				vertx.runOnContext(suspendableHandler(v2 -> {
+					try {
+						action.run();
+					} catch (Throwable throwable) {
+						testContext.fail(throwable);
+					}
+
+					latch.countDown();
+				}));
+			});
+		} else {
+			Vertx.currentContext().runOnContext(suspendableHandler(v -> {
 				try {
 					action.run();
 				} catch (Throwable throwable) {
-					fail();
+					testContext.fail(throwable);
 				}
-
-				latch.countDown();
 			}));
-		});
-		try {
-			latch.await(90L, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			fail();
 		}
-		assertEquals(0L, latch.getCount());
+
+		try {
+			latch.await(seconds, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			testContext.fail(e);
+		}
+		testContext.assertEquals(0L, latch.getCount());
 	}
 
 	@AfterClass
-	public static void tearDown(TestContext context) {
-		GlobalTracer.get().close();
+	public static void tearDown() throws InterruptedException {
 		/*
-		if (initialized.compareAndSet(true, false)) {
-			final Async async = context.async();
-			vertx.close(context.asyncAssertSuccess(then -> {
-				hazelcastInstance.shutdown();
-
-				async.complete();
-			}));
+		GlobalTracer.get().close();
+		CountDownLatch latch = new CountDownLatch(1);
+		if (vertx == null) {
+			latch.countDown();
+		} else {
+			vertx.close(v -> {
+				initialized.compareAndSet(true, false);
+				latch.countDown();
+				vertx = null;
+			});
 		}
-		*/
+
+		latch.await(3000L, TimeUnit.MILLISECONDS);
+		assertEquals(latch.getCount(), 0);
+		assertNull(vertx);*/
 	}
 }

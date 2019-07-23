@@ -11,11 +11,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
       "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "CopyDeathrattleSpell",
-      "secondaryTarget": "TRIGGER_HOST",
       "target": "EVENT_TARGET"
     }
   },
