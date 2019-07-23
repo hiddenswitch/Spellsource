@@ -1,0 +1,20 @@
+### Aggro Outlaw
+# Class: COPPER
+# Format: Spellsource
+#
+# 1x (1) Doodles
+# 2x (1) Enhancing Shaman
+# 2x (1) Hired Gunsmith
+# 2x (1) Plan Ahead
+# 2x (2) Bang!
+# 2x (2) Beauregard Bouncer
+# 2x (2) Shedding Chameleon
+# 2x (2) Spooky Turret
+# 2x (3) Cheating Wrangler
+# 2x (3) Reloading
+# 2x (3) Ride like the Wind!
+# 2x (3) Trigger Happy Rebel
+# 2x (4) Carriage Abductor
+# 2x (4) Dustbowl Vigilante
+# 1x (4) McGrief
+# 2x (4) Silvershot Pistol
