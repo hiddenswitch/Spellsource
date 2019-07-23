@@ -32,6 +32,7 @@ Bug fixes.
  - Darkshard Duelist is now a 7/7, up from 5/5. (1257)
  - Might Mufunga now costs (9), up from (8). (1257)
  - Guild Guard now costs (5), up from (4). (1257)
+ - Miserable Conclusion now correctly destroys all minions except the opponent's highest attack minion.
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
