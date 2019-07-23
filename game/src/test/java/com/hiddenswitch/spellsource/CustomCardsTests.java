@@ -7399,4 +7399,14 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(warden.getHp(), warden.getMaxHp() - 6);
 		}));
 	}
+
+	@Test
+	public void testMatriarchAiiranDescription() {
+		runGym((context, player, opponent) -> {
+			Minion aiiranOnBoard = playMinionCard(context, player, "minion_matriarch_aiiran");
+			Card aiiranInHand = receiveCard(context, player, "minion_matriarch_aiiran");
+			assertEquals(aiiranOnBoard.getDescription(context, player), "Opener: Deal X damage. (Increases by 2 for each other Dragon in your hand)");
+			assertEquals(aiiranInHand.getDescription(context, player), "Opener: Deal 0 damage. (Increases by 2 for each other Dragon in your hand)");
+		});
+	}
 }
