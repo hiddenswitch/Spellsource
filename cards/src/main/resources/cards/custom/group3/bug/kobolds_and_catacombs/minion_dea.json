@@ -6,17 +6,42 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Set all the numbers in the next card you play to 1.",
+  "description": "Battlecry: Choose a friendly minion. Add a 1/1 copy to your hand that costs (1).",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "NullSpell"
+      "class": "CopyCardSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "CardCostModifierSpell",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SET"
+            }
+          },
+          {
+            "class": "SetAttackSpell",
+            "value": 1,
+            "exclusive": true
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 1,
+            "exclusive": true
+          }
+        ]
+      }
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
