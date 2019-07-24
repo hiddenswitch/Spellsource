@@ -24,7 +24,7 @@
               "class": "AttributeValueProvider",
               "target": "SELF",
               "attribute": "ATTACK"
-            }
+            },
             "attribute": "ATTACK",
             "operation": "LESS"
           }

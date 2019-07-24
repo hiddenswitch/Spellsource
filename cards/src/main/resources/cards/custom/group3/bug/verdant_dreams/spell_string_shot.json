@@ -6,19 +6,17 @@
   "rarity": "RARE",
   "description": "If you control a Beast, return an enemy minion to your opponent's hand.",
   "targetSelection": "ENEMY_MINIONS",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    }
+  },
   "spell": {
-    "class": "ConditionalSpell",
-    "condition": {
-      "class": "MinionOnBoardCondition",
-      "cardFilter": {
-        "class": "RaceFilter",
-        "race": "BEAST"
-      }
-    },
-    "spell": {
-      "class": "ReturnTargetToHandSpell"
-    },
-  },	
+    "class": "ReturnTargetToHandSpell"
+  },
   "attributes": {},
   "collectible": true,
   "set": "VERDANT_DREAMS",
