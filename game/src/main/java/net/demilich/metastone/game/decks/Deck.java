@@ -1,10 +1,7 @@
 package net.demilich.metastone.game.decks;
 
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * A deck has, at minimum, a deck ID. The implementor {@link GameDeck} contains references to actual cards.

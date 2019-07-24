@@ -181,6 +181,13 @@ public final class BattlecryAction extends GameAction {
 				.build();
 	}
 
+	/**
+	 * Creates a formatted description for the battlecry given its target.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @return
+	 */
 	@Override
 	public String getDescription(GameContext context, int playerId) {
 		Entity source = context.resolveSingleTarget(getSourceReference());
