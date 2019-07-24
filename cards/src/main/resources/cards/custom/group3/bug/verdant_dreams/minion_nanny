@@ -14,12 +14,14 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-    "class": "BuffSpell",
-    "attackBonus": 4,
-    "hpBonus": 4
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 1,
+      "hpBonus": 1,
+      "randomTarget": "true"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
