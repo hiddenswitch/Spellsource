@@ -1,0 +1,15 @@
+{
+  "name": "Mimifae",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "FAE_BEAST",
+  "description": "Counts as a Fae and a Beast.",
+  "attributes": {},
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
