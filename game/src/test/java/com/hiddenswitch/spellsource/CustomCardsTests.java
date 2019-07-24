@@ -7409,4 +7409,18 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(warden2.getHp(), warden2.getMaxHp());
 		}));
 	}
+
+	@Test
+	public void testStringShot() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, opponent, "minion_test_3_2");
+			receiveCard(context, player, "spell_string_shot");
+			player.setMana(1);
+			int originalNumberOfActions = context.getValidActions().size();
+
+			playCard(context, player, "minion_lil_wormy");
+			assertEquals(context.getValidActions().size(), originalNumberOfActions + 1);
+		}));
+	}
+
 }

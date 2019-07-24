@@ -3,7 +3,7 @@
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "AMBER",
-  "rarity": "Common",
+  "rarity": "COMMON",
   "description": "Give a minion +0/+6 and Elusive.",
   "targetSelection": "MINIONS",
   "spell": {
@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": 0
+        "attackBonus": 0,
         "hpBonus": 6
       },
       {

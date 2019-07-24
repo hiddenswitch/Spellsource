@@ -29,7 +29,7 @@
           "race": "DRAGON"
         }
       },
-	  {
+      {
         "class": "DiscoverSpell",
         "spell": {
           "class": "SummonSpell"
@@ -39,7 +39,7 @@
           "race": "ELEMENTAL"
         }
       },
-	  {
+      {
         "class": "DiscoverSpell",
         "spell": {
           "class": "SummonSpell"

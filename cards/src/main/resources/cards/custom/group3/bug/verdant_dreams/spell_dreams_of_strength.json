@@ -15,7 +15,7 @@
         "filter": {
           "class": "SpecificCardFilter",
           "card": "token_spiderling"
-        },
+        }
       },
       {
         "class": "AddAttributeSpell",
