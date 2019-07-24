@@ -39,7 +39,7 @@
           "eventTrigger": {
             "class": "CardPlayedTrigger",
             "cardType": "SPELL",
-            "sourcePlayer": "SELF"
+            "targetPlayer": "SELF"
           },
           "spell": {
             "class": "AddAttributeSpell",
