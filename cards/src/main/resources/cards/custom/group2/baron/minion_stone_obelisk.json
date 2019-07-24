@@ -5,8 +5,8 @@
   "heroClass": "NAVY",
   "baseAttack": 0,
   "baseHp": 12,
-  "rarity": "RARE",
-  "description": "Your minions have Taunt.",
+  "rarity": "FREE",
+  "description": "Your minions have Guard.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Give all Knights in your hand +1/+1.",
+  "description": "Opener: Give all Knights in your hand +1/+1.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

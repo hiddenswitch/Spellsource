@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectReader;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
@@ -20,7 +21,9 @@ public interface DefaultClusterSerializable extends ClusterSerializable, Shareab
 
 	default int readFromBuffer(int pos, Buffer buffer) {
 		try {
-			final ObjectReader objectReader = Json.mapper.readerForUpdating(this);
+			final ObjectReader objectReader = Json.mapper
+					.readerForUpdating(this)
+					.without(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 			final VertxBufferInputStream src = new VertxBufferInputStream(buffer.getBuffer(pos, buffer.length()));
 			objectReader.readValue(src);
 			final int bytesRead = (int) src.getPosition();

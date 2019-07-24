@@ -3,10 +3,7 @@ package com.hiddenswitch.spellsource.applications;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hiddenswitch.spellsource.Broadcaster;
-import com.hiddenswitch.spellsource.Cluster;
-import com.hiddenswitch.spellsource.Gateway;
-import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
@@ -16,6 +13,7 @@ import io.vertx.core.VertxOptions;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 import java.time.Duration;
@@ -41,8 +39,8 @@ public class LocalClustered {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		LoggerFactory.initialise();
+
 
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
@@ -55,12 +53,13 @@ public class LocalClustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
+				.setMetricsOptions(Clustered.getMetrics())
 				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 40)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 40), then -> {
 
 			final Vertx vertx = then.result();
-
+			Tracing.initializeGlobal(vertx);
 			Mongo.mongo().connectWithEnvironment(vertx);
 			Spellsource.spellsource().migrate(vertx, v1 -> {
 				if (v1.failed()) {

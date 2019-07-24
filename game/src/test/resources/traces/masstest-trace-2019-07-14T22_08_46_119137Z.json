@@ -1,0 +1,12 @@
+{
+  "seed" : -2446690554725869044,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "CORAL", "ANY" ],
+  "deckCardIds" : [ [ "spell_full_audience", "minion_shine_sprite", "minion_sleepy_scarecrow", "minion_bonemare", "spell_sheet_music", "spell_charm", "minion_mad_scientist", "spell_groupies", "minion_spectral_knight", "spell_enchanting_tune", "spell_sheet_music", "minion_alluring_minstrel", "minion_servant_of_kalimos", "minion_mogushan_warden", "spell_charm", "weapon_storm_guitar", "minion_backup_bard", "minion_dragonling_pet", "minion_composer", "spell_full_audience", "minion_backup_bard", "minion_argent_squire", "minion_street_performer_coral", "minion_nefarian", "minion_flame_bearer", "minion_dragon_drummer", "weapon_storm_guitar", "minion_subject_9", "minion_deathspeaker", "minion_razorfen_hunter" ], [ "minion_doomed_diver", "minion_illuminator", "minion_magic_muffler", "minion_piloted_shredder", "minion_parallel_protector", "minion_crowd_roaster", "minion_zealous_initiate", "minion_dragonfruit_whelp", "minion_phantom_militia", "minion_infinite_futurist", "minion_blingtron_3000", "minion_wolfcrier", "minion_muck_hunter", "minion_microtech_controller", "minion_annoying_beetle", "minion_seeker_of_knowledge", "minion_prince_valanar", "minion_igneous_elemental", "minion_spellquaker", "minion_portal_keeper", "minion_murozond", "minion_stranglethorn_tiger", "minion_fossilized_devilsaur", "minion_bonemare", "minion_spider_tank", "minion_infinite_behemoth", "minion_clockwork_knight", "minion_razorfen_hunter", "minion_toshley", "minion_marsh_drake" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "LEAGUE_OF_EXPLORERS", "REWARD", "BASIC", "JOURNEY_TO_UNGORO", "VERDANT_DREAMS", "THE_OLD_GODS", "BATTLE_FOR_ASHENVALE", "RASTAKHANS_RUMBLE", "CUSTOM", "ONE_NIGHT_IN_KARAZHAN", "KOBOLDS_AND_CATACOMBS", "CLASSIC", "KNIGHTS_OF_THE_FROZEN_THRONE", "PROMO", "SANDS_OF_TIME", "WITCHWOOD", "HALL_OF_FAME", "BLACKROCK_MOUNTAIN", "GOBLINS_VS_GNOMES", "RISE_OF_SHADOWS", "NAXXRAMAS", "SPELLSOURCE_BASIC", "BOOMSDAY_PROJECT", "MEAN_STREETS_OF_GADGETZAN", "THE_GRAND_TOURNAMENT" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 13, 30 ], [ 60 ] ],
+  "actions" : [ 1, 0, 1, 2, 1, 3, 1, 0, 1, 0, 2, 6, 6, 8, 2, 2, 2, 1, 0, 1, 1, 10, 2, 1, 1, 2, 0, 4, 3, 2, 8, 1, 1, 0, 0, 0, 5, 2, 3, 16, 0, 0, 3, 2, 10, 0, 5, 4, 32, 1, 4, 12, 0, 4, 0, 0, 0, 9, 2, 6, 5, 24, 16, 5, 6 ],
+  "id" : null
+}

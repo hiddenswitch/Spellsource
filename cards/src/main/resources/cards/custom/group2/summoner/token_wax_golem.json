@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Deathrattle: Cast the imbued spell (targets chosen randomly).",
+  "description": "Aftermath: Cast the imbued spell (targets chosen randomly).",
   "deathrattle": {
     "class": "NullSpell"
   },

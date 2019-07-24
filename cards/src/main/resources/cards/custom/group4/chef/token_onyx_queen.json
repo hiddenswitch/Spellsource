@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "FREE",
-  "description": "Taunt",
+  "description": "Guard",
   "attributes": {
     "TAUNT": true
   },

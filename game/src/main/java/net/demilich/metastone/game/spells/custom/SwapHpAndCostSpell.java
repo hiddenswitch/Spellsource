@@ -9,9 +9,11 @@ import net.demilich.metastone.game.spells.CardCostModifierSpell;
 import net.demilich.metastone.game.spells.SetHpSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
+/**
+ * Swaps the HP and the cost of the {@code target}.
+ */
 public class SwapHpAndCostSpell extends Spell {
 
 	@Override

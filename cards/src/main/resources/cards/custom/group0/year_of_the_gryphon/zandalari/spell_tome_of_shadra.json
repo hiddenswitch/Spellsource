@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Summon a 3/3 Spider for each minion with Deathrattle you control.",
+  "description": "Summon a 3/3 Spider for each minion with Aftermath you control.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

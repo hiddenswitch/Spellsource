@@ -14,16 +14,34 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
 
+/**
+ * Filters entities based on various properties of their source cards.
+ * <p>
+ * The supported properties are:
+ * <ul>
+ * <li>{@link EntityFilterArg#CARD_TYPE}.</li>
+ * <li>{@link EntityFilterArg#RACE}.</li>
+ * <li>{@link EntityFilterArg#HERO_CLASS}</li>, including the special hero classes {@link HeroClass#OPPONENT} and {@link
+ * HeroClass#SELF}.
+ * <li>{@link EntityFilterArg#HERO_CLASSES}</li> to check if the entity's hero class matches any in the list.
+ * <li>{@link EntityFilterArg#MANA_COST} for the entity's base mana cost. Use {@link ManaCostFilter} for its current
+ * cost instead.</li>
+ * <li>{@link EntityFilterArg#RARITY}.</li>
+ * <li>{@link EntityFilterArg#CARD_SET}.</li>
+ * <li>{@link EntityFilterArg#ATTRIBUTE}, including an {@link EntityFilterArg#OPERATION} against it. For attack and
+ * health, use {@link AttributeFilter}.</li>
+ * </ul>
+ */
 public final class CardFilter extends EntityFilter {
 
 	public CardFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
-	private boolean heroClassTest(GameContext context, Player player, Card card, HeroClass heroClass) {
-		if (heroClass == HeroClass.OPPONENT) {
+	private boolean heroClassTest(GameContext context, Player player, Card card, String heroClass) {
+		if (heroClass.equals(HeroClass.OPPONENT)) {
 			heroClass = context.getOpponent(player).getHero().getHeroClass();
-		} else if (heroClass == HeroClass.SELF) {
+		} else if (heroClass.equals(HeroClass.SELF)) {
 			heroClass = player.getHero().getHeroClass();
 		}
 
@@ -53,10 +71,10 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		HeroClass[] heroClasses = (HeroClass[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
+		String[] heroClasses = (String[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
-			for (HeroClass heroClass : heroClasses) {
+			for (String heroClass : heroClasses) {
 				test |= !heroClassTest(context, player, card, heroClass);
 			}
 			if (!test) {
@@ -64,7 +82,7 @@ public final class CardFilter extends EntityFilter {
 			}
 		}
 
-		HeroClass heroClass = (HeroClass) getDesc().get(EntityFilterArg.HERO_CLASS);
+		String heroClass = (String) getDesc().get(EntityFilterArg.HERO_CLASS);
 		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
 			return false;
 		}
@@ -81,8 +99,8 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
-		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
-		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+		String cardSet = (String) getDesc().get(EntityFilterArg.CARD_SET);
+		if (cardSet != null && !cardSet.equals("ANY") && !card.getCardSet().equals(cardSet)) {
 			return false;
 		}
 
@@ -134,4 +152,3 @@ public final class CardFilter extends EntityFilter {
 		return new CardFilter(arguments);
 	}
 }
-

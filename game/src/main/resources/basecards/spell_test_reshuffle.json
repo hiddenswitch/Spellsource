@@ -1,0 +1,15 @@
+{
+  "name": "Test Reshuffle",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Reshuffle a card",
+  "spell": {
+    "class": "ChooseAndReshuffleSpell",
+    "value": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

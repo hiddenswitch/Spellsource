@@ -176,7 +176,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	public String getName() {
 		if ((getEntityType() == EntityType.CARD
 				&& getSourceCard() != null
-				&& getSourceCard().getCardSet() == CardSet.SPELLSOURCE)
+				&& getSourceCard().getCardSet() == "SPELLSOURCE")
 				|| getEntityType() == EntityType.PLAYER) {
 			return (String) getAttributes().getOrDefault(Attribute.NAME, name);
 		} else {
@@ -504,6 +504,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {
+		if (getAttributes().containsKey(Attribute.DYNAMIC_DESCRIPTION)) {
+			return (DynamicDescriptionDesc[]) getAttribute(Attribute.DYNAMIC_DESCRIPTION);
+		}
 		return getSourceCard() != null ? getSourceCard().getDesc().getDynamicDescription() : null;
 	}
 
@@ -589,6 +592,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 					int start = description.indexOf("[");
 					int end = description.indexOf("]");
 					description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+					i++;
 				}
 			}
 		} else {
@@ -627,7 +631,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		// Healing
-		if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+		if (true) {
 			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
 			StringBuffer newDescription = new StringBuffer();
 

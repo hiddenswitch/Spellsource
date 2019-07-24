@@ -6,35 +6,48 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever a friendly minion dies, summon a Tentacle with it's Attack and Health.",
+  "description": "Whenever a friendly minion dies, summon a Tentacle with its Attack and Health.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "CreateSummonSpell",
-      "name": "Undying Tentacle",
-      "spell": {
-        "class": "NullSpell"
-      },
-      "attackBonus": {
-            "class": "AttributeValueProvider",
-            "target": "EVENT_TARGET",
-            "attribute": "BASE_ATTACK"
-          },
-       "hpBonus": {
-            "class": "AttributeValueProvider",
-            "target": "EVENT_TARGET",
-            "attribute": "BASE_HP"
-          },
-      "mana": {
-        "class": "AlgebraicValueProvider",
-        "operation": "MINIMUM",
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
         "value1": {
           "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_HP"
+        },
+        "value2": 0,
+        "operation": "GREATER"
+      },
+      "spell": {
+        "class": "CreateSummonSpell",
+        "name": "Undying Tentacle",
+        "spell": {
+          "class": "NullSpell"
+        },
+        "attackBonus": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_ATTACK"
+        },
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_HP"
+        },
+        "mana": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MINIMUM",
+          "value1": {
+            "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",
             "attribute": "BASE_MANA_COST"
+          }
         }
       }
     }

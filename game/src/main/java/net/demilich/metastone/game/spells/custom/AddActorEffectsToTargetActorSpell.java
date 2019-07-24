@@ -65,11 +65,6 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 		Card sourceCard = sourceEntity.getSourceCard();
 		// Restore the race after it is changed
 		Actor targetActor = (Actor) target;
-		if (targetActor.hasAttribute(Attribute.BATTLECRY)
-				&& sourceCard.hasBattlecry()) {
-			logger.debug("onCast {} {}: The source card {} is going to overwrite the target {} battlecry.", context.getGameId(), source, sourceCard, targetActor);
-		}
-
 		Race originalRace = targetActor.getRace();
 		// Copy the attributes onto the actor
 		AttributeMap sourceAttributes = new AttributeMap();
@@ -77,13 +72,31 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 			sourceAttributes.put(key, sourceCard.getAttributes().get(key));
 		}
 		// Copy "text" attributes onto the actor by excluding the non-text ones
-		Stream.of(Attribute.AURA_ATTACK_BONUS, Attribute.AURA_HP_BONUS, Attribute.AURA_TAUNT, Attribute.AURA_UNTARGETABLE_BY_SPELLS,
-				Attribute.BASE_ATTACK, Attribute.BASE_HP, Attribute.BASE_MANA_COST, Attribute.HP, Attribute.MAX_HP,
-				Attribute.HP_BONUS, Attribute.ATTACK, Attribute.ATTACK_BONUS, Attribute.CONDITIONAL_ATTACK_BONUS,
-				Attribute.COPIED_FROM, Attribute.TRANSFORM_REFERENCE, Attribute.PLAYED_FROM_HAND_OR_DECK, Attribute.NAME,
-				Attribute.DESCRIPTION, Attribute.RACE, Attribute.COUNTERED).forEach(sourceAttributes::remove);
+		Stream.concat(Stream.of(Attribute.AURA_ATTACK_BONUS,
+				Attribute.AURA_HP_BONUS,
+				Attribute.AURA_TAUNT,
+				Attribute.AURA_UNTARGETABLE_BY_SPELLS,
+				Attribute.BASE_ATTACK,
+				Attribute.BASE_HP,
+				Attribute.BASE_MANA_COST,
+				Attribute.HP,
+				Attribute.MAX_HP,
+				Attribute.HP_BONUS,
+				Attribute.ATTACK,
+				Attribute.ATTACK_BONUS,
+				Attribute.CONDITIONAL_ATTACK_BONUS,
+				Attribute.COPIED_FROM,
+				Attribute.TRANSFORM_REFERENCE,
+				Attribute.PLAYED_FROM_HAND_OR_DECK,
+				Attribute.NAME,
+				Attribute.DESCRIPTION,
+				Attribute.RACE,
+				Attribute.COUNTERED,
+				Attribute.BATTLECRY,
+				Attribute.DEATHRATTLES), Card.IGNORED_MINION_ATTRIBUTES.stream()).forEach(sourceAttributes::remove);
 		targetActor.getAttributes().putAll(sourceAttributes);
 		// Now apply the actual text
+		// TODO: Add the battlecry instead of replacing it!
 		sourceCard.applyText(targetActor);
 		targetActor.setRace(originalRace);
 

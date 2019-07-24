@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Battlecry: Discover a 1-Cost spell.",
+  "description": "Opener: Discover a 1-Cost spell.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

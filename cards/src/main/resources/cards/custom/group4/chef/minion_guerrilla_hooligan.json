@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Add a Banana to your hand.",
+  "description": "Opener: Add a Banana to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

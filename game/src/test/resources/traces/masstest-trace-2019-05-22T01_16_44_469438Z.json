@@ -1,0 +1,11 @@
+{
+  "seed" : -8723739501283582450,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "VIOLET", "DARKGREEN" ],
+  "deckCardIds" : [ [ "minion_dreadsteed", "minion_possessed_villager", "minion_mindswapper", "spell_dinner_time", "minion_anima_golem", "minion_horace_shadowfall", "minion_old_murk-eye", "spell_ashes_to_ashes", "minion_bloodmage_thalnos", "minion_overestimated_wisp", "minion_fel_cannon", "spell_impending_doom", "minion_ornery_tortoise", "minion_massive_turtle", "minion_unpowered_steambot", "minion_soulwarden", "weapon_skull_of_the_manari", "minion_ankylo_devotee", "minion_boar_brawler", "minion_tournament_attendee", "minion_bugbiter", "minion_doppelgangster", "minion_kaboom_bot", "minion_spirit_of_the_bat", "spell_shadowflame", "spell_dilute_soul", "minion_avian_watcher", "minion_glacial_shard", "minion_possessed_villager", "minion_magic_muffler" ], [ "minion_whirliglider", "minion_unearthed_horror", "spell_lash_out", "spell_corrupted_power", "spell_aid_of_the_ancient", "minion_gilblin_stalker", "minion_party_pooper", "spell_void_curse", "spell_will_of_the_eldritch", "spell_mind_flay", "minion_temple_guardian", "minion_ravenous_lookout", "permanent_the_end_time", "minion_rapier_rodent", "minion_kahl_of_the_deep", "spell_deep_exploration", "minion_northot_necromaster", "minion_clockwork_giant", "minion_occult_wrecker", "minion_cult_promoter", "minion_temple_guardian", "minion_eldritch_scholar", "spell_eldritch_scroll", "spell_profane_disfiguration", "spell_deep_madness", "minion_runic_egg", "minion_archthief_rafaam", "spell_ancient_readings", "minion_squideary", "spell_wrath_of_the_occult" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "THE_GRAND_TOURNAMENT", "GOBLINS_VS_GNOMES", "CLASSIC", "ONE_NIGHT_IN_KARAZHAN", "BLACKROCK_MOUNTAIN", "SANDS_OF_TIME", "LEAGUE_OF_EXPLORERS", "WITCHWOOD", "JOURNEY_TO_UNGORO", "BASIC", "BATTLE_FOR_ASHENVALE", "PROMO", "KNIGHTS_OF_THE_FROZEN_THRONE", "NAXXRAMAS", "MEAN_STREETS_OF_GADGETZAN", "RASTAKHANS_RUMBLE", "HALL_OF_FAME", "REWARD", "THE_OLD_GODS", "VERDANT_DREAMS", "KOBOLDS_AND_CATACOMBS", "BOOMSDAY_PROJECT", "SPELLSOURCE_BASIC", "CUSTOM" ],
+  "mulligans" : [ [ 29, 25, 32 ], [ 40, 46, 47 ] ],
+  "actions" : [ 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 3, 2, 5, 2, 0, 3, 0, 16, 9, 2, 1, 0, 1, 10, 8, 24, 7, 9, 0, 0, 14, 1, 5, 0, 5, 1, 4, 0, 0, 28, 7, 3, 12, 9, 3 ],
+  "id" : null
+}

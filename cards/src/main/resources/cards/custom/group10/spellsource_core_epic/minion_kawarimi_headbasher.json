@@ -1,0 +1,30 @@
+{
+  "name": "Kawarimi Headbasher",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Aftermath: Return this to your hand and summon a 1/1 Demon.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReturnTargetToHandSpell",
+        "target": "SELF"
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_kawarimi_underling"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Swap your hand with your deck. (Destroys excess cards)",
+  "description": "Opener: Swap your hand with your deck. (Destroys excess cards)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

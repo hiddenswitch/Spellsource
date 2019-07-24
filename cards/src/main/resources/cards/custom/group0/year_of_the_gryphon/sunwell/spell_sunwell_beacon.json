@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "COMMON",
-  "description": "Draw a Divine Shield, Lifesteal, and Taunt minion from your deck.",
+  "description": "Draw a Dodge, Lifesteal, and Guard minion from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

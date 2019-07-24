@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Stealth. Spell Damage +1",
+  "description": "Hidden. Spellpower +1",
   "attributes": {
     "SPELL_DAMAGE": 1,
     "STEALTH": true

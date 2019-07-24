@@ -1,0 +1,16 @@
+{
+  "name": "Sheet Music",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Draw three cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

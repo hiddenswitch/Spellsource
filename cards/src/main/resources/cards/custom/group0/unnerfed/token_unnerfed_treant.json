@@ -6,9 +6,10 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Charge",
+  "description": "Blitz",
   "attributes": {
-    "CHARGE": true
+    "CHARGE": true,
+    "TREANT": true
   },
   "collectible": false,
   "set": "UNNERFED",

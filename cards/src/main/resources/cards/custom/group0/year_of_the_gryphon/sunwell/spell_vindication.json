@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "COMMON",
-  "description": "Give a minion and your hero Divine Shield.",
+  "description": "Give a minion and your champion Dodge.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

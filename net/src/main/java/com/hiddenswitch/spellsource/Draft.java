@@ -150,8 +150,8 @@ public interface Draft {
 	 */
 	@Suspendable
 	static DraftState toDraftState(PublicDraftState inState) {
-		HeroClass playerHero1 = inState.getHeroClass() == null ? HeroClass.RED : inState.getHeroClass();
-		GameContext workingContext = new GameContext(playerHero1, HeroClass.RED);
+		String playerHero1 = inState.getHeroClass() == null ? "RED" : inState.getHeroClass();
+		GameContext workingContext = new GameContext(playerHero1, "RED");
 		return new DraftState()
 				.cardsRemaining(inState.getCardsRemaining())
 				.currentCardChoices(inState.getCurrentCardChoices() == null ? null :

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Battlecry: Summon two 0/1 Shards with <b>Guard</b>.",
+  "description": "Opener: Summon two 0/1 Shards with <b>Guard</b>.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

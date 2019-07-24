@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Battlecry: Summon two 1/1 Rats for both players.",
+  "description": "Opener: Summon two 1/1 Rats for both players.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

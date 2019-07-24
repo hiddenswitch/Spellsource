@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Give a friendly minion +1/+4 and Taunt.",
+  "description": "Opener: Give a friendly minion +1/+4 and Guard.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

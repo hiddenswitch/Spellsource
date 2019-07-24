@@ -1,0 +1,28 @@
+{
+  "name": "Corrupt Sentinel",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "description": "Dash. Deals double damage to champions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "HERO"
+    },
+    "spell": {
+      "class": "ModifyDamageSpell",
+      "value": 2,
+      "operation": "MULTIPLY"
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

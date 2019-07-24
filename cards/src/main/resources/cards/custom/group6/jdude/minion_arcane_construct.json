@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Whenever you cast a spell, gain +1 Attack. Deathrattle: Summon three 1/3 Mana Wyrms.",
+  "description": "Whenever you cast a spell, gain +1 Attack. Aftermath: Summon three 1/3 Mana Wyrms.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

@@ -1,0 +1,11 @@
+{
+  "seed" : -3027098760688411053,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "ROSE", "CORAL" ],
+  "deckCardIds" : [ [ "minion_cursed_disciple", "spell_bottled_spirit", "spell_awakening_ritual", "secret_ghastly_visage", "minion_vitality_thrower", "spell_bodyswap", "minion_jeering_troll", "spell_hex_behemoth", "minion_boulderfist_ogre", "minion_tormentaxx_hulk", "weapon_bloodshed_reaver", "spell_hex_behemoth", "minion_murloc_jek", "weapon_twistbark_staff", "minion_bloodmage_thalnos", "minion_kinru_the_benevolent", "minion_tiki_tokens", "minion_witch_s_cauldron", "minion_nat_pagle", "minion_master_jouster", "minion_swamp_dragon_egg", "minion_bullet_bull", "minion_gurubashi_offering", "minion_hogger_doom_of_elwynn", "spell_recurring_nightmare", "minion_thunder_lizard", "minion_bomb_lobber", "minion_tinkertown_technician", "weapon_spiritbinder", "weapon_ritual_dagger" ], [ "minion_street_performer_coral", "minion_composer", "minion_giant_serpent", "minion_street_performer_coral", "minion_nightmare_dragonflight", "spell_groupies", "minion_worgen_abomination", "minion_nerubian_prophet", "minion_gorillabot_a3", "minion_shine_sprite", "weapon_crowd_pleaser", "minion_cobalt_scalebane", "minion_dragon_drummer", "spell_sheet_music", "minion_quest_giver", "minion_spirited_announcer", "minion_harrison_jones", "minion_recurring_torrent", "minion_songbird", "minion_earthen_ring_farseer", "spell_encore", "minion_nerubian_egg", "minion_frigid_bones", "minion_dragon_drummer", "minion_countess_ashmore", "minion_shade_of_naxxramas", "minion_timewalker_mistweaver", "minion_chillwind_yeti", "minion_deadscale_knight", "minion_bone_drake" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "BATTLE_FOR_ASHENVALE", "RASTAKHANS_RUMBLE", "WITCHWOOD", "VERDANT_DREAMS", "JOURNEY_TO_UNGORO", "GOBLINS_VS_GNOMES", "BOOMSDAY_PROJECT", "HALL_OF_FAME", "RISE_OF_SHADOWS", "NAXXRAMAS", "ONE_NIGHT_IN_KARAZHAN", "KNIGHTS_OF_THE_FROZEN_THRONE", "CLASSIC", "KOBOLDS_AND_CATACOMBS", "MEAN_STREETS_OF_GADGETZAN", "THE_OLD_GODS", "REWARD", "LEAGUE_OF_EXPLORERS", "PROMO", "THE_GRAND_TOURNAMENT", "BLACKROCK_MOUNTAIN", "SPELLSOURCE_BASIC", "CUSTOM", "SANDS_OF_TIME", "BASIC" ],
+  "mulligans" : [ [ 22 ], [ 47, 40 ] ],
+  "actions" : [ 0, 1, 1, 0, 1, 3, 0, 2, 1, 2 ],
+  "id" : null
+}

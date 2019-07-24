@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "SILVER",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Deal 2 damage to all non-Murloc minions.",
+  "description": "Opener: Deal 2 damage to all non-Murloc minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

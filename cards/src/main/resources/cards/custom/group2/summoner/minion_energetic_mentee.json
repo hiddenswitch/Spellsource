@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Summon two 1/1 Whelps. Invoke (3): Give them Charge.",
+  "description": "Opener: Summon two 1/1 Whelps. Invoke (3): Give them Blitz.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -48,6 +48,7 @@
     }
   },
   "attributes": {
+    "BATTLECRY": true,
     "INVOKE": 3
   },
   "collectible": true,

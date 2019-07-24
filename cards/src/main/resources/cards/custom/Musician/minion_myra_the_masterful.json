@@ -1,0 +1,16 @@
+{
+  "name": "Myra the Masterful",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Your spells cast twice.",
+  "attributes": {
+    "SPELLS_CAST_TWICE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Rage Ascension",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "EPIC",
+  "description": "Transform all minions in your hand into 5/5 Rage Behemoths.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReplaceCardsSpell",
+    "target": "FRIENDLY_HAND",
+    "card": "token_rage_behemoth",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

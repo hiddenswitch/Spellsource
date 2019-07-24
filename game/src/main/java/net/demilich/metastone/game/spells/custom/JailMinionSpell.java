@@ -9,9 +9,15 @@ import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * Destroys a minion, and gives the {@code source} the deathrattle, "Resummon that minion."
+ * <p>
+ * If a {@link SpellArg#REVERT_TRIGGER} is specified, creates a one-fire enchantment hosted by {@link
+ * SpellArg#SECONDARY_TARGET} (defaults to {@code source}) whose spell will resummon the original targeted minion.
  * <p>
  * Implements Moat Lurker and Carnivorous Cube.
  */
@@ -25,14 +31,31 @@ public final class JailMinionSpell extends Spell {
 		if (minion.getOwner() != source.getOwner()) {
 			targetPlayer = TargetPlayer.OPPONENT;
 		}
-		source.getAttributes().remove(Attribute.DEATHRATTLES);
-		SpellDesc deathrattle = SummonSpell.create(targetPlayer, minion.getSourceCard());
-		SpellDesc addDeathrattleSpell = AddDeathrattleSpell.create(deathrattle);
+		int copies = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+
+		SpellDesc resummon = SummonSpell.create(targetPlayer, minion.getSourceCard());
+		resummon.put(SpellArg.VALUE, copies);
+		SpellDesc enchant;
+
+		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
+			source = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
+		} else {
+			// TODO: Check if we actually need to do this
+			source.getAttributes().remove(Attribute.DEATHRATTLES);
+		}
+
+		if (desc.containsKey(SpellArg.REVERT_TRIGGER)) {
+			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
+			enchantmentDesc.eventTrigger = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
+			enchantmentDesc.maxFires = 1;
+			enchantmentDesc.spell = resummon;
+			enchant = AddEnchantmentSpell.create(enchantmentDesc);
+		} else {
+			enchant = AddDeathrattleSpell.create(resummon);
+		}
+
 		SpellDesc destroySpell = DestroySpell.create(target.getReference());
 		SpellUtils.castChildSpell(context, player, destroySpell, source, target);
-		for (int i = 0; i < desc.getValue(SpellArg.VALUE, context, player, target, source, 1); i++) {
-			SpellUtils.castChildSpell(context, player, addDeathrattleSpell.clone(), source, source);
-		}
+		SpellUtils.castChildSpell(context, player, enchant.clone(), source, source);
 	}
-
 }

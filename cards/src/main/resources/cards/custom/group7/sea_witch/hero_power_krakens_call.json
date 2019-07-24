@@ -11,11 +11,11 @@
     "spells": [
       {
         "class": "HealSpell",
-        "value": 3
+        "value": 2
       },
       {
         "class": "ShuffleToDeckSpell",
-        "value": 2,
+        "howMany": 2,
         "card": "spell_ocean_depths"
       }
     ]

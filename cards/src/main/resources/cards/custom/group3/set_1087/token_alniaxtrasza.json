@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Taunt. At the end of your turn, restore #7 Health to your hero.",
+  "description": "Guard. At the end of your turn, restore #7 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

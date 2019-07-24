@@ -3,88 +3,18 @@ package net.demilich.metastone.game.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.stream.Stream;
 
 public class ResourceLoader {
 
-	// the number of dirs levels to traverse on the given path
-	private static final int DIR_LEVELS = 5;
-
 	private static Logger logger = LoggerFactory.getLogger(ResourceLoader.class);
-
-	/**
-	 * Loads all the json files from the given rootDir into a collection of ResourceInputStreams
-	 *
-	 * @param rootDir        the root dir from where to start traversing to load the json files
-	 * @param fromFileSystem True if the rootDir is on the filesystem, False if the rootDir is in the Resources dir
-	 * @return Collections of ResourceInputStreams pointing to the json files
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
-	public static Collection<ResourceInputStream> loadInputStreams(String rootDir, boolean fromFileSystem)
-			throws URISyntaxException, IOException {
-		if (rootDir == null) {
-			throw new RuntimeException("rootDir cannot be null");
-		}
-
-		PathReference pathReference;
-		if (fromFileSystem) {
-			pathReference = new PathReference(Paths.get(rootDir), false);
-		} else { // from resources
-			pathReference = getPathFromResources(rootDir);
-		}
-
-		Collection<ResourceInputStream> inputStreams = new ArrayList<>();
-
-		Path filePath;
-		Stream<Path> walk = Files.walk(pathReference.path, DIR_LEVELS);
-		for (Iterator<Path> it = walk.iterator(); it.hasNext(); ) {
-			filePath = it.next();
-
-			// skip over non-json files and directories
-			if (!filePath.toString().endsWith("json"))
-				continue;
-
-			InputStream inputStream;
-			if (pathReference.fromJar) {
-				inputStream = Object.class.getResourceAsStream(filePath.toString());
-				// Try a variety of ways to access the resource. The way that works depends on whether or not this is
-				// a shadow JAR or running inside a special environment.
-				if (inputStream == null) {
-					inputStream = ResourceLoader.class.getClassLoader().getResourceAsStream(filePath.toString());
-				}
-				if (inputStream == null) {
-					inputStream = ResourceLoader.class.getClassLoader().getResourceAsStream(filePath.toString().substring(1));
-				}
-				if (inputStream == null) {
-					inputStream = ResourceLoader.class.getClassLoader().getResourceAsStream("/" + filePath.toString());
-				}
-				if (inputStream == null) {
-					throw new NullPointerException("The path to the resources are still wrong!");
-				}
-			} else {
-				inputStream = new FileInputStream(new File(filePath.toString()));
-			}
-
-			inputStreams.add(new ResourceInputStream(filePath.getFileName().toString(), inputStream, fromFileSystem));
-		}
-		walk.close();
-		return inputStreams;
-	}
 
 	/**
 	 * Utility method to get a PathReference from a given sourceDir that's in the Resources dir or a Jar file.

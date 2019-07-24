@@ -9,7 +9,7 @@
   "description": "Has +7/+7 for each time you shuffled this into your deck.",
   "deckTrigger": {
     "eventTrigger": {
-      "class": "CardShuffledTrigger",
+      "class": "ShuffledTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {

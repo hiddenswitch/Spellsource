@@ -3,10 +3,10 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "NAVY",
-  "baseAttack": 9,
-  "baseHp": 9,
+  "baseAttack": 6,
+  "baseHp": 12,
   "rarity": "LEGENDARY",
-  "description": "Taunt. Whenever a minion attacks, gain +2/+2.",
+  "description": "Guard. Whenever a minion attacks, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
@@ -16,7 +16,7 @@
       "class": "BuffSpell",
       "target": "TRIGGER_HOST",
       "attackBonus": 2,
-      "hpBonus": 2
+      "hpBonus": 0
     }
   },
   "attributes": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "After a hero power is used, replace it with a random one.",
+  "description": "After a skill is used, replace it with a random one.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

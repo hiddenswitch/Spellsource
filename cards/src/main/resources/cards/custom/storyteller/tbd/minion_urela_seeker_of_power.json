@@ -1,0 +1,38 @@
+{
+  "name": "Urela, Seeker of Power",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: This game, your fatigue damage also damages random enemies",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "FatigueTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "ENEMY_HERO",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "FATIGUE"
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

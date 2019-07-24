@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
-  "description": "Battlecry: For each enemy minion, add a 'WANTED!' spell to your hand.",
+  "description": "Opener: For each enemy minion, add a 'WANTED!' spell to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

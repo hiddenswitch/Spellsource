@@ -15,7 +15,7 @@ public class HealingTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		HealEvent healEvent = (HealEvent) event;
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);

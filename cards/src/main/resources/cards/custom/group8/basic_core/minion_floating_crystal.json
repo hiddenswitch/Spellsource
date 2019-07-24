@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "<b>Spell Damage +1</b>",
+  "description": "<b>Spellpower +1</b>",
   "attributes": {
     "SPELL_DAMAGE": 1
   },

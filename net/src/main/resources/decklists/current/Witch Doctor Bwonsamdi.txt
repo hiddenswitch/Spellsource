@@ -9,11 +9,11 @@
 # 2x (2) Possessed Madness
 # 2x (2) Ritual Dagger
 # 2x (2) Split Personality
-# 2x (3) Bladesworn
+# 2x (3) Entranced Dancer
 # 2x (3) Corvid Call
-# 2x (3) Gurubashi Bloodletter
+# 2x (3) Hotheaded Villager
 # 2x (3) Old Jungle Masta
-# 2x (4) Zandalari Conjurer
+# 2x (4) Spiritcaller
 # 1x (5) Jeering Troll
 # 2x (5) Spirit Power
 # 2x (6) Evocation

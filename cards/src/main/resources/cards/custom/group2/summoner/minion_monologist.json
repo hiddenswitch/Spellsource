@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Add a random Summoner Secret to your hand.",
+  "description": "Opener: Add a random Summoner Secret to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

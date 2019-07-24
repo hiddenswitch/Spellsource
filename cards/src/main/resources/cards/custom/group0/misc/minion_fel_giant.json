@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "DEMON",
-  "description": "Costs (1) less for each damage your hero has taken.",
+  "description": "Costs (1) less for each damage your champion has taken.",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

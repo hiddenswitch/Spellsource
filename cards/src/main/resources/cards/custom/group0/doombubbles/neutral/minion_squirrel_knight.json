@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Charge. Deathrattle: Summon a 0/1 Frog with Taunt.",
+  "description": "Blitz. Aftermath: Summon a 0/1 Frog with Guard.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_frog"

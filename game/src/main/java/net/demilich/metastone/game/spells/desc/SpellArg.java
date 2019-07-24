@@ -74,7 +74,7 @@ import java.util.List;
  * JSON key/value pair), a new {@link net.demilich.metastone.game.cards.desc.ParseValueType} needs to be added.
  *
  * @see DescDeserializer#init(DescDeserializer.SerializationContext) for the formal type of the values of these enum
- * keys.
+ * 		keys.
  */
 public enum SpellArg {
 	/**
@@ -171,7 +171,6 @@ public enum SpellArg {
 	/**
 	 * Multiple card filters that are used by effects like {@link DiscoverFilteredCardSpell}. Considered obsolete.
 	 */
-	@Deprecated
 	CARD_FILTERS,
 	/**
 	 * A value from {@link Zones} that represents a place to or from a card will be affected.
@@ -190,6 +189,7 @@ public enum SpellArg {
 	 * @see CardSource for more about card sources.
 	 */
 	CARD_SOURCE,
+	CARD_SOURCES,
 	/**
 	 * Used by the {@link CreateCardSpell} to determine what kind of card to make. Considered obsolete.
 	 */
@@ -316,7 +316,7 @@ public enum SpellArg {
 	 * card should be chosen from the list of cards to summon.
 	 *
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the complete targeting rules and how this arg is
-	 * interpreted.
+	 * 		interpreted.
 	 */
 	RANDOM_TARGET,
 	/**
@@ -377,7 +377,7 @@ public enum SpellArg {
 	 * Like {@link #SPELL}, a {@link SpellDesc} that's typically interpreted as the "second" or alternative spell.
 	 *
 	 * @see DiscoverSpell for an exaple of a spell that uses this arg. There, it is cast on the cards the player did
-	 * <b>not</b> choose.
+	 * 		<b>not</b> choose.
 	 */
 	SPELL2,
 	/**
@@ -445,6 +445,16 @@ public enum SpellArg {
 	 */
 	TARGET,
 	/**
+	 * Overrides the source of an effect with the specified {@link EntityReference}, which must resolve to zero to one
+	 * targets.
+	 * <p>
+	 * Some references are still "group references" that typically refer to exactly one entity if it exists, or zero if it
+	 * does not. For example, {@link EntityReference#FRIENDLY_WEAPON}. This is an appropriate specifier for source.
+	 *
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for more about how this argument is used.
+	 */
+	SOURCE,
+	/**
 	 * Indicates whose point of view this spell should be cast from. Typically becomes the {@code player} object in the
 	 * spell's Spell#cast(GameContext, Player, SpellDesc, Entity, List) implementation {@code onCast}.
 	 */
@@ -452,7 +462,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to indicate the card's target selection. Considered obsolete.
 	 */
-	@Deprecated
 	TARGET_SELECTION,
 	/**
 	 * Specifies the {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} enchantment that should be
@@ -489,5 +498,9 @@ public enum SpellArg {
 	 * Specifies a unique integer ID for a {@link SpellDesc} that is also a deathrattle, to allow deathrattles to identify
 	 * themselves inside iterators for {@link HasDeathrattleEnchantments#getDeathrattleEnchantments()}.
 	 */
-	DEATHRATTLE_ID
+	DEATHRATTLE_ID,
+	/**
+	 * Specifies which zones the spell's effects apply to. The interpretation may depend on the spell.
+	 */
+	ZONES
 }

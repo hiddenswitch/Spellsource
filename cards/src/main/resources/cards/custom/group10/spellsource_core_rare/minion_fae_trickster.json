@@ -1,0 +1,23 @@
+{
+  "name": "Fae Trickster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Opener: Swap the Attack and Health of a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SwapAttackAndHpSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

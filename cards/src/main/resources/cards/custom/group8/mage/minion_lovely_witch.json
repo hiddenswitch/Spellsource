@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Shuffle a Love Potion Secret into your deck.",
+  "description": "Opener: Shuffle a Love Potion Secret into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

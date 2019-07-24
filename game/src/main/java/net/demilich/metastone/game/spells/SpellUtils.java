@@ -16,6 +16,8 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
@@ -29,11 +31,9 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -45,7 +45,7 @@ public class SpellUtils {
 	private static Logger logger = LoggerFactory.getLogger(SpellUtils.class);
 
 	/**
-	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on a
+	 * Sets up the source and target references for casting a child spell, typically an "effect" of a spell defined on a
 	 * card.
 	 *
 	 * @param context The game context.
@@ -58,28 +58,27 @@ public class SpellUtils {
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		EntityReference targetReference = spell.getTarget();
+
 		// Inherit target
 		if (targetReference == null && target != null) {
 			targetReference = target.getReference();
 		}
+
 		if (sourceReference == null) {
 			sourceReference = EntityReference.NONE;
 		}
+
 		if (targetReference == null) {
 			targetReference = EntityReference.NONE;
 		}
-		// Determine casting player here
-		/*
-		if (spell.containsKey(SpellArg.TARGET_PLAYER)) {
-			CastRandomSpellSpell.DetermineCastingPlayer castingPlayer = determineCastingPlayer(context, player, source, spell.getTargetPlayer());
-			player = castingPlayer.getCastingPlayer();
-		}
-		*/
+
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
 
 	/**
 	 * Plays a card "randomly."
+	 * <p>
+	 * This will cause it to select random targets if, after target selection modification, it accepts targets.
 	 *
 	 * @param context
 	 * @param player
@@ -114,8 +113,7 @@ public class SpellUtils {
 			return false;
 		}
 
-		Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-
+		player = determineCastingPlayer.getCastingPlayer();
 		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
 
 		PlayCardAction action = null;
@@ -153,6 +151,7 @@ public class SpellUtils {
 
 		if (action == null) {
 			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -173,48 +172,24 @@ public class SpellUtils {
 			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
 			// Do we resolve battlecries?
 			if (resolveBattlecry) {
-				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
-				// the action from the actor that would be summoned.
-				BattlecryAction specifiedAction;
-				if (actionWithBattlecry.getBattlecry() == null) {
-					// Look at the actor
-					Actor actor = card.actor();
-					if (actor == null) {
-						logger.error("playCardRandom {} {}: The actor is missing from the card {}", context.getGameId(), source, card);
-						return false;
-					}
-					specifiedAction = actor.getBattlecry();
-				} else {
-					specifiedAction = actionWithBattlecry.getBattlecry();
-				}
-
-				if (specifiedAction != null) {
-					// We found a battlecry
-					specifiedAction = specifiedAction.clone();
-
-					// If a target is required then we'll see if there are valid targets and execute it. If a target isn't required,
-					// then the battlecry will do what it needs to do.
-					if (specifiedAction.getTargetRequirement() != null
-							&& specifiedAction.getTargetRequirement() != TargetSelection.NONE) {
-						List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
-						if (targets.isEmpty()) {
-							// Don't execute the battlecry if there are no valid targets for one that requires targets but still
-							// put the actor into play
-							specifiedAction = BattlecryAction.NONE;
-						} else {
-							EntityReference battlecryTarget = context.getLogic().getRandom(targets).getReference();
-							specifiedAction.setTargetReference(battlecryTarget);
-						}
-						actionWithBattlecry.setBattlecry(specifiedAction);
-					}
+				// TODO: Doesn't quite do what it's supposed to
+				if (RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, card, (Actor) source)) {
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+					return true;
 				}
 			} else {
 				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
 				// true but this method's parameter to not resolve battlecries will be respected
-				actionWithBattlecry.setBattlecry(BattlecryAction.NONE);
+				BattlecryDesc nullBattlecry = new BattlecryDesc();
+				nullBattlecry.spell = NullSpell.create();
+				actionWithBattlecry.setBattlecry(nullBattlecry);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
-			// This is some other kind of action that takes a target
+			// This is some other kind of action that takes a target. Process possible target modification first.
+			if (!card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+				action.setSourceReference(card.getReference());
+				context.getLogic().processTargetModifiers(action);
+			}
 			if (action.getTargetRequirement() != null && action.getTargetRequirement() != TargetSelection.NONE) {
 				List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 				EntityReference randomTarget = null;
@@ -224,6 +199,7 @@ public class SpellUtils {
 				} else {
 					// Card should be revealed, but there were no valid targets so the spell isn't cast
 					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 					return true;
 				}
 			}
@@ -231,6 +207,7 @@ public class SpellUtils {
 			// Target requirement may have been none, but the action is still valid.
 		} else {
 			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -343,7 +320,7 @@ public class SpellUtils {
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.
 	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an {@code
-	 * "OUTPUT_CARD"} value corresponds to.
+	 * 		"OUTPUT_CARD"} value corresponds to.
 	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
@@ -402,7 +379,7 @@ public class SpellUtils {
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
-	 * DiscoverCardSpell}.
+	 *    DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, Entity source, SpellDesc desc, CardList cards) {
@@ -475,10 +452,10 @@ public class SpellUtils {
 	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
 	 *                inherited from this spell.
 	 * @param spells  A list of spells from which to generate virtual cards.
-	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
+	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecries()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
-	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
+	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -510,7 +487,7 @@ public class SpellUtils {
 			Card card = spellCardDesc.create();
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
-			context.addTempCard(card.clone());
+			context.addTempCard(card);
 			card.moveOrAddTo(context, Zones.DISCOVER);
 			cards.add(card);
 
@@ -631,25 +608,8 @@ public class SpellUtils {
 	 */
 	static AttributeMap processKeptEnchantments(Entity target, AttributeMap map) {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
-					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
-
-			if (target instanceof Minion) {
-				Minion minion = (Minion) target;
-				if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
-					map.put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
-				}
-				map.put(Attribute.BASE_ATTACK, minion.getBaseAttack());
-				map.put(Attribute.BASE_HP, minion.getBaseHp());
-			}
-		}
-
-		return map;
-	}
-
-	static void processKeptEnchantments(Entity target, Card card) {
-		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			Stream.of(Attribute.POISONOUS,
+			Stream.of(
+					Attribute.POISONOUS,
 					Attribute.DIVINE_SHIELD,
 					Attribute.STEALTH,
 					Attribute.TAUNT,
@@ -671,18 +631,31 @@ public class SpellUtils {
 					Attribute.LIFESTEAL,
 					Attribute.WINDFURY,
 					Attribute.ATTACK_BONUS,
-					Attribute.HP_BONUS)
-					.filter(target::hasAttribute).forEach(k -> card.getAttributes().put(k, target.getAttributes().get(k)));
+					Attribute.HP_BONUS
+			)
+					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
 
 			if (target instanceof Minion) {
 				Minion minion = (Minion) target;
 				if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
-					card.getAttributes().put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
+					map.put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
 				}
-				card.getAttributes().put(Attribute.BASE_ATTACK, minion.getBaseAttack());
-				card.getAttributes().put(Attribute.BASE_HP, minion.getBaseHp());
+				map.put(Attribute.BASE_ATTACK, minion.getBaseAttack());
+				map.put(Attribute.BASE_HP, minion.getBaseHp());
 			}
 		}
+		return map;
+	}
+
+	/**
+	 * Process the text "keeps enchantments" on a {@code target} and the card that the enchantments are being moved to,
+	 * typically for a shuffle-to-deck or return-to-hand effect.
+	 *
+	 * @param target
+	 * @param card
+	 */
+	static void processKeptEnchantments(Entity target, Card card) {
+		processKeptEnchantments(target, card.getAttributes());
 	}
 
 	/**
@@ -744,7 +717,7 @@ public class SpellUtils {
 	 * @param desc    The {@link SpellDesc} typically of the calling spell.
 	 * @return A list of cards.
 	 * @see #getCards(GameContext, Player, Entity, Entity, SpellDesc, int) for a complete description of the rules of how
-	 * cards are generated or retrieved in this method.
+	 * 		cards are generated or retrieved in this method.
 	 */
 	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc) {
 		return getCards(context, player, target, source, desc, desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
@@ -833,7 +806,7 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves all of the unexpired, active auras that are instances of the {@code auraClass} hosted by {@link
-	 * Entity#isInPlay()} entities belonging to the {@code playerId}.
+	 * Entity#isInPlay()} entities belonging to the {@code playerId} or passive auras hosted by hero powers and cards.
 	 *
 	 * @param context
 	 * @param playerId
@@ -843,7 +816,7 @@ public class SpellUtils {
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.filter(e -> e.getOwner() == playerId && (e.isInPlay() || e.getZone() == Zones.HAND || e.getZone() == Zones.HERO_POWER))
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
 				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
@@ -851,6 +824,23 @@ public class SpellUtils {
 						.map(t -> (T) t)
 						.filter(((Predicate<Aura>) Aura::isExpired).negate()))
 				.collect(toList());
+	}
+
+	/**
+	 * Get the auras that are affecting the specified target of the given class.
+	 *
+	 * @param context
+	 * @param auraClass
+	 * @param target
+	 * @param <T>
+	 * @return
+	 */
+	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
+		return context.getTriggerManager().getTriggers().stream()
+				.filter(auraClass::isInstance)
+				.map(auraClass::cast)
+				.filter(aura -> aura.getAffectedEntities().contains(target.getId()))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -887,7 +877,7 @@ public class SpellUtils {
 	 *                            TargetPlayer#OPPONENT} is chosen here, then the opponent of the owner of the {@code
 	 *                            source} will be used.
 	 * @return An object containing information related to who is the casting player and whether or not the source has
-	 * been destroyed.
+	 * 		been destroyed.
 	 */
 	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
 		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();

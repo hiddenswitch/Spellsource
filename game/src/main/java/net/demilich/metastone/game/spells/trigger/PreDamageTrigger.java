@@ -15,7 +15,7 @@ public class PreDamageTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		return true;
 	}
 
