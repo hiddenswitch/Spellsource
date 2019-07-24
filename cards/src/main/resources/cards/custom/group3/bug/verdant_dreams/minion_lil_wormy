@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "At the start of your turn, turn into a 0/4 Cocoon.",
+  "description": "At the start of your turn, turn into a 0/6 Cocoon.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
@@ -16,7 +16,7 @@
     "spell": {
       "class": "TransformMinionSpell",
       "target": "SELF",
-      "card": "token_med_coccon"
+      "card": "token_med_cocoon"
     }
   },
   "attributes": {},
