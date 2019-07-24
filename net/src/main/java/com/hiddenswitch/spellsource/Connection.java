@@ -207,7 +207,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 			connection.endHandler(v -> span.finish());
 			connection.exceptionHandler(ex -> {
-				Tracing.error(ex, span, false);
+				// Wrap this so we can see where it actually occurs
+				Tracing.error(new VertxException(ex), span, false);
 				span.finish();
 				connection.close(Future.future());
 			});

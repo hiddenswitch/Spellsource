@@ -215,7 +215,7 @@ public interface Matchmaking extends Verticle {
 						SpanContext spanContext = span.context();
 
 						// We've successfully dequeued, we can defer
-						defer(v -> {
+						Fiber<Void> createGame = defer(v -> {
 							Span gameCreateSpan = tracer.buildSpan("Matchmaking/startMatchmaker/createGame")
 									.asChildOf(spanContext)
 									.start();
@@ -260,7 +260,6 @@ public interface Matchmaking extends Verticle {
 									throw new AssertionError("thisMatchRequests.size()");
 								}
 
-								LOGGER.trace("startMatchmaker {}: Creating game", queueId);
 								for (int i = 0; i < thisMatchRequests.size(); i += 2) {
 									MatchmakingRequest user1 = thisMatchRequests.get(i);
 									MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
@@ -283,6 +282,9 @@ public interface Matchmaking extends Verticle {
 										connection.write(gameReadyMessage());
 									}
 								}
+							} catch (RuntimeException runtimeException) {
+								Tracing.error(runtimeException, gameCreateSpan, true);
+								throw runtimeException;
 							} finally {
 								for (MatchmakingRequest request : thisMatchRequests) {
 									userToQueue.remove(new UserId(request.getUserId()));
@@ -290,6 +292,7 @@ public interface Matchmaking extends Verticle {
 								gameCreateSpan.finish();
 							}
 						});
+						createGame.setUncaughtExceptionHandler((f, e) -> Vertx.currentContext().exceptionHandler().handle(e));
 						gamesCreated++;
 					} finally {
 						span.setTag("gamesCreated", gamesCreated);
@@ -318,6 +321,8 @@ public interface Matchmaking extends Verticle {
 			}
 			return null;
 		});
+
+		fiber.setUncaughtExceptionHandler((f, e) -> Vertx.currentContext().exceptionHandler().handle(e));
 
 		// We don't join on the fiber (we don't wait until the queue has actually started), we return immediately.
 		fiber.start();
