@@ -1,10 +1,10 @@
 {
   "name": "Mimifae",
-  "baseManaCost": 1,
+  "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
-  "baseHp": 3,
+  "baseHp": 1,
   "rarity": "RARE",
   "race": "FAE_BEAST",
   "description": "Counts as a Fae and a Beast.",
