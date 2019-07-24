@@ -117,7 +117,7 @@ public class FriendTest extends SpellsourceTestBase {
 				}
 				fut.complete();
 			}, testContext.asyncAssertSuccess());
-		});
+		}, testContext);
 
 	}
 
@@ -167,6 +167,6 @@ public class FriendTest extends SpellsourceTestBase {
 					socket.close();
 				}
 			}
-		});
+		}, context);
 	}
 }

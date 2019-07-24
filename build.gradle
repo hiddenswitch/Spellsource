@@ -103,6 +103,10 @@ allprojects {
                 if (['com.fasterxml.jackson.core', 'com.fasterxml.jackson.jaxrs'].contains(details.requested.group)) {
                     details.useVersion "2.9.9"
                 }
+                
+                if (details.requested.module.name.contains('jackson-databind')) {
+                    details.useVersion "2.9.9.1"
+                }
 
                 if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
                     details.useVersion "3.5"

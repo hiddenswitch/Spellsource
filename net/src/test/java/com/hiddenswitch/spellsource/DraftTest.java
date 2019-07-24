@@ -9,7 +9,6 @@ import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.DraftActionRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.Future;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -20,7 +19,7 @@ import static org.junit.Assert.*;
 
 public class DraftTest extends SpellsourceTestBase {
 	@Test
-	public void testDraftService() {
+	public void testDraftService(TestContext context) {
 		sync(() -> {
 			// Create an account
 			CreateAccountResponse car = createRandomAccount();
@@ -45,7 +44,7 @@ public class DraftTest extends SpellsourceTestBase {
 			}
 
 			assertNotNull(response.getPublicDraftState().getDeckId());
-		});
+		}, context);
 	}
 
 
@@ -64,6 +63,7 @@ public class DraftTest extends SpellsourceTestBase {
 
 		try {
 			api.draftsGet();
+			context.fail("A draft should not yet exist.");
 		} catch (ApiException e) {
 			context.assertEquals(404, e.getCode(), "The exception codes for drafts get do not match.");
 		}
@@ -73,6 +73,7 @@ public class DraftTest extends SpellsourceTestBase {
 		context.assertEquals(DraftState.StatusEnum.SELECT_HERO, state.getStatus(), "The result of starting a draft is unexpectedly not select hero.");
 		try {
 			api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
+			context.fail("The client should fail to advance a draft without choosing a hero first.");
 		} catch (ApiException e) {
 			context.assertEquals(400, e.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
 		}

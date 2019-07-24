@@ -6,7 +6,7 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
@@ -40,7 +40,7 @@ import static org.junit.Assert.*;
 public class GatewayTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
-	@Test(timeout = 15000L)
+	@Test(timeout = 20000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
 
@@ -62,19 +62,19 @@ public class GatewayTest extends SpellsourceTestBase {
 
 					api.getApiClient().setApiKey(response1.getLoginToken());
 					final String userId = response1.getAccount().getId();
-					assertNotNull(userId);
+					context.assertNotNull(userId);
 					GetAccountsResponse response2 = api.getAccount(userId);
-					assertTrue(response2.getAccounts().size() > 0);
+					context.assertTrue(response2.getAccounts().size() > 0);
 
 					for (Account account : new Account[]{response1.getAccount(), response2.getAccounts().get(0)}) {
-						assertNotNull(account.getId());
-						assertNotNull(account.getEmail());
-						assertNotNull(account.getName());
-						assertNotNull(account.getPersonalCollection());
-						assertNotNull(account.getDecks());
-						assertEquals(account.getDecks().size(), Spellsource.spellsource().getStandardDecks().size());
-						assertTrue(account.getDecks().stream().map(InventoryCollection::getName).collect(Collectors.toSet()).containsAll(decks));
-						assertTrue(account.getPersonalCollection().getInventory().size() > 0);
+						context.assertNotNull(account.getId());
+						context.assertNotNull(account.getEmail());
+						context.assertNotNull(account.getName());
+						context.assertNotNull(account.getPersonalCollection());
+						context.assertNotNull(account.getDecks());
+						context.assertEquals(account.getDecks().size(), Spellsource.spellsource().getStandardDecks().size());
+						context.assertTrue(account.getDecks().stream().map(InventoryCollection::getName).collect(Collectors.toSet()).containsAll(decks));
+						context.assertTrue(account.getPersonalCollection().getInventory().size() > 0);
 					}
 				} catch (ApiException e) {
 					fail("API error: " + e.getMessage());
@@ -86,8 +86,8 @@ public class GatewayTest extends SpellsourceTestBase {
 			t.start();
 		}
 
-		latch.await(15L, TimeUnit.SECONDS);
-		assertEquals(latch.getCount(), 0L);
+		latch.await(20L, TimeUnit.SECONDS);
+		context.assertEquals(latch.getCount(), 0L);
 	}
 
 	@Test(timeout = 10000L)
@@ -200,7 +200,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				});
 			}
 
-		});
+		}, context);
 	}
 
 	@Test(timeout = 25000L)
@@ -232,7 +232,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				});
 
 				assertEquals(false, done);
-			});
+			}, context);
 
 			// Should not have received end game message
 			assertFalse(client.receivedGameOverMessage());
@@ -330,7 +330,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				client2.createUserAccount();
 				java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
 				Thread.sleep(2000L);
-				sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))));
+				sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))), context);
 				other.cancel(true);
 				Thread.sleep(2000L);
 			}

@@ -2,7 +2,7 @@ package com.hiddenswitch.cluster.applications;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Simulation;
 import io.jenetics.*;

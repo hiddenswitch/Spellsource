@@ -12,8 +12,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
  * Allows a battlecry to be encapsulated as a spell card.
- * <p>
- * Implements Shudderwock.
  */
 public class BattlecryAsPlaySpellCardAction extends PlaySpellCardAction {
 

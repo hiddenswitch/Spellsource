@@ -39,7 +39,7 @@ public class GamesTest extends SpellsourceTestBase {
 				// Game should still be running
 				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 				Strand.sleep(100L);
-			});
+			}, context);
 			// Reconnect
 			client.getTurnsToPlay().set(999);
 			client.play();
@@ -80,7 +80,7 @@ public class GamesTest extends SpellsourceTestBase {
 				// Game should still be running
 				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 				Strand.sleep(100L);
-			});
+			}, context);
 			// Reconnect
 			client.play();
 			client.waitUntilDone();
