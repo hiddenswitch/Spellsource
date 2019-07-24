@@ -1,0 +1,15 @@
+{
+  "name": "Colossal Butterfly",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": ",
+  "attributes": {},
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
