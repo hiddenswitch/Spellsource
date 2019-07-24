@@ -1,41 +1,14 @@
 {
   "name": "Lil Wormy",
-  "baseManaCost": 2,
+  "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 1,
-  "baseHp": 1,
-  "rarity": "EPIC",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: At the start of your next turn, set this minions stats to 4/4.",
-  "battlecry": {
-    "spell": {
-      "class": "AddEnchantmentSpell",
-      "target": "SELF",
-      "trigger": {
-        "eventTrigger": {
-          "class": "TurnStartTrigger"
-        },
-        "spell": {
-          "class": "MetaSpell",
-          "spells": [
-            {
-              "class": "SetAttackSpell",
-              "value": 4
-            },
-            {
-              "class": "SetHpSpell",
-              "value": 4
-            }
-          ]
-        },
-        "oneTurn": true
-      }
-    }
-  },
-  "attributes": {
-    "BATTLECRY": true
-  },
+  "description": "",
+  "attributes": {},
   "collectible": true,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
