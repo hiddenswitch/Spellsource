@@ -1613,7 +1613,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void endTurn(int playerId) {
-		context.fireGameEvent(new BeforeTurnEndEvent(context, playerId));
 		Player player = context.getPlayer(playerId);
 
 		Hero hero = player.getHero();
