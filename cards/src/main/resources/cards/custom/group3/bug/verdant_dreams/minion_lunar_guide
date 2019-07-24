@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST"
-  "description": "Battlecry: Add a random Emerald Secret to your hand.",
+  "description": "Opener: Add a random Emerald Secret to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
