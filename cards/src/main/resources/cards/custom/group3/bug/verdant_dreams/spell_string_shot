@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AMBER",
-  "rarity": "COMMON",
+  "rarity": "RARE",
   "description": "If you control a Beast, return an enemy minion to your opponent's hand.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
