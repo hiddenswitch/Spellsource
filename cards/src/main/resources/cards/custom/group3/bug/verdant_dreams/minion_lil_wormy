@@ -1,25 +1,41 @@
 {
   "name": "Lil Wormy",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
-  "baseHp": 2,
-  "rarity": "RARE",
+  "baseHp": 1,
+  "rarity": "EPIC",
   "race": "BEAST",
-  "description": "At the start of your turn, turn into a 0/6 Cocoon.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "TurnStartTrigger",
-      "targetPlayer": "SELF"
-    },
+  "description": "Battlecry: At the start of your next turn, set this minions stats to 4/4.",
+  "battlecry": {
     "spell": {
-      "class": "TransformMinionSpell",
+      "class": "AddEnchantmentSpell",
       "target": "SELF",
-      "card": "token_med_cocoon"
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SetAttackSpell",
+              "value": 4
+            },
+            {
+              "class": "SetHpSpell",
+              "value": 4
+            }
+          ]
+        },
+        "oneTurn": true
+      }
     }
   },
-  "attributes": {},
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
