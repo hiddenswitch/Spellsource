@@ -7409,4 +7409,21 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(warden2.getHp(), warden2.getMaxHp());
 		}));
 	}
+
+	@Test
+	public void testOmegaRune() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "spell_the_omega_rune");
+			player.getHero().setHp(20);
+			opponent.getHero().setHp(20);
+
+			playCard(context, player, "spell_test_deal_5_to_enemy_hero");
+			assertEquals(opponent.getHero().getHp(), 15);
+			assertEquals(player.getHero().getHp(), 25);
+
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
+			assertEquals(opponent.getHero().getHp(), 15);
+			assertEquals(player.getHero().getHp(), 20);
+		}));
+	}
 }
