@@ -4,13 +4,13 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Discover $3-Cost, $3-Attack, and $3-Health minions, improved by Spell Damage. Summon the three you chose.",
+  "description": "Discover $3-Cost, $3-Attack, and $3-Health minions, improved by Spellpower. Summon the three you chose.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "value": {
       "class": "SpellDamageValueProvider",
-      "offset": 3
+      "value": 3
     },
     "spells": [
       {

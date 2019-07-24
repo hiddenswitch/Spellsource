@@ -1,0 +1,17 @@
+{
+  "name": "Hungry Jaguar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Dash",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

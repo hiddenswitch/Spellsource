@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "Summon a 1/1 Crater Hatchling with Charge.",
+  "description": "Summon a 1/1 Crater Hatchling with Blitz.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

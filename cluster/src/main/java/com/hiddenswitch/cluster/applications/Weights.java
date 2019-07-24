@@ -70,7 +70,7 @@ public class Weights {
 				"AAECAR8CuwWG0wIO4eMCi+UCoIUD3gSXCI7DAo0BtQOoAqSIA9sJyfgC3dIC7/ECAA==\n" +
 				"#\n" +
 				"# To use this deck, copy it to your clipboard and create a new deck in Hearthstone").toGameDeck());
-		gameDecks.add(Deck.randomDeck(DeckFormat.SPELLSOURCE));
+		gameDecks.add(Deck.randomDeck(DeckFormat.getFormat("Spellsource")));
 		return gameDecks;
 	}
 
@@ -142,7 +142,7 @@ public class Weights {
 				INCLUDE_MIRRORS,
 				counter,
 				gameContext -> {
-					gameContext.setDeckFormat(DeckFormat.SPELLSOURCE);
+					gameContext.setDeckFormat(DeckFormat.getFormat("Spellsource"));
 					// Ensure the game starts a little faster
 					gameContext.getPlayer1().setMana(3);
 					gameContext.getPlayer2().setMana(3);

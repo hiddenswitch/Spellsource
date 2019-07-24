@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "COMMON",
-  "description": "Restore a minion to full Health and give it Spell Damage +2.",
+  "description": "Restore a minion to full Health and give it Spellpower +2.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

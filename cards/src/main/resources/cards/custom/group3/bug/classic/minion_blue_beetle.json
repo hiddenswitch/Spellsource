@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Taunt. Deathrattle: Gain 4 Armor.",
+  "description": "Guard. Aftermath: Gain 4 Armor.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",

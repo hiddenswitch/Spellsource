@@ -1,0 +1,25 @@
+{
+  "name": "Fassnu Avenger",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Whenever a minion dies, gain its Aftermath.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "CopyDeathrattleSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

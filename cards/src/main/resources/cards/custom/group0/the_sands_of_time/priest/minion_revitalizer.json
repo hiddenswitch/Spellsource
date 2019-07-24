@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Fully heal a friendly minion.",
+  "description": "Opener: Fully heal a friendly minion.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

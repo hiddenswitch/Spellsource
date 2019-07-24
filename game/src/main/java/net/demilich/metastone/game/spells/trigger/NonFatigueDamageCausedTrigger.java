@@ -16,8 +16,8 @@ public class NonFatigueDamageCausedTrigger extends DamageCausedTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
-		if (!super.fire(event, host)) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
+		if (!super.innerQueues(event, host)) {
 			return false;
 		}
 

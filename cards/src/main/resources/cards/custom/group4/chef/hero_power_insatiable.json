@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Passive Hero Power: After you play a card, shuffle a copy of it into your deck.",
+  "description": "Passive Skill: After you play a card, shuffle a copy of it into your deck.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",

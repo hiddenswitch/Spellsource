@@ -1,0 +1,26 @@
+{
+  "name": "Frightful Vision",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Deal $7 damage to a minion. If it dies, resummon it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 7
+    },
+    "spell2": {
+      "class": "ReviveMinionSpell",
+      "targetPlayer": "OWNER"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

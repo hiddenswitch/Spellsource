@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Whenever this attacks and kills a minion, it may attack again. Deathrattle: Give a random friendly Beast +1/+1.",
+  "description": "Whenever this attacks and kills a minion, it may attack again. Aftermath: Give a random friendly Beast +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

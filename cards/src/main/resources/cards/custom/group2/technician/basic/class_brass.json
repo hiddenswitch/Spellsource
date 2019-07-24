@@ -1,0 +1,11 @@
+{
+  "name": "Technician",
+  "type": "CLASS",
+  "hero": "hero_brass",
+  "heroClass": "BRASS",
+  "color": [0,0,0],
+  "blackText": false,
+  "collectible": false,
+  "set": "GRAVEYARD",
+  "fileFormatVersion": 1
+}

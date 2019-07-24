@@ -1,0 +1,55 @@
+{
+  "name": "Chord",
+  "heroPower": "hero_power_polychord",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "targetSelection": "NONE",
+  "description": "Give a minion +1/+1. If you have none, summon a 1/1 Patron.",
+  "passiveAuras": [
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "TRIGGER_HOST",
+      "targetSelection": "MINIONS",
+      "condition": {
+        "class": "MinionCountCondition",
+        "targetPlayer": "SELF",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "triggers": [
+        {
+          "class": "CardReceivedTrigger"
+        },
+        {
+          "class": "CardPlayedTrigger"
+        }
+      ]
+    }
+  ],
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "MinionCountCondition",
+        "targetPlayer": "SELF",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spell1": {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      },
+      "spell2": {
+        "class": "SummonSpell",
+        "card": "token_patron"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

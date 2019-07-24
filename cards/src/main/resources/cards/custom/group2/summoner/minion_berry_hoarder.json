@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Battlecry: Destroy all 0-Cost cards in your deck. Invoke (4): Draw them instead.",
+  "description": "Opener: Destroy all 0-Cost cards in your deck. Invoke (4): Draw them instead.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

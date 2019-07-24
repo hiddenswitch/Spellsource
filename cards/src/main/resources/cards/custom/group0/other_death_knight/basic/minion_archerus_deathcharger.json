@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Charge. Can't attack heroes.",
+  "description": "Blitz. Can't attack champions.",
   "attributes": {
     "CANNOT_ATTACK_HEROES": true,
     "CHARGE": true

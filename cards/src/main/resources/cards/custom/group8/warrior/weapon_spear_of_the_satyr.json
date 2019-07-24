@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Draw a weapon from your deck.",
+  "description": "Opener: Draw a weapon from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

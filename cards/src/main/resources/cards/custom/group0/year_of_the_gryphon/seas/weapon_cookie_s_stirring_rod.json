@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "After your hero attacks, give three different friendly minions +1/+1.",
+  "description": "After your champion attacks, give three different friendly minions +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

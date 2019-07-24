@@ -17,6 +17,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.Zones;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -90,7 +91,6 @@ public class ModelsTest {
 			assertEquals(2, player.getQuests().get(0).getFires());
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
 			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getState().getFires() == 2));
-			Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 			JsonObject jsonObject = JsonObject.mapFrom(state);
 			Assert.assertTrue(jsonObject.getJsonArray("entities").stream().anyMatch(obj -> {
 				JsonObject jo = (JsonObject) obj;
@@ -127,6 +127,7 @@ public class ModelsTest {
 			context.getLogic().receiveCard(0, kelesethCard);
 			context.performAction(0, kelesethCard.play());
 			context.getLogic().drawCard(player.getId(), player);
+			assertEquals(neutralMinion.getZone(), Zones.HAND);
 			assertEquals(3, neutralMinion.getAttack() + neutralMinion.getBonusAttack());
 			context.getLogic().endOfSequence();
 			context.performAction(player.getId(), neutralMinion.play());
@@ -135,7 +136,7 @@ public class ModelsTest {
 			context.performAction(player.getId(), roll);
 			context = context.clone();
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
-			Entity entity = state.getEntities().stream().filter(e -> e.getState().getLocation().getZone() == EntityLocation.ZoneEnum.HAND && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
+			Entity entity = state.getEntities().stream().filter(e -> e.getState().getL().getZ() == EntityLocation.ZEnum.H && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
 			assertEquals(3L, (long) entity.getState().getAttack());
 			assertEquals(3L, (long) entity.getState().getHp());
 		});
@@ -143,7 +144,7 @@ public class ModelsTest {
 
 	private void runGym(GymConsumer consume) {
 		CardCatalogue.loadCardsFromPackage();
-		GameContext context = new GameContext(HeroClass.BLACK, HeroClass.BLACK);
+		GameContext context = new GameContext("BLACK", "BLACK");
 		context.setLogic(new GameLogic(101010L));
 		context.setBehaviour(0, new ChooseLastBehaviour());
 		context.setBehaviour(1, new ChooseLastBehaviour());

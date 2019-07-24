@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Roast a card. If it costs (3) or more, gain +1 Attack.",
+  "description": "Opener: Roast a card. If it costs (3) or more, gain +1 Attack.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

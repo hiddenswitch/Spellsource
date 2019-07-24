@@ -1,0 +1,32 @@
+{
+  "name": "Twilight Mercenary",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Hidden. Opener: Choose a minion. At the start of your turn, destroy it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "DestroySpell",
+          "target": "SELF"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

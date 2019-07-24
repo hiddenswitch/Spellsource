@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Battlecry: Transform all Larva in your hand into Hive Guardian.",
+  "description": "Opener: Transform all Larva in your hand into Hive Guardian.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

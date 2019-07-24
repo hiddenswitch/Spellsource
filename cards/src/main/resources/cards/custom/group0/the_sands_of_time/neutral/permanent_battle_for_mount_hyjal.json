@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent. Lasts [6 turns].",
+  "description": "Your minions have +2/+2. Opener: Summon an 8/8 Demon for your opponent. Lasts [6 turns].",
   "trigger": {
     "countUntilCast": 6,
     "eventTrigger": {

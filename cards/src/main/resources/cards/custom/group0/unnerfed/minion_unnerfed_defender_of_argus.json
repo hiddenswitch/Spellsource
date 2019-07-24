@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Give adjacent minions +1/+1 and Taunt.",
+  "description": "Opener: Give adjacent minions +1/+1 and Guard.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -93,9 +94,7 @@ public interface Logic {
 				GameEventType.BEFORE_SUMMON,
 				Attribute.UNIQUE_CHAMPION_IDS_SIZE,
 				(PersistenceContext<BeforeSummonEvent> context) -> {
-					if (context.event().getMinion() == null
-							|| context.event().getSource() == null
-							|| context.event().getSource().getCardInventoryId() == null) {
+					if (context.event().getSource().getCardInventoryId() == null) {
 						return;
 					}
 
@@ -243,9 +242,8 @@ public interface Logic {
 	@Suspendable
 	static PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
 		final String attributeName = request.getAttribute().toKeyCase();
-		MongoClientUpdateResult update = Inventory.update(Mongo.mongo().client(), request.getInventoryIds(), json(
-				"$set", json("facts." + attributeName, request.getNewValue()))
-		);
+		MongoClientUpdateResult update = Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY, json("_id", json("$in", request.getInventoryIds())), json(
+				"$set", json("facts." + attributeName, request.getNewValue())), new UpdateOptions().setMulti(true));
 		return new PersistAttributeResponse().withUpdated(update.getDocModified());
 	}
 

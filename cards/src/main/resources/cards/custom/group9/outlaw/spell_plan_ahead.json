@@ -1,0 +1,33 @@
+{
+  "name": "Plan Ahead",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "RARE",
+  "description": "Look at the top three cards of your deck. Draw one and put the others at the bottom of your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "cardSource": {
+      "class": "TopThreeCardsOfDeckSource"
+    },
+    "exclusive": true,
+    "spell1": {
+      "class": "FromDeckToHandSpell"
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell"
+        },
+        {  
+          "class": "PutOnBottomOfDeckSpell"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

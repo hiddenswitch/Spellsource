@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Poisonous. Adjacent minions have Poisonous.",
+  "description": "Toxic. Adjacent minions have Toxic.",
   "aura": {
     "class": "AttributeAura",
     "target": "ADJACENT_MINIONS",

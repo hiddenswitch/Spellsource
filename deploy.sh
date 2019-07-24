@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
+SPELLSOURCE_VERSION=0.8.40
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -16,6 +17,7 @@ where:
     -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
     -w  deploy playspellsource.com (requires spellsource on the command line)
     -W  deploy wiki.hiddenswitch.com
+    -j  deploy JARs to Maven Central (requires signing assets)
     -v  bump the version (requires SPELLSOURCE_VERSION indicating
         the current version)
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
@@ -31,7 +33,7 @@ Notes for successful deployment:
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.20 ./deploy.sh -cpdwv
+  ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -41,8 +43,9 @@ deploy_launcher=false
 deploy_wiki=false
 bump_version=false
 install_dependencies=false
+deploy_java=false
 build_client=false
-while getopts "hcedwpvlWDA" opt; do
+while getopts "hcedwpjvlWDA" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -58,6 +61,9 @@ while getopts "hcedwpvlWDA" opt; do
      ;;
   W) deploy_wiki=true
      echo "Deploying mediawiki"
+     ;;
+  j) deploy_java=true
+     echo "Deploying to Maven"
      ;;
   l) deploy_launcher=true
      echo "Deploying launcher"
@@ -85,7 +91,8 @@ shift $((OPTIND-1))
 function update_portainer() {
   service_name=$1
   portainer_image_name=$2
-  sleep 4
+  # It takes a while for docker hub to process all the metadata for an image, unfortunately.
+  sleep 20
   service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
   service_id=$(echo $service | jq  -r .ID)
   service_specification=$(echo $service | jq .Spec)
@@ -189,6 +196,7 @@ if [[ "$bump_version" = true ]] ; then
     exit 1
   fi
 
+  new_version=$(bump2version --allow-dirty --current-version ${SPELLSOURCE_VERSION} --dry-run --list patch | grep new_version  | sed s,"^.*=",,)
   bump2version --allow-dirty --current-version "${SPELLSOURCE_VERSION}" patch \
     build.gradle \
     setup.py \
@@ -196,8 +204,9 @@ if [[ "$bump_version" = true ]] ; then
     server.sh \
     Dockerfile \
     spellsource/context.py \
-    cluster/runsims.sh \
-    net/src/main/java/com/hiddenswitch/spellsource/Version.java
+    net/src/main/java/com/hiddenswitch/spellsource/Version.java \
+    gradle.properties
+  SPELLSOURCE_VERSION=new_version
 fi
 
 # Configure the gradle command
@@ -239,6 +248,14 @@ if [[ "$build_client" = true ]] ; then
     rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/GlobalConfiguration.cs
     rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IApiAccessor.cs
     rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IReadableConfiguration.cs
+  fi
+fi
+
+if [[ "$deploy_java" = true ]] ; then
+  ${GRADLE_CMD} uploadArchives  --no-daemon --no-parallel >/dev/null \
+    && echo "Successfully uploaded to maven. Navigating you to Sonatype if your platform supports it..."
+  if [[ -x "$(command -v open)" ]] ; then
+    open "https://oss.sonatype.org/#stagingRepositories"
   fi
 fi
 
@@ -359,6 +376,11 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_
     echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
     exit 1
   }
+
+  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}.jar" ]] ; then
+    echo "Failed to build. jar not found!"
+    exit 1
+  fi
 fi
 
 if [[ "$deploy_www" = true ]] ; then
@@ -381,15 +403,11 @@ fi
 if [[ "$deploy_docker" = true ]] ; then
 
   # Build image and upload to docker
-  { # try
-    echo "Building and uploading Docker image"
-    docker build -t spellsource . > /dev/null && \
-    docker tag spellsource doctorpangloss/spellsource > /dev/null && \
-    docker push doctorpangloss/spellsource:latest > /dev/null
-  } || { # catch
-    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
-    exit 1
-  }
+  echo "Building and uploading Docker image"
+  docker build -t doctorpangloss/spellsource . && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest && \
+  docker push doctorpangloss/spellsource:latest
 
 
   # Update specific service for now instead of stack
@@ -439,7 +457,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.20-all.jar \
+      ./net/build/libs/net-0.8.40.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "Has +2 Attack while you have Spell Damage.",
+  "description": "Has +2 Attack while you have Spellpower.",
   "trigger": {
     "eventTrigger": {
       "class": "BoardChangedTrigger"

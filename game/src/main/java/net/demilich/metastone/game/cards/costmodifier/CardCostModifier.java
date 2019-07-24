@@ -15,7 +15,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
-import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
@@ -40,6 +39,13 @@ import java.io.Serializable;
  *         "value": 1
  *     }
  * </pre>
+ * <p>
+ * When a target isn't specified, the card cost modification applies to the hand of the owner of this card cost modifier
+ * (i.e. {@link EntityReference#FRIENDLY_HAND}.
+ * <p>
+ * To make a card cost modifier apply to both player's hands during both player's turns, {@link
+ * CardCostModifierArg#TARGET_PLAYER} must be {@link TargetPlayer#BOTH} and the {@code target} should be {@link
+ * EntityReference#BOTH_HANDS}.
  *
  * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
  * 		effects into play.
@@ -160,6 +166,14 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 			case OWNER:
 				applies &= card.getOwner() == player.getOwner();
 				break;
+			case PLAYER_1:
+				applies &= card.getOwner() == GameContext.PLAYER_1;
+				break;
+			case PLAYER_2:
+				applies &= card.getOwner() == GameContext.PLAYER_2;
+				break;
+			case BOTH:
+			case EITHER:
 			default:
 				break;
 		}
@@ -182,7 +196,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	 * @return {@code true}.
 	 */
 	@Override
-	public boolean canFire(GameEvent event) {
+	public boolean queues(GameEvent event) {
 		return true;
 	}
 
@@ -284,7 +298,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	@Override
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
-		if (expirationTrigger != null && event.getEventType() == expirationTrigger.interestedIn() && expirationTrigger.fires(event, host)) {
+		if (expirationTrigger != null && event.getEventType() == expirationTrigger.interestedIn() && expirationTrigger.queues(event, host)) {
 			expire();
 		}
 	}
@@ -327,9 +341,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
 		if (expirationTrigger != null) {
-			return expirationTrigger.canFireCondition(event);
+			return expirationTrigger.fires(event);
 		}
 		return true;
 	}

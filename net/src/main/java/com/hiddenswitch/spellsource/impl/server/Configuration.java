@@ -7,6 +7,7 @@ import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ public class Configuration implements Serializable, Cloneable {
 	private UserId userId;
 	private int playerId;
 	private String name;
-	private AttributeMap playerAttributes;
+	private AttributeMap playerAttributes = new AttributeMap();
 	@JsonDeserialize(as = CollectionDeck.class)
 	private Deck deck;
 	private boolean isBot;
@@ -50,6 +51,7 @@ public class Configuration implements Serializable, Cloneable {
 		return this;
 	}
 
+	@NotNull
 	public AttributeMap getPlayerAttributes() {
 		return playerAttributes;
 	}

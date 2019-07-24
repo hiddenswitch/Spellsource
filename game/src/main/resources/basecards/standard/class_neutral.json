@@ -1,0 +1,11 @@
+{
+  "name": "Neutral",
+  "type": "CLASS",
+  "hero": "hero_neutral",
+  "heroClass": "ANY",
+  "color": [221, 211, 204],
+  "blackText": true,
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

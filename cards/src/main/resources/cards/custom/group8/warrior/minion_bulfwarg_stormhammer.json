@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Taunt. Battlecry: Double your Armor and halve your Health (rounded up).",
+  "description": "Guard. Opener: Double your Armor and halve your Health (rounded up).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "GOLD",
   "rarity": "FREE",
-  "description": "Restore 2 Health. Gain 2 Armor.",
+  "description": "Restore #2 Health. Gain 2 Armor.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",

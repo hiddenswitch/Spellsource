@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Give a minion +2 Attack.",
+  "description": "Opener: Give a minion +2 Attack.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Taunt. Can't be targeted by Spells or Hero Powers.",
+  "description": "Guard. Can't be targeted by Spells or Skills.",
   "attributes": {
     "TAUNT": true,
     "UNTARGETABLE_BY_SPELLS": true

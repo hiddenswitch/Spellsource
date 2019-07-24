@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Give a friendly character +3 Health.",
+  "description": "Opener: Give a friendly character +3 Health.",
   "battlecry": {
     "targetSelection": "FRIENDLY_CHARACTERS",
     "spell": {

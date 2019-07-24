@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Passive: Your starting Hero Power is 'Give a friendly character +1 Attack this turn'",
+  "description": "Passive: Your starting Skill is 'Give a friendly character +1 Attack this turn'",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"

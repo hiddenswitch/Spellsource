@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Battlecry: Discard a Banana to add two Coins to your hand.",
+  "description": "Opener: Discard a Banana to add two Coins to your hand.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

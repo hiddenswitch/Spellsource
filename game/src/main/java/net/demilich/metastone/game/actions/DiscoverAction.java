@@ -74,7 +74,7 @@ public class DiscoverAction extends GameAction {
 	 */
 	@Override
 	public final boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
-		throw new UnsupportedOperationException("Discover actions should never be unrolled.");
+		return false;
 	}
 
 	/*

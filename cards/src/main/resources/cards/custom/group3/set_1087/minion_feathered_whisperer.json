@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: If you control a Dragon, gain +1/+1.",
+  "description": "Opener: If you control a Dragon, gain +1/+1.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

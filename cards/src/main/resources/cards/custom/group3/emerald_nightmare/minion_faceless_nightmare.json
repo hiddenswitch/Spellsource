@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Deal 3 damage to a random enemy minion. Overload: (1)",
+  "description": "Opener: Deal 3 damage to a random enemy minion. Overload: (1)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

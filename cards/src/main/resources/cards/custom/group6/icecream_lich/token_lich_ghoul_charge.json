@@ -6,11 +6,11 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Charge",
+  "description": "Blitz",
   "attributes": {
     "CHARGE": true
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "set": "GRAVEYARD",
   "fileFormatVersion": 1
 }

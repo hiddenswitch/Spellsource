@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Start of Game: If your deck has only class cards, your hero power unlocks your Overloaded Mana this game.",
+  "description": "Start of Game: If your deck has only class cards, your skill unlocks your Overloaded Mana this game.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

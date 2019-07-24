@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Your Razorpetals are Poisonous",
+  "description": "Your Razorpetals are Toxic",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

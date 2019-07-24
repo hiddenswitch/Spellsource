@@ -1,0 +1,38 @@
+{
+  "name": "Nezumi Master",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Opener: Give a Hidden minion +2 Attack and Dodge.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "STEALTH",
+        "operation": "HAS"
+      },
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 2
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DIVINE_SHIELD"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

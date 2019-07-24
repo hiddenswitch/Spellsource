@@ -1,0 +1,34 @@
+{
+  "name": "Stance Change",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Swap your minions' Attack and Health. Choose a bonus effect.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SwapAttackAndHpSpell",
+        "target": "FRIENDLY_MINIONS"
+      },
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "CastCardsSpell"
+        },
+        "cards": [
+          "spell_kitsune_stance",
+          "spell_tanuki_stance",
+          "spell_suzume_stance",
+          "spell_koi_stance"
+        ],
+        "howMany": 4
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

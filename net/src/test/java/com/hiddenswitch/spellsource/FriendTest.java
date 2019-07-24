@@ -5,13 +5,12 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
-import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.Json;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
@@ -19,6 +18,8 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 
 public class FriendTest extends SpellsourceTestBase {
@@ -116,7 +117,7 @@ public class FriendTest extends SpellsourceTestBase {
 				}
 				fut.complete();
 			}, testContext.asyncAssertSuccess());
-		});
+		}, testContext);
 
 	}
 
@@ -159,13 +160,13 @@ public class FriendTest extends SpellsourceTestBase {
 					});
 				});
 				atLeastConnected.await();
-				Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
+				Friends.putFriend(mongo().findOne(Accounts.USERS, json("_id", account1.getUserId()), UserRecord.class), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
 				latch.await();
 			} finally {
 				for (WebSocket socket : sockets) {
 					socket.close();
 				}
 			}
-		});
+		}, context);
 	}
 }

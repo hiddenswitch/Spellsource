@@ -13,7 +13,7 @@ import net.demilich.metastone.game.cards.Attribute;
 /**
  * Modifies the amount of damage that is currently about to be dealt.
  * <p>
- * The expression for the motification is {@code DAMAGE OPERATION VALUE}. In other words, if {@link SpellArg#OPERATION}
+ * The expression for the modification is {@code DAMAGE OPERATION VALUE}. In other words, if {@link SpellArg#OPERATION}
  * is {@link AlgebraicOperation#ADD}, the damage is 2 and the value is 4, the new damage will be {@code 2 + 4 = 6}.
  * <p>
  * Several triggers cast their spells at the right moment to modify damage. For <b>example</b>, a common trigger is a
@@ -63,6 +63,21 @@ import net.demilich.metastone.game.cards.Attribute;
  *           }
  *         }
  *       ]
+ *     }
+ *   }
+ * </pre>
+ * Finally, to <b>double</b> damage dealt by this minion to heroes:
+ * <pre>
+ *   {
+ *     "eventTrigger": {
+ *       "class": "PreDamageTrigger",
+ *       "hostTargetType": "IGNORE_OTHER_SOURCES",
+ *       "targetEntityType": "HERO"
+ *     },
+ *     "spell": {
+ *       "class": "ModifyDamageSpell",
+ *       "value": 2,
+ *       "operation": "MULTIPLY"
  *     }
  *   }
  * </pre>

@@ -1,0 +1,27 @@
+{
+  "name": "Jungle Operative",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Dodge. After this loses Dodge, gain +6 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseDivineShieldTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 6
+    }
+  },
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

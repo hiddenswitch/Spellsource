@@ -1,0 +1,28 @@
+{
+  "name": "Doctor Rigo Morti",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Gain a copy of all Aftermaths in your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+	"spell": {
+	  "class": "CopyDeathrattleSpell",
+	  "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DEATHRATTLES",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

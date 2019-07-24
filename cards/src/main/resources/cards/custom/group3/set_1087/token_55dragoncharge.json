@@ -1,13 +1,13 @@
 {
   "name": "Dragon Cavalry",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 5,
-  "baseHp": 5,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Charge",
+  "description": "Blitz",
   "attributes": {
     "CHARGE": true
   },
