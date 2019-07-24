@@ -7,7 +7,7 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
-import static org.junit.Assert.*;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
@@ -56,10 +55,11 @@ public abstract class SpellsourceTestBase {
 			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
+			vertx.exceptionHandler(t -> testContext.fail(t));
 			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
 				if (v2.failed()) {
-					testContext.fail(new AssertionError());
+					testContext.fail(new AssertionError(v2.cause()));
 				}
 				Mongo.mongo().connectWithEnvironment(vertx);
 				Spellsource.spellsource().deployAll(vertx, v4 -> {

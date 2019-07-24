@@ -4,31 +4,43 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 import java.io.*;
-import java.util.Base64;
 
+/**
+ * Provides utilities for serializing objects, especially Java objects.
+ */
 public class Serialization {
-//	private static ThreadLocal<FSTConfiguration> fsts = ThreadLocal.withInitial(FSTConfiguration::createDefaultConfiguration);
 
+	/**
+	 * Serializes the object to a String using JSON.
+	 *
+	 * @param object
+	 * @return
+	 */
 	public static String serialize(Object object) {
 		return Json.encode(object);
 	}
 
-	public static byte[] serializeBytes(Object object) throws IOException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		serialize(object, bos);
-		return bos.toByteArray();
-	}
-
+	/**
+	 * Deserializes the specified JSON into the specified class.
+	 *
+	 * @param json
+	 * @param classOfT
+	 * @param <T>
+	 * @return
+	 */
 	public static <T> T deserialize(String json, Class<T> classOfT) {
 		return Json.decodeValue(json, classOfT);
 	}
 
-
-	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(byte[] buffer) throws IOException, ClassNotFoundException {
-		return deserialize(new ByteArrayInputStream(buffer));
-	}
-
+	/**
+	 * Deserializes from a Java input stream using Java serialization.
+	 *
+	 * @param stream
+	 * @param <T>
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
@@ -37,6 +49,16 @@ public class Serialization {
 		return result;
 	}
 
+	/**
+	 * Deserializes to a specific class using Java serialization.
+	 *
+	 * @param stream
+	 * @param returnClass
+	 * @param <T>
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(stream);
 		T result = returnClass.cast(ois.readObject());
@@ -44,6 +66,13 @@ public class Serialization {
 		return result;
 	}
 
+	/**
+	 * Serializes an object using Java serialization to the specified output stream.
+	 *
+	 * @param obj
+	 * @param output
+	 * @throws IOException
+	 */
 	public static void serialize(Object obj, OutputStream output) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(output);
 		oos.writeObject(obj);
@@ -51,49 +80,16 @@ public class Serialization {
 		oos.close();
 	}
 
-	/*
-	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(InputStream stream) throws IOException, ClassNotFoundException {
-		FSTObjectInput ois = fsts.get().getObjectInput(stream);
-		T result = (T) ois.readObject();
-		stream.close();
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(InputStream stream, Class<? extends T> returnClass) throws Exception {
-		FSTObjectInput ois = fsts.get().getObjectInput(stream);
-		T result = (T) ois.readObject(returnClass);
-		return result;
-	}
-
-	public static void serialize(Object obj, OutputStream stream) throws IOException {
-		FSTObjectOutput oos = fsts.get().getObjectOutput(stream);
-		oos.writeObject(obj, obj.getClass());
-		oos.flush();
-	}
-	*/
-
+	/**
+	 * Deserializes a Vertx {@code JsonObject}, which is basically a {@link java.util.Map}, to the specified class.
+	 *
+	 * @param body
+	 * @param returnClass
+	 * @param <T>
+	 * @return
+	 */
 	public static <T> T deserialize(JsonObject body, Class<? extends T> returnClass) {
 		return body.mapTo(returnClass);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T deserializeBase64(String serializedBase64) {
-		byte bytes[] = Base64.getDecoder().decode(serializedBase64);
-
-		try {
-			return /*(T) fsts.get().getObjectInput(bytes).readObject()*/ deserialize(bytes);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static <T> String serializeBase64(T src) {
-		try {
-			return Base64.getEncoder().encodeToString(/*fsts.get().asByteArray(src)*/serializeBytes(src));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
