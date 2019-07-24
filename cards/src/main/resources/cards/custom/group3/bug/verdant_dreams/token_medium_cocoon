@@ -1,0 +1,26 @@
+{
+  "name": "Medium Coccoon",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 0,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "At the start of your turn, turn into a 5/5 Butterfly.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_big_butterfly"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
