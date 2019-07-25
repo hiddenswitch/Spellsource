@@ -36,6 +36,9 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
  - Hooded Ritualist now reads "After you cast a spell, summon a 2/1 Demon right before the end of your turn." (1264)
  - The Omega Rune now correctly no longer gives lifesteal on spell casts to both players. (1265)
  - Matriarch Aiiran no longer dynamically updates its damage number while on board. (1249)
+ - Manly Mountaineer now properly has Dash. (1233)
+ - Tome of Secrets now works properly. (1233)
+ - Dramatic Playwright now only changes the attack of one enemy minion. (1233)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
