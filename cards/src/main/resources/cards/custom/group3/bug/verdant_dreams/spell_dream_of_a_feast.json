@@ -1,6 +1,6 @@
 {
   "name": "Dream of a Feast",
-  "baseManaCost": 9,
+  "baseManaCost": 10,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
