@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Summon all minions from your hand of the same Cost as the last minion you played.",
+  "description": "Opener: Summon all [] (Equal to the cost of the last minion you played)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -28,6 +28,23 @@
   "attributes": {
     "BATTLECRY": true
   },
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        "(",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_LAST_MINION_PLAYED",
+            "attribute": "MANA_SPENT"
+          }
+        },
+        ")-Cost minions from your hand."
+      ]
+    }
+  ],
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
