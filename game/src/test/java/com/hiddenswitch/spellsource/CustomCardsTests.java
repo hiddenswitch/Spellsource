@@ -7139,10 +7139,16 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion minion1 = playMinionCard(context, opponent, "minion_test_3_2");
 			Minion minion2 = playMinionCard(context, opponent, "minion_test_3_2");
+
+			playCard(context, player, "spell_bloody_blow");
+			assertFalse(minion1.isDestroyed());
+			assertFalse(minion2.isDestroyed());
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 2);
+
 			playCard(context, player, "spell_bloody_blow");
 			assertTrue(minion1.isDestroyed());
 			assertTrue(minion2.isDestroyed());
-			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 2);
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 4);
 		});
 	}
 
@@ -7408,5 +7414,48 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(warden1.getHp(), warden1.getMaxHp() - 6);
 			assertEquals(warden2.getHp(), warden2.getMaxHp());
 		}));
+	}
+
+	@Test
+	public void testScopeOut() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			playCard(context, player, "spell_scope_out");
+			assertEquals(player.getHand().size(), 4);
+			assertEquals(player.getDeck().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_4_test");
+			playCard(context, player, "spell_scope_out");
+			assertEquals(player.getHand().size(), 4);
+			assertEquals(player.getDeck().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_4_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			playCard(context, player, "spell_scope_out");
+			assertEquals(player.getHand().size(), 4);
+			assertEquals(player.getDeck().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_11_test");
+			putOnTopOfDeck(context, player, "minion_cost_4_test");
+			putOnTopOfDeck(context, player, "minion_cost_4_test");
+			playCard(context, player, "spell_scope_out");
+			assertEquals(player.getHand().size(), 2);
+			assertEquals(player.getDeck().size(), 2);
+		});
 	}
 }

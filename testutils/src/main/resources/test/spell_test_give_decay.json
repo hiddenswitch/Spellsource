@@ -1,0 +1,16 @@
+{
+  "name": "Give Decay",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion Taunt.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "DECAY"
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
