@@ -1,0 +1,21 @@
+{
+  "name": "Death's Hand",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "<b>Pact:</b> After four cards are played, draw 3 cards.",
+  "quest": {
+    "class": "CardPlayedTrigger",
+    "targetPlayer": "BOTH"
+  },
+  "countUntilCast": 4,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawSpell",
+    "value": 3
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
