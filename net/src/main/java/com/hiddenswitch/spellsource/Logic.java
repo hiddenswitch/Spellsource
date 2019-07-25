@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -241,9 +242,8 @@ public interface Logic {
 	@Suspendable
 	static PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
 		final String attributeName = request.getAttribute().toKeyCase();
-		MongoClientUpdateResult update = Inventory.update(Mongo.mongo().client(), request.getInventoryIds(), json(
-				"$set", json("facts." + attributeName, request.getNewValue()))
-		);
+		MongoClientUpdateResult update = Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY, json("_id", json("$in", request.getInventoryIds())), json(
+				"$set", json("facts." + attributeName, request.getNewValue())), new UpdateOptions().setMulti(true));
 		return new PersistAttributeResponse().withUpdated(update.getDocModified());
 	}
 

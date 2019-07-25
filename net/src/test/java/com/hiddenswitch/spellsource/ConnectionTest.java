@@ -1,13 +1,9 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.Envelope;
-import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
-import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
-import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
@@ -16,10 +12,6 @@ import io.vertx.core.http.WebsocketRejectedException;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static io.vertx.ext.sync.Sync.awaitEvent;
 
@@ -37,10 +29,10 @@ public class ConnectionTest extends SpellsourceTestBase {
 				latch.countDown();
 			});
 			latch.await();
-		});
+		}, testContext);
 	}
 
-	@Test
+	@Test(timeout = 15000)
 	public void testConnectionWithAuthSuceeds(TestContext testContext) {
 		sync(() -> {
 			WebSocket socket = null;
@@ -58,7 +50,7 @@ public class ConnectionTest extends SpellsourceTestBase {
 			} finally {
 				socket.close();
 			}
-		});
+		}, testContext);
 	}
 
 	@Test
@@ -79,6 +71,6 @@ public class ConnectionTest extends SpellsourceTestBase {
 				latch.countDown();
 			});
 			latch.await();
-		});
+		}, testContext);
 	}
 }

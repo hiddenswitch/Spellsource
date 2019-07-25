@@ -48,7 +48,7 @@ public class Rpc {
 	 * The registration function will register every non-static method specified in the interface with {@link
 	 * EventBus#consumer(String)}, specifying the address as:
 	 * <p>
-	 * {@code serviceInterface.getName() + "::" + method.getName(); }
+	 * {@code serviceInterface.getName() + "/" + method.getName(); }
 	 * <p>
 	 * Internally, the system will use {@link Serialization#serialize(Object)} to serialize the message, which uses {@link
 	 * java.io.ObjectOutputStream} to write the message (i.e., {@link java.io.Serializable} for serialization).
@@ -110,7 +110,7 @@ public class Rpc {
 				return Stream.empty();
 			}
 
-			final String address = name + "::" + method.getName();
+			final String address = name + "/" + method.getName();
 
 			SuspendableFunction<Object, Object> finalMethod = arg -> method.invoke(instance, arg);
 
@@ -227,7 +227,7 @@ public class Rpc {
 		} catch (SuspendExecution | InterruptedException ignored) {
 		}
 
-		return serviceInterface.getName() + "::" + outName[0];
+		return serviceInterface.getName() + "/" + outName[0];
 	}
 
 	/**

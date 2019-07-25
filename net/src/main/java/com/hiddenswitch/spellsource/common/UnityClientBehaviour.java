@@ -15,15 +15,13 @@ import com.hiddenswitch.spellsource.impl.util.Scheduler;
 import com.hiddenswitch.spellsource.util.NoOpLock;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
-import io.opentracing.tag.Tag;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.json.Json;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.sync.Sync;
@@ -35,17 +33,14 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -75,8 +70,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final ReentrantLock requestsLock = new NoOpLock();
-	private WriteStream<ServerToClientMessage> writer;
-	private Server server;
+	private final ReadStream<ClientToServerMessage> reader;
+	private final WriteStream<ServerToClientMessage> writer;
+	private final Server server;
 
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
@@ -93,6 +89,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
+		this.reader = reader;
 		this.writer = writer;
 		this.userId = userId;
 		this.playerId = playerId;
@@ -515,7 +512,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.gameState(getClientGameState(state));
 
 		final Class<? extends Notification> eventClass = event.getClass();
@@ -627,7 +624,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_UPDATE)
 				.changes(getChangeSet(state))
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.gameState(gameState));
 	}
 
@@ -639,11 +636,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		Player local;
 		Player opponent;
 		if (playerId == PLAYER_1) {
-			local = state.player1;
-			opponent = state.player2;
+			local = state.getPlayer1();
+			opponent = state.getPlayer2();
 		} else if (playerId == PLAYER_2) {
-			local = state.player2;
-			opponent = state.player1;
+			local = state.getPlayer2();
+			opponent = state.getPlayer1();
 		} else {
 			// TODO: How should we define spectators?
 			throw new IllegalStateException("playerId");
@@ -667,7 +664,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.gameState(getClientGameState(state))
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
@@ -681,7 +678,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_MULLIGAN)
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
@@ -741,16 +738,29 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		try {
+			span.log("closing");
 			for (ActivityMonitor activityMonitor : activityMonitors) {
 				activityMonitor.cancel();
 			}
 			activityMonitors.clear();
-
 			requests.clear();
 			messageBuffer.clear();
-			server = null;
-			writer = null;
+			try {
+				writer.end();
+			} catch (IllegalStateException alreadyClosed) {
+			}
+
+			if (reader instanceof Closeable) {
+				((Closeable) reader).close(Future.future());
+			}
+
+			if (reader instanceof MessageConsumer) {
+				((MessageConsumer) reader).unregister();
+			}
+
+			span.log("closed");
 		} catch (Throwable ignore) {
+			Tracing.error(ignore, span, true);
 			LOGGER.error("close {}", getUserId(), ignore);
 		} finally {
 			span.finish();

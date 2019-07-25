@@ -7,6 +7,7 @@ import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.samplers.ConstSampler;
 import io.jaegertracing.internal.samplers.ProbabilisticSampler;
 import io.jaegertracing.spi.Sampler;
+import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.log.Fields;

@@ -8,7 +8,6 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -18,11 +17,10 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
-import net.demilich.metastone.game.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -37,7 +35,7 @@ import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -45,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -148,37 +145,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	private static final String TEMP_CARD_LABEL = "temp_card_id_";
 	private static final int INFINITE = -1;
-	private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
 	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
 	private IdFactoryImpl idFactory;
-	private long seed = createSeed();
+	private long seed = XORShiftRandom.createSeed();
 	private XORShiftRandom random = new XORShiftRandom(seed);
-
-	/**
-	 * Ensures {@link GameLogic} has a valid, unique seed in this JVM instance.
-	 * <p>
-	 * Adapted from the JVM's implementation of {@link Random}
-	 *
-	 * @return A {@link Long} corresponding to a unique value useful for "oring" to the {@link System#nanoTime()}.
-	 */
-	private static long seedUniquifier() {
-		for (; ; ) {
-			long current = seedUniquifier.get();
-			long next = current * 181783497276652981L;
-			if (seedUniquifier.compareAndSet(current, next))
-				return next;
-		}
-	}
-
-	/**
-	 * Creates a valid, highly probably unique seed.
-	 *
-	 * @return A {@link Long} seed that can be passed to a constructor of {@link Random}
-	 */
-	private static long createSeed() {
-		return seedUniquifier() ^ System.nanoTime();
-	}
 
 	protected transient GameContext context;
 

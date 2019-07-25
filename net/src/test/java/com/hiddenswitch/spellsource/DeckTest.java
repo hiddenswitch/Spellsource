@@ -4,12 +4,11 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class DeckTest extends SpellsourceTestBase {
 			DeckCreateResponse deckCreateResponse = createDeckForUserId(userId1);
 			GetCollectionResponse collectionResponse = getDeck(deckCreateResponse.getDeckId());
 			context.assertEquals(collectionResponse.getInventoryRecords().size(), 30);
-		});
+		}, context);
 	}
 
 	@Test
@@ -44,7 +43,7 @@ public class DeckTest extends SpellsourceTestBase {
 			for (int i = 0; i < 100; i++) {
 				context.assertEquals(getDeck(createDeckForUserId(userId1).getDeckId()).getInventoryRecords().size(), 30);
 			}
-		});
+		}, context);
 	}
 
 	private GetCollectionResponse getDeck(String deckId) throws SuspendExecution, InterruptedException {
@@ -74,7 +73,7 @@ public class DeckTest extends SpellsourceTestBase {
 			GetCollectionResponse deck2 = getDeck(deckId);
 			context.assertTrue(deck2.getInventoryRecords().contains(replacement));
 			context.assertFalse(deck2.getInventoryRecords().contains(toReplace));
-		});
+		}, context);
 	}
 
 	@Test
@@ -102,7 +101,7 @@ public class DeckTest extends SpellsourceTestBase {
 			GetCollectionResponse updatedDeck = Inventory.getCollection(GetCollectionRequest.deck(deck.getDeckId()));
 			context.assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
 			context.assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
-		});
+		}, context);
 	}
 
 	@Test
@@ -121,7 +120,7 @@ public class DeckTest extends SpellsourceTestBase {
 			// Delete the deck
 			DeckDeleteResponse response = Decks.deleteDeck(DeckDeleteRequest.create(deckId));
 			context.assertFalse(Accounts.get(userId1).getDecks().contains(deckId));
-		});
+		}, context);
 	}
 
 	@Test

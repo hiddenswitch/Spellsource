@@ -5,7 +5,7 @@
   "heroClass": "NAVY",
   "baseAttack": 6,
   "baseHp": 7,
-  "rarity": "COMMON",
+  "rarity": "FREE",
   "description": "Opener: Draw a card.",
   "battlecry": {
     "spell": {
