@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 
 import java.io.Serializable;
 import java.util.List;

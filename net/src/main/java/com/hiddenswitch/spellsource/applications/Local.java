@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.applications;
 
+import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.Gateway;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Tracing;
@@ -49,7 +50,15 @@ public class Local {
 						if (v2.failed()) {
 							Logging.root().error("main: Deployment failed: {}", v2.cause().getMessage(), v2.cause());
 							System.exit(1);
-							return;
+						} else {
+							vertx.deployVerticle(Broadcaster.create(), v3 -> {
+								if (v3.succeeded()) {
+									System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
+								} else {
+									Logging.root().error("main: Failed to deploy broadcaster");
+									System.exit(1);
+								}
+							});
 						}
 					});
 				}
