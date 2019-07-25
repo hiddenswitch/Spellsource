@@ -1,0 +1,59 @@
+{
+  "name": "Grave-Carer Yorn",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Your Skeletons have +1/+1 and <b>Guard</b>. <b>Opener</b>: Summon four 1/1 Skeletons.",
+  "battlecry": {
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "cards": [
+          "token_skeleton_wraith",
+          "token_skeleton_wraith"
+        ]
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "LEFT",
+        "cards": [
+          "token_skeleton_wraith",
+          "token_skeleton_wraith"
+        ]
+      }
+    ]
+  },
+      "auras": [
+        {
+          "class": "BuffAura",
+          "target": "OTHER_FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "hpBonus": 1,
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "SKELETON",
+            "operation": "HAS"
+          }
+        },
+        {
+          "class": "AttributeAura",
+          "target": "FRIENDLY_MINIONS",
+          "attribute": "AURA_TAUNT",
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "SKELETON",
+            "operation": "HAS"
+          }
+        }
+        ],
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

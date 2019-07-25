@@ -1,0 +1,30 @@
+{
+  "name": "Plague of Flesh",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "Give all enemy minions -1/-2. Their Attack cannot go below 1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ModifyAttributeSpell",
+        "target": "ENEMY_MINIONS",
+        "value": -2,
+        "attribute": "HEALTH_BONUS"
+      },
+      {
+        "class": "ModifyAttributeSpell",
+        "target": "ENEMY_MINIONS",
+        "value": -1,
+        "attribute": "ATTACK_BONUS",
+        "minValue": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
