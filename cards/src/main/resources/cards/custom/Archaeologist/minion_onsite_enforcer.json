@@ -1,0 +1,24 @@
+{
+  "name": "Big Bad Coyote",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 4,
+  "baseHp": 10,
+  "rarity": "RARE",
+  "description": "Dash, Guard. Opener: Shuffle your hand into your deck.",
+    "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "FRIENDLY_HAND"
+    }
+
+  "attributes": {
+    "RUSH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
