@@ -1,9 +1,8 @@
 package com.hiddenswitch.spellsource;
 
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.common.DeckListParsingException;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckListParsingException;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Assert;
 import org.junit.Test;
 

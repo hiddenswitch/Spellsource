@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -10,7 +10,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;

@@ -5,7 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -606,12 +606,15 @@ public class Spellsource {
 	 *
 	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
 	 */
-	public synchronized List<DeckCreateRequest> getStandardDecks() {
+	public List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
-			CardCatalogue.loadCardsFromPackage();
 			cachedStandardDecks = new ArrayList<>();
+			CardCatalogue.loadCardsFromPackage();
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
-			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
+			Set<URL> resourceList = reflections.getResources(x -> x != null && x.endsWith(".txt")).stream().map(Resources::getResource).collect(toSet());
+			if (resourceList.size() == 0) {
+				throw new IllegalStateException("no bot decks were loaded");
+			}
 			cachedStandardDecks.addAll(resourceList.stream().map(c -> {
 				try {
 					return Resources.toString(c, Charset.defaultCharset());
