@@ -1,15 +1,15 @@
 {
-  "name": "Fartstone",
+  "name": "Removed Card",
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Gain 1 Copyright Infringement.",
+  "description": "Do nothing.",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"
   },
   "collectible": false,
-  "set": "TEST",
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }
