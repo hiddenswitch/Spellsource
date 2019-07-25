@@ -13,7 +13,9 @@
     "attackBonus": 2,
     }
   "collectible": true,
-  "DECAY": true,
+  "attributes": {
+  "DECAY": true
+  },
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
