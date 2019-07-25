@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * Created by bberman on 1/22/17.
  */
 public class InventoryRecord extends MongoRecord {
+	public static final String CARDDESC_ID = "cardDesc.id";
 	private static Logger logger = LoggerFactory.getLogger(InventoryRecord.class);
 
 	@JsonProperty
