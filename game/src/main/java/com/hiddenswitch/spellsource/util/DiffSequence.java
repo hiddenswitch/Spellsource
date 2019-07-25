@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * Helps compute differences in sequences.
+ */
 public interface DiffSequence {
 	Logger logger = LoggerFactory.getLogger(DiffSequence.class);
 

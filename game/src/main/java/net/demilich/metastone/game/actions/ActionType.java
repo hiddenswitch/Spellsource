@@ -4,6 +4,8 @@ package net.demilich.metastone.game.actions;
  * Action types correspond to things the player can do. They can be used in {@link
  * net.demilich.metastone.game.spells.trigger.TargetAcquisitionTrigger} to perform effects when players do certain
  * targeting actions.
+ *
+ * @see GameAction for more about actions.
  */
 public enum ActionType {
 	/**

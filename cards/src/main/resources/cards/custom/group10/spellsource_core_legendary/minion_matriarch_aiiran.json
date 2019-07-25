@@ -28,16 +28,27 @@
   },
   "dynamicDescription": [
     {
-      "class": "ValueDescription",
-      "value": {
-        "class": "CardCountValueProvider",
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "MinionOnBoardCondition",
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "DRAGON"
-        },
-        "multiplier": 2,
-        "offset": -2
+          "class": "EntityEqualsFilter",
+          "secondaryTarget": "SELF"
+        }
+      },
+      "description1": "X",
+      "description2": {
+        "class": "ValueDescription",
+        "value": {
+          "class": "CardCountValueProvider",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "race": "DRAGON"
+          },
+          "multiplier": 2,
+          "offset": -2
+        }
       }
     }
   ],

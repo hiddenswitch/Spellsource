@@ -34,6 +34,8 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
  - Guild Guard now costs (5), up from (4). (1257)
  - Miserable Conclusion now correctly destroys all minions except the opponent's highest attack minion.
  - Hooded Ritualist now reads "After you cast a spell, summon a 2/1 Demon right before the end of your turn." (1264)
+ - The Omega Rune now correctly no longer gives lifesteal on spell casts to both players. (1265)
+ - Matriarch Aiiran no longer dynamically updates its damage number while on board. (1249)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 

@@ -8,6 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Implementors of this interface will get loaded by the {@code CardCatalogue} to find all the cards available to play
+ * in the game.
+ *
+ * @see AbstractCardResources for more about adding more cards to Spellsource.
+ */
 public interface CardResources {
 	@NotNull
 	static InputStream getInputStream(ClassLoader loader, boolean fromJar, String filePath) {
@@ -39,8 +45,6 @@ public interface CardResources {
 	}
 
 	void load();
-
-	String getDirectoryPrefix();
 
 	List<? extends CardResource> getResources();
 }

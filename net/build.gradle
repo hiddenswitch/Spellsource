@@ -16,7 +16,7 @@ def hazelcastJvmArgs = jdk8 ? [] : ["--add-modules", "java.se",
                                     "--add-opens", "java.management/sun.management=ALL-UNNAMED",
                                     "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED"]
 
-def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
+def localMainClassName = 'com.hiddenswitch.spellsource.applications.Local'
 
 def debugSystemProperties = ["spellsource.port"                        : "8080",
                              "spellsource.root.logger.level"           : "DEBUG",

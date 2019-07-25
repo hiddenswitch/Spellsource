@@ -13,12 +13,30 @@ import java.util.function.*;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
- * Created by bberman on 2/15/17.
+ * Contains utilities for:
+ * <ul>
+ * <li>Converting {@link Thread}-blocking calls into fiber suspendable calls using {@link #invoke(Supplier)}
+ * methods</li>
+ * <li>Creating handlers for vertx callbacks that support throwing {@link co.paralleluniverse.fibers.SuspendExecution}
+ * (i.e. checked exception that ensures your fiber will be instrumented) using {@link
+ * #suspendableHandler(SuspendableAction1)}</li>
+ * <li>Calling a fiber-synchronous method at a later time using {@link #defer(SuspendableAction1)}.</li>
+ * </ul>
  */
 public class Sync {
+	/**
+	 * Defer a call by queueing it to be executed on the current {@link io.vertx.core.Context}
+	 *
+	 * @param handler The code to execute at a later time.
+	 * @return The fiber that executes the provided handler. It may <b>not</b> have started, and it is the responsibility
+	 * 		of Vertx to start it.
+	 */
 	@Suspendable
-	public static void defer(SuspendableAction1<Void> handler) {
-		Vertx.currentContext().runOnContext(suspendableHandler(handler));
+	public static Fiber<Void> defer(SuspendableAction1<Void> handler) {
+		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
+		Fiber<Void> voidFiber = new Fiber<>(scheduler, () -> handler.call(null));
+		Vertx.currentContext().runOnContext(v -> voidFiber.start());
+		return voidFiber;
 	}
 
 	@Suspendable
@@ -26,15 +44,6 @@ public class Sync {
 		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
 	}
-
-	/*
-	@Suspendable
-	public static <T> Handler<T> suspendableHandler(Handler<T> handler) {
-		FiberScheduler scheduler = getContextScheduler();
-		return p -> new Fiber<Void>(scheduler, () -> handler.handle(p)).start();
-	}
-	*/
-
 
 	@Suspendable
 	public static <R> R invoke(Supplier<R> func0) {
