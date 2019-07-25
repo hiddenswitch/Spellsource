@@ -75,7 +75,7 @@ public class LogicTest extends SpellsourceTestBase {
 			Set<String> actualCardIds = Spellsource.spellsource().getStandardDecks().stream().flatMap(d -> d.getCardIds().stream()).collect(toSet());
 
 			assertTrue("The user's initial collection should contain all the cards they need in the starter decks.", cardIds.equals(actualCardIds));
-		});
+		}, context);
 	}
 
 	@Test

@@ -8,9 +8,9 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.Future;
 import io.vertx.core.streams.WriteStream;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.defer;
-import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 /**
  * Provides a way for users to friend each other.
@@ -23,7 +23,7 @@ public interface Friends {
 		Connection.connected((connection, fut) -> {
 			defer(v -> {
 				try {
-					UserRecord user = Accounts.findOne(connection.userId());
+					UserRecord user = mongo().findOne(Accounts.USERS, json("_id", connection.userId()), UserRecord.class);
 					for (FriendRecord friend : user.getFriends()) {
 						connection.write(new Envelope().added(new EnvelopeAdded().friend(friend.toFriendDto())));
 					}
@@ -54,7 +54,7 @@ public interface Friends {
 			String[] tokens = req.getUsernameWithToken().split("#");
 			friendAccount = Mongo.mongo().findOne(Accounts.USERS, json("username", tokens[0], "privacyToken", tokens[1]), UserRecord.class);
 		} else if (req.getFriendId() != null) {
-			friendAccount = Accounts.findOne(req.getFriendId());
+			friendAccount = mongo().findOne(Accounts.USERS, json("_id", req.getFriendId()), UserRecord.class);
 		} else {
 			friendAccount = null;
 		}
@@ -83,8 +83,8 @@ public interface Friends {
 				.setDisplayName(thisAccount.getUsername());
 
 		// Update both sides
-		Accounts.update(userId, json("$push", json("friends", json(friendRecord))));
-		Accounts.update(friendId, json("$push", json("friends", json(friendOfFriendRecord))));
+		mongo().updateCollection(Accounts.USERS, json("_id", userId), json("$push", json("friends", json(friendRecord))));
+		mongo().updateCollection(Accounts.USERS, json("_id", friendId), json("$push", json("friends", json(friendOfFriendRecord))));
 
 		// Update both users with the new friend records
 		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
@@ -123,9 +123,9 @@ public interface Friends {
 		}
 
 		// Delete from both sides
-		Accounts.update(Mongo.mongo().client(), userId, json("$pull",
+		Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId), json("$pull",
 				json("friends", json("friendId", friendId))));
-		Accounts.update(Mongo.mongo().client(), friendId, json("$pull",
+		Mongo.mongo().updateCollection(Accounts.USERS, json("_id", friendId), json("$pull",
 				json("friends", json("friendId", userId))));
 
 		// Update both users with the new friend records

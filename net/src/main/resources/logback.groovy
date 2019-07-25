@@ -61,6 +61,7 @@ logger("org.reflections", ERROR)
 logger("co.paralleluniverse", ERROR)
 logger("net.demilich", WARN)
 logger("io.vertx", INFO)
+logger("io.jaegertracing", ERROR)
 
 // Production group
 logger("com.hiddenswitch", INFO)

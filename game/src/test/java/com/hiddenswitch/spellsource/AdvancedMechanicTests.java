@@ -7,13 +7,9 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.HasChooseOneActions;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
@@ -24,7 +20,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.TestBase;
@@ -630,5 +625,30 @@ public class AdvancedMechanicTests extends TestBase {
 			// hero power should not be affected by SPELL_DAMAGE, and thus deal 1 damage
 			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
 		});
+	}
+
+	@Test
+	public void testOpenerTriggersAfterBuff() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "spell_dramatic_entrance");
+			playCard(context, player, "minion_ninja_aspirants");
+			assertEquals(player.getMinions().size(), 2);
+			for (Minion ninja : player.getMinions()) {
+				assertEquals(ninja.getHp(), ninja.getBaseHp() + 5);
+				assertTrue(ninja.hasAttribute(Attribute.TAUNT));
+			}
+		}));
+	}
+
+	@Test
+	public void testEndTurnInteractions() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_hooded_ritualist");
+			playCard(context, player, "spell_lackey_break");
+			context.endTurn();
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMinions().get(1).getAttack(), player.getMinions().get(1).getBaseAttack() + 1);
+			assertEquals(player.getMinions().get(1).getHp(), player.getMinions().get(1).getBaseHp() + 1);
+		}));
 	}
 }

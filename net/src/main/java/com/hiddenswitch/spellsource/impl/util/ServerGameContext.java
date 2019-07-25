@@ -217,6 +217,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 				// Once the game is disposed, there should be no more client instances referenced here
 				closeables.add(fut -> {
+					consumer.unregister();
 					getClients().clear();
 					CompositeFuture.join(getBehaviours().stream().filter(Closeable.class::isInstance).map(Closeable.class::cast).map(c -> {
 						Future<Void> future = Future.future();
@@ -1036,7 +1037,8 @@ public class ServerGameContext extends GameContext implements Server {
 			ListIterator<Client> listIterator = getClients().listIterator();
 			while (listIterator.hasNext()) {
 				Client next = listIterator.next();
-				if (next.getPlayerId() == client.getPlayerId()) {
+				if (next.getPlayerId() == client.getPlayerId() && client != next) {
+					next.close(Future.future());
 					listIterator.set(client);
 					next = client;
 				}
