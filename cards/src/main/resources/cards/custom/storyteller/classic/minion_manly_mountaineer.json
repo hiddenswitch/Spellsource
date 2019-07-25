@@ -33,6 +33,9 @@
       "value": 4
     }
   },
+  "attributes": {
+    "RUSH": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
