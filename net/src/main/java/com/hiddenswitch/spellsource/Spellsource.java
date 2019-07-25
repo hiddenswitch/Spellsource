@@ -9,10 +9,7 @@ import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
-import com.hiddenswitch.spellsource.models.CollectionTypes;
-import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
-import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
-import com.hiddenswitch.spellsource.models.MigrationRequest;
+import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.*;
 import io.vertx.core.json.Json;
@@ -23,6 +20,8 @@ import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -177,29 +176,29 @@ public class Spellsource {
 						.withVersion(4)
 						.withUp(thisVertx -> {
 							// Repair user collections
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
+							mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
 									json("$unset", json("deckType", 1), "$set", json("trashed", false)), new UpdateOptions().setMulti(true));
 
-							for (JsonObject record : Mongo.mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
+							for (JsonObject record : mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
 								final String userId = record.getString("_id");
-								Mongo.mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
+								mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
 							}
 
 							// Remove all inventory records that are in just one collection, the user collection
-							Mongo.mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
+							mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(5)
 						.withUp(thisVertx -> {
 							// Set all existing decks to standard.
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
+							mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", false)),
 									json("$set", json("format", "Standard")),
 									new UpdateOptions().setMulti(true));
 						})
 						.withDown(thisVertx -> {
 							// Remove format field
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
+							mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", true)),
 									json("$unset", json("format", null)),
 									new UpdateOptions().setMulti(true));
@@ -208,7 +207,7 @@ public class Spellsource {
 						.withVersion(6)
 						.withUp(thisVertx -> {
 							// Shuffle around the location of user record data
-							List<JsonObject> users = Mongo.mongo().find(Accounts.USERS, json());
+							List<JsonObject> users = mongo().find(Accounts.USERS, json());
 							for (JsonObject jo : users) {
 								if (!jo.containsKey("profile")
 										|| !jo.getJsonObject("profile").containsKey("emailAddress")) {
@@ -249,7 +248,7 @@ public class Spellsource {
 								String userId = jo.getString("_id");
 								logger.debug("add MigrationRequest 6: Migrating passwords and emails for userId {}", userId);
 
-								Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId),
+								mongo().updateCollection(Accounts.USERS, json("_id", userId),
 										updateCommand);
 							}
 						}))
@@ -393,7 +392,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(20)
 						.withUp(thisVertx -> {
-							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$set", json(
+							mongo().updateCollectionWithOptions(COLLECTIONS, json(), json("$set", json(
 									"wins", 0, "totalGames", 0
 							)), new UpdateOptions().setMulti(true));
 						}))
@@ -414,7 +413,7 @@ public class Spellsource {
 							// Remove all cards that don't exist
 							CardCatalogue.loadCardsFromPackage();
 							JsonArray allCardIds = array(CardCatalogue.getRecords().keySet().toArray());
-							MongoClientDeleteResult removed = Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+							MongoClientDeleteResult removed = mongo().removeDocuments(INVENTORY, json("cardDesc.id",
 									json("$nin", allCardIds)));
 							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
 						}))
@@ -558,7 +557,52 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(35, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(36)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+
+							String[] badHeroClasses = new String[]{"BLACK", "SILVER", "BROWN",
+																	"RED", "GOLD", "GREEN",
+																	"VIOLET", "BLUE", "WHITE"};
+
+							List<String> deckIds = new ArrayList<>();
+							for (String badHeroClass : badHeroClasses) {
+								deckIds.addAll(mongo().findWithOptions(COLLECTIONS,
+										json("heroClass", json("$regex", badHeroClass)),
+										new FindOptions().setFields(json("_id", true))).stream()
+										.map(o -> o.getString("_id")).collect(toList()));
+							}
+							for (String deckId : deckIds) {
+								Decks.deleteDeck(DeckDeleteRequest.create(deckId));
+							}
+
+							deckIds = mongo().findWithOptions(COLLECTIONS,
+									json(),
+									new FindOptions().setFields(json("_id", true))).stream()
+									.map(o -> o.getString("_id")).collect(toList());
+
+							List<String> cardIds = new ArrayList<>();
+							for (String deckId : deckIds) {
+								GetCollectionResponse response1 = Inventory.getCollection(new GetCollectionRequest().withDeckId(deckId));
+								response1.asDeck(response1.getUserId()).getCards().forEach(card -> cardIds.add(card.getCardId()));
+							}
+
+							cardIds.removeIf(cardId -> {
+								try {
+									CardCatalogue.getCardById(cardId);
+									return false;
+								} catch (Exception e) {
+									return true;
+								}
+							});
+
+							for (String cardId : cardIds) {
+								changeCardId(cardId, "spell_fartstone");
+							}
+
+						}))
+				.migrateTo(36, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
