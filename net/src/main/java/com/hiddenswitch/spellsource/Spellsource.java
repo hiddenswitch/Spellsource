@@ -19,6 +19,8 @@ import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -567,16 +569,24 @@ public class Spellsource {
 							String removedCardId = BaseCardResources.REMOVED_CARD_ID;
 							mongo().updateCollectionWithOptions(
 									INVENTORY,
-									json("cardDesc.id", json("$nin", cardIdsInCatalogue)),
-									json("$set", json("cardDesc.id", removedCardId)),
+									json(InventoryRecord.CARDDESC_ID, json("$nin", cardIdsInCatalogue)),
+									json("$set", json(InventoryRecord.CARDDESC_ID, removedCardId)),
 									new UpdateOptions().setMulti(true));
 
 							// Change all the hero classes to the neutral class.
 							List<String> heroClasses = CardCatalogue.getHeroes().stream().map(Card::getHeroClass).collect(toList());
 							mongo().updateCollectionWithOptions(
 									COLLECTIONS,
-									json("heroClass", json("$nin", heroClasses)),
-									json("$set", json("heroClass", "ANY")),
+									json(CollectionRecord.HERO_CLASS, json("$nin", heroClasses)),
+									json("$set", json(CollectionRecord.HERO_CLASS, HeroClass.ANY)),
+									new UpdateOptions().setMulti(true));
+
+							List<String> formats = new ArrayList<>(DeckFormat.formats().keySet());
+							// Remove all missing formats
+							mongo().updateCollectionWithOptions(
+									COLLECTIONS,
+									json(CollectionRecord.FORMAT, json("$nin", formats)),
+									json("$set", json(CollectionRecord.FORMAT, DeckFormat.ALL.getName())),
 									new UpdateOptions().setMulti(true));
 						}))
 				.migrateTo(36, then2 ->
@@ -602,9 +612,8 @@ public class Spellsource {
 				try {
 					return Resources.toString(c, Charset.defaultCharset());
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
-				return null;
 			}).map((deckList) -> DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true)).filter(Objects::nonNull).collect(toList()));
 		}
 
