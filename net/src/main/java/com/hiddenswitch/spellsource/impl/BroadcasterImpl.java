@@ -55,7 +55,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 
 							logger.debug("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Integer.toString(Port.port()) + "/", getMulticastPort(), getMulticastAddress(), Future.future());
+							socket.send(getResponsePrefix() + "http://" + host + ":" + Port.port() + "/", getMulticastPort(), getMulticastAddress(), Future.future());
 						});
 
 						isListening.complete();

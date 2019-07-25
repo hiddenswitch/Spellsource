@@ -47,7 +47,7 @@ import java.util.Map;
  * {@code SpellDesc} instance because in some {@code #init(SerializationContext)}, an arg (like {@link SpellArg#SPELL})
  * is configured to be of type {@link ParseValueType#SPELL}.
  * <p>
- * Then, a field like {@code "class"} is known to be the "class arg" and is {@link SpellDesc#put(Enum, Object)} with
+ * Then, a field like {@code "class"} is known to be the "class arg" and is {@code put} with
  * {@link SpellArg#CLASS} as the key and a {@link Class} instance as a value. For a field like {@code "value"}, it is
  * turned into {@code UPPER_CASE} (so {@code "VALUE"}) and simply passed to {@link Enum#valueOf(Class, String)} to find
  * the corresponding enum constant to use as the key. The {@code init} implementation specifies that {@link
@@ -117,7 +117,7 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 		}
 
 		if (spellClass == null) {
-			throw ctxt.weirdStringException(suppliedClassName,getAbstractComponentClass(),"parser encountered an invalid class");
+			throw ctxt.weirdStringException(suppliedClassName, getAbstractComponentClass(), "parser encountered an invalid class");
 		}
 
 

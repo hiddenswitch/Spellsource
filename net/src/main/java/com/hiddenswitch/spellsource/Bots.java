@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
@@ -27,8 +27,6 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -226,7 +224,7 @@ public interface Bots {
 		Scope scope = tracer.activateSpan(span);
 		try {
 			// Refresh the bot decks
-			List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("decks", 1)));
+			List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("_id", 1, "decks", 1)));
 			for (JsonObject bot : bots) {
 				for (Object obj : bot.getJsonArray("decks")) {
 					String deckId = (String) obj;

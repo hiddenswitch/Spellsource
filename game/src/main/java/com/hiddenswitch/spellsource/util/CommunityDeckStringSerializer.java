@@ -1,11 +1,10 @@
 package com.hiddenswitch.spellsource.util;
 
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
@@ -15,6 +14,12 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Converts a varint-based deck string into a community deck list.
+ *
+ * @deprecated since the retirement of the varint data necessary to support this feature.
+ */
+@Deprecated
 public class CommunityDeckStringSerializer {
 	private static final Map<Integer, String> dbf;
 

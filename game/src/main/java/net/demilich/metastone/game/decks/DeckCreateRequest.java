@@ -1,10 +1,10 @@
-package com.hiddenswitch.spellsource.common;
+package net.demilich.metastone.game.decks;
 
 import com.hiddenswitch.spellsource.util.CommunityDeckStringSerializer;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -18,8 +18,20 @@ import java.util.regex.Pattern;
 
 /**
  * Represents a request to create a game with the specified deck list.
+ * <p>
+ * A deck list can be specified in a community format using {@link #fromDeckList(String)} and converted to a deck usable
+ * by the engine using {@link #toGameDeck()}. Alternatively, the hero class and card IDs can be specified using {@link
+ * #fromCardIds(String, String...)}.
+ *
+ * @see #fromDeckList(String) to learn more about the format for deck lists.
+ * @see net.demilich.metastone.game.GameContext#fromDeckLists(List) to create a game context directly from community
+ * 		deck lists.
  */
 public class DeckCreateRequest implements Serializable, Cloneable {
+	/**
+	 * The maximum number of characters that can be specified in a name.
+	 */
+	public static final int NAME_MAX_LENGTH = 140;
 	private String userId;
 	private String name;
 	private String heroClass;
@@ -30,13 +42,58 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private List<String> inventoryIds = new ArrayList<>();
 	private List<String> cardIds = new ArrayList<>();
 
+	/**
+	 * Creates a deck list from a specified community format.
+	 * <p>
+	 * In this format, a deck is in one of two formats:
+	 * <ul>
+	 * <li>A <b>community decklist</b> format, which is a plain text list of cards.</li>
+	 * <li>A <b>varint</b> format, which is a Base 64-encoded list of numbers that correspond to specific cards
+	 * (deprecated).</li>
+	 * </ul>
+	 * <p>
+	 * A <b>community decklist</b> format looks like:
+	 * <pre>
+	 *   Name: Name of the deck
+	 *   Class: The color corresponding to the champion.
+	 *   Format: The game format this deck belongs to, indicating which cards it can use
+	 *   1x Card Name
+	 *   2x Card Name
+	 *   3x Card Name
+	 * </pre>
+	 * The specification for these lines:
+	 * <ul>
+	 * <li><b>Name</b>: The name of the deck that will appear in the client. This does not have to be a unique name. The
+	 * name will begin after the first space in the line, if there is one. Whitespace is removed from the end and
+	 * beginning of the name. The name is read until the end of the line. Names must be {@link #NAME_MAX_LENGTH}
+	 * characters long or fewer.</li>
+	 * <li><b>Class</b>: The color corresponding to the champion. Each champion has a color specified in the {@link
+	 * CardDesc#heroClass} field of a {@link CardType#CLASS}. You can find the appropriate, all-capitals color by
+	 * searching for {@code CLASS} cards in the {@link CardCatalogue}.</li>
+	 * <li><b>Format</b>: A format consisting of a set of {@link net.demilich.metastone.game.cards.CardSet}
+	 * (strings) in the {@link DeckFormat#formats()} map.</li>
+	 * <li>A list of cards. These are each in the form {@code number}, followed immediately by an {@code x} character,
+	 * followed by whitespace, followed by the case-sensitive card name in the {@link CardDesc#name} field. Whenever two
+	 * cards share a name, the one that is collectible is preferred; otherwise, the chosen card is arbitrary and will
+	 * <b>not</b> produce a warning.</li>
+	 * </ul>
+	 *
+	 * @param deckList A community format deck list
+	 * @return A request on which {@link DeckCreateRequest#toGameDeck()} can be called to get an actual deck, or which can
+	 * 		be passed to certain network services to create decks for users.
+	 * @throws DeckListParsingException that contains a list of more detailed exceptions as to why the deck failed to
+	 *                                  parse or any other errors related to it. This ensures you will see all the errors
+	 *                                  related to deck list parsing, not just one error.
+	 */
 	public static DeckCreateRequest fromDeckList(String deckList) throws DeckListParsingException {
 		if (!deckList.startsWith("#")
-				&& !deckList.contains("\n")) {
+				&& !deckList.contains("\n")
+				&& !deckList.startsWith("Name")
+				&& !deckList.startsWith("name")) {
 			try {
 				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, "Decklist (" + deckList + ")", deckList);
 			} catch (Throwable ex) {
-				throw new DeckListParsingException(Collections.singletonList(ex));
+				throw new DeckListParsingException(Collections.singletonList(ex), deckList);
 			}
 		}
 
@@ -49,7 +106,16 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		List<Throwable> errors = new ArrayList<>();
 		while (matcher.find()) {
 			if (matcher.group("name") != null) {
-				request.setName(matcher.group("name"));
+				try {
+					String name = matcher.group("name").strip();
+					if (name.length() == 0) {
+						throw new IllegalArgumentException("Name must contain at least one non-whitespace character.");
+					}
+					request.setName(name.substring(0, Math.min(name.length(), NAME_MAX_LENGTH)));
+				} catch (IllegalArgumentException ex) {
+					errors.add(ex);
+				}
+
 				continue;
 			}
 
@@ -150,7 +216,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		}
 
 		if (errors.size() > 0) {
-			throw new DeckListParsingException(errors);
+			throw new DeckListParsingException(errors, deckList);
 		}
 
 		return request;

@@ -5,6 +5,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+/**
+ * Implementors of this interface support being notified of changes to an ordered array.
+ *
+ * @param <T>
+ * @param <K>
+ */
 public interface DiffContext<T, K extends Comparable> {
 	/**
 	 * Indicates that the given ID should be removed.
@@ -24,6 +30,11 @@ public interface DiffContext<T, K extends Comparable> {
 	 */
 	void addedBefore(K newDocId, T newDoc, @Nullable K beforeId);
 
+	/**
+	 * A document with the specified ID has been added.
+	 * @param newDocId
+	 * @param newDoc
+	 */
 	void added(K newDocId, T newDoc);
 
 	void possiblyChanged(K newDocId, T oldDoc, T newDoc);
