@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "After you cast a spell, summon a 2/1 Demon at the end of your turn.",
+  "description": "After you cast a spell, summon a 2/1 Demon during the end of your turn.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
