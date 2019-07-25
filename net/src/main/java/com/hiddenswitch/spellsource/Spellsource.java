@@ -558,43 +558,26 @@ public class Spellsource {
 						.withVersion(36)
 						.withUp(thisVertx -> {
 							CardCatalogue.loadCardsFromPackage();
+							Mongo.mongo().connectWithEnvironment(thisVertx);
+							// We'll mark as removed all the missing cards, then change the hero classes that no longer exist to
+							// neutral heroes.
 
-							String[] badHeroClasses = new String[]{"BLACK", "SILVER", "BROWN",
-																	"RED", "GOLD", "GREEN",
-																	"VIOLET", "BLUE", "WHITE"};
+							// First, change all missing cards to reference the "removed card"
+							List<String> cardIdsInCatalogue = new ArrayList<>(CardCatalogue.getRecords().keySet());
+							String removedCardId = BaseCardResources.REMOVED_CARD_ID;
+							mongo().updateCollectionWithOptions(
+									INVENTORY,
+									json("cardDesc.id", json("$nin", cardIdsInCatalogue)),
+									json("$set", json("cardDesc.id", removedCardId)),
+									new UpdateOptions().setMulti(true));
 
-							List<String> deckIds = new ArrayList<>();
-							for (String badHeroClass : badHeroClasses) {
-								deckIds.addAll(mongo().findWithOptions(COLLECTIONS,
-										json("heroClass", json("$regex", badHeroClass)),
-										new FindOptions().setFields(json("_id", true))).stream()
-										.map(o -> o.getString("_id")).collect(toList()));
-							}
-							for (String deckId : deckIds) {
-								Decks.deleteDeck(DeckDeleteRequest.create(deckId));
-							}
-
-							deckIds = mongo().findWithOptions(COLLECTIONS,
-									json(),
-									new FindOptions().setFields(json("_id", true))).stream()
-									.map(o -> o.getString("_id")).collect(toList());
-
-							CardList cards = new CardArrayList();
-							for (String deckId : deckIds) {
-								GetCollectionResponse response1 = Inventory.getCollection(new GetCollectionRequest().withDeckId(deckId));
-								response1.asDeck(response1.getUserId()).getCards().forEach(card -> {
-									if (!cards.contains(card)) {
-										cards.add(card);
-									}
-								});
-							}
-
-							cards.removeIf(card -> CardCatalogue.getCardByName(card.getName()) == null);
-
-							for (String cardId : cards.stream().map(Card::getCardId).collect(toList())) {
-								changeCardId(cardId, "spell_fartstone");
-							}
-
+							// Change all the hero classes to the neutral class.
+							List<String> heroClasses = CardCatalogue.getHeroes().stream().map(Card::getHeroClass).collect(toList());
+							mongo().updateCollectionWithOptions(
+									COLLECTIONS,
+									json("heroClass", json("$nin", heroClasses)),
+									json("$set", json("heroClass", "ANY")),
+									new UpdateOptions().setMulti(true));
 						}))
 				.migrateTo(36, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
