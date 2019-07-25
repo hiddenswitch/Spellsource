@@ -1646,7 +1646,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getMinions().stream()
 				.filter(minion -> minion.hasAttribute(Attribute.DECAY))
 				.forEach(minion -> {
-							damage(player, minion, 1, minion, true, true, DamageType.DECAY);
+							damage(player, minion, 1, minion, true, false, DamageType.DECAY);
 							context.fireGameEvent(new DecayEvent(context, player.getId(), minion));
 						}
 				);

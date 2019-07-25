@@ -11,7 +11,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "DECAY"
+      "attribute": "DECAY",
+      "target": "ENEMY_MINIONS"
     }
   },
   "attributes": {

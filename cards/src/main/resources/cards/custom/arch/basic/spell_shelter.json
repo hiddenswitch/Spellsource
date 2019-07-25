@@ -14,7 +14,8 @@
         "hpBonus": 6
       },
       {
-        "class": "DrawCardSpell"
+        "class": "DrawCardSpell",
+        "value": 1
       }
     ]
   },

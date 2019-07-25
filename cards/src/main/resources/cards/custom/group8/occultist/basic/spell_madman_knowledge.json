@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "FRINDLY_HERO",
+        "target": "FRIENDLY_HERO",
         "value": 2
       },
       {
