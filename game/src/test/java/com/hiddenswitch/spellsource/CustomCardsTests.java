@@ -7413,14 +7413,14 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testStringShot() {
 		runGym(((context, player, opponent) -> {
-			playCard(context, opponent, "minion_test_3_2");
-			receiveCard(context, player, "spell_string_shot");
-			player.setMana(1);
-			int originalNumberOfActions = context.getValidActions().size();
-
+			Minion target = playMinionCard(context, opponent, "minion_test_3_2");
+			Card stringShotCard = receiveCard(context, player, "spell_string_shot");
 			playCard(context, player, "minion_lil_wormy");
-			assertEquals(context.getValidActions().size(), originalNumberOfActions + 1);
+			player.setMana(1);
+
+			assertEquals(context.getValidActions().stream().filter(action ->
+					Objects.equals(action.getSourceReference(), stringShotCard.getReference()) &&
+							Objects.equals(action.getTargetReference(), target.getReference())).count(), 1L);
 		}));
 	}
-
 }
