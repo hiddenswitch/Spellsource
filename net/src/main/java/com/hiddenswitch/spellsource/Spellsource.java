@@ -18,10 +18,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -582,22 +579,19 @@ public class Spellsource {
 									new FindOptions().setFields(json("_id", true))).stream()
 									.map(o -> o.getString("_id")).collect(toList());
 
-							List<String> cardIds = new ArrayList<>();
+							CardList cards = new CardArrayList();
 							for (String deckId : deckIds) {
 								GetCollectionResponse response1 = Inventory.getCollection(new GetCollectionRequest().withDeckId(deckId));
-								response1.asDeck(response1.getUserId()).getCards().forEach(card -> cardIds.add(card.getCardId()));
+								response1.asDeck(response1.getUserId()).getCards().forEach(card -> {
+									if (!cards.contains(card)) {
+										cards.add(card);
+									}
+								});
 							}
 
-							cardIds.removeIf(cardId -> {
-								try {
-									CardCatalogue.getCardById(cardId);
-									return false;
-								} catch (Exception e) {
-									return true;
-								}
-							});
+							cards.removeIf(card -> CardCatalogue.getCardByName(card.getName()) == null);
 
-							for (String cardId : cardIds) {
+							for (String cardId : cards.stream().map(Card::getCardId).collect(toList())) {
 								changeCardId(cardId, "spell_fartstone");
 							}
 
