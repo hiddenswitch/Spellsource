@@ -39,6 +39,7 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
  - Manly Mountaineer now properly has Dash. (1233)
  - Tome of Secrets now works properly. (1233)
  - Dramatic Playwright now only changes the attack of one enemy minion. (1233)
+ - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
