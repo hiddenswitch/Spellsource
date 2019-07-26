@@ -1,0 +1,29 @@
+{
+  "name": "Soultender",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Opener: Soulbind.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "SOULBIND"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

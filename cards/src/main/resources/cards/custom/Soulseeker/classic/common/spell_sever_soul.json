@@ -1,0 +1,32 @@
+{
+  "name": "Sever Soul",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Deal $3 damage to a minion. If that kills it, Soulbind.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "SOULBIND"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

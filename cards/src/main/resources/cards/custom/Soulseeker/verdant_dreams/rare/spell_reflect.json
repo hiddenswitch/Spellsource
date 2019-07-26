@@ -1,0 +1,32 @@
+{
+  "name": "Reflect",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "RARE",
+  "description": "Your next Opener this turn triggers twice.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_double_next_battlecry"
+      },
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "SOULBIND"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

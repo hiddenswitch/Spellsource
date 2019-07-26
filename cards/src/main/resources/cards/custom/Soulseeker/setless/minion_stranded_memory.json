@@ -1,0 +1,23 @@
+{
+  "name": "Stranded Memory",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "Opener: Draw 2 cards.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

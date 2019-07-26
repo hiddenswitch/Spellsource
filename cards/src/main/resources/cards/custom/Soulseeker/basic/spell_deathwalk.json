@@ -1,0 +1,26 @@
+{
+  "name": "Deathwalk",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Destroy a friendly minion. Add a copy of it to your hand.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "CopyCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

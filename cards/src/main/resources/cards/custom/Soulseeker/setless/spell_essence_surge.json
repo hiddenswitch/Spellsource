@@ -1,0 +1,37 @@
+{
+  "name": "Essence Shift",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "EPIC",
+  "description": "Soulbind twice, then restore 2 health to your champion for each minion you control.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "SOULBIND"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        },
+        "value": 2
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_MINIONS",
+          "multiplier": 2
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

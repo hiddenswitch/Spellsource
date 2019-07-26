@@ -1,0 +1,33 @@
+{
+  "name": "Consign",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "COMMON",
+  "description": "Return a minion to its owner's hand, then Soulbind.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReturnTargetToHandSpell"
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "SOULBIND"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
