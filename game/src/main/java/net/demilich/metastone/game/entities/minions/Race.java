@@ -13,7 +13,8 @@ public enum Race {
 	ELEMENTAL,
 	TITAN,
 	FAE,
-	ALL;
+	ALL,
+	SPIRIT;
 
 	public boolean hasRace(Race comparedTo) {
 		if (this == ALL && comparedTo != NONE && comparedTo != null) {

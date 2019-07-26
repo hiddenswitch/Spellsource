@@ -7436,4 +7436,16 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(aiiranInHand.getDescription(context, player), "Opener: Deal 0 damage. (Increases by 2 for each other Dragon in your hand)");
 		});
 	}
+
+	@Test
+	public void testBloodPlague() {
+		runGym((context, player, opponent) -> {
+			Minion one = playMinionCard(context, player, "minion_neutral_test_1");
+			Minion two = playMinionCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "spell_blood_plague");
+			context.getLogic().destroy(one);
+			context.getLogic().endOfSequence();
+			assertTrue(two.isDestroyed());
+		});
+	}
 }

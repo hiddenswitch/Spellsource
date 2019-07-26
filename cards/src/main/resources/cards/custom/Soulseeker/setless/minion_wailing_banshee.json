@@ -1,0 +1,33 @@
+{
+  "name": "Wailing Banshee",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "SPIRIT",
+  "description": "At the end of your turn, deal 1 damage to a random enemy for each Spirit you conrol.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "SPIRIT"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

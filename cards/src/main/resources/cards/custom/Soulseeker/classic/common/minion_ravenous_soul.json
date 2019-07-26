@@ -1,0 +1,33 @@
+{
+  "name": "Ravenous Soul",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "Dash. Whenever this minion attacks, Soulbind.",
+  "attributes": {
+    "RUSH": true
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "SOULBIND"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

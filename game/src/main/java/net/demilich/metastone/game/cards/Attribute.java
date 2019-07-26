@@ -1049,6 +1049,10 @@ public enum Attribute {
 	 */
 	LACKEY,
 	/**
+	 * Indicates a minion is a token to be used for the Soulbind effect
+	 */
+	SOULBIND,
+	/**
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
 	TREANT,

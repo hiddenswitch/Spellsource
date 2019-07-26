@@ -1,0 +1,32 @@
+{
+  "name": "Essence Shift",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "EPIC",
+  "description": "Soulbind twice, then trigger the Aftermath effect of each friendly minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "value": 2,
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "SOULBIND"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        }
+      },
+      {
+        "class": "TriggerDeathrattleSpell",
+        "target": "FRIENDLY_MINIONS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
