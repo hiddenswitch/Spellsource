@@ -106,4 +106,75 @@ public class DecayTests extends TestBase {
 			assertTrue(weapon.isBroken());
 		});
 	}
+
+	@Test
+	public void testDecayingArmorBuffTest() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "spell_test_5_decaying_armor");
+			assertEquals(player.getHero().getDecayingArmor(), 5);
+		}));
+	}
+
+	@Test
+	public void testBasicDecayingArmor() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "spell_test_5_decaying_armor");
+			Minion attacker = playMinionCard(context, opponent, "minion_test_3_2");
+			attack(context, opponent, attacker, player.getHero());
+			assertEquals(player.getHero().getDecayingArmor(), 2);
+			context.endTurn();
+			assertEquals(player.getHero().getDecayingArmor(), 1);
+		}));
+	}
+
+	@Test
+	public void testRegaularAndDecayingArmor() {
+		runGym(((context, player, opponent) -> {
+			// avoid fatigue
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+
+			playCard(context, player, "spell_test_5_decaying_armor");
+			playCard(context, player, "spell_test_5_regular_armor");
+
+			assertEquals(player.getHero().getArmor(), 10);
+			assertEquals(player.getHero().getDecayingArmor(), 5);
+
+			Minion attacker = playMinionCard(context, opponent, "minion_test_3_2");
+			attack(context, opponent, attacker, player.getHero());
+			assertEquals(player.getHero().getArmor(), 7);
+			assertEquals(player.getHero().getDecayingArmor(), 2);
+
+			context.endTurn();
+			assertEquals(player.getHero().getArmor(), 6);
+			assertEquals(player.getHero().getDecayingArmor(), 1);
+
+			attack(context, opponent, attacker, player.getHero());
+			assertEquals(player.getHero().getArmor(), 3);
+			assertEquals(player.getHero().getDecayingArmor(), 0);
+
+			context.endTurn();
+			assertEquals(player.getHero().getArmor(), 3);
+			assertEquals(player.getHero().getDecayingArmor(), 0);
+
+			context.endTurn();
+			assertEquals(player.getHero().getArmor(), 3);
+			assertEquals(player.getHero().getDecayingArmor(), 0);
+		}));
+	}
+
+	@Test
+	public void testDecayingArmorWithWeapon() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "spell_test_5_decaying_armor");
+			playCard(context, player, "weapon_lifestealx");
+			Minion attacker = playMinionCard(context, opponent, "minion_test_3_2");
+			attack(context, opponent, attacker, player.getHero());
+			assertEquals(player.getHero().getDecayingArmor(), 2);
+			context.endTurn();
+			assertEquals(player.getHero().getDecayingArmor(), 1);
+		}));
+	}
 }

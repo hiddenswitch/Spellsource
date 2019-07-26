@@ -27,6 +27,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);
 		ctx.add(SpellArg.AURA, ParseValueType.AURA);
 		ctx.add(SpellArg.ARMOR_BONUS, ParseValueType.VALUE);
+		ctx.add(SpellArg.DECAYING_ARMOR_BONUS, ParseValueType.VALUE);
 		ctx.add(SpellArg.BOARD_POSITION_ABSOLUTE, ParseValueType.VALUE);
 		ctx.add(SpellArg.BOARD_POSITION_RELATIVE, ParseValueType.BOARD_POSITION_RELATIVE);
 		ctx.add(SpellArg.CANNOT_RECEIVE_OWNED, ParseValueType.BOOLEAN);

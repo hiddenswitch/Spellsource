@@ -45,22 +45,26 @@ public final class BuffAsEnchantmentSpell extends BuffSpell {
 		checkArguments(logger, context, source, desc, SpellArg.ATTACK_BONUS, SpellArg.HP_BONUS, SpellArg.ARMOR_BONUS, SpellArg.VALUE);
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
+		int decayingArmorBonus = desc.getValue(SpellArg.DECAYING_ARMOR_BONUS, context, player, target, source, 0);
+		int totalArmorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 
 		if (value != 0) {
 			if (target instanceof Hero) {
-				attackBonus = armorBonus = value;
+				attackBonus = totalArmorBonus = value;
 			} else {
 				attackBonus = hpBonus = value;
 			}
 		}
 
-		logger.debug("onCast {} {}: {} gains ({})", context.getGameId(), source, target, attackBonus + "/" + (hpBonus + armorBonus));
+		logger.debug("onCast {} {}: {} gains ({})", context.getGameId(), source, target, attackBonus + "/" + (hpBonus + totalArmorBonus));
 
 		if (target instanceof Hero) {
-			if (armorBonus != 0) {
-				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), armorBonus);
+			if (totalArmorBonus != 0) {
+				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), totalArmorBonus);
+			}
+			if (decayingArmorBonus != 0) {
+				context.getLogic().gainDecayingArmor(context.getPlayer(target.getOwner()), decayingArmorBonus);
 			}
 			if (attackBonus != 0) {
 				target.modifyAttribute(Attribute.TEMPORARY_ATTACK_BONUS, attackBonus);

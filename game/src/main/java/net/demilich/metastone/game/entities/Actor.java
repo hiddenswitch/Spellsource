@@ -4,7 +4,6 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
@@ -114,6 +113,10 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 
 	public int getArmor() {
 		return getAttributeValue(Attribute.ARMOR);
+	}
+
+	public int getDecayingArmor() {
+		return getAttributeValue(Attribute.DECAYING_ARMOR);
 	}
 
 	public int getAttack() {

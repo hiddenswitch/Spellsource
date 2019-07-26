@@ -124,7 +124,8 @@ public class BuffSpell extends RevertableSpell {
 		if (desc.get(SpellArg.VALUE) instanceof ValueProvider
 				|| desc.get(SpellArg.ATTACK_BONUS) instanceof ValueProvider
 				|| desc.get(SpellArg.HP_BONUS) instanceof ValueProvider
-				|| desc.get(SpellArg.ARMOR_BONUS) instanceof ValueProvider) {
+				|| desc.get(SpellArg.ARMOR_BONUS) instanceof ValueProvider
+				|| desc.get(SpellArg.DECAYING_ARMOR_BONUS) instanceof ValueProvider) {
 			throw new UnsupportedOperationException("Cannot create a revertTrigger on a BuffSpell that uses a ValueProvider in any of its value fields");
 		}
 		if (desc.containsKey(SpellArg.VALUE)) {
@@ -139,6 +140,9 @@ public class BuffSpell extends RevertableSpell {
 		if (desc.containsKey(SpellArg.ARMOR_BONUS)) {
 			reverse.put(SpellArg.ARMOR_BONUS, -desc.getInt(SpellArg.ARMOR_BONUS, 0));
 		}
+		if (desc.containsKey(SpellArg.DECAYING_ARMOR_BONUS)) {
+			reverse.put(SpellArg.DECAYING_ARMOR_BONUS, -desc.getInt(SpellArg.DECAYING_ARMOR_BONUS, 0));
+		}
 		return reverse;
 	}
 
@@ -150,12 +154,13 @@ public class BuffSpell extends RevertableSpell {
 
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
+		int decayingArmorBonus = desc.getValue(SpellArg.DECAYING_ARMOR_BONUS, context, player, target, source, 0);
+		int totalArmorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0) + decayingArmorBonus;
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 
 		if (value != 0) {
 			if (target instanceof Hero) {
-				attackBonus = armorBonus = value;
+				attackBonus = totalArmorBonus = value;
 			} else {
 				attackBonus = hpBonus = value;
 			}
@@ -203,9 +208,9 @@ public class BuffSpell extends RevertableSpell {
 			}
 		}
 
-		if (armorBonus != 0) {
+		if (totalArmorBonus != 0) {
 			if (target != null && target.getEntityType() == EntityType.HERO) {
-				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), armorBonus);
+				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), totalArmorBonus);
 			} else {
 				if (target == null) {
 					LOGGER.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
@@ -213,7 +218,21 @@ public class BuffSpell extends RevertableSpell {
 					LOGGER.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
 							" differs from the player {}", context.getGameId(), source, target, player);
 				}
-				context.getLogic().gainArmor(player, armorBonus);
+				context.getLogic().gainArmor(player, totalArmorBonus);
+			}
+		}
+
+		if (decayingArmorBonus != 0) {
+			if (target != null && target.getEntityType() == EntityType.HERO) {
+				context.getLogic().gainDecayingArmor(context.getPlayer(target.getOwner()), decayingArmorBonus);
+			} else {
+				if (target == null) {
+					LOGGER.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
+				} else if (target.getOwner() != player.getId()) {
+					LOGGER.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
+							" differs from the player {}", context.getGameId(), source, target, player);
+				}
+				context.getLogic().gainDecayingArmor(player, decayingArmorBonus);
 			}
 		}
 	}
