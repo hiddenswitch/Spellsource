@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 4,
   "rarity": "RARE",
-  "description": "After your champion attacks, summon a Jade Serpent Statue.",
+  "description": "After your champion attacks, summon a BLessed Koi Statue.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -20,7 +20,7 @@
     }
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
