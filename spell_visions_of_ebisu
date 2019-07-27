@@ -1,0 +1,21 @@
+{
+  "name": "Visions of Ebisu",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Restore #3 Health to your champion for each enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS",
+      "multiplier": 3
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
