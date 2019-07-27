@@ -1,6 +1,6 @@
 {
   "name": "Enchanted Tapestry",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 0,
