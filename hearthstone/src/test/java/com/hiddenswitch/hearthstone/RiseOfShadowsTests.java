@@ -136,6 +136,7 @@ public class RiseOfShadowsTests extends TestBase {
 			final Answer<GameAction> answer = invocation -> {
 
 				if (isTeachingHorror.get()) {
+					@SuppressWarnings("unchecked")
 					final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
 					final DiscoverAction discoverAction = (DiscoverAction) gameActions.get(0);
 					cards.add(discoverAction.getCard());
