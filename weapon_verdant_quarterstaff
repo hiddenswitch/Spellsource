@@ -1,0 +1,23 @@
+{
+  "name": "Verdant Quarterstaff",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "COMMON",
+  "description": "Extra Strike",
+  "onEquip": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "WINDFURY"
+  },
+  "onUnequip": {
+    "class": "RemoveAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "WINDFURY"
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
