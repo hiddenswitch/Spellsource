@@ -6,7 +6,6 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "ELEMENTAL",
   "description": "Whenever you summon a minion, give it Deflect.",
   "trigger": {
     "eventTrigger": {
