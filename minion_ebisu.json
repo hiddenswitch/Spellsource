@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
   "description": "Deflect. Whenever a friendly minion Deflects, restore #6 Health to your champion.",
   "trigger": {
     "eventTrigger": {
