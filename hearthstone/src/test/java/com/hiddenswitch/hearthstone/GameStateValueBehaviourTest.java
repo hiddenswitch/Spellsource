@@ -1,18 +1,12 @@
 package com.hiddenswitch.hearthstone;
 
 import ch.qos.logback.classic.Level;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.events.GameStartEvent;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,11 +14,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
