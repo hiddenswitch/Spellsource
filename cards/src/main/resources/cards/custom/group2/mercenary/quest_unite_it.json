@@ -4,10 +4,10 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "LEGENDARY",
-  "description": "Quest: Summon a Murloc. Reward: Duplicate It!",
+  "description": "Quest: Summon a Fae. Reward: Duplicate It!",
   "quest": {
     "class": "MinionSummonedTrigger",
-    "race": "MURLOC",
+    "race": "FAE",
     "targetPlayer": "SELF"
   },
   "countUntilCast": 1,

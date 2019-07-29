@@ -23,10 +23,10 @@ public class AllianceSpellTests extends TestBase {
 		warrior.setMana(10);
 
 		Card card = CardCatalogue.getCardById("minion_sourcing_specialist");
-		card.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_wisp");
+		card.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_neutral_test");
 
 		playCard(context, mage, card);
 
-		Assert.assertTrue(mage.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_wisp")));
+		Assert.assertTrue(mage.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_neutral_test")));
 	}
 }

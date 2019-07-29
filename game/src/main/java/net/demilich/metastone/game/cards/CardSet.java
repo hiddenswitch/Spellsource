@@ -36,7 +36,13 @@ public class CardSet {
 	public static final String SANDS_OF_TIME = "SANDS_OF_TIME";
 	public static final String VERDANT_DREAMS = "VERDANT_DREAMS";
 	public static final String TEST = "TEST";
+	/**
+	 * Cards in the Spellsource basic set.
+	 */
 	public static final String SPELLSOURCE_BASIC = "SPELLSOURCE_BASIC";
+	/**
+	 * Spellsource / Minionate legacy cards.
+	 */
 	public static final String SPELLSOURCE = "SPELLSOURCE";
 	/**
 	 * Indicates the card should no longer be in any user's collections or appear in any formats.

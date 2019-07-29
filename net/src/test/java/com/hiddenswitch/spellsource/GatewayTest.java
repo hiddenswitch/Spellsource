@@ -6,7 +6,7 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
@@ -34,9 +34,6 @@ import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.*;
 
-/**
- * Created by bberman on 2/18/17.
- */
 public class GatewayTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
@@ -261,7 +258,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				if (counter.getAndIncrement() == 0) {
 					startTime.set(System.currentTimeMillis());
 					vertx.runOnContext(v -> {
-						vertx.setTimer(7000L, ignored -> {
+						vertx.setTimer(6000L, ignored -> {
 							this.respondRandomAction(message);
 						});
 					});
@@ -300,7 +297,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		GetCardsResponse response1 = defaultApi.getCards(null);
 		// The game is now sending formats and classes to the client
 		final long count = CardCatalogue.getRecords().values().stream().filter(
-				cd -> DeckFormat.getFormat("Greater Custom").isInFormat(cd.getDesc().getSet())
+				cd -> DeckFormat.getFormat("Spellsource").isInFormat(cd.getDesc().getSet())
 						&& cd.getDesc().type != CardType.GROUP
 						&& cd.getDesc().type != CardType.HERO_POWER
 						&& cd.getDesc().type != CardType.ENCHANTMENT).count();

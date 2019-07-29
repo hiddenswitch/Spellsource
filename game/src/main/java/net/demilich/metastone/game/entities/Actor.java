@@ -326,7 +326,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		}
 	}
 
-	public void setRace(Race race) {
+	public void setRace(String race) {
 		if (race != null) {
 			setAttribute(Attribute.RACE, race);
 		}

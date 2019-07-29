@@ -1,9 +1,13 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -21,5 +25,12 @@ public class CardValidationTests {
 	@Test(dataProvider = "CardProvider")
 	public void validateCard(File cardFile) throws IOException {
 		CardValidation.validateCard(cardFile);
+	}
+
+
+	@Test(dataProvider = "CardProvider")
+	public void validateCardReferences(File cardFile) throws IOException {
+		CardValidation.validateCardReferences(cardFile);
+
 	}
 }

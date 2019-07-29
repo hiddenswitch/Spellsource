@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Your Supremacy effects also draw a card.",
   "aura": {
     "class": "SupremacyBonusEffectAura",

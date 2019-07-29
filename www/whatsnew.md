@@ -6,10 +6,14 @@ permalink: /whats-new/
 
 ### 0.8.41-2.0.35 (In Progress)
 
+Non-Spellsource content is removed from the game.
+
 New Storyteller cards thanks to @Skurleton!
 Archaeologist is digging is way into the game, thanks to @Pircival! 
 
-The bot will now play more new decks in its rotation. Additionally, there are bug fixes.
+The bot will now play more new decks in its rotation.
+
+Many other bug fixes.
 
 ##### Content Additions:
 
@@ -18,6 +22,7 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
 
 ##### Content Fixes:
 
+ - Non-Spellsource content has been migrated to a "Do Nothing" card. (1180, 1285)
  - All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
  - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
  - Strengthen Core (Honed Potion) now gives a minion deflect, draws a card and costs (2). (1245)
@@ -35,6 +40,12 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
  - Might Mufunga now costs (9), up from (8). (1257)
  - Guild Guard now costs (5), up from (4). (1257)
  - Miserable Conclusion now correctly destroys all minions except the opponent's highest attack minion.
+ - Hooded Ritualist now reads "After you cast a spell, summon a 2/1 Demon right before the end of your turn." (1264)
+ - The Omega Rune now correctly no longer gives lifesteal on spell casts to both players. (1265)
+ - Matriarch Aiiran no longer dynamically updates its damage number while on board. (1249)
+ - Manly Mountaineer now properly has Dash. (1233)
+ - Tome of Secrets now works properly. (1233)
+ - Dramatic Playwright now only changes the attack of one enemy minion. (1233)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 

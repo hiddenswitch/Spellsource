@@ -33,10 +33,10 @@ public class BotsTest extends SpellsourceTestBase {
 		sync(() -> {
 			MulliganRequest request = new MulliganRequest(
 					Arrays.asList(
-							CardCatalogue.getCardById("spell_fireball"),
-							CardCatalogue.getCardById("spell_arcane_missiles"),
-							CardCatalogue.getCardById("spell_assassinate")));
-			assertEquals(2, Bots.mulligan(request).discardedCards.size());
+							CardCatalogue.getCardById("spell_test_deal_6"),
+							CardCatalogue.getCardById("minion_test_3_2"),
+							CardCatalogue.getCardById("spell_test_summon_tokens")));
+			assertEquals(1, Bots.mulligan(request).discardedCards.size());
 		}, context);
 	}
 

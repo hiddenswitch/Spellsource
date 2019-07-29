@@ -252,8 +252,6 @@ public class ParseUtils {
 				return parseEntityReference(jsonData.asText());
 			case TARGET_PLAYER:
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
-			case RACE:
-				return Enum.valueOf(Race.class, jsonData.asText());
 			case SPELL:
 				return spellParser.innerDeserialize(ctxt, jsonData);
 			case SPELL_ARRAY: {

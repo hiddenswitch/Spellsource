@@ -37,11 +37,11 @@ public class SuspendableGameContextTests extends TestBase {
 
 	@Test
 	public void testCopySuspendableContext() throws ExecutionException, InterruptedException {
-		SuspendableGameContext context1 = new SuspendableGameContext("BLACK", "BROWN");
+		SuspendableGameContext context1 = new SuspendableGameContext("JADE", "OBSIDIAN");
 		SuspendableGameContext context2 = context1.clone();
 
 		assertEquals(context1.getPlayer(0).getHero().getHeroClass(), context2.getPlayer(0).getHero().getHeroClass());
-		assertEquals("BLACK", context2.getPlayer(0).getHero().getHeroClass());
+		assertEquals("JADE", context2.getPlayer(0).getHero().getHeroClass());
 		assertNull(context1.getFiber());
 		assertNull(context2.getFiber());
 
