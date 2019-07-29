@@ -13,7 +13,9 @@ import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
 import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
+import io.netty.channel.EventLoop;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -684,8 +686,18 @@ public class Spellsource {
 	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
+		// This seems to be the most reliable way to count how many event loop threads there are?
+		EventLoop first = vertx.nettyEventLoopGroup().next();
+		EventLoop next = first;
+		int j = 1;
+		for (; j <= Runtime.getRuntime().availableProcessors(); j++) {
+			next = next.next();
+			if (Objects.equals(first, next)) {
+				break;
+			}
+		}
 		// Use up all the event loops
-		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
+		for (int i = 0; i < j; i++)
 			for (Verticle verticle : services()) {
 				final Future<String> future = Future.future();
 				vertx.deployVerticle(verticle, future);

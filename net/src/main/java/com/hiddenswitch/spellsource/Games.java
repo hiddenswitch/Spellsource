@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -30,7 +29,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.events.PhysicalAttackEvent;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.spells.BuffSpell;
@@ -38,7 +36,6 @@ import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
@@ -55,8 +52,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -680,6 +675,16 @@ public interface Games extends Verticle {
 	}
 
 	/**
+	 * Specifies the number of milliseconds to wait for players to connect to a {@link
+	 * com.hiddenswitch.spellsource.impl.util.ServerGameContext} that was just created.
+	 *
+	 * @return
+	 */
+	static long getDefaultConnectionTime() {
+		return 12000L;
+	}
+
+	/**
 	 * Creates a game session on this instance. Returns once the game is ready to receive first messages
 	 *
 	 * @param request Information needed to start a game.
@@ -1177,7 +1182,7 @@ public interface Games extends Verticle {
 						&& DamageSpell.class.isAssignableFrom(spell.getDescClass())
 						&& owningPlayer != null) {
 
-					Minion oneOne = CardCatalogue.getCardById("minion_snowflipper_penguin").summon();
+					Minion oneOne = CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()).summon();
 					oneOne.setId(65535);
 					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, oneOne);
 					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);

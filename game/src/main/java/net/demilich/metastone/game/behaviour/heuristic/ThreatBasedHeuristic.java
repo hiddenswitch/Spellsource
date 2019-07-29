@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -25,21 +26,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 	private static List<String> HARD_REMOVALS;
 
 	static {
-		HARD_REMOVALS = new ArrayList<String>();
-		HARD_REMOVALS.add("spell_polymorph");
-		HARD_REMOVALS.add("spell_execute");
-		HARD_REMOVALS.add("spell_crush");
-		HARD_REMOVALS.add("spell_assassinate");
-		HARD_REMOVALS.add("spell_siphon_soul");
-		HARD_REMOVALS.add("spell_shadow_word_death");
-		HARD_REMOVALS.add("spell_naturalize");
-		HARD_REMOVALS.add("spell_hex");
-		HARD_REMOVALS.add("spell_humility");
-		HARD_REMOVALS.add("spell_equality");
-		HARD_REMOVALS.add("spell_deadly_shot");
-		HARD_REMOVALS.add("spell_sap");
-		HARD_REMOVALS.add("minion_doomsayer");
-		HARD_REMOVALS.add("minion_big_game_hunter");
+		HARD_REMOVALS = new ArrayList<>(CardCatalogue.getHardRemovalCardIds());
 	}
 
 	private static ThreatLevel calcuateThreatLevel(GameContext context, int playerId) {

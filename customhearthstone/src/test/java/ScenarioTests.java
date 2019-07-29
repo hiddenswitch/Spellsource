@@ -1,5 +1,3 @@
-package com.hiddenswitch.hearthstone;
-
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;

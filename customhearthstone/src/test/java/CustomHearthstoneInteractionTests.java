@@ -1,10 +1,9 @@
-package com.hiddenswitch.hearthstone;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -12,25 +11,9 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
-public class CommunityBlizzardInteractionTests extends TestBase {
-
-	@Test
-	public void testShudderwockBloodCultistInteraction() {
-		runGym((context, player, opponent) -> {
-			Minion remove = playMinionCard(context, player, "minion_blood_cultist");
-			context.getLogic().removePeacefully(remove);
-			context.getLogic().endOfSequence();
-			overrideDiscover(context, player, discoverActions -> {
-				fail("Shouldn't prompt to discover");
-				return null;
-			});
-			playMinionCard(context, player, "minion_shudderwock");
-		});
-	}
-
+public class CustomHearthstoneInteractionTests extends TestBase {
 	@Test
 	public void testRenoJackson() {
 		runGym((context, player, opponent) -> {
@@ -96,5 +79,65 @@ public class CommunityBlizzardInteractionTests extends TestBase {
 			playCard(context, player, reno);
 			assertEquals(player.getHero().getHp(), 30);
 		}
+	}
+
+	@Test
+	public void testShudderwockBloodCultistInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion remove = playMinionCard(context, player, "minion_blood_cultist");
+			context.getLogic().removePeacefully(remove);
+			context.getLogic().endOfSequence();
+			overrideDiscover(context, player, discoverActions -> {
+				fail("Shouldn't prompt to discover");
+				return null;
+			});
+			playMinionCard(context, player, "minion_shudderwock");
+		});
+	}
+
+	@Test
+	public void testZilchGodOfNothing() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_zilch_god_of_nothing");
+			shuffleToDeck(context, player, "minion_wax_elemental");
+			shuffleToDeck(context, player, "minion_public_defender");
+
+
+			shuffleToDeck(context, opponent, "minion_zilch_god_of_nothing");
+			shuffleToDeck(context, opponent, "minion_neutral_test_1");
+
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+
+			for (Card card : player.getDeck()) {
+				assertEquals(card.getBonusAttack(), 1);
+				assertEquals(card.getBonusHp(), -1);
+			}
+
+			for (Card card : opponent.getDeck()) {
+				assertEquals(card.getBonusAttack(), 0);
+				assertEquals(card.getBonusHp(), 0);
+			}
+		});
+	}
+
+	@Test
+	public void testParadoxKingTogwaggleInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion paradox = playMinionCard(context, player, "minion_paradox");
+			playCard(context, player, "minion_king_togwaggle");
+			assertEquals(player.getSetAsideZone().size(), 0);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_paradox");
+		});
+	}
+
+	@Test
+	public void testParadoxNoggenfoggerAssassinateInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion noggenfogger = playMinionCard(context, player, "minion_mayor_noggenfogger");
+			Minion paradox = playMinionCard(context, player, "minion_paradox");
+			assertTrue(paradox.isInPlay());
+			playCard(context, player, "spell_assassinate", paradox);
+			assertTrue(paradox.isDestroyed());
+		});
 	}
 }

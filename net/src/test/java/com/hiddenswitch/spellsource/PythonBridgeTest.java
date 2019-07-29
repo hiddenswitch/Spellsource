@@ -15,7 +15,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class PythonBridgeTest {
-	String DECK_1 = "### Baron: Big Baron\n" +
+	String DECK_1 = "### Aggro Outlaw\n" +
+			"# Class: COPPER\n" +
+			"# Format: Spellsource\n" +
+			"#\n" +
+			"# 1x (1) Doodles\n" +
+			"# 2x (1) Enhancing Shaman\n" +
+			"# 2x (1) Hired Gunsmith\n" +
+			"# 2x (1) Plan Ahead\n" +
+			"# 2x (2) Bang!\n" +
+			"# 2x (2) Beauregard Bouncer\n" +
+			"# 2x (2) Shedding Chameleon\n" +
+			"# 2x (2) Spooky Turret\n" +
+			"# 2x (3) Cheating Wrangler\n" +
+			"# 2x (3) Reloading\n" +
+			"# 2x (3) Ride like the Wind!\n" +
+			"# 2x (3) Trigger Happy Rebel\n" +
+			"# 2x (4) Carriage Abductor\n" +
+			"# 2x (4) Dustbowl Vigilante\n" +
+			"# 1x (4) McGrief\n" +
+			"# 2x (4) Silvershot Pistol";
+	String DECK_2 = "### Baron: Big Baron\n" +
 			"# Class: NAVY\n" +
 			"# Format: Spellsource\n" +
 			"#\n" +
@@ -36,67 +56,50 @@ public class PythonBridgeTest {
 			"# 1x (9) Gor'thal the Ravager\n" +
 			"# 1x (10) Raid Boss Gnaxx\n" +
 			"# 1x (10) Sorceress Eka\n" +
-			"#";
-	String DECK_2 = "### Summoner: Fifi Summoner\n" +
-			"# Class: EGGPLANT\n" +
-			"# Format: Custom\n" +
-			"#\n" +
-			"# 2x (0) Blackflame Ritual\n" +
-			"# 2x (0) Rapier Rodent\n" +
-			"# 2x (1) Double\n" +
-			"# 2x (1) Hard Puncher\n" +
-			"# 2x (1) Lackey Break\n" +
-			"# 2x (2) Animation Surge\n" +
-			"# 2x (2) Contemplate\n" +
-			"# 1x (2) Fifi Fizzlewarp\n" +
-			"# 2x (2) Thuggish Fae\n" +
-			"# 2x (2) Whispers of Ruin\n" +
-			"# 2x (4) Evil Laughter\n" +
-			"# 1x (4) Monster Manual\n" +
-			"# 2x (4) Mutated Brute\n" +
-			"# 2x (5) Cybernetic Rager\n" +
-			"# 2x (5) Fiery Tyrant\n" +
-			"# 2x (6) Magma Hound";
-	String DECK_3 = "### Chef: A Well Roasted Meal\n" +
-			"Class: TOAST\n" +
-			"Format: Spellsource\n" +
-			"2x Pastry Cook\n" +
-			"2x Guerrilla Chef\n" +
-			"2x Unsatisfied Customer\n" +
-			"2x Limb Tentacle\n" +
-			"2x Lesser Opal Spellstone\n" +
-			"2x Tuskarr Provisions\n" +
-			"2x Onyx Pawn\n" +
-			"2x Inedible Ghoul\n" +
-			"2x Deathwing's Dinner\n" +
-			"2x Stormwind Chef\n" +
-			"2x Starving Myrmidon\n" +
-			"1x Roasting Drake\n" +
-			"1x Chef Stitches\n" +
-			"2x Summoned Table\n" +
-			"2x Fantastic Feast\n" +
-			"1x Baul Pocuse\n" +
-			"1x Boss Harambo";
-
-	String DECK_4 = "### Witch Doctor: Spell Power Doctor\n" +
-			"# Class: ROSE\n" +
+			"#\n";
+	String DECK_3 = "### Big Defense Baron\n" +
+			"# Class: NAVY\n" +
 			"# Format: Spellsource\n" +
 			"#\n" +
-			"# 2x (1) Wicked Insight\n" +
-			"# 2x (1) Devil Within\n" +
-			"# 2x (1) Hypnotic Chameleon\n" +
-			"# 2x (1) Tiki Tokens\n" +
-			"# 2x (2) Devilry Flare\n" +
-			"# 2x (2) Dreamwing Scout\n" +
-			"# 2x (2) Undergrowth Spirit\n" +
-			"# 2x (2) Ghostly Essence\n" +
-			"# 2x (2) Possessed Madness\n" +
-			"# 2x (2) Sliver of Silver\n" +
-			"# 2x (3) Old Jungle Masta\n" +
-			"# 2x (4) Bat-talion\n" +
-			"# 2x (5) Dawn Drake\n" +
-			"# 2x (5) Jeering Troll\n" +
-			"# 2x (6) Evocation\n" +
+			"# 2x (1) Doom Sergeant\n" +
+			"# 2x (2) Double Defender\n" +
+			"# 2x (3) Defenses Up\n" +
+			"# 2x (3) Extract\n" +
+			"# 2x (3) Fellow Academite\n" +
+			"# 2x (3) Final Defenses\n" +
+			"# 2x (3) Oni Entrapper\n" +
+			"# 2x (3) Reinforcements\n" +
+			"# 2x (4) Double Down\n" +
+			"# 2x (4) Immunize\n" +
+			"# 2x (4) Stone Obelisk\n" +
+			"# 1x (5) Moon Gladiator\n" +
+			"# 2x (5) Royal Protector\n" +
+			"# 1x (6) Attrition Master Rictor\n" +
+			"# 1x (8) Shapesifter Ryal\n" +
+			"# 2x (10) Fel Manticore\n" +
+			"# 1x (10) Sourceborn Aelin\n" +
+			"#";
+
+	String DECK_4 = "### Blitzkrieg Dragoon\n" +
+			"# Class: RUST\n" +
+			"# Format: Spellsource\n" +
+			"#\n" +
+			"# 2x (1) Dragon Caretaker\n" +
+			"# 2x (1) Timelost Sarcophagus\n" +
+			"# 2x (1) Wink Dog\n" +
+			"# 2x (2) Ankylo Devotee\n" +
+			"# 2x (2) Augmented Pixie\n" +
+			"# 2x (2) Katar\n" +
+			"# 2x (3) Dragonhorn\n" +
+			"# 1x (3) Irena, Dragon Knight\n" +
+			"# 2x (3) Supersonic Roar\n" +
+			"# 2x (3) Sweeper Drake\n" +
+			"# 2x (4) Guild Guard\n" +
+			"# 2x (4) The Little Swarm\n" +
+			"# 1x (5) Conflagration\n" +
+			"# 2x (5) Drakonid Bruiser\n" +
+			"# 2x (5) Vermillion Glider\n" +
+			"# 2x (6) Crimson Blades\n" +
 			"#";
 
 	@Test
