@@ -173,7 +173,7 @@ public class TheOldGodsTests extends TestBase {
 			shuffleToDeck(context, player, "minion_yshaarj_rage_unbound");
 			context.endTurn();
 			Assert.assertEquals(player.getDeck().size(), 1);
-			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_neutral_test");
 			Assert.assertEquals(player.getMinions().stream().filter(c -> c.getSourceCard().getCardId().equals("minion_yshaarj_rage_unbound")).count(), 2L);
 		});
 	}
