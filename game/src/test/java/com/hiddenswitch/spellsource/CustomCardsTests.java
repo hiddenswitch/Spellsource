@@ -7458,4 +7458,21 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getDeck().size(), 2);
 		});
 	}
+
+	@Test
+	public void testGravekeeperGallows() {
+		runGym(((context, player, opponent) -> {
+			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
+			Card weapon = receiveCard(context, player, "weapon_slapdagger");
+			destroy(context, grallows);
+			assertEquals(weapon.getDescription(), "Aftermath: Summon Grallows.");
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
+			Card weapon = receiveCard(context, player, "weapon_dig_up_shovel");
+			destroy(context, grallows);
+			assertEquals(weapon.getDescription(), "Decay At the end of your turn, draw a card. Aftermath: Summon Grallows.");
+		}));
+	}
 }

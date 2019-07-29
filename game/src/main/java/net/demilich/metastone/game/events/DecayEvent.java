@@ -28,11 +28,6 @@ public final class DecayEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public boolean isClientInterested() {
-		return true;
-	}
-
-	@Override
 	public int getValue() {
 		return 1;
 	}
