@@ -3,8 +3,12 @@
   "type": "CLASS",
   "hero": "hero_izzy_jameson",
   "heroClass": "LIGHTBROWN",
-  "color": [165, 42, 42],
-  "blackText": false,
+  "color": [
+    255,
+    222,
+    173
+  ],
+  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
