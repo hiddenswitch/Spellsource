@@ -1,0 +1,19 @@
+{
+  "name": "Glide",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Return a friendly minion to your hand, then summon it.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell"
+     "spell": {
+       "class": "RecruitSpell",
+       "target": "OUTPUT",
+    },
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
