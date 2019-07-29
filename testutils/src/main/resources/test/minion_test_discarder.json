@@ -1,0 +1,23 @@
+{
+  "name": "",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "description": "",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "DiscardCardsFromDeckSpell",
+      "value": 3
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

@@ -29,10 +29,6 @@ public enum ParseValueType {
 	 */
 	TARGET_PLAYER,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.entities.minions.Race} enum.
-	 */
-	RACE,
-	/**
 	 * A {@link net.demilich.metastone.game.spells.desc.SpellDesc}.
 	 */
 	SPELL,

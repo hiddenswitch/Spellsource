@@ -19,8 +19,8 @@ public class PhysicalAttackTrigger extends EventTrigger {
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		PhysicalAttackEvent physicalAttackEvent = (PhysicalAttackEvent) event;
 
-		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !physicalAttackEvent.getDefender().getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !Race.hasRace(physicalAttackEvent.getDefender().getRace(), race)) {
 			return false;
 		}
 

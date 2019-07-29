@@ -3,7 +3,7 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.EndTurnAction;
@@ -53,7 +53,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -1240,20 +1239,20 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setGameState(GameState state) {
-		this.setPlayer(GameContext.PLAYER_1, state.player1);
-		this.setPlayer(GameContext.PLAYER_2, state.player2);
-		this.setTempCards(state.tempCards);
-		this.setEnvironment(state.environment);
-		this.setTriggerManager(state.triggerManager);
+		this.setPlayer(GameContext.PLAYER_1, state.getPlayer1());
+		this.setPlayer(GameContext.PLAYER_2, state.getPlayer2());
+		this.setTempCards(state.getTempCards());
+		this.setEnvironment(state.getEnvironment());
+		this.setTriggerManager(state.getTriggerManager());
 		if (getLogic() == null) {
 			setLogic(new GameLogic());
 		}
-		this.getLogic().setIdFactory(new IdFactoryImpl(state.currentId));
+		this.getLogic().setIdFactory(new IdFactoryImpl(state.getCurrentId()));
 		this.getLogic().setContext(this);
-		this.setTurnState(state.turnState);
-		this.setTurn(state.turnNumber);
-		this.setActivePlayerId(state.activePlayerId);
-		this.setDeckFormat(state.deckFormat);
+		this.setTurnState(state.getTurnState());
+		this.setTurn(state.getTurnNumber());
+		this.setActivePlayerId(state.getActivePlayerId());
+		this.setDeckFormat(state.getDeckFormat());
 	}
 
 	public GameContext setPlayer(int index, Player player) {

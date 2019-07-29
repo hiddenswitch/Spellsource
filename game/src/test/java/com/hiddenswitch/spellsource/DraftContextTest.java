@@ -7,7 +7,6 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -43,7 +42,7 @@ public class DraftContextTest {
 				});
 		context.accept(then -> {
 		});
-		Assert.assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.DRAFTS);
+		Assert.assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.ROUNDS);
 		Assert.assertEquals(context.getPublicState().getStatus(), DraftStatus.COMPLETE);
 	}
 }

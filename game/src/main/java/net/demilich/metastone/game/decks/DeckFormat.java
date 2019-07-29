@@ -87,6 +87,12 @@ public class DeckFormat implements Serializable, Cloneable {
 		sets = new HashSet<>();
 	}
 
+	/**
+	 * The current {@code Spellsource} format containing all Spellsource sets.
+	 *
+	 * @return A format, or {@code null} if either Spellsource cards are not on your classpath or {@link
+	 *    CardCatalogue#loadCardsFromPackage()} has not been called. OSGi-friendly.
+	 */
 	public static DeckFormat spellsource() {
 		return getFormat("Spellsource");
 	}
