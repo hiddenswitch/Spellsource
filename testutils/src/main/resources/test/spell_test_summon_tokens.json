@@ -1,6 +1,6 @@
 {
   "name": "Test Summon Tokens",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",

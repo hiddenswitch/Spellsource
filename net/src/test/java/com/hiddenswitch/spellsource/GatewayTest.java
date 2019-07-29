@@ -34,9 +34,6 @@ import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.*;
 
-/**
- * Created by bberman on 2/18/17.
- */
 public class GatewayTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
@@ -261,7 +258,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				if (counter.getAndIncrement() == 0) {
 					startTime.set(System.currentTimeMillis());
 					vertx.runOnContext(v -> {
-						vertx.setTimer(7000L, ignored -> {
+						vertx.setTimer(6000L, ignored -> {
 							this.respondRandomAction(message);
 						});
 					});

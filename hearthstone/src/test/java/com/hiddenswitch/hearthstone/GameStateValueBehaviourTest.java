@@ -18,8 +18,6 @@ import java.util.List;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
-
-
 	@Test
 	public void testShadowVisionsInPlan() {
 		Logging.setLoggingLevel(Level.ERROR);
