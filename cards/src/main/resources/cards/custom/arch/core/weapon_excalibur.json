@@ -6,8 +6,8 @@
   "damage": 6,
   "durability": 2,
   "rarity": "FREE",
-   "description": "<b>Decay<b> Doesn't lose durability while Rejan is alive.",
-    "trigger": {
+  "description": "<b>Decay<b> Doesn't lose durability while Rejan is alive.",
+  "trigger": {
     "eventTrigger": {
       "class": "BoardChangedTrigger"
     },
@@ -32,7 +32,7 @@
     }
   },
   "attributes": {
-  "DECAY": true
+    "DECAY": true
   },
   "collectible": false,
   "set": "CLASSIC",

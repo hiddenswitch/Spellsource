@@ -7,12 +7,14 @@ permalink: /whats-new/
 ### 0.8.41-2.0.35 (In Progress)
 
 New Storyteller cards thanks to @Skurleton!
+Archaeologist is digging is way into the game, thanks to @Pircival! 
 
 The bot will now play more new decks in its rotation. Additionally, there are bug fixes.
 
 ##### Content Additions:
 
  - New Storyteller cards. (1237)
+ - Archaeologist class added with Basic/Core cards. (1263)
 
 ##### Content Fixes:
 

@@ -6,9 +6,9 @@
   "damage": 2,
   "durability": 7,
   "rarity": "COMMON",
-   "description": "<b>Decay<b>",
+  "description": "<b>Decay<b>",
   "attributes": {
-  "DECAY": true
+    "DECAY": true
   },
   "collectible": true,
   "set": "CLASSIC",
