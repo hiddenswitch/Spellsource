@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.41-2.0.35 (In Progress)
+### 0.8.41-2.0.35 (July 29th, 2019)
 
 Non-Spellsource content is removed from the game.
 
