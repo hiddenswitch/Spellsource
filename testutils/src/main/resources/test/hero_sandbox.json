@@ -3,7 +3,7 @@
   "heroPower": "hero_power_sandbox",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "ANY",
+  "heroClass": "TEST",
   "rarity": "FREE",
   "description": "",
   "attributes": {

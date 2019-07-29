@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "PIRATE",
-  "description": "After this minion attacks, add a Coin to your hand.",
+  "description": "After this minion attacks, add a Lunstone to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -15,7 +15,7 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "spell_the_coin"
+      "card": "spell_lunstone"
     }
   },
   "collectible": true,

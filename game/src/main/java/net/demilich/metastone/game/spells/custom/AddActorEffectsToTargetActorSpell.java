@@ -65,7 +65,7 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 		Card sourceCard = sourceEntity.getSourceCard();
 		// Restore the race after it is changed
 		Actor targetActor = (Actor) target;
-		Race originalRace = targetActor.getRace();
+		String originalRace = targetActor.getRace();
 		// Copy the attributes onto the actor
 		AttributeMap sourceAttributes = new AttributeMap();
 		for (Attribute key : sourceCard.getAttributes().unsafeKeySet()) {

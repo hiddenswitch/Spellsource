@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,5 +48,13 @@ public interface CardResources {
 	void load();
 
 	List<? extends CardResource> getResources();
+
+	default List<String> getDraftBannedCardIds() {
+		return Collections.emptyList();
+	}
+
+	default List<String> getHardRemovalCardIds() {
+		return Collections.emptyList();
+	}
 }
 
