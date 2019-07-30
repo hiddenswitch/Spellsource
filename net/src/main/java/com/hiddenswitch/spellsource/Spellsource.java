@@ -581,7 +581,7 @@ public class Spellsource {
 									new UpdateOptions().setMulti(true));
 
 							// Change all the hero classes to the neutral class.
-							List<String> heroClasses = CardCatalogue.getHeroes().stream().map(Card::getHeroClass).collect(toList());
+							List<String> heroClasses = HeroClass.getBaseClasses(DeckFormat.spellsource());
 							mongo().updateCollectionWithOptions(
 									COLLECTIONS,
 									json(CollectionRecord.HERO_CLASS, json("$nin", heroClasses)),
@@ -689,20 +689,24 @@ public class Spellsource {
 		// This seems to be the most reliable way to count how many event loop threads there are?
 		EventLoop first = vertx.nettyEventLoopGroup().next();
 		EventLoop next = first;
-		int j = 1;
+		int j = Runtime.getRuntime().availableProcessors()/*1*/;
+		/*
 		for (; j <= Runtime.getRuntime().availableProcessors(); j++) {
 			next = next.next();
 			if (Objects.equals(first, next)) {
 				break;
 			}
 		}
+		*/
 		// Use up all the event loops
-		for (int i = 0; i < j; i++)
+		for (int i = 0; i < j; i++) {
 			for (Verticle verticle : services()) {
 				final Future<String> future = Future.future();
 				vertx.deployVerticle(verticle, future);
 				futures.add(future);
 			}
+		}
+
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}
