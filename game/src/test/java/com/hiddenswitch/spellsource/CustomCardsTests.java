@@ -1,55 +1,40 @@
 package com.hiddenswitch.spellsource;
 
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.events.GameStartEvent;
+import net.demilich.metastone.game.events.WillEndSequenceEvent;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
-import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
@@ -4387,6 +4372,16 @@ public class CustomCardsTests extends TestBase {
 			Card aiiranInHand = receiveCard(context, player, "minion_matriarch_aiiran");
 			assertEquals(aiiranOnBoard.getDescription(context, player), "Opener: Deal X damage. (Increases by 2 for each other Dragon in your hand)");
 			assertEquals(aiiranInHand.getDescription(context, player), "Opener: Deal 0 damage. (Increases by 2 for each other Dragon in your hand)");
+		});
+	}
+
+	@Test
+	public void testMonolithOfDoomDescription() {
+		runGym((context, player, opponent) -> {
+			Minion monolithOnBoard = playMinionCard(context, player, "minion_monolith_of_doom");
+			Card monolithInHand = receiveCard(context, player, "minion_monolith_of_doom");
+			assertEquals(monolithOnBoard.getDescription(context, player), "Opener: Deal X damage. (Doubles for each Monolith of Doom you played this turn)");
+			assertEquals(monolithInHand.getDescription(context, player), "Opener: Deal 2 damage. (Doubles for each Monolith of Doom you played this turn)");
 		});
 	}
 }
