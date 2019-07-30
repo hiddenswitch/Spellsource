@@ -4,6 +4,15 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.43-2.0.35 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - The neutral and test champions no longer appear in the draft.
+ - Birdbrain is now a Witchdoctor card.
+
 ### 0.8.42-2.0.35 (July 30th, 2019)
 
 Hotfix decks missing hero classes.
