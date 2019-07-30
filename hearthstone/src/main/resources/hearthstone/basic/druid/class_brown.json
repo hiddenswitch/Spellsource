@@ -5,7 +5,7 @@
   "heroClass": "BROWN",
   "color": [94, 54, 40],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1
 }

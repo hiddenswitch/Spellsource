@@ -30,6 +30,8 @@ public class DraftTest extends SpellsourceTestBase {
 			// Choose a hero
 			assertNotNull(response.getPublicDraftState().getHeroClassChoices());
 			assertEquals(HeroClass.getBaseClasses(DeckFormat.spellsource()).size(), response.getPublicDraftState().getHeroClassChoices().size());
+			assertFalse(response.getPublicDraftState().getHeroClassChoices().contains(HeroClass.ANY));
+			assertFalse(response.getPublicDraftState().getHeroClassChoices().contains(HeroClass.TEST));
 
 			response = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(car.getUserId())

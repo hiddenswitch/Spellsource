@@ -5,7 +5,7 @@
   "heroClass": "SILVER",
   "color": [159, 171, 208],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1
 }
