@@ -1,33 +1,38 @@
 {
-  "name": "Essence Weave",
-  "baseManaCost": 7,
+  "name": "Rite of Promise",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Soulbind twice, then give your minions +2/+2.",
+  "description": "Soulbind twice, then restore 2 health to your champion for each minion you control.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "SummonSpell",
-        "value": 2,
         "cardFilter": {
           "class": "CardFilter",
           "attribute": "SOULBIND"
         },
         "cardSource": {
           "class": "UncollectibleCatalogueSource"
-        }
+        },
+        "value": 2,
+        "randomTarget": true
       },
       {
-        "class": "BuffSpell",
-        "target": "FRIENDLY_MINIONS",
-        "value": 2
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_MINIONS",
+          "multiplier": 2
+        }
       }
     ]
   },
   "collectible": true,
-  "set": "VERDANT_DREAMS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

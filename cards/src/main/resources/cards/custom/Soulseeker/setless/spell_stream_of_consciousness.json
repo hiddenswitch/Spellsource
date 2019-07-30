@@ -1,13 +1,12 @@
 {
-  "name": "Psychopomp",
-  "baseManaCost": 6,
-  "type": "MINION",
+  "name": "Stream of Consciousness",
+  "baseManaCost": 5,
+  "type": "SPELL",
   "heroClass": "DARKBLUE",
-  "baseAttack": 6,
-  "baseHp": 3,
-  "rarity": "COMMON",
-  "description": "Aftermath: Soulbind 3 times.",
-  "deathrattle": {
+  "rarity": "EPIC",
+  "description": "Soulbind five times.",
+  "targetSelection": "NONE",
+  "spell": {
     "class": "SummonSpell",
     "cardFilter": {
       "class": "CardFilter",
@@ -16,11 +15,8 @@
     "cardSource": {
       "class": "UncollectibleCatalogueSource"
     },
-    "value": 3,
+    "value": 5,
     "randomTarget": true
-  },
-  "attributes": {
-    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "CUSTOM",

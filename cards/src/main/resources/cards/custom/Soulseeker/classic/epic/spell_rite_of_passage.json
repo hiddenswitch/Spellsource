@@ -1,16 +1,17 @@
 {
-  "name": "Essence Shift",
-  "baseManaCost": 2,
+  "name": "Rite of Passage",
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Soulbind twice, then restore 2 health to your champion for each minion you control.",
+  "description": "Soulbind twice, then trigger the Aftermath effect of each friendly minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "SummonSpell",
+        "value": 2,
         "cardFilter": {
           "class": "CardFilter",
           "attribute": "SOULBIND"
@@ -18,16 +19,11 @@
         "cardSource": {
           "class": "UncollectibleCatalogueSource"
         },
-        "value": 2
+        "randomTarget": true
       },
       {
-        "class": "HealSpell",
-        "target": "FRIENDLY_HERO",
-        "value": {
-          "class": "EntityCounter",
-          "target": "FRIENDLY_MINIONS",
-          "multiplier": 2
-        }
+        "class": "TriggerDeathrattleSpell",
+        "target": "FRIENDLY_MINIONS"
       }
     ]
   },

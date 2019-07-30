@@ -263,4 +263,27 @@ public class SoulseekerTests extends TestBase {
 			assertEquals(player.getMinions().size(), 7);
 		});
 	}
+
+	//Dormant Spirits - 1 Mana Spell - "Secret: If your opponent has unspent mana when your turn starts, summon three 1/1 Spirits."
+	@Test
+	public void testDormantSpirits() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_dormant_spirits");
+			assertEquals(player.getMinions().size(), 0);
+			context.endTurn();
+			assertEquals(player.getMinions().size(), 0);
+			context.endTurn();
+			assertEquals(player.getMinions().size(), 3);
+			assertFalse(player.getMinions().get(0).canAttackThisTurn());
+		});
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_dormant_spirits");
+			assertEquals(player.getMinions().size(), 0);
+			context.endTurn();
+			playCard(context, opponent, "minion_neutral_test_1");
+			assertEquals(player.getMinions().size(), 0);
+			context.endTurn();
+			assertEquals(player.getMinions().size(), 0);
+		});
+	}
 }

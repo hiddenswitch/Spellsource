@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "RARE",
-  "description": "Your next Opener this turn triggers twice.",
+  "description": "Your next Opener this turn triggers twice. Soulbind.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
