@@ -4,9 +4,20 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.42 (In Progress)
+### 0.8.43-2.0.35 (In Progress)
 
+Bug fixes.
+
+##### Content Fixes:
+
+ - The neutral and test champions no longer appear in the draft.
+ - Birdbrain is now a Witchdoctor card.
+ - Distortoise now correctly does 3 damage to the owner instead of 2. (1294)
  - Prized Boar Aftermath now properly reflects the printed effect. (1293) 
+
+### 0.8.42-2.0.35 (July 30th, 2019)
+
+Hotfix decks missing hero classes.
 
 ### 0.8.41-2.0.35 (July 29th, 2019)
 
