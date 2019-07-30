@@ -4,6 +4,18 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.42 (Now In Progress)
+
+New Monk cards thanks to @Grand! (1290)
+
+##### Monk Card Updates:
+ - Blessed Koi Statue is no longer an Elemental.
+ - Fiery Kitsune Punch renamed to Lunging Jab
+ - Fortifying Prayer renamed to Inner Peace.
+ - Enchanted Tapestry cost increased from 2 to 3 and is no longer an Elemental.
+ - Mark of Despair renamed to Touch of Sorrow.
+ - White Tiger Statue renamed to Imbuing Fountain and health decreased from 4 to 3. 
+
 ### 0.8.41-2.0.35 (In Progress)
 
 New Storyteller cards thanks to @Skurleton!
