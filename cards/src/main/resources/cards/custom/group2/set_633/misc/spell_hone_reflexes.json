@@ -10,7 +10,7 @@
     "class": "ChangeHeroPowerSpell",
     "card": "hero_power_hone_reflexes"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
