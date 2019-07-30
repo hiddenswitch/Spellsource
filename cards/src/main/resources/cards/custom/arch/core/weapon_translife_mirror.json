@@ -22,6 +22,9 @@
         {
           "class": "SummonSpell",
           "card": "token_spirit"
+        },
+        {
+          "class": "DecaySpell"
         }
       ]
     }

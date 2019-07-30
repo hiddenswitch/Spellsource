@@ -8,6 +8,15 @@
   "rarity": "FREE",
   "description": "",
   "collectible": false,
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
   "set": "TEST",
   "fileFormatVersion": 1,
   "attributes": {

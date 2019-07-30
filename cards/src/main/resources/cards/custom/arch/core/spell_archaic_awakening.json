@@ -16,6 +16,18 @@
       {
         "class": "AddAttributeSpell",
         "attribute": "DECAY"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DecaySpell"
+          }
+        }
       }
     ]
   },
