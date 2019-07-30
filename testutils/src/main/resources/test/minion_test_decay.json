@@ -7,6 +7,15 @@
   "baseHp": 2,
   "rarity": "FREE",
   "description": "",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
   "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1,

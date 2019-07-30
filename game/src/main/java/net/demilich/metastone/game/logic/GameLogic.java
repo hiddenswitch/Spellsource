@@ -1643,25 +1643,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			eachPlayer.setAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 0);
 		}
 
-
-		player.getMinions().stream()
-				.filter(minion -> minion.hasAttribute(Attribute.DECAY))
-				.forEach(minion -> {
-							damage(player, minion, 1, minion, true, false, DamageType.DECAY);
-							context.fireGameEvent(new DecayEvent(context, player.getId(), minion));
-						}
-				);
-
-		player.getWeaponZone().stream()
-				.filter(weapon -> weapon.hasAttribute(Attribute.DECAY))
-				.forEach(weapon -> {
-							if (!weapon.hasAttribute(Attribute.IMMUNE) && !weapon.hasAttribute(Attribute.AURA_IMMUNE)) {
-								modifyDurability(hero.getWeapon(), -1);
-								context.fireGameEvent(new DecayEvent(context, player.getId(), weapon));
-							}
-						}
-				);
-
 		if (player.getHero().getDecayingArmor() > 0) {
 			damage(player, player.getHero(), 1, player.getHero(), true, false, DamageType.DECAY);
 			context.fireGameEvent(new DecayEvent(context, player.getId(), player));

@@ -7,8 +7,25 @@
   "description": "Give a minion Taunt.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "AddAttributeSpell",
-    "attribute": "DECAY"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DECAY"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DecaySpell"
+          }
+        }
+      }
+    ]
   },
   "collectible": false,
   "set": "TEST",

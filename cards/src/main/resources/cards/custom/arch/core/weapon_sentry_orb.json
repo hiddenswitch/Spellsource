@@ -13,10 +13,18 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 4
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DecaySpell"
+        },
+        {
+          "class": "MissilesSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1,
+          "howMany": 4
+        }
+      ]
     }
   },
   "attributes": {

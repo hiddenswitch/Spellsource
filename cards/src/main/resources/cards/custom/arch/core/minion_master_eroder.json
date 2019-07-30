@@ -10,9 +10,26 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "AddAttributeSpell",
-      "attribute": "DECAY",
-      "target": "ENEMY_MINIONS"
+      "class": "MetaSpell",
+      "target": "ENEMY_MINIONS",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "SELF"
+            },
+            "spell": {
+              "class": "DecaySpell"
+            }
+          }
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DECAY"
+        }
+      ]
     }
   },
   "attributes": {

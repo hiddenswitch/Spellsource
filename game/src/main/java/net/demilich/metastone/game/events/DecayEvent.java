@@ -34,6 +34,6 @@ public final class DecayEvent extends GameEvent implements HasValue {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		return String.format("%s took 1 fatigue damage", context.getPlayer(playerId).getName());
+		return String.format("%s decayed by 1.", context.getPlayer(playerId).getName());
 	}
 }

@@ -169,7 +169,7 @@ public class DecayTests extends TestBase {
 	public void testDecayingArmorWithWeapon() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "spell_test_5_decaying_armor");
-			playCard(context, player, "weapon_lifestealx");
+			playCard(context, player, "weapon_lifesteal");
 			Minion attacker = playMinionCard(context, opponent, "minion_test_3_2");
 			attack(context, opponent, attacker, player.getHero());
 			assertEquals(player.getHero().getDecayingArmor(), 2);
