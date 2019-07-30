@@ -7,15 +7,10 @@
   "durability": 6,
   "rarity": "COMMON",
   "description": "Extra Strike",
-  "onEquip": {
-    "class": "AddAttributeSpell",
+  "aura": {
+    "class": "AttributeAura",
     "target": "FRIENDLY_HERO",
-    "attribute": "WINDFURY"
-  },
-  "onUnequip": {
-    "class": "RemoveAttributeSpell",
-    "target": "FRIENDLY_HERO",
-    "attribute": "WINDFURY"
+    "attribute": "AURA_WINDFURY"
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",
