@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.42 (In Progress)
+
+ - Prized Boar Aftermath now properly reflects the printed effect. (1292) 
+
 ### 0.8.41-2.0.35 (July 29th, 2019)
 
 Non-Spellsource content is removed from the game.
