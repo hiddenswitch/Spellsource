@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.42 (In Progress)
+
+Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)
+
 ### 0.8.41-2.0.35 (July 29th, 2019)
 
 Non-Spellsource content is removed from the game.
