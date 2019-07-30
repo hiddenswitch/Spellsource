@@ -51,14 +51,17 @@ public class Local {
 							Logging.root().error("main: Deployment failed: {}", v2.cause().getMessage(), v2.cause());
 							System.exit(1);
 						} else {
-							vertx.deployVerticle(Broadcaster.create(), v3 -> {
-								if (v3.succeeded()) {
-									System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
-								} else {
-									Logging.root().error("main: Failed to deploy broadcaster");
-									System.exit(1);
-								}
-							});
+							boolean shouldDeployBroadcaster = Boolean.parseBoolean(System.getenv().getOrDefault("SPELLSOURCE_BROADCAST", "true"));
+							if (shouldDeployBroadcaster) {
+								vertx.deployVerticle(Broadcaster.create(), v3 -> {
+									if (v3.succeeded()) {
+										System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
+									} else {
+										Logging.root().error("main: Failed to deploy broadcaster");
+										System.exit(1);
+									}
+								});
+							}
 						}
 					});
 				}
