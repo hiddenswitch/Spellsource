@@ -97,6 +97,10 @@ public class DeckFormat implements Serializable, Cloneable {
 		return getFormat("Spellsource");
 	}
 
+	public static DeckFormat all() {
+		return getFormat("All");
+	}
+
 	public DeckFormat addSet(String cardSet) {
 		sets.add(cardSet);
 		return this;

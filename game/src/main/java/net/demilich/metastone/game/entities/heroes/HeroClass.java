@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +43,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static Card getHeroCard(String heroClass) {
-		CardList classCards = getClassCards(DeckFormat.getFormat("All")).filtered(card -> card.getHeroClass().equals(heroClass));
+		CardList classCards = getClassCards(DeckFormat.all()).filtered(card -> card.getHeroClass().equals(heroClass));
 		if (classCards.isEmpty()) {
 			return CardCatalogue.getCardById("hero_neutral");
 		}
@@ -69,7 +70,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static CardList getClassCards(DeckFormat deckFormat) {
-		return CardCatalogue.query(deckFormat, CardType.CLASS);
+		return CardCatalogue.getAll().filtered(c -> deckFormat.isInFormat(c) && c.getCardType().isCardType(CardType.CLASS));
 	}
 
 	/**
