@@ -15,6 +15,7 @@ New Monk cards thanks to @Grand! (1290)
  - Enchanted Tapestry cost increased from 2 to 3 and is no longer an Elemental.
  - Mark of Despair renamed to Touch of Sorrow.
  - White Tiger Statue renamed to Imbuing Fountain and health decreased from 4 to 3. 
+ - Disciple of Shitakiri health lowered from 7 to 6.
  - Remaining previous Verdant Dreams Monk cards have been removed.
 
 ### 0.8.41-2.0.35 (In Progress)
