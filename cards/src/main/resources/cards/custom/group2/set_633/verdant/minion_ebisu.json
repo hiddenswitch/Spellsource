@@ -13,7 +13,7 @@
       "class": "LoseDeflectTrigger",
       "fireCondition": {
         "class": "OwnedByPlayerCondition",
-        "targetPlayer": "FRIENDLY_MINIONS"
+        "targetPlayer": "SELF"
       },
       "targetEntityType": "MINION"
     },
@@ -23,7 +23,7 @@
       "value": 6
     }
   },
-    "attributes": {
+  "attributes": {
     "DEFLECT": true
   },
   "collectible": true,
