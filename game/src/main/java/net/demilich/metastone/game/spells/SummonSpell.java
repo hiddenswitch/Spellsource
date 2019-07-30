@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
  * made, summoning a total of {@link SpellArg#VALUE} minions.
  * <p>
  * If a {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARD_SOURCE} is specified, {@link SpellArg#VALUE} minions will
- * be summoned from the generated cards, <b>without replacement</b>. Any {@link SpellArg#CARD} or {@link SpellArg#CARDS}
- * that are also specified when a filter/card source is specified will be append to the possible choices of cards to
- * summon.
+ * be summoned from the generated cards, <b>without replacement</b> (unless {@link SpellArg#RANDOM_TARGET} is also specified).
+ * Any {@link SpellArg#CARD} or {@link SpellArg#CARDS} that are also specified when a filter/card source is specified will
+ * be append to the possible choices of cards to summon.
  * <p>
  * If {@link SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_FILTER}, and {@link SpellArg#CARD_SOURCE} are
  * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link Card},
@@ -286,7 +286,9 @@ public class SummonSpell extends Spell {
 
 					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
-						cards.remove(card);
+						if (!hasFilter || !desc.getBool(SpellArg.RANDOM_TARGET)) {
+							cards.remove(card);
+						}
 					}
 				}
 			} else {

@@ -1,10 +1,10 @@
 {
-  "name": "Essence Shift",
-  "baseManaCost": 4,
+  "name": "Rite of Pain",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Soulbind twice, then trigger the Aftermath effect of each friendly minion.",
+  "description": "Soulbind twice, then give your minions +1 Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -18,15 +18,17 @@
         },
         "cardSource": {
           "class": "UncollectibleCatalogueSource"
-        }
+        },
+        "randomTarget": true
       },
       {
-        "class": "TriggerDeathrattleSpell",
-        "target": "FRIENDLY_MINIONS"
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 1
       }
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
