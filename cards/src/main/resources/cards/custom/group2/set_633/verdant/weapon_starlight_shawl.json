@@ -9,24 +9,15 @@
   "description": "After a friendly minion Deflects, prevent the damage and lose 1 Durability.",
   "trigger": {
     "eventTrigger": {
-      "class": "LoseDeflectTrigger",
-      "fireCondition": {
-        "class": "OwnedByPlayerCondition",
-        "targetPlayer": "SELF"
-      },
-      "targetEntityType": "MINION",
+      "class": "PreDeflectDamageTrigger",
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
-          "condition": {
-            "class": "AttributeCondition",
-            "target": "FRIENDLY_HERO",
-            "value": 0,
-            "attribute": "DAMAGE_THIS_TURN",
-            "operation": "GREATER"
-          },
           "class": "ModifyDamageSpell",
           "value": 0,
           "operation": "SET"
@@ -35,7 +26,7 @@
           "class": "BuffSpell",
           "target": "FRIENDLY_WEAPON",
           "hpBonus": -1
-        }    
+        }
       ]
     }
   },

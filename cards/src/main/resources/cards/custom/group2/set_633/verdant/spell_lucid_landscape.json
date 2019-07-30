@@ -19,7 +19,7 @@
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "SPELL"
-      }
+        }
       }
     ]
   },

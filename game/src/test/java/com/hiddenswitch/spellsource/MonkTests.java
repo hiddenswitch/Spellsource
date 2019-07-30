@@ -223,4 +223,26 @@ public class MonkTests extends TestBase {
 		}));
 	}
 
+	// Starlight Shawl: "After a friendly minion Deflects, prevent the damage and lose 1 Durability."
+	@Test
+	public void testStarlightShawl() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "weapon_starlight_shawl");
+			Minion deflectMinion = playMinionCard(context, player, "minion_test_deflect");
+			playCard(context, player, "spell_test_deal_6", deflectMinion);
+			assertFalse(deflectMinion.isDestroyed());
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getMaxDurability() - 1);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "weapon_starlight_shawl");
+			Minion deflectMinion = playMinionCard(context, opponent, "minion_test_deflect");
+			playCard(context, player, "spell_test_deal_6", deflectMinion);
+			assertFalse(deflectMinion.isDestroyed());
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getMaxDurability());
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 6);
+		}));
+	}
 }
