@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.42 (In Progress)
+
+ - Non-Spellsource and non-test classes are no longer available to choose in Drafting. (1297)
+
 ### 0.8.41-2.0.35 (July 29th, 2019)
 
 Non-Spellsource content is removed from the game.
