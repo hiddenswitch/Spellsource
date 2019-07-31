@@ -6,7 +6,9 @@ permalink: /whats-new/
 
 ### 0.8.43-2.0.35 (In Progress)
 
-Bug fixes.
+Disconnects and other forms of game interruption do not cause unusual effects in game (a regression since 0.8.41).
+
+Additional bug fixes.
 
 ##### Content Fixes:
 
