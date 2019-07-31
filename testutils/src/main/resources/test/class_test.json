@@ -5,7 +5,7 @@
   "heroClass": "TEST",
   "color": [0, 0, 0],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }

@@ -149,10 +149,6 @@ public class CardCatalogue {
 		return getCardById(recordsByName.get(name).get(0).getDesc().getId());
 	}
 
-	public static CardList getHeroes() {
-		return query(null, card -> card.getCardSet().equals("BASIC") && card.getCardType() == CardType.HERO);
-	}
-
 	public static CardList query(DeckFormat deckFormat) {
 		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null);
 	}
