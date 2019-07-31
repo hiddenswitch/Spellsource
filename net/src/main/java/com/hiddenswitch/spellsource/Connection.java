@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -208,7 +209,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			connection.endHandler(v -> span.finish());
 			connection.exceptionHandler(ex -> {
 				// Wrap this so we can see where it actually occurs
-				Tracing.error(new VertxException(ex), span, true);
+				if (!(ex instanceof IOException)) {
+					Tracing.error(new VertxException(ex), span, false);
+				}
 				connection.close(Future.future());
 			});
 			// All handlers should run simultaneously but we'll wait until the handlers have run

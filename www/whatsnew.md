@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.44-2.0.35 (July 31st, 2019)
+
+Spellpower in the hand no longer causes game-crashing issues.
+
 ### 0.8.43-2.0.35 (July 31st, 2019)
 
 Disconnects and other forms of game interruption do not cause unusual effects in game (a regression since 0.8.41).
