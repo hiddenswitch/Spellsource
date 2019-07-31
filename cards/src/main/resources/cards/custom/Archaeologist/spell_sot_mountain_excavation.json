@@ -1,0 +1,20 @@
+{
+  "name": "Sot Mountain Excavation",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "LEGENDARY",
+  "description": "Summon a random Legendary minion. Destroy 4 of your Armor and cast this again.",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+  },
+  //needs custom code
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
