@@ -6,17 +6,17 @@
   "rarity": "COMMON",
   "description": "Each player shuffles a copy of their hand into their opponent's deck.",
   "targetSelection": "NONE",
-   "spell": {
+  "spell": {
     "class": "MetaSpell",
     "spells": [
-  "spell": {
-    "class": "ShuffleToDeckSpell",
-    "target": "ENEMY_HAND"
-  },
       {
-      "class": "ShuffleToDeckSpell",
-      "target": "FRIENDLY_HAND"
-      "targetPlayer": "OPPONENT"
+        "class": "ShuffleToDeckSpell",
+        "target": "ENEMY_HAND"
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "target": "FRIENDLY_HAND"
+        "targetPlayer": "OPPONENT"
       }
     ]
   },

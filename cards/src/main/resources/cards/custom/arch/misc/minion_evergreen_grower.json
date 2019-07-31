@@ -16,8 +16,8 @@
         "class": "RaceFilter",
         "race": "ELEMENTAL"
       },
-          "attackBonus": 1,
-          "hpBonus": 2
+      "attackBonus": 1,
+      "hpBonus": 2
     }
   },
   "attributes": {
