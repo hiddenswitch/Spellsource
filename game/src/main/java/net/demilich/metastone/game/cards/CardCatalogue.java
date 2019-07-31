@@ -28,6 +28,18 @@ import java.util.stream.Stream;
  * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
  */
 public class CardCatalogue {
+	public static Set<String> getBannedDraftCards() {
+		return Collections.unmodifiableSet(bannedCardIds);
+	}
+
+	public static Set<String> getHardRemovalCardIds() {
+		return Collections.unmodifiableSet(hardRemovalCardIds);
+	}
+
+	public static String getOneOneNeutralMinionCardId() {
+		return "minion_neutral_test_1";
+	}
+
 	/**
 	 * A class that describes injected card resources used internally by a static global card catalogue..
 	 */
@@ -45,18 +57,21 @@ public class CardCatalogue {
 	static {
 		// This code iterates through all the classes on the classpath that are subtypes of CardsModule as "plugins", then
 		// makes the cards they define available to the card catalogue.
-		INJECTOR = Guice.createInjector(new Reflections("com.hiddenswitch.spellsource").getSubTypesOf(CardsModule.class).stream().map(clazz -> {
+		List<? extends CardsModule> plugins = new Reflections("com.hiddenswitch.spellsource").getSubTypesOf(CardsModule.class).stream().map(clazz -> {
 			try {
 				return clazz.getConstructor().newInstance();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-		}).collect(Collectors.toList()));
+		}).collect(Collectors.toList());
+		INJECTOR = Guice.createInjector(plugins);
 	}
 
 	private static Logger LOGGER = LoggerFactory.getLogger(CardCatalogue.class);
 	private static int version = 2;
+	private static final Set<String> bannedCardIds = new HashSet<>();
 	private static AtomicBoolean loaded = new AtomicBoolean();
+	private static final Set<String> hardRemovalCardIds = new HashSet<>();
 	private final static Map<String, Card> cards = new LinkedHashMap<>();
 	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>();
 	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>();
@@ -222,6 +237,10 @@ public class CardCatalogue {
 
 		try {
 			InjectedCardResources cardResources = INJECTOR.getInstance(InjectedCardResources.class);
+			for (CardResources cardResource : cardResources.cardResources) {
+				bannedCardIds.addAll(cardResource.getDraftBannedCardIds());
+				hardRemovalCardIds.addAll(cardResource.getHardRemovalCardIds());
+			}
 			Collection<ResourceInputStream> inputStreams = cardResources.cardResources.stream().flatMap(resource -> resource.getResources().stream()).map(resource -> ((CardResource) resource)).map(resource -> (ResourceInputStream) resource).collect(Collectors.toList());
 			Map<String, CardDesc> cardDesc = new HashMap<>();
 			ArrayList<String> badCards = new ArrayList<>();

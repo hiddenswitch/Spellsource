@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GamesTest extends SpellsourceTestBase {
-	private static Logger logger = LoggerFactory.getLogger(GamesTest.class);
 
-	@Test
+	@Test(timeout = 15000L)
 	public void testReconnectsResumesMulligan(TestContext context) throws InterruptedException {
 		AtomicInteger mulligans = new AtomicInteger(0);
 		try (UnityClient client = new UnityClient(context) {
@@ -39,7 +39,7 @@ public class GamesTest extends SpellsourceTestBase {
 				// Game should still be running
 				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 				Strand.sleep(100L);
-			}, context);
+			},5, context);
 			// Reconnect
 			client.getTurnsToPlay().set(999);
 			client.play();
@@ -50,7 +50,7 @@ public class GamesTest extends SpellsourceTestBase {
 		}
 	}
 
-	@Test
+	@Test(timeout = 15000L)
 	public void testReconnectsResumesNormalActions(TestContext context) throws InterruptedException {
 		AtomicInteger requests = new AtomicInteger();
 		List<Integer> actions = new ArrayList<>();
@@ -80,7 +80,7 @@ public class GamesTest extends SpellsourceTestBase {
 				// Game should still be running
 				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 				Strand.sleep(100L);
-			}, context);
+			}, 10, context);
 			// Reconnect
 			client.play();
 			client.waitUntilDone();

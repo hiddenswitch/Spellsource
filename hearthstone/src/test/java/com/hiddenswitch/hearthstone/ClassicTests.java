@@ -460,7 +460,7 @@ public class ClassicTests extends TestBase {
 				if (i == HARVEST_GOLEM) {
 					assertEquals(minion.getAttack(), 2);
 					assertEquals(minion.getHp(), 1);
-					assertEquals(minion.getRace(), Race.MECH);
+					assertEquals(minion.getRace(), "MECH");
 				} else {
 					assertEquals(minion.getAttack(), 1);
 					assertEquals(minion.getHp(), 1);

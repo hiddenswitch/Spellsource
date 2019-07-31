@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Add 10 Bananas to your hand. Excess bananas go to the bottom of your deck.",
+  "description": "Opener: Add 10 Apples to your hand. Excess Apples go to the bottom of your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -20,7 +20,7 @@
             "playerAttribute": "HAND_COUNT",
             "targetPlayer": "SELF"
           },
-          "card": "spell_bananas"
+          "card": "spell_apple"
         },
         {
           "class": "ReceiveCardSpell",
@@ -34,7 +34,7 @@
               "targetPlayer": "SELF"
             }
           },
-          "card": "spell_bananas"
+          "card": "spell_apple"
         }
       ]
     }

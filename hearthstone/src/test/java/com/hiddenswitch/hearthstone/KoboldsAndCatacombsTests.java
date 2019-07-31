@@ -556,7 +556,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_kobold_hermit");
 			assertEquals(player.getMinions().size(), 2);
-			assertEquals(player.getMinions().get(1).getRace(), Race.TOTEM);
+			assertEquals(player.getMinions().get(1).getRace(), "TOTEM");
 		});
 	}
 

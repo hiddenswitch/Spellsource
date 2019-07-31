@@ -15,12 +15,12 @@ public class PuppeteerTests extends TestBase {
 			playCard(context, player, "spell_morbid_mockery");
 			Minion aftermathMinion = playMinionCard(context, player, player.getHand().get(0));
 			assertTrue(aftermathMinion.hasAttribute(Attribute.TAUNT));
-			playCard(context, player, "spell_seance", aftermathMinion);
+			playCard(context, player, "spell_test_add_to_hand", aftermathMinion);
 			Minion shouldNotHaveTaunt = playMinionCard(context, player, player.getHand().get(0));
 			assertFalse(shouldNotHaveTaunt.hasAttribute(Attribute.TAUNT));
-			playCard(context, player, "spell_treachery", aftermathMinion);
+			playCard(context, player, "spell_test_give_away", aftermathMinion);
 			assertEquals(aftermathMinion.getOwner(), opponent.getId());
-			playCard(context, player, "spell_sap", aftermathMinion);
+			playCard(context, player, "spell_test_return_to_hand", aftermathMinion);
 			context.endTurn();
 			aftermathMinion = playMinionCard(context, opponent, opponent.getHand().get(0));
 			assertFalse(aftermathMinion.hasAttribute(Attribute.TAUNT));
@@ -31,9 +31,9 @@ public class PuppeteerTests extends TestBase {
 			playCard(context, player, "spell_morbid_mockery");
 			Minion aftermathMinion = playMinionCard(context, player, player.getHand().get(0));
 			assertTrue(aftermathMinion.hasAttribute(Attribute.TAUNT));
-			playCard(context, player, "spell_treachery", aftermathMinion);
+			playCard(context, player, "spell_test_give_away", aftermathMinion);
 			assertEquals(aftermathMinion.getOwner(), opponent.getId());
-			playCard(context, player, "spell_sap", aftermathMinion);
+			playCard(context, player, "spell_test_return_to_hand", aftermathMinion);
 			context.endTurn();
 			aftermathMinion = playMinionCard(context, opponent, opponent.getHand().get(0));
 			assertFalse(aftermathMinion.hasAttribute(Attribute.TAUNT));

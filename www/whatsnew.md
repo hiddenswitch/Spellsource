@@ -4,11 +4,15 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.41-2.0.35 (In Progress)
+### 0.8.41-2.0.35 (July 29th, 2019)
+
+Non-Spellsource content is removed from the game.
 
 New Storyteller cards thanks to @Skurleton!
 
-The bot will now play more new decks in its rotation. Additionally, there are bug fixes.
+The bot will now play more new decks in its rotation.
+
+Many other bug fixes.
 
 ##### Content Additions:
 
@@ -16,6 +20,7 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
 
 ##### Content Fixes:
 
+ - Non-Spellsource content has been migrated to a "Do Nothing" card. (1180, 1285)
  - All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
  - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
  - Strengthen Core (Honed Potion) now gives a minion deflect, draws a card and costs (2). (1245)
