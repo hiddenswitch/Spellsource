@@ -1,14 +1,14 @@
 {
-  "name": "Gain 10 Mana",
-  "baseManaCost": 0,
+  "name": "Deal 1 Damage",
+  "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "ANY",
+  "heroClass": "TEST",
   "rarity": "FREE",
-  "description": "Gain 10 Mana",
-  "targetSelection": "NONE",
+  "description": "Deal 1 Damage",
+  "targetSelection": "ANY",
   "spell": {
-    "class": "GainManaSpell",
-    "value": 10
+    "class": "DamageSpell",
+    "value": 1
   },
   "collectible": false,
   "set": "TEST",

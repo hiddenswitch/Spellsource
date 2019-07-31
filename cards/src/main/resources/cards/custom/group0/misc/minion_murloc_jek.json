@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Guard. Aftermath: Discard a random card. Add 'Mystic Skull' to your hand.",
   "deathrattle": {
     "class": "MetaSpell",

@@ -36,7 +36,7 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 			Set<Map.Entry<UserId, GameId>> games = Games.getUsersInGames().entrySet();
 			assertEquals(queuedUsers.size(), 0);
 			assertEquals(games.size(), 0);
-		}, context);
+		}, 4, context);
 
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * 3;
 		int checkpointTotal = count * 6;
