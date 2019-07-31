@@ -14,6 +14,9 @@ Additional bug fixes.
 
  - The neutral and test champions no longer appear in the draft.
  - Birdbrain is now a Witchdoctor card.
+ - Distortoise now correctly does 3 damage to the owner instead of 2. (1294)
+ - Prized Boar Aftermath now properly reflects the printed effect. (1293) 
+ - Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)
 
 ### 0.8.42-2.0.35 (July 30th, 2019)
 
