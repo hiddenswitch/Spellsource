@@ -237,10 +237,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	static void registerCodecs() {
 		Vertx owner = Vertx.currentContext().owner();
 		String nodeId;
-		try {
-			nodeId = ((VertxInternal) owner).getNodeID();
-		} catch (NullPointerException noNodeId) {
+
+		if (((VertxInternal) owner).getClusterManager() == null) {
 			nodeId = owner.toString();
+		} else {
+			nodeId = ((VertxInternal) owner).getNodeID();
 		}
 
 		if (CODECS_REGISTERED.putIfAbsent(nodeId, true) == null) {

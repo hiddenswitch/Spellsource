@@ -2,6 +2,7 @@ package com.hiddenswitch.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -142,7 +143,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 			context.endTurn();
 			attack(context, player, shaku, opponent.getHero());
 			Assert.assertTrue(player.getHand().get(0).hasHeroClass(opponent.getHero().getHeroClass()));
-		});
+		}, HeroClass.BLUE, HeroClass.RED);
 	}
 
 	@Test

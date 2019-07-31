@@ -12,6 +12,8 @@ import java.util.List;
  * A mongodb record of the user's collection metadata. Does not contain the inventory IDs themselves.
  */
 public class CollectionRecord extends MongoRecord {
+	public static final String FORMAT = "format";
+	public static final String HERO_CLASS = "heroClass";
 	private String userId;
 	private CollectionTypes type;
 	private boolean trashed;

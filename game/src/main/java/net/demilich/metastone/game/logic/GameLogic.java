@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -146,37 +145,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	private static final String TEMP_CARD_LABEL = "temp_card_id_";
 	private static final int INFINITE = -1;
-	private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
 	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
 	private IdFactoryImpl idFactory;
-	private long seed = createSeed();
+	private long seed = XORShiftRandom.createSeed();
 	private XORShiftRandom random = new XORShiftRandom(seed);
-
-	/**
-	 * Ensures {@link GameLogic} has a valid, unique seed in this JVM instance.
-	 * <p>
-	 * Adapted from the JVM's implementation of {@link Random}
-	 *
-	 * @return A {@link Long} corresponding to a unique value useful for "oring" to the {@link System#nanoTime()}.
-	 */
-	private static long seedUniquifier() {
-		for (; ; ) {
-			long current = seedUniquifier.get();
-			long next = current * 181783497276652981L;
-			if (seedUniquifier.compareAndSet(current, next))
-				return next;
-		}
-	}
-
-	/**
-	 * Creates a valid, highly probably unique seed.
-	 *
-	 * @return A {@link Long} seed that can be passed to a constructor of {@link Random}
-	 */
-	private static long createSeed() {
-		return seedUniquifier() ^ System.nanoTime();
-	}
 
 	protected transient GameContext context;
 
@@ -2876,7 +2849,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
+		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), "MURLOC")
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -3869,8 +3842,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				card.setOwner(player.getId());
 			}
 
-			// Remove passive triggers
-			removeEnchantments(card, true, keepCardCostModifiers);
+			// Remove passive triggers if the card was in a place they were active
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+				removeEnchantments(card, true, keepCardCostModifiers);
+			}
 
 			if (count == 0) {
 				card.moveOrAddTo(context, Zones.DECK);

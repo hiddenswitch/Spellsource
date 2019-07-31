@@ -40,7 +40,7 @@
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",
-      "card": "enchantment_unholy_prescence"
+      "card": "enchantment_unholy_presence"
     }
   },
   "collectible": false,

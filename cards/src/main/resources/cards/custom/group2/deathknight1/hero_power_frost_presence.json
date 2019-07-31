@@ -41,7 +41,7 @@
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",
-      "card": "enchantment_frost_prescence"
+      "card": "enchantment_frost_presence"
     }
   },
   "collectible": false,

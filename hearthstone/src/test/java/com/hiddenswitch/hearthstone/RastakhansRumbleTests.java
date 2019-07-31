@@ -25,7 +25,7 @@ public class RastakhansRumbleTests extends TestBase {
 			assertTrue(target1.hasAttribute(Attribute.FROZEN));
 			assertTrue(target2.hasAttribute(Attribute.FROZEN));
 			assertTrue(target3.hasAttribute(Attribute.FROZEN));
-		});
+		}, HeroClass.BLUE, HeroClass.BLUE);
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class RastakhansRumbleTests extends TestBase {
 			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
 			useHeroPower(context, player, wisp.getReference());
 			assertEquals(player.getHand().size(), 1);
-		});
+		}, HeroClass.BLUE, HeroClass.BLUE);
 	}
 
 	@Test

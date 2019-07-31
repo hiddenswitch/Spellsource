@@ -294,7 +294,7 @@ public class TestBase {
 
 	@Suspendable
 	public static void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
-		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets("BASIC", "CLASSIC"));
+		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets("SPELLSOURCE_BASIC", "TEST"));
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
 		clearHand(context, player);
@@ -304,6 +304,8 @@ public class TestBase {
 		clearZone(context, player.getGraveyard());
 		clearZone(context, opponent.getGraveyard());
 		context.setDeckFormat(DeckFormat.getFormat("Custom").addSet("TEST"));
+
+		player.getHero().setHp(player.getHero().getMaxHp());
 
 		consumer.run(context, player, opponent);
 	}
@@ -332,7 +334,7 @@ public class TestBase {
 
 	@Suspendable
 	public static void runGym(GymConsumer consumer) {
-		runGym(consumer, "BLUE", "BLUE");
+		runGym(consumer, "TEST", "TEST");
 	}
 
 	public static void clearHand(GameContext context, Player player) {

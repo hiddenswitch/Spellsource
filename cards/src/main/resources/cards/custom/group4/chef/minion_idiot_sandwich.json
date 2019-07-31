@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Aftermath: Give adjacent minions +2/+2.",
   "deathrattle": {
     "class": "custom.AdjacentDeathrattleSpell",

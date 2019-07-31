@@ -1,15 +1,24 @@
 package com.hiddenswitch.spellsource.draft;
 
-import com.hiddenswitch.spellsource.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.function.Consumer;
 
 /**
  * Stores data and logic relating to drafting cards.
+ * <p>
+ * This context does not itself start a game. Use a {@link net.demilich.metastone.game.GameContext} for that.
+ * <p>
+ * Create a draft context using {@link #DraftContext()}, then set its behaviour using {@link
+ * #setBehaviour(DraftBehaviour)}. The default behaviour <b>never</b> replies to any choices.
+ * <p>
+ * To start the draft, call {@link #accept(Handler)} with a handler when the draft is done.
+ * <p>
+ * Retrieve the current state of the draft using {@link #getPublicState()}.
+ *
+ * @see DraftLogic for the specific rules regarding which cards are chosen to show to a player during a draft.
  */
 public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>> {
 	private DraftLogic logic = new DraftLogic(this);
@@ -18,9 +27,18 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 	private DraftBehaviour behaviour = new NullDraftBehaviour();
 	private Handler<AsyncResult<DraftContext>> handleDone;
 
+	/**
+	 * Creates a new draft context with a {@link NullDraftBehaviour} as the default.
+	 */
 	public DraftContext() {
 	}
 
+	/**
+	 * Starts a draft.
+	 *
+	 * @param done Called when all the draft choices have been made and the deck the player has been constructing is ready
+	 *             to play.
+	 */
 	public void accept(Handler<AsyncResult<DraftContext>> done) {
 		if (handleDone != null) {
 			throw new RuntimeException("Stale draft context.");
@@ -49,6 +67,11 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		getBehaviour().chooseHeroAsync(getPublicState().getHeroClassChoices(), this::onHeroSelected);
 	}
 
+	/**
+	 * This handler should be called with the player's champion selection.
+	 *
+	 * @param choice The champion selected by the player.
+	 */
 	public void onHeroSelected(AsyncResult<String> choice) {
 		if (choice.failed()) {
 			// TODO: Retry
@@ -63,13 +86,18 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		getBehaviour().chooseCardAsync(getLogic().getCardChoices(), this::onCardSelected);
 	}
 
+	/**
+	 * This handler should be called whenever the player makes a card choice.
+	 *
+	 * @param selectedCardResult The index of the card chosen in {@link PublicDraftState#getCurrentCardChoices()}.
+	 */
 	public void onCardSelected(AsyncResult<Integer> selectedCardResult) {
 		getLogic().selectCard(selectedCardResult.result());
 
 		if (getLogic().isDraftOver()) {
 			// TODO: What do we do when we're done? We should create a deck and populate it
 			if (handleDone != null) {
-				handleDone.handle(new Result<>(this));
+				handleDone.handle(Future.succeededFuture(this));
 			}
 
 		} else {
@@ -77,6 +105,11 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		}
 	}
 
+	/**
+	 * Gets the draft logic.
+	 *
+	 * @return
+	 */
 	public DraftLogic getLogic() {
 		return logic;
 	}
@@ -85,6 +118,12 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		this.logic = logic;
 	}
 
+	/**
+	 * Gets the public draft state. This state is safe to share with the end user and does not leak any information that
+	 * would advantage the player unfairly in the drafting process.
+	 *
+	 * @return
+	 */
 	public PublicDraftState getPublicState() {
 		return publicState;
 	}
@@ -93,6 +132,13 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		this.publicState = publicState;
 	}
 
+	/**
+	 * Gets the private draft state. In practice, this is the pre-generated list of cards the player will see, according
+	 * to the current rules in {@link DraftLogic}. This should never be shared with an end-user, since it can be used to
+	 * cheat.
+	 *
+	 * @return
+	 */
 	public PrivateDraftState getPrivateState() {
 		return privateState;
 	}
@@ -101,10 +147,21 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 		this.privateState = privateState;
 	}
 
+	/**
+	 * Gets the behaviour to which draft requests are delegated.
+	 *
+	 * @return
+	 */
 	public DraftBehaviour getBehaviour() {
 		return behaviour;
 	}
 
+	/**
+	 * Sets the behaviour. Beware of the {@link NullDraftBehaviour}--it does not ever call its callbacks, so the {@link
+	 * DraftContext} is never completed by it.
+	 *
+	 * @param behaviour
+	 */
 	public void setBehaviour(DraftBehaviour behaviour) {
 		this.behaviour = behaviour;
 	}

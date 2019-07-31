@@ -1,0 +1,12 @@
+{
+  "seed" : 6858201993936523549,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "CORAL", "TEAL" ],
+  "deckCardIds" : [ [ "minion_crystal_golem", "spell_fortissimo", "weapon_storm_guitar", "minion_mutamite_terror", "minion_myra_the_masterful", "minion_treasure_hunter", "minion_chromie", "minion_frazzled_barmaid", "spell_power_chord", "minion_eyeweaver", "minion_alluring_minstrel", "minion_barside_slinker", "minion_cacodemon", "minion_lounge_brownie", "minion_little_helper", "minion_sunbender", "minion_kodama_bulwark", "spell_rehearsal", "minion_spirited_announcer", "spell_uplifting_melody", "spell_power_chord", "minion_dawnrisen_harpy", "minion_alluring_minstrel", "minion_nightmare_whelp", "minion_hunchback_supplier", "minion_end", "minion_stowaway_scoundrel", "spell_enchanting_tune", "minion_hostile_snapdragon", "minion_sly_conquistador" ], [ "minion_bittertide_crab", "minion_stowaway_scoundrel", "minion_fassnu_avenger", "weapon_brine_crossbolter", "spell_evaporation", "minion_sleepy_sprite", "minion_deranged_greengill", "spell_gift_of_the_queen", "minion_stallius_the_horned", "minion_nazjatar_seahorseman", "spell_finding_mobus", "weapon_cerith_scepter", "spell_gift_of_the_queen", "weapon_brine_crossbolter", "minion_tanglefer_of_the_jungle", "weapon_cerith_scepter", "minion_sea_elemental", "minion_verdant_dreams_dracomancer", "minion_bronze_timekeeper", "spell_highborne_grace", "spell_frostfire", "minion_primalist_kirra", "spell_murloc_mating_call", "minion_chief_vigilante", "minion_hooded_ritualist", "spell_highborne_grace", "minion_seeker_of_knowledge", "minion_yaungol_guardian", "minion_frigid_bones", "spell_regal_gaze" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 13 ], [ 57 ] ],
+  "actions" : [ 0, 0, 1, 3, 1, 3, 1, 0, 0, 3, 1, 5, 0, 0, 4, 6, 5, 7, 0, 1, 5, 0, 0, 18, 14, 0, 2, 20, 0, 0, 0, 15, 5, 4, 1, 5, 7, 0, 12, 5, 4, 2, 0, 10 ],
+  "id" : null
+}

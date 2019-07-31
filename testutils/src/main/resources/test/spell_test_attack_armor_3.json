@@ -1,0 +1,18 @@
+{
+  "name": "",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give your hero +3 Attack this turn. Gain 3 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 3,
+    "attackBonus": 3
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

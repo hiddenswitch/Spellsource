@@ -26,73 +26,33 @@ import java.util.stream.Stream;
 /**
  * The fields that correspond to a complete state of the game.
  * <p>
- * Notably, this class contains {@link Player} objects, whose {@link net.demilich.metastone.game.behaviour.Behaviour}
- * fields are not strictly state. These can be safely serialized since behaviours generally do not contain any state.
+ * This game state is used, in practice, as a snapshot of the game in a specific point in time using {@link
+ * GameContext#getGameStateCopy()} and to copy games using {@link GameContext#setGameState(GameState)}.
+ * <p>
+ * Creating a game state using {@link GameContext#getGameState()} produces an instance whose objects are shared with the
+ * {@code GameContext}. Mutating the player objects, for example, in such a game state will also mutate the player
+ * objects in the context. To retrieve a copy, use {@link GameContext#getGameState()} or {@link #clone()} the state.
+ * <p>
+ * While the fields in this instance are immutable, the engine does not prevent changes to fields within the fields.
+ * This is <b>not</b> an immutable data type.
+ *
+ * @see GameContext for more about how state in Spellsource works
  */
 public class GameState implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * A player object corresponding to the arbitrarily-decided first player of the game.
-	 *
-	 * @see Player for more about players.
-	 */
-	public final Player player1;
-	/**
-	 * A player object corresponding to the arbitrarily-decided second player of the game.
-	 *
-	 * @see Player for more about players.
-	 */
-	public final Player player2;
-	/**
-	 * A {@link CardList} of cards that are temporarily created in this game.
-	 */
-	public final CardList tempCards;
-	/**
-	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions are
-	 * currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
-	 * <p>
-	 * This helps implement a variety of complex rules in the game.
-	 *
-	 * @see Environment for more about the environment variables.
-	 */
-	public final Map<Environment, Object> environment;
-	/**
-	 * An instance of the class that manages and stores the state for {@link Trigger} objects.
-	 *
-	 * @see Trigger for more about triggers.
-	 * @see GameContext#fireGameEvent(GameEvent) for more about firing triggers and raising events.
-	 */
-	public final TriggerManager triggerManager;
-	/**
-	 * The next ID to generate in an {@link IdFactoryImpl}/
-	 */
-	public final int currentId;
-	/**
-	 * The currently active player.
-	 */
-	public final int activePlayerId;
-	/**
-	 * The current {@link TurnState} of the game.
-	 */
-	public final TurnState turnState;
-	/**
-	 * The timestamp of when this {@link GameState} was accessed.
-	 */
-	public final long timestamp;
-	/**
-	 * The current turn number.
-	 */
-	public final int turnNumber;
-	/**
-	 * The deck format of this game.
-	 */
-	public final DeckFormat deckFormat;
-	/**
-	 * The amount of time left in a timer, such as an end of turn or mulligan timer, until the player's actions are
-	 * automatically terminated. When {@code null}, no timer is set.
-	 */
-	public final Long millisRemaining;
+	private final Player player1;
+	private final Player player2;
+	private final CardList tempCards;
+	private final Map<Environment, Object> environment;
+	private final TriggerManager triggerManager;
+	private final int currentId;
+	private final int activePlayerId;
+	private final TurnState turnState;
+	private final long timestamp;
+	private final int turnNumber;
+	private final DeckFormat deckFormat;
+	private final Long millisRemaining;
 
 	public GameState(GameContext fromContext) {
 		this(fromContext, fromContext.getTurnState(), false);
@@ -147,10 +107,14 @@ public class GameState implements Serializable, Cloneable {
 		this.millisRemaining = millisRemaining;
 	}
 
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	protected Stream<Entity> getEntities() {
-		return Stream.of(player1, player2).flatMap(p -> Stream.of(Zones.values()).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+		return Stream.of(getPlayer1(), getPlayer2()).flatMap(p -> Stream.of(Zones.values()).flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 
 	/**
@@ -185,17 +149,115 @@ public class GameState implements Serializable, Cloneable {
 	@Override
 	public GameState clone() {
 		return new GameState(
-				player1,
-				player2,
-				tempCards,
-				environment,
-				triggerManager,
-				currentId,
-				activePlayerId,
-				turnState,
-				timestamp,
-				turnNumber,
-				deckFormat,
-				millisRemaining);
+				getPlayer1(),
+				getPlayer2(),
+				getTempCards(),
+				getEnvironment(),
+				getTriggerManager(),
+				getCurrentId(),
+				getActivePlayerId(),
+				getTurnState(),
+				getTimestamp(),
+				getTurnNumber(),
+				getDeckFormat(),
+				getMillisRemaining());
+	}
+
+
+	/**
+	 * A player object corresponding to the arbitrarily-decided first player of the game.
+	 *
+	 * @see Player for more about players.
+	 */
+	public Player getPlayer1() {
+		return player1;
+	}
+
+	/**
+	 * A player object corresponding to the arbitrarily-decided second player of the game.
+	 *
+	 * @see Player for more about players.
+	 */
+	public Player getPlayer2() {
+		return player2;
+	}
+
+	/**
+	 * A {@link CardList} of cards that are temporarily created in this game.
+	 */
+	public CardList getTempCards() {
+		return tempCards;
+	}
+
+	/**
+	 * Gets a reference to the game context's environment, a piece of game state that keeps tracks of which minions are
+	 * currently being summoned, which targets are being targeted, how much damage is set to be dealt, etc.
+	 * <p>
+	 * This helps implement a variety of complex rules in the game.
+	 *
+	 * @see Environment for more about the environment variables.
+	 */
+	public Map<Environment, Object> getEnvironment() {
+		return environment;
+	}
+
+	/**
+	 * An instance of the class that manages and stores the state for {@link Trigger} objects.
+	 *
+	 * @see Trigger for more about triggers.
+	 * @see GameContext#fireGameEvent(GameEvent) for more about firing triggers and raising events.
+	 */
+	public TriggerManager getTriggerManager() {
+		return triggerManager;
+	}
+
+	/**
+	 * The next ID to generate in an {@link IdFactoryImpl}/
+	 */
+	public int getCurrentId() {
+		return currentId;
+	}
+
+	/**
+	 * The currently active player.
+	 */
+	public int getActivePlayerId() {
+		return activePlayerId;
+	}
+
+	/**
+	 * The current {@link TurnState} of the game.
+	 */
+	public TurnState getTurnState() {
+		return turnState;
+	}
+
+	/**
+	 * The timestamp of when this {@link GameState} was accessed.
+	 */
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	 * The current turn number.
+	 */
+	public int getTurnNumber() {
+		return turnNumber;
+	}
+
+	/**
+	 * The deck format of this game.
+	 */
+	public DeckFormat getDeckFormat() {
+		return deckFormat;
+	}
+
+	/**
+	 * The amount of time left in a timer, such as an end of turn or mulligan timer, until the player's actions are
+	 * automatically terminated. When {@code null}, no timer is set.
+	 */
+	public Long getMillisRemaining() {
+		return millisRemaining;
 	}
 }
