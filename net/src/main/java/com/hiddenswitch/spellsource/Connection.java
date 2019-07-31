@@ -208,8 +208,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			connection.endHandler(v -> span.finish());
 			connection.exceptionHandler(ex -> {
 				// Wrap this so we can see where it actually occurs
-				Tracing.error(new VertxException(ex), span, false);
-				span.finish();
+				Tracing.error(new VertxException(ex), span, true);
 				connection.close(Future.future());
 			});
 			// All handlers should run simultaneously but we'll wait until the handlers have run
