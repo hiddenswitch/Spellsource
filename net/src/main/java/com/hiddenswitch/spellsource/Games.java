@@ -1178,6 +1178,7 @@ public interface Games extends Verticle {
 					break;
 				}
 
+				/*
 				if (card.getZone() == Zones.HAND
 						&& DamageSpell.class.isAssignableFrom(spell.getDescClass())
 						&& owningPlayer != null) {
@@ -1187,6 +1188,7 @@ public interface Games extends Verticle {
 					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, oneOne);
 					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);
 				}
+				*/
 				entityState.underAura(spellpowerDamage > damage
 						|| hostsTrigger);
 				entityState.spellDamage(spellpowerDamage);
