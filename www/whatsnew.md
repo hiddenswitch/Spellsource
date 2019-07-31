@@ -15,6 +15,7 @@ Bug fixes.
  - Distortoise now correctly does 3 damage to the owner instead of 2. (1294)
  - Prized Boar Aftermath now properly reflects the printed effect. (1293) 
  - Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)
+ - Many cards that before referenced Mana now refer to Lun instead. (1306)
 
 ### 0.8.42-2.0.35 (July 30th, 2019)
 
