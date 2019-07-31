@@ -18,7 +18,7 @@
       },
       {
         "class": "DamageSpell",
-        "target": "MINIONS",
+        "target": "ALL_MINIONS",
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"

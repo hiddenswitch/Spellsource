@@ -15,7 +15,7 @@
       },
       {
         "class": "ShuffleToDeckSpell",
-        "target": "FRIENDLY_HAND"
+        "target": "FRIENDLY_HAND",
         "targetPlayer": "OPPONENT"
       }
     ]

@@ -2,7 +2,7 @@
   "name": "Gnomechanic",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "PircClass",
+  "heroClass": "LIGHTBROWN",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
@@ -13,7 +13,7 @@
       "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "---Armor Lost---",
+        "playerAttribute": "ARMOR_LOST",
         "targetPlayer": "SELF"
       },
       "value2": 10
@@ -22,47 +22,48 @@
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
       "armorBonus": 10
-    },
-    "attributes": {
-      "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1,
-    "dynamicDescription": [
-      {
-        "class": "ConditionalDescription",
-        "condition": {
-          "class": "ComparisonCondition",
-          "operation": "GREATER_OR_EQUAL",
-          "value1": {
-            "class": "PlayerAttributeValueProvider",
-            "playerAttribute": "---Armor Lost---",
-            "targetPlayer": "SELF"
-          },
-          "value2": 10
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "ARMOR_LOST",
+          "targetPlayer": "SELF"
         },
-        "description1": " (Ready!)",
-        "description2": {
-          "class": "MetaDescription",
-          "descriptions": [
-            " (",
-            {
-              "class": "ValueDescription",
-              "value": {
-                "class": "AlgebraicValueProvider",
-                "operation": "SUBTRACT",
-                "value1": 10,
-                "value2": {
-                  "class": "PlayerAttributeValueProvider",
-                  "playerAttribute": "---Armor Lost---",
-                  "targetPlayer": "SELF"
-                }
+        "value2": 10
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 10,
+              "value2": {
+                "class": "PlayerAttributeValueProvider",
+                "playerAttribute": "ARMOR_LOST",
+                "targetPlayer": "SELF"
               }
-            },
-            " left!)"
-          ]
-        }
+            }
+          },
+          " left!)"
+        ]
       }
-    ]
-  }
+    }
+  ]
+}

@@ -1,55 +1,40 @@
 package com.hiddenswitch.spellsource;
 
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.events.GameStartEvent;
+import net.demilich.metastone.game.events.WillEndSequenceEvent;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
-import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
@@ -1776,6 +1761,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(big.isDestroyed());
 		}, "TOAST", "TOAST");
 	}
+
 	@Test
 	public void testSorrowstone() {
 		runGym((context, player, opponent) -> {
@@ -1808,6 +1794,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), shouldBeSummoned.getSourceCard().getCardId());
 		});
 	}
+
 	@Test
 	public void testWindsweptStrike() {
 		runGym((context, player, opponent) -> {
@@ -3245,7 +3232,6 @@ public class CustomCardsTests extends TestBase {
 	*/
 
 
-
 	@Test
 	public void testMysticSkull() {
 		runGym((context, player, opponent) -> {
@@ -3831,7 +3817,6 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 	*/
-
 
 
 	@Test
@@ -4454,5 +4439,52 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(aiiranOnBoard.getDescription(context, player), "Opener: Deal X damage. (Increases by 2 for each other Dragon in your hand)");
 			assertEquals(aiiranInHand.getDescription(context, player), "Opener: Deal 0 damage. (Increases by 2 for each other Dragon in your hand)");
 		});
+	}
+
+	@Test
+	public void testArmorLostAndGnomechanic() {
+		runGym(((context, player, opponent) -> {
+			player.getHero().modifyArmor(10);
+			Card card = receiveCard(context, player, "minion_gnomechanic");
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
+			assertEquals(player.getHero().getArmor(), 0);
+			playCard(context, player, card);
+			assertEquals(player.getHero().getArmor(), 10);
+		}));
+	}
+
+	@Test
+	public void testPaven() {
+		runGym(((context, player, opponent) -> {
+			Minion paven1 = playMinionCard(context, player, "minion_paven_elemental_of_surprise");
+			destroy(context, paven1);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "permanent_paven_captured");
+			playCard(context, opponent, "spell_test_discover1");
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "permanent_paven_captured");
+			playCard(context, player, "spell_test_discover1");
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_paven_elemental_of_surprise");
+		}));
+	}
+
+	@Test
+	public void testSotMountainExcavation() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "spell_sot_mountain_excavation");
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 1);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			player.getHero().modifyArmor(8);
+			playCard(context, player, "spell_sot_mountain_excavation");
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 3);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			player.getHero().modifyArmor(28);
+			playCard(context, player, "spell_sot_mountain_excavation");
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 7);
+			assertEquals(player.getHero().getArmor(), 4);
+		}));
 	}
 }

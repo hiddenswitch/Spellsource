@@ -1309,6 +1309,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		hero.modifyDecayingArmor(-damage);
 		if (armorChange != 0) {
 			context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
+			context.getPlayer(hero.getOwner()).getStatistics().loseArmor(-armorChange);
 		}
 		int newHp = Math.min(hero.getHp(), effectiveHp - damage);
 		hero.setHp(newHp);
@@ -4510,6 +4511,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void revealCard(Player player, Card cardToReveal) {
 		// For now, just trigger a reveal card event.
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));
+	}
+
+	@Suspendable
+	public void discoverCard(int playerId) {
+		// Similar to above, we will just fire an event for now.
+		context.fireGameEvent(new DiscoverEvent(context, playerId));
 	}
 
 	public int getInternalId() {
