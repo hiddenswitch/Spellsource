@@ -526,8 +526,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	@NotNull
-	public Race getRace() {
-		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
+	public String getRace() {
+		return (String) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}
 
 	/**

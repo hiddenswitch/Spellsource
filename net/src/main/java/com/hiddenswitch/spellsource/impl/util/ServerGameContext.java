@@ -421,9 +421,8 @@ public class ServerGameContext extends GameContext implements Server {
 			getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
 
 			initialization.complete();
-			// Await both clients ready for 10s
 			Future bothClientsReady;
-			long timeout = 12000L;
+			long timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
 			if (!clientsReady.values().stream().allMatch(Future::isComplete)) {
 				// If this is interrupted, it will bubble up to the general interrupt handler
 				bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, timeout);

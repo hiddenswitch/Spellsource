@@ -2826,7 +2826,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
+		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), "MURLOC")
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -3819,8 +3819,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				card.setOwner(player.getId());
 			}
 
-			// Remove passive triggers
-			removeEnchantments(card, true, keepCardCostModifiers);
+			// Remove passive triggers if the card was in a place they were active
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+				removeEnchantments(card, true, keepCardCostModifiers);
+			}
 
 			if (count == 0) {
 				card.moveOrAddTo(context, Zones.DECK);

@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -127,6 +128,7 @@ public class SoulseekerTests extends TestBase {
 
 	//In Fate's Hands - 1 Mana Epic Spell - "Secret: When a friendly minion dies, give the ones next to it Immune until your next turn."
 	@Test
+	@Ignore("Old Implementation")
 	public void testInFatesHands() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_in_fates_hands");

@@ -1,0 +1,16 @@
+{
+  "name": "Test Deal 10",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 10
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

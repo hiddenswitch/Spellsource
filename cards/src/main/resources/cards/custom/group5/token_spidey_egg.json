@@ -1,0 +1,20 @@
+{
+  "name": "Spidey Egg",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Deathrattle: Summon a 4/4 Spidy.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_spidey"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

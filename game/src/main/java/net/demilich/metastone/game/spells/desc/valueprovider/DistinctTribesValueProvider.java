@@ -33,9 +33,9 @@ public final class DistinctTribesValueProvider extends ValueProvider {
 		} else {
 			targets = new ArrayList<>();
 		}
-		Stream<Race> raceStream = targets.stream().map(Entity::getRace);
+		Stream<String> raceStream = targets.stream().map(Entity::getRace);
 		if (getDesc().containsKey(ValueProviderArg.RACE)) {
-			raceStream = Stream.concat(Stream.of((Race) getDesc().get(ValueProviderArg.RACE)), raceStream);
+			raceStream = Stream.concat(Stream.of((String) getDesc().get(ValueProviderArg.RACE)), raceStream);
 		}
 		return (int) raceStream.distinct().count();
 	}
