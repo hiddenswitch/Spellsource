@@ -22,7 +22,7 @@
         "cardType": "MINION",
         "race": "ELEMENTAL",
         "operation": "EQUAL"
-      }
+      },
       "cardSource": {
         "class": "GraveyardActorsSource",
         "targetPlayer": "SELF"

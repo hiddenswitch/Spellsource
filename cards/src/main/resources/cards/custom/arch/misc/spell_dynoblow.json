@@ -4,32 +4,32 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Deal 8 damage to a random minion. Repeat with halved damage.",
+  "description": "Deal $8 damage to a random minion. Then deal $4 damage to a random minion. Then $2. Then $1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "MINIONS",
+        "target": "ALL_MINIONS",
         "value": 8,
         "randomTarget": true
       },
       {
         "class": "DamageSpell",
-        "target": "MINIONS",
+        "target": "ALL_MINIONS",
         "value": 4,
         "randomTarget": true
       },
       {
         "class": "DamageSpell",
-        "target": "MINIONS",
+        "target": "ALL_MINIONS",
         "value": 2,
         "randomTarget": true
       },
       {
         "class": "DamageSpell",
-        "target": "MINIONS",
+        "target": "ALL_MINIONS",
         "value": 1,
         "randomTarget": true
       }

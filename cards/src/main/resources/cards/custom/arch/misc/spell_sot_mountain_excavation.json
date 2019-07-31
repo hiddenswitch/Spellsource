@@ -7,13 +7,93 @@
   "description": "Summon a random Legendary minion. Destroy 4 of your Armor and cast this again.",
   "targetSelection": "NONE",
   "spell": {
-      "class": "SummonSpell",
-      "cardFilter": {
-        "class": "CardFilter",
-        "rarity": "LEGENDARY",
-        "cardType": "MINION"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "ComparisonCondition",
+              "operation": "GREATER",
+              "value1": {
+                "class": "AttributeValueProvider",
+                "target": "FRIENDLY_HERO",
+                "attribute": "ARMOR"
+              },
+              "value2": 0
+            },
+            {
+              "class": "MinionCountCondition",
+              "value": 7,
+              "operation": "LESS",
+              "targetPlayer": "SELF"
+            }
+          ]
+        },
+        "spell": {
+          "class": "RecastWhileSpell",
+          "condition": {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "ComparisonCondition",
+                "operation": "GREATER",
+                "value1": {
+                  "class": "AttributeValueProvider",
+                  "target": "FRIENDLY_HERO",
+                  "attribute": "ARMOR"
+                },
+                "value2": 0
+              },
+              {
+                "class": "MinionCountCondition",
+                "value": 7,
+                "operation": "LESS",
+                "targetPlayer": "SELF"
+              }
+            ]
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "DamageSpell",
+                "target": "FRIENDLY_HERO",
+                "value": {
+                  "class": "AlgebraicValueProvider",
+                  "value1": {
+                    "class": "AttributeValueProvider",
+                    "attribute": "ARMOR"
+                  },
+                  "value2": 4,
+                  "operation": "MINIMUM"
+                }
+              },
+              {
+                "class": "SummonSpell",
+                "cardFilter": {
+                  "class": "CardFilter",
+                  "rarity": "LEGENDARY",
+                  "cardType": "MINION"
+                }
+              }
+            ]
+          },
+          "randomTarget": true
+        }
+      }
+    ]
   },
-  //needs custom code
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

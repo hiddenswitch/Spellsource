@@ -11,29 +11,28 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DiscoverSpell",
-          "spell": {
-            "class": "CardCostModifierSpell",
-            "target": "OUTPUT",
-            "cardCostModifier": {
-              "class": "CardCostModifier",
-              "target": "SELF",
-              "value": 1,
-              "operation": "ADD"
-            }
-          },
-          "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "SPELL"
-          },
-          "cardSource": {
-            "class": "CatalogueSource"
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF",
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "value": 1,
+            "operation": "ADD"
           }
         }
-      ]
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
     }
   },
   "attributes": {

@@ -136,6 +136,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.HEALING_DONE, healing);
 	}
 
+	public void loseArmor(int armorLost) {
+		add(Statistic.ARMOR_LOST, armorLost);
+	}
+
 	private void increaseCardCount(Card card, int turn) {
 		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
 			return;

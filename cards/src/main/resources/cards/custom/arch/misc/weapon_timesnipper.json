@@ -1,5 +1,5 @@
 {
-  "name": "Mystick",
+  "name": "Timesnipper",
   "baseManaCost": 2,
   "type": "WEAPON",
   "heroClass": "LIGHTBROWN",
@@ -15,6 +15,15 @@
   },
   "deathrattle": {
     "class": "NullSpell"
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
   },
   "attributes": {
     "BATTLECRY": true,

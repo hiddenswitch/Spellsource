@@ -1,8 +1,8 @@
 {
-  "name": "Big Bad Coyote",
+  "name": "Onsite Enforcer",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "OLIVE",
+  "heroClass": "LIGHTBROWN",
   "baseAttack": 4,
   "baseHp": 10,
   "rarity": "RARE",
@@ -10,15 +10,15 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ShuffleToDeckSpell",
+      "class": "ShuffleOriginalToDeckSpell",
       "target": "FRIENDLY_HAND"
     }
-
-    "attributes": {
-      "RUSH": true,
-      "TAUNT": true
-    },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
-  }
+  },
+  "attributes": {
+    "RUSH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
