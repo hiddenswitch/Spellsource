@@ -18,8 +18,8 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "DEATHRATTLES": true
-     "DECAY": true
+    "DEATHRATTLES": true,
+    "DECAY": true
   },
   "collectible": true,
   "set": "CUSTOM",

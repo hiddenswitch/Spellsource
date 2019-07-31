@@ -13,9 +13,9 @@
       "sourcePlayer": "SELF"
     },
     "spell": {
-        "class": "BuffSpell",
-        "target": "FRIENDLY_HERO",
-        "armorBonus": 2
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 2
     }
   },
   "collectible": true,

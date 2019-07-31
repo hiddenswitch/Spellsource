@@ -7,14 +7,14 @@
   "durability": 3,
   "rarity": "RARE",
   "description": "<b>Decay</b>. Your hero has +2 Attack.",
-    "aura": {
+  "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_HERO",
-    "attackBonus": 2,
-    }
+    "attackBonus": 2
+  },
   "collectible": true,
   "attributes": {
-  "DECAY": true
+    "DECAY": true
   },
   "set": "CUSTOM",
   "fileFormatVersion": 1

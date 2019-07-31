@@ -7,18 +7,18 @@
   "baseHp": 10,
   "rarity": "RARE",
   "description": "Dash, Guard. Opener: Shuffle your hand into your deck.",
-    "battlecry": {
+  "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ShuffleToDeckSpell",
       "target": "FRIENDLY_HAND"
     }
 
-  "attributes": {
-    "RUSH": true,
-    "TAUNT": true
-  },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
-}
+    "attributes": {
+      "RUSH": true,
+      "TAUNT": true
+    },
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+  }

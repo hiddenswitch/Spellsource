@@ -19,9 +19,9 @@
             "playerAttribute": "HAND_COUNT",
             "targetPlayer": "SELF"
           },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      }
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
         },
         {
           "class": "ReceiveCardSpell",
@@ -35,9 +35,9 @@
               "targetPlayer": "SELF"
             }
           },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      }
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
         }
       ]
     }

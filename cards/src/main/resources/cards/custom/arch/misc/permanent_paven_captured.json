@@ -8,9 +8,9 @@
   "rarity": "FREE",
   "description": "When you Discover a card, revive this minion.",
   "trigger": {
-     "eventTrigger": {
-       "class": "DiscoverTrigger",
-     },
+    "eventTrigger": {
+      "class": "DiscoverTrigger"
+    },
     "spell": {
       "class": "TransformMinionSpell",
       "target": "SELF",

@@ -15,14 +15,14 @@
       "spells": [
         {
           "class": "DiscoverSpell",
-            "spell": {
-              "class": "CardCostModifierSpell",
-              "target": "OUTPUT",
-              "cardCostModifier": {
-                "class": "CardCostModifier",
-                "target": "SELF",
-                "value": 1,
-                "operation": "ADD"
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "ADD"
             }
           },
           "cardFilter": {
