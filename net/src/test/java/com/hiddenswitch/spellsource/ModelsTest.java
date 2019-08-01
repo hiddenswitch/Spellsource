@@ -35,10 +35,10 @@ public class ModelsTest {
 	@Test
 	public void testChooseOnesDelivered() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_wrath"));
-			Card card = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_test_choose_one"));
+			Card card = CardCatalogue.getCardById("minion_test_3_2");
 			context.getLogic().summon(opponent.getId(), card.summon(), card, 0, false);
-			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_wrath")));
+			assertTrue("The player has Choose One Card", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_test_choose_one")));
 			if (context.getActivePlayerId() != player.getId()) {
 				context.endTurn();
 				context.startTurn(player.getId());
@@ -54,10 +54,10 @@ public class ModelsTest {
 	@Test
 	public void testChooseOneDeliveredNotPlayable() {
 		runGym((context, player, opponent) -> {
-			Card wrath = CardCatalogue.getCardById("spell_wrath");
-			context.getLogic().receiveCard(player.getId(), wrath);
-			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_wrath")));
-			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_wrath")));
+			Card chooseOne = CardCatalogue.getCardById("spell_test_choose_one");
+			context.getLogic().receiveCard(player.getId(), chooseOne);
+			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_test_choose_one")));
+			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_test_choose_one")));
 			if (context.getActivePlayerId() != player.getId()) {
 				context.endTurn();
 				context.startTurn(player.getId());
@@ -66,11 +66,11 @@ public class ModelsTest {
 			List<GameAction> validActions = context.getValidActions();
 			GameActions clientActions = Games.getClientActions(context, validActions, 0);
 			assertEquals(0, clientActions.getChooseOnes().size());
-			Entity clientWrath2 = Games.getEntity(context, wrath, player.getId());
-			Assert.assertFalse(clientWrath2.getState().isPlayable());
+			Entity clientCard = Games.getEntity(context, chooseOne, player.getId());
+			Assert.assertFalse(clientCard.getState().isPlayable());
 			GameState state = Games.getGameState(context, player, opponent);
-			Entity clientWrath = state.getEntities().stream().filter(e -> e.getId() == wrath.getId()).findFirst().get();
-			Assert.assertFalse(clientWrath.getState().isPlayable());
+			Entity clientCard2 = state.getEntities().stream().filter(e -> e.getId() == chooseOne.getId()).findFirst().get();
+			Assert.assertFalse(clientCard2.getState().isPlayable());
 		});
 
 	}
@@ -78,16 +78,16 @@ public class ModelsTest {
 	@Test
 	public void testQuestFiresDelivered() {
 		runGym((context, player, opponent) -> {
-			Card cavernsCard = CardCatalogue.getCardById("quest_the_caverns_below");
-			context.getLogic().receiveCard(0, cavernsCard);
-			context.performAction(0, cavernsCard.play());
-			assertEquals("quest_the_caverns_below", player.getQuests().get(0).getSourceCard().getCardId());
-			Card bloodfen1 = CardCatalogue.getCardById("minion_bloodfen_raptor");
-			context.getLogic().receiveCard(0, bloodfen1);
-			context.performAction(0, bloodfen1.play());
-			bloodfen1 = CardCatalogue.getCardById("minion_bloodfen_raptor");
-			context.getLogic().receiveCard(0, bloodfen1);
-			context.performAction(0, bloodfen1.play());
+			Card questCard = CardCatalogue.getCardById("quest_into_the_mines");
+			context.getLogic().receiveCard(0, questCard);
+			context.performAction(0, questCard.play());
+			assertEquals("quest_into_the_mines", player.getQuests().get(0).getSourceCard().getCardId());
+			Card freeze = CardCatalogue.getCardById("spell_test_freeze");
+			context.getLogic().receiveCard(0, freeze);
+			context.performAction(0, freeze.play());
+			freeze = CardCatalogue.getCardById("spell_test_freeze");
+			context.getLogic().receiveCard(0, freeze);
+			context.performAction(0, freeze.play());
 			assertEquals(2, player.getQuests().get(0).getFires());
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
 			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getState().getFires() == 2));
@@ -107,9 +107,9 @@ public class ModelsTest {
 		runGym((context, player, opponent) -> {
 			Card neutralMinion = CardCatalogue.getCardById("minion_cost_three_test");
 			context.getLogic().shuffleToDeck(player, neutralMinion);
-			Card kelesethCard = CardCatalogue.getCardById("minion_prince_keleseth");
-			context.getLogic().receiveCard(0, kelesethCard);
-			context.performAction(0, kelesethCard.play());
+			Card buffCard = CardCatalogue.getCardById("minion_test_card_buff");
+			context.getLogic().receiveCard(0, buffCard);
+			context.performAction(0, buffCard.play());
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(3, neutralMinion.getAttack() + neutralMinion.getBonusAttack());
 			context.getLogic().endOfSequence();
@@ -123,7 +123,7 @@ public class ModelsTest {
 		runGym((context, player, opponent) -> {
 			Card neutralMinion = CardCatalogue.getCardById("minion_cost_three_test");
 			context.getLogic().shuffleToDeck(player, neutralMinion);
-			Card kelesethCard = CardCatalogue.getCardById("minion_prince_keleseth");
+			Card kelesethCard = CardCatalogue.getCardById("minion_test_card_buff");
 			context.getLogic().receiveCard(0, kelesethCard);
 			context.performAction(0, kelesethCard.play());
 			context.getLogic().drawCard(player.getId(), player);

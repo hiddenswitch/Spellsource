@@ -187,8 +187,13 @@ public interface Gateway extends Verticle {
 	 * @return A Java {@link NetworkInterface} object that can be used by {@link io.vertx.core.Vertx}.
 	 * @throws SocketException Typically if the application is not permitted to enumerate network interfaces.
 	 */
-	static NetworkInterface mainInterface() throws SocketException {
-		final ArrayList<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+	static NetworkInterface mainInterface() {
+		final ArrayList<NetworkInterface> interfaces;
+		try {
+			interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+		} catch (SocketException e) {
+			throw new RuntimeException(e);
+		}
 		final NetworkInterface networkInterface = interfaces.stream().filter(ni -> {
 			boolean isLoopback = false;
 			boolean supportsMulticast = false;
@@ -218,7 +223,7 @@ public interface Gateway extends Verticle {
 				return null;
 			}
 			return hostAddress.getAddress().getHostAddress();
-		} catch (SocketException ex) {
+		} catch (Throwable ex) {
 			throw new VertxException(ex);
 		}
 	}

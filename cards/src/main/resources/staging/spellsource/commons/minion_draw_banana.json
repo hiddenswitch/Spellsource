@@ -1,12 +1,12 @@
 {
-  "name": "Draw Banana",
+  "name": "Draw Apple",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "At the end of your turn, draw a banana.",
+  "description": "At the end of your turn, draw an Apple.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "spell_bananas"
+      "card": "spell_apple"
     }
   },
   "collectible": true,

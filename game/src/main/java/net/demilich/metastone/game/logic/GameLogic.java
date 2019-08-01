@@ -1183,7 +1183,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, boolean ignoreLifesteal, DamageType damageType) {
-		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage);
+		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage, damageType);
 		resolveDamageEvent(player, target, source, damageDealt, ignoreLifesteal, damageType);
 		if (source.getEntityType() == EntityType.CARD) {
 			Card card = (Card) source;
@@ -1237,7 +1237,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage) {
+	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage, DamageType damageType) {
 		if (target.getHp() < -100) {
 			return 0;
 		}
@@ -1267,7 +1267,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		context.getDamageStack().push(damage);
-		context.fireGameEvent(new PreDamageEvent(context, target, source, damage));
+		context.fireGameEvent(new PreDamageEvent(context, target, source, damage, damageType));
 		damage = context.getDamageStack().pop();
 		if (damage > 0) {
 			removeAttribute(source, null, Attribute.STEALTH);
@@ -1358,7 +1358,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (target.hasAttribute(Attribute.DEFLECT)
 				&& target.getHp() <= damage) {
 			removeAttribute(target, source, Attribute.DEFLECT);
-			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true);
+			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true, DamageType.DEFLECT);
 			return true;
 		}
 		return false;
@@ -1799,8 +1799,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// This could change, theoretically, if the minion has an ability  whose damage depends on the other minion's HP.
 		boolean attackerWasDestroyed = attacker.isDestroyed();
 		boolean defenderWasDestroyed = defender.isDestroyed();
-		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true);
-		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true);
+		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true, DamageType.PHYSICAL);
+		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true, DamageType.PHYSICAL);
 		// Defender queues first. Damage events should not change the attacker
 		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageType.PHYSICAL);
 		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageType.PHYSICAL);
@@ -2825,7 +2825,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
+		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), "MURLOC")
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -3818,8 +3818,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				card.setOwner(player.getId());
 			}
 
-			// Remove passive triggers
-			removeEnchantments(card, true, keepCardCostModifiers);
+			// Remove passive triggers if the card was in a place they were active
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+				removeEnchantments(card, true, keepCardCostModifiers);
+			}
 
 			if (count == 0) {
 				card.moveOrAddTo(context, Zones.DECK);

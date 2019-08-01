@@ -1,0 +1,35 @@
+{
+  "name": "Curious Kirrin",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Deflect. Extra Strike. Whenever this minion attacks, add an Emerald Secret to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "DEFLECT": true,
+    "WINDFURY": true
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

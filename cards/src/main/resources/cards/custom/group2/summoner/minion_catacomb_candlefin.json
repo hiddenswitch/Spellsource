@@ -6,15 +6,15 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "race": "MURLOC",
-  "description": "Opener: Add a copy of the last friendly Murloc that died to your hand.",
+  "race": "FAE",
+  "description": "Opener: Add a copy of the last friendly Fae that died to your hand.",
   "battlecry": {
     "spell": {
       "class": "ReceiveLastCardSpell",
       "value": 1,
       "cardFilter": {
         "class": "CardFilter",
-        "race": "MURLOC"
+        "race": "FAE"
       },
       "cardSource": {
         "class": "GraveyardActorsSource",

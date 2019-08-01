@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Dash. Opener: If you have 10 Mana Crystals, deal 4 damage.",
+  "description": "Dash. Opener: If you have 10 Lun, deal 4 damage.",
   "battlecry": {
     "condition": {
       "class": "ManaMaxedCondition"
