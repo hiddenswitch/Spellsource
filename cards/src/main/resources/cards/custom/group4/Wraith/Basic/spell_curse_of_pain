@@ -1,0 +1,27 @@
+{
+  "name": "Curse of Pain",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Choose a minion. Whenever it attacks, it takes 4 damage.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "PhysicalAttackTrigger",
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "SELF",
+        "value": 4
+      },
+      "persistentOwner": true
+    }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

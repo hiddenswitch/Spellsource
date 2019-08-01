@@ -1,0 +1,25 @@
+{
+  "name": "Extraction",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "<b>Pact:</b> After your hero takes damage, give a random enemy minion -4 Health.",
+  "quest": {
+    "class": "DamageTrigger",
+    "sourcePlayer": "BOTH",
+    "targetEntityType": "HERO",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "target": "ENEMY_MINIONS",
+  "randomTarget": true,
+  "spell": {
+    "class": "ModifyAttributeSpell",
+    "value": -4,
+    "attribute": "HEALTH_BONUS"
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

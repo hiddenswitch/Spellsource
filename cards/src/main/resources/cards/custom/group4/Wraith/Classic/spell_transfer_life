@@ -1,0 +1,29 @@
+{
+  "name": "Transfer Life",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "RARE",
+  "description": "Destroy a friendly minion. Your champion is Immune until your next turn.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_HERO",
+        "attribute": "IMMUNE",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

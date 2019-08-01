@@ -1,0 +1,21 @@
+{
+  "name": "Boon of the Dead",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "Give your minions \"<b>Aftermath:</b> Deal 2 damage to the enemy champion.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
