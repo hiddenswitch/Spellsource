@@ -1,0 +1,16 @@
+{
+  "name": "Skeleton",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {
+    "SKELETON": true
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
