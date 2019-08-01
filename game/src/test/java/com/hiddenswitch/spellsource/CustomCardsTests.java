@@ -635,7 +635,9 @@ public class CustomCardsTests extends TestBase {
 			Card card1 = receiveCard(context, player, "minion_cost_three_test");
 			Card card2 = receiveCard(context, player, "minion_cost_three_test");
 			Card card3 = receiveCard(context, player, "minion_neutral_test");
-			playCard(context, player, "minion_soulcaller_roten");
+			Card roten = receiveCard(context, player, "minion_soulcaller_roten");
+			assertEquals(roten.getDescription(context, player), "Opener: Summon all (3)-Cost minions from your hand. (Equal to the cost of the last minion you played)");
+			playCard(context, player, roten);
 			assertEquals(card1.getZone(), Zones.GRAVEYARD);
 			assertEquals(card2.getZone(), Zones.GRAVEYARD);
 			assertEquals(card3.getZone(), Zones.HAND);
