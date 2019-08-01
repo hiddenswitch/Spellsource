@@ -3,6 +3,7 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+ - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
 
 ### 0.8.45-2.0.35 (In progress)
 
