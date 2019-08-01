@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.45-2.0.35 (In progress)
+
+Bug fixes.
+
+##### Other Fixes:
+
+ - Accepting friend invites works again. (1303)
+
 ### 0.8.44-2.0.35 (July 31st, 2019)
 
 Spellpower in the hand no longer causes game-crashing issues.
