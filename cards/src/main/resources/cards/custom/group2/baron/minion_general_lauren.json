@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
-  "description": "Opener: Summon two Southsea Captains.",
+  "description": "Opener: Summon two Pirate Captains.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -16,12 +16,12 @@
         {
           "class": "SummonSpell",
           "boardPositionRelative": "LEFT",
-          "card": "minion_southsea_captain"
+          "card": "token_pirate_captain"
         },
         {
           "class": "SummonSpell",
           "boardPositionRelative": "RIGHT",
-          "card": "minion_southsea_captain"
+          "card": "token_pirate_captain"
         }
       ]
     }

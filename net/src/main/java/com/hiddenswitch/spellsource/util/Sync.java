@@ -7,6 +7,7 @@ import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.*;
 
@@ -28,20 +29,21 @@ public class Sync {
 	 * Defer a call by queueing it to be executed on the current {@link io.vertx.core.Context}
 	 *
 	 * @param handler The code to execute at a later time.
-	 * @return The fiber that executes the provided handler. It may <b>not</b> have started, and it is the responsibility
-	 * 		of Vertx to start it.
 	 */
 	@Suspendable
-	public static Fiber<Void> defer(SuspendableAction1<Void> handler) {
-		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
-		Fiber<Void> voidFiber = new Fiber<>(scheduler, () -> handler.call(null));
-		Vertx.currentContext().runOnContext(v -> voidFiber.start());
-		return voidFiber;
+	public static void defer(SuspendableAction1<Void> handler) {
+		Vertx.currentContext().runOnContext(suspendableHandler(handler));
 	}
 
 	@Suspendable
 	public static <T> Handler<T> suspendableHandler(SuspendableAction1<T> handler) {
 		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
+		return suspendableHandler(scheduler, handler);
+	}
+
+	@NotNull
+	@Suspendable
+	public static <T> Handler<T> suspendableHandler(FiberScheduler scheduler, SuspendableAction1<T> handler) {
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
 	}
 
@@ -84,9 +86,13 @@ public class Sync {
 
 	@Suspendable
 	public static <T, R> R invoke(ThrowingFunction<T, R> func1, T arg1) {
-		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
-			done.complete(func1.apply(arg1));
-		}, false, h));
+		if (Fiber.isCurrentFiber() && Vertx.currentContext() != null) {
+			return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+				done.complete(func1.apply(arg1));
+			}, false, h));
+		} else {
+			return func1.apply(arg1);
+		}
 	}
 
 	@Suspendable
@@ -98,9 +104,13 @@ public class Sync {
 
 	@Suspendable
 	public static <T1, T2, R> R invoke(ThrowingBiFunction<T1, T2, R> func2, T1 arg1, T2 arg2) {
-		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
-			done.complete(func2.apply(arg1, arg2));
-		}, false, h));
+		if (Fiber.isCurrentFiber() && Vertx.currentContext() != null) {
+			return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+				done.complete(func2.apply(arg1, arg2));
+			}, false, h));
+		} else {
+			return func2.apply(arg1, arg2);
+		}
 	}
 
 	@Suspendable
