@@ -31,30 +31,36 @@ public class BroadcastTest {
 		}
 
 		System.setProperty("java.net.preferIPv4Stack", "true");
-		final Vertx vertx = contextRule.vertx();
+		Vertx vertx = contextRule.vertx();
 		vertx.exceptionHandler(context.exceptionHandler());
-		final Broadcaster verticle = Broadcaster.create();
-		final String expectedHostname = Gateway.getHostAddress();
+		Broadcaster verticle = Broadcaster.create();
+		String expectedHostname = Gateway.getHostAddress();
+		Async async = context.async();
+
 		vertx.deployVerticle(verticle, context.asyncAssertSuccess(then -> {
 			vertx.createDatagramSocket(new DatagramSocketOptions()
 					.setReuseAddress(true)
 					.setReusePort(true))
 					.listen(verticle.getMulticastPort(), "0.0.0.0", context.asyncAssertSuccess(listening -> {
-						listening.listenMulticastGroup(verticle.getMulticastAddress(), context.asyncAssertSuccess(socket -> {
-							final Async async = context.async();
-							socket.handler(packet -> {
-								final String packetData = packet.data().toString();
-								if (packetData.equals(verticle.getClientCall())) {
-									return;
-								}
-								context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Port.port() + "/");
-								context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Port.port() + "/");
-								context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Port.port() + "/");
-								async.complete();
-							});
-							socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
-						}));
+						vertx.setTimer(1000L, v -> {
+							listening.listenMulticastGroup(verticle.getMulticastAddress(), Gateway.mainInterface().getName(), null, context.asyncAssertSuccess(socket -> {
+								vertx.setTimer(1000L, v2 -> {
+									socket.handler(packet -> {
+										String packetData = packet.data().toString();
+										if (packetData.equals(verticle.getClientCall())) {
+											return;
+										}
+										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Port.port() + "/");
+										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Port.port() + "/");
+										context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Port.port() + "/");
+										async.complete();
+									});
+									socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
+								});
+							}));
+						});
 					}));
 		}));
 	}
+
 }

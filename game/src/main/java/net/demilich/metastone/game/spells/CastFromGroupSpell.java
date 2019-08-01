@@ -88,7 +88,6 @@ import java.util.*;
  *
  * @see CardDesc#group for the choices.
  */
-@Deprecated
 public class CastFromGroupSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(CastFromGroupSpell.class);

@@ -1,9 +1,9 @@
 {
-  "name": "Steadfast Defense",
+  "name": "Resilience",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "JADE",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Your minions can only take 1 damage at a time until your next turn.",
   "targetSelection": "NONE",
   "spell": {
@@ -64,7 +64,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

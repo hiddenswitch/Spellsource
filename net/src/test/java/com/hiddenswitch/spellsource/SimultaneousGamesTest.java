@@ -1,12 +1,15 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.hiddenswitch.spellsource.client.ApiException;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Test;
@@ -17,27 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class SimultaneousGamesTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(SimultaneousGamesTest.class);
 
-	@Test(timeout = 210000L)
+	@Test(timeout = 400000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
+		Tracer tracer = Tracing.initialize("test");
+		Span span = tracer.buildSpan("testSimultaneousGames").start();
 		// Make sure the queues are empty when this starts
 		sync(() -> {
 			Set<Map.Entry<UserId, String>> queuedUsers = Matchmaking.getUsersInQueues().entrySet();
 			Set<Map.Entry<UserId, GameId>> games = Games.getUsersInGames().entrySet();
-			assertEquals(queuedUsers.size(), 0);
-			assertEquals(games.size(), 0);
-		}, context);
+			context.assertEquals(queuedUsers.size(), 0);
+			context.assertEquals(games.size(), 0);
+		}, 4, context);
 
+		Thread testThread = Thread.currentThread();
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * 3;
 		int checkpointTotal = count * 6;
 
@@ -79,22 +81,27 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 					logger.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					logger.info("testSimultaneousGames: {} finished", userId);
 					latch.countDown();
-				} catch (ApiException t) {
-					context.exceptionHandler().handle(t);
 				} catch (Throwable any) {
 					context.fail(any);
 				}
 			});
 			thread.start();
 			thread.setUncaughtExceptionHandler((eh, ex) -> {
-				ExceptionUtils.printRootCauseStackTrace(ex);
+				Tracing.error(ex, span, false);
+				testThread.interrupt();
 			});
 			threads.add(thread);
 		}
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(210L, TimeUnit.SECONDS);
-		assertEquals(0L, latch.getCount());
+		try {
+			latch.await(400L, TimeUnit.SECONDS);
+		} catch (InterruptedException interrupted) {
+			context.fail(interrupted);
+		} finally {
+			span.finish();
+		}
+		context.assertEquals(0L, latch.getCount());
 		for (Thread thread : threads) {
 			if (thread.isAlive()) {
 				thread.interrupt();

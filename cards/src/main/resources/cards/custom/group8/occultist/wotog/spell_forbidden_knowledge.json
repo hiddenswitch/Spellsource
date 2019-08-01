@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Spend all your Mana. Draw cards equal to the mana spent. (Draws [])",
+  "description": "Spend all your Lun. Draw cards equal to the lun used. (Draws [])",
   "spell": {
     "class": "MetaSpell",
     "spells": [

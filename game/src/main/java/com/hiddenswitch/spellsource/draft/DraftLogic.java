@@ -128,55 +128,7 @@ public class DraftLogic {
 		String latestExpansion = CardSet.SPELLSOURCE_BASIC;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
-
-		Set<String> bannedCards = new HashSet<>();
-		bannedCards.addAll(Arrays.asList(
-				"spell_forgotten_torch",
-				"minion_snowchugger",
-				"minion_faceless_summoner",
-				"minion_goblin_auto-barber",
-				"minion_undercity_valiant",
-				"minion_vitality_totem",
-				"minion_dust_devil",
-				"spell_totemic_might",
-				"spell_ancestral_healing",
-				"minion_dunemaul_shaman",
-				"minion_windspeaker",
-				"minion_anima_golem",
-				"spell_sacrificial_pact",
-				"spell_curse_of_rafaam",
-				"spell_sense_demons",
-				"minion_void_crusher",
-				"minion_reliquary_seeker",
-				"minion_succubus",
-				"spell_savagery",
-				"spell_poison_seeds",
-				"spell_soul_of_the_forest",
-				"spell_mark_of_nature",
-				"spell_tree_of_life",
-				"spell_astral_communion",
-				"minion_warsong_commander",
-				"spell_bolster",
-				"spell_charge",
-				"spell_bouncing_blade",
-				"minion_axe_flinger",
-				"spell_rampage",
-				"minion_ogre_warmaul",
-				"minion_starving_buzzard",
-				"spell_call_pet",
-				"minion_timber_wolf",
-				"spell_cobra_shot",
-				"spell_lock_and_load",
-				"secret_dart_trap",
-				"secret_snipe",
-				"spell_mind_blast",
-				"minion_shadowbomber",
-				"minion_lightwell",
-				"spell_power_word_glory",
-				"spell_confuse",
-				"spell_convert",
-				"spell_inner_fire"
-		));
+		Set<String> bannedCards = new HashSet<>(CardCatalogue.getBannedDraftCards());
 
 		CardCatalogue.getAll().stream()
 				.filter(Card::isQuest)
