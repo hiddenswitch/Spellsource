@@ -3,7 +3,6 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
- - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
 
 ### 0.8.45-2.0.35 (In progress)
 
@@ -25,6 +24,8 @@ New Monk cards thanks to @Grand! (1290)
  - Remaining previous Verdant Dreams Monk cards have been removed. (1290)
  - Booty Bay Backup now reads "Opener: Give your other Pirates +1 Attack." (1284)
  - Malicious Magpie changed from a 1-mana 1/1 to a 2-mana 1/2. (1284)
+ - Description for Soulcaller Roten now dynamically updates. (1276)
+ - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
 
 ##### Other Fixes:
 
