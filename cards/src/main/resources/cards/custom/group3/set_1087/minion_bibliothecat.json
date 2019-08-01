@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Discover a Beast, Dragon or Murloc.",
+  "description": "Opener: Discover a Beast, Dragon or Fae.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -29,7 +29,7 @@
         },
         {
           "class": "CardFilter",
-          "race": "MURLOC",
+          "race": "FAE",
           "cardType": "MINION"
         }
       ],

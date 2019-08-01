@@ -104,7 +104,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		if (noActivityTimeout > 0L) {
 			ActivityMonitor activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
 			activityMonitor.activity();
-			activityMonitors.add(activityMonitor);
+			getActivityMonitors().add(activityMonitor);
 		} else if (noActivityTimeout < 0L) {
 			throw new IllegalArgumentException("noActivityTimeout must be positive");
 		}
@@ -187,7 +187,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		switch (message.getMessageType()) {
 			case PINGPONG:
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				// Server is responsible for replying
@@ -196,7 +196,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			case FIRST_MESSAGE:
 				lastStateSent = null;
 				// The first message indicates the player has connected or reconnected.
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 
@@ -217,7 +217,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					throw new RuntimeException();
 				}
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				final String messageId = message.getRepliesTo();
@@ -227,7 +227,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					throw new RuntimeException();
 				}
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				final String messageId2 = message.getRepliesTo();
@@ -243,7 +243,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					break;
 				}
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				if (null != message.getEntityTouch()) {
@@ -739,10 +739,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		try {
 			span.log("closing");
-			for (ActivityMonitor activityMonitor : activityMonitors) {
+			for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 				activityMonitor.cancel();
 			}
-			activityMonitors.clear();
+			getActivityMonitors().clear();
 			requests.clear();
 			messageBuffer.clear();
 			try {

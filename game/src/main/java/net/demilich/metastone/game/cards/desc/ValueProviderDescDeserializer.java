@@ -29,7 +29,7 @@ public class ValueProviderDescDeserializer extends DescDeserializer<ValueProvide
 		ctx.add(ValueProviderArg.OFFSET, ParseValueType.VALUE);
 		ctx.add(ValueProviderArg.IF_TRUE, ParseValueType.VALUE);
 		ctx.add(ValueProviderArg.IF_FALSE, ParseValueType.VALUE);
-		ctx.add(ValueProviderArg.RACE, ParseValueType.RACE);
+		ctx.add(ValueProviderArg.RACE, ParseValueType.STRING);
 		ctx.add(ValueProviderArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
 		ctx.add(ValueProviderArg.CONDITION, ParseValueType.CONDITION);
 		ctx.add(ValueProviderArg.FILTER, ParseValueType.ENTITY_FILTER);

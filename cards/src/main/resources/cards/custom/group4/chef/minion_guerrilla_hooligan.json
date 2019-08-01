@@ -7,12 +7,12 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Add a Banana to your hand.",
+  "description": "Opener: Add an Apple to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "spell_bananas"
+      "card": "spell_apple"
     }
   },
   "attributes": {
