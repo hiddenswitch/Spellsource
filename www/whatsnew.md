@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.45-2.0.35 (In progress)
+### 0.8.45-2.0.35 (August 1st, 2019)
 
 Bug fixes.
 
@@ -27,6 +27,9 @@ New Monk cards thanks to @Grand! (1290)
  - Description for Soulcaller Roten now dynamically updates. (1276)
  - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
  - Musician Skill now reads "Give a minion +2 health." (1275)
+ - Defenders with zero attack, Catta the Merciless, and Holdover Lich no longer interact to cause an infinite recursion.
+ - Stealing a Formless Rancour no longer causes a crash.
+ - If you create a Deep Borer from a Chimera, it will harmlessly shuffle itself inside your deck.
 
 ##### Other Fixes:
 

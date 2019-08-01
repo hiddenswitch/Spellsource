@@ -1261,8 +1261,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			damage *= 2;
 		}
 
-		// Dealing zero base damage should never cause any effects because it doesn't count as a hit
+		// Dealing zero damage at this point correctly sets the last recorded hit as zero, but does not trigger damage
+		// effects since no damage is going to be dealt.
 		if (damage == 0) {
+			target.setAttribute(Attribute.LAST_HIT, 0);
 			return 0;
 		}
 
