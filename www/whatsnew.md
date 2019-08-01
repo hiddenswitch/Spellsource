@@ -4,6 +4,11 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### new stuff
+
+- Occultist card Seeker of Knowledge has been removed from the game.
+- Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."
+
 ### 0.8.41-2.0.35 (In Progress)
 
 Non-Spellsource content is removed from the game.

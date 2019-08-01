@@ -9,27 +9,14 @@
   "description": "Opener: Shuffle two random Fossils into your deck.",
   "battlecry": {
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "ShuffleToDeckSpell",
-          "cards": [
-            "token_bone_bouncer",
-            "token_bone_bruiser",
-            "token_bone_bowman"
-          ],
-          "randomTarget": true
-        },
-        {
-          "class": "ShuffleToDeckSpell",
-          "cards": [
-            "token_bone_bouncer",
-            "token_bone_bruiser",
-            "token_bone_bowman"
-          ],
-          "randomTarget": true
-        }
-      ]
+      "class": "ShuffleToDeckSpell",
+      "cards": [
+        "token_bone_bouncer",
+        "token_bone_bruiser",
+        "token_bone_bowman"
+      ],
+      "randomTarget": true,
+      "howMany": 2
     }
   },
   "attributes": {

@@ -37,7 +37,7 @@ public class AddDescriptionSpell extends SetDescriptionSpell {
 		} else if (desc.containsKey(SpellArg.DESCRIPTION)) {
 			description = desc.getString(SpellArg.DESCRIPTION);
 		}
-		if (target.getDescription().equals("")) {
+		if (target != null && target.getDescription() != null && target.getDescription().equals("")) {
 			target.setAttribute(Attribute.DESCRIPTION, description);
 		} else {
 			target.setAttribute(Attribute.DESCRIPTION, target.getDescription() + " " + description);

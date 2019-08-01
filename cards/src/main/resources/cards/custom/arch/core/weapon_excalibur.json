@@ -6,7 +6,7 @@
   "damage": 6,
   "durability": 2,
   "rarity": "FREE",
-  "description": "<b>Decay<b> Doesn't lose durability while Rejan is alive.",
+  "description": "<b>Decay<b>. Doesn't lose durability while Rejan is alive.",
   "triggers": [
     {
       "eventTrigger": {

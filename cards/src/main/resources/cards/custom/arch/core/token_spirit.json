@@ -5,6 +5,7 @@
   "heroClass": "LIGHTBROWN",
   "baseAttack": 1,
   "baseHp": 1,
+  "race": "SPIRIT",
   "rarity": "FREE",
   "description": "",
   "collectible": false,

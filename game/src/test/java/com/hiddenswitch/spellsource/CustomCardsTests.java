@@ -4410,7 +4410,7 @@ public class CustomCardsTests extends TestBase {
 			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
 			Card weapon = receiveCard(context, player, "weapon_dig_up_shovel");
 			destroy(context, grallows);
-			assertEquals(weapon.getDescription(), "Decay At the end of your turn, draw a card. Aftermath: Summon Grallows.");
+			assertEquals(weapon.getDescription(), "Decay. At the end of your turn, draw a card. Aftermath: Summon Grallows.");
 		}));
 	}
 
@@ -4485,6 +4485,44 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_sot_mountain_excavation");
 			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 7);
 			assertEquals(player.getHero().getArmor(), 4);
+		}));
+	}
+
+	@Test
+	public void testSurveyorSkag() {
+		runGym(((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				receiveCard(context, player, "spell_lunstone");
+			}
+			playCard(context, player, "minion_surveyor_skag");
+			assertEquals(player.getHand().size(), 10);
+			assertEquals(player.getDeck().size(), 5);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "spell_lunstone");
+			}
+			playCard(context, player, "minion_surveyor_skag");
+			assertEquals(player.getHand().size(), 10);
+			assertEquals(player.getDeck().size(), 10);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_surveyor_skag");
+			assertEquals(player.getHand().size(), 10);
+			assertEquals(player.getDeck().size(), 0);
+		}));
+	}
+
+	@Test
+	public void testDigIn() {
+		runGym(((context, player, opponent) -> {
+			receiveCard(context, player, "minion_black_test");
+			receiveCard(context, opponent, "minion_blue_test");
+			playCard(context, player, "spell_dig_in");
+			assertEquals(player.getDeck().get(0).getCardId(), "minion_blue_test");
+			assertEquals(opponent.getDeck().get(0).getCardId(), "minion_black_test");
 		}));
 	}
 }
