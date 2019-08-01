@@ -29,6 +29,7 @@ Additional bug fixes.
  - Distortoise now correctly does 3 damage to the owner instead of 2. (1294)
  - Prized Boar Aftermath now properly reflects the printed effect. (1293) 
  - Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)
+ - Berry Hoarder now correctly draws all copies of 0-cost cards in the owner's decks instead of just one copy of each. (1307)
 
 ### 0.8.42-2.0.35 (July 30th, 2019)
 
