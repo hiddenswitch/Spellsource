@@ -3987,6 +3987,26 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_dragon_caretaker");
 			assertEquals(dragon.getHp(), dragon.getBaseHp() + 2);
 		});
+
+		runGym((context, player, opponent) -> {
+			Minion nonDragon = playMinionCard(context, player, "minion_test_3_2");
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 0);
+				return battlecryActions.get(0);
+			});
+			playMinionCard(context, player, "minion_dragon_caretaker");
+			assertEquals(nonDragon.getHp(), nonDragon.getBaseHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion dragon = playMinionCard(context, opponent, "minion_blastflame_dragon");
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 0);
+				return battlecryActions.get(0);
+			});
+			playMinionCard(context, player, "minion_dragon_caretaker");
+			assertEquals(dragon.getHp(), dragon.getBaseHp());
+		});
 	}
 
 	// Siphonscale Blade - 8 Mana 6/3 Weapon Epic "Can attack again after a friendly minion attacks and kills a minion."
