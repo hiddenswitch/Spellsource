@@ -639,4 +639,44 @@ public class AdvancedMechanicTests extends TestBase {
 			}
 		}));
 	}
+
+	@Test
+	public void testDoubleTurnEndTriggers() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_drakkari_enchanter");
+			playCard(context, player, "spell_turn_end_one_turn");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHand().size(), 0);
+			context.endTurn();
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_drakkari_enchanter");
+			playCard(context, player, "spell_turn_end_one_fire");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHand().size(), 0);
+			context.endTurn();
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_drakkari_enchanter");
+			context.endTurn();
+			playCard(context, opponent, "spell_turn_end_one_fire");
+			putOnTopOfDeck(context, opponent, "spell_lunstone");
+			putOnTopOfDeck(context, opponent, "spell_lunstone");
+			assertEquals(opponent.getDeck().size(), 2);
+			assertEquals(opponent.getHand().size(), 0);
+			context.endTurn();
+			assertEquals(opponent.getDeck().size(), 1);
+			assertEquals(opponent.getHand().size(), 1);
+		});
+	}
 }
