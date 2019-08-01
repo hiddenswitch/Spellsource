@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Destroy all minions that cost (6) or less. (Invoke 5 Mana Crystals to upgrade.)",
+  "description": "Destroy all minions that cost (6) or less. (Invoke 5 Lun to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 5,
     "eventTrigger": {

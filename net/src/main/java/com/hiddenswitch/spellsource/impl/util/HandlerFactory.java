@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.impl.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
+import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.util.Sync;
@@ -43,6 +44,7 @@ public class HandlerFactory {
 				respond(context, WebResult.failed(500, unhandled));
 			} finally {
 				if (t != null) {
+					Tracing.error(t);
 					logger.error("handler error", t);
 				}
 			}

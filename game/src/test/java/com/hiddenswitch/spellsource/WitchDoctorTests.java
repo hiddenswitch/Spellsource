@@ -46,10 +46,10 @@ public class WitchDoctorTests extends TestBase {
 	public void testHexlordZixxis() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			playCard(context, opponent, "spell_mirror_image");
+			playCard(context, opponent, "spell_test_summon_tokens");
 			context.endTurn();
 			context.endTurn();
-			playCard(context, opponent, "spell_mind_blast");
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			context.endTurn();
 			player.getHero().setAttribute(Attribute.IMMUNE);
 			int opponentHp = opponent.getHero().getHp();
@@ -108,13 +108,13 @@ public class WitchDoctorTests extends TestBase {
 	@Test
 	public void testDreamshaker() {
 		runGym((context, player, opponent) -> {
-			Card played1 = receiveCard(context, player, "spell_the_coin");
+			Card played1 = receiveCard(context, player, "spell_test_gain_mana");
 			Card notPlayed1 = receiveCard(context, player, "minion_test_mech");
 			Card played2 = receiveCard(context, opponent, "minion_neutral_test");
 			Card notPlayed2 = receiveCard(context, opponent, "minion_test_mech");
 			playCard(context, player, "minion_neutral_test");
 			context.endTurn();
-			playCard(context, opponent, "spell_the_coin");
+			playCard(context, opponent, "spell_test_gain_mana");
 			context.endTurn();
 			playCard(context, player, "minion_dreamshaker");
 			assertEquals(played1.getZone(), Zones.GRAVEYARD);
@@ -210,15 +210,15 @@ public class WitchDoctorTests extends TestBase {
 	@Test
 	public void testWitchingTraveler() {
 		runGym((context, player, opponent) -> {
-			Card coin = receiveCard(context, player, "spell_the_coin");
+			Card coin = receiveCard(context, player, "spell_test_gain_mana");
 			assertEquals(costOf(context, player, coin), 0);
-			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_test_gain_mana");
 			playCard(context, player, "minion_witching_traveler");
 			assertEquals(costOf(context, player, coin), 0);
-			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_test_gain_mana");
 			playCard(context, player, "minion_witching_traveler");
 			assertEquals(costOf(context, player, coin), 0);
-			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_test_gain_mana");
 			playCard(context, player, "minion_witching_traveler");
 			assertEquals(costOf(context, player, coin), 1);
 		});
@@ -250,7 +250,7 @@ public class WitchDoctorTests extends TestBase {
 	public void testHighShamanMawliki() {
 		runGym((context, player, opponent) -> {
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion friend2 = playMinionCard(context, player, "minion_neutral_test_14");
+			Minion friend2 = playMinionCard(context, player, "minion_neutral_test_big");
 			playMinionCard(context, player, "minion_high_shaman_mawliki");
 			// Check for guard and elusive
 			assertTrue(friend1.hasAttribute(Attribute.AURA_TAUNT));
@@ -270,11 +270,11 @@ public class WitchDoctorTests extends TestBase {
 			assertEquals(opponent.getMinions().size(), 1);
 			context.endTurn();
 			attack(context, opponent, enemy3, friend2);
-			assertEquals(friend2.getHp(), 4);
+			assertEquals(friend2.getHp(), 10);
 			context.endTurn();
 			// Check for double healing effect
-			playCard(context, player, "spell_crystal_power_2", friend2);
-			assertEquals(friend2.getHp(), 14);
+			playCard(context, player, "spell_test_heal_8", friend2);
+			assertEquals(friend2.getHp(), 20);
 		});
 	}
 

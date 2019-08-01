@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -208,8 +209,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			connection.endHandler(v -> span.finish());
 			connection.exceptionHandler(ex -> {
 				// Wrap this so we can see where it actually occurs
-				Tracing.error(new VertxException(ex), span, false);
-				span.finish();
+				if (!(ex instanceof IOException)) {
+					Tracing.error(new VertxException(ex), span, false);
+				}
 				connection.close(Future.future());
 			});
 			// All handlers should run simultaneously but we'll wait until the handlers have run
@@ -237,10 +239,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	static void registerCodecs() {
 		Vertx owner = Vertx.currentContext().owner();
 		String nodeId;
-		try {
-			nodeId = ((VertxInternal) owner).getNodeID();
-		} catch (NullPointerException noNodeId) {
+
+		if (((VertxInternal) owner).getClusterManager() == null) {
 			nodeId = owner.toString();
+		} else {
+			nodeId = ((VertxInternal) owner).getNodeID();
 		}
 
 		if (CODECS_REGISTERED.putIfAbsent(nodeId, true) == null) {
@@ -261,7 +264,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection exceptionHandler(Handler<Throwable> handler) {
-		return null;
+		return this;
 	}
 
 	/**
@@ -272,7 +275,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	@Override
 	default Connection write(@NotNull Envelope data) {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -281,7 +284,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection setWriteQueueMaxSize(int maxSize) {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -291,27 +294,27 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection drainHandler(Handler<Void> handler) {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection handler(Handler<Envelope> handler) {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection pause() {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection resume() {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection endHandler(Handler<Void> endHandler) {
-		return null;
+		return this;
 	}
 
 	/**
