@@ -1306,7 +1306,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		int effectiveHp = hero.getHp() + hero.getArmor();
 		final int armorChange = hero.modifyArmor(-damage);
-		hero.modifyDecayingArmor(-damage);
 		if (armorChange != 0) {
 			context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
 			context.getPlayer(hero.getOwner()).getStatistics().loseArmor(-armorChange);
@@ -1617,11 +1616,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			eachPlayer.setAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 0);
 		}
 
-		if (player.getHero().getDecayingArmor() > 0) {
-			damage(player, player.getHero(), 1, player.getHero(), true, false, DamageType.DECAY);
-			context.fireGameEvent(new DecayEvent(context, player.getId(), player));
-		}
-
 		context.fireGameEvent(new TurnEndEvent(context, playerId));
 		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
 			context.fireGameEvent(new TurnEndEvent(context, playerId));
@@ -1855,24 +1849,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void gainArmor(Player player, int armor) {
 		logger.debug("{} gains {} armor", player.getHero(), armor);
 		player.getHero().modifyArmor(armor);
-		player.getStatistics().armorGained(armor);
-		if (armor != 0) {
-			context.fireGameEvent(new ArmorChangedEvent(context, player.getHero(), armor));
-		}
-	}
-
-	/**
-	 * Gains decaying armor and triggers an {@link ArmorChangedEvent}.
-	 *
-	 * @param player The player whose {@link Hero} should gain decaying armor.
-	 * @param armor  The amount of decaying armor to gain.
-	 * @see #damage(Player, Actor, int, Entity, boolean) for a description of how armor protects an {@link Actor} like a
-	 * {@link Hero}.
-	 */
-	@Suspendable
-	public void gainDecayingArmor(Player player, int armor) {
-		logger.debug("{} gains {} decaying armor", player.getHero(), armor);
-		player.getHero().modifyDecayingArmor(armor);
 		player.getStatistics().armorGained(armor);
 		if (armor != 0) {
 			context.fireGameEvent(new ArmorChangedEvent(context, player.getHero(), armor));

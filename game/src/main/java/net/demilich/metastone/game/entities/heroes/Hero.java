@@ -100,21 +100,6 @@ public final class Hero extends Actor {
 		return armorChange;
 	}
 
-	/**
-	 * Changes the amount of decaying armor the hero has.
-	 *
-	 * @param armor The requested change in decaying armor.
-	 * @return The amount the armor changed. If damage is being dealt, then the armor will change {@code -Infinity < armor
-	 * <= 0} if it is possible.
-	 */
-	public int modifyDecayingArmor(final int armor) {
-		// decaying armor cannot fall below zero
-		final int originalArmor = getDecayingArmor();
-		int newArmor = Math.max(originalArmor + armor, 0);
-		setAttribute(Attribute.DECAYING_ARMOR, newArmor);
-		return newArmor - originalArmor;
-	}
-
 	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
