@@ -1,12 +1,11 @@
 {
-  "name": "White Tiger Statue",
+  "name": "Imbuing Fountain",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 0,
-  "baseHp": 4,
+  "baseHp": 3,
   "rarity": "RARE",
-  "race": "ELEMENTAL",
   "description": "Your Champion has +2 Attack during your turn.",
   "aura": {
     "class": "BuffAura",
@@ -21,7 +20,7 @@
       "class": "TurnStartTrigger"
     }
   },
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

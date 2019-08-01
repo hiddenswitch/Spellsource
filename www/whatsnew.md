@@ -4,14 +4,25 @@ title: What's New
 permalink: /whats-new/
 ---
 
+
 ### 0.8.45-2.0.35 (In progress)
 
 Bug fixes.
+
+New Monk cards thanks to @Grand! (1290)
 
 ##### Content Fixes:
 
   - Many cards that before referenced Mana now refer to Lun instead. (1306)
   - Berry Hoarder now correctly draws all copies of 0-cost cards in the owner's decks instead of just one copy of each. (1307)
+  - Blessed Koi Statue is no longer an Elemental. (1290)
+  - Fiery Kitsune Punch renamed to Lunging Jab. (1290)
+  - Fortifying Prayer renamed to Inner Peace. (1290)
+  - Enchanted Tapestry cost increased from 2 to 3 and is no longer an Elemental. (1290)
+  - Mark of Despair renamed to Touch of Sorrow. (1290)
+  - White Tiger Statue renamed to Imbuing Fountain and health decreased from 4 to 3. (1290)
+  - Disciple of Shitakiri health lowered from 7 to 6. (1290)
+  - Remaining previous Verdant Dreams Monk cards have been removed. (1290)
 
 ##### Other Fixes:
 
