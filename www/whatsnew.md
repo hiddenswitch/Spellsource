@@ -26,6 +26,7 @@ New Monk cards thanks to @Grand! (1290)
  - Malicious Magpie changed from a 1-mana 1/1 to a 2-mana 1/2. (1284)
  - Description for Soulcaller Roten now dynamically updates. (1276)
  - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
+ - Musician Skill now reads "Give a minion +2 health." (1275)
 
 ##### Other Fixes:
 
