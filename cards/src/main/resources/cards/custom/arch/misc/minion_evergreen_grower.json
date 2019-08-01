@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Give another Elemental +1/+2.",
+  "description": "Opener: Give another Elemental +1/+2.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

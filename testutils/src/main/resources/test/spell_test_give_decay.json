@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Give a minion Taunt.",
+  "description": "Give a minion Decay.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

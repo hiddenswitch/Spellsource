@@ -12,7 +12,8 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 2
+        "value": 2,
+        "ignoreSpellDamage": true
       },
       {
         "class": "DrawCardSpell",

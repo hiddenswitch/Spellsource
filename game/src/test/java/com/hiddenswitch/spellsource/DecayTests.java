@@ -46,7 +46,7 @@ public class DecayTests extends TestBase {
 	@Test
 	public void testDodgeMinionDecay() {
 		runGym((context, player, opponent) -> {
-			Minion testMinion = playMinionCard(context, player, "minion_test_dodge");
+			Minion testMinion = playMinionCard(context, player, "minion_test_dodge_2");
 			playCard(context, player, "spell_test_give_decay", testMinion);
 			assertEquals(testMinion.getHp(), testMinion.getMaxHp());
 

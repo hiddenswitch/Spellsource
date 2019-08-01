@@ -19,7 +19,7 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
-          "hpBonus": 2
+          "armorBonus": 2
         }
       ]
     }
