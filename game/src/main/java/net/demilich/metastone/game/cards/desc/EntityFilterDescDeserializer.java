@@ -21,7 +21,7 @@ public class EntityFilterDescDeserializer extends DescDeserializer<EntityFilterD
 		ctx.add(EntityFilterArg.VALUE, ParseValueType.VALUE);
 		ctx.add(EntityFilterArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
 		ctx.add(EntityFilterArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);
-		ctx.add(EntityFilterArg.RACE, ParseValueType.RACE);
+		ctx.add(EntityFilterArg.RACE, ParseValueType.STRING);
 		ctx.add(EntityFilterArg.OPERATION, ParseValueType.OPERATION);
 		ctx.add(EntityFilterArg.INVERT, ParseValueType.BOOLEAN);
 		ctx.add(EntityFilterArg.CARD_TYPE, ParseValueType.CARD_TYPE);

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
+import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
@@ -7,6 +8,8 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
+import io.vertx.core.Context;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
@@ -54,9 +57,11 @@ public abstract class SpellsourceTestBase {
 			}
 			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
+					.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors() * 2)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
 			vertx.exceptionHandler(t -> testContext.fail(t));
-			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+			Tracing.initializeGlobal(vertx);
+//			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
 				if (v2.failed()) {
 					testContext.fail(new AssertionError(v2.cause()));
@@ -82,9 +87,9 @@ public abstract class SpellsourceTestBase {
 		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
 		return Decks.createDeck(new DeckCreateRequest()
 				.withUserId(userId)
-				.withHeroClass("RED")
+				.withHeroClass("TEST")
 				.withName("Test Deck")
-				.withFormat("Wild")
+				.withFormat("All")
 				.withInventoryIds(inventoryIds));
 	}
 
@@ -107,6 +112,10 @@ public abstract class SpellsourceTestBase {
 			for (GameId gameId : Games.getConnections().keySet()) {
 				Games.endGame(gameId);
 			}
+
+			testContext.assertEquals(Games.getConnections().size(), 0);
+			testContext.assertEquals(Matchmaking.getUsersInQueues().size(), 0);
+			testContext.assertEquals(Games.getUsersInGames().size(), 0);
 		}, 8, testContext);
 	}
 
@@ -146,6 +155,7 @@ public abstract class SpellsourceTestBase {
 			Vertx.currentContext().runOnContext(suspendableHandler(v -> {
 				try {
 					action.run();
+					latch.countDown();
 				} catch (Throwable throwable) {
 					testContext.fail(throwable);
 				}
@@ -158,25 +168,5 @@ public abstract class SpellsourceTestBase {
 			testContext.fail(e);
 		}
 		testContext.assertEquals(0L, latch.getCount());
-	}
-
-	@AfterClass
-	public static void tearDown() throws InterruptedException {
-		/*
-		GlobalTracer.get().close();
-		CountDownLatch latch = new CountDownLatch(1);
-		if (vertx == null) {
-			latch.countDown();
-		} else {
-			vertx.close(v -> {
-				initialized.compareAndSet(true, false);
-				latch.countDown();
-				vertx = null;
-			});
-		}
-
-		latch.await(3000L, TimeUnit.MILLISECONDS);
-		assertEquals(latch.getCount(), 0);
-		assertNull(vertx);*/
 	}
 }

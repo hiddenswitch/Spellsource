@@ -123,11 +123,12 @@ public class StorytellerTests extends TestBase {
 	public void testTallTale() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "secret_tall_tale");
+			playCard(context, player, "spell_test_deal_5_to_enemy_hero");
 			assertEquals(player.getSecrets().size(), 1);
 			playCard(context, player, "spell_frostfire", opponent.getHero());
 			assertEquals(player.getSecrets().size(), 1);
 			context.endTurn();
-			playCard(context, opponent, "spell_5_to_enemy");
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			assertEquals(player.getSecrets().size(), 1);
 			playCard(context, opponent, "spell_frostfire", player.getHero());
 			assertEquals(player.getSecrets().size(), 0);
@@ -247,19 +248,19 @@ public class StorytellerTests extends TestBase {
 			context.endTurn();
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 3);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 5);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 4);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 8);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 6);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 11);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 9);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 15);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 12);
 			playCard(context, player, "minion_timeworn_archivist");
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 20);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 16);
 			playCard(context, player, "minion_timeworn_archivist");
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 26);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 21);
 		});
 	}
 
