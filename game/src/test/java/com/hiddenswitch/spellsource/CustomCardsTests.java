@@ -7423,4 +7423,19 @@ public class CustomCardsTests extends TestBase {
 							Objects.equals(action.getTargetReference(), target.getReference())).count(), 1L);
 		}));
 	}
+
+	@Test
+	public void testTheGlutton() {
+		runGym(((context, player, opponent) -> {
+			Minion glutton = playMinionCard(context, player, "minion_the_glutton");
+			Minion toBeEaten = playMinionCard(context, player, "minion_black_test");
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack());
+			context.endTurn();
+			assertTrue(toBeEaten.isDestroyed());
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack() + 1);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack() + 1);
+		}));
+	}
 }

@@ -14,28 +14,46 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DestroySpell",
-          "filter": {
-            "class": "AttributeFilter",
-            "value": {
-              "class": "AttributeValueProvider",
-              "target": "SELF",
-              "attribute": "ATTACK"
-            },
-            "attribute": "ATTACK",
-            "operation": "LESS"
-          }
-        },
-        {
-          "class": "BuffSpell",
-          "target": "SELF",
-          "attackBonus": 1,
-          "hpBonus": 1
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "MinionOnBoardCondition",
+        "cardFilter": {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "ATTACK"
+          },
+          "attribute": "ATTACK",
+          "operation": "LESS"
         }
-      ]
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell",
+            "target": "ALL_MINIONS",
+            "randomTarget": true,
+            "filter": {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "AttributeValueProvider",
+                "target": "SELF",
+                "attribute": "ATTACK"
+              },
+              "attribute": "ATTACK",
+              "operation": "LESS"
+            }
+          },
+          {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        ]
+      }
     }
   },
   "attributes": {},
