@@ -112,7 +112,7 @@ public class MonkTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_lake_elemental");
 			Card elemental = receiveCard(context, player, "minion_crystal_giant");
-			receiveCard(context, player, "minion_wisp");
+			receiveCard(context, player, "minion_rapier_rodent");
 			playMinionCard(context, player, "minion_river_spirit");
 			assertEquals(player.getMinions().size(), 3);
 			assertEquals(player.getMinions().get(2).getSourceCard(), elemental);
@@ -157,12 +157,12 @@ public class MonkTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			assertEquals(player.getHand().size(), 0);
 			shuffleToDeck(context, player, "minion_lake_elemental");
-			shuffleToDeck(context, player, "minion_wisp");
-			shuffleToDeck(context, player, "minion_thunderhead");
+			shuffleToDeck(context, player, "minion_rapier_rodent");
+			shuffleToDeck(context, player, "minion_alemental");
 			playMinionCard(context, player, "minion_the_uncasked");
 			assertEquals(player.getHand().size(), 2);
-			assertEquals(player.getHand().get(0).getRace(), Race.ELEMENTAL);
-			assertEquals(player.getHand().get(1).getRace(), Race.ELEMENTAL);
+			assertEquals(player.getHand().get(0).getRace(), "ELEMENTAL");
+			assertEquals(player.getHand().get(1).getRace(), "ELEMENTAL");
 		}));
 	}
 
@@ -195,7 +195,7 @@ public class MonkTests extends TestBase {
 			context.endTurn();
 			opponent.getHero().setHp(opponent.getHero().getBaseHp());
 			player.getHero().setAttack(2);
-			playMinionCard(context, player, "minion_kobold_geomancer");
+			playMinionCard(context, player, "minion_floating_crystal");
 			playCard(context, player, "spell_touch_of_death");
 			assertEquals(opponent.getHero().getHp() + target1.getHp(), opponent.getHero().getBaseHp() + target1.getBaseHp() - 6);
 		}));
@@ -205,12 +205,11 @@ public class MonkTests extends TestBase {
 	@Test
 	public void testZenPilgrimage() {
 		runGym(((context, player, opponent) -> {
-			Minion friend1 = playMinionCard(context, player, "minion_blood_knight");
+			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_zen_pilgrimage", friend1);
-			assertEquals(player.getHand().size(), 3);
+			assertEquals(player.getHand().size(), 2);
 			assertTrue(player.getHand().get(0).getCardId().contains("secret_secret_of"));
 			assertTrue(player.getHand().get(1).getCardId().contains("secret_secret_of"));
-			assertTrue(player.getHand().get(2).getCardId().contains("secret_secret_of"));
 			assertEquals(player.getMinions().size(), 0);
 		}));
 		runGym(((context, player, opponent) -> {

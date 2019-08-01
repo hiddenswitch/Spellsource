@@ -17,7 +17,7 @@ public class EventTriggerDescDeserializer extends DescDeserializer<EventTriggerD
 
 	@Override
 	public void init(SerializationContext ctx) {
-		ctx.add(EventTriggerArg.RACE, ParseValueType.RACE);
+		ctx.add(EventTriggerArg.RACE, ParseValueType.STRING);
 		ctx.add(EventTriggerArg.CARD_TYPE, ParseValueType.CARD_TYPE);
 		ctx.add(EventTriggerArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
 		ctx.add(EventTriggerArg.SOURCE_PLAYER, ParseValueType.TARGET_PLAYER);

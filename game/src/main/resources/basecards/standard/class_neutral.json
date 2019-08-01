@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "color": [221, 211, 204],
   "blackText": true,
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

@@ -19,28 +19,23 @@ import java.util.concurrent.TimeoutException;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 
-public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket {
+public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket, AutoCloseable {
 	private static Logger LOGGER = LoggerFactory.getLogger(NettyWebsocketClientEndpoint.class);
 	private final String endpoint;
 	private final String auth;
 	private NettyWebSocket websocket;
 	private Handler<String> messageHandler;
 	private Runnable closeHandler;
-	private int webSocketMaxFrameSize = 65536;
-	private final AsyncHttpClient client;
+	private static final int webSocketMaxFrameSize = 65536;
+	private static final AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
+			.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
+			.setHandshakeTimeout(3000)
+			.setConnectTimeout(3000)
+			.setMaxConnections(60));
 
 	public NettyWebsocketClientEndpoint(String endpoint, String auth) {
 		this.endpoint = endpoint;
 		this.auth = auth;
-		try {
-			client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
-					.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
-					.setHandshakeTimeout(3000)
-					.setConnectTimeout(3000)
-					.setMaxConnections(1024));
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public void connect() {

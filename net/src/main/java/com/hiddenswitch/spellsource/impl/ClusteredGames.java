@@ -273,16 +273,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			Games.LOGGER.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
 			removeGameAndRecordReplay(new GameId(request.getGameId()));
 		} else {
-			Games.LOGGER.debug("endGameSession: This instance does not contain the gameId " + request.getGameId()
-					+ ". Redirecting your request to the correct deployment.");
-			SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
-			CreateGameSessionResponse connection = connections.get(key);
-			if (connection == null) {
-				Games.LOGGER.error("endGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
-				return new EndGameSessionResponse();
-			}
-
-			Rpc.connect(Games.class).sync(connection.deploymentId).endGameSession(request);
+			throw new IllegalArgumentException("request.gameId");
 		}
 		return new EndGameSessionResponse();
 	}
@@ -322,12 +313,12 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	@Suspendable
 	public void stop() throws Exception {
 		Games.LOGGER.debug("stop: Stopping the ClusteredGamesImpl.");
-		super.stop();
-		Rpc.unregister(registration);
-		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		for (GameId gameId : contexts.keySet()) {
 			removeGameAndRecordReplay(new GameId(gameId.toString()));
 		}
+		Rpc.unregister(registration);
+		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		Games.LOGGER.debug("stop: Sessions killed");
+		super.stop();
 	}
 }
