@@ -4384,4 +4384,28 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(monolithInHand.getDescription(context, player), "Opener: Deal 2 damage. (Doubles for each Monolith of Doom you played this turn)");
 		});
 	}
+
+	@Test
+	public void testBerryHoarder() {
+		runGym(((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			playCard(context, player, "minion_berry_hoarder");
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 0);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			player.setMana(5);
+			playCard(context, player, "minion_berry_hoarder");
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 4);
+		}));
+	}
 }
