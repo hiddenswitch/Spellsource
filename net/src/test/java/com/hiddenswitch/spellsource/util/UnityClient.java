@@ -45,7 +45,8 @@ public class UnityClient implements AutoCloseable {
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
 	public static String BASE_PATH = BASE + Integer.toString(Port.port());
-	private final Tracer tracer = NoopTracerFactory.create(); /*Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0)*/
+	private final Tracer tracer = Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0);
+	private final Span parentSpan;
 	private int id;
 	private ApiClient apiClient;
 	private DefaultApi api;
@@ -72,6 +73,8 @@ public class UnityClient implements AutoCloseable {
 		thisUrl = BASE_PATH;
 		apiClient.setBasePath(BASE_PATH);
 		api = new DefaultApi(apiClient);
+		parentSpan = tracer.buildSpan("UnityClient").withTag("id", id).start();
+		tracer.activateSpan(parentSpan);
 	}
 
 	public UnityClient(TestContext context) {
@@ -110,8 +113,8 @@ public class UnityClient implements AutoCloseable {
 			context.assertTrue(account.getDecks().size() > 0);
 			LOGGER.debug("createUserAccount {} {}: Created account", id, car.getAccount().getId());
 		} catch (ApiException e) {
-//			close();
-			context.fail(e.getMessage());
+			Tracing.error(e, parentSpan, true);
+			context.fail(e);
 		}
 		return this;
 	}
@@ -162,6 +165,7 @@ public class UnityClient implements AutoCloseable {
 			messagingLock.lock();
 			if (realtime == null) {
 				AtomicReference<Span> span = new AtomicReference<>(tracer.buildSpan("ServerGameContext/play")
+						.asChildOf(parentSpan)
 						.start());
 				span.get().log("connecting");
 				span.get().setTag("userId", getAccount().getId());
@@ -200,11 +204,12 @@ public class UnityClient implements AutoCloseable {
 					}
 				});
 				realtime.connect();
-				firstMessage.await(3000, TimeUnit.MILLISECONDS);
+				firstMessage.await(25000, TimeUnit.MILLISECONDS);
 				context.assertTrue(firstMessage.getCount() <= 0);
 			}
 		} catch (Throwable any) {
 //			close();
+			Tracing.error(any, parentSpan, true);
 			context.fail(any);
 		} finally {
 			messagingLock.unlock();
@@ -224,7 +229,7 @@ public class UnityClient implements AutoCloseable {
 		}
 
 		if (matchmakingFut.get().isCancelled()) {
-//			close();
+			Tracing.error(new IllegalStateException("matchmaking was cancelled"), parentSpan, true);
 			context.fail(new IllegalStateException("matchmaking was cancelled"));
 		}
 
@@ -344,7 +349,7 @@ public class UnityClient implements AutoCloseable {
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
 		} catch (TimeoutException e) {
-//			close();
+			Tracing.error(e, parentSpan, true);
 			context.fail(e);
 		}
 	}
@@ -520,10 +525,10 @@ public class UnityClient implements AutoCloseable {
 	public UnityClient waitUntilDone() {
 		LOGGER.debug("waitUntilDone {} {}: is waiting", id, getUserId());
 		try {
-			gameOverLatch.await(90L, TimeUnit.SECONDS);
+			gameOverLatch.await(120L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-//			close();
-			throw new AssertionError(e);
+			Tracing.error(e, parentSpan, true);
+			context.fail(e);
 		}
 		return this;
 	}
@@ -536,7 +541,7 @@ public class UnityClient implements AutoCloseable {
 			account = lr.getAccount();
 			context.assertNotNull(account);
 		} catch (ApiException e) {
-//			close();
+			Tracing.error(e, parentSpan, true);
 			context.fail(e.getMessage());
 		}
 		return this;
@@ -568,8 +573,12 @@ public class UnityClient implements AutoCloseable {
 	@Override
 	public void close() {
 		disconnect();
+
 		if (tracer.activeSpan() != null) {
 			tracer.activeSpan().finish();
+		}
+		if (tracer.scopeManager().active()!=null) {
+			tracer.scopeManager().active().close();
 		}
 		tracer.close();
 	}

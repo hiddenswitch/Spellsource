@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static co.paralleluniverse.strands.Strand.sleep;
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
-import static org.junit.Assert.*;
 
 public class InvitesTest extends SpellsourceTestBase {
 
