@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
@@ -46,15 +47,19 @@ import static java.util.stream.Collectors.toList;
  * of cards to discover from is greater than {@code count}, cards are chosen at random from the possible options without
  * replacement (i.e., duplicates will not appear).
  * <p>
+ * If {@link SpellArg#CARD_FILTER} is specified <b>without</b> a {@link SpellArg#CARD_SOURCE}, it is assumed that the
+ * <b>weighted</b> (i.e., class-specific) catalogue source {@link CatalogueSource} should be used. However, if the
+ * casting player is the {@link HeroClass#ANY} or {@link HeroClass#TEST} class, an {@link UnweightedCatalogueSource}
+ * will be used instead.
+ * <p>
  * When {@link SpellArg#CANNOT_RECEIVE_OWNED} is specified, the possible options exclude cards that are already in the
  * player's {@link Zones#HAND} or {@link Zones#HERO_POWER}.
  * <p>
  * Some card sources generate new cards; these card sources implement the {@link HasCardCreationSideEffects} interface.
  * Other card sources, like {@link DeckSource}, will reference the actual cards in the player's deck. Discovers
  * <b>always</b> present copies of cards to users, regardless of their origin. To perform the spell on the
- * <b>actual</b>
- * card, set {@link SpellArg#EXCLUSIVE} to {@code true}. Trying to use an "exclusive" discover on cards that are always
- * generated will throw an exception.
+ * <b>actual</b> card, set {@link SpellArg#EXCLUSIVE} to {@code true}. Trying to use an "exclusive" discover on cards
+ * that are always generated will throw an exception.
  * <p>
  * When the user makes a discover choice, the spell arguments are interpreted to determine what spell is "cast" with the
  * chosen and unchosen cards:
@@ -207,8 +212,8 @@ import static java.util.stream.Collectors.toList;
  * </pre>
  * If instead you want to <b>steal</b> a card from the opponent's deck, use a {@link StealCardSpell} and set {@link
  * SpellArg#EXCLUSIVE} to {@code true}. The {@link SpellArg#EXCLUSIVE} argument will cast {@link StealCardSpell} with
- * the chosen card's {@link Entity#id} as the {@code target}. You must use {@link SpellArg#EXCLUSIVE} whenever you use
- * spells that only accept {@code target} and not {@link SpellArg#CARD}.
+ * the chosen card's {@link Entity#getId()} as the {@code target}. You must use {@link SpellArg#EXCLUSIVE} whenever you
+ * use spells that only accept {@code target} and not {@link SpellArg#CARD}.
  * <pre>
  *     {
  *         "class": "DiscoverSpell",
@@ -261,12 +266,29 @@ public class DiscoverSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Card> specificCards = Arrays.asList(SpellUtils.getCards(context, desc));
-		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER) || desc.containsKey(SpellArg.CARD_SOURCE);
+		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER);
+		boolean hasSource = desc.containsKey(SpellArg.CARD_SOURCE);
 		CardList filteredCards;
-		CardSource cardSource = desc.getCardSource();
-		if (hasFilter) {
-			filteredCards = desc.getFilteredCards(context, player, source);
-		} else if (specificCards.size() != 0) {
+		CardSource cardSource;
+		if (hasFilter || hasSource) {
+			if (hasFilter && hasSource) {
+				cardSource = desc.getCardSource();
+				filteredCards = desc.getFilteredCards(context, player, source);
+			} else if (hasFilter /*&& !hasSource*/) {
+				if (player.getHero().getSourceCard().hasHeroClass(HeroClass.ANY)
+						|| player.getHero().getSourceCard().hasHeroClass(HeroClass.TEST)) {
+					cardSource = UnweightedCatalogueSource.create();
+				} else {
+					cardSource = CatalogueSource.create();
+				}
+				filteredCards = cardSource.getCards(context, source, player).filtered(desc.getCardFilter().matcher(context, player, source));
+			} else /*only has source*/ {
+				cardSource = desc.getCardSource();
+				// Unfiltered
+				filteredCards = cardSource.getCards(context, source, player);
+			}
+		} else if (!specificCards.isEmpty()) {
+			cardSource = UnweightedCatalogueSource.create();
 			filteredCards = new CardArrayList();
 		} else {
 			cardSource = CatalogueSource.create();
@@ -307,7 +329,7 @@ public class DiscoverSpell extends Spell {
 		CardList choices = new CardArrayList();
 		// Apply the weights
 		final boolean isWeighted = (cardSource instanceof HasWeights)
-				|| (specificCards.size() == 0 && cardSource == null && hasFilter);
+				|| (specificCards.size() == 0 && cardSource == null && !hasFilter);
 		// Compute weights if weighting is implied
 		if (isWeighted) {
 			if (cardSource == null) {

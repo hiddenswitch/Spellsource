@@ -7,7 +7,7 @@
   "baseHp": 8,
   "race": "DRAGON",
   "rarity": "EPIC",
-  "description": "Opener: At the end of this turn, deal $[0] damage to all enemies. (Increases for each unspent mana)",
+  "description": "Opener: At the end of this turn, deal $[0] damage to all enemies. (Increases for each unspent lun)",
   "battlecry": {
     "spell": {
       "class": "AddEnchantmentSpell",

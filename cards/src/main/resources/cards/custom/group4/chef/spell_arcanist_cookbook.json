@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Discover a Beast, a Dragon or a Murloc.",
+  "description": "Discover a Beast, a Dragon or a Fae.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverFilteredCardSpell",
@@ -25,7 +25,7 @@
       },
       {
         "class": "CardFilter",
-        "race": "MURLOC",
+        "race": "FAE",
         "cardType": "MINION"
       }
     ]

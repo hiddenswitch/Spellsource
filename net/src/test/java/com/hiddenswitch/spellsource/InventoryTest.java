@@ -34,10 +34,10 @@ public class InventoryTest extends SpellsourceTestBase {
 			CreateAccountResponse user = createRandomAccount();
 			final String userId = user.getUserId();
 			CreateCollectionResponse createEmptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "BLACK", Collections.emptyList(), false));
+			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false));
 			final String deckId = createEmptyDeck.getCollectionId();
-			AddToCollectionResponse addToCollectionResponse = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("minion_bloodfen_raptor", "minion_bloodfen_raptor")));
-			context.assertEquals(2, addToCollectionResponse.getInventoryIds().size(), "Two Bloodfen Raptors should have been added");
+			AddToCollectionResponse addToCollectionResponse = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("minion_test_3_2", "minion_test_3_2")));
+			context.assertEquals(2, addToCollectionResponse.getInventoryIds().size(), "Two 3/2s should have been added");
 			GetCollectionResponse updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			GetCollectionResponse updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
 			Stream.of(updatedUserCollection, updatedDeckCollection)
@@ -47,79 +47,79 @@ public class InventoryTest extends SpellsourceTestBase {
 
 			// Now add a card to the user collection, assert that when I request two duplicates I use one from the user
 			// collection and one is created
-			AddToCollectionResponse oneCardAdded = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, userId, Arrays.asList("spell_mirror_image")));
-			AddToCollectionResponse addTwoMirrorImages = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_mirror_image", "spell_mirror_image")));
-			context.assertEquals(2, addTwoMirrorImages.getInventoryIds().size());
-			context.assertEquals(1L, addTwoMirrorImages.getInventoryIds().stream().filter(id -> id.equals(oneCardAdded.getInventoryIds().get(0))).count());
-			context.assertEquals(1L, addTwoMirrorImages.getInventoryIds().stream().filter(id -> !id.equals(oneCardAdded.getInventoryIds().get(0))).count());
+			AddToCollectionResponse oneCardAdded = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, userId, Arrays.asList("spell_test_summon_tokens")));
+			AddToCollectionResponse addTwoSpells = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_test_summon_tokens", "spell_test_summon_tokens")));
+			context.assertEquals(2, addTwoSpells.getInventoryIds().size());
+			context.assertEquals(1L, addTwoSpells.getInventoryIds().stream().filter(id -> id.equals(oneCardAdded.getInventoryIds().get(0))).count());
+			context.assertEquals(1L, addTwoSpells.getInventoryIds().stream().filter(id -> !id.equals(oneCardAdded.getInventoryIds().get(0))).count());
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			context.assertEquals(2L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_mirror_image")).count());
-			context.assertEquals(2L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_mirror_image")).count());
+			context.assertEquals(2L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_summon_tokens")).count());
+			context.assertEquals(2L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_summon_tokens")).count());
 			context.assertEquals(4L, updatedDeckCollection.getInventoryRecords().stream().map(InventoryRecord::getId).distinct().count());
 
 			// Now create 3 duplicate cards in the user collection, and assert that when I add 2 of that card ID, at
 			// least one is unused. Then, when I add a third, assert that all 3 are being used.
-			AddToCollectionResponse threeCardsAdded = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, userId, Arrays.asList("spell_fireball", "spell_fireball", "spell_fireball")));
-			AddToCollectionResponse addTwoFireballs = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_fireball", "spell_fireball")));
+			AddToCollectionResponse threeCardsAdded = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, userId, Arrays.asList("spell_test_deal_6", "spell_test_deal_6", "spell_test_deal_6")));
+			AddToCollectionResponse addTwoDeal6s = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_test_deal_6", "spell_test_deal_6")));
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			context.assertEquals(2L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
+			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			context.assertEquals(2L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
 			context.assertEquals(1L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_test_deal_6")
 							&& record.getCollectionIds().stream().noneMatch(cid -> cid.equals(deckId))).count());
 
-			AddToCollectionResponse addOneMoreFireball = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_fireball")));
+			AddToCollectionResponse addOneMoreDeal6 = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("spell_test_deal_6")));
 
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			context.assertEquals(3L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
+			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			context.assertEquals(3L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
 			context.assertEquals(0L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_test_deal_6")
 							&& record.getCollectionIds().stream().noneMatch(cid -> cid.equals(deckId))).count());
 
-			// Remove 2 fireballs from the deck
-			RemoveFromCollectionResponse removedOneFireball = Inventory.removeFromCollection(RemoveFromCollectionRequest.byCardIds(deckId, Arrays.asList("spell_fireball", "spell_fireball")));
+			// Remove 2 deal6s from the deck
+			RemoveFromCollectionResponse removeOneDeal6 = Inventory.removeFromCollection(RemoveFromCollectionRequest.byCardIds(deckId, Arrays.asList("spell_test_deal_6", "spell_test_deal_6")));
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			context.assertEquals(1L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
+			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			context.assertEquals(1L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
 			context.assertEquals(2L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_test_deal_6")
 							&& record.getCollectionIds().stream().noneMatch(cid -> cid.equals(deckId))).count());
 
-			// Add a fireball to another deck, remove it, and assert as a side effect the unchanged deck was unaffected.
-			CreateCollectionResponse newDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "BLACK", Collections.emptyList(), false));
+			// Add a deal6 to another deck, remove it, and assert as a side effect the unchanged deck was unaffected.
+			CreateCollectionResponse newDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false));
 			context.assertNotEquals(newDeck.getCollectionId(), deckId);
-			AddToCollectionResponse addOneFireballToNewDeck = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, newDeck.getCollectionId(), Arrays.asList("spell_fireball")));
+			AddToCollectionResponse addOneDeal6ToNewDeck = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, newDeck.getCollectionId(), Arrays.asList("spell_test_deal_6")));
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			context.assertEquals(1L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			// One fireball is in the original deck
+			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			context.assertEquals(1L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			// One deal6 is in the original deck
 			context.assertEquals(1L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_test_deal_6")
 							&& record.getCollectionIds().stream().anyMatch(cid -> cid.equals(deckId))).count());
-			// One fireball is in the new deck
+			// One deal6 is in the new deck
 			context.assertEquals(1L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_test_deal_6")
 							&& record.getCollectionIds().stream().anyMatch(cid -> cid.equals(newDeck.getCollectionId()))).count());
 
-			RemoveFromCollectionResponse removeFireballFromOtherDeck = Inventory.removeFromCollection(RemoveFromCollectionRequest.byCardIds(newDeck.getCollectionId(), Arrays.asList("spell_fireball")));
+			RemoveFromCollectionResponse removeDeal6FromOtherDeck = Inventory.removeFromCollection(RemoveFromCollectionRequest.byCardIds(newDeck.getCollectionId(), Arrays.asList("spell_test_deal_6")));
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
 			updatedDeckCollection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
 
-			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			context.assertEquals(1L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_fireball")).count());
-			// One fireball remains in the original deck
+			context.assertEquals(3L, updatedUserCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			context.assertEquals(1L, updatedDeckCollection.getInventoryRecords().stream().filter(records -> records.getCardId().equals("spell_test_deal_6")).count());
+			// One deal6 remains in the original deck
 			context.assertEquals(1L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_test_deal_6")
 							&& record.getCollectionIds().stream().anyMatch(cid -> cid.equals(deckId))).count());
-			// No fireballs are in the new deck
+			// No deal6s are in the new deck
 			context.assertEquals(0L,
-					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_fireball")
+					updatedUserCollection.getInventoryRecords().stream().filter(record -> record.getCardId().equals("spell_deal6")
 							&& record.getCollectionIds().stream().anyMatch(cid -> cid.equals(newDeck.getCollectionId()))).count());
 		}, context);
 	}

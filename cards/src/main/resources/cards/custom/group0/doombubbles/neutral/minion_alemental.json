@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
   "description": "Whenever a friendly Elemental dies, return it to your hand instead.",
   "trigger": {
     "eventTrigger": {

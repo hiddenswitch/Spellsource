@@ -7,6 +7,7 @@ package com.hiddenswitch.spellsource;
  * @see AbstractCardResources for more about how to create a cards package.
  */
 public class BaseCardResources extends AbstractCardResources<BaseCardResources> {
+	public static final String REMOVED_CARD_ID = "spell_removed_card";
 
 	public BaseCardResources() {
 		super(BaseCardResources.class);
