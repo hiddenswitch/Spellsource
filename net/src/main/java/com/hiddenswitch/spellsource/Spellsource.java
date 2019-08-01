@@ -606,7 +606,7 @@ public class Spellsource {
 	 *
 	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
 	 */
-	public List<DeckCreateRequest> getStandardDecks() {
+	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
 			cachedStandardDecks = new ArrayList<>();
 			CardCatalogue.loadCardsFromPackage();

@@ -264,7 +264,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection exceptionHandler(Handler<Throwable> handler) {
-		return null;
+		return this;
 	}
 
 	/**
@@ -275,7 +275,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	@Override
 	default Connection write(@NotNull Envelope data) {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -284,7 +284,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection setWriteQueueMaxSize(int maxSize) {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -294,27 +294,27 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection drainHandler(Handler<Void> handler) {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection handler(Handler<Envelope> handler) {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection pause() {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection resume() {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection endHandler(Handler<Void> endHandler) {
-		return null;
+		return this;
 	}
 
 	/**

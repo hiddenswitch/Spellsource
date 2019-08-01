@@ -384,8 +384,11 @@ public interface Invites {
 		}
 
 		// Check that the opponent is still in the queue
-		if (!Matchmaking.getUsersInQueues().get(new UserId(invite.getFromUserId())).equals(invite.getQueueId())) {
-			throw new IllegalStateException("Opponent no longer in queue.");
+		if (invite.getQueueId() != null) {
+			UserId opponentInQueue = new UserId(invite.getFromUserId());
+			if (!Objects.equals(Matchmaking.getUsersInQueues().get(opponentInQueue), (invite.getQueueId()))) {
+				throw new IllegalStateException("Opponent no longer in queue.");
+			}
 		}
 
 		AcceptInviteResponse res = new AcceptInviteResponse();
