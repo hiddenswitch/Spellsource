@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give a minion +2 Health.",
+  "description": "Give a minion +4 Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "HeroPowerSpell",
