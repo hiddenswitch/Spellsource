@@ -57,10 +57,11 @@ public abstract class SpellsourceTestBase {
 			}
 			vertx = Vertx.vertx(new VertxOptions()
 					.setBlockedThreadCheckInterval(999999)
-					.setEventLoopPoolSize(1)
+					.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors() * 2)
 					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
 			vertx.exceptionHandler(t -> testContext.fail(t));
-			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+			Tracing.initializeGlobal(vertx);
+//			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
 				if (v2.failed()) {
 					testContext.fail(new AssertionError(v2.cause()));
