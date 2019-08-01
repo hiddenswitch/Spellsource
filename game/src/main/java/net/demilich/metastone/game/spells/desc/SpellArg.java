@@ -90,10 +90,6 @@ public enum SpellArg {
 	 */
 	ARMOR_BONUS,
 	/**
-	 * The amount of decaying armor to buff to an entity, which is almost always only a hero.
-	 */
-	DECAYING_ARMOR_BONUS,
-	/**
 	 * The amount of attack to buff to an entity. Used by a few spells and auras.
 	 *
 	 * @see net.demilich.metastone.game.spells.BuffSpell for an example of a spell that uses this arg.

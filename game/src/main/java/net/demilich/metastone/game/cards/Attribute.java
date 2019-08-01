@@ -79,10 +79,6 @@ public enum Attribute {
 	 */
 	ARMOR,
 	/**
-	 * The current decaying armor belonging to the {@link Actor}
-	 */
-	DECAYING_ARMOR,
-	/**
 	 * A one-turn long attack bonus given to the {@link Actor}.
 	 */
 	TEMPORARY_ATTACK_BONUS,
