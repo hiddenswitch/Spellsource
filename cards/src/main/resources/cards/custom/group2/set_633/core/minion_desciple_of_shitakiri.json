@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 1,
-  "baseHp": 7,
+  "baseHp": 6,
   "rarity": "RARE",
-  "description": "When a friendly minion Deflects, gain +2 Attack.",
+  "description": "Whenever a friendly minion Deflects, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDeflectTrigger",
