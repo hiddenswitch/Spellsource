@@ -10,20 +10,21 @@
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "ModifyAttributeSpell",
-          "value": -2,
-          "attribute": "HEALTH_BONUS"
-        },
-        {
-          "class": "ModifyAttributeSpell",
-          "value": -2,
-          "attribute": "ATTACK_BONUS",
-          "minValue": 1
+      "class": "BuffSpell",
+      "attackBonus": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
+        "value1": -2,
+        "value2": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MULTIPLY",
+          "value1": -1,
+          "value2": {
+            "class": "AttributeValueProvider"
+          }
         }
-      ]
+      },
+      "hpBonus": -2
     }
   },
   "attributes": {
