@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static co.paralleluniverse.strands.Strand.sleep;
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
-import static org.junit.Assert.*;
 
 public class InvitesTest extends SpellsourceTestBase {
 
@@ -336,7 +335,7 @@ public class InvitesTest extends SpellsourceTestBase {
 				}, 5, testContext);
 				receivedInvite.await();
 
-				// Accept the invite with a deck ID, wxi;./////////////////////hich should enqueue automatically
+				// Accept the invite with a deck ID, which should enqueue automatically
 				AcceptInviteResponse acceptInviteResponse = invoke(recipient.getApi()::acceptInvite, inviteResponse.getInvite().getId(), new AcceptInviteRequest()
 						.match(new MatchmakingQueuePutRequest()
 								.queueId(inviteResponse.getInvite().getQueueId())
