@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.46-2.0.35 (August 1st, 2019)
+
+Hotfix for an issue related to closing games introduced with metrics we do not use.
+
 ### 0.8.45-2.0.35 (August 1st, 2019)
 
 Bug fixes.

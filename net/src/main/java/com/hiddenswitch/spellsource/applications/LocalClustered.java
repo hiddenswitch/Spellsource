@@ -53,7 +53,7 @@ public class LocalClustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
-				.setMetricsOptions(Clustered.getMetrics())
+//				.setMetricsOptions(Clustered.getMetrics())
 				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 40)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 40), then -> {

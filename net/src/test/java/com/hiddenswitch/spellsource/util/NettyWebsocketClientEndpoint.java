@@ -31,7 +31,7 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 			.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
 			.setHandshakeTimeout(3000)
 			.setConnectTimeout(3000)
-			.setMaxConnections(60));
+			.setMaxConnections(256));
 
 	public NettyWebsocketClientEndpoint(String endpoint, String auth) {
 		this.endpoint = endpoint;
