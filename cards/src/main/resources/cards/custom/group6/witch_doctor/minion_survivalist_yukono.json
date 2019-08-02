@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your Skill costs Health instead of Mana this game.",
+  "description": "Opener: Your Skill costs Health instead of Lun this game.",
   "battlecry": {
     "spell": {
       "class": "AddEnchantmentSpell",
