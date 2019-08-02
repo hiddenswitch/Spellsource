@@ -8,48 +8,52 @@
   "rarity": "LEGENDARY",
   "description": "Your Skeletons have +1/+1 and <b>Guard</b>. <b>Opener</b>: Summon four 1/1 Skeletons.",
   "battlecry": {
-    "spells": [
-      {
-        "class": "SummonSpell",
-        "boardPositionRelative": "RIGHT",
-        "cards": [
-          "token_skeleton_wraith",
-          "token_skeleton_wraith"
-        ]
-      },
-      {
-        "class": "SummonSpell",
-        "boardPositionRelative": "LEFT",
-        "cards": [
-          "token_skeleton_wraith",
-          "token_skeleton_wraith"
-        ]
-      }
-    ]
-  },
-      "auras": [
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
         {
-          "class": "BuffAura",
-          "target": "OTHER_FRIENDLY_MINIONS",
-          "attackBonus": 1,
-          "hpBonus": 1,
-          "filter": {
-            "class": "AttributeFilter",
-            "attribute": "SKELETON",
-            "operation": "HAS"
-          }
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "cards": [
+            "token_skeleton_wraith",
+            "token_skeleton_wraith"
+          ]
         },
         {
-          "class": "AttributeAura",
-          "target": "FRIENDLY_MINIONS",
-          "attribute": "AURA_TAUNT",
-          "filter": {
-            "class": "AttributeFilter",
-            "attribute": "SKELETON",
-            "operation": "HAS"
-          }
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "cards": [
+            "token_skeleton_wraith",
+            "token_skeleton_wraith"
+          ]
         }
-        ],
+      ]
+    }
+  },
+  "auras": [
+    {
+      "class": "BuffAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 1,
+      "hpBonus": 1,
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "SKELETON",
+        "operation": "HAS"
+      }
+    },
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_MINIONS",
+      "attribute": "AURA_TAUNT",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "SKELETON",
+        "operation": "HAS"
+      }
+    }
+  ],
   "attributes": {
     "BATTLECRY": true
   },

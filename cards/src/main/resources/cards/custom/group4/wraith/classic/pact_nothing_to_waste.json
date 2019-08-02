@@ -6,8 +6,8 @@
   "rarity": "COMMON",
   "description": "<b>Pact:</b> After you've dealt 4 damage, summon two 2/2 Skeletons.",
   "quest": {
-    "class": "DamageTrigger",
-    "targetPlayer": "SELF"
+    "class": "DamageCausedTrigger",
+    "sourcePlayer": "SELF"
   },
   "countUntilCast": 4,
   "targetSelection": "NONE",

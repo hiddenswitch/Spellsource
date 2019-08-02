@@ -3,7 +3,11 @@
   "type": "CLASS",
   "hero": "hero_wraith_mandron",
   "heroClass": "CRIMSON",
-  "color": [220, 20, 60],
+  "color": [
+    220,
+    20,
+    60
+  ],
   "blackText": false,
   "collectible": true,
   "set": "CUSTOM",

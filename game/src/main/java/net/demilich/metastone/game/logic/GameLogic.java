@@ -206,6 +206,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		IMMUNE_TO_SILENCE.add(Attribute.CARD_INVENTORY_ID);
 		IMMUNE_TO_SILENCE.add(Attribute.TREANT);
 		IMMUNE_TO_SILENCE.add(Attribute.LACKEY);
+		IMMUNE_TO_SILENCE.add(Attribute.SKELETON);
 	}
 
 	private int getId;

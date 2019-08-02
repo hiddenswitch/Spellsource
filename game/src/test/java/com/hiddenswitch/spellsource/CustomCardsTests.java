@@ -1763,6 +1763,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(big.isDestroyed());
 		}, "TOAST", "TOAST");
 	}
+
 	@Test
 	public void testSorrowstone() {
 		runGym((context, player, opponent) -> {
@@ -1795,6 +1796,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), shouldBeSummoned.getSourceCard().getCardId());
 		});
 	}
+
 	@Test
 	public void testWindsweptStrike() {
 		runGym((context, player, opponent) -> {
@@ -3232,7 +3234,6 @@ public class CustomCardsTests extends TestBase {
 	*/
 
 
-
 	@Test
 	public void testMysticSkull() {
 		runGym((context, player, opponent) -> {
@@ -3818,7 +3819,6 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 	*/
-
 
 
 	@Test
@@ -4428,6 +4428,13 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_berry_hoarder");
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(player.getHand().size(), 4);
+		}));
+	}
+
+	@Test
+	public void test() {
+		runGym(((context, player, opponent) -> {
+
 		}));
 	}
 }
