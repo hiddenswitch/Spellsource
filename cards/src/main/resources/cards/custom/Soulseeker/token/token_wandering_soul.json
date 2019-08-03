@@ -13,8 +13,7 @@
     "value": 1
   },
   "attributes": {
-    "DEATHRATTLES": true,
-    "SOULBIND": true
+    "DEATHRATTLES": true
   },
   "collectible": false,
   "set": "CUSTOM",
