@@ -15,8 +15,7 @@
     "howMany": 3
   },
   "attributes": {
-    "DEATHRATTLES": true,
-    "SOULBIND": true
+    "DEATHRATTLES": true
   },
   "collectible": false,
   "set": "CUSTOM",

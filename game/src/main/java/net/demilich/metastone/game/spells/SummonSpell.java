@@ -286,9 +286,6 @@ public class SummonSpell extends Spell {
 
 					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
-						if (!hasFilter || !desc.getBool(SpellArg.RANDOM_TARGET)) {
-							cards.remove(card);
-						}
 					}
 				}
 			} else {

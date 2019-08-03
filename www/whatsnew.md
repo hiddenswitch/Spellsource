@@ -4,6 +4,12 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.46-2.0.35 (Ongoing)
+
+##### Content Additions:
+ - New Soulseeker class courtesy of @birb
+   - With a spooky keyword "Soulbind" which summons one of four 0/1 Spirits with special aftermaths
+
 ### 0.8.46-2.0.35 (August 1st, 2019)
 
 Hotfix for an issue related to closing games introduced with metrics we do not use.
