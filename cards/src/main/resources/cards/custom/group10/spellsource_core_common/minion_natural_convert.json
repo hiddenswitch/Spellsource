@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
+  "race": "SPIRIT",
   "description": "Opener: Restore #5 Health to your champion.",
   "battlecry": {
     "targetSelection": "NONE",
