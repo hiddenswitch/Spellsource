@@ -4,7 +4,7 @@
   "type": "WEAPON",
   "heroClass": "LIGHTBROWN",
   "damage": 0,
-  "durability": 5,
+  "durability": 4,
   "rarity": "RARE",
   "description": "<b>Decay<b>. At the end of your turn, deal 4 damage randomly split among all enemies.",
   "trigger": {
