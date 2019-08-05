@@ -3,7 +3,9 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Assert;
 import org.testng.annotations.Ignore;
@@ -14,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
 
 public class SoulseekerTests extends TestBase {
@@ -21,9 +25,9 @@ public class SoulseekerTests extends TestBase {
 	private static final List<String> SOULBIND_TOKENS = Arrays.asList(
 			"token_wandering_soul",
 			"token_wicked_soul",
-		  	"token_woeful_soul",
-		  	"token_wrathful_soul"
-		  );
+			"token_woeful_soul",
+			"token_wrathful_soul"
+	);
 
 	@Test
 	public void testSoulbind() {
@@ -286,6 +290,38 @@ public class SoulseekerTests extends TestBase {
 			assertEquals(player.getMinions().size(), 0);
 			context.endTurn();
 			assertEquals(player.getMinions().size(), 0);
+		});
+	}
+
+	@Test
+	public void testAncestralEffigy() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_ancestral_effigy");
+			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			context.endTurn();
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
+			// Make sure we destroy the target. We could make it attack zero but that has all sorts of weird arcane rules.
+			charger.setAttack(999);
+			attack(context, opponent, charger, target);
+			assertFalse(target.isDestroyed());
+			assertTrue(player.getGraveyard().stream().anyMatch(e -> SOULBIND_TOKENS.contains(e.getSourceCard().getCardId())));
+			assertEquals(player.getSecrets().size(), 0);
+		});
+	}
+
+	@Test
+	public void testStreamOfConsciousness() {
+		// Also verifies that soulbinding occurs with replacement
+		runGym((context, player, opponent) -> {
+			GameLogic spyLogic = spy(context.getLogic());
+			doAnswer(invocation -> {
+				List<? extends Entity> options = invocation.getArgument(0);
+				assertEquals(options.size(), SOULBIND_TOKENS.size());
+				return invocation.callRealMethod();
+			}).when(spyLogic).getRandom(anyList());
+			context.setLogic(spyLogic);
+			playCard(context, player, "spell_stream_of_consciousness");
+			assertEquals(player.getMinions().size(), 5);
 		});
 	}
 }
