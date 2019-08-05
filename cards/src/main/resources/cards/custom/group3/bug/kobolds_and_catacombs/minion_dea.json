@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Add a copy of a minion to your hand. Set its stats and Cost to 0.",
+  "description": "Opener: Add a copy of a minion to your hand. Set its stats and Cost to 1.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
@@ -20,18 +20,18 @@
             "cardCostModifier": {
               "class": "CardCostModifier",
               "target": "SELF",
-              "value": 0,
+              "value": 1,
               "operation": "SET"
             }
           },
           {
             "class": "SetAttackSpell",
-            "value": 0,
+            "value": 1,
             "exclusive": true
           },
           {
             "class": "SetHpSpell",
-            "value": 0,
+            "value": 1,
             "exclusive": true
           }
         ]
