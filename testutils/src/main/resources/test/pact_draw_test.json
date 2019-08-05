@@ -1,26 +1,26 @@
 {
-  "name": "Death's Hand",
-  "baseManaCost": 2,
+  "name": "Draw Test",
+  "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "CRIMSON",
-  "rarity": "EPIC",
-  "description": "<b>Pact:</b> After four cards are played, draw 3 cards.",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Pact:</b> After you play a card, draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",
     "pact": {
-      "countUntilCast": 4,
+      "countUntilCast": 1,
       "eventTrigger": {
         "class": "CardPlayedTrigger",
-        "targetPlayer": "BOTH"
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "DrawCardSpell",
-        "value": 3
+        "value": 1
       }
     }
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "TEST",
   "fileFormatVersion": 1
 }

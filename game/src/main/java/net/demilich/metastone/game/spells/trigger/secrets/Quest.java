@@ -48,6 +48,8 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
  */
 public class Quest extends Enchantment {
 
+	boolean isPact;
+
 	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
 		super(trigger, spell);
 		this.setSourceCard(source);
@@ -61,6 +63,14 @@ public class Quest extends Enchantment {
 		setKeepAfterTransform(desc.keepAfterTransform);
 		setCountByValue(desc.countByValue);
 		setPersistentOwner(desc.persistentOwner);
+	}
+
+	public void setPact(boolean pact) {
+		isPact = pact;
+	}
+
+	public boolean isPact() {
+		return isPact;
 	}
 
 	@Override

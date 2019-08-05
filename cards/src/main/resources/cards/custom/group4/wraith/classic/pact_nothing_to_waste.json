@@ -5,18 +5,22 @@
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
   "description": "<b>Pact:</b> After you've dealt 4 damage, summon two 2/2 Skeletons.",
-  "quest": {
-    "class": "DamageCausedTrigger",
-    "sourcePlayer": "SELF"
-  },
-  "countUntilCast": 4,
-  "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_skeleton2_wraith",
-      "token_skeleton2_wraith"
-    ]
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 4,
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_skeleton2_wraith",
+          "token_skeleton2_wraith"
+        ]
+      }
+    }
   },
   "collectible": true,
   "set": "CLASSIC",
