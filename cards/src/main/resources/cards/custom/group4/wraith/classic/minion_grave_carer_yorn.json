@@ -34,7 +34,7 @@
   "auras": [
     {
       "class": "BuffAura",
-      "target": "OTHER_FRIENDLY_MINIONS",
+      "target": "FRIENDLY_MINIONS",
       "attackBonus": 1,
       "hpBonus": 1,
       "filter": {

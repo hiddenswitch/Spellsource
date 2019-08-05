@@ -25,7 +25,7 @@
         "class": "DamagedFilter"
       }
     },
-    "ifFalse": 5,
-    "ifTrue": 7
+    "ifFalse": 0,
+    "ifTrue": 2
   }
 }

@@ -11,23 +11,22 @@
     "target": "ENEMY_MINIONS",
     "value": 7,
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "hpBonus": -2
-        },
-        {
-          "class": "BuffSpell",
-          "attackBonus": -1,
-          "filter": {
-            "class": "AttributeFilter",
-            "value": 1,
-            "attribute": "ATTACK",
-            "operation": "GREATER"
-          }
+      "class": "BuffSpell",
+      "attackBonus": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
+        "value1": -1,
+        "value2": {
+          "class": "AlgebraicValueProvider",
+          "operation": "NEGATE",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "ATTACK"
+          },
+          "offset": 1
         }
-      ]
+      },
+      "hpBonus": -2
     }
   },
   "collectible": true,
