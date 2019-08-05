@@ -11,6 +11,9 @@
     "TAUNT": true
   },
   "collectible": false,
-  "set": "CLASSIC",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }

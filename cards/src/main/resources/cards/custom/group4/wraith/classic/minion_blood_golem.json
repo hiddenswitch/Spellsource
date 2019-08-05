@@ -11,7 +11,10 @@
     "TAUNT": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "ConditionalValueProvider",

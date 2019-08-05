@@ -23,6 +23,9 @@
     ]
   },
   "collectible": true,
-  "set": "Classic",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }
