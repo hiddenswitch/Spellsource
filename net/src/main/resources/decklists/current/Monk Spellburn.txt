@@ -15,7 +15,7 @@
 # 2x (3) Spinning Crane Kick
 # 2x (3) Windswept Strike
 # 2x (5) Chi Restoration
-# 2x (5) Fiery Kitsune Punch
+# 2x (5) Lunging Jab
 # 2x (5) Spellquaker
 # 1x (5) The Imperial Soul
 # 2x (7) Fists of Fury

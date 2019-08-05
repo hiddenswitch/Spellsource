@@ -6,6 +6,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -103,6 +104,7 @@ public class PythonBridgeTest {
 			"#";
 
 	@Test
+	@Ignore
 	public void testSimulateMethod() throws InterruptedException {
 		CardCatalogue.loadCardsFromPackage();
 		List<String> deckLists = Arrays.asList(DECK_1, DECK_2, DECK_3, DECK_4);

@@ -2,11 +2,11 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
@@ -18,6 +18,7 @@ import io.vertx.ext.unit.TestContext;
 import io.vertx.test.core.Repeat;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
@@ -25,19 +26,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
-import static io.vertx.ext.sync.Sync.awaitResult;
-import static org.junit.Assert.*;
 
 public class GatewayTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
-	@Test(timeout = 20000L)
+	@Test(timeout = 30000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
 
@@ -74,7 +73,7 @@ public class GatewayTest extends SpellsourceTestBase {
 						context.assertTrue(account.getPersonalCollection().getInventory().size() > 0);
 					}
 				} catch (ApiException e) {
-					fail("API error: " + e.getMessage());
+					context.fail("API error: " + e.getMessage());
 					return;
 				}
 				latch.countDown();
@@ -83,7 +82,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			t.start();
 		}
 
-		latch.await(20L, TimeUnit.SECONDS);
+		latch.await(30L, TimeUnit.SECONDS);
 		context.assertEquals(latch.getCount(), 0L);
 	}
 
@@ -148,12 +147,12 @@ public class GatewayTest extends SpellsourceTestBase {
 			client.createUserAccount(null);
 			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
-			assertTrue(client.getTurnsPlayed() > 0);
-			assertTrue(client.isGameOver());
+			context.assertTrue(client.getTurnsPlayed() > 0);
+			context.assertTrue(client.isGameOver());
 			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
-			assertTrue(client.getTurnsPlayed() > 0);
-			assertTrue(client.isGameOver());
+			context.assertTrue(client.getTurnsPlayed() > 0);
+			context.assertTrue(client.isGameOver());
 			client.disconnect();
 		}
 	}
@@ -175,7 +174,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				// You must wait until you receive the end game message to be confident you can requeue
 				client.waitUntilDone();
 				GetAccountsResponse account = invoke(client.getApi()::getAccount, client.getAccount().getId());
-				assertFalse(account.getAccounts().get(0).isInMatch());
+				context.assertFalse(account.getAccounts().get(0).isInMatch());
 				SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 				boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
 				context.assertFalse(hasUser);
@@ -203,7 +202,7 @@ public class GatewayTest extends SpellsourceTestBase {
 	@Test(timeout = 25000L)
 	public void testGameClosedAfterNoActivity(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
+		context.assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
 		try (UnityClient client = new UnityClient(context)) {
 			client.setShouldDisconnect(true);
@@ -217,29 +216,30 @@ public class GatewayTest extends SpellsourceTestBase {
 			sync(() -> {
 				// wait 10 seconds
 				Strand.sleep(10000L);
-				assertNull(Games.getUsersInGames().get(new UserId(userId)));
+				context.assertNull(Games.getUsersInGames().get(new UserId(userId)));
 
 				Boolean done = invoke(() -> {
 					UnityClient client2 = new UnityClient(context, token);
 					try {
 						return client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
 					} catch (ApiException e) {
-						throw new AssertionError();
+						context.fail(e);
+						return false;
 					}
 				});
 
-				assertEquals(false, done);
+				context.assertEquals(false, done);
 			}, context);
 
 			// Should not have received end game message
-			assertFalse(client.receivedGameOverMessage());
+			context.assertFalse(client.receivedGameOverMessage());
 		}
 	}
 
-	@Test(timeout = 14000L)
+	@Test(timeout = 18000L)
 	public void testGameDoesntCloseAfterActivity(TestContext context) {
-		System.setProperty("games.defaultNoActivityTimeout", "8000");
-		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
+		System.setProperty("games.defaultNoActivityTimeout", "12000");
+		context.assertEquals(Games.getDefaultNoActivityTimeout(), 12000L);
 		AtomicInteger counter = new AtomicInteger();
 		AtomicLong startTime = new AtomicLong();
 		try (UnityClient client = new UnityClient(context) {
@@ -254,8 +254,8 @@ public class GatewayTest extends SpellsourceTestBase {
 			@Override
 			protected boolean onRequestAction(ServerToClientMessage message) {
 				logger.trace("testGameDoesntCloseAfterActivity: Sending request {}", counter.get());
-				// Spend 7 seconds waiting to send the first action
-				if (counter.getAndIncrement() == 0) {
+				int andIncrement = counter.getAndIncrement();
+				if (andIncrement == 0) {
 					startTime.set(System.currentTimeMillis());
 					vertx.runOnContext(v -> {
 						vertx.setTimer(6000L, ignored -> {
@@ -263,10 +263,10 @@ public class GatewayTest extends SpellsourceTestBase {
 						});
 					});
 
-				} else if (counter.getAndIncrement() == 1) {
+				} else if (andIncrement == 1) {
 					// Otherwise, slow things down only a little bit
 					vertx.runOnContext(v -> {
-						vertx.setTimer(1000L, ignored -> {
+						vertx.setTimer(6000L, ignored -> {
 							this.respondRandomAction(message);
 						});
 					});
@@ -283,9 +283,9 @@ public class GatewayTest extends SpellsourceTestBase {
 			client.createUserAccount(null);
 			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
-			assertTrue(System.currentTimeMillis() - startTime.get() > 8000L);
-			assertTrue(client.getTurnsPlayed() > 0);
-			assertTrue(client.isGameOver());
+			context.assertTrue(System.currentTimeMillis() - startTime.get() > 12000L);
+			context.assertTrue(client.getTurnsPlayed() > 0);
+			context.assertTrue(client.isGameOver());
 		}
 	}
 
@@ -317,19 +317,19 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	public void testMatchmakingCancellation(TestContext context) throws ApiException, InterruptedException {
+	public void testMatchmakingCancellation(TestContext context) throws ApiException, InterruptedException, SuspendExecution {
 		try (UnityClient client1 = new UnityClient(context)) {
 			client1.createUserAccount();
 			java.util.concurrent.Future<Void> matchmaking = client1.matchmake(null, "constructed");
-			Thread.sleep(2000L);
+			Strand.sleep(2000L);
 			matchmaking.cancel(true);
 			try (UnityClient client2 = new UnityClient(context)) {
 				client2.createUserAccount();
 				java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
-				Thread.sleep(2000L);
+				Strand.sleep(2000L);
 				sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))), context);
 				other.cancel(true);
-				Thread.sleep(2000L);
+				Strand.sleep(2000L);
 			}
 		}
 	}

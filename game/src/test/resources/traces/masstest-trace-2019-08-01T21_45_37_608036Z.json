@@ -1,0 +1,12 @@
+{
+  "seed" : -6391742718116742252,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TIME", "NAVY" ],
+  "deckCardIds" : [ [ "minion_swift_stinger", "spell_lesser_marble_spellstone", "minion_corvana_the_seamstress", "minion_brawler_bushi", "minion_swarmed_captive", "minion_metalic_manadrake", "minion_metalic_manadrake", "minion_darkbent_drake", "spell_temporal_echoes", "secret_moments_hesitation", "minion_lundurr_the_reborn", "minion_xavius", "spell_astral_shockwave", "minion_blackflame_bomber", "minion_beloved_benji", "minion_mutated_brute", "minion_giant_serpent", "spell_good_omens", "spell_power_everlasting", "spell_band_of_brothers", "minion_necksnapper", "spell_banish", "minion_bogovanis", "spell_fortuna_abounding", "spell_astral_shockwave", "minion_giant_disappointment", "spell_bullet_time", "spell_banish", "minion_tempest_elemental", "minion_lightning_elemental" ], [ "minion_jungle_wanderer", "minion_gilded_swarmer", "minion_fae_horncaster", "minion_hypnotic_beetle", "weapon_the_transmogrifter", "spell_battlefield", "weapon_booty_bay_conscription", "minion_hypnomental", "spell_fight", "minion_recurring_torrent", "minion_soulclencher", "spell_spellforce", "minion_perplexed_courtsman", "minion_plunderogue", "minion_abandoned_geneticist", "minion_booty_bay_backup", "minion_wink_dog", "minion_grape_merchant", "minion_brawler_bushi", "minion_cyclotron", "minion_spirited_bomber", "spell_army_recruits", "minion_haunted_berserker", "minion_attrition_master_rictor", "minion_centaur_acumen", "minion_daring_duelist", "minion_doomwalker", "minion_doomgunners", "minion_stowaway_scoundrel", "minion_giant_reaper" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 15, 7, 31 ], [ 65, 42, 58 ] ],
+  "actions" : [ 0, 1, 0, 0, 0, 1, 0, 2, 3, 0, 5, 0, 2, 0, 6, 0, 0, 2, 2, 0, 0, 7, 0, 3, 2, 1, 4, 9, 3, 0, 1, 15, 3, 2, 1, 0, 13, 4, 2, 0, 15, 1, 5, 2, 0, 1, 1, 0, 33, 8, 0, 2, 2, 11, 5, 1, 1, 2, 0, 2, 2, 3, 3, 6, 14, 1, 2, 2, 2, 3, 3, 3, 0, 13, 1, 1, 2, 1, 0, 0, 0, 2, 7, 2, 0, 1 ],
+  "id" : null
+}

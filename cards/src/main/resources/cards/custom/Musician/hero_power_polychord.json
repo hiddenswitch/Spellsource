@@ -4,50 +4,13 @@
   "type": "HERO_POWER",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give a minion +2/+1. If you have none, summon two 1/1 Patrons.",
-  "passiveAuras": [
-    {
-      "class": "TargetSelectionOverrideAura",
-      "target": "TRIGGER_HOST",
-      "targetSelection": "MINIONS",
-      "condition": {
-        "class": "MinionCountCondition",
-        "targetPlayer": "SELF",
-        "value": 1,
-        "operation": "GREATER_OR_EQUAL"
-      },
-      "triggers": [
-        {
-          "class": "CardReceivedTrigger"
-        },
-        {
-          "class": "CardPlayedTrigger"
-        }
-      ]
-    }
-  ],
+  "description": "Give a minion +4 Health.",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
-      "class": "EitherOrSpell",
-      "condition": {
-        "class": "MinionCountCondition",
-        "targetPlayer": "SELF",
-        "value": 1,
-        "operation": "GREATER_OR_EQUAL"
-      },
-      "spell1": {
-        "class": "BuffSpell",
-        "attackBonus": 2,
-        "hpBonus": 1
-      },
-      "spell2": {
-        "class": "SummonSpell",
-        "cards": [
-          "token_patron",
-          "token_patron"
-        ]
-      }
+      "class": "BuffSpell",
+      "hpBonus": 4
     }
   },
   "collectible": false,
