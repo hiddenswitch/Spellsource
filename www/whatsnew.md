@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.48-2.0.35 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
+
 ### 0.8.47-2.0.35 (August 5th, 2019)
 
 Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
@@ -15,7 +23,7 @@ Also, Archaeologist is digging is way into the game, thanks to @Pircival!
  - Archaeologist class added with Basic/Core cards. (1263)
  - New Soulseeker class courtesy of @birb and a new spooky keyword Soulbind: Summon one of four 0/1 Spirits with special aftermaths.
 
-##### Content Fixes
+##### Content Fixes:
 
  - The Occultist card Seeker of Knowledge has been removed from the game.
  - Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."  (1263)

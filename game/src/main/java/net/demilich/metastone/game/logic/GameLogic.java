@@ -3355,6 +3355,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (actor instanceof Weapon
 				&& peacefully) {
 			// Move the weapon directly to the graveyard and don't trigger its deathrattle.
+			// Also remove its enchantments!
+			removeEnchantments(actor);
 			actor.moveOrAddTo(context, Zones.GRAVEYARD);
 		} else {
 			actor.setAttribute(Attribute.DESTROYED);
