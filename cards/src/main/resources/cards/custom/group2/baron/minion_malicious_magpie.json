@@ -1,10 +1,10 @@
 {
   "name": "Malicious Magpie",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 1,
-  "baseHp": 1,
+  "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "Whenever another friendly minion attacks, deal 1 damage to the target.",

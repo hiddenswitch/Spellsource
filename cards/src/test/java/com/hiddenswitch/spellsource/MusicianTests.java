@@ -1,67 +1,13 @@
 package com.hiddenswitch.spellsource;
 
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Objects;
-
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class MusicianTests extends TestBase {
-
-	@Test
-	public void testChord() {
-		runGym((context, player, opponent) -> {
-			Hero musician = player.getHero();
-			GameAction chord = musician.getHeroPower().play();
-			context.performAction(context.getPlayer1().getId(), chord);
-			assertEquals(player.getMinions().size(), 1);
-			Minion patron = player.getMinions().get(0);
-			assertEquals(patron.getSourceCard().getCardId(), "token_patron");
-
-			chord.setTarget(patron);
-			context.performAction(context.getPlayer1().getId(), chord);
-			Assert.assertEquals(patron.getHp(), 2);
-			Assert.assertEquals(patron.getAttack(), 2);
-
-			context.endTurn();
-			context.endTurn();
-
-			assertTrue(context.getValidActions().stream().anyMatch(action -> patron.getReference().equals(action.getTargetReference())));
-		}, "CORAL", "ANY");
-
-		runGym((context, player, opponent) -> {
-			Minion helper = playMinionCard(context, player, "minion_little_helper");
-			player.setMana(10);
-			Card helped = player.getHand().get(0);
-			destroy(context, helper);
-			assertEquals(player.getMinions().size(), 0);
-			player.setMana(10);
-			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equals(ga.getSourceReference(), helped.getReference())
-					&& Objects.isNull(ga.getTargetReference())));
-			assertTrue(context.getValidActions().stream().noneMatch(ga -> Objects.equals(ga.getSourceReference(), helped.getReference())
-					&& !Objects.isNull(ga.getTargetReference())));
-			Minion target = playMinionCard(context, player, "minion_neutral_test");
-			assertEquals(player.getMinions().size(), 1);
-			player.setMana(10);
-			assertTrue(context.getValidActions().stream().noneMatch(ga -> Objects.equals(ga.getSourceReference(), helped.getReference())
-					&& Objects.isNull(ga.getTargetReference())));
-			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equals(ga.getSourceReference(), helped.getReference()) && Objects.equals(ga.getTargetReference(), target.getReference())));
-			destroy(context, target);
-			assertEquals(player.getMinions().size(), 0);
-			player.setMana(10);
-			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equals(ga.getSourceReference(), helped.getReference())
-					&& Objects.isNull(ga.getTargetReference())));
-			assertTrue(context.getValidActions().stream().noneMatch(ga -> Objects.equals(ga.getSourceReference(), helped.getReference())
-					&& !Objects.isNull(ga.getTargetReference())));
-		}, "CORAL", "ANY");
-	}
-
 	@Test
 	public void testRehearsal() {
 		runGym((context, player, opponent) -> {

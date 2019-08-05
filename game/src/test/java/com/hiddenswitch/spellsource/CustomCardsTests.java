@@ -635,7 +635,9 @@ public class CustomCardsTests extends TestBase {
 			Card card1 = receiveCard(context, player, "minion_cost_three_test");
 			Card card2 = receiveCard(context, player, "minion_cost_three_test");
 			Card card3 = receiveCard(context, player, "minion_neutral_test");
-			playCard(context, player, "minion_soulcaller_roten");
+			Card roten = receiveCard(context, player, "minion_soulcaller_roten");
+			assertEquals(roten.getDescription(context, player), "Opener: Summon all (3)-Cost minions from your hand. (Equals the cost of the last minion you played)");
+			playCard(context, player, roten);
 			assertEquals(card1.getZone(), Zones.GRAVEYARD);
 			assertEquals(card2.getZone(), Zones.GRAVEYARD);
 			assertEquals(card3.getZone(), Zones.HAND);
@@ -3987,6 +3989,26 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_dragon_caretaker");
 			assertEquals(dragon.getHp(), dragon.getBaseHp() + 2);
 		});
+
+		runGym((context, player, opponent) -> {
+			Minion nonDragon = playMinionCard(context, player, "minion_test_3_2");
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 0);
+				return battlecryActions.get(0);
+			});
+			playMinionCard(context, player, "minion_dragon_caretaker");
+			assertEquals(nonDragon.getHp(), nonDragon.getBaseHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion dragon = playMinionCard(context, opponent, "minion_blastflame_dragon");
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 0);
+				return battlecryActions.get(0);
+			});
+			playMinionCard(context, player, "minion_dragon_caretaker");
+			assertEquals(dragon.getHp(), dragon.getBaseHp());
+		});
 	}
 
 	// Siphonscale Blade - 8 Mana 6/3 Weapon Epic "Can attack again after a friendly minion attacks and kills a minion."
@@ -4523,6 +4545,40 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_dig_in");
 			assertEquals(player.getDeck().get(0).getCardId(), "minion_blue_test");
 			assertEquals(opponent.getDeck().get(0).getCardId(), "minion_black_test");
+		}));
+	}
+
+	@Test
+	public void testMonolithOfDoomDescription() {
+		runGym((context, player, opponent) -> {
+			Minion monolithOnBoard = playMinionCard(context, player, "minion_monolith_of_doom");
+			Card monolithInHand = receiveCard(context, player, "minion_monolith_of_doom");
+			assertEquals(monolithOnBoard.getDescription(context, player), "Opener: Deal X damage. (Doubles for each Monolith of Doom you played this turn)");
+			assertEquals(monolithInHand.getDescription(context, player), "Opener: Deal 2 damage. (Doubles for each Monolith of Doom you played this turn)");
+		});
+	}
+
+	@Test
+	public void testBerryHoarder() {
+		runGym(((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			playCard(context, player, "minion_berry_hoarder");
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 0);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "minion_knight_eternal");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			putOnTopOfDeck(context, player, "weapon_stick");
+			player.setMana(5);
+			playCard(context, player, "minion_berry_hoarder");
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 4);
 		}));
 	}
 }

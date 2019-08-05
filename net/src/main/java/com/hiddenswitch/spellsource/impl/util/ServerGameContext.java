@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -556,25 +557,25 @@ public class ServerGameContext extends GameContext implements Server {
 				try {
 					LOGGER.debug("play {}: Starting forked game", gameId);
 					super.play(false);
-				} catch (VertxException interrupted) {
-					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
-					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
+				} catch (Throwable throwable) {
+					Throwable rootCause = Throwables.getRootCause(throwable);
+					if (Strand.currentStrand().isInterrupted() || rootCause instanceof InterruptedException) {
+						// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 						span.log(ImmutableMap.of(
 								Fields.EVENT, "interrupt",
 								"graceful", true
 						));
+						// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
+						// is allowed to interrupt the fiber. So we don't need to call endGame here.
 					} else {
-						Tracing.error(interrupted);
+						Tracing.error(throwable);
+						try {
+							endGame();
+						} catch (Throwable endGameError) {
+							Tracing.error(endGameError);
+						}
 					}
-					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
-					// is allowed to interrupt the fiber.
-				} catch (Throwable anyOther) {
-					Tracing.error(anyOther);
-					try {
-						endGame();
-					} catch (Throwable endGameError) {
-						Tracing.error(endGameError);
-					}
+
 				} finally {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
 					span.finish();
