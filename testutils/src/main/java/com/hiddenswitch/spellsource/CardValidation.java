@@ -5,6 +5,7 @@ import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -65,6 +66,41 @@ public class CardValidation {
 							"Deathrattles trigger from the graveyard, so they cannot contain a reference to ADJACENT_MINIONS. Use a custom.AdjacentDeathrattleSpell instead.");
 				}
 			}
+		} catch (DecodeException ex) {
+			// Decode again to throw the inner exception
+			try {
+				CardDesc desc = Json.mapper.readValue(new FileInputStream(cardFile), CardDesc.class);
+			} catch (JsonProcessingException innerEx) {
+				Assert.fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",
+						cardFile.getName(),
+						innerEx.getMessage(),
+						innerEx.getLocation().getLineNr(),
+						innerEx.getLocation().getColumnNr()), innerEx);
+			}
+		} catch (Exception ex) {
+			Assert.fail(cardFile.getName(), ex);
+		}
+	}
+
+	public static void validateCardReferences(File cardFile) throws IOException {
+		CardCatalogue.loadCardsFromPackage();
+		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
+
+		try {
+			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
+			record.getDesc().bfs().build().forEach(node -> {
+				if (node.getKey().equals(SpellArg.CARD)) {
+					String card = (String) node.getValue();
+					CardCatalogue.getCardById(card);
+				} else if (node.getKey().equals(SpellArg.CARDS)) {
+					if (node.getValue() instanceof String[]) {
+						String[] cards = (String[]) node.getValue();
+						for (String card : cards) {
+							CardCatalogue.getCardById(card);
+						}
+					}
+				}
+			});
 		} catch (DecodeException ex) {
 			// Decode again to throw the inner exception
 			try {

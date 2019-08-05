@@ -6,15 +6,15 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "race": "MURLOC",
-  "description": "Opener: Take control of an enemy Murloc",
+  "race": "FAE",
+  "description": "Opener: Take control of an enemy Fae",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "MindControlSpell",
       "filter": {
         "class": "RaceFilter",
-        "race": "MURLOC"
+        "race": "FAE"
       }
     }
   },

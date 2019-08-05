@@ -1,12 +1,12 @@
 {
-  "name": "Tasty Murloc",
+  "name": "Tasty Fae",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "TOAST",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "When you Roast this, add a Meal to your hand that restores 7 Health.",
   "deckTrigger": {
     "eventTrigger": {
@@ -16,7 +16,7 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "spell_murloc_meal"
+      "card": "spell_fae_meal"
     }
   },
   "attributes": {},

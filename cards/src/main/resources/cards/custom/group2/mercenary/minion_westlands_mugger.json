@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Whenever this minion attacks a minion, add the Coin to your hand.",
+  "description": "Whenever this minion attacks a minion, add a Lunstone to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
@@ -15,7 +15,7 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "spell_the_coin"
+      "card": "spell_lunstone"
     }
   },
   "collectible": true,

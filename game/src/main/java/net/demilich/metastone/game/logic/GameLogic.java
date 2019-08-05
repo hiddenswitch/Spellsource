@@ -8,7 +8,6 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -18,11 +17,10 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
-import net.demilich.metastone.game.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -37,7 +35,7 @@ import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -45,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -148,37 +145,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	private static final String TEMP_CARD_LABEL = "temp_card_id_";
 	private static final int INFINITE = -1;
-	private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
 	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
 	private IdFactoryImpl idFactory;
-	private long seed = createSeed();
+	private long seed = XORShiftRandom.createSeed();
 	private XORShiftRandom random = new XORShiftRandom(seed);
-
-	/**
-	 * Ensures {@link GameLogic} has a valid, unique seed in this JVM instance.
-	 * <p>
-	 * Adapted from the JVM's implementation of {@link Random}
-	 *
-	 * @return A {@link Long} corresponding to a unique value useful for "oring" to the {@link System#nanoTime()}.
-	 */
-	private static long seedUniquifier() {
-		for (; ; ) {
-			long current = seedUniquifier.get();
-			long next = current * 181783497276652981L;
-			if (seedUniquifier.compareAndSet(current, next))
-				return next;
-		}
-	}
-
-	/**
-	 * Creates a valid, highly probably unique seed.
-	 *
-	 * @return A {@link Long} seed that can be passed to a constructor of {@link Random}
-	 */
-	private static long createSeed() {
-		return seedUniquifier() ^ System.nanoTime();
-	}
 
 	protected transient GameContext context;
 
@@ -1212,7 +1183,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, boolean ignoreLifesteal, DamageType damageType) {
-		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage);
+		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage, damageType);
 		resolveDamageEvent(player, target, source, damageDealt, ignoreLifesteal, damageType);
 		if (source.getEntityType() == EntityType.CARD) {
 			Card card = (Card) source;
@@ -1266,7 +1237,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage) {
+	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage, DamageType damageType) {
 		if (target.getHp() < -100) {
 			return 0;
 		}
@@ -1290,13 +1261,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			damage *= 2;
 		}
 
-		// Dealing zero base damage should never cause any effects because it doesn't count as a hit
+		// Dealing zero damage at this point correctly sets the last recorded hit as zero, but does not trigger damage
+		// effects since no damage is going to be dealt.
 		if (damage == 0) {
+			target.setAttribute(Attribute.LAST_HIT, 0);
 			return 0;
 		}
 
 		context.getDamageStack().push(damage);
-		context.fireGameEvent(new PreDamageEvent(context, target, source, damage));
+		context.fireGameEvent(new PreDamageEvent(context, target, source, damage, damageType));
 		damage = context.getDamageStack().pop();
 		if (damage > 0) {
 			removeAttribute(source, null, Attribute.STEALTH);
@@ -1387,7 +1360,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (target.hasAttribute(Attribute.DEFLECT)
 				&& target.getHp() <= damage) {
 			removeAttribute(target, source, Attribute.DEFLECT);
-			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true);
+			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true, DamageType.DEFLECT);
 			return true;
 		}
 		return false;
@@ -1828,8 +1801,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// This could change, theoretically, if the minion has an ability  whose damage depends on the other minion's HP.
 		boolean attackerWasDestroyed = attacker.isDestroyed();
 		boolean defenderWasDestroyed = defender.isDestroyed();
-		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true);
-		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true);
+		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true, DamageType.PHYSICAL);
+		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true, DamageType.PHYSICAL);
 		// Defender queues first. Damage events should not change the attacker
 		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageType.PHYSICAL);
 		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageType.PHYSICAL);
@@ -2854,7 +2827,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
+		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), "MURLOC")
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -3847,8 +3820,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				card.setOwner(player.getId());
 			}
 
-			// Remove passive triggers
-			removeEnchantments(card, true, keepCardCostModifiers);
+			// Remove passive triggers if the card was in a place they were active
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+				removeEnchantments(card, true, keepCardCostModifiers);
+			}
 
 			if (count == 0) {
 				card.moveOrAddTo(context, Zones.DECK);

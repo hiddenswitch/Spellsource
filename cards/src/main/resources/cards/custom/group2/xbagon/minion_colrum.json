@@ -6,8 +6,8 @@
   "baseAttack": 7,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "race": "MURLOC",
-  "description": "Opener: Transform ALL Murlocs to random non-Murloc minions (wherever they are).",
+  "race": "FAE",
+  "description": "Opener: Transform ALL Fae to random non-Fae minions (wherever they are).",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
@@ -20,7 +20,7 @@
             "filters": [
               {
                 "class": "RaceFilter",
-                "race": "MURLOC",
+                "race": "FAE",
                 "invert": true
               },
               {
@@ -34,7 +34,7 @@
           },
           "filter": {
             "class": "RaceFilter",
-            "race": "MURLOC"
+            "race": "FAE"
           }
         },
         {
@@ -45,7 +45,7 @@
             "filters": [
               {
                 "class": "RaceFilter",
-                "race": "MURLOC",
+                "race": "FAE",
                 "invert": true
               },
               {
@@ -59,7 +59,7 @@
           },
           "filter": {
             "class": "RaceFilter",
-            "race": "MURLOC"
+            "race": "FAE"
           }
         },
         {
@@ -70,7 +70,7 @@
             "filters": [
               {
                 "class": "RaceFilter",
-                "race": "MURLOC",
+                "race": "FAE",
                 "invert": true
               },
               {
@@ -84,7 +84,7 @@
           },
           "filter": {
             "class": "RaceFilter",
-            "race": "MURLOC"
+            "race": "FAE"
           }
         }
       ]

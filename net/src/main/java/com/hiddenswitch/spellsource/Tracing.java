@@ -15,6 +15,9 @@ import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public interface Tracing {
 	static void initializeGlobal(Vertx vertx) {
 		GlobalTracer.registerIfAbsent(initialize("spellsource"));
@@ -35,7 +38,7 @@ public interface Tracing {
 		span.log(ImmutableMap.of(
 				Fields.EVENT, "error",
 				Fields.ERROR_OBJECT, throwable,
-				Fields.MESSAGE, throwable.getMessage(),
+				Fields.MESSAGE, throwable.getMessage() == null ? "(no message)" : throwable.getMessage(),
 				Fields.STACK, Throwables.getStackTraceAsString(throwable)));
 		if (finish) {
 			span.finish();
@@ -61,7 +64,11 @@ public interface Tracing {
 						.withAgentHost("localhost")
 						.withAgentPort(6831));
 
+		Map<String, String> map = new HashMap<>();
+		map.put("version", Version.version());
+
 		Configuration config = new Configuration(serviceName)
+				.withTracerTags(map)
 				.withSampler(samplerConfig)
 				.withReporter(reporterConfig);
 

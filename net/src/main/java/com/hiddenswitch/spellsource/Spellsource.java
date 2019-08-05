@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -14,7 +13,9 @@ import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
 import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
+import io.netty.channel.EventLoop;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -22,7 +23,11 @@ import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -177,29 +182,29 @@ public class Spellsource {
 						.withVersion(4)
 						.withUp(thisVertx -> {
 							// Repair user collections
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
+							mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
 									json("$unset", json("deckType", 1), "$set", json("trashed", false)), new UpdateOptions().setMulti(true));
 
-							for (JsonObject record : Mongo.mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
+							for (JsonObject record : mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
 								final String userId = record.getString("_id");
-								Mongo.mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
+								mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
 							}
 
 							// Remove all inventory records that are in just one collection, the user collection
-							Mongo.mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
+							mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(5)
 						.withUp(thisVertx -> {
 							// Set all existing decks to standard.
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
+							mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", false)),
 									json("$set", json("format", "Standard")),
 									new UpdateOptions().setMulti(true));
 						})
 						.withDown(thisVertx -> {
 							// Remove format field
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
+							mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", true)),
 									json("$unset", json("format", null)),
 									new UpdateOptions().setMulti(true));
@@ -208,7 +213,7 @@ public class Spellsource {
 						.withVersion(6)
 						.withUp(thisVertx -> {
 							// Shuffle around the location of user record data
-							List<JsonObject> users = Mongo.mongo().find(Accounts.USERS, json());
+							List<JsonObject> users = mongo().find(Accounts.USERS, json());
 							for (JsonObject jo : users) {
 								if (!jo.containsKey("profile")
 										|| !jo.getJsonObject("profile").containsKey("emailAddress")) {
@@ -249,7 +254,7 @@ public class Spellsource {
 								String userId = jo.getString("_id");
 								logger.debug("add MigrationRequest 6: Migrating passwords and emails for userId {}", userId);
 
-								Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId),
+								mongo().updateCollection(Accounts.USERS, json("_id", userId),
 										updateCommand);
 							}
 						}))
@@ -393,7 +398,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(20)
 						.withUp(thisVertx -> {
-							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$set", json(
+							mongo().updateCollectionWithOptions(COLLECTIONS, json(), json("$set", json(
 									"wins", 0, "totalGames", 0
 							)), new UpdateOptions().setMulti(true));
 						}))
@@ -414,7 +419,7 @@ public class Spellsource {
 							// Remove all cards that don't exist
 							CardCatalogue.loadCardsFromPackage();
 							JsonArray allCardIds = array(CardCatalogue.getRecords().keySet().toArray());
-							MongoClientDeleteResult removed = Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+							MongoClientDeleteResult removed = mongo().removeDocuments(INVENTORY, json("cardDesc.id",
 									json("$nin", allCardIds)));
 							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
 						}))
@@ -558,7 +563,40 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(35, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(36)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Mongo.mongo().connectWithEnvironment(thisVertx);
+							// We'll mark as removed all the missing cards, then change the hero classes that no longer exist to
+							// neutral heroes.
+
+							// First, change all missing cards to reference the "removed card"
+							List<String> cardIdsInCatalogue = new ArrayList<>(CardCatalogue.getRecords().keySet());
+							String removedCardId = BaseCardResources.REMOVED_CARD_ID;
+							mongo().updateCollectionWithOptions(
+									INVENTORY,
+									json(InventoryRecord.CARDDESC_ID, json("$nin", cardIdsInCatalogue)),
+									json("$set", json(InventoryRecord.CARDDESC_ID, removedCardId)),
+									new UpdateOptions().setMulti(true));
+
+							// Change all the hero classes to the neutral class.
+							List<String> heroClasses = HeroClass.getBaseClasses(DeckFormat.spellsource());
+							mongo().updateCollectionWithOptions(
+									COLLECTIONS,
+									json(CollectionRecord.HERO_CLASS, json("$nin", heroClasses)),
+									json("$set", json(CollectionRecord.HERO_CLASS, HeroClass.ANY)),
+									new UpdateOptions().setMulti(true));
+
+							List<String> formats = new ArrayList<>(DeckFormat.formats().keySet());
+							// Remove all missing formats
+							mongo().updateCollectionWithOptions(
+									COLLECTIONS,
+									json(CollectionRecord.FORMAT, json("$nin", formats)),
+									json("$set", json(CollectionRecord.FORMAT, DeckFormat.ALL.getName())),
+									new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(36, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -570,17 +608,19 @@ public class Spellsource {
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
-			CardCatalogue.loadCardsFromPackage();
 			cachedStandardDecks = new ArrayList<>();
+			CardCatalogue.loadCardsFromPackage();
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
-			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
+			Set<URL> resourceList = reflections.getResources(x -> x != null && x.endsWith(".txt")).stream().map(Resources::getResource).collect(toSet());
+			if (resourceList.size() == 0) {
+				throw new IllegalStateException("no bot decks were loaded");
+			}
 			cachedStandardDecks.addAll(resourceList.stream().map(c -> {
 				try {
 					return Resources.toString(c, Charset.defaultCharset());
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
-				return null;
 			}).map((deckList) -> DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true)).filter(Objects::nonNull).collect(toList()));
 		}
 
@@ -646,13 +686,27 @@ public class Spellsource {
 	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
+		// This seems to be the most reliable way to count how many event loop threads there are?
+		EventLoop first = vertx.nettyEventLoopGroup().next();
+		EventLoop next = first;
+		int j = Runtime.getRuntime().availableProcessors()/*1*/;
+		/*
+		for (; j <= Runtime.getRuntime().availableProcessors(); j++) {
+			next = next.next();
+			if (Objects.equals(first, next)) {
+				break;
+			}
+		}
+		*/
 		// Use up all the event loops
-		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
+		for (int i = 0; i < j; i++) {
 			for (Verticle verticle : services()) {
 				final Future<String> future = Future.future();
 				vertx.deployVerticle(verticle, future);
 				futures.add(future);
 			}
+		}
+
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}

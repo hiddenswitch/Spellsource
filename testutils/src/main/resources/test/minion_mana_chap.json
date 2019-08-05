@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "",
+  "battlecry": {
+    "spell": {
+      "class": "ModifyMaxManaSpell",
+      "value": 1
+    }
+  },
+  "deathrattle": {
+    "class": "ModifyMaxManaSpell",
+    "value": -1
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

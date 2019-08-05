@@ -8,7 +8,17 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
  * Choose-one effects on actors are implemented as choosing their battlecry.
  */
 public interface HasBattlecry {
+	/**
+	 * Gets a battlecry description for this object.
+	 *
+	 * @return
+	 */
 	BattlecryDesc getBattlecry();
 
+	/**
+	 * Sets the battlecry. May not be supported.
+	 *
+	 * @param action
+	 */
 	void setBattlecry(BattlecryDesc action);
 }

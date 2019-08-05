@@ -24,5 +24,9 @@ public enum DamageType {
 	/**
 	 * Magical damage is caused by spells and effects. It is typically rendered by missiles in the client.
 	 */
-	MAGICAL
+	MAGICAL,
+	/**
+	 * Damage dealt from that Deflect ability.
+	 */
+	DEFLECT
 }
