@@ -8,9 +8,17 @@ permalink: /whats-new/
 
 Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
 
+Also, Archaeologist is digging is way into the game, thanks to @Pircival! 
+
 ##### Content Additions:
 
+ - Archaeologist class added with Basic/Core cards. (1263)
  - New Soulseeker class courtesy of @birb and a new spooky keyword Soulbind: Summon one of four 0/1 Spirits with special aftermaths.
+
+##### Content Fixes
+
+ - The Occultist card Seeker of Knowledge has been removed from the game.
+ - Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."  (1263)
 
 ### 0.8.46-2.0.35 (August 1st, 2019)
 

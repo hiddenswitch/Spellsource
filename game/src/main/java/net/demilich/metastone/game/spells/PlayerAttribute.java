@@ -79,5 +79,9 @@ public enum PlayerAttribute {
 	/**
 	 * The total healing done by friendly sources
 	 */
-	HEALING_DONE
+	HEALING_DONE,
+	/**
+	 * The total amount of armor lost this game
+	 */
+	ARMOR_LOST
 }
