@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -29,6 +30,70 @@ public class WraithTests extends TestBase {
 			assertFalse(enemyMinion.isDestroyed());
 			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack());
 			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - 2);
+		}));
+	}
+
+	@Test
+	public void testCurseOfPain() {
+		runGym(((context, player, opponent) -> {
+			Minion enemyMinion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "spell_curse_of_pain", enemyMinion);
+			attack(context, opponent, enemyMinion, player.getHero());
+			assertTrue(enemyMinion.isDestroyed());
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
+		}));
+	}
+
+	@Test
+	public void testBloodGolem() {
+		runGym(((context, player, opponent) -> {
+			Card golem = receiveCard(context, player, "minion_blood_golem");
+			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
+			player.setMana(10);
+			playCard(context, player, golem);
+			assertEquals(player.getMana(), 5);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			Card golem = receiveCard(context, player, "minion_blood_golem");
+			player.setMana(10);
+			playCard(context, player, golem);
+			assertEquals(player.getMana(), 3);
+		}));
+	}
+
+	@Test
+	public void testDarkArtist() {
+		runGym(((context, player, opponent) -> {
+			overrideBattlecry(context, player, battlecryActions -> battlecryActions.get(0));
+			Minion minion = playMinionCard(context, opponent, "minion_test_4_5");
+			playMinionCard(context, player, "minion_dark_artist");
+			assertEquals(minion.getAttack(), minion.getBaseAttack() - 2);
+			assertEquals(minion.getHp(), minion.getBaseHp() - 2);
+		}));
+		runGym(((context, player, opponent) -> {
+			overrideBattlecry(context, player, battlecryActions -> battlecryActions.get(0));
+			Minion minion = playMinionCard(context, opponent, "minion_test_2_3");
+			playMinionCard(context, player, "minion_dark_artist");
+			assertEquals(minion.getAttack(), minion.getBaseAttack() - 1);
+			assertEquals(minion.getHp(), minion.getBaseHp() - 2);
+		}));
+	}
+
+	@Test
+	public void testNothingToWaster() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "pact_nothing_to_waste");
+			playCard(context, player, "spell_test_deal_5_to_enemy_hero");
+			assertEquals(player.getMinions().size(), 2);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "pact_nothing_to_waste");
+			playCard(context, opponent, "minion_test_1_3");
+			playCard(context, opponent, "minion_test_1_3");
+			playCard(context, player, "spell_test_1_aoe");
+			assertEquals(player.getMinions().size(), 2);
 		}));
 	}
 }

@@ -16,7 +16,8 @@
       "spell": {
         "class": "DamageSpell",
         "target": "ENEMY_CHARACTERS",
-        "value": 2
+        "value": 2,
+        "ignoreSpellDamage": true
       }
     }
   },

@@ -17,11 +17,12 @@
         "value1": -2,
         "value2": {
           "class": "AlgebraicValueProvider",
-          "operation": "MULTIPLY",
-          "value1": -1,
-          "value2": {
-            "class": "AttributeValueProvider"
-          }
+          "operation": "NEGATE",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "ATTACK"
+          },
+          "offset": 1
         }
       },
       "hpBonus": -2

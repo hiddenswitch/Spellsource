@@ -16,7 +16,8 @@
       "spell": {
         "class": "DamageSpell",
         "target": "SELF",
-        "value": 4
+        "value": 4,
+        "ignoreSpellDamage": true
       },
       "persistentOwner": true
     }
