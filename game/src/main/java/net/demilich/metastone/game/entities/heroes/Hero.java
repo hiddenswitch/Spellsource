@@ -89,14 +89,15 @@ public final class Hero extends Actor {
 	 *
 	 * @param armor The requested change in armor.
 	 * @return The amount the armor changed. If damage is being dealt, then the armor will change {@code -Infinity < armor
-	 * 		<= 0} if it is possible.
+	 * <= 0} if it is possible.
 	 */
 	public int modifyArmor(final int armor) {
 		// armor cannot fall below zero
 		final int originalArmor = getArmor();
 		int newArmor = Math.max(originalArmor + armor, 0);
 		setAttribute(Attribute.ARMOR, newArmor);
-		return newArmor - originalArmor;
+		int armorChange = newArmor - originalArmor;
+		return armorChange;
 	}
 
 	public void setHeroClass(String heroClass) {

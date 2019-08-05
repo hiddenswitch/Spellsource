@@ -150,12 +150,12 @@ public class BuffSpell extends RevertableSpell {
 
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
+		int totalArmorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 
 		if (value != 0) {
 			if (target instanceof Hero) {
-				attackBonus = armorBonus = value;
+				attackBonus = totalArmorBonus = value;
 			} else {
 				attackBonus = hpBonus = value;
 			}
@@ -203,9 +203,9 @@ public class BuffSpell extends RevertableSpell {
 			}
 		}
 
-		if (armorBonus != 0) {
+		if (totalArmorBonus != 0) {
 			if (target != null && target.getEntityType() == EntityType.HERO) {
-				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), armorBonus);
+				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), totalArmorBonus);
 			} else {
 				if (target == null) {
 					LOGGER.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
@@ -213,7 +213,7 @@ public class BuffSpell extends RevertableSpell {
 					LOGGER.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
 							" differs from the player {}", context.getGameId(), source, target, player);
 				}
-				context.getLogic().gainArmor(player, armorBonus);
+				context.getLogic().gainArmor(player, totalArmorBonus);
 			}
 		}
 	}

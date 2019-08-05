@@ -52,6 +52,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return (int) player.getStatistics().getLong(Statistic.HERO_POWER_DAMAGE_DEALT);
 			case HEALING_DONE:
 				return (int) player.getStatistics().getLong(Statistic.HEALING_DONE);
+			case ARMOR_LOST:
+				return (int) player.getStatistics().getLong(Statistic.ARMOR_LOST);
 			default:
 				break;
 		}
