@@ -16,7 +16,7 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "SummonSpell",
-      "card": "token_spirit"
+      "card": "token_lost_soul"
     }
   },
   "collectible": false,
