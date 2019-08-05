@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.47-2.0.35 (In Progress)
+### 0.8.47-2.0.35 (August 5th, 2019)
 
 Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
 
