@@ -2,7 +2,7 @@
   "name": "Illidari Enforcer",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "PURPLE",
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "COMMON",

@@ -4,10 +4,21 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### new stuff
+### 0.8.47-2.0.35 (In Progress)
 
-- Occultist card Seeker of Knowledge has been removed from the game.
-- Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."
+Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
+
+Also, Archaeologist is digging is way into the game, thanks to @Pircival! 
+
+##### Content Additions:
+
+ - Archaeologist class added with Basic/Core cards. (1263)
+ - New Soulseeker class courtesy of @birb and a new spooky keyword Soulbind: Summon one of four 0/1 Spirits with special aftermaths.
+
+##### Content Fixes
+
+ - The Occultist card Seeker of Knowledge has been removed from the game.
+ - Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."  (1263)
 
 ### 0.8.46-2.0.35 (August 1st, 2019)
 
@@ -67,12 +78,10 @@ Additional bug fixes.
 Hotfix decks missing hero classes.
 
 ### 0.8.41-2.0.35 (July 29th, 2019)
->>>>>>> master
 
 Non-Spellsource content is removed from the game.
 
 New Storyteller cards thanks to @Skurleton!
-Archaeologist is digging is way into the game, thanks to @Pircival! 
 
 The bot will now play more new decks in its rotation.
 
@@ -81,7 +90,6 @@ Many other bug fixes.
 ##### Content Additions:
 
  - New Storyteller cards. (1237)
- - Archaeologist class added with Basic/Core cards. (1263)
 
 ##### Content Fixes:
 
