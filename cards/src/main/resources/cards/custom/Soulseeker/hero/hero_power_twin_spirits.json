@@ -16,8 +16,8 @@
     "spell": {
       "class": "SummonSpell",
       "cards": [
-        "token_spirit",
-        "token_spirit"
+        "token_lost_soul",
+        "token_lost_soul"
       ]
     }
   },
