@@ -13,22 +13,29 @@
         "class": "DestroySpell"
       },
       {
-        "class": "ConditionalEffectSpell",
-        "exclusive": true,
-        "condition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "OPPONENT"
-        },
-        "spell1": {
-          "class": "HealSpell",
-          "value": 8,
-          "target": "FRIENDLY_HERO"
-        },
-        "spell2": {
-          "class": "HealSpell",
-          "value": 8,
-          "target": "ENEMY_HERO"
-        }
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "OPPONENT"
+          }
+        ],
+        "spells": [
+          {
+            "class": "HealSpell",
+            "value": 8,
+            "target": "FRIENDLY_HERO"
+          },
+          {
+            "class": "HealSpell",
+            "value": 8,
+            "target": "ENEMY_HERO"
+          }
+        ]
       }
     ]
   },

@@ -2,12 +2,10 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.spells.desc.filter.AndFilter;
-import net.demilich.metastone.game.spells.desc.filter.AttributeFilter;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.EntityTypeFilter;
+import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
 import net.demilich.metastone.game.cards.Attribute;
@@ -29,7 +27,7 @@ public final class DiedThisTurnValueProvider extends ValueProvider {
 		CardSource source = GraveyardActorsSource.create();
 		EntityFilter diedThisTurnFilter = AttributeFilter.create(Attribute.DIED_ON_TURN, getDesc().getValue(ValueProviderArg.VALUE, context, player, target, host, context.getTurn()));
 		EntityFilter userFilter = (EntityFilter) getDesc().getOrDefault(ValueProviderArg.CARD_FILTER, AndFilter.create());
-		EntityFilter minionFilter = EntityTypeFilter.create(EntityType.MINION);
+		EntityFilter minionFilter = CardFilter.create(CardType.MINION);
 		int count = source
 				.getCards(context, host, player)
 				.filtered(AndFilter.create(diedThisTurnFilter, userFilter, minionFilter).matcher(context, player, host))
