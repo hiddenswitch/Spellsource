@@ -1,0 +1,21 @@
+{
+  "name": "Eternal Steed",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "SPIRIT",
+  "description": "Aftermath: Summon an Eternal Steed.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "minion_eternal_steed"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Woeful Soul",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Aftermath: Deal 3 damage randomly split among all enemies.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 1,
+    "howMany": 3
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
