@@ -11,6 +11,9 @@
     "SKELETON": true
   },
   "collectible": false,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }

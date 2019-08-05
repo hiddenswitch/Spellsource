@@ -16,6 +16,9 @@
     "CHARGE": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }
