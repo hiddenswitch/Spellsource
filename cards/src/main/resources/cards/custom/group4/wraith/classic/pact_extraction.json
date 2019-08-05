@@ -5,19 +5,22 @@
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
   "description": "<b>Pact:</b> After your hero takes damage, give a random enemy minion -4 Health.",
-  "quest": {
-    "class": "DamageCausedTrigger",
-    "sourcePlayer": "BOTH",
-    "targetEntityType": "HERO",
-    "targetPlayer": "SELF"
-  },
-  "countUntilCast": 1,
   "spell": {
-    "target": "ENEMY_MINIONS",
-    "randomTarget": true,
-    "class": "ModifyAttributeSpell",
-    "value": -4,
-    "attribute": "HEALTH_BONUS"
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 1,
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true,
+        "class": "BuffSpell",
+        "hpBonus": -4
+      }
+    }
   },
   "collectible": true,
   "set": "CLASSIC",

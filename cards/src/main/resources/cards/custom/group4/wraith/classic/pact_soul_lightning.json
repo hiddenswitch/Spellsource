@@ -5,16 +5,20 @@
   "heroClass": "CRIMSON",
   "rarity": "RARE",
   "description": "<b>Pact:</b> After two friendly minions have died, deal 2 damage to all enemies.",
-  "quest": {
-    "class": "MinionDeathTrigger",
-    "targetPlayer": "SELF"
-  },
-  "countUntilCast": 2,
-  "targetSelection": "NONE",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_CHARACTERS",
-    "value": 2
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "MinionDeathTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 2
+      }
+    }
   },
   "collectible": true,
   "set": "CLASSIC",
