@@ -91,7 +91,7 @@ RUN set -eux; \
 	javac --version; \
 	java --version
 
-ENV SPELLSOURCE_VERSION=0.8.40
+ENV SPELLSOURCE_VERSION=0.8.46
 ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}.jar
 
 RUN mkdir /etc/service/java
@@ -110,6 +110,7 @@ WORKDIR /data
 ENV PORT=80
 ENV HAZELCAST_PORT=5701
 ENV VERTX_CLUSTER_PORT=5710
+ENV SPELLSOURCE_BROADCAST=false
 
 EXPOSE 80
 

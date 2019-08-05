@@ -368,7 +368,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		// Doesn't show duplicates due to class card weighting
 		factory.run((context, player, opponent) -> {
-			context.setDeckFormat(new FixedCardsDeckFormat("minion_blue_test", "minion_neutral_test"));
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_neutral_test_1", "minion_neutral_test"));
 			overrideDiscover(context, player, discoverActions -> {
 				assertEquals(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).distinct().count(), 2L);
 				return discoverActions.get(0);
@@ -643,7 +643,7 @@ public class AdvancedMechanicTests extends TestBase {
 	@Test
 	public void testDoubleTurnEndTriggers() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_drakkari_enchanter");
+			playCard(context, player, "minion_double_turn_end_triggers_aura");
 			playCard(context, player, "spell_turn_end_one_turn");
 			putOnTopOfDeck(context, player, "spell_lunstone");
 			putOnTopOfDeck(context, player, "spell_lunstone");
@@ -655,7 +655,7 @@ public class AdvancedMechanicTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_drakkari_enchanter");
+			playCard(context, player, "minion_double_turn_end_triggers_aura");
 			playCard(context, player, "spell_turn_end_one_fire");
 			putOnTopOfDeck(context, player, "spell_lunstone");
 			putOnTopOfDeck(context, player, "spell_lunstone");
@@ -667,7 +667,7 @@ public class AdvancedMechanicTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_drakkari_enchanter");
+			playCard(context, player, "minion_double_turn_end_triggers_aura");
 			context.endTurn();
 			playCard(context, opponent, "spell_turn_end_one_fire");
 			putOnTopOfDeck(context, opponent, "spell_lunstone");
@@ -678,5 +678,17 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(opponent.getDeck().size(), 1);
 			assertEquals(opponent.getHand().size(), 1);
 		});
+	}
+
+	@Test
+	public void testEndTurnInteractions() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_hooded_ritualist");
+			playCard(context, player, "spell_lackey_break");
+			context.endTurn();
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMinions().get(1).getAttack(), player.getMinions().get(1).getBaseAttack() + 1);
+			assertEquals(player.getMinions().get(1).getHp(), player.getMinions().get(1).getBaseHp() + 1);
+		}));
 	}
 }

@@ -54,7 +54,7 @@ public class Clustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
-				.setMetricsOptions(getMetrics())
+//				.setMetricsOptions(getMetrics())
 				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 400)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 400), then -> {

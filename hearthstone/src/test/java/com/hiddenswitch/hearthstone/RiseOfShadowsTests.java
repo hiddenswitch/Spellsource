@@ -136,7 +136,7 @@ public class RiseOfShadowsTests extends TestBase {
 			final Answer<GameAction> answer = invocation -> {
 
 				if (isTeachingHorror.get()) {
-					final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
+					@SuppressWarnings("unchecked") final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
 					final DiscoverAction discoverAction = (DiscoverAction) gameActions.get(0);
 					cards.add(discoverAction.getCard());
 					return discoverAction;
@@ -439,7 +439,7 @@ public class RiseOfShadowsTests extends TestBase {
 			for (Card card : player.getHand()) {
 				assertEquals(costOf(context, player, card), 1);
 			}
-		});
+		}, HeroClass.ANY, HeroClass.ANY);
 	}
 
 	@Test

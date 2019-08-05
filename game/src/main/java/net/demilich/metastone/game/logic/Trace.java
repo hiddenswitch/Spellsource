@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
@@ -54,10 +54,10 @@ public class Trace implements Serializable, Cloneable {
 
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
-		Player[] players = new Player[]{gameState.player1, gameState.player2};
-		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new String[0]);
-		deckFormatName = gameState.deckFormat.getName();
-		secondPlayerBonusCards = gameState.deckFormat.getSecondPlayerBonusCards();
+		Player[] players = new Player[]{gameState.getPlayer1(), gameState.getPlayer2()};
+		deckFormatSets = gameState.getDeckFormat().getCardSets().toArray(new String[0]);
+		deckFormatName = gameState.getDeckFormat().getName();
+		secondPlayerBonusCards = gameState.getDeckFormat().getSecondPlayerBonusCards();
 		setHeroClasses(new String[2]);
 		setDeckCardIds(new String[2][]);
 		for (int i = 0; i < 2; i++) {

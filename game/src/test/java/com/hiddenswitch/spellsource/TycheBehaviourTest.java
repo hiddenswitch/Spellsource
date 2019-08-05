@@ -61,6 +61,7 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	}
 
 	@Test
+	@Ignore("No more midrange shaman")
 	public void testMidrangeShamanMirrorMatch() {
 		List<GameDeck> decks = Collections.singletonList(TycheBehaviour.midrangeShaman().toGameDeck());
 		Logging.setLoggingLevel(Level.ERROR);

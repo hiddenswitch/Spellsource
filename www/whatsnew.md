@@ -4,11 +4,72 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.41-2.0.35 (In Progress)
+### 0.8.46-2.0.35 (August 1st, 2019)
+
+Hotfix for an issue related to closing games introduced with metrics we do not use.
+
+### 0.8.45-2.0.35 (August 1st, 2019)
+
+Bug fixes.
+
+New Monk cards thanks to @Grand! (1290)
+
+##### Content Fixes:
+
+ - Many cards that before referenced Mana now refer to Lun instead. (1306)
+ - Berry Hoarder now correctly draws all copies of 0-cost cards in the owner's decks instead of just one copy of each. (1307)
+ - Blessed Koi Statue is no longer an Elemental. (1290)
+ - Fiery Kitsune Punch renamed to Lunging Jab. (1290)
+ - Fortifying Prayer renamed to Inner Peace. (1290)
+ - Enchanted Tapestry cost increased from 2 to 3 and is no longer an Elemental. (1290)
+ - Mark of Despair renamed to Touch of Sorrow. (1290)
+ - White Tiger Statue renamed to Imbuing Fountain and health decreased from 4 to 3. (1290)
+ - Disciple of Shitakiri health lowered from 7 to 6. (1290)
+ - Remaining previous Verdant Dreams Monk cards have been removed. (1290)
+ - Booty Bay Backup now reads "Opener: Give your other Pirates +1 Attack." (1284)
+ - Malicious Magpie changed from a 1-mana 1/1 to a 2-mana 1/2. (1284)
+ - Description for Soulcaller Roten now dynamically updates. (1276)
+ - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
+ - Musician Skill now reads "Give a minion +2 health." (1275)
+ - Defenders with zero attack, Catta the Merciless, and Holdover Lich no longer interact to cause an infinite recursion.
+ - Stealing a Formless Rancour no longer causes a crash.
+ - If you create a Deep Borer from a Chimera, it will harmlessly shuffle itself inside your deck.
+
+##### Other Fixes:
+
+ - Accepting friend invites works again. (1303)
+
+### 0.8.44-2.0.35 (July 31st, 2019)
+
+Spellpower in the hand no longer causes game-crashing issues.
+
+### 0.8.43-2.0.35 (July 31st, 2019)
+
+Disconnects and other forms of game interruption do not cause unusual effects in game (a regression since 0.8.41).
+
+Additional bug fixes.
+
+##### Content Fixes:
+
+ - The neutral and test champions no longer appear in the draft.
+ - Birdbrain is now a Witchdoctor card.
+ - Distortoise now correctly does 3 damage to the owner instead of 2. (1294)
+ - Prized Boar Aftermath now properly reflects the printed effect. (1293) 
+ - Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)
+
+### 0.8.42-2.0.35 (July 30th, 2019)
+
+Hotfix decks missing hero classes.
+
+### 0.8.41-2.0.35 (July 29th, 2019)
+
+Non-Spellsource content is removed from the game.
 
 New Storyteller cards thanks to @Skurleton!
 
-The bot will now play more new decks in its rotation. Additionally, there are bug fixes.
+The bot will now play more new decks in its rotation.
+
+Many other bug fixes.
 
 ##### Content Additions:
 
@@ -16,6 +77,7 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
 
 ##### Content Fixes:
 
+ - Non-Spellsource content has been migrated to a "Do Nothing" card. (1180, 1285)
  - All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
  - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
  - Strengthen Core (Honed Potion) now gives a minion deflect, draws a card and costs (2). (1245)
@@ -33,6 +95,12 @@ The bot will now play more new decks in its rotation. Additionally, there are bu
  - Might Mufunga now costs (9), up from (8). (1257)
  - Guild Guard now costs (5), up from (4). (1257)
  - Miserable Conclusion now correctly destroys all minions except the opponent's highest attack minion.
+ - Hooded Ritualist now reads "After you cast a spell, summon a 2/1 Demon right before the end of your turn." (1264)
+ - The Omega Rune now correctly no longer gives lifesteal on spell casts to both players. (1265)
+ - Matriarch Aiiran no longer dynamically updates its damage number while on board. (1249)
+ - Manly Mountaineer now properly has Dash. (1233)
+ - Tome of Secrets now works properly. (1233)
+ - Dramatic Playwright now only changes the attack of one enemy minion. (1233)
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
