@@ -4491,7 +4491,7 @@ public class CustomCardsTests extends TestBase {
 		}));
 	}
 
-	@Test(invocationCount = 100)
+	@Test
 	public void testSotMountainExcavation() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "spell_sot_mountain_excavation");
