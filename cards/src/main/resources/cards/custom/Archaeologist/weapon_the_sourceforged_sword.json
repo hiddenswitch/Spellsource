@@ -1,0 +1,31 @@
+{
+  "name": "The Sourceforged Sword",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "<b>Litedrain</b>. Opener: Gain +1 Durability for each weapon you played this game.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_WEAPON",
+      "value": {
+    "class": "CardsPlayedValueProvider",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    },
+    "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
