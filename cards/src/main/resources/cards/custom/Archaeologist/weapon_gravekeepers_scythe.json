@@ -1,0 +1,35 @@
+{
+  "name": "Gravekeeper's Scythe",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 0,
+  "durability": 5,
+  "rarity": "COMMON",
+  "description": "<b>Decay<b>. Whenever you Discover a card, gain 4 Armor.",
+    "trigger": {
+    "eventTrigger": {
+      "class": "DiscoverTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 4
+    }
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
