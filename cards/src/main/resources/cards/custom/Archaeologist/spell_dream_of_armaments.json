@@ -1,0 +1,19 @@
+{
+  "name": "Dream of Armaments",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "EPIC",
+  "description": "Draw 10 weapons from your deck.",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 10,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
