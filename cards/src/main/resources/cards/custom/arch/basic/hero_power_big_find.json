@@ -1,0 +1,33 @@
+{
+  "name": "Big Find",
+  "heroPower": "hero_power_big_find",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+  "description": "Skill: Restore #2 Health. Gain 2 Armor.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "HealSpell",
+          "value": 2
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
+          "armorBonus": 2
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

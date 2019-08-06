@@ -1,0 +1,37 @@
+{
+  "name": "Double Next Opener",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "The next battlecry played this turn is triggered twice.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "BattlecryResolvedTrigger"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_double_next_battlecry"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_double_next_battlecry"
+      }
+    }
+  ],
+  "aura": {
+    "class": "DoubleBattlecriesAura",
+    "target": "FRIENDLY_CARDS"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

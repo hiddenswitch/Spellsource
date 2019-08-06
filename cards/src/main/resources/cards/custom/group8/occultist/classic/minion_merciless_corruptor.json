@@ -6,12 +6,12 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Opener: Give your minions \"Aftermath: Deal 1 damage to all minions.\"",
+  "description": "Opener: Give all other minions \"Aftermath: Deal 1 damage to all minions.\"",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "AddDeathrattleSpell",
-      "target": "FRIENDLY_MINIONS",
+      "target": "ALL_OTHER_MINIONS",
       "spell": {
         "class": "DamageSpell",
         "target": "ALL_MINIONS",

@@ -1,0 +1,33 @@
+{
+  "name": "Give Decay",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion Decay.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DECAY"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DecaySpell"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

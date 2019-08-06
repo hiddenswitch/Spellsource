@@ -1,0 +1,51 @@
+{
+  "name": "Surveyor Skag",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Add 10 random cards to your hand. Shuffle any that don't fit into your deck",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "PutOnBottomOfDeckSpell",
+          "howMany": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "value": {
+            "class": "AlgebraicValueProvider",
+            "operation": "SUBTRACT",
+            "value1": 10,
+            "value2": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "HAND_COUNT",
+              "targetPlayer": "SELF"
+            }
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

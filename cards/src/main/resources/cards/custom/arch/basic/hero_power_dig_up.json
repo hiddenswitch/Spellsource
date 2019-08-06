@@ -1,0 +1,33 @@
+{
+  "name": "Dig Up",
+  "heroPower": "hero_power_big_find",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+  "description": "Skill: Restore #1 Health. Gain 1 Armor.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "HealSpell",
+          "value": 1
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
+          "armorBonus": 1
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

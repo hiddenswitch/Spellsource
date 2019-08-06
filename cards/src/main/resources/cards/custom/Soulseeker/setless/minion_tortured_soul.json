@@ -1,0 +1,21 @@
+{
+  "name": "Tortured Soul",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "Aftermath: Summon a 4/4 Awoken.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_awoken"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
