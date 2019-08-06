@@ -1,0 +1,36 @@
+
+{
+  "name": "Sand Filter",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 0,
+  "durability": 4,
+  "rarity": "EPIC",
+  "description": "<b>Decay</b>. During your turn, Discover cards from your deck instead of drawing..",
+ "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "FromDeckToHandSpell"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "distinct": true
+      },
+      "exclusive": true
+    },
+    "removeEffect": {
+      "class": "DrawCardSpell"
+    }
+  },
+  },
+  "collectible": true,
+  "attributes": {
+    "DECAY": true
+  },
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
