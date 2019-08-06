@@ -11,6 +11,8 @@ Bug fixes.
 ##### Content Fixes:
 
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
+ - Garbasu Monster now reads, "After this minion survives damage, gain +1/+1."
+ - Catta the Merciless and Garbasu Monster no longer interact to cause an infinite loop when Garbasu faces off a 1-attack immune minion.
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 

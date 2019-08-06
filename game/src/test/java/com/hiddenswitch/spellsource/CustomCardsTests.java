@@ -1383,6 +1383,17 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(defender.isDestroyed());
 			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), -95, "Hit limit on attacks");
 		});
+
+		// Test interaction with garbasu monster and immune while attack
+		runGym((context, player, opponent) -> {
+			Minion catta = playMinionCard(context, player, "minion_catta_the_merciless");
+			Minion attacker = playMinionCard(context, player, "minion_neutral_test");
+			attacker.setAttribute(Attribute.IMMUNE_WHILE_ATTACKING);
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_garbasu_monster");
+			context.endTurn();
+			attack(context, player, attacker, defender);
+		});
 	}
 
 	@Test
@@ -4392,7 +4403,7 @@ public class CustomCardsTests extends TestBase {
 		}));
 	}
 
-  @Test
+	@Test
 	public void testScopeOut() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_cost_11_test");
