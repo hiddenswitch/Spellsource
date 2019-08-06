@@ -4491,7 +4491,7 @@ public class CustomCardsTests extends TestBase {
 		}));
 	}
 
-	@Test
+	@Test(invocationCount = 100)
 	public void testSotMountainExcavation() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "spell_sot_mountain_excavation");
@@ -4581,6 +4581,22 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_berry_hoarder");
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(player.getHand().size(), 4);
+		}));
+	}
+
+	@Test
+	public void testFlamerunner() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_flamerunner");
+			player.getHero().setHp(25);
+			playCard(context, player, "spell_test_heal_8", player.getHero());
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 0);
+			context.endTurn();
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 1);
+			playCard(context, player, "spell_test_heal_8", player.getHero());
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 1);
+			context.endTurn();
+			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 1);
 		}));
 	}
 }
