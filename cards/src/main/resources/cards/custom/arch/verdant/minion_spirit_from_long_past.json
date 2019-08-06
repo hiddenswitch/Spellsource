@@ -12,21 +12,18 @@
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
     "applyEffect": {
-  "spell": {
-    "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      }
     },
-    "cardSource": {
-      "class": "GraveyardCardsSource",
-      "targetPlayer": "SELF"
-    }
-  },
     "removeEffect": {
       "class": "DrawCardSpell"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

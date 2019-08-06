@@ -8,15 +8,6 @@
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
-    "value": {
-      "class": "AlgebraicValueProvider",
-      "operation": "ADD",
-      "value1": {
-        "class": "AttributeValueProvider",
-        "attribute": "HEALTH"
-      },
-      "value2": 1
-    },
     "spells": [
       {
         "class": "BuffSpell",
@@ -27,12 +18,16 @@
         "target": "FRIENDLY_HERO",
         "armorBonus": {
           "class": "GameValueProvider",
-          "gameValue": "SPELL_VALUE"
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "SPELL_TARGET",
+            "attibute": "HP"
+          }
         }
       }
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

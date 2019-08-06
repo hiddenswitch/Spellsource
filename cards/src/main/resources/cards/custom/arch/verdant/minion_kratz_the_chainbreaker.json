@@ -21,6 +21,8 @@
     "operation": "SET",
     "targetPlayer": "SELF"
   },
-  }
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
 }
 

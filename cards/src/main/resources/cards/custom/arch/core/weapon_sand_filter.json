@@ -1,4 +1,3 @@
-
 {
   "name": "Sand Filter",
   "baseManaCost": 2,
@@ -7,8 +6,8 @@
   "damage": 0,
   "durability": 4,
   "rarity": "EPIC",
-  "description": "<b>Decay</b>. During your turn, Discover cards from your deck instead of drawing..",
- "aura": {
+  "description": "<b>Decay</b>. During your turn, Discover cards from your deck instead of drawing.",
+  "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
     "applyEffect": {
@@ -25,7 +24,6 @@
     "removeEffect": {
       "class": "DrawCardSpell"
     }
-  },
   },
   "collectible": true,
   "attributes": {
