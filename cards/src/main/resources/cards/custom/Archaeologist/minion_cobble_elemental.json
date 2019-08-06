@@ -1,0 +1,28 @@
+{
+  "name": "Cobble Elemental",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Guard. Aftermath: Draw two Elementals from your deck.",
+  "deathrattle": {
+    "class": "FromDeckToHandSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL",
+      "cardType": "MINION"
+    },
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+}
