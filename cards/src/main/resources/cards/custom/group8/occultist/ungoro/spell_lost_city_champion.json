@@ -4,12 +4,12 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Discover a minion in your deck. Summon a copy of it with Guard.",
+  "description": "Discover a minion in your deck. Summon it with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
     "spell": {
-      "class": "SummonSpell",
+      "class": "RecruitSpell",
       "spell": {
         "target": "OUTPUT",
         "class": "AddAttributeSpell",
