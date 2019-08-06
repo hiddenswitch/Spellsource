@@ -4,7 +4,27 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.45-2.0.35 (In progress)
+### 0.8.47-2.0.35 (In Progress)
+
+Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
+
+Also, Archaeologist is digging is way into the game, thanks to @Pircival! 
+
+##### Content Additions:
+
+ - Archaeologist class added with Basic/Core cards. (1263)
+ - New Soulseeker class courtesy of @birb and a new spooky keyword Soulbind: Summon one of four 0/1 Spirits with special aftermaths.
+
+##### Content Fixes
+
+ - The Occultist card Seeker of Knowledge has been removed from the game.
+ - Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."  (1263)
+
+### 0.8.46-2.0.35 (August 1st, 2019)
+
+Hotfix for an issue related to closing games introduced with metrics we do not use.
+
+### 0.8.45-2.0.35 (August 1st, 2019)
 
 Bug fixes.
 
@@ -26,6 +46,10 @@ New Monk cards thanks to @Grand! (1290)
  - Malicious Magpie changed from a 1-mana 1/1 to a 2-mana 1/2. (1284)
  - Description for Soulcaller Roten now dynamically updates. (1276)
  - Dragon Caretaker now correctly can only target friendly Dragons. (1278)
+ - Musician Skill now reads "Give a minion +2 health." (1275)
+ - Defenders with zero attack, Catta the Merciless, and Holdover Lich no longer interact to cause an infinite recursion.
+ - Stealing a Formless Rancour no longer causes a crash.
+ - If you create a Deep Borer from a Chimera, it will harmlessly shuffle itself inside your deck.
 
 ##### Other Fixes:
 

@@ -159,7 +159,16 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		} else {
 			move(indexOf(source), destination, destination.size());
 		}
+	}
 
+	@SuppressWarnings("unchecked")
+	protected void exchange(E entity1, E entity2) {
+		int i = entity1.getIndex();
+		int j = entity2.getIndex();
+		internal.set(i, entity2);
+		internal.set(j, entity1);
+		internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
+		internal.get(j).setEntityLocation(new EntityLocation(zone, player, j));
 	}
 
 	@Override
@@ -211,8 +220,13 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		if (targetEntity.getOwner() != sourceOwner) {
 			targetEntity.setOwner(sourceOwner);
 		}
-		sourceZone.move(sourceIndex, targetZone, targetIndex);
-		targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
+
+		if (sourceZone == targetZone) {
+			sourceZone.exchange(sourceEntity, targetEntity);
+		} else {
+			sourceZone.move(sourceIndex, targetZone, targetIndex);
+			targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
+		}
 	}
 
 	@Override

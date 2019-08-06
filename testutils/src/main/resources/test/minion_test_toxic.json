@@ -1,0 +1,16 @@
+{
+  "name": "Toxic Test",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Toxic",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "ELEMENTAL",
   "description": "Opener: Give a friendly minion +1/+1",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
