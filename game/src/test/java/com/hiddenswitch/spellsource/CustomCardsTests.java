@@ -4583,4 +4583,15 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 4);
 		}));
 	}
+
+	@Test
+	public void testIronPreserver() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_iron_preserver");
+			playCard(context, player, "weapon_test_1_1");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "weapon_test_1_1");
+		}));
+	}
 }
