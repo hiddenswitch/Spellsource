@@ -894,6 +894,13 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 
 		Player opponent = context.getOpponent(player);
+
+		if (getCondition() != null) {
+			if (!getCondition().create().isFulfilled(context, player, null, null)) {
+				return false;
+			}
+		}
+
 		TargetSelection selection = hasChoices() || isHeroPower() ?
 				getTargetSelection() :
 				context.getLogic().processTargetModifiers(play()).getTargetRequirement();
@@ -907,9 +914,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			default:
 				break;
 		}
-		if (getCondition() != null) {
-			return getCondition().create().isFulfilled(context, player, null, null);
-		}
+
 		return true;
 	}
 

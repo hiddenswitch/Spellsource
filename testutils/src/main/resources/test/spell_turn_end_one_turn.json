@@ -1,10 +1,10 @@
 {
-  "name": "Call the Cavalry",
+  "name": "Draw at end of turn",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "AMBER",
-  "rarity": "EPIC",
-  "description": "At the end of this turn, summon a 3/3 Worm",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "At the end of this turn, draw a card",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
@@ -14,14 +14,12 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "SummonSpell",
-        "value": 1,
-        "card": "token_shiny_worm"
+        "class": "DrawCardSpell"
       },
-      "maxFires": 1
+      "oneTurn": true
     }
-  },  
-  "collectible": true,
-  "set": "CUSTOM",
+  },
+  "collectible": false,
+  "set": "TEST",
   "fileFormatVersion": 1
 }

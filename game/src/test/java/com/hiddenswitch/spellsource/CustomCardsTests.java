@@ -4379,6 +4379,20 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testStringShot() {
+		runGym(((context, player, opponent) -> {
+			Minion target = playMinionCard(context, opponent, "minion_test_3_2");
+			Card stringShotCard = receiveCard(context, player, "spell_string_shot");
+			playCard(context, player, "minion_lil_wormy");
+			player.setMana(1);
+
+			assertEquals(context.getValidActions().stream().filter(action ->
+					Objects.equals(action.getSourceReference(), stringShotCard.getReference()) &&
+							Objects.equals(action.getTargetReference(), target.getReference())).count(), 1L);
+		}));
+	}
+
+  @Test
 	public void testScopeOut() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_cost_11_test");
@@ -4452,6 +4466,21 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			assertEquals(opponent.getHero().getHp(), 15);
 			assertEquals(player.getHero().getHp(), 20);
+		}));
+	}
+
+	@Test
+	public void testTheGlutton() {
+		runGym(((context, player, opponent) -> {
+			Minion glutton = playMinionCard(context, player, "minion_the_glutton");
+			Minion toBeEaten = playMinionCard(context, player, "minion_black_test");
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack());
+			context.endTurn();
+			assertTrue(toBeEaten.isDestroyed());
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack() + 1);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack() + 1);
 		}));
 	}
 
