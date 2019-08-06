@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
+ - The Wraith haunting its way into Spellsource thanks to @Bromara! (1313)
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 
