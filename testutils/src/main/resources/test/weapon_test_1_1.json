@@ -1,0 +1,13 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
