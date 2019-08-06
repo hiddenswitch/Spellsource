@@ -1,0 +1,31 @@
+{
+  "name": "Atumjun Trapfinder",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Opener: Discover a copy of a card in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "distinct": true,
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -2,7 +2,6 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Actor;
@@ -1048,6 +1047,11 @@ public enum Attribute {
 	 * Indicates a minion is part of the "___ Lackey" subset of cards for the Year of the Dragon
 	 */
 	LACKEY,
+	/**
+	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability
+	 * at the end of every owner's turn
+	 */
+	DECAY,
 	/**
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */

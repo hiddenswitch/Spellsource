@@ -1,0 +1,13 @@
+{
+  "name": "Spellsource Basic",
+  "description": "Just Spellsource's own Core set.",
+  "type": "FORMAT",
+  "collectible": true,
+  "sets": [
+    "SPELLSOURCE_BASIC"
+  ],
+  "secondPlayerBonusCards": [
+    "spell_lunstone"
+  ],
+  "fileFormatVersion": 1
+}

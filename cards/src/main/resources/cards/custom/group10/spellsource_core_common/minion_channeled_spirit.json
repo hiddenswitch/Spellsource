@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "race": "ELEMENTAL",
+  "race": "SPIRIT",
   "description": "Aftermath: Give a random friendly minion +2/+2.",
   "deathrattle": {
     "class": "BuffSpell",

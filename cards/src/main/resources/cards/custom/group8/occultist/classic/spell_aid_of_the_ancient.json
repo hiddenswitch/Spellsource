@@ -1,18 +1,29 @@
 {
-  "name": "Aid of the Ancient",
+  "name": "Ancient's Aid",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Summon three 1/1 Tentacles with Guard.",
+  "description": "Take 3 damage. Summon three 1/1 Tentacles with Guard.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_tauntentacle",
-      "token_tauntentacle",
-      "token_tauntentacle"
-    ]
+    "class": "MetaSpell",
+     "spells": [
+       {
+         "class": "SummonSpell",
+         "cards": [
+           "token_tauntentacle",
+           "token_tauntentacle",
+           "token_tauntentacle"
+         ]
+       },
+       {
+         "class": "DamageSpell",
+         "target": "FRIENDLY_HERO",
+         "value": 3,
+         "ignoreSpellDamage": true
+       }
+       ]
   },
   "collectible": true,
   "fileFormatVersion": 1,

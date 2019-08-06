@@ -1,0 +1,25 @@
+{
+  "name": "",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "set": "TEST",
+  "fileFormatVersion": 1,
+  "attributes": {
+    "DECAY": true
+  }
+}

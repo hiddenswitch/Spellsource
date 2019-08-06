@@ -1,0 +1,20 @@
+{
+  "name": "Quicksand",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Shuffle two random minions on the board into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ALL_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "ShuffleMinionToDeckSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
