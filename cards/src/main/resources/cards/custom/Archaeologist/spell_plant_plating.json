@@ -1,0 +1,38 @@
+{
+  "name": "Plant Plating",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "RARE",
+  "description": "Give a friendly minion +3 Health, then gain Armor equal to its Health.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "ADD",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "HEALTH"
+      },
+      "value2": 1
+    },
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 3
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
