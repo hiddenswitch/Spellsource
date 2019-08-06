@@ -2,11 +2,11 @@
   "name": "Feral Forager",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "AMBER",
+  "heroClass": "LIGHTBROWN",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "race": "Dragon",
+  "race": "DRAGON",
   "description": "Aftermath: Gain 5 Armor.",
   "deathrattle": {
     "class": "BuffSpell",
