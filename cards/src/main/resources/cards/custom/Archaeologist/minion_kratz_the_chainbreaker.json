@@ -1,0 +1,26 @@
+{
+  "name": "Kratz the Chainbreaker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 6,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Hidden. Your weapons cost (0) while you have a weapon equipped.",
+  "cardCostModifier": {
+    "condition": {
+      "class": "HasWeaponCondition"
+    },
+    "class": "CardCostModifier",
+    "target": "FRIENDLY_HAND",
+    "value": 0,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    },
+    "operation": "SET",
+    "targetPlayer": "SELF"
+  },
+  }
+}
+
