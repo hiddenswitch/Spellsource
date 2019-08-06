@@ -13,17 +13,8 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "target": "FRIENDLY_WEAPON",
-      "spells": [
-        {
-          "class": "RemoveAttribute",
-          "attribute": "DESTROYED"
-        },
-        {
-          "class": "ReturnTargetToHandSpell"
-        }
-      ]
+      "class": "ReturnTargetToHandSpell",
+      "target": "EVENT_TARGET"
     }
   },
   "attributes": {},
