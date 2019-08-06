@@ -23,9 +23,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "CLASSIC"
-  ],
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

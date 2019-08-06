@@ -1,0 +1,12 @@
+{
+  "seed" : -8289000128252394585,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "LIGHTBROWN", "TIME" ],
+  "deckCardIds" : [ [ "spell_uncover", "spell_safeguard", "minion_eranikus", "minion_translocator", "minion_iron_preserver", "spell_scout", "spell_quicksand", "minion_thuggish_fae", "weapon_dig_up_shovel", "minion_abandoned_geneticist", "minion_flamerunner", "weapon_timesnipper", "spell_sword_in_stone", "spell_scout", "minion_jungle_wanderer", "minion_surveyor_skag", "spell_sot_mountain_excavation", "minion_atumjun_trapfinder", "minion_inspiring_hero", "minion_divine_cleric", "spell_cavern_collapse", "minion_channeled_spirit", "spell_shelter", "minion_denkeeper_sinthi", "weapon_dig_up_shovel", "spell_shelter", "minion_inora_spellbound", "minion_stalagmite_stomper", "minion_cursing_chimp", "minion_lingering_spirit" ], [ "minion_infinite_futurist", "minion_meek_inheritor", "minion_shadowveiler", "minion_dante_the_outlaw", "minion_doctor_hatchett", "spell_bullet_time", "minion_skeletal_warrior", "minion_sky_high_surveyor", "secret_afterimage", "spell_leyline_tap", "minion_mecha_rager", "minion_hostile_snapdragon", "minion_frigid_bones", "secret_moments_hesitation", "minion_reload_rodger", "spell_banish", "weapon_scepter_of_the_first_king", "minion_ambushing_rose", "spell_astral_shockwave", "minion_arcane_accelerator", "minion_frigid_bones", "spell_snip_the_cord", "spell_good_omens", "spell_banish", "minion_purifying_ooze", "weapon_blistering_blade", "spell_good_omens", "spell_pacify", "minion_sunbender", "spell_firesilk_chrysalis" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 33, 24 ], [ 57, 50, 41 ] ],
+  "actions" : [ 0, 1, 2, 0, 3, 1, 0, 0, 5, 3, 0, 0, 6, 3, 12, 2, 0, 0, 11, 14, 3, 2, 14, 0, 0, 1, 0, 13, 1, 10, 0, 0, 1, 4, 0, 2, 2, 0, 12, 3, 0, 0, 15, 15, 10, 15, 0, 17, 11, 3, 0, 3, 12, 2, 25, 14, 45, 11, 12, 4, 7, 3, 13, 20, 4, 0, 5, 0, 0, 1, 1, 7, 2, 0, 9, 6, 5, 9, 0, 3, 2, 0, 15, 19, 8, 2, 8, 0, 6, 3, 0, 10, 18, 1, 22, 14, 19, 17, 8, 9, 6, 2, 0, 0, 23, 0, 1, 16, 25, 20, 1, 0, 24, 10, 33, 21, 6, 23, 2, 4 ],
+  "id" : null
+}
