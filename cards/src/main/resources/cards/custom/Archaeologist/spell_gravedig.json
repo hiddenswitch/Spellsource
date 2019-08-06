@@ -1,0 +1,23 @@
+{
+  "name": "Gravedig",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Discover a card from your graveyard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardSource": {
+      "class": "GraveyardCardsSource",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
