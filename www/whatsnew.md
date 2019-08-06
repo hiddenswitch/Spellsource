@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
+ - Flamerunner now reads "At the end of your turn, if you restored Health this turn, summon a 2/2  Elemental." (1323)
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 
