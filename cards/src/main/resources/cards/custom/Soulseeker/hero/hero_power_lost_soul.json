@@ -1,0 +1,25 @@
+{
+  "name": "Lost Soul",
+  "heroPower": "hero_power_lost_soul",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Summon a 1/1 Spirit.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_lost_soul"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

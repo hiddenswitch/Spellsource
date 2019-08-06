@@ -1,0 +1,51 @@
+{
+  "name": "Excalibur",
+  "baseManaCost": 9,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 6,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "<b>Decay<b>. Doesn't lose durability while Rejan is alive.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger"
+      },
+      "spell": {
+        "class": "EitherOrSpell",
+        "target": "FRIENDLY_WEAPON",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_rejan_last_defender"
+          }
+        },
+        "spell1": {
+          "class": "AddAttributeSpell",
+          "attribute": "IMMUNE"
+        },
+        "spell2": {
+          "class": "RemoveAttributeSpell",
+          "attribute": "IMMUNE"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DecaySpell"
+      }
+    }
+  ],
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

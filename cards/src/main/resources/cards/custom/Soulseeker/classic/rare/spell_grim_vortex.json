@@ -1,0 +1,21 @@
+{
+  "name": "Grim Vortex",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "RARE",
+  "description": "Deal $2 damage to all minions. Costs (1) less for each friendly minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "FRIENDLY_MINIONS"
+  }
+}

@@ -1048,6 +1048,11 @@ public enum Attribute {
 	 */
 	LACKEY,
 	/**
+	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability
+	 * at the end of every owner's turn
+	 */
+	DECAY,
+	/**
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
 	TREANT,

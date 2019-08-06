@@ -1275,8 +1275,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			damage *= 2;
 		}
 
-		// Dealing zero base damage should never cause any effects because it doesn't count as a hit
+		// Dealing zero damage at this point correctly sets the last recorded hit as zero, but does not trigger damage
+		// effects since no damage is going to be dealt.
 		if (damage == 0) {
+			target.setAttribute(Attribute.LAST_HIT, 0);
 			return 0;
 		}
 
@@ -1322,6 +1324,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		final int armorChange = hero.modifyArmor(-damage);
 		if (armorChange != 0) {
 			context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
+			context.getPlayer(hero.getOwner()).getStatistics().loseArmor(-armorChange);
 		}
 		int newHp = Math.min(hero.getHp(), effectiveHp - damage);
 		hero.setHp(newHp);
@@ -4528,6 +4531,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void revealCard(Player player, Card cardToReveal) {
 		// For now, just trigger a reveal card event.
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));
+	}
+
+	@Suspendable
+	public void discoverCard(int playerId) {
+		// Similar to above, we will just fire an event for now.
+		context.fireGameEvent(new DiscoverEvent(context, playerId));
 	}
 
 	public int getInternalId() {

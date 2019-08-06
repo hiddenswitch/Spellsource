@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
  * <p>
  * When a {@link SpellArg#CARD} or {@link SpellArg#CARDS} are specified, all the specified cards are summoned {@link
  * SpellArg#VALUE} times. When {@link SpellArg#RANDOM_TARGET} is also set to {@code true} instead of its default, {@code
- * false}, a random card from the {@link SpellArg#CARDS} is chosen. {@link SpellArg#VALUE} (default 1) choices will be
- * made, summoning a total of {@link SpellArg#VALUE} minions.
+ * false}, a random card from the {@link SpellArg#CARDS} is chosen. Choices are made <b>with replacement</b>. {@link
+ * SpellArg#VALUE} (default 1) choices will be made, summoning a total of {@link SpellArg#VALUE} minions.
  * <p>
  * If a {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARD_SOURCE} is specified, {@link SpellArg#VALUE} minions will
  * be summoned from the generated cards, <b>without replacement</b>. Any {@link SpellArg#CARD} or {@link SpellArg#CARDS}
@@ -269,11 +269,14 @@ public class SummonSpell extends Spell {
 		cards.removeIf(c -> c.getCardType() != CardType.MINION);
 
 		if (cards.size() > 0) {
+			// We are summoning one card at a time from the list, however the list of cards was generated
 			if (desc.getBool(SpellArg.RANDOM_TARGET)
 					|| hasFilter) {
 				for (int i = 0; i < count; i++) {
 					Card card = context.getLogic().getRandom(cards);
+					// The list is empty, use a replacement card
 					if (card == null) {
+						// Only a single replacement card can be used
 						if (desc.containsKey(SpellArg.CARD)) {
 							String replacementCard = desc.getString(SpellArg.CARD);
 							card = context.getCardById(replacementCard);
@@ -282,14 +285,18 @@ public class SummonSpell extends Spell {
 							continue;
 						}
 					}
-					final Minion minion = card.summon();
 
+					Minion minion = card.summon();
 					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
-						cards.remove(card);
+						// If this is summoning from a filter or card source, as per the rules, the summoning occurs without replacement.
+						if (hasFilter) {
+							cards.remove(card);
+						}
 					}
 				}
 			} else {
+				// We're just summoning all the cards in the list for COUNT times.
 				for (Card card : cards) {
 					for (int i = 0; i < count; i++) {
 						card = count == 1 ? card : card.clone();
@@ -303,6 +310,7 @@ public class SummonSpell extends Spell {
 			}
 		} else if (target != null
 				&& !(target.getReference().equals(EntityReference.NONE))) {
+			// We're cloning from a target (no list of cards or card source / filter specified)
 			for (int i = 0; i < count; i++) {
 				Minion minion;
 				// Keep track if we ultimately summoned from the base card, because we shouldn't copy triggers in that case.

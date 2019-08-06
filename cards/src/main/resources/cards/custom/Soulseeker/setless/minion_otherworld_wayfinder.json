@@ -1,0 +1,30 @@
+{
+  "name": "Otherworld Wayfinder",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Give a friendly Spirit \"Aftermath: Resummon this minion.\"",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "spell": {
+        "class": "ReviveMinionSpell",
+        "target": "SELF"
+      },
+      "filter": {
+        "class": "RaceFilter",
+        "race": "SPIRIT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

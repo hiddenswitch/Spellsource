@@ -1,0 +1,25 @@
+{
+  "name": "Rustblade",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 2,
+  "durability": 7,
+  "rarity": "COMMON",
+  "description": "<b>Decay<b>",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

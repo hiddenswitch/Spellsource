@@ -1,0 +1,20 @@
+{
+  "name": "Trap Room",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Deal $10 damage randomly split among enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 1,
+    "howMany": 10
+  },
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

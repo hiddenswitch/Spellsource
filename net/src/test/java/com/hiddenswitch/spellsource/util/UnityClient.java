@@ -84,7 +84,7 @@ public class UnityClient implements AutoCloseable {
 
 	public UnityClient(TestContext context, int port) {
 		this(context);
-		thisUrl = BASE + Integer.toString(port);
+		thisUrl = BASE + port;
 		apiClient.setBasePath(thisUrl);
 		api = new DefaultApi(apiClient);
 	}
