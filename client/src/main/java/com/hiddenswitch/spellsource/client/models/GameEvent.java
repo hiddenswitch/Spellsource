@@ -94,6 +94,8 @@ public class GameEvent implements Serializable {
     
     DISCARD("DISCARD"),
     
+    DISCOVER("DISCOVER"),
+    
     DRAIN("DRAIN"),
     
     DRAW_CARD("DRAW_CARD"),

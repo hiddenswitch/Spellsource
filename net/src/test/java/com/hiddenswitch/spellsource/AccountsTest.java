@@ -33,7 +33,7 @@ public class AccountsTest extends SpellsourceTestBase {
 	@Test
 	public void testLogin(TestContext context) throws Exception {
 		sync(() -> {
-			final String emailAddress = getEmailAddress();
+			String emailAddress = getEmailAddress();
 			Accounts.createAccount(emailAddress, "password", getUsername());
 			LoginResponse loginResponse = Accounts.login(emailAddress, "password");
 			assertNotNull(loginResponse.getToken());
@@ -66,7 +66,7 @@ public class AccountsTest extends SpellsourceTestBase {
 	public void testIsAuthorizedWithToken(TestContext context) throws Exception {
 		sync(() -> {
 			CreateAccountResponse response = Accounts.createAccount(getEmailAddress(), "password", getUsername());
-			final String secret = response.getLoginToken().getSecret();
+			String secret = response.getLoginToken().getSecret();
 			assertTrue(Accounts.isAuthorizedWithToken(response.getUserId(), secret));
 			assertFalse(Accounts.isAuthorizedWithToken(response.getUserId(), null));
 			assertFalse(Accounts.isAuthorizedWithToken(response.getUserId(), ""));
@@ -85,8 +85,8 @@ public class AccountsTest extends SpellsourceTestBase {
 	@Test
 	public void testGet(TestContext context) throws Exception {
 		sync(() -> {
-			final String emailAddress = getEmailAddress();
-			final String username = getUsername();
+			String emailAddress = getEmailAddress();
+			String username = getUsername();
 			CreateAccountResponse response = Accounts.createAccount(emailAddress, "password", username);
 			UserRecord profile = Accounts.get(response.getUserId());
 			assertNotNull(profile);

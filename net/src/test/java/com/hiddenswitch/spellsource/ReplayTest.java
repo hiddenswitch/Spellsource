@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
+import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 import static org.junit.Assert.assertTrue;
 
 public class ReplayTest extends SpellsourceTestBase {
@@ -33,33 +34,35 @@ public class ReplayTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	@Ignore("inexplicably spotty")
 	public void testReplayMatchesClientData(TestContext context) {
 		sync(() -> {
 			List<GameState> receivedStates = new ArrayList<>();
 
-			UnityClient player = new UnityClient(context) {
+			try (UnityClient player = new UnityClient(context) {
 				@Override
 				@Suspendable
 				protected boolean onRequestAction(ServerToClientMessage message) {
 					receivedStates.add(message.getGameState());
 					return true;
 				}
-			};
+			}) {
+				invoke0(player::createUserAccount);
+				player.matchmakeQuickPlay(null);
+				invoke0(player::waitUntilDone);
+				context.assertTrue(player.getTurnsPlayed() > 0);
 
-			player.createUserAccount();
-			player.matchmakeQuickPlay(null);
-			player.waitUntilDone();
-			context.assertTrue(player.getTurnsPlayed() > 0);
+				// Sleep to let the replay actually get saved
+				Strand.sleep(12000);
 
-			// Sleep to let the replay actually get saved
-			Strand.sleep(12000);
+				GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
+				context.assertEquals(gameIds.getGameIds().size(), 1);
+				GetGameRecordResponse gameRecordResponse = invoke(player.getApi()::getGameRecord, gameIds.getGameIds().get(0));
+				context.assertNotNull(gameRecordResponse.getReplay());
+			}
 
-			GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
-			context.assertEquals(gameIds.getGameIds().size(), 1);
-			GetGameRecordResponse gameRecordResponse = invoke(player.getApi()::getGameRecord, gameIds.getGameIds().get(0));
-			context.assertNotNull(gameRecordResponse.getReplay());
-			player.close();
+
+
+
 			/*
 			// Check that every state we received was in this response
 			Set<GameState> firsts = gameRecordResponse.getReplay().getGameStates().stream().map(ReplayGameStates::getFirst).collect(Collectors.toSet());

@@ -43,6 +43,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			Mongo.mongo().connectWithEnvironment(newVertxInstance);
 
 			// Connect to existing cluster
+			Vertx vertx = contextRule.vertx();
 			vertx.runOnContext(v1 -> {
 				vertx.runOnContext(suspendableHandler(v2 -> {
 					SuspendableQueue<String> queue = SuspendableQueue.get("test-1000");
