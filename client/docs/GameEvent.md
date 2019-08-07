@@ -59,6 +59,7 @@ BOARD_CHANGED | &quot;BOARD_CHANGED&quot;
 CARD_ADDED_TO_DECK | &quot;CARD_ADDED_TO_DECK&quot;
 CARD_SHUFFLED | &quot;CARD_SHUFFLED&quot;
 DAMAGE | &quot;DAMAGE&quot;
+DECAY | &quot;DECAY&quot;
 DID_END_SEQUENCE | &quot;DID_END_SEQUENCE&quot;
 DISCARD | &quot;DISCARD&quot;
 DRAIN | &quot;DRAIN&quot;
