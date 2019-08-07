@@ -17,12 +17,9 @@
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
         "armorBonus": {
-          "class": "GameValueProvider",
-          "value": {
-            "class": "AttributeValueProvider",
-            "target": "SPELL_TARGET",
-            "attibute": "HP"
-          }
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "HP"
         }
       }
     ]

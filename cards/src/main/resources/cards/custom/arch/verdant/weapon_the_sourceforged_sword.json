@@ -10,14 +10,15 @@
   "battlecry": {
     "spell": {
       "class": "BuffSpell",
-      "target": "FRIENDLY_WEAPON",
-      "value": {
+      "target": "SELF",
+      "hpBonus": {
         "class": "CardsPlayedValueProvider",
         "filter": {
           "class": "CardFilter",
           "cardType": "WEAPON"
         },
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "offset": -1
       }
     }
   },

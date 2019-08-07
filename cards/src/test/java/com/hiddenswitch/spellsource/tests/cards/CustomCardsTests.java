@@ -4730,6 +4730,17 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testFoundGoods() {
+		runGym(((context, player, opponent) -> {
+			Card card = receiveCard(context, player, "minion_test_3_2");
+			playCard(context, player, "spell_found_goods");
+			player.setMana(2);
+			playCard(context, player, card);
+			assertEquals(player.getMana(), 2);
+		}));
+	}
+
+	@Test
 	public void testMasterEroder() {
 		// test basic master eroder
 		runGym(((context, player, opponent) -> {
@@ -4761,6 +4772,25 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(minion.getHp(), minion.getMaxHp());
 			context.endTurn();
 			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+	}
+
+	@Test
+	public void testPlantPlating() {
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_test_3_2");
+			playCard(context, player, "spell_plant_plating", minion);
+			assertEquals(player.getHero().getArmor(), minion.getBaseHp() + 3);
+		}));
+	}
+
+	@Test
+	public void testPortableFlytrap() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "weapon_portable_flytrap");
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			attack(context, opponent, minion, player.getHero());
+			assertTrue(minion.isDestroyed());
 		}));
 	}
 
@@ -4822,5 +4852,14 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(guy.getAttack(), guy.getBaseAttack() + finalI);
 			});
 		}
+	}
+
+	@Test
+	public void testSourceforgedSword() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "weapon_portable_flytrap");
+			playCard(context, player, "weapon_the_sourceforged_sword");
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getBaseDurability() + 1);
+		}));
 	}
 }
