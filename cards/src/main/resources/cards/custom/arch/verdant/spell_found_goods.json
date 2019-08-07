@@ -5,7 +5,7 @@
   "heroClass": "LIGHTBROWN",
   "rarity": "RARE",
   "description": "Discover a card. Reduce the cost of all cards you're holding that didn't start in your deck by (2).",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [

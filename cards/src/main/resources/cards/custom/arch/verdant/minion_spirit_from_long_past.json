@@ -12,12 +12,7 @@
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
     "applyEffect": {
-      "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF",
-      "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "SELF"
-      }
+      "class": "DrawFromGraveyardSpell"
     },
     "removeEffect": {
       "class": "DrawCardSpell"
