@@ -872,6 +872,7 @@ definitions:
           - 'CARD_ADDED_TO_DECK'
           - 'CARD_SHUFFLED'
           - 'DAMAGE'
+          - 'DECAY'
           - 'DID_END_SEQUENCE'
           - 'DISCARD'
           - 'DRAIN'
