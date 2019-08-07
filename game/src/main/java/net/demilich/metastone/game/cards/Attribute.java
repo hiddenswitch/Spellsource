@@ -157,7 +157,6 @@ public enum Attribute {
 	 * was {@link #FROZEN}.
 	 *
 	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
-	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
 	/**

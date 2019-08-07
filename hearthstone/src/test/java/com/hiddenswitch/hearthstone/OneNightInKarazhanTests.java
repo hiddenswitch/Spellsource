@@ -10,7 +10,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -56,7 +55,7 @@ public class OneNightInKarazhanTests extends TestBase {
 
 	@Test
 	public void testPrinceMalchezaar() {
-		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Wild"));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")
@@ -68,7 +67,7 @@ public class OneNightInKarazhanTests extends TestBase {
 
 		context.init();
 		// Should include 10 legendaries added + the 2 Malchezaars
-		Assert.assertEquals(context.getEntities().filter(c -> c.getSourceCard().getRarity() == Rarity.LEGENDARY).count(), 12L);
+		Assert.assertEquals(context.getEntities().filter(c -> c.getSourceCard().getZone() == Zones.DECK && c.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 12L);
 	}
 
 	@Test

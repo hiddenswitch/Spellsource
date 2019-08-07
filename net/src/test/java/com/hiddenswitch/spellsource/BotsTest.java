@@ -43,7 +43,8 @@ public class BotsTest extends SpellsourceTestBase {
 	@Test
 	public void testRequestAction(TestContext context) {
 		sync(() -> {
-			DebugContext context1 = TestBase.createContext("GREEN", "GOLD");
+			TestBase testBase = new TestBase();
+			DebugContext context1 = testBase.createContext("JADE", "JADE");
 			context1.endTurn();
 			context1.startTurn(context1.getActivePlayerId());
 			int startTurn = context1.getTurn();

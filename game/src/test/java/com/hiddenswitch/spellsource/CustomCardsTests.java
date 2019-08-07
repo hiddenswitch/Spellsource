@@ -22,7 +22,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
-import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
@@ -4534,23 +4533,23 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	@Ignore("summons minions that destroy other minions")
 	public void testSotMountainExcavation() {
-		runGym(((context, player, opponent) -> {
+		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 1);
-		}));
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 1L);
+		});
 
-		runGym(((context, player, opponent) -> {
+		runGym((context, player, opponent) -> {
 			player.getHero().modifyArmor(8);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 3);
-		}));
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 3L);
+		});
 
-		runGym(((context, player, opponent) -> {
+		runGym((context, player, opponent) -> {
 			player.getHero().modifyArmor(28);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 7);
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 7L);
 			assertEquals(player.getHero().getArmor(), 4);
-		}));
+		});
 	}
 
 	@Test

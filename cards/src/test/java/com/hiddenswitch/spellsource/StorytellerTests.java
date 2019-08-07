@@ -7,7 +7,7 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.XORShiftRandom;
-import net.demilich.metastone.tests.util.TestBase;
+import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -19,6 +19,13 @@ import static org.testng.Assert.*;
 import static org.testng.Assert.assertEquals;
 
 public class StorytellerTests extends TestBase {
+
+	@NotNull
+	@Override
+	public String getDefaultHeroClass() {
+		return HeroClass.OLIVE;
+	}
+
 	@Test
 	public void testBookOfLife() {
 		runGym((context, player, opponent) -> {
@@ -26,7 +33,7 @@ public class StorytellerTests extends TestBase {
 			useHeroPower(context, player);
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getSourceCard().getCardId(), "spell_restorative_words");
-		}, HeroClass.OLIVE, HeroClass.OLIVE);
+		});
 	}
 
 	@Test
@@ -219,7 +226,7 @@ public class StorytellerTests extends TestBase {
 			assertTrue(opponent.getMinions().contains(minion));
 		}));
 	}
-  
+
 	@Test
 	public void testTomeOfSecrets() {
 		runGym((context, player, opponent) -> {
@@ -244,23 +251,24 @@ public class StorytellerTests extends TestBase {
 	@Test
 	public void testUrelaSeekerOfPower() {
 		runGym((context, player, opponent) -> {
+			player.getAttributes().remove(Attribute.DISABLE_FATIGUE);
 			playCard(context, player, "minion_urela_seeker_of_power");
+			context.endTurn();
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp());
 			context.endTurn();
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 4);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1 - 2);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 6);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1 - 2);
 			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 9);
-			context.endTurn();
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 12);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1 - 2 - 3);
 			playCard(context, player, "minion_timeworn_archivist");
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 16);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1 - 2 - 3 - 4);
 			playCard(context, player, "minion_timeworn_archivist");
-			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 21);
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 1 - 2 - 3 - 4 - 5);
 		});
 	}
 
