@@ -18,10 +18,8 @@ public class ConversationTest extends SpellsourceTestBase {
 	private static Logger LOGGER = LoggerFactory.getLogger(ConversationTest.class);
 
 	@Test
-//	@Ignore("too flakey")
 	public void testConversationRealtime(TestContext context) {
 		sync(() -> {
-
 			CreateAccountResponse user1 = createRandomAccount();
 			CreateAccountResponse user2 = createRandomAccount();
 

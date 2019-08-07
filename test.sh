@@ -20,4 +20,10 @@ else
   export GRADLE_CMD=gradle
 fi
 
-${GRADLE_CMD} test
+${GRADLE_CMD} game:test
+${GRADLE_CMD} cards:test
+${GRADLE_CMD} hearthstone:test
+
+if [[ "$CI" != "true" ]] ; then
+  ${GRADLE_CMD} net:test
+fi
