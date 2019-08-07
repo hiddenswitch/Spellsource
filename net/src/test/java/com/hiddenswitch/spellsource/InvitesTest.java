@@ -22,7 +22,7 @@ import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 
 public class InvitesTest extends SpellsourceTestBase {
 
-	@Test(timeout = 18000L)
+	@Test(timeout = 36000L)
 	public void testFriendInvite(TestContext testContext) throws InterruptedException, SuspendExecution {
 		sync(() -> {
 			// Regular friending.
