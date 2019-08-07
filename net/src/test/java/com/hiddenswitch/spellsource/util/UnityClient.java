@@ -168,7 +168,9 @@ public class UnityClient implements AutoCloseable {
 						.asChildOf(parentSpan)
 						.start());
 				span.get().log("connecting");
-				span.get().setTag("userId", getAccount().getId());
+				if (getAccount() != null) {
+					span.get().setTag("userId", getAccount().getId());
+				}
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 				CountDownLatch firstMessage = new CountDownLatch(1);
 				LOGGER.debug("ensureConnected {}: Connected", id);
@@ -204,7 +206,7 @@ public class UnityClient implements AutoCloseable {
 					}
 				});
 				realtime.connect();
-				firstMessage.await(25000, TimeUnit.MILLISECONDS);
+				firstMessage.await(4000, TimeUnit.MILLISECONDS);
 				context.assertTrue(firstMessage.getCount() <= 0);
 			}
 		} catch (Throwable any) {
@@ -577,7 +579,7 @@ public class UnityClient implements AutoCloseable {
 		if (tracer.activeSpan() != null) {
 			tracer.activeSpan().finish();
 		}
-		if (tracer.scopeManager().active()!=null) {
+		if (tracer.scopeManager().active() != null) {
 			tracer.scopeManager().active().close();
 		}
 		tracer.close();

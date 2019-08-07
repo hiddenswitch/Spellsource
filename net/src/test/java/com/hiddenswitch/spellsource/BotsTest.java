@@ -86,20 +86,22 @@ public class BotsTest extends SpellsourceTestBase {
 
 	@Test
 	public void testBotReused(TestContext context) {
-		try (UnityClient client = new UnityClient(context)) {
-			client.createUserAccount();
-			NoArgs playAndWait = () -> {
-				client.matchmakeQuickPlay(null);
-				client.waitUntilDone();
-				context.assertTrue(client.isGameOver());
-				context.assertTrue(client.getTurnsPlayed() > 0);
-				try {
-					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
-				} catch (ApiException e) {
-					throw new AssertionError(e);
-				}
-			};
-			sync(() -> {
+
+		sync(() -> {
+			try (UnityClient client = new UnityClient(context)) {
+				Sync.invoke0(client::createUserAccount);
+
+				NoArgs playAndWait = () -> {
+					client.matchmakeQuickPlay(null);
+					client.waitUntilDone();
+					context.assertTrue(client.isGameOver());
+					context.assertTrue(client.getTurnsPlayed() > 0);
+					try {
+						assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+					} catch (ApiException e) {
+						throw new AssertionError(e);
+					}
+				};
 				Mongo.mongo().removeDocuments(Accounts.USERS, json("bot", true));
 				Sync.invoke0(playAndWait);
 				List<String> botIds = Bots.getBotIds();
@@ -115,7 +117,7 @@ public class BotsTest extends SpellsourceTestBase {
 				for (String id : botIds) {
 					assertFalse(games.containsKey(new UserId(id)));
 				}
-			}, context);
-		}
+			}
+		}, context);
 	}
 }

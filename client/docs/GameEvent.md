@@ -62,6 +62,7 @@ DAMAGE | &quot;DAMAGE&quot;
 DECAY | &quot;DECAY&quot;
 DID_END_SEQUENCE | &quot;DID_END_SEQUENCE&quot;
 DISCARD | &quot;DISCARD&quot;
+DISCOVER | &quot;DISCOVER&quot;
 DRAIN | &quot;DRAIN&quot;
 DRAW_CARD | &quot;DRAW_CARD&quot;
 ENRAGE_CHANGED | &quot;ENRAGE_CHANGED&quot;

@@ -66,6 +66,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
+		Connection.registerCodecs();
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		io.vertx.core.logging.LoggerFactory.initialise();
 		server = vertx.createHttpServer(new HttpServerOptions()

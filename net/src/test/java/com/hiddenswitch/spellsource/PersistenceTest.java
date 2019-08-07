@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -22,26 +23,26 @@ import static org.junit.Assert.fail;
 public class PersistenceTest extends SpellsourceTestBase {
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void testMinionatePersistenceApi(TestContext context) {
 		ConcurrentLinkedQueue<Long> queue = new ConcurrentLinkedQueue<Long>();
-
+		Vertx vertx = contextRule.vertx();
 		// Use a random attribute to test for persistence
-		vertx.runOnContext(ignored -> {
-			Spellsource.spellsource().persistAttribute("reserved-attribute-1", GameEventType.TURN_END, Attribute.RESERVED_INTEGER_4, persistenceContext -> {
-				// Save the turn number to this yogg attribute
-				long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
-				queue.add(updated);
-			});
+//		vertx.runOnContext(ignored -> {
+		Spellsource.spellsource().persistAttribute("reserved-attribute-1", GameEventType.TURN_END, Attribute.RESERVED_INTEGER_4, persistenceContext -> {
+			// Save the turn number to this yogg attribute
+			long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
+			queue.add(updated);
 		});
+//		});
 
 
 		// Start a game and assert that there are entities with all random yogg
-		vertx.executeBlocking(done -> {
+		vertx.executeBlocking(fut -> {
 			UnityClient client = new UnityClient(context);
 			client.createUserAccount();
 			// The user needs a deck of persistent effect cards
-			final DecksPutResponse decksPutResponse;
+			DecksPutResponse decksPutResponse;
 			try {
 
 				decksPutResponse = client.getApi().decksPut(new DecksPutRequest()
@@ -49,14 +50,14 @@ public class PersistenceTest extends SpellsourceTestBase {
 								"Hero Class: Violet\n" +
 								"30x Persistence Test Minion"));
 			} catch (ApiException e) {
-				fail(e.getMessage());
+				fut.fail(e.getMessage());
 				return;
 			}
 			client.matchmakeQuickPlay(decksPutResponse.getDeckId());
 			client.waitUntilDone();
 			assertTrue(client.getTurnsPlayed() > 0);
 			assertTrue(client.isGameOver());
-			done.complete();
+			fut.complete();
 		}, context.asyncAssertSuccess(also -> {
 			context.assertTrue(queue.stream().anyMatch(l -> l > 0L), "Any number of the entities updated was greater than zero.");
 			Mongo.mongo().client().count(Inventory.INVENTORY,

@@ -1,15 +1,15 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
-import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
-import io.vertx.core.Context;
-import io.vertx.ext.sync.Sync;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.ext.unit.junit.RunTestOnContext;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
@@ -18,22 +18,18 @@ import com.hiddenswitch.spellsource.util.UnityClient;
 import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
@@ -41,44 +37,43 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
-	protected static AtomicBoolean initialized = new AtomicBoolean();
-	protected static Vertx vertx;
+//	protected static AtomicBoolean initialized = new AtomicBoolean();
 
-	@BeforeClass
-	public static void setUp(TestContext testContext) throws InterruptedException {
-		CountDownLatch latch = new CountDownLatch(1);
-		Async async = testContext.async();
-		if (initialized.compareAndSet(false, true)) {
-			CardCatalogue.loadCardsFromPackage();
-			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
+	@Rule
+	public RunTestOnContext contextRule = new RunTestOnContext();
 
-			if (vertx != null) {
-				testContext.fail(new AssertionError());
-			}
-			vertx = Vertx.vertx(new VertxOptions()
-					.setBlockedThreadCheckInterval(999999)
-					.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors() * 2)
-					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
-			vertx.exceptionHandler(t -> testContext.fail(t));
-			Tracing.initializeGlobal(vertx);
-//			GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
-			vertx.runOnContext(v1 -> Spellsource.spellsource().migrate(vertx, v2 -> {
-				if (v2.failed()) {
-					testContext.fail(new AssertionError(v2.cause()));
-				}
-				Mongo.mongo().connectWithEnvironment(vertx);
-				Spellsource.spellsource().deployAll(vertx, v4 -> {
-					if (v4.failed()) {
-						testContext.fail(new AssertionError());
-					}
-					async.complete();
-					latch.countDown();
-				});
-			}));
-			latch.await(12000L, TimeUnit.MILLISECONDS);
-		} else {
-			async.complete();
-		}
+	@Before
+	public void setUp(TestContext testContext) throws InterruptedException {
+//		CountDownLatch latch = new CountDownLatch(1);
+//		Async async = testContext.async();
+//		if (initialized.compareAndSet(false, true)) {
+		CardCatalogue.loadCardsFromPackage();
+		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
+		Vertx vertx = contextRule.vertx();
+//			if (vertx != null) {
+//				testContext.fail(new AssertionError());
+//			}
+//			vertx = Vertx.vertx(new VertxOptions()
+//					.setBlockedThreadCheckInterval(4000)
+//					.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors() * 2)
+//					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
+		vertx.exceptionHandler(testContext::fail);
+//			Tracing.initializeGlobal(vertx);
+		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+
+			Mongo.mongo().connectWithEnvironment(vertx);
+		Spellsource.spellsource().migrate(vertx, testContext.asyncAssertSuccess(v1 -> {
+			Spellsource.spellsource().deployAll(vertx, testContext.asyncAssertSuccess());
+		}));
+//			latch.await(12000L, TimeUnit.MILLISECONDS);
+//		} else {
+//			async.complete();
+//		}
+	}
+
+	@After
+	public void tearDown(TestContext testContext) {
+		Mongo.mongo().close();
 	}
 
 	public static DeckCreateResponse createDeckForUserId(String userId) throws SuspendExecution, InterruptedException {
@@ -97,6 +92,7 @@ public abstract class SpellsourceTestBase {
 		return Boolean.parseBoolean(System.getenv("CI"));
 	}
 
+	/*
 	@Before
 	public void setUpEach(TestContext testContext) {
 		if (vertx == null) {
@@ -118,6 +114,7 @@ public abstract class SpellsourceTestBase {
 			testContext.assertEquals(Games.getUsersInGames().size(), 0);
 		}, 8, testContext);
 	}
+	*/
 
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
 		return Accounts.createAccount(new CreateAccountRequest().withEmailAddress("test-" + RandomStringUtils.randomAlphanumeric(32) + "@test.com")
@@ -128,45 +125,44 @@ public abstract class SpellsourceTestBase {
 		DefaultApi api = new DefaultApi();
 		api.setApiClient(new ApiClient());
 		api.getApiClient().setBasePath(UnityClient.BASE_PATH);
+		api.getApiClient().addDefaultHeader("Accept-Encoding", "gzip");
 		return api;
 	}
 
 	@Suspendable
-	public static void sync(SuspendableRunnable action, TestContext testContext) {
-		sync(action, 90, testContext);
-	}
-
-	@Suspendable
-	public static void sync(SuspendableRunnable action, int seconds, TestContext testContext) {
-		CountDownLatch latch = new CountDownLatch(1);
-		if (Vertx.currentContext() == null) {
-			vertx.runOnContext(v1 -> {
-				vertx.runOnContext(suspendableHandler(v2 -> {
-					try {
-						action.run();
-					} catch (Throwable throwable) {
-						testContext.fail(throwable);
-					}
-
-					latch.countDown();
-				}));
-			});
-		} else {
-			Vertx.currentContext().runOnContext(suspendableHandler(v -> {
-				try {
-					action.run();
-					latch.countDown();
-				} catch (Throwable throwable) {
-					testContext.fail(throwable);
-				}
-			}));
-		}
-
-		try {
-			latch.await(seconds, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			testContext.fail(e);
-		}
-		testContext.assertEquals(0L, latch.getCount());
+	public void sync(SuspendableRunnable action, TestContext testContext) {
+		Handler<AsyncResult<Void>> handler = testContext.asyncAssertSuccess();
+//		CountDownLatch latch = new CountDownLatch(1);
+//		Vertx vertx = contextRule.vertx();
+//		if (Vertx.currentContext() == null) {
+//			vertx.runOnContext(v1 -> {
+//				vertx.runOnContext(suspendableHandler(v2 -> {
+//					try {
+//						action.run();
+//					} catch (Throwable throwable) {
+//						testContext.fail(throwable);
+//					}
+//
+//					latch.countDown();
+//				}));
+//			});
+//		} else {
+		Vertx.currentContext().runOnContext(suspendableHandler(v -> {
+			try {
+				action.run();
+//					latch.countDown();
+				handler.handle(Future.succeededFuture());
+			} catch (Throwable throwable) {
+				handler.handle(Future.failedFuture(throwable));
+			}
+		}));
+//		}
+//
+//		try {
+//			latch.await(seconds, TimeUnit.SECONDS);
+//		} catch (InterruptedException e) {
+//			testContext.fail(e);
+//		}
+//		testContext.assertEquals(0L, latch.getCount());
 	}
 }

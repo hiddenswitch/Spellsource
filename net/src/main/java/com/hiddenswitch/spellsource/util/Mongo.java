@@ -497,6 +497,10 @@ public class Mongo {
 	@Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
 	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
 	*/
+
+	/**
+	 * Close this client.
+	 */
 	public void close() {
 		if (getClient() == null) {
 			return;

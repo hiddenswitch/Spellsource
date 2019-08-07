@@ -875,6 +875,7 @@ definitions:
           - 'DECAY'
           - 'DID_END_SEQUENCE'
           - 'DISCARD'
+          - 'DISCOVER'
           - 'DRAIN'
           - 'DRAW_CARD'
           - 'ENRAGE_CHANGED'
