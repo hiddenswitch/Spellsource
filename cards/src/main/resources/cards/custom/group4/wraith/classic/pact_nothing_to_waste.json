@@ -6,62 +6,22 @@
   "rarity": "COMMON",
   "description": "<b>Pact:</b> After you've dealt 4 damage, summon two 2/2 Skeletons.",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "DamageCausedTrigger",
-            "sourcePlayer": "SELF"
-          },
-          "spell": {
-            "class": "MetaSpell",
-            "spells": [
-              {
-                "class": "ModifyAttributeSpell",
-                "target": "FRIENDLY_HERO",
-                "attribute": "RESERVED_INTEGER_3",
-                "value": {
-                  "class": "AttributeValueProvider",
-                  "attribute": "LAST_HIT",
-                  "target": "EVENT_TARGET"
-                }
-              }
-            ]
-          },
-          "maxFires": 4
-        }
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 4,
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "sourcePlayer": "SELF"
       },
-      {
-        "class": "AddPactSpell",
-        "pact": {
-          "countUntilCast": 1,
-          "eventTrigger": {
-            "class": "DamageCausedTrigger",
-            "sourcePlayer": "SELF",
-            "fireCondition": {
-              "class": "ComparisonCondition",
-              "value1": {
-                "class": "AttributeValueProvider",
-                "target": "FRIENDLY_HERO",
-                "attribute": "RESERVED_INTEGER_3"
-              },
-              "value2": 4,
-              "operation": "GREATER_OR_EQUAL"
-            }
-          },
-          "spell": {
-            "class": "SummonSpell",
-            "cards": [
-              "token_skeleton2_wraith",
-              "token_skeleton2_wraith"
-            ]
-          }
-        }
+      "countByValue": true,
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_skeleton2_wraith",
+          "token_skeleton2_wraith"
+        ]
       }
-    ]
+    }
   },
   "collectible": true,
   "sets": [
