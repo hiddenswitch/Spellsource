@@ -77,7 +77,7 @@ public class Spellsource {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 	}
 
-	private Spellsource() {
+	protected Spellsource() {
 	}
 
 	/**
@@ -101,8 +101,6 @@ public class Spellsource {
 	 * @return
 	 */
 	public Spellsource migrate(Vertx vertx, Handler<AsyncResult<Void>> then) {
-		mongo().connectWithEnvironment(vertx);
-
 		Migrations.migrate(vertx)
 				.add(new MigrationRequest()
 						.withVersion(1)
@@ -567,7 +565,6 @@ public class Spellsource {
 						.withVersion(36)
 						.withUp(thisVertx -> {
 							CardCatalogue.loadCardsFromPackage();
-							Mongo.mongo().connectWithEnvironment(thisVertx);
 							// We'll mark as removed all the missing cards, then change the hero classes that no longer exist to
 							// neutral heroes.
 
@@ -685,28 +682,20 @@ public class Spellsource {
 	 */
 	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
+		deployAll(vertx, Runtime.getRuntime().availableProcessors(), deployments);
+	}
+
+	@Suspendable
+	public void deployAll(Vertx vertx, int concurrency, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
-		// This seems to be the most reliable way to count how many event loop threads there are?
-		EventLoop first = vertx.nettyEventLoopGroup().next();
-		EventLoop next = first;
-		int j = Runtime.getRuntime().availableProcessors()/*1*/;
-		/*
-		for (; j <= Runtime.getRuntime().availableProcessors(); j++) {
-			next = next.next();
-			if (Objects.equals(first, next)) {
-				break;
-			}
-		}
-		*/
 		// Use up all the event loops
-		for (int i = 0; i < j; i++) {
+		for (int i = 0; i < concurrency; i++) {
 			for (Verticle verticle : services()) {
 				final Future<String> future = Future.future();
 				vertx.deployVerticle(verticle, future);
 				futures.add(future);
 			}
 		}
-
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}
