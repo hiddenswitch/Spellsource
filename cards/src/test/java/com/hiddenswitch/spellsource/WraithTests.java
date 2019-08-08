@@ -81,7 +81,7 @@ public class WraithTests extends TestBase {
 	}
 
 	@Test
-	public void testNothingToWaster() {
+	public void testNothingToWaste() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "pact_nothing_to_waste");
 			playCard(context, player, "spell_test_deal_5_to_enemy_hero");
