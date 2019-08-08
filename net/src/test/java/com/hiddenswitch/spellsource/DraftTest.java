@@ -103,31 +103,19 @@ public class DraftTest extends SpellsourceTestBase {
 			final String deckId = state.getDeckId();
 
 
-			try (UnityClient client = new UnityClient(context)) {
-				client.loginWithUserAccount(name, "testpass");
-				client.ensureConnected();
+			try (UnityClient client = new UnityClient(context,car.getLoginToken())) {
+				invoke0(client::ensureConnected);
 				client.matchmakeQuickPlay(deckId);
-				client.waitUntilDone();
+				invoke0(client::waitUntilDone);
+				context.assertTrue(client.isGameOver());
 				context.assertTrue(client.getTurnsPlayed() > 0);
 			}
 
-			DraftState newState = null;
-			newState = invoke(api::draftsPost, new DraftsPostRequest().retireEarly(true));
+			DraftState newState = invoke(api::draftsPost, new DraftsPostRequest().retireEarly(true));
 			context.assertEquals(DraftState.StatusEnum.RETIRED, newState.getStatus(), "Expected a status of retired.");
-
-			try {
-				invoke(api::draftsGet);
-			} catch (Throwable e) {
-				if (e instanceof ApiException) {
-					context.assertEquals(404, ((ApiException) e).getCode(), "There should be no draft if we retired the draft early.");
-
-				}
-			}
 
 			newState = invoke(api::draftsPost, new DraftsPostRequest().startDraft(true));
 			context.assertEquals(DraftState.StatusEnum.SELECT_HERO, newState.getStatus(), "A draft was not correctly started anew.");
-
 		}, context);
-
 	}
 }

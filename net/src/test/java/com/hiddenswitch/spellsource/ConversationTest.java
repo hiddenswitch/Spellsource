@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke0;
+
 public class ConversationTest extends SpellsourceTestBase {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ConversationTest.class);
@@ -62,8 +64,8 @@ public class ConversationTest extends SpellsourceTestBase {
 					}
 				}
 			};
-			client1.ensureConnected();
-			client2.ensureConnected();
+			invoke0(client1::ensureConnected);
+			invoke0(client2::ensureConnected);
 			try {
 				latch.await();
 			} finally {

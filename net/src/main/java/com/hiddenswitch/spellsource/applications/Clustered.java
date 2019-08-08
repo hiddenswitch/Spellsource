@@ -61,7 +61,6 @@ public class Clustered {
 			final Vertx vertx = then.result();
 			Tracing.initializeGlobal(vertx);
 
-			Mongo.mongo().connectWithEnvironment(vertx);
 			Spellsource.spellsource().migrate(vertx, v1 -> {
 				if (v1.failed()) {
 					Logging.root().error("main: Migration failed: ", v1.cause());

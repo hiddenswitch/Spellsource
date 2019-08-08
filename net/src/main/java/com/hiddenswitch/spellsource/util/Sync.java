@@ -63,10 +63,14 @@ public class Sync {
 
 	@Suspendable
 	public static <T> void invoke0(Consumer<T> func1, T arg1) {
-		Void res = awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+		if (Fiber.isCurrentFiber() && Vertx.currentContext() != null) {
+			Void res = awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+				func1.accept(arg1);
+				done.complete();
+			}, false, h));
+		} else {
 			func1.accept(arg1);
-			done.complete();
-		}, false, h));
+		}
 	}
 
 	@Suspendable

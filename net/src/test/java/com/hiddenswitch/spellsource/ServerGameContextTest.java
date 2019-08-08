@@ -85,7 +85,5 @@ public class ServerGameContextTest extends SpellsourceTestBase {
 		assertThrows(IllegalArgumentException.class, () -> {
 			new ServerGameContext(null, new TestScheduler(), playerConfigurations);
 		});
-
-		context1.dispose();
 	}
 }

@@ -12,7 +12,6 @@ import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -23,18 +22,14 @@ import static org.junit.Assert.fail;
 public class PersistenceTest extends SpellsourceTestBase {
 
 	@Test
-//	@Ignore
 	public void testMinionatePersistenceApi(TestContext context) {
 		ConcurrentLinkedQueue<Long> queue = new ConcurrentLinkedQueue<Long>();
 		Vertx vertx = contextRule.vertx();
-		// Use a random attribute to test for persistence
-//		vertx.runOnContext(ignored -> {
 		Spellsource.spellsource().persistAttribute("reserved-attribute-1", GameEventType.TURN_END, Attribute.RESERVED_INTEGER_4, persistenceContext -> {
 			// Save the turn number to this yogg attribute
 			long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
 			queue.add(updated);
 		});
-//		});
 
 
 		// Start a game and assert that there are entities with all random yogg

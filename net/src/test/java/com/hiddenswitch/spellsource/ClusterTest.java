@@ -1,81 +1,83 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
-import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
-import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
-import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
-import io.vertx.ext.unit.Async;
+import io.vertx.core.*;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
-import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
+import static com.hiddenswitch.spellsource.util.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class ClusterTest extends SpellsourceTestBase {
-	@Test
-	@Ignore
-	public void testArrayQueueOverCluster(TestContext context) {
-		Async latch = context.async(3);
-		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5702, 5701));
-		Vertx.clusteredVertx(new VertxOptions()
-				.setClusterManager(new HazelcastClusterManager(instance))
-				.setWorkerPoolSize(99)
-				.setInternalBlockingPoolSize(99)
-				.setBlockedThreadCheckInterval(30000L)
-				.setWarningExceptionTime(30000L), context.asyncAssertSuccess(newVertxInstance -> {
-			// Deploy a second gateway
-			newVertx.set(newVertxInstance);
-			Mongo.mongo().connectWithEnvironment(newVertxInstance);
+	private static Logger LOGGER = LoggerFactory.getLogger(ClusterTest.class);
 
-			// Connect to existing cluster
-			Vertx vertx = contextRule.vertx();
-			vertx.runOnContext(v1 -> {
-				vertx.runOnContext(suspendableHandler(v2 -> {
-					SuspendableQueue<String> queue = SuspendableQueue.get("test-1000");
-					queue.offer("ok");
-					Strand.sleep(5000L);
-					queue.offer("ok2");
-					Strand.sleep(1000L);
-					String ok3 = queue.take();
-					context.assertEquals(ok3, "ok3");
-					context.assertEquals(com.hiddenswitch.spellsource.util.Hazelcast.getClusterManager().getNodes().size(), 2);
-					latch.countDown();
-				}));
+	private static class SpellsourceInner extends Spellsource {
+		SpellsourceInner() {
+			super();
+		}
+
+		@Override
+		protected Verticle[] services() {
+			return new Verticle[]{
+					Games.create(),
+					Gateway.create(9090)};
+		}
+	}
+
+	@Override
+	protected int getConcurrency() {
+		return 1;
+	}
+
+	@Override
+	protected RunTestOnContext getTestContext() {
+		AtomicReference<HazelcastInstance> hazelcastInstance = new AtomicReference<>();
+		return new RunTestOnContext(() -> {
+			HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
+			hazelcastInstance.set(instance);
+			CompletableFuture<Vertx> fut = new CompletableFuture<>();
+			Vertx.clusteredVertx(new VertxOptions()
+							.setClusterManager(new HazelcastClusterManager(hazelcastInstance.get())),
+					res -> {
+						if (res.succeeded()) {
+							fut.complete(res.result());
+						} else {
+							fut.completeExceptionally(res.cause());
+						}
+					});
+			try {
+				return fut.get();
+			} catch (InterruptedException | ExecutionException e) {
+				throw new RuntimeException(e);
+			}
+		}, (vertx, fut) -> {
+			vertx.runOnContext(v -> {
+				Mongo.mongo().close();
+				vertx.close(v2 -> {
+					hazelcastInstance.get().shutdown();
+					hazelcastInstance.set(null);
+					fut.accept(null);
+				});
 			});
 
-			newVertxInstance.getOrCreateContext().runOnContext(v2 -> {
-				newVertxInstance.runOnContext(suspendableHandler(v3 -> {
-					SuspendableQueue<String> queue = SuspendableQueue.get("test-1000");
-					String ok = queue.take();
-					context.assertEquals(ok, "ok");
-					latch.countDown();
-					String ok2 = queue.take();
-					context.assertEquals(ok2, "ok2");
-					latch.countDown();
-					queue.offer("ok3");
-				}));
-			});
-		}));
-
-		latch.awaitSuccess();
-		newVertx.get().close(context.asyncAssertSuccess(v1 -> {
-			instance.shutdown();
-		}));
+		});
 	}
 
 	@Test(timeout = 90000L)
@@ -83,50 +85,77 @@ public class ClusterTest extends SpellsourceTestBase {
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
-		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2);
-		Async latch = context.async(count);
-		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5702, 5701));
-		Vertx.clusteredVertx(new VertxOptions()
-				.setClusterManager(new HazelcastClusterManager(instance))
-				.setBlockedThreadCheckInterval(30000L)
-				.setWarningExceptionTime(30000L), context.asyncAssertSuccess(newVertxInstance -> {
-			// Deploy a second gateway
-			newVertx.set(newVertxInstance);
-			newVertxInstance.runOnContext(v -> Connection.registerCodecs());
-			Mongo.mongo().connectWithEnvironment(newVertxInstance);
-			newVertxInstance.deployVerticle(Gateway.create(9090), context.asyncAssertSuccess(v2 -> {
-				newVertxInstance.deployVerticle(Games.create(), context.asyncAssertSuccess(v3 -> {
-					// Distribute clients to the two gateways
-					Stream.generate(() -> Stream.of(8080, 9090)).flatMap(Function.identity())
-							.map(port -> new Thread(() -> {
-								try (UnityClient client = new UnityClient(context, port) {
-									@Override
-									protected int getActionIndex(ServerToClientMessage message) {
-										// Always return end turn so that we end the game in a fatigue duel
-										if (message.getActions().getEndTurn() != null) {
-											return message.getActions().getEndTurn();
-										} else {
-											return super.getActionIndex(message);
-										}
-									}
-								}) {
-									client.createUserAccount();
-									client.matchmakeConstructedPlay(null);
-									client.waitUntilDone();
-									context.assertTrue(client.getTurnsPlayed() > 0);
-									context.assertTrue(client.isGameOver());
-									latch.countDown();
-								}
-							})).limit(count).forEachOrdered(Thread::start);
-				}));
+		int numberOfGames = 2;
+		int baseRate = 1;
+		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2 * baseRate, 2);
+		CountDownLatch latch = new CountDownLatch(count);
+		sync(() -> {
+			HazelcastInstance instance = invoke(Hazelcast::newHazelcastInstance, Cluster.getTcpDiscoverabilityConfig(5702, 5701));
+			try {
+				Vertx vertx2 = awaitResult(h -> Vertx.clusteredVertx(new VertxOptions()
+						.setClusterManager(new HazelcastClusterManager(instance)), h));
+				try {
+					awaitResult(h -> vertx2.runOnContext(v -> {
+						Connection.registerCodecs();
+						h.handle(Future.succeededFuture());
+					}));
 
-			}));
-		}));
-		latch.awaitSuccess();
-		Logging.root().info("ClusterTest: Successful");
-		newVertx.get().close(context.asyncAssertSuccess(v1 -> {
-			instance.shutdown();
-		}));
+					SpellsourceInner spellsourceInner = new SpellsourceInner();
+					CompositeFuture res = awaitResult(h -> spellsourceInner.deployAll(vertx2, getConcurrency(), h));
+					WorkerExecutor executor = contextRule.vertx().createSharedWorkerExecutor("testers", count);
+					for (int i = 0; i < count; i++) {
+						int port;
+						if (i % 2 == 1) {
+							port = 9090;
+						} else {
+							port = 8080;
+						}
+
+						executor.executeBlocking(fut -> {
+							try (UnityClient client = new UnityClient(context, port) {
+								@Override
+								protected int getActionIndex(ServerToClientMessage message) {
+
+									// Always return end turn so that we end the game in a fatigue duel
+									if (message.getActions().getEndTurn() != null) {
+										return message.getActions().getEndTurn();
+									} else {
+										return super.getActionIndex(message);
+									}
+								}
+							}) {
+								// Play n games in a row
+								client.createUserAccount();
+								for (int j = 0; j < numberOfGames; j++) {
+									LOGGER.info("execute: Queued {}", j);
+									client.ensureConnected();
+									client.matchmakeConstructedPlay(null);
+									LOGGER.info("execute: Playing {}", j);
+									client.waitUntilDone();
+									LOGGER.info("execute: Done {}", j);
+									context.assertTrue(client.isGameOver());
+								}
+
+								latch.countDown();
+								fut.complete();
+							} catch (Throwable t) {
+								fut.fail(t);
+							}
+						}, false, context.asyncAssertSuccess());
+					}
+					latch.await();
+					Strand.sleep(1000);
+				} finally {
+					Void t = awaitResult(h -> {
+						vertx2.runOnContext(v -> {
+							h.handle(Future.succeededFuture());
+						});
+					});
+					t = awaitResult(vertx2::close);
+				}
+			} finally {
+				invoke0(instance::shutdown);
+			}
+		}, context);
 	}
 }

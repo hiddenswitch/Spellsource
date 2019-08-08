@@ -37,38 +37,29 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
-//	protected static AtomicBoolean initialized = new AtomicBoolean();
+
+	protected RunTestOnContext getTestContext() {
+		return new RunTestOnContext();
+	}
 
 	@Rule
-	public RunTestOnContext contextRule = new RunTestOnContext();
+	public RunTestOnContext contextRule = getTestContext();
 
 	@Before
 	public void setUp(TestContext testContext) throws InterruptedException {
-//		CountDownLatch latch = new CountDownLatch(1);
-//		Async async = testContext.async();
-//		if (initialized.compareAndSet(false, true)) {
 		CardCatalogue.loadCardsFromPackage();
 		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 		Vertx vertx = contextRule.vertx();
-//			if (vertx != null) {
-//				testContext.fail(new AssertionError());
-//			}
-//			vertx = Vertx.vertx(new VertxOptions()
-//					.setBlockedThreadCheckInterval(4000)
-//					.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors() * 2)
-//					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS));
 		vertx.exceptionHandler(testContext::fail);
-//			Tracing.initializeGlobal(vertx);
 		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 
-			Mongo.mongo().connectWithEnvironment(vertx);
 		Spellsource.spellsource().migrate(vertx, testContext.asyncAssertSuccess(v1 -> {
-			Spellsource.spellsource().deployAll(vertx, testContext.asyncAssertSuccess());
+			Spellsource.spellsource().deployAll(vertx, getConcurrency(), testContext.asyncAssertSuccess());
 		}));
-//			latch.await(12000L, TimeUnit.MILLISECONDS);
-//		} else {
-//			async.complete();
-//		}
+	}
+
+	protected int getConcurrency() {
+		return Runtime.getRuntime().availableProcessors();
 	}
 
 	@After
@@ -92,30 +83,6 @@ public abstract class SpellsourceTestBase {
 		return Boolean.parseBoolean(System.getenv("CI"));
 	}
 
-	/*
-	@Before
-	public void setUpEach(TestContext testContext) {
-		if (vertx == null) {
-			testContext.fail(new AssertionError());
-		}
-		vertx.exceptionHandler(testContext.exceptionHandler());
-		// Cleanup anything else that might be going on
-		sync(() -> {
-			for (UserId key : Matchmaking.getUsersInQueues().keySet()) {
-				Matchmaking.dequeue(key);
-			}
-
-			for (GameId gameId : Games.getConnections().keySet()) {
-				Games.endGame(gameId);
-			}
-
-			testContext.assertEquals(Games.getConnections().size(), 0);
-			testContext.assertEquals(Matchmaking.getUsersInQueues().size(), 0);
-			testContext.assertEquals(Games.getUsersInGames().size(), 0);
-		}, 8, testContext);
-	}
-	*/
-
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
 		return Accounts.createAccount(new CreateAccountRequest().withEmailAddress("test-" + RandomStringUtils.randomAlphanumeric(32) + "@test.com")
 				.withName("username" + RandomStringUtils.randomAlphanumeric(32)).withPassword("password"));
@@ -132,37 +99,13 @@ public abstract class SpellsourceTestBase {
 	@Suspendable
 	public void sync(SuspendableRunnable action, TestContext testContext) {
 		Handler<AsyncResult<Void>> handler = testContext.asyncAssertSuccess();
-//		CountDownLatch latch = new CountDownLatch(1);
-//		Vertx vertx = contextRule.vertx();
-//		if (Vertx.currentContext() == null) {
-//			vertx.runOnContext(v1 -> {
-//				vertx.runOnContext(suspendableHandler(v2 -> {
-//					try {
-//						action.run();
-//					} catch (Throwable throwable) {
-//						testContext.fail(throwable);
-//					}
-//
-//					latch.countDown();
-//				}));
-//			});
-//		} else {
 		Vertx.currentContext().runOnContext(suspendableHandler(v -> {
 			try {
 				action.run();
-//					latch.countDown();
 				handler.handle(Future.succeededFuture());
 			} catch (Throwable throwable) {
 				handler.handle(Future.failedFuture(throwable));
 			}
 		}));
-//		}
-//
-//		try {
-//			latch.await(seconds, TimeUnit.SECONDS);
-//		} catch (InterruptedException e) {
-//			testContext.fail(e);
-//		}
-//		testContext.assertEquals(0L, latch.getCount());
 	}
 }

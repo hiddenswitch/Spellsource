@@ -87,8 +87,8 @@ public class InvitesTest extends SpellsourceTestBase {
 					invoke0(sender::createUserAccount);
 					invoke0(recipient::createUserAccount);
 
-					recipient.ensureConnected();
-					sender.ensureConnected();
+					invoke0(recipient::ensureConnected);
+					invoke0(sender::ensureConnected);
 
 					recipientId.set(recipient.getUserId().toString());
 					testContext.assertTrue(recipient.getAccount().getName().contains("#"));
@@ -167,8 +167,8 @@ public class InvitesTest extends SpellsourceTestBase {
 					invoke0(sender::createUserAccount);
 					invoke0(recipient::createUserAccount);
 
-					sender.ensureConnected();
-					recipient.ensureConnected();
+					invoke0(recipient::ensureConnected);
+					invoke0(sender::ensureConnected);
 
 					recipientId.set(recipient.getUserId().toString());
 					testContext.assertTrue(recipient.getAccount().getName().contains("#"));
@@ -237,8 +237,8 @@ public class InvitesTest extends SpellsourceTestBase {
 				}) {
 					invoke0(sender::createUserAccount);
 					invoke0(recipient::createUserAccount);
-					sender.ensureConnected();
-					recipient.ensureConnected();
+					invoke0(recipient::ensureConnected);
+					invoke0(sender::ensureConnected);
 
 					recipientId.set(recipient.getUserId().toString());
 					testContext.assertTrue(recipient.getAccount().getName().contains("#"));
@@ -307,8 +307,8 @@ public class InvitesTest extends SpellsourceTestBase {
 					invoke0(sender::createUserAccount);
 					invoke0(recipient::createUserAccount);
 
-					sender.ensureConnected();
-					recipient.ensureConnected();
+					invoke0(recipient::ensureConnected);
+					invoke0(sender::ensureConnected);
 
 					Friends.putFriend(Accounts.get(sender.getUserId().toString()), new FriendPutRequest().friendId(recipient.getUserId().toString()).usernameWithToken(recipient.getAccount().getName()));
 					// Friend them coercively
