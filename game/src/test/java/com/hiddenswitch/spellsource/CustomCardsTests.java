@@ -4634,4 +4634,39 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "weapon_test_1_1");
 		}));
 	}
+
+	@Test
+	public void testMasterEroder() {
+		// test basic master eroder
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp());
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+
+		// test master eroder with mind control
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			playCard(context, opponent, "spell_test_give_away", minion);
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+
+		// test that master eroder doesn't double stack its effect
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			playCard(context, player, "minion_master_eroder");
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp());
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+	}
 }
