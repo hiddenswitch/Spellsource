@@ -14,6 +14,7 @@ Bug fixes.
  - Garbasu Monster now reads, "After this minion survives damage, gain +1/+1."
  - Catta the Merciless and Garbasu Monster no longer interact to cause an infinite loop when Garbasu faces off a 1-attack immune minion.
  - Replacing weapons no longer sometimes keeps their enchantments, like Decay, in play.
+ - Decayed minions from Master Eroder now properly decay at the end of the owner's turn rather than the end of Master Eroder's owner's turn. (1333)
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 
