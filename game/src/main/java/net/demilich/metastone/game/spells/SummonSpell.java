@@ -8,14 +8,14 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.source.SummonWithoutReplacementCardSource;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,6 +144,22 @@ import java.util.stream.Collectors;
  *          "randomTarget": true
  *     }
  * </pre>
+ * <p>
+ * To summon minions from a list of cards without replacement:
+ * <pre>
+ *     "spell": {
+ *     "class": "SummonSpell",
+ *     "value": 2,
+ *     "cards": [
+ *       "token_bellowing_spirit",
+ *       "token_unearthed_spirit",
+ *       "token_burning_spirit"
+ *     ],
+ *     "randomTarget": true,
+ *     "cardSource": {
+ *       "class": "SummonWithoutReplacementCardSource"
+ *     }
+ * </pre>
  *
  * @see ResurrectSpell for the effect of resurrecting dead minions without repeats.
  */
@@ -250,7 +266,9 @@ public class SummonSpell extends Spell {
 		List<Card> cards = new ArrayList<>();
 
 		final boolean hasFilter = desc.getCardFilter() != null || desc.getCardSource() != null;
-		if (hasFilter) {
+		final boolean isSummonWithoutReplacementCardSource = desc.getCardSource() != null
+				&& desc.getCardSource().getClass().isAssignableFrom(SummonWithoutReplacementCardSource.class);
+		if (hasFilter && !isSummonWithoutReplacementCardSource) {
 			cards.addAll(desc.getFilteredCards(context, player, source));
 			// The SpellArg.CARD field should be interpreted as a replacement card in this scenario.
 		} else {
