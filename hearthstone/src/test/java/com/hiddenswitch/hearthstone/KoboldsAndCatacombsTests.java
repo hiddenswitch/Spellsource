@@ -617,6 +617,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		});
 	}
 
+	@Test
 	public void testToMySide() {
 		runGym((context, player, opponent) -> {
 			// Test putting a spell in the deck
