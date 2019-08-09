@@ -1,20 +1,15 @@
 package com.hiddenswitch.spellsource.applications;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.util.Logging;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.RpcClient;
+import io.atomix.core.Atomix;
+import io.atomix.vertx.AtomixClusterManager;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.json.Json;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
-import io.vertx.ext.dropwizard.DropwizardMetricsOptions;
-import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -39,13 +34,15 @@ public class LocalClustered {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
+		int atomixPort = Integer.parseInt(System.getenv().getOrDefault("ATOMIX_PORT", "5701"));
 		LoggerFactory.initialise();
 
 
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
-		final HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701));
-		ClusterManager clusterManager = new HazelcastClusterManager(instance);
+		Atomix atomix = Cluster.create(atomixPort);
+		atomix.start().join();
+		ClusterManager clusterManager = new AtomixClusterManager(atomix);
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(clusterManager)
 				.setClusterHost(Gateway.getHostAddress())
