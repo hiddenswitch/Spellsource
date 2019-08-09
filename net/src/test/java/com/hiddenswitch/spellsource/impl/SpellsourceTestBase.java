@@ -64,7 +64,7 @@ public abstract class SpellsourceTestBase {
 
 	@After
 	public void tearDown(TestContext testContext) {
-		Mongo.mongo().close();
+//		Mongo.mongo().close();
 	}
 
 	public static DeckCreateResponse createDeckForUserId(String userId) throws SuspendExecution, InterruptedException {

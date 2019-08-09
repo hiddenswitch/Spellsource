@@ -2,6 +2,8 @@ package com.hiddenswitch.spellsource.util;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.impl.util.MongoRecord;
 import io.opentracing.Span;
@@ -30,7 +32,8 @@ import java.util.stream.Collectors;
  */
 public class Mongo {
 	private static Mongo instance;
-	private Map<Vertx, MongoClient> clients = new ConcurrentHashMap<>();
+	private static final Object probe = new Object();
+	private Map<Integer, MongoClient> clients = new ConcurrentHashMap<>();
 
 	static {
 		ch.qos.logback.classic.Logger mongoLogger = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -47,9 +50,11 @@ public class Mongo {
 				.start();
 	}
 
-	public synchronized static Mongo mongo() {
-		if (instance == null) {
-			instance = new Mongo();
+	public static Mongo mongo() {
+		synchronized (probe) {
+			if (instance == null) {
+				instance = new Mongo();
+			}
 		}
 
 		if (Vertx.currentContext() != null) {
@@ -62,11 +67,11 @@ public class Mongo {
 		return instance;
 	}
 
-	protected synchronized MongoClient getOrCreateClient(Vertx vertx, String connectionString) {
-		return clients.computeIfAbsent(vertx, (k) -> {
+	protected MongoClient getOrCreateClient(Vertx vertx, String connectionString) {
+		return clients.computeIfAbsent(vertx.hashCode(), (k) -> {
 			MongoClient client = MongoClient.createShared(vertx, new JsonObject().put("connection_string", connectionString));
 			((VertxInternal) vertx).addCloseHook(v -> {
-				clients.remove(vertx);
+				clients.remove(vertx.hashCode());
 				client.close();
 				v.handle(Future.succeededFuture());
 			});
@@ -563,10 +568,10 @@ public class Mongo {
 			return;
 		}
 		client().close();
-		clients.remove(Vertx.currentContext().owner());
+		clients.remove(Vertx.currentContext().owner().hashCode());
 	}
 
-	public synchronized MongoClient client() {
+	public MongoClient client() {
 		if (Vertx.currentContext() == null) {
 			throw new NullPointerException("not on context");
 		}
