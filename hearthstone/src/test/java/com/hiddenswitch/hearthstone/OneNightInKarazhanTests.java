@@ -1,10 +1,7 @@
 package com.hiddenswitch.hearthstone;
 
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardZone;
-import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -55,7 +52,7 @@ public class OneNightInKarazhanTests extends TestBase {
 
 	@Test
 	public void testPrinceMalchezaar() {
-		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Wild"));
+		DebugContext context = createContext("WHITE", "WHITE", false, new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")
@@ -67,7 +64,7 @@ public class OneNightInKarazhanTests extends TestBase {
 
 		context.init();
 		// Should include 10 legendaries added + the 2 Malchezaars
-		Assert.assertEquals(context.getEntities().filter(c -> c.getSourceCard().getZone() == Zones.DECK && c.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 12L);
+		Assert.assertEquals(context.getEntities().filter(c -> (c.getSourceCard().getZone() == Zones.DECK || c.getSourceCard().getZone() == Zones.HAND) && c.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 12L);
 	}
 
 	@Test
