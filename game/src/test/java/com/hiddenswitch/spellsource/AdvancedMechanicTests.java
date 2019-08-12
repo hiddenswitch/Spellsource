@@ -6,9 +6,12 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
@@ -18,17 +21,18 @@ import net.demilich.metastone.game.spells.SetHpSpell;
 import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.tests.util.GymFactory;
-import net.demilich.metastone.tests.util.TestBase;
-import net.demilich.metastone.tests.util.TestMinionCard;
-import net.demilich.metastone.tests.util.TestSpellCard;
+import net.demilich.metastone.tests.util.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -650,5 +654,41 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getMinions().get(1).getAttack(), player.getMinions().get(1).getBaseAttack() + 1);
 			assertEquals(player.getMinions().get(1).getHp(), player.getMinions().get(1).getBaseHp() + 1);
 		}));
+	}
+
+	@Test
+	public void testValidateDeck() {
+		String heroClass = "DARKBLUE";
+		DeckFormat deckFormat = DeckFormat.getFormat("Custom");
+
+		Player player1 = new Player(new GameDeck(heroClass, Arrays.asList("minion_channeler_initiate",
+				"minion_channeler_initiate", "minion_channeler_initiate")));
+		Player player2 = new Player(new GameDeck("TEST"));
+
+		DebugContext context = new DebugContext(player1, player2, new GameLogic() {
+			@Override
+			public int determineBeginner(int... playerIds) {
+				return GameContext.PLAYER_1;
+			}
+		}, deckFormat);
+		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
+
+		Card formatCard = CardCatalogue.getFormatCards().filtered(card -> card.getName().equals(context.getDeckFormat().getName())).peekFirst();
+
+		Condition[] conditions = (Condition[]) formatCard.getCondition().get(ConditionArg.CONDITIONS);
+		boolean validDeck = true;
+		for (Condition condition : conditions) {
+			boolean pass = condition.isFulfilled(context, player1, player1, player1);
+			if (!pass) {
+				validDeck = false;
+				context.getLogger().error(condition.getDesc().getString(ConditionArg.DESCRIPTION));
+			}
+		}
+
+
+
+		assertFalse(validDeck);
+
+
 	}
 }

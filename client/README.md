@@ -241,6 +241,7 @@ Class | Method | HTTP request | Description
  - [TargetActionPair](docs/TargetActionPair.md)
  - [Timers](docs/Timers.md)
  - [UnfriendResponse](docs/UnfriendResponse.md)
+ - [ValidationReport](docs/ValidationReport.md)
 
 
 ## Documentation for Authorization

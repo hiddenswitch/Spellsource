@@ -600,6 +600,17 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/CardRecord'
+      validationReport:
+        $ref: '#/definitions/ValidationReport'
+  ValidationReport:
+    type: 'object'
+    properties:
+      valid:
+        type: 'boolean'
+      errors:
+        type: 'array'
+        items:
+          type: 'string'
   CardRecord:
     type: 'object'
     properties:

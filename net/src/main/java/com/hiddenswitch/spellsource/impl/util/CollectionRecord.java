@@ -23,6 +23,7 @@ public class CollectionRecord extends MongoRecord {
 	private boolean isStandardDeck;
 	private int wins;
 	private int totalGames;
+	private ValidationRecord validationRecord;
 
 	/**
 	 * Hero class for deck collection records.
@@ -193,6 +194,14 @@ public class CollectionRecord extends MongoRecord {
 	public CollectionRecord setStandardDeck(boolean standardDeck) {
 		isStandardDeck = standardDeck;
 		return this;
+	}
+
+	public void setValidationRecord(ValidationRecord validationRecord) {
+		this.validationRecord = validationRecord;
+	}
+
+	public ValidationRecord getValidationRecord() {
+		return validationRecord;
 	}
 }
 

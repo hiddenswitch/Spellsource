@@ -271,14 +271,18 @@ public class CardCatalogue {
 				}
 			});
 			DeckFormat.populateAll(sets);
-			DeckFormat.populateFormats(new CardArrayList(cards.values().stream()
-					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList())));
+			DeckFormat.populateFormats(getFormatCards());
 
 
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static CardList getFormatCards() {
+		return new CardArrayList(cards.values().stream()
+				.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList()));
 	}
 
 	public static CardList query(DeckFormat deckFormat, Predicate<Card> filter) {

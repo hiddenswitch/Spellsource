@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.impl.util.ValidationRecord;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
@@ -26,11 +27,12 @@ public final class CreateCollectionRequest implements Serializable {
 	private String heroCardId;
 	private String format;
 	private boolean standard;
+	private ValidationRecord validationRecord;
 
 	private CreateCollectionRequest() {
 	}
 
-	public static CreateCollectionRequest deck(String userId, String name, String heroClass, List<String> inventoryIds, boolean draft) {
+	public static CreateCollectionRequest deck(String userId, String name, String heroClass, List<String> inventoryIds, boolean draft, ValidationRecord validationRecord) {
 		return new CreateCollectionRequest()
 				.withType(CollectionTypes.DECK)
 				.withName(name)
@@ -38,7 +40,8 @@ public final class CreateCollectionRequest implements Serializable {
 				.withHeroClass(heroClass)
 				.withInventoryIds(inventoryIds)
 				.withFormat("Standard")
-				.withDraft(draft);
+				.withDraft(draft)
+				.setValidationRecord(validationRecord);
 	}
 
 	public static CreateCollectionRequest startingCollection(String userId) {
@@ -257,6 +260,15 @@ public final class CreateCollectionRequest implements Serializable {
 
 	public CreateCollectionRequest setStandard(boolean standard) {
 		this.standard = standard;
+		return this;
+	}
+
+	public ValidationRecord getValidationRecord() {
+		return validationRecord;
+	}
+
+	public CreateCollectionRequest setValidationRecord(ValidationRecord validationRecord) {
+		this.validationRecord = validationRecord;
 		return this;
 	}
 }

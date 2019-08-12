@@ -1,10 +1,14 @@
 {
-  "name": "Spellsource Basic",
-  "description": "Just Spellsource's own Core set.",
+  "name": "Pauper",
+  "description": "Only Free and Common Cards",
   "type": "FORMAT",
   "collectible": true,
   "sets": [
-    "SPELLSOURCE_BASIC"
+    "SPELLSOURCE_BASIC",
+    "VERDANT_DREAMS",
+    "SANDS_OF_TIME",
+    "BATTLE_FOR_ASHENVALE",
+    "CUSTOM"
   ],
   "secondPlayerBonusCards": [
     "spell_lunstone"
@@ -50,15 +54,46 @@
         "value": 2
       },
       {
-        "description": "Decks can only have 1 copy of Legendary cards",
-        "class": "NumberOfCopiesCondition",
-        "target": "FRIENDLY_DECK",
-        "filter": {
-          "class": "CardFilter",
-          "rarity": "LEGENDARY"
+        "description": "Pauper Decks can't have Rare cards",
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "rarity": "RARE"
+          }
         },
         "operation": "EQUAL",
-        "value": 1
+        "value2": 0
+      },
+      {
+        "description": "Pauper Decks can't have Epic cards",
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "rarity": "EPIC"
+          }
+        },
+        "operation": "EQUAL",
+        "value2": 0
+      },
+      {
+        "description": "Pauper Decks can't have Legendary cards",
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY"
+          }
+        },
+        "operation": "EQUAL",
+        "value2": 0
       }
     ]
   },

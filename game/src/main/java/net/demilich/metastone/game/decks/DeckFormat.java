@@ -2,12 +2,11 @@ package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The sets that are available to build decks from and generate cards from.
@@ -21,6 +20,7 @@ public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<String> sets;
 	private String[] secondPlayerBonusCards = new String[0];
+	private ConditionDesc validDeckCondition;
 
 	public static DeckFormat ALL = new DeckFormat()
 			.withName("All");
@@ -39,6 +39,7 @@ public class DeckFormat implements Serializable, Cloneable {
 		for (Card formatCard : formatCards) {
 			FORMATS.put(formatCard.getName(), new DeckFormat()
 					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
+					.setValidDeckCondition(formatCard.getDesc().getCondition())
 					.withName(formatCard.getName())
 					.withCardSets(formatCard.getCardSets()));
 		}
@@ -180,6 +181,15 @@ public class DeckFormat implements Serializable, Cloneable {
 
 	public DeckFormat setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
+	}
+
+	public ConditionDesc getValidDeckCondition() {
+		return validDeckCondition;
+	}
+
+	public DeckFormat setValidDeckCondition(ConditionDesc validDeckCondition) {
+		this.validDeckCondition = validDeckCondition;
 		return this;
 	}
 }

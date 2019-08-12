@@ -1,11 +1,13 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
+import com.hiddenswitch.spellsource.impl.util.ValidationRecord;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
@@ -35,6 +37,7 @@ public final class GetCollectionResponse implements Serializable {
 	private String heroCardId;
 	private String format;
 	private boolean standard;
+	private ValidationRecord validationRecord;
 
 	private GetCollectionResponse() {
 	}
@@ -216,6 +219,7 @@ public final class GetCollectionResponse implements Serializable {
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
 				.isStandardDeck(isStandard())
+				.validationReport(validationRecord == null ? new ValidationReport() : validationRecord.toValidationReport())
 				.inventory(records);
 
 		if (getHeroClass() != null) {
@@ -315,6 +319,15 @@ public final class GetCollectionResponse implements Serializable {
 	public GetCollectionResponse setStandard(boolean standard) {
 		this.standard = standard;
 		return this;
+	}
+
+	public GetCollectionResponse setValidationRecord(ValidationRecord validationRecord) {
+		this.validationRecord = validationRecord;
+		return this;
+	}
+
+	public ValidationRecord getValidationRecord() {
+		return validationRecord;
 	}
 }
 
