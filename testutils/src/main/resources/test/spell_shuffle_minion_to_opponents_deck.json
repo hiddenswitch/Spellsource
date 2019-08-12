@@ -1,0 +1,16 @@
+{
+  "name": "Shuffle Minion to Owner's Deck",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ShuffleMinionToDeckSpell",
+    "targetPlayer": "OWNER"
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

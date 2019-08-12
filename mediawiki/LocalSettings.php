@@ -155,6 +155,19 @@ wfLoadExtension('SpamBlacklist');
 wfLoadExtension('TemplateData');
 wfLoadExtension('VisualEditor');
 wfLoadExtension('UploadWizard');
+wfLoadExtension('UserMerge');
+wfLoadExtension('Nuke');
+//wfLoadExtension('SmiteSpam');
+wfLoadExtensions([ 'ConfirmEdit', 'ConfirmEdit/ReCaptchaNoCaptcha' ]);
+
+# Configuration for UserMerge
+$wgGroupPermissions['sysop']['usermerge'] = true;
+
+# Configuration for ReCaptcha
+$wgCaptchaClass = 'ReCaptchaNoCaptcha';
+$wgReCaptchaSiteKey = getenv("GOOGLE_RECAPTCHA_SITE_KEY");
+$wgReCaptchaSecretKey = getenv("GOOGLE_RECAPTCHA_SECRET_KEY");
+$wgReCaptchaSendRemoteIP = true;
 
 # Configuration for AWS extension
 $wgAWSRegion = getenv('MEDIAWIKI_AWS_REGION');
