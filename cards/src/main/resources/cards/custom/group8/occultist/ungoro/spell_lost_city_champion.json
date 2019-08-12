@@ -16,6 +16,7 @@
         "attribute": "TAUNT"
       }
     },
+    "exclusive": true,
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "MINION"
