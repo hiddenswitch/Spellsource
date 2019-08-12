@@ -7,22 +7,41 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "MECH",
-  "description": "When a player has at least 4 or more minions and summons another, return it to their hand.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "MinionSummonedTrigger",
-      "queueCondition": {
-        "class": "MinionCountCondition",
-        "value": 4,
-        "operation": "GREATER",
-        "targetPlayer": "ANY"
+  "description": "When a player has at least 4 minions and summons another, return it to their hand.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "OPPONENT",
+        "fireCondition": {
+          "class": "MinionCountCondition",
+          "value": 4,
+          "operation": "GREATER",
+          "targetPlayer": "OPPONENT"
+        }
+      },
+      "spell": {
+        "class": "ReturnTargetToHandSpell",
+        "target": "EVENT_TARGET"
       }
     },
-    "spell": {
-      "class": "ReturnTargetToHandSpell",
-      "target": "EVENT_TARGET"
+    {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "MinionCountCondition",
+          "value": 4,
+          "operation": "GREATER",
+          "targetPlayer": "SELF"
+        }
+      },
+      "spell": {
+        "class": "ReturnTargetToHandSpell",
+        "target": "EVENT_TARGET"
+      }
     }
-  },
+  ],
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

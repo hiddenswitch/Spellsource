@@ -7,13 +7,14 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "<b>Wither (1).</b> <b>Battlecry:</b> Deal 1 damage.",
+  "description": "<b>Wither (1).</b> <b>Opener:</b> Deal 1 damage.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
+          "class": "AddEnchantmentSpell",
           "trigger": {
             "eventTrigger": {
               "class": "DamageCausedTrigger",

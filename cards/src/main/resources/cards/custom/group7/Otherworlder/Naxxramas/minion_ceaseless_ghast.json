@@ -9,34 +9,28 @@
   "race": "TITAN",
   "description": "Deathrattle: If this has more than 1 Attack, resummon it with -1 Attack.",
   "deathrattle": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "condition": {
-          "class": "AnyMatchFilterCondition",
-          "target": "SELF",
-          "filter": {
-            "class": "AttributeFilter",
-            "value": 1,
-            "attribute": "ATTACK",
-            "operation": "GREATER"
-          }
-        },
-        "spell": {
-          "class": "SummonSpell",
-          "card": "minion_ceaseless_ghast"
-        }
-      },
-      {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "ATTACK",
+      "operation": "GREATER"
+    },
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF",
+      "spell": {
         "class": "SetAttackSpell",
-        "offset": -1,
+        "target": "OUTPUT",
         "value": {
           "class": "AttributeValueProvider",
-          "target": "OUTPUT",
-          "attribute": "ATTACK"
+          "target": "SELF",
+          "attribute": "ATTACK",
+          "offset": -1
         }
       }
-    ]
+    }
   },
   "attributes": {
     "DEATHRATTLES": true
