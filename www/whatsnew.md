@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
+ - Bromediad Pup now correctly renamed to Bromeliad Pup. (1325)
  - Garbasu Monster now reads, "After this minion survives damage, gain +1/+1."
  - Catta the Merciless and Garbasu Monster no longer interact to cause an infinite loop when Garbasu faces off a 1-attack immune minion.
  - Replacing weapons no longer sometimes keeps their enchantments, like Decay, in play.
