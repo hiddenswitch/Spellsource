@@ -66,6 +66,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
+		Connection.registerCodecs();
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		io.vertx.core.logging.LoggerFactory.initialise();
 		server = vertx.createHttpServer(new HttpServerOptions()
@@ -130,11 +131,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/")
 				.handler(routingContext -> {
 					// Check that hazelcast is ready in this health check
-					if (!Hazelcast.getHazelcastInstance().getLifecycleService().isRunning()) {
-						routingContext.fail(500);
-						return;
-					}
-
 					routingContext.response().setStatusCode(200);
 					routingContext.response().end("OK");
 				});

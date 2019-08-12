@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AMBER",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Give a minion +1/+1. Summon a random 1-Cost minion.",
   "targetSelection": "MINIONS",
   "spell": {
