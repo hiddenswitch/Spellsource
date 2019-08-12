@@ -1,0 +1,41 @@
+{
+  "name": "Formless Agony",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Permanent. At the end of your turn, deal 3 damage randomly split among all characters. When they all hit a hero, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MissilesSpell",
+        "target": "ALL_OTHER_CHARACTERS",
+        "value": 1,
+        "howMany": 3,
+        "randomTarget": true
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "GameStateChangedTrigger",
+        ---WHEN THEY ALL HIT A HERO, DESTROY THIS---
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
