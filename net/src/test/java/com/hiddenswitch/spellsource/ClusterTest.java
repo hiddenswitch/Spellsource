@@ -2,17 +2,17 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
-import com.hiddenswitch.spellsource.util.Mongo;
+import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
+import io.atomix.cluster.Node;
+import io.atomix.core.Atomix;
+import io.atomix.vertx.AtomixClusterManager;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.RunTestOnContext;
-import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.hiddenswitch.spellsource.util.Sync.invoke;
-import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class ClusterTest extends SpellsourceTestBase {
@@ -48,13 +46,14 @@ public class ClusterTest extends SpellsourceTestBase {
 
 	@Override
 	protected RunTestOnContext getTestContext() {
-		AtomicReference<HazelcastInstance> hazelcastInstance = new AtomicReference<>();
+		AtomicReference<Atomix> atomixInstance = new AtomicReference<>();
 		return new RunTestOnContext(() -> {
-			HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
-			hazelcastInstance.set(instance);
+			Atomix instance = Cluster.create(5701, Node.builder().withHost("localhost").withPort(5701).build());
+			atomixInstance.set(instance);
 			CompletableFuture<Vertx> fut = new CompletableFuture<>();
 			Vertx.clusteredVertx(new VertxOptions()
-							.setClusterManager(new HazelcastClusterManager(hazelcastInstance.get())),
+							.setPreferNativeTransport(true)
+							.setClusterManager(new AtomixClusterManager(atomixInstance.get())),
 					res -> {
 						if (res.succeeded()) {
 							fut.complete(res.result());
@@ -69,10 +68,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			}
 		}, (vertx, fut) -> {
 			vertx.runOnContext(v -> {
-				Mongo.mongo().close();
 				vertx.close(v2 -> {
-					hazelcastInstance.get().shutdown();
-					hazelcastInstance.set(null);
 					fut.accept(null);
 				});
 			});
@@ -81,24 +77,26 @@ public class ClusterTest extends SpellsourceTestBase {
 	}
 
 	@Test(timeout = 90000L)
-	@Ignore
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
-		int numberOfGames = 2;
+		int numberOfGames = 1;
 		int baseRate = 1;
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2 * baseRate, 2);
 		CountDownLatch latch = new CountDownLatch(count);
 		sync(() -> {
-			HazelcastInstance instance = invoke(Hazelcast::newHazelcastInstance, Cluster.getTcpDiscoverabilityConfig(5702, 5701));
+			Atomix instance = Cluster.create(5702, Node.builder().withHost("localhost").withPort(5701).build());
 			try {
 				Vertx vertx2 = awaitResult(h -> Vertx.clusteredVertx(new VertxOptions()
-						.setClusterManager(new HazelcastClusterManager(instance)), h));
+						.setPreferNativeTransport(true)
+						.setClusterManager(new AtomixClusterManager(instance)), h));
 				try {
 					awaitResult(h -> vertx2.runOnContext(v -> {
 						Connection.registerCodecs();
 						h.handle(Future.succeededFuture());
 					}));
+
+					LOGGER.trace("nodes: {}", ((VertxInternal) vertx2).getClusterManager().getNodes());
 
 					SpellsourceInner spellsourceInner = new SpellsourceInner();
 					CompositeFuture res = awaitResult(h -> spellsourceInner.deployAll(vertx2, getConcurrency(), h));
@@ -127,12 +125,12 @@ public class ClusterTest extends SpellsourceTestBase {
 								// Play n games in a row
 								client.createUserAccount();
 								for (int j = 0; j < numberOfGames; j++) {
-									LOGGER.info("execute: Queued {}", j);
 									client.ensureConnected();
+									LOGGER.trace("execute: Connected and queueing {}", j);
 									client.matchmakeConstructedPlay(null);
-									LOGGER.info("execute: Playing {}", j);
+									LOGGER.trace("execute: Playing {}", j);
 									client.waitUntilDone();
-									LOGGER.info("execute: Done {}", j);
+									LOGGER.trace("execute: Done {}", j);
 									context.assertTrue(client.isGameOver());
 								}
 
@@ -146,15 +144,10 @@ public class ClusterTest extends SpellsourceTestBase {
 					latch.await();
 					Strand.sleep(1000);
 				} finally {
-					Void t = awaitResult(h -> {
-						vertx2.runOnContext(v -> {
-							h.handle(Future.succeededFuture());
-						});
-					});
-					t = awaitResult(vertx2::close);
+					Void t3 = awaitResult(vertx2::close);
 				}
 			} finally {
-				invoke0(instance::shutdown);
+				Sync.get(instance.stop());
 			}
 		}, context);
 	}

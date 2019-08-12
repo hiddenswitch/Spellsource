@@ -131,11 +131,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/")
 				.handler(routingContext -> {
 					// Check that hazelcast is ready in this health check
-					if (!Hazelcast.getHazelcastInstance().getLifecycleService().isRunning()) {
-						routingContext.fail(500);
-						return;
-					}
-
 					routingContext.response().setStatusCode(200);
 					routingContext.response().end("OK");
 				});

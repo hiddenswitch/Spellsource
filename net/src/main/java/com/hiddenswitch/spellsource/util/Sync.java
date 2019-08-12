@@ -2,13 +2,18 @@ package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.fibers.futures.AsyncCompletionStage;
 import co.paralleluniverse.strands.SuspendableAction1;
+import io.atomix.vertx.VertxFutures;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.*;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -175,5 +180,17 @@ public class Sync {
 		}
 
 		R applyThows(T1 t1, T2 t2) throws Exception;
+	}
+
+	/**
+	 * Converts a completable future into a suspendable await. Uses a Vertx context.
+	 *
+	 * @param future
+	 * @param <T>
+	 * @return
+	 */
+	@Suspendable
+	public static <T> T get(CompletableFuture<T> future) {
+		return awaitResult(h -> future.whenComplete(VertxFutures.resultHandler(h, Vertx.currentContext())));
 	}
 }

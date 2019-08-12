@@ -35,7 +35,15 @@
     {
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_rejan_last_defender"
+          },
+          "invert": true
+        }
       },
       "spell": {
         "class": "DecaySpell"

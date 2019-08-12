@@ -46,7 +46,8 @@ public class LocalQueue<V> implements SuspendableQueue<V> {
 
 	@Override
 	@Suspendable
-	public boolean offer(@NotNull V item, boolean createQueue) {
+	public boolean offer(@NotNull V item) {
+		boolean createQueue=true;
 		@SuppressWarnings("unchecked")
 		LocalQueue<V> queue = (LocalQueue<V>) QUEUES.computeIfAbsent(getKey(), s -> {
 			if (createQueue) {
@@ -90,15 +91,13 @@ public class LocalQueue<V> implements SuspendableQueue<V> {
 
 	@Override
 	@Suspendable
-	public boolean offer(V item) {
-		return offer(item, true);
-	}
-
-	@Override
-	@Suspendable
 	public void destroy() {
 		QUEUES.remove(getKey());
 		this.channel.close();
+	}
+
+	@Override
+	public void close() {
 	}
 
 	@NotNull

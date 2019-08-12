@@ -24,11 +24,5 @@ public interface SuspendableCondition extends Closeable {
 	long awaitMillis(long millis);
 
 	@Suspendable
-	void awaitMillis(long millis, Handler<AsyncResult<Void>> handler);
-
-	@Suspendable
-	void signal();
-
-	@Suspendable
 	void signalAll();
 }
