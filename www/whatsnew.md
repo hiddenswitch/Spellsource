@@ -7,6 +7,11 @@ permalink: /whats-new/
 ### 0.8.48-2.0.35 (In Progress)
 
 Bug fixes.
+New Otherworlder cards thanks to @AnterogradeNil!
+
+##### Content Additions:
+
+ - Many Otherworlder cards have been added to the game thanks to @AnterogradeNil!
 
 ##### Content Fixes:
 
