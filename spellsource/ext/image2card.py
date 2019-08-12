@@ -1,9 +1,10 @@
 import os
 import re
 import logging
+import dataclasses
 from collections import deque
 from copy import deepcopy
-from json import loads, dumps
+from json import loads, JSONEncoder
 from mimetypes import MimeTypes
 from typing import Union, Mapping, Iterable, Optional, Deque, List, Generator, Dict
 from urllib.parse import urlparse, ParseResult
@@ -18,6 +19,21 @@ from scrapy.spiders import Spider, Request
 from ..ext.hearthcards import enrich_from_description
 
 _MIME = MimeTypes()
+
+
+class _Encoder(JSONEncoder):
+    def default(self, o):
+        try:
+            boolable = bool(o)
+        except TypeError:
+            pass
+        else:
+            return bool(boolable)
+            # Let the base class default method raise the TypeError
+        return JSONEncoder.default(self, o)
+
+
+_ENCODER = _Encoder()
 
 
 class PageToImages(Iterable[str]):
@@ -185,10 +201,10 @@ class RekognitionGenerator(Iterable[DetectTextResponse]):
 
             rekognition_res = self._rekognition.detect_text(
                 image=Image(s3_object=S3Object(bucket=self._bucket, name=location)))
-            self._requests[image] = rekognition_res.to_boto_dict()
+            self._requests[image] = dataclasses.asdict(rekognition_res)
             # Save the result to S3
             self._s3.put_object(bucket=self._bucket, key=result_key, content_type='application/json',
-                                body=dumps(self._requests[image]))
+                                body=_ENCODER.encode(self._requests[image]))
             yield rekognition_res
 
 
@@ -219,7 +235,7 @@ class SpellsourceCardDescGenerator(Iterable[Dict]):
             if len(lines) < 2:
                 SpellsourceCardDescGenerator._LOGGER.exception(
                     'Invalid card detected. Insufficient lines (%d) for request %s' % (
-                        len(lines), detect_text.to_boto_dict()))
+                        len(lines), dataclasses.asdict(detect_text)))
                 continue
 
             # First line is the mana line

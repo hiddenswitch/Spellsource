@@ -46,7 +46,7 @@ public class DeckFormat implements Serializable, Cloneable {
 	}
 
 	public static DeckFormat getFormat(String name) {
-		return FORMATS.getOrDefault(name, ALL).clone();
+		return FORMATS.get(name);
 	}
 
 	public static Map<String, DeckFormat> formats() {

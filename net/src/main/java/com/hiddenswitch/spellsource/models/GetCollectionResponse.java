@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.client.models.Entity;
+import com.hiddenswitch.spellsource.client.models.EntityState;
 import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.Games;
@@ -11,6 +13,7 @@ import com.hiddenswitch.spellsource.impl.util.ValidationRecord;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -202,11 +205,26 @@ public final class GetCollectionResponse implements Serializable {
 			if (record == null) {
 				continue;
 			}
-			final Card instance = record.create();
+			record.create();
+			boolean isActor = record.type == CardType.MINION || record.type == CardType.WEAPON;
+			// Send significantly less data
+			// TODO: Just look it up by the card ID in the client
 			records.add(new CardRecord()
 					.userId(cr.getUserId())
 					.collectionIds(cr.getCollectionIds())
-					.entity(Games.getEntity(emptyContext, instance, 0))
+					.entity(new Entity()
+							.cardId(record.id)
+							.description(record.description)
+							.entityType(Entity.EntityTypeEnum.CARD)
+							.name(record.name)
+							.state(new EntityState()
+									.baseAttack(isActor ? record.getBaseAttack() + record.getDamage() : null)
+									.baseHp(isActor ? record.getBaseHp() + record.getDurability() : null)
+									.tribe(record.getRace())
+									.rarity(record.getRarity().getClientRarity())
+									.baseManaCost(record.baseManaCost)
+									.heroClass(record.getHeroClass()))
+					)
 					.id(cr.getId())
 					.allianceId(cr.getAllianceId())
 					.donorUserId(cr.getDonorUserId()));

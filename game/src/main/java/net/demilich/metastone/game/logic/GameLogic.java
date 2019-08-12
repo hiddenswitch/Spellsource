@@ -645,9 +645,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@code spellDesc.getSpellClass()}, then calls its {@link Spell#cast(GameContext, Player, SpellDesc, Entity, List)}
 	 * method to actually execute the code of the spell.
 	 * <p>
-	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
+	 * For example, imagine a spell, "Deal 2 damage to all Fae." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
-	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be
+	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#FAE}, (3) whose {@link SpellArg#VALUE} would be
 	 * {@code 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
 	 * <p>
 	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
@@ -671,10 +671,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param sourceAction    The {@link GameAction}, usually a {@link }
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
 	 *    SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
-	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
-	 * 		spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
-	 * 		implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
-	 *    SpellDesc} as damage.
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) {@code Spell onCast} for the function that typically
+	 * 		has the spell-specific code. {@code onCast} actually implements the logic of a damage spell and interprets the
+	 *    {@link SpellArg#VALUE} attribute of the {@link SpellDesc} as damage.
 	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
 	 * 		into actions the player can take.
@@ -1310,6 +1309,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		final int armorChange = hero.modifyArmor(-damage);
 		if (armorChange != 0) {
 			context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
+			context.getPlayer(hero.getOwner()).getStatistics().loseArmor(-armorChange);
 		}
 		int newHp = Math.min(hero.getHp(), effectiveHp - damage);
 		hero.setHp(newHp);
@@ -1439,6 +1439,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			owner.getHero().setWeapon(null);
 		}
 		weapon.onUnequip(context, owner);
+		removeEnchantments(weapon);
 		context.fireGameEvent(new WeaponDestroyedEvent(context, weapon));
 	}
 
@@ -1553,10 +1554,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void dealFatigueDamage(Player player) {
 		Hero hero = player.getHero();
-		int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
-		fatigue++;
-		player.setAttribute(Attribute.FATIGUE, fatigue);
+
 		if (!player.hasAttribute(Attribute.DISABLE_FATIGUE) && !hero.isDestroyed()) {
+			int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
+			fatigue++;
+			player.setAttribute(Attribute.FATIGUE, fatigue);
+
 			damage(player, hero, fatigue, player, true, true, DamageType.FATIGUE);
 			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 			player.getStatistics().fatigueDamage(fatigue);
@@ -1669,30 +1672,46 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void equipWeapon(int playerId, Weapon weapon, Card weaponCard, boolean resolveBattlecry) {
-		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
-		Weapon currentWeapon = preEquipWeapon.getCurrentWeapon();
-		Player player = preEquipWeapon.getPlayer();
+		Player player = context.getPlayer(playerId);
+
+		weapon.setId(generateId());
+		Weapon currentWeapon = player.getHero().getWeapon();
+
+		if (currentWeapon != null) {
+			currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+		}
+
+		player.getHero().setWeapon(weapon);
 
 		if (resolveBattlecry
 				&& !weapon.getBattlecries().isEmpty()) {
 			resolveBattlecries(playerId, weapon);
+			// This will not resolve the deathrattle of the weapon we're replacing
 			endOfSequence();
 		}
 
+		// We've definitely replaced the existing weapon, whether or not the new weapon is still in play, so its deathrattle
+		// will still need to be evaluated (at a later time).
 		if (currentWeapon != null) {
 			markAsDestroyed(currentWeapon);
 		}
 
-		player.getStatistics().equipWeapon(weapon);
-		weapon.onEquip(context, player);
-		weapon.setActive(context.getActivePlayerId() == playerId);
+		// Resolving the battlecry may have destroyed the weapon we are currently putting into play
+		if (weapon.isInPlay()) {
+			player.getStatistics().equipWeapon(weapon);
+			weapon.onEquip(context, player);
+			weapon.setActive(context.getActivePlayerId() == playerId);
 
-		processBattlefieldEnchantments(player, weapon);
+			processBattlefieldEnchantments(player, weapon);
 
-		if (weapon.getCardCostModifier() != null) {
-			addGameEventListener(player, weapon.getCardCostModifier(), weapon);
+			if (weapon.getCardCostModifier() != null) {
+				addGameEventListener(player, weapon.getCardCostModifier(), weapon);
+			}
+
+			// We're only going to fire this now if the weapon was successfully equipped
+			context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
 		}
-		context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
+
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -3354,6 +3373,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (actor instanceof Weapon
 				&& peacefully) {
 			// Move the weapon directly to the graveyard and don't trigger its deathrattle.
+			// Also remove its enchantments!
+			removeEnchantments(actor);
 			actor.moveOrAddTo(context, Zones.GRAVEYARD);
 		} else {
 			actor.setAttribute(Attribute.DESTROYED);
@@ -4490,6 +4511,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));
 	}
 
+	@Suspendable
+	public void discoverCard(int playerId) {
+		// Similar to above, we will just fire an event for now.
+		context.fireGameEvent(new DiscoverEvent(context, playerId));
+	}
+
 	public int getInternalId() {
 		return idFactory.getInternalId();
 	}
@@ -4562,40 +4589,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			for (AuraDesc aura : card.getDesc().getPassiveAuras()) {
 				addGameEventListener(player, aura.create(), card);
 			}
-		}
-	}
-
-	protected class PreEquipWeapon {
-		private int playerId;
-		private Weapon weapon;
-		private Player player;
-		private Weapon currentWeapon;
-
-		public PreEquipWeapon(int playerId, Weapon weapon) {
-			this.playerId = playerId;
-			this.weapon = weapon;
-		}
-
-		public Player getPlayer() {
-			return player;
-		}
-
-		public Weapon getCurrentWeapon() {
-			return currentWeapon;
-		}
-
-		public PreEquipWeapon invoke() {
-			player = context.getPlayer(playerId);
-
-			weapon.setId(generateId());
-			currentWeapon = player.getHero().getWeapon();
-
-			if (currentWeapon != null) {
-				currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-			}
-
-			player.getHero().setWeapon(weapon);
-			return this;
 		}
 	}
 

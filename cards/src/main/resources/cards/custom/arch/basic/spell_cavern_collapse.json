@@ -1,0 +1,28 @@
+{
+  "name": "Cavern Collapse",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+  "description": "Destroy a minion. Gain 10 Armor.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 10
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

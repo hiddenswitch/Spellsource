@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
 
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;

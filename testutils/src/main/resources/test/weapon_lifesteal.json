@@ -1,0 +1,16 @@
+{
+  "name": "Lifesteal Weapon",
+  "baseManaCost": 0,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "COMMON",
+  "description": "Lifesteal",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
