@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
 import net.demilich.metastone.game.logic.GameStatus;
@@ -4632,6 +4633,26 @@ public class CustomCardsTests extends TestBase {
 			attack(context, player, player.getHero(), opponent.getHero());
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "weapon_test_1_1");
+		}));
+	}
+
+	@Test
+	public void testRejanAndExcalibur() {
+		runGym(((context, player, opponent) -> {
+			Minion rejan = playMinionCard(context, player, "minion_rejan_last_defender");
+			Weapon weapon = player.getHero().getWeapon();
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability());
+			context.endTurn();
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability());
+			context.endTurn();
+
+			destroy(context, rejan);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability() - 1);
+			context.endTurn();
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability() - 2);
+			assertTrue(weapon.isBroken());
 		}));
 	}
 
