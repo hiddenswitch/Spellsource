@@ -9,7 +9,6 @@
   "race": "MECH",
   "description": "When a player has at least 4 or more minions and summons another, return it to their hand.",
   "trigger": {
-    "targetSelection": "NONE",
     "eventTrigger": {
       "class": "MinionSummonedTrigger",
       "queueCondition": {
@@ -19,13 +18,11 @@
         "targetPlayer": "ANY"
       }
     },
-    "targetPlayer": "ANY",
     "spell": {
       "class": "ReturnTargetToHandSpell",
       "target": "EVENT_TARGET"
     }
   },
-  
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

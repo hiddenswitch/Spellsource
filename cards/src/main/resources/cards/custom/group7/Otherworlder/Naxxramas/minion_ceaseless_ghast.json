@@ -34,8 +34,8 @@
           "class": "AttributeValueProvider",
           "target": "OUTPUT",
           "attribute": "ATTACK"
-        },
-      }    
+        }
+      }
     ]
   },
   "attributes": {

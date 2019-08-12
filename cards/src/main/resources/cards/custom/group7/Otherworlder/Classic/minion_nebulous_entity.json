@@ -12,7 +12,6 @@
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "MetaSpell",
-
       "spells": [
         {
           "class": "DamageSpell",

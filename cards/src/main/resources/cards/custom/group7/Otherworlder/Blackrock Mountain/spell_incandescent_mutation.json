@@ -8,16 +8,15 @@
   "spell": {
     "class": "MetaSpell",
     "spells": [
-    {
-      "class": "DrawCardSpell",
-      "value": 1
-    },
-    {
-      //GIVE MINIONS IN HAND THE BATTLECRY.
-    }
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        //GIVE MINIONS IN HAND THE BATTLECRY.
+      }
     ]
   },
-  
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

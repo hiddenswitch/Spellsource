@@ -18,74 +18,74 @@
           "spells": [
             {
               "class": "ConditionalSpell",
-	          "condition": {
+              "condition": {
                 "class": "AnyMatchFilterCondition",
                 "target": "SELF",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "TAUNT",
-		          "operation": "HAS"
+                  "operation": "HAS"
                 },
                 "invert": true
-		      },
-		      "spell": {
-		        "class": "AddAttributeSpell",
-			    "attribute": "TAUNT"
-		      }
-		    },
+              },
+              "spell": {
+                "class": "AddAttributeSpell",
+                "attribute": "TAUNT"
+              }
+            },
             {
               "class": "ConditionalSpell",
-	          "condition": {
+              "condition": {
                 "class": "AnyMatchFilterCondition",
                 "target": "SELF",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "DIVINE SHIELD",
-		          "operation": "HAS"
+                  "operation": "HAS"
                 },
                 "invert": true
-		      },
-		      "spell": {
-		        "class": "AddAttributeSpell",
-			    "attribute": "DIVINE SHIELD"
-		      }
-		    },
-		    {
+              },
+              "spell": {
+                "class": "AddAttributeSpell",
+                "attribute": "DIVINE SHIELD"
+              }
+            },
+            {
               "class": "ConditionalSpell",
-	          "condition": {
+              "condition": {
                 "class": "AnyMatchFilterCondition",
                 "target": "SELF",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "STEALTH",
-		          "operation": "HAS"
+                  "operation": "HAS"
                 },
                 "invert": true
-		      },
-		      "spell": {
-		        "class": "AddAttributeSpell",
-			    "attribute": "STEALTH"
-		      }
-		    },
-		    {
+              },
+              "spell": {
+                "class": "AddAttributeSpell",
+                "attribute": "STEALTH"
+              }
+            },
+            {
               "class": "ConditionalSpell",
-	          "condition": {
+              "condition": {
                 "class": "AnyMatchFilterCondition",
                 "target": "SELF",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "WINDFURY",
-		          "operation": "HAS"
+                  "operation": "HAS"
                 },
                 "invert": true
-		      },
-		      "spell": {
-		        "class": "AddAttributeSpell",
-			    "attribute": "WINDFURY"
-		      }
-		    }
-		  ]
-	    },
+              },
+              "spell": {
+                "class": "AddAttributeSpell",
+                "attribute": "WINDFURY"
+              }
+            }
+          ]
+        },
         {
           "class": "ShuffleToDeckSpell",
           "target": "SELF"

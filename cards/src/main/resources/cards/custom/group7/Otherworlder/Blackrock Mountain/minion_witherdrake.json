@@ -13,22 +13,22 @@
     "spell": {
       "class": "MetaSpell",
       "spells": [
-      {
-        "trigger": {
-          "eventTrigger": {
-            "class": "DamageCausedTrigger",
-            "hostTargetType": "IGNORE_OTHER_SOURCES"
-          },
-          "spell": {
-            "class": "WitherSpell",
-            "target": "EVENT_TARGET"
+        {
+          "trigger": {
+            "eventTrigger": {
+              "class": "DamageCausedTrigger",
+              "hostTargetType": "IGNORE_OTHER_SOURCES"
+            },
+            "spell": {
+              "class": "WitherSpell",
+              "target": "EVENT_TARGET"
+            }
           }
+        },
+        {
+          "class": "DamageSpell",
+          "value": 1
         }
-      },
-      {
-        "class": "DamageSpell",
-        "value": 1
-      }
       ]
     }
   },
