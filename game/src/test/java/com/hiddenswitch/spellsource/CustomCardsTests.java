@@ -4535,17 +4535,20 @@ public class CustomCardsTests extends TestBase {
 	@Ignore("summons minions that destroy other minions")
 	public void testSotMountainExcavation() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			playCard(context, player, "spell_sot_mountain_excavation");
 			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 1L);
 		});
 
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(8);
 			playCard(context, player, "spell_sot_mountain_excavation");
 			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 3L);
 		});
 
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(28);
 			playCard(context, player, "spell_sot_mountain_excavation");
 			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 7L);
