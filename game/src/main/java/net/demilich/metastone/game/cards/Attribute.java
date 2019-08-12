@@ -157,7 +157,6 @@ public enum Attribute {
 	 * was {@link #FROZEN}.
 	 *
 	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
-	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
 	/**
@@ -734,11 +733,6 @@ public enum Attribute {
 	 */
 	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
 	/**
-	 * If a {@link Player} has this attribute, the player had a deck named "The Supreme Archive" in the player's
-	 * collection when the game began.
-	 */
-	HAS_SUPREME_ARCHIVE_DECK,
-	/**
 	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
 	 * damage to the target minion, the target minion  is destroyed.
 	 */
@@ -1048,8 +1042,8 @@ public enum Attribute {
 	 */
 	LACKEY,
 	/**
-	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability
-	 * at the end of every owner's turn
+	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability at the end of every
+	 * owner's turn
 	 */
 	DECAY,
 	/**
@@ -1057,13 +1051,13 @@ public enum Attribute {
 	 */
 	TREANT,
 	DRAINED_THIS_TURN,
-    TOTAL_DRAINED,
-    DRAINED_LAST_TURN,
-    /**
-     * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
-     */
-    SURGE,
-    DYNAMIC_DESCRIPTION, PASSIVE_AURAS, CURSE;
+	TOTAL_DRAINED,
+	DRAINED_LAST_TURN,
+	/**
+	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+	 */
+	SURGE,
+	DYNAMIC_DESCRIPTION, PASSIVE_AURAS, CURSE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

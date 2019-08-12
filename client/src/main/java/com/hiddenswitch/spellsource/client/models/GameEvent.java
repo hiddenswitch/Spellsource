@@ -88,9 +88,13 @@ public class GameEvent implements Serializable {
     
     DAMAGE("DAMAGE"),
     
+    DECAY("DECAY"),
+    
     DID_END_SEQUENCE("DID_END_SEQUENCE"),
     
     DISCARD("DISCARD"),
+    
+    DISCOVER("DISCOVER"),
     
     DRAIN("DRAIN"),
     

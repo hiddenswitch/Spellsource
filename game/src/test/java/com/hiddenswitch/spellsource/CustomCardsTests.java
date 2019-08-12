@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
 import net.demilich.metastone.game.logic.GameStatus;
@@ -22,7 +23,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
-import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
@@ -1382,6 +1382,17 @@ public class CustomCardsTests extends TestBase {
 			assertFalse(attacker.isDestroyed());
 			assertTrue(defender.isDestroyed());
 			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), -95, "Hit limit on attacks");
+		});
+
+		// Test interaction with garbasu monster and immune while attack
+		runGym((context, player, opponent) -> {
+			Minion catta = playMinionCard(context, player, "minion_catta_the_merciless");
+			Minion attacker = playMinionCard(context, player, "minion_neutral_test");
+			attacker.setAttribute(Attribute.IMMUNE_WHILE_ATTACKING);
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_garbasu_monster");
+			context.endTurn();
+			attack(context, player, attacker, defender);
 		});
 	}
 
@@ -4379,6 +4390,20 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testStringShot() {
+		runGym(((context, player, opponent) -> {
+			Minion target = playMinionCard(context, opponent, "minion_test_3_2");
+			Card stringShotCard = receiveCard(context, player, "spell_string_shot");
+			playCard(context, player, "minion_lil_wormy");
+			player.setMana(1);
+
+			assertEquals(context.getValidActions().stream().filter(action ->
+					Objects.equals(action.getSourceReference(), stringShotCard.getReference()) &&
+							Objects.equals(action.getTargetReference(), target.getReference())).count(), 1L);
+		}));
+	}
+
+	@Test
 	public void testScopeOut() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_cost_11_test");
@@ -4456,6 +4481,21 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testTheGlutton() {
+		runGym(((context, player, opponent) -> {
+			Minion glutton = playMinionCard(context, player, "minion_the_glutton");
+			Minion toBeEaten = playMinionCard(context, player, "minion_black_test");
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack());
+			context.endTurn();
+			assertTrue(toBeEaten.isDestroyed());
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack() + 1);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(glutton.getAttack(), glutton.getBaseAttack() + 1);
+		}));
+	}
+
+	@Test
 	public void testMatriarchAiiranDescription() {
 		runGym((context, player, opponent) -> {
 			Minion aiiranOnBoard = playMinionCard(context, player, "minion_matriarch_aiiran");
@@ -4492,24 +4532,28 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	@Ignore("summons minions that destroy other minions")
 	public void testSotMountainExcavation() {
-		runGym(((context, player, opponent) -> {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 1);
-		}));
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 1L);
+		});
 
-		runGym(((context, player, opponent) -> {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(8);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 3);
-		}));
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 3L);
+		});
 
-		runGym(((context, player, opponent) -> {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(28);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().equals(Rarity.LEGENDARY)).collect(Collectors.toList()).size(), 7);
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 7L);
 			assertEquals(player.getHero().getArmor(), 4);
-		}));
+		});
 	}
 
 	@Test
@@ -4582,5 +4626,85 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(player.getHand().size(), 4);
 		}));
+	}
+
+	@Test
+	public void testIronPreserver() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_iron_preserver");
+			playCard(context, player, "weapon_test_1_1");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "weapon_test_1_1");
+		}));
+	}
+
+	@Test
+	public void testRejanAndExcalibur() {
+		runGym(((context, player, opponent) -> {
+			Minion rejan = playMinionCard(context, player, "minion_rejan_last_defender");
+			Weapon weapon = player.getHero().getWeapon();
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability());
+			context.endTurn();
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability());
+			context.endTurn();
+
+			destroy(context, rejan);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability() - 1);
+			context.endTurn();
+			assertEquals(weapon.getDurability(), weapon.getMaxDurability() - 2);
+			assertTrue(weapon.isBroken());
+		}));
+	}
+
+	@Test
+	public void testMasterEroder() {
+		// test basic master eroder
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp());
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+
+		// test master eroder with mind control
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			playCard(context, opponent, "spell_test_give_away", minion);
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+
+		// test that master eroder doesn't double stack its effect
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			playCard(context, player, "minion_master_eroder");
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp());
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+	}
+
+	@Test
+	public void testXitalu() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_xitalu");
+			Minion playerMinion = playMinionCard(context, player, "minion_test_3_2");
+			playCard(context, player, "spell_shuffle_minion_to_deck", playerMinion);
+			assertEquals(player.getDeck().stream().filter(card -> card.getSourceCard().getCardId().equals("minion_test_3_2")).collect(Collectors.toList()).size(), 3);
+
+			Minion opponentMinion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "spell_shuffle_minion_to_opponents_deck", opponentMinion);
+			assertEquals(opponent.getDeck().stream().filter(card -> card.getSourceCard().getCardId().equals("minion_test_3_2")).collect(Collectors.toList()).size(), 3);
+		});
 	}
 }

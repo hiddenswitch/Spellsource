@@ -19,7 +19,7 @@ public class InventoryTest extends SpellsourceTestBase {
 	@Test
 	public void testCreateStartingCollectionAllCards(TestContext context) {
 		sync(() -> {
-			final String userId = createRandomAccount().getUserId();
+			String userId = createRandomAccount().getUserId();
 			CreateCollectionResponse response = Inventory.createCollection(CreateCollectionRequest.startingCollection(userId));
 			GetCollectionResponse get = Inventory.getCollection(GetCollectionRequest.user(userId));
 			context.assertEquals(response.getCreatedInventoryIds().size(), get.getInventoryRecords().size());
@@ -32,10 +32,10 @@ public class InventoryTest extends SpellsourceTestBase {
 	public void testUpdateCollectionWithCardIds(TestContext context) {
 		sync(() -> {
 			CreateAccountResponse user = createRandomAccount();
-			final String userId = user.getUserId();
+			String userId = user.getUserId();
 			CreateCollectionResponse createEmptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
 			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false));
-			final String deckId = createEmptyDeck.getCollectionId();
+			String deckId = createEmptyDeck.getCollectionId();
 			AddToCollectionResponse addToCollectionResponse = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("minion_test_3_2", "minion_test_3_2")));
 			context.assertEquals(2, addToCollectionResponse.getInventoryIds().size(), "Two 3/2s should have been added");
 			GetCollectionResponse updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));

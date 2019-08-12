@@ -18,7 +18,6 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
-import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestBehaviour;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -487,7 +486,7 @@ public class JourneyToUngoroTests extends TestBase {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
 			putOnTopOfDeck(context, opponent, rightCardId);
-			putOnTopOfDeck(context,opponent,"spell_lunstone");
+			putOnTopOfDeck(context, opponent, "spell_lunstone");
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
 			opponent.getDeck().get(1).getAttributes().put(Attribute.STARTED_IN_DECK, false);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
@@ -506,7 +505,7 @@ public class JourneyToUngoroTests extends TestBase {
 			context.getEntities().forEach(e -> e.getAttributes().remove(Attribute.STARTED_IN_DECK));
 			String rightCardId = "minion_shade_of_naxxramas";
 			putOnTopOfDeck(context, opponent, rightCardId);
-			putOnTopOfDeck(context,opponent,"spell_lunstone");
+			putOnTopOfDeck(context, opponent, "spell_lunstone");
 			opponent.getDeck().get(0).getAttributes().put(Attribute.STARTED_IN_DECK, true);
 			opponent.getDeck().get(1).getAttributes().put(Attribute.STARTED_IN_DECK, false);
 			OverrideDiscoverBehaviour override = overrideDiscoverChoice((List<DiscoverAction> choices) ->
@@ -968,7 +967,7 @@ public class JourneyToUngoroTests extends TestBase {
 		});
 	}
 
-	@Test
+	@Test(invocationCount = 100)
 	public void testFreeFromAmber() {
 		GameContext context = createContext("WHITE", "WHITE");
 		Player player = context.getActivePlayer();
