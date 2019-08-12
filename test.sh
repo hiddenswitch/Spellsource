@@ -20,4 +20,7 @@ else
   export GRADLE_CMD=gradle
 fi
 
-${GRADLE_CMD} test
+${GRADLE_CMD} game:test
+${GRADLE_CMD} cards:test
+${GRADLE_CMD} hearthstone:test
+${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.DeckTest.testGetStandardDecks

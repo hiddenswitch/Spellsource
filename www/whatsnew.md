@@ -15,6 +15,8 @@ Bug fixes.
  - Catta the Merciless and Garbasu Monster no longer interact to cause an infinite loop when Garbasu faces off a 1-attack immune minion.
  - Replacing weapons no longer sometimes keeps their enchantments, like Decay, in play.
  - A number of cards that trigger off of shuffling effects, such as Xitalu, now properly work. (1334)
+ - Sot Mountain Excavation no longer deals damage to the player champion and instead just removes the armor.
+ - Bloody Reconstruction now appears in the Collection again. (1342)
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 

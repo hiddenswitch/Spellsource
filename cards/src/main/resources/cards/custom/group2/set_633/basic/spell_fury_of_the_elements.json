@@ -19,7 +19,10 @@
       "token_unearthed_spirit",
       "token_burning_spirit"
     ],
-    "randomTarget": true
+    "randomTarget": true,
+    "cardSource": {
+      "class": "SummonWithoutReplacementCardSource"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
