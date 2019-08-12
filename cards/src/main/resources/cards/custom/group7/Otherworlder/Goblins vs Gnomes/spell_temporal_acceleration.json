@@ -8,25 +8,24 @@
   "spell": {
     "class": "MetaSpell",
     "spells": [
-    {
-      "class": "DiscardSpell",
-      "target": "LEFTMOST_FRIENDLY_CARD_HAND"
-    },
-    {
-      "class": "DiscardSpell",
-      "target": "LEFTMOST_FRIENDLY_CARD_HAND"
-    },
-    {
-      "class": "DiscardSpell",
-      "target": "LEFTMOST_FRIENDLY_CARD_HAND"
-    },
-    {
-      "class": "DrawCardSpell",
-      "value": 3
-    }
+      {
+        "class": "DiscardSpell",
+        "target": "LEFTMOST_FRIENDLY_CARD_HAND"
+      },
+      {
+        "class": "DiscardSpell",
+        "target": "LEFTMOST_FRIENDLY_CARD_HAND"
+      },
+      {
+        "class": "DiscardSpell",
+        "target": "LEFTMOST_FRIENDLY_CARD_HAND"
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      }
     ]
   },
-  
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

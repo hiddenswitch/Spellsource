@@ -7,31 +7,56 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "description": "Permanent. At the end of your turn, deal 3 damage randomly split among all characters. When they all hit a hero, destroy this.",
-  "triggers": [
-    {
-      "eventTrigger": {
-        "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "MissilesSpell",
-        "target": "ALL_OTHER_CHARACTERS",
-        "value": 1,
-        "howMany": 3,
-        "randomTarget": true
-      }
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
     },
-    {
-      "eventTrigger": {
-        "class": "GameStateChangedTrigger",
-        ---WHEN THEY ALL HIT A HERO, DESTROY THIS---
-      },
-      "spell": {
-        "class": "DestroySpell",
-        "target": "SELF"
-      }
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "MissilesSpell",
+          "target": "ALL_OTHER_CHARACTERS",
+          "value": 1,
+          "howMany": 3,
+          "randomTarget": true,
+          "spell": {
+            "class": "ConditionalSpell",
+            "condition": {
+              "class": "CardPropertyCondition",
+              "target": "OUTPUT",
+              "cardType": "HERO",
+              "invert": true
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "attribute": "RESERVED_BOOLEAN_1",
+              "target": "SELF"
+            }
+          }
+        },
+        {
+          "class": "EitherOrSpell",
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "SELF",
+            "attribute": "RESERVED_BOOLEAN_1",
+            "operation": "HAS"
+          },
+          "spell1": {
+            "class": "RemoveAttributeSpell",
+            "target": "SELF",
+            "attribute": "RESERVED_BOOLEAN_1"
+          },
+          "spell2": {
+            "class": "DestroySpell",
+            "target": "SELF"
+          }
+        }
+      ]
     }
-  ],
+  },
   "attributes": {
     "PERMANENT": true
   },

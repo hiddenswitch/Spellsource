@@ -4634,4 +4634,20 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "weapon_test_1_1");
 		}));
 	}
+
+	@Test
+	public void testFormlessAgony() {
+		runGym((context, player, opponent) -> {
+			Minion permanent = playMinionCard(context, player, "permanent_formless_agony");
+			context.endTurn();
+			assertTrue(permanent.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_test_3_2");
+			Minion permanent = playMinionCard(context, player, "permanent_formless_agony");
+			context.endTurn();
+			assertEquals(permanent.isDestroyed(), minion.getHp() == minion.getMaxHp());
+		});
+	}
 }
