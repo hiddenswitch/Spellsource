@@ -12,6 +12,7 @@ import io.vertx.core.VertxException;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.impl.Utils;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -216,6 +217,7 @@ public interface Gateway extends Verticle {
 	 *
 	 * @return A string
 	 */
+	@Nullable
 	static String getHostAddress() {
 		try {
 			final InterfaceAddress hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);

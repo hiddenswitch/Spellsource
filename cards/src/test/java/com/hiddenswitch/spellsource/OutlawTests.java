@@ -2,8 +2,9 @@ package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.tests.util.TestBase;
+import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
@@ -12,6 +13,12 @@ import static org.testng.Assert.*;
 import static org.testng.Assert.assertEquals;
 
 public class OutlawTests extends TestBase {
+
+	@NotNull
+	@Override
+	public String getDefaultHeroClass() {
+		return HeroClass.COPPER;
+	}
 
 	@Test
 	public void testSpookyTurret() {

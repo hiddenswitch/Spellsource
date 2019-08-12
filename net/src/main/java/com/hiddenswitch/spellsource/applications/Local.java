@@ -35,13 +35,10 @@ public class Local {
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
 //				.setMetricsOptions(Clustered.getMetrics())
-				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 400)
-				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
-				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 400));
+				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors()));
 		vertx.runOnContext(v -> {
 			Tracing.initializeGlobal(vertx);
 
-			Mongo.mongo().connectWithEnvironment(vertx);
 			Spellsource.spellsource().migrate(vertx, v1 -> {
 				if (v1.failed()) {
 					Logging.root().error("main: Migration failed: ", v1.cause());

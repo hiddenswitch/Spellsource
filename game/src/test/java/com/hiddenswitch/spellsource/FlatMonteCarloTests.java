@@ -12,7 +12,6 @@ import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;

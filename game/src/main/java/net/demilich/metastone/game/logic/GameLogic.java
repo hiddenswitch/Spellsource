@@ -645,9 +645,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@code spellDesc.getSpellClass()}, then calls its {@link Spell#cast(GameContext, Player, SpellDesc, Entity, List)}
 	 * method to actually execute the code of the spell.
 	 * <p>
-	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
+	 * For example, imagine a spell, "Deal 2 damage to all Fae." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
-	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be
+	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#FAE}, (3) whose {@link SpellArg#VALUE} would be
 	 * {@code 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
 	 * <p>
 	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
@@ -671,10 +671,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param sourceAction    The {@link GameAction}, usually a {@link }
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
 	 * SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
-	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
-	 * spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
-	 * implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
-	 * SpellDesc} as damage.
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) {@code Spell onCast} for the function that typically
+	 * has the spell-specific code. {@code onCast} actually implements the logic of a damage spell and interprets the
+	 * {@link SpellArg#VALUE} attribute of the {@link SpellDesc} as damage.
 	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
 	 * into actions the player can take.
@@ -1440,6 +1439,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			owner.getHero().setWeapon(null);
 		}
 		weapon.onUnequip(context, owner);
+		removeEnchantments(weapon);
 		context.fireGameEvent(new WeaponDestroyedEvent(context, weapon));
 	}
 
@@ -1554,10 +1554,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void dealFatigueDamage(Player player) {
 		Hero hero = player.getHero();
-		int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
-		fatigue++;
-		player.setAttribute(Attribute.FATIGUE, fatigue);
+
 		if (!player.hasAttribute(Attribute.DISABLE_FATIGUE) && !hero.isDestroyed()) {
+			int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
+			fatigue++;
+			player.setAttribute(Attribute.FATIGUE, fatigue);
+
 			damage(player, hero, fatigue, player, true, true, DamageType.FATIGUE);
 			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 			player.getStatistics().fatigueDamage(fatigue);
@@ -1670,30 +1672,46 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void equipWeapon(int playerId, Weapon weapon, Card weaponCard, boolean resolveBattlecry) {
-		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
-		Weapon currentWeapon = preEquipWeapon.getCurrentWeapon();
-		Player player = preEquipWeapon.getPlayer();
+		Player player = context.getPlayer(playerId);
+
+		weapon.setId(generateId());
+		Weapon currentWeapon = player.getHero().getWeapon();
+
+		if (currentWeapon != null) {
+			currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+		}
+
+		player.getHero().setWeapon(weapon);
 
 		if (resolveBattlecry
 				&& !weapon.getBattlecries().isEmpty()) {
 			resolveBattlecries(playerId, weapon);
+			// This will not resolve the deathrattle of the weapon we're replacing
 			endOfSequence();
 		}
 
+		// We've definitely replaced the existing weapon, whether or not the new weapon is still in play, so its deathrattle
+		// will still need to be evaluated (at a later time).
 		if (currentWeapon != null) {
 			markAsDestroyed(currentWeapon);
 		}
 
-		player.getStatistics().equipWeapon(weapon);
-		weapon.onEquip(context, player);
-		weapon.setActive(context.getActivePlayerId() == playerId);
+		// Resolving the battlecry may have destroyed the weapon we are currently putting into play
+		if (weapon.isInPlay()) {
+			player.getStatistics().equipWeapon(weapon);
+			weapon.onEquip(context, player);
+			weapon.setActive(context.getActivePlayerId() == playerId);
 
-		processBattlefieldEnchantments(player, weapon);
+			processBattlefieldEnchantments(player, weapon);
 
-		if (weapon.getCardCostModifier() != null) {
-			addGameEventListener(player, weapon.getCardCostModifier(), weapon);
+			if (weapon.getCardCostModifier() != null) {
+				addGameEventListener(player, weapon.getCardCostModifier(), weapon);
+			}
+
+			// We're only going to fire this now if the weapon was successfully equipped
+			context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
 		}
-		context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
+
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -3773,22 +3791,52 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling the
-	 * deck (i.e., changing the existing order of the cards).
-	 * <p>
-	 * Removes the enchantments on the card before shuffling it into the deck. This removes card cost modification
-	 * enchantments.
-	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
 	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @return
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
 	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
 	 * triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
-		return shuffleToDeck(player, null, card, quiet, false);
+		return shuffleToDeck(player, null, card, quiet, false, player.getId());
+	}
+
+	/**
+	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling the
+	 * deck (i.e., changing the existing order of the cards).
+	 * <p>
+	 * Removes the enchantments on the card before shuffling it into the deck. This removes card cost modification
+	 * enchantments.
+	 *
+	 * @param player         The player whose deck this card is getting shuffled into.
+	 * @param card           The card to shuffle into that player's deck.
+	 * @param quiet          If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param sourcePlayerId The caster of the spell that is executing the shuffleToDeck method.
+	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
+	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * triggering another shuffle event (e.g., with Augmented Elekk).
+	 */
+	@Suspendable
+	public boolean shuffleToDeck(Player player, Card card, boolean quiet, int sourcePlayerId) {
+		return shuffleToDeck(player, null, card, quiet, false, sourcePlayerId);
+	}
+
+	/**
+	 * @param player                The player whose deck this card is getting shuffled into.
+	 * @param relatedEntity         The entity related to the card that is getting shuffled. For example, when shuffling a
+	 * @param card                  The card to shuffle into that player's deck.
+	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
+	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
+	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
+	 *                              card cost modifiers).
+	 */
+	@Suspendable
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
+		return shuffleToDeck(player, relatedEntity, card, quiet, keepCardCostModifiers, player.getId());
 	}
 
 	/**
@@ -3807,18 +3855,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
 	 *                              card cost modifiers).
+	 * @param sourcePlayerId        The caster of the spell that is executing the shuffleToDeck method.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
 	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
 	 * triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers, int sourcePlayerId) {
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
 				card.setId(generateId());
 			}
-			int originalOwner = card.getOwner();
 			if (card.getOwner() == IdFactory.UNASSIGNED) {
 				card.setOwner(player.getId());
 			}
@@ -3837,13 +3885,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			processDeckTriggers(player, card);
 
 			if (!quiet) {
-				if (originalOwner == UNASSIGNED) {
-					originalOwner = player.getId();
-				}
 				if (relatedEntity != null) {
-					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, relatedEntity, card));
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, relatedEntity, card));
 				} else {
-					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, card));
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, card));
 
 				}
 				if (card.getZone() == Zones.DECK) {
@@ -3873,7 +3918,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card) {
-		return shuffleToDeck(player, card, false);
+		return shuffleToDeck(player, card, false, player.getId());
 	}
 
 	/**
@@ -4571,40 +4616,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			for (AuraDesc aura : card.getDesc().getPassiveAuras()) {
 				addGameEventListener(player, aura.create(), card);
 			}
-		}
-	}
-
-	protected class PreEquipWeapon {
-		private int playerId;
-		private Weapon weapon;
-		private Player player;
-		private Weapon currentWeapon;
-
-		public PreEquipWeapon(int playerId, Weapon weapon) {
-			this.playerId = playerId;
-			this.weapon = weapon;
-		}
-
-		public Player getPlayer() {
-			return player;
-		}
-
-		public Weapon getCurrentWeapon() {
-			return currentWeapon;
-		}
-
-		public PreEquipWeapon invoke() {
-			player = context.getPlayer(playerId);
-
-			weapon.setId(generateId());
-			currentWeapon = player.getHero().getWeapon();
-
-			if (currentWeapon != null) {
-				currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-			}
-
-			player.getHero().setWeapon(weapon);
-			return this;
 		}
 	}
 

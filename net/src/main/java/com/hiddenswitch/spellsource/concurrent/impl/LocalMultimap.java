@@ -52,7 +52,7 @@ public class LocalMultimap<K, V> extends AbstractAddedChangedRemoved<K, V> imple
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public boolean remove(@Nullable Object key, @Nullable Object value) {
+	public boolean remove(@Nullable K key, @Nullable V value) {
 		boolean success = map.remove(key, value);
 		if (success) {
 			removed.onNext(Maps.immutableEntry((K) key, (V) value));

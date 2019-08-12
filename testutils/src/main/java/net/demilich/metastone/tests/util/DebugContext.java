@@ -12,8 +12,8 @@ public class DebugContext extends GameContext {
 
 	public DebugContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
 		super();
-		setPlayer(0,player1);
-		setPlayer(1,player2);
+		setPlayer(0, player1);
+		setPlayer(1, player2);
 		setLogic(logic);
 		setDeckFormat(deckFormat);
 	}

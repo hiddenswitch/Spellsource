@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Battlecry: If you control another Elemental, summon an Elemental from your hand.",
+  "description": "Opener: If you control another Elemental, summon an Elemental from your hand.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

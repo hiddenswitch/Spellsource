@@ -33,6 +33,9 @@ public class HeroClass {
 	public static final String RED = "RED";
 	public static final String OLIVE = "OLIVE";
 	public static final String TEST = "TEST";
+	public static final String CORAL = "CORAL";
+	public static final String COPPER = "COPPER";
+	public static final String DARKBLUE = "DARKBLUE";
 
 
 	/**
