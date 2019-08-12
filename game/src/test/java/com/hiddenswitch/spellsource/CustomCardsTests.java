@@ -4655,4 +4655,53 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(weapon.isBroken());
 		}));
 	}
+
+	@Test
+	public void testMasterEroder() {
+		// test basic master eroder
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp());
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+
+		// test master eroder with mind control
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			playCard(context, opponent, "spell_test_give_away", minion);
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+
+		// test that master eroder doesn't double stack its effect
+		runGym(((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "minion_master_eroder");
+			playCard(context, player, "minion_master_eroder");
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp());
+			context.endTurn();
+			assertEquals(minion.getHp(), minion.getMaxHp() - 1);
+		}));
+	}
+
+	@Test
+	public void testXitalu() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_xitalu");
+			Minion playerMinion = playMinionCard(context, player, "minion_test_3_2");
+			playCard(context, player, "spell_shuffle_minion_to_deck", playerMinion);
+			assertEquals(player.getDeck().stream().filter(card -> card.getSourceCard().getCardId().equals("minion_test_3_2")).collect(Collectors.toList()).size(), 3);
+
+			Minion opponentMinion = playMinionCard(context, opponent, "minion_test_3_2");
+			playCard(context, player, "spell_shuffle_minion_to_opponents_deck", opponentMinion);
+			assertEquals(opponent.getDeck().stream().filter(card -> card.getSourceCard().getCardId().equals("minion_test_3_2")).collect(Collectors.toList()).size(), 3);
+		});
+	}
 }
