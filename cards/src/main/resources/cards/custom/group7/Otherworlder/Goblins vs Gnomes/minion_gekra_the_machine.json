@@ -9,18 +9,72 @@
   "race": "MECH",
   "description": "Deathrattle: Permanently give this minion <b>Taunt</b>, <b>Divine Shield</b>, <b>Stealth</b>, or <b>Windfury</b> at random and shuffle it into your deck.",
   "deathrattle": {
+    "class": "ShuffleToDeckSpell",
+    "target": "SELF",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "RandomlyCastSpell",
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "invert": true,
+        "conditions": [
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "WINDFURY",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "TAUNT",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "DIVINE_SHIELD",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "STEALTH",
+              "operation": "HAS"
+            }
+          }
+        ]
+      },
+      "spell": {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "AnyMatchFilterCondition",
           "target": "SELF",
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "RESERVED_BOOLEAN_1",
+            "operation": "HAS",
+            "invert": true
+          }
+        },
+        "spell": {
+          "class": "RandomlyCastSpell",
           "spells": [
             {
               "class": "ConditionalSpell",
               "condition": {
                 "class": "AnyMatchFilterCondition",
-                "target": "SELF",
+                "target": "OUTPUT",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "TAUNT",
@@ -29,32 +83,54 @@
                 "invert": true
               },
               "spell": {
-                "class": "AddAttributeSpell",
-                "attribute": "TAUNT"
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "TAUNT"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
               }
             },
             {
               "class": "ConditionalSpell",
               "condition": {
                 "class": "AnyMatchFilterCondition",
-                "target": "SELF",
+                "target": "OUTPUT",
                 "filter": {
                   "class": "AttributeFilter",
-                  "attribute": "DIVINE SHIELD",
+                  "attribute": "DIVINE_SHIELD",
                   "operation": "HAS"
                 },
                 "invert": true
               },
               "spell": {
-                "class": "AddAttributeSpell",
-                "attribute": "DIVINE SHIELD"
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "DIVINE_SHIELD"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
               }
             },
             {
               "class": "ConditionalSpell",
               "condition": {
                 "class": "AnyMatchFilterCondition",
-                "target": "SELF",
+                "target": "OUTPUT",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "STEALTH",
@@ -63,15 +139,26 @@
                 "invert": true
               },
               "spell": {
-                "class": "AddAttributeSpell",
-                "attribute": "STEALTH"
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "STEALTH"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
               }
             },
             {
               "class": "ConditionalSpell",
               "condition": {
                 "class": "AnyMatchFilterCondition",
-                "target": "SELF",
+                "target": "OUTPUT",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "WINDFURY",
@@ -80,17 +167,24 @@
                 "invert": true
               },
               "spell": {
-                "class": "AddAttributeSpell",
-                "attribute": "WINDFURY"
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "WINDFURY"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
               }
             }
           ]
-        },
-        {
-          "class": "ShuffleToDeckSpell",
-          "target": "SELF"
         }
-      ]
+      }
     }
   },
   "attributes": {

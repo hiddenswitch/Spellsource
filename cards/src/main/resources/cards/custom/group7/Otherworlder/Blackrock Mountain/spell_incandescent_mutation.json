@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Draw a card, then give all minions in your hand \"<b>Battlecry</b>: Deal 1 damage to a random enemy minion.\"",
+  "description": "Draw a card, then give all minions in your hand \"<b>Opener</b>: Deal 1 damage to a random enemy minion.\"",
   "spell": {
     "class": "MetaSpell",
     "spells": [
@@ -13,7 +13,17 @@
         "value": 1
       },
       {
-        //GIVE MINIONS IN HAND THE BATTLECRY.
+        "class": "AddBattlecrySpell",
+        "target": "FRIENDLY_HAND",
+        "battlecry": {
+          "targetSelection": "NONE",
+          "spell": {
+            "class": "DamageSpell",
+            "value": "1",
+            "target": "ENEMY_MINIONS",
+            "randomTarget": true
+          }
+        }
       }
     ]
   },
