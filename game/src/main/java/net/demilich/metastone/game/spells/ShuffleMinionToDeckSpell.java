@@ -35,7 +35,7 @@ public class ShuffleMinionToDeckSpell extends ShuffleToDeckSpell {
 
 	@Override
 	@Suspendable
-	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean quiet) {
-		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, targetEntity, card, quiet, false));
+	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean quiet, int sourcePlayerId) {
+		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, targetEntity, card, quiet, false, sourcePlayerId));
 	}
 }

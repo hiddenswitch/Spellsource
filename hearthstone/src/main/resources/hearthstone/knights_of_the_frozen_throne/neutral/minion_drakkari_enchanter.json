@@ -7,8 +7,9 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "description": "Your end of turn effects trigger twice.",
-  "attributes": {
-    "DOUBLE_END_TURN_TRIGGERS": true
+  "aura": {
+    "class": "DoubleTurnEndTriggersAura",
+    "target": "FRIENDLY_CARDS"
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

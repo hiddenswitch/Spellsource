@@ -1,12 +1,13 @@
 package com.hiddenswitch.hearthstone;
 
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.GymFactory;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -100,20 +101,24 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 
 	@Test
 	public void testWrathion() {
-		runGym((context, player, opponent) -> {
+		GymFactory factory = getGymFactory((context, player, opponent) -> {
+			player.getAttributes().remove(Attribute.DISABLE_FATIGUE);
+		});
+
+		factory.run((context, player, opponent) -> {
 			int preFatigue = player.getHero().getHp();
 			playCard(context, player, "minion_wrathion");
 			Assert.assertEquals(player.getHero().getHp(), preFatigue - 1, "Wrathion should successfully deal fatigue.");
 		});
 
-		runGym((context, player, opponent) -> {
+		factory.run((context, player, opponent) -> {
 			int hp = player.getHero().getHp();
 			shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_wrathion");
 			Assert.assertEquals(player.getHero().getHp(), hp, "Wrathion should not have dealt fatigue.");
 		});
 
-		runGym((context, player, opponent) -> {
+		factory.run((context, player, opponent) -> {
 			int hp = player.getHero().getHp();
 			shuffleToDeck(context, player, "minion_ysera");
 			playCard(context, player, "minion_wrathion");

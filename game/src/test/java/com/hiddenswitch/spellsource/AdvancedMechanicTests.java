@@ -22,7 +22,6 @@ import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.GymFactory;
-import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
@@ -380,85 +379,80 @@ public class AdvancedMechanicTests extends TestBase {
 
 	@Test
 	public void testChooseOne() {
-		GameContext context = createContext("BROWN", "RED");
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			TestMinionCard Card = new TestMinionCard(1, 4);
+			playCard(context, opponent, Card);
+			context.endTurn();
 
-		context.endTurn();
-		TestMinionCard Card = new TestMinionCard(1, 4);
-		playCard(context, opponent, Card);
-		context.endTurn();
+			player.getHero().getHeroPower().markUsed();
+			for (Card card : player.getHand().toList()) {
+				context.getLogic().removeCard(card);
+			}
+			Card wrath = CardCatalogue.getCardById("spell_test_choose_one");
+			context.getLogic().receiveCard(player.getId(), wrath);
+			player.setMana(wrath.getBaseManaCost() + 1);
+			List<GameAction> validActions = context.getLogic().getValidActions(player.getId());
+			assertEquals(player.getHand().getCount(), 1);
+			// player should have 3 valid actions: two from 'Choose One' card and 1 'End Turn'
+			assertEquals(validActions.size(), 3);
 
-		player.getHero().getHeroPower().markUsed();
-		for (Card card : player.getHand().toList()) {
-			context.getLogic().removeCard(card);
-		}
-		Card wrath = CardCatalogue.getCardById("spell_test_choose_one");
-		HasChooseOneActions wrathChooseOne = wrath;
-		context.getLogic().receiveCard(player.getId(), wrath);
-		player.setMana(wrath.getBaseManaCost() + 1);
-		List<GameAction> validActions = context.getLogic().getValidActions(player.getId());
-		assertEquals(player.getHand().getCount(), 1);
-		// player should have 3 valid actions: two from 'Choose One' card and 1 'End Turn'
-		assertEquals(validActions.size(), 3);
+			GameAction playWrath = ((HasChooseOneActions) wrath).playOptions()[0];
+			playWrath.setTarget(getSingleMinion(opponent.getMinions()));
+			context.performAction(player.getId(), playWrath);
 
-		GameAction playWrath = wrathChooseOne.playOptions()[0];
-		playWrath.setTarget(getSingleMinion(opponent.getMinions()));
-		context.performAction(player.getId(), playWrath);
-
-		validActions = context.getLogic().getValidActions(player.getId());
-		// This time it should just be the 'End Turn'
-		assertEquals(validActions.size(), 1);
-		assertEquals(player.getHand().getCount(), 0);
+			validActions = context.getLogic().getValidActions(player.getId());
+			// This time it should just be the 'End Turn'
+			assertEquals(validActions.size(), 1);
+			assertEquals(player.getHand().getCount(), 0);
+		});
 	}
 
 	@Test
 	public void testCopyCards() {
-		GameContext context = createContext("WHITE", "RED");
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
-		clearHand(context, player);
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			}
 
-		int cardsInHand = player.getHand().getCount();
-		int cardsInOpponentsDeck = opponent.getDeck().getCount();
-		Card thoughtsteal = CardCatalogue.getCardById("spell_test_copy_cards");
-		context.getLogic().receiveCard(player.getId(), thoughtsteal);
-		context.performAction(player.getId(), thoughtsteal.play());
-		assertEquals(opponent.getDeck().getCount(), cardsInOpponentsDeck);
-		assertEquals(player.getHand().getCount(), cardsInHand + 2);
+			int cardsInHand = player.getHand().getCount();
+			int cardsInOpponentsDeck = opponent.getDeck().getCount();
+			playCard(context,player,"spell_test_copy_cards");
+			assertEquals(opponent.getDeck().getCount(), cardsInOpponentsDeck);
+			assertEquals(player.getHand().getCount(), cardsInHand + 2);
+		});
 	}
 
 	@Test
 	public void testDivineShield() {
-		GameContext context = createContext("BLUE", "RED");
-		Player mage = context.getPlayer1();
-		mage.setMana(10);
-		Player warrior = context.getPlayer2();
-		warrior.setMana(10);
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			opponent.setMana(10);
 
-		Card card1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
-		context.getLogic().receiveCard(mage.getId(), card1);
-		context.performAction(mage.getId(), card1.play());
+			Card card1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
+			context.getLogic().receiveCard(player.getId(), card1);
+			context.performAction(player.getId(), card1.play());
 
-		Card card2 = new TestMinionCard(5, 5);
-		context.getLogic().receiveCard(warrior.getId(), card2);
-		context.performAction(warrior.getId(), card2.play());
+			Card card2 = new TestMinionCard(5, 5);
+			context.getLogic().receiveCard(opponent.getId(), card2);
+			context.performAction(opponent.getId(), card2.play());
 
-		Actor attacker = getSingleMinion(mage.getMinions());
-		Actor defender = getSingleMinion(warrior.getMinions());
+			Actor attacker = getSingleMinion(player.getMinions());
+			Actor defender = getSingleMinion(opponent.getMinions());
 
-		GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
-		attackAction.setTarget(defender);
+			GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
+			attackAction.setTarget(defender);
 
-		context.performAction(mage.getId(), attackAction);
-		assertEquals(attacker.getHp(), attacker.getMaxHp());
-		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
-		assertEquals(attacker.isDestroyed(), false);
+			context.performAction(player.getId(), attackAction);
+			assertEquals(attacker.getHp(), attacker.getMaxHp());
+			assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
+			assertFalse(attacker.isDestroyed());
 
-		context.performAction(mage.getId(), attackAction);
-		assertEquals(attacker.getHp(), attacker.getMaxHp() - defender.getAttack());
-		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack() * 2);
-		assertEquals(attacker.isDestroyed(), true);
+			context.performAction(player.getId(), attackAction);
+			assertEquals(attacker.getHp(), attacker.getMaxHp() - defender.getAttack());
+			assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack() * 2);
+			assertTrue(attacker.isDestroyed());
+		});
 	}
 
 	@Test
@@ -553,45 +547,46 @@ public class AdvancedMechanicTests extends TestBase {
 			playSpellCard.setTarget(minion);
 			context.performAction(player.getId(), playSpellCard);
 			assertEquals(minion.getHp(), baseHp);
-		}, "GREEN", "RED");
+		});
 	}
 
 	@Test
 	public void testShorttermBuffs() {
-		GameContext context = createContext("BLUE", "RED");
-		Player mage = context.getPlayer1();
-		mage.setMana(10);
-		Player warrior = context.getPlayer2();
-		warrior.setMana(10);
+		runGym((context, player, opponent) -> {
 
-		int baseAttack = 1;
-		context.setBehaviour(0, new UtilityBehaviour() {
+			player.setMana(10);
+			opponent.setMana(10);
 
-			@Override
-			public String getName() {
-				return "Select-First";
-			}
+			int baseAttack = 1;
+			context.setBehaviour(0, new UtilityBehaviour() {
 
-			@Override
-			public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-				return new ArrayList<Card>();
-			}
+				@Override
+				public String getName() {
+					return "Select-First";
+				}
 
-			@Override
-			public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-				return validActions.get(0);
-			}
+				@Override
+				public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
+					return new ArrayList<Card>();
+				}
 
-		});
+				@Override
+				public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
+					return validActions.get(0);
+				}
 
-		playCard(context, mage, new TestMinionCard(baseAttack, 1));
-		Actor testSubject = getSingleMinion(mage.getMinions());
-		assertEquals(testSubject.getAttack(), baseAttack);
+			});
 
-		playCard(context, mage, "minion_test_buffs");
-		assertEquals(testSubject.getAttack(), baseAttack + 2);
-		context.getLogic().endTurn(mage.getId());
-		assertEquals(testSubject.getAttack(), baseAttack);
+			playCard(context, player, new TestMinionCard(baseAttack, 1));
+			Actor testSubject = getSingleMinion(player.getMinions());
+			assertEquals(testSubject.getAttack(), baseAttack);
+
+			playCard(context, player, "minion_test_buffs");
+			assertEquals(testSubject.getAttack(), baseAttack + 2);
+			context.getLogic().endTurn(player.getId());
+			assertEquals(testSubject.getAttack(), baseAttack);
+		}, "BLUE", "RED");
+
 	}
 
 	@Test
@@ -638,6 +633,46 @@ public class AdvancedMechanicTests extends TestBase {
 				assertTrue(ninja.hasAttribute(Attribute.TAUNT));
 			}
 		}));
+	}
+
+	@Test
+	public void testDoubleTurnEndTriggers() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_double_turn_end_triggers_aura");
+			playCard(context, player, "spell_turn_end_one_turn");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHand().size(), 0);
+			context.endTurn();
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_double_turn_end_triggers_aura");
+			playCard(context, player, "spell_turn_end_one_fire");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHand().size(), 0);
+			context.endTurn();
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_double_turn_end_triggers_aura");
+			context.endTurn();
+			playCard(context, opponent, "spell_turn_end_one_fire");
+			putOnTopOfDeck(context, opponent, "spell_lunstone");
+			putOnTopOfDeck(context, opponent, "spell_lunstone");
+			assertEquals(opponent.getDeck().size(), 2);
+			assertEquals(opponent.getHand().size(), 0);
+			context.endTurn();
+			assertEquals(opponent.getDeck().size(), 1);
+			assertEquals(opponent.getHand().size(), 1);
+		});
 	}
 
 	@Test

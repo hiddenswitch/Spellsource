@@ -1,0 +1,15 @@
+{
+  "name": "Lil Wormy",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "attributes": {},
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

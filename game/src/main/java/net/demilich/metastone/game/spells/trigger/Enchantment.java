@@ -12,6 +12,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.DoubleTurnEndTriggersAura;
 import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -22,8 +23,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,7 +76,6 @@ public class Enchantment extends Entity implements Trigger {
 	protected boolean usesSpellTrigger = true;
 	protected Integer maxFiresPerSequence;
 	protected int firesThisSequence;
-
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		usesSpellTrigger = true;
@@ -183,6 +181,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (!usesSpellTrigger) {
 			return false;
 		}
+		// Maybe have to add a thing to prevent the maxfires from counting twice because of TURN_END_TRIGGERS_TWICE
 		if (countByValue && event instanceof HasValue) {
 			int value = ((HasValue) event).getValue();
 			fires += value;
@@ -214,6 +213,9 @@ public class Enchantment extends Entity implements Trigger {
 				expire();
 			}
 			if (this instanceof Secret && SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+			}
+			if (event.getEventType().equals(GameEventType.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0){
 				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 			}
 			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
