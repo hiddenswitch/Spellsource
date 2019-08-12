@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "<b>Opener:</b> Deal 3 damage to an enemy. Restore 3 Health to your champion.",
+  "description": "<b>Opener:</b> Deal 3 damage to an enemy. Restore #3 Health to your champion.",
   "battlecry": {
     "targetSelection": "ENEMY_CHARACTERS",
     "spell": {
