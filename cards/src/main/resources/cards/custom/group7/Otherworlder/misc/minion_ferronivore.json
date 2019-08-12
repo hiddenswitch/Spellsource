@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Destroy a friendly Mech to deal its combined stats as damage randomly split among all enemies.",
+  "description": "Opener: Destroy a friendly Mech to deal its combined stats as damage randomly split among all enemies.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
@@ -23,18 +23,18 @@
           "class": "MissilesSpell",
           "target": "ENEMY_CHARACTERS",
           "howMany": {
-            "class": "AttributeValueProvider",
-            "target": "OUTPUT",
-            "attribute": "ATTACK"
-          }
-        },
-        {
-          "class": "MissilesSpell",
-          "target": "ENEMY_CHARACTERS",
-          "howMany": {
-            "class": "AttributeValueProvider",
-            "target": "OUTPUT",
-            "attribute": "HP"
+            "class": "AlgebraicValueProvider",
+            "operation": "ADD",
+            "value1":{
+              "class": "AttributeValueProvider",
+              "target": "OUTPUT",
+              "attribute": "ATTACK",
+            },
+            "value2":{
+              "class": "AttributeValueProvider",
+              "target": "OUTPUT",
+              "attribute": "HP"
+            }
           }
         }
       ]
