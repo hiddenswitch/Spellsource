@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Whenever this minion survives damage, gain +1/+1.",
+  "description": "After this minion survives damage, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -17,10 +17,20 @@
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
-      "class": "BuffSpell",
-      "target": "SELF",
-      "attackBonus": 1,
-      "hpBonus": 1
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "target": "SELF",
+        "condition": {
+          "class": "IsDeadCondition",
+          "invert": true
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "attackBonus": 1,
+          "hpBonus": 1
+        }
+      }
     }
   },
   "collectible": true,

@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

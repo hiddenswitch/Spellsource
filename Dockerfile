@@ -108,7 +108,7 @@ COPY --from=jaegertracing/jaeger-agent:1.13 /go/bin/agent-linux /go/bin/agent-li
 WORKDIR /data
 
 ENV PORT=80
-ENV HAZELCAST_PORT=5701
+ENV ATOMIX_PORT=5701
 ENV VERTX_CLUSTER_PORT=5710
 ENV SPELLSOURCE_BROADCAST=false
 

@@ -232,7 +232,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.getFormat("Standard"));
+		setDeckFormat(DeckFormat.all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -1752,6 +1752,16 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	public static GameContext fromTwoRandomDecks() {
 		return fromDecks(Arrays.asList(Deck.randomDeck(), Deck.randomDeck()));
+	}
+
+	/**
+	 * Creates a game with two random decks in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
+	public static GameContext fromTwoRandomDecks(DeckFormat format) {
+		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)));
 	}
 
 	/**
