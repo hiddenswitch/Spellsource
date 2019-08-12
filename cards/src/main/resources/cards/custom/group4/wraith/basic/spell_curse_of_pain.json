@@ -15,7 +15,7 @@
       },
       "spell": {
         "class": "DamageSpell",
-        "target": "SELF",
+        "target": "TRIGGER_HOST",
         "value": 4,
         "ignoreSpellDamage": true
       },
