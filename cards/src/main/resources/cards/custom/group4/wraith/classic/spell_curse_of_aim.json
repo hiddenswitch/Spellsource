@@ -17,7 +17,7 @@
         "class": "FightSpell",
         "target": "FRIENDLY_HERO"
       },
-      "persistentOwner": true
+      "persistentOwner": false
     }
   },
   "collectible": true,
