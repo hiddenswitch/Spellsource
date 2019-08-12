@@ -67,16 +67,20 @@
             "class": "MetaSpell",
             "spells": [
               {
-                "class": "DamageSpell",
+                "class": "BuffSpell",
                 "target": "FRIENDLY_HERO",
-                "value": {
+                "armorBonus": {
                   "class": "AlgebraicValueProvider",
+                  "operation": "NEGATE",
                   "value1": {
-                    "class": "AttributeValueProvider",
-                    "attribute": "ARMOR"
-                  },
-                  "value2": 4,
-                  "operation": "MINIMUM"
+                    "class": "AlgebraicValueProvider",
+                    "value1": {
+                      "class": "AttributeValueProvider",
+                      "attribute": "ARMOR"
+                    },
+                    "value2": 4,
+                    "operation": "MINIMUM"
+                  }
                 }
               },
               {

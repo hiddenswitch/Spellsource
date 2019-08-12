@@ -17,7 +17,6 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
@@ -922,7 +921,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.map(actionGetter -> {
 						Card malfurion = (Card) CardCatalogue.getCardById("hero_malfurion_the_pestilent");
 
-						GameContext context1 = createContext("BROWN", "RED");
+						GameContext context1 =createContext(HeroClass.BROWN, HeroClass.RED, true, DeckFormat.getFormat("Wild"));
 						Player player = context1.getPlayer1();
 						clearHand(context1, player);
 						clearZone(context1, player.getDeck());

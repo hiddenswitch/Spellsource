@@ -27,6 +27,7 @@ public class FriendTest extends SpellsourceTestBase {
 
 	@Test
 	public void testFriendsApi(TestContext testContext) {
+		Vertx vertx = contextRule.vertx();
 		sync(() -> {
 			DefaultApi defaultApi = getApi();
 			// create first account

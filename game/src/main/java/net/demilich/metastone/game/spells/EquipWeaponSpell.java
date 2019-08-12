@@ -124,6 +124,7 @@ public class EquipWeaponSpell extends Spell {
 
 		Weapon weapon = context.getLogic().getRandom(results).createWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
+		// TODO: Should we only cast if the specific weapon we tried to equip has been put into play?
 		weapon = player.getHero().getWeapon();
 		if (weapon != null && weapon.getZone() == Zones.WEAPON) {
 			for (SpellDesc spellDesc : desc.subSpells(0)) {
@@ -136,6 +137,4 @@ public class EquipWeaponSpell extends Spell {
 			}
 		}
 	}
-
-
 }
