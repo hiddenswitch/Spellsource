@@ -19,11 +19,11 @@
   "manaCostModifier": {
     "class": "ConditionalValueProvider",
     "condition": {
-      "class": "AnyMatchFilterCondition",
+      "class": "AttributeCondition",
       "target": "FRIENDLY_HERO",
-      "filter": {
-        "class": "DamagedFilter"
-      }
+      "attribute": "DAMAGE_THIS_TURN",
+      "value": 0,
+      "operation": "GREATER"
     },
     "ifFalse": 0,
     "ifTrue": 2

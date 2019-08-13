@@ -4583,12 +4583,4 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 4);
 		}));
 	}
-
-	@Test
-	public void test() {
-		runGym(((context, player, opponent) -> {
-			playCard(context, player, "quest_curse_it");
-			playCard(context, player, "spell_peace_in_nothing");
-		}));
-	}
 }
