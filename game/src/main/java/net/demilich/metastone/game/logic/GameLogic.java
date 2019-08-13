@@ -550,7 +550,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Determines whether a player can play a pact.
 	 * <p>
-	 * Pacts count as secrets
+	 * Pacts count as quests
 	 *
 	 * @param player
 	 * @param card
@@ -4459,6 +4459,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param pact
 	 * @see #playQuest(Player, Quest, boolean) for a complete reference.
 	 */
+	@Suspendable
 	public void playPact(Player player, Quest pact) {
 		playPact(player, pact, true);
 	}

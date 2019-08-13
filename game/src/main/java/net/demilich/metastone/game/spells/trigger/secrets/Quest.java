@@ -48,7 +48,7 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
  */
 public class Quest extends Enchantment {
 
-	boolean isPact;
+	private boolean isPact;
 
 	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
 		super(trigger, spell);
