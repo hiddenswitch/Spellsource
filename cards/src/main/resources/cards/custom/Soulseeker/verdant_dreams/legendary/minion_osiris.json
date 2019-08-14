@@ -1,12 +1,12 @@
 {
   "name": "Osiris",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKBLUE",
-  "baseAttack": 4,
-  "baseHp": 4,
+  "baseAttack": 3,
+  "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Opener: Return your other minions to your hand. Summon a 4/4 Awoken for each.",
+  "description": "Opener: Return your other minions to your hand. Summon random minions of the same cost.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
@@ -17,7 +17,15 @@
         },
         {
           "class": "SummonSpell",
-          "card": "token_awoken"
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": {
+              "class": "AttributeValueProvider",
+              "target": "SPELL_TARGET",
+              "attribute": "BASE_MANA_COST"
+            }
+          }
         }
       ]
     }

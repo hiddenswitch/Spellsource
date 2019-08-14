@@ -1,13 +1,13 @@
 {
-  "name": "Stranded Memory",
-  "baseManaCost": 3,
+  "name": "Twisted Pathology",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKBLUE",
-  "baseAttack": 2,
-  "baseHp": 2,
+  "baseAttack": 3,
+  "baseHp": 4,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Opener: Both players draw 2 cards.",
+  "description": "Dash. Opener: Both players draw 2 cards.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell",
@@ -16,9 +16,10 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "RUSH": true
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
