@@ -1,22 +1,15 @@
 package com.hiddenswitch.spellsource.models;
 
-import com.hiddenswitch.spellsource.client.models.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityState;
-import com.hiddenswitch.spellsource.client.models.ValidationReport;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
-import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
-import com.hiddenswitch.spellsource.client.models.CardRecord;
-import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
-import com.hiddenswitch.spellsource.impl.util.ValidationRecord;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
@@ -40,7 +33,7 @@ public final class GetCollectionResponse implements Serializable {
 	private String heroCardId;
 	private String format;
 	private boolean standard;
-	private ValidationRecord validationRecord;
+	private ValidationReport validationReport;
 
 	private GetCollectionResponse() {
 	}
@@ -237,7 +230,7 @@ public final class GetCollectionResponse implements Serializable {
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
 				.isStandardDeck(isStandard())
-				.validationReport(validationRecord == null ? new ValidationReport() : validationRecord.toValidationReport())
+				.validationReport(validationReport == null ? new com.hiddenswitch.spellsource.client.models.ValidationReport() : validationReport)
 				.inventory(records);
 
 		if (getHeroClass() != null) {
@@ -339,13 +332,13 @@ public final class GetCollectionResponse implements Serializable {
 		return this;
 	}
 
-	public GetCollectionResponse setValidationRecord(ValidationRecord validationRecord) {
-		this.validationRecord = validationRecord;
+	public GetCollectionResponse setValidationReport(ValidationReport validationReport) {
+		this.validationReport = validationReport;
 		return this;
 	}
 
-	public ValidationRecord getValidationRecord() {
-		return validationRecord;
+	public ValidationReport getValidationReport() {
+		return validationReport;
 	}
 }
 

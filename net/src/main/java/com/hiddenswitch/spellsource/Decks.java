@@ -3,10 +3,9 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
-import com.hiddenswitch.spellsource.impl.util.ValidationRecord;
+import com.hiddenswitch.spellsource.impl.util.ValidationReport;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
@@ -24,7 +23,6 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 
@@ -71,7 +69,7 @@ public interface Decks {
 				inventoryIds.addAll(request.getInventoryIds());
 			}
 
-			ValidationRecord validationRecord;
+			ValidationReport validationReport;
 
 			if (request.getCardIds() != null
 					&& request.getCardIds().size() > 0) {
@@ -94,9 +92,9 @@ public interface Decks {
 					inventoryIds.add(record);
 				}
 
-				validationRecord = validateDeck(request.getCardIds(), request.getHeroClass(), request.getFormat());
+				validationReport = validateDeck(request.getCardIds(), request.getHeroClass(), request.getFormat());
 			} else {
-				validationRecord = new ValidationRecord(true, new String[]{});
+				validationReport = new ValidationReport(true, new String[]{});
 			}
 
 			if (inventoryIds.size() > getMaxDeckSize()) {
@@ -112,7 +110,7 @@ public interface Decks {
 			// Creates a new collection representing this deck
 			final String userId = request.getUserId();
 			CreateCollectionResponse createCollectionResponse = Inventory
-					.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft(), validationRecord)
+					.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft(), validationReport)
 							.setStandard(request.isStandardDeck())
 							.withHeroCardId(request.getHeroCardId())
 							.withFormat(request.getFormat()));
@@ -206,13 +204,13 @@ public interface Decks {
 			}
 
 			GetCollectionResponse getCollectionResponse = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			ValidationRecord validationRecord = validateDeck(getCollectionResponse.asDeck(userId), getCollectionResponse.getFormat());
+			ValidationReport validationReport = validateDeck(getCollectionResponse.asDeck(userId), getCollectionResponse.getFormat());
 
 			collectionUpdate = new JsonObject();
 
-			if (validationRecord != null) {
-				jsonPut(collectionUpdate, "$set", json("validationRecord", json("valid", validationRecord.isValid(),
-						"errorMessages", Arrays.asList(validationRecord.getErrorMessages()))));
+			if (validationReport != null) {
+				jsonPut(collectionUpdate, "$set", json("validationReport", json("valid", validationReport.isValid(),
+						"errorMessages", Arrays.asList(validationReport.getErrorMessages()))));
 			}
 
 			if (!collectionUpdate.isEmpty()) {
@@ -318,8 +316,8 @@ public interface Decks {
 	}
 
 	@Suspendable
-	static ValidationRecord validateDeck(GameDeck deck, String deckFormat) {
-		ValidationRecord validationRecord = new ValidationRecord(true, new String[]{});
+	static ValidationReport validateDeck(GameDeck deck, String deckFormat) {
+		ValidationReport validationReport = new ValidationReport(true, new String[]{});
 
 		GameContext context = new GameContext();
 		Player player1 = new Player(deck);
@@ -333,17 +331,17 @@ public interface Decks {
 		for (Condition condition : conditions) {
 			boolean pass = condition.isFulfilled(context, player1, player1, player1);
 			if (!pass) {
-				validationRecord.setValid(false);
+				validationReport.setValid(false);
 				String error = condition.getDesc().getString(ConditionArg.DESCRIPTION);
-				validationRecord.addErrorMessage(error);
+				validationReport.addErrorMessage(error);
 			}
 		}
 
-		return validationRecord;
+		return validationReport;
 	}
 
 	@Suspendable
-	static ValidationRecord validateDeck(List<String> cards, String heroClass, String deckFormat) {
+	static ValidationReport validateDeck(List<String> cards, String heroClass, String deckFormat) {
 		return validateDeck(new GameDeck(heroClass, cards), deckFormat);
 	}
 }

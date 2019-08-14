@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.models.CollectionTypes;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
@@ -23,7 +24,7 @@ public class CollectionRecord extends MongoRecord {
 	private boolean isStandardDeck;
 	private int wins;
 	private int totalGames;
-	private ValidationRecord validationRecord;
+	private ValidationReport validationReport;
 
 	/**
 	 * Hero class for deck collection records.
@@ -196,12 +197,12 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public void setValidationRecord(ValidationRecord validationRecord) {
-		this.validationRecord = validationRecord;
+	public void setValidationReport(ValidationReport validationReport) {
+		this.validationReport = validationReport;
 	}
 
-	public ValidationRecord getValidationRecord() {
-		return validationRecord;
+	public ValidationReport getValidationReport() {
+		return validationReport;
 	}
 }
 

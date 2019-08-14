@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
-import com.hiddenswitch.spellsource.impl.util.ValidationRecord;
+import com.hiddenswitch.spellsource.impl.util.ValidationReport;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -35,7 +35,7 @@ public class InventoryTest extends SpellsourceTestBase {
 			CreateAccountResponse user = createRandomAccount();
 			String userId = user.getUserId();
 			CreateCollectionResponse createEmptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false, new ValidationRecord()));
+			CreateCollectionResponse createEmptyDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false, new ValidationReport()));
 			String deckId = createEmptyDeck.getCollectionId();
 			AddToCollectionResponse addToCollectionResponse = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, deckId, Arrays.asList("minion_test_3_2", "minion_test_3_2")));
 			context.assertEquals(2, addToCollectionResponse.getInventoryIds().size(), "Two 3/2s should have been added");
@@ -92,7 +92,7 @@ public class InventoryTest extends SpellsourceTestBase {
 							&& record.getCollectionIds().stream().noneMatch(cid -> cid.equals(deckId))).count());
 
 			// Add a deal6 to another deck, remove it, and assert as a side effect the unchanged deck was unaffected.
-			CreateCollectionResponse newDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false, new ValidationRecord()));
+			CreateCollectionResponse newDeck = Inventory.createCollection(CreateCollectionRequest.deck(userId, "name", "TEST", Collections.emptyList(), false, new ValidationReport()));
 			context.assertNotEquals(newDeck.getCollectionId(), deckId);
 			AddToCollectionResponse addOneDeal6ToNewDeck = Inventory.addToCollection(AddToCollectionRequest.createWithCardIds(userId, newDeck.getCollectionId(), Arrays.asList("spell_test_deal_6")));
 			updatedUserCollection = Inventory.getCollection(GetCollectionRequest.user(userId));

@@ -8,13 +8,10 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -101,7 +98,7 @@ public interface Inventory {
 				record1.setHeroCardId(request.getHeroCardId());
 				record1.setFormat(request.getFormat());
 				record1.setStandardDeck(request.isStandard());
-				record1.setValidationRecord(request.getValidationRecord());
+				record1.setValidationReport(request.getValidationReport());
 				final String deckId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record1));
 
 				if (request.getInventoryIds() != null
@@ -347,7 +344,7 @@ public interface Inventory {
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
 				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed())
-						.setStandard(record.isStandardDeck()).setValidationRecord(record.getValidationRecord()));
+						.setStandard(record.isStandardDeck()).setValidationReport(record.getValidationReport()));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -378,7 +375,7 @@ public interface Inventory {
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
 			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed())
-					.setStandard(deck.isStandardDeck()).setValidationRecord(deck.getValidationRecord());
+					.setStandard(deck.isStandardDeck()).setValidationReport(deck.getValidationReport());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(userId, inventoryRecords);
 		} /*  else {
