@@ -20,7 +20,7 @@
     "class": "ConditionalValueProvider",
     "condition": {
       "class": "AttributeCondition",
-      "target": "FRIENDLY_HERO",
+      "target": "FRIENDLY_PLAYER",
       "attribute": "DAMAGE_THIS_TURN",
       "value": 0,
       "operation": "GREATER"
