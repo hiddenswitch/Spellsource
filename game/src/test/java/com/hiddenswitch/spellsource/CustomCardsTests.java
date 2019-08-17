@@ -4532,7 +4532,6 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	@Ignore("summons minions that destroy other minions")
 	public void testSotMountainExcavation() {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
