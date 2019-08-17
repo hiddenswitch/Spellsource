@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Choose a minion. Whenever it attacks, it takes 4 damage.",
+  "description": "Choose a minion. Whenever it attacks, it loses 4 health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
@@ -14,10 +14,10 @@
         "hostTargetType": "IGNORE_OTHER_SOURCES"
       },
       "spell": {
-        "class": "DamageSpell",
+        "class": "ModifyAttributeSpell",
         "target": "TRIGGER_HOST",
-        "value": 4,
-        "ignoreSpellDamage": true
+        "attribute": "HP",
+        "value": -4
       },
       "persistentOwner": true
     }
