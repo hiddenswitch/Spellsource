@@ -25,6 +25,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 import org.mockito.ArgumentMatchers;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
@@ -280,33 +281,36 @@ public class TestBase {
 		}
 	}
 
-	public static GymFactory getGymFactory(GymConsumer initializer) {
-		GymFactory factory = new GymFactory();
+	public GymFactory getGymFactory(GymConsumer initializer) {
+		GymFactory factory = new GymFactory(this);
 		factory.first = initializer;
 		return factory;
 	}
 
-	public static GymFactory getGymFactory(GymConsumer initializer, GymConsumer after) {
+	public GymFactory getGymFactory(GymConsumer initializer, GymConsumer after) {
 		GymFactory factory = getGymFactory(initializer);
 		factory.after = after;
 		return factory;
 	}
 
 	@Suspendable
-	public static void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
-		GameContext context = createContext(heroClass1, heroClass2, true, new DeckFormat().withCardSets("SPELLSOURCE_BASIC", "TEST"));
+	public void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
+		DeckFormat defaultFormat = getDefaultFormat();
+		defaultFormat = defaultFormat.clone();
+		// Remove the starting card
+		defaultFormat.setSecondPlayerBonusCards(new String[0]);
+		GameContext context = new DebugContext(new Player(heroClass1), new Player(heroClass2), new GameLogic() {
+			@Override
+			public int determineBeginner(int... playerIds) {
+				return GameContext.PLAYER_1;
+			}
+		}, defaultFormat);
+		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
+		// Disable fatigue
+		context.getPlayers().forEach(p -> p.setAttribute(Attribute.DISABLE_FATIGUE));
+		context.init();
 		Player player = context.getActivePlayer();
 		Player opponent = context.getOpponent(player);
-		clearHand(context, player);
-		clearHand(context, opponent);
-		clearZone(context, player.getDeck());
-		clearZone(context, opponent.getDeck());
-		clearZone(context, player.getGraveyard());
-		clearZone(context, opponent.getGraveyard());
-		context.setDeckFormat(DeckFormat.getFormat("Custom").addSet("TEST"));
-
-		player.getHero().setHp(player.getHero().getMaxHp());
-
 		consumer.run(context, player, opponent);
 	}
 
@@ -333,8 +337,13 @@ public class TestBase {
 	}
 
 	@Suspendable
-	public static void runGym(GymConsumer consumer) {
-		runGym(consumer, "TEST", "TEST");
+	public void runGym(GymConsumer consumer) {
+		runGym(consumer, getDefaultHeroClass(), getDefaultHeroClass());
+	}
+
+	@NotNull
+	public String getDefaultHeroClass() {
+		return "TEST";
 	}
 
 	public static void clearHand(GameContext context, Player player) {
@@ -412,11 +421,15 @@ public class TestBase {
 		context.performAction(player.getId(), physicalAttackAction);
 	}
 
-	public static DebugContext createContext(String hero1, String hero2) {
-		return createContext(hero1, hero2, true, DeckFormat.getFormat("Custom"));
+	public DebugContext createContext(String hero1, String hero2) {
+		return createContext(hero1, hero2, true, getDefaultFormat());
 	}
 
-	public static DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
+	public DeckFormat getDefaultFormat() {
+		return DeckFormat.getFormat("All");
+	}
+
+	public DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
 		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
 		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
 

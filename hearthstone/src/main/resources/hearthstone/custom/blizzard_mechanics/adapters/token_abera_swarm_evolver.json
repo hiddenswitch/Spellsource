@@ -3,7 +3,7 @@
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 8,
+  "baseAttack": 0,
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",

@@ -6,12 +6,27 @@ permalink: /whats-new/
 
 ### 0.8.48-2.0.35 (In Progress)
 
+Introducing the Wraith class! Big thanks to @Bromara for the contribution.
+
+The Spellsource community would also like to show its immense gratitude to Sam (Fermata) and @lilumani for their wonderful contributions to code, art and other important creative tasks.
+
 Bug fixes.
 
 ##### Content Fixes:
 
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
  - The Wraith haunting its way into Spellsource thanks to @Bromara! (1313)
+ - Bloody Blow now properly marked under "BASIC" and "CUSTOM" sets. (1322) 
+ - Bromediad Pup now correctly renamed to Bromeliad Pup. (1325)
+ - Garbasu Monster now reads, "After this minion survives damage, gain +1/+1."
+ - Catta the Merciless and Garbasu Monster no longer interact to cause an infinite loop when Garbasu faces off a 1-attack immune minion.
+ - Replacing weapons no longer sometimes keeps their enchantments, like Decay, in play.
+ - Fixed a bug where Hired Gunsmith was no longer visible in the collection. (1328)
+ - Excalibur no longer loses durability from Decay if Rejan, Last Defender is alive. (1332)
+ - Decayed minions from Master Eroder now properly decay at the end of the owner's turn rather than the end of Master Eroder's owner's turn. (1333)
+ - A number of cards that trigger off of shuffling effects, such as Xitalu, now properly work. (1334)
+ - Sot Mountain Excavation no longer deals damage to the player champion and instead just removes the armor.
+ - Bloody Reconstruction now appears in the Collection again. (1342)
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 

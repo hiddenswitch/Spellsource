@@ -12,7 +12,6 @@ import com.hiddenswitch.spellsource.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.opentracing.Scope;
@@ -28,10 +27,12 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.logic.GameStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
@@ -120,11 +121,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
 						final GameId gameOverId = new GameId(session.getGameId());
 						// The players should not accidentally wind back up in games
-						try {
-							removeGameAndRecordReplay(gameOverId);
-						} catch (InterruptedException | SuspendExecution e) {
-							throw new RuntimeException(e);
-						}
+						removeGameAndRecordReplay(gameOverId);
 					});
 
 					CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), context);
@@ -158,11 +155,11 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	 * Records metadata, like wins and losses.
 	 *
 	 * @param gameId
-	 * @throws InterruptedException
 	 * @throws SuspendExecution
 	 */
 	@Suspendable
-	private void removeGameAndRecordReplay(GameId gameId) throws InterruptedException, SuspendExecution {
+	private void removeGameAndRecordReplay(@NotNull GameId gameId) throws SuspendExecution {
+		Objects.requireNonNull(gameId);
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay")
 				.asChildOf(tracer.activeSpan())
@@ -211,13 +208,11 @@ public class ClusteredGames extends SyncVerticle implements Games {
 						LOGGER.trace("endGame {}: Marked {} as loser in other", gameId, userIdLoser);
 					}
 				}
-			} catch (Throwable ex) {
-				LOGGER.error("endGame {}: Could not get winner due to {}", gameId, ex.getMessage(), ex);
-			}
-
-			// If the game is still running when this is called, make sure to force end the game
-			if (gameContext.getStatus() == GameStatus.RUNNING) {
-				gameContext.loseBothPlayers();
+				// If the game is still running when this is called, make sure to force end the game
+			} finally {
+				if (gameContext.getStatus() == GameStatus.RUNNING) {
+					gameContext.loseBothPlayers();
+				}
 			}
 
 			// Set the player's presence to no longer be in a game
@@ -314,7 +309,8 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	public void stop() throws Exception {
 		Games.LOGGER.debug("stop: Stopping the ClusteredGamesImpl.");
 		for (GameId gameId : contexts.keySet()) {
-			removeGameAndRecordReplay(new GameId(gameId.toString()));
+			Objects.requireNonNull(gameId.toString());
+			removeGameAndRecordReplay(gameId);
 		}
 		Rpc.unregister(registration);
 		Games.LOGGER.debug("stop: Activity monitors unregistered");

@@ -12,7 +12,6 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
-import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;

@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.util.Scheduler;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.ext.unit.Async;
@@ -34,15 +35,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static net.demilich.metastone.tests.util.TestBase.assertThrows;
 import static org.junit.Assert.*;
 
-//@PrepareForTest(Server.class)
-@PowerMockRunnerDelegate(VertxUnitRunner.class)
 public class ServerGameContextTest extends SpellsourceTestBase {
-
-	@BeforeClass
-	public static void startUp() {
-		CardCatalogue.loadCardsFromPackage();
-	}
-
 	private static class TestScheduler implements Scheduler {
 		AtomicLong id = new AtomicLong();
 
@@ -79,58 +72,18 @@ public class ServerGameContextTest extends SpellsourceTestBase {
 
 		List<Configuration> playerConfigurations = Arrays.asList(configuration1, configuration2);
 
-		Async async = context.async();
-		vertx.runOnContext(v -> {
-			ServerGameContext context1 = new ServerGameContext(new GameId("test"), new TestScheduler(), playerConfigurations);
+		ServerGameContext context1 = new ServerGameContext(new GameId("test"), new TestScheduler(), playerConfigurations);
 
-			assertThrows(IllegalArgumentException.class, () -> {
-				new ServerGameContext(new GameId("test"), new TestScheduler(), Collections.singletonList(configuration1));
-			});
-
-			assertThrows(IllegalArgumentException.class, () -> {
-				new ServerGameContext(new GameId("test"), new TestScheduler(), Collections.singletonList(configuration2));
-			});
-
-			assertThrows(IllegalArgumentException.class, () -> {
-				new ServerGameContext(null, new TestScheduler(), playerConfigurations);
-			});
-
-			async.complete();
+		assertThrows(IllegalArgumentException.class, () -> {
+			new ServerGameContext(new GameId("test"), new TestScheduler(), Collections.singletonList(configuration1));
 		});
 
-		async.awaitSuccess();
-	}
-
-//	@Test
-	public void testUnityClientBehaviourConstructor(TestContext context) {
-		// TODO: This breaks all sorts of calls to server for some reason
-		Server mockServer = PowerMockito.mock(Server.class);
-		Scheduler testScheduler = new TestScheduler();
-		FakeStream<ClientToServerMessage> reader = new FakeStream<>();
-		FakeStream<ServerToClientMessage> writer = new FakeStream<>();
-
-		assertThrows(IllegalStateException.class, () -> {
-			UnityClientBehaviour unityClientBehaviour1 = new UnityClientBehaviour(mockServer, testScheduler, reader, writer, new UserId("1"), 0, 0L);
+		assertThrows(IllegalArgumentException.class, () -> {
+			new ServerGameContext(new GameId("test"), new TestScheduler(), Collections.singletonList(configuration2));
 		});
 
-
-		Async async = context.async(1);
-		vertx.runOnContext(v -> {
-			context.verify(v2 -> {
-				UnityClientBehaviour unityClientBehaviour2 = new UnityClientBehaviour(mockServer, testScheduler, reader, writer, new UserId("1"), 0, 0L);
-				assertNotNull(unityClientBehaviour2);
-
-				UnityClientBehaviour unityClientBehaviour3 = new UnityClientBehaviour(mockServer, testScheduler, reader, writer, new UserId("1"), 0, 1L);
-				assertNotNull(unityClientBehaviour3);
-
-				assertThrows(IllegalArgumentException.class, () -> {
-					UnityClientBehaviour unityClientBehaviour4 = new UnityClientBehaviour(mockServer, testScheduler, reader, writer, new UserId("1"), 0, -1L);
-				});
-
-				async.countDown();
-			});
+		assertThrows(IllegalArgumentException.class, () -> {
+			new ServerGameContext(null, new TestScheduler(), playerConfigurations);
 		});
-
-		async.awaitSuccess();
 	}
 }

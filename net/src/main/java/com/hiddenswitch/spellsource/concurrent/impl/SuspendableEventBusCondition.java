@@ -7,22 +7,26 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.ext.sync.HandlerReceiverAdaptor;
 import io.vertx.ext.sync.Sync;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class SuspendableEventBusCondition implements SuspendableCondition, Closeable {
+import static com.hiddenswitch.spellsource.util.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.awaitResult;
+
+public final class SuspendableEventBusCondition implements SuspendableCondition, AutoCloseable, Closeable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SuspendableEventBusCondition.class);
+	private static final String NOT_EMPTY = "not empty";
+	private static final String DESTROYED = "destroyed";
+	public static final long SEND_TIMEOUT = 1000L;
 	private final String address;
-	private final MessageProducer<Buffer> producer;
 
 	public SuspendableEventBusCondition(String name) {
-		this.address = "SuspendableEventBusCondition/consumer-" + name;
-		this.producer = Vertx.currentContext().owner()
-				.eventBus()
-				.sender(address);
-		this.producer.deliveryOptions(new DeliveryOptions().setSendTimeout(1000L));
+		this.address = "SuspendableEventBusCondition/consumer/" + name;
 	}
 
 	@Override
@@ -30,11 +34,16 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 	public boolean await() {
 		HandlerReceiverAdaptor<Buffer> adaptor = Sync.streamAdaptor();
 		MessageConsumer<Buffer> consumer = Vertx.currentContext().owner().eventBus().consumer(address);
+		Future<Void> future = Future.future();
+		consumer.completionHandler(future);
 		consumer.bodyStream().handler(adaptor);
-		Buffer res;
+		Buffer message;
+		Void t = awaitResult(h -> future.setHandler(h));
 
 		try {
-			res = adaptor.receive();
+			LOGGER.trace("vertx {} awaiting on {}", getNodeID(), address);
+			message = adaptor.receive();
+			LOGGER.trace("vertx {} received {}", getNodeID(), message);
 		} catch (VertxException ex) {
 			// Timed out or interrupted, doesn't really matter but it's bad.
 			if (ex.getCause() instanceof TimeoutException
@@ -43,14 +52,15 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 			}
 			// Not recoverable
 			throw ex;
+		} finally {
+			adaptor.receivePort().close();
+			consumer.unregister();
 		}
 
-		if (res != null && !res.toString().equals("ok")) {
+		if (message != null && !message.toString().equals(NOT_EMPTY)) {
 			throw new AssertionError("not ok");
 		}
 
-		adaptor.receivePort().close();
-		consumer.unregister();
 		return true;
 	}
 
@@ -60,55 +70,43 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 		long start = System.currentTimeMillis();
 		HandlerReceiverAdaptor<Buffer> adaptor = Sync.streamAdaptor();
 		MessageConsumer<Buffer> consumer = Vertx.currentContext().owner().eventBus().consumer(address);
+		Future<Void> future = Future.future();
+		consumer.completionHandler(future);
 		consumer.bodyStream().handler(adaptor);
-		Buffer res;
+		Buffer message;
+		Void t = awaitResult(h -> future.setHandler(h));
+		long res = 0;
 
 		try {
-			res = adaptor.receive(millis);
+			LOGGER.trace("vertx {} awaiting on {}", getNodeID(), address);
+			message = adaptor.receive(millis);
+			LOGGER.trace("vertx {} received {}", getNodeID(), message);
+			if (message != null && message.toString().equals(DESTROYED)) {
+				return 0;
+			}
+
+			if (message != null && !message.toString().equals(NOT_EMPTY)) {
+				throw new AssertionError(message);
+			}
+			long end = System.currentTimeMillis();
+			res = Math.max(1, millis - (end - start));
 		} catch (VertxException ex) {
 			// Timed out or interrupted, doesn't really matter but it's bad.
 			if (ex.getCause() instanceof TimeoutException
 					|| ex.getCause() instanceof InterruptedException) {
-				return 0;
+			} else {
+				// Not recoverable
+				throw ex;
 			}
-			// Not recoverable
-			throw ex;
+		} finally {
+			adaptor.receivePort().close();
+			Void v2 = awaitResult(consumer::unregister);
 		}
-
-		if (res != null && !res.toString().equals("ok")) {
-			throw new AssertionError("not ok");
-		}
-		long end = System.currentTimeMillis();
-		adaptor.receivePort().close();
-		consumer.unregister();
-		return millis - (end - start);
+		return res;
 	}
 
-	@Override
-	public void awaitMillis(long millis, Handler<AsyncResult<Void>> handler) {
-		Vertx vertx = Vertx.currentContext().owner();
-		AtomicBoolean succeeded = new AtomicBoolean();
-		MessageConsumer<Buffer> consumer = vertx.eventBus().consumer(address);
-
-		consumer.handler(msg -> {
-			consumer.unregister();
-			if (msg.body().toString().equals("ok") && succeeded.compareAndSet(false, true)) {
-				handler.handle(Future.succeededFuture());
-			}
-		});
-
-		vertx.setTimer(millis, timerId -> {
-			consumer.unregister();
-			if (!succeeded.get()) {
-				handler.handle(Future.failedFuture(new TimeoutException()));
-			}
-		});
-	}
-
-	@Override
-	@Suspendable
-	public void signal() {
-		producer.send(Buffer.buffer("ok"));
+	public String getNodeID() {
+		return ((VertxInternal) Vertx.currentContext().owner()).getNodeID();
 	}
 
 	@Override
@@ -117,12 +115,29 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 		Vertx.currentContext()
 				.owner()
 				.eventBus()
-				.publish(address, Buffer.buffer("ok"), new DeliveryOptions().setSendTimeout(1000L));
+				.publish(address, Buffer.buffer(NOT_EMPTY), new DeliveryOptions().setSendTimeout(SEND_TIMEOUT));
+		LOGGER.trace("vertx {} signalled all to {}", getNodeID(), address);
 	}
 
 	@Override
+	@Suspendable
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
-		producer.close();
-		completionHandler.handle(null);
+		completionHandler.handle(Future.succeededFuture());
+	}
+
+	@Suspendable
+	public void destroy(Handler<AsyncResult<Void>> completionHandler) {
+		Vertx.currentContext()
+				.owner()
+				.eventBus()
+				.publish(address, Buffer.buffer(DESTROYED), new DeliveryOptions().setSendTimeout(SEND_TIMEOUT));
+		close(completionHandler);
+	}
+
+	@Override
+	@Suspendable
+	public void close() throws Exception {
+		close((fut) -> {
+		});
 	}
 }
