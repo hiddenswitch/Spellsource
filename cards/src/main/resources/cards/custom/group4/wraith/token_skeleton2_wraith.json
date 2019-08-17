@@ -7,9 +7,6 @@
   "baseHp": 2,
   "rarity": "FREE",
   "description": "",
-  "attributes": {
-    "SKELETON": true
-  },
   "collectible": false,
   "sets": [
     "CUSTOM",

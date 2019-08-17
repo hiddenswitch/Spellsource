@@ -38,9 +38,11 @@
       "attackBonus": 1,
       "hpBonus": 1,
       "filter": {
-        "class": "AttributeFilter",
-        "attribute": "SKELETON",
-        "operation": "HAS"
+        "class": "SpecificCardFilter",
+        "cards": [
+          "token_skeleton_wraith",
+          "token_skeleton2_wraith"
+        ]
       }
     },
     {
@@ -48,9 +50,11 @@
       "target": "FRIENDLY_MINIONS",
       "attribute": "AURA_TAUNT",
       "filter": {
-        "class": "AttributeFilter",
-        "attribute": "SKELETON",
-        "operation": "HAS"
+        "class": "SpecificCardFilter",
+        "cards": [
+          "token_skeleton_wraith",
+          "token_skeleton2_wraith"
+        ]
       }
     }
   ],

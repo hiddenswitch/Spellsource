@@ -1050,10 +1050,6 @@ public enum Attribute {
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
 	TREANT,
-	/**
-	 * Indicates a minion is a Skeleton, considered for Skeleton-related synergies
-	 */
-	SKELETON,
 	DRAINED_THIS_TURN,
 	TOTAL_DRAINED,
 	DRAINED_LAST_TURN,

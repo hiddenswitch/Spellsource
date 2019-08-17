@@ -65,10 +65,21 @@ public class Quest extends Enchantment {
 		setPersistentOwner(desc.persistentOwner);
 	}
 
+	/**
+	 * Set to {@code true} by the {@link net.demilich.metastone.game.spells.AddPactSpell}.
+	 *
+	 * @param pact
+	 */
 	public void setPact(boolean pact) {
 		isPact = pact;
 	}
 
+	/**
+	 * Pacts are a kind of quest that can be triggered by either player.
+	 *
+	 * @return {@code true} if this quest should behave like a pact.
+	 * @see net.demilich.metastone.game.spells.AddPactSpell for more on pacts.
+	 */
 	public boolean isPact() {
 		return isPact;
 	}
