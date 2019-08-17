@@ -74,6 +74,7 @@ logger("com.hiddenswitch.spellsource.Games", defaultLevel)
 logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", defaultLevel)
 logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
 logger("com.hiddenswitch.spellsource.Gateway", INFO)
+logger("io.atomix.cluster.messaging.impl", ERROR)
 
 // Test group
 logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
