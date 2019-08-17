@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class ClusterTest extends SpellsourceTestBase {
+
 	private static Logger LOGGER = LoggerFactory.getLogger(ClusterTest.class);
 
 	private static class SpellsourceInner extends Spellsource {
@@ -48,8 +49,9 @@ public class ClusterTest extends SpellsourceTestBase {
 	protected RunTestOnContext getTestContext() {
 		AtomicReference<Atomix> atomixInstance = new AtomicReference<>();
 		return new RunTestOnContext(() -> {
-			Atomix instance = Cluster.create(5701, Node.builder().withHost("localhost").withPort(5701).build());
+			Atomix instance = Cluster.create(5701);
 			atomixInstance.set(instance);
+			instance.start().join();
 			CompletableFuture<Vertx> fut = new CompletableFuture<>();
 			Vertx.clusteredVertx(new VertxOptions()
 							.setPreferNativeTransport(true)
@@ -76,7 +78,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		});
 	}
 
-	@Test(timeout = 90000L)
+	@Test(timeout = 95000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
@@ -87,6 +89,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		sync(() -> {
 			Atomix instance = Cluster.create(5702, Node.builder().withHost("localhost").withPort(5701).build());
 			try {
+				Sync.get(instance.start());
 				Vertx vertx2 = awaitResult(h -> Vertx.clusteredVertx(new VertxOptions()
 						.setPreferNativeTransport(true)
 						.setClusterManager(new AtomixClusterManager(instance)), h));
