@@ -61,7 +61,7 @@ public enum PlayerAttribute {
 	 */
 	SUPREMACIES_THIS_GAME,
 	/**
-	 * Unused.
+	 * Indicates the amount of damage the player's hero has taken this turn.
 	 */
 	DAMAGE_THIS_TURN,
 	/**
