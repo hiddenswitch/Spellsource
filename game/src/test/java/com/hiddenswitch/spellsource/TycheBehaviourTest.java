@@ -13,7 +13,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
-import net.demilich.metastone.tests.util.TestBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

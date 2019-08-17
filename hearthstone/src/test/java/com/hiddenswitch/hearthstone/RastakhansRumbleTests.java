@@ -4,7 +4,6 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -31,6 +30,7 @@ public class RastakhansRumbleTests extends TestBase {
 	@Test
 	public void testHallazealSoupVendorCorruptedBloodInteraction() {
 		runGym((context, player, opponent) -> {
+			player.getAttributes().remove(Attribute.DISABLE_FATIGUE);
 			playMinionCard(context, player, "minion_hallazeal_the_ascended");
 			playMinionCard(context, player, "minion_soup_vendor");
 			putOnTopOfDeck(context, player, "spell_corrupted_blood");
@@ -44,6 +44,7 @@ public class RastakhansRumbleTests extends TestBase {
 	@Test
 	public void testCorruptedBlood() {
 		runGym((context, player, opponent) -> {
+			player.getAttributes().remove(Attribute.DISABLE_FATIGUE);
 			putOnTopOfDeck(context, player, "spell_corrupted_blood");
 			putOnTopOfDeck(context, player, "spell_corrupted_blood");
 			context.endTurn();

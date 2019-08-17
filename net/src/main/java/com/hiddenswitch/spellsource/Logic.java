@@ -124,18 +124,6 @@ public interface Logic {
 					}
 				}
 		);
-
-		Spellsource.spellsource().trigger(
-				"has-rafaam-archivist-deck-1",
-				TurnStartTrigger.create(TargetPlayer.BOTH),
-				(context, player, desc, source, target) -> {
-					final String userId = player.getUserId();
-
-					if (Mongo.mongo().count(Inventory.COLLECTIONS, json("userId", userId, "name", "The Supreme Archive")) > 0L) {
-						player.setAttribute(Attribute.HAS_SUPREME_ARCHIVE_DECK);
-					}
-				}
-		);
 	}
 
 	/**
@@ -249,6 +237,8 @@ public interface Logic {
 
 	/**
 	 * Retrieves a deck of a specific name from the player's collection.
+	 * <p>
+	 * The search is case insensitive
 	 *
 	 * @param logicGetDeckRequest The request specifying the name and user ID of the player whose collection should be
 	 *                            queried.
@@ -258,7 +248,7 @@ public interface Logic {
 	static GetCollectionResponse getDeck(LogicGetDeckRequest logicGetDeckRequest) {
 		// Looks up a deck by name
 		List<JsonObject> collections = Mongo.mongo().findWithOptions(Inventory.COLLECTIONS,
-				json("userId", logicGetDeckRequest.getUserId().toString(), "name", logicGetDeckRequest.getName()),
+				json("userId", logicGetDeckRequest.getUserId().toString(), "name", json("$regex", "^" + logicGetDeckRequest.getName() + "$", "$options", "i")),
 				new FindOptions().setFields(json("_id", 1)));
 
 		if (collections.size() == 0) {

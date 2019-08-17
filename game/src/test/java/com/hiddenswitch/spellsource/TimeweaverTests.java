@@ -6,7 +6,6 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -139,6 +138,19 @@ public class TimeweaverTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			assertEquals(player.getHand().get(0).getCardId(), "spell_greater_marble_spellstone");
+		});
+	}
+
+	@Test
+	public void testDelayFate() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_delay_fate");
+			context.endTurn();
+			int initialMana = opponent.getMana();
+			playCard(context, opponent, "spell_test_summon_tokens");
+			assertTrue(opponent.getMinions().isEmpty());
+			assertEquals(opponent.getMana(), initialMana);
+
 		});
 	}
 }

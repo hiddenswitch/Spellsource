@@ -1,0 +1,12 @@
+{
+  "seed" : 8903673352655217195,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "NEONGREEN", "NAVY" ],
+  "deckCardIds" : [ [ "permanent_formless_immortal", "minion_defender_of_tomorrow", "minion_the_grudge", "minion_nebulous_entity", "minion_sneaky_kaeru", "minion_blubber_behemoth", "spell_warp", "minion_hypnotist", "spell_cannibalize", "minion_garbasu_monster", "spell_reconnoitre", "minion_hope_eater", "minion_realm_parasite", "minion_degenerator", "minion_magelight_dragon", "minion_mutamite_terror", "spell_cellular_overdrive", "minion_divine_cleric", "spell_xenobulwark", "minion_gustbreaker", "minion_nightmare_whelp", "minion_degenerator", "minion_spellquaker", "minion_wavering_diabloist", "minion_gargoyle_warden", "minion_rafaam_archivist", "minion_sky_high_surveyor", "spell_warp", "permanent_formless_immortal", "minion_bone_guard" ], [ "minion_reckless_hero", "minion_landsieged_drake", "minion_fumewalker_zin", "minion_sparkgunner", "minion_catta_the_merciless", "minion_titanic_terror", "minion_stone_obelisk", "minion_flutterer", "minion_reckless_hero", "minion_giant_reaper", "minion_kitesail_ravager", "minion_raid_boss_gnaxx", "minion_emissary_of_the_end", "minion_booty_bay_porter", "minion_cyclotron", "minion_gasbelly_oni", "minion_old_ratmother", "minion_scarlet_inquisitor", "minion_grassroot_mossling", "minion_sandman", "minion_divine_cleric", "minion_underworld_keeper", "spell_weak_point", "minion_necksnapper", "minion_crystal_giant", "minion_sleepy_scarecrow", "minion_automatrainer", "spell_redeem", "minion_nature_rager", "minion_field_supplier" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 4, 27 ], [ 44 ] ],
+  "actions" : [ 0, 0, 3, 1, 1, 0, 2, 0, 8, 5, 0, 1, 0, 3, 1, 0, 0, 3, 0, 17, 6, 0, 1, 0, 2, 0, 6, 0, 8, 17, 4, 3, 3, 1, 0, 23, 15, 9, 2, 23, 8, 4, 21, 20, 9, 3, 0, 20, 18, 9, 0, 0, 9, 24, 19, 9 ],
+  "id" : null
+}
