@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -87,6 +88,13 @@ public class WraithTests extends TestBase {
 			assertEquals(minion.getAttack(), minion.getBaseAttack() - 1);
 			assertEquals(minion.getHp(), minion.getBaseHp() - 2);
 		}));
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			context.endTurn();
+			playMinionCardWithBattlecry(context, player, "minion_dark_artist", target);
+			assertTrue(target.isDestroyed());
+		});
 	}
 
 	@Test
