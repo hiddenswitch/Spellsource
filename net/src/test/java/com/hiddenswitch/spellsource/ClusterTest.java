@@ -87,19 +87,22 @@ public class ClusterTest extends SpellsourceTestBase {
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2 * baseRate, 2);
 		CountDownLatch latch = new CountDownLatch(count);
 		sync(() -> {
-			Atomix instance = Cluster.create(5702, Node.builder().withHost("localhost").withPort(5701).build());
+			Atomix instance = Cluster.create(5702);
 			try {
 				Sync.get(instance.start());
-				Vertx vertx2 = awaitResult(h -> Vertx.clusteredVertx(new VertxOptions()
-						.setPreferNativeTransport(true)
-						.setClusterManager(new AtomixClusterManager(instance)), h));
+				AtomixClusterManager clusterManager = new AtomixClusterManager(instance);
+				Vertx vertx2 = awaitResult(h -> {
+					Vertx.clusteredVertx(new VertxOptions()
+							.setPreferNativeTransport(true)
+							.setClusterManager(clusterManager), h);
+				});
 				try {
 					awaitResult(h -> vertx2.runOnContext(v -> {
 						Connection.registerCodecs();
 						h.handle(Future.succeededFuture());
 					}));
 
-					LOGGER.trace("nodes: {}", ((VertxInternal) vertx2).getClusterManager().getNodes());
+					context.assertEquals(clusterManager.getNodes().size(), 2);
 
 					SpellsourceInner spellsourceInner = new SpellsourceInner();
 					CompositeFuture res = awaitResult(h -> spellsourceInner.deployAll(vertx2, getConcurrency(), h));

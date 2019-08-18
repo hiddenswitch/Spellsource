@@ -257,11 +257,10 @@ public class AtomixClusterManager implements ClusterManager {
 	}
 
 	public MultiPrimaryProtocol getProtocol() {
-		return null;
-//		return MultiPrimaryProtocol.builder()
-//				.withConsistency(Consistency.LINEARIZABLE)
-//				.withReplication(Replication.ASYNCHRONOUS)
-//				.withBackups(0)
-//				.build();
+		return MultiPrimaryProtocol.builder()
+				.withConsistency(Consistency.LINEARIZABLE)
+				.withReplication(Replication.ASYNCHRONOUS)
+				.withBackups(1)
+				.build();
 	}
 }

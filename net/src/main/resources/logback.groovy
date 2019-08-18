@@ -79,5 +79,6 @@ logger("io.atomix.cluster.messaging.impl", ERROR)
 // Test group
 logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
 logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", TRACE)
+logger("com.hiddenswitch.spellsource.ClusterTest", TRACE)
 logger("com.neovisionaries.ws.client", WARN)
 logger("org.asynchttpclient", WARN)
