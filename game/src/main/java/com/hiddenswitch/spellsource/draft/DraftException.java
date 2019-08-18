@@ -9,6 +9,6 @@ public abstract class DraftException extends IndexOutOfBoundsException {
 	}
 
 	DraftException(int choiceIndex) {
-		super(choiceIndex);
+		super(Integer.toString(choiceIndex));
 	}
 }
