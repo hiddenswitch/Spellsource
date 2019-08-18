@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.49-2.0.35 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Curse of Aim no longer causes a game crash.
+
 ### 0.8.48-2.0.35 (August 17th, 2019)
 
 Introducing the Wraith class! Big thanks to @Bromara for the contribution.

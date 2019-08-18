@@ -1,5 +1,6 @@
 package io.vertx.ext.sync;
 
+import co.paralleluniverse.common.util.Exceptions;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberExecutorScheduler;
 import co.paralleluniverse.fibers.FiberScheduler;
@@ -86,16 +87,11 @@ public class Sync {
 	}
 
 	private static RuntimeException makeSafe(Throwable exception) {
-		if (exception instanceof VertxException && exception.getCause() != null) {
-			if (exception.getCause() instanceof RuntimeException) {
-				return (RuntimeException) exception.getCause();
-			} else {
-				return new RuntimeException(exception.getCause());
-			}
-		} else if (exception instanceof RuntimeException) {
-			return (RuntimeException) exception;
+		Throwable res = Exceptions.unwrap(exception);
+		if (!(res instanceof RuntimeException)) {
+			return new RuntimeException(res);
 		} else {
-			return new RuntimeException(exception);
+			return (RuntimeException) res;
 		}
 	}
 
