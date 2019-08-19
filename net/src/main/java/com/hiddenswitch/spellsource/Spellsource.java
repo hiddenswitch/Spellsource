@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
+import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
@@ -688,22 +690,22 @@ public class Spellsource {
 	@Suspendable
 	public void deployAll(Vertx vertx, int concurrency, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
-		// Use up all the event loops
-		for (int i = 0; i < concurrency; i++) {
-			for (Verticle verticle : services()) {
-				final Future<String> future = Future.future();
-				vertx.deployVerticle(verticle, future);
-				futures.add(future);
-			}
+
+		// Correctly use event loops
+		for (Supplier<Verticle> verticle : services()) {
+			final Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, new DeploymentOptions().setInstances(concurrency), future);
+			futures.add(future);
 		}
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}
 
-	protected Verticle[] services() {
-		return new Verticle[]{
-				Games.create(),
-				Gateway.create()};
+	protected List<Supplier<Verticle>> services() {
+		return Arrays.asList(
+				Gateway::create,
+				Games::create
+		);
 	}
 
 	/**

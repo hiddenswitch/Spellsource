@@ -2074,6 +2074,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private boolean canActivateInvokeKeyword(Player player, Card card) {
+		// Short circuit this costly computation
+		if (!card.hasAttribute(Attribute.INVOKE) && !card.hasAttribute(Attribute.AURA_INVOKE)) {
+			return false;
+		}
+
 		int mana = player.getMana();
 		List<CardCostInsteadAura> auras = SpellUtils.getAuras(context, player.getId(), CardCostInsteadAura.class);
 		if (doesCardCostHealth(player, card) && player.getHero() != null) {

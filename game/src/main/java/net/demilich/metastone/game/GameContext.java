@@ -387,7 +387,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		setTurnState(TurnState.TURN_ENDED);
-		onGameStateChanged();
 	}
 
 
@@ -908,7 +907,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	public void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
-		onGameStateChanged();
 	}
 
 	/**
@@ -992,7 +990,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		trace.addAction(nextAction.getId(), nextAction, this);
 
 		getLogic().performGameAction(getActivePlayerId(), nextAction);
-		onGameStateChanged();
 
 		return nextAction.getActionType() != ActionType.END_TURN;
 	}
@@ -1149,7 +1146,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().startTurn(playerId);
 		setActionsThisTurn(0);
 		setTurnState(TurnState.TURN_IN_PROGRESS);
-		onGameStateChanged();
 	}
 
 	@Override
