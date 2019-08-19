@@ -344,7 +344,7 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Suspendable
-	protected void matchmakeAndPlay(String deckId, String queueId) {
+	public void matchmakeAndPlay(String deckId, String queueId) {
 		CompletableFuture<Void> matchmaking = matchmake(deckId, queueId);
 		try {
 			AsyncCompletionStage.get(matchmaking, 35000L, TimeUnit.MILLISECONDS);
