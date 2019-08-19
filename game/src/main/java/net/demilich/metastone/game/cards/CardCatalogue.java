@@ -1,6 +1,11 @@
 package net.demilich.metastone.game.cards;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -19,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +35,12 @@ import java.util.stream.Stream;
  * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
  */
 public class CardCatalogue {
+	private static Map<String, Card> classCards;
+	private static Map<String, Card> heroCards;
+	private static LoadingCache<DeckFormat, CardList> classCardsForFormat;
+	private static List<String> baseClasses;
+	private static LoadingCache<DeckFormat, List<String>> baseClassesForFormat;
+
 	public static Set<String> getBannedDraftCards() {
 		return Collections.unmodifiableSet(bannedCardIds);
 	}
@@ -38,6 +51,10 @@ public class CardCatalogue {
 
 	public static String getOneOneNeutralMinionCardId() {
 		return "minion_neutral_test_1";
+	}
+
+	public static String getNeutralHero() {
+		return "hero_neutral";
 	}
 
 	/**
@@ -274,10 +291,50 @@ public class CardCatalogue {
 			DeckFormat.populateFormats(new CardArrayList(cards.values().stream()
 					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList())));
 
+			// Populate the class and hero cards
+			classCards = cards.values().stream().filter(c -> c.getCardType() == CardType.CLASS).collect(Collectors.toMap(Card::getHeroClass, Function.identity()));
+			classCardsForFormat = CacheBuilder.newBuilder()
+					.maximumSize(32)
+					.build(new CacheLoader<>() {
+						@Override
+						public CardList load(@NotNull DeckFormat key) {
+							return classCards.values().stream().filter(key::isInFormat).collect(Collectors.toCollection(CardArrayList::new));
+						}
+					});
+			heroCards = Maps.transformEntries(classCards, (key, value) -> getCardById(Objects.requireNonNull(value).getHero()));
+			baseClasses = classCards.values().stream().filter(Card::isCollectible).map(Card::getHeroClass).collect(Collectors.toList());
+			baseClassesForFormat = CacheBuilder.newBuilder()
+					.maximumSize(32)
+					.build(new CacheLoader<>() {
+						@Override
+						public List<String> load(@NotNull DeckFormat key) {
+							return classCards.values().stream().filter(c -> c.isCollectible() && key.isInFormat(c)).map(Card::getHeroClass).collect(Collectors.toList());
+						}
+					});
 
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	public static Card getHeroCard(String heroClass) {
+		return heroCards.getOrDefault(heroClass, getCardById(CardCatalogue.getNeutralHero()));
+	}
+
+	public static CardList getClassCards(DeckFormat format) {
+		try {
+			return classCardsForFormat.get(format);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e.getCause());
+		}
+	}
+
+	public static List<String> getBaseClasses(DeckFormat deckFormat) {
+		try {
+			return baseClassesForFormat.get(deckFormat);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e.getCause());
 		}
 	}
 

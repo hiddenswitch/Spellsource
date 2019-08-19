@@ -4,13 +4,27 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.48-2.0.35 (In Progress)
+### 0.8.49-2.0.35 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Curse of Aim no longer causes a game crash.
+ - Eternal Steed and Rending Curse no longer interact to cause a crash.
+
+### 0.8.48-2.0.35 (August 17th, 2019)
+
+Introducing the Wraith class! Big thanks to @Bromara for the contribution.
+
+The Spellsource community would also like to show its immense gratitude to Sam (Fermata) and @lilumani for their wonderful contributions to code, art and other important creative tasks.
 
 Bug fixes.
 
 ##### Content Fixes:
 
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
+ - The Wraith haunting its way into Spellsource thanks to @Bromara! (1313)
  - Bloody Blow now properly marked under "BASIC" and "CUSTOM" sets. (1322) 
  - Bromediad Pup now correctly renamed to Bromeliad Pup. (1325)
  - Garbasu Monster now reads, "After this minion survives damage, gain +1/+1."

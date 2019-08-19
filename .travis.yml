@@ -8,7 +8,7 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 jdk:
-  - openjdk11
+  - openjdk12
 services:
   - mongodb
 script:
