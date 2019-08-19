@@ -3,13 +3,10 @@ package net.demilich.metastone.game.cards;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import com.hiddenswitch.spellsource.ResourceInputStream;
+import io.vertx.core.json.Json;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -35,6 +32,11 @@ public class CardParser {
 
 		if (desc.getId() == null) {
 			desc.setId(id);
+		}
+
+		// Remove tags in description
+		if (desc.description != null) {
+			desc.description = desc.description.replaceAll("(</?[bi]>)|\\[x\\]", "");
 		}
 
 		return new CardCatalogueRecord(id, desc);

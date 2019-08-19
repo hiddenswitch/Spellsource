@@ -399,7 +399,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		if (description == null || description.isEmpty()) {
 			return "";
 		}
-		return description.replaceAll("(</?[bi]>)|\\[x\\]", "");
+		return description;
 	}
 
 	@Override
