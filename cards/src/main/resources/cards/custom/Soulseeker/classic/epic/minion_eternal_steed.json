@@ -9,8 +9,11 @@
   "race": "SPIRIT",
   "description": "Aftermath: Summon an Eternal Steed.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "card": "minion_eternal_steed"
+    "class": "CastAfterSequenceSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_eternal_steed"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true
