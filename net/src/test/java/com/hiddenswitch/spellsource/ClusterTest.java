@@ -88,7 +88,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
 		int numberOfGames = 1;
-		int baseRate = 1;
+		int baseRate = 2;
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * baseRate, 1);
 		CountDownLatch latch = new CountDownLatch(count * 2);
 		sync(() -> {
