@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 0,
-  "baseHp": 3,
+  "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Aftermath: Summon a 3/3 Mummy.",
+  "description": "Aftermath: Summon a 2/3 Mummy.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_mummy"

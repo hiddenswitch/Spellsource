@@ -4,6 +4,7 @@ import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.atomix.cluster.Node;
@@ -13,17 +14,22 @@ import io.vertx.core.*;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.RunTestOnContext;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class ClusterTest extends SpellsourceTestBase {
+
 	private static Logger LOGGER = LoggerFactory.getLogger(ClusterTest.class);
 
 	private static class SpellsourceInner extends Spellsource {
@@ -48,8 +54,9 @@ public class ClusterTest extends SpellsourceTestBase {
 	protected RunTestOnContext getTestContext() {
 		AtomicReference<Atomix> atomixInstance = new AtomicReference<>();
 		return new RunTestOnContext(() -> {
-			Atomix instance = Cluster.create(5701, Node.builder().withHost("localhost").withPort(5701).build());
+			Atomix instance = Cluster.create(5701);
 			atomixInstance.set(instance);
+			instance.start().join();
 			CompletableFuture<Vertx> fut = new CompletableFuture<>();
 			Vertx.clusteredVertx(new VertxOptions()
 							.setPreferNativeTransport(true)
@@ -76,70 +83,77 @@ public class ClusterTest extends SpellsourceTestBase {
 		});
 	}
 
-	@Test(timeout = 90000L)
+	@Test(timeout = 95000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
 		int numberOfGames = 1;
-		int baseRate = 1;
-		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2 * baseRate, 2);
-		CountDownLatch latch = new CountDownLatch(count);
+		int baseRate = 2;
+		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * baseRate, 1);
+		CountDownLatch latch = new CountDownLatch(count * 2);
 		sync(() -> {
-			Atomix instance = Cluster.create(5702, Node.builder().withHost("localhost").withPort(5701).build());
+			Atomix instance = Cluster.create(5702, Node.builder().withHost("0.0.0.0").withPort(5701).build());
 			try {
-				Vertx vertx2 = awaitResult(h -> Vertx.clusteredVertx(new VertxOptions()
-						.setPreferNativeTransport(true)
-						.setClusterManager(new AtomixClusterManager(instance)), h));
+				Sync.get(instance.start());
+				AtomixClusterManager clusterManager = new AtomixClusterManager(instance);
+				Vertx vertx2 = awaitResult(h -> {
+					Vertx.clusteredVertx(new VertxOptions()
+							.setPreferNativeTransport(true)
+							.setClusterManager(clusterManager), h);
+				});
 				try {
 					awaitResult(h -> vertx2.runOnContext(v -> {
 						Connection.registerCodecs();
 						h.handle(Future.succeededFuture());
 					}));
 
-					LOGGER.trace("nodes: {}", ((VertxInternal) vertx2).getClusterManager().getNodes());
+					context.assertEquals(clusterManager.getNodes().size(), 2);
 
 					SpellsourceInner spellsourceInner = new SpellsourceInner();
 					CompositeFuture res = awaitResult(h -> spellsourceInner.deployAll(vertx2, getConcurrency(), h));
-					WorkerExecutor executor = contextRule.vertx().createSharedWorkerExecutor("testers", count);
+					WorkerExecutor executor = contextRule.vertx()
+							.createSharedWorkerExecutor("testers",
+									count * 2,
+									90000L, TimeUnit.MILLISECONDS);
 					for (int i = 0; i < count; i++) {
-						int port;
-						if (i % 2 == 1) {
-							port = 9090;
-						} else {
-							port = 8080;
-						}
+						String queueId = "private-queue-" + i;
+						Closeable queue = Matchmaking.startMatchmaker(queueId, new MatchmakingQueueConfiguration()
+								.setAwaitingLobbyTimeout(4000L)
+								.setBotOpponent(false)
+								.setEmptyLobbyTimeout(4000L)
+								.setLobbySize(2)
+								.setName(String.format("match %d", i))
+								.setOnce(false)
+								.setPrivateLobby(true)
+								.setRanked(false)
+								.setStillConnectedTimeout(2000L)
+								.setJoin(true)
+								.setAutomaticallyClose(true)
+								.setRules(new CardDesc[0]));
 
-						executor.executeBlocking(fut -> {
-							try (UnityClient client = new UnityClient(context, port) {
-								@Override
-								protected int getActionIndex(ServerToClientMessage message) {
-
-									// Always return end turn so that we end the game in a fatigue duel
-									if (message.getActions().getEndTurn() != null) {
-										return message.getActions().getEndTurn();
-									} else {
-										return super.getActionIndex(message);
+						for (int port : new int[]{8080, 9090}) {
+							executor.executeBlocking(fut -> {
+								try (UnityClient client = new UnityClient(context, port)) {
+									// Play n games in a row
+									client.createUserAccount();
+									for (int k = 0; k < numberOfGames; k++) {
+										client.ensureConnected();
+										LOGGER.trace("execute: Connected and queueing {}", k);
+										client.matchmakeAndPlay(null, queueId);
+										LOGGER.trace("execute: Playing {}", k);
+										client.waitUntilDone();
+										LOGGER.trace("execute: Done {}", k);
+										context.assertTrue(client.isGameOver());
+										context.assertTrue(client.getTurnsPlayed() > 1);
 									}
-								}
-							}) {
-								// Play n games in a row
-								client.createUserAccount();
-								for (int j = 0; j < numberOfGames; j++) {
-									client.ensureConnected();
-									LOGGER.trace("execute: Connected and queueing {}", j);
-									client.matchmakeConstructedPlay(null);
-									LOGGER.trace("execute: Playing {}", j);
-									client.waitUntilDone();
-									LOGGER.trace("execute: Done {}", j);
-									context.assertTrue(client.isGameOver());
-								}
 
-								latch.countDown();
-								fut.complete();
-							} catch (Throwable t) {
-								fut.fail(t);
-							}
-						}, false, context.asyncAssertSuccess());
+									latch.countDown();
+									fut.complete();
+								} catch (Throwable t) {
+									fut.fail(t);
+								}
+							}, false, context.asyncAssertSuccess());
+						}
 					}
 					latch.await();
 					Strand.sleep(1000);

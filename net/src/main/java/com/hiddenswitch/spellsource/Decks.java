@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
-import com.hiddenswitch.spellsource.impl.util.ValidationReport;
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -94,7 +94,9 @@ public interface Decks {
 
 				validationReport = validateDeck(request.getCardIds(), request.getHeroClass(), request.getFormat());
 			} else {
-				validationReport = new ValidationReport(true, new String[]{});
+				validationReport = new ValidationReport();
+				validationReport.setValid(true);
+				validationReport.setErrors(new ArrayList<>());
 			}
 
 			if (inventoryIds.size() > getMaxDeckSize()) {
@@ -210,7 +212,7 @@ public interface Decks {
 
 			if (validationReport != null) {
 				jsonPut(collectionUpdate, "$set", json("validationReport", json("valid", validationReport.isValid(),
-						"errorMessages", Arrays.asList(validationReport.getErrorMessages()))));
+						"errorMessages", validationReport.getErrors())));
 			}
 
 			if (!collectionUpdate.isEmpty()) {
@@ -317,7 +319,9 @@ public interface Decks {
 
 	@Suspendable
 	static ValidationReport validateDeck(GameDeck deck, String deckFormat) {
-		ValidationReport validationReport = new ValidationReport(true, new String[]{});
+		ValidationReport validationReport = new ValidationReport();
+		validationReport.setValid(true);
+		validationReport.setErrors(new ArrayList<>());
 
 		GameContext context = new GameContext();
 		Player player1 = new Player(deck);
@@ -333,7 +337,7 @@ public interface Decks {
 			if (!pass) {
 				validationReport.setValid(false);
 				String error = condition.getDesc().getString(ConditionArg.DESCRIPTION);
-				validationReport.addErrorMessage(error);
+				validationReport.addErrorsItem(error);
 			}
 		}
 

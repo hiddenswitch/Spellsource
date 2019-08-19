@@ -28,6 +28,7 @@ import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -357,7 +358,7 @@ public interface Matchmaking extends Verticle {
 			}
 		}
 
-		return completionHandler -> {
+		Closeable closeable = completionHandler -> {
 			if (thisFiber.get() == null) {
 				completionHandler.handle(Future.succeededFuture());
 				return;
@@ -369,6 +370,12 @@ public interface Matchmaking extends Verticle {
 
 			completionHandler.handle(Future.succeededFuture());
 		};
+
+		if (queueConfiguration.isAutomaticallyClose()) {
+			Vertx.currentContext().addCloseHook(closeable);
+		}
+
+		return closeable;
 	}
 
 	static long getTimeout() {

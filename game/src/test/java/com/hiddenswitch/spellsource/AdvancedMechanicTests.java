@@ -30,6 +30,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -684,6 +685,28 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(player.getMinions().get(1).getAttack(), player.getMinions().get(1).getBaseAttack() + 1);
 			assertEquals(player.getMinions().get(1).getHp(), player.getMinions().get(1).getBaseHp() + 1);
+		}));
+	}
+
+	@Test
+	public void testPacts() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "pact_nothing_to_waste");
+			playCard(context, player, "pact_extraction");
+			playCard(context, player, "quest_into_the_mines");
+			playCard(context, player, "pact_deaths_hand");
+			playCard(context, player, "pact_soul_lightning");
+			assertEquals(player.getQuests().size(), 5);
+			assertEquals(player.getQuests().stream().filter(quest -> quest.isPact()).collect(Collectors.toList()).size(), 4);
+			assertEquals(player.getQuests().stream().filter(quest -> !quest.isPact()).collect(Collectors.toList()).size(), 1);
+		}));
+
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "pact_draw_test");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			playCard(context, player, "spell_lunstone");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_lunstone");
 		}));
 	}
 }

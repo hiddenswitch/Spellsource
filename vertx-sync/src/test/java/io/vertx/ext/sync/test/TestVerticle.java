@@ -211,9 +211,7 @@ public class TestVerticle extends SyncVerticle {
       String res = awaitResult(h -> ai.methodThatFails("oranges", h));
       fail("Should throw exception");
     } catch (Exception e) {
-      assertTrue(e instanceof VertxException);
-      VertxException ve = (VertxException)e;
-      assertEquals("oranges", ve.getCause().getMessage());
+      assertEquals("oranges", e.getCause().getMessage());
       complete();
     }
 

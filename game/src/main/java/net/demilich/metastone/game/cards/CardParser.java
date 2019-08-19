@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -20,6 +21,7 @@ public class CardParser {
 	static {
 		Json.mapper.configure(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION, true);
 		Json.mapper.configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, true);
+		Json.mapper.registerModule(new AfterburnerModule());
 	}
 
 	@SuppressWarnings("unchecked")
