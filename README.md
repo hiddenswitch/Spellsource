@@ -111,6 +111,8 @@ Visit our [website](http://playspellsource.com/contribute) for more about contri
 
 ### Special Thanks
 
+[![YourKit](https://www.yourkit.com/images/yklogo.png)]
+
 YourKit supports open source projects with its full-featured Java Profiler.
 
 YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a>
