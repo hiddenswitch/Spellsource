@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Curse of Aim no longer causes a game crash.
+ - Eternal Steed and Rending Curse no longer interact to cause a crash.
 
 ### 0.8.48-2.0.35 (August 17th, 2019)
 
