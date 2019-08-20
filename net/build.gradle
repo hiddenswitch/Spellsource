@@ -6,10 +6,6 @@ plugins {
 apply plugin: 'com.palantir.graal'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-def jdk8 = JavaVersion.current() == JavaVersion.VERSION_1_8
-
-def hazelcastJvmArgs = []
-
 def localMainClassName = 'com.hiddenswitch.spellsource.applications.Local'
 
 def debugSystemProperties = ["spellsource.port"                        : "8080",
@@ -103,8 +99,6 @@ dependencies {
 
 test {
     setSystemProperties(debugSystemProperties)
-    //setJvmArgs(hazelcastJvmArgs+ ["-agentlib:native-image-agent=config-output-dir=${project.projectDir.absolutePath}/src/main/resources/META-INF/native-image"] as List<String>)
-    setJvmArgs(hazelcastJvmArgs)
     useJUnit()
     maxParallelForks = 1
 
@@ -120,14 +114,13 @@ test {
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
     setSystemProperties(debugSystemProperties)
     main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs + ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
+    setJvmArgs(["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task(local, dependsOn: 'classes', type: JavaExec) {
     setSystemProperties(debugSystemProperties)
     main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs)
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -148,6 +141,5 @@ task(localWindows, dependsOn: 'classes', type: JavaExec) {
     }
     setSystemProperties(debugSystemProperties)
     main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs)
     classpath = sourceSets.main.runtimeClasspath
 }

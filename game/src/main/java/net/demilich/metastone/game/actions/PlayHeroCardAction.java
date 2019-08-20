@@ -38,7 +38,7 @@ public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		Card heroCard = (Card) context.resolveSingleTarget(getSourceReference());
-		Hero hero = heroCard.createHero();
+		Hero hero = heroCard.createHero(context.getPlayer(playerId));
 		if (battlecry != null) {
 			hero.setBattlecry(battlecry);
 		}

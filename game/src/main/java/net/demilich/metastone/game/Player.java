@@ -13,6 +13,9 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.DiscoverSpell;
+import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
@@ -20,19 +23,24 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * The {@link Player} class stores almost the state that corresponds to a particular player, like a collection of {@link
- * EntityZone} objects and select {@link Attribute} and {@link net.demilich.metastone.game.spells.PlayerAttribute}
+ * EntityZone} objects and select {@link Attribute} and {@link PlayerAttribute}
  * attributes as an {@link Entity} that exists in the game.
  * <p>
  * Unusually, the {@link Zones#WEAPON} and {@link Zones#HERO_POWER} zones are located on the {@link Hero} entity
@@ -53,17 +61,20 @@ import java.util.stream.Collectors;
  */
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	protected CardZone deck = new CardZone(getId(), Zones.DECK);
-	private CardZone hand = new CardZone(getId(), Zones.HAND);
-	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER);
-	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE);
-	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD);
-	private EntityZone<Entity> removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY);
-	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD);
-	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO);
-	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET);
-	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST);
-	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
+	private Map<Integer, Entity> lookup = new HashMap<>(55);
+	protected CardZone deck = new CardZone(getId(), Zones.DECK, lookup);
+	private CardZone hand = new CardZone(getId(), Zones.HAND, lookup);
+	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER, lookup);
+	private EntityZone<Entity> setAsideZone = new EntityZone<>(getId(), Zones.SET_ASIDE_ZONE, lookup);
+	private EntityZone<Entity> graveyard = new EntityZone<>(getId(), Zones.GRAVEYARD, lookup);
+	private EntityZone<Entity> removedFromPlay = new EntityZone<>(getId(), Zones.REMOVED_FROM_PLAY, lookup);
+	private EntityZone<Minion> minions = new EntityZone<>(getId(), Zones.BATTLEFIELD, lookup);
+	private EntityZone<Hero> heroZone = new EntityZone<>(getId(), Zones.HERO, lookup);
+	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET, lookup);
+	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST, lookup);
+	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER, lookup);
+	private EntityZone<Card> heroPowerZone = new EntityZone<>(getId(), Zones.HERO_POWER, lookup);
+	private EntityZone<Weapon> weaponZone = new EntityZone<>(getId(), Zones.WEAPON, lookup);
 	private GameStatistics statistics = new GameStatistics();
 
 	/**
@@ -89,8 +100,8 @@ public class Player extends Entity implements Serializable {
 	 * Creates a player for the given integer id, userId and deck.
 	 *
 	 * @param userId The networked user ID of the player.
-	 * @param id     The player's ID, {@link net.demilich.metastone.game.targeting.IdFactory#PLAYER_1} or {@link
-	 *               net.demilich.metastone.game.targeting.IdFactory#PLAYER_2}
+	 * @param id     The player's ID, {@link IdFactory#PLAYER_1} or {@link
+	 *               IdFactory#PLAYER_2}
 	 * @param deck   The deck to initialize the player with.
 	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
@@ -116,10 +127,37 @@ public class Player extends Entity implements Serializable {
 		this.graveyard = otherPlayer.getGraveyard().clone();
 		this.setAsideZone = otherPlayer.getSetAsideZone().clone();
 		this.heroZone = otherPlayer.getHeroZone().clone();
+		if (!heroZone.isEmpty()) {
+			heroZone.get(0).setPlayer(this);
+		}
+
+		this.heroPowerZone = otherPlayer.getHeroPowerZone().clone();
+		this.weaponZone = otherPlayer.getWeaponZone().clone();
 		this.mana = otherPlayer.mana;
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
 		this.statistics = otherPlayer.getStatistics().clone();
+		this.lookup = new HashMap<>(playerZone.size()
+				+ secretZone.size()
+				+ quests.size()
+				+ deck.size()
+				+ hand.size()
+				+ minions.size()
+				+ discoverZone.size()
+				+ removedFromPlay.size()
+				+ graveyard.size()
+				+ setAsideZone.size()
+				+ heroZone.size()
+				+ heroPowerZone.size()
+				+ weaponZone.size());
+		for (Zones zone : Zones.values()) {
+			EntityZone zone1 = getZone(zone);
+			zone1.setLookup(lookup);
+			for (Object entity : zone1) {
+				Entity entity1 = (Entity) entity;
+				lookup.put(entity1.getId(), entity1);
+			}
+		}
 	}
 
 	/**
@@ -146,8 +184,8 @@ public class Player extends Entity implements Serializable {
 
 	public Player(GameDeck deck, String name) {
 		this();
-		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy());
-		this.setHero(deck.getHeroCard().createHero());
+		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy(), lookup);
+		this.setHero(deck.getHeroCard().createHero(this));
 		this.setName(name);
 	}
 
@@ -158,7 +196,7 @@ public class Player extends Entity implements Serializable {
 	 */
 	public Player(String heroClass) {
 		this();
-		this.setHero(HeroClass.getHeroCard(heroClass).createHero());
+		this.setHero(HeroClass.getHeroCard(heroClass).createHero(this));
 	}
 
 	/**
@@ -277,7 +315,7 @@ public class Player extends Entity implements Serializable {
 	 * of each secret in their {@link #secretZone}.
 	 *
 	 * @return The set of secret card IDs.
-	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, Card) to see how this method plays into
+	 * @see GameLogic#canPlaySecret(Player, Card) to see how this method plays into
 	 * 		rules regarding the ability to play secrets.
 	 */
 	public Set<String> getSecretCardIds() {
@@ -316,7 +354,7 @@ public class Player extends Entity implements Serializable {
 	 * Sets the player's current hero. If a {@link Hero} currently exists in the hero zone, it is removed.
 	 *
 	 * @param hero The hero entity.
-	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate hero changing method
+	 * @see GameLogic#changeHero(Player, Hero) for the appropriate hero changing method
 	 * 		for spells.
 	 */
 	public void setHero(Hero hero) {
@@ -394,8 +432,8 @@ public class Player extends Entity implements Serializable {
 	/**
 	 * Sets the player's ID. Can only be called once. Sets the owner fields on the zones stored in this player object.
 	 *
-	 * @param id The ID to set to, either {@link net.demilich.metastone.game.targeting.IdFactory#PLAYER_1} or {@link
-	 *           net.demilich.metastone.game.targeting.IdFactory#PLAYER_2}.
+	 * @param id The ID to set to, either {@link IdFactory#PLAYER_1} or {@link
+	 *           IdFactory#PLAYER_2}.
 	 */
 	@Override
 	public void setId(int id) {
@@ -411,6 +449,8 @@ public class Player extends Entity implements Serializable {
 		secretZone.setPlayer(id);
 		playerZone.setPlayer(id);
 		quests.setPlayer(id);
+		heroPowerZone.setPlayer(id);
+		weaponZone.setPlayer(id);
 	}
 
 	/**
@@ -433,7 +473,7 @@ public class Player extends Entity implements Serializable {
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
 			case PLAYER:
-				final EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
+				final EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER, lookup);
 				playerZone.add(this);
 				return playerZone;
 			case BATTLEFIELD:
@@ -479,21 +519,21 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the hero power zone stored inside the hero entity.
 	 *
 	 * @return The hero power stored by this hero.
-	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate way to change heroes.
+	 * @see GameLogic#changeHero(Player, Hero) for the appropriate way to change heroes.
 	 */
 	public EntityZone<Card> getHeroPowerZone() {
-		return getHero().getHeroPowerZone();
+		return heroPowerZone;
 	}
 
 	/**
 	 * Retrieves the weapon zone belonging to this player's hero entity.
 	 *
 	 * @return A weapon zone.
-	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, Card, boolean) for the appropriate way to
+	 * @see GameLogic#equipWeapon(int, Weapon, Card, boolean) for the appropriate way to
 	 * 		mutate this zone.
 	 */
 	public EntityZone<Weapon> getWeaponZone() {
-		return getHero().getWeaponZone();
+		return weaponZone;
 	}
 
 	/**
@@ -507,7 +547,7 @@ public class Player extends Entity implements Serializable {
 
 	/**
 	 * Retrieves entities that are removed from play. Typically enchantments like {@link Quest} and {@link Secret} go
-	 * here, and cards created during a {@link net.demilich.metastone.game.spells.DiscoverSpell} go here.
+	 * here, and cards created during a {@link DiscoverSpell} go here.
 	 * <p>
 	 * Entities that are in {@link Zones#REMOVED_FROM_PLAY} should not be targetable, so it would be unusual to iterate
 	 * through this zone.
@@ -553,5 +593,25 @@ public class Player extends Entity implements Serializable {
 	 */
 	public TargetPlayer toTargetPlayer() {
 		return getId() == GameContext.PLAYER_1 ? TargetPlayer.PLAYER_1 : TargetPlayer.PLAYER_2;
+	}
+
+	/**
+	 * Updates the lookup table with the specified entity's ID
+	 *
+	 * @param entity
+	 */
+	public void updateLookup(@NotNull Entity entity) {
+		if (entity.getId() == IdFactory.UNASSIGNED) {
+			throw new IllegalArgumentException("unassigned ID");
+		}
+		lookup.put(entity.getId(), entity);
+	}
+
+	public <T extends Entity> Optional<T> findEntity(int id) {
+		return Optional.ofNullable((T) lookup.getOrDefault(id, null));
+	}
+
+	public Map<Integer, Entity> getLookup() {
+		return lookup;
 	}
 }

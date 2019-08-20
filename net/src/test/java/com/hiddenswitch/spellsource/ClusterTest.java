@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
@@ -20,11 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -38,16 +41,15 @@ public class ClusterTest extends SpellsourceTestBase {
 		}
 
 		@Override
-		protected Verticle[] services() {
-			return new Verticle[]{
-					Games.create(),
-					Gateway.create(9090)};
+		protected List<Supplier<Verticle>> services() {
+			return Arrays.asList(Games::create,
+					() -> Gateway.create(9090));
 		}
 	}
 
 	@Override
 	protected int getConcurrency() {
-		return 1;
+		return Runtime.getRuntime().availableProcessors();
 	}
 
 	@Override
@@ -84,6 +86,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	}
 
 	@Test(timeout = 95000L)
+	@Suspendable
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		// Connect to existing cluster
