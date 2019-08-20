@@ -579,21 +579,6 @@ public class JourneyToUngoroTests extends TestBase {
 				playCard(c, o, "spell_arcane_missiles");
 			}
 			assertEquals(p.getHero().getHp(), startingHp - 8 * 3);
-
-			/* Fixing Mind Control Tech with Shudderwock bug means this has to be re-written, but the effect still works as intended
-			// Test mind control tech
-			c.endTurn();
-			Minion raptor = playMinionCard(c, p, "minion_bloodfen_raptor");
-			c.endTurn();
-			CardDesc custom = (CardDesc) CardCatalogue.getRecords().get("minion_mind_control_tech").getDesc();
-			custom.getBattlecry().setCondition(null);
-			Card customControl = new Card(custom);
-			playCard(c, o, customControl);
-			assertEquals(o.getMinions().size(), 2, "Raptor + Mind Control Tech");
-			Assert.assertFalse(o.getMinions().stream().map(Minion::getSourceCard).anyMatch(c1 -> c1.getCardId().equals("permanent_sherazin_seed")));
-			assertEquals(o.getMinions().get(1), raptor);
-			assertEquals(p.getMinions().size(), 1, "Just Sherazin Seed");
-			*/
 		});
 
 		// Permanents do not count as eligible targets for triggered effects such as Blood Imp. If a triggered effect
@@ -671,8 +656,8 @@ public class JourneyToUngoroTests extends TestBase {
 			Assert.assertFalse(c.getLogic().canSummonMoreMinions(p));
 		});
 
-		// Example: Reliquary Seeker's Battlecry activates with 5 other minions and a permanent on the battlefield,
-		// despite requiring "6 other minions"
+		// In actual Hearthstone, Reliquary Seeker's Battlecry activates with 5 other minions and a permanent on the
+		// battlefield, despite requiring "6 other minions." In Spellsource, it does not.
 		factory.run((c, p, o) -> {
 			c.endTurn();
 			for (int i = 0; i < 5; i++) {
@@ -683,7 +668,7 @@ public class JourneyToUngoroTests extends TestBase {
 			}
 			Assert.assertTrue(c.getLogic().canSummonMoreMinions(p));
 			Minion seeker = playMinionCard(c, p, "minion_reliquary_seeker");
-			assertEquals(seeker.getHp(), 5);
+			assertEquals(seeker.getHp(), 1);
 		});
 
 		// Effects that simply scale per minion do not count permanents.
