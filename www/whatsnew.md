@@ -4,7 +4,15 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.49-2.0.35 (In Progress)
+### 0.8.50-2.0.35 (In Progress)
+
+Bug fixes and new cards.
+
+##### Content Additions:
+
+ - New cards for Otherworlder (thanks @AnterogradeNil!)
+
+### 0.8.49-2.0.35 (August 19th, 2019)
 
 Bug fixes and networked performance improvements.
 
@@ -29,6 +37,11 @@ Introducing the Wraith class! Big thanks to @Bromara for the contribution.
 The Spellsource community would also like to show its immense gratitude to Sam (Fermata) and @lilumani for their wonderful contributions to code, art and other important creative tasks.
 
 Bug fixes.
+New Otherworlder cards thanks to @AnterogradeNil!
+
+##### Content Additions:
+
+ - Many Otherworlder cards have been added to the game thanks to @AnterogradeNil!
 
 ##### Content Fixes:
 

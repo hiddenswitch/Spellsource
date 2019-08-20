@@ -329,7 +329,12 @@ public interface Decks {
 		context.setPlayer2(new Player(HeroClass.TEST));
 		context.setDeckFormat(DeckFormat.getFormat(deckFormat));
 
-		Card formatCard = CardCatalogue.getFormatCards().filtered(card -> card.getName().equals(context.getDeckFormat().getName())).peekFirst();
+		Card formatCard = CardCatalogue.getFormatCard(context.getDeckFormat().getName());
+		if (formatCard == null) {
+			validationReport.setValid(false);
+			validationReport.addErrorsItem("Invalid Format");
+			return validationReport;
+		}
 
 		Condition[] conditions = (Condition[]) formatCard.getCondition().get(ConditionArg.CONDITIONS);
 		for (Condition condition : conditions) {
