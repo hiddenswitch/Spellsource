@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
@@ -71,9 +72,9 @@ public class Spellsource {
 	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
 	private static Spellsource instance;
 	private List<DeckCreateRequest> cachedStandardDecks;
-	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
-	private Map<String, Trigger> gameTriggers = new HashMap<>();
-	private Map<String, Spell> spells = new HashMap<>();
+	private Map<String, PersistenceHandler> persistAttributeHandlers = new ConcurrentHashMap<>();
+	private Map<String, Trigger> gameTriggers = new ConcurrentHashMap<>();
+	private Map<String, Spell> spells = new ConcurrentHashMap<>();
 
 	static {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
@@ -607,7 +608,7 @@ public class Spellsource {
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
-			cachedStandardDecks = new ArrayList<>();
+			cachedStandardDecks = Collections.synchronizedList(new ArrayList<>());
 			CardCatalogue.loadCardsFromPackage();
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> x != null && x.endsWith(".txt")).stream().map(Resources::getResource).collect(toSet());

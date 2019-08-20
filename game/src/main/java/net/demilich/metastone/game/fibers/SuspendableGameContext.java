@@ -120,8 +120,8 @@ public class SuspendableGameContext extends GameContext {
 
 	public SuspendableGameContext(String heroClass1, String heroClass2) {
 		this();
-		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero());
-		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero());
+		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero(getPlayer1()));
+		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero(getPlayer2()));
 		getTrace().setHeroClasses(new String[]{heroClass1, heroClass2});
 	}
 

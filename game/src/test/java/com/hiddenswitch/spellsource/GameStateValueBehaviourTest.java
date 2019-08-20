@@ -208,7 +208,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// Southsea MUST attack before weapon attacks
 			// Sun cleric MUST be played after southsea and should NOT buff a minion that gains a huge amount of hp
 			// This is a depth 6 puzzle.
-			Assert.assertNull(player.getHero().getWeapon());
+			Assert.assertTrue(player.getWeaponZone().isEmpty());
 			assertTrue(context.updateAndGetGameOver());
 		});
 	}
