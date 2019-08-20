@@ -204,6 +204,26 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_test_deal_6", player.getHero());
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), originalHeroPower);
 		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_doodles");
+			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
+			context.endTurn();
+			playCard(context, opponent, "spell_test_deal_6", player.getHero());
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
+			playCard(context, opponent, "spell_test_deal_6", player.getHero());
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), originalHeroPower);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_doodles");
+			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
+			context.endTurn();
+			playCard(context, opponent, "spell_test_deal_11", player.getHero());
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), originalHeroPower);
+		});
 	}
 
 	@Test
