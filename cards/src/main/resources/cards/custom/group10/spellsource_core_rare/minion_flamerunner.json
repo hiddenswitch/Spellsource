@@ -8,51 +8,24 @@
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "At the end of your turn, if you restored Health this turn, summon a 2/2 Elemental.",
-  "triggers": [
-    {
-      "eventTrigger": {
-        "class": "HealingTrigger",
-        "sourcePlayer": "SELF",
-        "fireCondition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "ACTIVE",
-          "target": "SELF"
-        }
-      },
-      "spell": {
-        "class": "AddAttributeSpell",
-        "attribute": "RESERVED_BOOLEAN_1",
-        "target": "SELF"
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "HEALING_THIS_TURN",
+        "operation": "GREATER",
+        "value": 0
       }
     },
-    {
-      "eventTrigger": {
-        "class": "TurnEndTrigger",
-        "targetPlayer": "SELF",
-        "fireCondition": {
-          "class": "AttributeCondition",
-          "target": "TRIGGER_HOST",
-          "attribute": "RESERVED_BOOLEAN_1",
-          "operation": "HAS"
-        }
-      },
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "SummonSpell",
-            "boardPositionRelative": "RIGHT",
-            "card": "token_ember_elemental"
-          },
-          {
-            "class": "RemoveAttributeSpell",
-            "attribute": "RESERVED_BOOLEAN_1",
-            "target": "SELF"
-          }
-        ]
-      }
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_ember_elemental"
     }
-  ],
+  },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1

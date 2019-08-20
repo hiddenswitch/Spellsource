@@ -4590,13 +4590,13 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_flamerunner");
 			player.getHero().setHp(25);
 			playCard(context, player, "spell_test_heal_8", player.getHero());
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 0);
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 0L);
 			context.endTurn();
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 1);
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 1L);
 			playCard(context, player, "spell_test_heal_8", player.getHero());
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 1);
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 1L);
 			context.endTurn();
-			assertEquals(player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).collect(Collectors.toList()).size(), 1);
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 1L);
 		}));
 	}
 }
