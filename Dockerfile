@@ -1,97 +1,57 @@
 FROM phusion/baseimage:0.11
 
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-	    wget \
-		bzip2 \
-		unzip \
-		xz-utils \
-		\
-# utilities for keeping Debian and OpenJDK CA certificates in sync
-		ca-certificates p11-kit \
-		\
-# java.lang.UnsatisfiedLinkError: /usr/local/openjdk-11/lib/libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
-# java.lang.NoClassDefFoundError: Could not initialize class sun.awt.X11FontManager
-# https://github.com/docker-library/openjdk/pull/235#issuecomment-424466077
-		fontconfig libfreetype6 \
-	; \
-	rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates locales \
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Default to UTF-8 file.encoding
-ENV LANG C.UTF-8
-
-ENV JAVA_HOME /usr/local/openjdk-11
-ENV PATH $JAVA_HOME/bin:$PATH
-
-# backwards compatibility shim
-RUN { echo '#/bin/sh'; echo 'echo "$JAVA_HOME"'; } > /usr/local/bin/docker-java-home && chmod +x /usr/local/bin/docker-java-home && [ "$JAVA_HOME" = "$(docker-java-home)" ]
-
-# https://adoptopenjdk.net/upstream.html
-ENV JAVA_VERSION 11.0.3
-ENV JAVA_BASE_URL https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-11.0.3%2B7/OpenJDK11U-
-ENV JAVA_URL_VERSION 11.0.3_7
-# https://github.com/docker-library/openjdk/issues/320#issuecomment-494050246
+ENV JAVA_VERSION jdk-12.0.2+10
 
 RUN set -eux; \
-	\
-	dpkgArch="$(dpkg --print-architecture)"; \
-	case "$dpkgArch" in \
-		amd64) upstreamArch='x64' ;; \
-		arm64) upstreamArch='aarch64' ;; \
-		*) echo >&2 "error: unsupported architecture: $dpkgArch" ;; \
-	esac; \
-	\
-	wget -O openjdk.tgz.asc "${JAVA_BASE_URL}${upstreamArch}_linux_${JAVA_URL_VERSION}.tar.gz.sign"; \
-	wget -O openjdk.tgz "${JAVA_BASE_URL}${upstreamArch}_linux_${JAVA_URL_VERSION}.tar.gz" --progress=dot:giga; \
-	\
-	export GNUPGHOME="$(mktemp -d)"; \
-# TODO find a good link for users to verify this key is right (https://mail.openjdk.java.net/pipermail/jdk-updates-dev/2019-April/000951.html is one of the only mentions of it I can find); perhaps a note added to https://adoptopenjdk.net/upstream.html would make sense?
-	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys CA5F11C6CE22644D42C6AC4492EF8D39DC13168F; \
-# https://github.com/docker-library/openjdk/pull/322#discussion_r286839190
-	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys EAC843EBD3EFDB98CC772FADA5CD6035332FA671; \
-	gpg --batch --list-sigs --keyid-format 0xLONG CA5F11C6CE22644D42C6AC4492EF8D39DC13168F | grep '0xA5CD6035332FA671' | grep 'Andrew Haley'; \
-	gpg --batch --verify openjdk.tgz.asc openjdk.tgz; \
-	gpgconf --kill all; \
-	rm -rf "$GNUPGHOME"; \
-	\
-	mkdir -p "$JAVA_HOME"; \
-	tar --extract \
-		--file openjdk.tgz \
-		--directory "$JAVA_HOME" \
-		--strip-components 1 \
-		--no-same-owner \
-	; \
-	rm openjdk.tgz*; \
-	\
-# TODO strip "demo" and "man" folders?
-	\
-# update "cacerts" bundle to use Debian's CA certificates (and make sure it stays up-to-date with changes to Debian's store)
-# see https://github.com/docker-library/openjdk/issues/327
-#     http://rabexc.org/posts/certificates-not-working-java#comment-4099504075
-#     https://salsa.debian.org/java-team/ca-certificates-java/blob/3e51a84e9104823319abeb31f880580e46f45a98/debian/jks-keystore.hook.in
-#     https://git.alpinelinux.org/aports/tree/community/java-cacerts/APKBUILD?id=761af65f38b4570093461e6546dcf6b179d2b624#n29
-	{ \
-		echo '#!/usr/bin/env bash'; \
-		echo 'set -Eeuo pipefail'; \
-		echo 'if ! [ -d "$JAVA_HOME" ]; then echo >&2 "error: missing JAVA_HOME environment variable"; exit 1; fi'; \
-# 8-jdk uses "$JAVA_HOME/jre/lib/security/cacerts" and 8-jre and 11+ uses "$JAVA_HOME/lib/security/cacerts" directly (no "jre" directory)
-		echo 'cacertsFile=; for f in "$JAVA_HOME/lib/security/cacerts" "$JAVA_HOME/jre/lib/security/cacerts"; do if [ -e "$f" ]; then cacertsFile="$f"; break; fi; done'; \
-		echo 'if [ -z "$cacertsFile" ] || ! [ -f "$cacertsFile" ]; then echo >&2 "error: failed to find cacerts file in $JAVA_HOME"; exit 1; fi'; \
-		echo 'trust extract --overwrite --format=java-cacerts --filter=ca-anchors --purpose=server-auth "$cacertsFile"'; \
-	} > /etc/ca-certificates/update.d/docker-openjdk; \
-	chmod +x /etc/ca-certificates/update.d/docker-openjdk; \
-	/etc/ca-certificates/update.d/docker-openjdk; \
-	\
-# https://github.com/docker-library/openjdk/issues/331#issuecomment-498834472
-	find "$JAVA_HOME/lib" -name '*.so' -exec dirname '{}' ';' | sort -u > /etc/ld.so.conf.d/docker-openjdk.conf; \
-	ldconfig; \
-	\
+    ARCH="$(dpkg --print-architecture)"; \
+    case "${ARCH}" in \
+       aarch64|arm64) \
+         ESUM='855f046afc5a5230ad6da45a5c811194267acd1748f16b648bfe5710703fe8c6'; \
+         BINARY_URL='https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-12.0.2%2B10/OpenJDK12U-jdk_aarch64_linux_hotspot_12.0.2_10.tar.gz'; \
+         ;; \
+       armhf) \
+         ESUM='9fec85826ffb7b2b2cf2853a6ed3e001b528ed5cf13e435cd13026398b5178d8'; \
+         BINARY_URL='https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-12.0.2%2B10/OpenJDK12U-jdk_arm_linux_hotspot_12.0.2_10.tar.gz'; \
+         ;; \
+       ppc64el|ppc64le) \
+         ESUM='4b0c9f5cdea1b26d7f079fa6478aceebf1923c947c4209d5709c0869dd71b98f'; \
+         BINARY_URL='https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-12.0.2%2B10/OpenJDK12U-jdk_ppc64le_linux_hotspot_12.0.2_10.tar.gz'; \
+         ;; \
+       s390x) \
+         ESUM='9897deeaf7a2c90374fbaca8b3eb8e63267d8fc1863b43b21c0bfc86e4783470'; \
+         BINARY_URL='https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-12.0.2%2B10/OpenJDK12U-jdk_s390x_linux_hotspot_12.0.2_10.tar.gz'; \
+         ;; \
+       amd64|x86_64) \
+         ESUM='1202f536984c28d68681d51207a84b6c76e5998579132d3fe1b8085aa6a5f21e'; \
+         BINARY_URL='https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-12.0.2%2B10/OpenJDK12U-jdk_x64_linux_hotspot_12.0.2_10.tar.gz'; \
+         ;; \
+       *) \
+         echo "Unsupported arch: ${ARCH}"; \
+         exit 1; \
+         ;; \
+    esac; \
+    curl -LfsSo /tmp/openjdk.tar.gz ${BINARY_URL}; \
+    echo "${ESUM} */tmp/openjdk.tar.gz" | sha256sum -c -; \
+    mkdir -p /opt/java/openjdk; \
+    cd /opt/java/openjdk; \
+    tar -xf /tmp/openjdk.tar.gz --strip-components=1; \
+    rm -rf /tmp/openjdk.tar.gz; \
+    ldconfig;
+
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH="/opt/java/openjdk/bin:$PATH"
+
 # basic smoke test
-	javac --version; \
-	java --version
+RUN javac --version; \
+    java --version;
 
-ENV SPELLSOURCE_VERSION=0.8.47
+ENV SPELLSOURCE_VERSION=0.8.49
 ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}.jar
 
 RUN mkdir /etc/service/java

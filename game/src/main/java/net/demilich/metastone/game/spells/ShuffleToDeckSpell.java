@@ -55,7 +55,7 @@ public class ShuffleToDeckSpell extends Spell {
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
 			for (int i = 0; i < copies; i++) {
-				Card copy = shuffle(context, player, null, target.getSourceCard(), quiet);
+				Card copy = shuffle(context, player, null, target.getSourceCard(), quiet, source.getOwner());
 				copy.getAttributes().putAll(map);
 				if (copy.getZone() == Zones.DECK) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
@@ -70,7 +70,7 @@ public class ShuffleToDeckSpell extends Spell {
 		Map<Card, Boolean> didShuffle = new HashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
-				Card copy = shuffle(context, player, null, original, quiet);
+				Card copy = shuffle(context, player, null, original, quiet, source.getOwner());
 				didShuffle.put(copy, copy.getZone() == Zones.DECK);
 			}
 		}
@@ -83,8 +83,8 @@ public class ShuffleToDeckSpell extends Spell {
 	}
 
 	@Suspendable
-	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean quiet) {
-		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean quiet, int sourcePlayerId) {
+		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet, sourcePlayerId));
 	}
 }
 

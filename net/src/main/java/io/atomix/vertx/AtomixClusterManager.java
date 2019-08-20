@@ -24,6 +24,7 @@ import io.atomix.core.Atomix;
 import io.atomix.core.lock.AtomicLock;
 import io.atomix.primitive.Consistency;
 import io.atomix.primitive.Replication;
+import io.atomix.primitive.protocol.GossipProtocol;
 import io.atomix.protocols.backup.MultiPrimaryProtocol;
 import io.atomix.utils.concurrent.SingleThreadContext;
 import io.atomix.utils.concurrent.ThreadContext;
@@ -56,8 +57,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author <a href="http://github.com/kuujo">Jordan Halterman</a>
  */
 public class AtomixClusterManager implements ClusterManager {
-	private static final String SUBS_MAP_NAME = "__vertx.subs";
-
+	public static final int DEFAULT_CACHE_SIZE = 64 * 1024 * 1024;
 	private final Atomix atomix;
 	private final ThreadContext context;
 	private NodeListener listener;
@@ -122,6 +122,8 @@ public class AtomixClusterManager implements ClusterManager {
 	public <K, V> void getAsyncMultiMap(String name, Handler<AsyncResult<AsyncMultiMap<K, V>>> handler) {
 		atomix.<K, V>atomicMultimapBuilder(name)
 				.withProtocol(getProtocol())
+				.withCacheEnabled(true)
+				.withCacheSize(DEFAULT_CACHE_SIZE)
 				.withSerializer(createSerializer())
 				.buildAsync()
 				.whenComplete(VertxFutures.convertHandler(
@@ -132,6 +134,8 @@ public class AtomixClusterManager implements ClusterManager {
 	public <K, V> void getAsyncMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
 		atomix.<K, V>atomicMapBuilder(name)
 				.withProtocol(getProtocol())
+				.withCacheEnabled(true)
+				.withCacheSize(DEFAULT_CACHE_SIZE)
 				.withSerializer(createSerializer())
 				.buildAsync()
 				.whenComplete(VertxFutures.convertHandler(
@@ -257,11 +261,10 @@ public class AtomixClusterManager implements ClusterManager {
 	}
 
 	public MultiPrimaryProtocol getProtocol() {
-		return null;
-//		return MultiPrimaryProtocol.builder()
-//				.withConsistency(Consistency.LINEARIZABLE)
-//				.withReplication(Replication.ASYNCHRONOUS)
-//				.withBackups(0)
-//				.build();
+		return MultiPrimaryProtocol.builder()
+				.withConsistency(Consistency.LINEARIZABLE)
+				.withReplication(Replication.ASYNCHRONOUS)
+				.withBackups(1)
+				.build();
 	}
 }

@@ -1,0 +1,26 @@
+{
+  "name": "Bloodshard Elemental",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "<b>Aftermath</b>: Deal 2 damage to all enemies.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

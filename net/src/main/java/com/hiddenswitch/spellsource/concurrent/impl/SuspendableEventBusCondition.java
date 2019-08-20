@@ -89,7 +89,7 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 				throw new AssertionError(message);
 			}
 			long end = System.currentTimeMillis();
-			res = Math.max(1, millis - (end - start));
+			res = Math.max(0, millis - (end - start));
 		} catch (VertxException ex) {
 			// Timed out or interrupted, doesn't really matter but it's bad.
 			if (ex.getCause() instanceof TimeoutException

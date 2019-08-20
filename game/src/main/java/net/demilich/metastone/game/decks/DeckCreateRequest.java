@@ -107,7 +107,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		while (matcher.find()) {
 			if (matcher.group("name") != null) {
 				try {
-					String name = matcher.group("name").strip();
+					String name = matcher.group("name").trim();
 					if (name.length() == 0) {
 						throw new IllegalArgumentException("Name must contain at least one non-whitespace character.");
 					}

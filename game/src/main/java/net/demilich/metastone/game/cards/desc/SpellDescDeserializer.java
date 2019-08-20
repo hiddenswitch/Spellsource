@@ -54,6 +54,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.NAME, ParseValueType.STRING);
 		ctx.add(SpellArg.OPERATION, ParseValueType.ALGEBRAIC_OPERATION);
 		ctx.add(SpellArg.QUEST, ParseValueType.QUEST);
+		ctx.add(SpellArg.PACT, ParseValueType.QUEST);
 		ctx.add(SpellArg.RACE, ParseValueType.STRING);
 		ctx.add(SpellArg.RANDOM_TARGET, ParseValueType.BOOLEAN);
 		ctx.add(SpellArg.REVERT_TRIGGER, ParseValueType.EVENT_TRIGGER);

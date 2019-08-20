@@ -46,11 +46,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static Card getHeroCard(String heroClass) {
-		CardList classCards = getClassCards(DeckFormat.all()).filtered(card -> card.getHeroClass().equals(heroClass));
-		if (classCards.isEmpty()) {
-			return CardCatalogue.getCardById("hero_neutral");
-		}
-		return CardCatalogue.getCardById(classCards.get(0).getHero());
+		return CardCatalogue.getHeroCard(heroClass);
 	}
 
 
@@ -62,7 +58,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static List<String> getBaseClasses(DeckFormat deckFormat) {
-		return getClassCards(deckFormat).filtered(Card::isCollectible).stream().map(Card::getHeroClass).collect(Collectors.toList());
+		return CardCatalogue.getBaseClasses(deckFormat);
 	}
 
 	/**
@@ -73,7 +69,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static CardList getClassCards(DeckFormat deckFormat) {
-		return CardCatalogue.getAll().filtered(c -> deckFormat.isInFormat(c) && c.getCardType().isCardType(CardType.CLASS));
+		return CardCatalogue.getClassCards(deckFormat);
 	}
 
 	/**

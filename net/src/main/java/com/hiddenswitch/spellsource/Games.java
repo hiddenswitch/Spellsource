@@ -1084,7 +1084,6 @@ public interface Games extends Verticle {
 		String description = card.getDescription();
 		if (owner != -1) {
 			if (card.getZone() == Zones.HAND
-					|| card.getZone() == Zones.DECK
 					|| card.getZone() == Zones.SET_ASIDE_ZONE
 					|| card.getZone() == Zones.HERO_POWER
 					&& owner == localPlayerId) {

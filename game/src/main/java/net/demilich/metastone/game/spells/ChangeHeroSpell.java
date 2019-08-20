@@ -90,7 +90,7 @@ public class ChangeHeroSpell extends Spell {
 		}
 
 		Card heroCard = heroCards.get(0);
-		Hero hero = heroCard.createHero();
+		Hero hero = heroCard.createHero(player);
 		context.getLogic().changeHero(player, hero, !(boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false));
 
 		List<SpellDesc> spellDescs = desc.subSpells(0);

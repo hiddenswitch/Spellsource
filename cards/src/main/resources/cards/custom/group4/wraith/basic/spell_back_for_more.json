@@ -1,0 +1,23 @@
+{
+  "name": "Back For More",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Summon three 1/1 Skeletons.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_skeleton_wraith",
+      "token_skeleton_wraith",
+      "token_skeleton_wraith"
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

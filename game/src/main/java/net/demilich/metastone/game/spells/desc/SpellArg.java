@@ -300,6 +300,10 @@ public enum SpellArg {
 	 */
 	OPERATION,
 	/**
+	 * Like a {@link SpellArg.QUEST} but a player can have multiple of these active at once.
+	 */
+	PACT,
+	/**
 	 * Used by the {@link SetRaceSpell} to change a target minion's race.
 	 */
 	RACE,
