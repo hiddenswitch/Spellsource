@@ -13,48 +13,17 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "MissilesSpell",
-          "target": "ALL_OTHER_CHARACTERS",
-          "value": 1,
-          "howMany": 3,
-          "randomTarget": true,
-          "spell": {
-            "class": "ConditionalSpell",
-            "condition": {
-              "class": "CardPropertyCondition",
-              "target": "OUTPUT",
-              "cardType": "HERO",
-              "invert": true
-            },
-            "spell": {
-              "class": "AddAttributeSpell",
-              "attribute": "RESERVED_BOOLEAN_1",
-              "target": "SELF"
-            }
-          }
-        },
-        {
-          "class": "EitherOrSpell",
-          "condition": {
-            "class": "AttributeCondition",
-            "target": "SELF",
-            "attribute": "RESERVED_BOOLEAN_1",
-            "operation": "HAS"
-          },
-          "spell1": {
-            "class": "RemoveAttributeSpell",
-            "target": "SELF",
-            "attribute": "RESERVED_BOOLEAN_1"
-          },
-          "spell2": {
-            "class": "DestroySpell",
-            "target": "SELF"
-          }
-        }
-      ]
+      "class": "custom.FormlessAgonyMissilesSpell",
+      "howMany": 3,
+      "target": "ALL_CHARACTERS",
+      "cardFilter": {
+        "class": "EntityTypeFilter",
+        "entityType": "HERO"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
     }
   },
   "attributes": {

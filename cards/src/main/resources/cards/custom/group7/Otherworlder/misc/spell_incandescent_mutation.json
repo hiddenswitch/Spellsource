@@ -15,11 +15,15 @@
       {
         "class": "AddBattlecrySpell",
         "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
         "battlecry": {
           "targetSelection": "NONE",
           "spell": {
             "class": "DamageSpell",
-            "value": "1",
+            "value": 1,
             "target": "ENEMY_MINIONS",
             "randomTarget": true
           }
