@@ -1,12 +1,12 @@
 {
   "name": "Lord Henryk",
-  "baseManaCost": 8,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 7,
+  "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "<b>Opener</b>: If your champion has 12 or less Health, deal 8 damage.",
+  "description": "<b>Opener</b>: If your champion has 12 or less Health, deal 10 damage.",
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",
@@ -18,7 +18,7 @@
     "targetSelection": "ANY",
     "spell": {
       "class": "DamageSpell",
-      "value": 8
+      "value": 10
     }
   },
   "attributes": {
