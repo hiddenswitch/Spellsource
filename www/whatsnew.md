@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.50-2.0.35 (In Progress)
+### 0.8.50-2.0.35 (August 20th, 2019)
 
 Bug fixes and new cards.
 
