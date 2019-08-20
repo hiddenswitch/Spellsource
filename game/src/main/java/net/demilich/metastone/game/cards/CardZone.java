@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.targeting.Zones;
@@ -16,12 +17,12 @@ import java.util.stream.Stream;
  */
 public final class CardZone extends EntityZone<Card> implements CardList {
 
-	public CardZone(int player, Zones zone) {
-		super(player, zone);
+	public CardZone(int player, Zones zone, Map<Integer, Entity> lookup) {
+		super(player, zone, lookup);
 	}
 
-	public CardZone(int player, Zones zone, CardList cardsCopy) {
-		super(player, zone);
+	public CardZone(int player, Zones zone, CardList cardsCopy, Map<Integer, Entity> lookup) {
+		super(player, zone, lookup);
 		addAll(cardsCopy);
 	}
 
@@ -48,7 +49,7 @@ public final class CardZone extends EntityZone<Card> implements CardList {
 	@Override
 	public CardZone clone() {
 		// Clone all the cards too
-		CardZone zone = new CardZone(getPlayer(), getZone());
+		CardZone zone = new CardZone(getPlayer(), getZone(), null);
 		for (Card e : this) {
 			zone.uncheckedAdd(zone.size(), e.clone());
 		}

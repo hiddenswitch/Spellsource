@@ -150,14 +150,14 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * Creates a hero entity from the text on the card. Works similarly to {@link #summon()}, except for heroes.
 	 *
 	 * @return A new hero instance.
+	 * @param player
 	 */
-	public Hero createHero() {
+	public Hero createHero(Player player) {
 		if (getCardType() != CardType.HERO) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an hero", this, getCardType());
 		}
 
-		Card heroPower = CardCatalogue.getCardById(getDesc().getHeroPower());
-		Hero hero = new Hero(this, heroPower);
+		Hero hero = new Hero(this, player);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (HERO_ATTRIBUTES.contains(gameTag)) {
 				hero.getAttributes().put(gameTag, getAttributes().get(gameTag));
@@ -638,24 +638,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	public boolean isActor() {
 		return getCardType() == CardType.MINION || getCardType() == CardType.WEAPON || getCardType() == CardType.HERO;
-	}
-
-	/**
-	 * Creates an instance of the appropriate actor from this card.
-	 *
-	 * @return The {@link Actor} entity or {@code null} if the card could not have produced an actor.
-	 */
-	public Actor actor() {
-		switch (getCardType()) {
-			case MINION:
-				return summon();
-			case WEAPON:
-				return createWeapon();
-			case HERO:
-				return createHero();
-		}
-
-		return null;
 	}
 
 	/**

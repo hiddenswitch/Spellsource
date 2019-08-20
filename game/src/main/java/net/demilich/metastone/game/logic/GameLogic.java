@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -400,9 +401,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param ownerIndex The owner to assign to this {@link CardList}
 	 */
 	protected void assignEntityIds(Iterable<? extends Entity> cardList, int ownerIndex) {
+		Player player = context.getPlayer(ownerIndex);
+
 		for (Entity entity : cardList) {
 			entity.setId(generateId());
 			entity.setOwner(ownerIndex);
+			player.updateLookup(entity);
 		}
 	}
 
@@ -927,16 +931,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// Get the additional armor from the incoming hero
 		int previousArmor = previousHero.getArmor();
 
-		hero.setWeapon(previousHero.getWeapon());
 		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
-		if (Objects.equals(hero.getHeroPower().getHeroClass(), HeroClass.INHERIT)) {
-			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
-		}
+
+		Card heroPower = CardCatalogue.getCardById(hero.getSourceCard().getDesc().getHeroPower());
 		// Set hero power ID before events trigger to prevent issues
-		hero.getHeroPower().setId(generateId());
-		hero.getHeroPower().setOwner(hero.getOwner());
+		heroPower.setId(generateId());
+		heroPower.setOwner(hero.getOwner());
 
 		// Set the new hero's number of attacks to the old hero's.
 		hero.getAttributes().put(Attribute.NUMBER_OF_ATTACKS, previousHero.getAttributes().get(Attribute.NUMBER_OF_ATTACKS));
@@ -965,6 +967,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		removeCard(previousHero.getHeroPower());
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		hero.moveOrAddTo(context, Zones.HERO);
+		player.getHeroPowerZone().add(heroPower);
+		if (Objects.equals(hero.getHeroPower().getHeroClass(), HeroClass.INHERIT)) {
+			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
+		}
 		hero.modifyArmor(previousArmor);
 		final int armorChange = hero.getArmor() - previousArmor;
 		if (armorChange != 0) {
@@ -1451,10 +1457,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	private void destroyWeapon(Weapon weapon) {
+		// Already in graveyard by this point
 		Player owner = context.getPlayer(weapon.getOwner());
-		if (owner.getHero().getWeapon() != null && owner.getHero().getWeapon().getId() == weapon.getId()) {
-			owner.getHero().setWeapon(null);
-		}
 		weapon.onUnequip(context, owner);
 		removeEnchantments(weapon);
 		context.fireGameEvent(new WeaponDestroyedEvent(context, weapon));
@@ -1693,13 +1697,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = context.getPlayer(playerId);
 
 		weapon.setId(generateId());
+		weapon.setOwner(playerId);
 		Weapon currentWeapon = player.getHero().getWeapon();
 
 		if (currentWeapon != null) {
 			currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 		}
 
-		player.getHero().setWeapon(weapon);
+		player.getWeaponZone().add(weapon);
 
 		if (resolveBattlecry
 				&& !weapon.getBattlecries().isEmpty()) {
@@ -2096,18 +2101,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
-		return context.getEntities()
-				.filter(Entity::isInPlay)
-				.filter(e -> e.getOwner() == player.getId())
-				.flatMapToInt(entity ->
-						Stream.of(entity.getAttributeValue(attr),
-								context.getTriggersAssociatedWith(entity.getReference())
-										.stream()
-										.filter(Enchantment.class::isInstance)
-										.map(Enchantment.class::cast)
-										.mapToInt(e -> e.getAttributeValue(attr)).sum())
-								.mapToInt(i -> i))
-				.sum();
+		int value = 0;
+		for (Entity entity : player.getLookup().values()) {
+			if (!entity.isInPlay()) {
+				continue;
+			}
+			value += entity.getAttributeValue(attr);
+		}
+		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
+			if (trigger instanceof Enchantment && trigger.getOwner() == player.getId()) {
+				value += ((Enchantment) trigger).getAttributeValue(attr);
+			}
+		}
+		return value;
 	}
 
 	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
@@ -2422,7 +2428,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getHero().setOwner(player.getId());
 		player.getHero().setMaxHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
 		player.getHero().setHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
-		hero.getHeroPower().setId(generateId());
+		Card heroPower = context.getCardById(hero.getSourceCard().getDesc().getHeroPower());
+		heroPower.setOwner(playerId);
+		heroPower.setId(generateId());
+		player.getHeroPowerZone().add(heroPower);
+		player.updateLookup(player);
+		player.updateLookup(hero);
+		player.updateLookup(heroPower);
 		assignEntityIds(player.getDeck(), playerId);
 		assignEntityIds(player.getHand(), playerId);
 

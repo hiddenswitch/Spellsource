@@ -103,6 +103,10 @@ allprojects {
                 if (['com.fasterxml.jackson.core', 'com.fasterxml.jackson.jaxrs'].contains(details.requested.group)) {
                     details.useVersion "2.9.9"
                 }
+
+                if (details.requested.module.name == 'netty-all') {
+                    details.useVersion "4.1.34.Final"
+                }
                 
                 if (details.requested.module.name.contains('jackson-databind')) {
                     details.useVersion "2.9.9.1"
