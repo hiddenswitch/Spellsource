@@ -4,7 +4,83 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.49-2.0.35 (In Progress)
+### 0.8.50-2.0.35 (In Progress)
+
+Bug fixes and new cards.
+
+##### Content Additions:
+
+ - New cards for Otherworlder (thanks @AnterogradeNil!)
+ 
+ ##### Soulseeker v0.2 (from @birb):
+ Summary:
+  - First round of “Obvious nerfs.”
+  - Card deletions.
+  - Reflavoring and set changes.
+  - New cards, in particular Secrets archetype.
+ 
+ New Cards:
+ 
+ Verdant Dreams:
+ - Reverse Volition: 1 mana common spell "Secret: When your opponent plays a minion, return it to their hand." (Replaces Dormant Spirits)
+ 
+ Setless:
+ - Rebirth: 0 mana common spell "Destroy a friendly minion. Summon a random minion with the same Cost."
+ - Seeker of Mysteries: 2 mana 2/3 common "Opener: If you control a secret, Soulbind twice."
+ - Render Imaginary: 2 mana common spell "Destroy a minion. Its owner draws 2 cards."
+ - Transmute Life: 1 mana rare spell "Secret: When a friendly minion dies, give your other minions +1/+1."
+ - Mirror Phantom: 1 mana 1/3 rare Spirit "While in your hand, this is a copy of the last Spirit you played."
+ - Split Soul: 2 mana epic spell "Destroy a friendly minion. Add two 1/1 copies of it to your hand that cost (1)."
+ - Soul Warden: 4 mana 3/4 Spirit "Opener: Summon 1/1 copies of your minions that died this turn."
+ - Knowledge Feeder: 4 mana 3/3 epic Spirit "Opener: Destroy a friendly minion to put three Secrets from your deck into the battlefield."
+ - Ranabosh, in Memory: 3 mana 4/2 Legendary Spirit "Aftermath: Go dormant. Trigger two friendly Secrets to revive this minion."
+ - Prophet Elenthris: 4 mana 4/5 Legendary "Opener: Add five Soulstones to your hand. Play them all to summon Magoria."
+      - Soulstone (Token): 2 mana spell "Destroy a friendly minion. If you've played all five of these, awaken Magoria!"
+      - Mother Magoria: 10 mana 10/10 "At the end of your turn, fill your board with random minions."
+ 
+ Nerfs:
+ - Channeler Initiate costs (3).
+ - Dominant Will now costs (3).
+ - Extract Nightmare costs (6).
+ - Domineer costs (7).
+ - Spectral Host no longer gives guard.
+ - Essence Harvester’s heal reduced to 8.
+ 
+ Alterations:
+ - Rite of Promise costs (1) and only Soulbinds once.
+ - Rite of Pain costs (2) and only Soulbinds once.
+ - Rite of Passage costs (3) and only Soulbinds once.
+ 
+ Reworks:
+ - Stranded Memory is reworked into “Twisted Pathology”, a 5 mana 3/4 common spirit with “Dash. Opener: Each player draws 2 cards.”
+ - Ravenous Soul has been reworked into Devoted Denizen,  2 mana 2/2 Spirit with Guard and "Aftermath: Soulbind."
+ - Osiris is now a 5 mana 3/6 with "Opener: Return your other minions to your hand. Summon random minions with the same Costs."
+ 
+ Deletions:
+ - Wailing Banshee is deleted.
+ - Delve Into Memory is deleted.
+ - Vaash Trinity is deleted.
+ - Dormant Spirits is deleted.
+ - Otherworld Wayfinder is deleted.
+ 
+ *deleted = made uncollectible
+ 
+ Buffs:
+ - Olivia, the Successor is now a 4/3.
+ 
+ Reflavoring:
+ - Channeler Initiate is now called "Seeker Initiate"
+ - Jekk Trinity is now called "Lost Legionnaire"
+ - Stranded Thought is now called “Afterthought”
+ - Tortured Soul is now called "Dormant Soul"
+ - Brink of Reality is now called "Brink of Existence"
+ 
+ Set Changes:
+ - Awaken is now a basic card (was core/classic).
+ - Essence Harvester is now a core (classic) card (was setless).
+ - Lost Legionnaire (formerly Jekk Trinity) is now a core (classic) card (was setless)
+
+### 0.8.49-2.0.35 (August 19th, 2019)
 
 Bug fixes and networked performance improvements.
 
@@ -29,6 +105,11 @@ Introducing the Wraith class! Big thanks to @Bromara for the contribution.
 The Spellsource community would also like to show its immense gratitude to Sam (Fermata) and @lilumani for their wonderful contributions to code, art and other important creative tasks.
 
 Bug fixes.
+New Otherworlder cards thanks to @AnterogradeNil!
+
+##### Content Additions:
+
+ - Many Otherworlder cards have been added to the game thanks to @AnterogradeNil!
 
 ##### Content Fixes:
 
@@ -45,75 +126,6 @@ Bug fixes.
  - A number of cards that trigger off of shuffling effects, such as Xitalu, now properly work. (1334)
  - Sot Mountain Excavation no longer deals damage to the player champion and instead just removes the armor.
  - Bloody Reconstruction now appears in the Collection again. (1342)
- 
-##### Soulseeker v0.2 (from @birb):
-Summary:
- - First round of “Obvious nerfs.”
- - Card deletions.
- - Reflavoring and set changes.
- - New cards, in particular Secrets archetype.
-
-New Cards:
-
-Verdant Dreams:
-- Reverse Volition: 1 mana common spell "Secret: When your opponent plays a minion, return it to their hand." (Replaces Dormant Spirits)
-
-Setless:
-- Rebirth: 0 mana common spell "Destroy a friendly minion. Summon a random minion with the same Cost."
-- Seeker of Mysteries: 2 mana 2/3 common "Opener: If you control a secret, Soulbind twice."
-- Render Imaginary: 2 mana common spell "Destroy a minion. Its owner draws 2 cards."
-- Transmute Life: 1 mana rare spell "Secret: When a friendly minion dies, give your other minions +1/+1."
-- Mirror Phantom: 1 mana 1/3 rare Spirit "While in your hand, this is a copy of the last Spirit you played."
-- Split Soul: 2 mana epic spell "Destroy a friendly minion. Add two 1/1 copies of it to your hand that cost (1)."
-- Soul Warden: 4 mana 3/4 Spirit "Opener: Summon 1/1 copies of your minions that died this turn."
-- Knowledge Feeder: 4 mana 3/3 epic Spirit "Opener: Destroy a friendly minion to put three Secrets from your deck into the battlefield."
-- Ranabosh, in Memory: 3 mana 4/2 Legendary Spirit "Aftermath: Go dormant. Trigger two friendly Secrets to revive this minion."
-- Prophet Elenthris: 4 mana 4/5 Legendary "Opener: Add five Soulstones to your hand. Play them all to summon Magoria."
-     - Soulstone (Token): 2 mana spell "Destroy a friendly minion. If you've played all five of these, awaken Magoria!"
-     - Mother Magoria: 10 mana 10/10 "At the end of your turn, fill your board with random minions."
-
-Nerfs:
-- Channeler Initiate costs (3).
-- Dominant Will now costs (3).
-- Extract Nightmare costs (6).
-- Domineer costs (7).
-- Spectral Host no longer gives guard.
-- Essence Harvester’s heal reduced to 8.
-
-Alterations:
-- Rite of Promise costs (1) and only Soulbinds once.
-- Rite of Pain costs (2) and only Soulbinds once.
-- Rite of Passage costs (3) and only Soulbinds once.
-
-Reworks:
-- Stranded Memory is reworked into “Twisted Pathology”, a 5 mana 3/4 common spirit with “Dash. Opener: Each player draws 2 cards.”
-- Ravenous Soul has been reworked into Devoted Denizen,  2 mana 2/2 Spirit with Guard and "Aftermath: Soulbind."
-- Osiris is now a 5 mana 3/6 with "Opener: Return your other minions to your hand. Summon random minions with the same Costs."
-
-Deletions:
-- Wailing Banshee is deleted.
-- Delve Into Memory is deleted.
-- Vaash Trinity is deleted.
-- Dormant Spirits is deleted.
-- Otherworld Wayfinder is deleted.
-
-*deleted = made uncollectible
-
-Buffs:
-- Olivia, the Successor is now a 4/3.
-
-Reflavoring:
-- Channeler Initiate is now called "Seeker Initiate"
-- Jekk Trinity is now called "Lost Legionnaire"
-- Stranded Thought is now called “Afterthought”
-- Tortured Soul is now called "Dormant Soul"
-- Brink of Reality is now called "Brink of Existence"
-
-Set Changes:
-- Awaken is now a basic card (was core/classic).
-- Essence Harvester is now a core (classic) card (was setless).
-- Lost Legionnaire (formerly Jekk Trinity) is now a core (classic) card (was setless)
-
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
 
