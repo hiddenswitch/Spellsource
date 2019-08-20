@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.48
+SPELLSOURCE_VERSION=0.8.49
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -462,7 +462,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.48.jar \
+      ./net/build/libs/net-0.8.49.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null
