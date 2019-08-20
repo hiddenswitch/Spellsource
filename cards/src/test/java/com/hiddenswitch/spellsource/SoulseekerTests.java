@@ -4,10 +4,10 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.tests.util.TestBase;
-import org.junit.Assert;
+import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
@@ -17,10 +17,17 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class SoulseekerTests extends TestBase {
+
+	@NotNull
+	@Override
+	public String getDefaultHeroClass() {
+		return HeroClass.DARKBLUE;
+	}
 
 	private static final List<String> SOULBIND_TOKENS = Arrays.asList(
 			"token_wandering_soul",
@@ -212,15 +219,15 @@ public class SoulseekerTests extends TestBase {
 		}
 	}
 
-	//Haunting Vision - 2 mana 3/2 Minion - "Opener: If you've played another Paradox this game, deal 3 Damage."
+	//Haunting Vision - 2 mana 3/2 Minion - "Opener: If you've played another Haunting Vision this game, deal 3 Damage."
 	@Test
 	public void testHauntingVision() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_haunting_vision", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp());
-			playCard(context, player, "minion_haunting_vision", opponent.getHero());
+			playMinionCardWithBattlecry(context, player, "minion_haunting_vision", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 3);
-			playCard(context, player, "minion_haunting_vision", opponent.getHero());
+			playMinionCardWithBattlecry(context, player, "minion_haunting_vision", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 6);
 		});
 	}
@@ -235,8 +242,6 @@ public class SoulseekerTests extends TestBase {
 			playCard(context, player, "spell_dreamstep", spirit);
 			assertEquals(costOf(context, player, player.getHand().get(0)), 2);
 			assertEquals(costOf(context, player, player.getHand().get(1)), 0);
-
-
 		});
 	}
 

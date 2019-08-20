@@ -1,17 +1,16 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.applications.PythonBridge;
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
@@ -104,11 +103,10 @@ public class PythonBridgeTest {
 			"#";
 
 	@Test
-	@Ignore
 	public void testSimulateMethod() throws InterruptedException {
 		CardCatalogue.loadCardsFromPackage();
 		List<String> deckLists = Arrays.asList(DECK_1, DECK_2, DECK_3, DECK_4);
-		int n = 20;
+		int n = 1;
 		CountDownLatch latch = new CountDownLatch(1);
 		Supplier<Behaviour> behaviourSupplier = () -> {
 			GameStateValueBehaviour inst = new GameStateValueBehaviour();

@@ -1,0 +1,17 @@
+{
+  "name": "Double Turn End Triggers",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Your end of turn effects trigger twice.",
+  "aura": {
+    "class": "DoubleTurnEndTriggersAura",
+    "target": "FRIENDLY_CARDS"
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

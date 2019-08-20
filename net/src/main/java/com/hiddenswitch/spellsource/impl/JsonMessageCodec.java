@@ -1,12 +1,25 @@
 package com.hiddenswitch.spellsource.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.smile.SmileFactory;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+import io.netty.buffer.ByteBufInputStream;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
-import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.Json;
 
-import static io.vertx.core.json.JsonObject.mapFrom;
+import java.io.IOException;
+import java.io.InputStream;
 
 public abstract class JsonMessageCodec<T> implements MessageCodec<T, T> {
+
+	private static ObjectMapper mapper;
+
+	static {
+		mapper = new ObjectMapper(new SmileFactory());
+		mapper.registerModule(new AfterburnerModule());
+	}
 
 	protected abstract Class<? extends T> getMessageClass();
 
@@ -15,14 +28,27 @@ public abstract class JsonMessageCodec<T> implements MessageCodec<T, T> {
 
 	@Override
 	public void encodeToWire(Buffer buffer, T obj) {
-		mapFrom(obj).writeToBuffer(buffer);
+		byte[] bytes;
+		try {
+			bytes = mapper.writeValueAsBytes(obj);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+
+		buffer.appendInt(bytes.length);
+		buffer.appendBytes(bytes);
 	}
 
 	@Override
 	public T decodeFromWire(int pos, Buffer buffer) {
-		JsonObject obj = new JsonObject();
-		obj.readFromBuffer(pos, buffer);
-		return obj.mapTo(getMessageClass());
+		int length = buffer.getInt(pos);
+		int start = pos + 4;
+		byte[] bytes = buffer.getBytes(start, start + length);
+		try {
+			return mapper.readValue(bytes, getMessageClass());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

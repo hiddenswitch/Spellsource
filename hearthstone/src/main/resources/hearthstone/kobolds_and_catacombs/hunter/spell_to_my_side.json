@@ -29,7 +29,10 @@
         "token_misha",
         "token_leokk"
       ],
-      "randomTarget": true
+      "randomTarget": true,
+      "cardSource": {
+        "class": "SummonWithoutReplacementCardSource"
+      }
     },
     "spell2": {
       "class": "SummonSpell",

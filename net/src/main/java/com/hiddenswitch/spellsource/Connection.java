@@ -147,17 +147,6 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	/**
-	 * Obtains the unique lock for the user to prevent the user from calling more than one method at a time.
-	 *
-	 * @param userId
-	 * @return
-	 */
-	@Suspendable
-	static SuspendableLock methodLock(String userId) {
-		return SuspendableLock.lock("Connection/method-ordering-lock/" + userId);
-	}
-
-	/**
 	 * A method that handles a routing context. For internal use only.
 	 *
 	 * @param routingContext

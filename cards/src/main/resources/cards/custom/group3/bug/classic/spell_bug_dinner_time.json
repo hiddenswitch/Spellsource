@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 2
+        "value": 3
       },
       {
         "class": "BuffSpell",

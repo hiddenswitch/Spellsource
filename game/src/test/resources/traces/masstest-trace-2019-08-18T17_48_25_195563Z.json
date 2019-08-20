@@ -1,0 +1,12 @@
+{
+  "seed" : -6606366703909315890,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "BLOOD", "CRIMSON" ],
+  "deckCardIds" : [ [ "spell_blood_moon_rising", "spell_hemoshield", "minion_little_purrsuer", "spell_sweet_sustenance", "minion_clumsy_dryad", "minion_kawarimi_headbasher", "minion_clash_flamecore", "minion_uccian_hydra", "minion_mollusk_meister", "weapon_souldrinker_axe", "minion_bogovanis", "minion_bloodrider", "weapon_voltsaber", "minion_vampiric_savage", "minion_deranged_greengill", "minion_chainwrecker_corsair", "minion_gargoyle_warden", "minion_skeletower", "minion_smogg", "minion_streetwise_specialist", "spell_hemoshield", "minion_faldoran_the_ninja", "minion_streetwise_specialist", "weapon_midnight_blade", "minion_alemental", "minion_kodama_bulwark", "weapon_midnight_blade", "minion_petal_knight", "minion_blood_elf_champion", "minion_beloved_benji" ], [ "minion_quest_giver", "minion_natural_convert", "minion_bone_napper", "spell_recycle_the_dead", "minion_void_reaper", "minion_tempest_elemental", "pact_soul_lightning", "pact_extraction", "minion_perplexed_courtsman", "pact_extraction", "spell_curse_of_pain", "spell_bone_shield_wraith", "pact_nothing_to_waste", "spell_transfer_life", "minion_blubber_behemoth", "spell_blood_cleave", "minion_kiljaeden_deceiver", "minion_fiendish_giant", "minion_dragon_pod", "minion_phantom_advisor", "spell_transfer_life", "minion_tanglefer_of_the_jungle", "minion_lord_henryk", "spell_curse_of_aim", "pact_deaths_hand", "minion_hooded_ritualist", "spell_curse_on_strength", "pact_nothing_to_waste", "minion_wee_squashling", "minion_bronze_warden" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 15, 25 ], [ 52, 59 ] ],
+  "actions" : [ 0, 0, 2, 0, 0, 2, 0, 0, 5, 0, 1, 1, 0, 0, 2, 1, 0, 0, 0, 0, 7, 0, 1, 0, 7, 4, 0, 7, 5, 1, 1, 1, 0, 10, 13, 1, 0, 8, 4, 3, 7, 2, 4, 0, 5, 3, 20, 1, 5, 3, 0, 0, 22, 22, 1, 16, 6, 19, 7, 18, 4, 0, 0, 13, 29, 9, 5, 9, 2, 0, 1, 2, 0, 0, 10, 1, 0, 0, 2, 0, 3, 0, 0, 19, 4, 0, 1, 0, 3, 8, 2, 0, 1, 0, 9, 11, 4, 3, 0, 0, 11, 15, 11, 13, 10, 1, 8, 6, 0, 28, 16, 2, 7, 9, 1, 1 ],
+  "id" : null
+}

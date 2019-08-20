@@ -1,9 +1,8 @@
 package com.hiddenswitch.hearthstone;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Actor;
@@ -13,8 +12,6 @@ import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.aura.BuffAura;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestBehaviour;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;

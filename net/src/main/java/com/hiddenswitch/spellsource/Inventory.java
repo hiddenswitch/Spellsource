@@ -135,7 +135,7 @@ public interface Inventory {
 				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.getId()))
 						.withUserId(userId)
 						.withCollectionIds(userIdCollection))
-				.map(arg -> JsonObject.mapFrom(arg))
+				.map(JsonObject::mapFrom)
 				.collect(toList());
 
 		mongo().insertManyWithOptions(INVENTORY, documents, new BulkWriteOptions().setOrdered(false).setWriteOption(WriteOption.ACKNOWLEDGED));

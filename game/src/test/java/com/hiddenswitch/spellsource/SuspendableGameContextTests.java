@@ -4,7 +4,6 @@ import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.Collections;

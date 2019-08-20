@@ -1,0 +1,17 @@
+{
+  "name": "1 AOE",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Deal $1 damage to ALL characters.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ALL_CHARACTERS",
+    "value": 1
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

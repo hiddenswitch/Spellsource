@@ -8,15 +8,10 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -280,7 +275,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
 	public void testUnidentifiedElixirStartsInHand() {
-		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Custom"));
+		DebugContext context = createContext("WHITE", "WHITE", false, DeckFormat.getFormat("Standard"));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck ->
 				Stream.generate(() -> "spell_unidentified_elixir")

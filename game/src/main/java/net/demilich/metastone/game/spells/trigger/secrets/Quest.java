@@ -48,6 +48,8 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
  */
 public class Quest extends Enchantment {
 
+	private boolean isPact;
+
 	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
 		super(trigger, spell);
 		this.setSourceCard(source);
@@ -61,6 +63,25 @@ public class Quest extends Enchantment {
 		setKeepAfterTransform(desc.keepAfterTransform);
 		setCountByValue(desc.countByValue);
 		setPersistentOwner(desc.persistentOwner);
+	}
+
+	/**
+	 * Set to {@code true} by the {@link net.demilich.metastone.game.spells.AddPactSpell}.
+	 *
+	 * @param pact
+	 */
+	public void setPact(boolean pact) {
+		isPact = pact;
+	}
+
+	/**
+	 * Pacts are a kind of quest that can be triggered by either player.
+	 *
+	 * @return {@code true} if this quest should behave like a pact.
+	 * @see net.demilich.metastone.game.spells.AddPactSpell for more on pacts.
+	 */
+	public boolean isPact() {
+		return isPact;
 	}
 
 	@Override

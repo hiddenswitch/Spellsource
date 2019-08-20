@@ -10,7 +10,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;

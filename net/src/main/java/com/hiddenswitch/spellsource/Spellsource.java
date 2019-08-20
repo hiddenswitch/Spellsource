@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
+import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -42,6 +43,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
@@ -69,15 +72,15 @@ public class Spellsource {
 	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
 	private static Spellsource instance;
 	private List<DeckCreateRequest> cachedStandardDecks;
-	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
-	private Map<String, Trigger> gameTriggers = new HashMap<>();
-	private Map<String, Spell> spells = new HashMap<>();
+	private Map<String, PersistenceHandler> persistAttributeHandlers = new ConcurrentHashMap<>();
+	private Map<String, Trigger> gameTriggers = new ConcurrentHashMap<>();
+	private Map<String, Spell> spells = new ConcurrentHashMap<>();
 
 	static {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 	}
 
-	private Spellsource() {
+	protected Spellsource() {
 	}
 
 	/**
@@ -101,8 +104,6 @@ public class Spellsource {
 	 * @return
 	 */
 	public Spellsource migrate(Vertx vertx, Handler<AsyncResult<Void>> then) {
-		mongo().connectWithEnvironment(vertx);
-
 		Migrations.migrate(vertx)
 				.add(new MigrationRequest()
 						.withVersion(1)
@@ -567,7 +568,6 @@ public class Spellsource {
 						.withVersion(36)
 						.withUp(thisVertx -> {
 							CardCatalogue.loadCardsFromPackage();
-							Mongo.mongo().connectWithEnvironment(thisVertx);
 							// We'll mark as removed all the missing cards, then change the hero classes that no longer exist to
 							// neutral heroes.
 
@@ -608,7 +608,7 @@ public class Spellsource {
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
-			cachedStandardDecks = new ArrayList<>();
+			cachedStandardDecks = Collections.synchronizedList(new ArrayList<>());
 			CardCatalogue.loadCardsFromPackage();
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
 			Set<URL> resourceList = reflections.getResources(x -> x != null && x.endsWith(".txt")).stream().map(Resources::getResource).collect(toSet());
@@ -685,36 +685,28 @@ public class Spellsource {
 	 */
 	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		List<Future> futures = new ArrayList<>();
-		// This seems to be the most reliable way to count how many event loop threads there are?
-		EventLoop first = vertx.nettyEventLoopGroup().next();
-		EventLoop next = first;
-		int j = Runtime.getRuntime().availableProcessors()/*1*/;
-		/*
-		for (; j <= Runtime.getRuntime().availableProcessors(); j++) {
-			next = next.next();
-			if (Objects.equals(first, next)) {
-				break;
-			}
-		}
-		*/
-		// Use up all the event loops
-		for (int i = 0; i < j; i++) {
-			for (Verticle verticle : services()) {
-				final Future<String> future = Future.future();
-				vertx.deployVerticle(verticle, future);
-				futures.add(future);
-			}
-		}
+		deployAll(vertx, Runtime.getRuntime().availableProcessors(), deployments);
+	}
 
+	@Suspendable
+	public void deployAll(Vertx vertx, int concurrency, Handler<AsyncResult<CompositeFuture>> deployments) {
+		List<Future> futures = new ArrayList<>();
+
+		// Correctly use event loops
+		for (Supplier<Verticle> verticle : services()) {
+			final Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, new DeploymentOptions().setInstances(concurrency), future);
+			futures.add(future);
+		}
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}
 
-	protected Verticle[] services() {
-		return new Verticle[]{
-				Games.create(),
-				Gateway.create()};
+	protected List<Supplier<Verticle>> services() {
+		return Arrays.asList(
+				Gateway::create,
+				Games::create
+		);
 	}
 
 	/**

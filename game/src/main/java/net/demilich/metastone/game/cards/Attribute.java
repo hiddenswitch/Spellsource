@@ -157,7 +157,6 @@ public enum Attribute {
 	 * was {@link #FROZEN}.
 	 *
 	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
-	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
 	/**
@@ -199,7 +198,7 @@ public enum Attribute {
 	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
-	 * 		complete targeting logic.
+	 * complete targeting logic.
 	 */
 	TAUNT,
 	/**
@@ -229,7 +228,7 @@ public enum Attribute {
 	 * A {@link Minion} with {@link #CHARGE} can attack the same turn it enters play.
 	 *
 	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking the
-	 * 		same turn it is summoned.
+	 * same turn it is summoned.
 	 */
 	CHARGE,
 	/**
@@ -284,7 +283,7 @@ public enum Attribute {
 	 * This implements Baron Rivendare's text.
 	 *
 	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
-	 * 		complete rules for deathrattles.
+	 * complete rules for deathrattles.
 	 */
 	@Deprecated
 	DOUBLE_DEATHRATTLES,
@@ -317,11 +316,11 @@ public enum Attribute {
 	 * as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
 	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the
-	 * 		situation where physical attacks cause a minion to lose stealth.
+	 * situation where physical attacks cause a minion to lose stealth.
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
-	 * 		from a minion causes it to lose stealth.
+	 * from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * 		logic behind selecting valid targets.
+	 * logic behind selecting valid targets.
 	 */
 	STEALTH,
 	/**
@@ -383,7 +382,7 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
-	 * 		the battlefield.
+	 * the battlefield.
 	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
@@ -392,14 +391,14 @@ public enum Attribute {
 	 * powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * 		complete target selection logic.
+	 * complete target selection logic.
 	 */
 	UNTARGETABLE_BY_SPELLS,
 	/**
 	 * Marks an {@link Actor} to be untargetable by an <b>opponent's</b> spells or hero powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * 		complete target selection logic.
+	 * complete target selection logic.
 	 */
 	UNTARGETABLE_BY_OPPONENT_SPELLS,
 	/**
@@ -516,7 +515,7 @@ public enum Attribute {
 	 * Marks that this {@link Card} has a trigger that should be active while it is in the deck.
 	 *
 	 * @see #PASSIVE_TRIGGERS for an attribute that marks the entity has a trigger that is only active in the player's
-	 * 		battlefield or hand.
+	 * battlefield or hand.
 	 */
 	DECK_TRIGGERS,
 	/**
@@ -528,7 +527,7 @@ public enum Attribute {
 	 * number of times a hero power can be used will be the max value found among in-play entities owned by the player.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
-	 * 		a hero power card, can be played.
+	 * a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
 	/**
@@ -550,7 +549,7 @@ public enum Attribute {
 	 * Implements the C'Thun mechanic.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
-	 * 		attributes like these and provides values to various spells.
+	 * attributes like these and provides values to various spells.
 	 */
 	CTHUN_ATTACK_BUFF,
 	/**
@@ -559,7 +558,7 @@ public enum Attribute {
 	 * Implements the C'Thun mechanic.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
-	 * 		attributes like these and provides values to various spells.
+	 * attributes like these and provides values to various spells.
 	 */
 	CTHUN_HEALTH_BUFF,
 	/**
@@ -602,7 +601,7 @@ public enum Attribute {
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.
 	 *
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
-	 * 		attack.
+	 * attack.
 	 */
 	RUSH,
 	/**
@@ -733,11 +732,6 @@ public enum Attribute {
 	 * battlefield.
 	 */
 	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
-	/**
-	 * If a {@link Player} has this attribute, the player had a deck named "The Supreme Archive" in the player's
-	 * collection when the game began.
-	 */
-	HAS_SUPREME_ARCHIVE_DECK,
 	/**
 	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
 	 * damage to the target minion, the target minion  is destroyed.
@@ -1048,8 +1042,8 @@ public enum Attribute {
 	 */
 	LACKEY,
 	/**
-	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability
-	 * at the end of every owner's turn
+	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability at the end of every
+	 * owner's turn
 	 */
 	DECAY,
 	/**
@@ -1057,13 +1051,13 @@ public enum Attribute {
 	 */
 	TREANT,
 	DRAINED_THIS_TURN,
-    TOTAL_DRAINED,
-    DRAINED_LAST_TURN,
-    /**
-     * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
-     */
-    SURGE,
-    DYNAMIC_DESCRIPTION, PASSIVE_AURAS, CURSE;
+	TOTAL_DRAINED,
+	DRAINED_LAST_TURN,
+	/**
+	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+	 */
+	SURGE,
+	DYNAMIC_DESCRIPTION, PASSIVE_AURAS, CURSE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

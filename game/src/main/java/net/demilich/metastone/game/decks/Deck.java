@@ -28,12 +28,12 @@ public interface Deck extends Cloneable {
 
 	static @NotNull
 	GameDeck randomDeck(@NotNull String heroClass) {
-		return new RandomDeck(heroClass, DeckFormat.getFormat("Custom"));
+		return new RandomDeck(heroClass, DeckFormat.spellsource());
 	}
 
 	static @NotNull
 	GameDeck randomDeck() {
-		return new RandomDeck(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
+		return new RandomDeck(HeroClass.random(DeckFormat.spellsource()), DeckFormat.spellsource());
 	}
 
 	/**

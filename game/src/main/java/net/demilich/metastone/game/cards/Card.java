@@ -150,14 +150,14 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * Creates a hero entity from the text on the card. Works similarly to {@link #summon()}, except for heroes.
 	 *
 	 * @return A new hero instance.
+	 * @param player
 	 */
-	public Hero createHero() {
+	public Hero createHero(Player player) {
 		if (getCardType() != CardType.HERO) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an hero", this, getCardType());
 		}
 
-		Card heroPower = CardCatalogue.getCardById(getDesc().getHeroPower());
-		Hero hero = new Hero(this, heroPower);
+		Hero hero = new Hero(this, player);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (HERO_ATTRIBUTES.contains(gameTag)) {
 				hero.getAttributes().put(gameTag, getAttributes().get(gameTag));
@@ -399,7 +399,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		if (description == null || description.isEmpty()) {
 			return "";
 		}
-		return description.replaceAll("(</?[bi]>)|\\[x\\]", "");
+		return description;
 	}
 
 	@Override
@@ -641,24 +641,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
-	 * Creates an instance of the appropriate actor from this card.
-	 *
-	 * @return The {@link Actor} entity or {@code null} if the card could not have produced an actor.
-	 */
-	public Actor actor() {
-		switch (getCardType()) {
-			case MINION:
-				return summon();
-			case WEAPON:
-				return createWeapon();
-			case HERO:
-				return createHero();
-		}
-
-		return null;
-	}
-
-	/**
 	 * Retrieves the play options from choose one cards. If the card is not actually a choose one card, it returns an
 	 * empty array.
 	 *
@@ -894,6 +876,13 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 
 		Player opponent = context.getOpponent(player);
+
+		if (getCondition() != null) {
+			if (!getCondition().create().isFulfilled(context, player, null, null)) {
+				return false;
+			}
+		}
+
 		TargetSelection selection = hasChoices() || isHeroPower() ?
 				getTargetSelection() :
 				context.getLogic().processTargetModifiers(play()).getTargetRequirement();
@@ -907,9 +896,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			default:
 				break;
 		}
-		if (getCondition() != null) {
-			return getCondition().create().isFulfilled(context, player, null, null);
-		}
+
 		return true;
 	}
 

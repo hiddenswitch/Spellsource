@@ -7,7 +7,6 @@ import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.testng.annotations.Test;
-import net.demilich.metastone.tests.util.TestBase;
 /*import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
