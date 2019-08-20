@@ -19,6 +19,7 @@ Bug fixes and new cards.
  - Effects which count minions no longer count permanents.
  - Conditions that change when evaluated from a different player's point of view work more reliably. 
  - Conditions that count the number of cards in your hand, graveyard or battlefield work more reliably.
+ - Bloodshard Elemental no longer has Guard. (1349)
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
 
