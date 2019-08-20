@@ -560,7 +560,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return
 	 */
 	public boolean canPlayPact(Player player, @NotNull Card card) {
-		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().stream().map(Quest::getSourceCard).map(Card::getCardId).noneMatch(cid -> cid.equals(card.getCardId()));
+		return player.getSecrets().size() < MAX_SECRETS
+				&& player.getQuests().stream().map(Quest::getSourceCard).map(Card::getCardId).noneMatch(cid -> cid.equals(card.getCardId()));
 	}
 
 	/**
@@ -1435,6 +1436,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 						KillEvent killEvent = new KillEvent(context, target);
 						context.fireGameEvent(killEvent);
 						context.getEnvironment().remove(Environment.KILLED_MINION);
+						// Remove peacefully
+					} else if (target.hasAttribute(Attribute.DESTROYED)) {
+						target.getAttributes().remove(Attribute.DESTROYED);
 					}
 					break;
 				case WEAPON:

@@ -21,6 +21,8 @@ Bug fixes and new cards.
  - Conditions that count the number of cards in your hand, graveyard or battlefield work more reliably.
  - Bloodshard Elemental no longer has Guard. (1349)
  - Plague of Flesh no longer gives 0-Attack minions 1 Attack. (1348) 
+ - Broodmother Narvina no longer interacts with Terrain Devourer to cause an infinite loop when the board is full.
+ - Pacts no longer appear as playable in the hand when a pact of the same source card is already in play. (1347)
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
 

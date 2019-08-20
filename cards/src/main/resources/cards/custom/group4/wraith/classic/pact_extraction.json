@@ -5,6 +5,10 @@
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
   "description": "<b>Pact:</b> After your hero takes damage, give a random enemy minion -4 Health.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",
     "pact": {
