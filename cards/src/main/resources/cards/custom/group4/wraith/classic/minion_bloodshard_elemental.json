@@ -14,8 +14,7 @@
     "value": 2
   },
   "attributes": {
-    "DEATHRATTLES": true,
-    "TAUNT": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "sets": [
