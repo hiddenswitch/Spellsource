@@ -6,7 +6,16 @@ permalink: /whats-new/
 
 ### 0.8.49-2.0.35 (In Progress)
 
-Bug fixes.
+Bug fixes and networked performance improvements.
+
+##### Known Issues:
+
+ - The client will not always render damage values above the cards. It sometimes renders them behind.
+
+##### Usability Fixes:
+
+ - The server sends significantly less redundant data to the client.
+ - The client no longer shows cost zero and a missing card type for every card in a deck (regression).
 
 ##### Content Fixes:
 

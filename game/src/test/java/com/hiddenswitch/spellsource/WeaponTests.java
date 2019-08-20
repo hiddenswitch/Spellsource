@@ -26,6 +26,10 @@ public class WeaponTests extends TestBase {
 
 			attack(context, player, warrior, context.getPlayer2().getHero());
 			Assert.assertEquals(warrior.getWeapon().getDurability(), 1);
+			context.endTurn();
+			context.endTurn();
+			attack(context, player, warrior, context.getPlayer2().getHero());
+			Assert.assertNull(warrior.getWeapon());
 		}, "RED", "RED");
 	}
 }

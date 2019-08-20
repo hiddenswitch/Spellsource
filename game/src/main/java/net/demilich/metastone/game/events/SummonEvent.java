@@ -50,11 +50,6 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public boolean isClientInterested() {
-		return true;
-	}
-
-	@Override
 	@NotNull
 	public Card getCard() {
 		return source.getSourceCard();

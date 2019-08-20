@@ -1,6 +1,5 @@
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -14,7 +13,7 @@ public class ScenarioTests extends TestBase {
 	@Test
 	void testNecromancer() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().changeHero(player, ((Card) CardCatalogue.getCardById("hero_necromancer")).createHero(), true);
+			context.getLogic().changeHero(player, ((Card) CardCatalogue.getCardById("hero_necromancer")).createHero(player), true);
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor") /*Cost 2*/;
 			Minion bearshark = playMinionCard(context, player, "minion_bearshark") /*Cost 3*/;
 			Assert.assertEquals(bloodfen.getDeathrattles().size(), 1);
