@@ -7,37 +7,42 @@ import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.concurrent.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
 import com.hiddenswitch.spellsource.impl.DeckId;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.*;
+import com.hiddenswitch.spellsource.models.ConfigurationRequest;
+import com.hiddenswitch.spellsource.models.MatchmakingRequest;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueEntry;
 import io.netty.handler.timeout.TimeoutException;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.*;
+import io.vertx.core.Closeable;
+import io.vertx.core.Future;
+import io.vertx.core.Verticle;
+import io.vertx.core.Vertx;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.WriteStream;
-import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.defer;
-import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitEvent;
-import static io.vertx.ext.sync.Sync.awaitResult;
 import static io.vertx.ext.sync.Sync.getContextScheduler;
 
 /**
@@ -73,13 +78,15 @@ public interface Matchmaking extends Verticle {
 				throw new IllegalStateException("User is already enqueued in a different queue.");
 			}
 
-			SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId());
-			if (!queue.offer(new MatchmakingQueueEntry()
-					.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
-					.setUserId(request.getUserId())
-					.setRequest(request), false)) {
-				throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
+			try (SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId())) {
+				if (!queue.offer(new MatchmakingQueueEntry()
+						.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
+						.setUserId(request.getUserId())
+						.setRequest(request))) {
+					throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
+				}
 			}
+
 			LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
 
 			Presence.updatePresence(new UserId(request.getUserId()), PresenceEnum.IN_GAME);
@@ -111,12 +118,14 @@ public interface Matchmaking extends Verticle {
 			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
 			String queueId = currentQueue.remove(userId);
 			if (queueId != null) {
-				SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
-				queue.offer(new MatchmakingQueueEntry()
-						.setCommand(MatchmakingQueueEntry.Command.CANCEL)
-						.setUserId(userId.toString()), false);
-				Presence.updatePresence(userId.toString());
-				dequeued = true;
+				try (SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId)) {
+					queue.offer(new MatchmakingQueueEntry()
+							.setCommand(MatchmakingQueueEntry.Command.CANCEL)
+							.setUserId(userId.toString()));
+				} finally {
+					Presence.updatePresence(userId.toString());
+					dequeued = true;
+				}
 			}
 		} finally {
 			span.setTag("dequeued", dequeued);
@@ -156,24 +165,25 @@ public interface Matchmaking extends Verticle {
 		CountDownLatch awaitReady = new CountDownLatch(1);
 		AtomicReference<Fiber<Void>> thisFiber = new AtomicReference<>(null);
 		// Use an async lock so that timing out doesn't throw an exception
-		Vertx.currentContext().owner().sharedData().getLockWithTimeout("Matchmaking/queues/" + queueId, 200L, res -> {
+		// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
+		Vertx.currentContext().owner().sharedData().getLockWithTimeout("Matchmaking/queues/" + queueId, getTimeout(), res -> {
 			if (res.failed()) {
 				// Someone already has the lock
 				awaitReady.countDown();
 				return;
 			}
 
+			LOGGER.trace("startMatchmaker {}: Started", queueId);
+
 			Lock lock = res.result();
 			thisFiber.set(new Fiber<>("Matchmaking/queues/" + queueId, getContextScheduler(), () -> {
 				long gamesCreated = 0;
-				// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
-//			SuspendableLock lock = null;
+
 				SuspendableQueue<MatchmakingQueueEntry> queue = null;
 				Tracer tracer = GlobalTracer.get();
 
 
 				try {
-//				lock = SuspendableLock.lock(, 200L);
 					queue = SuspendableQueue.getOrCreate(queueId);
 					SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
 
@@ -327,16 +337,9 @@ public interface Matchmaking extends Verticle {
 						lock.release();
 					}
 
-					/*
-					// Private lobby locks should be destroyed once they reach here
-					if (lock != null && queueConfiguration.isPrivateLobby()) {
-						lock.destroy();
-					}*/
-
 					if (queue != null) {
 						queue.destroy();
 					}
-
 				}
 				return null;
 			}));
@@ -355,7 +358,7 @@ public interface Matchmaking extends Verticle {
 			}
 		}
 
-		return completionHandler -> {
+		Closeable closeable = completionHandler -> {
 			if (thisFiber.get() == null) {
 				completionHandler.handle(Future.succeededFuture());
 				return;
@@ -367,6 +370,16 @@ public interface Matchmaking extends Verticle {
 
 			completionHandler.handle(Future.succeededFuture());
 		};
+
+		if (queueConfiguration.isAutomaticallyClose()) {
+			Vertx.currentContext().addCloseHook(closeable);
+		}
+
+		return closeable;
+	}
+
+	static long getTimeout() {
+		return 8000L;
 	}
 
 	/**

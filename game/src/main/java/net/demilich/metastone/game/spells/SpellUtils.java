@@ -28,6 +28,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -814,15 +815,14 @@ public class SpellUtils {
 	 * @param <T>
 	 * @return A list of aura instances.
 	 */
-	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
-		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && (e.isInPlay() || e.getZone() == Zones.HAND || e.getZone() == Zones.HERO_POWER))
+	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, @NotNull Class<T> auraClass) {
+		return context.getTriggerManager()
+				.getTriggers()
+				.stream()
+				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e))
+				.map(auraClass::cast)
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
-				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
-						.filter(auraClass::isInstance)
-						.map(t -> (T) t)
-						.filter(((Predicate<Aura>) Aura::isExpired).negate()))
 				.collect(toList());
 	}
 

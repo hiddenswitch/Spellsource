@@ -17,6 +17,7 @@ public class MatchmakingQueueConfiguration implements Serializable {
 	private long awaitingLobbyTimeout = 0L;
 	private boolean once;
 	private boolean join;
+	private boolean automaticallyClose;
 
 	public String getName() {
 		return name;
@@ -151,6 +152,19 @@ public class MatchmakingQueueConfiguration implements Serializable {
 
 	public MatchmakingQueueConfiguration setJoin(boolean join) {
 		this.join = join;
+		return this;
+	}
+
+	/**
+	 * Should the fiber be interrupted as soon as the vertx instance is closed?
+	 * @return
+	 */
+	public boolean isAutomaticallyClose() {
+		return automaticallyClose;
+	}
+
+	public MatchmakingQueueConfiguration setAutomaticallyClose(boolean automaticallyClose) {
+		this.automaticallyClose = automaticallyClose;
 		return this;
 	}
 }

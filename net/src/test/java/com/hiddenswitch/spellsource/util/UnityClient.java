@@ -1,12 +1,11 @@
 package com.hiddenswitch.spellsource.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.concurrent.AbstractQueuedSynchronizer;
+import co.paralleluniverse.fibers.futures.AsyncCompletionStage;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Port;
@@ -17,13 +16,11 @@ import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.BinaryCarrier;
 import com.hiddenswitch.spellsource.impl.UserId;
-import io.jaegertracing.internal.samplers.GuaranteedThroughputSampler;
 import io.jaegertracing.internal.samplers.ProbabilisticSampler;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
-import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.propagation.Format;
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
@@ -34,7 +31,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -124,7 +124,7 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Suspendable
-	public Future<Void> matchmake(String deckId, String queueId) {
+	public CompletableFuture<Void> matchmake(String deckId, String queueId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
@@ -143,7 +143,6 @@ public class UnityClient implements AutoCloseable {
 		matchmakingFut.set(fut);
 		ensureConnected();
 		context.assertTrue(realtime.isOpen());
-		LOGGER.info("matchmake {} {}: Sending enqueue", id, getAccount().getId());
 		try {
 			messagingLock.lock();
 			sendMessage(new Envelope()
@@ -168,7 +167,9 @@ public class UnityClient implements AutoCloseable {
 						.asChildOf(parentSpan)
 						.start());
 				span.get().log("connecting");
-				span.get().setTag("userId", getAccount().getId());
+				if (getAccount() != null) {
+					span.get().setTag("userId", getAccount().getId());
+				}
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 				CountDownLatch firstMessage = new CountDownLatch(1);
 				LOGGER.debug("ensureConnected {}: Connected", id);
@@ -184,7 +185,9 @@ public class UnityClient implements AutoCloseable {
 									.asChildOf(tracer.extract(Format.Builtin.BINARY, new BinaryCarrier(env.getAdded().getSpanContext().getData())))
 									.start());
 							s = tracer.activateSpan(span.get());
-							span.get().setTag("userId", getAccount().getId());
+							if (getAccount() != null) {
+								span.get().setTag("userId", getAccount().getId());
+							}
 						}
 						span.get().log(ImmutableMap.of(Fields.EVENT, "received",
 								"messageType", env.getGame() == null ? "" : env.getGame().getServerToClient().getMessageType().toString()));
@@ -204,7 +207,7 @@ public class UnityClient implements AutoCloseable {
 					}
 				});
 				realtime.connect();
-				firstMessage.await(25000, TimeUnit.MILLISECONDS);
+				firstMessage.await(4000, TimeUnit.MILLISECONDS);
 				context.assertTrue(firstMessage.getCount() <= 0);
 			}
 		} catch (Throwable any) {
@@ -341,12 +344,12 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Suspendable
-	protected void matchmakeAndPlay(String deckId, String queueId) {
-		Future<Void> matchmaking = matchmake(deckId, queueId);
+	public void matchmakeAndPlay(String deckId, String queueId) {
+		CompletableFuture<Void> matchmaking = matchmake(deckId, queueId);
 		try {
-			matchmaking.get(35000L, TimeUnit.MILLISECONDS);
+			AsyncCompletionStage.get(matchmaking, 35000L, TimeUnit.MILLISECONDS);
 			play();
-		} catch (InterruptedException | ExecutionException ex) {
+		} catch (InterruptedException | ExecutionException | SuspendExecution ex) {
 			matchmaking.cancel(true);
 		} catch (TimeoutException e) {
 			Tracing.error(e, parentSpan, true);
@@ -394,7 +397,7 @@ public class UnityClient implements AutoCloseable {
 				.messageType(MessageType.UPDATE_ACTION)
 				.repliesTo(message.getId())
 				.actionIndex(action)))));
-		LOGGER.trace("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(action));
+		LOGGER.trace("play: UserId " + getUserId() + " sent action with ID " + action);
 	}
 
 	@Suspendable
@@ -533,20 +536,6 @@ public class UnityClient implements AutoCloseable {
 		return this;
 	}
 
-	public UnityClient loginWithUserAccount(String username, String password) {
-		try {
-			LoginResponse lr = api.login(new LoginRequest().email(username + "@hiddenswitch.com").password(password));
-			loginToken = lr.getLoginToken();
-			api.getApiClient().setApiKey(loginToken);
-			account = lr.getAccount();
-			context.assertNotNull(account);
-		} catch (ApiException e) {
-			Tracing.error(e, parentSpan, true);
-			context.fail(e.getMessage());
-		}
-		return this;
-	}
-
 	public String getToken() {
 		return loginToken;
 	}
@@ -577,7 +566,7 @@ public class UnityClient implements AutoCloseable {
 		if (tracer.activeSpan() != null) {
 			tracer.activeSpan().finish();
 		}
-		if (tracer.scopeManager().active()!=null) {
+		if (tracer.scopeManager().active() != null) {
 			tracer.scopeManager().active().close();
 		}
 		tracer.close();

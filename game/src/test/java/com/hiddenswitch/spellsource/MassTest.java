@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.game.decks.DeckFormat;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -30,7 +30,7 @@ public class MassTest extends TestBase {
 	}
 
 	private void oneGame() {
-		GameContext context = GameContext.fromTwoRandomDecks();
+		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {
 			context.play();
 		} catch (RuntimeException any) {

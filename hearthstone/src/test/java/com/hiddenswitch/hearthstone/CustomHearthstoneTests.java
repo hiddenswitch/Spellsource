@@ -1,17 +1,14 @@
 package com.hiddenswitch.hearthstone;
 
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
@@ -20,27 +17,18 @@ import net.demilich.metastone.game.events.TurnStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
-import net.demilich.metastone.game.spells.DamageSpell;
-import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.desc.SpellArg;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.tests.util.TestBase;
-import net.demilich.metastone.tests.util.TestMinionCard;
-import net.demilich.metastone.tests.util.TestSpellCard;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -52,6 +40,11 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomHearthstoneTests extends TestBase {
+
+	@Override
+	public DeckFormat getDefaultFormat() {
+		return DeckFormat.getFormat("Custom Hearthstone");
+	}
 
 	@Test
 	public void testTheMaelstrom() {

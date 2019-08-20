@@ -232,7 +232,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.getFormat("Standard"));
+		setDeckFormat(DeckFormat.all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -285,7 +285,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
-			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
+			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero(getPlayer(i)));
 		}
 	}
 
@@ -387,7 +387,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		setTurnState(TurnState.TURN_ENDED);
-		onGameStateChanged();
 	}
 
 
@@ -893,11 +892,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
 
-	@Suspendable
-	protected void onGameStateChanged() {
-	}
-
-
 	/**
 	 * Executes the specified game action, typically by calling {@link GameLogic#performGameAction(int, GameAction)}.
 	 *
@@ -908,7 +902,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	public void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
-		onGameStateChanged();
 	}
 
 	/**
@@ -992,7 +985,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		trace.addAction(nextAction.getId(), nextAction, this);
 
 		getLogic().performGameAction(getActivePlayerId(), nextAction);
-		onGameStateChanged();
 
 		return nextAction.getActionType() != ActionType.END_TURN;
 	}
@@ -1149,7 +1141,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().startTurn(playerId);
 		setActionsThisTurn(0);
 		setTurnState(TurnState.TURN_IN_PROGRESS);
-		onGameStateChanged();
 	}
 
 	@Override
@@ -1306,9 +1297,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
-		return getPlayers().stream()
-				.flatMap(p -> Stream.of(Zones.values())
-						.flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+		return Stream.concat(
+				getPlayer1().getLookup().values().stream(),
+				getPlayer2().getLookup().values().stream());
 	}
 
 	@Suspendable
@@ -1755,6 +1746,16 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
+	 * Creates a game with two random decks in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
+	public static GameContext fromTwoRandomDecks(DeckFormat format) {
+		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)));
+	}
+
+	/**
 	 * Creates a game context from the given state.
 	 *
 	 * @param state A {@link GameState} object.
@@ -1934,7 +1935,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void setDeck(int playerId, GameDeck deck) {
 		getPlayer(playerId).getDeck().clear();
 		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
-		getPlayer(playerId).setHero(deck.getHeroCard().createHero());
+		getPlayer(playerId).setHero(deck.getHeroCard().createHero(getPlayer(playerId)));
 		getTrace().getDeckCardIds();
 	}
 

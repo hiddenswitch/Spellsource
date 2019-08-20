@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.47
+SPELLSOURCE_VERSION=0.8.49
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -125,6 +125,11 @@ if [[ "$install_dependencies" = true ]] ; then
     if ! command -v java -version > /dev/null ; then
       echo "Installing java..."
       brew cask install java
+    fi
+
+    if ! command -v asdf > /dev/null ; then
+      echo "Installing asdf for version management..."
+      brew install asdf
     fi
 
     if ! command -v python3 --version > /dev/null ; then
@@ -457,7 +462,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.47.jar \
+      ./net/build/libs/net-0.8.49.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

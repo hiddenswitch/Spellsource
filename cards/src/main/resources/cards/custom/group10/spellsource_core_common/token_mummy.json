@@ -1,9 +1,9 @@
 {
   "name": "Mummy",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3,
+  "baseAttack": 2,
   "baseHp": 3,
   "rarity": "FREE",
   "collectible": false,

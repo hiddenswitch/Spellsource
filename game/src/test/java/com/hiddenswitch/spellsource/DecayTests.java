@@ -3,7 +3,6 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -26,6 +25,27 @@ public class DecayTests extends TestBase {
 			// End own second turn, should destroy minion
 			context.endTurn();
 			assertTrue(testMinion.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testBasicMinionDecayWithMindControl() {
+		runGym((context, player, opponent) -> {
+			Minion testMinion = playMinionCard(context, player, "minion_test_decay");
+			assertEquals(testMinion.getHp(), testMinion.getMaxHp());
+			playCard(context, player, "spell_test_give_away", testMinion);
+
+			// End own first turn, should not deal damage
+			context.endTurn();
+			assertEquals(testMinion.getHp(), testMinion.getMaxHp());
+
+			// End opponent first turn, should deal damage
+			context.endTurn();
+			assertEquals(testMinion.getHp(), testMinion.getMaxHp() - 1);
+
+			// End own second turn, should not deal damage again
+			context.endTurn();
+			assertFalse(testMinion.isDestroyed());
 		});
 	}
 

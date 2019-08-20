@@ -1,7 +1,6 @@
 package com.hiddenswitch.hearthstone;
 
 import com.hiddenswitch.spellsource.CardValidation;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

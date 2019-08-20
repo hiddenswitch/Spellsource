@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -400,9 +401,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param ownerIndex The owner to assign to this {@link CardList}
 	 */
 	protected void assignEntityIds(Iterable<? extends Entity> cardList, int ownerIndex) {
+		Player player = context.getPlayer(ownerIndex);
+
 		for (Entity entity : cardList) {
 			entity.setId(generateId());
 			entity.setOwner(ownerIndex);
+			player.updateLookup(entity);
 		}
 	}
 
@@ -542,8 +546,21 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return
 	 */
 	public boolean canPlayQuest(Player player, @NotNull Card card) {
-		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().size() < MAX_QUESTS
+		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().stream().filter(quest -> !quest.isPact()).collect(toList()).size() < MAX_QUESTS
 				&& player.getQuests().stream().map(Quest::getSourceCard).map(Card::getCardId).noneMatch(cid -> cid.equals(card.getCardId()));
+	}
+
+	/**
+	 * Determines whether a player can play a pact.
+	 * <p>
+	 * Pacts count as quests
+	 *
+	 * @param player
+	 * @param card
+	 * @return
+	 */
+	public boolean canPlayPact(Player player, @NotNull Card card) {
+		return player.getSecrets().size() < MAX_SECRETS && player.getQuests().stream().map(Quest::getSourceCard).map(Card::getCardId).noneMatch(cid -> cid.equals(card.getCardId()));
 	}
 
 	/**
@@ -645,9 +662,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@code spellDesc.getSpellClass()}, then calls its {@link Spell#cast(GameContext, Player, SpellDesc, Entity, List)}
 	 * method to actually execute the code of the spell.
 	 * <p>
-	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
+	 * For example, imagine a spell, "Deal 2 damage to all Fae." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
-	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be
+	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#FAE}, (3) whose {@link SpellArg#VALUE} would be
 	 * {@code 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
 	 * <p>
 	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
@@ -670,18 +687,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                        and deathrattles are, unusually, {@code false} (not) child spells.
 	 * @param sourceAction    The {@link GameAction}, usually a {@link }
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
-	 * SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
-	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
-	 * spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
-	 * implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
-	 * SpellDesc} as damage.
+	 *    SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) {@code Spell onCast} for the function that typically
+	 * 		has the spell-specific code. {@code onCast} actually implements the logic of a damage spell and interprets the
+	 *    {@link SpellArg#VALUE} attribute of the {@link SpellDesc} as damage.
 	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
-	 * into actions the player can take.
+	 * 		into actions the player can take.
 	 * @see PlayCardAction#innerExecute(GameContext, int) for the call to this function that a player actually does when
-	 * they play a {@link Card} (as opposed to a battlecry or deathrattle).
+	 * 		they play a {@link Card} (as opposed to a battlecry or deathrattle).
 	 * @see BattlecryAction#execute(GameContext, int) for the call to this function that demonstrates a battlecry effect.
-	 * Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
+	 * 		Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
 	 */
 	@Suspendable
 	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
@@ -833,7 +849,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param source
 	 * @param sourceAction
 	 * @return {@code null} if this is not an overridable form of target acquisition; or, the intended target if the
-	 * target was not overridden, or the new target.
+	 * 		target was not overridden, or the new target.
 	 */
 	@Suspendable
 	protected @Nullable
@@ -915,16 +931,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// Get the additional armor from the incoming hero
 		int previousArmor = previousHero.getArmor();
 
-		hero.setWeapon(previousHero.getWeapon());
 		if (hero.getHeroClass().equals(HeroClass.INHERIT)) {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
-		if (Objects.equals(hero.getHeroPower().getHeroClass(), HeroClass.INHERIT)) {
-			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
-		}
+
+		Card heroPower = CardCatalogue.getCardById(hero.getSourceCard().getDesc().getHeroPower());
 		// Set hero power ID before events trigger to prevent issues
-		hero.getHeroPower().setId(generateId());
-		hero.getHeroPower().setOwner(hero.getOwner());
+		heroPower.setId(generateId());
+		heroPower.setOwner(hero.getOwner());
 
 		// Set the new hero's number of attacks to the old hero's.
 		hero.getAttributes().put(Attribute.NUMBER_OF_ATTACKS, previousHero.getAttributes().get(Attribute.NUMBER_OF_ATTACKS));
@@ -953,6 +967,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		removeCard(previousHero.getHeroPower());
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		hero.moveOrAddTo(context, Zones.HERO);
+		player.getHeroPowerZone().add(heroPower);
+		if (Objects.equals(hero.getHeroPower().getHeroClass(), HeroClass.INHERIT)) {
+			hero.getHeroPower().setHeroClass(previousHero.getHeroClass());
+		}
 		hero.modifyArmor(previousArmor);
 		final int armorChange = hero.getArmor() - previousArmor;
 		if (armorChange != 0) {
@@ -1229,6 +1247,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			// Implement Doomlord
 			target.modifyAttribute(Attribute.DAMAGE_THIS_TURN, damageDealt);
+			if (target.getEntityType() == EntityType.HERO) {
+				Player targetOwner = context.getPlayer(target.getOwner());
+				targetOwner.modifyAttribute(Attribute.DAMAGE_THIS_TURN, damageDealt);
+			}
 
 			player.getStatistics().damageDealt(damageDealt);
 			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt, damageType);
@@ -1372,7 +1394,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param targets A list of {@link Actor} targets that should be destroyed.
 	 * @see #endOfSequence() for the code that actually finds dead entities as a result of effects and eventually destroys
-	 * them.
+	 * 		them.
 	 */
 	@Suspendable
 	public void destroy(Actor... targets) {
@@ -1435,11 +1457,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	private void destroyWeapon(Weapon weapon) {
+		// Already in graveyard by this point
 		Player owner = context.getPlayer(weapon.getOwner());
-		if (owner.getHero().getWeapon() != null && owner.getHero().getWeapon().getId() == weapon.getId()) {
-			owner.getHero().setWeapon(null);
-		}
 		weapon.onUnequip(context, owner);
+		removeEnchantments(weapon);
 		context.fireGameEvent(new WeaponDestroyedEvent(context, weapon));
 	}
 
@@ -1554,10 +1575,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void dealFatigueDamage(Player player) {
 		Hero hero = player.getHero();
-		int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
-		fatigue++;
-		player.setAttribute(Attribute.FATIGUE, fatigue);
+
 		if (!player.hasAttribute(Attribute.DISABLE_FATIGUE) && !hero.isDestroyed()) {
+			int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
+			fatigue++;
+			player.setAttribute(Attribute.FATIGUE, fatigue);
+
 			damage(player, hero, fatigue, player, true, true, DamageType.FATIGUE);
 			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 			player.getStatistics().fatigueDamage(fatigue);
@@ -1613,7 +1636,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Remove these attributes to occur after the turn has ended
 		context.getEntities()
-				.filter(actor -> actor.hasAttribute(Attribute.HEALING_THIS_TURN) || actor.hasAttribute(Attribute.DAMAGE_THIS_TURN))
+				.filter(entity -> entity.hasAttribute(Attribute.HEALING_THIS_TURN) || entity.hasAttribute(Attribute.DAMAGE_THIS_TURN))
 				.forEach(actor -> {
 					actor.getAttributes().remove(Attribute.HEALING_THIS_TURN);
 					actor.getAttributes().remove(Attribute.DAMAGE_THIS_TURN);
@@ -1622,6 +1645,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		for (Player eachPlayer : context.getPlayers()) {
 			eachPlayer.setAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 0);
 			eachPlayer.setAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 0);
+			eachPlayer.setAttribute(Attribute.DAMAGE_THIS_TURN, 0);
 		}
 
 		// Peacefully remove in-play entities with this attribute
@@ -1671,30 +1695,47 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void equipWeapon(int playerId, Weapon weapon, Card weaponCard, boolean resolveBattlecry) {
-		PreEquipWeapon preEquipWeapon = new PreEquipWeapon(playerId, weapon).invoke();
-		Weapon currentWeapon = preEquipWeapon.getCurrentWeapon();
-		Player player = preEquipWeapon.getPlayer();
+		Player player = context.getPlayer(playerId);
+
+		weapon.setId(generateId());
+		weapon.setOwner(playerId);
+		Weapon currentWeapon = player.getHero().getWeapon();
+
+		if (currentWeapon != null) {
+			currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+		}
+
+		player.getWeaponZone().add(weapon);
 
 		if (resolveBattlecry
 				&& !weapon.getBattlecries().isEmpty()) {
 			resolveBattlecries(playerId, weapon);
+			// This will not resolve the deathrattle of the weapon we're replacing
 			endOfSequence();
 		}
 
+		// We've definitely replaced the existing weapon, whether or not the new weapon is still in play, so its deathrattle
+		// will still need to be evaluated (at a later time).
 		if (currentWeapon != null) {
 			markAsDestroyed(currentWeapon);
 		}
 
-		player.getStatistics().equipWeapon(weapon);
-		weapon.onEquip(context, player);
-		weapon.setActive(context.getActivePlayerId() == playerId);
+		// Resolving the battlecry may have destroyed the weapon we are currently putting into play
+		if (weapon.isInPlay()) {
+			player.getStatistics().equipWeapon(weapon);
+			weapon.onEquip(context, player);
+			weapon.setActive(context.getActivePlayerId() == playerId);
 
-		processBattlefieldEnchantments(player, weapon);
+			processBattlefieldEnchantments(player, weapon);
 
-		if (weapon.getCardCostModifier() != null) {
-			addGameEventListener(player, weapon.getCardCostModifier(), weapon);
+			if (weapon.getCardCostModifier() != null) {
+				addGameEventListener(player, weapon.getCardCostModifier(), weapon);
+			}
+
+			// We're only going to fire this now if the weapon was successfully equipped
+			context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
 		}
-		context.fireGameEvent(new WeaponEquippedEvent(context, weapon, weaponCard));
+
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -1728,11 +1769,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see <a href="http://hearthstone.gamepedia.com/Attack">Attack</a> for more on this method and its rules.
 	 * @see PhysicalAttackAction#execute(GameContext, int) for the main caller of this function.
 	 * @see net.demilich.metastone.game.spells.MisdirectSpell for an example of a spell that causes actors to fight each
-	 * other without a player initiatied action.
+	 * 		other without a player initiatied action.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) to see how to enumerate all the possible
-	 * {@link PhysicalAttackAction} that determine what can fight what.
+	 *    {@link PhysicalAttackAction} that determine what can fight what.
 	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) to see how minions with {@link Attribute#TAUNT}
-	 * affect what can and cannot be fought by a player.
+	 * 		affect what can and cannot be fought by a player.
 	 */
 	@Suspendable
 	public void fight(Player player, Actor attacker, Actor defender, PhysicalAttackAction sourceAction) {
@@ -1846,7 +1887,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player The player whose {@link Hero} should gain armor.
 	 * @param armor  The amount of armor to gain.
 	 * @see #damage(Player, Actor, int, Entity, boolean) for a description of how armor protects an {@link Actor} like a
-	 * {@link Hero}.
+	 *    {@link Hero}.
 	 */
 	@Suspendable
 	public void gainArmor(Player player, int armor) {
@@ -2039,6 +2080,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private boolean canActivateInvokeKeyword(Player player, Card card) {
+		// Short circuit this costly computation
+		if (!card.hasAttribute(Attribute.INVOKE) && !card.hasAttribute(Attribute.AURA_INVOKE)) {
+			return false;
+		}
+
 		int mana = player.getMana();
 		List<CardCostInsteadAura> auras = SpellUtils.getAuras(context, player.getId(), CardCostInsteadAura.class);
 		if (doesCardCostHealth(player, card) && player.getHero() != null) {
@@ -2056,18 +2102,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
-		return context.getEntities()
-				.filter(Entity::isInPlay)
-				.filter(e -> e.getOwner() == player.getId())
-				.flatMapToInt(entity ->
-						Stream.of(entity.getAttributeValue(attr),
-								context.getTriggersAssociatedWith(entity.getReference())
-										.stream()
-										.filter(Enchantment.class::isInstance)
-										.map(Enchantment.class::cast)
-										.mapToInt(e -> e.getAttributeValue(attr)).sum())
-								.mapToInt(i -> i))
-				.sum();
+		int value = 0;
+		for (Entity entity : player.getLookup().values()) {
+			if (!entity.isInPlay()) {
+				continue;
+			}
+			value += entity.getAttributeValue(attr);
+		}
+		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
+			if (trigger instanceof Enchantment && trigger.getOwner() == player.getId()) {
+				value += ((Enchantment) trigger).getAttributeValue(attr);
+			}
+		}
+		return value;
 	}
 
 	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
@@ -2089,7 +2136,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId The player whose point of view should be considered.
 	 * @return A list of valid actions the player can take. If it is not the player's turn, no actions are returned.
 	 * @see ActionLogic#getValidActions(GameContext, Player) for the logic behind determining what actions a player can
-	 * take.
+	 * 		take.
 	 */
 	@Suspendable
 	public List<GameAction> getValidActions(int playerId) {
@@ -2110,7 +2157,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param action   The action to get valid targets for.
 	 * @return A list of valid targets
 	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) for the logic behind determining valid targets
-	 * given an action.
+	 * 		given an action.
 	 */
 	public List<Entity> getValidTargets(int playerId, GameAction action) {
 		Player player = context.getPlayer(playerId);
@@ -2384,7 +2431,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getHero().setOwner(player.getId());
 		player.getHero().setMaxHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
 		player.getHero().setHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
-		hero.getHeroPower().setId(generateId());
+		Card heroPower = context.getCardById(hero.getSourceCard().getDesc().getHeroPower());
+		heroPower.setOwner(playerId);
+		heroPower.setId(generateId());
+		player.getHeroPowerZone().add(heroPower);
+		player.updateLookup(player);
+		player.updateLookup(hero);
+		player.updateLookup(heroPower);
 		assignEntityIds(player.getDeck(), playerId);
 		assignEntityIds(player.getHand(), playerId);
 
@@ -2786,11 +2839,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param action   The game action to perform.
 	 * @see #getValidActions(int) for the way the {@link GameLogic} determines what actions a player can take.
 	 * @see Card#play() for an example of how a card generates a {@link PlayCardAction} that will eventually be sent to
-	 * this method.
+	 * 		this method.
 	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover
-	 * mechanic generates a {@link DiscoverAction} that gets sent to this method.
+	 * 		mechanic generates a {@link DiscoverAction} that gets sent to this method.
 	 * @see Minion#getBattlecries() for the method that creates battlecry actions. (Note: Deathrattles never involve a
-	 * player decision, so deathrattles never generate a battlecry).
+	 * 		player decision, so deathrattles never generate a battlecry).
 	 */
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
@@ -3002,7 +3055,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param secret   The secret being played.
 	 * @param fromHand When {@code true}, a {@link SecretPlayedEvent} is fired; otherwise, the event is not fired.
 	 * @see net.demilich.metastone.game.spells.AddSecretSpell the place where secret entities are created. A {@link Card}
-	 * uses this spell to actually create a {@link Secret}.
+	 * 		uses this spell to actually create a {@link Secret}.
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
@@ -3351,7 +3404,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                   due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
 	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #endOfSequence()}.
 	 * @see ReturnTargetToHandSpell for usage of {@link #removeActor(Actor, boolean)}. Note, this and {@link
-	 * net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
+	 *    net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
 	 */
 	@Suspendable
 	public void removeActor(Actor actor, boolean peacefully) {
@@ -3726,7 +3779,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * top of the deck, and {@code 0} for the bottom.
 	 *
 	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link
-	 * #MAX_DECK_SIZE}).
+	 *    #MAX_DECK_SIZE}).
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index) {
@@ -3742,7 +3795,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param index
 	 * @param quiet  If {@code true}, does not fire the {@link CardAddedToDeckEvent}.
 	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link *
-	 * #MAX_DECK_SIZE}).
+	 * 		#MAX_DECK_SIZE}).
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {
@@ -3776,22 +3829,53 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
+	 * @param player The player whose deck this card is getting shuffled into.
+	 * @param card   The card to shuffle into that player's deck.
+	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @return
+	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
+	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
+	 */
+	@Suspendable
+	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
+		return shuffleToDeck(player, null, card, quiet, false, player.getId());
+	}
+
+	/**
 	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling the
 	 * deck (i.e., changing the existing order of the cards).
 	 * <p>
 	 * Removes the enchantments on the card before shuffling it into the deck. This removes card cost modification
 	 * enchantments.
 	 *
-	 * @param player The player whose deck this card is getting shuffled into.
-	 * @param card   The card to shuffle into that player's deck.
-	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param player         The player whose deck this card is getting shuffled into.
+	 * @param card           The card to shuffle into that player's deck.
+	 * @param quiet          If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param sourcePlayerId The caster of the spell that is executing the shuffleToDeck method.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
-	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
-	 * triggering another shuffle event (e.g., with Augmented Elekk).
+	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
-		return shuffleToDeck(player, null, card, quiet, false);
+	public boolean shuffleToDeck(Player player, Card card, boolean quiet, int sourcePlayerId) {
+		return shuffleToDeck(player, null, card, quiet, false, sourcePlayerId);
+	}
+
+	/**
+	 * @param player                The player whose deck this card is getting shuffled into.
+	 * @param relatedEntity         The entity related to the card that is getting shuffled. For example, when shuffling
+	 *                              a
+	 * @param card                  The card to shuffle into that player's deck.
+	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
+	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
+	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
+	 *                              card cost modifiers).
+	 */
+	@Suspendable
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
+		return shuffleToDeck(player, relatedEntity, card, quiet, keepCardCostModifiers, player.getId());
 	}
 
 	/**
@@ -3810,18 +3894,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
 	 *                              card cost modifiers).
+	 * @param sourcePlayerId        The caster of the spell that is executing the shuffleToDeck method.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
-	 * is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
-	 * triggering another shuffle event (e.g., with Augmented Elekk).
+	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers, int sourcePlayerId) {
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
 				card.setId(generateId());
 			}
-			int originalOwner = card.getOwner();
 			if (card.getOwner() == IdFactory.UNASSIGNED) {
 				card.setOwner(player.getId());
 			}
@@ -3840,13 +3924,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			processDeckTriggers(player, card);
 
 			if (!quiet) {
-				if (originalOwner == UNASSIGNED) {
-					originalOwner = player.getId();
-				}
 				if (relatedEntity != null) {
-					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, relatedEntity, card));
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, relatedEntity, card));
 				} else {
-					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, card));
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, card));
 
 				}
 				if (card.getZone() == Zones.DECK) {
@@ -3876,7 +3957,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card) {
-		return shuffleToDeck(player, card, false);
+		return shuffleToDeck(player, card, false, player.getId());
 	}
 
 	/**
@@ -3906,7 +3987,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                 minion that somehow gets silenced during the turn that spell is cast.
 	 * @param target   A {@link Minion} to silence.
 	 * @see <a href="http://hearthstone.gamepedia.com/Silence">Silence</a> for a complete description of the silencing
-	 * game rules.
+	 * 		game rules.
 	 */
 	@Suspendable
 	public void silence(int playerId, Actor target) {
@@ -4442,6 +4523,35 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
+	 * Plays a quest from the hand.
+	 *
+	 * @param player
+	 * @param pact
+	 * @see #playQuest(Player, Quest, boolean) for a complete reference.
+	 */
+	@Suspendable
+	public void playPact(Player player, Quest pact) {
+		playPact(player, pact, true);
+	}
+
+	/**
+	 * Plays the specified quest. The quest goes into the {@link Zones#QUEST} zone and triggers using the enchantment's
+	 * {@link Enchantment#getCountUntilCast()} functionality.
+	 *
+	 * @param player   The player that triggered the quest.
+	 * @param pact     The pact to put into play.
+	 * @param fromHand If {@code true}, fires a {@link QuestPlayedEvent}.
+	 */
+	@Suspendable
+	public void playPact(Player player, Quest pact, boolean fromHand) {
+		pact = pact.clone();
+		pact.setId(generateId());
+		pact.setOwner(player.getId());
+		pact.moveOrAddTo(context, Zones.QUEST);
+		addGameEventListener(player, pact, pact);
+	}
+
+	/**
 	 * Indicates that a quest was successful (its spell was casted).
 	 *
 	 * @param player The player that triggered the quest. May be different than its owner.
@@ -4574,40 +4684,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			for (AuraDesc aura : card.getDesc().getPassiveAuras()) {
 				addGameEventListener(player, aura.create(), card);
 			}
-		}
-	}
-
-	protected class PreEquipWeapon {
-		private int playerId;
-		private Weapon weapon;
-		private Player player;
-		private Weapon currentWeapon;
-
-		public PreEquipWeapon(int playerId, Weapon weapon) {
-			this.playerId = playerId;
-			this.weapon = weapon;
-		}
-
-		public Player getPlayer() {
-			return player;
-		}
-
-		public Weapon getCurrentWeapon() {
-			return currentWeapon;
-		}
-
-		public PreEquipWeapon invoke() {
-			player = context.getPlayer(playerId);
-
-			weapon.setId(generateId());
-			currentWeapon = player.getHero().getWeapon();
-
-			if (currentWeapon != null) {
-				currentWeapon.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-			}
-
-			player.getHero().setWeapon(weapon);
-			return this;
 		}
 	}
 

@@ -9,7 +9,6 @@ import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
@@ -32,7 +31,6 @@ import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.spells.BuffSpell;
-import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -1086,7 +1084,6 @@ public interface Games extends Verticle {
 		String description = card.getDescription();
 		if (owner != -1) {
 			if (card.getZone() == Zones.HAND
-					|| card.getZone() == Zones.DECK
 					|| card.getZone() == Zones.SET_ASIDE_ZONE
 					|| card.getZone() == Zones.HERO_POWER
 					&& owner == localPlayerId) {

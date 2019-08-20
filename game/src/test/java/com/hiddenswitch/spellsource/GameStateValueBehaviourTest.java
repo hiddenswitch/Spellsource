@@ -13,7 +13,6 @@ import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
-import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
@@ -209,7 +208,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// Southsea MUST attack before weapon attacks
 			// Sun cleric MUST be played after southsea and should NOT buff a minion that gains a huge amount of hp
 			// This is a depth 6 puzzle.
-			Assert.assertNull(player.getHero().getWeapon());
+			Assert.assertTrue(player.getWeaponZone().isEmpty());
 			assertTrue(context.updateAndGetGameOver());
 		});
 	}
