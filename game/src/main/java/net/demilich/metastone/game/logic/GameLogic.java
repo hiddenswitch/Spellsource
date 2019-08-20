@@ -1629,6 +1629,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getAttributes().remove(Attribute.COMBO);
 		hero.activateWeapon(false);
 
+		context.fireGameEvent(new TurnEndEvent(context, playerId));
+		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
+			context.fireGameEvent(new TurnEndEvent(context, playerId));
+		}
+
+		// Remove these attributes to occur after the turn has ended
 		context.getEntities()
 				.filter(entity -> entity.hasAttribute(Attribute.HEALING_THIS_TURN) || entity.hasAttribute(Attribute.DAMAGE_THIS_TURN))
 				.forEach(actor -> {
@@ -1640,11 +1646,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			eachPlayer.setAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 0);
 			eachPlayer.setAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 0);
 			eachPlayer.setAttribute(Attribute.DAMAGE_THIS_TURN, 0);
-		}
-
-		context.fireGameEvent(new TurnEndEvent(context, playerId));
-		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
-			context.fireGameEvent(new TurnEndEvent(context, playerId));
 		}
 
 		// Peacefully remove in-play entities with this attribute
@@ -2347,7 +2348,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			HealEvent healEvent = new HealEvent(context, player.getId(), target, healing);
 			// Implements Happy Ghoul
 			target.modifyAttribute(Attribute.HEALING_THIS_TURN, healing);
+			player.modifyAttribute(Attribute.HEALING_THIS_TURN, healing);
 			target.setAttribute(Attribute.LAST_HEAL, healing);
+			player.setAttribute(Attribute.LAST_HEAL, healing);
 			// Implements Crystal Giant
 			player.modifyAttribute(Attribute.TIMES_HEALED, 1);
 			target.modifyAttribute(Attribute.TIMES_HEALED, 1);

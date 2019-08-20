@@ -4628,6 +4628,22 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testFlamerunner() {
+		runGym(((context, player, opponent) -> {
+			playCard(context, player, "minion_flamerunner");
+			player.getHero().setHp(25);
+			playCard(context, player, "spell_test_heal_8", player.getHero());
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 0L);
+			context.endTurn();
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 1L);
+			playCard(context, player, "spell_test_heal_8", player.getHero());
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 1L);
+			context.endTurn();
+			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getCardId().equals("token_ember_elemental")).count(), 1L);
+		}));
+	}
+
+	@Test
 	public void testIronPreserver() {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "minion_iron_preserver");
