@@ -11,6 +11,10 @@ Bug fixes and new cards.
 ##### Content Additions:
 
  - New cards for Otherworlder (thanks @AnterogradeNil!)
+ 
+##### Content Fixes:
+
+ - Flamerunner now reads "At the end of your turn, if you restored Health this turn, summon a 2/2  Elemental." (1323)
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
 
