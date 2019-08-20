@@ -878,7 +878,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		Player opponent = context.getOpponent(player);
 
 		if (getCondition() != null) {
-			if (!getCondition().create().isFulfilled(context, player, null, null)) {
+			if (!getCondition().create().isFulfilled(context, player, this, null)) {
 				return false;
 			}
 		}

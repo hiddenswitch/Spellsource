@@ -5,6 +5,10 @@
   "heroClass": "CRIMSON",
   "rarity": "RARE",
   "description": "<b>Pact:</b> After two friendly minions have died, deal 2 damage to all enemies.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",
     "pact": {

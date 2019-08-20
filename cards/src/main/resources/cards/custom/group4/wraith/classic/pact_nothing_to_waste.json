@@ -5,6 +5,10 @@
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
   "description": "<b>Pact:</b> After you've dealt 4 damage, summon two 2/2 Skeletons.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",
     "pact": {

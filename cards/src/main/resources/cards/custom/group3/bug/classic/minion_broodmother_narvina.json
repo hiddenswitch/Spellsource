@@ -17,7 +17,19 @@
       "class": "CastAfterSequenceSpell",
       "spell": {
         "class": "SummonSpell",
-        "value": 2,
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "value1": {
+            "class": "AlgebraicValueProvider",
+            "value1": 7,
+            "value2": {
+              "class": "BoardCountValueProvider"
+            },
+            "operation": "SUBTRACT"
+          },
+          "value2": 2,
+          "operation": "MAXIMUM"
+        },
         "card": "token_spiderling"
       }
     }

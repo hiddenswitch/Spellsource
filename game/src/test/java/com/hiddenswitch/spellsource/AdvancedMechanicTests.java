@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.common.util.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -418,7 +419,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 			int cardsInHand = player.getHand().getCount();
 			int cardsInOpponentsDeck = opponent.getDeck().getCount();
-			playCard(context,player,"spell_test_copy_cards");
+			playCard(context, player, "spell_test_copy_cards");
 			assertEquals(opponent.getDeck().getCount(), cardsInOpponentsDeck);
 			assertEquals(player.getHand().getCount(), cardsInHand + 2);
 		});
@@ -708,5 +709,13 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "spell_lunstone");
 		}));
+
+		runGym((context, player, opponent) -> {
+			Card card = receiveCard(context, player, "pact_draw_test");
+			player.setMana(10);
+			assertTrue(context.getValidActions().stream().anyMatch(a -> Objects.equal(a.getSourceReference(), card.getReference())));
+			playCard(context, player, "pact_draw_test");
+			assertFalse(context.getValidActions().stream().anyMatch(a -> Objects.equal(a.getSourceReference(), card.getReference())));
+		});
 	}
 }

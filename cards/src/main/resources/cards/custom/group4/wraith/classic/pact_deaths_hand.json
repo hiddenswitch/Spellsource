@@ -5,6 +5,9 @@
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
   "description": "<b>Pact:</b> After four cards are played, draw 3 cards.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",
