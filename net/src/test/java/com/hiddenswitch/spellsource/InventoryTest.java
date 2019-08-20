@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource;
 
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
-import com.hiddenswitch.spellsource.impl.util.ValidationReport;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
