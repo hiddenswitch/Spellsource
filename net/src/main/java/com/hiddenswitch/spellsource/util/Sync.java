@@ -173,13 +173,13 @@ public class Sync {
 		@Override
 		default R apply(T1 t1, T2 t2) {
 			try {
-				return applyThows(t1, t2);
+				return applyThrows(t1, t2);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
 
-		R applyThows(T1 t1, T2 t2) throws Exception;
+		R applyThrows(T1 t1, T2 t2) throws Exception;
 	}
 
 	/**

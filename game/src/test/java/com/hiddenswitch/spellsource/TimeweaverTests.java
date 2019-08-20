@@ -140,4 +140,17 @@ public class TimeweaverTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "spell_greater_marble_spellstone");
 		});
 	}
+
+	@Test
+	public void testDelayFate() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_delay_fate");
+			context.endTurn();
+			int initialMana = opponent.getMana();
+			playCard(context, opponent, "spell_test_summon_tokens");
+			assertTrue(opponent.getMinions().isEmpty());
+			assertEquals(opponent.getMana(), initialMana);
+
+		});
+	}
 }

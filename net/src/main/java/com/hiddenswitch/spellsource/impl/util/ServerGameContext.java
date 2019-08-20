@@ -716,12 +716,6 @@ public class ServerGameContext extends GameContext implements Server {
 		return getLogic().getTurnTimeMillis(activePlayerId);
 	}
 
-	@Override
-	@Suspendable
-	protected void onGameStateChanged() {
-		updateClientsWithGameState();
-	}
-
 	@Suspendable
 	private void updateClientsWithGameState() {
 		GameState state = getGameStateCopy();
@@ -734,9 +728,12 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
 		eventCounter.incrementAndGet();
-		final GameState gameStateCopy = getGameStateCopy();
-		for (Client client : getClients()) {
-			client.sendNotification(gameEvent, gameStateCopy);
+		// Do not build game state for events the client is not interested in
+		if (gameEvent.isClientInterested()) {
+			GameState gameStateCopy = getGameStateCopy();
+			for (Client client : getClients()) {
+				client.sendNotification(gameEvent, gameStateCopy);
+			}
 		}
 		super.fireGameEvent(gameEvent, new ArrayList<>(gameTriggers));
 		if (eventCounter.decrementAndGet() == 0) {
@@ -1051,7 +1048,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			onPlayerReady(client);
-			onGameStateChanged();
+			updateClientsWithGameState();
 		} finally {
 			lock.unlock();
 		}

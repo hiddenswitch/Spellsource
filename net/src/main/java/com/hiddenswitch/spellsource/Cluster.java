@@ -16,11 +16,12 @@ public interface Cluster {
 
 	static Atomix create(int port, Node... bootstrapNodes) {
 		AtomixBuilder atomixBuilder = Atomix.builder()
-				.withHost(Gateway.getHostAddress())
-				.withPort(port)
-				.withMulticastEnabled()
-				.withProfiles(Profile.dataGrid(1));
-		if (bootstrapNodes.length > 0) {
+				.withHost("0.0.0.0")
+				.withPort(port);
+		if (bootstrapNodes.length == 0) {
+			atomixBuilder
+					.withProfiles(Profile.dataGrid(1));
+		} else {
 			atomixBuilder
 					.withMembershipProvider(BootstrapDiscoveryProvider
 							.builder()

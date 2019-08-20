@@ -12,13 +12,19 @@
     "spell": {
       "class": "MetaSpell",
       "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DECAY",
+        "operation": "HAS",
+        "invert": true
+      },
       "spells": [
         {
           "class": "AddEnchantmentSpell",
           "trigger": {
             "eventTrigger": {
               "class": "TurnEndTrigger",
-              "targetPlayer": "SELF"
+              "targetPlayer": "OWNER"
             },
             "spell": {
               "class": "DecaySpell"

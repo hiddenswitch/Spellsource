@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.decks;
 
+import com.google.common.base.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
 
@@ -154,13 +155,18 @@ public class DeckFormat implements Serializable, Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof DeckFormat)) {
-			return false;
-		}
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof DeckFormat)) return false;
+		DeckFormat that = (DeckFormat) o;
+		return Objects.equal(name, that.name) &&
+				Objects.equal(sets, that.sets) &&
+				Objects.equal(secondPlayerBonusCards, that.secondPlayerBonusCards);
+	}
 
-		DeckFormat rhs = (DeckFormat) obj;
-		return this.getCardSets().equals(rhs.getCardSets());
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(name, sets, secondPlayerBonusCards);
 	}
 
 	@Override
