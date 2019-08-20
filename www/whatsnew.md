@@ -20,6 +20,7 @@ Bug fixes and new cards.
  - Conditions that change when evaluated from a different player's point of view work more reliably. 
  - Conditions that count the number of cards in your hand, graveyard or battlefield work more reliably.
  - Bloodshard Elemental no longer has Guard. (1349)
+ - Plague of Flesh no longer gives 0-Attack minions 1 Attack. (1348) 
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
 
