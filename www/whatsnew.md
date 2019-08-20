@@ -15,6 +15,10 @@ Bug fixes and new cards.
 ##### Content Fixes:
 
  - Flamerunner now reads "At the end of your turn, if you restored Health this turn, summon a 2/2  Elemental." (1323)
+ - The Glutton now correctly eats enemy minions. (1351)
+ - Effects which count minions no longer count permanents.
+ - Conditions that change when evaluated from a different player's point of view work more reliably. 
+ - Conditions that count the number of cards in your hand, graveyard or battlefield work more reliably.
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
 

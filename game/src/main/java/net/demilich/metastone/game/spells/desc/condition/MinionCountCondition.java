@@ -4,48 +4,30 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
+import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
-import java.util.stream.Stream;
+import java.util.List;
 
-public class MinionCountCondition extends Condition {
+public class MinionCountCondition extends CountCondition {
 
 	public MinionCountCondition(ConditionDesc desc) {
 		super(desc);
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		TargetPlayer targetPlayer = desc.containsKey(ConditionArg.TARGET_PLAYER) ? (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)
-				: TargetPlayer.SELF;
-
-		Stream<Minion> minions;
-
-		switch (targetPlayer) {
-			case BOTH:
-				minions = Stream.concat(player.getMinions().stream(), context.getOpponent(player).getMinions().stream());
-				break;
-			case OPPONENT:
-				minions = context.getOpponent(player).getMinions().stream();
-				break;
-			case SELF:
-			case OWNER:
-				minions = player.getMinions().stream();
-				break;
-			default:
-				minions = Stream.empty();
-				break;
+	protected int getCountForPlayer(GameContext context, Player player, Entity source, Entity target) {
+		List<Minion> minions = TargetLogic.withoutPermanents(player.getMinions());
+		int count = 0;
+		EntityFilter filter = (EntityFilter) getDesc().get(ConditionArg.FILTER);
+		if (filter == null) {
+			filter = (EntityFilter) getDesc().get(ConditionArg.CARD_FILTER);
 		}
-		EntityFilter filter = (EntityFilter) desc.getOrDefault(ConditionArg.CARD_FILTER, desc.get(ConditionArg.FILTER));
-		if (filter != null) {
-			minions = minions.filter(filter.matcher(context, player, source));
+		for (Entity minion : minions) {
+			if (filter == null || filter.matches(context, player, source, minion)) {
+				count++;
+			}
 		}
-		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
-		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
-		return SpellUtils.evaluateOperation(operation, (int) minions.count(), targetValue);
+		return count;
 	}
-
 }
