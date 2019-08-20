@@ -15,6 +15,18 @@
         "class": "RaceFilter",
         "race": "MECH"
       },
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "ADD",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "ATTACK"
+        },
+        "value2": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
+      },
       "spells": [
         {
           "class": "DestroySpell"
@@ -23,18 +35,8 @@
           "class": "MissilesSpell",
           "target": "ENEMY_CHARACTERS",
           "howMany": {
-            "class": "AlgebraicValueProvider",
-            "operation": "ADD",
-            "value1":{
-              "class": "AttributeValueProvider",
-              "target": "OUTPUT",
-              "attribute": "ATTACK",
-            },
-            "value2":{
-              "class": "AttributeValueProvider",
-              "target": "OUTPUT",
-              "attribute": "HP"
-            }
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
           }
         }
       ]

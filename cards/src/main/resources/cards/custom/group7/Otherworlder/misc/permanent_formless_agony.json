@@ -20,7 +20,7 @@
         "class": "EntityTypeFilter",
         "entityType": "HERO"
       },
-      "spell": {
+      "spell1": {
         "class": "DestroySpell",
         "target": "SELF"
       }
