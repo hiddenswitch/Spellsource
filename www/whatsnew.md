@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.50-2.0.35 (In Progress)
+
+Bug fixes and new cards.
+
+##### Content Additions:
+
+ - New cards for Otherworlder (thanks @AnterogradeNil!)
+
 ### 0.8.49-2.0.35 (August 19th, 2019)
 
 Bug fixes and networked performance improvements.
