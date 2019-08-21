@@ -4,6 +4,19 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.50-2.0.36 (August 21st, 2019)
+
+Quality of life improvements for the client.
+
+##### Usability Fixes:
+
+ - It should be easier to drag your own hero for a physical attack. Be careful not to cast a spell on yourself!
+ - Memory usage should be lower on web.
+ - Deck lists now show the card counts again. (1352)
+ - Popups are less jarring and more legible.
+ - Text is more legible.
+ - The appearance of lun, attack and health values is more consistent.
+
 ### 0.8.50-2.0.35 (August 20th, 2019)
 
 Bug fixes and new cards.
