@@ -38,7 +38,7 @@ public final class CreateCollectionRequest implements Serializable {
 				.withUserId(userId)
 				.withHeroClass(heroClass)
 				.withInventoryIds(inventoryIds)
-				.withFormat("Standard")
+				.withFormat("Spellsource")
 				.withDraft(draft)
 				.setValidationReport(validationReport);
 	}

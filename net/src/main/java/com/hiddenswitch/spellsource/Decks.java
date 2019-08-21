@@ -212,7 +212,7 @@ public interface Decks {
 
 			if (validationReport != null) {
 				jsonPut(collectionUpdate, "$set", json("validationReport", json("valid", validationReport.isValid(),
-						"errorMessages", validationReport.getErrors())));
+						"errors", validationReport.getErrors())));
 			}
 
 			if (!collectionUpdate.isEmpty()) {
@@ -328,11 +328,14 @@ public interface Decks {
 		context.setPlayer1(player1);
 		context.setPlayer2(new Player(HeroClass.TEST));
 		context.setDeckFormat(DeckFormat.getFormat(deckFormat));
-
-		Card formatCard = CardCatalogue.getFormatCard(context.getDeckFormat().getName());
-		if (formatCard == null) {
+		if (context.getDeckFormat() == null) {
 			validationReport.setValid(false);
 			validationReport.addErrorsItem("Invalid Format");
+			return validationReport;
+		}
+		Card formatCard = CardCatalogue.getFormatCard(context.getDeckFormat().getName());
+		if (formatCard == null) {
+			validationReport.setValid(true);
 			return validationReport;
 		}
 
