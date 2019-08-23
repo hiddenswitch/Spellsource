@@ -13,8 +13,8 @@ public final class ShuffleOriginalToDeckSpell extends ShuffleToDeckSpell {
 
 	@Override
 	@Suspendable
-	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean quiet, int sourcePlayerId) {
-		context.getLogic().shuffleToDeck(player, targetCard, quiet, sourcePlayerId);
+	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean extraCopy, int sourcePlayerId) {
+		context.getLogic().shuffleToDeck(player, targetCard, extraCopy, sourcePlayerId);
 		return targetCard;
 	}
 }

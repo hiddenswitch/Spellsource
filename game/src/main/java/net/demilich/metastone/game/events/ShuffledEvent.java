@@ -8,15 +8,18 @@ public class ShuffledEvent extends GameEvent implements HasCard {
 
 	private final Entity target;
 	private final Card card;
+	private final boolean extraCopy;
 
-	public ShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, Entity target, Card card) {
+	public ShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, boolean extraCopy, Entity target, Card card) {
 		super(context, targetPlayerId, sourcePlayerId);
+		this.extraCopy = extraCopy;
 		this.target = target;
 		this.card = card;
 	}
 
-	public ShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, Card card) {
+	public ShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, boolean extraCopy, Card card) {
 		super(context, targetPlayerId, sourcePlayerId);
+		this.extraCopy = extraCopy;
 		this.target = card;
 		this.card = card;
 	}
@@ -34,6 +37,10 @@ public class ShuffledEvent extends GameEvent implements HasCard {
 	@Override
 	public GameEventType getEventType() {
 		return GameEventType.CARD_SHUFFLED;
+	}
+
+	public boolean isExtraCopy() {
+		return extraCopy;
 	}
 }
 

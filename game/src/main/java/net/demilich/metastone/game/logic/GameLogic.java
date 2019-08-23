@@ -3833,17 +3833,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * @param player The player whose deck this card is getting shuffled into.
-	 * @param card   The card to shuffle into that player's deck.
-	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param player    The player whose deck this card is getting shuffled into.
+	 * @param card      The card to shuffle into that player's deck.
+	 * @param extraCopy If {@code true}, indicates this is an "extra copy" and should not recursively trigger certain
+	 *                  kinds of shuffle-copying effects.
 	 * @return
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
 	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
-		return shuffleToDeck(player, null, card, quiet, false, player.getId());
+	public boolean shuffleToDeck(Player player, Card card, boolean extraCopy) {
+		return shuffleToDeck(player, null, card, extraCopy, false, player.getId());
 	}
 
 	/**
@@ -3855,15 +3856,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player         The player whose deck this card is getting shuffled into.
 	 * @param card           The card to shuffle into that player's deck.
-	 * @param quiet          If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param extraCopy      If {@code true}, indicates this is an "extra copy" and should not recursively trigger certain
+	 *                       kinds of shuffle-copying effects.
 	 * @param sourcePlayerId The caster of the spell that is executing the shuffleToDeck method.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
 	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, Card card, boolean quiet, int sourcePlayerId) {
-		return shuffleToDeck(player, null, card, quiet, false, sourcePlayerId);
+	public boolean shuffleToDeck(Player player, Card card, boolean extraCopy, int sourcePlayerId) {
+		return shuffleToDeck(player, null, card, extraCopy, false, sourcePlayerId);
 	}
 
 	/**
@@ -3871,15 +3873,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param relatedEntity         The entity related to the card that is getting shuffled. For example, when shuffling
 	 *                              a
 	 * @param card                  The card to shuffle into that player's deck.
-	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param extraCopy             If {@code true}, indicates this is an "extra copy" and should not recursively trigger
+	 *                              certain kinds of shuffle-copying effects.
 	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
 	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
 	 *                              card cost modifiers).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
-		return shuffleToDeck(player, relatedEntity, card, quiet, keepCardCostModifiers, player.getId());
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean extraCopy, boolean keepCardCostModifiers) {
+		return shuffleToDeck(player, relatedEntity, card, extraCopy, keepCardCostModifiers, player.getId());
 	}
 
 	/**
@@ -3893,7 +3896,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param relatedEntity         The entity related to the card that is getting shuffled. For example, when shuffling a
 	 *                              minion ({@link Actor}) to the deck, that minion should be this argument.
 	 * @param card                  The card to shuffle into that player's deck.
-	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
+	 * @param extraCopy             If {@code true}, indicates this is an "extra copy" and should not recursively trigger
+	 *                              certain kinds of shuffle-copying effects.
 	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
 	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
@@ -3904,7 +3908,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers, int sourcePlayerId) {
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean extraCopy, boolean keepCardCostModifiers, int sourcePlayerId) {
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
@@ -3927,17 +3931,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
 
-			if (!quiet) {
-				if (relatedEntity != null) {
-					context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, relatedEntity, card));
-				} else {
-					context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, card));
 
-				}
-				if (card.getZone() == Zones.DECK) {
-					context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
-				}
+			if (relatedEntity != null) {
+				context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, extraCopy, relatedEntity, card));
+			} else {
+				context.fireGameEvent(new ShuffledEvent(context, player.getId(), sourcePlayerId, extraCopy, card));
+
 			}
+
+			if (card.getZone() == Zones.DECK) {
+				context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
+			}
+
 			if (card.getZone() == Zones.DECK) {
 				EnvironmentEntityList.getList(context, Environment.SHUFFLED_CARDS_LIST).add(player, card);
 			}

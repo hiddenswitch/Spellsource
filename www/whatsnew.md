@@ -15,6 +15,7 @@ Bug fixes.
  - Terrain Devourer no longer interacts with Undying Tentacles in a way that causes a crash.
  - Plague of Flesh and other negative-HP buffs now reduce the health of wounded minions. The behaviour for aura-based buffs has not changed. (1354)
  - Spells that are not castable when the board is full, like many summoning spells, no longer incorrectly count permanents (regression).
+ - Shuffling Unearthed Horrors while Xitalu is in play will not correctly shuffle in buffed cards. Additionally, other shuffle trigger effects now has synergy with Xitalu in the expected way. (1338)
 
 ### 0.8.50-2.0.36 (August 21st, 2019)
 
