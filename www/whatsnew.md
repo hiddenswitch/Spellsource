@@ -11,6 +11,10 @@ Bug fixes.
 ##### Content Fixes:
 
  - Recipe for Power now only gives an armor bonus. (1355)
+ - Treasure Trove now counts the owner's cards correctly.
+ - Terrain Devourer no longer interacts with Undying Tentacles in a way that causes a crash.
+ - Plague of Flesh and other negative-HP buffs now reduce the health of wounded minions. The behaviour for aura-based buffs has not changed. (1354)
+ - Spells that are not castable when the board is full, like many summoning spells, no longer incorrectly count permanents (regression).
 
 ### 0.8.50-2.0.36 (August 21st, 2019)
 
@@ -326,6 +330,7 @@ The Skill is a spell that is playable once per turn specific to your champion.
  - Champion: Your player character. When this dies, you lose the game.
  - Dash: This can attack enemy minions even if it is exhausted.
  - Deflect: The first time this minion takes damage, deal it to its Champion instead.
+ - Decay: At the end of your turn, this loses 1 health or durability.
  - Dodge: The first time this minion takes damage, it takes zero instead.
  - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
  - Elusive: Cannot be targeted by spells or skills.

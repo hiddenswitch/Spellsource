@@ -10,8 +10,8 @@
   "battlecry": {
     "condition": {
       "class": "MinionCountCondition",
-      "value": 7,
-      "operation": "EQUAL",
+      "value": 6,
+      "operation": "GREATER_OR_EQUAL",
       "targetPlayer": "SELF"
     },
     "targetSelection": "NONE",

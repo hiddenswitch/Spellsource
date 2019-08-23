@@ -6,10 +6,7 @@
   "rarity": "LEGENDARY",
   "description": "Remove the top cards of your deck until you remove a minion. Summon it.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS",
-    "targetPlayer": "SELF"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {

@@ -13,10 +13,7 @@
       "requiredAttribute": "SECRET",
       "sourcePlayer": "SELF",
       "fireCondition": {
-        "class": "MinionCountCondition",
-        "value": 7,
-        "operation": "LESS",
-        "targetPlayer": "SELF"
+        "class": "CanSummonCondition"
       }
     },
     "spell": {

@@ -15,14 +15,22 @@
     "spell": {
       "class": "ConditionalSpell",
       "condition": {
-        "class": "ComparisonCondition",
-        "value1": {
-          "class": "AttributeValueProvider",
-          "target": "EVENT_TARGET",
-          "attribute": "BASE_HP"
-        },
-        "value2": 0,
-        "operation": "GREATER"
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "ComparisonCondition",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "target": "EVENT_TARGET",
+              "attribute": "MAX_HP"
+            },
+            "value2": 0,
+            "operation": "GREATER"
+          },
+          {
+            "class": "CanSummonCondition"
+          }
+        ]
       },
       "spell": {
         "class": "CreateSummonSpell",

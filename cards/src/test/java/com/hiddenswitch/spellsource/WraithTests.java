@@ -41,6 +41,15 @@ public class WraithTests extends TestBase {
 			assertEquals(enemyMinion.getAttack(), 0);
 			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - 2);
 		});
+
+		runGym(((context, player, opponent) -> {
+			Minion enemyMinion = playMinionCard(context, opponent, "minion_test_4_5");
+			enemyMinion.setHp(4);
+			playCard(context, player, "spell_plague_of_flesh");
+			assertFalse(enemyMinion.isDestroyed());
+			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack() - 1);
+			assertEquals(enemyMinion.getHp(), 2);
+		}));
 	}
 
 	@Test

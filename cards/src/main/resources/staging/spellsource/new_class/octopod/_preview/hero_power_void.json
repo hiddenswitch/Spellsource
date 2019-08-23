@@ -6,9 +6,7 @@
   "rarity": "FREE",
   "description": "Summon a 6/6 Kraken.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {

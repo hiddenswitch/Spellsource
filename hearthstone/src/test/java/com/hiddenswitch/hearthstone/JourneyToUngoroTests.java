@@ -656,8 +656,8 @@ public class JourneyToUngoroTests extends TestBase {
 			Assert.assertFalse(c.getLogic().canSummonMoreMinions(p));
 		});
 
-		// In actual Hearthstone, Reliquary Seeker's Battlecry activates with 5 other minions and a permanent on the
-		// battlefield, despite requiring "6 other minions." In Spellsource, it does not.
+		// Reliquary Seeker's Battlecry activates with 5 other minions and a permanent on the
+		// battlefield, despite requiring "6 other minions."
 		factory.run((c, p, o) -> {
 			c.endTurn();
 			for (int i = 0; i < 5; i++) {
@@ -668,7 +668,7 @@ public class JourneyToUngoroTests extends TestBase {
 			}
 			Assert.assertTrue(c.getLogic().canSummonMoreMinions(p));
 			Minion seeker = playMinionCard(c, p, "minion_reliquary_seeker");
-			assertEquals(seeker.getHp(), 1);
+			assertEquals(seeker.getHp(), 5);
 		});
 
 		// Effects that simply scale per minion do not count permanents.
