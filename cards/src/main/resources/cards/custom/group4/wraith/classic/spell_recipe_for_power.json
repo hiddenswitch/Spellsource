@@ -20,8 +20,7 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 1,
-        "value": {
+        "armorBonus": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         }
