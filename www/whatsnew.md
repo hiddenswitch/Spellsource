@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.51-2.0.36 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Recipe for Power now only gives an armor bonus. (1355)
+
 ### 0.8.50-2.0.36 (August 21st, 2019)
 
 Quality of life improvements for the client.
