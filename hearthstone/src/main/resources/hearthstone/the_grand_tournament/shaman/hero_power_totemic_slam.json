@@ -6,9 +6,7 @@
   "rarity": "FREE",
   "description": "Summon a Totem of your choice.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "chooseOneCardIds": [

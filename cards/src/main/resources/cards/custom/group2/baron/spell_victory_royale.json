@@ -11,8 +11,7 @@
     "condition": {
       "class": "CardCountCondition",
       "value": 9,
-      "operation": "LESS_OR_EQUAL",
-      "targetPlayer": "OWNER"
+      "operation": "LESS_OR_EQUAL"
     },
     "spell": {
       "class": "DiscoverSpell"

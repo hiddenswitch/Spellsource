@@ -33,10 +33,7 @@
               "value2": 0
             },
             {
-              "class": "MinionCountCondition",
-              "value": 7,
-              "operation": "LESS",
-              "targetPlayer": "SELF"
+              "class": "CanSummonCondition"
             }
           ]
         },
@@ -56,10 +53,7 @@
                 "value2": 0
               },
               {
-                "class": "MinionCountCondition",
-                "value": 7,
-                "operation": "LESS",
-                "targetPlayer": "SELF"
+                "class": "CanSummonCondition"
               }
             ]
           },

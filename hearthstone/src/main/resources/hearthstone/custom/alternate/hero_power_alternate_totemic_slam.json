@@ -43,9 +43,7 @@
         "invert": true
       },
       {
-        "class": "MinionCountCondition",
-        "value": 7,
-        "operation": "LESS"
+        "class": "CanSummonCondition"
       }
     ]
   },

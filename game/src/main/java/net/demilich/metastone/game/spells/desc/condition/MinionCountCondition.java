@@ -31,3 +31,4 @@ public class MinionCountCondition extends CountCondition {
 		return count;
 	}
 }
+

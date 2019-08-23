@@ -20,9 +20,7 @@
           "targetPlayer": "OPPONENT"
         },
         {
-          "class": "MinionCountCondition",
-          "value": 7,
-          "operation": "LESS"
+          "class": "CanSummonCondition"
         }
       ]
     },

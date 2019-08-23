@@ -50,7 +50,7 @@ public abstract class CountCondition extends Condition {
 				cardCount = getCountForPlayer(context, context.getOpponent(context.getActivePlayer()), source, target);
 				break;
 			case OWNER:
-				cardCount = getCountForPlayer(context, context.getPlayer(source.getOwner()), source, target);
+				cardCount = getCountForPlayer(context, context.getPlayer(target.getOwner()), source, target);
 				break;
 			case PLAYER_1:
 				cardCount = getCountForPlayer(context, context.getPlayer1(), source, target);

@@ -6,9 +6,7 @@
   "rarity": "FREE",
   "description": "Summon two different Elemental Spirits",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {

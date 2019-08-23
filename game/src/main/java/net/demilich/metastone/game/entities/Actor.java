@@ -253,13 +253,11 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	@Override
 	public void modifyHpBonus(int value) {
 		modifyAttribute(Attribute.HP_BONUS, value);
-		if (value > 0) {
-			modifyAttribute(Attribute.HP, value);
-		}
+		modifyAttribute(Attribute.HP, value);
+
 		if (getHp() > getMaxHp()) {
 			setHp(getMaxHp());
 		}
-
 	}
 
 	public void setAttack(int value) {

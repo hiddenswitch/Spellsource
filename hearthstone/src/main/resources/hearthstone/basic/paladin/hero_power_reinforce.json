@@ -7,9 +7,7 @@
   "rarity": "FREE",
   "description": "Summon a 1/1 Recruit.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {

@@ -11,10 +11,7 @@
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
       "fireCondition": {
-        "class": "MinionCountCondition",
-        "value": 7,
-        "operation": "LESS",
-        "targetPlayer": "SELF"
+        "class": "CanSummonCondition"
       },
       "sourcePlayer": "SELF"
     },
