@@ -1,10 +1,10 @@
 {
-  "name": "Wicked Smite",
-  "baseManaCost": 1,
+  "name": "Ancient Curse",
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "CRIMSON",
-  "rarity": "FREE",
-  "description": "Deal $4 damage to both champions.",
+  "rarity": "RARE",
+  "description": "Deal $6 damage to both champions (ignore yours' Armor). Gain 6 Armor",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -12,19 +12,21 @@
       {
         "class": "DamageSpell",
         "target": "ENEMY_HERO",
-        "value": 4
+        "value": 6
       },
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 4
+        "value": 6
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 6
       }
     ]
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "BASIC"
-  ],
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
