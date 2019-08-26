@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -1304,7 +1303,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				damageDealt = damageMinion(player, damage, source, target);
 				break;
 			case HERO:
-				damageDealt = damageHero((Hero) target, damage, source);
+				damageDealt = damageHero((Hero) target, damage, source, damageType);
 				break;
 			default:
 				break;
@@ -1318,7 +1317,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	private int damageHero(Hero hero, final int damage, Entity source) {
+	private int damageHero(Hero hero, final int damage, Entity source, DamageType damageType) {
 		if (hero.hasAttribute(Attribute.IMMUNE) || hero.hasAttribute(Attribute.AURA_IMMUNE)) {
 			return 0;
 		}
@@ -1329,13 +1328,21 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return 0;
 		}
 
-		int effectiveHp = hero.getHp() + hero.getArmor();
-		final int armorChange = hero.modifyArmor(-damage);
-		if (armorChange != 0) {
-			context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
-			context.getPlayer(hero.getOwner()).getStatistics().loseArmor(-armorChange);
+		int effectiveHp;
+		int newHp;
+		if (damageType == DamageType.IGNORES_ARMOR) {
+			effectiveHp = hero.getHp();
+			newHp = effectiveHp - damage;
+		} else {
+			effectiveHp = hero.getHp() + hero.getArmor();
+			int armorChange = hero.modifyArmor(-damage);
+			if (armorChange != 0) {
+				context.fireGameEvent(new ArmorChangedEvent(context, hero, armorChange));
+				context.getPlayer(hero.getOwner()).getStatistics().loseArmor(-armorChange);
+			}
+			newHp = Math.min(hero.getHp(), effectiveHp - damage);
 		}
-		int newHp = Math.min(hero.getHp(), effectiveHp - damage);
+
 		hero.setHp(newHp);
 		return damage;
 	}

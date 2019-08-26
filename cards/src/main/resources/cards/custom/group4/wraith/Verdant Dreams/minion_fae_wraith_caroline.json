@@ -8,17 +8,18 @@
   "rarity": "LEGENDARY",
   "description": "Guard. Opener: Draw a card. Aftermath: Shuffle this into your deck",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell"
     }
   },
   "deathrattle": {
-    "class": "ShuffleToDeckSpell",
+    "class": "ShuffleMinionToDeckSpell",
     "target": "SELF"
   },
   "attributes": {
     "BATTLECRY": true,
-    "DEATHRATTLE": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

@@ -41,7 +41,8 @@
         "class": "SpecificCardFilter",
         "cards": [
           "token_skeleton_wraith",
-          "token_skeleton2_wraith"
+          "token_skeleton2_wraith",
+          "token_skeleton2guard_wraith"
         ]
       }
     },
@@ -53,7 +54,8 @@
         "class": "SpecificCardFilter",
         "cards": [
           "token_skeleton_wraith",
-          "token_skeleton2_wraith"
+          "token_skeleton2_wraith",
+          "token_skeleton2guard_wraith"
         ]
       }
     }

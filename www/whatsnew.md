@@ -6,10 +6,17 @@ permalink: /whats-new/
 
 ### 0.8.51-2.0.36 (In Progress)
 
-Bug fixes.
+Content additions and bug fixes.
+
+Thanks @Bromora for the contribution to Wraith.
+
+##### Content Additions:
+
+ - Wraith Verdant Dreams cards. Thanks @Bromora!
 
 ##### Content Fixes:
 
+ - Wicked Smite now deals 4 damage to both champions.
  - Recipe for Power now only gives an armor bonus. (1355)
  - Treasure Trove now counts the owner's cards correctly.
  - Terrain Devourer no longer interacts with Undying Tentacles in a way that causes a crash.

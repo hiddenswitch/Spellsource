@@ -25,9 +25,7 @@
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
       "armorBonus": {
-        "class": "AttributeValueProvider",
-        "target": "EVENT_TARGET",
-        "attribute": "LAST_HIT"
+        "class": "EventValueProvider"
       }
     }
   },

@@ -27,6 +27,5 @@ public class CardValidationTests {
 	@Test(dataProvider = "CardProvider")
 	public void validateCardReferences(File cardFile) throws IOException {
 		CardValidation.validateCardReferences(cardFile);
-
 	}
 }

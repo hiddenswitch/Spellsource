@@ -9,6 +9,7 @@
   "race": "FAE",
   "description": "Opener: Draw a card for each Skeleton you control.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell",
       "value": {

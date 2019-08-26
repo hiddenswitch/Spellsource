@@ -15,16 +15,20 @@
       "countUntilCast": 1,
       "eventTrigger": {
         "class": "SpellCastedTrigger",
-        "targetPlayer": "FRIENDLY_HERO",
-        "filter": {
-          "class": "SpecificCardFilter",
-          "cards": [
-            "pact_deaths_hand",
-            "pact_extraction",
-            "pact_nothing_to_waste",
-            "pact_soul_lightning",
-            "pact_binding_nightmare"
-          ]
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "AllMatchFilterCondition",
+          "target": "EVENT_SOURCE",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cards": [
+              "pact_deaths_hand",
+              "pact_extraction",
+              "pact_nothing_to_waste",
+              "pact_soul_lightning",
+              "pact_binding_nightmare"
+            ]
+          }
         }
       },
       "spell": {
