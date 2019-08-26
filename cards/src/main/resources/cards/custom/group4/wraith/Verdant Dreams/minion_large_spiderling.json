@@ -7,10 +7,11 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Guard. Opener: Deal 5 damage to your champion (ignore Armor).",
+  "description": "Guard. Opener: Deal 5 damage to your champion, bypassing armor.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
-      "class": "DamageSpell",
+      "class": "DamageIgnoringArmorSpell",
       "target": "FRIENDLY_HERO",
       "value": 5
     }

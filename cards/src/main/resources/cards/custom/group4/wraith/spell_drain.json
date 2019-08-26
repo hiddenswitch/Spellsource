@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Lifedrain. Deal 3 damage to a random enemy. Cast this when drawn.",
+  "description": "Lifedrain. Deal $3 damage to a random enemy. Cast this when drawn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -15,7 +15,8 @@
       "spells": [
         {
           "class": "DamageSpell",
-          "target": "RANDOM_ENEMY",
+          "target": "ENEMY_CHARACTERS",
+          "randomTarget": true,
           "value": 3
         },
         {
@@ -31,7 +32,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
-    "target": "RANDOM_ENEMY",
+    "target": "ENEMY_CHARACTERS",
+    "randomTarget": true,
     "value": 3
   },
   "attributes": {

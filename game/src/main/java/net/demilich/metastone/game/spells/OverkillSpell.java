@@ -70,7 +70,6 @@ public class OverkillSpell extends DamageSpell {
 					spell.put(SpellArg.VALUE, Math.abs(minion.getHp()));
 				}
 				context.getLogic().castSpell(player.getId(), spell, source.getReference(), target.getReference(), true);
-
 			}
 		}
 	}

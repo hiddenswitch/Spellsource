@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.DamageType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -140,7 +141,7 @@ public class DamageSpell extends Spell {
 		if (damage < 0) {
 			logger.error("onCast {} {}: Suspicious negative damage call", context.getGameId(), source);
 		}
-		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage);
+		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage, getDamageType());
 	}
 
 	public static int getDamage(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -155,6 +156,10 @@ public class DamageSpell extends Spell {
 			damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		}
 		return damage;
+	}
+
+	protected DamageType getDamageType() {
+		return DamageType.MAGICAL;
 	}
 }
 

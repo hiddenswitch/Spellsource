@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
@@ -71,11 +72,12 @@ public class CardValidation {
 			try {
 				CardDesc desc = Json.mapper.readValue(new FileInputStream(cardFile), CardDesc.class);
 			} catch (JsonProcessingException innerEx) {
+				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile,0,0,0);
 				Assert.fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",
 						cardFile.getName(),
 						innerEx.getMessage(),
-						innerEx.getLocation().getLineNr(),
-						innerEx.getLocation().getColumnNr()), innerEx);
+						location.getLineNr(),
+						location.getColumnNr()), innerEx);
 			}
 		} catch (Exception ex) {
 			Assert.fail(cardFile.getName(), ex);
@@ -102,16 +104,7 @@ public class CardValidation {
 				}
 			});
 		} catch (DecodeException ex) {
-			// Decode again to throw the inner exception
-			try {
-				CardDesc desc = Json.mapper.readValue(new FileInputStream(cardFile), CardDesc.class);
-			} catch (JsonProcessingException innerEx) {
-				Assert.fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",
-						cardFile.getName(),
-						innerEx.getMessage(),
-						innerEx.getLocation().getLineNr(),
-						innerEx.getLocation().getColumnNr()), innerEx);
-			}
+			// Does not deal with this issue here
 		} catch (Exception ex) {
 			Assert.fail(cardFile.getName(), ex);
 		}
