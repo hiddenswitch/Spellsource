@@ -16,6 +16,7 @@ Thanks @Bromora for the contribution to Wraith.
 
 ##### Content Fixes:
 
+ - Some Fae cards have been renamed. (1362)
  - Wicked Smite now deals 4 damage to both champions.
  - Recipe for Power now only gives an armor bonus. (1355)
  - Treasure Trove now counts the owner's cards correctly.
