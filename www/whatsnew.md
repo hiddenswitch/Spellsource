@@ -19,6 +19,7 @@ Thanks @Bromora for the contribution to Wraith.
  - Some Fae cards have been renamed. (1362)
  - Changing skills with skills, like Ghanathoa's effects, no longer cause a draw. (1370)
  - Bioweaponize now works on minions that have not previously had a Wither effect. (1369)
+ - Witherdrake's Opener now correctly applies Wither. (1368)
  - A variety of other incorrectly themed cards have been renamed and their descriptions updated. (1361)
  - Defensive Position's description is no longer missing a space. (1360)
  - Mandron now correctly specifies Skill. (1359)
