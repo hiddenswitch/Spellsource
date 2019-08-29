@@ -55,10 +55,10 @@ public final class ModifyWitherAttributeSpell extends ModifyAttributeSpell {
 	}
 
 	private boolean isWitherEnchantment(Trigger trigger) {
-		Enchantment enchantment = (Enchantment) trigger;
-		if (enchantment == null) {
+		if (!(trigger instanceof Enchantment)) {
 			return false;
 		}
+		Enchantment enchantment = (Enchantment) trigger;
 		return enchantment.getTriggers().size() == 1
 				&& enchantment.getTriggers().get(0).getClass().equals(DamageCausedTrigger.class)
 				&& Objects.equal(enchantment.getTriggers().get(0).getDesc().get(EventTriggerArg.HOST_TARGET_TYPE), TargetType.IGNORE_OTHER_SOURCES)
