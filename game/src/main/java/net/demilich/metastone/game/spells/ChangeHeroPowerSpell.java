@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -60,6 +61,7 @@ public class ChangeHeroPowerSpell extends Spell {
 			heroPower.setHeroClass(hero.getHeroClass());
 		}
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
+		oldHeroPower.getAttributes().put(Attribute.TRANSFORM_REFERENCE, heroPower.getReference());
 		context.getLogic().processGameTriggers(player, heroPower);
 		context.getLogic().processPassiveTriggers(player, heroPower);
 		context.getLogic().processPassiveAuras(player, heroPower);
