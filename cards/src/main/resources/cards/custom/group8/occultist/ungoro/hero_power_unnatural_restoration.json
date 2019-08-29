@@ -21,8 +21,8 @@
           "card": "hero_power_unnatural_destruction"
         },
         {
-      "class": "RefreshHeroPowerSpell",
-      "targetPlayer": "SELF"
+          "class": "RefreshHeroPowerSpell",
+          "targetPlayer": "SELF"
         }
       ]
     }
