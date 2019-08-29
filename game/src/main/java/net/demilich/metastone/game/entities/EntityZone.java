@@ -131,6 +131,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public E remove(int index) {
 		E result = internal.remove(index);
 		result.setEntityLocation(EntityLocation.UNASSIGNED);
+		lookup.remove(result.getId());
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
@@ -169,7 +170,9 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public void move(int index, EntityZone destination, int destinationIndex) {
 		Entity result = internal.remove(index);
 		// Must remove entity now because we might be changing owners
-		lookup.remove(result.getId());
+		if (destination.getPlayer() != getPlayer()) {
+			lookup.remove(result.getId());
+		}
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
