@@ -193,4 +193,21 @@ public class OtherworlderTests extends TestBase {
 			assertEquals(target.getHp(), target.getMaxHp() - 2 /*wither*/ - parasite.getAttack());
 		});
 	}
+
+	@Test
+	public void testWitherdrake() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			int targetHp = 10;
+			context.getLogic().setHpAndMaxHp(target, targetHp);
+			context.endTurn();
+			playMinionCardWithBattlecry(context, player, "minion_witherdrake", target);
+			assertEquals(target.getHp(), targetHp - 1/*wither*/ - 1/*battlecry damage*/);
+			context.endTurn();
+			assertEquals(target.getHp(), targetHp - 1/*wither*/ - 1/*battlecry damage*/);
+			context.endTurn();
+			assertEquals(target.getHp(), targetHp - 1/*battlecry damage*/);
+		});
+	}
 }
