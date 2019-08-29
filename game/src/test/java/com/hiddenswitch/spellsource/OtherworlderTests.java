@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
 import org.testng.annotations.Test;
 
@@ -162,6 +163,34 @@ public class OtherworlderTests extends TestBase {
 
 			destroy(context, ghast);
 			assertEquals(player.getMinions().size(), 0);
+		});
+	}
+
+	@Test
+	public void testBioweaponize() {
+		runGym((context, player, opponent) -> {
+			Minion source = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			playCard(context, player, "spell_bioweaponize", source);
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			int targetMaxHp = 10;
+			target.setAttack(0);
+			context.getLogic().setHpAndMaxHp(target, targetMaxHp);
+			context.endTurn();
+			attack(context, player, source, target);
+			assertEquals(target.getHp(), target.getMaxHp() - 1 /*wither*/ - source.getAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion parasite = playMinionCard(context, player, "minion_realm_parasite");
+			playCard(context, player, "spell_bioweaponize", parasite);
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			context.endTurn();
+			int targetMaxHp = 10;
+			context.getLogic().setHpAndMaxHp(target, targetMaxHp);
+			attack(context, player, parasite, target);
+			assertEquals(target.getHp(), target.getMaxHp() - 2 /*wither*/ - parasite.getAttack());
 		});
 	}
 }

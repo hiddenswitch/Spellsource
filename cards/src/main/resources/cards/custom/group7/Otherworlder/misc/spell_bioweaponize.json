@@ -14,7 +14,7 @@
         "value": 1
       },
       {
-        "class": "ModifyAttributeSpell",
+        "class": "ModifyWitherAttributeSpell",
         "attribute": "WITHER",
         "value": 1
       },
