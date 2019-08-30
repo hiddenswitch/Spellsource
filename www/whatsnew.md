@@ -17,6 +17,7 @@ Thanks @Bromora for the contribution to Wraith.
 ##### Content Fixes:
 
  - Some Fae cards have been renamed. (1362)
+ - Wither now reads: "Wither (X): Whenever this hits a minion, its attack is reduced by X next time it could attack."
  - Changing skills with skills, like Ghanathoa's effects, no longer cause a draw. (1370)
  - Bioweaponize now works on minions that have not previously had a Wither effect. (1369)
  - Witherdrake's Opener now correctly applies Wither. (1368)
@@ -369,4 +370,4 @@ The Skill is a spell that is playable once per turn specific to your champion.
  - Supremacy: Occurs whenever this minion attacks and kills another.
  - Surge: Occurs when a card is played from the hand on the same turn it was added to the hand.
  - Toxic: This kills minions it damages.
- - Wither (X): This reduces its target's health by this amount, and restores the health at the start of the caster's turn.
+ - Wither (X): Whenever this hits a minion, its attack is reduced by X next time it could attack.

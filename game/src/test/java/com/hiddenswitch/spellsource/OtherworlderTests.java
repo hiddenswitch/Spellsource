@@ -63,7 +63,7 @@ public class OtherworlderTests extends TestBase {
 	@Test
 	public void testGekraTheMachine() {
 		runGym((context, player, opponent) -> {
-			List<Attribute> attributes = new ArrayList();
+			List<Attribute> attributes = new ArrayList<>();
 			attributes.add(Attribute.DIVINE_SHIELD);
 			attributes.add(Attribute.TAUNT);
 			attributes.add(Attribute.STEALTH);
@@ -173,12 +173,11 @@ public class OtherworlderTests extends TestBase {
 			playCard(context, player, "spell_bioweaponize", source);
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
-			int targetMaxHp = 10;
-			target.setAttack(0);
-			context.getLogic().setHpAndMaxHp(target, targetMaxHp);
+			int targetAttack = 10;
+			target.setAttack(targetAttack);
 			context.endTurn();
 			attack(context, player, source, target);
-			assertEquals(target.getHp(), target.getMaxHp() - 1 /*wither*/ - source.getAttack());
+			assertEquals(target.getAttack(), targetAttack - 1 /*wither*/);
 		});
 
 		runGym((context, player, opponent) -> {
@@ -187,10 +186,10 @@ public class OtherworlderTests extends TestBase {
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
 			context.endTurn();
-			int targetMaxHp = 10;
-			context.getLogic().setHpAndMaxHp(target, targetMaxHp);
+			int targetAttack = 10;
+			target.setAttack(targetAttack);
 			attack(context, player, parasite, target);
-			assertEquals(target.getHp(), target.getMaxHp() - 2 /*wither*/ - parasite.getAttack());
+			assertEquals(target.getAttack(), targetAttack - 2 /*wither*/);
 		});
 	}
 
@@ -199,15 +198,16 @@ public class OtherworlderTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
-			int targetHp = 10;
-			context.getLogic().setHpAndMaxHp(target, targetHp);
+			int targetAttack = 10;
+			target.setAttack(targetAttack);
+			target.setHp(2);
 			context.endTurn();
 			playMinionCardWithBattlecry(context, player, "minion_witherdrake", target);
-			assertEquals(target.getHp(), targetHp - 1/*wither*/ - 1/*battlecry damage*/);
+			assertEquals(target.getAttack(), targetAttack - 1/*wither*/);
 			context.endTurn();
-			assertEquals(target.getHp(), targetHp - 1/*wither*/ - 1/*battlecry damage*/);
+			assertEquals(target.getAttack(), targetAttack - 1/*wither*/);
 			context.endTurn();
-			assertEquals(target.getHp(), targetHp - 1/*battlecry damage*/);
+			assertEquals(target.getAttack(), targetAttack);
 		});
 	}
 }
