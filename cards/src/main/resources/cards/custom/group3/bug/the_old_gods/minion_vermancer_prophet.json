@@ -4,20 +4,27 @@
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 9,
-  "baseHp": 7,
+  "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Replace all Larva in your hand with Servant Wasps.",
+  "description": "Opener: Discover and summon two minions that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReplaceCardsSpell",
-      "target": "FRIENDLY_HAND",
-      "card": "minion_servant_wasp",
-      "filter": {
-        "class": "SpecificCardFilter",
-        "card": "token_spiderling"
+	  "class": "DiscoverSpell",
+      "spell": {
+        "class": "SummonSpell"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "operation": "HAS"
+      },
+	  "value": 2m
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "BOTH"
       }
-    }
+	} 
   },
   "attributes": {
     "BATTLECRY": true
