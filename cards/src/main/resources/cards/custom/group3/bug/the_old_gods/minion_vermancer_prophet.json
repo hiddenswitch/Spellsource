@@ -19,7 +19,7 @@
         "attribute": "PLAYED_FROM_HAND_OR_DECK",
         "operation": "HAS"
       },
-	  "value": 2m
+      "value": 2,
       "cardSource": {
         "class": "GraveyardCardsSource",
         "targetPlayer": "BOTH"
