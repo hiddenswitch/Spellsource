@@ -3,22 +3,26 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 1,
-  "baseHp": 5,
+  "baseAttack": 2,
+  "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "At the end of your turn, give a random friendly minion +2 Health."
+  "description": "At the end of your turn, give a random minion in your hand +1/+1."
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "randomTarget": true,
       "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS",
-      "attackBonus": 0,
-      "hpBonus": 2,
-      "randomTarget": "true"
+      "attackBonus": 1,
+      "hpBonus": 1
     }
   },
   "collectible": true,
