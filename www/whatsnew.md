@@ -4,11 +4,11 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.51-2.0.37 (In Progress)
+### 0.8.51-2.0.37 (September 1st, 2019)
 
 Content additions and bug fixes.
 
-Thanks @Bromora for the contribution to Wraith.
+Thanks @Bromora for the contribution to Wraith!
 
 ##### Usability Fixed:
 
