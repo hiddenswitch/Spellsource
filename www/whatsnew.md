@@ -13,6 +13,7 @@ Thanks @Bromora for the contribution to Wraith.
 ##### Usability Fixed:
 
  - Deleting a deck no longer glitches out the client on non-Windows platforms. (1372)
+ - Legibility of buffs has been improved, showing a darkened rectangle when a buff is applied. Buffs will be visualized differently in the new client. (1367)
 
 ##### Content Additions:
 
