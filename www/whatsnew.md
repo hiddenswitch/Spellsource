@@ -4,11 +4,15 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.51-2.0.36 (In Progress)
+### 0.8.51-2.0.37 (In Progress)
 
 Content additions and bug fixes.
 
 Thanks @Bromora for the contribution to Wraith.
+
+##### Usability Fixed:
+
+ - Deleting a deck no longer glitches out the client on non-Windows platforms. (1372)
 
 ##### Content Additions:
 
