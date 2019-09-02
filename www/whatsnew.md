@@ -6,6 +6,10 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.51-2.0.38 (September 2nd, 2019)
+
+Tribes are now visible on cards again. (1358)
+
 ### 0.8.51-2.0.37 (September 1st, 2019)
 
 Content additions and bug fixes.
