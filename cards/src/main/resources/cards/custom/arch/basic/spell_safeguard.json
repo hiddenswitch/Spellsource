@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-  "description": "Restore 3 Health. Gain 3 Armor.",
+  "description": "Restore #3 Health. Gain 3 Armor.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
