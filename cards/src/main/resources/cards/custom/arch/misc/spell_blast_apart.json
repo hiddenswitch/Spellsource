@@ -1,25 +1,41 @@
 {
-  "name": "Blast Apart",
-  "baseManaCost": 9,
+  "name": "Forge Suit",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Destroy a minion and deal its Health as damage to all other minions.",
+  "description": "Spend up to 10 Armor. Give a minion that much Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
-    "value": {
-      "class": "AttributeValueProvider",
-      "attribute": "HP"
-    },
     "spells": [
+      "value": {
+      "class": "AttributeValueProvider",
+      "operation": "MINIMUM",
+        "value1": 10,
+        "value2": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "ARMOR"
+        }
+    },
       {
-        "class": "DestroySpell"
+        {
+                "class": "BuffSpell",
+                "target": "FRIENDLY_HERO",
+                "armorBonus": {
+                  "class": "AlgebraicValueProvider",
+                  "operation": "NEGATE",
+                  "value1": {
+                    "class": "AlgebraicValueProvider",
+                    "value1": {
+                      "class": "AttributeValueProvider",
+                      "attribute": "ARMOR"
+                    },
       },
       {
-        "class": "DamageSpell",
-        "target": "ALL_MINIONS",
-        "value": {
+        "class": "BuffSpell",
+        "hpBonus": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         }
