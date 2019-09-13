@@ -1,20 +1,17 @@
 package com.hiddenswitch.spellsource.models;
 
-import com.hiddenswitch.spellsource.client.models.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityState;
-import com.hiddenswitch.spellsource.impl.util.DeckType;
-import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
+import com.hiddenswitch.spellsource.client.models.Entity;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
+import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
@@ -214,16 +211,14 @@ public final class GetCollectionResponse implements Serializable {
 							.description(record.description)
 							.entityType(Entity.EntityTypeEnum.CARD)
 							.name(record.name)
-							.state(new EntityState()
-									.baseAttack(isActor ? record.getBaseAttack() + record.getDamage() : null)
-									.baseHp(isActor ? record.getBaseHp() + record.getDurability() : null)
-									.tribe(record.getRace())
-									.cardType(EntityState.CardTypeEnum.valueOf(record.type.toString()))
-									.rarity(record.getRarity().getClientRarity())
-									.manaCost(record.baseManaCost)
-									.baseManaCost(record.baseManaCost)
-									.heroClass(record.getHeroClass()))
-					)
+							.baseAttack(isActor ? record.getBaseAttack() + record.getDamage() : null)
+							.baseHp(isActor ? record.getBaseHp() + record.getDurability() : null)
+							.tribe(record.getRace())
+							.cardType(Entity.CardTypeEnum.valueOf(record.type.toString()))
+							.rarity(record.getRarity().getClientRarity())
+							.manaCost(record.baseManaCost)
+							.baseManaCost(record.baseManaCost)
+							.heroClass(record.getHeroClass()))
 					.id(cr.getId())
 					.allianceId(cr.getAllianceId())
 					.donorUserId(cr.getDonorUserId()));
