@@ -680,6 +680,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.timers(new Timers()
 						.millisRemaining(state.getMillisRemaining()))
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_MULLIGAN)
+				.changes(getChangeSet(state))
+				.gameState(getClientGameState(state))
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
 
@@ -725,7 +727,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private EntityChangeSet getChangeSet(com.hiddenswitch.spellsource.common.GameState current) {
-		EntityChangeSet changes = Games.computeChangeSet(lastStateSent, current);
+		EntityChangeSet changes = Games.computeChangeSet(current);
 		lastStateSent = current;
 		return changes;
 	}

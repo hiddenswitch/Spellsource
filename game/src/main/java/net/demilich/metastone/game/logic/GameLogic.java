@@ -2525,6 +2525,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// Cards are now in the set aside zone
 		starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
 
+		// After quests, fill the remainder of the starter cards
 		for (int j = starterCards.size(); j < numberOfStarterCards && !player.getDeck().isEmpty(); j++) {
 			Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
 			if (randomCard != null) {

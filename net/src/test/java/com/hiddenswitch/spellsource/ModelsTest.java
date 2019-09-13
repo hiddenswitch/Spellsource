@@ -67,10 +67,10 @@ public class ModelsTest {
 			GameActions clientActions = Games.getClientActions(context, validActions, 0);
 			assertEquals(0, clientActions.getChooseOnes().size());
 			Entity clientCard = Games.getEntity(context, chooseOne, player.getId());
-			Assert.assertFalse(clientCard.getState().isPlayable());
+			Assert.assertFalse(clientCard.isPlayable());
 			GameState state = Games.getGameState(context, player, opponent);
 			Entity clientCard2 = state.getEntities().stream().filter(e -> e.getId() == chooseOne.getId()).findFirst().get();
-			Assert.assertFalse(clientCard2.getState().isPlayable());
+			Assert.assertFalse(clientCard2.isPlayable());
 		});
 
 	}
@@ -90,7 +90,7 @@ public class ModelsTest {
 			context.performAction(0, freeze.play());
 			assertEquals(2, player.getQuests().get(0).getFires());
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
-			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getState().getFires() == 2));
+			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getFires() == 2));
 			JsonObject jsonObject = JsonObject.mapFrom(state);
 			Assert.assertTrue(jsonObject.getJsonArray("entities").stream().anyMatch(obj -> {
 				JsonObject jo = (JsonObject) obj;
@@ -116,8 +116,8 @@ public class ModelsTest {
 			context = context.clone();
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
 			Entity entity = state.getEntities().stream().filter(e -> "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
-			assertEquals(3L, (long) entity.getState().getAttack());
-			assertEquals(3L, (long) entity.getState().getHp());
+			assertEquals(3L, (long) entity.getAttack());
+			assertEquals(3L, (long) entity.getHp());
 		});
 
 		runGym((context, player, opponent) -> {
@@ -136,9 +136,9 @@ public class ModelsTest {
 			context.performAction(player.getId(), roll);
 			context = context.clone();
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
-			Entity entity = state.getEntities().stream().filter(e -> e.getState().getL().getZ() == EntityLocation.ZEnum.H && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
-			assertEquals(3L, (long) entity.getState().getAttack());
-			assertEquals(3L, (long) entity.getState().getHp());
+			Entity entity = state.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.H && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
+			assertEquals(3L, (long) entity.getAttack());
+			assertEquals(3L, (long) entity.getHp());
 		});
 	}
 

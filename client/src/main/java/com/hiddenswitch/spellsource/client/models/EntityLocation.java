@@ -23,21 +23,19 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * EntityLocation
+ * Encodes the location of the entity. Its index should be ordered in the entity change set. 
  */
+@ApiModel(description = "Encodes the location of the entity. Its index should be ordered in the entity change set. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EntityLocation implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("p")
-  private Integer p = null;
-
   @JsonProperty("i")
   private Integer i = null;
 
   /**
-   * Gets or Sets z
+   * The zone this entity belongs to. 
    */
   public enum ZEnum {
     N("N"),
@@ -100,34 +98,16 @@ public class EntityLocation implements Serializable {
   @JsonProperty("z")
   private ZEnum z = null;
 
-  public EntityLocation p(Integer p) {
-    this.p = p;
-    return this;
-  }
-
-   /**
-   * Get p
-   * @return p
-  **/
-  @ApiModelProperty(required = true, value = "")
-  public Integer getP() {
-    return p;
-  }
-
-  public void setP(Integer p) {
-    this.p = p;
-  }
-
   public EntityLocation i(Integer i) {
     this.i = i;
     return this;
   }
 
    /**
-   * Get i
+   * The index of the entity inside its zone. 
    * @return i
   **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "The index of the entity inside its zone. ")
   public Integer getI() {
     return i;
   }
@@ -142,10 +122,10 @@ public class EntityLocation implements Serializable {
   }
 
    /**
-   * Get z
+   * The zone this entity belongs to. 
    * @return z
   **/
-  @ApiModelProperty(required = true, value = "")
+  @ApiModelProperty(required = true, value = "The zone this entity belongs to. ")
   public ZEnum getZ() {
     return z;
   }
@@ -164,14 +144,13 @@ public class EntityLocation implements Serializable {
       return false;
     }
     EntityLocation entityLocation = (EntityLocation) o;
-    return Objects.equals(this.p, entityLocation.p) &&
-        Objects.equals(this.i, entityLocation.i) &&
+    return Objects.equals(this.i, entityLocation.i) &&
         Objects.equals(this.z, entityLocation.z);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(p, i, z);
+    return Objects.hash(i, z);
   }
 
 
@@ -180,7 +159,6 @@ public class EntityLocation implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class EntityLocation {\n");
     
-    sb.append("    p: ").append(toIndentedString(p)).append("\n");
     sb.append("    i: ").append(toIndentedString(i)).append("\n");
     sb.append("    z: ").append(toIndentedString(z)).append("\n");
     sb.append("}");

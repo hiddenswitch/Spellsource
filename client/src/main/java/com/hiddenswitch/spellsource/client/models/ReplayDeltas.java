@@ -24,9 +24,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * The forward and backword deltas (change sets) required (along with player &#x60;GameState&#x60;s) to transition the client battlefield. 
+ * The forward and backward deltas (change sets) required (along with player &#x60;GameState&#x60;s) to transition the client battlefield. 
  */
-@ApiModel(description = "The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield. ")
+@ApiModel(description = "The forward and backward deltas (change sets) required (along with player `GameState`s) to transition the client battlefield. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class ReplayDeltas implements Serializable {

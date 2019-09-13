@@ -774,16 +774,20 @@ definitions:
         type: 'integer'
   EntityLocation:
     type: 'object'
+    description: |
+      Encodes the location of the entity. Its index should be ordered in the entity change set.
     required:
       - z
       - i
-      - p
     properties:
-      p:
-        type: 'integer'
       i:
         type: 'integer'
+        x-nullable: false
+        description: |
+          The index of the entity inside its zone.
       z:
+        description: |
+          The zone this entity belongs to.
         type: 'string'
         enum:
           - 'N' # 'NONE'
@@ -803,29 +807,15 @@ definitions:
           - 'P' # 'PLAYER'
   EntityChangeSet:
     description: |
-      An abbreviated description of changes since the last change set this client received.
-    type: 'array'
-    items:
-      type: 'object'
-      properties:
-        op:
-          description: |
-            Describes a change to an entity. 'A' corresponds to added/inserted, 'C' corresponds to changed, 'R' corresponds to
-            removed. p0 is the previous value, if it exists. p1 is the current value. Only the entity's locatino is currently
-            populated in this changeset.
-          type: 'string'
-          enum:
-            - 'A'
-            - 'C'
-            - 'R'
-        id:
-          description: |
-            The ID of the entity in this change set.
+      An array that corresponds to the visible entities in this game state notification. The client is responsible for
+      determining which indices have been added, changed or removed.
+    type: 'object'
+    properties:
+      ids:
+        type: 'array'
+        items:
           type: 'integer'
-        p0:
-          $ref: '#/definitions/EntityState'
-        p1:
-          $ref: '#/definitions/EntityState'
+          x-nullable: false
   CardEvent:
     type: 'object'
     properties:
@@ -1430,6 +1420,7 @@ definitions:
         type: 'integer'
         format: 'int32'
         default: -1
+        x-nullable: false
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
         type: 'string'
@@ -1446,14 +1437,6 @@ definitions:
         description: |
           The text that would go into the entity's description field.
         type: 'string'
-      state:
-        $ref: '#/definitions/EntityState'
-  EntityState:
-    type: 'object'
-    description: |
-      The entity state contains all the mutable values of an entity. In the future, the server will provide a list of
-      exact changes to this state.
-    properties:
       l:
         $ref: '#/definitions/EntityLocation'
       background:
@@ -1479,6 +1462,7 @@ definitions:
         type: 'integer'
         format: 'int32'
         default: -1
+        x-nullable: false
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
@@ -1578,6 +1562,18 @@ definitions:
           physical attack action targeting.
         type: 'boolean'
         default: false
+      discarded:
+        description: |
+          Indicates the entity was discarded from the hand.
+        type: 'boolean'
+        default: false
+        x-nullable: false
+      roasted:
+        description: |
+          Indicates the entity was roasted (removed due to excess cards or otherwise discarded from the deck).
+        type: 'boolean'
+        default: false
+        x-nullable: false
       spellDamage:
         description: |
           Indicates the amount of additional spell damage this entity gives its owning player.
@@ -1969,7 +1965,7 @@ definitions:
           $ref: '#/definitions/ReplayDeltas'
   ReplayDeltas:
     description: |
-      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+      The forward and backward deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
     type: 'object'
     properties:
       backward:

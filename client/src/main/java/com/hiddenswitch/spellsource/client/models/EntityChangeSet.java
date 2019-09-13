@@ -14,21 +14,53 @@
 package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
-import com.hiddenswitch.spellsource.client.models.EntityChangeSetInner;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * An abbreviated description of changes since the last change set this client received. 
+ * An array that corresponds to the visible entities in this game state notification. The client is responsible for determining which indices have been added, changed or removed. 
  */
-@ApiModel(description = "An abbreviated description of changes since the last change set this client received. ")
+@ApiModel(description = "An array that corresponds to the visible entities in this game state notification. The client is responsible for determining which indices have been added, changed or removed. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
-public class EntityChangeSet extends ArrayList<EntityChangeSetInner> implements Serializable {
+public class EntityChangeSet implements Serializable {
   private static final long serialVersionUID = 1L;
+
+  @JsonProperty("ids")
+  private List<Integer> ids = null;
+
+  public EntityChangeSet ids(List<Integer> ids) {
+    this.ids = ids;
+    return this;
+  }
+
+  public EntityChangeSet addIdsItem(Integer idsItem) {
+    if (this.ids == null) {
+      this.ids = new ArrayList<>();
+    }
+    this.ids.add(idsItem);
+    return this;
+  }
+
+   /**
+   * Get ids
+   * @return ids
+  **/
+  @ApiModelProperty(value = "")
+  public List<Integer> getIds() {
+    return ids;
+  }
+
+  public void setIds(List<Integer> ids) {
+    this.ids = ids;
+  }
 
 
   @Override
@@ -39,12 +71,13 @@ public class EntityChangeSet extends ArrayList<EntityChangeSetInner> implements 
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    return super.equals(o);
+    EntityChangeSet entityChangeSet = (EntityChangeSet) o;
+    return Objects.equals(this.ids, entityChangeSet.ids);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode());
+    return Objects.hash(ids);
   }
 
 
@@ -52,7 +85,8 @@ public class EntityChangeSet extends ArrayList<EntityChangeSetInner> implements 
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class EntityChangeSet {\n");
-    sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    
+    sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
     sb.append("}");
     return sb.toString();
   }

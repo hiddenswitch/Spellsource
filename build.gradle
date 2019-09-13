@@ -12,8 +12,14 @@ buildscript {
 
 apply plugin: 'java'
 
-import io.swagger.codegen.config.CodegenConfigurator
+
+import io.swagger.codegen.ClientOptInput
+import io.swagger.codegen.ClientOpts
 import io.swagger.codegen.DefaultGenerator
+import io.swagger.codegen.config.CodegenConfigurator
+import io.swagger.codegen.languages.CSharpClientCodegen
+import io.swagger.models.Swagger
+import io.swagger.parser.SwaggerParser
 
 task(swagger) {
     def input = "swagger-api.yaml"
@@ -46,6 +52,17 @@ task(swagger) {
 }
 
 
+class CSharpNullableGenerator extends CSharpClientCodegen {
+    @Override
+    String getTypeDeclaration(io.swagger.models.properties.Property p) {
+        def declaration = super.getTypeDeclaration(p)
+        if (!Boolean.parseBoolean(p.vendorExtensions.getOrDefault("x-nullable", "true").toString()) && declaration.contains("?")) {
+            return declaration.replaceAll("\\?", "")
+        }
+        return declaration
+    }
+}
+
 task(swaggerClient) {
     def input = "swagger-api.yaml"
     def outputDir = 'clientcsharp'
@@ -53,11 +70,10 @@ task(swaggerClient) {
     inputs.file(input)
     outputs.dir(output)
     doLast {
-        def config = new CodegenConfigurator()
+        def config = new CSharpNullableGenerator()
         config.setInputSpec(input)
         config.setOutputDir(output.path)
-        config.setLang('csharp')
-        config.setAdditionalProperties([
+        config.additionalProperties().putAll([
                 'supportFiles'           : 'false',
                 'apiTests'               : 'false',
                 'modelTests'             : 'false',
@@ -69,7 +85,13 @@ task(swaggerClient) {
                 'optionalProjectFile'    : 'false',
                 'optionalAssemblyFile'   : 'false'
         ])
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+
+        def optInput = new ClientOptInput();
+        Swagger swagger = new SwaggerParser().read(input, [], true);
+        optInput.config(config)
+                .opts(new ClientOpts())
+                .swagger(swagger)
+        new DefaultGenerator().opts(optInput).generate()
     }
 }
 
@@ -107,7 +129,7 @@ allprojects {
                 if (details.requested.module.name == 'netty-all') {
                     details.useVersion "4.1.34.Final"
                 }
-                
+
                 if (details.requested.module.name.contains('jackson-databind')) {
                     details.useVersion "2.9.9.1"
                 }
@@ -127,7 +149,7 @@ allprojects {
                 if (details.requested.group == 'commons-io') {
                     details.useVersion "2.5"
                 }
-                
+
                 if (details.requested.group == 'commons-logging') {
                     details.useVersion "1.2"
                 }

@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
@@ -66,6 +65,9 @@ public interface Games extends Verticle {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	String GAMES_PLAYERS_MAP = "Games/players";
 	String GAMES = "games";
+	Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
+			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
+			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 
 	/**
 	 * Creates a new instance of the service that maintains a list of running games.
@@ -92,11 +94,10 @@ public interface Games extends Verticle {
 				.description("A secret! This card will be revealed when a certain action occurs.")
 				.name("Secret")
 				.id(id)
-				.state(new EntityState()
-						.owner(owner)
-						.cardType(EntityState.CardTypeEnum.SPELL)
-						.heroClass(heroClass)
-						.l(toClientLocation(location)));
+				.owner(owner)
+				.cardType(Entity.CardTypeEnum.SPELL)
+				.heroClass(heroClass)
+				.l(toClientLocation(location));
 	}
 
 	/**
@@ -212,7 +213,7 @@ public interface Games extends Verticle {
 											.description(battlecryDescription);
 								}
 
-								entity.id(id).getState().playable(true)
+								entity.id(id).playable(true)
 										.l(Games.toClientLocation(sourceCardLocation));
 
 								summon.addEntitiesItem(entity);
@@ -268,8 +269,7 @@ public interface Games extends Verticle {
 								Entity entity = Games.getEntity(workingContext, sourceCard, playerId);
 								String battlecryDescription = sourceCard.getBattlecryDescription(key);
 								entity.id(id)
-										.description(battlecryDescription)
-										.getState().playable(true)
+										.description(battlecryDescription).playable(true)
 										.l(Games.toClientLocation(sourceCardLocation));
 
 								hero.addEntitiesItem(entity);
@@ -405,7 +405,7 @@ public interface Games extends Verticle {
 
 			// Use the source card location
 			entity.id(id)
-					.getState().playable(true)
+					.playable(true)
 					.l(Games.toClientLocation(sourceCardLocation));
 			SpellAction choiceSpell = getSpellAction(id, choiceActions);
 
@@ -791,10 +791,9 @@ public interface Games extends Verticle {
 			com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(secret.getId())
 					.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.SECRET)
-					.state(new EntityState()
-							.owner(secret.getOwner())
-							.heroClass(secret.getSourceCard().getHeroClass().toString())
-							.l(Games.toClientLocation(secret.getEntityLocation())));
+					.owner(secret.getOwner())
+					.heroClass(secret.getSourceCard().getHeroClass())
+					.l(Games.toClientLocation(secret.getEntityLocation()));
 			opposingSecrets.add(entity);
 		}
 
@@ -814,13 +813,12 @@ public interface Games extends Verticle {
 					.id(player.getId())
 					.name(player.getName())
 					.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.PLAYER)
-					.state(new EntityState()
-							.owner(player.getId())
-							.lockedMana(player.getLockedMana())
-							.maxMana(player.getMaxMana())
-							.mana(player.getMana())
-							.l(Games.toClientLocation(player.getEntityLocation()))
-							.gameStarted(player.hasAttribute(Attribute.GAME_STARTED)));
+					.owner(player.getId())
+					.lockedMana(player.getLockedMana())
+					.maxMana(player.getMaxMana())
+					.mana(player.getMana())
+					.l(Games.toClientLocation(player.getEntityLocation()))
+					.gameStarted(player.hasAttribute(Attribute.GAME_STARTED));
 			playerEntities.add(playerEntity);
 			// The heroes may have wound up in the graveyard
 			com.hiddenswitch.spellsource.client.models.Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
@@ -830,7 +828,7 @@ public interface Games extends Verticle {
 			}
 
 			// Include the player's mana, locked mana and max mana in the hero entity for convenience
-			heroEntity.getState()
+			heroEntity
 					.mana(player.getMana())
 					.maxMana(player.getMaxMana())
 					.lockedMana(player.getLockedMana());
@@ -864,7 +862,7 @@ public interface Games extends Verticle {
 				.map(h -> {
 					Entity e = getEntity(workingContext, h, localPlayerId);
 					Player owner = h.getOwner() == local.getId() ? local : opponent;
-					e.getState()
+					e
 							.mana(owner.getMana())
 							.maxMana(owner.getMaxMana())
 							.lockedMana(owner.getLockedMana());
@@ -875,13 +873,17 @@ public interface Games extends Verticle {
 				.collect(toList());
 		entities.addAll(graveyardHeroes);
 
+		// Include local set aside zone
+		entities.addAll(local.getSetAsideZone().stream()
+				.map(c -> getEntity(workingContext, c, localPlayerId))
+				.collect(toList()));
+
 		// Any missing entities will get a stand-in entry
 		Set<Integer> visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
 		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId())).map(e -> new com.hiddenswitch.spellsource.client.models.Entity()
 				.id(e.getId())
-				.cardId("hidden")
-				.state(new EntityState()
-						.l(toClientLocation(e.getEntityLocation())))
+				.owner(e.getOwner())
+				.l(toClientLocation(e.getEntityLocation()))
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(toList()));
 
 		// Sort the entities by ID
@@ -943,7 +945,6 @@ public interface Games extends Verticle {
 		}
 
 		Card card = actor.getSourceCard();
-		EntityState entityState = new EntityState();
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
 				.description(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
 				.name(actor.getName())
@@ -952,35 +953,35 @@ public interface Games extends Verticle {
 
 		if (actor instanceof Minion) {
 			entity.setEntityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.MINION);
-			entityState.boardPosition(actor.getEntityLocation().getIndex());
+			entity.boardPosition(actor.getEntityLocation().getIndex());
 		} else if (actor instanceof Hero) {
 			entity.setEntityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.HERO);
-			entityState.armor(actor.getArmor());
+			entity.armor(actor.getArmor());
 		} else if (actor instanceof Weapon) {
 			entity.setEntityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.WEAPON);
 		}
 
-		entityState.owner(actor.getOwner());
-		entityState.l(Games.toClientLocation(actor.getEntityLocation()));
-		entityState.manaCost(card.getBaseManaCost());
-		entityState.heroClass(card.getHeroClass().toString());
-		entityState.cardSet(Objects.toString(card.getCardSet()));
-		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
-		entityState.baseManaCost(card.getBaseManaCost());
-		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
-		entityState.deathrattles(!actor.getDeathrattles().isEmpty());
+		entity.owner(actor.getOwner());
+		entity.l(Games.toClientLocation(actor.getEntityLocation()));
+		entity.manaCost(card.getBaseManaCost());
+		entity.heroClass(card.getHeroClass().toString());
+		entity.cardSet(Objects.toString(card.getCardSet()));
+		entity.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
+		entity.baseManaCost(card.getBaseManaCost());
+		entity.silenced(actor.hasAttribute(Attribute.SILENCED));
+		entity.deathrattles(!actor.getDeathrattles().isEmpty());
 		boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
 				&& actor.getOwner() == localPlayerId
 				&& workingContext.getStatus() == GameStatus.RUNNING
 				&& actor.canAttackThisTurn();
-		entityState.playable(playable);
-		entityState.attack(actor.getAttack());
-		entityState.baseAttack(actor.getBaseAttack());
-		entityState.baseHp(actor.getBaseHp());
-		entityState.hp(actor.getHp());
-		entityState.maxHp(actor.getMaxHp());
-		entityState.heroClass(actor.getHeroClass().toString());
-		entityState.underAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
+		entity.playable(playable);
+		entity.attack(actor.getAttack());
+		entity.baseAttack(actor.getBaseAttack());
+		entity.baseHp(actor.getBaseHp());
+		entity.hp(actor.getHp());
+		entity.maxHp(actor.getMaxHp());
+		entity.heroClass(actor.getHeroClass().toString());
+		entity.underAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
 				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)
 				|| actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)
@@ -989,28 +990,27 @@ public interface Games extends Verticle {
 				|| actor.hasAttribute(Attribute.ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
-		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
-		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
-		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.AURA_IMMUNE));
-		entityState.stealth(actor.hasAttribute(Attribute.STEALTH) || actor.hasAttribute(Attribute.AURA_STEALTH));
-		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) || actor.hasAttribute(Attribute.AURA_TAUNT));
-		entityState.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
-		entityState.deflect(actor.hasAttribute(Attribute.DEFLECT));
-		entityState.enraged(actor.hasAttribute(Attribute.ENRAGED));
-		entityState.destroyed(actor.hasAttribute(Attribute.DESTROYED));
-		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
-		entityState.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE) + actor.getAttributeValue(Attribute.AURA_SPELL_DAMAGE));
-		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY) || actor.hasAttribute(Attribute.AURA_WINDFURY));
-		entityState.lifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.AURA_LIFESTEAL));
-		entityState.poisonous(actor.hasAttribute(Attribute.POISONOUS) || actor.hasAttribute(Attribute.AURA_POISONOUS));
-		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
-		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
-		entityState.permanent(actor.hasAttribute(Attribute.PERMANENT));
-		entityState.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
-		entityState.tribe(actor.getRace());
+		entity.frozen(actor.hasAttribute(Attribute.FROZEN));
+		entity.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
+		entity.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.AURA_IMMUNE));
+		entity.stealth(actor.hasAttribute(Attribute.STEALTH) || actor.hasAttribute(Attribute.AURA_STEALTH));
+		entity.taunt(actor.hasAttribute(Attribute.TAUNT) || actor.hasAttribute(Attribute.AURA_TAUNT));
+		entity.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
+		entity.deflect(actor.hasAttribute(Attribute.DEFLECT));
+		entity.enraged(actor.hasAttribute(Attribute.ENRAGED));
+		entity.destroyed(actor.hasAttribute(Attribute.DESTROYED));
+		entity.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
+		entity.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE) + actor.getAttributeValue(Attribute.AURA_SPELL_DAMAGE));
+		entity.windfury(actor.hasAttribute(Attribute.WINDFURY) || actor.hasAttribute(Attribute.AURA_WINDFURY));
+		entity.lifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.AURA_LIFESTEAL));
+		entity.poisonous(actor.hasAttribute(Attribute.POISONOUS) || actor.hasAttribute(Attribute.AURA_POISONOUS));
+		entity.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
+		entity.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+		entity.permanent(actor.hasAttribute(Attribute.PERMANENT));
+		entity.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
+		entity.tribe(actor.getRace());
 		List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
-		entityState.hostsTrigger(triggers.size() > 0);
-		entity.state(entityState);
+		entity.hostsTrigger(triggers.size() > 0);
 		return entity;
 	}
 
@@ -1045,13 +1045,12 @@ public interface Games extends Verticle {
 			entityType = Entity.EntityTypeEnum.ENCHANTMENT;
 		}
 
-		entity.getState()
+		entity
 				.fires(enchantment.getFires())
 				.countUntilCast(enchantment.getCountUntilCast());
 
 		entity.id(enchantment.getId())
 				.entityType(entityType)
-				.getState()
 				.l(Games.toClientLocation(enchantment.getEntityLocation()))
 				.owner(enchantment.getOwner())
 				.playable(false);
@@ -1078,7 +1077,6 @@ public interface Games extends Verticle {
 				.name(card.getName())
 				.id(card.getId())
 				.cardId(card.getCardId());
-		EntityState entityState = new EntityState();
 		int owner = card.getOwner();
 		Player owningPlayer;
 		String description = card.getDescription();
@@ -1090,34 +1088,37 @@ public interface Games extends Verticle {
 				boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
-				entityState.playable(playable);
-				entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
+				entity.playable(playable);
+				entity.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
 			} else {
-				entityState.playable(false);
-				entityState.manaCost(card.getBaseManaCost());
+				entity.playable(false);
+				entity.manaCost(card.getBaseManaCost());
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 
 			description = card.getDescription(workingContext, owningPlayer);
 		} else {
-			entityState.playable(false);
-			entityState.manaCost(card.getBaseManaCost());
+			entity.playable(false);
+			entity.manaCost(card.getBaseManaCost());
+			entity.owner(localPlayerId);
 			owningPlayer = Player.empty();
 		}
 
 		entity.description(description.replace("$", "").replace("#", "")
 				.replace("[", "").replace("]", ""));
 
-		entityState.owner(card.getOwner());
-		entityState.cardSet(Objects.toString(card.getCardSet()));
-		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
-		entityState.l(Games.toClientLocation(card.getEntityLocation()));
-		entityState.baseManaCost(card.getBaseManaCost());
-		entityState.uncensored(card.hasAttribute(Attribute.UNCENSORED));
-		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
-		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
-		entityState.permanent(card.hasAttribute(Attribute.PERMANENT));
-		entityState.collectible(card.isCollectible());
+		entity.owner(card.getOwner());
+		entity.cardSet(Objects.toString(card.getCardSet()));
+		entity.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
+		entity.l(Games.toClientLocation(card.getEntityLocation()));
+		entity.baseManaCost(card.getBaseManaCost());
+		entity.uncensored(card.hasAttribute(Attribute.UNCENSORED));
+		entity.battlecry(card.hasAttribute(Attribute.BATTLECRY));
+		entity.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
+		entity.permanent(card.hasAttribute(Attribute.PERMANENT));
+		entity.collectible(card.isCollectible());
+		entity.discarded(card.hasAttribute(Attribute.DISCARDED));
+		entity.roasted(card.hasAttribute(Attribute.ROASTED));
 		// TODO: A little too underperformant so we're going to skip this
 		// entityState.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
 		String heroClass = card.getHeroClass();
@@ -1127,8 +1128,8 @@ public interface Games extends Verticle {
 			heroClass = HeroClass.ANY;
 		}
 
-		entityState.heroClass(heroClass.toString());
-		entityState.cardType(EntityState.CardTypeEnum.valueOf(card.getCardType().toString()));
+		entity.heroClass(heroClass);
+		entity.cardType(Entity.CardTypeEnum.valueOf(card.getCardType().toString()));
 		boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file -doombubbles
@@ -1137,30 +1138,30 @@ public interface Games extends Verticle {
 				// Retrieve the weapon attack
 				Card weapon = card.getWeapon();
 				if (weapon != null) {
-					entityState.attack(weapon.getBaseDamage());
+					entity.attack(weapon.getBaseDamage());
 				}
-				entityState.armor(card.getArmor());
+				entity.armor(card.getArmor());
 				break;
 			case MINION:
-				entityState.attack(card.getAttack() + card.getBonusAttack() + card.getAttributeValue(Attribute.AURA_ATTACK_BONUS));
-				entityState.baseAttack(card.getBaseAttack());
-				entityState.baseManaCost(card.getBaseManaCost());
-				entityState.hp(card.getHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
-				entityState.baseHp(card.getBaseHp());
-				entityState.maxHp(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
-				entityState.underAura(card.getBonusAttack() > 0
+				entity.attack(card.getAttack() + card.getBonusAttack() + card.getAttributeValue(Attribute.AURA_ATTACK_BONUS));
+				entity.baseAttack(card.getBaseAttack());
+				entity.baseManaCost(card.getBaseManaCost());
+				entity.hp(card.getHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
+				entity.baseHp(card.getBaseHp());
+				entity.maxHp(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
+				entity.underAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
-				entityState.tribe(card.getRace());
+				entity.tribe(card.getRace());
 				// Include handbuffs from WhereverTheyAre enchantments. Also use this for other effects!
-				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entityState);
+				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entity);
 				break;
 			case WEAPON:
-				entityState.durability(card.getDurability());
-				entityState.hp(card.getDurability());
-				entityState.maxHp(card.getBaseDurability() + card.getBonusDurability());
-				entityState.attack(card.getDamage() + card.getBonusDamage());
-				entityState.underAura(card.getBonusDamage() > 0
+				entity.durability(card.getDurability());
+				entity.hp(card.getDurability());
+				entity.maxHp(card.getBaseDurability() + card.getBonusDurability());
+				entity.attack(card.getDamage() + card.getBonusDamage());
+				entity.underAura(card.getBonusDamage() > 0
 						|| card.getBonusDurability() > 0
 						|| hostsTrigger);
 				break;
@@ -1186,25 +1187,24 @@ public interface Games extends Verticle {
 					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);
 				}
 				*/
-				entityState.underAura(spellpowerDamage > damage
+				entity.underAura(spellpowerDamage > damage
 						|| hostsTrigger);
-				entityState.spellDamage(spellpowerDamage);
+				entity.spellDamage(spellpowerDamage);
 				break;
 			case CHOOSE_ONE:
 				// TODO: Handle choose one cards
 				break;
 			case CLASS:
-				entityState.blackText(card.isBlackText());
+				entity.blackText(card.isBlackText());
 				if (card.getColor() != null) {
-					entityState.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
+					entity.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
 				}
 				break;
 			case FORMAT:
-				entityState.cardSets(Arrays.asList(card.getCardSets()));
+				entity.cardSets(Arrays.asList(card.getCardSets()));
 				break;
 		}
 
-		entity.state(entityState);
 		return entity;
 	}
 
@@ -1217,8 +1217,7 @@ public interface Games extends Verticle {
 	static com.hiddenswitch.spellsource.client.models.EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
 		return new com.hiddenswitch.spellsource.client.models.EntityLocation()
 				.z(com.hiddenswitch.spellsource.client.models.EntityLocation.ZEnum.valueOf(location.getZone().getSerialized()))
-				.i(location.getIndex())
-				.p(location.getPlayer());
+				.i(location.getIndex());
 	}
 
 	/**
@@ -1235,43 +1234,16 @@ public interface Games extends Verticle {
 	/**
 	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
 	 *
-	 * @param gameStateOld
 	 * @param gameStateNew
 	 * @return
 	 */
 	static EntityChangeSet computeChangeSet(
-			com.hiddenswitch.spellsource.common.GameState gameStateOld,
 			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
-		MapDifference<Integer, EntityLocation> difference;
-		if (gameStateOld == null) {
-			difference = gameStateNew.start();
-		} else {
-			difference = gameStateOld.to(gameStateNew);
-		}
-
-		EntityChangeSet changes = new EntityChangeSet();
-		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
-				.id(i.getKey())
-				.op(EntityChangeSetInner.OpEnum.C)
-				.p1(new EntityState()
-						.l(Games.toClientLocation(i.getValue().rightValue())))
-				.p0(new EntityState()
-						.l(Games.toClientLocation(i.getValue().leftValue()))))
-				.forEach(changes::add);
-
-		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
-				.op(EntityChangeSetInner.OpEnum.A)
-				.p1(new EntityState()
-						.l(Games.toClientLocation(i.getValue()))))
-				.forEach(changes::add);
-
-		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
-				.op(EntityChangeSetInner.OpEnum.R)
-				.p1(new EntityState()
-						.l(Games.toClientLocation(i.getValue()))))
-				.forEach(changes::add);
-
-		return changes;
+		// TODO: Return array of indices
+		return new EntityChangeSet().ids(Stream.concat(gameStateNew.getPlayer1().getLookup().values().stream(), gameStateNew.getPlayer2().getLookup().values().stream())
+				.sorted(ENTITY_NATURAL_ORDER)
+				.map(net.demilich.metastone.game.entities.Entity::getId)
+				.collect(Collectors.toList()));
 	}
 
 	/**
@@ -1299,11 +1271,11 @@ public interface Games extends Verticle {
 
 			com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
 			ReplayDeltas delta = new ReplayDeltas();
-			delta.forward(computeChangeSet(gameStateOld.get(), gameStateNew));
+			delta.forward(computeChangeSet(gameStateNew));
 			if (gameStateOld.get() != null) {
 				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
 				// backward populated.
-				delta.backward(computeChangeSet(gameStateNew, gameStateOld.get()));
+				delta.backward(computeChangeSet(gameStateOld.get()));
 			}
 			replay.addDeltasItem(delta);
 
@@ -1335,7 +1307,7 @@ public interface Games extends Verticle {
 	 * @param entity
 	 * @param state
 	 */
-	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId, @NotNull net.demilich.metastone.game.entities.Entity entity, @NotNull EntityState state) {
+	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId, @NotNull net.demilich.metastone.game.entities.Entity entity, @NotNull Entity state) {
 		int attackBonus = 0;
 		int hpBonus = 0;
 		boolean hasTaunt = false;

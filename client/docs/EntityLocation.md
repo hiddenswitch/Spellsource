@@ -4,9 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**p** | **Integer** |  | 
-**i** | **Integer** |  | 
-**z** | [**ZEnum**](#ZEnum) |  | 
+**i** | **Integer** | The index of the entity inside its zone.  | 
+**z** | [**ZEnum**](#ZEnum) | The zone this entity belongs to.  | 
 
 
 <a name="ZEnum"></a>
