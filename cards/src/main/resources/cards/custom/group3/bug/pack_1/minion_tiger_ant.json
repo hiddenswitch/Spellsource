@@ -1,6 +1,6 @@
 {
   "name": "Tiger Ant",
-  "baseManaCost": 10,
+  "baseManaCost": 12,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 6,
