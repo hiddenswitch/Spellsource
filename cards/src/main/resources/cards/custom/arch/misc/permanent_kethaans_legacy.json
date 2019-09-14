@@ -1,0 +1,29 @@
+
+{
+  "name": "Kethaan's Legacy",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you summon an Elemental, give it +2/+2.",
+ "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "ELEMENTAL",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 2,
+      "hpBonus": 2
+             }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
