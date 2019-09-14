@@ -4,7 +4,7 @@
   "type": "MINION",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "JADE",
+  "heroClass": "LIGHTBROWN",
   "rarity": "LEGENDARY",
   "description": "After you summon an Elemental, give it +2/+2. Aftermath: Become a permanent with this effect.",
   "trigger": {
