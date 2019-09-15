@@ -1,0 +1,42 @@
+{
+  "name": "Tall Tales",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "EPIC",
+  "description": "Summon a 3/3 Skeptic for each other spell you've cast this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_skeptic",
+    "value": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider",
+                "offset": -1
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
