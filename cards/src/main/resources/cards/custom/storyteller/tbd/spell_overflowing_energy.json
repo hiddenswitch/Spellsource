@@ -1,6 +1,6 @@
 {
   "name": "Overflowing Energy",
-  "baseManaCost": 5,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "EPIC",
