@@ -22,9 +22,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * <pre>
  *   "trigger": {
  *     "eventTrigger": {
- *       "class": "AfterPhysicalAttackTrigger",
- *       "hostTargetType": "IGNORE_OTHER_SOURCES",
- *       "targetEntityType": "MINION"
+ *     	  "class": "DamageCausedTrigger",
+ *       "hostTargetType": "IGNORE_OTHER_SOURCES"
  *     },
  *     "spell": {
  *       "class": "OverkillSpell",
@@ -71,7 +70,6 @@ public class OverkillSpell extends DamageSpell {
 					spell.put(SpellArg.VALUE, Math.abs(minion.getHp()));
 				}
 				context.getLogic().castSpell(player.getId(), spell, source.getReference(), target.getReference(), true);
-
 			}
 		}
 	}

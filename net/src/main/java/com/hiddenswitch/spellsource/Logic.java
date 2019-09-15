@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -93,9 +94,7 @@ public interface Logic {
 				GameEventType.BEFORE_SUMMON,
 				Attribute.UNIQUE_CHAMPION_IDS_SIZE,
 				(PersistenceContext<BeforeSummonEvent> context) -> {
-					if (context.event().getMinion() == null
-							|| context.event().getSource() == null
-							|| context.event().getSource().getCardInventoryId() == null) {
+					if (context.event().getSource().getCardInventoryId() == null) {
 						return;
 					}
 
@@ -122,18 +121,6 @@ public interface Logic {
 					if (lowestAttackMinionStillOnBattlefield.isPresent()
 							&& victim.getAttack() < lowestAttackMinionStillOnBattlefield.get().getAttack()) {
 						context.update(victim.getReference(), victim.getAttributeValue(Attribute.WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT) + 1);
-					}
-				}
-		);
-
-		Spellsource.spellsource().trigger(
-				"has-rafaam-archivist-deck-1",
-				TurnStartTrigger.create(TargetPlayer.BOTH),
-				(context, player, desc, source, target) -> {
-					final String userId = player.getUserId();
-
-					if (Mongo.mongo().count(Inventory.COLLECTIONS, json("userId", userId, "name", "The Supreme Archive")) > 0L) {
-						player.setAttribute(Attribute.HAS_SUPREME_ARCHIVE_DECK);
 					}
 				}
 		);
@@ -243,14 +230,15 @@ public interface Logic {
 	@Suspendable
 	static PersistAttributeResponse persistAttribute(PersistAttributeRequest request) {
 		final String attributeName = request.getAttribute().toKeyCase();
-		MongoClientUpdateResult update = Inventory.update(Mongo.mongo().client(), request.getInventoryIds(), json(
-				"$set", json("facts." + attributeName, request.getNewValue()))
-		);
+		MongoClientUpdateResult update = Mongo.mongo().updateCollectionWithOptions(Inventory.INVENTORY, json("_id", json("$in", request.getInventoryIds())), json(
+				"$set", json("facts." + attributeName, request.getNewValue())), new UpdateOptions().setMulti(true));
 		return new PersistAttributeResponse().withUpdated(update.getDocModified());
 	}
 
 	/**
 	 * Retrieves a deck of a specific name from the player's collection.
+	 * <p>
+	 * The search is case insensitive
 	 *
 	 * @param logicGetDeckRequest The request specifying the name and user ID of the player whose collection should be
 	 *                            queried.
@@ -260,7 +248,7 @@ public interface Logic {
 	static GetCollectionResponse getDeck(LogicGetDeckRequest logicGetDeckRequest) {
 		// Looks up a deck by name
 		List<JsonObject> collections = Mongo.mongo().findWithOptions(Inventory.COLLECTIONS,
-				json("userId", logicGetDeckRequest.getUserId().toString(), "name", logicGetDeckRequest.getName()),
+				json("userId", logicGetDeckRequest.getUserId().toString(), "name", json("$regex", "^" + logicGetDeckRequest.getName() + "$", "$options", "i")),
 				new FindOptions().setFields(json("_id", 1)));
 
 		if (collections.size() == 0) {

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -46,7 +47,7 @@ import java.util.Map;
  * {@code SpellDesc} instance because in some {@code #init(SerializationContext)}, an arg (like {@link SpellArg#SPELL})
  * is configured to be of type {@link ParseValueType#SPELL}.
  * <p>
- * Then, a field like {@code "class"} is known to be the "class arg" and is {@link SpellDesc#put(Enum, Object)} with
+ * Then, a field like {@code "class"} is known to be the "class arg" and is {@code put} with
  * {@link SpellArg#CLASS} as the key and a {@link Class} instance as a value. For a field like {@code "value"}, it is
  * turned into {@code UPPER_CASE} (so {@code "VALUE"}) and simply passed to {@link Enum#valueOf(Class, String)} to find
  * the corresponding enum constant to use as the key. The {@code init} implementation specifies that {@link
@@ -96,13 +97,13 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 
 	@SuppressWarnings("unchecked")
 	public T deserialize(com.fasterxml.jackson.core.JsonParser p, DeserializationContext ctxt) throws IOException {
-		JsonNode node = p.readValueAsTree();
+		JsonNode node = ctxt.readValue(p, JsonNode.class);
 
 		return innerDeserialize(ctxt, node);
 	}
 
 	@SuppressWarnings("unchecked")
-	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) {
+	public T innerDeserialize(DeserializationContext ctxt, JsonNode node) throws JsonMappingException {
 		T inst = createDescInstance();
 		final String suppliedClassName = node.get("class").asText();
 		String[] spellClassNames = new String[]{getAbstractComponentClass().getPackage().getName() + "." + suppliedClassName, getAbstractComponentClass().getPackage().getName() + ".custom." + suppliedClassName};
@@ -116,7 +117,7 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 		}
 
 		if (spellClass == null) {
-			throw new RuntimeException("parser encountered an invalid class: " + suppliedClassName);
+			throw ctxt.weirdStringException(suppliedClassName, getAbstractComponentClass(), "parser encountered an invalid class");
 		}
 
 

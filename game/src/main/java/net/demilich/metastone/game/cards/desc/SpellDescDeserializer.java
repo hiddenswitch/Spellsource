@@ -54,7 +54,8 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.NAME, ParseValueType.STRING);
 		ctx.add(SpellArg.OPERATION, ParseValueType.ALGEBRAIC_OPERATION);
 		ctx.add(SpellArg.QUEST, ParseValueType.QUEST);
-		ctx.add(SpellArg.RACE, ParseValueType.RACE);
+		ctx.add(SpellArg.PACT, ParseValueType.QUEST);
+		ctx.add(SpellArg.RACE, ParseValueType.STRING);
 		ctx.add(SpellArg.RANDOM_TARGET, ParseValueType.BOOLEAN);
 		ctx.add(SpellArg.REVERT_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(SpellArg.SECRET, ParseValueType.SECRET);
@@ -62,6 +63,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.SECONDARY_NAME, ParseValueType.STRING);
 		ctx.add(SpellArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(SpellArg.SECONDARY_VALUE, ParseValueType.VALUE);
+		ctx.add(SpellArg.SOURCE, ParseValueType.TARGET_REFERENCE);
 		ctx.add(SpellArg.SPELL, ParseValueType.SPELL);
 		ctx.add(SpellArg.SPELL1, ParseValueType.SPELL);
 		ctx.add(SpellArg.SPELL2, ParseValueType.SPELL);

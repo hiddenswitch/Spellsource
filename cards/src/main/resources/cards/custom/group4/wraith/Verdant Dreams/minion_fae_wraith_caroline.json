@@ -1,0 +1,27 @@
+{
+  "name": "Fae-Wraith Caroline",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Guard. Opener: Draw a card. Aftermath: Shuffle this into your deck",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "deathrattle": {
+    "class": "ShuffleMinionToDeckSpell",
+    "target": "SELF"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

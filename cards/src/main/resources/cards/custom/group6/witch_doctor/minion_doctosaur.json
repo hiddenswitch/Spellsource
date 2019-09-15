@@ -2,7 +2,7 @@
   "name": "Doctosaur",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "ROSE",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "RARE",

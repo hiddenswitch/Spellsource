@@ -1,0 +1,28 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Opener: Give a friendly Fae +1/+1.",
+  "race": "FAE",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "value": 1,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "FAE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

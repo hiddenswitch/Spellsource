@@ -2,25 +2,29 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.client.models.ClientToServerMessage;
 import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
-import com.hiddenswitch.spellsource.impl.ConnectionImpl;
-import com.hiddenswitch.spellsource.impl.EnvelopeMessageCodec;
-import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.impl.*;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,38 +37,37 @@ import static java.util.stream.Collectors.toList;
 /**
  * Manages the real time data connection users get when they connect to the Spellsource server.
  * <p>
- * To set up a behaviour that uses the real time connect, use {@link Connection#connected(SetupHandler)}, which passes you a
- * new connection to a unique user. For <b>example</b>, this code from the {@link Presence} package notifies users of
- * their presence.
+ * To set up a behaviour that uses the real time connect, use {@link Connection#connected(SetupHandler)}, which passes
+ * you a new connection to a unique user. For <b>example</b>, this code from the {@link Presence} package notifies users
+ * of their presence.
  * <pre>
  *   {@code
  *     Connection.connected(Sync.suspendableHandler(connection -> {
  * 	  		final UserId key = new UserId(connection.userId());
  * 	  		connection.endHandler(Sync.suspendableHandler(ignored -> {
  * 	  			setPresence(key, PresenceEnum.OFFLINE);
- * 	  		}));
+ *        }));
  *
  * 	  		// Once the user is connected, set their status to online
  * 	  		setPresence(key, PresenceEnum.ONLINE);
- * 	   }));
+ *     }));
  * 	   ...
  * 	   static void setPresence(String userId) {
  * 	   	final UserId key = new UserId(userId);
  * 	   	Connection.writeStream(userId, res -> {
  * 	   		if (res.failed() || res.result() == null) {
  * 	   			setPresence(key, PresenceEnum.OFFLINE);
- * 	   		} else {
+ *        } else {
  * 	   			setPresence(key, PresenceEnum.ONLINE);
- * 	   		}
- * 	   	});
- * 	   }
+ *        }
+ *      });
+ *     }
  *   }
  * </pre>
  * Observe the use of the {@link Connection#writeStream(String)}}, which allows any code anywhere to send a message to a
  * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
-	Logger LOGGER = LoggerFactory.getLogger(Connection.class);
 	Map<String, Boolean> CODECS_REGISTERED = new ConcurrentHashMap<>();
 
 	/**
@@ -76,7 +79,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	static @NotNull
 	WriteStream<Envelope> writeStream(@NotNull String userId) {
-		return Vertx.currentContext().owner().eventBus().publisher(toBusAddress(userId), new DeliveryOptions().setCodecName("envelope"));
+		return Vertx.currentContext().owner().eventBus().publisher(toBusAddress(userId));
 	}
 
 	static @NotNull
@@ -97,7 +100,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	static String toBusAddress(String userId) {
-		return "Connection::clusteredConsumer[" + userId + "]";
+		return "Connection/clusteredConsumer/" + userId;
 	}
 
 	/**
@@ -107,7 +110,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @param handler
 	 */
 	static void close(String userId, Handler<AsyncResult<Void>> handler) {
-		Vertx.currentContext().owner().eventBus().send(Connection.toBusAddress(userId) + "::closer", Buffer.buffer("close"), res -> {
+		Vertx.currentContext().owner().eventBus().send(Connection.toBusAddress(userId) + "/closer", Buffer.buffer("close"), res -> {
 			if (res.failed()) {
 				handler.handle(Future.failedFuture(res.cause()));
 				return;
@@ -134,24 +137,13 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	static Deque<SetupHandler> getHandlers() {
 		Vertx vertx = Vertx.currentContext().owner();
 		final Context context = vertx.getOrCreateContext();
-		Deque<SetupHandler> handlers = context.get("Connection::handlers");
+		Deque<SetupHandler> handlers = context.get("Connection/handlers");
 
 		if (handlers == null) {
 			handlers = new ConcurrentLinkedDeque<>();
-			context.put("Connection::handlers", handlers);
+			context.put("Connection/handlers", handlers);
 		}
 		return handlers;
-	}
-
-	/**
-	 * Obtains the unique lock for the user to prevent the user from calling more than one method at a time.
-	 *
-	 * @param userId
-	 * @return
-	 */
-	@Suspendable
-	static SuspendableLock methodLock(String userId) {
-		return SuspendableLock.lock("Connection::method-ordering-lock[" + userId + "]");
 	}
 
 	/**
@@ -178,42 +170,52 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		ServerWebSocket socket;
 
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("Connection/connected")
+				.withTag("userId", userId)
+				.start();
+		SpanContext spanContext = span.context();
+
 		// By the time we try to upgrade the socket, the request might have been closed anyway
 		try {
-			LOGGER.debug("connection {}: Upgrading socket", userId);
+			span.log("upgrading");
 			socket = routingContext.request().upgrade();
+			span.log("upgraded");
 		} catch (RuntimeException any) {
-			LOGGER.error("connected {}: {}", userId, any.getMessage());
 			routingContext.fail(403);
 			return;
 		}
 
-		LOGGER.debug("connection {}: Socket upgraded", userId);
-
 		Deque<SetupHandler> handlers = getHandlers();
 		Connection connection = create(userId);
 
-		LOGGER.debug("connection {}: Connection created", userId);
 		try {
-			Void ready = awaitResult(h -> connection.setSocket(socket, h));
-			connection.endHandler(suspendableHandler(v -> {
-				LOGGER.debug("connection {}: Connection closed", userId);
-			}));
+			Void ready = awaitResult(h -> {
+				connection.setSocket(socket, h, spanContext);
+				span.log("ready");
+			});
+
+			connection.endHandler(v -> span.finish());
 			connection.exceptionHandler(ex -> {
-				LOGGER.error("connection exceptionHandler {}: {}", userId, ex.getMessage(), ex);
+				// Wrap this so we can see where it actually occurs
+				if (!(ex instanceof IOException)) {
+					Tracing.error(new VertxException(ex), span, false);
+				}
+				connection.close(Future.future());
 			});
 			// All handlers should run simultaneously but we'll wait until the handlers have run
 			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
 				Future<Void> fut = Future.future();
-				Vertx.currentContext().runOnContext(v -> setupHandler.handle(connection, fut));
+				Vertx.currentContext().runOnContext(v -> {
+					span.log("setupHandler");
+					setupHandler.handle(connection, fut);
+				});
 				return fut;
 			}).collect(toList())).setHandler(h));
-
-			LOGGER.debug("connection {}: Connection ready", userId);
 			// Send an envelope to indicate that the connection is ready.
 			connection.write(new Envelope());
-		} catch (Throwable any) {
-			LOGGER.error("connected {}: {}", userId, any.getMessage(), any);
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
 			// This also closes the socket and cleans up its handlers
 			connection.close(Future.future());
 		}
@@ -225,8 +227,18 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	static void registerCodecs() {
 		Vertx owner = Vertx.currentContext().owner();
-		if (CODECS_REGISTERED.putIfAbsent(((VertxInternal) owner).getNodeID(), true) == null) {
+		String nodeId;
+
+		if (((VertxInternal) owner).getClusterManager() == null) {
+			nodeId = owner.toString();
+		} else {
+			nodeId = ((VertxInternal) owner).getNodeID();
+		}
+
+		if (CODECS_REGISTERED.putIfAbsent(nodeId, true) == null) {
 			owner.eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
+			owner.eventBus().registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
+			owner.eventBus().registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
 		}
 	}
 
@@ -235,12 +247,13 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 *
 	 * @param socket
 	 * @param readyHandler
+	 * @param spanContext  An optional SpanContext for instrumentation
 	 */
-	void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler);
+	void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler, @Nullable SpanContext spanContext);
 
 	@Override
 	default Connection exceptionHandler(Handler<Throwable> handler) {
-		return null;
+		return this;
 	}
 
 	/**
@@ -251,7 +264,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	@Override
 	default Connection write(@NotNull Envelope data) {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -260,7 +273,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection setWriteQueueMaxSize(int maxSize) {
-		return null;
+		return this;
 	}
 
 	@Override
@@ -270,27 +283,27 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Override
 	default Connection drainHandler(Handler<Void> handler) {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection handler(Handler<Envelope> handler) {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection pause() {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection resume() {
-		return null;
+		return this;
 	}
 
 	@Override
 	default Connection endHandler(Handler<Void> endHandler) {
-		return null;
+		return this;
 	}
 
 	/**

@@ -1,0 +1,22 @@
+{
+  "name": "Woeful Soul",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Aftermath: Restore #4 health to your champion.",
+  "deathrattle": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 4
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

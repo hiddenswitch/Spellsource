@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.client.models.Entity;
+import com.hiddenswitch.spellsource.client.models.EntityState;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
@@ -9,6 +11,7 @@ import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -26,7 +29,7 @@ public final class GetCollectionResponse implements Serializable {
 	private List<GetCollectionResponse> responses;
 	private List<InventoryRecord> inventoryRecords;
 	private CollectionTypes collectionType;
-	private HeroClass heroClass;
+	private String heroClass;
 	private String name;
 	private String collectionId;
 	private String userId;
@@ -52,7 +55,7 @@ public final class GetCollectionResponse implements Serializable {
 				.withCollectionType(CollectionTypes.USER);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, HeroClass heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
+	public static GetCollectionResponse deck(String userId, String deckId, String name, String heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
 		return new GetCollectionResponse()
 				.withTrashed(trashed)
 				.withCollectionType(CollectionTypes.DECK)
@@ -92,11 +95,11 @@ public final class GetCollectionResponse implements Serializable {
 		this.inventoryRecords = inventoryRecords;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -105,7 +108,7 @@ public final class GetCollectionResponse implements Serializable {
 		return this;
 	}
 
-	public GetCollectionResponse withHeroClass(final HeroClass heroClass) {
+	public GetCollectionResponse withHeroClass(final String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}
@@ -187,7 +190,7 @@ public final class GetCollectionResponse implements Serializable {
 			displayName = getName();
 		}
 
-		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
+		final String fakeHeroClass = getHeroClass() == null ? "RED" : getHeroClass();
 		GameContext emptyContext = new GameContext(fakeHeroClass, fakeHeroClass);
 
 		List<InventoryRecord> inventoryRecords = getInventoryRecords();
@@ -199,11 +202,28 @@ public final class GetCollectionResponse implements Serializable {
 			if (record == null) {
 				continue;
 			}
-			final Card instance = record.create();
+			record.create();
+			boolean isActor = record.type == CardType.MINION || record.type == CardType.WEAPON;
+			// Send significantly less data
+			// TODO: Just look it up by the card ID in the client
 			records.add(new CardRecord()
 					.userId(cr.getUserId())
 					.collectionIds(cr.getCollectionIds())
-					.entity(Games.getEntity(emptyContext, instance, 0))
+					.entity(new Entity()
+							.cardId(record.id)
+							.description(record.description)
+							.entityType(Entity.EntityTypeEnum.CARD)
+							.name(record.name)
+							.state(new EntityState()
+									.baseAttack(isActor ? record.getBaseAttack() + record.getDamage() : null)
+									.baseHp(isActor ? record.getBaseHp() + record.getDurability() : null)
+									.tribe(record.getRace())
+									.cardType(EntityState.CardTypeEnum.valueOf(record.type.toString()))
+									.rarity(record.getRarity().getClientRarity())
+									.manaCost(record.baseManaCost)
+									.baseManaCost(record.baseManaCost)
+									.heroClass(record.getHeroClass()))
+					)
 					.id(cr.getId())
 					.allianceId(cr.getAllianceId())
 					.donorUserId(cr.getDonorUserId()));

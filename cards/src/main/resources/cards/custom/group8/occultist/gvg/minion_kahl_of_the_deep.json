@@ -1,12 +1,12 @@
 {
   "name": "Kahl of the Deep",
-  "baseManaCost": 8,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 3,
-  "baseHp": 8,
+  "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 8 cards\"",
+  "description": "Aftermath: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 3 cards\"",
   "deathrattle": {
     "class": "ShuffleMinionToDeckSpell",
     "target": "SELF",
@@ -20,7 +20,7 @@
         },
         "spell": {
           "class": "DrawCardSpell",
-          "value": 8,
+          "value": 3,
           "targetPlayer": "SELF"
         }
       }

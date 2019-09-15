@@ -1,0 +1,38 @@
+{
+  "name": "Rehearsal",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "The first spell you cast next turn costs (4) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "OneTurnCostModifier",
+          "value": 4,
+          "cardType": "SPELL",
+          "expirationTrigger": {
+            "class": "CardPlayedTrigger",
+            "cardType": "SPELL",
+            "targetPlayer": "SELF"
+          },
+          "operation": "SUBTRACT"
+        }
+      },
+      "maxFires": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

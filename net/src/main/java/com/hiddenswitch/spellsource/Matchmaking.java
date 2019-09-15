@@ -4,33 +4,45 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import co.paralleluniverse.strands.concurrent.CyclicBarrier;
+import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.concurrent.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
 import com.hiddenswitch.spellsource.impl.DeckId;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.*;
-import io.vertx.codegen.annotations.Nullable;
-import io.vertx.core.*;
+import com.hiddenswitch.spellsource.models.ConfigurationRequest;
+import com.hiddenswitch.spellsource.models.MatchmakingRequest;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueEntry;
+import io.netty.handler.timeout.TimeoutException;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
+import io.vertx.core.Closeable;
+import io.vertx.core.Future;
+import io.vertx.core.Verticle;
+import io.vertx.core.Vertx;
+import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.defer;
-import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitEvent;
-import static io.vertx.ext.sync.Sync.awaitResult;
 import static io.vertx.ext.sync.Sync.getContextScheduler;
 
 /**
@@ -47,30 +59,43 @@ public interface Matchmaking extends Verticle {
 	 */
 	@Suspendable
 	static boolean enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
-		LOGGER.trace("enqueue {}: Enqueueing {}", request.getUserId(), request);
-		// Check if the user is already in a game
-		UserId userId = new UserId(request.getUserId());
-		if (Games.getUsersInGames().containsKey(userId)) {
-			throw new IllegalStateException("User is already in a game");
-		}
+		Span span = GlobalTracer.get().buildSpan("Matchmaking/enqueue").start();
+		boolean enqueued = false;
+		try (Scope ignored = GlobalTracer.get().activateSpan(span)) {
+			span.setTag("userId", request.getUserId())
+					.setTag("deckId", request.getDeckId())
+					.setTag("queueId", request.getQueueId());
 
-		SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
-		boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
-		if (alreadyQueued) {
-			throw new IllegalStateException("User is already enqueued in a different queue.");
-		}
+			// Check if the user is already in a game
+			UserId userId = new UserId(request.getUserId());
+			if (Games.getUsersInGames().containsKey(userId)) {
+				throw new IllegalStateException("User is already in a game");
+			}
 
-		SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId());
-		if (!queue.offer(new MatchmakingQueueEntry()
-				.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
-				.setUserId(request.getUserId())
-				.setRequest(request), false)) {
-			throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
-		}
-		LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
+			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
+			boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
+			if (alreadyQueued) {
+				throw new IllegalStateException("User is already enqueued in a different queue.");
+			}
 
-		Presence.updatePresence(new UserId(request.getUserId()), PresenceEnum.IN_GAME);
-		return true;
+			try (SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId())) {
+				if (!queue.offer(new MatchmakingQueueEntry()
+						.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
+						.setUserId(request.getUserId())
+						.setRequest(request))) {
+					throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
+				}
+			}
+
+			LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
+
+			Presence.updatePresence(new UserId(request.getUserId()), PresenceEnum.IN_GAME);
+			enqueued = true;
+		} finally {
+			span.setTag("enqueued", enqueued);
+			span.finish();
+		}
+		return enqueued;
 	}
 
 	/**
@@ -81,22 +106,30 @@ public interface Matchmaking extends Verticle {
 	@NotNull
 	@Suspendable
 	static SuspendableMap<UserId, String> getUsersInQueues() {
-		return SuspendableMap.getOrCreate("Matchmaking::currentQueue");
+		return SuspendableMap.getOrCreate("Matchmaking/currentQueue");
 	}
 
 	@Suspendable
 	static void dequeue(UserId userId) throws SuspendExecution {
-		SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
-		String queueId = currentQueue.remove(userId);
-		if (queueId != null) {
-			SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
-			queue.offer(new MatchmakingQueueEntry()
-					.setCommand(MatchmakingQueueEntry.Command.CANCEL)
-					.setUserId(userId.toString()), false);
-			Presence.updatePresence(userId.toString());
-			LOGGER.trace("dequeue {}: Successfully dequeued", userId);
-		} else {
-			LOGGER.trace("dequeue {}: User was not enqueued", userId);
+		Span span = GlobalTracer.get().buildSpan("Matchmaking/dequeue").start();
+		boolean dequeued = false;
+		try (Scope s = GlobalTracer.get().activateSpan(span)) {
+			span.setTag("userId", userId.toString());
+			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
+			String queueId = currentQueue.remove(userId);
+			if (queueId != null) {
+				try (SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId)) {
+					queue.offer(new MatchmakingQueueEntry()
+							.setCommand(MatchmakingQueueEntry.Command.CANCEL)
+							.setUserId(userId.toString()));
+				} finally {
+					Presence.updatePresence(userId.toString());
+					dequeued = true;
+				}
+			}
+		} finally {
+			span.setTag("dequeued", dequeued);
+			span.finish();
 		}
 	}
 
@@ -130,160 +163,193 @@ public interface Matchmaking extends Verticle {
 	@Suspendable
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration queueConfiguration) throws SuspendExecution {
 		CountDownLatch awaitReady = new CountDownLatch(1);
-		Fiber<Void> fiber = new Fiber<>("Matchmaking::queues[" + queueId + "]", getContextScheduler(), () -> {
-			// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
-			SuspendableLock lock = null;
-			SuspendableQueue<MatchmakingQueueEntry> queue = null;
-			try {
-				lock = SuspendableLock.lock("Matchmaking::queues[" + queueId + "]");
-				LOGGER.info("startMatchmaker {}: Hazelcast node ID={} is running this queue", queueId, Hazelcast.getClusterManager().getNodeID());
-				queue = SuspendableQueue.get(queueId);
-				SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
+		AtomicReference<Fiber<Void>> thisFiber = new AtomicReference<>(null);
+		// Use an async lock so that timing out doesn't throw an exception
+		// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
+		Vertx.currentContext().owner().sharedData().getLockWithTimeout("Matchmaking/queues/" + queueId, getTimeout(), res -> {
+			if (res.failed()) {
+				// Someone already has the lock
+				awaitReady.countDown();
+				return;
+			}
 
-				// Dequeue requests
-				do {
-					List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
-					LOGGER.trace("startMatchmaker {}: Awaiting {} users", queueId, queueConfiguration.getLobbySize());
-					awaitReady.countDown();
+			LOGGER.trace("startMatchmaker {}: Started", queueId);
 
-					while (thisMatchRequests.size() < queueConfiguration.getLobbySize()) {
-						MatchmakingQueueEntry request;
-						if (queueConfiguration.getEmptyLobbyTimeout() > 0L && thisMatchRequests.isEmpty()) {
-							LOGGER.debug("startMatchmaker {}: Polling with empty lobby", queueId);
-							request = queue.poll(queueConfiguration.getEmptyLobbyTimeout());
-						} else if (queueConfiguration.getAwaitingLobbyTimeout() > 0L && !thisMatchRequests.isEmpty()) {
-							LOGGER.debug("startMatchmaker {}: Polling with awaiting lobby", queueId);
-							request = queue.poll(queueConfiguration.getAwaitingLobbyTimeout());
-						} else {
-							LOGGER.debug("startMatchmaker {}: Taking, have {}", queueId, thisMatchRequests.size());
-							request = queue.take();
+			Lock lock = res.result();
+			thisFiber.set(new Fiber<>("Matchmaking/queues/" + queueId, getContextScheduler(), () -> {
+				long gamesCreated = 0;
+
+				SuspendableQueue<MatchmakingQueueEntry> queue = null;
+				Tracer tracer = GlobalTracer.get();
+
+
+				try {
+					queue = SuspendableQueue.getOrCreate(queueId);
+					SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
+
+					// Dequeue requests
+					do {
+						if (Strand.interrupted()) {
+							return null;
 						}
+						Span span = tracer.buildSpan("Matchmaking/startMatchmaker/loop").start();
+						span.setTag("queueId", queueId);
+						span.log(json(queueConfiguration).getMap());
+						try (Scope s2 = tracer.activateSpan(span)) {
+							List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
+							awaitReady.countDown();
 
-						if (request == null) {
-							LOGGER.debug("startMatchmaker {}: Queue timed out", queueId);
-							// The request timed out.
-							// Remove any awaiting users, then break
-							for (MatchmakingRequest existingRequest : thisMatchRequests) {
-								userToQueue.remove(new UserId(existingRequest.getUserId()));
-								WriteStream<Envelope> connection = Connection.writeStream(existingRequest.getUserId());
-								// Notify the user they were dequeued
-								connection.write(new Envelope().result(new EnvelopeResult().dequeue(new DefaultMethodResponse())));
-							}
-							// queue.destroy() is dealt with outside of here
-							break;
-						}
+							while (thisMatchRequests.size() < queueConfiguration.getLobbySize()) {
+								MatchmakingQueueEntry request;
+								if (queueConfiguration.getEmptyLobbyTimeout() > 0L && thisMatchRequests.isEmpty()) {
+									span.log(ImmutableMap.of("thisMatchRequests.size", thisMatchRequests.size()));
+									request = queue.poll(queueConfiguration.getEmptyLobbyTimeout());
+								} else if (queueConfiguration.getAwaitingLobbyTimeout() > 0L && !thisMatchRequests.isEmpty()) {
+									span.log(ImmutableMap.of("thisMatchRequests.size", thisMatchRequests.size()));
+									request = queue.poll(queueConfiguration.getAwaitingLobbyTimeout());
+								} else {
+									span.log(ImmutableMap.of("thisMatchRequests.size", thisMatchRequests.size()));
+									request = queue.take();
+								}
 
-						switch (request.getCommand()) {
-							case ENQUEUE:
-								thisMatchRequests.add(request.getRequest());
-								LOGGER.trace("startMatchmaker {}: Queued {}", queueId, request.getUserId());
-								break;
-							case CANCEL:
-								thisMatchRequests.removeIf(existingReq -> existingReq.getUserId().equals(request.getUserId()));
-								userToQueue.remove(new UserId(request.getUserId()));
-								LOGGER.trace("startMatchmaker {}: Dequeued {}", queueId, request.getUserId());
-								break;
-						}
-					}
+								if (request == null) {
+									span.log("timeout");
+									// The request timed out.
+									// Remove any awaiting users, then break
+									for (MatchmakingRequest existingRequest : thisMatchRequests) {
+										userToQueue.remove(new UserId(existingRequest.getUserId()));
+										WriteStream<Envelope> connection = Connection.writeStream(existingRequest.getUserId());
+										// Notify the user they were dequeued
+										connection.write(new Envelope().result(new EnvelopeResult().dequeue(new DefaultMethodResponse())));
+									}
+									// queue.destroy() is dealt with outside of here
+									break;
+								}
 
-					// We've successfully dequeued, we can defer
-					defer(v -> {
-						GameId gameId = GameId.create();
-
-						// Is this a bot game?
-						if (queueConfiguration.isBotOpponent()) {
-							// Actually creating the game can happen without joining
-							// Create a bot game.
-							MatchmakingRequest user = thisMatchRequests.get(0);
-							SuspendableLock botLock = SuspendableLock.noOpLock();
-
-							try {
-								// TODO: Move this lock into pollBotId
-								// The player has been waiting too long. Match to an AI.
-								// Retrieve a bot and use it to play against the opponent
-								UserRecord bot = Accounts.get(Bots.pollBotId());
-
-								DeckId botDeckId = user.getBotDeckId() == null
-										? new DeckId(Bots.getRandomDeck(bot))
-										: new DeckId(user.getBotDeckId());
-
-								Games.createGame(ConfigurationRequest.botMatch(
-										gameId,
-										new UserId(user.getUserId()),
-										new UserId(bot.getId()),
-										new DeckId(user.getDeckId()),
-										botDeckId));
-							} finally {
-								botLock.release();
-							}
-
-							WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
-
-							connection.write(gameReadyMessage());
-
-							userToQueue.remove(new UserId(user.getUserId()));
-							return;
-						}
-
-						// Create a game for every pair
-						try {
-							if (thisMatchRequests.size() % 2 != 0) {
-								throw new AssertionError("thisMatchRequests.size()");
-							}
-
-							LOGGER.trace("startMatchmaker {}: Creating game", queueId);
-							for (int i = 0; i < thisMatchRequests.size(); i += 2) {
-								MatchmakingRequest user1 = thisMatchRequests.get(i);
-								MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
-
-								// This is a standard two player competitive match
-								ConfigurationRequest request =
-										ConfigurationRequest.versusMatch(gameId,
-												new UserId(user1.getUserId()),
-												new DeckId(user1.getDeckId()),
-												new UserId(user2.getUserId()),
-												new DeckId(user2.getDeckId()));
-								Games.createGame(request);
-
-								LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
-
-								for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
-									@SuppressWarnings("unchecked")
-									WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
-									connection.write(gameReadyMessage());
+								switch (request.getCommand()) {
+									case ENQUEUE:
+										thisMatchRequests.add(request.getRequest());
+										break;
+									case CANCEL:
+										thisMatchRequests.removeIf(existingReq -> existingReq.getUserId().equals(request.getUserId()));
+										userToQueue.remove(new UserId(request.getUserId()));
+										break;
 								}
 							}
+							GameId gameId = GameId.create();
+							span.setBaggageItem("gameId", gameId.toString());
+							span.setTag("gameId", gameId.toString());
+							SpanContext spanContext = span.context();
+
+							// We've successfully dequeued, we can defer
+							/*Fiber<Void> createGame = */
+							defer(v -> {
+								Span gameCreateSpan = tracer
+										.buildSpan("Matchmaking/startMatchmaker/createGame")
+										.start();
+								try (Scope s3 = tracer.activateSpan(gameCreateSpan)) {
+									gameCreateSpan.setTag("gameId", gameId.toString());
+
+									// Is this a bot game?
+									if (queueConfiguration.isBotOpponent()) {
+										// Actually creating the game can happen without joining
+										// Create a bot game.
+										MatchmakingRequest user = thisMatchRequests.get(0);
+										SuspendableLock botLock = SuspendableLock.noOpLock();
+
+										try {
+											// TODO: Move this lock into pollBotId
+											// The player has been waiting too long. Match to an AI.
+											// Retrieve a bot and use it to play against the opponent
+											UserRecord bot = Accounts.get(Bots.pollBotId().toString());
+
+											DeckId botDeckId = user.getBotDeckId() == null
+													? new DeckId(Bots.getRandomDeck(bot))
+													: new DeckId(user.getBotDeckId());
+
+											Games.createGame(ConfigurationRequest.botMatch(
+													gameId,
+													new UserId(user.getUserId()),
+													new UserId(bot.getId()),
+													new DeckId(user.getDeckId()),
+													botDeckId)
+													.setSpanContext(gameCreateSpan.context()));
+										} finally {
+											botLock.release();
+										}
+
+										WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
+										connection.write(gameReadyMessage());
+										return;
+									}
+
+									// Create a game for every pair
+									if (thisMatchRequests.size() % 2 != 0) {
+										throw new AssertionError("thisMatchRequests.size()");
+									}
+
+									for (int i = 0; i < thisMatchRequests.size(); i += 2) {
+										MatchmakingRequest user1 = thisMatchRequests.get(i);
+										MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
+
+										// This is a standard two player competitive match
+										ConfigurationRequest request =
+												ConfigurationRequest.versusMatch(gameId,
+														new UserId(user1.getUserId()),
+														new DeckId(user1.getDeckId()),
+														new UserId(user2.getUserId()),
+														new DeckId(user2.getDeckId()))
+														.setSpanContext(gameCreateSpan.context());
+										Games.createGame(request);
+
+										LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
+
+										for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
+											@SuppressWarnings("unchecked")
+											WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
+											connection.write(gameReadyMessage());
+										}
+									}
+								} catch (RuntimeException runtimeException) {
+									Tracing.error(runtimeException, gameCreateSpan, true);
+									throw runtimeException;
+								} finally {
+									for (MatchmakingRequest request : thisMatchRequests) {
+										userToQueue.remove(new UserId(request.getUserId()));
+									}
+									gameCreateSpan.finish();
+								}
+							});
+							//createGame.setUncaughtExceptionHandler((f, e) -> Vertx.currentContext().exceptionHandler().handle(e));
+							gamesCreated++;
+						} catch (RuntimeException runtimeException) {
+							Tracing.error(runtimeException, span, true);
+							throw runtimeException;
 						} finally {
-							for (MatchmakingRequest request : thisMatchRequests) {
-								userToQueue.remove(new UserId(request.getUserId()));
-							}
+							span.setTag("gamesCreated", gamesCreated);
+							span.finish();
 						}
+					} while (/*Queues that run once are typically private games*/!queueConfiguration.isOnce());
+				} catch (TimeoutException | InterruptedException ex) {
+					// Cancelled or could not obtain the lock
+				} finally {
+					if (lock != null) {
+						lock.release();
+					}
 
-					});
-				} while (/*Queues that run once are typically private games*/!queueConfiguration.isOnce());
-			} catch (VertxException | InterruptedException ex) {
-				// Cancelled
-			} finally {
-				if (lock != null) {
-					lock.release();
+					if (queue != null) {
+						queue.destroy();
+					}
 				}
+				return null;
+			}));
 
-				// Private lobby locks should be destroyed once they reach here
-				if (lock != null && queueConfiguration.isPrivateLobby()) {
-					lock.destroy();
-				}
+			thisFiber.get().setUncaughtExceptionHandler((f, e) -> Vertx.currentContext().exceptionHandler().handle(e));
 
-				if (queue != null) {
-					queue.destroy();
-				}
-			}
-			return null;
+			// We don't join on the fiber (we don't wait until the queue has actually started), we return immediately.
+			thisFiber.get().start();
 		});
 
-		// We don't join on the fiber (we don't wait until the queue has actually started), we return immediately.
-		fiber.start();
-
-		AtomicReference<Fiber<Void>> thisFiber = new AtomicReference<>(fiber);
 		if (queueConfiguration.isJoin()) {
 			try {
 				awaitReady.await();
@@ -291,14 +357,29 @@ public interface Matchmaking extends Verticle {
 				throw new RuntimeException(e);
 			}
 		}
-		return completionHandler -> {
+
+		Closeable closeable = completionHandler -> {
+			if (thisFiber.get() == null) {
+				completionHandler.handle(Future.succeededFuture());
+				return;
+			}
 			// Don't interrupt twice if something else makes this fiber end early.
-			if (thisFiber.get().isAlive() && thisFiber.get().isInterrupted()) {
+			if (thisFiber.get().isAlive() && !thisFiber.get().isInterrupted()) {
 				thisFiber.get().interrupt();
 			}
 
 			completionHandler.handle(Future.succeededFuture());
 		};
+
+		if (queueConfiguration.isAutomaticallyClose()) {
+			Vertx.currentContext().addCloseHook(closeable);
+		}
+
+		return closeable;
+	}
+
+	static long getTimeout() {
+		return 8000L;
 	}
 
 	/**

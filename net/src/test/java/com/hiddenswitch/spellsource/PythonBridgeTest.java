@@ -1,119 +1,112 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.applications.PythonBridge;
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class PythonBridgeTest {
-	String DECK_1 = "### Cubelock - Standard Meta Snapshot - May 9, 2018\n" +
-			"# Class: Warlock\n" +
-			"# Format: Standard\n" +
-			"# Year of the Raven\n" +
+	String DECK_1 = "### Aggro Outlaw\n" +
+			"# Class: COPPER\n" +
+			"# Format: Spellsource\n" +
 			"#\n" +
-			"# 2x (1) Dark Pact\n" +
-			"# 2x (1) Kobold Librarian\n" +
-			"# 1x (2) Acidic Swamp Ooze\n" +
-			"# 2x (2) Defile\n" +
-			"# 2x (2) Plated Beetle\n" +
-			"# 2x (3) Stonehill Defender\n" +
-			"# 2x (4) Hellfire\n" +
-			"# 2x (4) Lesser Amethyst Spellstone\n" +
-			"# 1x (4) Spiritsinger Umbra\n" +
-			"# 2x (5) Carnivorous Cube\n" +
-			"# 2x (5) Doomguard\n" +
-			"# 1x (5) Faceless Manipulator\n" +
-			"# 2x (5) Possessed Lackey\n" +
-			"# 1x (5) Skull of the Man'ari\n" +
-			"# 1x (6) Rin, the First Disciple\n" +
-			"# 1x (7) Lord Godfrey\n" +
-			"# 2x (9) Voidlord\n" +
-			"# 1x (10) Bloodreaver Gul'dan\n" +
-			"# 1x (12) Mountain Giant";
-	String DECK_2 = "### Even Paladin - Standard Meta Snapshot - May 9, 2018\n" +
-			"# Class: Paladin\n" +
-			"# Format: Standard\n" +
-			"# Year of the Raven\n" +
+			"# 1x (1) Doodles\n" +
+			"# 2x (1) Enhancing Shaman\n" +
+			"# 2x (1) Hired Gunsmith\n" +
+			"# 2x (1) Plan Ahead\n" +
+			"# 2x (2) Bang!\n" +
+			"# 2x (2) Beauregard Bouncer\n" +
+			"# 2x (2) Shedding Chameleon\n" +
+			"# 2x (2) Spooky Turret\n" +
+			"# 2x (3) Cheating Wrangler\n" +
+			"# 2x (3) Reloading\n" +
+			"# 2x (3) Ride like the Wind!\n" +
+			"# 2x (3) Trigger Happy Rebel\n" +
+			"# 2x (4) Carriage Abductor\n" +
+			"# 2x (4) Dustbowl Vigilante\n" +
+			"# 1x (4) McGrief\n" +
+			"# 2x (4) Silvershot Pistol";
+	String DECK_2 = "### Baron: Big Baron\n" +
+			"# Class: NAVY\n" +
+			"# Format: Spellsource\n" +
 			"#\n" +
-			"# 1x (2) Acidic Swamp Ooze\n" +
-			"# 2x (2) Amani Berserker\n" +
-			"# 2x (2) Dire Wolf Alpha\n" +
-			"# 2x (2) Equality\n" +
-			"# 2x (2) Knife Juggler\n" +
-			"# 2x (2) Loot Hoarder\n" +
-			"# 2x (4) Blessing of Kings\n" +
-			"# 2x (4) Call to Arms\n" +
-			"# 2x (4) Consecration\n" +
-			"# 2x (4) Saronite Chain Gang\n" +
-			"# 2x (4) Spellbreaker\n" +
-			"# 2x (4) Truesilver Champion\n" +
-			"# 2x (6) Argent Commander\n" +
-			"# 2x (6) Avenging Wrath\n" +
-			"# 1x (6) Genn Greymane\n" +
-			"# 1x (6) Sunkeeper Tarim\n" +
-			"# 1x (6) Val'anyr";
-	String DECK_3 = "### Spiteful Druid - Standard Meta Snapshot - May 9, 2018\n" +
-			"# Class: Druid\n" +
-			"# Format: Standard\n" +
-			"# Year of the Raven\n" +
+			"# 2x (1) Enchanted Shield\n" +
+			"# 2x (1) Gather Strength\n" +
+			"# 2x (3) Bewitch\n" +
+			"# 2x (3) Defenses Up\n" +
+			"# 2x (3) Duplimancy\n" +
+			"# 2x (4) Defender of Tomorrow\n" +
+			"# 2x (4) Hidden Treasure\n" +
+			"# 2x (4) Self-Appoint\n" +
+			"# 2x (5) Bog Mutant\n" +
+			"# 2x (5) Savage Werewolf\n" +
+			"# 2x (7) Clash!\n" +
+			"# 2x (7) Landsieged Drake\n" +
+			"# 2x (7) Unstable Artifact\n" +
+			"# 1x (8) Headless Horseman, Revengeance\n" +
+			"# 1x (9) Gor'thal the Ravager\n" +
+			"# 1x (10) Raid Boss Gnaxx\n" +
+			"# 1x (10) Sorceress Eka\n" +
+			"#\n";
+	String DECK_3 = "### Big Defense Baron\n" +
+			"# Class: NAVY\n" +
+			"# Format: Spellsource\n" +
 			"#\n" +
-			"# 2x (1) Fire Fly\n" +
-			"# 2x (1) Glacial Shard\n" +
-			"# 1x (2) Prince Keleseth\n" +
-			"# 2x (3) Crypt Lord\n" +
-			"# 2x (3) Druid of the Scythe\n" +
-			"# 2x (3) Greedy Sprite\n" +
-			"# 2x (3) Mind Control Tech\n" +
-			"# 1x (3) Tar Creeper\n" +
-			"# 2x (4) Saronite Chain Gang\n" +
-			"# 2x (4) Spellbreaker\n" +
-			"# 2x (5) Cobalt Scalebane\n" +
-			"# 2x (5) Fungalmancer\n" +
-			"# 1x (5) Leeroy Jenkins\n" +
-			"# 2x (6) Spiteful Summoner\n" +
-			"# 1x (7) Malfurion the Pestilent\n" +
-			"# 1x (8) Grand Archivist\n" +
-			"# 1x (8) The Lich King\n" +
-			"# 2x (10) Ultimate Infestation";
+			"# 2x (1) Doom Sergeant\n" +
+			"# 2x (2) Double Defender\n" +
+			"# 2x (3) Defenses Up\n" +
+			"# 2x (3) Extract\n" +
+			"# 2x (3) Fellow Academite\n" +
+			"# 2x (3) Final Defenses\n" +
+			"# 2x (3) Oni Entrapper\n" +
+			"# 2x (3) Reinforcements\n" +
+			"# 2x (4) Double Down\n" +
+			"# 2x (4) Immunize\n" +
+			"# 2x (4) Stone Obelisk\n" +
+			"# 1x (5) Moon Gladiator\n" +
+			"# 2x (5) Royal Protector\n" +
+			"# 1x (6) Attrition Master Rictor\n" +
+			"# 1x (8) Shapesifter Ryal\n" +
+			"# 2x (10) Fel Manticore\n" +
+			"# 1x (10) Sourceborn Aelin\n" +
+			"#";
 
-	String DECK_4 = "### Aggro Mage - Standard Meta Snapshot - Apr. 30, 2018\n" +
-			"# Class: Mage\n" +
-			"# Format: Standard\n" +
-			"# Year of the Raven\n" +
+	String DECK_4 = "### Blitzkrieg Dragoon\n" +
+			"# Class: RUST\n" +
+			"# Format: Spellsource\n" +
 			"#\n" +
-			"# 2x (1) Arcane Missiles\n" +
-			"# 2x (1) Mana Wyrm\n" +
-			"# 1x (1) Mirror Image\n" +
-			"# 1x (2) Amani Berserker\n" +
-			"# 2x (2) Arcanologist\n" +
-			"# 1x (2) Bloodmage Thalnos\n" +
-			"# 2x (2) Frostbolt\n" +
-			"# 2x (2) Primordial Glyph\n" +
-			"# 2x (2) Sorcerer's Apprentice\n" +
-			"# 2x (3) Arcane Intellect\n" +
-			"# 2x (3) Cinderstorm\n" +
-			"# 2x (3) Counterspell\n" +
-			"# 2x (3) Explosive Runes\n" +
-			"# 2x (3) Kirin Tor Mage\n" +
-			"# 2x (4) Fireball\n" +
-			"# 1x (4) Lifedrinker\n" +
-			"# 1x (6) Aluneth\n" +
-			"# 1x (10) Pyroblast";
+			"# 2x (1) Dragon Caretaker\n" +
+			"# 2x (1) Timelost Sarcophagus\n" +
+			"# 2x (1) Wink Dog\n" +
+			"# 2x (2) Ankylo Devotee\n" +
+			"# 2x (2) Augmented Pixie\n" +
+			"# 2x (2) Katar\n" +
+			"# 2x (3) Dragonhorn\n" +
+			"# 1x (3) Irena, Dragon Knight\n" +
+			"# 2x (3) Supersonic Roar\n" +
+			"# 2x (3) Sweeper Drake\n" +
+			"# 2x (4) Guild Guard\n" +
+			"# 2x (4) The Little Swarm\n" +
+			"# 1x (5) Conflagration\n" +
+			"# 2x (5) Drakonid Bruiser\n" +
+			"# 2x (5) Vermillion Glider\n" +
+			"# 2x (6) Crimson Blades\n" +
+			"#";
 
 	@Test
 	public void testSimulateMethod() throws InterruptedException {
 		CardCatalogue.loadCardsFromPackage();
 		List<String> deckLists = Arrays.asList(DECK_1, DECK_2, DECK_3, DECK_4);
-		int n = 20;
+		int n = 1;
 		CountDownLatch latch = new CountDownLatch(1);
 		Supplier<Behaviour> behaviourSupplier = () -> {
 			GameStateValueBehaviour inst = new GameStateValueBehaviour();

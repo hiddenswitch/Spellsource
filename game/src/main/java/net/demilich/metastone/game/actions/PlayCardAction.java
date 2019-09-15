@@ -76,6 +76,7 @@ public abstract class PlayCardAction extends GameAction {
 		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		context.getLogic().playCard(playerId, getSourceReference(), getTargetReference());
+
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
 			// Fixes Glinda Crowskin, whose aura stopped being applied once the card was played and moved to the graveyard
@@ -108,6 +109,7 @@ public abstract class PlayCardAction extends GameAction {
 
 		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 			card.getDeathrattleEnchantments().clear();
+			card.getBattlecryEnchantments().clear();
 		}
 
 		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, card.getReference()));
@@ -149,7 +151,7 @@ public abstract class PlayCardAction extends GameAction {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		Card playedCard = (Card) context.resolveSingleTarget(getSourceReference());
+		Card playedCard = context.resolveSingleTarget(getSourceReference()).getSourceCard();
 		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
 		if (playedCard.getCardType() == CardType.SPELL
 				&& playedCard.isSecret()) {

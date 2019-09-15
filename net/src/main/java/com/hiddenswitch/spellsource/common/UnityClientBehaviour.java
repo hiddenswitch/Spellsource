@@ -7,17 +7,21 @@ import co.paralleluniverse.strands.StrandLocalRandom;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.Games;
+import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.Scheduler;
 import com.hiddenswitch.spellsource.util.NoOpLock;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.tag.Tags;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.json.Json;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.sync.Sync;
@@ -29,17 +33,14 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -69,37 +70,51 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final ReentrantLock requestsLock = new NoOpLock();
-	private WriteStream<Buffer> writer;
-	private Server server;
+	private final ReadStream<ClientToServerMessage> reader;
+	private final WriteStream<ServerToClientMessage> writer;
+	private final Server server;
 
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
+	private Span span;
 
 
 	public UnityClientBehaviour(Server server,
 	                            Scheduler scheduler,
-	                            ReadStream<Buffer> reader,
-	                            WriteStream<Buffer> writer,
+	                            ReadStream<ClientToServerMessage> reader,
+	                            WriteStream<ServerToClientMessage> writer,
 	                            UserId userId,
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
+		this.reader = reader;
 		this.writer = writer;
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
-
-		ActivityMonitor activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
-		activityMonitor.activity();
-		activityMonitors.add(activityMonitor);
+		Tracer tracer = GlobalTracer.get();
+		this.span = tracer.buildSpan("UnityClientBehaviour")
+				.asChildOf(server.getSpanContext())
+				.withTag(Tags.SAMPLING_PRIORITY, 0)
+				.start();
+		span.setTag("userId", userId.toString());
+		span.setTag("gameId", server.getGameId());
+		if (noActivityTimeout > 0L) {
+			ActivityMonitor activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
+			activityMonitor.activity();
+			getActivityMonitors().add(activityMonitor);
+		} else if (noActivityTimeout < 0L) {
+			throw new IllegalArgumentException("noActivityTimeout must be positive");
+		}
 
 		reader.handler(suspendableHandler(this::handleWebSocketMessage));
 	}
 
 	@Suspendable
 	private void noActivity(ActivityMonitor activityMonitor) {
+		span.log("noActivity");
 		elapseAwaitingRequests();
 		server.onConcede(this);
 	}
@@ -121,6 +136,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void elapseAwaitingRequests() {
+		span.log("elapseAwaitingRequests");
 		requestsLock.lock();
 		elapsed = true;
 		try {
@@ -159,21 +175,19 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	/**
 	 * Handles a web socket message (message from the event bus), decoding it into a {@link ClientToServerMessage}.
 	 *
-	 * @param messageBuffer The buffer containing the JSON of the message.
+	 * @param message The buffer containing the JSON of the message.
 	 * @throws SuspendExecution
 	 */
 	@Suspendable
-	protected void handleWebSocketMessage(Buffer messageBuffer) throws SuspendExecution {
-		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
-
+	protected void handleWebSocketMessage(ClientToServerMessage message) throws SuspendExecution {
 		if (inboundMessagesClosed) {
-			LOGGER.error("handleWebSocketMessage {} {} {}: Message of type {} was received despite inbound messages closed", playerId, userId, server.getGameId(), message.getMessageType());
+			Tracing.error(new IllegalStateException("inbound messages closed"), span, false);
 			return;
 		}
 
 		switch (message.getMessageType()) {
 			case PINGPONG:
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				// Server is responsible for replying
@@ -182,17 +196,19 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			case FIRST_MESSAGE:
 				lastStateSent = null;
 				// The first message indicates the player has connected or reconnected.
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 
-				LOGGER.debug("handleWebSocketMessage {} {} {}: Received first message", playerId, userId, server.getGameId());
+
 				if (server.isGameReady()) {
 					// Replace the client
+					span.log("receiveFirstMessage/reconnected");
 					server.onPlayerReconnected(this);
 					// Since the player may have pending requests, we're going to send the data the client needs again.
 					retryRequests();
 				} else {
+					span.log("receiveFirstMessage/playerReady");
 					server.onPlayerReady(this);
 				}
 				break;
@@ -201,7 +217,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					throw new RuntimeException();
 				}
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				final String messageId = message.getRepliesTo();
@@ -211,7 +227,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					throw new RuntimeException();
 				}
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				final String messageId2 = message.getRepliesTo();
@@ -227,7 +243,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					break;
 				}
-				for (ActivityMonitor activityMonitor : activityMonitors) {
+				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 					activityMonitor.activity();
 				}
 				if (null != message.getEntityTouch()) {
@@ -256,9 +272,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						break;
 					case MULLIGAN:
 						onMulligan(request.getCallbackId(), lastStateSent, request.getStarterCards(), playerId);
-						break;
-					default:
-						LOGGER.error("Unknown gameplay request was pending.");
 						break;
 				}
 			}
@@ -453,10 +466,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Suspendable
-	private void sendMessage(WriteStream<Buffer> socket, ServerToClientMessage message) {
+	private void sendMessage(WriteStream<ServerToClientMessage> socket, ServerToClientMessage message) {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
-		socket.write(Buffer.buffer(Json.encode(message)));
+		socket.write(message);
 	}
 
 	@Override
@@ -499,7 +512,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.gameState(getClientGameState(state));
 
 		final Class<? extends Notification> eventClass = event.getClass();
@@ -611,7 +624,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_UPDATE)
 				.changes(getChangeSet(state))
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.gameState(gameState));
 	}
 
@@ -623,11 +636,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		Player local;
 		Player opponent;
 		if (playerId == PLAYER_1) {
-			local = state.player1;
-			opponent = state.player2;
+			local = state.getPlayer1();
+			opponent = state.getPlayer2();
 		} else if (playerId == PLAYER_2) {
-			local = state.player2;
-			opponent = state.player1;
+			local = state.getPlayer2();
+			opponent = state.getPlayer1();
 		} else {
 			// TODO: How should we define spectators?
 			throw new IllegalStateException("playerId");
@@ -651,7 +664,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.gameState(getClientGameState(state))
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
@@ -665,7 +678,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		sendMessage(new ServerToClientMessage()
 				.id(id)
 				.timers(new Timers()
-						.millisRemaining(state.millisRemaining))
+						.millisRemaining(state.getMillisRemaining()))
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_MULLIGAN)
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
@@ -680,7 +693,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						.message(emote)));
 	}
 
-	public WriteStream<Buffer> getWriter() {
+	public WriteStream<ServerToClientMessage> getWriter() {
 		return writer;
 	}
 
@@ -701,6 +714,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void closeInboundMessages() {
+		span.log("inboundMessageClosed");
 		inboundMessagesClosed = true;
 	}
 
@@ -724,18 +738,32 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		try {
-			for (ActivityMonitor activityMonitor : activityMonitors) {
+			span.log("closing");
+			for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 				activityMonitor.cancel();
 			}
-			activityMonitors.clear();
-
+			getActivityMonitors().clear();
 			requests.clear();
 			messageBuffer.clear();
-			server = null;
-			writer = null;
+			try {
+				writer.end();
+			} catch (IllegalStateException alreadyClosed) {
+			}
+
+			if (reader instanceof Closeable) {
+				((Closeable) reader).close(Future.future());
+			}
+
+			if (reader instanceof MessageConsumer) {
+				((MessageConsumer) reader).unregister();
+			}
+
+			span.log("closed");
 		} catch (Throwable ignore) {
+			Tracing.error(ignore, span, true);
 			LOGGER.error("close {}", getUserId(), ignore);
 		} finally {
+			span.finish();
 			completionHandler.handle(Future.succeededFuture());
 		}
 	}

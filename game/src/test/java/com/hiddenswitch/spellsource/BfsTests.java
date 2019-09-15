@@ -34,7 +34,7 @@ public class BfsTests {
 
 	@Test
 	public void testAccurateSummoningBattlecry() {
-		Card card = CardCatalogue.getCardById("minion_dragonling_mechanic");
+		Card card = CardCatalogue.getCardById("minion_test_opener_summon");
 		Stream.Builder<HasEntrySet.BfsNode<Enum, Object>> bfs = card.getDesc().bfs();
 
 		boolean shouldMatch = bfs.build()
@@ -42,7 +42,7 @@ public class BfsTests {
 						&& SummonSpell.class.isAssignableFrom((Class) node.getValue())
 						&& node.predecessors().anyMatch(pred -> pred.getKey().equals(BattlecryDescArg.SPELL)));
 
-		Assert.assertTrue(shouldMatch, "Dragonling Mechanic should match");
+		Assert.assertTrue(shouldMatch, "Minion should match");
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class BfsTests {
 		assertContains(nodes, CardDescArg.NAME, "Name");
 		assertContains(nodes, CardDescArg.BASE_MANA_COST, 3);
 		assertContains(nodes, CardDescArg.TYPE, CardType.MINION);
-		assertContains(nodes, CardDescArg.HERO_CLASS, HeroClass.GOLD);
+		assertContains(nodes, CardDescArg.HERO_CLASS, "GOLD");
 		assertContains(nodes, CardDescArg.BASE_ATTACK, 2);
 		assertContains(nodes, CardDescArg.BASE_HP, 1);
 		assertContains(nodes, CardDescArg.RARITY, Rarity.COMMON);
@@ -75,7 +75,7 @@ public class BfsTests {
 		assertContains(nodes, Attribute.BATTLECRY, true);
 		assertContains(nodes, Attribute.SPELL_DAMAGE, 2);
 		assertContains(nodes, CardDescArg.COLLECTIBLE, true);
-		assertContains(nodes, CardDescArg.SET, CardSet.TEST);
+		assertContains(nodes, CardDescArg.SET, "TEST");
 		assertContains(nodes, BattlecryDescArg.TARGET_SELECTION, TargetSelection.MINIONS);
 		assertContains(nodes, CardDescArg.ATTRIBUTES, card.getDesc().getAttributes());
 		assertContains(nodes, CardDescArg.TRIGGERS, card.getDesc().getTrigger());

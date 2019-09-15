@@ -1,0 +1,36 @@
+{
+  "name": "Fate Incarnate",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "SPIRIT",
+  "description": "Opener and Aftermath: Destroy two random enemy minions.",
+  "battlecry": {
+    "spell": {
+      "class": "MultiTargetSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 2,
+      "spell": {
+        "class": "DestroySpell"
+      }
+    }
+  },
+  "deathrattle": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DestroySpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

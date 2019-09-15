@@ -69,7 +69,7 @@ public class PythonBridge {
 	 */
 	public static long simulate(SimulationResultGenerator generator, List<String> deckLists, int gamesPerBatch, List<Supplier<Behaviour>> behaviours, boolean mirrors, boolean reduce) {
 		final Map<String, GameDeck> decks = Simulation.getDecks(deckLists);
-		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() > 2
+		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() >= 2
 				&& !behaviours.get(0).get().getClass().equals(behaviours.get(1).get().getClass()));
 
 		Thread job = Executors.defaultThreadFactory().newThread(() -> {

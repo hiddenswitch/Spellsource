@@ -9,17 +9,19 @@ import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.DraftActionRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.Future;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
+import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 import static org.junit.Assert.*;
 
 public class DraftTest extends SpellsourceTestBase {
 	@Test
-	public void testDraftService() {
+	public void testDraftService(TestContext context) {
 		sync(() -> {
 			// Create an account
 			CreateAccountResponse car = createRandomAccount();
@@ -29,7 +31,9 @@ public class DraftTest extends SpellsourceTestBase {
 
 			// Choose a hero
 			assertNotNull(response.getPublicDraftState().getHeroClassChoices());
-			assertEquals(HeroClass.getBaseClasses().size(), response.getPublicDraftState().getHeroClassChoices().size());
+			assertEquals(HeroClass.getBaseClasses(DeckFormat.spellsource()).size(), response.getPublicDraftState().getHeroClassChoices().size());
+			assertFalse(response.getPublicDraftState().getHeroClassChoices().contains(HeroClass.ANY));
+			assertFalse(response.getPublicDraftState().getHeroClassChoices().contains(HeroClass.TEST));
 
 			response = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(car.getUserId())
@@ -44,84 +48,74 @@ public class DraftTest extends SpellsourceTestBase {
 			}
 
 			assertNotNull(response.getPublicDraftState().getDeckId());
-		});
+		}, context);
 	}
 
 
 	@Test
 	public void testDraftAPI(TestContext context) throws ApiException {
-		DefaultApi api = getApi();
+		sync(() -> {
+			DefaultApi api = getApi();
 
-		String name = RandomStringUtils.randomAlphanumeric(32) + "username";
-		String email = name + "@hiddenswitch.com";
-		com.hiddenswitch.spellsource.client.models.CreateAccountResponse car = api.createAccount(new com.hiddenswitch.spellsource.client.models.CreateAccountRequest()
-				.name(name)
-				.email(email)
-				.password("testpass"));
+			String name = RandomStringUtils.randomAlphanumeric(32) + "username";
+			String email = name + "@hiddenswitch.com";
+			com.hiddenswitch.spellsource.client.models.CreateAccountResponse car = invoke(api::createAccount, new com.hiddenswitch.spellsource.client.models.CreateAccountRequest()
+					.name(name)
+					.email(email)
+					.password("testpass"));
 
-		api.getApiClient().setApiKey(car.getLoginToken());
+			api.getApiClient().setApiKey(car.getLoginToken());
 
-		try {
-			api.draftsGet();
-		} catch (ApiException e) {
-			context.assertEquals(404, e.getCode(), "The exception codes for drafts get do not match.");
-		}
-
-
-		DraftState state = api.draftsPost(new DraftsPostRequest().startDraft(true));
-		context.assertEquals(DraftState.StatusEnum.SELECT_HERO, state.getStatus(), "The result of starting a draft is unexpectedly not select hero.");
-		try {
-			api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
-		} catch (ApiException e) {
-			context.assertEquals(400, e.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
-		}
+			try {
+				api.draftsGet();
+				context.fail("A draft should not yet exist.");
+			} catch (ApiException e) {
+				context.assertEquals(404, e.getCode(), "The exception codes for drafts get do not match.");
+			}
 
 
-		state = api.draftsChooseHero(new DraftsChooseHeroRequest().heroIndex(1));
-		context.assertNotNull(state.getHeroClass());
+			DraftState state = invoke(api::draftsPost, new DraftsPostRequest().startDraft(true));
+			context.assertEquals(DraftState.StatusEnum.SELECT_HERO, state.getStatus(), "The result of starting a draft is unexpectedly not select hero.");
+			try {
+				api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
+				context.fail("The client should fail to advance a draft without choosing a hero first.");
+			} catch (ApiException e) {
+				context.assertEquals(400, e.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
+			}
 
-		while (state.getCurrentCardChoices() != null
-				&& state.getStatus() == DraftState.StatusEnum.IN_PROGRESS) {
-			context.assertEquals(3, state.getCurrentCardChoices().size(), "The number of card choices should always be three");
-			Entity card = state.getCurrentCardChoices().get(1);
-			context.assertNotNull(card, "The draft service should provide a full card definition.");
-			context.assertNotNull(card.getCardId(), "The draft service should at least provide a card ID.");
-			state = api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
-			context.assertEquals(card.getCardId(), state.getSelectedCardIds().get(state.getSelectedCardIds().size() - 1), "The card didn't appear to be selected correctly");
-		}
 
-		context.assertEquals(DraftState.StatusEnum.COMPLETE, state.getStatus(), "The status of the draft should be complete.");
-		context.assertNotNull(state.getDeckId(), "The draft state should contain a deck ID when it is complete.");
+			state = invoke(api::draftsChooseHero, new DraftsChooseHeroRequest().heroIndex(1));
+			context.assertNotNull(state.getHeroClass());
 
-		final String deckId = state.getDeckId();
+			while (state.getCurrentCardChoices() != null
+					&& state.getStatus() == DraftState.StatusEnum.IN_PROGRESS) {
+				context.assertEquals(3, state.getCurrentCardChoices().size(), "The number of card choices should always be three");
+				Entity card = state.getCurrentCardChoices().get(1);
+				context.assertNotNull(card, "The draft service should provide a full card definition.");
+				context.assertNotNull(card.getCardId(), "The draft service should at least provide a card ID.");
+				state = invoke(api::draftsChooseCard, new DraftsChooseCardRequest().cardIndex(1));
+				context.assertEquals(card.getCardId(), state.getSelectedCardIds().get(state.getSelectedCardIds().size() - 1), "The card didn't appear to be selected correctly");
+			}
 
-		UnityClient client = new UnityClient(context);
-		client.loginWithUserAccount(name, "testpass");
-		client.ensureConnected();
-		client.matchmakeQuickPlay(deckId);
-		client.waitUntilDone();
-		context.assertTrue(client.getTurnsPlayed() > 0);
+			context.assertEquals(DraftState.StatusEnum.COMPLETE, state.getStatus(), "The status of the draft should be complete.");
+			context.assertNotNull(state.getDeckId(), "The draft state should contain a deck ID when it is complete.");
 
-		DraftState newState = null;
-		try {
-			newState = api.draftsPost(new DraftsPostRequest().retireEarly(true));
-		} catch (ApiException e) {
-			context.fail();
-		}
-		context.assertEquals(DraftState.StatusEnum.RETIRED, newState.getStatus(), "Expected a status of retired.");
+			final String deckId = state.getDeckId();
 
-		try {
-			api.draftsGet();
-		} catch (ApiException e) {
-			context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
-		}
 
-		try {
-			newState = api.draftsPost(new DraftsPostRequest().startDraft(true));
-		} catch (ApiException e) {
-			context.fail();
-		}
-		context.assertEquals(DraftState.StatusEnum.SELECT_HERO, newState.getStatus(), "A draft was not correctly started anew.");
+			try (UnityClient client = new UnityClient(context,car.getLoginToken())) {
+				invoke0(client::ensureConnected);
+				client.matchmakeQuickPlay(deckId);
+				invoke0(client::waitUntilDone);
+				context.assertTrue(client.isGameOver());
+				context.assertTrue(client.getTurnsPlayed() > 0);
+			}
 
+			DraftState newState = invoke(api::draftsPost, new DraftsPostRequest().retireEarly(true));
+			context.assertEquals(DraftState.StatusEnum.RETIRED, newState.getStatus(), "Expected a status of retired.");
+
+			newState = invoke(api::draftsPost, new DraftsPostRequest().startDraft(true));
+			context.assertEquals(DraftState.StatusEnum.SELECT_HERO, newState.getStatus(), "A draft was not correctly started anew.");
+		}, context);
 	}
 }

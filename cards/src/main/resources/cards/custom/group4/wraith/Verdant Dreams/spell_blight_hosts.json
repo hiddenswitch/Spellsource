@@ -1,0 +1,19 @@
+{
+  "name": "Blight Hosts",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "RARE",
+  "description": "Summon two 2/2 Skeletons with Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_skeleton2guard_wraith",
+      "token_skeleton2guard_wraith"
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

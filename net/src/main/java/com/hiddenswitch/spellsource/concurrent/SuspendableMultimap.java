@@ -7,17 +7,11 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SetMultimap;
-import com.hazelcast.core.MultiMap;
 import com.hiddenswitch.spellsource.concurrent.impl.LocalMultimap;
-import com.hiddenswitch.spellsource.concurrent.impl.RxEntryListenerAdaptor;
 import com.hiddenswitch.spellsource.concurrent.impl.SingleKeyAddedChangedRemoved;
-import com.hiddenswitch.spellsource.concurrent.impl.SuspendableHazelcastMultimap;
-import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableAtomixMultimap;
 import com.hiddenswitch.spellsource.util.*;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.spi.cluster.AsyncMultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +29,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	static <K, V> SuspendableMultimap<K, V> getOrCreate(String name) {
 		final Vertx vertx = Vertx.currentContext().owner();
 		if (vertx.isClustered()) {
-			return new SuspendableHazelcastMultimap<>(name);
+			return new SuspendableAtomixMultimap<>(name);
 		} else {
 			return (SuspendableMultimap<K, V>) LOCAL_MULTIMAPS.computeIfAbsent(name, (k) -> new LocalMultimap<K, V>());
 		}
@@ -45,10 +39,14 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	static <K, V> AddedChangedRemoved<K, V> subscribeToKeyInMultimap(String name, K key) throws SuspendExecution {
 		final Vertx vertx = Vertx.currentContext().owner();
 		if (vertx.isClustered()) {
+			/*
 			final RxEntryListenerAdaptor<K, V> adaptor = new RxEntryListenerAdaptor<>();
 			MultiMap<K, V> map = Sync.invoke(Hazelcast.getHazelcastInstance()::getMultiMap, name);
 			map.addEntryListener(adaptor, key, true);
 			return adaptor;
+
+			 */
+			throw new UnsupportedOperationException("");
 		} else {
 			SuspendableMultimap<K, V> map = getOrCreate(name);
 			return new SingleKeyAddedChangedRemoved<>(key, map);
@@ -103,7 +101,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * key-value pair that's already in the multimap has no effect.
 	 *
 	 * @return {@code true} if the method increased the size of the multimap, or {@code false} if the multimap already
-	 * contained the key-value pair and doesn't allow duplicates
+	 * 		contained the key-value pair and doesn't allow duplicates
 	 */
 	@Suspendable
 	boolean put(@Nullable K key, @Nullable V value);
@@ -115,7 +113,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * @return {@code true} if the multimap changed
 	 */
 	@Suspendable
-	boolean remove(@Nullable Object key, @Nullable Object value);
+	boolean remove(@Nullable K key, @Nullable V value);
 
 	// Bulk Operations
 
@@ -149,8 +147,8 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * <p>
 	 * <p>If {@code values} is empty, this is equivalent to {@link #removeAll(Object) removeAll(key)}.
 	 *
-	 * @return the collection of replaced values, or an empty collection if no values were previously associated with
-	 * the key. The collection <i>may</i> be modifiable, but updating it will have no effect on the multimap.
+	 * @return the collection of replaced values, or an empty collection if no values were previously associated with the
+	 * 		key. The collection <i>may</i> be modifiable, but updating it will have no effect on the multimap.
 	 */
 	@Suspendable
 	List<V> replaceValues(@Nullable K key, Iterable<? extends V> values);
@@ -162,7 +160,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * #keySet()}, {@link #asMap()}, or any other views.
 	 *
 	 * @return the values that were removed (possibly empty). The returned collection <i>may</i> be modifiable, but
-	 * updating it will have no effect on the multimap.
+	 * 		updating it will have no effect on the multimap.
 	 */
 	@Suspendable
 	List<V> removeAll(@Nullable K key);
@@ -176,8 +174,8 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	// Views
 
 	/**
-	 * Returns a view collection of the values associated with {@code key} in this multimap, if any. Note that when
-	 * {@code containsKey(key)} is false, this returns an empty collection, not {@code null}.
+	 * Returns a view collection of the values associated with {@code key} in this multimap, if any. Note that when {@code
+	 * containsKey(key)} is false, this returns an empty collection, not {@code null}.
 	 * <p>
 	 * <p>Changes to the returned collection will update the underlying multimap, and vice versa.
 	 */
@@ -185,8 +183,8 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	List<V> get(@Nullable K key);
 
 	/**
-	 * Returns a view collection of all <i>distinct</i> keys contained in this multimap. Note that the key set contains
-	 * a key if and only if this multimap maps that key to at least one value.
+	 * Returns a view collection of all <i>distinct</i> keys contained in this multimap. Note that the key set contains a
+	 * key if and only if this multimap maps that key to at least one value.
 	 * <p>
 	 * <p>Changes to the returned set will update the underlying multimap, and vice versa. However, <i>adding</i> to the
 	 * returned set is not possible.
@@ -206,8 +204,8 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	Multiset<K> keys();
 
 	/**
-	 * Returns a view collection containing the <i>value</i> from each key-value pair contained in this multimap,
-	 * without collapsing duplicates (so {@code values().size() == size()}).
+	 * Returns a view collection containing the <i>value</i> from each key-value pair contained in this multimap, without
+	 * collapsing duplicates (so {@code values().size() == size()}).
 	 * <p>
 	 * <p>Changes to the returned collection will update the underlying multimap, and vice versa. However, <i>adding</i>
 	 * to the returned collection is not possible.
@@ -247,8 +245,8 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * equality of two {@link ListMultimap} instances depends on the ordering of the values for each key.
 	 * <p>
 	 * <p>A non-empty {@link SetMultimap} cannot be equal to a non-empty {@link ListMultimap}, since their {@link
-	 * #asMap} views contain unequal collections as values. However, any two empty multimaps are equal, because they
-	 * both have empty {@link #asMap} views.
+	 * #asMap} views contain unequal collections as values. However, any two empty multimaps are equal, because they both
+	 * have empty {@link #asMap} views.
 	 */
 	@Override
 	@Suspendable

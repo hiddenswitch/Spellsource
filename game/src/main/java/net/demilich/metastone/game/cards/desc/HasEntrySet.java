@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
-import org.apache.commons.collections4.iterators.ArrayIterator;
+import com.google.common.collect.Iterators;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
@@ -36,7 +36,7 @@ public interface HasEntrySet<T extends Enum<T>, V> {
 			Iterator iterator;
 			// Deal with arrays or lists
 			if (node.value != null && node.value.getClass().isArray()) {
-				iterator = new ArrayIterator(node.value);
+				iterator = Iterators.forArray((Object[]) node.value);
 			} else if (node.value instanceof List) {
 				iterator = ((List) node.value).iterator();
 			} else {

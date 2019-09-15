@@ -1,0 +1,35 @@
+{
+  "name": "Magedrainer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Opener: Deal 2 damage to a minion. If that kills it, gain Spellpower +2.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDeadCondition"
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      "spell2": {
+        "class": "ModifyAttributeSpell",
+        "target": "SELF",
+        "value": 2,
+        "attribute": "SPELL_DAMAGE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

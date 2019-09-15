@@ -1,0 +1,26 @@
+{
+  "name": "Eldritch Push",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Deal $5 damage to a minion. If it survives, return it to its owner's hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 5
+    },
+    "spell2": {
+      "class": "ReturnTargetToHandSpell"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

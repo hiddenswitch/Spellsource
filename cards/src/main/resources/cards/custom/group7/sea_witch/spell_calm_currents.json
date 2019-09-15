@@ -22,7 +22,7 @@
   "spell": {
     "class": "ShuffleToDeckSpell",
     "target": "FRIENDLY_LAST_DIED_MINION",
-    "value": 2
+    "howMany": 2
   },
   "attributes": {},
   "collectible": true,

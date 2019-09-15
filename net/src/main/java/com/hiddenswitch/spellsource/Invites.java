@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.Invite.StatusEnum;
 import com.hiddenswitch.spellsource.impl.InviteId;
@@ -255,11 +256,8 @@ public interface Invites {
 
 				// This is (potentially also) a matchmaking queue request
 				// Create a new queue just for this invite.
-				request.setQueueId(RandomStringUtils.randomAlphanumeric(10));
 				// Right now, anyone can wait in any queue, but this is probably the most convenient.
-				// TODO: Destroy the user's missing queues
-				String queueIdRequested = request.getQueueId() == null ? "" : "-" + request.getQueueId();
-				String customQueueId = user.getUsername() + "-" + inviteId + queueIdRequested;
+				String customQueueId = user.getUsername() + "/" + inviteId + "/" + request.getQueueId();
 				invite.queueId(customQueueId);
 
 				// The matchmaker will close itself automatically if no one joins after 4s or the
@@ -385,6 +383,13 @@ public interface Invites {
 				throw new IllegalStateException("The invite was canceled.");
 		}
 
+		// Check that the opponent is still in the queue
+		if (invite.getQueueId() != null) {
+			UserId opponentInQueue = new UserId(invite.getFromUserId());
+			if (!Objects.equals(Matchmaking.getUsersInQueues().get(opponentInQueue), (invite.getQueueId()))) {
+				throw new IllegalStateException("Opponent no longer in queue.");
+			}
+		}
 
 		AcceptInviteResponse res = new AcceptInviteResponse();
 		res.invite(invite);
@@ -400,6 +405,8 @@ public interface Invites {
 				MatchmakingQueuePutRequest match = request.getMatch();
 				match.queueId(invite.getQueueId());
 				Matchmaking.enqueue(new MatchmakingRequest(match, recipient.getId()));
+				// TODO: Wait a beat for the game to start, but actually set up a thing to wait for when it actually starts
+				Strand.sleep(2000L);
 				env.result(new EnvelopeResult().enqueue(new MatchmakingQueuePutResponse()));
 				res.match(new MatchmakingQueuePutResponse());
 			} catch (IllegalStateException alreadyInMatch) {

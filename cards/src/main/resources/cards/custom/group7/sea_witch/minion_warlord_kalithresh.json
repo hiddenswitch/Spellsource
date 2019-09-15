@@ -14,7 +14,7 @@
       "spells": [
         {
           "class": "ShuffleToDeckSpell",
-          "value": 7,
+          "howMany": 7,
           "card": "spell_ocean_depths"
         },
         {

@@ -66,6 +66,10 @@ public class GameStatistics implements Cloneable, Serializable {
 				break;
 			case GROUP:
 				break;
+			case CLASS:
+				break;
+			case FORMAT:
+				break;
 		}
 		increaseCardCount(card, turn);
 	}
@@ -130,6 +134,10 @@ public class GameStatistics implements Cloneable, Serializable {
 
 	public void heal(int healing) {
 		add(Statistic.HEALING_DONE, healing);
+	}
+
+	public void loseArmor(int armorLost) {
+		add(Statistic.ARMOR_LOST, armorLost);
 	}
 
 	private void increaseCardCount(Card card, int turn) {

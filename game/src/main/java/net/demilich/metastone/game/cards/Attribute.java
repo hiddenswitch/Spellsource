@@ -2,7 +2,6 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Actor;
@@ -15,6 +14,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -154,9 +155,6 @@ public enum Attribute {
 	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a {@link net.demilich.metastone.game.spells.SilenceSpell}
 	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the minion
 	 * was {@link #FROZEN}.
-	 *
-	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
-	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
 	/**
@@ -208,6 +206,11 @@ public enum Attribute {
 	 */
 	AURA_TAUNT,
 	/**
+	 * Like taunt, but only applies while in hand or in the deck. Affects the summoned minion and goes away when this card
+	 * is moved to the graveyard.
+	 */
+	CARD_TAUNT,
+	/**
 	 * The total amount of spell damage that an {@link Entity} contributes.
 	 */
 	SPELL_DAMAGE,
@@ -244,6 +247,10 @@ public enum Attribute {
 	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
 	 */
 	EXTRA_ATTACKS,
+	/**
+	 * A virtual attribute that will call {@link Actor#getMaxNumberOfAttacks()} and return it.
+	 */
+	MAX_ATTACKS,
 	/**
 	 * When an {@link Actor} is {@link #ENRAGED}, its {@link #CONDITIONAL_ATTACK_BONUS} is set to the amount of damage
 	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
@@ -433,6 +440,10 @@ public enum Attribute {
 	 */
 	ATTACK_EQUALS_HP,
 	/**
+	 * The aura version of {@link #ATTACK_EQUALS_HP}.
+	 */
+	AURA_ATTACK_EQUALS_HP,
+	/**
 	 * When set, this {@link Minion} cannot attack.
 	 */
 	CANNOT_ATTACK,
@@ -514,7 +525,8 @@ public enum Attribute {
 	 */
 	GAME_TRIGGERS,
 	/**
-	 * This attribute keeps track of how many times the hero power was used this turn.
+	 * This attribute indicates the maximum number of times a hero power can be used in a turn. It is an aura effect. The
+	 * number of times a hero power can be used will be the max value found among in-play entities owned by the player.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
 	 * 		a hero power card, can be played.
@@ -723,11 +735,6 @@ public enum Attribute {
 	 */
 	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
 	/**
-	 * If a {@link Player} has this attribute, the player had a deck named "The Supreme Archive" in the player's
-	 * collection when the game began.
-	 */
-	HAS_SUPREME_ARCHIVE_DECK,
-	/**
 	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
 	 * damage to the target minion, the target minion  is destroyed.
 	 */
@@ -925,14 +932,22 @@ public enum Attribute {
 	 */
 	SPELLS_CAST_TWICE,
 	/**
-	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 * Applies a multiplier to the base attack plus bonus attack on an {@link Actor}.
 	 */
 	ATTACK_MULTIPLIER,
 	/**
+	 * The aura version of {@link #ATTACK_MULTIPLIER}.
+	 */
+	AURA_ATTACK_MULTIPLIER,
+	/**
 	 * When non-zero, multiplies the {@link #ATTACK_BONUS}, {@link #TEMPORARY_ATTACK_BONUS}, {@link #AURA_ATTACK_BONUS}
-	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount.
+	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount. In other words, a multiplier that only affects bonuses.
 	 */
 	ATTACK_BONUS_MULTIPLIER,
+	/**
+	 * The aura version of {@link #ATTACK_BONUS_MULTIPLIER}.
+	 */
+	AURA_ATTACK_BONUS_MULTIPLIER,
 	/**
 	 * Will block an entity from receiving game event triggers
 	 */
@@ -957,6 +972,10 @@ public enum Attribute {
 	 * Tracks a card being in the progress of playing
 	 */
 	BEING_PLAYED,
+	/**
+	 * Marks a card as using a "Quick Draw" effect for the Outlaw class
+	 */
+	QUICK_DRAW,
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
@@ -1017,9 +1036,22 @@ public enum Attribute {
 	 */
 	WITHERED,
 	/**
-	 * Indicates the amount of health drained by the {@link net.demilich.metastone.game.spells.DrainSpell} effect this
-	 * turn.
+	 * Counter for each time a "XXXXX's Scheme" card has upgraded
 	 */
+	SCHEME,
+	/**
+	 * Indicates a minion is part of the "___ Lackey" subset of cards for the Year of the Dragon
+	 */
+	LACKEY,
+	/**
+	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability at the end of every
+	 * owner's turn
+	 */
+	DECAY,
+	/**
+	 * Indicates a minion is an official Treant, considered for Treant-related synergies
+	 */
+	TREANT,
 	DRAINED_THIS_TURN,
 	TOTAL_DRAINED,
 	DRAINED_LAST_TURN,
@@ -1027,9 +1059,15 @@ public enum Attribute {
 	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
 	 */
 	SURGE,
-	DYNAMIC_DESCRIPTION;
+	DYNAMIC_DESCRIPTION, PASSIVE_AURAS, CURSE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
+	}
+
+	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+
+	public static List<Attribute> getCardEnchantmentAttributes() {
+		return cardEnchantmentAttributes;
 	}
 }

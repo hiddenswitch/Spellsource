@@ -1,0 +1,25 @@
+{
+  "name": "The Grudge",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Aftermath: Destroy three random minions.",
+  "deathrattle": {
+    "class": "MultiTargetSpell",
+    "target": "ALL_MINIONS",
+    "value": 3,
+    "spell": {
+      "class": "DestroySpell"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -5,6 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
@@ -20,21 +21,14 @@ public class HighestAttributeFilter extends EntityFilter {
 		Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
 		EntityReference targetReference = (EntityReference) getDesc().get(EntityFilterArg.TARGET);
 		List<Entity> entities = context.resolveTarget(player, entity, targetReference);
-		int highest = getHighestInList(entities, attribute);
-		return getAttributeValue(entity, attribute) >= highest;
+		int highest = getHighestInList(context, entities, attribute);
+		return AttributeValueProvider.provideValueForAttribute(context, attribute, entity) >= highest;
 	}
 
-	private static int getAttributeValue(Entity entity, Attribute attribute) {
-		if (attribute == Attribute.ATTACK) {
-			return ((Actor) entity).getAttack();
-		}
-		return entity.getAttributeValue(attribute);
-	}
-
-	private static int getHighestInList(List<Entity> entities, Attribute attribute) {
+	private static int getHighestInList(GameContext context, List<Entity> entities, Attribute attribute) {
 		int highest = Integer.MIN_VALUE;
 		for (Entity entity : entities) {
-			int attributeValue = getAttributeValue(entity, attribute);
+			int attributeValue = AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
 			if (attributeValue > highest) {
 				highest = attributeValue;
 			}

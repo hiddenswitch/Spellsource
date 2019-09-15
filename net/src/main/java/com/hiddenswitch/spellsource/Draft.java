@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.draft.DraftContext;
 import com.hiddenswitch.spellsource.draft.DraftStatus;
 import com.hiddenswitch.spellsource.draft.PrivateDraftState;
@@ -150,8 +150,8 @@ public interface Draft {
 	 */
 	@Suspendable
 	static DraftState toDraftState(PublicDraftState inState) {
-		HeroClass playerHero1 = inState.getHeroClass() == null ? HeroClass.RED : inState.getHeroClass();
-		GameContext workingContext = new GameContext(playerHero1, HeroClass.RED);
+		String playerHero1 = inState.getHeroClass() == null ? "RED" : inState.getHeroClass();
+		GameContext workingContext = new GameContext(playerHero1, "RED");
 		return new DraftState()
 				.cardsRemaining(inState.getCardsRemaining())
 				.currentCardChoices(inState.getCurrentCardChoices() == null ? null :

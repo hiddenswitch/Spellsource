@@ -9,7 +9,7 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
@@ -27,7 +27,6 @@ import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +66,15 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
+		Connection.registerCodecs();
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		io.vertx.core.logging.LoggerFactory.initialise();
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(port)
 				.setMaxWebsocketFrameSize(65536)
+				.setWebsocketAllowServerNoContext(true)
+				.setWebsocketPreferredClientNoContext(true)
 				.setMaxWebsocketMessageSize(100 * 65536)
 				.setPerFrameWebsocketCompressionSupported(true)
 				.setPerMessageWebsocketCompressionSupported(true)
@@ -129,11 +131,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/")
 				.handler(routingContext -> {
 					// Check that hazelcast is ready in this health check
-					if (!Hazelcast.getHazelcastInstance().getLifecycleService().isRunning()) {
-						routingContext.fail(500);
-						return;
-					}
-
 					routingContext.response().setStatusCode(200);
 					routingContext.response().end("OK");
 				});
@@ -450,7 +447,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		DeckCreateRequest createRequest;
 		if (request.getDeckList() == null
 				|| request.getDeckList().equals("")) {
-			final HeroClass heroClass = HeroClass.valueOf(request.getHeroClass().name());
+			final String heroClass = request.getHeroClass();
 
 			createRequest = new DeckCreateRequest()
 					.withName(request.getName())
@@ -695,7 +692,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards::cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
 
 		String cardsVersion = cache.get("cards-version");
 		String lastModified = cache.get("cards-last-modified");

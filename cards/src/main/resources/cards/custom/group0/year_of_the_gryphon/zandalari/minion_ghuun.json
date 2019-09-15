@@ -1,12 +1,12 @@
 {
-  "name": "G'huun",
+  "name": "H'guun",
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Lifesteal. Damaged minions have +8/+8 and can't attack championes.",
+  "description": "Lifesteal. Damaged minions have +8/+8 and can't attack champions.",
   "attributes": {
     "LIFESTEAL": true
   },

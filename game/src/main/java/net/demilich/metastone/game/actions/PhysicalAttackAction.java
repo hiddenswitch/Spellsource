@@ -26,6 +26,12 @@ public class PhysicalAttackAction extends GameAction {
 		return (PhysicalAttackAction) super.clone();
 	}
 
+	/**
+	 * Creates a physical attack with the specified {@code attackerReference} as the attacker. This should be an {@code
+	 * Actor}.
+	 *
+	 * @param attackerReference
+	 */
 	public PhysicalAttackAction(EntityReference attackerReference) {
 		this();
 		this.setSourceReference(attackerReference);

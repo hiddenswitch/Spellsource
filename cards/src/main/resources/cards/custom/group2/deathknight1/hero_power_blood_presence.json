@@ -16,11 +16,13 @@
       "targetPlayer": "SELF"
     }
   },
-  "aura": {
-    "class": "AttributeAura",
-    "target": "FRIENDLY_MINIONS",
-    "attribute": "AURA_LIFESTEAL"
-  },
+  "passiveAuras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_MINIONS",
+      "attribute": "AURA_LIFESTEAL"
+    }
+  ],
   "condition": {
     "class": "AndCondition",
     "invert": true
@@ -32,7 +34,7 @@
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",
-      "card": "enchantment_blood_prescence"
+      "card": "enchantment_blood_presence"
     }
   },
   "collectible": false,

@@ -6,11 +6,14 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 
 public class ConversationTest extends SpellsourceTestBase {
 
@@ -19,7 +22,6 @@ public class ConversationTest extends SpellsourceTestBase {
 	@Test
 	public void testConversationRealtime(TestContext context) {
 		sync(() -> {
-
 			CreateAccountResponse user1 = createRandomAccount();
 			CreateAccountResponse user2 = createRandomAccount();
 
@@ -62,13 +64,13 @@ public class ConversationTest extends SpellsourceTestBase {
 					}
 				}
 			};
-			client1.ensureConnected();
-			client2.ensureConnected();
+			invoke0(client1::ensureConnected);
+			invoke0(client2::ensureConnected);
 			try {
 				latch.await();
 			} finally {
 				context.assertEquals(latch.getCount(), 0L);
 			}
-		});
+		}, context);
 	}
 }

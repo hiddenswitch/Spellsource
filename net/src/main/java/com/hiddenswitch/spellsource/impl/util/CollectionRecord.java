@@ -9,9 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by bberman on 2/6/17.
+ * A mongodb record of the user's collection metadata. Does not contain the inventory IDs themselves.
  */
 public class CollectionRecord extends MongoRecord {
+	public static final String FORMAT = "format";
+	public static final String HERO_CLASS = "heroClass";
 	private String userId;
 	private CollectionTypes type;
 	private boolean trashed;
@@ -25,7 +27,7 @@ public class CollectionRecord extends MongoRecord {
 	/**
 	 * Hero class for deck collection records.
 	 */
-	private HeroClass heroClass;
+	private String heroClass;
 
 	/**
 	 * Names for alliance and deck collection records.
@@ -70,7 +72,7 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public static CollectionRecord deck(final String userId, final String name, final HeroClass heroClass, final boolean draft) {
+	public static CollectionRecord deck(final String userId, final String name, final String heroClass, final boolean draft) {
 		return new CollectionRecord()
 				.withDraft(draft)
 				.setUserId(userId)
@@ -166,11 +168,11 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public CollectionRecord setHeroClass(HeroClass heroClass) {
+	public CollectionRecord setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 		return this;
 	}

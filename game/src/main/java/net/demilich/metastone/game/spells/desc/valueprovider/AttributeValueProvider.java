@@ -71,10 +71,12 @@ public class AttributeValueProvider extends ValueProvider {
 		if (entity instanceof Card) {
 			Card card = (Card) entity;
 			if (attribute == Attribute.ATTACK && card.getCardType() == CardType.MINION) {
-				value += card.getDesc().baseAttack + card.getBonusAttack();
+				value += card.getDesc().getBaseAttack() + card.getBonusAttack();
 			} else if (attribute == Attribute.HP && card.getCardType() == CardType.MINION) {
-				value += card.getDesc().baseHp + card.getBonusHp();
-			} else value += card.getAttributeValue(attribute);
+				value += card.getDesc().getBaseHp() + card.getBonusHp();
+			} else {
+				value += card.getAttributeValue(attribute);
+			}
 		} else {
 			if (entity instanceof Actor) {
 				Actor source = (Actor) entity;
@@ -86,6 +88,8 @@ public class AttributeValueProvider extends ValueProvider {
 					value += source.getHp();
 				} else if (attribute == Attribute.BASE_MANA_COST) {
 					value += source.getSourceCard().getBaseManaCost();
+				} else if (attribute == Attribute.MAX_ATTACKS) {
+					value += source.getMaxNumberOfAttacks();
 				} else {
 					value += source.getAttributeValue(attribute);
 				}

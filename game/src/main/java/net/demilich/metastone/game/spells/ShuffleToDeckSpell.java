@@ -6,8 +6,11 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.ShuffledEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.ShuffledOnlyOriginalCopiesTrigger;
+import net.demilich.metastone.game.spells.trigger.ShuffledTrigger;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.AttributeMap;
 
@@ -18,7 +21,8 @@ import java.util.Map;
  * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER}
  * cards into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
- * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
+ * When {@link SpellArg#EXCLUSIVE} is {@code true}, marks the shuffled card as an extra copy for the purposes of the
+ * {@link ShuffledTrigger}. To trigger only on non-extra copies, use {@link ShuffledOnlyOriginalCopiesTrigger}.
  * <p>
  * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
  * <pre>
@@ -43,7 +47,7 @@ public class ShuffleToDeckSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int copies = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
-		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
+		boolean extraCopy = desc.getBool(SpellArg.EXCLUSIVE);
 
 		if (target != null
 				&& !desc.containsKey(SpellArg.CARD)
@@ -54,7 +58,7 @@ public class ShuffleToDeckSpell extends Spell {
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
 			for (int i = 0; i < copies; i++) {
-				Card copy = shuffle(context, player, target.getSourceCard(), quiet);
+				Card copy = shuffle(context, player, null, target.getSourceCard(), extraCopy, source.getOwner());
 				copy.getAttributes().putAll(map);
 				if (copy.getZone() == Zones.DECK) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
@@ -69,7 +73,7 @@ public class ShuffleToDeckSpell extends Spell {
 		Map<Card, Boolean> didShuffle = new HashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
-				Card copy = shuffle(context, player, original, quiet);
+				Card copy = shuffle(context, player, null, original, extraCopy, source.getOwner());
 				didShuffle.put(copy, copy.getZone() == Zones.DECK);
 			}
 		}
@@ -82,8 +86,8 @@ public class ShuffleToDeckSpell extends Spell {
 	}
 
 	@Suspendable
-	protected Card shuffle(GameContext context, Player player, Card original, boolean quiet) {
-		return CopyCardSpell.copyCard(context, player, original, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean extraCopy, int sourcePlayerId) {
+		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, extraCopy, sourcePlayerId));
 	}
 }
 

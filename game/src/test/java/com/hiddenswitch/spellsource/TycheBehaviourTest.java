@@ -13,7 +13,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
-import net.demilich.metastone.tests.util.TestBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -61,6 +60,7 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	}
 
 	@Test
+	@Ignore("No more midrange shaman")
 	public void testMidrangeShamanMirrorMatch() {
 		List<GameDeck> decks = Collections.singletonList(TycheBehaviour.midrangeShaman().toGameDeck());
 		Logging.setLoggingLevel(Level.ERROR);
@@ -104,6 +104,6 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 			// This is a depth 6 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
 			assertTrue(context.updateAndGetGameOver());
-		}, HeroClass.BLACK, HeroClass.BLACK);
+		}, "BLACK", "BLACK");
 	}
 }

@@ -1,22 +1,12 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
-    }
+plugins {
+    id "com.palantir.graal" version "0.3.0-37-g77aa98f"
+    id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
-def hazelcastJvmArgs = ["--add-modules", "java.se",
-                        "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
-                        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                        "--add-opens", "java.base/java.nio=ALL-UNNAMED",
-                        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
-                        "--add-opens", "java.management/sun.management=ALL-UNNAMED",
-                        "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED"]
+apply plugin: 'com.palantir.graal'
+apply plugin: 'com.github.johnrengelman.shadow'
 
-def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
+def localMainClassName = 'com.hiddenswitch.spellsource.applications.Local'
 
 def debugSystemProperties = ["spellsource.port"                        : "8080",
                              "spellsource.root.logger.level"           : "DEBUG",
@@ -29,10 +19,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 configurations.all {
     resolutionStrategy {
         force 'com.hazelcast:hazelcast:3.11'
-        force 'org.apache.commons:commons-lang3:3.5'
-        force 'com.fasterxml.jackson.core:jackson-core:2.9.8'
-        force 'com.fasterxml.jackson.core:annotations:2.9.0'
-        force 'com.fasterxml.jackson.core:databind:2.9.8'
     }
 }
 
@@ -44,9 +30,17 @@ jar {
 
 shadowJar {
     mergeServiceFiles()
-    classifier = null;
+    archiveClassifier.set(null)
     configurations = [project.configurations.compile]
     zip64 true
+}
+
+graal {
+    mainClass mainClassName
+    outputName 'spellsource-server'
+    graalVersion '19.1.0'
+    option "--no-fallback"
+    option "--report-unsupported-elements-at-runtime"
 }
 
 artifacts {
@@ -65,40 +59,38 @@ repositories {
 }
 
 dependencies {
-    compile group: 'com.hazelcast', name: 'hazelcast', version: '3.11'
-    compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.3'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
-    compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-web', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.6.0'
-    compile group: 'su.nlq', name: 'vertx-prometheus-metrics', version: '3.6.0'
-    compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.7'
-    compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-web', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.8.0'
+    compile group: 'io.vertx', name: 'vertx-dropwizard-metrics', version: '3.8.0'
+    compile 'io.netty:netty-transport-native-epoll:4.1.15.Final:linux-x86_64'
+    compile 'io.netty:netty-transport-native-kqueue:4.1.15.Final:osx-x86_64'
+    compile 'io.atomix:atomix:3.1.5'
+    compile 'io.atomix:atomix-raft:3.1.5'
+    compile 'io.atomix:atomix-primary-backup:3.1.5'
+    compile group: 'javax.cache', name: 'cache-api', version: '1.1.1'
+    compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
     compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
-    
-    /* Hazelcast Consul discovery support is pretty spotty
-    compile group: 'org.bitsofinfo', name: 'hazelcast-consul-discovery-spi', version: '1.0-RC9'
-    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: '3.0.3'
-    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http-hc', version: '3.0.3'
-    */
-    
+
     compile project(':game')
     compile project(':cards')
     compile project(':client')
     compile project(':vertx-sync')
 
+    testCompile project(':testutils')
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
-    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
+    testCompile 'io.vertx:vertx-core:3.8.0:tests'
+    testCompile 'org.powermock:powermock-module-junit4:2.0.2'
+    testCompile 'org.powermock:powermock-api-mockito2:2.0.2'
+    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.8.0'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9'
@@ -107,14 +99,13 @@ dependencies {
 
 test {
     setSystemProperties(debugSystemProperties)
-    setJvmArgs(hazelcastJvmArgs)
     useJUnit()
     maxParallelForks = 1
 
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
     }
-    
+
     if (System.properties.containsKey("exclude-tests")) {
         exclude(System.properties.getProperty("exclude-tests").split(","))
     }
@@ -123,14 +114,13 @@ test {
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
     setSystemProperties(debugSystemProperties)
     main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs + ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
+    setJvmArgs(["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
     classpath = sourceSets.main.runtimeClasspath
 }
 
 task(local, dependsOn: 'classes', type: JavaExec) {
     setSystemProperties(debugSystemProperties)
     main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs)
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -151,6 +141,5 @@ task(localWindows, dependsOn: 'classes', type: JavaExec) {
     }
     setSystemProperties(debugSystemProperties)
     main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs)
     classpath = sourceSets.main.runtimeClasspath
 }

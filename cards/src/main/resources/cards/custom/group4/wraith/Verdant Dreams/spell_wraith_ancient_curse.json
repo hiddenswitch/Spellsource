@@ -1,0 +1,32 @@
+{
+  "name": "Ancient Curse",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "RARE",
+  "description": "Deal $6 damage to both champions, but bypassing YOUR armor. Then, gain 6 Armor",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 6
+      },
+      {
+        "class": "DamageIgnoringArmorSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 6
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 6
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

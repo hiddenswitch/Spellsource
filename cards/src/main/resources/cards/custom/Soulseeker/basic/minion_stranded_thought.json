@@ -1,0 +1,21 @@
+{
+  "name": "Stranded Thought",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Aftermath: Draw 2 cards.",
+  "deathrattle": {
+    "class": "DrawCardSpell",
+    "value": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

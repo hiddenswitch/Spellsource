@@ -4,12 +4,11 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class DeckTest extends SpellsourceTestBase {
 			DeckCreateResponse deckCreateResponse = createDeckForUserId(userId1);
 			GetCollectionResponse collectionResponse = getDeck(deckCreateResponse.getDeckId());
 			context.assertEquals(collectionResponse.getInventoryRecords().size(), 30);
-		});
+		}, context);
 	}
 
 	@Test
@@ -44,7 +43,7 @@ public class DeckTest extends SpellsourceTestBase {
 			for (int i = 0; i < 100; i++) {
 				context.assertEquals(getDeck(createDeckForUserId(userId1).getDeckId()).getInventoryRecords().size(), 30);
 			}
-		});
+		}, context);
 	}
 
 	private GetCollectionResponse getDeck(String deckId) throws SuspendExecution, InterruptedException {
@@ -74,7 +73,7 @@ public class DeckTest extends SpellsourceTestBase {
 			GetCollectionResponse deck2 = getDeck(deckId);
 			context.assertTrue(deck2.getInventoryRecords().contains(replacement));
 			context.assertFalse(deck2.getInventoryRecords().contains(toReplace));
-		});
+		}, context);
 	}
 
 	@Test
@@ -83,26 +82,26 @@ public class DeckTest extends SpellsourceTestBase {
 			CreateAccountResponse player1 = createRandomAccount();
 			final String userId = player1.getUserId();
 			CreateCollectionResponse emptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", HeroClass.BLACK));
+			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", "TEST"));
 			DeckUpdateResponse update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
 					.pushCardIds(new DecksUpdateCommandPushCardIds()
-							.addEachItem("spell_mirror_image")
-							.addEachItem("spell_mirror_image")
-							.addEachItem("spell_mirror_image")
-							.addEachItem("minion_bloodfen_raptor"))));
+							.addEachItem("spell_test_summon_tokens")
+							.addEachItem("spell_test_summon_tokens")
+							.addEachItem("spell_test_summon_tokens")
+							.addEachItem("minion_test_3_2"))));
 
 
 			context.assertEquals(4L, update.getAddedInventoryIds().stream().distinct().count());
 			GetCollectionResponse userCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
-			context.assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
-			context.assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
+			context.assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
+			context.assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
 			update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
-					.pullAllCardIds(Arrays.asList("spell_mirror_image", "spell_mirror_image", "minion_bloodfen_raptor"))));
+					.pullAllCardIds(Arrays.asList("spell_test_summon_tokens", "spell_test_summon_tokens", "minion_test_3_2"))));
 			context.assertEquals(3L, update.getRemovedInventoryIds().stream().distinct().count());
 			GetCollectionResponse updatedDeck = Inventory.getCollection(GetCollectionRequest.deck(deck.getDeckId()));
-			context.assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_mirror_image")).count());
-			context.assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_bloodfen_raptor")).count());
-		});
+			context.assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
+			context.assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
+		}, context);
 	}
 
 	@Test
@@ -121,7 +120,7 @@ public class DeckTest extends SpellsourceTestBase {
 			// Delete the deck
 			DeckDeleteResponse response = Decks.deleteDeck(DeckDeleteRequest.create(deckId));
 			context.assertFalse(Accounts.get(userId1).getDecks().contains(deckId));
-		});
+		}, context);
 	}
 
 	@Test

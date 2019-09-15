@@ -106,7 +106,9 @@ public class TargetLogic implements Serializable {
 			return environmentResult;
 		}
 
-		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId).findFirst();
+		Optional<Entity> entity = context.getPlayer(0).findEntity(targetId)
+				.or(() -> context.getPlayer(1).findEntity(targetId));
+
 		if (entity.isPresent()) {
 			return entity.get();
 		} else {
@@ -258,6 +260,19 @@ public class TargetLogic implements Serializable {
 				return new ArrayList<>();
 			}
 			return new ArrayList<>(player.getHand().subList(0, 1));
+		} else if (targetKey.equals(EntityReference.LEFTMOST_ENEMY_CARD_HAND)) {
+			player = context.getOpponent(player);
+			if (player.getHand().size() == 0) {
+				return new ArrayList<>();
+			}
+			return new ArrayList<>(player.getHand().subList(0, 1));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN)) {
+			EntityReference value = context.getLastSpellPlayedThisTurnMap().getOrDefault(player.getId(), null);
+			if (value == null) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(context.resolveSingleTarget(value));
+			}
 		} else if (targetKey.equals(EntityReference.RIGHTMOST_FRIENDLY_CARD_HAND)) {
 			if (player.getHand().size() == 0) {
 				return new ArrayList<>();

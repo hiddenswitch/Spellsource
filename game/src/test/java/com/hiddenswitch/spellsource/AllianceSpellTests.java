@@ -6,7 +6,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -16,17 +15,17 @@ import org.testng.annotations.Test;
 public class AllianceSpellTests extends TestBase {
 	@Test
 	public void testLastMinionDestroyedBattlecrySummon() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
+		GameContext context = createContext("BLUE", "RED");
 		Player mage = context.getPlayer1();
 		mage.setMana(10);
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
 		Card card = CardCatalogue.getCardById("minion_sourcing_specialist");
-		card.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_wisp");
+		card.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_neutral_test");
 
 		playCard(context, mage, card);
 
-		Assert.assertTrue(mage.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_wisp")));
+		Assert.assertTrue(mage.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_neutral_test")));
 	}
 }

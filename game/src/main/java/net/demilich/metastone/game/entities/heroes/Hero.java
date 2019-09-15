@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.entities.heroes;
 
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
@@ -8,19 +9,19 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 
+import java.lang.ref.WeakReference;
 import java.util.EnumMap;
 import java.util.Map;
 
 public final class Hero extends Actor {
-	private HeroClass heroClass;
-	private EntityZone<Card> heroPowerZone = new EntityZone<>(getOwner(), Zones.HERO_POWER);
-	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), Zones.WEAPON);
+	private String heroClass;
+	private WeakReference<Player> playerRef = new WeakReference<>(null);
 
-	public Hero(Card heroCard, Card heroPower) {
+	public Hero(Card heroCard, Player player) {
 		super(heroCard);
+		setPlayer(player);
 		setName(heroCard.getName());
-		this.setHeroClass(heroCard.getHeroClass());
-		this.setHeroPower(heroPower);
+		setHeroClass(heroCard.getHeroClass());
 	}
 
 	public void activateWeapon(boolean active) {
@@ -32,8 +33,6 @@ public final class Hero extends Actor {
 	@Override
 	public Hero clone() {
 		Hero clone = (Hero) super.clone();
-		clone.heroPowerZone = heroPowerZone.clone();
-		clone.weaponZone = weaponZone.clone();
 		return clone;
 	}
 
@@ -46,14 +45,6 @@ public final class Hero extends Actor {
 		return attack;
 	}
 
-	public Map<Attribute, Object> getAttributesCopy() {
-		Map<Attribute, Object> copy = new EnumMap<>(Attribute.class);
-		for (Attribute attribute : getAttributes().keySet()) {
-			copy.put(attribute, getAttributes().get(attribute));
-		}
-		return copy;
-	}
-
 	public int getEffectiveHp() {
 		return getHp() + getArmor();
 	}
@@ -64,21 +55,21 @@ public final class Hero extends Actor {
 	}
 
 	@Override
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
 	public Card getHeroPower() {
-		if (heroPowerZone.size() > 0) {
-			return heroPowerZone.get(0);
+		if (getHeroPowerZone().size() > 0) {
+			return getHeroPowerZone().get(0);
 		} else {
 			return null;
 		}
 	}
 
 	public Weapon getWeapon() {
-		if (weaponZone.size() > 0) {
-			return weaponZone.get(0);
+		if (getWeaponZone().size() > 0) {
+			return getWeaponZone().get(0);
 		} else {
 			return null;
 		}
@@ -96,52 +87,24 @@ public final class Hero extends Actor {
 		final int originalArmor = getArmor();
 		int newArmor = Math.max(originalArmor + armor, 0);
 		setAttribute(Attribute.ARMOR, newArmor);
-		return newArmor - originalArmor;
+		int armorChange = newArmor - originalArmor;
+		return armorChange;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
-	public void setHeroPower(Card heroPower) {
-		if (heroPowerZone.size() > 0) {
-			heroPowerZone.remove(0);
-		}
-		heroPower.setOwner(getOwner());
-		this.heroPowerZone.add(heroPower);
-
-	}
-
-	@Override
-	public void setOwner(int ownerIndex) {
-		super.setOwner(ownerIndex);
-		if (heroPowerZone.getPlayer() == -1) {
-			heroPowerZone.setPlayer(ownerIndex);
-		}
-		if (weaponZone.getPlayer() == -1) {
-			weaponZone.setPlayer(ownerIndex);
-		}
-		getHeroPower().setOwner(ownerIndex);
-		if (getWeapon() != null) {
-			getWeapon().setOwner(ownerIndex);
-		}
-	}
-
-	public void setWeapon(Weapon weapon) {
-		if (weaponZone.size() > 0) {
-			weaponZone.remove(0);
-		}
-		if (weapon != null) {
-			weapon.setOwner(getOwner());
-			this.weaponZone.add(weapon);
-		}
-	}
-
 	public EntityZone<Card> getHeroPowerZone() {
-		return heroPowerZone;
+		return playerRef.get().getHeroPowerZone();
 	}
 
 	public EntityZone<Weapon> getWeaponZone() {
-		return weaponZone;
+		return playerRef.get().getWeaponZone();
+	}
+
+	public Hero setPlayer(Player player) {
+		playerRef = new WeakReference<>(player);
+		return this;
 	}
 }

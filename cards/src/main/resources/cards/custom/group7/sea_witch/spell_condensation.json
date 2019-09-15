@@ -16,7 +16,6 @@
     },
     "spell2": {
       "class": "ShuffleToDeckSpell",
-      "value": 1,
       "card": "minion_sea_elemental"
     }
   },

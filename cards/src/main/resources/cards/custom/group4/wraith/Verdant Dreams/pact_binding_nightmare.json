@@ -1,0 +1,46 @@
+{
+  "name": "Binding Nightmare",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "<b>Pact:</b> After you play a <b>Pact</b>, draw 3 cards.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 1,
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "AllMatchFilterCondition",
+          "target": "EVENT_SOURCE",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cards": [
+              "pact_deaths_hand",
+              "pact_extraction",
+              "pact_nothing_to_waste",
+              "pact_soul_lightning",
+              "pact_binding_nightmare"
+            ]
+          }
+        }
+      },
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 3
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

@@ -118,11 +118,11 @@ public class SuspendableGameContext extends GameContext {
 		ready = new SimpleConditionSynchronizer(this);
 	}
 
-	public SuspendableGameContext(HeroClass heroClass1, HeroClass heroClass2) {
+	public SuspendableGameContext(String heroClass1, String heroClass2) {
 		this();
-		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero());
-		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero());
-		getTrace().setHeroClasses(new HeroClass[]{heroClass1, heroClass2});
+		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero(getPlayer1()));
+		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero(getPlayer2()));
+		getTrace().setHeroClasses(new String[]{heroClass1, heroClass2});
 	}
 
 	public SuspendableGameContext(GameDeck... decks) {

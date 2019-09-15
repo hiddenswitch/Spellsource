@@ -1,0 +1,25 @@
+{
+  "name": "Twin Spirits",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Summon two 1/1 Spirits.",
+  "condition": {
+    "class": "CanSummonCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_lost_soul",
+        "token_lost_soul"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

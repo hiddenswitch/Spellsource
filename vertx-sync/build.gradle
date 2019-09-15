@@ -1,11 +1,11 @@
 dependencies {
-    compile group: 'co.paralleluniverse', name: 'quasar-core', version: '0.8.0'
+    compile project(':quasar-core')
     compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'
-    compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.8.0'
     // Docgen appears to be missing from maven?
-    compile group: 'io.vertx', name: 'vertx-docgen', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-codetrans', version: '3.6.0'
-    compile("com.esotericsoftware:kryo:4.0.0") {
+    compile group: 'io.vertx', name: 'vertx-docgen', version: '0.9.2'
+    compile group: 'io.vertx', name: 'vertx-codetrans', version: '3.8.0'
+    compile("com.esotericsoftware:kryo:4.0.2") {
         exclude group: "org.ow2.asm", module: '*'
     }
     compile("de.javakaffee:kryo-serializers:0.42") {
@@ -14,6 +14,6 @@ dependencies {
     }
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
-    testCompile group: 'io.vertx', name: 'vertx-core', version: '3.6.0', classifier: 'tests'
+    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.8.0'
+    testCompile group: 'io.vertx', name: 'vertx-core', version: '3.8.0', classifier: 'tests'
 }

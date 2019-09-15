@@ -61,3 +61,4 @@ public class ModifyAttributeSpell extends RevertableSpell {
 		target.modifyAttribute(attribute, value);
 	}
 }
+

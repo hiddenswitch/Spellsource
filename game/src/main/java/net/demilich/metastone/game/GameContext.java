@@ -3,7 +3,7 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.EndTurnAction;
@@ -84,7 +84,7 @@ import static java.util.stream.Collectors.toList;
  * GameContext context = new GameContext();
  * for (int playerId : new int[] {GameContext.PLAYER_1, GameContext.PLAYER_2}) {
  *   context.setBehaviour(playerId, new GameStateValueProvider());
- *   context.setDeck(playerId, Deck.randomDeck(HeroClass.RED, DeckFormat.STANDARD));
+ *   context.setDeck(playerId, Deck.randomDeck("RED", DeckFormat.getFormat("Standard")));
  * }
  * context.play();
  * }
@@ -162,7 +162,7 @@ import static java.util.stream.Collectors.toList;
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
  * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
- * <li>{@link GameLogic#resolveBattlecry(int, Actor)}},
+ * <li>{@link GameLogic#resolveBattlecries(int, Actor)}},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
  * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all
@@ -232,7 +232,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.STANDARD);
+		setDeckFormat(DeckFormat.all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -248,7 +248,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
 		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
-		setDeckFormat(fromContext.getDeckFormat());
+		setDeckFormat(fromContext.getDeckFormat().clone());
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
 
@@ -282,10 +282,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param heroClasses The player's hero classes.
 	 */
-	public GameContext(HeroClass... heroClasses) {
+	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
-			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
+			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero(getPlayer(i)));
 		}
 	}
 
@@ -296,7 +296,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param card The card to add, typically made with code.
 	 */
 	public void addTempCard(Card card) {
-		getTempCards().addCard(card);
+		getTempCards().addCard(card.clone());
 	}
 
 	/**
@@ -387,7 +387,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		setTurnState(TurnState.TURN_ENDED);
-		onGameStateChanged();
 	}
 
 
@@ -893,11 +892,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
 
-	@Suspendable
-	protected void onGameStateChanged() {
-	}
-
-
 	/**
 	 * Executes the specified game action, typically by calling {@link GameLogic#performGameAction(int, GameAction)}.
 	 *
@@ -908,7 +902,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	public void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
-		onGameStateChanged();
 	}
 
 	/**
@@ -992,7 +985,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		trace.addAction(nextAction.getId(), nextAction, this);
 
 		getLogic().performGameAction(getActivePlayerId(), nextAction);
-		onGameStateChanged();
 
 		return nextAction.getActionType() != ActionType.END_TURN;
 	}
@@ -1149,7 +1141,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().startTurn(playerId);
 		setActionsThisTurn(0);
 		setTurnState(TurnState.TURN_IN_PROGRESS);
-		onGameStateChanged();
 	}
 
 	@Override
@@ -1183,6 +1174,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setLogic(GameLogic logic) {
+		if (this.logic != null && logic.getInternalId() != this.logic.getInternalId()) {
+			throw new IllegalArgumentException("logic.getInternalId() != this.logic.getInternalId()");
+		}
 		this.logic = logic;
 		logic.setContext(this);
 	}
@@ -1236,20 +1230,20 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setGameState(GameState state) {
-		this.setPlayer(GameContext.PLAYER_1, state.player1);
-		this.setPlayer(GameContext.PLAYER_2, state.player2);
-		this.setTempCards(state.tempCards);
-		this.setEnvironment(state.environment);
-		this.setTriggerManager(state.triggerManager);
+		this.setPlayer(GameContext.PLAYER_1, state.getPlayer1());
+		this.setPlayer(GameContext.PLAYER_2, state.getPlayer2());
+		this.setTempCards(state.getTempCards());
+		this.setEnvironment(state.getEnvironment());
+		this.setTriggerManager(state.getTriggerManager());
 		if (getLogic() == null) {
 			setLogic(new GameLogic());
 		}
-		this.getLogic().setIdFactory(new IdFactoryImpl(state.currentId));
+		this.getLogic().setIdFactory(new IdFactoryImpl(state.getCurrentId()));
 		this.getLogic().setContext(this);
-		this.setTurnState(state.turnState);
-		this.setTurn(state.turnNumber);
-		this.setActivePlayerId(state.activePlayerId);
-		this.setDeckFormat(state.deckFormat);
+		this.setTurnState(state.getTurnState());
+		this.setTurn(state.getTurnNumber());
+		this.setActivePlayerId(state.getActivePlayerId());
+		this.setDeckFormat(state.getDeckFormat());
 	}
 
 	public GameContext setPlayer(int index, Player player) {
@@ -1303,9 +1297,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
-		return getPlayers().stream()
-				.flatMap(p -> Stream.of(Zones.values())
-						.flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+		return Stream.concat(
+				getPlayer1().getLookup().values().stream(),
+				getPlayer2().getLookup().values().stream());
 	}
 
 	@Suspendable
@@ -1431,6 +1425,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return getLastCardPlayedMap().get(IdFactory.UNASSIGNED);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<Integer, EntityReference> getLastSpellPlayedThisTurnMap() {
+		if (!getEnvironment().containsKey(Environment.LAST_SPELL_PLAYED_THIS_TURN)) {
+			getEnvironment().put(Environment.LAST_SPELL_PLAYED_THIS_TURN, new EnvironmentMap<>());
+		}
+		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_SPELL_PLAYED_THIS_TURN);
+	}
+
+	public void setLastSpellPlayedThisTurn(int playerId, EntityReference cardReference) {
+		getLastSpellPlayedThisTurnMap().put(IdFactory.UNASSIGNED, cardReference);
+		getLastSpellPlayedThisTurnMap().put(playerId, cardReference);
+	}
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence() {
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(IdFactory.UNASSIGNED);
@@ -1740,6 +1746,16 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
+	 * Creates a game with two random decks in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
+	public static GameContext fromTwoRandomDecks(DeckFormat format) {
+		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)));
+	}
+
+	/**
 	 * Creates a game context from the given state.
 	 *
 	 * @param state A {@link GameState} object.
@@ -1919,7 +1935,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void setDeck(int playerId, GameDeck deck) {
 		getPlayer(playerId).getDeck().clear();
 		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
-		getPlayer(playerId).setHero(deck.getHeroCard().createHero());
+		getPlayer(playerId).setHero(deck.getHeroCard().createHero(getPlayer(playerId)));
 		getTrace().getDeckCardIds();
 	}
 

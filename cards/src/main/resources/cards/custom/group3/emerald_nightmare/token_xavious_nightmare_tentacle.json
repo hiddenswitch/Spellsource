@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Xavius has +3 Attack.",
+  "description": "Vaxius has +3 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_MINIONS",

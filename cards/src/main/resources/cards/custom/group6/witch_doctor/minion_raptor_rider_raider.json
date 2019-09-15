@@ -1,10 +1,10 @@
 {
   "name": "Raptor Rider Raider",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ROSE",
-  "baseAttack": 5,
-  "baseHp": 3,
+  "baseAttack": 6,
+  "baseHp": 4,
   "rarity": "RARE",
   "description": "Opener: Reveal a minion in each deck. If yours costs more, summon a copy of this minion.",
   "battlecry": {

@@ -3,24 +3,35 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
-import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.*;
+import com.hiddenswitch.spellsource.models.CollectionTypes;
+import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
+import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
+import com.hiddenswitch.spellsource.models.MigrationRequest;
+import com.hiddenswitch.spellsource.util.Mongo;
+import io.netty.channel.EventLoop;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.reflections.Reflections;
@@ -32,6 +43,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
@@ -40,7 +53,6 @@ import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -60,11 +72,15 @@ public class Spellsource {
 	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
 	private static Spellsource instance;
 	private List<DeckCreateRequest> cachedStandardDecks;
-	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
-	private Map<String, Trigger> gameTriggers = new HashMap<>();
-	private Map<String, Spell> spells = new HashMap<>();
+	private Map<String, PersistenceHandler> persistAttributeHandlers = new ConcurrentHashMap<>();
+	private Map<String, Trigger> gameTriggers = new ConcurrentHashMap<>();
+	private Map<String, Spell> spells = new ConcurrentHashMap<>();
 
-	private Spellsource() {
+	static {
+		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+	}
+
+	protected Spellsource() {
 	}
 
 	/**
@@ -88,8 +104,6 @@ public class Spellsource {
 	 * @return
 	 */
 	public Spellsource migrate(Vertx vertx, Handler<AsyncResult<Void>> then) {
-		mongo().connectWithEnvironment(vertx);
-
 		Migrations.migrate(vertx)
 				.add(new MigrationRequest()
 						.withVersion(1)
@@ -169,29 +183,29 @@ public class Spellsource {
 						.withVersion(4)
 						.withUp(thisVertx -> {
 							// Repair user collections
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
+							mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
 									json("$unset", json("deckType", 1), "$set", json("trashed", false)), new UpdateOptions().setMulti(true));
 
-							for (JsonObject record : Mongo.mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
+							for (JsonObject record : mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
 								final String userId = record.getString("_id");
-								Mongo.mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
+								mongo().updateCollectionWithOptions(INVENTORY, json("userId", userId), json("$addToSet", json("collectionIds", userId)), new UpdateOptions().setMulti(true));
 							}
 
 							// Remove all inventory records that are in just one collection, the user collection
-							Mongo.mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
+							mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(5)
 						.withUp(thisVertx -> {
 							// Set all existing decks to standard.
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
+							mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", false)),
 									json("$set", json("format", "Standard")),
 									new UpdateOptions().setMulti(true));
 						})
 						.withDown(thisVertx -> {
 							// Remove format field
-							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
+							mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", true)),
 									json("$unset", json("format", null)),
 									new UpdateOptions().setMulti(true));
@@ -200,7 +214,7 @@ public class Spellsource {
 						.withVersion(6)
 						.withUp(thisVertx -> {
 							// Shuffle around the location of user record data
-							List<JsonObject> users = Mongo.mongo().find(Accounts.USERS, json());
+							List<JsonObject> users = mongo().find(Accounts.USERS, json());
 							for (JsonObject jo : users) {
 								if (!jo.containsKey("profile")
 										|| !jo.getJsonObject("profile").containsKey("emailAddress")) {
@@ -241,7 +255,7 @@ public class Spellsource {
 								String userId = jo.getString("_id");
 								logger.debug("add MigrationRequest 6: Migrating passwords and emails for userId {}", userId);
 
-								Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId),
+								mongo().updateCollection(Accounts.USERS, json("_id", userId),
 										updateCommand);
 							}
 						}))
@@ -385,7 +399,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(20)
 						.withUp(thisVertx -> {
-							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$set", json(
+							mongo().updateCollectionWithOptions(COLLECTIONS, json(), json("$set", json(
 									"wins", 0, "totalGames", 0
 							)), new UpdateOptions().setMulti(true));
 						}))
@@ -406,7 +420,7 @@ public class Spellsource {
 							// Remove all cards that don't exist
 							CardCatalogue.loadCardsFromPackage();
 							JsonArray allCardIds = array(CardCatalogue.getRecords().keySet().toArray());
-							MongoClientDeleteResult removed = Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+							MongoClientDeleteResult removed = mongo().removeDocuments(INVENTORY, json("cardDesc.id",
 									json("$nin", allCardIds)));
 							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
 						}))
@@ -443,11 +457,84 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(29)
 						.withUp(thisVertx -> {
-							changeCardId("minon_treeleach", "minion_treeleach");
 						}))
 				.add(new MigrationRequest()
 						.withVersion(30)
 						.withUp(thisVertx -> {
+							// Reran elsewhere
+						}))
+				.add(new MigrationRequest()
+						.withVersion(31)
+						.withUp(thisVertx -> {
+							// Reran elsewhere
+						}))
+				.add(new MigrationRequest()
+						.withVersion(32)
+						.withUp(thisVertx -> {
+							changeCardId("minon_treeleach", "minion_treeleach");
+							changeCardId("hero_witch_doctor", "hero_senzaku");
+							changeCardId("minion_emerald_exhibit", "minion_ceremonial_alter");
+							changeCardId("minion_bladesworn", "minion_entranced_dancer");
+							changeCardId("minion_blood_transfuser", "minion_forgotten_ancestor");
+							changeCardId("minion_doby_mick", "minion_gaitha_the_protector");
+							changeCardId("minion_gurubashi_bloodletter", "minion_hotheaded_villager");
+							changeCardId("minion_tunnel_soulfinder", "minion_jungle_soulfinder");
+							changeCardId("minion_anzu_the_raven_god", "minion_kinru_the_benevolent");
+							changeCardId("minion_spore_bat", "minion_prized_boar");
+							changeCardId("minion_winterfang_seer", "minion_rallying_elder");
+							changeCardId("minion_darkwill_appraiser", "minion_resourceful_hoarder");
+							changeCardId("minion_wolpertinger", "minion_shimmerscale");
+							changeCardId("minion_ghuun_the_false_god", "minion_soulcaller_roten");
+							changeCardId("minion_zandalari_conjurer", "minion_spiritcaller");
+							changeCardId("minion_avatar_of_hakkar", "minion_survivalist_yukono");
+							changeCardId("minion_aberration", "minion_temple_militia");
+							changeCardId("minion_nraqi_oppressor", "minion_underbrush_protector");
+							changeCardId("minion_energized_spectre", "minion_undergrowth_spirit");
+							changeCardId("minion_bwonsamdi_witchdoctor", "minion_ushibasu_the_vigilant");
+							changeCardId("spell_shadow_distortion", "spell_alter_ego");
+							changeCardId("spell_cycle_of_undeath", "spell_ashes_to_ashes_voodoo");
+							changeCardId("spell_mass_production", "spell_beastcallers_summon");
+							changeCardId("spell_cursed_mirror", "spell_bodyswap");
+							changeCardId("spell_blood_rage", "spell_hex_behemoth");
+							changeCardId("spell_hex_zombie", "spell_hex_pig");
+							changeCardId("spell_spiritball", "spell_jungles_guidance");
+							changeCardId("spell_kanov_worms", "spell_law_of_the_jungle");
+							changeCardId("spell_drain_sanity", "spell_manic_outburst");
+							changeCardId("spell_bone_bond", "spell_wicked_insight");
+							changeCardId("token_spiritfused_machine", "token_hungry_jaguar");
+							changeCardId("token_voodoo_pig", "token_sacrificial_pig");
+							changeCardId("weapon_staff_of_origination", "weapon_hexcarver");
+							changeCardId("weapon_butchers_cleaver", "weapon_sacrificial_blade");
+							changeCardId("weapon_spirit_wand", "weapon_twistbark_staff");
+							changeCardId("minion_student_of_the_tiger", "minion_lungrath_hunter");
+							changeCardId("hero_chen_stormstout", "hero_mienzhou");
+							changeCardId("hero_power_meditation", "hero_power_effuse");
+							changeCardId("minion_blessed_koi_statue", "minion_jade_serpent_statue");
+							changeCardId("minion_skunky_brew_alemental", "minion_deepwoods_elemental");
+							changeCardId("minion_crane_school_instructor", "minion_desciple_of_shitakiri");
+							changeCardId("minion_black_ox_statue", "minion_enchanted_tapestry");
+							changeCardId("minion_emperor_shaohao", "minion_master_jigen");
+							changeCardId("minion_monastery_guard", "minion_monastery_warden");
+							changeCardId("minion_windwalk_master", "minion_shigaraki_elder");
+							changeCardId("minion_elusive_brawler", "minion_sly_brawler");
+							changeCardId("spell_leg_sweep", "spell_axe_kick");
+							changeCardId("spell_chi_torpedo", "spell_chi_restoration");
+							changeCardId("spell_gift_of_the_mists", "spell_enlightenment");
+							changeCardId("spell_flying_serpent_kick", "spell_fiery_kitsune_punch");
+							changeCardId("spell_fortifying_brew", "spell_fortifying_prayer");
+							changeCardId("spell_storm_earth_and_fire", "spell_fury_of_the_elements");
+							changeCardId("spell_staggering_brew", "spell_honed_potion");
+							changeCardId("spell_keg_smash", "spell_mark_of_despair");
+							changeCardId("spell_tiger_palm_strike", "spell_palm_strike");
+							changeCardId("spell_effuse", "spell_springs_of_ebisu");
+							changeCardId("spell_dampen_harm", "spell_steadfast_defense");
+							changeCardId("spell_breath_of_fire", "spell_windswept_strike");
+							changeCardId("token_xuen_the_white_tiger", "token_kumiho_nine_tailed_kitsune");
+							changeCardId("token_chi_ji_the_red_crane", "token_shitakiri_slit_tongue_suzume");
+							changeCardId("token_tiny_alemental", "token_stony_elemental");
+							changeCardId("token_earth_spirit", "token_unearthed_spirit");
+							changeCardId("token_niuzao_the_black_ox", "token_yashima_cheerful_tanuki");
+							// Rerun the earlier changes since something definitely glitched out
 							changeCardId("minion_anub'rekhan", "minion_anobii");
 							changeCardId("minion_azjol_visionary", "minion_visionary");
 							changeCardId("minion_nerubian_vizier", "minion_vizier");
@@ -456,8 +543,60 @@ public class Spellsource {
 							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
 							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
 							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+							changeCardId("spell_ahnqiraj_portal", "spell_ancient_waygate");
 						}))
-				.migrateTo(30, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(33)
+						.withUp(thisVertx -> {
+							changeCardId("minion_jade_serpent_statue", "minion_jade_cloud_serpent");
+							changeCardId("token_storm_spirit", "token_bellowing_spirit");
+							changeCardId("token_fire_spirit", "token_burning_spirit");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(34)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(35)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(36)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							// We'll mark as removed all the missing cards, then change the hero classes that no longer exist to
+							// neutral heroes.
+
+							// First, change all missing cards to reference the "removed card"
+							List<String> cardIdsInCatalogue = new ArrayList<>(CardCatalogue.getRecords().keySet());
+							String removedCardId = BaseCardResources.REMOVED_CARD_ID;
+							mongo().updateCollectionWithOptions(
+									INVENTORY,
+									json(InventoryRecord.CARDDESC_ID, json("$nin", cardIdsInCatalogue)),
+									json("$set", json(InventoryRecord.CARDDESC_ID, removedCardId)),
+									new UpdateOptions().setMulti(true));
+
+							// Change all the hero classes to the neutral class.
+							List<String> heroClasses = HeroClass.getBaseClasses(DeckFormat.spellsource());
+							mongo().updateCollectionWithOptions(
+									COLLECTIONS,
+									json(CollectionRecord.HERO_CLASS, json("$nin", heroClasses)),
+									json("$set", json(CollectionRecord.HERO_CLASS, HeroClass.ANY)),
+									new UpdateOptions().setMulti(true));
+
+							List<String> formats = new ArrayList<>(DeckFormat.formats().keySet());
+							// Remove all missing formats
+							mongo().updateCollectionWithOptions(
+									COLLECTIONS,
+									json(CollectionRecord.FORMAT, json("$nin", formats)),
+									json("$set", json(CollectionRecord.FORMAT, DeckFormat.ALL.getName())),
+									new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(36, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -469,25 +608,20 @@ public class Spellsource {
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
+			cachedStandardDecks = Collections.synchronizedList(new ArrayList<>());
 			CardCatalogue.loadCardsFromPackage();
-			cachedStandardDecks = new ArrayList<>();
 			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
-			Set<URL> resourceList = reflections.getResources(x -> true).stream().map(Resources::getResource).collect(toSet());
+			Set<URL> resourceList = reflections.getResources(x -> x != null && x.endsWith(".txt")).stream().map(Resources::getResource).collect(toSet());
+			if (resourceList.size() == 0) {
+				throw new IllegalStateException("no bot decks were loaded");
+			}
 			cachedStandardDecks.addAll(resourceList.stream().map(c -> {
 				try {
 					return Resources.toString(c, Charset.defaultCharset());
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
-				return null;
-			}).map((deckList) -> {
-				try {
-					return DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
-			}).filter(Objects::nonNull).collect(toList()));
+			}).map((deckList) -> DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true)).filter(Objects::nonNull).collect(toList()));
 		}
 
 		return cachedStandardDecks;
@@ -551,22 +685,28 @@ public class Spellsource {
 	 */
 	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
+		deployAll(vertx, Runtime.getRuntime().availableProcessors(), deployments);
+	}
+
+	@Suspendable
+	public void deployAll(Vertx vertx, int concurrency, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
-		// Use up all the event loops
-		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
-			for (Verticle verticle : services()) {
-				final Future<String> future = Future.future();
-				vertx.deployVerticle(verticle, future);
-				futures.add(future);
-			}
+
+		// Correctly use event loops
+		for (Supplier<Verticle> verticle : services()) {
+			final Future<String> future = Future.future();
+			vertx.deployVerticle(verticle, new DeploymentOptions().setInstances(concurrency), future);
+			futures.add(future);
+		}
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}
 
-	protected Verticle[] services() {
-		return new Verticle[]{
-				Games.create(),
-				Gateway.create()};
+	protected List<Supplier<Verticle>> services() {
+		return Arrays.asList(
+				Gateway::create,
+				Games::create
+		);
 	}
 
 	/**
@@ -602,12 +742,19 @@ public class Spellsource {
 		return gameTriggers;
 	}
 
+	/**
+	 * A map of spells that can be cast by {@link net.demilich.metastone.game.spells.desc.SpellArg#NAME} using a {@link
+	 * DelegateSpell}.
+	 *
+	 * @return
+	 */
 	public Map<String, Spell> getSpells() {
 		return spells;
 	}
 
 	@Suspendable
 	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
+		CardCatalogue.loadCardsFromPackage();
 		try {
 			CardCatalogue.getCardById(newId);
 		} catch (Throwable any) {

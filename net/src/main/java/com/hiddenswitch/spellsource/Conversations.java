@@ -1,7 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
@@ -10,6 +8,8 @@ import io.reactivex.disposables.Disposable;
 import io.vertx.core.Future;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.defer;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
@@ -31,7 +31,7 @@ public interface Conversations {
 						if (msg.getMethod() != null && msg.getMethod().getSendMessage() != null) {
 							EnvelopeMethodSendMessage sendMessage = msg.getMethod().getSendMessage();
 							// Sending a chat message
-							UserRecord sender = Accounts.findOne(connection.userId());
+							UserRecord sender = mongo().findOne(Accounts.USERS, json("_id", connection.userId()), UserRecord.class);
 							String conversationId = sendMessage.getConversationId();
 							if (!conversationId.contains(connection.userId())) {
 								throw new SecurityException(String.format("User %s attempted to subscribe to unauthorized conversationId %s",

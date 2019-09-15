@@ -1,0 +1,17 @@
+{
+  "name": "Bellowing Spirit",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Extra Strike (Can attack twice in a turn).",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

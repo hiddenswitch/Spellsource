@@ -10,7 +10,7 @@ public final class Minion extends Actor {
 
 	public Minion(Card sourceCard) {
 		super(sourceCard);
-		Race race = sourceCard.hasAttribute(Attribute.RACE) ? (Race) sourceCard.getAttribute(Attribute.RACE) : Race.NONE;
+		String race = sourceCard.hasAttribute(Attribute.RACE) ? (String) sourceCard.getAttribute(Attribute.RACE) : Race.NONE;
 		setRace(race);
 	}
 
@@ -22,7 +22,7 @@ public final class Minion extends Actor {
 
 	@Override
 	public int getAttack() {
-		if (hasAttribute(Attribute.ATTACK_EQUALS_HP)) {
+		if (hasAttribute(Attribute.ATTACK_EQUALS_HP) || hasAttribute(Attribute.AURA_ATTACK_EQUALS_HP)) {
 			return getHp();
 		}
 		return super.getAttack();

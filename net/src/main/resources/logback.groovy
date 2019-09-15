@@ -57,10 +57,12 @@ root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 
 logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
+logger("io.atomix", WARN)
 logger("org.reflections", ERROR)
 logger("co.paralleluniverse", ERROR)
 logger("net.demilich", WARN)
 logger("io.vertx", INFO)
+logger("io.jaegertracing", ERROR)
 
 // Production group
 logger("com.hiddenswitch", INFO)
@@ -72,9 +74,11 @@ logger("com.hiddenswitch.spellsource.Games", defaultLevel)
 logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", defaultLevel)
 logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
 logger("com.hiddenswitch.spellsource.Gateway", INFO)
+logger("io.atomix.cluster.messaging.impl", ERROR)
 
 // Test group
 logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
-logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", TRACE)
+logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", defaultLevel)
+logger("com.hiddenswitch.spellsource.ClusterTest", defaultLevel)
 logger("com.neovisionaries.ws.client", WARN)
 logger("org.asynchttpclient", WARN)

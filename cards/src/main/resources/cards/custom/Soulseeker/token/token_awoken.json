@@ -1,0 +1,14 @@
+{
+  "name": "Awoken",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

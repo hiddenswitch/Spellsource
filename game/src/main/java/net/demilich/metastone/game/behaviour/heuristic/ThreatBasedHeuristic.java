@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -25,21 +26,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 	private static List<String> HARD_REMOVALS;
 
 	static {
-		HARD_REMOVALS = new ArrayList<String>();
-		HARD_REMOVALS.add("spell_polymorph");
-		HARD_REMOVALS.add("spell_execute");
-		HARD_REMOVALS.add("spell_crush");
-		HARD_REMOVALS.add("spell_assassinate");
-		HARD_REMOVALS.add("spell_siphon_soul");
-		HARD_REMOVALS.add("spell_shadow_word_death");
-		HARD_REMOVALS.add("spell_naturalize");
-		HARD_REMOVALS.add("spell_hex");
-		HARD_REMOVALS.add("spell_humility");
-		HARD_REMOVALS.add("spell_equality");
-		HARD_REMOVALS.add("spell_deadly_shot");
-		HARD_REMOVALS.add("spell_sap");
-		HARD_REMOVALS.add("minion_doomsayer");
-		HARD_REMOVALS.add("minion_big_game_hunter");
+		HARD_REMOVALS = new ArrayList<>(CardCatalogue.getHardRemovalCardIds());
 	}
 
 	private static ThreatLevel calcuateThreatLevel(GameContext context, int playerId) {
@@ -64,13 +51,13 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 	private static int getHeroDamage(Hero hero) {
 		int heroDamage = 0;
-		if (hero.getHeroClass() == HeroClass.BLUE) {
+		if (hero.getHeroClass().equals("BLUE")) {
 			heroDamage += 1;
-		} else if (hero.getHeroClass() == HeroClass.GREEN) {
+		} else if (hero.getHeroClass().equals("GREEN")) {
 			heroDamage += 2;
-		} else if (hero.getHeroClass() == HeroClass.BROWN) {
+		} else if (hero.getHeroClass().equals("BROWN")) {
 			heroDamage += 1;
-		} else if (hero.getHeroClass() == HeroClass.BLACK) {
+		} else if (hero.getHeroClass().equals("BLACK")) {
 			heroDamage += 1;
 		}
 		if (hero.getWeapon() != null) {
@@ -181,7 +168,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 				score += weights.get(WeightedFeature.HARD_REMOVAL_VALUE);
 			}
 
-			if (card.getCardId().equals("spell_cursed")) {
+			if (card.hasAttribute(Attribute.CURSE)) {
 				score += weights.get(WeightedFeature.CURSED_FACTOR);
 			}
 		}

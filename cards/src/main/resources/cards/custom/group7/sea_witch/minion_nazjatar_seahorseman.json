@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Blitz. Reservoir (20+): Can't attack championes.",
+  "description": "Blitz. Reservoir (20+): Can't attack champions.",
   "battlecry": {
     "condition": {
       "class": "ReservoirCondition",

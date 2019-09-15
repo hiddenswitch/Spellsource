@@ -28,6 +28,9 @@ import java.util.List;
  * When the amount of damage a missile deals is 1, the spell damage modifier is interpreted to increase the number of
  * missiles. In all other instances, spell damage increases the damage <b>per missile.</b>
  * <p>
+ * Every target hit by a missile will have {@link SpellArg#SPELL} cast on it if specified, with the hit target as the
+ * {@code target}. {@link EntityReference#OUTPUT} will not be set.
+ * <p>
  * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, applies spell damage to the number of missiles (the {@link
  * SpellArg#HOW_MANY} value).
  */
@@ -44,6 +47,8 @@ public class MissilesSpell extends DamageSpell {
 		}
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
 		int damage = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
+
+		SpellDesc subSpell = desc.getSpell();
 
 		if ((damage == 1 || desc.getBool(SpellArg.EXCLUSIVE)) && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
@@ -65,9 +70,17 @@ public class MissilesSpell extends DamageSpell {
 			if (validTargets.isEmpty()) {
 				return;
 			}
-			Actor randomTarget = (Actor) context.getLogic().getRandom(validTargets);
+			Actor randomTarget = getRandomTarget(context, validTargets);
 			context.getLogic().damage(player, randomTarget, damage, source, true);
+
+			if (subSpell != null) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, randomTarget);
+			}
 		}
+	}
+
+	public Actor getRandomTarget(GameContext context, List<Entity> validTargets) {
+		return (Actor) context.getLogic().getRandom(validTargets);
 	}
 
 	@Override

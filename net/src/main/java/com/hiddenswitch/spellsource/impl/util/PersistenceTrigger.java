@@ -1,11 +1,15 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.util.RpcClient;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Handler;
 import io.vertx.core.VertxException;
 import io.vertx.core.logging.Logger;
@@ -64,8 +68,14 @@ public class PersistenceTrigger implements Trigger, Serializable {
 
 		try {
 			Spellsource.spellsource().persistence().persistenceTrigger(event);
-		} catch (VertxException e) {
-			logger.error("onGameEvent: Failed a persistence call and silently continuing. {}", e);
+		} catch (Throwable throwable) {
+			if (Strand.isCurrentFiber()) {
+				Tracer tracer = GlobalTracer.get();
+				if (tracer.activeSpan() != null) {
+					Tracing.error(throwable, tracer.activeSpan(), false);
+				}
+			}
+			logger.error("onGameEvent: Failed a persistence call and silently continuing. {}", throwable);
 		}
 	}
 
@@ -75,7 +85,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean canFire(GameEvent event) {
+	public boolean queues(GameEvent event) {
 		return true;
 	}
 
@@ -131,7 +141,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
 		return true;
 	}
 

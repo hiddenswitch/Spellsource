@@ -1,6 +1,6 @@
 {
   "name": "Birdbrain",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 5,

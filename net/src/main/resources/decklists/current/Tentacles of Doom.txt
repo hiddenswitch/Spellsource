@@ -1,0 +1,20 @@
+### Occultist: Tentacles of Doom
+# Class: DARKGREEN
+# Format: Spellsource
+#
+# 2x (1) Chilling Warcry
+# 2x (1) Sparkly Messenger
+# 2x (1) Tournament Trial
+# 2x (1) Wicked Devotee
+# 2x (1) Wink Dog
+# 2x (2) Ancient's Aid
+# 2x (2) Eldritch Experimenter
+# 2x (2) Scourge Cultist
+# 2x (3) Deep Defense
+# 2x (3) Eldritch Thrashing
+# 2x (3) Skeletal Warrior
+# 2x (4) Guild Guard
+# 2x (6) Rain of Tentacles
+# 2x (7) Raise the Dead
+# 2x (8) Mighty Mufunga
+#

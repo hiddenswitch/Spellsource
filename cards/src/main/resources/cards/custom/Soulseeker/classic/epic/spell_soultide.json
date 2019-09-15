@@ -1,0 +1,19 @@
+{
+  "name": "Soultide",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "EPIC",
+  "description": "Summon your Spirits that died this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.SummonFriendlyMinionsThatDiedSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "SPIRIT"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

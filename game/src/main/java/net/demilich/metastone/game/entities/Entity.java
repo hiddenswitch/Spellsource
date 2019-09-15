@@ -176,7 +176,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	public String getName() {
 		if ((getEntityType() == EntityType.CARD
 				&& getSourceCard() != null
-				&& getSourceCard().getCardSet() == CardSet.SPELLSOURCE)
+				&& getSourceCard().getCardSet() == "SPELLSOURCE")
 				|| getEntityType() == EntityType.PLAYER) {
 			return (String) getAttributes().getOrDefault(Attribute.NAME, name);
 		} else {
@@ -526,8 +526,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	@NotNull
-	public Race getRace() {
-		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
+	public String getRace() {
+		return (String) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}
 
 	/**

@@ -2,16 +2,18 @@ package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.concurrent.impl.SuspendableArrayQueue;
+import com.hiddenswitch.spellsource.concurrent.impl.LocalQueue;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableAtomixQueue;
+import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 
-public interface SuspendableQueue<V> {
+public interface SuspendableQueue<V> extends AutoCloseable {
 	/**
 	 * Gets a reference to a bounded queue with the specified {@code name}.
 	 * <p>
 	 * If a {@code capacity > 0} is specified, the queue is bounded.
 	 * <p>
-	 * If the queue does not exist, it will be created when any {@link #offer(Object, boolean)} is called with {@code
+	 * If the queue does not exist, it will be created when any {@link #offer(Object)} is called with {@code
 	 * createQueue == true}; or, if a {@link #poll(long)} is ever called.
 	 *
 	 * @param name     The name of the queue shared in the cluster
@@ -19,13 +21,16 @@ public interface SuspendableQueue<V> {
 	 *                 or if {@code 0} or negative, no bound is specified.
 	 * @param <V>      The type of the items.
 	 * @return A reference to a suspendable queue. Until a method is called on it, its underlying data structures in the
-	 * cluster may not be created.
+	 * 		cluster may not be created.
 	 * @see #get(String) for an unbounded version of this method.
 	 */
 	@Suspendable
 	static <V> SuspendableQueue<V> get(String name, int capacity) throws SuspendExecution {
-//		return SuspendableLinkedQueue.getOrCreate(name, capacity <= 0 ? Integer.MAX_VALUE : capacity);
-		return new SuspendableArrayQueue<>(name, capacity);
+		if (Vertx.currentContext().owner().isClustered()) {
+			return new SuspendableAtomixQueue<>(name);
+		} else {
+			return LocalQueue.get(name, capacity);
+		}
 	}
 
 	/**
@@ -38,12 +43,21 @@ public interface SuspendableQueue<V> {
 	 */
 	@Suspendable
 	static <V> SuspendableQueue<V> get(String name) throws SuspendExecution {
-		return new SuspendableArrayQueue<>(name);
-//		return SuspendableLinkedQueue.getOrCreate(name);
+		if (Vertx.currentContext().owner().isClustered()) {
+			return new SuspendableAtomixQueue<>(name);
+		} else {
+			return LocalQueue.get(name, 64);
+		}
 	}
 
 	@Suspendable
-	boolean offer(@NotNull V item, boolean createQueue);
+	static <V> SuspendableQueue<V> getOrCreate(String name) throws SuspendExecution {
+		if (Vertx.currentContext().owner().isClustered()) {
+			return new SuspendableAtomixQueue<>(name);
+		} else {
+			return LocalQueue.getOrCreateLocalQueue(name, 64);
+		}
+	}
 
 	/**
 	 * Waits {@code timeout} for an item, returning it or {@code null} if none is available by that timeout.
@@ -67,7 +81,8 @@ public interface SuspendableQueue<V> {
 	 */
 	@Suspendable
 	default V take() throws InterruptedException, SuspendExecution {
-		return poll(Long.MAX_VALUE);
+		// Specifically use Integer.MAX_VALUE to prevent arithmetic with this timeout from overflowing in longs
+		return poll(Integer.MAX_VALUE);
 	}
 
 	/**
@@ -76,9 +91,7 @@ public interface SuspendableQueue<V> {
 	 * @see #offer(Object) for more on sending.
 	 */
 	@Suspendable
-	default boolean offer(V item) {
-		return offer(item, true);
-	}
+	boolean offer(V item);
 
 	/**
 	 * Destroys the queue.
@@ -99,6 +112,13 @@ public interface SuspendableQueue<V> {
 	 */
 	@Suspendable
 	static boolean exists(String name) {
-		return SuspendableArrayQueue.getArrayQueues().containsKey(name);
+		if (Vertx.currentContext().owner().isClustered()) {
+			throw new UnsupportedOperationException();
+		} else {
+			return LocalQueue.containsKey(name);
+		}
 	}
+
+	@Override
+	void close();
 }

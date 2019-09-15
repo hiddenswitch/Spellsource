@@ -10,21 +10,54 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
-import static net.demilich.metastone.game.entities.heroes.HeroClass.*;
 
 /**
- * Progresses a draft.
+ * Implements a basic draft where the user is given a selection of champions from all {@link DeckFormat#spellsource()}
+ * champions, and 30 rounds of 3-card choices pulled from a weighted selection of {@link DeckFormat#spellsource()}
+ * catalogue cards.
  */
 public class DraftLogic {
 	private static final Logger logger = LoggerFactory.getLogger(DraftLogic.class);
-	public static final float EXPANSION_ODDS_FACTOR = 16.0f;
-	public static final float COMMON_ROLL = 0.50f;
+	/**
+	 * The number of cards per round the player will choose from.
+	 */
+	public static int CARDS_PER_ROUND = 3;
+	/**
+	 * Indicates the number of rounds of choices the user will make among {@link #CARDS_PER_ROUND} options to build a deck
+	 * for a draft.
+	 */
+	public static int ROUNDS = 30;
+	/**
+	 * Indicates the additional odds the latest expansion gets in appearing in a draft.
+	 */
+	private static final float EXPANSION_ODDS_FACTOR = 4.0f;
+	/**
+	 * Indicates the percent chance a {@link Rarity#COMMON} card is chosen in the {@link #CARDS_PER_ROUND}-card pool of
+	 * choices.
+	 */
+	private static final float COMMON_ROLL = 0.50f;
+	/**
+	 * Indicates the percent chance a {@link Rarity#RARE} card is shown in the {@link #CARDS_PER_ROUND}-card pool of
+	 * choices.
+	 */
 	private static final float RARE_ROLL = 0.30f;
+	/**
+	 * Indicates the percent chance an {@link Rarity#EPIC} card is shown in the {@link #CARDS_PER_ROUND}-card pool of
+	 * choices.
+	 * <p>
+	 * {@link Rarity#LEGENDARY} cards are shown with chance {@code 1 - EPIC_ROLL - RARE_ROLL - COMMON_ROLL}.
+	 */
 	private static final float EPIC_ROLL = 0.15f;
 	private final WeakReference<DraftContext> context;
-	public static int DRAFTS = 30;
-	public static int CARDS_PER_DRAFT = 3;
 
+
+	/**
+	 * Creates an instance associated weakly with the specified context.
+	 * <p>
+	 * As a side effect, this will initialize the context's {@link PrivateDraftState} if it is {@code null}.
+	 *
+	 * @param context
+	 */
 	public DraftLogic(DraftContext context) {
 		this.context = new WeakReference<>(context);
 
@@ -33,17 +66,28 @@ public class DraftLogic {
 		}
 	}
 
+	/**
+	 * Begins a draft, initializing the {@link PublicDraftState} on the context and notifying the behaviour that the state
+	 * has changed.
+	 */
 	public void initializeDraft() {
 		if (getContext().getPublicState() == null) {
 			getContext().setPublicState(new PublicDraftState());
 		}
 
+		requireDraftStatus(DraftStatus.NOT_STARTED);
 		getContext().getPublicState().setHeroClassChoices(createHeroChoices());
 		getContext().getPublicState().setStatus(DraftStatus.SELECT_HERO);
 		notifyPublicStateChanged();
 	}
 
-	public void startDraft(HeroClass heroClass) {
+	/**
+	 * Starts the draft given the choice of the specified hero class.
+	 *
+	 * @param heroClass
+	 */
+	public void startDraft(String heroClass) {
+		requireDraftStatus(DraftStatus.SELECT_HERO);
 		// Determine the cards available to this player for the draft.
 		// For now, do not make later parts of the draft dependent on earlier parts.
 		getContext().getPublicState().setHeroClass(heroClass);
@@ -54,87 +98,44 @@ public class DraftLogic {
 		notifyPublicStateChanged();
 	}
 
-	private List<HeroClass> createHeroChoices() {
-		List<HeroClass> classes = HeroClass.getBaseClasses();
-
-		// For now, simply return all the classes
-		return classes;
-		/*
-		Collections.shuffle(classes, getRandom());
-		return Arrays.asList(classes.get(0), classes.get(1), classes.get(2));
-		*/
+	protected void requireDraftStatus(DraftStatus requiredStatus) {
+		if (getContext().getPublicState().getStatus() != requiredStatus) {
+			throw new InvalidDraftStatusException(getContext().getPublicState().getStatus(), requiredStatus);
+		}
 	}
 
-	private List<List<String>> createDraftCards(HeroClass hero) {
-		ArrayList<List<Card>> draftCards = new ArrayList<>(DRAFTS);
+	private List<String> createHeroChoices() {
+		return HeroClass.getBaseClasses(DeckFormat.spellsource());
+	}
 
-		List<CardSet> equals = Arrays.asList(
-				CardSet.VERDANT_DREAMS,
-				CardSet.BATTLE_FOR_ASHENVALE,
-				CardSet.SANDS_OF_TIME,
-				CardSet.SPELLSOURCE_BASIC
+	/**
+	 * Creates the list of cards that will appear in the draft.
+	 * <p>
+	 * Uses the {@link DeckFormat#spellsource()} sets and sets {@link CardSet#SPELLSOURCE_BASIC} to be {@link
+	 * #EXPANSION_ODDS_FACTOR} more likely to appear.
+	 *
+	 * @param hero
+	 * @return
+	 */
+	private List<List<String>> createDraftCards(String hero) {
+		ArrayList<List<Card>> draftCards = new ArrayList<>(ROUNDS);
+
+		List<String> equals = Arrays.asList(
+				CardSet.CUSTOM
 		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.CUSTOM;
+		String latestExpansion = CardSet.SPELLSOURCE_BASIC;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
-
-		Set<String> bannedCards = new HashSet<>();
-		bannedCards.addAll(Arrays.asList(
-				"spell_forgotten_torch",
-				"minion_snowchugger",
-				"minion_faceless_summoner",
-				"minion_goblin_auto-barber",
-				"minion_undercity_valiant",
-				"minion_vitality_totem",
-				"minion_dust_devil",
-				"spell_totemic_might",
-				"spell_ancestral_healing",
-				"minion_dunemaul_shaman",
-				"minion_windspeaker",
-				"minion_anima_golem",
-				"spell_sacrificial_pact",
-				"spell_curse_of_rafaam",
-				"spell_sense_demons",
-				"minion_void_crusher",
-				"minion_reliquary_seeker",
-				"minion_succubus",
-				"spell_savagery",
-				"spell_poison_seeds",
-				"spell_soul_of_the_forest",
-				"spell_mark_of_nature",
-				"spell_tree_of_life",
-				"spell_astral_communion",
-				"minion_warsong_commander",
-				"spell_bolster",
-				"spell_charge",
-				"spell_bouncing_blade",
-				"minion_axe_flinger",
-				"spell_rampage",
-				"minion_ogre_warmaul",
-				"minion_starving_buzzard",
-				"spell_call_pet",
-				"minion_timber_wolf",
-				"spell_cobra_shot",
-				"spell_lock_and_load",
-				"secret_dart_trap",
-				"secret_snipe",
-				"spell_mind_blast",
-				"minion_shadowbomber",
-				"minion_lightwell",
-				"spell_power_word_glory",
-				"spell_confuse",
-				"spell_convert",
-				"spell_inner_fire"
-		));
+		Set<String> bannedCards = new HashSet<>(CardCatalogue.getBannedDraftCards());
 
 		CardCatalogue.getAll().stream()
 				.filter(Card::isQuest)
 				.map(Card::getCardId)
 				.forEach(bannedCards::add);
 
-		for (int draft = 0; draft < DRAFTS; draft++) {
+		for (int draft = 0; draft < ROUNDS; draft++) {
 			// Select a rarity at the appropriate frequency
 			float rarityRoll = roll();
 			Rarity rarity;
@@ -149,19 +150,13 @@ public class DraftLogic {
 			}
 
 			// Select the card set. The latest expansion gets a 50% bonus
-			List<Card> draftChoices = new ArrayList<>(CARDS_PER_DRAFT);
+			List<Card> draftChoices = new ArrayList<>(CARDS_PER_ROUND);
 
-			while (draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_DRAFT) {
+			while (draftChoices.stream().map(Card::getCardId).distinct().count() < CARDS_PER_ROUND) {
 				float cardSetRoll = roll();
 				DeckFormat format = new DeckFormat();
 				float latestExpansionOdds = EXPANSION_ODDS_FACTOR / (equals.size() + EXPANSION_ODDS_FACTOR);
 				if (cardSetRoll < latestExpansionOdds) {
-					if (latestExpansion == CardSet.CUSTOM) {
-						// Include the other two custom sets for now
-						format.addSet(CardSet.BATTLE_FOR_ASHENVALE);
-						format.addSet(CardSet.SANDS_OF_TIME);
-						format.addSet(CardSet.ALTERNATIVE);
-					}
 					format.withCardSets(latestExpansion);
 				} else {
 					format.withCardSets(equals);
@@ -222,16 +217,24 @@ public class DraftLogic {
 		return getContext().getPrivateState().getRandom();
 	}
 
+	/**
+	 * Selects a card from teh current choice index.
+	 *
+	 * @param choiceIndex
+	 * @throws InvalidDraftCardSelectionException if the choice does not exist or the state is invalid.
+	 */
 	public void selectCard(int choiceIndex) {
 		final PublicDraftState publicState = getContext().getPublicState();
 		final List<String> selectedCards = publicState.getSelectedCards();
 		final List<List<String>> choices = getContext().getPrivateState().getCards();
 
+		requireDraftStatus(DraftStatus.IN_PROGRESS);
+
 		// Are we making an invalid choice?
 		int draftIndex = getContext().getPublicState().getDraftIndex();
 		if (choiceIndex >= choices.get(draftIndex).size()
 				|| choiceIndex < 0) {
-			throw new DraftError();
+			throw new InvalidDraftCardSelectionException(choiceIndex, getContext().getPrivateState());
 		}
 
 		String chosenCard = choices.get(draftIndex).get(choiceIndex);
@@ -255,14 +258,29 @@ public class DraftLogic {
 		getContext().notifyPublicStateChanged();
 	}
 
+	/**
+	 * Is the draft over?
+	 *
+	 * @return {@code true} if the number of cards remaining is equal to 0.
+	 */
 	public boolean isDraftOver() {
 		return getContext().getPublicState().getCardsRemaining() == 0;
 	}
 
+	/**
+	 * Gets a reference to the draft context. Held weakly by this instance.
+	 *
+	 * @return
+	 */
 	public DraftContext getContext() {
 		return context.get();
 	}
 
+	/**
+	 * Gets a list of card choices currently available to the player.
+	 *
+	 * @return The choices, or {@link Collections#emptyList()} if there are none.
+	 */
 	public List<String> getCardChoices() {
 		return getContext().getPublicState().getCurrentCardChoices();
 	}

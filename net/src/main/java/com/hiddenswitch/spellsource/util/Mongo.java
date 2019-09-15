@@ -2,15 +2,22 @@ package com.hiddenswitch.spellsource.util;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.impl.util.MongoRecord;
-import io.vertx.core.Handler;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.tag.Tags;
+import io.opentracing.util.GlobalTracer;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.*;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 import java.util.List;
@@ -24,10 +31,9 @@ import java.util.stream.Collectors;
  * Provide an easy way to access Mongo's methods in a sync pattern.
  */
 public class Mongo {
-	private static Logger logger = LoggerFactory.getLogger(Mongo.class);
 	private static Mongo instance;
-	private Map<Vertx, MongoClient> clients = new ConcurrentHashMap<>();
-	private LocalMongo localMongoServer;
+	private static final Object probe = new Object();
+	private Map<Integer, MongoClient> clients = new ConcurrentHashMap<>();
 
 	static {
 		ch.qos.logback.classic.Logger mongoLogger = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
@@ -35,130 +41,161 @@ public class Mongo {
 		mongoLogger.setLevel(Level.ERROR);
 	}
 
-	public synchronized static Mongo mongo() {
-		if (instance == null) {
-			instance = new Mongo();
+	private static Span getSpan(String operationName, JsonObject command) {
+		Tracer tracer = GlobalTracer.get();
+		String commandString = command.toString();
+		return tracer.buildSpan("Mongo/" + operationName)
+				.withTag(Tags.DB_TYPE, "mongo")
+				.withTag(Tags.DB_STATEMENT, commandString.substring(0, Math.min(100, commandString.length())))
+				.start();
+	}
+
+	public static Mongo mongo() {
+		synchronized (probe) {
+			if (instance == null) {
+				instance = new Mongo();
+			}
+		}
+
+		if (Vertx.currentContext() != null) {
+			Vertx owner = Vertx.currentContext().owner();
+			instance.getOrCreateClient(owner);
+		} else {
+			throw new RuntimeException("not in context");
 		}
 
 		return instance;
 	}
 
-	public synchronized Mongo startEmbedded() {
-		if (localMongoServer == null) {
-			logger.info("startEmbedded: Starting Mongod embedded.");
-			localMongoServer = new LocalMongo();
-			try {
-				localMongoServer.start();
-			} catch (Throwable e) {
-				logger.error("startEmbedded: Mongo failed to start: {}", e);
-				return this;
-			}
-			logger.info("startEmbedded: Started Mongod embedded.");
-		} else {
-			logger.info("startEmbedded: Mongod already started.");
-		}
-		return this;
+	protected MongoClient getOrCreateClient(Vertx vertx, String connectionString) {
+		return clients.computeIfAbsent(vertx.hashCode(), (k) -> {
+			MongoClient client = MongoClient.createShared(vertx, new JsonObject().put("connection_string", connectionString));
+			((VertxInternal) vertx).addCloseHook(v -> {
+				clients.remove(vertx.hashCode());
+				client.close();
+				v.handle(Future.succeededFuture());
+			});
+			return client;
+		});
 	}
 
-	public synchronized Mongo stopEmbedded() {
-		if (localMongoServer != null) {
-			try {
-				localMongoServer.stop();
-				localMongoServer = null;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return this;
-	}
-
-	public Mongo connect(Vertx vertx, String connectionString) {
-		if (getClient() != null) {
-			return this;
-		}
-
-		clients.put(vertx, MongoClient.createShared(vertx, new JsonObject().put("connection_string", connectionString)));
-		return this;
-	}
-
-	public Mongo connect(Vertx vertx) {
+	protected MongoClient getOrCreateClient(Vertx vertx) {
 		// Gets the connection string from the static field.
-		String connectionString;
-		if (localMongoServer != null) {
-			connectionString = localMongoServer.getUrl();
-		} else {
-			connectionString = "mongodb://localhost:27017/metastone";
-		}
-		return connect(vertx, connectionString);
-	}
-
-	/**
-	 * Connect by interpreting the MONGO_URL environment variable or the mongo.url system property. Otherwise, start an
-	 * embedded server if it doens't already exist and connect to it.
-	 *
-	 * @param vertx The vertx instance to build the mongo client with.
-	 * @return This {@link Mongo} instance.
-	 */
-	public synchronized Mongo connectWithEnvironment(Vertx vertx) {
-		if (getClient() != null) {
-			return this;
-		}
-
-		String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017"));
-		return connect(vertx, mongoUrl);
-	}
-
-	public MongoClient client() {
-		return getClient();
+		String connectionString = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017/metastone"));
+		return getOrCreateClient(vertx, connectionString);
 	}
 
 	@Suspendable
 	public String insert(String collection, JsonObject document) {
-		return awaitResult(h -> getClient().insert(collection, document, h));
+		Span span = getSpan("insert", json("collection", collection, "document", document));
+		try {
+			return awaitResult(h -> client().insert(collection, document, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public String insertWithOptions(String collection, JsonObject document, WriteOption writeOption) {
-		return awaitResult(h -> getClient().insertWithOptions(collection, document, writeOption, h));
+		Span span = getSpan("insertWithOptions", json("document", document, "writeOption", writeOption));
+		try {
+			return awaitResult(h -> client().insertWithOptions(collection, document, writeOption, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public MongoClientUpdateResult updateCollection(String collection, JsonObject query, JsonObject update) {
-		return awaitResult(h -> getClient().updateCollection(collection, query, update, h));
+		Span span = getSpan("updateCollection", json("collection", collection, "query", query, "update", update));
+		try {
+			return awaitResult(h -> client().updateCollection(collection, query, update, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public MongoClientUpdateResult updateCollectionWithOptions(String collection, JsonObject query, JsonObject update, UpdateOptions options) {
-		if (options.isUpsert()
-				&& update.containsKey("$set")
-				&& update.getJsonObject("$set").containsKey("_id")) {
-			// Fix for Mongo 3.6
-			String id = (String) update.getJsonObject("$set").remove("_id");
-			update.put("$setOnInsert", new JsonObject().put("_id", id));
+		Span span = getSpan("updateCollectionWithOptions", json("collection", collection, "query", query, "update", update, "options", options.toJson()));
+		try {
+			if (options.isUpsert()
+					&& update.containsKey("$set")
+					&& update.getJsonObject("$set").containsKey("_id")) {
+				// Fix for Mongo 3.6
+				String id = (String) update.getJsonObject("$set").remove("_id");
+				update.put("$setOnInsert", new JsonObject().put("_id", id));
+			}
+			return awaitResult(h -> client().updateCollectionWithOptions(collection, query, update, options, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
 		}
-		return awaitResult(h -> getClient().updateCollectionWithOptions(collection, query, update, options, h));
 	}
 
 	@Suspendable
 	public List<JsonObject> find(String collection, JsonObject query) {
-		return awaitResult(h -> getClient().find(collection, query, h));
+		Span span = getSpan("find", json("collection", collection, "query", query));
+		try {
+			return awaitResult(h -> client().find(collection, query, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public <T> List<T> find(String collection, JsonObject query, Class<T> returnClass) {
-		final List<JsonObject> objs = awaitResult(h -> getClient().find(collection, query, h));
-		return fromJson(objs, returnClass);
+		Span span = getSpan("find", json("collection", collection, "query", query));
+		try {
+			final List<JsonObject> objs = awaitResult(h -> client().find(collection, query, h));
+			return fromJson(objs, returnClass);
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public <T> List<T> findWithOptions(String collection, JsonObject query, FindOptions options, Class<T> returnClass) {
-		final List<JsonObject> objs = awaitResult(h -> getClient().findWithOptions(collection, query, options, h));
-		return fromJson(objs, returnClass);
+		Span span = getSpan("findWithOptions", json("collection", collection, "query", query, "options", options.toJson()));
+		try {
+			final List<JsonObject> objs = awaitResult(h -> client().findWithOptions(collection, query, options, h));
+			return fromJson(objs, returnClass);
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public List<JsonObject> findWithOptions(String collection, JsonObject query, FindOptions options) {
-		return awaitResult(h -> getClient().findWithOptions(collection, query, options, then -> h.handle(then.otherwiseEmpty())));
+		Span span = getSpan("findWithOptions", json("collection", collection, "query", query, "options", options.toJson()));
+		try {
+			return awaitResult(h -> client().findWithOptions(collection, query, options, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -169,50 +206,114 @@ public class Mongo {
 	 */
 	@Suspendable
 	public JsonObject findOne(String collection, JsonObject query, JsonObject fields) {
-		return awaitResult(h -> getClient().findOne(collection, query, fields, then -> h.handle(then.otherwiseEmpty())));
+		Span span = getSpan("findOne", json("collection", collection, "query", query, "fields", fields));
+		try {
+			return awaitResult(h -> client().findOne(collection, query, fields, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public <T> T findOne(String collection, JsonObject query, JsonObject fields, Class<? extends T> returnClass) {
-		final JsonObject obj = awaitResult(h -> getClient().findOne(collection, query, fields, then -> h.handle(then.otherwiseEmpty())));
-		if (obj == null) {
-			return null;
+		Span span = getSpan("findOne", json("collection", collection, "query", query, "fields", fields));
+		try {
+			JsonObject obj = awaitResult(h -> client().findOne(collection, query, fields, h));
+			if (obj == null) {
+				return null;
+			}
+			return fromJson(obj, returnClass);
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
 		}
-		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable
 	public <T> T findOne(String collection, JsonObject query, Class<? extends T> returnClass) {
-		final JsonObject obj = awaitResult(h -> getClient().findOne(collection, query, null, then -> h.handle(then.otherwiseEmpty())));
-		if (obj == null) {
-			return null;
+		Span span = getSpan("findOne", json("collection", collection, "query", query));
+		try {
+			JsonObject obj = awaitResult(h -> client().findOne(collection, query, null, h));
+			if (obj == null) {
+				return null;
+			}
+			return fromJson(obj, returnClass);
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
 		}
-		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable
 	public Long count(String collection, JsonObject query) {
-		return awaitResult(h -> getClient().count(collection, query, h));
+		Span span = getSpan("count", json("collection", collection, "query", query));
+		try {
+			return awaitResult(h -> client().count(collection, query, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public List<String> getCollections() {
-		return awaitResult(h -> getClient().getCollections(h));
+		Span span = getSpan("getCollections", new JsonObject());
+		try {
+			return awaitResult(h -> client().getCollections(h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public Void createIndex(String collection, JsonObject key) {
-		return awaitResult(h -> getClient().createIndex(collection, key, h));
+		Span span = getSpan("createIndex", json("collection", collection, "key", key));
+		try {
+			return awaitResult(h -> client().createIndex(collection, key, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public Void createIndexWithOptions(String collection, JsonObject key, IndexOptions options) {
-		return awaitResult(h -> getClient().createIndexWithOptions(collection, key, options, h));
+		Span span = getSpan("createIndex", json("collection", collection, "key", key, "options", options.toJson()));
+		try {
+			return awaitResult(h -> client().createIndexWithOptions(collection, key, options, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	@Suspendable
 	public Void dropIndex(String collection, String indexName) {
-		return awaitResult(h -> getClient().dropIndex(collection, indexName, h));
+		Span span = getSpan("dropIndex", json("collection", collection, "indexName", indexName));
+		try {
+			return awaitResult(h -> client().dropIndex(collection, indexName, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -223,7 +324,15 @@ public class Mongo {
 	 */
 	@Suspendable
 	public MongoClientDeleteResult removeDocuments(String collection, JsonObject query) {
-		return awaitResult(h -> getClient().removeDocuments(collection, query, h));
+		Span span = getSpan("removeDocuments", json("collection", collection, "query", query));
+		try {
+			return awaitResult(h -> client().removeDocuments(collection, query, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -236,7 +345,15 @@ public class Mongo {
 	 */
 	@Suspendable
 	public MongoClientDeleteResult removeDocumentsWithOptions(String collection, JsonObject query, WriteOption writeOption) {
-		return awaitResult(h -> getClient().removeDocumentsWithOptions(collection, query, writeOption, h));
+		Span span = getSpan("removeDocumentsWithOptions", json("collection", collection, "query", query, "writeOption", writeOption));
+		try {
+			return awaitResult(h -> client().removeDocumentsWithOptions(collection, query, writeOption, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -247,7 +364,15 @@ public class Mongo {
 	 */
 	@Suspendable
 	public MongoClientDeleteResult removeDocument(String collection, JsonObject query) {
-		return awaitResult(h -> getClient().removeDocument(collection, query, h));
+		Span span = getSpan("removeDocument", json("collection", collection, "query", query));
+		try {
+			return awaitResult(h -> client().removeDocument(collection, query, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -260,7 +385,15 @@ public class Mongo {
 	 */
 	@Suspendable
 	public MongoClientDeleteResult removeDocumentWithOptions(String collection, JsonObject query, WriteOption writeOption) {
-		return awaitResult(h -> getClient().removeDocumentWithOptions(collection, query, writeOption, h));
+		Span span = getSpan("removeDocumentWithOptions", json("collection", collection, "query", query, "writeOption", writeOption));
+		try {
+			return awaitResult(h -> client().removeDocumentWithOptions(collection, query, writeOption, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -270,7 +403,15 @@ public class Mongo {
 	 */
 	@Suspendable
 	public Void createCollection(String collectionName) {
-		return awaitResult(h -> getClient().createCollection(collectionName, h));
+		Span span = getSpan("createCollection", json("collectionName", collectionName));
+		try {
+			return awaitResult(h -> client().createCollection(collectionName, h));
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -284,8 +425,16 @@ public class Mongo {
 	 */
 	@Suspendable
 	public <T extends MongoRecord> T findOneAndUpdate(String collection, JsonObject query, JsonObject update, Class<? extends T> returnClass) {
-		final JsonObject obj = awaitResult(h -> getClient().findOneAndUpdate(collection, query, update, then -> h.handle(then.otherwiseEmpty())));
-		return fromJson(obj, returnClass);
+		Span span = getSpan("findOneAndUpdate", json("collection", collection, "query", query, "update", update));
+		try {
+			JsonObject obj = awaitResult(h -> client().findOneAndUpdate(collection, query, update, h));
+			return fromJson(obj, returnClass);
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 
@@ -297,7 +446,20 @@ public class Mongo {
 	 */
 	@Suspendable
 	public MongoClientBulkWriteResult bulkWrite(String collection, List<BulkOperation> operations) {
-		return awaitResult(h -> getClient().bulkWrite(collection, operations, h));
+		Span span = getSpan("bulkWrite", json("collection", collection, "count", operations.size()));
+		try {
+			MongoClientBulkWriteResult res = awaitResult(h -> client().bulkWrite(collection, operations, h));
+			span.setTag("insertedCount", res.getInsertedCount())
+					.setTag("matchedCount", res.getMatchedCount())
+					.setTag("modifiedCount", res.getModifiedCount())
+					.setTag("deletedCount", res.getDeletedCount());
+			return res;
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -310,7 +472,20 @@ public class Mongo {
 	 */
 	@Suspendable
 	public MongoClientBulkWriteResult bulkWriteWithOptions(String collection, List<BulkOperation> operations, BulkWriteOptions bulkWriteOptions) {
-		return awaitResult(h -> getClient().bulkWriteWithOptions(collection, operations, bulkWriteOptions, h));
+		Span span = getSpan("bulkWrite", json("collection", collection, "count", operations.size(), "bulkWriteOptions", bulkWriteOptions.toJson()));
+		try {
+			MongoClientBulkWriteResult res = awaitResult(h -> client().bulkWriteWithOptions(collection, operations, bulkWriteOptions, h));
+			span.setTag("insertedCount", res.getInsertedCount())
+					.setTag("matchedCount", res.getMatchedCount())
+					.setTag("modifiedCount", res.getModifiedCount())
+					.setTag("deletedCount", res.getDeletedCount());
+			return res;
+		} catch (Throwable throwable) {
+			Tracing.error(throwable, span, true);
+			throw throwable;
+		} finally {
+			span.finish();
+		}
 	}
 
 	/**
@@ -384,16 +559,23 @@ public class Mongo {
 	@Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
 	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
 	*/
+
+	/**
+	 * Close this client.
+	 */
 	public void close() {
-		if (getClient() == null) {
+		if (client() == null) {
 			return;
 		}
-		getClient().close();
-		clients.remove(Vertx.currentContext().owner());
-		instance = null;
+		client().close();
+		clients.remove(Vertx.currentContext().owner().hashCode());
 	}
 
-	public MongoClient getClient() {
-		return clients.get(Vertx.currentContext().owner());
+	public MongoClient client() {
+		if (Vertx.currentContext() == null) {
+			throw new NullPointerException("not on context");
+		}
+		Vertx owner = Vertx.currentContext().owner();
+		return getOrCreateClient(owner);
 	}
 }

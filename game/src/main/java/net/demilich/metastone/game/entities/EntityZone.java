@@ -2,6 +2,7 @@ package net.demilich.metastone.game.entities;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,10 +24,27 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable, Comparable<EntityZone<? extends Entity>> {
 
 	protected final Zones zone;
+	protected Map<Integer, Entity> lookup;
 	protected int player = -1;
-	protected List<E> internal = new ArrayList<>();
+	protected final List<E> internal;
 
-	public EntityZone(int player, Zones zone) {
+	public EntityZone(int player, Zones zone, Map<Integer, Entity> lookup) {
+		switch (zone) {
+			case DECK:
+				this.internal = new ArrayList<>(30);
+				break;
+			case BATTLEFIELD:
+				this.internal = new ArrayList<>(7);
+				break;
+			case HAND:
+			case GRAVEYARD:
+			case REMOVED_FROM_PLAY:
+				this.internal = new ArrayList<>(10);
+				break;
+			default:
+				this.internal = new ArrayList<>(1);
+		}
+		this.lookup = lookup;
 		this.zone = zone;
 		this.player = player;
 	}
@@ -43,7 +61,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@SuppressWarnings("unchecked")
 	public EntityZone<E> clone() {
 		// Clone all the cards too
-		EntityZone<E> zone = new EntityZone<>(getPlayer(), getZone());
+		EntityZone<E> zone = new EntityZone<>(getPlayer(), getZone(), null);
 		for (E e : this) {
 			zone.uncheckedAdd(zone.size(), (E) e.clone());
 		}
@@ -100,12 +118,20 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
+		updateLookup(element);
+	}
+
+	private void updateLookup(E element) {
+		if (lookup != null && element.getId() != IdFactory.UNASSIGNED) {
+			lookup.put(element.getId(), element);
+		}
 	}
 
 	@Override
 	public E remove(int index) {
 		E result = internal.remove(index);
 		result.setEntityLocation(EntityLocation.UNASSIGNED);
+		lookup.remove(result.getId());
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
@@ -143,6 +169,10 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@SuppressWarnings("unchecked")
 	public void move(int index, EntityZone destination, int destinationIndex) {
 		Entity result = internal.remove(index);
+		// Must remove entity now because we might be changing owners
+		if (destination.getPlayer() != getPlayer()) {
+			lookup.remove(result.getId());
+		}
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
@@ -159,7 +189,16 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		} else {
 			move(indexOf(source), destination, destination.size());
 		}
+	}
 
+	@SuppressWarnings("unchecked")
+	protected void exchange(E entity1, E entity2) {
+		int i = entity1.getIndex();
+		int j = entity2.getIndex();
+		internal.set(i, entity2);
+		internal.set(j, entity1);
+		internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
+		internal.get(j).setEntityLocation(new EntityLocation(zone, player, j));
 	}
 
 	@Override
@@ -187,7 +226,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	}
 
 	public static EntityZone empty(int player) {
-		return new EntityZone(player, Zones.NONE);
+		return new EntityZone(player, Zones.NONE, null);
 	}
 
 	/**
@@ -211,8 +250,13 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		if (targetEntity.getOwner() != sourceOwner) {
 			targetEntity.setOwner(sourceOwner);
 		}
-		sourceZone.move(sourceIndex, targetZone, targetIndex);
-		targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
+
+		if (sourceZone == targetZone) {
+			sourceZone.exchange(sourceEntity, targetEntity);
+		} else {
+			sourceZone.move(sourceIndex, targetZone, targetIndex);
+			targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
+		}
 	}
 
 	@Override
@@ -227,6 +271,11 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		}
 
 		return this.size() - o.size();
+	}
+
+	public EntityZone<E> setLookup(Map<Integer, Entity> lookup) {
+		this.lookup = lookup;
+		return this;
 	}
 }
 

@@ -1,0 +1,22 @@
+{
+  "name": "Sonorous Spectre",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Opener: Silence all other minions.",
+  "battlecry": {
+    "spell": {
+      "class": "SilenceSpell",
+      "target": "ALL_OTHER_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
