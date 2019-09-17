@@ -1,0 +1,23 @@
+  
+{
+  "name": "Bellydrummer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Aftermath: Deal 2 damage to the enemy champion.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
