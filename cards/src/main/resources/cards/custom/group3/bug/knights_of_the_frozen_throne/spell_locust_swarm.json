@@ -1,10 +1,10 @@
 {
   "name": "Locust Swarm",
-  "baseManaCost": 8,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Lifesteal. Deal $3 damage to all enemy minions.",
+  "description": "Lifesteal. Deal $2 damage to all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
