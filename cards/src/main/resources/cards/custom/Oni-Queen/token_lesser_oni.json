@@ -9,6 +9,6 @@
   "race": "DEMON",
   "description": "",
   "collectible": false,
-  "set": "CUSTOM",
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }
