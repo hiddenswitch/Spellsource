@@ -1,0 +1,24 @@
+{
+  "name": "Bonecrusher Brute",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "Dash. Opener: Discard a random card.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
