@@ -1,0 +1,17 @@
+{
+  "name": "Smokeweaver",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Hidden",
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
