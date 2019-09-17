@@ -1,0 +1,32 @@
+{
+  "name": "Shuten Doji",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 7,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Whenever your opponent draws a card, they draw a Fatigue card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "IsDeadCondition",
+        "target": "SELF",
+        "invert": true
+      },
+      "spell": {
+        "class": "FatigueSpell",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
