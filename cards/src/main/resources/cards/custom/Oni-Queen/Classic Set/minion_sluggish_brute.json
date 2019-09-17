@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "COMMON",
-  "race": "DEMON"
+  "race": "DEMON",
   "description": "Dash",
   "attributes": {
     "RUSH": true
