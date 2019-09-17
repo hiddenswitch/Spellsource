@@ -1,6 +1,6 @@
 {
   "name": "Paucha",
-  "heroPower": "hero_oni_contract",
+  "heroPower": "hero_power_oni_contract",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "BLUEGREY",
