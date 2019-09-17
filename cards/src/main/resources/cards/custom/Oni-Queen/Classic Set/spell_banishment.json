@@ -1,0 +1,38 @@
+{
+  "name": "Banishment",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "COMMON",
+  "description": "Destroy a friendly Demon and a random enemy minion.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DestroySpell",
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
