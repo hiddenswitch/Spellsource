@@ -1,0 +1,11 @@
+{
+  "name": "Oni Queen",
+  "type": "CLASS",
+  "hero": "hero_paucha",
+  "heroClass": "BLUEGREY",
+  "color": [152, 168, 214],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
