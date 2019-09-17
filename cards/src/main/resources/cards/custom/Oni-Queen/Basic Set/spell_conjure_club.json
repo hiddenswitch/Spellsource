@@ -7,7 +7,7 @@
   "description": "Give your champion +3 Attack this turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
+    "class": "TemporaryAttackSpell",
     "target": "FRIENDLY_HERO",
     "attackBonus": 3
   },
