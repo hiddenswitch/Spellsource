@@ -1,0 +1,29 @@
+{
+  "name": "Waygate Commander",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "After you play a Demon, give it Dash.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "DEMON"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "RUSH"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
