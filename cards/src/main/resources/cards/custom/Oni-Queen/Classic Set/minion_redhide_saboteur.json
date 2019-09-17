@@ -1,0 +1,22 @@
+{
+  "name": "Redhide Saboteur",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Hidden. Aftermath: Your opponent draws a Fatigue card.",
+  "deathrattle": {
+    "class": "FatigueSpell",
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
