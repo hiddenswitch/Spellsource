@@ -14,9 +14,8 @@
         "value": 4
       },
       {
-        "class": "DrawCardSpell",
-        "value": 1,
-        "targetPlayer": "OWNER"
+        "class": "ModifyMaxManaSpell",
+        "value": -1
       }
     ]
   },
