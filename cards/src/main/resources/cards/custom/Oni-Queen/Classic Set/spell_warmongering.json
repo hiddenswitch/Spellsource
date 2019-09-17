@@ -1,0 +1,27 @@
+{
+  "name": "Warmongering",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Give a minion 'After this attacks a champion, gain +2/+2'.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "PhysicalAttackTrigger",
+        "hostTargetType": "IGNORE_OTHER_SOURCES",
+        "targetEntityType": "HERO"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "value": 2
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
