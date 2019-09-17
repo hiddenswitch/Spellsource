@@ -1,6 +1,6 @@
 {
   "name": "Locust Swarm",
-  "baseManaCost": 7,
+  "baseManaCost": 8,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
