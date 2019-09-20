@@ -21,6 +21,8 @@ Bug fixes.
 
 ##### Content Fixes:
 
+ - Lifedrain now does not apply if the source shares an owner with the target, the source is a spell, and the target is a hero. In other words, "Take X damage" effects no longer are influenced by Lifedrain.
+ - Auto-Cannibalism can now be cast with less than 16 health. (1383)
  - Vermancer is now called Hive Queen (1397)
  - Tournament Trial can now target any minion. (1392)
  - Mollusk Meister now reads, "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health." (1391)

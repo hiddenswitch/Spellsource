@@ -1,18 +1,28 @@
 {
   "name": "Auto-Cannibalism",
-  "baseManaCost": 16,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
-  "description": "Lifedrain. Costs Health instead of Lun. Deal $2 damage to all enemy minions.",
+  "description": "Lifedrain. Take 16 damage. Deal $2 damage to all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_MINIONS",
-    "value": 2
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 16,
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 2
+      }
+    ]
   },
   "attributes": {
-    "COSTS_HEALTH_INSTEAD_OF_MANA": true,
     "LIFESTEAL": true
   },
   "collectible": true,
