@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
  * If the minion was successfully summoned, {@link SpellArg#SPELL} will be cast with {@link EntityReference#OUTPUT}
  * <b>and</b> {@code target} as the summoned minion.
  * <p>
+ * Uses the filter specified in {@link SpellArg#CARD_FILTER}. Always only resurrects minions.
+ * <p>
  * For <b>example</b>, to resurrect <b>2 different</b> friendly minions:
  * <pre>
  *   {
