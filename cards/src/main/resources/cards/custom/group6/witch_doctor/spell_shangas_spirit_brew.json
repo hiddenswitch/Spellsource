@@ -1,6 +1,6 @@
 {
   "name": "Shanga's Spirit Brew",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "LEGENDARY",

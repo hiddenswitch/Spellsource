@@ -8,7 +8,16 @@ Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Pla
 
 ### 0.8.52-2.0.38 (In Progress)
 
+Thanks to @Logovaz for a great contribution to Witch Doctor.
+
 Bug fixes.
+
+##### Content Additions:
+
+ - Quick Chant - 1 Lun Basic Spell "Restore a friendly minion to full Health. Give it +3 Health."
+ - Jungle Survivalist - 2/1/2 Common Minion "Opener: Discover a spell."
+ - Cemetary Party - 4 Lun Rare Spell "Resurrect a friendly Aftermath minion. Add a copy of it to your hand."
+ - Story Collector - 3/1/5 Epic Minion "Opener: If you cast a spell this turn, add two random Witch Doctor spells to your hand."
 
 ##### Content Fixes:
 
@@ -17,6 +26,18 @@ Bug fixes.
  - Mollusk Meister now reads, "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health." (1391)
  - Death's Messenger is no longer collectible. (1390)
  - The Mercenary champion and class are no longer collectible. (1389)
+ - Ushibasu is now a 7/4/7 from 7/5/8.
+ - Split Personality, Devilry Flare, and Sliver of Silver all now cost 3 Lun from 2 Lun.
+ - Shanga's Spirit Brew now costs 3 Lun from 4 Lun.
+ - Chant Leader and Hexcrazed Vessel both now cost 5 Lun from 6 Lun.
+ - Titanic Fanatic now costs 7 Lun from 8 Lun.
+ - High Shaman Mawliki now costs 9 Lun from 10 Lun.
+ - Gaitha the Protector is now a 7/4/8 from 7/4/6.
+ - Entranced Dancer is now a 3/4/3 from 3/4/2.
+ - Bloodseeker is now a 2/2/3 from 2/2/2.
+ - Ritual Shaman is now "Opener: Play a Secret from your deck." from "Opener: If you played a spell this turn, play a Secret from your deck."
+ - Legendary hero card Puppeteer Senzaku and Basic minion Spiritcaller have been removed.
+ - Ptero Max has fixed text "Your Beasts gain an extra attack after attacking and killing minions." from "Your Beasts can attack again after they attack and kill a minion." No change in interaction.
 
 ### 0.8.51-2.0.38 (September 2nd, 2019)
 

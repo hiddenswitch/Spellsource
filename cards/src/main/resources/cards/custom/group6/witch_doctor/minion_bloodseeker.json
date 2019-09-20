@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 2,
-  "baseHp": 2,
+  "baseHp": 3,
   "rarity": "RARE",
   "description": "Has +1 Attack for each damage your champion has taken this turn.",
   "aura": {

@@ -4070,15 +4070,14 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-	// Mollusk Meister: "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
+	// Mollusk Meister: "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health.",
 	@Test
 	public void testMolluskMeister() {
 		runGym((context, player, opponent) -> {
-			player.getHero().modifyArmor(3);
 			Minion friendly = playMinionCard(context, player, "minion_neutral_test");
 			playMinionCardWithBattlecry(context, player, "minion_mollusk_meister", friendly);
-			assertEquals(player.getHero().getArmor(), 11);
-			assertEquals(friendly.getHp(), player.getHero().getArmor() + friendly.getBaseHp());
+			assertEquals(friendly.getHp(), friendly.getBaseHp() + 8);
+			assertEquals(player.getHero().getArmor(), friendly.getMaxHp());
 		});
 	}
 
@@ -4126,9 +4125,6 @@ public class CustomCardsTests extends TestBase {
 	public void testRitualShaman() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "spell_test_counter_secret");
-			playCard(context, player, "minion_ritual_shaman");
-			assertEquals(player.getSecrets().size(), 0);
-			playCard(context, player, "spell_test_summon_tokens");
 			playCard(context, player, "minion_ritual_shaman");
 			assertEquals(player.getSecrets().size(), 1);
 		});
