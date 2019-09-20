@@ -6,6 +6,14 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.52-2.0.38 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Vermancer is now called Hive Queen
+
 ### 0.8.51-2.0.38 (September 2nd, 2019)
 
 Tribes are now visible on cards again. (1358)
@@ -16,7 +24,7 @@ Content additions and bug fixes.
 
 Thanks @Bromora for the contribution to Wraith!
 
-##### Usability Fixed:
+##### Usability Fixes:
 
  - Deleting a deck no longer glitches out the client on non-Windows platforms. (1372)
  - Legibility of buffs has been improved, showing a darkened rectangle when a buff is applied. Buffs will be visualized differently in the new client. (1367)
