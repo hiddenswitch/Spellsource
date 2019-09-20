@@ -16,6 +16,7 @@ Bug fixes.
  - Tournament Trial can now target any minion. (1392)
  - Mollusk Meister now reads, "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health." (1391)
  - Death's Messenger is no longer collectible. (1390)
+ - The Mercenary champion and class are no longer collectible. (1389)
 
 ### 0.8.51-2.0.38 (September 2nd, 2019)
 
