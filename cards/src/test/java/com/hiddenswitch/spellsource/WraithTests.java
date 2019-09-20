@@ -131,4 +131,24 @@ public class WraithTests extends TestBase {
 			assertEquals(player.getMinions().size(), 2);
 		}));
 	}
+
+	@Test
+	public void testAutoCannibalism() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			context.endTurn();
+			Card autoCannibalism = receiveCard(context, player, "spell_auto_cannibalism");
+			assertTrue(context.getLogic().canPlayCard(player, autoCannibalism));
+			player.getHero().setHp(15);
+			assertTrue(context.getLogic().canPlayCard(player, autoCannibalism));
+			int hp = player.getHero().getHp();
+			int hpCost = 16;
+			int perMinionLifesteal = 2;
+			int minions = opponent.getMinions().size();
+			playCard(context, player, autoCannibalism);
+			assertEquals(player.getHero().getHp(), hp - hpCost + perMinionLifesteal * minions);
+			assertFalse(player.getHero().isDestroyed());
+		});
+	}
 }

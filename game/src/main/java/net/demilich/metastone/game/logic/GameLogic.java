@@ -1235,6 +1235,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Implement lifesteal
 			if (!ignoreLifesteal
 					&& (source.hasAttribute(Attribute.LIFESTEAL) || source.hasAttribute(Attribute.AURA_LIFESTEAL))
+					// Lifesteal now does not apply if the source shares an owner with the target and the target is a hero.
+					&& !(source.getOwner() == target.getOwner() && target.getEntityType() == EntityType.HERO && source.getSourceCard().getCardType().isCardType(CardType.SPELL))
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
 					&& (((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL)
