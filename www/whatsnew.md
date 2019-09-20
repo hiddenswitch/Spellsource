@@ -12,7 +12,8 @@ Bug fixes.
 
 ##### Content Fixes:
 
- - Vermancer is now called Hive Queen
+ - Vermancer is now called Hive Queen (1397)
+ - Tournament Trial can now target any minion. (1392)
 
 ### 0.8.51-2.0.38 (September 2nd, 2019)
 
