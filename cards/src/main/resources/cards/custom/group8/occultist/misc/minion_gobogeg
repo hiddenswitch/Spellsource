@@ -1,0 +1,26 @@
+{
+  "name": "Gobogeg",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a friendly minion takes damage, give it +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
