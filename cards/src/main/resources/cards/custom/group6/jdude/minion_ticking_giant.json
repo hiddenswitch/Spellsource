@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "description": "Cost (1) less for each damage both champions have taken.",
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {
