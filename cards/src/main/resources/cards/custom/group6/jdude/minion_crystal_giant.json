@@ -3,12 +3,14 @@
   "baseManaCost": 12,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8,
+  "baseAttack": 7,
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Costs (1) less for each unused lun",
-  "attributes": {},
+  "description": "Guard. Costs (1) less for each unused Lun.",
+  "attributes": {
+    "TAUNT": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
