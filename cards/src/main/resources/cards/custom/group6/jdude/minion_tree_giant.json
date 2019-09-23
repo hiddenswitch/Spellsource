@@ -1,13 +1,16 @@
 {
-  "name": "Tree Giant",
+  "name": "Earthtremor Terror",
   "baseManaCost": 12,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8,
-  "baseHp": 8,
+  "baseAttack": 5,
+  "baseHp": 10,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Costs (1) less for each Guard minion you've played this game.",
+  "description": "Guard. Costs (1) less for each Guard minion you've played this game.",
+    "attributes": {
+    "TAUNT": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
