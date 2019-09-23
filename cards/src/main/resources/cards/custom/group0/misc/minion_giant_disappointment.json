@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "description": "Costs (1) less",
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {
