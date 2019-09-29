@@ -694,6 +694,7 @@ definitions:
           ClientToServerMessage if this field is not null.
       localPlayerId:
         type: 'integer'
+        x-nullable: false
         description: |
           The ID of the player that corresponds to the local player (the recipient).
       timers:
