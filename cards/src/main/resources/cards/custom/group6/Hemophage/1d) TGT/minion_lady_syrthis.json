@@ -1,0 +1,17 @@
+{
+  "name": "Lady Syrthis",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Double the effects of your weapons' card text.",
+  
+		### I'm not sure how to get this one to work on both passive and activated weapon effects. In theory it should work for all weapons in the game, but if that's
+		### obnoxious to sort out then I don't mind if it only works with specifically Hemophage weapons; the class won't ever have any inbuilt card stealing effects.
+  
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

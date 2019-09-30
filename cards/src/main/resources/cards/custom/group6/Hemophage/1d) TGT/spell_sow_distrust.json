@@ -1,0 +1,27 @@
+{
+  "name": "Sow Distrust",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Force the left and rightmost enemy minions to attack their neighbour.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FightSpell",
+        "target": "ADJACENT_TO_TARGET",
+		"secondaryTarget": "LEFTMOST_ENEMY_MINION"
+      },
+      {
+        "class": "FightSpell",
+        "target": "ADJACENT_TO_TARGET",
+		"secondaryTarget": "RIGHTMOST_ENEMY_MINION"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

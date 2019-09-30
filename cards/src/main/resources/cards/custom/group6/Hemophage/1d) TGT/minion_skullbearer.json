@@ -1,0 +1,37 @@
+{
+  "name": "Skullbearer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Reveal a minion in each deck. If yours costs more, draw it and it costs Health instead of Lun.",
+  "battlecry": {
+    "spell": {
+      "class": "JoustSpell",
+      "spell": {
+        "class": "FromDeckToHandSpell"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+	  "spell": {
+        "class": "AddEnchantmentSpell",
+		"target": "FRIENDLY_PLAYER",
+		"aura": {
+			"class": "AttributeAura",
+			"target": "OUTPUT",
+			"attribute": "AURA_COSTS_HEALTH_INSTEAD_OF_MANA"
+		}
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

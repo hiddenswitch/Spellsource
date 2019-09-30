@@ -1,0 +1,20 @@
+{
+  "name": "Bloodstone Infuser",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Adjacent minions have Guard.",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "ADJACENT_MINIONS",
+      "attribute": "AURA_GUARD"
+    },
+  ]
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

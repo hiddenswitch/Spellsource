@@ -1,0 +1,28 @@
+{
+  "name": "Hemoshape: Bulwark",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Take 3 damage. Give your champion Guard until their Health drops below 20.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+		"ignoreSpellDamage": true
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_HERO",
+        "card": "enchantment_hemoshape_bulwark"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

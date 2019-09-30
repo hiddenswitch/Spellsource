@@ -1,0 +1,18 @@
+{
+  "name": "Grave Peril",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Trigger the Aftermaths of 3 random friendly minions that died this game.",
+  "targetSelection": "NONE",
+  "spell": {
+  
+  ### Not 100% sure which spell class I need to get this to work. Can the CardFilter Nine Lives uses work without adding a card to your hand? 
+  ### The intention is to trigger the Aftermaths/Deathrattles of 3 random, separate friendly minions that died this game. The card shouldn't be castable until 3 friendly minions have died.
+  
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

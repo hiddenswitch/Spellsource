@@ -1,0 +1,21 @@
+{
+  "name": "Heart Stopper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Can't attack. Neither can the minion (or minions) opposite this one.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "OPPOSITE_MINIONS",
+    "attribute": "AURA_CANNOT_ATTACK"
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

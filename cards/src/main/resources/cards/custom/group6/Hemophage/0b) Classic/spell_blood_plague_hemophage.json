@@ -1,0 +1,27 @@
+{
+  "name": "Blood Plague",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Choose a minion. At the end of each turn, it Drains 2 Health from all other minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "BOTH"
+            },
+            "spell": {
+              "class": "DrainSpell",
+              "target": "ALL_OTHER_MINIONS",
+              "value": 2,
+              "secondaryTarget": "TRIGGER_HOST"
+            }
+          }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Wyrmshaper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Whenever you summon a Dragon, it Drains 2 Health from the enemy champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "DRAGON",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrainSpell",
+          "target": "ENEMY_HERO",
+          "value": 2,
+		  "secondaryTarget": "TRIGGER_HOST"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

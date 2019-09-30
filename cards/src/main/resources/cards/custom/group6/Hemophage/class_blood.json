@@ -1,0 +1,11 @@
+{
+  "name": "Hemophage",
+  "type": "CLASS",
+  "hero": "hero_demandred",
+  "heroClass": "BLOOD",
+  "color": [102, 23, 21],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

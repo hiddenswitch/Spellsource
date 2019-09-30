@@ -1,0 +1,29 @@
+{
+  "name": "Vein Wyrm",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "At the end of your turn, give the minions in your hand +1 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EndTurnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+	  "target": "FRIENDLY_HAND",
+      "hpBonus": 1,
+      "filter": {
+		"class": "CardFilter",
+		"cardType": "MINION"
+      },
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

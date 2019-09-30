@@ -1,0 +1,34 @@
+{
+  "name": "Share the Pain",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Each time your hero takes damage this turn, deal that much damage to the enemy hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+		"targetEntityType": "HERO",
+		"targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+		"target": "ENEMY_HERO",
+		"value": {
+			"class": "AttributeValueProvider",
+			"target": "FRIENDLY_HERO",
+			"attribute": "LAST_HIT"
+        }
+      },
+      "oneTurn": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

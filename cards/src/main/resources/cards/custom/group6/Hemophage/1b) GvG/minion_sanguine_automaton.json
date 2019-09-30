@@ -1,0 +1,22 @@
+{
+  "name": "Sanguine Automaton",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "Aftermath: Give your champion +3 Health.",
+  "deathrattle": {
+    "class": "BuffSpell",
+	"target": "FRIENDLY_HERO",
+    "hpBonus": 3
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

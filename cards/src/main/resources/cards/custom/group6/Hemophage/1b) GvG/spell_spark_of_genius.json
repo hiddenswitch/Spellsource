@@ -1,0 +1,42 @@
+{
+  "name": "Spark of Genius",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Add a random Mech to your hand. If you control a Mech, add a random Hemophage spell as well.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+		"cardFilter": {
+			"class": "RaceFilter",
+			"race": "BEAST"
+		}
+	  },
+	  {
+	    "class": "ConditionalSpell",
+		"condition": {
+			"class": "MinionOnBoardCondition",
+			"cardFilter": {
+				"class": "RaceFilter",
+				"race": "MECH"
+			}
+		},
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"heroClass": "BLOOD",
+				"cardType": "SPELL"
+			}
+		}
+      },
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

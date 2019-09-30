@@ -1,0 +1,19 @@
+{
+  "name": "Arkhaelis",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Your Health increasing effects affect all friendly characters.",
+
+  ### Okay, I have no idea how to get this to work and can't find any decent examples of similar effects either. Sorry.
+  ### To be clear, any effect that boosts Health should be copied fully to all friendly characters - so doubling a minion's Health will double all friendly characters' Health, and so on.
+  ### The only caveat here would be +X/+X buffs only give your hero/champion the Attack for current turn, because permanent Attack is gamebreaking. 
+  ### Hopefully all of that isn't too hard to implement. Let me know if any interactions aren't clear or something doesn't work.
+  
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

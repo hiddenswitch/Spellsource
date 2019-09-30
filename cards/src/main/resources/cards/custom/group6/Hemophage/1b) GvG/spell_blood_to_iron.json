@@ -1,0 +1,30 @@
+{
+  "name": "Blood to Iron",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Add copies of your Mechs to your hand. They cost Health instead of Lun.",
+  "targetSelection": "NONE",
+  "spell": {
+		"class": "CopyCardSpell",
+		"target": "FRIENDLY_MINIONS",
+		"targetPlayer": "OWNER",
+		"filter": {
+            "class": "RaceFilter",
+            "race": "MECH"
+        },
+      "spell": {
+        "class": "AddEnchantmentSpell",
+		"target": "FRIENDLY_PLAYER",
+		"aura": {
+			"class": "AttributeAura",
+			"target": "OUTPUT",
+			"attribute": "AURA_COSTS_HEALTH_INSTEAD_OF_MANA"
+		}
+      }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

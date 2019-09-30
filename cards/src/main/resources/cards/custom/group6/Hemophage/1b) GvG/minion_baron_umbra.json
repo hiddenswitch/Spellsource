@@ -1,0 +1,31 @@
+{
+  "name": "Baron Umbra",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Drain [0] Health randomly split from enemy minions. (+1 for every 2 Health your champion is missing)",
+  "battlecry": {
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": {							  ### I think a new kind of spell or definition for DrainSpell is needed for this. The value might be doable with multiple embedded AlgebraicValueProviders, 
+        "class": "AttributeValueProvider",	  ### but Im guessing creating an attribute like the DRAINED_LAST_TURN you made for the Blood Engine will be easier so I'll leave it like this for now.
+        "target": "FRIENDLY_HERO",			  ### For reference, it's essentially a MissilesSpell but each missile Drains to Baron Umbra.
+        "attribute": ""
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+	  
+  ]
+}
