@@ -1,0 +1,25 @@
+{
+  "name": "Power of the People",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "EPIC",
+  "description": "Trigger the Openers of your minions with random targets.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.RepeatAllOtherBattlecriesSpell",
+    "target": "FRIENDLY_MINIONS",
+    "cardFilter": {
+      "filter":
+        {
+          "class": "CardFilter",
+          "attribute": "BATTLECRY",
+          "cardType": "MINION"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
