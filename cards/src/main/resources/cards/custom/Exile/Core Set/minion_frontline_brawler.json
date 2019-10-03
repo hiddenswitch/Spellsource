@@ -1,0 +1,27 @@
+{
+  "name": "Frontline Brawler",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Dash. Whenever this attacks, gain 3 Armor.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 3
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
