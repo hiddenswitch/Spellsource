@@ -13,7 +13,7 @@
       {
         "class": "DamageSpell",
         "target": "ENEMY_HERO",
-        "value": 2
+        "value": 1
       },
       {
         "class": "BuffSpell",
