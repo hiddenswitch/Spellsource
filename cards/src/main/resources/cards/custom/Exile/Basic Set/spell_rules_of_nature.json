@@ -1,0 +1,15 @@
+{
+  "name": "Rules of Nature",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "FREE",
+  "description": "Destroy a minion that attacked and killed another minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "-"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
