@@ -1,0 +1,33 @@
+{
+  "name": "Slam",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage to a minion. If it survives, deal 2 damage to adjacent minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "AdjacentEffectSpell",
+      "spell1": {
+        "class": "NullSpell"
+      },
+      "spell2": {
+        "class": "DamageSpell",
+        "value": 2
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
