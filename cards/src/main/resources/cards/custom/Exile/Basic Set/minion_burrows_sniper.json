@@ -1,0 +1,23 @@
+{
+  "name": "Burrows Sniper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Opener: Deal 2 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
