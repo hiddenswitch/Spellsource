@@ -1,0 +1,42 @@
+{
+  "name": "Novice Recruiter",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Opener: Refresh your skill. Its next use this turn costs (0).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RefreshHeroPowerSpell",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "OneTurnCostModifier",
+            "target": "FRIENDLY_HERO_POWER",
+            "value": 0,
+            "expirationTrigger": {
+              "class": "InspireTrigger",
+              "targetPlayer": "SELF"
+            },
+            "operation": "SET"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
