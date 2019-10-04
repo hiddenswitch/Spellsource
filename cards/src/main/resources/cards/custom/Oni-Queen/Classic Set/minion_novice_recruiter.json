@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "BLUEGREY",
-  "baseAttack": 1,
+  "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
   "description": "Opener: Refresh your skill. Its next use this turn costs (0).",
