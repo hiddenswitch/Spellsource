@@ -6,18 +6,18 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Hidden. Opener: Draw two cards. Discard a random card.",
+  "description": "Hidden. Opener: Discard a random card. Then, draw 2 cards.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "DrawCardSpell",
-          "value": 2
-        },
-        {
           "class": "DiscardSpell",
           "value": 1
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 2
         }
       ]
     }
