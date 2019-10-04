@@ -1,6 +1,6 @@
 {
   "name": "Novice Recruiter",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "BLUEGREY",
   "baseAttack": 1,
