@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-    "spells: [
+    "spells": [
       {
         "class": "DamageSpell",
         "target": "ENEMY_MINIONS",
