@@ -1,0 +1,33 @@
+{
+  "name": "Shinobi Infiltrator",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Hidden. Opener: Draw two cards. Put a random card from your hand on top of your deck.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "value": 2
+        },
+        {
+          "class": "PutDeckTopSpell",
+          "target": "FRIENDLY_HAND",
+          "randomTarget": true
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
