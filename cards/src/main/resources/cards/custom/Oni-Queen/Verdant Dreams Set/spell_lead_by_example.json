@@ -1,0 +1,20 @@
+{
+  "name": "Lead by Example",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Give a minion Attack equal to your champion's Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HERO",
+      "attribute": "ATTACK"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
