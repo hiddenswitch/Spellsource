@@ -3,10 +3,10 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 1,
+  "baseAttack": 2,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Hidden. Opener: Draw two cards. Put a random card from your hand on top of your deck.",
+  "description": "Hidden. Opener: Draw two cards. Discard a random card.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
@@ -16,9 +16,8 @@
           "value": 2
         },
         {
-          "class": "PutDeckTopSpell",
-          "target": "FRIENDLY_HAND",
-          "randomTarget": true
+          "class": "DiscardSpell",
+          "value": 1
         }
       ]
     }
