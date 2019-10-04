@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 2,
+  "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
   "description": "Hidden. Opener: Draw two cards. Discard a random card.",
