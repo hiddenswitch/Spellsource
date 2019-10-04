@@ -1,0 +1,25 @@
+{
+  "name": "Torchbearer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Opener: Give your champion +2 Attack this turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
