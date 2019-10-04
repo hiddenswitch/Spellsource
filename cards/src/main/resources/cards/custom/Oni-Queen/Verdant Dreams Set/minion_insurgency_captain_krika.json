@@ -1,0 +1,78 @@
+{
+  "name": "Insurgency Captain Krika",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Opener: If your champion attacked 5 times this game, give your minions Dash this game.[]",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "playerAttribute": "ATTACKS_THIS_GAME",
+          "targetPlayer": "FRIENDLY_PLAYER"
+        },
+        "value2": 5
+      },
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "aura": {
+          "class": "AttributeAura",
+          "target": "FRIENDLY_MINIONS",
+          "attribute": "RUSH",
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "playerAttribute": "ATTACKS_THIS_GAME",
+          "targetPlayer": "FRIENDLY_PLAYER"
+        },
+        "value2": 5
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 5,
+              "value2": {
+                "class": "AttributeValueProvider",
+                "playerAttribute": "ATTACKS_THIS_GAME",
+                "targetPlayer": "FRIENDLY_PLAYER"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
+}
