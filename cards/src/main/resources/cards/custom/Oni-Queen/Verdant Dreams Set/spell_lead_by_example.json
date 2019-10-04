@@ -1,18 +1,27 @@
 {
   "name": "Lead by Example",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Give a minion Attack equal to your champion's Attack.",
+  "description": "Give a minion Attack equal to your champion's Attack. Draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "attackBonus": {
-      "class": "AttributeValueProvider",
-      "target": "FRIENDLY_HERO",
-      "attribute": "ATTACK"
-    }
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "BuffSpell",
+        "attackBonus": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "ATTACK"
+        }
+      }
+    ]
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",
