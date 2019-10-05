@@ -1,29 +1,24 @@
 {
   "name": "Shinobi Infiltrator",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "VIOLET",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Hidden. Opener: Discard a random card. Then, draw 2 cards.",
-  "battlecry": {
+  "description": "Hidden. After this attacks a champion, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "HERO"
+    },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DiscardSpell",
-          "value": 1
-        },
-        {
-          "class": "DrawCardSpell",
-          "value": 2
-        }
-      ]
+      "class": "DrawCardSpell",
+      "value": 1
     }
   },
   "attributes": {
-    "BATTLECRY": true,
     "STEALTH": true
   },
   "collectible": true,
