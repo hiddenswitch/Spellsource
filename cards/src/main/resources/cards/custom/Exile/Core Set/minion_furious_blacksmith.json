@@ -9,7 +9,7 @@
   "description": "After you lose Armor, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
-      "class": "LoseArmorTrigger",
+      "class": "LoseArmorTrigger", #New trigger needs to be developed.
       "hostTargetType": "FRIENDLY_HERO"
     },
     "spell": {
