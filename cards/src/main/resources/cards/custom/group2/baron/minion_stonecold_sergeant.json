@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 2,
-  "baseHp": 6,
+  "baseHp": 5,
   "rarity": "RARE",
   "description": "Whenever you add a Knight to your hand, give it +2/+2.",
   "trigger": {
