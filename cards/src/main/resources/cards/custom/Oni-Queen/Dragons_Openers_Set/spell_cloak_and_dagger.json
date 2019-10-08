@@ -1,0 +1,21 @@
+{
+  "name": "Cloak and Dagger",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "COMMON",
+  "description": "Give a friendly Hidden minion Toxic.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "POISONOUS",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "STEALTH",
+      "operation": "HAS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
