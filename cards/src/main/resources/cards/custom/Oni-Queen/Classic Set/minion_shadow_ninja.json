@@ -20,7 +20,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "STEALTH": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
