@@ -1,0 +1,26 @@
+{
+  "name": "Bogovey Traitor",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Opener: Destroy an enemy Dragon.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "DRAGON"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
