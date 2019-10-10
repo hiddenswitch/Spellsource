@@ -1,11 +1,12 @@
 {
-  "name": "Furious Blacksmith",
+  "name": "Armored Scoundrel",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "CAMO",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
+  "race": "PIRATE",
   "description": "After you lose Armor, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
