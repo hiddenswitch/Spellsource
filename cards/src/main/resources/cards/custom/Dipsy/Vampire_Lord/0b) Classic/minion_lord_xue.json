@@ -1,0 +1,19 @@
+{
+  "name": "Lord Xue",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Your Health increasing effects trigger twice.",
+
+  ### I'm not sure how to implement this one. The idea is that ANY effect that boosts something's Health will simply cast again, but I'm not sure how to set up that trigger.
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

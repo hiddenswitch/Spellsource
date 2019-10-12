@@ -1,0 +1,27 @@
+{
+  "name": "Proselytize",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Put the leftmost enemy minion into your hand. Double its Health.",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "ReturnTargetToHandSpell",
+	  "target": "LEFTMOST_ENEMY_MINION",
+      "spell": {
+        "class": "BuffSpell",
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "target": "OUTPUT",
+          "attribute": "HP"
+        }
+      }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

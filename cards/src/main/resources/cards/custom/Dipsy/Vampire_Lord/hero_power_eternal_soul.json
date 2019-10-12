@@ -1,0 +1,21 @@
+{
+  "name": "Eternal Soul",
+  "heroPower": "hero_power_eternal_suffering",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Give your champion +2 Health.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+	  "target": "FRIENDLY_HERO",
+      "hpBonus": 2
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

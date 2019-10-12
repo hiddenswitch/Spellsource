@@ -1,0 +1,22 @@
+{
+  "name": "Devour",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Drain 3 Health from a character.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DrainSpell",
+      "value": 3
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}
