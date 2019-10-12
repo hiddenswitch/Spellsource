@@ -1,0 +1,35 @@
+{
+  "name": "Deft Familiar",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Your Skill can target minions.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DrainSpell",
+      "value": 2
+    }
+  },
+  "auras": {
+      "class": "CardAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "card": "hero_power_familiar_eternal_soul",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "hero_power_eternal_soul"
+      }
+  }
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

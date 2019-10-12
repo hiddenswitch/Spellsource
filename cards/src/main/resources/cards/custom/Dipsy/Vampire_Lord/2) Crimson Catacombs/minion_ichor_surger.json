@@ -1,0 +1,32 @@
+{
+  "name": "Ichor Surger",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Opener: Double the Health of your other minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"DRAIN": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

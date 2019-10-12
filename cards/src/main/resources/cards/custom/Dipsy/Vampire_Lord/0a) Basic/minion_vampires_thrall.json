@@ -1,0 +1,23 @@
+{
+  "name": "Vampire's Thrall",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Minions adjacent to this one have Guard.",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "ADJACENT_MINIONS",
+      "attribute": "AURA_GUARD"
+    },
+  ]
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

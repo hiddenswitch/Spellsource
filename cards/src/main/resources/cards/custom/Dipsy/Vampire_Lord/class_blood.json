@@ -1,0 +1,11 @@
+{
+  "name": "Vampire Lord",
+  "type": "CLASS",
+  "hero": "hero_jian_shin",
+  "heroClass": "BLOOD",
+  "color": [102, 23, 21],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Essence Shock",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Deal damage to a minion equal to the combined Health of all minions in your hand.",
+  "targetSelection": "MINIONS",
+  "class": "DamageSpell",
+	  "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HAND",
+        "attribute": "HP"
+      }
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

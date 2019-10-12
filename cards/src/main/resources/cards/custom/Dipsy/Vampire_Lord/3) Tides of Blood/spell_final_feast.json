@@ -1,0 +1,21 @@
+{
+  "name": "Final Feast",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "LEGENDARY",
+  "description": "All friendly minions Drain 4 Health from the enemy (or enemies) opposite them.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrainSpell"		### There arent many effects similar to this, but from what I can tell looking at them (eg Impale's custom.DamageOppositeMinionsSpell),
+  },							### I would guess that the easiest way to get this working without it being overly complicated is with a custom spell type.
+  "attributes": {				### For clarity's sake, this would work similarly to the chess minigame in One Night in Karazhan - the enemy champion is treated as being at either end of the board.
+	"DRAIN": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

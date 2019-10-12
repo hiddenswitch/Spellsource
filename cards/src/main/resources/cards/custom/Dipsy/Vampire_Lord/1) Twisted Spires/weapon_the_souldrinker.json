@@ -1,0 +1,29 @@
+{
+  "name": "The Souldrinker",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After a friendly character's Health increases, give them that much Attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MaxHpIncreasedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TemporaryAttackSpell",
+        "value": {
+          "class": "EventValueProvider"
+        }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

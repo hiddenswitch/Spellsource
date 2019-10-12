@@ -1,0 +1,25 @@
+{
+  "name": "Eternal Soul",
+  "heroPower": "hero_power_eternal_suffering",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Give a minion or your champion +2 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": 2
+    },
+	"filter": {
+      "class": "EntityEqualsFilter",
+      "invert": true,
+      "secondaryTarget": "ENEMY_HERO"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Yagan, Lifetaker",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Drain half your champion's Health and randomly distribute it between your minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrainSpell"
+	  
+	  ### Not 100% on this. From the understanding I have of DrainSpell, this might need a new spell type, but I could be wrong. 
+	  ### This minion is intended to be included in the potential targets.
+	  
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"DRAIN": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
