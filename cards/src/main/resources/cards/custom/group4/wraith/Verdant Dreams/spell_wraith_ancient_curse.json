@@ -1,6 +1,6 @@
 {
   "name": "Ancient Curse",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
