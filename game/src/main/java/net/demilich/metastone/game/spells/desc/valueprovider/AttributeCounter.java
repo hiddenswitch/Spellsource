@@ -16,8 +16,8 @@ public class AttributeCounter extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		EntityReference source = getDesc().getSource();
-		List<Entity> relevantEntities = context.resolveTarget(player, host, source);
+		EntityReference descTarget = getDesc().getTarget();
+		List<Entity> relevantEntities = context.resolveTarget(player, host, descTarget);
 		int count = 0;
 		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
 		for (Entity entity : relevantEntities) {

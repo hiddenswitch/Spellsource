@@ -11,7 +11,7 @@
     "class": "StatefulAttributeValueAura",
     "target": "SELF",
     "value": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "FRIENDLY_MINIONS"
     },
     "attribute": "AURA_ATTACK_BONUS"

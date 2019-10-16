@@ -15,7 +15,7 @@
   "set": "BOOMSDAY_PROJECT",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "FRIENDLY_GRAVEYARD",
     "filter": {
       "class": "AttributeFilter",

@@ -10,7 +10,7 @@
     "class": "HealSpell",
     "target": "FRIENDLY_HERO",
     "value": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ENEMY_MINIONS",
       "multiplier": 3
     }

@@ -15,6 +15,21 @@ Please note that the client is currently in maintenance mode while the new build
 ##### Content Additions:
 
  - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
+ 
+##### Content Fixes:
+
+ - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
+ - Cryptlady Zara is no longer collectible. (1373)
+ - Anobii, the Trapper is now known as Crypto, the Trapper. (1373)
+ - Locust Swarm now costs 8. (1373)
+ - Tiger Ant now costs 11. (1373)
+ - Harden now gives +4 Health instead of +4/+4 and costs 4. (1373)
+ - Reclamation now reads, "Gain 0 Armor. (Increases for each Beast in your graveyard)" (1373)
+ - The Prophet now reads, "Opener: Discover and summon two minions that died this game." (1373)
+ - Lil Wormy is now a 1/3 Beast. (1373)
+ - Nanny now reads, "At the end of your turn, give a random minion in your hand +1/+1." (1373)
+ - Dream of Kingship now reads, "Discover a Beast, a Dragon and a Fae. Summon them all." (1373)
+ - Other changes to Hive Queen descriptions. (1373) 
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
 

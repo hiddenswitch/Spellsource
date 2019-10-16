@@ -13,7 +13,7 @@
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
       "armorBonus": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ENEMY_MINIONS",
         "multiplier": 2
       }

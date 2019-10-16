@@ -9,7 +9,7 @@
     "class": "ComparisonCondition",
     "operation": "GREATER",
     "value1": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ENEMY_MINIONS"
     },
     "value2": 0

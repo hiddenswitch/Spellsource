@@ -31,7 +31,7 @@ import java.util.Map;
  *     "class": "StatefulAttributeValueAura",
  *     "attribute": "AURA_ATTACK_BONUS",
  *     "value": {
- *       "class": "EntityCounter",
+ *       "class": "EntityCountValueProvider",
  *       "target": "OTHER_FRIENDLY_MINIONS"
  *     },
  *     "target": "SELF"

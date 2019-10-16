@@ -28,7 +28,7 @@
     "spell2": {
       "class": "ModifyMaxManaSpell",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_MINIONS"
       }
     }

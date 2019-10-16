@@ -12,7 +12,7 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "FRIENDLY_GRAVEYARD",
     "filter": {
       "class": "AndFilter",

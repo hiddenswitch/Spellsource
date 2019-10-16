@@ -16,7 +16,7 @@
   "set": "LEAGUE_OF_EXPLORERS",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "FRIENDLY_MINIONS",
     "filter": {
       "class": "RaceFilter",
