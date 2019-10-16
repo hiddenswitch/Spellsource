@@ -6,6 +6,16 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.53-2.0.38 (In Progress)
+
+Bug fixes, balance changes and light content additions.
+
+Please note that the client is currently in maintenance mode while the new build is being developed!
+
+##### Content Additions:
+
+ - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
+
 ### 0.8.52-2.0.38 (September 20th, 2019)
 
 Thanks to @Logovaz for a great contribution to Witch Doctor.
