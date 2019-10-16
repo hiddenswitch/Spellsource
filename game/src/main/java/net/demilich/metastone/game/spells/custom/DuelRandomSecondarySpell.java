@@ -25,10 +25,15 @@ public final class DuelRandomSecondarySpell extends DuelSpell {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		List<Entity> validDefenders = targets;
+		if (validDefenders == null || validDefenders.isEmpty()) {
+			return;
+		}
 		List<Entity> validAttackers = context.resolveTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		validAttackers.removeAll(validDefenders);
+		if (validAttackers.isEmpty()) {
+			return;
+		}
 		validAttackers = Collections.singletonList(context.getLogic().getRandom(validAttackers));
-
 		duel(context, player, source, validAttackers, validDefenders);
 	}
 }

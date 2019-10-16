@@ -32,6 +32,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -149,8 +150,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	/**
 	 * Creates a hero entity from the text on the card. Works similarly to {@link #summon()}, except for heroes.
 	 *
-	 * @return A new hero instance.
 	 * @param player
+	 * @return A new hero instance.
 	 */
 	public Hero createHero(Player player) {
 		if (getCardType() != CardType.HERO) {
@@ -533,7 +534,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	@Override
 	public String toString() {
-		return String.format("[%s '%s' %s Manacost:%d]", getCardType(), getName(), getReference(), getBaseManaCost());
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.append("name", getName())
+				.append("description", getDescription())
+				.append("cardId", getCardId())
+				.toString();
 	}
 
 	/**
