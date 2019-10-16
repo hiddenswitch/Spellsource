@@ -1005,16 +1005,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void endOfSequence() {
-		endOfSequence(0);
+		endOfSequence(0, new ArrayList<>());
 	}
 
 	/**
 	 * Checks all player minions and weapons for destroyed actors and proceeds with the removal in correct order.
 	 *
-	 * @param sequenceDepth The number of times this method has been called to avoid infinite death checking.
+	 * @param sequenceDepth         The number of times this method has been called to avoid infinite death checking.
+	 * @param cumulativeDestroyList Keeps track of the entities that have appeared on the destroy list (for debugging
+	 *                              purposes).
 	 */
 	@Suspendable
-	private void endOfSequence(int sequenceDepth) {
+	private void endOfSequence(int sequenceDepth, List<Actor> cumulativeDestroyList) {
 		if (sequenceDepth == 0) {
 			context.fireGameEvent(new WillEndSequenceEvent(context));
 		}
@@ -1041,7 +1043,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Check if any characters have been marked as destroyed by ending the sequence. If one has, we're in big trouble.
 			if (!getDestroyedCharacters().isEmpty()) {
 				// Gotta end the sequence again!
-				endOfSequence(sequenceDepth + 1);
+				cumulativeDestroyList.addAll(destroyList);
+				endOfSequence(sequenceDepth + 1, cumulativeDestroyList);
 			}
 			return;
 		}
@@ -1055,9 +1058,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
-
+		cumulativeDestroyList.addAll(destroyList);
 		// deathrattles have been resolved, which may lead to other actors being destroyed now, so we need to check again
-		endOfSequence(sequenceDepth + 1);
+		endOfSequence(sequenceDepth + 1, cumulativeDestroyList);
 	}
 
 	@NotNull

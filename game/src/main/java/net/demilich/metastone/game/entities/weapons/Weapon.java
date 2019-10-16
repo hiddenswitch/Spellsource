@@ -98,21 +98,4 @@ public final class Weapon extends Actor {
 	public void setOnUnequip(SpellDesc onUnequip) {
 		this.onUnequip = onUnequip;
 	}
-
-	@Override
-	public String toString() {
-		String result = "[" + getEntityType() + " '" + getName() + "'id:" + getId() + " ";
-		result += getWeaponDamage() + "/" + getDurability();
-		String prefix = " ";
-		for (Attribute tag : getAttributes().keySet()) {
-			if (false) {
-				result += prefix + tag;
-				prefix = ", ";
-			}
-		}
-		result += " hashCode: " + hashCode();
-		result += "]";
-		return result;
-	}
-
 }

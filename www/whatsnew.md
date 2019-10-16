@@ -19,6 +19,8 @@ Please note that the client is currently in maintenance mode while the new build
 ##### Content Fixes:
 
  - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
+ - Fleeting Firebug no longer interacts with War Trebuchet to cause an infinite loop. Fleeting Firebug now summons at the end of its owner's turn.
+ - Two Commander Gareths on the battlefield no longer cause an infinite loop. It now reads, "At most once."
  - Unnatural Restoration now restores 4 Health. (1378)
  - Cryptlady Zara is no longer collectible. (1373)
  - Anobii, the Trapper is now known as Crypto, the Trapper. (1373)
@@ -31,6 +33,7 @@ Please note that the client is currently in maintenance mode while the new build
  - Nanny now reads, "At the end of your turn, give a random minion in your hand +1/+1." (1373)
  - Dream of Kingship now reads, "Discover a Beast, a Dragon and a Fae. Summon them all." (1373)
  - Other changes to Hive Queen descriptions. (1373) 
+ - Archaeologist has several reworked cards. (1385)
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
 
