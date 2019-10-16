@@ -15,44 +15,44 @@
     {
       "eventTrigger": {
         "class": "GameStartTrigger",
-        "targetPlayer": "SELF",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "MetaSpell",
-        "spells": [
-        {
-          "class": "DiscardCardsFromDeckSpell",
-          "value": 60,
-          "targetPlayer": "SELF"
-        },
-        {
-          "class": "CastRepeatedlySpell",
-          "spell": {
-            "class": "ShuffleToDeckSpell",
-            "cardSource": {
-            "class": "UnweightedCatalogueSource"
-          }
-          },
-          "howMany": 30
-        }
-        {
-          "value": {
-      "class": "CardCountValueProvider"
-    },
-      {
-        "class": "DiscardSpell",
-        "value": -1
-      },
-      {
-        "class": "DrawCardSpell",
         "value": {
-          "class": "GameValueProvider",
-          "gameValue": "SPELL_VALUE"
-        }
+          "class": "CardCountValueProvider"
+        },
+        "spells": [
           {
             "class": "RevealCardSpell",
             "target": "SELF",
             "targetPlayer": "SELF"
+          },
+          {
+            "class": "DiscardCardsFromDeckSpell",
+            "value": 60,
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "CastRepeatedlySpell",
+            "spell": {
+              "class": "ShuffleToDeckSpell",
+              "cardSource": {
+                "class": "UnweightedCatalogueSource"
+              }
+            },
+            "howMany": 30
+          },
+          {
+            "class": "DiscardSpell",
+            "value": -1
+          },
+          {
+            "class": "DrawCardSpell",
+            "value": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            }
           }
         ]
       }

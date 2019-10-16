@@ -24,6 +24,9 @@ import java.util.Map;
  * When {@link SpellArg#EXCLUSIVE} is {@code true}, marks the shuffled card as an extra copy for the purposes of the
  * {@link ShuffledTrigger}. To trigger only on non-extra copies, use {@link ShuffledOnlyOriginalCopiesTrigger}.
  * <p>
+ * Shuffling cards to the deck when generated from a {@link net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects}
+ * card source is done <b>without replacement</b>.
+ * <p>
  * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
  * <pre>
  *   {
