@@ -750,6 +750,8 @@ public class SpellUtils {
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
 	 * card source used is {@link net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource}.
 	 *
+	 * The cards are chosen randomly <b>without replacement</b>.
+	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved
 	 * @param target  The target, which can be {@code null}
