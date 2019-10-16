@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -327,18 +328,12 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 
 	@Override
 	public String toString() {
-		String result = "[" + getEntityType() + " '" + getName() + "'id:" + getId() + " ";
-		result += getAttack() + "/" + getHp();
-		String prefix = " ";
-		for (Attribute tag : getAttributes().keySet()) {
-			if (false) {
-				result += prefix + tag;
-				prefix = ", ";
-			}
-		}
-		result += " hashCode: " + hashCode();
-		result += "]";
-		return result;
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.append("name", getName())
+				.append(getAttack() + "/" + getHp())
+				.append("description", getDescription())
+				.toString();
 	}
 
 	@Override
