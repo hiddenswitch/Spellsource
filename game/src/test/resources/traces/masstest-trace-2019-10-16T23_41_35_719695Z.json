@@ -1,0 +1,12 @@
+{
+  "seed" : -1021958795086459808,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "TOAST", "LIGHTBROWN" ],
+  "deckCardIds" : [ [ "minion_banana_tree", "minion_corona_fae_defender", "minion_mecha_rager", "minion_magedrainer", "minion_frigid_bones", "minion_perplexed_courtsman", "minion_sourceborn_aelin", "minion_chaotic_cutthroat", "minion_starving_myrmidon", "minion_crazy_cook", "minion_cursing_disciple", "minion_kiljaeden_deceiver", "spell_roast", "spell_lava_soup", "spell_tel_abim_bananas", "minion_difficult_child", "spell_stormchops", "minion_boar_brawler", "spell_feast_of_winter_veil", "minion_chromie", "minion_the_rokk", "minion_crazy_cook", "spell_halitosis", "minion_tasty_murloc", "minion_meat_construct", "spell_vegan_diet", "minion_floating_crystal", "minion_alien_invader", "minion_stone_sentinel_basic", "minion_lord_cookie" ], [ "spell_blast_apart", "minion_abandoned_geneticist", "minion_surveyor_skag", "spell_restore_artifact", "minion_kiljaeden_deceiver", "minion_master_eroder", "weapon_dig_up_shovel", "minion_jack_in_the_box", "minion_evergreen_grower", "spell_restore_artifact", "minion_southsea_giant", "spell_scope_out", "minion_volcanic_elemental", "minion_clash_flamecore", "minion_translocator", "minion_sparkly_messenger", "minion_kawarimi_headbasher", "minion_timewalker_initiate", "minion_hypnotist", "spell_scout", "minion_roadblock_pufferfish", "minion_cursed_construct", "spell_sword_in_stone", "spell_dig_in", "minion_iron_preserver", "minion_atumjun_trapfinder", "minion_prince_tenris", "minion_storm_giant", "minion_daring_duelist", "spell_earthshake" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ [ 14, 17 ], [ 36, 43, 51 ] ],
+  "actions" : [ 2, 0, 1, 2, 1, 1, 1, 2, 2, 2, 0, 2, 0, 0, 1, 1, 21, 1, 4, 2, 2, 0, 9, 0, 1, 1, 0, 3, 0, 1, 0, 6, 9, 4, 0, 0, 0, 7, 8, 1, 0, 10, 9, 8, 2, 1, 0, 4, 0, 0, 0, 5, 5, 0, 0, 6, 0, 5, 1, 0, 0, 9, 4, 1, 2, 0, 12, 0, 28, 8, 24, 3, 0, 25, 17, 14, 17, 2, 3, 0, 5, 3, 7, 5, 0, 2, 5, 2, 3, 0, 0, 7, 9, 0, 0, 7, 7, 3, 6, 1, 2, 6, 8, 4, 9, 9, 8, 2, 1, 8, 8, 12, 37, 15, 13, 1, 9, 8, 2, 5 ],
+  "id" : null
+}

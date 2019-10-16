@@ -15,9 +15,12 @@ Please note that the client is currently in maintenance mode while the new build
 ##### Content Additions:
 
  - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
+ - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
  
 ##### Content Fixes:
 
+ - Effects which play cards randomly may now play cards of the same base card randomly. However, during the invocation of a specific card's random play effect, it will never be able to play itself randomly recursively.
+ - One on One no longer causes a crash if it is randomly played in such a way to select an enemy minion when it's the only minion on the board.
  - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
  - Fleeting Firebug no longer interacts with War Trebuchet to cause an infinite loop. Fleeting Firebug now summons at the end of its owner's turn.
  - Two Commander Gareths on the battlefield no longer cause an infinite loop. It now reads, "At most once."
