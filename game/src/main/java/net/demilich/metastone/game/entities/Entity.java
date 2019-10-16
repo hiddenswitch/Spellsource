@@ -364,8 +364,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * <p>
 	 *
 	 * @return The entity's location in the match encoded as a {@link EntityLocation}, or {@link
-	 * 		EntityLocation#UNASSIGNED} if the entity has not yet been assigned a location or placed into an {@link
-	 * 		EntityZone}.
+	 *    EntityLocation#UNASSIGNED} if the entity has not yet been assigned a location or placed into an {@link
+	 *    EntityZone}.
 	 * @see EntityLocation for a complete description of how to use {@link EntityLocation} objects.
 	 */
 	public EntityLocation getEntityLocation() {
@@ -473,7 +473,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets the possibly modified description of the entity to render to the end user.
 	 *
 	 * @return The {@link #getSourceCard()}'s {@link Card#getDescription()} field, or the value specified in {@link
-	 * 		Attribute#DESCRIPTION}.
+	 *    Attribute#DESCRIPTION}.
 	 */
 	public String getDescription() {
 		return (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) != null) ?
@@ -667,5 +667,19 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		} else {
 			matcher.appendReplacement(newDescription, Integer.toString(newValue));
 		}
+	}
+
+	/**
+	 * Indicates whether the minion died a natural death (not removed peacefully, not removed by spells, not a permanent)
+	 * on the battlefield.
+	 *
+	 * @return {@code true} if this minion died a natural death on the battlefield, is not a permanent, is in the
+	 * 		graveyard and is definitely a minion.
+	 */
+	public boolean diedOnBattlefield() {
+		return getEntityType() == EntityType.MINION
+				&& getZone() == Zones.GRAVEYARD
+				&& hasAttribute(Attribute.DIED_ON_TURN)
+				&& !hasAttribute(Attribute.PERMANENT);
 	}
 }

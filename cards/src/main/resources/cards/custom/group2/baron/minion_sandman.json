@@ -12,7 +12,7 @@
     "spell": {
       "class": "RecastWhileSpell",
       "howMany": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_MINIONS",
         "multiplier": -1,
         "offset": 3

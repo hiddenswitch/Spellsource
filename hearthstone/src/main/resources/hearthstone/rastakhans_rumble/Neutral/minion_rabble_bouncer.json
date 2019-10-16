@@ -14,7 +14,7 @@
   "set": "RASTAKHANS_RUMBLE",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "ENEMY_MINIONS"
   }
 }

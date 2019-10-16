@@ -13,7 +13,7 @@
       "class": "ComparisonCondition",
       "operation": "GREATER_OR_EQUAL",
       "value1": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_DECK"
       },
       "value2": 1
@@ -25,7 +25,7 @@
         "class": "ComparisonCondition",
         "operation": "GREATER_OR_EQUAL",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK"
         },
         "value2": 1

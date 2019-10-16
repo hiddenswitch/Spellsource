@@ -19,7 +19,7 @@ public class GraveyardCountCondition extends CountCondition {
 		int count = 0;
 		EntityFilter filter = (EntityFilter) getDesc().get(ConditionArg.FILTER);
 		for (Entity deadEntity : player.getGraveyard()) {
-			if (deadEntity instanceof Minion && !deadEntity.isRemovedPeacefully() && (filter == null || filter.matches(context, player, source, deadEntity))) {
+			if (deadEntity.diedOnBattlefield() && (filter == null || filter.matches(context, player, source, deadEntity))) {
 				count++;
 			}
 		}

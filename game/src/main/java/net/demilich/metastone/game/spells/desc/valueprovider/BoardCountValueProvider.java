@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 /**
  * Returns the number of minions, including permanents, on the board, unfiltered.
  */
-public class BoardCountValueProvider extends ValueProvider {
+public class BoardCountValueProvider extends EntityCountValueProvider {
 
 	public BoardCountValueProvider(ValueProviderDesc desc) {
 		super(desc);

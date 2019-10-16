@@ -16,7 +16,7 @@
           "class": "BuffSpell",
           "target": "SELF",
           "value": {
-            "class": "EntityCounter",
+            "class": "EntityCountValueProvider",
             "target": "ADJACENT_MINIONS"
           }
         },

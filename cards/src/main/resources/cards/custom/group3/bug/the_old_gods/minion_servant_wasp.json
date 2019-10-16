@@ -1,5 +1,5 @@
 {
-  "name": "Servant Wasp",
+  "name": "Ordinary Wasp",
   "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "AMBER",
@@ -7,46 +7,9 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Give your C'Thulu +2/+2 (wherever it is).",
-  "battlecry": {
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "target": "FRIENDLY_MINIONS",
-          "value": 2,
-          "filter": {
-            "class": "SpecificCardFilter",
-            "card": "minion_cthun"
-          }
-        },
-        {
-          "class": "BuffSpell",
-          "target": "FRIENDLY_HAND",
-          "value": 2,
-          "filter": {
-            "class": "SpecificCardFilter",
-            "card": "minion_cthun"
-          }
-        },
-        {
-          "class": "ModifyAttributeSpell",
-          "target": "FRIENDLY_PLAYER",
-          "value": 2,
-          "attribute": "CTHUN_ATTACK_BUFF"
-        },
-        {
-          "class": "ModifyAttributeSpell",
-          "target": "FRIENDLY_PLAYER",
-          "value": 2,
-          "attribute": "CTHUN_HEALTH_BUFF"
-        }
-      ]
-    }
-  },
+  "description": "Blitz",
   "attributes": {
-    "BATTLECRY": true
+    "CHARGE": true
   },
   "collectible": false,
   "set": "CUSTOM",

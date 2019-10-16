@@ -16,7 +16,7 @@
       {
         "class": "DrawCardSpell",
         "value": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_MINIONS",
           "filter": {
             "class": "AttributeFilter",

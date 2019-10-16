@@ -12,7 +12,7 @@
     "class": "BuffAura",
     "target": "SELF",
     "attackBonus": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "CardFilter",
@@ -21,7 +21,7 @@
       "offset": -1
     },
     "hpBonus": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "CardFilter",

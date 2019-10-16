@@ -31,14 +31,14 @@ import net.demilich.metastone.game.cards.Attribute;
  *     "class": "CardCostInsteadAura",
  *     "target": "FRIENDLY_HAND",
  *     "amountOfCurrency": {
- *       "class": "EntityCounter",
+ *       "class": "EntityCountValueProvider",
  *       "target": "FRIENDLY_DECK"
  *     },
  *     "canAffordCondition": {
  *       "class": "ComparisonCondition",
  *       "operation": "GREATER_OR_EQUAL",
  *       "value1": {
- *         "class": "EntityCounter",
+ *         "class": "EntityCountValueProvider",
  *         "target": "FRIENDLY_DECK"
  *       },
  *       "value2": {
@@ -92,14 +92,14 @@ import net.demilich.metastone.game.cards.Attribute;
  *           "card": "spell_cheap_damage"
  *         },
  *         "amountOfCurrency": {
- *           "class": "EntityCounter",
+ *           "class": "EntityCountValueProvider",
  *           "target": "FRIENDLY_MINIONS"
  *         },
  *         "canAffordCondition": {
  *           "class": "ComparisonCondition",
  *           "operation": "GREATER_OR_EQUAL",
  *           "value1": {
- *             "class": "EntityCounter",
+ *             "class": "EntityCountValueProvider",
  *             "target": "FRIENDLY_MINIONS"
  *           },
  *           "value2": {

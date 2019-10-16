@@ -20,7 +20,7 @@
       "class": "StatefulAttributeValueAura",
       "target": "SELF",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_GRAVEYARD",
         "filter": {
           "class": "AndFilter",
@@ -54,7 +54,7 @@
       "class": "StatefulAttributeValueAura",
       "target": "SELF",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_GRAVEYARD",
         "filter": {
           "class": "AndFilter",

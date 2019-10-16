@@ -17,7 +17,7 @@
           "class": "BuffSpell",
           "target": "SELF",
           "value": {
-            "class": "EntityCounter",
+            "class": "EntityCountValueProvider",
             "target": "FRIENDLY_MINIONS",
             "filter": {
               "class": "RaceFilter",
