@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
@@ -79,14 +80,14 @@ public class WraithTests extends TestBase {
 			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			player.setMana(10);
 			playCard(context, player, golem);
-			assertEquals(player.getMana(), 5);
+			assertEquals(player.getMana(), 10 - (golem.getBaseManaCost() - golem.getSourceCard().getDesc().getManaCostModifier().getInt(ValueProviderArg.IF_TRUE)));
 		}));
 
 		runGym(((context, player, opponent) -> {
 			Card golem = receiveCard(context, player, "minion_blood_golem");
 			player.setMana(10);
 			playCard(context, player, golem);
-			assertEquals(player.getMana(), 3);
+			assertEquals(player.getMana(), 10 - golem.getBaseManaCost());
 		}));
 	}
 

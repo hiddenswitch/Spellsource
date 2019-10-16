@@ -34,6 +34,11 @@ Please note that the client is currently in maintenance mode while the new build
  - Dream of Kingship now reads, "Discover a Beast, a Dragon and a Fae. Summon them all." (1373)
  - Other changes to Hive Queen descriptions. (1373) 
  - Archaeologist has several reworked cards. (1385)
+ - Wicked Smite is removed for a new basic minion, "Peeling Zombie." (1388)
+ - Blood Golem is changed to be a 5 mana 4/5 so that it can be played more flexibly. (1388)
+ - Large Spiderling is buffed to now deal 4 damage to the friendly champion instead of 5. (1388)
+ - Ancient Curse is buffed to cost 3 mana instead of 4 mana,. (1388)
+ - Bone Shield now only does 1 damage to a friendly minion. (1388)
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
 
