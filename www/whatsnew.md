@@ -19,6 +19,7 @@ Please note that the client is currently in maintenance mode while the new build
 ##### Content Fixes:
 
  - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
+ - Unnatural Restoration now restores 4 Health. (1378)
  - Cryptlady Zara is no longer collectible. (1373)
  - Anobii, the Trapper is now known as Crypto, the Trapper. (1373)
  - Locust Swarm now costs 8. (1373)
