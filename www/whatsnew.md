@@ -50,6 +50,9 @@ Please note that the client is currently in maintenance mode while the new build
  - Some Sands of Time neutrals have been buffed and nerfed. (1403)
  - Archivist Jerrard now looks for a deck in your collection called The Archive. (1403)
  - Rektan, Warrior of the Wild now reads, "Opener: Your champion has +1 Attack for the rest of the game." (1403)
+ - Stonecold Sergeant now has 5 Health. (1407)
+ - Stormwind Commander now has 4 Health. (1407)
+ - Forces Unite now costs 6. (1407)
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
 
