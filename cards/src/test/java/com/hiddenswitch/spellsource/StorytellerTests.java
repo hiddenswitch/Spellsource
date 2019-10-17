@@ -231,11 +231,8 @@ public class StorytellerTests extends TestBase {
 	public void testTomeOfSecrets() {
 		runGym((context, player, opponent) -> {
 			player.setMaxMana(5);
-			int originalMana = player.getMaxMana();
 			playCard(context, player, "spell_tome_of_secrets");
-			assertEquals(player.getSecrets().size(), 1);
-			assertEquals(player.getSecrets().get(0).getSourceCard().getHeroClass(), "OLIVE");
-			assertEquals(player.getMaxMana(), originalMana + 1);
+			assertEquals(player.getHand().size(), 3);
 		});
 	}
 
