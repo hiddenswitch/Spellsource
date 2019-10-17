@@ -461,6 +461,7 @@ public class TargetLogic implements Serializable {
 			friendlyCards.addAll(player.getDeck());
 			friendlyCards.addAll(player.getMinions());
 			friendlyCards.addAll(player.getSetAsideZone());
+			friendlyCards.addAll(player.getHeroPowerZone());
 			friendlyCards.add(player.getHero());
 			friendlyCards.addAll(player
 					.getGraveyard()
@@ -476,6 +477,7 @@ public class TargetLogic implements Serializable {
 			enemyCards.addAll(context.getOpponent(player).getDeck());
 			enemyCards.addAll(context.getOpponent(player).getMinions());
 			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
+			enemyCards.addAll(context.getOpponent(player).getHeroPowerZone());
 			enemyCards.add(context.getOpponent(player).getHero());
 			enemyCards.addAll(context.getOpponent(player).getGraveyard()
 					.stream()
