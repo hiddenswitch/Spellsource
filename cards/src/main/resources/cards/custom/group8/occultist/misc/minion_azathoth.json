@@ -1,0 +1,35 @@
+{
+  "name": "Azathoth, Idiot God",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 1,
+  "baseHp": 20,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Deal [0] damage to all characters. (Increases for every damage dealt to this)",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ALL_CHARACTERS",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "SELF",
+      "attribute": "TOTAL_DAMAGE_RECEIVED"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "TOTAL_DAMAGE_RECEIVED"
+      }
+    }
+  ]
+}

@@ -17,9 +17,11 @@ Please note that the client is currently in maintenance mode while the new build
  - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
  - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
  - New Storyteller cards. (1394)
+ - New Occultist cards. (1398)
  
 ##### Content Fixes:
 
+ - Effects which target friendly cards now also target Skills if the effects did not already.
  - Effects which play cards randomly may now play cards of the same base card randomly. However, during the invocation of a specific card's random play effect, it will never be able to play itself randomly recursively.
  - One on One no longer causes a crash if it is randomly played in such a way to select an enemy minion when it's the only minion on the board.
  - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
@@ -48,7 +50,6 @@ Please note that the client is currently in maintenance mode while the new build
  - Some Sands of Time neutrals have been buffed and nerfed. (1403)
  - Archivist Jerrard now looks for a deck in your collection called The Archive. (1403)
  - Rektan, Warrior of the Wild now reads, "Opener: Your champion has +1 Attack for the rest of the game." (1403)
- - 
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
 

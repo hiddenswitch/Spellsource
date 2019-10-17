@@ -6,7 +6,7 @@
   "baseHp": 5,
   "heroClass": "DARKGREEN",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Destroy your deck. Shuffle two copies of your hand into your deck.",
+  "description": "Opener: Destroy your deck. Shuffle two copies of your hand into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -17,15 +17,17 @@
           "target": "FRIENDLY_DECK"
         },
         {
-      "class": "ShuffleToDeckSpell",
-      "target": "FRIENDLY_HAND",
-            "howMany": 2
-          }
-        },
+          "class": "ShuffleToDeckSpell",
+          "target": "FRIENDLY_HAND",
+          "howMany": 2
+        }
+      ]
+    }
+  },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
- }
+}

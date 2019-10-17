@@ -18,13 +18,14 @@
         "target": "FRIENDLY_HAND",
         "cardCostModifier": {
           "class": "CardCostModifier",
+          "target": "SELF",
           "value": 1,
           "operation": "SET"
         }
       }
     ]
-},
-"collectible": true,
-"set": "CUSTOM",
-"fileFormatVersion": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

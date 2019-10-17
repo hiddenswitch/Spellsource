@@ -21,5 +21,7 @@
   },
   "collectible": true,
   "fileFormatVersion": 1,
-  "sets": "CUSTOM"
+  "sets": [
+    "CUSTOM"
+  ]
 }
