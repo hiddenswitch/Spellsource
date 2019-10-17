@@ -12,7 +12,7 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "FromDeckToHandSpell",
-      "value": 1,
+      "value": 2,
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION",
