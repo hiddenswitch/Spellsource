@@ -1,0 +1,30 @@
+{
+  "name": "Forest Get Together",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "RARE",
+  "description": "Draw a minion. Restore #3 Health to your champion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

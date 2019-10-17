@@ -16,6 +16,7 @@ Please note that the client is currently in maintenance mode while the new build
 
  - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
  - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
+ - New Storyteller cards. (1394)
  
 ##### Content Fixes:
 
@@ -24,6 +25,7 @@ Please note that the client is currently in maintenance mode while the new build
  - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
  - Fleeting Firebug no longer interacts with War Trebuchet to cause an infinite loop. Fleeting Firebug now summons at the end of its owner's turn.
  - Two Commander Gareths on the battlefield no longer cause an infinite loop. It now reads, "At most once."
+ - Storyteller buffs and nerfs. (1394)
  - Unnatural Restoration now restores 4 Health. (1378)
  - Cryptlady Zara is no longer collectible. (1373)
  - Anobii, the Trapper is now known as Crypto, the Trapper. (1373)
