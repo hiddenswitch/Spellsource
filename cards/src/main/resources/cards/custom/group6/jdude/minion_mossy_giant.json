@@ -1,13 +1,16 @@
 {
-  "name": "Mossy Giant",
-  "baseManaCost": 20,
+  "name": "Deathhulk Terror",
+  "baseManaCost": 15,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8,
-  "baseHp": 8,
+  "baseAttack": 6,
+  "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Cost (1) less for each friendly minion that has died this game.",
-  "attributes": {},
+  "race": "ELEMENTAL",
+  "description": "Dash. Costs (1) less for each friendly minion that has died this game.",
+  "attributes": {
+    "RUSH": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

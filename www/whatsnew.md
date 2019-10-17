@@ -44,6 +44,11 @@ Please note that the client is currently in maintenance mode while the new build
  - Large Spiderling is buffed to now deal 4 damage to the friendly champion instead of 5. (1388)
  - Ancient Curse is buffed to cost 3 mana instead of 4 mana,. (1388)
  - Bone Shield now only does 1 damage to a friendly minion. (1388)
+ - Some neutrals have been removed. (1403)
+ - Some Sands of Time neutrals have been buffed and nerfed. (1403)
+ - Archivist Jerrard now looks for a deck in your collection called The Archive. (1403)
+ - Rektan, Warrior of the Wild now reads, "Opener: Your champion has +1 Attack for the rest of the game." (1403)
+ - 
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
 
