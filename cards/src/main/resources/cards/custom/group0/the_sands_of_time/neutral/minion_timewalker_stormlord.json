@@ -1,12 +1,12 @@
 {
-  "name": "Timewalker Stormlord",
+  "name": "Firegate Inquisitor",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Whenever you draw a card, deal 3 damage to a random enemy.",
+  "description": "Whenever you draw a card, deal 2 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -15,7 +15,7 @@
     "spell": {
       "class": "DamageSpell",
       "target": "ENEMY_CHARACTERS",
-      "value": 3,
+      "value": 2,
       "randomTarget": true
     }
   },
