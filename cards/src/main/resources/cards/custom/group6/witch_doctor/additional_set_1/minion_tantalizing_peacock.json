@@ -1,0 +1,25 @@
+{
+  "name": "Tantalizing Peacock",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Aftermath: Shuffle a random enemy minion into your opponent's deck.",
+  "deathrattle":
+    "spell": {
+      "class": "ShuffleMinionToDeckSpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true,
+      "targetPlayer": "OWNER"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
