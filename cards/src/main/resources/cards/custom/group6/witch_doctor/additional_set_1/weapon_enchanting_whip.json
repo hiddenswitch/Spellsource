@@ -1,0 +1,52 @@
+{
+  "name": "Enchanting Whip",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Opener: Discard a Voodoo spell to give a friendly Beast +2/+2.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "cards": [
+          "spell_divination",
+          "spell_frenzy",
+          "spell_hex_bolt",
+          "spell_spirit_bind"
+        ]
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscardSpell",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cards": [
+              "spell_divination",
+              "spell_frenzy",
+              "spell_hex_bolt",
+              "spell_spirit_bind"
+            ],
+            "randomTarget": true
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "attackBonus": 2,
+          "hpBonus": 2
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
