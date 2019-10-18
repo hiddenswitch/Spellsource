@@ -1,0 +1,56 @@
+{
+  "name": "Dreamscape Scythe",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "CAMO",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "After your champion attacks, give a random friendly Demon, Dragon, and Pirate +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "filter": {
+            "class": "CardFilter",
+            "race": "DEMON"
+          },
+          "randomTarget": true
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "filter": {
+            "class": "CardFilter",
+            "race": "DRAGON"
+          },
+          "randomTarget": true
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "filter": {
+            "class": "CardFilter",
+            "race": "PIRATE"
+          },
+          "randomTarget": true
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
