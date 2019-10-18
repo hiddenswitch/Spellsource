@@ -3,7 +3,7 @@
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "ROSE",
-  "rarity": "COMMON",
+  "rarity": "EPIC",
   "description": "Costs (1) less for each other card in your hand. Restore 8 Health.",
   "targetSelection": "ANY",
   "spell": {
