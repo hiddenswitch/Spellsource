@@ -1,0 +1,49 @@
+{
+  "name": "Obsigon, Bounty Sorcerer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Dash. Opener: Deal 2 damage to a random enemy. Repeat [0] time(s) for each character that attacked last turn.",
+  "battlecry": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 2,
+    "howMany": {
+      "value": { #Not sure about this.
+        "class": "HasAttackedCondition",
+        "target": "ENEMY_CHARACTERS",
+        "value": {
+          "class": "LastTurnValueProvider"
+        }
+      },
+      "offset": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription", #Also unsure here as well
+          "value": {
+            "class": "HasAttackedCondition",
+            "target": "ENEMY_CHARACTERS",
+            "value": {
+              "attribute": "LastTurnValueProvider"
+            }
+          }
+        },
+      ]
+    }
+  ],
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
