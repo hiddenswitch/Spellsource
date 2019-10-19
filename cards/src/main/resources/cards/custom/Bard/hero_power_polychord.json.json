@@ -1,0 +1,23 @@
+{
+  "name": "Polychord",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "Give a random minion in your hand +2/+2.",
+  "targetSelection": "MINION",
+  "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HAND",
+      "attackBonus": 2,
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "hpBonus": 2,
+      "randomTarget": true
+    }
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

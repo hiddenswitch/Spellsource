@@ -1,0 +1,34 @@
+{
+  "name": "Jack, of All Trades",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Hidden. Whenever you cast a spell, add a random spell from your opponent's class to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "OPPONENT",
+	    "cardType": "SPELL"
+    },
+      "cardSource": {
+        "class": "CatalogueSource",
+        "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

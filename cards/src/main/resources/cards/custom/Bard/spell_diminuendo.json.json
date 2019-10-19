@@ -1,0 +1,30 @@
+{
+  "name": "Diminuendo",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "RARE",
+  "description": "Silence all enemy minions. Give them -2 Attack until your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell",
+        "target": "ENEMY_MINIONS"
+      },
+      {
+        "class": "ModifyAttributeSpell",
+        "target": "ENEMY_MINIONS",
+        "value": -2,
+        "attribute": "ATTACK_BONUS",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

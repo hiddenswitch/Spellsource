@@ -1,0 +1,13 @@
+{
+  "name": "Fan",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Soundhorn",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "CORAL",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "After your champion attacks, give all minions in your hand +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HAND",
+      "attackBonus": 1,
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "hpBonus": 1,
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
