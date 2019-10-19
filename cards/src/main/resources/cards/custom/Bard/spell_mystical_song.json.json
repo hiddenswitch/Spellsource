@@ -1,0 +1,23 @@
+{
+  "name": "Mystical Song",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Give a minion and adjacent ones +1/+1.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+        "class": "BuffSpell",
+        "value": 1
+    },
+    "spell2": {
+        "class": "BuffSpell",
+        "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

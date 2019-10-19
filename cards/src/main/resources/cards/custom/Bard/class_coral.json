@@ -1,0 +1,11 @@
+{
+  "name": "Bard",
+  "type": "CLASS",
+  "hero": "hero_sakura_swiftvale",
+  "heroClass": "CORAL",
+  "color": [250, 121, 83],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
