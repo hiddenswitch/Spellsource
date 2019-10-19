@@ -23,7 +23,9 @@
       "value": 1
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
+
+#remove this pls
