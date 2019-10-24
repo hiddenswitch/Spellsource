@@ -11,7 +11,7 @@
     "target": "FRIENDLY_PLAYER",
     "card": "enchantment_blood_moon_rising"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

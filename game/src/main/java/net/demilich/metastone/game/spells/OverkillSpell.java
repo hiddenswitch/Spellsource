@@ -5,10 +5,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
  * This spell implements the new Overkill mechanic introduced in Rastakhan's Rumble. It's meant to happen when something
@@ -45,8 +45,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *     }
  *   }
  * </pre>
- *
- * If the desc has the {@link SpellArg#EXCLUSIVE} arg set to true, the excess damage will be passed into the spell's {@link SpellArg#VALUE}
+ * <p>
+ * If the desc has the {@link SpellArg#EXCLUSIVE} arg set to true, the excess damage will be passed into the spell's
+ * {@link SpellArg#VALUE}
  */
 
 public class OverkillSpell extends DamageSpell {
@@ -69,7 +70,7 @@ public class OverkillSpell extends DamageSpell {
 				if (desc.getBool(SpellArg.EXCLUSIVE)) {
 					spell.put(SpellArg.VALUE, Math.abs(minion.getHp()));
 				}
-				context.getLogic().castSpell(player.getId(), spell, source.getReference(), target.getReference(), true);
+				SpellUtils.castChildSpell(context, player, spell, source, target);
 			}
 		}
 	}

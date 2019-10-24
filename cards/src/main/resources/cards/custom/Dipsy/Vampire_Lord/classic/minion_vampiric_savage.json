@@ -1,0 +1,31 @@
+{
+  "name": "Bat Swarm",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Whenever your champion gains Health, this minion gains that much as well.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MaxHpIncreasedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": {
+        "class": "EventValueProvider"
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Yakha Reiri",
+  "heroPower": "hero_power_devour",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Skill: Drain 3 Health from a character.",
+  "attributes": {
+    "HP": 15,
+    "MAX_HP": 15
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

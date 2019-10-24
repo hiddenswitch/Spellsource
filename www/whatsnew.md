@@ -18,9 +18,11 @@ Please note that the client is currently in maintenance mode while the new build
  - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
  - New Storyteller cards. (1394)
  - New Occultist cards. (1398)
+ - The Vampire Lord has been reworked. (1413)
  
 ##### Content Fixes:
 
+ - Catta the Merciless, Terrain Devourer, Ravenous Lookout, Broodmother Narvina, Sylas Fate's Hand, Northot Necromaster and Eternal Steed are no longer collectible due to infinite loop interactions.
  - Effects which target friendly cards now also target Skills if the effects did not already.
  - Effects which play cards randomly may now play cards of the same base card randomly. However, during the invocation of a specific card's random play effect, it will never be able to play itself randomly recursively.
  - One on One no longer causes a crash if it is randomly played in such a way to select an enemy minion when it's the only minion on the board.
@@ -444,7 +446,7 @@ The Skill is a spell that is playable once per turn specific to your champion.
  - Deflect: The first time this minion takes damage, deal it to its Champion instead.
  - Decay: At the end of your turn, this loses 1 health or durability.
  - Dodge: The first time this minion takes damage, it takes zero instead.
- - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
+ - Drain (X): Deals this much damage to the target, then gain that much health.
  - Elusive: Cannot be targeted by spells or skills.
  - Enchantment: Occurs as long as the target this is attached to is in play.
  - Exhausted: During the turn it comes into play or changes sides, this minion is exhausted and cannot attack this turn. It loses exhaustion at the start of next turn.

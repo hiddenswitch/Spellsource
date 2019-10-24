@@ -631,31 +631,29 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		// Healing
-		if (true) {
-			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
-			StringBuffer newDescription = new StringBuffer();
+		Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
+		StringBuffer newDescription = new StringBuffer();
 
-			boolean matchedAtLeastOnce = false;
-			while (matcher.find()) {
-				// Skip the # in the beginning
-				int healing = Integer.parseInt(matcher.group(1));
-				int modifiedHealing = healing;
-				if (card.getId() != GameLogic.UNASSIGNED) {
-					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-					if (card.isSpell()) {
-						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
-					}
-					if (card.isHeroPower()) {
-						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
-					}
+		boolean matchedAtLeastOnce = false;
+		while (matcher.find()) {
+			// Skip the # in the beginning
+			int healing = Integer.parseInt(matcher.group(1));
+			int modifiedHealing = healing;
+			if (card.getId() != GameLogic.UNASSIGNED) {
+				modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+				if (card.isSpell()) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 				}
-				modifyDescription(matcher, newDescription, healing, modifiedHealing);
-				matchedAtLeastOnce = true;
+				if (card.isHeroPower()) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+				}
 			}
-			if (matchedAtLeastOnce) {
-				matcher.appendTail(newDescription);
-				description = newDescription.toString();
-			}
+			modifyDescription(matcher, newDescription, healing, modifiedHealing);
+			matchedAtLeastOnce = true;
+		}
+		if (matchedAtLeastOnce) {
+			matcher.appendTail(newDescription);
+			description = newDescription.toString();
 		}
 
 		return description;

@@ -135,20 +135,31 @@ public class TargetLogic implements Serializable {
 	private List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement, boolean omitPermanents) {
 		Player opponent = context.getOpponent(player);
 		List<Entity> entities = new ArrayList<>();
-		if (targetRequirement == TargetSelection.ENEMY_HERO || targetRequirement == TargetSelection.ENEMY_CHARACTERS
-				|| targetRequirement == TargetSelection.ANY || targetRequirement == TargetSelection.HEROES) {
+		if (targetRequirement == TargetSelection.ENEMY_HERO
+				|| targetRequirement == TargetSelection.ENEMY_CHARACTERS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.HEROES) {
 			entities.add(opponent.getHero());
 		}
-		if (targetRequirement == TargetSelection.ENEMY_MINIONS || targetRequirement == TargetSelection.ENEMY_CHARACTERS
-				|| targetRequirement == TargetSelection.MINIONS || targetRequirement == TargetSelection.ANY) {
+		if (targetRequirement == TargetSelection.ENEMY_MINIONS
+				|| targetRequirement == TargetSelection.ENEMY_CHARACTERS
+				|| targetRequirement == TargetSelection.MINIONS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
 			entities.addAll(opponent.getMinions());
 		}
-		if (targetRequirement == TargetSelection.FRIENDLY_HERO || targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
-				|| targetRequirement == TargetSelection.ANY || targetRequirement == TargetSelection.HEROES) {
+		if (targetRequirement == TargetSelection.FRIENDLY_HERO
+				|| targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.HEROES
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
 			entities.add(player.getHero());
 		}
-		if (targetRequirement == TargetSelection.FRIENDLY_MINIONS || targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
-				|| targetRequirement == TargetSelection.MINIONS || targetRequirement == TargetSelection.ANY) {
+		if (targetRequirement == TargetSelection.FRIENDLY_MINIONS
+				|| targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
+				|| targetRequirement == TargetSelection.MINIONS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
 			entities.addAll(player.getMinions());
 		}
 
@@ -300,6 +311,12 @@ public class TargetLogic implements Serializable {
 			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()).getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
 			return new ArrayList<>(context.getOppositeMinions(source.getReference()));
+		} else if (targetKey.equals(EntityReference.OPPOSITE_CHARACTERS)) {
+			List<Actor> oppositeMinions = context.getOppositeMinions(source.getReference());
+			if (oppositeMinions.isEmpty()) {
+				return singleTargetAsList(context.getOpponent(player).getHero());
+			}
+			return new ArrayList<>(oppositeMinions);
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
 			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
@@ -460,6 +477,7 @@ public class TargetLogic implements Serializable {
 			friendlyCards.addAll(player.getHand());
 			friendlyCards.addAll(player.getDeck());
 			friendlyCards.addAll(player.getMinions());
+			friendlyCards.addAll(player.getWeaponZone());
 			friendlyCards.addAll(player.getSetAsideZone());
 			friendlyCards.addAll(player.getHeroPowerZone());
 			friendlyCards.add(player.getHero());
@@ -476,6 +494,7 @@ public class TargetLogic implements Serializable {
 			enemyCards.addAll(context.getOpponent(player).getHand());
 			enemyCards.addAll(context.getOpponent(player).getDeck());
 			enemyCards.addAll(context.getOpponent(player).getMinions());
+			enemyCards.addAll(context.getOpponent(player).getWeaponZone());
 			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
 			enemyCards.addAll(context.getOpponent(player).getHeroPowerZone());
 			enemyCards.add(context.getOpponent(player).getHero());

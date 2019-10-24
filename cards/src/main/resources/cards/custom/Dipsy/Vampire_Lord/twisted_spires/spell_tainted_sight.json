@@ -1,0 +1,24 @@
+{
+  "name": "Tainted Sight",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Draw your highest Health minion(s).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 60,
+    "cardFilter": {
+      "class": "HighestAttributeFilter",
+      "target": "FRIENDLY_DECK",
+      "attribute": "HP"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

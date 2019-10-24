@@ -120,6 +120,8 @@ public class ParseUtils {
 				return EntityReference.ALL_ENTITIES;
 			case "opposite_minions":
 				return EntityReference.OPPOSITE_MINIONS;
+			case "opposite_characters":
+				return EntityReference.OPPOSITE_CHARACTERS;
 			case "friendly_hero":
 				return EntityReference.FRIENDLY_HERO;
 			case "friendly_weapon":

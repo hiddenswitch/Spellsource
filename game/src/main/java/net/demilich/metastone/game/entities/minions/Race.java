@@ -16,6 +16,7 @@ public class Race {
 	public static final String ALL = "ALL";
 	public static final String FAE = "FAE";
 	public static final String SPIRIT = "SPIRIT";
+	public static final String MURLOC = "MURLOC";
 
 	/**
 	 * Returns {@code true} if the given race string is considered as having the race {@code rhs}, accounting for whether

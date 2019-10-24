@@ -6,7 +6,6 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.XORShiftRandom;
@@ -113,7 +112,7 @@ public class WitchwoodTests extends TestBase {
 	public void testVoodooDoll() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
-			Minion doll = playMinionCardWithBattlecry(context, player, "minion_voodoo_doll", target);
+			Minion doll = playMinionCard(context, player, "minion_voodoo_doll", target);
 			destroy(context, doll);
 			assertTrue(target.isDestroyed());
 		});
@@ -293,7 +292,7 @@ public class WitchwoodTests extends TestBase {
 			// Play different color
 			Minion notBattlecryTarget = playMinionCard(context, player, "minion_black_test");
 			// Replay battlecry randomly
-			playMinionCardWithBattlecry(context, player, "minion_play_randomly_battlecry", notBattlecryTarget);
+			playMinionCard(context, player, "minion_play_randomly_battlecry", notBattlecryTarget);
 			// Will not replay because this is a BLUE card
 			Minion battlecryTarget = playMinionCard(context, player, "minion_battlecry_target");
 			// Spy on reveal cards

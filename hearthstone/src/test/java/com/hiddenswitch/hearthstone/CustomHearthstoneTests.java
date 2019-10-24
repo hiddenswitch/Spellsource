@@ -1033,14 +1033,14 @@ public class CustomHearthstoneTests extends TestBase {
 			Minion enemyWisp = playMinionCard(context, opponent, "minion_neutral_test_1");
 			int i = 0;
 			try {
-				playMinionCardWithBattlecry(context, player, boi, enemyWisp);
+				playMinionCard(context, player, boi, enemyWisp);
 			} catch (AssertionError e) {
 				i++;
 			}
 			assertEquals(i, 1);
 			playCard(context, player, "weapon_ulthalesh");
 
-			playMinionCardWithBattlecry(context, player, boi, enemyWisp);
+			playMinionCard(context, player, boi, enemyWisp);
 
 			assertTrue(!player.getHero().isDestroyed());
 		});
@@ -1049,7 +1049,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Card brew = receiveCard(context, player, "minion_youthful_brewmaster");
 			Minion wisp = playMinionCard(context, opponent, "minion_neutral_test_1");
 			playCard(context, player, "weapon_ulthalesh");
-			playMinionCardWithBattlecry(context, player, brew, wisp);
+			playMinionCard(context, player, brew, wisp);
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(opponent.getHand().size(), 0);
 		});
@@ -1354,7 +1354,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Minion desolationOfKaresh = playMinionCard(context, player, "permanent_desolation_of_karesh");
 			Minion twoTwoWisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion threeThreeWisp = playMinionCard(context, player, "minion_neutral_test_1");
-			playMinionCardWithBattlecry(context, player, "minion_undercity_valiant", opponent.getHero());
+			playMinionCard(context, player, "minion_undercity_valiant", opponent.getHero());
 			assertEquals(twoTwoWisp.getAttack(), twoTwoWisp.getBaseAttack() + 1);
 			assertEquals(twoTwoWisp.getHp(), twoTwoWisp.getBaseHp() + 1);
 			assertEquals(threeThreeWisp.getAttack(), threeThreeWisp.getBaseAttack() + 2);
@@ -1396,7 +1396,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Card startedInDeck = putOnTopOfDeck(context, player, "token_searing_totem");
 			Card startedInHand = receiveCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_king_mukla");
-			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			assertEquals(onBoardBefore.getAttack(), 1);
 			assertEquals(onBoardBefore.getHp(), 1);
 			assertEquals(opponent.getHand().size(), 2, "The opponent should have two bananas at the moment.");
@@ -1416,7 +1416,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Card startedInHand = receiveCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_stormwind_champion");
 			stormwinds++;
-			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			stormwinds++;
 			assertEquals(onBoardBefore.getAttack(), onBoardBefore.getBaseAttack() + stormwinds - 1);
 			assertEquals(onBoardBefore.getHp(), onBoardBefore.getBaseHp() + stormwinds - 1);
@@ -1432,7 +1432,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Card startedInHand = receiveCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_northshire_cleric");
 			clerics++;
-			Minion damaged = playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			Minion damaged = playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			clerics++;
 			playCard(context, player, startedInHand);
 			clerics++;
@@ -1453,7 +1453,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Card startedInHand = receiveCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_loot_hoarder");
 			lootHoarders++;
-			Minion damaged = playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			Minion damaged = playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			lootHoarders++;
 			playCard(context, player, startedInHand);
 			lootHoarders++;
@@ -1469,7 +1469,7 @@ public class CustomHearthstoneTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
-			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
 			playCard(context, player, "spell_silence", copyCard);
 			assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
@@ -1479,7 +1479,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
 			playCard(context, player, "spell_silence", copyCard);
-			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
 		});
 
@@ -1488,7 +1488,7 @@ public class CustomHearthstoneTests extends TestBase {
 			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
 			playCard(context, player, "spell_windfury", copyCard);
-			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
+			playMinionCard(context, player, "minion_farseer_nobundo", copyCard);
 			Assert.assertFalse(onBoardBefore.hasAttribute(Attribute.WINDFURY));
 		});
 	}
@@ -2328,7 +2328,7 @@ public class CustomHearthstoneTests extends TestBase {
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
 			context.endTurn();
-			Minion stitches = playMinionCardWithBattlecry(context, player, "minion_stitches", target);
+			Minion stitches = playMinionCard(context, player, "minion_stitches", target);
 			assertTrue(target.isDestroyed());
 			assertEquals(stitches.getAttack(), target.getBaseAttack() + stitches.getBaseAttack());
 			assertEquals(stitches.getMaxHp(), target.getBaseHp() + stitches.getBaseHp());

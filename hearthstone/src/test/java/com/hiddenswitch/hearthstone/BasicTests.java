@@ -8,13 +8,13 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
@@ -33,7 +33,7 @@ public class BasicTests extends TestBase {
 			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
 			context.endTurn();
 			playCard(context, player, "spell_corruption", target);
-			Minion manipulator = playMinionCardWithBattlecry(context, player, "minion_faceless_manipulator", target);
+			Minion manipulator = playMinionCard(context, player, "minion_faceless_manipulator", target);
 			context.endTurn();
 			context.endTurn();
 			assertTrue(target.isDestroyed());
@@ -102,7 +102,7 @@ public class BasicTests extends TestBase {
 			playCard(context, mage, devMonsterCard);
 
 			SpellDesc heroBuffSpell = BuffSpell.create(EntityReference.FRIENDLY_HERO, damage, 0);
-			context.getLogic().castSpell(druid.getId(), heroBuffSpell, druid.getHero().getReference(), null, false);
+			context.getLogic().castSpell(druid.getId(), heroBuffSpell, druid.getHero().getReference(), null, TargetSelection.NONE, false, null);
 			context.getLogic().endTurn(druid.getId());
 
 			Actor devMonster = getSingleMinion(mage.getMinions());
@@ -114,7 +114,7 @@ public class BasicTests extends TestBase {
 			Assert.assertEquals(devMonster.getHp(), devMonster.getMaxHp());
 			context.getLogic().endTurn(mage.getId());
 
-			context.getLogic().castSpell(druid.getId(), heroBuffSpell, druid.getHero().getReference(), null, false);
+			context.getLogic().castSpell(druid.getId(), heroBuffSpell, druid.getHero().getReference(), null, TargetSelection.NONE, false, null);
 			GameAction heroAttackAction = new PhysicalAttackAction(druid.getHero().getReference());
 			heroAttackAction.setTarget(devMonster);
 			context.performAction(mage.getId(), heroAttackAction);

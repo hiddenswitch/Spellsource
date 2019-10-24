@@ -59,7 +59,7 @@ public class RastakhansRumbleTests extends TestBase {
 			Minion spirit = playMinionCard(context, player, "minion_spirit_of_the_shark");
 			Minion edwin = playMinionCard(context, player, "minion_edwin_vancleef");
 			assertEquals(edwin.getAttack(), 6);
-			playMinionCardWithBattlecry(context, player, "minion_si7_agent", edwin);
+			playMinionCard(context, player, "minion_si7_agent", edwin);
 			assertEquals(edwin.getHp(), 2);
 			assertTrue(spirit.hasAttribute(Attribute.STEALTH));
 			context.endTurn();

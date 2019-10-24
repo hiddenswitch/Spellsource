@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -328,9 +329,10 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this)
-				.append("id", getId())
+		return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
 				.append("name", getName())
+				.append("id", getId())
+				.append("zone", getZone())
 				.append(getAttack() + "/" + getHp())
 				.append("description", getDescription())
 				.toString();
