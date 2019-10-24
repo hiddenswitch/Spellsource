@@ -202,7 +202,7 @@ public class OtherworlderTests extends TestBase {
 			target.setAttack(targetAttack);
 			target.setHp(2);
 			context.endTurn();
-			playMinionCardWithBattlecry(context, player, "minion_witherdrake", target);
+			playMinionCard(context, player, "minion_witherdrake", target);
 			assertEquals(target.getAttack(), targetAttack - 1/*wither*/);
 			context.endTurn();
 			assertEquals(target.getAttack(), targetAttack - 1/*wither*/);

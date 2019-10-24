@@ -23,7 +23,6 @@ import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -865,8 +864,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {
 						// Correctly set the trigger stacks
 						context.getTriggerHostStack().push(trigger.getHostReference());
-						context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(),
-								trigger.getHostReference(), EntityReference.NONE, true);
+						context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(), trigger.getHostReference(), EntityReference.NONE, TargetSelection.NONE, true, null);
 						context.getTriggerHostStack().pop();
 					}
 				}

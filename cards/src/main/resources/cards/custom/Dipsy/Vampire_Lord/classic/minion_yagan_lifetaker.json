@@ -1,0 +1,42 @@
+{
+  "name": "Yagan, Lifetaker",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Drain half your champion's Health and distribute it randomly among your minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CastRepeatedlySpell",
+      "howMany": {
+        "class": "AlgebraicValueProvider",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP",
+          "target": "FRIENDLY_HERO"
+        },
+        "value2": 2,
+        "operation": "DIVIDE"
+      },
+      "spell": {
+        "class": "DrainSpell",
+        "secondaryTarget": "FRIENDLY_MINIONS",
+        "target": "FRIENDLY_HERO",
+        "value": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DRAIN": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

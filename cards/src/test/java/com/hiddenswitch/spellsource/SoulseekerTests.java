@@ -225,9 +225,9 @@ public class SoulseekerTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_haunting_vision", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp());
-			playMinionCardWithBattlecry(context, player, "minion_haunting_vision", opponent.getHero());
+			playMinionCard(context, player, "minion_haunting_vision", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 3);
-			playMinionCardWithBattlecry(context, player, "minion_haunting_vision", opponent.getHero());
+			playMinionCard(context, player, "minion_haunting_vision", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 6);
 		});
 	}

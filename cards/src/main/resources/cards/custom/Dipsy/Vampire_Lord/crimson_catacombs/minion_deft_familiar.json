@@ -1,0 +1,36 @@
+{
+  "name": "Deft Familiar",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Your Vampire Lord Skill can target minions.",
+  "auras": [
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "card": "hero_power_familiar_eternal_soul",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "herp_power_crimson_gift"
+      }
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "card": "hero_power_familiar_eternal_suffering",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "herp_power_crimson_tide"
+      }
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

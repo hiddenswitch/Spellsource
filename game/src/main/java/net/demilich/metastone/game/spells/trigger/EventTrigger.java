@@ -77,6 +77,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 	/**
 	 * When an event this trigger is {@link #interestedIn()} occurs, this test indicates whether or not the trigger should
 	 * enter the queue of effects that should be evaluated. This is distinct from whether or not
+	 *
 	 * @param event
 	 * @param host
 	 * @return
@@ -105,7 +106,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		}
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if ((event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType())
+		if ((event.getTarget() != null && targetEntityType != null && !event.getTarget().getEntityType().hasEntityType(targetEntityType))
 				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}

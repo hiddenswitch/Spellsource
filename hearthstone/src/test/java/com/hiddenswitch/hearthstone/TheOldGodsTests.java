@@ -68,7 +68,7 @@ public class TheOldGodsTests extends TestBase {
 	public void testShadowcaster() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playMinionCardWithBattlecry(context, player, "minion_shadowcaster", bloodfenRaptor);
+			playMinionCard(context, player, "minion_shadowcaster", bloodfenRaptor);
 			Card miniCopy = player.getHand().get(0);
 			Assert.assertEquals(miniCopy.getCardId(), "minion_bloodfen_raptor");
 			Assert.assertEquals(miniCopy.getAttack(), 1);

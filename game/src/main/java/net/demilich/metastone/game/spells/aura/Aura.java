@@ -21,6 +21,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,7 +225,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 			return;
 		}
-		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
 	}
 
 	@Suspendable
@@ -234,7 +235,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 			return;
 		}
-		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
+		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
 	}
 
 	@Override

@@ -7,16 +7,18 @@ public final class DrainEvent extends GameEvent implements HasValue {
 
 	private int value;
 	private Entity source;
+	private Entity target;
 
-	public DrainEvent(GameContext context, Entity source, int sourcePlayerId, int value) {
-		super(context, sourcePlayerId, sourcePlayerId);
+	public DrainEvent(GameContext context, Entity source, Entity target, int sourcePlayerId, int value) {
+		super(context, target.getOwner(), sourcePlayerId);
 		this.value = value;
 		this.source = source;
+		this.target = target;
 	}
 
 	@Override
 	public Entity getEventTarget() {
-		return null;
+		return target;
 	}
 
 	@Override

@@ -6,12 +6,14 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Reduces the sum of all values of attribute {@link ValueProviderArg#ATTRIBUTE} on target entities for {@link
@@ -46,6 +48,11 @@ public class AttributeValueProvider extends ValueProvider {
 		} else {
 			entities = new ArrayList<>();
 			entities.add(target);
+		}
+
+		if (getDesc().containsKey(ValueProviderArg.FILTER)) {
+			EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
+			entities = entities.stream().filter(filter.matcher(context, player, host)).collect(Collectors.toList());
 		}
 
 		if (entities == null) {

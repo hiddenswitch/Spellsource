@@ -1,19 +1,15 @@
 package com.hiddenswitch.hearthstone;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.tests.util.DebugContext;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -115,7 +111,7 @@ public class TheGrandTournamentTests extends TestBase {
 			runGym((context, player, opponent) -> {
 				SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
 				spell.put(SpellArg.CARD, heroPower.getCardId());
-				context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+				context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, TargetSelection.NONE, false, null);
 
 				playCard(context, player, "minion_justicar_trueheart");
 				if (heroPower.getDesc().getHeroPower() != null) {

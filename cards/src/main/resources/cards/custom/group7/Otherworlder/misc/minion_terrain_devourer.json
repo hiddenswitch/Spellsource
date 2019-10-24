@@ -30,10 +30,18 @@
           "operation": "LESS"
         },
         "spell1": {
-          "class": "ReturnTargetToHandSpell"
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "ReturnTargetToHandSpell",
+            "target": "SPELL_TARGET"
+          }
         },
         "spell2": {
-          "class": "RemoveActorPeacefullySpell"
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RemoveActorPeacefullySpell",
+            "target": "SPELL_TARGET"
+          }
         }
       }
     },
@@ -58,15 +66,23 @@
           "operation": "LESS"
         },
         "spell1": {
-          "class": "ReturnTargetToHandSpell"
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "ReturnTargetToHandSpell",
+            "target": "SPELL_TARGET"
+          }
         },
         "spell2": {
-          "class": "RemoveActorPeacefullySpell"
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RemoveActorPeacefullySpell",
+            "target": "SPELL_TARGET"
+          }
         }
       }
     }
   ],
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

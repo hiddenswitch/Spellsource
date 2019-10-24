@@ -10,6 +10,10 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
+/**
+ * Computes the highest value of the attribute in the specified list of {@code target} entities and returns all with
+ * that highest value.
+ */
 public class HighestAttributeFilter extends EntityFilter {
 
 	public HighestAttributeFilter(EntityFilterDesc desc) {

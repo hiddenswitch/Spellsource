@@ -2,7 +2,6 @@ package com.hiddenswitch.hearthstone;
 
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -106,7 +105,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
 
 			receiveCard(context, player, "minion_azure_drake");
-			playMinionCardWithBattlecry(context, player, "minion_blackwing_corruptor", player.getHero());
+			playMinionCard(context, player, "minion_blackwing_corruptor", player.getHero());
 			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - 3);
 		});
 	}

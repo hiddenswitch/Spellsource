@@ -35,6 +35,10 @@ public enum DamageType {
 	 */
 	DEFLECT,
 	/**
+	 * Damage dealt by a Drain ability.
+	 */
+	DRAIN,
+	/**
 	 * Damage that ignores armor when it is dealt to the hero.
 	 */
 	IGNORES_ARMOR

@@ -143,6 +143,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @see GameLogic#generateCardId() for the situation where card IDs need to be generated.
 	 */
+	private static final int MAX_SPELL_DEPTH = 288;
 	private static final String TEMP_CARD_LABEL = "temp_card_id_";
 	private static final int INFINITE = -1;
 	private final TargetLogic targetLogic = new TargetLogic();
@@ -150,7 +151,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private IdFactoryImpl idFactory;
 	private long seed = XORShiftRandom.createSeed();
 	private XORShiftRandom random = new XORShiftRandom(seed);
-
+	private transient int spellDepth = 0;
 	protected transient GameContext context;
 
 	static {
@@ -638,22 +639,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		handleAfterSpellCasted(playerId, targets, sourceCard);
 	}
 
-	/*
-	 * Casts a spell.
-	 * @param playerId The casting player.
-	 * @param spellDesc The {@link SpellDesc} for the spell.
-	 * @param sourceReference The source of the spell (typically the card), or {@code null} if it doesn't have one.
-	 * @param targetReference The selected target of the spell, or {@code null} if it doesn't have one.
-	 * @param childSpell When true, this spell is implementing an effect rather than what a player would think of as a
-	 * "spell"--a single card.
-	 * @see #castSpell(int, SpellDesc, EntityReference, EntityReference, TargetSelection, boolean) for complete documentation.
-	 */
-	@Suspendable
-	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-	                      boolean childSpell) {
-		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell, null);
-	}
-
 	/**
 	 * Casts a spell.
 	 * <p>
@@ -702,6 +687,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
+		spellDepth++;
+		if (spellDepth > MAX_SPELL_DEPTH) {
+			throw new UnsupportedOperationException("infinite spell depth");
+		}
+		if (sourceAction != null && sourceAction.isOverrideChild()) {
+			childSpell = true;
+		}
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
 		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
@@ -797,15 +789,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (sourceCard != null
 				&& sourceCard.getCardType() == CardType.SPELL
 				&& targetSelection != TargetSelection.NONE
+				&& targets != null
 				&& targets.size() == 1
 				&& targets.get(0).getOwner() == playerId
 				&& targets.get(0).getEntityType().equals(EntityType.MINION)
+				&& sourceAction != null
+				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
 				&& !childSpell) {
 			sourceCard.setAttribute(Attribute.CASTED_ON_FRIENDLY_MINION);
 		}
 
-		if (targetSelection != TargetSelection.NONE && targets.size() == 1
-				&& targets.get(0).getEntityType().equals(EntityType.MINION) && !childSpell) {
+		if (targetSelection != TargetSelection.NONE
+				&& targets != null
+				&& targets.size() == 1
+				&& sourceCard != null
+				&& targets.get(0).getEntityType().equals(EntityType.MINION)
+				&& sourceAction != null
+				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
+				&& !childSpell) {
 			boolean willTargetAdjacent = false;
 			for (SpellTargetsAdjacentAura aura : SpellUtils.getAuras(context, playerId, SpellTargetsAdjacentAura.class)) {
 				aura.onGameEvent(new WillEndSequenceEvent(context));
@@ -815,19 +816,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 			if (willTargetAdjacent) {
 				SpellDesc adjacentSpellDesc = AdjacentEffectSpell.create(targetReference, NullSpell.create(), spellDesc);
-				castSpell(playerId, adjacentSpellDesc, sourceReference, targetReference, true);
+				castSpell(playerId, adjacentSpellDesc, sourceReference, targetReference, TargetSelection.NONE, true, null);
 			}
 		}
 
 
-		if (sourceCard != null
+		if (sourceAction != null
+				&& sourceCard != null
 				&& sourceCard.getCardType().isCardType(CardType.SPELL)
+				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
 				&& !childSpell) {
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
 			endOfSequence();
 
 			handleAfterSpellCasted(playerId, targets, sourceCard);
 		}
+
+		// Cast second time if source belongs to aura and not child spell (Implements Lady Uki)
+		List<SpellEffectsCastTwiceAura> castTwiceAuras = SpellUtils.getAuras(context, SpellEffectsCastTwiceAura.class, source);
+		if (!castTwiceAuras.isEmpty()
+				&& !childSpell) {
+			castSpell(playerId, spellDesc, sourceReference, targetReference, targetSelection, true, sourceAction);
+		}
+		spellDepth--;
 	}
 
 	@Suspendable
@@ -1258,6 +1269,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			player.getStatistics().damageDealt(damageDealt);
+
+			// Implement Yakha Reiri
+			if (target.getEntityType() == EntityType.MINION) {
+				Player sourceOwner = context.getPlayer(source.getOwner());
+				if (source.getEntityType() != EntityType.PLAYER) {
+					source.modifyAttribute(Attribute.TOTAL_MINION_DAMAGE_DEALT_THIS_GAME, damageDealt);
+				}
+				sourceOwner.modifyAttribute(Attribute.TOTAL_MINION_DAMAGE_DEALT_THIS_GAME, damageDealt);
+			}
+
 			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt, damageType);
 			context.fireGameEvent(damageEvent);
 		}
@@ -2900,7 +2921,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), "MURLOC")
+		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), Race.MURLOC)
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -2960,7 +2981,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				}
 
 				if (aura.getCanAffordCondition().isFulfilled(context, player, card, card)) {
-					castSpell(playerId, aura.getPayEffect(), card.getReference(), card.getReference(), true);
+					castSpell(playerId, aura.getPayEffect(), card.getReference(), card.getReference(), TargetSelection.NONE, true, null);
 					paid = true;
 					break;
 				}
@@ -3759,10 +3780,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			SpellDesc deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
 			deathrattle.put(SpellArg.DEATHRATTLE_ID, id);
 			id++;
-			castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, false);
+			castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 			if (doubleDeathrattles) {
 				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
-				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, false);
+				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, true, null);
 			}
 		}
 	}
@@ -4109,7 +4130,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 
-		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, true);
+		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, TargetSelection.NONE, true, null);
 
 		endOfSequence();
 	}
@@ -4648,7 +4669,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Returns {@code true} if all the card's conditions are met.
+	 * Returns {@code true} if any the card's conditions are met.
 	 * <p>
 	 * If the card does not contain any conditions, returns {@code false}.
 	 * <p>
@@ -4657,12 +4678,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param localPlayerId
 	 * @param card
-	 * @return {@code} true if there are conditions and all are met, otherwise false.
+	 * @return {@code true} if there are conditions and any are met, otherwise {@code false}.
 	 */
 	@Suspendable
 	public boolean conditionMet(int localPlayerId, @NotNull Card card) {
 		try {
-			return card.getDesc().getConditions().allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
+			return card.getDesc()
+					.getConditions()
+					.allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
 		} catch (Throwable ignored) {
 			return false;
 		}

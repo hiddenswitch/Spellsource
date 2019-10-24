@@ -111,7 +111,7 @@ public class WraithTests extends TestBase {
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
 			context.endTurn();
-			playMinionCardWithBattlecry(context, player, "minion_dark_artist", target);
+			playMinionCard(context, player, "minion_dark_artist", target);
 			assertTrue(target.isDestroyed());
 		});
 	}

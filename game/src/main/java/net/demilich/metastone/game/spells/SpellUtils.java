@@ -73,7 +73,7 @@ public class SpellUtils {
 			targetReference = EntityReference.NONE;
 		}
 
-		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
+		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, TargetSelection.NONE, true, null);
 	}
 
 	/**
@@ -216,6 +216,7 @@ public class SpellUtils {
 		if (playFromHand) {
 			action.execute(context, player.getId());
 		} else {
+			action.setOverrideChild(true);
 			int playedFromHandOrDeck = -1;
 			// Reference the real card
 			if (card.getId() != IdFactory.UNASSIGNED) {
@@ -749,7 +750,7 @@ public class SpellUtils {
 	 * <p>
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
 	 * card source used is {@link net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource}.
-	 *
+	 * <p>
 	 * The cards are chosen randomly <b>without replacement</b>.
 	 *
 	 * @param context The game context
@@ -841,7 +842,7 @@ public class SpellUtils {
 		return context.getTriggerManager().getTriggers().stream()
 				.filter(auraClass::isInstance)
 				.map(auraClass::cast)
-				.filter(aura -> aura.getAffectedEntities().contains(target.getId()))
+				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(Collectors.toList());
 	}
 
