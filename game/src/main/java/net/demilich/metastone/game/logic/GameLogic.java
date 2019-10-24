@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -155,30 +156,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	protected transient GameContext context;
 
 	static {
+		IMMUNE_TO_SILENCE.addAll(Attribute.getAuraAttributes());
 		IMMUNE_TO_SILENCE.add(Attribute.HP);
 		IMMUNE_TO_SILENCE.add(Attribute.MAX_HP);
 		IMMUNE_TO_SILENCE.add(Attribute.BASE_HP);
 		IMMUNE_TO_SILENCE.add(Attribute.BASE_ATTACK);
 		IMMUNE_TO_SILENCE.add(Attribute.SUMMONING_SICKNESS);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_ATTACK_BONUS);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_HP_BONUS);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_TAUNT);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_CANNOT_ATTACK);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_CHARGE);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_CARD_ID);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_IMMUNE);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_INVOKE);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_CANNOT_ATTACK_HEROES);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_ECHO);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_LIFESTEAL);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_POISONOUS);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_RUSH);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_STEALTH);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_SPELL_DAMAGE);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
-		IMMUNE_TO_SILENCE.add(Attribute.AURA_WINDFURY);
 		IMMUNE_TO_SILENCE.add(Attribute.RACE);
 		IMMUNE_TO_SILENCE.add(Attribute.DESTROYED);
 		IMMUNE_TO_SILENCE.add(Attribute.NUMBER_OF_ATTACKS);
@@ -1233,6 +1216,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, boolean ignoreLifesteal, DamageType damageType) {
+		// Check if the target is already destroyed. This allows kills to be tracked properly (one source per kill).
+		boolean startedDestroyed = target.isDestroyed();
 		if (damageDealt > 0) {
 			// Keyword effects for lifesteal and poisonous will come BEFORE all other events
 			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
@@ -1281,6 +1266,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt, damageType);
 			context.fireGameEvent(damageEvent);
+
+			// Check now if a kill is registered so the source can be properly credited
+			if (target.isDestroyed() && !startedDestroyed) {
+				source.modifyAttribute(Attribute.TOTAL_KILLS, 1);
+			}
 		}
 	}
 
@@ -1650,6 +1640,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void endTurn(int playerId) {
 		Player player = context.getPlayer(playerId);
+		Player opponent = context.getOpponent(player);
+
+		// All actors that have attacked last turn get their ATTACKS_LAST_TURN attribute incremented
+		Stream.of(player.getMinions(), player.getHeroZone(), opponent.getMinions(), opponent.getHeroZone())
+				.flatMap(Collection::stream)
+				.forEach((Consumer<Actor>) actor -> {
+
+				});
 
 		Hero hero = player.getHero();
 		hero.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
@@ -3359,7 +3357,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param entity
 	 */
-	public void refreshAttacksPerRound(Actor entity) {
+	public void refreshAttacksPerRound(Entity entity) {
 		int attacks = 1;
 		if (entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			attacks = MEGA_WINDFURY_ATTACKS;
@@ -4082,17 +4080,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void startTurn(int playerId) {
-		final int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
+		int now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 		Player player = context.getPlayer(playerId);
-		final int gameStartTime;
+		int gameStartTime;
 		if (player.getAttributes().containsKey(Attribute.GAME_START_TIME_MILLIS)) {
 			gameStartTime = now;
 		} else {
 			gameStartTime = (int) player.getAttributes().get(Attribute.GAME_START_TIME_MILLIS);
 		}
 
-		final int _startTime = now - gameStartTime;
-		final int startTime = _startTime + (_startTime < 0 ? Integer.MAX_VALUE : 0);
+		int startTime = Math.max(now - gameStartTime, 0);
 		player.setAttribute(Attribute.MANA_SPENT_THIS_TURN, 0);
 		player.getAttributes().put(Attribute.TURN_START_TIME_MILLIS, startTime);
 
@@ -4107,36 +4104,50 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
 
 		player.getAttributes().remove(Attribute.OVERLOAD);
-		player.getHero().getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-		for (Minion minion : player.getMinions()) {
-			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-		}
 		player.setAttribute(Attribute.EXTRA_TURN, Math.max(player.getAttributeValue(Attribute.EXTRA_TURN) - 1, 0));
 
-		player.getHero().getHeroPower().setUsed(0);
-		player.getHero().activateWeapon(true);
-		player.getHero().setAttribute(Attribute.DRAINED_LAST_TURN, player.getHero().getAttributeValue(Attribute.DRAINED_THIS_TURN));
-		player.getHero().getAttributes().remove(Attribute.DRAINED_THIS_TURN);
-		player.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
-		refreshAttacksPerRound(player.getHero());
-		stealthForTurns(player.getHero());
-		for (Actor minion : player.getMinions()) {
-			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
-			minion.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
-			minion.setAttribute(Attribute.DRAINED_LAST_TURN, minion.getAttributeValue(Attribute.DRAINED_THIS_TURN));
-			minion.getAttributes().remove(Attribute.DRAINED_THIS_TURN);
-			refreshAttacksPerRound(minion);
-			stealthForTurns(minion);
+		if (!player.getHeroPowerZone().isEmpty()) {
+			player.getHeroPowerZone().get(0).setUsed(0);
 		}
+		if (!player.getWeaponZone().isEmpty()) {
+			player.getWeaponZone().get(0).setActive(true);
+		}
+
+		startTurnForEntity(player);
+		startTurnForEntity(player.getHero());
+		for (Minion minion : player.getMinions()) {
+			startTurnForEntity(minion);
+		}
+
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
-
 		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, TargetSelection.NONE, true, null);
-
 		endOfSequence();
 	}
 
+	/**
+	 * Resets turn temporary fields on the specified entity and prepares it for the next turn.
+	 *
+	 * @param entity
+	 */
+	protected void startTurnForEntity(Entity entity) {
+		if (entity.getEntityType().hasEntityType(EntityType.ACTOR)) {
+			refreshAttacksPerRound(entity);
+			stealthForTurns(entity);
+			entity.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+		}
+
+		if (entity.getEntityType().hasEntityType(EntityType.MINION)) {
+			entity.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
+		}
+
+		entity.setAttribute(Attribute.ATTACKS_LAST_TURN, entity.getAttributeValue(Attribute.ATTACKS_THIS_TURN));
+		entity.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
+		entity.setAttribute(Attribute.DRAINED_LAST_TURN, entity.getAttributeValue(Attribute.DRAINED_THIS_TURN));
+		entity.getAttributes().remove(Attribute.DRAINED_THIS_TURN);
+	}
+
 	@Suspendable
-	protected void stealthForTurns(Actor actor) {
+	protected void stealthForTurns(Entity actor) {
 		if (actor.hasAttribute(Attribute.STEALTH) && actor.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
 			int stealthForTurns = actor.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
 			if (stealthForTurns == 1) {

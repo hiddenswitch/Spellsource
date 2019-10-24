@@ -8,7 +8,7 @@ Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Pla
 
 ### 0.8.53-2.0.38 (In Progress)
 
-Bug fixes, balance changes and light content additions.
+Bug fixes, balance changes and massive content additions.
 
 Please note that the client is currently in maintenance mode while the new build is being developed!
 
@@ -16,12 +16,14 @@ Please note that the client is currently in maintenance mode while the new build
 
  - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
  - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
+ - Introducing the Exile class, the Oni-Queen class, and new Witch Doctor cards! (1414)
  - New Storyteller cards. (1394)
  - New Occultist cards. (1398)
  - The Vampire Lord has been reworked. (1413)
  
 ##### Content Fixes:
 
+ - Champion of Death now correctly destroys minions.
  - Catta the Merciless, Terrain Devourer, Ravenous Lookout, Broodmother Narvina, Sylas Fate's Hand, Northot Necromaster and Eternal Steed are no longer collectible due to infinite loop interactions.
  - Effects which target friendly cards now also target Skills if the effects did not already.
  - Effects which play cards randomly may now play cards of the same base card randomly. However, during the invocation of a specific card's random play effect, it will never be able to play itself randomly recursively.
@@ -385,34 +387,6 @@ For Python users, the build is now compatible with Java 11.
 Fixing issues with cards not being found or detected after their IDs were changed.
 
 Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
-
-### 0.8.34-2.0.31 (June 30th, 2019)
-
-Bug fixes and content additions.
-
-The 0.8 series will be the last to contain content external from Spellsource.
-
-##### Content Additions:
-
- - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
- - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
- - Thanks to contributions from @Muhframos, Occultist updates! (1198)
-
-##### Content Fixes:
-
- - Yig's Mastermind and other cards that interact with deck cards would incorrectly cast pre-transformation versions of those cards. It no longer crashes the game.
- - Mari Anette and Irena, Dragon Knight no longer interact in a way that crashes the game.
- - Fairy Fixpicker no longer causes crashes when it attempts to replace cards that are immediately roasted or discarded.
- - Failed Experiment now has the correct stats. (1128)
- - Firegate Commander now provides a Dash aura instead of a Blitz aura. (1131)
- - Kahl of the Deep is now a 3/5, cost 5, that draws 3 cards for the opponent instead of 8. (1182)
- - Yig's Mastermind cost increased from 8 to 10. (1184)
- - Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
- - Stealing a card when a deck is full no longer causes a crash.
- - Wavering Diabolist correctly indicates that it does not have Guard. (1203)
- - Timewalker Strider now reads "After this minion attacks, it gains +2 Attack." (1201)
- - Energetic Mentee now specifies that it's first abilitiy is an opener. (1202)
- - Fireguard Bulwark now properly has Guard. (1200)
 
 ### Basic Rules
 

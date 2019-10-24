@@ -706,6 +706,10 @@ public enum Attribute {
 	 */
 	TOTAL_DAMAGE_DEALT,
 	/**
+	 * Every time an {@link Actor} kills a target, increment this attribute.
+	 */
+	TOTAL_KILLS,
+	/**
 	 * Every time an {@link Actor} receives damage, increment this attribute with the total amount of damage dealt.
 	 */
 	TOTAL_DAMAGE_RECEIVED,
@@ -1064,7 +1068,7 @@ public enum Attribute {
 	/**
 	 * Records how much damage was dealt to minions by this player or entity this game.
 	 */
-	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME;
+	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME, ATTACKS_LAST_TURN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

@@ -27,3 +27,4 @@ public class CardCountCondition extends CountCondition {
 		return count;
 	}
 }
+

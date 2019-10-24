@@ -1,0 +1,18 @@
+{
+  "name": "Noisy Uwan",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Your Openers trigger twice.",
+  "aura": {
+    "class": "DoubleBattlecriesAura",
+    "target": "FRIENDLY_CARDS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

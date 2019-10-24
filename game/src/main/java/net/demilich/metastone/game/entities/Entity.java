@@ -232,6 +232,15 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return true;
 	}
 
+	public int getMaxNumberOfAttacks() {
+		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
+			return GameLogic.MEGA_WINDFURY_ATTACKS;
+		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
+			return GameLogic.WINDFURY_ATTACKS;
+		}
+		return 1;
+	}
+
 	/**
 	 * Checks if the entity is destroyed. Overridden to take into account entities with hitpoints.
 	 *

@@ -1,0 +1,27 @@
+{
+  "name": "Splintered Spear",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "CAMO",
+  "damage": 4,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "Whenever your champion attacks, deal $3 damage to it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

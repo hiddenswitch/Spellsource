@@ -1,0 +1,17 @@
+{
+  "name": "Conjure Kanobo",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "COMMON",
+  "description": "Give your champion +5 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TemporaryAttackSpell",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": 3
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

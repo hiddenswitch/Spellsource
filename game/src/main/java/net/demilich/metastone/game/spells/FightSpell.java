@@ -28,6 +28,9 @@ import java.util.List;
  * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, this effect does not use up one of the attacker's attack
  * counts.
  * <p>
+ * When {@link SpellArg#RANDOM_TARGET} is set to {@code true} and a {@link SpellArg#SECONDARY_TARGET} (i.e. source) is
+ * specified, the resolved sources are removed from the list of target entities before the random choice is made.
+ * <p>
  * For example, consider the text from Birb's You from the Future, "Summon a copy of a friendly minion. Then, it attacks
  * the original":
  * <pre>
@@ -47,6 +50,18 @@ import java.util.List;
 public class FightSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(FightSpell.class);
+
+	@Override
+	@Suspendable
+	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		if (desc.getDescClass().equals(FightSpell.class) && targets != null && desc.getBool(SpellArg.RANDOM_TARGET) && desc.getSecondaryTarget() != null) {
+			// Resolve the source. Remove the sources from the target
+			List<Entity> sources = context.resolveTarget(player, source, desc.getSecondaryTarget());
+			targets.removeAll(sources);
+		}
+
+		super.cast(context, player, desc, source, targets);
+	}
 
 	@Override
 	@Suspendable
