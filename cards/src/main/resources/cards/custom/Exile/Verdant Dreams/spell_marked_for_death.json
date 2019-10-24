@@ -1,0 +1,16 @@
+{
+  "name": "Marked for Death",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "RARE",
+  "description": "Choose a minion. It takes double damage.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "TAKE_DOUBLE_DAMAGE"
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

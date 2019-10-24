@@ -1,0 +1,17 @@
+{
+  "name": "Headbutt",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Deal $3 damage to the enemy hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 3
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

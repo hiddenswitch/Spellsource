@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
 /**
- * Evaluates to {@code true} if the {@link ConditionArg#TARGET_PLAYER} has card-count [ {@link ConditionArg#OPERATION} ]
+ * Evaluates to {@code true} if the {@link ConditionArg#TARGET_PLAYER} has en entity-count [ {@link ConditionArg#OPERATION} ]
  * {@link ConditionArg#VALUE} cards.
  */
 public abstract class CountCondition extends Condition {

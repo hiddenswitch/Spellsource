@@ -1,0 +1,22 @@
+{
+  "name": "Fassnu Oathbreaker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Equip a 3/2 Axe.",
+  "battlecry": {
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "weapon_fassnu_axe"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Jeering Bodyguard",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Guard. Opener: Force an enemy minion to attack this.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "FightSpell",
+      "target": "SELF",
+      "secondaryTarget": "TARGET"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

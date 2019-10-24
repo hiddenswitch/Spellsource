@@ -28,10 +28,9 @@ public final class DiedThisTurnValueProvider extends ValueProvider {
 		EntityFilter diedThisTurnFilter = AttributeFilter.create(Attribute.DIED_ON_TURN, getDesc().getValue(ValueProviderArg.VALUE, context, player, target, host, context.getTurn()));
 		EntityFilter userFilter = (EntityFilter) getDesc().getOrDefault(ValueProviderArg.CARD_FILTER, AndFilter.create());
 		EntityFilter minionFilter = CardFilter.create(CardType.MINION);
-		int count = source
+		return source
 				.getCards(context, host, player)
 				.filtered(AndFilter.create(diedThisTurnFilter, userFilter, minionFilter).matcher(context, player, host))
 				.getCount();
-		return count;
 	}
 }

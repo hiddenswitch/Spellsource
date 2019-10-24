@@ -210,15 +210,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		return enchantments.size() != 0;
 	}
 
-	public int getMaxNumberOfAttacks() {
-		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
-			return GameLogic.MEGA_WINDFURY_ATTACKS;
-		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
-			return GameLogic.WINDFURY_ATTACKS;
-		}
-		return 1;
-	}
-
 
 	/**
 	 * Indicates whether or not the actor is mortally wounded.
