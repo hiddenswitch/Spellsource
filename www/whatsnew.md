@@ -23,6 +23,7 @@ Please note that the client is currently in maintenance mode while the new build
  
 ##### Content Fixes:
 
+ - Stubborn Stegodon is now a Beast. (1415)
  - Champion of Death now correctly destroys minions.
  - Catta the Merciless, Terrain Devourer, Ravenous Lookout, Broodmother Narvina, Sylas Fate's Hand, Northot Necromaster and Eternal Steed are no longer collectible due to infinite loop interactions.
  - Effects which target friendly cards now also target Skills if the effects did not already.

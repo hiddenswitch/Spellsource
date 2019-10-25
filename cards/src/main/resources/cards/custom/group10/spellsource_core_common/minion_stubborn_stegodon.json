@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Guard. Can't attack.",
   "attributes": {
     "CANNOT_ATTACK": true,
