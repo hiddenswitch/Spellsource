@@ -24,6 +24,7 @@ Please note that the client is currently in maintenance mode while the new build
  
 ##### Content Fixes:
 
+ - Imperfect Duplicate now correctly summons a minion based on the target's stats. (1404)
  - Sneaky Kaeru now returns to the hand when its health is 1. (1401)
  - Bloodmoon Ritual is now in the collection. (1399)
  - Quick Chant is now in the collection. (1400)

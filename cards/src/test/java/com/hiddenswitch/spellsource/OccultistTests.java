@@ -10,6 +10,19 @@ import static org.junit.Assert.*;
 public class OccultistTests extends TestBase {
 
 	@Test
+	public void testImperfectDuplicate() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			assertEquals(target.getSourceCard().getBaseManaCost(), 1);
+			playCard(context, player, "spell_imperfect_duplicate", target);
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMinions().get(1).getAttack(), 1);
+			assertEquals(player.getMinions().get(1).getHp(), 1);
+			assertNotEquals(player.getMinions().get(1).getSourceCard().getCardId(), CardCatalogue.getOneOneNeutralMinionCardId());
+		});
+	}
+
+	@Test
 	public void testUnearthedHorrorXitaluInteraction() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_xitalu");
