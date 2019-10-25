@@ -41,6 +41,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSneakyKaeru() {
+		runGym((context, player, opponent) -> {
+			Minion sneakyKaeru = playMinionCard(context, player, "minion_sneaky_kaeru");
+			castDamageSpell(context, player, sneakyKaeru.getMaxHp() - 1, sneakyKaeru);
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_sneaky_kaeru");
+		});
+	}
+
+	@Test
 	public void testSecretOfTwilightAffectedBySpellDamage() {
 		runGym((context, player, opponent) -> {
 			Minion spellDamage = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
