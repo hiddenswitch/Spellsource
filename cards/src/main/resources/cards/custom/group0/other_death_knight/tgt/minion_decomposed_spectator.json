@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Inspire: Summon a 1/1 Decomposed Spectator.",
+  "description": "Whenever you use your Skill, Summon a 1/1 Decomposed Spectator.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",
