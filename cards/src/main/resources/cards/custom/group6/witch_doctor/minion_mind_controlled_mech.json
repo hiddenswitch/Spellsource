@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "MECH",
-  "description": "Can't attack. Your Hero Power is 'Choose a target. Your Mind Controlled Mechs attack it'.",
+  "description": "Can't attack. Your Skill is 'Choose a target. Your Mind Controlled Mechs attack it'.",
   "aura": {
     "class": "CardAura",
     "target": "FRIENDLY_HERO_POWER",

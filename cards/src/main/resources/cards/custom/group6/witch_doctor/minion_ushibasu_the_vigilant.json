@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Whenever your hero would take damage, deal it to the enemy champion instead.",
+  "description": "Whenever your champion would take damage, deal it to the enemy champion instead.",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",
