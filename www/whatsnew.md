@@ -6,7 +6,7 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
-### 0.8.53-2.0.38 (In Progress)
+### 0.8.53-2.0.38 (October 25th, 2019)
 
 Bug fixes, balance changes and massive content additions.
 
