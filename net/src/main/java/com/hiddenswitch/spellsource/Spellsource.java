@@ -600,8 +600,6 @@ public class Spellsource {
 						.withVersion(37)
 						.withUp(thisVertx -> {
 							CardCatalogue.loadCardsFromPackage();
-							changeCardId("minion_skullsplitter_troll", "minion_essence_gatherer");
-							changeCardId("enchantment_heartpierced", "enchantment_heartpierced");
 							changeCardId("minion_lifetaker", "minion_marrow_render");
 							changeCardId("spell_blood_plague_blood_knight", "spell_blood_plague_vampire");
 							changeCardId("weapon_midnight_blade", "weapon_wicked_moonblade");
