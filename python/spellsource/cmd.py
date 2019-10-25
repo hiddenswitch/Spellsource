@@ -12,6 +12,7 @@ from .ext.hearthcards import write_set_stubs
 from .ext.admin import Admin
 from .ext.cardformatter import fix_cards, fix_card
 from .ext.datasources import HSReplayMatchups
+from .ext.fixpullrequest import PullRequestFixSession
 from tqdm import tqdm
 
 
@@ -394,6 +395,20 @@ def create_cards_db(file: typing.TextIO):
         cards.version("1")
         json_cards = ctx.root_namespace().com.hiddenswitch.spellsource.util.Serialization.serialize(cards)
     file.write(json_cards)
+
+
+@_cli.command()
+def fix_merge():
+    """
+    Fixes card catalogue merge issues.
+
+    This will undo deletes staged in the git repo and mark those cards as not collectible instead. Then, it will undo
+    true renames (file moves are allowed, as long as the filenames haven't changed). Finally it will fix missing
+    extensions or adding too many .json extensions.
+    """
+    session = PullRequestFixSession('.')
+    res = session.fix()
+    click.echo(res)
 
 
 def main():

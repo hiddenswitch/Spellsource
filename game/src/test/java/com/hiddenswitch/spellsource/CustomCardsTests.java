@@ -41,6 +41,23 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSecretOfTwilightAffectedBySpellDamage() {
+		runGym((context, player, opponent) -> {
+			Minion spellDamage = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			spellDamage.modifyAttribute(Attribute.SPELL_DAMAGE, 1);
+			playCard(context, player, "secret_secret_of_twilight");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp() + 1;
+			playCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			int targetHp = 1;
+			if (opponent.getMinions().size() == 0) {
+				targetHp = 0;
+			}
+			assertEquals(opponent.getHero().getHp() + targetHp, opponentHp - 4, "Spell damage should have been applied");
+		});
+	}
+
+	@Test
 	public void testKorvasBloodthorn() {
 		// Test casting spell on my own minion, opponent can't target it during their turn
 		runGym((context, player, opponent) -> {

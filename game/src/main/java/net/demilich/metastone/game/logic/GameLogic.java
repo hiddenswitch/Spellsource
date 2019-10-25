@@ -146,7 +146,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	private static final int MAX_SPELL_DEPTH = 288;
 	private static final String TEMP_CARD_LABEL = "temp_card_id_";
-	private static final int INFINITE = -1;
+	public static final int INFINITE = -1;
 	private final TargetLogic targetLogic = new TargetLogic();
 	private final ActionLogic actionLogic = new ActionLogic();
 	private IdFactoryImpl idFactory;

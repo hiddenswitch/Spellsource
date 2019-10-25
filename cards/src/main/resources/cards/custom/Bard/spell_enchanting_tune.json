@@ -1,0 +1,21 @@
+{
+  "name": "Song of Soothing",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "EPIC",
+  "description": "Take control of an enemy minion with 3 or less Attack.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MindControlSpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 3,
+      "attribute": "ATTACK",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

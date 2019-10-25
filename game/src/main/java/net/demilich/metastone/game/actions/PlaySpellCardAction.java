@@ -43,7 +43,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 		Entity source = Objects.equals(getSourceReference(), EntityReference.NONE) ? null : context.resolveSingleTarget(getSourceReference());
 		Entity target = Objects.equals(getTargetReference(), EntityReference.NONE) ? null : context.resolveSingleTarget(getTargetReference());
 		if (context.getLogic().spellsCastTwice(context.getPlayer(playerId), (Card) source, source, target)) {
-			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
+			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), true, this);
 		}
 		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}
