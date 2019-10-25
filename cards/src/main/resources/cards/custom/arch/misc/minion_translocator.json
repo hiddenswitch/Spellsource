@@ -6,7 +6,7 @@
   "baseHp": 6,
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Whenever you shuffle a card into your deck, restore 2 Health to your hero.",
+  "description": "Whenever you shuffle a card into your deck, restore 2 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",
