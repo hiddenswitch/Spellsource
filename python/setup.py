@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 if sys.version_info < (3, 6):
-    sys.exit('Spellsource requires Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
+    sys.exit('Spellsource requires at least Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
 
 try:
     java_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode('utf-8')
@@ -17,7 +17,7 @@ except:
     sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
 
 SRC_PATH = './'
-with open('README.md', 'r') as readme_file:
+with open('../README.md', 'r') as readme_file:
     README = readme_file.read()
 
 
