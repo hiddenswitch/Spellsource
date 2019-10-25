@@ -68,7 +68,7 @@ setup(name='spellsource',
                         'pymongo',
                         'mistletoe'],
       extras_require={
-          'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk']
+          'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
       },
       entry_points={
           'console_scripts': [

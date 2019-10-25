@@ -20,9 +20,13 @@ Please note that the client is currently in maintenance mode while the new build
  - New Storyteller cards. (1394)
  - New Occultist cards. (1398)
  - The Vampire Lord has been reworked. (1413)
+ - Bard has been reworked. (1416)
  
 ##### Content Fixes:
 
+ - Bloodmoon Ritual is now in the collection. (1399)
+ - Quick Chant is now in the collection. (1400)
+ - Secrets that fire missiles are now affected by spellpower. (1402)
  - Stubborn Stegodon is now a Beast. (1415)
  - Champion of Death now correctly destroys minions.
  - Catta the Merciless, Terrain Devourer, Ravenous Lookout, Broodmother Narvina, Sylas Fate's Hand, Northot Necromaster and Eternal Steed are no longer collectible due to infinite loop interactions.
