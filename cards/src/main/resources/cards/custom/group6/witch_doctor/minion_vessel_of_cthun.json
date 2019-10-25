@@ -1,12 +1,12 @@
 {
-  "name": "Vessel of C'Thun",
+  "name": "Vessel of Big Guy",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "After you target this minion with a spell, give your C'Thun +2/+2 (wherever it is).",
+  "description": "After you target this minion with a spell, give your Big Guy +2/+2 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
