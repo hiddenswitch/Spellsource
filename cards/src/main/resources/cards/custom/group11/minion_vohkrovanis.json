@@ -18,43 +18,8 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "MetaSpell",
-        "value": {
-          "class": "CardCountValueProvider"
-        },
-        "spells": [
-          {
-            "class": "RevealCardSpell",
-            "target": "SELF",
-            "targetPlayer": "SELF"
-          },
-          {
-            "class": "DiscardCardsFromDeckSpell",
-            "value": 60,
-            "targetPlayer": "SELF"
-          },
-          {
-            "class": "CastRepeatedlySpell",
-            "spell": {
-              "class": "ShuffleToDeckSpell",
-              "cardSource": {
-                "class": "UnweightedCatalogueSource"
-              }
-            },
-            "howMany": 30
-          },
-          {
-            "class": "DiscardSpell",
-            "value": -1
-          },
-          {
-            "class": "DrawCardSpell",
-            "value": {
-              "class": "GameValueProvider",
-              "gameValue": "SPELL_VALUE"
-            }
-          }
-        ]
+        "class": "custom.VohkrovanisSpell",
+        "value": 30
       }
     }
   ]

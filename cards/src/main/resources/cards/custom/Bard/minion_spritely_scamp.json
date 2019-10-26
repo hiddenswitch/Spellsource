@@ -11,21 +11,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
-      "value": -1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "value": {
-          "class": "LastTurnValueProvider"
-        },
-        "attribute": "PLAYED_FROM_HAND_OR_DECK",
-        "cardType": "SPELL",
-        "operation": "EQUAL"
-      },
-      "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "OPPONENT"
-      }
+      "class": "custom.ReceiveOpponentsCastSpellsSpell"
     }
   },
   "attributes": {

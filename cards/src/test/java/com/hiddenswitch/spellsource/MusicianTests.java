@@ -17,6 +17,18 @@ public class MusicianTests extends TestBase {
 	}
 
 	@Test
+	public void testSpritelyScamp() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "spell_lunstone");
+			context.endTurn();
+			playCard(context, player, "minion_spritely_scamp");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_lunstone");
+		});
+	}
+
+	@Test
 	public void testRehearsal() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_rehearsal");

@@ -57,7 +57,9 @@ public final class DrainSpell extends Spell {
 		}
 
 		Entity defaultSource;
-		if (source.getSourceCard().getCardType() == CardType.SPELL || source.getEntityType() == EntityType.WEAPON) {
+		if (source.getSourceCard().getCardType().isCardType(CardType.SPELL)
+				|| source.getSourceCard().getCardType().isCardType(CardType.HERO_POWER)
+				|| source.getEntityType() == EntityType.WEAPON) {
 			defaultSource = context.resolveSingleTarget(context.getPlayer(source.getOwner()), source, EntityReference.FRIENDLY_HERO);
 		} else {
 			defaultSource = source;

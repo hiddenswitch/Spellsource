@@ -41,6 +41,22 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testVohkrovanis() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("spell_test_spellpower"));
+			Card shouldBeRemoved1 = shuffleToDeck(context, player, "spell_lunstone");
+			Card shouldBeRemoved2 = receiveCard(context, player, "spell_lunstone");
+			SpellUtils.castChildSpell(context, player, context.getCardById("minion_vohkrovanis").getDesc().getGameTriggers()[0].spell, player, null);
+			context.getLogic().endOfSequence();
+			assertEquals(shouldBeRemoved1.getZone(), Zones.GRAVEYARD);
+			assertEquals(shouldBeRemoved2.getZone(), Zones.GRAVEYARD);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_test_spellpower", "should have drawn 1 card");
+			assertEquals(player.getDeck().size(), 29, "should have drawn 1 card");
+		});
+	}
+
+	@Test
 	public void testSneakyKaeru() {
 		runGym((context, player, opponent) -> {
 			Minion sneakyKaeru = playMinionCard(context, player, "minion_sneaky_kaeru");
