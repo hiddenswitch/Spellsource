@@ -6,6 +6,22 @@
   "rarity": "FREE",
   "description": "Passive Skill. Your Dragons have +3 Attack.",
   "targetSelection": "NONE",
+  "condition": {
+    "class": "OrCondition"
+  },
+  "passiveAuras": [
+    {
+      "class": "BuffAura",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      },
+      "attackBonus": 3,
+      "hpBonus": 0
+    }
+  ],
   "spell": {
     "class": "HeroPowerSpell",
     "description": "Your Dragons have +3 Attack.",
@@ -19,9 +35,10 @@
           "class": "CardFilter",
           "race": "DRAGON",
           "cardType": "MINION"
-        }
-      },
-      "attackBonus": 3
+        },
+        "attackBonus": 3,
+        "hpBonus": 0
+      }
     }
   },
   "collectible": false,

@@ -15,21 +15,30 @@
         "class": "MinionOnBoardCondition",
         "cardFilter": {
           "class": "AttributeFilter",
-          "attribute": "DEATHRATTLE",
+          "attribute": "DEATHRATTLES",
           "operation": "HAS"
         },
         "targetPlayer": "SELF"
       },
-      "spell": { #Iffy on this one.
-        "class": "TriggerDeathrattleSpell",
-        "filter": {
-          "class": "AttributeFilter",
-          "attribute": "DEATHRATTLES",
-          "operation": "HAS"
-        },
-        "cardSource": {
-          "class": "GraveyardActorsSource",
-          "distinct": true
+      "spell": {
+        "class": "CastRepeatedlySpell",
+        "spell": {
+          "class": "TriggerDeathrattleSpell",
+          "filter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "AttributeFilter",
+                "attribute": "DEATHRATTLES",
+                "operation": "HAS"
+              },
+              {
+                "class": "EntityTypeFilter",
+                "entityType": "ACTOR"
+              }
+            ]
+          },
+          "target": "FRIENDLY_GRAVEYARD"
         },
         "howMany": 3
       }

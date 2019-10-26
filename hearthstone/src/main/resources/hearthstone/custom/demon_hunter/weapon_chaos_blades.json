@@ -46,7 +46,7 @@
               "class": "ComparisonCondition",
               "operation": "GREATER",
               "value1": {
-                "class": "EntityCounter",
+                "class": "EntityCountValueProvider",
                 "target": "ENEMY_CHARACTERS",
                 "filter": {
                   "class": "AttributeFilter",

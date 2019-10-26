@@ -27,7 +27,7 @@
         "class": "ComparisonCondition",
         "operation": "EQUAL",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "ALL_ENTITIES",
           "filter": {
             "class": "AndFilter",
@@ -45,7 +45,7 @@
           }
         },
         "value2": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "ALL_ENTITIES",
           "filter": {
             "class": "AndFilter",

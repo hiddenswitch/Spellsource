@@ -10,7 +10,7 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "value": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "FRIENDLY_MINIONS"
     }
   },

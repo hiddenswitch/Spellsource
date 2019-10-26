@@ -10,14 +10,21 @@
   "description": "After you lose Armor, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
-      "class": "LoseArmorTrigger", #New trigger needs to be developed.
-      "hostTargetType": "FRIENDLY_HERO"
+      "class": "ArmorChangedTrigger",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "operation": "LESS",
+        "value1": {
+          "class": "EventValueProvider"
+        },
+        "value2": 0
+      }
     },
     "spell": {
       "class": "BuffSpell",
       "attackBonus": 1,
       "hpBonus": 1,
-      "target": "SELF"
+      "target": "TRIGGER_HOST"
     }
   },
   "collectible": true,

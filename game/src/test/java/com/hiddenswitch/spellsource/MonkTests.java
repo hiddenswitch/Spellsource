@@ -2,10 +2,10 @@ package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import org.testng.annotations.Test;
 /*import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
@@ -23,7 +23,7 @@ public class MonkTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
 			spell.put(SpellArg.CARD, "hero_power_hone_reflexes");
-			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, TargetSelection.NONE, false, null);
 			context.getLogic().endOfSequence();
 			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_hone_reflexes");
 			useHeroPower(context, player);
@@ -126,7 +126,7 @@ public class MonkTests extends TestBase {
 			// Setting it to a specific hero power since some require a target some don't for useHeroPower()
 			SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
 			spell.put(SpellArg.CARD, "hero_power_hone_reflexes");
-			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, TargetSelection.NONE, false, null);
 			context.getLogic().endOfSequence();
 			Card heroPower = player.getHero().getHeroPower();
 			assertEquals(heroPower.getCardId(), "hero_power_hone_reflexes");

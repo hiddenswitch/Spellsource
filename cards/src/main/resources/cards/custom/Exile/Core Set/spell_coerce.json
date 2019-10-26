@@ -6,9 +6,15 @@
   "rarity": "RARE",
   "description": "Choose an enemy minion. It attacks another random minion.",
   "targetSelection": "ENEMY_MINIONS",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 1,
+    "operation": "GREATER",
+    "targetPlayer": "BOTH"
+  },
   "spell": {
     "class": "FightSpell",
-    "target": "MINIONS",
+    "target": "ALL_MINIONS",
     "exclusive": true,
     "randomTarget": true,
     "secondaryTarget": "TARGET"

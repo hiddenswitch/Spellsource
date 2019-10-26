@@ -10,38 +10,52 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "AddEnchantmentSpell",
-      "target": "FRIENDLY_PLAYER",
-      "aura": {
-        "class": "Aura",
-        "target": "FRIENDLY_MINIONS",
-        "filter": {
-          "class": "SpecificCardFilter",
-          "card": "token_lesser_oni"
-        },
-        "applyEffect": {
-          "class": "MetaSpell",
-          "spells": [
-            {
-              "class": "SetAttackSpell",
-              "value": 4,
-              "exclusive": false
-            },
-            {
-              "class": "SetHpSpell",
-              "value": 4,
-              "exclusive": false
-            },
-            {
-              "class": "AttributeAura",
-              "attribute": "AURA_TAKE_DOUBLE_DAMAGE"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "AttributeAura",
+            "attribute": "AURA_TAKE_DOUBLE_DAMAGE",
+            "target": "FRIENDLY_MINIONS",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "token_lesser_oni"
             }
-          ]
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "Aura",
+            "target": "FRIENDLY_MINIONS",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "token_lesser_oni"
+            },
+            "applyEffect": {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "SetAttackSpell",
+                  "value": 4,
+                  "exclusive": false
+                },
+                {
+                  "class": "SetHpSpell",
+                  "value": 4,
+                  "exclusive": false
+                }
+              ]
+            },
+            "removeEffect": {
+              "class": "NullSpell"
+            }
+          }
         }
-      },
-      "removeEffect": {
-        "class": "NullSpell"
-      }
+      ]
     }
   },
   "attributes": {

@@ -596,7 +596,18 @@ public class Spellsource {
 									json("$set", json(CollectionRecord.FORMAT, DeckFormat.ALL.getName())),
 									new UpdateOptions().setMulti(true));
 						}))
-				.migrateTo(36, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(37)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("minion_lifetaker", "minion_marrow_render");
+							changeCardId("spell_blood_plague_blood_knight", "spell_blood_plague_vampire");
+							changeCardId("weapon_midnight_blade", "weapon_wicked_moonblade");
+							changeCardId("spell_crimson_flow", "spell_hemoshape_flow");
+							changeCardId("minion_thassarian", "minion_the_vein_wyrm");
+							changeCardId("weapon_souldrinker_axe", "weapon_consuming_blade");
+						}))
+				.migrateTo(37, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

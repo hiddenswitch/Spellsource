@@ -4561,7 +4561,7 @@
     ]
   },
   {
-    "name": "net.demilich.metastone.game.spells.desc.valueprovider.EntityCounter",
+    "name": "net.demilich.metastone.game.spells.desc.valueprovider.EntityCountValueProvider",
     "methods": [
       {
         "name": "<init>",

@@ -7,9 +7,8 @@
   "durability": 3,
   "rarity": "RARE",
   "description": "Opener: Discard a Voodoo spell to give a friendly Beast +2/+2.",
-  "targetSelection": "FRIENDLY_MINIONS",
-  "spell": {
-    "class": "ConditionalSpell",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
     "condition": {
       "class": "HoldsCardCondition",
       "cardFilter": {
@@ -23,19 +22,24 @@
       }
     },
     "spell": {
+      "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      },
       "class": "MetaSpell",
       "spells": [
         {
           "class": "DiscardSpell",
-          "cardFilter": {
+          "randomTarget": true,
+          "target": "FRIENDLY_HAND",
+          "filter": {
             "class": "SpecificCardFilter",
             "cards": [
               "spell_divination",
               "spell_frenzy",
               "spell_hex_bolt",
               "spell_spirit_bind"
-            ],
-            "randomTarget": true
+            ]
           }
         },
         {
@@ -45,6 +49,9 @@
         }
       ]
     }
+  },
+  "attributes": {
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",

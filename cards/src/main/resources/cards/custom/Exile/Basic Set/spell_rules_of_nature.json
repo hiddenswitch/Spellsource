@@ -7,7 +7,13 @@
   "description": "Destroy a minion that attacked and killed another minion.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "-"
+    "class": "DestroySpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "TOTAL_KILLS",
+      "value": 0,
+      "operation": "GREATER"
+    }
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

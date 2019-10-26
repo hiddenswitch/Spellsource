@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Whenever your champion takes damage, give your C'Thun +2/+2 (wherever it is).",
+  "description": "Whenever your champion takes damage, give your Big Guy +2/+2 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -50,7 +50,7 @@
       ]
     }
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",

@@ -13,17 +13,20 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * @deprecated Use {@link SetHpSpell} instead.
- * 		<p>
- * 		Sets the target actor's HP to the specified {@link SpellArg#VALUE}, including increasing the maximum HP if
- * 		necessary.
- * 		<p>
- * 		This spell does work for other actors besides heroes, but it is recommended to use {@link SetHpSpell} instead.
+ * Use {@link SetHpSpell} instead.
+ * <p>
+ * Sets the target actor's HP to the specified {@link SpellArg#VALUE}, including increasing the maximum HP if
+ * necessary.
+ * <p>
+ * This spell does work for other actors besides heroes, but it is recommended to use {@link SetHpSpell} instead.
+ *
+ * @deprecated
  */
 @Deprecated
 public class SetHeroHpSpell extends Spell {
 
 	private static final Logger logger = LoggerFactory.getLogger(SetHeroHpSpell.class);
+
 	public static SpellDesc create(int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetHeroHpSpell.class);
 		arguments.put(SpellArg.VALUE, value);

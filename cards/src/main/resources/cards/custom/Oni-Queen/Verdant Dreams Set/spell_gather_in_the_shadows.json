@@ -9,8 +9,8 @@
   "spell": {
     "class": "EitherOrSpell",
     "condition": {
-      "class": "DuplicateHandCondition"
-      #Refer to minion_bullhorn.json about this
+      "class": "HighlanderHandCondition",
+      "invert": true
     },
     "spell1": {
       "class": "FromDeckToHandSpell",

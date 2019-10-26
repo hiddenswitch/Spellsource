@@ -9,7 +9,7 @@
   "spell": {
     "class": "BuffSpell",
     "attackBonus": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "OTHER_FRIENDLY_MINIONS"
     },
     "hpBonus": 0

@@ -17,8 +17,8 @@
         "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "AttributeValueProvider",
-          "playerAttribute": "ATTACKS_THIS_GAME",
-          "targetPlayer": "FRIENDLY_PLAYER"
+          "attribute": "ATTACKS_THIS_GAME",
+          "target": "FRIENDLY_HERO"
         },
         "value2": 3
       },
@@ -28,7 +28,7 @@
         "aura": {
           "class": "AttributeAura",
           "target": "FRIENDLY_MINIONS",
-          "attribute": "RUSH",
+          "attribute": "AURA_RUSH"
         }
       }
     }
@@ -47,8 +47,8 @@
         "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "AttributeValueProvider",
-          "playerAttribute": "ATTACKS_THIS_GAME",
-          "targetPlayer": "FRIENDLY_PLAYER"
+          "attribute": "ATTACKS_THIS_GAME",
+          "target": "FRIENDLY_HERO"
         },
         "value2": 3
       },
@@ -65,8 +65,8 @@
               "value1": 3,
               "value2": {
                 "class": "AttributeValueProvider",
-                "playerAttribute": "ATTACKS_THIS_GAME",
-                "targetPlayer": "FRIENDLY_PLAYER"
+                "attribute": "ATTACKS_THIS_GAME",
+                "target": "FRIENDLY_HERO"
               }
             }
           },

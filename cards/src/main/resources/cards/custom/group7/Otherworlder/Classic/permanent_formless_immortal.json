@@ -27,7 +27,7 @@
           "class": "ComparisonCondition",
           "operation": "EQUAL",
           "value1": {
-            "class": "EntityCounter",
+            "class": "EntityCountValueProvider",
             "target": "FRIENDLY_MINIONS"
           },
           "value2": 0

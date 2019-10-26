@@ -1,0 +1,27 @@
+{
+  "name": "Ancestral Wardrum",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "CORAL",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "After your hero attacks, give your minions +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -208,15 +210,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		return enchantments.size() != 0;
 	}
 
-	public int getMaxNumberOfAttacks() {
-		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
-			return GameLogic.MEGA_WINDFURY_ATTACKS;
-		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
-			return GameLogic.WINDFURY_ATTACKS;
-		}
-		return 1;
-	}
-
 
 	/**
 	 * Indicates whether or not the actor is mortally wounded.
@@ -327,18 +320,13 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 
 	@Override
 	public String toString() {
-		String result = "[" + getEntityType() + " '" + getName() + "'id:" + getId() + " ";
-		result += getAttack() + "/" + getHp();
-		String prefix = " ";
-		for (Attribute tag : getAttributes().keySet()) {
-			if (false) {
-				result += prefix + tag;
-				prefix = ", ";
-			}
-		}
-		result += " hashCode: " + hashCode();
-		result += "]";
-		return result;
+		return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
+				.append("name", getName())
+				.append("id", getId())
+				.append("zone", getZone())
+				.append(getAttack() + "/" + getHp())
+				.append("description", getDescription())
+				.toString();
 	}
 
 	@Override

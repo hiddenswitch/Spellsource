@@ -7,11 +7,13 @@
   "baseHp": 6,
   "rarity": "RARE",
   "description": "Guard. Opener: Force an enemy minion to attack this.",
-  "targetSelection": "ENEMY_MINIONS",
   "battlecry": {
-    "class": "FightSpell",
-    "target": "SELF",
-    "secondaryTarget": "TARGET"
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "FightSpell",
+      "target": "SELF",
+      "secondaryTarget": "TARGET"
+    }
   },
   "attributes": {
     "BATTLECRY": true,

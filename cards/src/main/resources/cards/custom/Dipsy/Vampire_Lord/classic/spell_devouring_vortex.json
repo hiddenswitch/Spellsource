@@ -1,0 +1,26 @@
+{
+  "name": "Devouring Vortex",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Drain the Health of your opponent's central minion (or minions).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrainSpell",
+    "target": "ENEMY_MIDDLE_MINIONS",
+    "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP"
+    }
+  },
+  "collectible": true,
+  "attributes": {
+	"DRAIN": true
+  },
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

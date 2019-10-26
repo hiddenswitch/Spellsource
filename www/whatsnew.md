@@ -6,6 +6,100 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.53-2.0.38 (October 25th, 2019)
+
+Bug fixes, balance changes and massive content additions.
+
+Please note that the client is currently in maintenance mode while the new build is being developed!
+
+##### Content Additions:
+
+ - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
+ - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
+ - Introducing the Exile class, the Oni-Queen class, and new Witch Doctor cards! (1414)
+ - New Storyteller cards. (1394)
+ - New Occultist cards. (1398)
+ - The Vampire Lord has been reworked. (1413)
+ - Bard has been reworked. (1416)
+ 
+##### Content Fixes:
+
+ - Imperfect Duplicate now correctly summons a minion based on the target's stats. (1404)
+ - Sneaky Kaeru now returns to the hand when its health is 1. (1401)
+ - Bloodmoon Ritual is now in the collection. (1399)
+ - Quick Chant is now in the collection. (1400)
+ - Secrets that fire missiles are now affected by spellpower. (1402)
+ - Stubborn Stegodon is now a Beast. (1415)
+ - Champion of Death now correctly destroys minions.
+ - Catta the Merciless, Terrain Devourer, Ravenous Lookout, Broodmother Narvina, Sylas Fate's Hand, Northot Necromaster and Eternal Steed are no longer collectible due to infinite loop interactions.
+ - Effects which target friendly cards now also target Skills if the effects did not already.
+ - Effects which play cards randomly may now play cards of the same base card randomly. However, during the invocation of a specific card's random play effect, it will never be able to play itself randomly recursively.
+ - One on One no longer causes a crash if it is randomly played in such a way to select an enemy minion when it's the only minion on the board.
+ - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
+ - Fleeting Firebug no longer interacts with War Trebuchet to cause an infinite loop. Fleeting Firebug now summons at the end of its owner's turn.
+ - Two Commander Gareths on the battlefield no longer cause an infinite loop. It now reads, "At most once."
+ - Storyteller buffs and nerfs. (1394)
+ - Unnatural Restoration now restores 4 Health. (1378)
+ - Cryptlady Zara is no longer collectible. (1373)
+ - Anobii, the Trapper is now known as Crypto, the Trapper. (1373)
+ - Locust Swarm now costs 8. (1373)
+ - Tiger Ant now costs 11. (1373)
+ - Harden now gives +4 Health instead of +4/+4 and costs 4. (1373)
+ - Reclamation now reads, "Gain 0 Armor. (Increases for each Beast in your graveyard)" (1373)
+ - The Prophet now reads, "Opener: Discover and summon two minions that died this game." (1373)
+ - Lil Wormy is now a 1/3 Beast. (1373)
+ - Nanny now reads, "At the end of your turn, give a random minion in your hand +1/+1." (1373)
+ - Dream of Kingship now reads, "Discover a Beast, a Dragon and a Fae. Summon them all." (1373)
+ - Other changes to Hive Queen descriptions. (1373) 
+ - Archaeologist has several reworked cards. (1385)
+ - Wicked Smite is removed for a new basic minion, "Peeling Zombie." (1388)
+ - Blood Golem is changed to be a 5 mana 4/5 so that it can be played more flexibly. (1388)
+ - Large Spiderling is buffed to now deal 4 damage to the friendly champion instead of 5. (1388)
+ - Ancient Curse is buffed to cost 3 mana instead of 4 mana,. (1388)
+ - Bone Shield now only does 1 damage to a friendly minion. (1388)
+ - Some neutrals have been removed. (1403)
+ - Some Sands of Time neutrals have been buffed and nerfed. (1403)
+ - Archivist Jerrard now looks for a deck in your collection called The Archive. (1403)
+ - Rektan, Warrior of the Wild now reads, "Opener: Your champion has +1 Attack for the rest of the game." (1403)
+ - Stonecold Sergeant now has 5 Health. (1407)
+ - Stormwind Commander now has 4 Health. (1407)
+ - Forces Unite now costs 6. (1407)
+
+### 0.8.52-2.0.38 (September 20th, 2019)
+
+Thanks to @Logovaz for a great contribution to Witch Doctor.
+
+Bug fixes.
+
+##### Content Additions:
+
+ - Quick Chant - 1 Lun Basic Spell "Restore a friendly minion to full Health. Give it +3 Health."
+ - Jungle Survivalist - 2/1/2 Common Minion "Opener: Discover a spell."
+ - Cemetary Party - 4 Lun Rare Spell "Resurrect a friendly Aftermath minion. Add a copy of it to your hand."
+ - Story Collector - 3/1/5 Epic Minion "Opener: If you cast a spell this turn, add two random Witch Doctor spells to your hand."
+
+##### Content Fixes:
+
+ - Lifedrain now does not apply if the source shares an owner with the target, the source is a spell, and the target is a hero. In other words, "Take X damage" effects no longer are influenced by Lifedrain.
+ - Auto-Cannibalism can now be cast with less than 16 health. (1383)
+ - Vermancer is now called Hive Queen (1397)
+ - Tournament Trial can now target any minion. (1392)
+ - Mollusk Meister now reads, "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health." (1391)
+ - Death's Messenger is no longer collectible. (1390)
+ - The Mercenary champion and class are no longer collectible. (1389)
+ - Ushibasu is now a 7/4/7 from 7/5/8.
+ - Split Personality, Devilry Flare, and Sliver of Silver all now cost 3 Lun from 2 Lun.
+ - Shanga's Spirit Brew now costs 3 Lun from 4 Lun.
+ - Chant Leader and Hexcrazed Vessel both now cost 5 Lun from 6 Lun.
+ - Titanic Fanatic now costs 7 Lun from 8 Lun.
+ - High Shaman Mawliki now costs 9 Lun from 10 Lun.
+ - Gaitha the Protector is now a 7/4/8 from 7/4/6.
+ - Entranced Dancer is now a 3/4/3 from 3/4/2.
+ - Bloodseeker is now a 2/2/3 from 2/2/2.
+ - Ritual Shaman is now "Opener: Play a Secret from your deck." from "Opener: If you played a spell this turn, play a Secret from your deck."
+ - Legendary hero card Puppeteer Senzaku and Basic minion Spiritcaller have been removed.
+ - Ptero Max has fixed text "Your Beasts gain an extra attack after attacking and killing minions." from "Your Beasts can attack again after they attack and kill a minion." No change in interaction.
+
 ### 0.8.51-2.0.38 (September 2nd, 2019)
 
 Tribes are now visible on cards again. (1358)
@@ -16,7 +110,7 @@ Content additions and bug fixes.
 
 Thanks @Bromora for the contribution to Wraith!
 
-##### Usability Fixed:
+##### Usability Fixes:
 
  - Deleting a deck no longer glitches out the client on non-Windows platforms. (1372)
  - Legibility of buffs has been improved, showing a darkened rectangle when a buff is applied. Buffs will be visualized differently in the new client. (1367)
@@ -301,34 +395,6 @@ Fixing issues with cards not being found or detected after their IDs were change
 
 Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
 
-### 0.8.34-2.0.31 (June 30th, 2019)
-
-Bug fixes and content additions.
-
-The 0.8 series will be the last to contain content external from Spellsource.
-
-##### Content Additions:
-
- - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
- - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
- - Thanks to contributions from @Muhframos, Occultist updates! (1198)
-
-##### Content Fixes:
-
- - Yig's Mastermind and other cards that interact with deck cards would incorrectly cast pre-transformation versions of those cards. It no longer crashes the game.
- - Mari Anette and Irena, Dragon Knight no longer interact in a way that crashes the game.
- - Fairy Fixpicker no longer causes crashes when it attempts to replace cards that are immediately roasted or discarded.
- - Failed Experiment now has the correct stats. (1128)
- - Firegate Commander now provides a Dash aura instead of a Blitz aura. (1131)
- - Kahl of the Deep is now a 3/5, cost 5, that draws 3 cards for the opponent instead of 8. (1182)
- - Yig's Mastermind cost increased from 8 to 10. (1184)
- - Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
- - Stealing a card when a deck is full no longer causes a crash.
- - Wavering Diabolist correctly indicates that it does not have Guard. (1203)
- - Timewalker Strider now reads "After this minion attacks, it gains +2 Attack." (1201)
- - Energetic Mentee now specifies that it's first abilitiy is an opener. (1202)
- - Fireguard Bulwark now properly has Guard. (1200)
-
 ### Basic Rules
 
 This is a summary of the basic rules of Spellsource.
@@ -361,7 +427,7 @@ The Skill is a spell that is playable once per turn specific to your champion.
  - Deflect: The first time this minion takes damage, deal it to its Champion instead.
  - Decay: At the end of your turn, this loses 1 health or durability.
  - Dodge: The first time this minion takes damage, it takes zero instead.
- - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
+ - Drain (X): Deals this much damage to the target, then gain that much health.
  - Elusive: Cannot be targeted by spells or skills.
  - Enchantment: Occurs as long as the target this is attached to is in play.
  - Exhausted: During the turn it comes into play or changes sides, this minion is exhausted and cannot attack this turn. It loses exhaustion at the start of next turn.

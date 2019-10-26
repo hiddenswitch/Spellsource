@@ -32,7 +32,7 @@
           "operation": "GREATER",
           "targetPlayer": "SELF",
           "value1": {
-            "class": "EntityCounter",
+            "class": "EntityCountValueProvider",
             "target": "OTHER_FRIENDLY_MINIONS"
           },
           "value2": 0

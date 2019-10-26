@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.51
+SPELLSOURCE_VERSION=0.8.53
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -204,11 +204,11 @@ if [[ "$bump_version" = true ]] ; then
   new_version=$(bump2version --allow-dirty --current-version ${SPELLSOURCE_VERSION} --dry-run --list patch | grep new_version  | sed s,"^.*=",,)
   bump2version --allow-dirty --current-version "${SPELLSOURCE_VERSION}" patch \
     build.gradle \
-    setup.py \
+    python/setup.py \
     deploy.sh \
     server.sh \
     Dockerfile \
-    spellsource/context.py \
+    python/spellsource/context.py \
     net/src/main/java/com/hiddenswitch/spellsource/Version.java \
     gradle.properties
   SPELLSOURCE_VERSION=new_version
@@ -437,13 +437,21 @@ if [[ "$deploy_python" = true ]] ; then
     echo "Failed to deploy python: Missing twine binary. Install with pip3 install twine"
     exit 1
   fi
+
+  cd python
+  {
+    rm -rf dist/
+    mkdir -pv dist
+    pip3 install wheel twine >/dev/null
+    python3 setup.py sdist bdist_wheel >/dev/null
+    echo Deploying
+    TWINE_USERNAME=${TWINE_USERNAME} TWINE_PASSWORD=${TWINE_PASSWORD} twine upload dist/*
+  } || {
+    echo "Failed to build python"
+  }
+
   rm -rf dist/
-  mkdir -pv dist
-  pip3 install wheel twine >/dev/null
-  python3 setup.py sdist bdist_wheel >/dev/null
-  echo Deploying
-  TWINE_USERNAME=${TWINE_USERNAME} TWINE_PASSWORD=${TWINE_PASSWORD} twine upload dist/*
-  rm -rf dist/
+  cd ..
 fi
 
 if [[ "$deploy_elastic_beanstalk" = true ]] ; then
@@ -462,7 +470,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.51.jar \
+      ./net/build/libs/net-0.8.53.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

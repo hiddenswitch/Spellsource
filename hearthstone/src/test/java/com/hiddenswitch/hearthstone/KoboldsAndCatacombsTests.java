@@ -701,7 +701,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_sonya_shadowdancer");
-			playMinionCardWithBattlecry(context, player, "minion_gadgetzan_ferryman", bloodfen);
+			playMinionCard(context, player, "minion_gadgetzan_ferryman", bloodfen);
 			assertEquals(player.getHand().size(), 1);
 		});
 	}

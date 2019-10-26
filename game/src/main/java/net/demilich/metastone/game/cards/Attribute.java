@@ -17,6 +17,7 @@ import net.demilich.metastone.game.targeting.Zones;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A list of attributes on entities.
@@ -576,10 +577,7 @@ public enum Attribute {
 	 */
 	SPELLS_COST_HEALTH,
 	/**
-	 * When any {@link Entity} has this attribute in play, a {@link Card} with the {@link
-	 * net.demilich.metastone.game.entities.minions.Race#MURLOC} costs health instead of mana.
-	 * <p>
-	 * This attribute implements Seadevil Stinger.
+	 * When any {@link Entity} has this attribute in play, minions cost health instead of mana.
 	 */
 	MINIONS_COST_HEALTH,
 	/**
@@ -707,6 +705,10 @@ public enum Attribute {
 	 * This is a legacy mechanic. In a networked multiplayer environment, this value will persist between matches.
 	 */
 	TOTAL_DAMAGE_DEALT,
+	/**
+	 * Every time an {@link Actor} kills a target, increment this attribute.
+	 */
+	TOTAL_KILLS,
 	/**
 	 * Every time an {@link Actor} receives damage, increment this attribute with the total amount of damage dealt.
 	 */
@@ -1059,15 +1061,27 @@ public enum Attribute {
 	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
 	 */
 	SURGE,
-	DYNAMIC_DESCRIPTION, PASSIVE_AURAS, CURSE;
+	DYNAMIC_DESCRIPTION,
+	PASSIVE_AURAS,
+	CURSE,
+	DRAIN,
+	/**
+	 * Records how much damage was dealt to minions by this player or entity this game.
+	 */
+	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME, ATTACKS_LAST_TURN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
 	}
 
 	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+	private static final List<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toUnmodifiableList());
 
 	public static List<Attribute> getCardEnchantmentAttributes() {
 		return cardEnchantmentAttributes;
+	}
+
+	public static List<Attribute> getAuraAttributes() {
+		return auraAttributes;
 	}
 }

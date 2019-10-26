@@ -13,7 +13,7 @@
       "class": "CardFilter",
       "attribute": "BATTLECRY",
       "operation": "HAS",
-      "cardType": "MINION
+      "cardType": "MINION"
     }
   },
   "collectible": true,

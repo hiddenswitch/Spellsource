@@ -6,7 +6,7 @@
   "damage": 8,
   "durability": 1,
   "rarity": "FREE",
-  "description": "Opener: Freeze your hero, Reshuffle 1. Surge: Don't.",
+  "description": "Opener: Freeze your champion, Reshuffle 1. Surge: Don't.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

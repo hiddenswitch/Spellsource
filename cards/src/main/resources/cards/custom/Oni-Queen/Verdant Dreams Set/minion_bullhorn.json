@@ -10,12 +10,8 @@
   "description": "Opener: If your hand has duplicates, destroy a random enemy minion.",
   "battlecry": {
     "condition": {
-      "class": "DuplicateHandCondition"
-      #This is the condition that Sam (Fermata) came up with
-      #@Override
-      #protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-        #return player.getHand().stream().map(Card::getCardId).distinct().count() == (long) player.getHand().getCount();
-      }
+      "class": "HighlanderHandCondition",
+      "invert": true
     },
     "spell": {
       "class": "DestroySpell",

@@ -11,10 +11,10 @@
     "class": "AttributeAura",
     "target": "SELF",
     "condition": {
-      "class": "HasAttackedCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "ENEMY_CHARACTERS",
-      "value": {
-        "class": "LastTurnValueProvider",
+      "filter": {
+        "class": "HasAttackedLastTurnFilter"
       }
     },
     "attribute": "AURA_CANNOT_ATTACK"

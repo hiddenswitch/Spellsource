@@ -1,0 +1,21 @@
+{
+  "name": "Earworm",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "RARE",
+  "description": "Take control of an enemy minion with 1 or less Attack.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MindControlSpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 1,
+      "attribute": "ATTACK",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

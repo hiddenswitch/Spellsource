@@ -27,7 +27,7 @@ import java.util.Map;
  *   {
  *     "class": "MetaSpell",
  *     "value": {
- *       "class": "EntityCounter",
+ *       "class": "EntityCountValueProvider",
  *       "target": "ALL_MINIONS",
  *       "filter": {
  *         "class": "AttributeFilter",

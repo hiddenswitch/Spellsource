@@ -1,22 +1,22 @@
 {
   "name": "Safeguard",
-  "baseManaCost": 4,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-  "description": "Restore #6 health. Gain 6 Armor.",
+  "description": "Restore #3 Health. Gain 3 Armor.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "HealSpell",
-        "value": 6
+        "value": 3
       },
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 6
+        "armorBonus": 3
       }
     ]
   },

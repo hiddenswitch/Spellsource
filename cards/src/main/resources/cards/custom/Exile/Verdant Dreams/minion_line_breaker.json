@@ -10,10 +10,10 @@
   "description": "Dash. Opener: If an enemy minion attacked last turn, gain Blitz.",
   "battlecry": {
     "condition": {
-      "class": "HasAttackedCondition",
+      "class": "AnyMatchFilterCondition",
       "target": "ENEMY_CHARACTERS",
-      "value": {
-        "class": "LastTurnValueProvider"
+      "filter": {
+        "class": "HasAttackedLastTurnFilter"
       }
     },
     "spell": {

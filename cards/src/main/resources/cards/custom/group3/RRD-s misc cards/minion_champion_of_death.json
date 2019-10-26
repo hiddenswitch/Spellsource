@@ -9,7 +9,7 @@
   "race": "DRAGON",
   "description": "Opener: Destroy a minion and discard a card",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "MINIONS",
     "spell": {
       "class": "MetaSpell",
       "spells": [

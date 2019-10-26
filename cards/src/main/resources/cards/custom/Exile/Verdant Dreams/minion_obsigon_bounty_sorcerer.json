@@ -7,20 +7,20 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Dash. Opener: Deal 2 damage to a random enemy. Repeat [0] time(s) for each character that attacked last turn.",
+  "description": "Dash. Opener: Deal 2 damage to a random enemy. Repeat [0 times]. (Increases each character that attacked last turn)",
   "battlecry": {
-    "class": "MissilesSpell",
-    "target": "ENEMY_CHARACTERS",
-    "value": 2,
-    "howMany": {
-      "value": { #Not sure about this.
-        "class": "HasAttackedCondition",
-        "target": "ENEMY_CHARACTERS",
-        "value": {
-          "class": "LastTurnValueProvider"
-        }
-      },
-      "offset": 1
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "howMany": {
+        "class": "EntityCountValueProvider",
+        "target": "ALL_CHARACTERS",
+        "filter": {
+          "class": "HasAttackedLastTurnFilter"
+        },
+        "offset": 1
+      }
     }
   },
   "attributes": {
@@ -28,19 +28,16 @@
   },
   "dynamicDescription": [
     {
-      "class": "MetaDescription",
-      "descriptions": [
-        {
-          "class": "ValueDescription", #Also unsure here as well
-          "value": {
-            "class": "HasAttackedCondition",
-            "target": "ENEMY_CHARACTERS",
-            "value": {
-              "attribute": "LastTurnValueProvider"
-            }
-          }
-        },
-      ]
+      "class": "PluralDescription",
+      "value": {
+        "class": "EntityCountValueProvider",
+        "target": "ALL_CHARACTERS",
+        "filter": {
+          "class": "HasAttackedLastTurnFilter"
+        }
+      },
+      "description1": " time",
+      "description2": " times"
     }
   ],
   "collectible": true,

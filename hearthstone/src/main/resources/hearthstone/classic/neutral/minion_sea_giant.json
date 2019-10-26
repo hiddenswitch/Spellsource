@@ -11,7 +11,7 @@
   "set": "CLASSIC",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "ALL_OTHER_MINIONS"
   }
 }

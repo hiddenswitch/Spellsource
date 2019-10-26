@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
@@ -79,14 +80,14 @@ public class WraithTests extends TestBase {
 			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			player.setMana(10);
 			playCard(context, player, golem);
-			assertEquals(player.getMana(), 5);
+			assertEquals(player.getMana(), 10 - (golem.getBaseManaCost() - golem.getSourceCard().getDesc().getManaCostModifier().getInt(ValueProviderArg.IF_TRUE)));
 		}));
 
 		runGym(((context, player, opponent) -> {
 			Card golem = receiveCard(context, player, "minion_blood_golem");
 			player.setMana(10);
 			playCard(context, player, golem);
-			assertEquals(player.getMana(), 3);
+			assertEquals(player.getMana(), 10 - golem.getBaseManaCost());
 		}));
 	}
 
@@ -110,7 +111,7 @@ public class WraithTests extends TestBase {
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
 			context.endTurn();
-			playMinionCardWithBattlecry(context, player, "minion_dark_artist", target);
+			playMinionCard(context, player, "minion_dark_artist", target);
 			assertTrue(target.isDestroyed());
 		});
 	}
@@ -130,5 +131,25 @@ public class WraithTests extends TestBase {
 			playCard(context, player, "spell_test_1_aoe");
 			assertEquals(player.getMinions().size(), 2);
 		}));
+	}
+
+	@Test
+	public void testAutoCannibalism() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			context.endTurn();
+			Card autoCannibalism = receiveCard(context, player, "spell_auto_cannibalism");
+			assertTrue(context.getLogic().canPlayCard(player, autoCannibalism));
+			player.getHero().setHp(15);
+			assertTrue(context.getLogic().canPlayCard(player, autoCannibalism));
+			int hp = player.getHero().getHp();
+			int hpCost = 16;
+			int perMinionLifesteal = 2;
+			int minions = opponent.getMinions().size();
+			playCard(context, player, autoCannibalism);
+			assertEquals(player.getHero().getHp(), hp - hpCost + perMinionLifesteal * minions);
+			assertFalse(player.getHero().isDestroyed());
+		});
 	}
 }

@@ -68,7 +68,7 @@ public class AdvancedMechanicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			// Should give us exactly two auras
 			Minion auraMinion = playMinionCard(context, player, "minion_test_aura");
-			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", auraMinion);
+			Minion copy = playMinionCard(context, player, "minion_test_copy", auraMinion);
 			assertEquals(copy.getSourceCard().getCardId(), "minion_test_aura");
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(auraMinion.getAttack(), 4);
@@ -79,7 +79,7 @@ public class AdvancedMechanicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			// Should give us exactly two card cost modifiers
 			Minion radiant = playMinionCard(context, player, "minion_test_spells_cost_1_less");
-			Minion transformedCopy = playMinionCardWithBattlecry(context, player, "minion_test_copy", radiant);
+			Minion transformedCopy = playMinionCard(context, player, "minion_test_copy", radiant);
 			assertEquals(transformedCopy.getSourceCard().getCardId(), "minion_test_spells_cost_1_less");
 			Card costThreeSpell = receiveCard(context, player, "spell_test_cost_3_spell");
 			assertEquals(costOf(context, player, costThreeSpell), costThreeSpell.getBaseManaCost() - 2);
@@ -89,7 +89,7 @@ public class AdvancedMechanicTests extends TestBase {
 			// Should correctly copy enchantments granted after the fact
 			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_test_enchant_persistent_owner", blessed);
-			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
+			Minion copy = playMinionCard(context, player, "minion_test_copy", blessed);
 			context.endTurn();
 			context.endTurn();
 			for (int i = 0; i < 10; i++) {
@@ -107,7 +107,7 @@ public class AdvancedMechanicTests extends TestBase {
 			context.endTurn();
 			playCard(context, opponent, "spell_test_enchant_persistent_owner", blessed);
 			context.endTurn();
-			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
+			Minion copy = playMinionCard(context, player, "minion_test_copy", blessed);
 			context.endTurn();
 			context.endTurn();
 			for (int i = 0; i < 10; i++) {

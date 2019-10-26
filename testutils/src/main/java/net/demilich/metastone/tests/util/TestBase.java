@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.TestCardResources;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -11,6 +12,8 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -19,6 +22,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -187,14 +191,14 @@ public class TestBase {
 		return handle;
 	}
 
-	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, String cardId, Entity target) {
+	protected static Minion playMinionCard(GameContext context, Player player, String cardId, Entity target) {
 		OverrideHandle<EntityReference> handle = overrideBattlecry(context, player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
 		Minion result = playMinionCard(context, player, cardId);
 		handle.stop();
 		return result;
 	}
 
-	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, Card card, Entity target) {
+	protected static Minion playMinionCard(GameContext context, Player player, Card card, Entity target) {
 		OverrideHandle<EntityReference> handle = overrideBattlecry(context, player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
 		return playMinionCard(context, player, card);
 	}
@@ -520,16 +524,41 @@ public class TestBase {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
 		}
-		if (!target.isInPlay()) {
+		if (target != null && !target.isInPlay()) {
 			throw new UnsupportedOperationException("cannot target not in play entities");
 		}
 		GameAction action = card.play();
-		action.setTarget(target);
+		if (card.hasBattlecry()) {
+			overrideBattlecry(context, player, choices -> choices.stream().filter(choice -> Objects.equals(target != null ? target.getReference() : null, choice.getTargetReference())).findFirst().orElseThrow());
+		} else {
+			action.setTarget(target);
+		}
 		context.performAction(player.getId(), action);
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, String minionCardId) {
 		return playMinionCard(context, player, CardCatalogue.getCardById(minionCardId));
+	}
+
+	protected static Minion playMinionCard(GameContext context, Player player, int attack, int hp) {
+		Minion minion = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+		minion.setAttack(attack);
+		minion.setBaseAttack(attack);
+		context.getLogic().setHpAndMaxHp(minion, hp);
+		minion.setBaseHp(hp);
+		return minion;
+	}
+
+	protected static void castDamageSpell(GameContext context, Player player, int damage, Entity target) {
+		CardDesc damageSpell = new CardDesc();
+		damageSpell.setId(context.getLogic().generateCardId());
+		damageSpell.setTargetSelection(TargetSelection.ANY);
+		damageSpell.spell = DamageSpell.create(damage);
+		damageSpell.setSet(TestCardResources.TEST);
+		damageSpell.setType(CardType.SPELL);
+		Card card = new Card(damageSpell);
+		context.addTempCard(card);
+		playCard(context, player, card, target);
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, Card card) {

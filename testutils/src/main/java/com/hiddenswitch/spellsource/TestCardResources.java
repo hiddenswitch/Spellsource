@@ -2,6 +2,8 @@ package com.hiddenswitch.spellsource;
 
 public class TestCardResources extends AbstractCardResources<TestCardResources> {
 
+	public static final String TEST = "TEST";
+
 	public TestCardResources() {
 		super(TestCardResources.class);
 	}

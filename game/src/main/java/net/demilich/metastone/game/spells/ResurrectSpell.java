@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
  * If the minion was successfully summoned, {@link SpellArg#SPELL} will be cast with {@link EntityReference#OUTPUT}
  * <b>and</b> {@code target} as the summoned minion.
  * <p>
+ * Uses the filter specified in {@link SpellArg#CARD_FILTER}. Always only resurrects minions.
+ * <p>
  * For <b>example</b>, to resurrect <b>2 different</b> friendly minions:
  * <pre>
  *   {
@@ -49,9 +51,7 @@ public class ResurrectSpell extends Spell {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		List<Entity> graveyard = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyard) {
-			if (deadEntity.getEntityType() == EntityType.MINION
-					// Check that this died on a turn to indicate whether or not it was removed peacefully
-					&& !deadEntity.isRemovedPeacefully()) {
+			if (deadEntity.diedOnBattlefield()) {
 				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}

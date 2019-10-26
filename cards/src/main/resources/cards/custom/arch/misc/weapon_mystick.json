@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "RARE",
-  "description": "<b>Decay</b>. Your hero has +2 Attack.",
+  "description": "<b>Decay</b>. Your champion has +2 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_HERO",

@@ -2,7 +2,7 @@
   "name": "Smokebomb",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "Camo",
+  "heroClass": "CAMO",
   "rarity": "COMMON",
   "description": "Deal $1 damage to a minion. Give it Hidden for a turn.",
   "targetSelection": "MINIONS",
@@ -24,6 +24,6 @@
     ]
   },
   "collectible": true,
-  "set": "SPELLSOURCE_BASIC"
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

@@ -14,7 +14,7 @@
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "FRIENDLY_MINIONS",
     "filter": {
       "class": "SpecificCardFilter",

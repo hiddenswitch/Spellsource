@@ -1,0 +1,61 @@
+{
+  "name": "Vohkrovanis",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 10,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "value": {
+          "class": "CardCountValueProvider"
+        },
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "DiscardCardsFromDeckSpell",
+            "value": 60,
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "CastRepeatedlySpell",
+            "spell": {
+              "class": "ShuffleToDeckSpell",
+              "cardSource": {
+                "class": "UnweightedCatalogueSource"
+              }
+            },
+            "howMany": 30
+          },
+          {
+            "class": "DiscardSpell",
+            "value": -1
+          },
+          {
+            "class": "DrawCardSpell",
+            "value": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

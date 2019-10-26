@@ -16,7 +16,7 @@
         "class": "ComparisonCondition",
         "operation": "EQUAL",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK",
           "filter": {
             "class": "RaceFilter",
@@ -24,7 +24,7 @@
           }
         },
         "value2": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK"
         }
       }

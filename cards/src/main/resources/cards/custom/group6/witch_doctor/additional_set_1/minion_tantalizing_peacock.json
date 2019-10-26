@@ -8,13 +8,11 @@
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Aftermath: Shuffle a random enemy minion into your opponent's deck.",
-  "deathrattle":
-    "spell": {
-      "class": "ShuffleMinionToDeckSpell",
-      "target": "ENEMY_MINIONS",
-      "randomTarget": true,
-      "targetPlayer": "OWNER"
-    }
+  "deathrattle": {
+    "class": "ShuffleMinionToDeckSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true,
+    "targetPlayer": "OWNER"
   },
   "attributes": {
     "DEATHRATTLES": true

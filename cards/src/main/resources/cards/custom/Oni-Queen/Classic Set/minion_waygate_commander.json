@@ -11,10 +11,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "filter": {
-        "class": "RaceFilter",
-        "race": "DEMON"
-      },
+      "race": "DEMON",
       "targetPlayer": "SELF"
     },
     "spell": {
