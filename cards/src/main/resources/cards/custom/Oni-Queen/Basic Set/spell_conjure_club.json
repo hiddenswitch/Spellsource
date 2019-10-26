@@ -9,7 +9,7 @@
   "spell": {
     "class": "TemporaryAttackSpell",
     "target": "FRIENDLY_HERO",
-    "attackBonus": 3
+    "value": 3
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

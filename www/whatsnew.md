@@ -6,6 +6,22 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.54-2.0.38 (In Progress)
+
+Bug fixes.
+
+Giving yourself more than 10 Lun (but not Lun stones) during your turn now preserves that lun. 
+
+##### Content Fixes:
+
+ - Revelation should no longer break the game. (1423)
+ - Tainted Sight now only draws minions. (1422)
+ - Alpha Raptor now has a Beast tag. (1421)
+ - Conjure Club and Conjure Kanobo now correctly buff the champion. (1420)
+ - Spritely Scamp now correctly receives spells casted by the opponent during the opponent's last turn. (1419)
+ - Vohkrovanis now replaces the deck and draws correctly. (1418)
+ - Devour now correctly drains to the friendly champion. Additionally, the Reiri minion token now correctly shows how much damage is left for it to activate. (1417)
+
 ### 0.8.53-2.0.38 (October 25th, 2019)
 
 Bug fixes, balance changes and massive content additions.

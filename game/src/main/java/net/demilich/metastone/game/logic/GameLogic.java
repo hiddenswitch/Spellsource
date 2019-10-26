@@ -2738,7 +2738,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void modifyCurrentMana(int playerId, int mana, boolean spent) {
 		Player player = context.getPlayer(playerId);
-		int newMana = Math.min(Math.max(0, player.getMana()) + mana, MAX_MANA);
+		int newMana = MathUtils.clamp(player.getMana() + mana, 0, MAX_MANA + Math.abs(mana));
 		player.setMana(newMana);
 		if ((mana < 0 && spent) || mana > 0) {
 			context.getPlayer(playerId).modifyAttribute(Attribute.MANA_SPENT_THIS_TURN, mana < 0 ? -mana : 0);

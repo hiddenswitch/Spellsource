@@ -5,9 +5,29 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
 import org.testng.annotations.Test;
 
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 public class OccultistTests extends TestBase {
+
+	@Test
+	public void testRevelation() {
+		for (int j = 0; j < 10; j++) {
+			final int k = j;
+			runGym((context, player, opponent) -> {
+				for (int i = 0; i < k; i++) {
+					context.endTurn();
+					context.endTurn();
+				}
+
+				Card card = receiveCard(context, player, "spell_lunstone");
+				playCard(context, player, "spell_revelation");
+				assertEquals(player.getMana(), 0);
+				assertEquals(player.getMaxMana(), 0);
+				assertEquals(costOf(context, player, card), 1);
+			});
+		}
+
+	}
 
 	@Test
 	public void testImperfectDuplicate() {

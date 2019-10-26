@@ -38,8 +38,9 @@ public class TemporaryAttackSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE);
+		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE, SpellArg.ATTACK_BONUS);
 		int attackBonus = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		Actor targetActor = (Actor) target;
 
 		// Read auras

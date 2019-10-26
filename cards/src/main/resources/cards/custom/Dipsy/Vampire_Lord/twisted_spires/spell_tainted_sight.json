@@ -10,9 +10,18 @@
     "class": "FromDeckToHandSpell",
     "value": 60,
     "cardFilter": {
-      "class": "HighestAttributeFilter",
-      "target": "FRIENDLY_DECK",
-      "attribute": "HP"
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "HighestAttributeFilter",
+          "target": "FRIENDLY_DECK",
+          "attribute": "HP"
+        },
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      ]
     }
   },
   "collectible": true,
