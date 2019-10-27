@@ -2,7 +2,7 @@
   "name": "Thousand Year Hatred",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "ANY",
+  "heroClass": "BLUEGREY",
   "rarity": "EPIC",
   "description": "Choose an enemy minion. Destroy all minions with the same name.",
   "targetSelection": "ENEMY_MINIONS",

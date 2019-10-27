@@ -9,7 +9,7 @@
   "spell": {
     "class": "DamageSpell",
     "target": "ENEMY_CHARACTERS",
-    "value": 2
+    "value": 1
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

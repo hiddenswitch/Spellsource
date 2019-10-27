@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "TransformToRandomMinionSpell",
-      "target": "FRIENDLY_MINIONS",
+      "target": "OTHER_FRIENDLY_MINIONS",
       "cardFilter": {
         "class": "CardFilter",
         "rarity": "LEGENDARY",

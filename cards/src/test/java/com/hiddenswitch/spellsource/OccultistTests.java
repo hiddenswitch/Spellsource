@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.common.util.Objects;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -64,10 +66,14 @@ public class OccultistTests extends TestBase {
 			String firstHp = player.getHeroPowerZone().get(0).getCardId();
 			target.setMaxHp(5);
 			target.setHp(3);
+			player.setMana(GameLogic.MAX_MANA);
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equal(ga.getSourceReference(), player.getHeroPowerZone().get(0).getReference())));
 			useHeroPower(context, player, target.getReference());
 			assertTrue(target.getHp() == 1 || target.getHp() == 5);
 			String secondHp = player.getHeroPowerZone().get(0).getCardId();
 			assertNotEquals(firstHp, secondHp);
+			player.setMana(GameLogic.MAX_MANA);
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equal(ga.getSourceReference(), player.getHeroPowerZone().get(0).getReference())));
 		});
 	}
 }

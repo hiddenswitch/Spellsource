@@ -18,7 +18,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * Triggers the {@code target} entity's deathrattles.
+ * Triggers the {@code target} entity's aftermaths.
+ * <p>
+ * If a {@link Actor} target is specified, the aftermath is resolved from exactly where it is located.
+ * <p>
+ * If it is a {@link Card}, the aftermaths written on the card will be used instead.
  */
 public class TriggerDeathrattleSpell extends Spell {
 

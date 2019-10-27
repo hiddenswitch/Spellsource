@@ -10,8 +10,10 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "CastRepeatedlySpell",
-      "howMany": {
+      "class": "custom.YaganLifetakerSpell",
+      "target": "FRIENDLY_HERO",
+      "secondaryTarget": "FRIENDLY_MINIONS",
+      "value": {
         "class": "AlgebraicValueProvider",
         "value1": {
           "class": "AttributeValueProvider",
@@ -20,12 +22,6 @@
         },
         "value2": 2,
         "operation": "DIVIDE"
-      },
-      "spell": {
-        "class": "DrainSpell",
-        "secondaryTarget": "FRIENDLY_MINIONS",
-        "target": "FRIENDLY_HERO",
-        "value": 1
       }
     }
   },
