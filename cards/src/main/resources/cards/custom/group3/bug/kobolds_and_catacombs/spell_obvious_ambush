@@ -4,23 +4,27 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "At the end of this turn, summon a 3/3 Worm",
+  "description": "Destroy a friendly minion. Summon a 3/3 Worm",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "trigger": {
-      "eventTrigger": {
-        "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
       },
-      "spell": {
+      {
         "class": "SummonSpell",
         "value": 1,
         "card": "token_shiny_worm"
-      },
-      "oneTurn": true
-    }
-  },  
+      }
+    ]
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
