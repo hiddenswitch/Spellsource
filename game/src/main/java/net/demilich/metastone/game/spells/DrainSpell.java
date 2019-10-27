@@ -51,8 +51,7 @@ public final class DrainSpell extends Spell {
 		List<DrainEvent> events = new ArrayList<>(targets.size());
 		for (Entity target : targets) {
 			int damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-			int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageType.DRAIN);
-			events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
+			int thisDamageDealt = drainDamage(context, player, source, target, damage, events);
 			damageDealt += thisDamageDealt;
 		}
 
@@ -95,6 +94,13 @@ public final class DrainSpell extends Spell {
 		}
 		healingTarget.modifyAttribute(Attribute.DRAINED_THIS_TURN, amount);
 		healingTarget.modifyAttribute(Attribute.TOTAL_DRAINED, amount);
+	}
+
+	@Suspendable
+	public static int drainDamage(GameContext context, Player player, Entity source, Entity target, int damage, List<DrainEvent> events) {
+		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageType.DRAIN);
+		events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
+		return thisDamageDealt;
 	}
 
 	@Override

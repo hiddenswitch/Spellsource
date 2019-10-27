@@ -10,13 +10,12 @@
   "trigger": {
     "eventTrigger": {
       "class": "MaxHpIncreasedTrigger",
-      "hostTargetType": "IGNORE_AS_TARGET",
       "targetEntityType": "HERO",
       "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",
-      "target": "SELF",
+      "target": "TRIGGER_HOST",
       "hpBonus": {
         "class": "EventValueProvider"
       }

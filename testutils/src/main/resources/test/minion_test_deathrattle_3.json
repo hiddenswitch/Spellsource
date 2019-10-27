@@ -6,10 +6,11 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Aftermath: Summon a neutral 2/2 test minion.",
+  "description": "Aftermath: Deal 1 damage to the enemy champion.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "card": "minion_neutral_test"
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 1
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -10,17 +10,33 @@ Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Pla
 
 Bug fixes.
 
-Giving yourself more than 10 Lun (but not Lun stones) during your turn now preserves that lun. 
+Giving yourself more than 10 Lun (but not Lun stones) during your turn now preserves that lun. This means you can use the Lunstone while you have 10 lun, and you will correctly have 11 lun. Other effects which spend all your lun will scale correctly to that 11th lun.
+
+Using a skill now spends its lun before the skill effects are evaluating, making skills behave like cards played from the hand.
 
 ##### Content Fixes:
 
+ - Yagan Lifetaker now correctly buffs minions randomly. (1438)
+ - Flame Burp now deals the correct amount of damage, 1. (1436)
+ - Livid Zealot and other text copying effects now correctly copy triggers and auras onto actors already in play. (1435)
+ - Council Meeting is a spell now. (1434)
+ - Dinosoul now shows distinct Beasts. (1433)
+ - Bellringer Juriso now correctly triggers distinct aftermaths. (1433)
+ - General Hun'zho now only transforms other friendly minions. (1432)
+ - Thousand Year Hatred is now an Oni Queen card. (1431)
+ - Fae-wraith Caroline is now a Wraith card. (1431)
+ - Skill refreshing effects like Ghatanothoa's switching now work. (1430)
+ - Obsigon, Bounty Sorcerer now has Dash. (1426)
+ - Chokehold is now named correctly. (1425)
+ - Fassnu Oathbreaker now has the Dragon tag. (1424)
  - Revelation should no longer break the game. (1423)
  - Tainted Sight now only draws minions. (1422)
  - Alpha Raptor now has a Beast tag. (1421)
  - Conjure Club and Conjure Kanobo now correctly buff the champion. (1420)
  - Spritely Scamp now correctly receives spells casted by the opponent during the opponent's last turn. (1419)
  - Vohkrovanis now replaces the deck and draws correctly. (1418)
- - Devour now correctly drains to the friendly champion. Additionally, the Reiri minion token now correctly shows how much damage is left for it to activate. (1417)
+ - Devour now correctly drains to the friendly champion. (1417)
+ - The Reiri minion token now correctly shows how much damage is left for it to activate. (1417)
 
 ### 0.8.53-2.0.38 (October 25th, 2019)
 

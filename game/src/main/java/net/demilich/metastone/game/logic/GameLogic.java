@@ -2035,11 +2035,26 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param attr   Which attribute to find
 	 * @return The highest value from all sources. -1 is considered infinite.
 	 */
-	private int getGreatestAttributeValue(Player player, Attribute attr) {
-		int greatest = Math.max(INFINITE, player.getHero().getAttributeValue(attr));
-		if (greatest == INFINITE) {
-			return greatest;
+	public int getGreatestAttributeValue(Player player, Attribute attr) {
+		int greatest = 0;
+		if (player.getHero().hasAttribute(Attribute.HERO_POWER_USAGES)) {
+			int attributeValue = player.getHero().getAttributeValue(attr);
+			if (attributeValue == INFINITE) {
+				return greatest;
+			} else {
+				greatest = Math.max(attributeValue, greatest);
+			}
 		}
+
+		if (player.hasAttribute(Attribute.HERO_POWER_USAGES)) {
+			int attributeValue = player.getAttributeValue(attr);
+			if (attributeValue == INFINITE) {
+				return greatest;
+			} else {
+				greatest = Math.max(attributeValue, greatest);
+			}
+		}
+
 		for (Entity minion : player.getMinions()) {
 			if (minion.hasAttribute(attr)) {
 				if (minion.getAttributeValue(attr) > greatest) {
@@ -2475,6 +2490,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.updateLookup(heroPower);
 		assignEntityIds(player.getDeck(), playerId);
 		assignEntityIds(player.getHand(), playerId);
+		// The player can use a hero power once per turn by default
+		player.setAttribute(Attribute.HERO_POWER_USAGES, 1);
 
 		// Implements Open the Waygate
 		Stream.concat(player.getDeck().stream(),
@@ -4491,29 +4508,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
-	}
-
-	/**
-	 * Uses the player's hero power.
-	 *
-	 * @param playerId The player whose power should be used.
-	 */
-	@Suspendable
-	public void useHeroPower(int playerId) {
-		Player player = context.getPlayer(playerId);
-		Card power = player.getHero().getHeroPower();
-		// Hero powers could also cost health
-		int modifiedManaCost = getModifiedManaCost(player, power);
-		boolean cardCostsHealth = doesCardCostHealth(player, power);
-		if (cardCostsHealth) {
-			damage(player, (Actor) player.getHero(), modifiedManaCost, (Entity) power, true);
-		} else {
-			modifyCurrentMana(playerId, -modifiedManaCost, true);
-			player.getStatistics().manaSpent(modifiedManaCost);
-		}
-		power.markUsed();
-		player.getStatistics().cardPlayed(power, context.getTurn());
-		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
 	public Random getRandom() {

@@ -21,26 +21,22 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "CastRepeatedlySpell",
-        "spell": {
-          "class": "TriggerDeathrattleSpell",
-          "filter": {
-            "class": "AndFilter",
-            "filters": [
-              {
-                "class": "AttributeFilter",
-                "attribute": "DEATHRATTLES",
-                "operation": "HAS"
-              },
-              {
-                "class": "EntityTypeFilter",
-                "entityType": "ACTOR"
-              }
-            ]
-          },
-          "target": "FRIENDLY_GRAVEYARD"
+        "class": "custom.TriggerDistinctAftermathsInGraveyard",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "attribute": "DEATHRATTLES",
+              "operation": "HAS"
+            },
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "ACTOR"
+            }
+          ]
         },
-        "howMany": 3
+        "value": 3
       }
     }
   },
