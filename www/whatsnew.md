@@ -6,6 +6,14 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.55-2.0.38 (In Progress)
+
+Balance changes.
+
+##### Content Fixes:
+
+ - Obvious Ambush now reads, "Destroy a friendly minion. Summon a 3/3 Worm." (1437)
+
 ### 0.8.54-2.0.38 (October 27th, 2019)
 
 Bug fixes.
