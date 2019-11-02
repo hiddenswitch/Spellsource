@@ -1,0 +1,24 @@
+{
+  "name": "Bloodlord Goa",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Aftermath: Repeat every other friendly Aftermath you've triggered this game.",
+  "deathrattle": {
+    "class": "BloodlordGoaSpell",					### This one definitely needs some hefty custom code. Sorry in advance. The difficult part is that I want it to repeat ALL triggered effects,
+													### including Aftermaths you've triggered with cards like Soulscream or Vein Burster. If the Aftermath went off for any reason, it gets repeated.
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

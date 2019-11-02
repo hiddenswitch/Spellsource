@@ -1,10 +1,10 @@
 {
   "name": "Bloodfuser",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "BLOOD",
   "baseAttack": 4,
-  "baseHp": 4,
+  "baseHp": 3,
   "rarity": "FREE",
   "description": "Opener: Give your other minions +2 Health.",
   "battlecry": {

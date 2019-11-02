@@ -1,0 +1,30 @@
+{
+  "name": "Malicious Mirage",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Aftermath: If you increased this minion's Health, draw a card.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HealthIncreasedCondition",
+														### There might be a way to get this working with a comparison condition between the "base" Health of the card and its current max Health?
+    },													### Not sure how that would work, though, and ideally the effect should track all Health boosts even if the minion's Health has then been 
+    "spell": {											### set to something else. Let me know what you can do for this one.
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+	"DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}
