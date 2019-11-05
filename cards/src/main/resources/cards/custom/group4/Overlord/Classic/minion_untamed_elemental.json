@@ -1,0 +1,28 @@
+{
+  "name": "Untamed Elemental",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "<b>Blitz</b>, <b>Opener:</b> Deal 3 damage to your champion",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "CHARGE": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

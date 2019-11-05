@@ -1,0 +1,35 @@
+{
+  "name": "Fairy Whip-master",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Opener: Draw a card for each Captive and Underling you control.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "EntityCounter",
+        "target": "OTHER_FRIENDLY_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+            "token_underling_overlord",
+            "token_captive_overlord",
+            "token_captiveGuard_overlord"
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
