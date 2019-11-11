@@ -119,12 +119,26 @@ public interface Games extends Verticle {
 				this.sourceReference = gameAction.getSourceReference() == null ? -1 : gameAction.getSourceReference().getId();
 				this.actionType = gameAction.getActionType();
 			}
+
+			@Override
+			public boolean equals(Object o) {
+				if (this == o) return true;
+				if (!(o instanceof ActionKey)) return false;
+				ActionKey actionKey = (ActionKey) o;
+				return sourceReference == actionKey.sourceReference &&
+						actionType == actionKey.actionType;
+			}
+
+			@Override
+			public int hashCode() {
+				return com.google.common.base.Objects.hashCode(sourceReference, actionType);
+			}
 		}
 
 		Map<ActionKey, List<GameAction>> actionMap = actions.stream()
 				.unordered()
 				.collect(Collectors.groupingBy(ActionKey::new));
-
+		EntityZone<Minion> friendlyMinions = workingContext.getPlayer(playerId).getMinions();
 		GameActions clientActions = new GameActions()
 				.all(
 						actionMap.entrySet()
@@ -134,15 +148,23 @@ public interface Games extends Verticle {
 									if (kv.getValue().size() == 1 && kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
 										GameAction ga = kv.getValue().get(0);
 										return new SpellAction()
+												.sourceId(kv.getKey().sourceReference)
 												.action(ga.getId())
 												.entity(ga instanceof net.demilich.metastone.game.entities.HasCard ?
 														getEntity(workingContext, ((net.demilich.metastone.game.entities.HasCard) ga).getSourceCard(), playerId) : null)
-												.sourceId(kv.getKey() == null ? playerId : kv.getKey().sourceReference)
 												.description(ga.getDescription(workingContext, playerId))
 												.actionType(ActionType.valueOf(ga.getActionType().name()));
+									} else if (kv.getKey().actionType == net.demilich.metastone.game.actions.ActionType.SUMMON) {
+										return new SpellAction()
+												.sourceId(kv.getKey().sourceReference)
+												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
+												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
+														.action(ga.getId())
+														.friendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(), ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
+														.target(ga.getTargetReference() == null ? -1 : ga.getTargetReference().getId())).collect(toList()));
 									} else {
 										return new SpellAction()
-												.sourceId(kv.getKey() == null ? playerId : kv.getKey().sourceReference)
+												.sourceId(kv.getKey().sourceReference)
 												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
 												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
 														.action(ga.getId())
