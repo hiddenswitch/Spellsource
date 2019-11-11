@@ -684,6 +684,8 @@ definitions:
           The ID of the player who has won. Null if no player has won.
   ServerToClientMessage:
     type: 'object'
+    description: >
+      An envelope for messages from the server during gameplay.
     required:
       - messageType
     properties:
@@ -787,9 +789,24 @@ definitions:
         description: |
           The index of the entity inside its zone.
       z:
-        description: |
-          The zone this entity belongs to.
         type: 'string'
+        x-nullable: false
+        x-enum-varnames:
+          - 'NONE'
+          - 'HAND'
+          - 'DECK'
+          - 'GRAVEYARD'
+          - 'BATTLEFIELD'
+          - 'SECRET'
+          - 'QUEST'
+          - 'HERO_POWER'
+          - 'HERO'
+          - 'WEAPON'
+          - 'SET_ASIDE_ZONE'
+          - 'HIDDEN'
+          - 'DISCOVER'
+          - 'REMOVED_FROM_PLAY'
+          - 'PLAYER'
         enum:
           - 'N' # 'NONE'
           - 'H' # 'HAND'
@@ -1234,9 +1251,34 @@ definitions:
     type: 'object'
     properties:
       target:
+        description: >
+          The corresponding target for this action.
+
+          When -1, this indicates there is no target for this particular pair. This is relevant for summon actions which
+          would ordinarily have a null value. A -1 here indicates the rightmost position on the battlefield.
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
       action:
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
+  ActionType:
+    type: 'string'
+    x-nullable: false
+    enum:
+      - 'SYSTEM'
+      - 'END_TURN'
+      - 'PHYSICAL_ATTACK'
+      - 'SPELL'
+      - 'SUMMON'
+      - 'HERO_POWER'
+      - 'BATTLECRY'
+      - 'EQUIP_WEAPON'
+      - 'DISCOVER'
+      - 'HERO'
   SpellAction:
     type: 'object'
     description: |
@@ -1244,12 +1286,35 @@ definitions:
     properties:
       sourceId:
         description: |
-          The ID of the source card in your hand or the minion that originates this spell or battlecry.
+          The ID of the entity (minion or card) that originates this action
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
+      actionType:
+        $ref: '#/definitions/ActionType'
+      description:
+        type: 'string'
+        description: |
+          A user-readable description of this action.
+      entity:
+        $ref: '#/definitions/Entity'
+      choices:
+        type: 'array'
+        description: >
+          When set, represents a choose one action with entities set to render.
+
+          Those entities' id property corresponds to the choices's sourceId property. The parent/root action's
+          sourceId corresponds to the actual entity that reveals the choices.
+        items:
+          $ref: '#/definitions/SpellAction'
       action:
         description: |
-          The action for this spell. Defined when this spell is not targetable.
+          The action for this spell.
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
       targetKeyToActions:
         description: |
           An array of entity ID-action pairs that let you convert a valid target to an action index to respond with.
@@ -1257,74 +1322,6 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/TargetActionPair'
-  SummonAction:
-    description: |
-      A summon action that originates from a specific card.
-    type: 'object'
-    properties:
-      sourceId:
-        description: |
-          The ID of the source card in your hand.
-        type: 'integer'
-      indexToActions:
-        description: |
-          An array of index-action pairs that let you convert a battlefield location to an action index to
-          respond with.
-        type: 'array'
-        items:
-          description: |
-            A single index-action pair.
-          type: 'object'
-          properties:
-            index:
-              description: |
-                The position in the battlefield that corresponds to this summon action.
-              type: 'integer'
-            action:
-              description: |
-                The action index of this particular summon index position for this card.
-              type: 'integer'
-  ChooseOneOptions:
-    description: |
-      A prompt to choose from specified options.
-    type: 'object'
-    properties:
-      cardInHandId:
-        type: 'integer'
-        description: |
-          The card in the hand that corresponds to these two options.
-      entities:
-        type: 'array'
-        description: |
-          The virtual cards used to render the options.
-        items:
-          $ref: '#/definitions/Entity'
-      spells:
-        type: 'array'
-        description: |
-          The spells that correspond to the virtual entities. Their sourceId is set to the
-          corresponding virtual entity.
-        items:
-          $ref: '#/definitions/SpellAction'
-      summons:
-        type: 'array'
-        description: |
-          The summons that correspond to the virtual entities. Their sourceId is set to the
-          corresponding virtual entity.
-        items:
-          $ref: '#/definitions/SummonAction'
-      heroPowers:
-        type: 'array'
-        description: |
-          The spells that correspond to virtual hero power entities.
-        items:
-          $ref: '#/definitions/SpellAction'
-      heroes:
-        type: 'array'
-        description: |
-          Choose one hero cards corresponding to their virtual entities.
-        items:
-          $ref: '#/definitions/SpellAction'
   GameActions:
     description: |
       An object representing all valid game actions in this action request.
@@ -1337,82 +1334,13 @@ definitions:
         type: 'array'
         items:
           type: 'integer'
-      endTurn:
-        description: |
-          The end turn action. Not necessarily always available, because you cannot end your turn in the middle of
-          a discover or a battlecry. The value corresponds to which integer index to reply with.
-        type: 'integer'
-      physicalAttacks:
-        description: |
-          An array of entity ID - target IDs pairs that represent valid physical attacks.
-        type: 'array'
-        items:
-          type: 'object'
-          properties:
-            sourceId:
-              description: |
-                The entity (minion or hero) that corresponds to the source of this physical attack.
-              type: 'integer'
-            defenders:
-              description: |
-                Valid defenders for this attacker.
-              type: 'array'
-              items:
-                $ref: '#/definitions/TargetActionPair'
-      summons:
-        description: |
-          The cards in your hand that can be summoned. These are typically only minions.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SummonAction'
-      heroPower:
-        $ref: '#/definitions/SpellAction'
-      heroes:
-        description:
-          The cards in your hand that are heroes
+      all:
+        description: >
+          An array of actions containing source, target, type and a short description of the action. Some actions make
+          come with additional display data like a specific card, card ID or other content.
         type: 'array'
         items:
           $ref: '#/definitions/SpellAction'
-      spells:
-        description: |
-          The cards in your hand that are spells that take targets.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SpellAction'
-      battlecries:
-        description: |
-          A set of possible targetable battlecry actions.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SpellAction'
-      discoveries:
-        description: |
-          Card discovers.
-        type: 'array'
-        items:
-          description: |
-            Card IDs and their corresponding action indices.
-          type: 'object'
-          properties:
-            cardId:
-              type: 'integer'
-            action:
-              type: 'integer'
-      weapons:
-        description: |
-          The weapons in your hand that can be equipped. These are the equivalent of summons that only have a single
-          index, but do not require targeting on the battlefield.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SummonAction'
-      chooseOnes:
-        description: |
-          An array of choose one spells or summons. Each spell/summon is represented by a different card. An entity
-          that can be used to render a card for the option is provided. Use the spell action's card ID to figure out
-          which options correspond to which cards in the hand.
-        type: 'array'
-        items:
-          $ref: '#/definitions/ChooseOneOptions'
   Entity:
     type: 'object'
     properties:

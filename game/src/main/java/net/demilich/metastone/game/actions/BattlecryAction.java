@@ -28,16 +28,6 @@ public final class BattlecryAction extends GameAction {
 	private Condition condition;
 
 	/**
-	 * Creates a battlecry that performs the specify spell. Does not ask for target selection.
-	 *
-	 * @param spell The spell to cast for this battlecry action.
-	 * @return An instance
-	 */
-	public static BattlecryAction createBattlecry(SpellDesc spell) {
-		return createBattlecry(spell, TargetSelection.NONE);
-	}
-
-	/**
 	 * Creates a battlecry action that performs the specified spell and requests a target.
 	 * <p>
 	 * To filter the target, make sure to add a {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} to the

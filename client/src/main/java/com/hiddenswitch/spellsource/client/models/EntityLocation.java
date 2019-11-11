@@ -35,7 +35,7 @@ public class EntityLocation implements Serializable {
   private Integer i = null;
 
   /**
-   * The zone this entity belongs to. 
+   * Gets or Sets z
    */
   public enum ZEnum {
     N("N"),
@@ -122,10 +122,10 @@ public class EntityLocation implements Serializable {
   }
 
    /**
-   * The zone this entity belongs to. 
+   * Get z
    * @return z
   **/
-  @ApiModelProperty(required = true, value = "The zone this entity belongs to. ")
+  @ApiModelProperty(required = true, value = "")
   public ZEnum getZ() {
     return z;
   }

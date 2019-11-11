@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -39,6 +40,7 @@ import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NotNull;
@@ -109,261 +111,46 @@ public interface Games extends Verticle {
 	 * @return A list of game client actions.
 	 */
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
+		class ActionKey {
+			private int sourceReference;
+			private net.demilich.metastone.game.actions.ActionType actionType;
+
+			private ActionKey(GameAction gameAction) {
+				this.sourceReference = gameAction.getSourceReference() == null ? -1 : gameAction.getSourceReference().getId();
+				this.actionType = gameAction.getActionType();
+			}
+		}
+
+		Map<ActionKey, List<GameAction>> actionMap = actions.stream()
+				.unordered()
+				.collect(Collectors.groupingBy(ActionKey::new));
+
 		GameActions clientActions = new GameActions()
-				.battlecries(new ArrayList<>())
-				.chooseOnes(new ArrayList<>())
-				.compatibility(new ArrayList<>())
-				.discoveries(new ArrayList<>())
-				.heroes(new ArrayList<>())
-				.physicalAttacks(new ArrayList<>())
-				.spells(new ArrayList<>())
-				.summons(new ArrayList<>())
-				.weapons(new ArrayList<>());
-
-		// Get the minions' indices
-		Map<Integer, Integer> minionsOrWeapons = workingContext.getEntities()
-				.filter(e -> e.getEntityType() == EntityType.MINION || e.getEntityType() == EntityType.WEAPON)
-				.collect(Collectors.toMap(net.demilich.metastone.game.entities.Entity::getId, e -> e.getEntityLocation().getIndex()));
-
-		// Battlecries
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.BATTLECRY)
-				.map(ga -> (BattlecryAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> {
-					SpellAction spellAction = new SpellAction()
-							.sourceId(kv.getKey())
-							.targetKeyToActions(new ArrayList<>());
-
-					// Targetable battlecry
-					kv.getValue().stream()
-							.map(t -> new TargetActionPair()
-									.action(t.getId())
-									.target(t.getTargetReference().getId()))
-							.forEach(spellAction::addTargetKeyToActionsItem);
-
-					return spellAction;
-				})
-				.forEach(clientActions::addBattlecriesItem);
-
-		// Spells
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.SPELL
-						&& !(ga instanceof PlayChooseOneCardAction))
-				.map(ga -> (PlaySpellCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> {
-					Integer sourceCardId = kv.getKey();
-					List<PlaySpellCardAction> spellCardActions = kv.getValue();
-					return getSpellAction(sourceCardId, spellCardActions);
-				})
-				.forEach(clientActions::addSpellsItem);
-
-
-		// Choose one spells
-		int[] chooseOneVirtualEntitiesId = {8000};
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.SPELL
-						&& ga instanceof PlayChooseOneCardAction)
-				.map(ga -> (PlayChooseOneCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addSpellsItem))
-				.forEach(clientActions.getChooseOnes()::add);
-
-		// Next, choose one summons
-		// Choose one summons are actually SUMMON cards with different group indices from the same card
-		// First,  non-choose-one summons
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
-				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
-				.map(kv -> {
-					ChooseOneOptions summon = new ChooseOneOptions();
-					summon.cardInHandId(kv.getKey());
-					Card sourceCard = (Card) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
-					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
-
-					kv.getValue().stream()
-							.collect(Collectors.groupingBy(PlayMinionCardAction::getChooseOneOptionIndex))
-							.forEach((key, summonActions) -> {
-								int id = chooseOneVirtualEntitiesId[0];
-								SummonAction summonAction = getSummonAction(workingContext, id, minionsOrWeapons, summonActions, playerId);
-								// If it's a transform minion spell, use the entity representing the minion it's transforming into
-								// Otherwise, use the source card entity with the description in the option
-								Entity entity;
-								String transformCardId = sourceCard.getTransformMinionCardId(key);
-								boolean isTransform = transformCardId != null;
-								if (isTransform) {
-									entity = Games.getEntity(workingContext, CardCatalogue.getCardById(transformCardId), playerId);
-								} else {
-									entity = Games.getEntity(workingContext, sourceCard, playerId);
-									String battlecryDescription = sourceCard.getBattlecryDescription(key);
-									String battlecryName = sourceCard.getBattlecryName(key);
-									entity.id(id)
-											.name(battlecryName)
-											.description(battlecryDescription);
-								}
-
-								entity.id(id).playable(true)
-										.l(Games.toClientLocation(sourceCardLocation));
-
-								summon.addEntitiesItem(entity);
-								summon.addSummonsItem(summonAction);
-								chooseOneVirtualEntitiesId[0]++;
-							});
-
-					return summon;
-				}).forEach(clientActions.getChooseOnes()::add);
-
-		// Regular summons
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
-				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
-				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId)).forEach(clientActions::addSummonsItem);
-
-		// Heroes
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.HERO)
-				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
-				.map(kv -> getSpellAction(kv.getKey(), kv.getValue()))
-				.forEach(clientActions::addHeroesItem);
-
-		// Choose one heroes
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.HERO)
-				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
-				.map(kv -> {
-					ChooseOneOptions hero = new ChooseOneOptions();
-					hero.cardInHandId(kv.getKey());
-					Card sourceCard = (Card) workingContext.resolveSingleTarget(new EntityReference(kv.getKey()));
-					EntityLocation sourceCardLocation = sourceCard.getEntityLocation();
-
-					kv.getValue().stream()
-							.collect(Collectors.groupingBy(PlayHeroCardAction::getChooseOneOptionIndex))
-							.forEach((key, battlecries) -> {
-								int id = chooseOneVirtualEntitiesId[0];
-								SpellAction spellAction = getSpellAction(id, battlecries);
-								// If it's a transform minion spell, use the entity representing the minion it's transforming into
-								// Otherwise, use the source card entity with the description in the option
-								Entity entity = Games.getEntity(workingContext, sourceCard, playerId);
-								String battlecryDescription = sourceCard.getBattlecryDescription(key);
-								entity.id(id)
-										.description(battlecryDescription).playable(true)
-										.l(Games.toClientLocation(sourceCardLocation));
-
-								hero.addEntitiesItem(entity);
-								hero.addHeroesItem(spellAction);
-								chooseOneVirtualEntitiesId[0]++;
-							});
-
-					return hero;
-				}).forEach(clientActions.getChooseOnes()::add);
-
-		// Physical attacks
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK)
-				.map(ga -> (PhysicalAttackAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getAttackerReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> new GameActionsPhysicalAttacks()
-						.sourceId(kv.getKey())
-						.defenders(kv.getValue().stream().map(ga ->
-								new TargetActionPair().target(ga.getTargetReference().getId())
-										.action(ga.getId())
-						).collect(toList())))
-				.forEach(clientActions::addPhysicalAttacksItem);
-
-		// Hero powers
-		Optional<SpellAction> heroPowerSpell = actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
-				.map(ga -> (HeroPowerAction) ga)
-				.filter(ga -> ga.getChooseOneOptionIndex() == null)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> getSpellAction(kv.getKey(), kv.getValue())).findFirst();
-
-		heroPowerSpell.ifPresent(clientActions::heroPower);
-
-		// Choose one hero powers
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
-				.map(ga -> (HeroPowerAction) ga)
-				.filter(ga -> ga.getChooseOneOptionIndex() != null)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addHeroPowersItem))
-				.forEach(clientActions.getChooseOnes()::add);
-
-		// Weapons
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.EQUIP_WEAPON)
-				.map(ga -> (PlayWeaponCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
-				.entrySet()
-				.stream()
-				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId))
-				.forEach(clientActions::addWeaponsItem);
-
-		// discovers
-		actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.DISCOVER)
-				.map(ga -> (DiscoverAction) ga)
-				.map(da -> new GameActionsDiscoveries()
-						.action(da.getId())
-						.cardId(da.getCard().getId()))
-				.forEach(clientActions::addDiscoveriesItem);
-
-
-		// End Turn
-		actions
-				.stream()
-				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
-				.map(ga -> (EndTurnAction) ga)
-				.findFirst()
-				.ifPresent(endTurnAction1 -> clientActions.endTurn(endTurnAction1.getId()));
-
-		// Fix choose ones
-		clientActions.getChooseOnes().forEach(chooseOneOptions -> {
-			if (chooseOneOptions.getHeroes() == null) {
-				chooseOneOptions.setHeroes(Collections.emptyList());
-			}
-			if (chooseOneOptions.getEntities() == null) {
-				chooseOneOptions.setEntities(Collections.emptyList());
-			}
-			if (chooseOneOptions.getHeroPowers() == null) {
-				chooseOneOptions.setHeroPowers(Collections.emptyList());
-			}
-			if (chooseOneOptions.getSpells() == null) {
-				chooseOneOptions.setSpells(Collections.emptyList());
-			}
-			if (chooseOneOptions.getSummons() == null) {
-				chooseOneOptions.setSummons(Collections.emptyList());
-			}
-		});
+				.all(
+						actionMap.entrySet()
+								.stream()
+								.unordered()
+								.map(kv -> {
+									if (kv.getValue().size() == 1 && kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
+										GameAction ga = kv.getValue().get(0);
+										return new SpellAction()
+												.action(ga.getId())
+												.entity(ga instanceof net.demilich.metastone.game.entities.HasCard ?
+														getEntity(workingContext, ((net.demilich.metastone.game.entities.HasCard) ga).getSourceCard(), playerId) : null)
+												.sourceId(kv.getKey() == null ? playerId : kv.getKey().sourceReference)
+												.description(ga.getDescription(workingContext, playerId))
+												.actionType(ActionType.valueOf(ga.getActionType().name()));
+									} else {
+										return new SpellAction()
+												.sourceId(kv.getKey() == null ? playerId : kv.getKey().sourceReference)
+												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
+												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
+														.action(ga.getId())
+														.target(ga.getTargetReference() == null ? -1 : ga.getTargetReference().getId())).collect(toList()));
+									}
+								})
+								.collect(toList())
+				);
 
 		// Add all the action indices for compatibility purposes
 		clientActions.compatibility(actions.stream()
@@ -371,83 +158,6 @@ public interface Games extends Verticle {
 				.collect(toList()));
 
 		return clientActions;
-	}
-
-	/**
-	 * Builds choose one options from a choice card, incrementing the {@code chooseOneVirtualEntitiesId} for every virtual
-	 * entity it has added using {@code adder}.
-	 *
-	 * @param workingContext             A {@link GameContext} to query for state.
-	 * @param playerId                   The point of view whom we should build the choices from.
-	 * @param chooseOneVirtualEntitiesId A single-element array whose item is used to "out" the incremented entities ID
-	 *                                   (i.e., {@code chooseOneVirtualEntitiesId[0]++})
-	 * @param sourceId                   The source card's entity ID.
-	 * @param choices                    The list of {@link PlayCardAction} choices.
-	 * @param adder                      A method that accepts a {@link SpellAction} to return to the user.
-	 * @param <T>                        The particular action type that supports the interface {@link HasChoiceCard}
-	 * @return The choose one options.
-	 */
-	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
-		ChooseOneOptions spell = new ChooseOneOptions();
-		EntityLocation sourceCardLocation = workingContext.resolveSingleTarget(choices.get(0).getSourceReference()).getEntityLocation();
-		spell.cardInHandId(sourceId);
-
-		Map<String, List<T>> intermediate = choices.stream()
-				// Solves LambdaConversionException
-				.collect(Collectors.groupingBy(s -> s.getChoiceCardId()));
-
-
-		for (String cardId : intermediate.keySet()) {
-			List<T> choiceActions = intermediate.get(cardId);
-
-			Entity entity = Games.getEntity(workingContext, CardCatalogue.getCardById(cardId), playerId);
-			int id = chooseOneVirtualEntitiesId[0];
-
-			// Use the source card location
-			entity.id(id)
-					.playable(true)
-					.l(Games.toClientLocation(sourceCardLocation));
-			SpellAction choiceSpell = getSpellAction(id, choiceActions);
-
-			spell.addEntitiesItem(entity);
-			adder.accept(spell, choiceSpell);
-
-			chooseOneVirtualEntitiesId[0]++;
-		}
-
-		return spell;
-	}
-
-	/**
-	 * Builds a summon action from a minion card.
-	 *
-	 * @param workingContext
-	 * @param sourceCardId
-	 * @param minionEntityIdToLocation
-	 * @param summonActions
-	 * @param playerId
-	 * @return
-	 */
-	static SummonAction getSummonAction(GameContext workingContext, Integer sourceCardId, Map<Integer, Integer> minionEntityIdToLocation, List<? extends PlayCardAction> summonActions, int playerId) {
-		SummonAction summonAction = new SummonAction()
-				.sourceId(sourceCardId)
-				.indexToActions(summonActions.stream()
-						.filter(a -> a.getTargetReference() != null)
-						.map(a -> new SummonActionIndexToActions()
-								.action(a.getId())
-								.index(minionEntityIdToLocation.get(a.getTargetReference().getId()))).collect(toList()));
-
-		// Add the null targeted action, if it exists
-		Optional<? extends PlayCardAction> nullPlay = summonActions.stream()
-				.filter(a -> a.getTargetReference() == null).findFirst();
-		if (nullPlay.isPresent()) {
-			GameAction a = nullPlay.get();
-			summonAction.addIndexToActionsItem(
-					new SummonActionIndexToActions()
-							.action(a.getId())
-							.index(workingContext.getPlayer(playerId).getMinions().size()));
-		}
-		return summonAction;
 	}
 
 	/**

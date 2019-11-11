@@ -32,10 +32,10 @@ public class TargetActionPair implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("target")
-  private Integer target = null;
+  private Integer target = -1;
 
   @JsonProperty("action")
-  private Integer action = null;
+  private Integer action = -1;
 
   public TargetActionPair target(Integer target) {
     this.target = target;

@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **i** | **Integer** | The index of the entity inside its zone.  | 
-**z** | [**ZEnum**](#ZEnum) | The zone this entity belongs to.  | 
+**z** | [**ZEnum**](#ZEnum) |  | 
 
 
 <a name="ZEnum"></a>
