@@ -450,7 +450,6 @@ public class UnityClient implements AutoCloseable {
 		context.assertNotNull(message.getChanges());
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
-		context.assertTrue(message.getChanges().stream().allMatch(e -> e >= 0));
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.PLAYER).count() == 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() >= 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
@@ -464,7 +463,7 @@ public class UnityClient implements AutoCloseable {
 					h.getMaxMana() >= 1));
 		}
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
-		final Set<Integer> changeIds = new HashSet<>(message.getChanges());
+		final Set<Integer> changeIds = new HashSet<>(message.getChanges().getIds());
 		final boolean contains = entityIds.containsAll(changeIds);
 		if (!contains) {
 			context.fail(/*message.toString()*/ "An ID is missing! " + Sets.difference(changeIds, entityIds).toString());

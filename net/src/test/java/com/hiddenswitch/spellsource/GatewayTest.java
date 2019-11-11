@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -240,8 +241,9 @@ public class GatewayTest extends SpellsourceTestBase {
 			try (UnityClient client = new UnityClient(context) {
 				@Override
 				protected int getActionIndex(ServerToClientMessage message) {
-					if (message.getActions().getEndTurn() != null) {
-						return message.getActions().getEndTurn();
+					Optional<SpellAction> endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+					if (endTurn.isPresent()) {
+						return endTurn.get().getAction();
 					}
 					return super.getActionIndex(message);
 				}

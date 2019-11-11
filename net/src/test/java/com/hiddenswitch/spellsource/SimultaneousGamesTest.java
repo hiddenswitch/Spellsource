@@ -3,7 +3,9 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiException;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
+import com.hiddenswitch.spellsource.client.models.SpellAction;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -17,10 +19,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -44,11 +43,12 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 					@Override
 					protected int getActionIndex(ServerToClientMessage message) {
 						// Always return end turn so that we end the game in a fatigue duel
-						if (message.getActions().getEndTurn() != null) {
-							return message.getActions().getEndTurn();
-						} else {
-							return super.getActionIndex(message);
+						Optional<SpellAction> endTurn = message.getActions().getAll().stream()
+								.filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+						if (endTurn.isPresent()) {
+							return endTurn.get().getAction();
 						}
+						return super.getActionIndex(message);
 					}
 				}) {
 					client.createUserAccount(null);
