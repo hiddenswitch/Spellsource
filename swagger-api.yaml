@@ -1260,6 +1260,12 @@ definitions:
         format: 'int32'
         default: -1
         x-nullable: false
+      friendlyBattlefieldIndex:
+        description: >
+          The corresponding index on the friendly side of the battlefield for a summon action.
+
+          The minion will be summoned to the left of this index.
+        type: 'integer'
       action:
         type: 'integer'
         format: 'int32'
