@@ -2820,6 +2820,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
+	/**
+	 * Sets the cards that the player discarded during the mulligan phase.
+	 *
+	 * @param player
+	 * @param begins
+	 * @param discardedCards
+	 */
 	@Suspendable
 	public void handleMulligan(Player player, boolean begins, List<Card> discardedCards) {
 		// Get the entity ids of the discarded cards and then replace the discarded cards with them

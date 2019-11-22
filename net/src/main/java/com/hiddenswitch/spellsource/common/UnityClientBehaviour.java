@@ -309,6 +309,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
+	/**
+	 * Handles a mulligan from a Unity client.
+	 * <p>
+	 * The starting hand is also sent in the {@link net.demilich.metastone.game.targeting.Zones#SET_ASIDE_ZONE}, where the
+	 * index in the set aside zone corresponds to the index that should be sent to discard.
+	 *
+	 * @param messageId
+	 * @param discardedCardIndices A list of indices in the list of starter cards that should be discarded.
+	 */
 	@Suspendable
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
 		requestsLock.lock();
@@ -669,6 +678,17 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
 
+	/**
+	 * Sends a mulligan request to a Unity client.
+	 * <p>
+	 * The {@link net.demilich.metastone.game.targeting.Zones#SET_ASIDE_ZONE} will contain the cards that can be
+	 * mulliganned.
+	 *
+	 * @param id
+	 * @param state    The game state
+	 * @param cards    The cards that can be discarded
+	 * @param playerId The player doing the discards
+	 */
 	@Override
 	@Suspendable
 	public void onMulligan(String id, com.hiddenswitch.spellsource.common.GameState state, List<Card> cards, int playerId) {
