@@ -406,10 +406,19 @@ public interface Accounts {
 				return new LoginResponse(true, false);
 			}
 
-			if (request.getPassword() != null
-					&& !SCryptUtil.check(request.getPassword(), userRecord.getServices().getPassword().getScrypt())) {
-				span.setTag("badPassword", true);
-				return new LoginResponse(false, true);
+			if (request.getPassword() != null) {
+				boolean check = false;
+				try {
+					check = SCryptUtil.check(request.getPassword(), userRecord.getServices().getPassword().getScrypt());
+				} catch (IllegalArgumentException notHashed) {
+					LOGGER.error("Not hashed correctly for user {}", userRecord.getUsername(), notHashed);
+					Tracing.error(notHashed, span, false);
+				} finally {
+					if (!check) {
+						span.setTag("badPassword", true);
+						return new LoginResponse(false, true);
+					}
+				}
 			}
 
 			// Since we don't store the tokens unhashed, we have to add this token always. We slice down five tokens.

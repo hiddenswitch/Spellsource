@@ -1356,6 +1356,7 @@ definitions:
         format: 'int32'
         default: -1
         x-nullable: false
+        x-unity-serializable: true
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
         type: 'string'

@@ -15,9 +15,7 @@ import io.vertx.core.Vertx;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
@@ -42,7 +40,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +49,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -139,36 +137,48 @@ public interface Games extends Verticle {
 				.unordered()
 				.collect(Collectors.groupingBy(ActionKey::new));
 		EntityZone<Minion> friendlyMinions = workingContext.getPlayer(playerId).getMinions();
+		CardZone discovers = workingContext.getPlayer(playerId).getDiscoverZone();
 		GameActions clientActions = new GameActions()
 				.all(
 						actionMap.entrySet()
 								.stream()
 								.unordered()
-								.map(kv -> {
-									if (kv.getValue().size() == 1 && kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
-										GameAction ga = kv.getValue().get(0);
-										return new SpellAction()
-												.sourceId(kv.getKey().sourceReference)
-												.action(ga.getId())
-												.entity(ga instanceof net.demilich.metastone.game.entities.HasCard ?
-														getEntity(workingContext, ((net.demilich.metastone.game.entities.HasCard) ga).getSourceCard(), playerId) : null)
-												.description(ga.getDescription(workingContext, playerId))
-												.actionType(ActionType.valueOf(ga.getActionType().name()));
-									} else if (kv.getKey().actionType == net.demilich.metastone.game.actions.ActionType.SUMMON) {
-										return new SpellAction()
+								.flatMap(kv -> {
+									if (kv.getKey().actionType == net.demilich.metastone.game.actions.ActionType.SUMMON) {
+										return Stream.of(new SpellAction()
 												.sourceId(kv.getKey().sourceReference)
 												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
 												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
 														.action(ga.getId())
 														.friendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(), ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
-														.target(ga.getTargetReference() == null ? -1 : ga.getTargetReference().getId())).collect(toList()));
+														.target((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 : ga.getTargetReference().getId())).collect(toList())));
+									} else if (kv.getKey().actionType == net.demilich.metastone.game.actions.ActionType.DISCOVER) {
+										// Find the corresponding cards in the discover zone
+										kv.getValue().sort(Comparator.comparingInt(GameAction::getId));
+										return IntStream.range(0, discovers.size())
+												.mapToObj(i -> {
+													GameAction sourceAction = kv.getValue().get(i);
+													return new SpellAction()
+															.sourceId(discovers.get(i).getId())
+															.action(sourceAction.getId())
+															.actionType(ActionType.DISCOVER);
+												});
+									} else if (kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
+										GameAction ga = kv.getValue().get(0);
+										return Stream.of(new SpellAction()
+												.sourceId(kv.getKey().sourceReference)
+												.action(ga.getId())
+												.entity(ga instanceof net.demilich.metastone.game.entities.HasCard ?
+														getEntity(workingContext, ((net.demilich.metastone.game.entities.HasCard) ga).getSourceCard(), playerId) : null)
+												.description(ga.getDescription(workingContext, playerId))
+												.actionType(ActionType.valueOf(ga.getActionType().name())));
 									} else {
-										return new SpellAction()
+										return Stream.of(new SpellAction()
 												.sourceId(kv.getKey().sourceReference)
 												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
 												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
 														.action(ga.getId())
-														.target(ga.getTargetReference() == null ? -1 : ga.getTargetReference().getId())).collect(toList()));
+														.target((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 : ga.getTargetReference().getId())).collect(toList())));
 									}
 								})
 								.collect(toList())
