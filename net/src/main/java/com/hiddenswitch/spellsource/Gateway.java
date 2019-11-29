@@ -12,6 +12,7 @@ import io.vertx.core.VertxException;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.impl.Utils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -120,7 +121,7 @@ public interface Gateway extends Verticle {
 	DateFormat DATE_TIME_FORMATTER = Utils.createRFC1123DateTimeFormatter();
 
 	static Gateway create() {
-		return new GatewayImpl(Port.port());
+		return new GatewayImpl(Configuration.apiGatewayPort());
 	}
 
 	static Gateway create(int port) {
@@ -212,17 +213,17 @@ public interface Gateway extends Verticle {
 	}
 
 	/**
-	 * Retrieves a local-network-accessible IPv4 valid hostname for this instance by heuristically picking the "primary"
-	 * network interface on this device.
+	 * Retrieves a local-network-accessible IPv4 address for this instance by heuristically picking the "primary" network
+	 * interface on this device.
 	 *
-	 * @return A string
+	 * @return A string in the form of "192.168.0.1"
 	 */
-	@Nullable
-	static String getHostAddress() {
+	@NotNull
+	static String getHostIpAddress() {
 		try {
 			final InterfaceAddress hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);
 			if (hostAddress == null) {
-				return null;
+				return "127.0.0.1";
 			}
 			return hostAddress.getAddress().getHostAddress();
 		} catch (Throwable ex) {

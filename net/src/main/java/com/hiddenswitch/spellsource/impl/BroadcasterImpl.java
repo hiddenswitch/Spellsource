@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.Gateway;
-import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.Configuration;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -36,11 +36,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 	}
 
 	private DatagramSocket createDatagramSocket(final NetworkInterface networkInterface, Future<Void> isListening) throws SocketException {
-		final String host = Gateway.getHostAddress();
-		if (host == null) {
-			isListening.fail("No valid IPv4 host address found.");
-			return null;
-		}
+		String host = Gateway.getHostIpAddress();
 
 		return vertx.createDatagramSocket(new DatagramSocketOptions()
 				.setReuseAddress(true)
@@ -55,7 +51,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 
 							logger.debug("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Port.port() + "/", getMulticastPort(), getMulticastAddress(), Future.future());
+							socket.send(getResponsePrefix() + "http://" + host + ":" + Configuration.apiGatewayPort() + "/", getMulticastPort(), getMulticastAddress(), Future.future());
 						});
 
 						isListening.complete();

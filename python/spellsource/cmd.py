@@ -425,6 +425,12 @@ def run(mongo_url: str = None, gradle_cmd: str = 'gradle', default_gradle: bool 
 
     Starts a mongod instance if installed and no MONGO_URL environment variable is specified.
 
+    Additional configuration can be set with the following environment variables:
+
+      PORT=8080                The HTTP serving port (TCP)
+      VERTX_CLUSTER_PORT=5701  The cluster traffic port (TCP)
+      ATOMIX_PORT=5710         The management traffic port (TCP)
+
     If gradle is not installed, uses the local distribution.
     """
     from subprocess import Popen, DEVNULL

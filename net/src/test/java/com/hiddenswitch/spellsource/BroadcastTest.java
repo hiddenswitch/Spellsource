@@ -6,15 +6,11 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.NetworkInterface;
-import java.net.SocketException;
 
 @RunWith(VertxUnitRunner.class)
 public class BroadcastTest {
@@ -34,7 +30,7 @@ public class BroadcastTest {
 		Vertx vertx = contextRule.vertx();
 		vertx.exceptionHandler(context.exceptionHandler());
 		Broadcaster verticle = Broadcaster.create();
-		String expectedHostname = Gateway.getHostAddress();
+		String expectedHostname = Gateway.getHostIpAddress();
 		Async async = context.async();
 
 		vertx.deployVerticle(verticle, context.asyncAssertSuccess(then -> {
@@ -50,9 +46,9 @@ public class BroadcastTest {
 										if (packetData.equals(verticle.getClientCall())) {
 											return;
 										}
-										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Port.port() + "/");
-										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Port.port() + "/");
-										context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Port.port() + "/");
+										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Configuration.apiGatewayPort() + "/");
+										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Configuration.apiGatewayPort() + "/");
+										context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Configuration.apiGatewayPort() + "/");
 										async.complete();
 									});
 									socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
