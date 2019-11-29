@@ -14,4 +14,4 @@ java --add-modules java.se \
   --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
   --add-opens java.management/sun.management=ALL-UNNAMED \
   --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED \
-  -cp /data/net-${SPELLSOURCE_VERSION}.jar com.hiddenswitch.spellsource.applications.Local
+  -cp /data/net-${SPELLSOURCE_VERSION}.jar com.hiddenswitch.spellsource.applications.Clustered

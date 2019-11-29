@@ -16,6 +16,7 @@ public interface Cluster {
 
 	static Atomix create(int port, Node... bootstrapNodes) {
 		AtomixBuilder atomixBuilder = Atomix.builder()
+				.withMemberId(String.format("spellsource-atomix-%s-%d", Gateway.getHostIpAddress(), port))
 				.withHost("0.0.0.0")
 				.withPort(port);
 		if (bootstrapNodes.length == 0) {

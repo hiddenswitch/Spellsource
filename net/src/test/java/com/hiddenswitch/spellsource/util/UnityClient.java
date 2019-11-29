@@ -8,7 +8,7 @@ import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Matchmaking;
-import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.Configuration;
 import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
@@ -41,7 +41,7 @@ public class UnityClient implements AutoCloseable {
 	private static Logger LOGGER = LoggerFactory.getLogger(UnityClient.class);
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
-	public static String BASE_PATH = BASE + Integer.toString(Port.port());
+	public static String BASE_PATH = BASE + Integer.toString(Configuration.apiGatewayPort());
 	private final Tracer tracer = Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0);
 	private final Span parentSpan;
 	private int id;
