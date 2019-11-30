@@ -56,7 +56,6 @@ appender("STDOUT", ConsoleAppender) {
 root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 
 logger("io.netty", ERROR)
-logger("com.hazelcast", ERROR)
 logger("io.atomix", WARN)
 logger("org.reflections", ERROR)
 logger("co.paralleluniverse", ERROR)

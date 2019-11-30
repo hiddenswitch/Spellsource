@@ -100,8 +100,6 @@ public interface Accounts {
 
 	/**
 	 * Creates an account.
-	 * <p>
-	 * The first user created on the database will gain the {@link Authorities#ADMINISTRATIVE} authority.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
@@ -118,7 +116,7 @@ public interface Accounts {
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("Accounts/createAccount")
 				.withTag("name", request.getName())
-				.withTag("emailAddres", request.getEmailAddress())
+				.withTag("emailAddress", request.getEmailAddress())
 				.withTag("isBot", request.isBot())
 				.start();
 		Scope scope = tracer.activateSpan(span);
@@ -137,14 +135,14 @@ public interface Accounts {
 				return response;
 			}
 
-			final String password = request.getPassword();
+			String password = request.getPassword();
 			if (!isValidPassword(password)) {
 				response.setInvalidPassword(true);
 				span.setTag("invalidPassword", true);
 				return response;
 			}
 
-			final String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
+			String userId = RandomStringUtils.randomAlphanumeric(36).toLowerCase();
 			UserRecord record = new UserRecord(userId);
 			EmailRecord email = new EmailRecord();
 			email.setAddress(request.getEmailAddress());
@@ -167,12 +165,6 @@ public interface Accounts {
 			PasswordRecord passwordRecord = new PasswordRecord();
 			passwordRecord.setScrypt(scrypt);
 			record.getServices().setPassword(passwordRecord);
-
-			// The first user on the server is automatically the administrator
-			if (mongo().count(USERS, json()) == 0L) {
-				span.setTag("administrative", true);
-				record.getRoles().add(Authorities.ADMINISTRATIVE.name());
-			}
 
 			mongo().insert(USERS, mapFrom(record));
 
@@ -211,10 +203,10 @@ public interface Accounts {
 	 * Validates that a password is not null and at least of length 1.
 	 *
 	 * @param password The password, in plaintext, to check.
-	 * @return {@code true} if the password is not {@code null} and its length is at least 1.
+	 * @return {@code true} if the password is not {@code null} and its length is at least 4.
 	 */
 	static boolean isValidPassword(String password) {
-		return password != null && password.length() >= 1;
+		return password != null && password.length() >= 4;
 	}
 
 	/**
@@ -521,12 +513,14 @@ public interface Accounts {
 				throw new SecurityException("Invalid password.");
 			}
 
-			final String scrypt = Accounts.securedPassword(request.getPassword());
+			String scrypt = Accounts.securedPassword(request.getPassword());
 
+			// Set new password hash, clear all login tokens
 			MongoClientUpdateResult result = mongo().updateCollection(USERS,
 					json(MongoRecord.ID, record.getId()),
 					json("$set", json(
-							UserRecord.SERVICES_PASSWORD_SCRYPT, scrypt
+							UserRecord.SERVICES_PASSWORD_SCRYPT, scrypt,
+							UserRecord.SERVICES_RESUME_LOGIN_TOKENS, array()
 					)));
 			LOGGER.debug("changePassword: Changed password for userId={}, username={}", record.getId(), record.getUsername());
 
@@ -750,28 +744,5 @@ public interface Accounts {
 						routingContext.response().end();
 					}
 				}));
-	}
-
-	/**
-	 * Represents authorities and ways to add and remove them from {@link UserRecord} instances.
-	 * <p>
-	 * Used with {@link com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler#addAuthority(String)} and {@link
-	 * io.vertx.ext.auth.User#isAuthorized(String, Handler)}.
-	 */
-	enum Authorities {
-		/**
-		 * Indicates this user is administative
-		 */
-		ADMINISTRATIVE((user) -> user.getRoles() != null && user.getRoles().contains("ADMINISTRATIVE"));
-
-		private final Function<UserRecord, Boolean> has;
-
-		Authorities(Function<UserRecord, Boolean> has) {
-			this.has = has;
-		}
-
-		public boolean has(UserRecord record) {
-			return this.has.apply(record);
-		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.impl.PersistenceContextImpl;
@@ -24,7 +25,11 @@ public class Persistence {
 				continue;
 			}
 
-			handler1.getHandler().handle(new PersistenceContextImpl(event, handler1.getId(), handler1.getAttribute()));
+			try {
+				handler1.getHandler().call(new PersistenceContextImpl(event, handler1.getId(), handler1.getAttribute()));
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+				throw new RuntimeException(suspendExecution);
+			}
 		}
 	}
 

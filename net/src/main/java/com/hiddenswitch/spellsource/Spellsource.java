@@ -439,10 +439,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(26)
 						.withUp(thisVertx -> {
-							// DoctorPangloss is the first and only admin user
-							mongo().updateCollectionWithOptions(Accounts.USERS, json(), json("$set", json(UserRecord.ROLES, array())), new UpdateOptions().setMulti(true));
-							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
-							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
+							// No more administrative behaviour
 						}))
 				.add(new MigrationRequest()
 						.withVersion(27)
@@ -607,7 +604,15 @@ public class Spellsource {
 							changeCardId("minion_thassarian", "minion_the_vein_wyrm");
 							changeCardId("weapon_souldrinker_axe", "weapon_consuming_blade");
 						}))
-				.migrateTo(37, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(38)
+						.withUp(thisVertx -> {
+							mongo().updateCollectionWithOptions(Accounts.USERS,
+									json(),
+									json("$unset", json("roles", null)),
+									new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(38, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -670,7 +675,7 @@ public class Spellsource {
 		if (getPersistAttributeHandlers().containsKey(id)) {
 			return this;
 		}
-		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(suspendableHandler(handler), id, event, attribute));
+		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(handler, id, event, attribute));
 		return this;
 	}
 
