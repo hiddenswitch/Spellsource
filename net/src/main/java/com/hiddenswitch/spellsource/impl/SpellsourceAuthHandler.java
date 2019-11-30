@@ -29,12 +29,12 @@ public class SpellsourceAuthHandler implements AuthHandler {
 	@Override
 	public AuthHandler addAuthority(String authority) {
 		// Authorities are not supported
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("authorities are not supported");
 	}
 
 	@Override
 	public AuthHandler addAuthorities(Set<String> authorities) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("authorities are not supported");
 	}
 
 	@Override
@@ -62,29 +62,24 @@ public class SpellsourceAuthHandler implements AuthHandler {
 
 	@Override
 	public void authorize(User user, Handler<AsyncResult<Void>> handler) {
-		if (user == null) {
-			handler.handle(Future.failedFuture(new SecurityException("Null user in SpellsourceAuthHandler")));
-		} else {
-			// We don't support authorities, so go ahead and authorize the user.
-			handler.handle(Future.succeededFuture());
-		}
+		throw new UnsupportedOperationException("authorities are not supported");
 	}
 
 	@Override
 	public void handle(RoutingContext event) {
 		parseCredentials(event, credentials -> {
 			if (credentials.failed()) {
-				final String message = "Parse failed: " + credentials.cause().getMessage();
+				String message = "Parse failed: " + credentials.cause().getMessage();
 				fail(event, message);
 				return;
 			}
 
-			final String userId = credentials.result().getString("userId");
-			final String secret = credentials.result().getString("secret");
-			final String token = userId + ":" + secret;
+			String userId = credentials.result().getString("userId");
+			String secret = credentials.result().getString("secret");
+			String token = userId + ":" + secret;
 
 			Vertx.currentContext().runOnContext(v1 -> {
-				Vertx.currentContext().runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
+				Vertx.currentContext().runOnContext(suspendableHandler(v2 -> {
 					UserRecord record = Accounts.getWithToken(token);
 					event.setUser(record);
 					if (record == null) {

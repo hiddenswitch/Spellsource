@@ -1,10 +1,9 @@
 package com.hiddenswitch.spellsource;
 
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.models.CreateAccountResponse;
-import com.hiddenswitch.spellsource.models.LoginRequest;
-import com.hiddenswitch.spellsource.models.LoginResponse;
+import com.hiddenswitch.spellsource.models.*;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +16,29 @@ import static net.demilich.metastone.tests.util.TestBase.assertThrows;
 import static org.junit.Assert.*;
 
 public class AccountsTest extends SpellsourceTestBase {
+
+	@Test
+	public void testChangePassword(TestContext context) {
+		sync(() -> {
+			CreateAccountResponse account = createRandomAccount();
+			assertTrue(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
+			ChangePasswordResponse res = Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "test"));
+			assertFalse("should log out user", Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
+		}, context);
+	}
+
+	@Test
+	public void testChangePasswordRejectsInvalidPassword(TestContext context) {
+		sync(() -> {
+			CreateAccountResponse account = createRandomAccount();
+			assertTrue(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
+			assertThrows(SecurityException.class, () -> {
+				ChangePasswordResponse res = Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "*"));
+			});
+			assertTrue("should not log out user", Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
+		}, context);
+	}
+
 	@Test
 	public void testCreateAccount(TestContext context) throws Exception {
 		sync(() -> {

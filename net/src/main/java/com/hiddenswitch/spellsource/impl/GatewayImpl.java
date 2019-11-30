@@ -83,8 +83,11 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		logger.info("start: Configuring router on instance {}", this.deploymentID());
 
-		final AuthHandler authHandler = SpellsourceAuthHandler.create();
-		final BodyHandler bodyHandler = BodyHandler.create();
+		AuthHandler authHandler = SpellsourceAuthHandler.create();
+		BodyHandler bodyHandler = BodyHandler.create()
+				.setBodyLimit(Configuration.maxBodyBytes())
+				.setHandleFileUploads(false)
+				.setPreallocateBodyBuffer(true);
 
 		// Handle all realtime messaging here
 		router.route("/realtime")
