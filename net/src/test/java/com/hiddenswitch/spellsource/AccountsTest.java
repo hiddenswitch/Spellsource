@@ -1,10 +1,17 @@
 package com.hiddenswitch.spellsource;
 
+import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.Sync;
+import com.hiddenswitch.spellsource.util.UnityClient;
+import io.vertx.core.MultiMap;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.web.client.HttpResponse;
+import io.vertx.ext.web.client.WebClient;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -12,6 +19,7 @@ import org.junit.Test;
 import java.sql.Date;
 import java.time.Instant;
 
+import static io.vertx.ext.sync.Sync.awaitResult;
 import static net.demilich.metastone.tests.util.TestBase.assertThrows;
 import static org.junit.Assert.*;
 
@@ -119,4 +127,56 @@ public class AccountsTest extends SpellsourceTestBase {
 		}, context);
 	}
 
+
+	@Test
+	public void testPasswordReset(TestContext context) {
+		sync(() -> {
+			try (UnityClient client = new UnityClient(context)) {
+				Sync.invoke0(client::createUserAccount);
+				String token = Accounts.createResetToken(client.getUserId().toString()).getToken();
+				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
+				/*
+				HttpResponse<Buffer> res = awaitResult(h -> WebClient.create(contextRule.vertx())
+						.post(client.getApiClient().getBasePath() + "/reset/passwords/with-token")
+						.addQueryParam("token", token)
+						.sendForm(MultiMap.caseInsensitiveMultiMap()
+								.add("password1", "test")
+								.add("password2", "test"), h));
+				*/
+
+				try (UnityClient client2 = new UnityClient(context)) {
+					com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
+					context.assertNotNull(res2.getLoginToken());
+				}
+			}
+		}, context);
+	}
+
+	@Test
+	public void testPasswordResetWrongToken(TestContext context) {
+		sync(() -> {
+			try (UnityClient client = new UnityClient(context)) {
+				Sync.invoke0(client::createUserAccount);
+				String token = "faketoken";
+				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
+				/*
+				HttpResponse<Buffer> res = awaitResult(h -> WebClient.create(contextRule.vertx())
+						.post(client.getApiClient().getBasePath() + "/reset/passwords/with-token")
+						.addQueryParam("token", token)
+						.sendForm(MultiMap.caseInsensitiveMultiMap()
+								.add("password1", "test")
+								.add("password2", "test"), h));
+				*/
+
+				try (UnityClient client2 = new UnityClient(context)) {
+					try {
+						com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
+						context.fail("should not reach");
+					} catch (RuntimeException ex) {
+						context.assertTrue(((ApiException) ex.getCause()).getResponseBody().contains("Bad password"));
+					}
+				}
+			}
+		}, context);
+	}
 }

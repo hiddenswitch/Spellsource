@@ -660,26 +660,31 @@ public interface Accounts {
 
 		router.route(resetUrl)
 				.method(HttpMethod.POST)
-				.handler(Sync.suspendableHandler(routingContext -> {
+				.handler(HandlerFactory.returnUnhandledExceptions(routingContext -> {
 					routingContext.response().setStatusCode(303);
 
 					String password1 = routingContext.request().getFormAttribute("password1");
 					String password2 = routingContext.request().getFormAttribute("password2");
 
-					if (!password1.equals(password2) || !Accounts.isValidPassword(password1)) {
+					if (!Objects.equals(password1, password2) || !Accounts.isValidPassword(password1)) {
 						routingContext.response().putHeader("Location", "passwordsdidnotmatch.html");
 						routingContext.response().end();
 						return;
 					}
 
 					Cookie cookie = routingContext.getCookie("token");
+					String token;
 					if (cookie == null) {
+						token = routingContext.queryParams().get("token");
+					} else {
+						token = cookie.getValue();
+					}
+					if (token == null) {
 						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
 
-					String token = cookie.getValue();
 					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
 					if (passwordResetRecord == null || System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
 						routingContext.response().putHeader("Location", "passwordresetexpired.html");
@@ -718,15 +723,17 @@ public interface Accounts {
 						routingContext.response().end();
 
 						if (userRecord != null) {
-							String token = RandomStringUtils.randomAlphanumeric(64).toLowerCase();
-							PasswordResetRecord record = new PasswordResetRecord(token);
-							record.setUserId(userRecord.getId());
-							mongo().insert(RESET_TOKENS, mapFrom(record));
+							String userId = userRecord.getId();
+							CreateResetTokenResponse createResetTokenResult = createResetToken(userId);
+							String token = createResetTokenResult.getToken();
+							String id = createResetTokenResult.getId();
+
 							MailClient mailClient = MailClient.createShared(Vertx.currentContext().owner(),
 									new MailConfig()
 											.setHostname(System.getenv().getOrDefault("SMTP_HOST", "smtp.mailgun.org"))
 											.setUsername(System.getenv().getOrDefault("SMTP_USERNAME", "no-reply@hiddenswitch.com"))
 											.setPassword(System.getenv().getOrDefault("SMTP_PASSWORD", "password")));
+							boolean sent = false;
 							try {
 								String emailUrl = Configuration.getDefaultApiClient().getBasePath() + resetUrl + "?token=" + token;
 								MailResult mailResult = awaitResult(h -> mailClient.sendMail(new MailMessage()
@@ -735,8 +742,14 @@ public interface Accounts {
 										.setSubject("Your Password Reset Request from Spellsource")
 										.setHtml(
 												String.format("Please visit this URL to reset your password for Spellsource: <br /> <a href=\"%s\">%s</a>", emailUrl, emailUrl)), h));
+								if (mailResult.getMessageID() != null) {
+									sent = true;
+								}
 							} finally {
 								mailClient.close();
+								if (!sent) {
+									mongo().removeDocument(RESET_TOKENS, json("_id", id));
+								}
 							}
 						}
 					} else {
@@ -744,5 +757,14 @@ public interface Accounts {
 						routingContext.response().end();
 					}
 				}));
+	}
+
+	@Suspendable
+	static CreateResetTokenResponse createResetToken(String userId) {
+		String token = RandomStringUtils.randomAlphanumeric(64).toLowerCase();
+		PasswordResetRecord record = new PasswordResetRecord(token);
+		record.setUserId(userId);
+		String id = mongo().insert(RESET_TOKENS, mapFrom(record));
+		return new CreateResetTokenResponse().setToken(token).setId(id);
 	}
 }

@@ -9,6 +9,7 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
+import io.vertx.core.impl.VertxInternal;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -52,7 +53,7 @@ import static java.util.stream.Collectors.toList;
  * @see Gateway for a detailed description on how to add methods to the API gateway.
  */
 public class GatewayImpl extends SyncVerticle implements Gateway {
-	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	private final int port;
 	private HttpServer server;
 	private Closeable queues;
@@ -81,7 +82,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setCompressionSupported(true));
 		Router router = Router.router(vertx);
 
-		logger.info("start: Configuring router on instance {}", this.deploymentID());
+		LOGGER.info("start: Configuring router on instance {}", this.deploymentID());
 
 		AuthHandler authHandler = SpellsourceAuthHandler.create();
 		BodyHandler bodyHandler = BodyHandler.create()
@@ -133,9 +134,17 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {
-					// Check that hazelcast is ready in this health check
+					// Check that Atomix is ready in this health check
+					if (routingContext.vertx().isClustered()
+							&& !((VertxInternal) routingContext.vertx()).getClusterManager().isActive()) {
+						routingContext.response().setStatusCode(401);
+						routingContext.response().end("NO CLUSTER");
+						routingContext.fail(401);
+						return;
+					}
 					routingContext.response().setStatusCode(200);
 					routingContext.response().end("OK");
+					routingContext.next();
 				});
 
 
@@ -145,12 +154,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(routingContext -> routingContext.response().end(Version.version()));
 
 		// All routes need logging of URLs. URLs never leak private information
-		router.route().handler(LoggerHandler.create(false, LoggerFormat.DEFAULT));
+		router.route().handler(new SpellsourceLogger(true, LoggerFormat.DEFAULT));
 
 		// CORS
 		router.route().handler(CorsHandler.create(".*")
 				.allowedHeader("Content-Type")
-				.allowedHeader("X-Auth-Token")
+				.allowedHeader(SpellsourceAuthHandler.HEADER)
 				.allowedHeader("If-None-Match")
 				.allowedHeader("Accept-Encoding")
 				.exposedHeader("Content-Type")
@@ -164,10 +173,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.exposedHeader("Upgrade")
 				.allowCredentials(true)
 				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.HEAD)));
-
-		// Pass through cookies
-		// TODO: This obviously isn't working for the load balancer / cookies coming from the client
-		router.route().handler(CookieHandler.create());
 
 		// Add body handling to all routes
 		router.route().handler(bodyHandler);
@@ -187,8 +192,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				return;
 			}
 
-			if (routingContext.statusCode() > 0
-					&& routingContext.failure() == null) {
+			if (routingContext.statusCode() > 0) {
 				routingContext.response().setStatusCode(routingContext.statusCode());
 			} else if (routingContext.response().getStatusCode() < 400) {
 				routingContext.response().setStatusCode(500);
@@ -203,7 +207,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 					routingContext.response().end(Serialization.serialize(new SpellsourceException().message("An internal server error occurred. Try again later.")));
 				}
 			}
-
 		});
 
 		// Password reset
@@ -358,7 +361,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		server.requestHandler(router);
 		HttpServer listening = awaitResult(server::listen);
 
-		logger.info("start: Router configured.");
+		LOGGER.info("start: Router configured.");
 	}
 
 	@Override

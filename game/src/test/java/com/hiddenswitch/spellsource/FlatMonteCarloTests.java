@@ -1,8 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
-import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -70,8 +68,6 @@ public class FlatMonteCarloTests extends TestBase {
 				"# 2x (5) Arcanite Reaper\n" +
 				"# 2x (6) Boulderfist Ogre\n" +
 				"#").toGameDeck();
-
-		Logging.setLoggingLevel(Level.OFF);
 		final AtomicInteger matchCounter = new AtomicInteger();
 		SimulationResult result = GameContext.simulate(Arrays.asList(druid, warrior), FlatMonteCarloBehaviour::new, PlayRandomBehaviour::new, 10, true, matchCounter);
 		Assert.assertEquals(result.getNumberOfGames(), 10);
@@ -80,7 +76,6 @@ public class FlatMonteCarloTests extends TestBase {
 	@Test
 	@Ignore("test too slow for unused functionality")
 	public void testFlatMonteCarlo() {
-		Logging.setLoggingLevel(Level.OFF);
 		runGym((context, player, opponent) -> {
 			Card winTheGame = receiveCard(context, player, "spell_win_the_game");
 			FlatMonteCarloBehaviour behaviour = new FlatMonteCarloBehaviour(10);

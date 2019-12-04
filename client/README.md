@@ -126,6 +126,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 *DefaultApi* | [**postInvite**](docs/DefaultApi.md#postInvite) | **POST** /invites | 
+*DefaultApi* | [**postPasswordReset**](docs/DefaultApi.md#postPasswordReset) | **POST** /reset/passwords/with-token | 
 
 
 ## Documentation for Models

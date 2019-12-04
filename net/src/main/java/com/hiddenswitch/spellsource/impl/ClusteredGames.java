@@ -119,7 +119,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					// Deal with ending the game
 					context.handleEndGame(session -> {
 						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
-						final GameId gameOverId = new GameId(session.getGameId());
+						GameId gameOverId = new GameId(session.getGameId());
 						// The players should not accidentally wind back up in games
 						removeGameAndRecordReplay(gameOverId);
 					});

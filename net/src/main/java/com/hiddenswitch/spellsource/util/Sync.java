@@ -87,6 +87,14 @@ public class Sync {
 	}
 
 	@Suspendable
+	public static void invoke0(ThrowingNoArgs func0) {
+		Void res = awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+			func0.apply();
+			done.complete();
+		}, false, h));
+	}
+
+	@Suspendable
 	public static <T, R> R invoke(Function<T, R> func1, T arg1) {
 		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
 			done.complete(func1.apply(arg1));
@@ -166,6 +174,21 @@ public class Sync {
 
 		R applyThrows(T t) throws Exception;
 	}
+
+	@FunctionalInterface
+	public interface ThrowingNoArgs extends NoArgs {
+		@Override
+		default void apply() {
+			try {
+				applyThrows();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		void applyThrows() throws Exception;
+	}
+
 
 	@FunctionalInterface
 	public interface ThrowingBiFunction<T1, T2, R> extends BiFunction<T1, T2, R> {

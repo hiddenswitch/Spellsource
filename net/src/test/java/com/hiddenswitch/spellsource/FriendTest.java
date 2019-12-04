@@ -4,6 +4,7 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
@@ -135,9 +136,9 @@ public class FriendTest extends SpellsourceTestBase {
 				AtomicBoolean didGetOffline = new AtomicBoolean();
 				CountDownLatch atLeastConnected = new CountDownLatch(1);
 
-				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), sockets::add);
+				httpClient.websocket(8080, "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=" + account1.getLoginToken().getToken(), sockets::add);
 
-				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), ws2 -> {
+				httpClient.websocket(8080, "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=" + account2.getLoginToken().getToken(), ws2 -> {
 					sockets.add(ws2);
 
 					ws2.handler(buf -> {

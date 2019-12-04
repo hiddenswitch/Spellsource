@@ -437,7 +437,7 @@ public class DefaultApiTest {
      */
     @Test
     public void healthCheckTest() throws ApiException {
-        api.healthCheck();
+        String response = api.healthCheck();
 
         // TODO: test validations
     }
@@ -500,6 +500,24 @@ public class DefaultApiTest {
     public void postInviteTest() throws ApiException {
         InvitePostRequest request = null;
         InviteResponse response = api.postInvite(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * Provided a valid reset token, resets a user&#39;s password. 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void postPasswordResetTest() throws ApiException {
+        String token = null;
+        String password1 = null;
+        String password2 = null;
+        api.postPasswordReset(token, password1, password2);
 
         // TODO: test validations
     }

@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import io.vertx.core.Future;
@@ -64,7 +65,7 @@ public class ConnectionTest extends SpellsourceTestBase {
 			});
 
 			HttpClient client = Vertx.currentContext().owner().createHttpClient();
-			client.websocket(Configuration.apiGatewayPort(), "localhost", "/realtime?X-Auth-Token=invalid:auth", (ws) -> {
+			client.websocket(Configuration.apiGatewayPort(), "localhost", "/realtime?"+ SpellsourceAuthHandler.HEADER+"=invalid:auth", (ws) -> {
 				testContext.fail("Should not connect");
 			}, excepted -> {
 				testContext.assertEquals(WebsocketRejectedException.class, excepted.getClass());
