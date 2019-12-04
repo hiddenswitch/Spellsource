@@ -103,7 +103,7 @@ public class ConnectionImpl implements Connection {
 			}
 		});
 
-		socket.endHandler(suspendableHandler(v1 -> {
+		socket.endHandler(v1 -> {
 			try {
 				span.log("ending");
 				for (Handler<Void> handler : endHandlers) {
@@ -121,7 +121,7 @@ public class ConnectionImpl implements Connection {
 			} finally {
 				span.finish();
 			}
-		}));
+		});
 
 		if (readyHandler != null) {
 			Future<Void> v1 = Future.future();

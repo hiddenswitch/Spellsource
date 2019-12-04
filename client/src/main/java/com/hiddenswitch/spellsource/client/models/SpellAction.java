@@ -29,9 +29,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * A spell action or battlecry. 
+ * A spell action describes a possible action the player can take. The list of SpellAction objects in the ServerToClientMessage is exhaustive and represents every possible action. 
  */
-@ApiModel(description = "A spell action or battlecry. ")
+@ApiModel(description = "A spell action describes a possible action the player can take. The list of SpellAction objects in the ServerToClientMessage is exhaustive and represents every possible action. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class SpellAction implements Serializable {
@@ -64,10 +64,10 @@ public class SpellAction implements Serializable {
   }
 
    /**
-   * The ID of the entity (minion or card) that originates this action 
+   * The ID of the entity (minion or card) that is the source of the action. The client is guaranteed to have this entity in its entities array. For a SpellAction whose actionType is DISCOVER, the source is the entity in the acting player&#39;s discover zone. In the engine, the source is the entity that is prompting the discover (e.g. a minion if an opener is causing the discover, or the spell card being played). Sometimes ENDTURN will not be available, this is because some actions like DISCOVER and BATTLECRY cannot be interrupted. Running out of time will result in ENDTURN being chosen or a random DISCOVER or BATTLECRY action. This will occur on the server, not the client. 
    * @return sourceId
   **/
-  @ApiModelProperty(value = "The ID of the entity (minion or card) that originates this action ")
+  @ApiModelProperty(value = "The ID of the entity (minion or card) that is the source of the action. The client is guaranteed to have this entity in its entities array. For a SpellAction whose actionType is DISCOVER, the source is the entity in the acting player's discover zone. In the engine, the source is the entity that is prompting the discover (e.g. a minion if an opener is causing the discover, or the spell card being played). Sometimes ENDTURN will not be available, this is because some actions like DISCOVER and BATTLECRY cannot be interrupted. Running out of time will result in ENDTURN being chosen or a random DISCOVER or BATTLECRY action. This will occur on the server, not the client. ")
   public Integer getSourceId() {
     return sourceId;
   }
@@ -100,10 +100,10 @@ public class SpellAction implements Serializable {
   }
 
    /**
-   * A user-readable description of this action. 
+   * A user-readable description of this action. This is typically not rendered in the client except in logs. 
    * @return description
   **/
-  @ApiModelProperty(value = "A user-readable description of this action. ")
+  @ApiModelProperty(value = "A user-readable description of this action. This is typically not rendered in the client except in logs. ")
   public String getDescription() {
     return description;
   }
@@ -162,10 +162,10 @@ public class SpellAction implements Serializable {
   }
 
    /**
-   * The action for this spell. 
+   * The action index corresponding to this action.  If targetKeyToActions is length zero or null, the action is valid and set, corresponding to an action that does not take a user-specified target. This includes all DISCOVER actions, ENDTURN, but *never* a summon, even if no minions are on the board. 
    * @return action
   **/
-  @ApiModelProperty(value = "The action for this spell. ")
+  @ApiModelProperty(value = "The action index corresponding to this action.  If targetKeyToActions is length zero or null, the action is valid and set, corresponding to an action that does not take a user-specified target. This includes all DISCOVER actions, ENDTURN, but *never* a summon, even if no minions are on the board. ")
   public Integer getAction() {
     return action;
   }
@@ -188,10 +188,10 @@ public class SpellAction implements Serializable {
   }
 
    /**
-   * An array of entity ID-action pairs that let you convert a valid target to an action index to respond with. Defined if this spell is targetable. 
+   * An array of entity ID-action pairs that let you convert a valid target to an action index to respond with. Defined if this spell is targetable.  This is null or length zero if the target does not have targeted actions. Use the action property instead for that situation.  A SpellAction with actionType SUMMON will have a targetKeyToActions entry with a target of -1 corresponding to the *last* (rightmost) minion position to summon, while all other targets correspond to minions on the board. 
    * @return targetKeyToActions
   **/
-  @ApiModelProperty(value = "An array of entity ID-action pairs that let you convert a valid target to an action index to respond with. Defined if this spell is targetable. ")
+  @ApiModelProperty(value = "An array of entity ID-action pairs that let you convert a valid target to an action index to respond with. Defined if this spell is targetable.  This is null or length zero if the target does not have targeted actions. Use the action property instead for that situation.  A SpellAction with actionType SUMMON will have a targetKeyToActions entry with a target of -1 corresponding to the *last* (rightmost) minion position to summon, while all other targets correspond to minions on the board. ")
   public List<TargetActionPair> getTargetKeyToActions() {
     return targetKeyToActions;
   }

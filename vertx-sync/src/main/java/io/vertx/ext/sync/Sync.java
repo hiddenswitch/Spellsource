@@ -22,9 +22,8 @@ import java.util.function.Consumer;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class Sync {
-
 	protected static final String FIBER_SCHEDULER_CONTEXT_KEY = "__vertx-sync.fiberScheduler";
-	public static final int DEFAULT_STACK_SIZE = 128;
+	public static final int DEFAULT_STACK_SIZE = 32;
 
 	/**
 	 * Invoke an asynchronous operation and obtain the result synchronous. The fiber will be blocked until the result is

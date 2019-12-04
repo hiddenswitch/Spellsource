@@ -2006,7 +2006,17 @@ paths:
       responses:
         "200":
           description: |
-            The server is okay!
+            The server is healthy.
+          schema:
+            type: 'string'
+        "401":
+          description: |
+            The server did not successfully connect to a cluster yet.
+          schema:
+            type: 'string'
+        default:
+          $ref: '#/responses/InternalServerError'
+
   /accounts/{targetUserId}:
     get:
       description: |
@@ -2603,3 +2613,39 @@ paths:
             The semver version
           schema:
             type: 'string'
+  /reset/passwords/with-token:
+    post:
+      description: >
+        Provided a valid reset token, resets a user's password.
+      operationId: postPasswordReset
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: token
+          in: query
+          type: 'string'
+          required: true
+        - name: password1
+          in: formData
+          type: 'string'
+          required: true
+        - name: password2
+          in: formData
+          type: 'string'
+          required: true
+      responses:
+        "303":
+          description: |
+            Redirects to the result of the password reset request delivered in the HTML body.
+
+            Possible Location response header values:
+             - passwordresetted.html: successfully reset password.
+             - passwordresetexpired.html: invalid token, or token was not passed in cookie.
+             - passwordsdidnotmatch.html: if the passwords provided in the form data did not match.
+          headers:
+            Location:
+              type: "string"
+              enum:
+                - 'passwordresetted.html'
+                - 'passwordresetexpired.html'
+                - 'passwordsdidnotmatch.html'

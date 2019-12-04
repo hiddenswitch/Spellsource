@@ -560,17 +560,6 @@ public class Mongo {
 	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
 	*/
 
-	/**
-	 * Close this client.
-	 */
-	public void close() {
-		if (client() == null) {
-			return;
-		}
-		client().close();
-		clients.remove(Vertx.currentContext().owner().hashCode());
-	}
-
 	public MongoClient client() {
 		if (Vertx.currentContext() == null) {
 			throw new NullPointerException("not on context");

@@ -1,14 +1,11 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
-import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.TycheBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.game.statistics.SimulationResult;
@@ -63,7 +60,6 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	@Ignore("No more midrange shaman")
 	public void testMidrangeShamanMirrorMatch() {
 		List<GameDeck> decks = Collections.singletonList(TycheBehaviour.midrangeShaman().toGameDeck());
-		Logging.setLoggingLevel(Level.ERROR);
 		SimulationResult res = GameContext.simulate(decks, TycheBehaviour::new, () -> {
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setMaxDepth(4);
@@ -72,7 +68,6 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 			behaviour.setParallel(false);
 			return behaviour;
 		}, 2, true, true);
-		Logging.setLoggingLevel(Level.INFO);
 		LOGGER.info("testMidrangeShaman: TycheBehaviour winrate was {}", res.getPlayer1Stats().get(Statistic.WIN_RATE));
 	}
 

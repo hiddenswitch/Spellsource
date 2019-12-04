@@ -109,6 +109,12 @@ public interface Matchmaking extends Verticle {
 		return SuspendableMap.getOrCreate("Matchmaking/currentQueue");
 	}
 
+	/**
+	 * Removes the specified user from whichever queue it is in.
+	 *
+	 * @param userId
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	static void dequeue(UserId userId) throws SuspendExecution {
 		Span span = GlobalTracer.get().buildSpan("Matchmaking/dequeue").start();
@@ -133,6 +139,12 @@ public interface Matchmaking extends Verticle {
 		}
 	}
 
+	/**
+	 * The default queues include the constructed and quick play (i.e. bot) queues.
+	 *
+	 * @return
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	static Closeable startDefaultQueues() throws SuspendExecution {
 		Closeable constructed = startMatchmaker("constructed", new MatchmakingQueueConfiguration()
@@ -160,8 +172,22 @@ public interface Matchmaking extends Verticle {
 		return (completionHandler -> constructed.close(v1 -> quickPlay.close(completionHandler)));
 	}
 
+	/**
+	 * Starts a matchmaking queue.
+	 * <p>
+	 * Queues can be joined by players using {@link Matchmaking#enqueue(MatchmakingRequest)}.
+	 *
+	 * @param queueId
+	 * @param queueConfiguration
+	 * @return
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration queueConfiguration) throws SuspendExecution {
+		if (Vertx.currentContext() == null) {
+			throw new IllegalStateException("must run on context");
+		}
+
 		CountDownLatch awaitReady = new CountDownLatch(1);
 		AtomicReference<Fiber<Void>> thisFiber = new AtomicReference<>(null);
 		// Use an async lock so that timing out doesn't throw an exception
@@ -396,6 +422,10 @@ public interface Matchmaking extends Verticle {
 										.firstMessage(new ClientToServerMessageFirstMessage())))));
 	}
 
+	/**
+	 * Configures the {@link Connection} interface of web socket communications to accept enqueues, dequeues, and notify
+	 * connected players of changes in queue status.
+	 */
 	static void handleConnections() {
 		Connection.connected((connection, fut) -> {
 			LOGGER.trace("handleConnections {}: Matchmaking ready", connection.userId());

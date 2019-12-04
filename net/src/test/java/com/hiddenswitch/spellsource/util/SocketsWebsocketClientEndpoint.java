@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
+import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.neovisionaries.ws.client.*;
 import io.vertx.core.Handler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -20,7 +21,7 @@ public class SocketsWebsocketClientEndpoint extends WebSocketAdapter implements 
 
 	public SocketsWebsocketClientEndpoint(String endpoint, String auth) {
 		try {
-			String uri = endpoint + "?X-Auth-Token=" + auth;
+			String uri = endpoint + "?" + SpellsourceAuthHandler.HEADER + "=" + auth;
 			websocket = webSocketFactory.createSocket(uri, 10000);
 			websocket.setMaxPayloadSize(1024);
 			websocket.addListener(this);

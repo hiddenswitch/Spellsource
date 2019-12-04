@@ -1034,9 +1034,10 @@ public class DefaultApi {
   /**
    * 
    * Returns an empty body if the server is available. 
+   * @return String
    * @throws ApiException if fails to make API call
    */
-  public void healthCheck() throws ApiException {
+  public String healthCheck() throws ApiException {
     Object localVarPostBody = null;
     
     // create path and map variables
@@ -1063,9 +1064,9 @@ public class DefaultApi {
 
     String[] localVarAuthNames = new String[] {  };
 
-
-    apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
-  }
+    GenericType<String> localVarReturnType = new GenericType<String>() {};
+    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
   /**
    * 
    * Login with a username and password, receiving an authentication token to use for future sessions. 
@@ -1222,4 +1223,62 @@ public class DefaultApi {
     GenericType<InviteResponse> localVarReturnType = new GenericType<InviteResponse>() {};
     return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
+  /**
+   * 
+   * Provided a valid reset token, resets a user&#39;s password. 
+   * @param token  (required)
+   * @param password1  (required)
+   * @param password2  (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void postPasswordReset(String token, String password1, String password2) throws ApiException {
+    Object localVarPostBody = null;
+    
+    // verify the required parameter 'token' is set
+    if (token == null) {
+      throw new ApiException(400, "Missing the required parameter 'token' when calling postPasswordReset");
+    }
+    
+    // verify the required parameter 'password1' is set
+    if (password1 == null) {
+      throw new ApiException(400, "Missing the required parameter 'password1' when calling postPasswordReset");
+    }
+    
+    // verify the required parameter 'password2' is set
+    if (password2 == null) {
+      throw new ApiException(400, "Missing the required parameter 'password2' when calling postPasswordReset");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/reset/passwords/with-token";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+    localVarQueryParams.addAll(apiClient.parameterToPair("token", token));
+
+    
+    if (password1 != null)
+      localVarFormParams.put("password1", password1);
+if (password2 != null)
+      localVarFormParams.put("password2", password2);
+
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/x-www-form-urlencoded"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {  };
+
+
+    apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+  }
 }

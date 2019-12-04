@@ -1,14 +1,10 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.concurrent.CountDownLatch;
-import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.client.models.SpellAction;
-import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
-import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -25,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class SimultaneousGamesTest extends SpellsourceTestBase {
-	private static Logger logger = LoggerFactory.getLogger(SimultaneousGamesTest.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(SimultaneousGamesTest.class);
 
 	@Test(timeout = 80000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
@@ -53,25 +49,23 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 				}) {
 					client.createUserAccount(null);
 					String userId = client.getAccount().getId();
-					logger.trace("testSimultaneousGames: {} 1st Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
+					LOGGER.trace("testSimultaneousGames: {} 1st Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.matchmakeConstructedPlay(null);
-					logger.trace("testSimultaneousGames: {} 1st Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
+					LOGGER.trace("testSimultaneousGames: {} 1st Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.waitUntilDone();
 					context.assertTrue(client.getTurnsPlayed() > 0);
 					context.assertTrue(client.isGameOver());
-//					context.assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
-					logger.trace("testSimultaneousGames: {} 1st Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
+					LOGGER.trace("testSimultaneousGames: {} 1st Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 
 					// Try two games in a row
-					logger.trace("testSimultaneousGames: {} 2nd Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
+					LOGGER.trace("testSimultaneousGames: {} 2nd Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.matchmakeConstructedPlay(null);
-					logger.trace("testSimultaneousGames: {} 2nd Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
+					LOGGER.trace("testSimultaneousGames: {} 2nd Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.waitUntilDone();
 					context.assertTrue(client.getTurnsPlayed() > 0);
 					context.assertTrue(client.isGameOver());
-//					context.assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
-					logger.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-					logger.info("testSimultaneousGames: {} finished", userId);
+					LOGGER.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
+					LOGGER.info("testSimultaneousGames: {} finished", userId);
 
 					fut.complete();
 				} catch (Throwable any) {

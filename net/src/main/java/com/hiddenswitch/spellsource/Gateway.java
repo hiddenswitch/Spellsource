@@ -42,7 +42,7 @@ import java.util.Comparator;
  * behaviour for the serialization and authorization boilerplate provided by {@link HandlerFactory}. (1) Every method
  * should start with an {@link RoutingContext} argument; (2) if the method requires the user to be authenticated and
  * authorized, the next argument should be {@code String userId}, or omit the argument; (3) if the path is variable,
- * e.g., {@code /v1/decks/:deckId}, the next argument should be a {@link String} whose name matches the variable name,
+ * e.g., {@code /decks/:deckId}, the next argument should be a {@link String} whose name matches the variable name,
  * or omit the argument; (4) finally, if the method accepts a request body of type {@code T}, the next argument should
  * be {@code T request}, or omit the argument. Every supported pattern is shown below:
  * <pre>
@@ -79,13 +79,13 @@ import java.util.Comparator;
  * <pre>
  *     {@code
  *     // Parse the body
- *     router.route("/v1/accounts").handler(bodyHandler);
+ *     router.route("/accounts").handler(bodyHandler);
  *     // If required, authorize and authenticate the user based on the token in the X-Auth-UserId header they provide.
  *     // Specify that this auth is required for an Http.GET
- *     router.route("/v1/accounts").method(HttpMethod.GET).handler(authHandler);
+ *     router.route("/accounts").method(HttpMethod.GET).handler(authHandler);
  *     // Finally, handle the request.
  *     // Read on for how to build a HandlerFactor.handler call.
- *     router.route("/v1/accounts").method(HttpMethod.GET).handler(HandlerFactory.handler(GetAccountsRequest.class,
+ *     router.route("/accounts").method(HttpMethod.GET).handler(HandlerFactory.handler(GetAccountsRequest.class,
  * this::getAccounts));
  *     }
  * </pre>
@@ -97,22 +97,22 @@ import java.util.Comparator;
  *     {@code
  *     // [ ] Request body, [ ] Path variable.
  *     router
- *         .route("/v1/my-method")
+ *         .route("/my-method")
  *         .method(HttpMethod.GET).handler(HandlerFactory.handler(this::myMethod));
  *
  *     // [X] Request body, [ ] Path variable.
  *     router
- *         .route("/v1/my-method")
+ *         .route("/my-method")
  *         .method(HttpMethod.POST).handler(HandlerFactory.handler(MyMethodRequest.class, this::myMethod));
  *
  *     // [ ] Request body, [X] Path variable.
  *     router
- *         .route("/v1/my-method/:objectId")
+ *         .route("/my-method/:objectId")
  *         .method(HttpMethod.GET).handler(HandlerFactory.handler("objectId", this::myMethod));
  *
  *     // [X] Request body, [X] Path variable.
  *     router
- *         .route("/v1/my-method/:objectId")
+ *         .route("/my-method/:objectId")
  *         .method(HttpMethod.POST).handler(HandlerFactory.handler(MyMethodRequest.class, "objectId", this::myMethod));
  *     }
  * </pre></li></ol>

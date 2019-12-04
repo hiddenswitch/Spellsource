@@ -1,7 +1,5 @@
 package com.hiddenswitch.hearthstone;
 
-import ch.qos.logback.classic.Level;
-import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -19,7 +17,6 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 
 	@Test
 	public void testShadowVisionsInPlan() {
-		Logging.setLoggingLevel(Level.ERROR);
 		String comboPriest = "Name: Combo Priest\n" +
 				"Class: Priest\n" +
 				"Format: Standard\n" +
