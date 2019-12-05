@@ -2,7 +2,10 @@ package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.impl.SuspendableVertxCounter;
+import io.atomix.vertx.AtomixClusterManager;
+import io.vertx.core.Context;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.Counter;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -10,8 +13,9 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public interface SuspendableCounter {
 
 	@Suspendable
-	static SuspendableCounter create(String name) {
-		Counter counter = awaitResult(h -> Vertx.currentContext().owner().sharedData().getCounter(name, h));
+	static SuspendableCounter getOrCreate(String name) {
+		Context context = Vertx.currentContext();
+		Counter counter = awaitResult(h -> context.owner().sharedData().getCounter(name, h));
 		return new SuspendableVertxCounter(counter);
 	}
 
@@ -64,4 +68,9 @@ public interface SuspendableCounter {
 	@Suspendable
 	boolean compareAndSet(long expected, long value);
 
+	/**
+	 * Closes the counter.
+	 */
+	@Suspendable
+	void close();
 }

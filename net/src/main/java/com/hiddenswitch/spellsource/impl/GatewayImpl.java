@@ -783,9 +783,15 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		final String displayName = record.getUsername();
 		final List<GetCollectionResponse> responses = deckCollections.getResponses();
+		List<Friend> friends = record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList());
+
+		for (Friend friend : friends) {
+			friend.presence(Presence.getPresence(friend.getFriendId()));
+		}
+
 		return new Account()
 				.id(record.getId())
-				.friends(record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList()))
+				.friends(friends)
 				.decks((responses != null && responses.size() > 0) ? responses.stream()
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
@@ -810,5 +816,4 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			Sync.invoke1(queues::close);
 		}
 	}
-
 }
