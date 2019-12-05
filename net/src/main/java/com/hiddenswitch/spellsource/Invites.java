@@ -115,7 +115,7 @@ public interface Invites {
 				"status", json("$in", PENDING_STATUSES),
 				"expiresAt", json("$lt", time)
 		), Invite.class);
-		int totalExpied = shouldBeExpiredInvites.size();
+		int totalExpired = shouldBeExpiredInvites.size();
 
 		// Cache retrieved connections
 		Map<String, WriteStream<Envelope>> connections = new HashMap<>();
@@ -129,7 +129,7 @@ public interface Invites {
 				"status", json("$in", PENDING_STATUSES),
 				"expiresAt", json("$lt", time)
 		), Invite.class);
-		totalExpied += shouldBeExpiredInvites.size();
+		totalExpired += shouldBeExpiredInvites.size();
 		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
 			WriteStream<Envelope> toConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getToUserId(), Connection::writeStream);
 			toConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
@@ -146,8 +146,8 @@ public interface Invites {
 						"$set", json("status", StatusEnum.TIMEOUT)
 				), new UpdateOptions().setMulti(true));
 
-		if (updateResult.getDocModified() != totalExpied) {
-			LOGGER.warn("handleConnections {}: Expired {} documents but should have expired {}", expire, updateResult.getDocModified(), totalExpied);
+		if (updateResult.getDocModified() != totalExpired) {
+			LOGGER.warn("handleConnections {}: Expired {} documents but should have expired {}", expire, updateResult.getDocModified(), totalExpired);
 		}
 	}
 
