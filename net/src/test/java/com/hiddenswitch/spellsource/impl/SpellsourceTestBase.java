@@ -6,22 +6,21 @@ import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.ext.unit.junit.RunTestOnContext;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +32,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitResult;
 
 @RunWith(VertxUnitRunner.class)
 public abstract class SpellsourceTestBase {
