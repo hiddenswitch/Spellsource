@@ -17,7 +17,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -46,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -190,37 +188,6 @@ public interface Games extends Verticle {
 				.collect(toList()));
 
 		return clientActions;
-	}
-
-	/**
-	 * Builds a spell action from a spell card or a hero power card. Any play card action that accepts targets can work
-	 * for this function.
-	 *
-	 * @param sourceCardId
-	 * @param playCardActions
-	 * @return
-	 */
-	@Suspendable
-	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
-		SpellAction spellAction = new SpellAction()
-				.sourceId(sourceCardId)
-				.targetKeyToActions(new ArrayList<>());
-
-		// Targetable spell
-		if (playCardActions.size() == 1
-				&& (playCardActions.get(0).getTargetReference() == null
-				|| playCardActions.get(0).getTargetReference().isTargetGroup())) {
-			spellAction.action(playCardActions.get(0).getId());
-		} else {
-			// Add all the valid targets
-			playCardActions.stream()
-					.map(t -> new TargetActionPair()
-							.action(t.getId())
-							.target(t.getTargetReference().getId()))
-					.forEach(spellAction::addTargetKeyToActionsItem);
-		}
-
-		return spellAction;
 	}
 
 	/**
@@ -380,26 +347,6 @@ public interface Games extends Verticle {
 	}
 
 	/**
-	 * Immediately ends the given game, causing both players to concede.
-	 * <p>
-	 * All games ended this way end in a draw.
-	 *
-	 * @param game
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static void endGame(GameId game) throws SuspendExecution, InterruptedException {
-		try {
-			String deploymentId = getConnections().get(game).deploymentId;
-			Rpc.connect(Games.class).sync(deploymentId).endGameSession(new EndGameSessionRequest(game.toString()));
-		} catch (NullPointerException notFound) {
-			NullPointerException rethrown = new NullPointerException(String.format("The specified game %s was not found", game.toString()));
-			rethrown.setStackTrace(notFound.getStackTrace());
-			throw rethrown;
-		}
-	}
-
-	/**
 	 * Creates a match without entering a queue entry between two users.
 	 *
 	 * @param request All the required information to create a game.
@@ -436,18 +383,6 @@ public interface Games extends Verticle {
 	CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException;
 
 	/**
-	 * Possibly prematurely ends the game session. Typically this is done due to timeouts or some external action that
-	 * would concede a game (like a ban or profanity). This will send the correct game over notifications to the bots/
-	 * players who are connected to this game.
-	 *
-	 * @param request The game to end.
-	 * @return Information about ending the specified game session.
-	 * @throws InterruptedException
-	 * @throws SuspendExecution
-	 */
-	EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution;
-
-	/**
 	 * Updates an entity specified inside the game with specific attributes. Currently unsupported. This allows real-time
 	 * manipulation of a game in progress. This call should punt the request to the next instance in the cluster if it
 	 * does not have the specified game.
@@ -469,18 +404,6 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution;
-
-	/**
-	 * Concedes the specified game session. Unlike ending a game session prematurely, a concession may trigger some
-	 * additional notifications and scoring consequences.
-	 *
-	 * @param request The player and game conceding.
-	 * @return Any consequences of the concession.
-	 * @throws InterruptedException
-	 * @throws SuspendExecution
-	 */
-	@Suspendable
-	ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution;
 
 	/**
 	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
