@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.util.Arrays;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static net.demilich.metastone.tests.util.TestBase.assertThrows;
@@ -177,6 +178,26 @@ public class AccountsTest extends SpellsourceTestBase {
 					}
 				}
 			}
+		}, context);
+	}
+
+	@Test
+	public void testRemoveAccount(TestContext context) {
+		sync(() -> {
+			CreateAccountResponse account = createRandomAccount();
+			Accounts.removeAccount(new UserId(account.getUserId()));
+			context.assertNull(Accounts.get(account.getUserId()));
+		}, context);
+	}
+
+	@Test
+	public void testRemoveAccounts(TestContext context) {
+		sync(() -> {
+			CreateAccountResponse account1 = createRandomAccount();
+			CreateAccountResponse account2 = createRandomAccount();
+			Accounts.removeAccounts(Arrays.asList(new UserId(account1.getUserId()), new UserId(account2.getUserId())));
+			context.assertNull(Accounts.get(account1.getUserId()));
+			context.assertNull(Accounts.get(account2.getUserId()));
 		}, context);
 	}
 }

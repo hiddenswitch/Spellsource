@@ -597,6 +597,8 @@ public interface Accounts {
 			mongo().removeDocuments(Inventory.INVENTORY, json("userId", json("$in", userIds)));
 			// Remove the user document
 			MongoClientDeleteResult result = mongo().removeDocuments(Accounts.USERS, json("_id", json("$in", userIds)));
+
+			// TODO: Remove friend entries for deleted accounts
 			return result.getRemovedCount();
 
 		} catch (RuntimeException runtimeException) {

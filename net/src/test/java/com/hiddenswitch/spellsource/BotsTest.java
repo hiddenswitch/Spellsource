@@ -14,6 +14,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.FiberBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
@@ -49,6 +51,7 @@ public class BotsTest extends SpellsourceTestBase {
 			context1.startTurn(context1.getActivePlayerId());
 			int startTurn = context1.getTurn();
 			GameAction gameAction = null;
+			Bots.BEHAVIOUR.set(GameStateValueBehaviour::new);
 			while (gameAction == null
 					|| gameAction.getActionType() != ActionType.END_TURN) {
 				RequestActionRequest requestActionRequest = new RequestActionRequest(new GameId(context1.getGameId()),
@@ -62,6 +65,7 @@ public class BotsTest extends SpellsourceTestBase {
 				assertNotNull(gameAction);
 				context1.performAction(context1.getActivePlayerId(), gameAction);
 			}
+			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 			assertTrue(context1.getTurn() > startTurn);
 		}, context);
 	}
@@ -87,7 +91,6 @@ public class BotsTest extends SpellsourceTestBase {
 
 	@Test
 	public void testBotReused(TestContext context) {
-
 		sync(() -> {
 			try (UnityClient client = new UnityClient(context)) {
 				Sync.invoke0(client::createUserAccount);
@@ -119,6 +122,15 @@ public class BotsTest extends SpellsourceTestBase {
 					assertFalse(games.containsKey(new UserId(id)));
 				}
 			}
+		}, context);
+	}
+
+	@Test
+	public void testBotUpdateDecklist(TestContext context) {
+		sync(() -> {
+			UserId botId = Bots.pollBotId();
+			Bots.updateBotDeckList();
+			context.assertTrue(Accounts.get(botId.toString()).getDecks().size() > 0);
 		}, context);
 	}
 }
