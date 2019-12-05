@@ -37,35 +37,6 @@ public interface Inventory {
 	String INVENTORY = "inventory.cards";
 	String COLLECTIONS = "inventory.collections";
 
-	/**
-	 * Opens a card pack for the specified user.
-	 *
-	 * @param request Specifications for which sets/how many cards/how many packs should be opened for a user.
-	 * @return Changes to the inventory due to this method.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	@NotNull
-	static OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws InterruptedException, SuspendExecution {
-		QueryCardsRequest commons = new QueryCardsRequest()
-				.withFields(CardFields.ALL)
-				.withSets("SPELLSOURCE")
-				.withRarity(Rarity.COMMON)
-				.withRandomCount((request.getCardsPerPack() - 1) * request.getNumberOfPacks());
-
-		QueryCardsRequest allianceRares = new QueryCardsRequest()
-				.withFields(CardFields.ALL)
-				.withSets("SPELLSOURCE")
-				.withRarity(Rarity.ALLIANCE)
-				.withRandomCount(request.getNumberOfPacks());
-
-		QueryCardsResponse response = Cards.query(new QueryCardsRequest()
-				.withRequests(commons, allianceRares));
-
-		List<String> ids = createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList()));
-		return new OpenCardPackResponse(ids);
-	}
-
 	@Suspendable
 	static CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException {
 		final String userId = request.getUserId();
@@ -89,10 +60,6 @@ public interface Inventory {
 				if (request.getCardIds() != null
 						&& request.getCardIds().size() != 0) {
 					newInventoryIds.addAll(createCardsForUser(request.getCardIds(), userId));
-				}
-
-				if (request.getOpenCardPackRequest() != null) {
-					newInventoryIds.addAll(Inventory.openCardPack(request.getOpenCardPackRequest()).getCreatedInventoryIds());
 				}
 
 				return CreateCollectionResponse.user(userId, newInventoryIds);
