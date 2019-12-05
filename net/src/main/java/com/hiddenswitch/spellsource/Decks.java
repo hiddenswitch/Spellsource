@@ -3,6 +3,9 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
+import io.vertx.core.Vertx;
+import io.vertx.core.WorkerExecutor;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
@@ -15,6 +18,8 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +39,8 @@ import static java.util.stream.Collectors.toList;
  * The deck management service.
  */
 public interface Decks {
+	Logger LOGGER = LoggerFactory.getLogger(Decks.class);
+
 	static int getMaxDeckSize() {
 		return 30;
 	}
@@ -65,8 +72,11 @@ public interface Decks {
 			if (request.getCardIds() != null
 					&& request.getCardIds().size() > 0) {
 				// Find the card IDs in the user's collection, using copies wherever available, to put into the deck
-				GetCollectionResponse userCollection = Inventory.getCollection(GetCollectionRequest.user(request.getUserId()));
-				Map<String, List<String>> cards = userCollection.getInventoryRecords().stream().collect(groupingBy(InventoryRecord::getCardId, mapping(InventoryRecord::getId, toList())));
+				List<InventoryRecord> results = mongo().findWithOptions(Inventory.INVENTORY,
+						json("collectionIds", request.getUserId()),
+						new FindOptions().setFields(json(InventoryRecord.CARDDESC_ID, 1)),
+						InventoryRecord.class);
+				Map<String, List<String>> cards = results.stream().collect(groupingBy(InventoryRecord::getCardId, mapping(InventoryRecord::getId, toList())));
 
 				for (String cardId : request.getCardIds()) {
 					List<String> entry = cards.getOrDefault(cardId, Collections.emptyList());
@@ -230,54 +240,6 @@ public interface Decks {
 			Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId), json("$pull", json("decks", deckId)));
 
 			return DeckDeleteResponse.create(response);
-		} catch (RuntimeException runtimeException) {
-			Tracing.error(runtimeException, span, true);
-			throw runtimeException;
-		} finally {
-			span.finish();
-			scope.close();
-		}
-	}
-
-	/**
-	 * Replace all constructed decks with a series of decklists
-	 *
-	 * @param request
-	 * @return
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	@Suspendable
-	static DeckListUpdateResponse updateAllDecks(DeckListUpdateRequest request) throws SuspendExecution, InterruptedException {
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("Decks/updateAllDecks")
-				.start();
-		Scope scope = tracer.activateSpan(span);
-		try {
-			// Get all the non-draft decks
-			List<String> deckIds = mongo().findWithOptions(Inventory.COLLECTIONS, json("deckType", DeckType.CONSTRUCTED.toString()), new FindOptions().setFields(json("_id", true)))
-					.stream().map(o -> o.getString("_id")).collect(toList());
-
-			// Trash them all
-			for (String deckId : deckIds) {
-				deleteDeck(DeckDeleteRequest.create(deckId));
-			}
-
-			// Get all the users
-			List<String> userIds = mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", true))).stream().map(o -> o.getString("_id")).collect(toList());
-
-			AtomicLong updated = new AtomicLong();
-
-			// Add all the new decks
-			// TODO: For now, with so few users, we're not going to overoptimize this. We'll just call the API methods.
-			for (String userId : userIds) {
-				for (DeckCreateRequest deckCreate : request.getDeckCreateRequests()) {
-					createDeck(deckCreate.clone().withUserId(userId));
-					updated.incrementAndGet();
-				}
-			}
-
-			return DeckListUpdateResponse.create(updated.get());
 		} catch (RuntimeException runtimeException) {
 			Tracing.error(runtimeException, span, true);
 			throw runtimeException;

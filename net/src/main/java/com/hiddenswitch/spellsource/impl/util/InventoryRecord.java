@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by bberman on 1/22/17.
+ * A record in the inventory collection. Describes the history of a card and its ID.
  */
 public class InventoryRecord extends MongoRecord {
 	public static final String CARDDESC_ID = "cardDesc.id";

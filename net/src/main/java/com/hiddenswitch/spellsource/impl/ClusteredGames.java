@@ -61,9 +61,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				.start();
 		try (Scope s1 = tracer.activateSpan(span)) {
 			span.log(json(request).getMap());
-			if (Games.LOGGER.isDebugEnabled()) {
-				Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
-			}
+			Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
 
 			if (request.getGameId() == null) {
 				throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
@@ -240,9 +238,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 								.setDeckIds(deckIds)
 								.setPlayerNames(playerNames);
 						Replay replay = Games.replayFromGameContext(gameContext);
-						if (replay == null) {
-							LOGGER.error("endGame {}: Could not save replay due to error restoring the game state", gameId);
-						}
 						gameRecord.setReplay(replay);
 						mongo().insert(Games.GAMES, mapFrom(gameRecord));
 					} catch (Throwable any) {

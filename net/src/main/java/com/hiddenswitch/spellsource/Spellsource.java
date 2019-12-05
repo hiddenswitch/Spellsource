@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -14,9 +13,7 @@ import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
 import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
-import io.netty.channel.EventLoop;
 import io.vertx.core.*;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -24,7 +21,6 @@ import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -161,11 +157,6 @@ public class Spellsource {
 											"type", CollectionTypes.DECK.toString()),
 									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));
-
-							// Update to the latest decklist
-
-							Decks.updateAllDecks(new DeckListUpdateRequest()
-									.withDeckCreateRequests(Spellsource.spellsource().getStandardDecks()));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(3)
