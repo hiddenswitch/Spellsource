@@ -262,18 +262,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	}
 
 	@Override
-	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		final GameId key = new GameId(request.getGameId());
-		if (contexts.containsKey(key)) {
-			Games.LOGGER.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
-			removeGameAndRecordReplay(new GameId(request.getGameId()));
-		} else {
-			throw new IllegalArgumentException("request.gameId");
-		}
-		return new EndGameSessionResponse();
-	}
-
-	@Override
 	public UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
@@ -281,27 +269,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	@Override
 	public PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		final GameId key = new GameId(request.getGameId());
-		if (contexts.containsKey(key)) {
-			Games.LOGGER.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
-			removeGameAndRecordReplay(new GameId(request.getGameId()));
-		} else {
-			Games.LOGGER.debug("concedeGameSession: This instance does not contain the gameId " + request.getGameId()
-					+ ". Redirecting your request to the correct deployment.");
-			SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
-			CreateGameSessionResponse connection = connections.get(key);
-			if (connection == null) {
-				Games.LOGGER.error("concedeGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
-				return new ConcedeGameSessionResponse();
-			}
-
-			Rpc.connect(Games.class).sync(connection.deploymentId).concedeGameSession(request);
-		}
-		return new ConcedeGameSessionResponse();
 	}
 
 	@Override
