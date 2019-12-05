@@ -6,13 +6,12 @@ import com.hiddenswitch.spellsource.client.models.PresenceEnum;
 import java.io.Serializable;
 
 /**
- * Created by weller on 6/5/17. This class represents an internal record, thus does not extend MongoRecord
+ * Information about a friend relationship. Stored on both friends.
  */
 public class FriendRecord implements Serializable {
 	private String friendId;
 	private long since;
 	private String displayName;
-	private PresenceEnum presence;
 
 	public long getSince() {
 		return since;
@@ -41,13 +40,8 @@ public class FriendRecord implements Serializable {
 		return this;
 	}
 
-
-	public void setPresence(PresenceEnum presence) {
-		this.presence = presence;
-	}
-
 	public Friend toFriendDto() {
-		return new Friend().friendId(this.friendId).since(this.since).friendName(this.displayName).presence(presence);
+		return new Friend().friendId(this.friendId).since(this.since).friendName(this.displayName);
 	}
 
 	@Override
@@ -68,9 +62,5 @@ public class FriendRecord implements Serializable {
 		result = 31 * result + (int) (since ^ (since >>> 32));
 		result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
 		return result;
-	}
-
-	public PresenceEnum getPresence() {
-		return presence;
 	}
 }

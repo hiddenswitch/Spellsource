@@ -28,7 +28,6 @@ import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -89,7 +88,7 @@ public interface Matchmaking extends Verticle {
 
 			LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
 
-			Presence.updatePresence(new UserId(request.getUserId()), PresenceEnum.IN_GAME);
+			Presence.notifyFriendsOfPresence(new UserId(request.getUserId()), PresenceEnum.IN_GAME);
 			enqueued = true;
 		} finally {
 			span.setTag("enqueued", enqueued);

@@ -17,6 +17,7 @@ package io.atomix.vertx;
 
 import io.atomix.core.counter.AsyncAtomicCounter;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Closeable;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.Counter;
@@ -28,48 +29,63 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author <a href="http://github.com/kuujo">Jordan Halterman</a>
  */
-public class AtomixCounter implements Counter {
-  private final Vertx vertx;
-  private final AsyncAtomicCounter counter;
+public class AtomixCounter implements Counter, Closeable {
+	private final Vertx vertx;
+	private final AsyncAtomicCounter counter;
+	private Handler<Void> closeHandler;
 
-  public AtomixCounter(Vertx vertx, AsyncAtomicCounter counter) {
-    this.vertx = checkNotNull(vertx, "vertx cannot be null");
-    this.counter = checkNotNull(counter, "counter cannot be null");
-  }
+	public AtomixCounter(Vertx vertx, AsyncAtomicCounter counter) {
+		this.vertx = checkNotNull(vertx, "vertx cannot be null");
+		this.counter = checkNotNull(counter, "counter cannot be null");
+	}
 
-  @Override
-  public void get(Handler<AsyncResult<Long>> handler) {
-    counter.get().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void get(Handler<AsyncResult<Long>> handler) {
+		counter.get().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
-  @Override
-  public void incrementAndGet(Handler<AsyncResult<Long>> handler) {
-    counter.incrementAndGet().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void incrementAndGet(Handler<AsyncResult<Long>> handler) {
+		counter.incrementAndGet().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
-  @Override
-  public void getAndIncrement(Handler<AsyncResult<Long>> handler) {
-    counter.getAndIncrement().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void getAndIncrement(Handler<AsyncResult<Long>> handler) {
+		counter.getAndIncrement().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
-  @Override
-  public void decrementAndGet(Handler<AsyncResult<Long>> handler) {
-    counter.decrementAndGet().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void decrementAndGet(Handler<AsyncResult<Long>> handler) {
+		counter.decrementAndGet().whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
-  @Override
-  public void addAndGet(long delta, Handler<AsyncResult<Long>> handler) {
-    counter.addAndGet(delta).whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void addAndGet(long delta, Handler<AsyncResult<Long>> handler) {
+		counter.addAndGet(delta).whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
-  @Override
-  public void getAndAdd(long delta, Handler<AsyncResult<Long>> handler) {
-    counter.getAndAdd(delta).whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void getAndAdd(long delta, Handler<AsyncResult<Long>> handler) {
+		counter.getAndAdd(delta).whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
-  @Override
-  public void compareAndSet(long expect, long update, Handler<AsyncResult<Boolean>> handler) {
-    counter.compareAndSet(expect, update).whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
-  }
+	@Override
+	public void compareAndSet(long expect, long update, Handler<AsyncResult<Boolean>> handler) {
+		counter.compareAndSet(expect, update).whenComplete(VertxFutures.resultHandler(handler, vertx.getOrCreateContext()));
+	}
 
+	@Override
+	public void close(Handler<AsyncResult<Void>> completionHandler) {
+		counter.close().whenComplete(VertxFutures.resultHandler(v -> {
+			if (v.succeeded()) {
+				closeHandler.handle(v.result());
+			}
+			completionHandler.handle(v);
+		}, vertx.getOrCreateContext()));
+	}
+
+	public AtomixCounter setCloseHandler(Handler<Void> closeHandler) {
+		this.closeHandler = closeHandler;
+		return this;
+	}
 }

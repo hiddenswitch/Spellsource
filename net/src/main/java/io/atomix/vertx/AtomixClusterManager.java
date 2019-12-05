@@ -21,10 +21,12 @@ import com.google.common.cache.LoadingCache;
 import io.atomix.cluster.ClusterMembershipEvent;
 import io.atomix.cluster.ClusterMembershipEventListener;
 import io.atomix.core.Atomix;
+import io.atomix.core.counter.AtomicCounter;
 import io.atomix.core.lock.AtomicLock;
+import io.atomix.core.map.AsyncAtomicMap;
+import io.atomix.core.map.AtomicMap;
 import io.atomix.primitive.Consistency;
 import io.atomix.primitive.Replication;
-import io.atomix.primitive.protocol.GossipProtocol;
 import io.atomix.protocols.backup.MultiPrimaryProtocol;
 import io.atomix.utils.concurrent.SingleThreadContext;
 import io.atomix.utils.concurrent.ThreadContext;
@@ -58,6 +60,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class AtomixClusterManager implements ClusterManager {
 	public static final int DEFAULT_CACHE_SIZE = 64 * 1024 * 1024;
+	public static final int DEFAULT_LOCK_CACHE_SIZE = 10000;
+	public static final int DEFAULT_COUNTER_CACHE_SIZE = 10000;
 	private final Atomix atomix;
 	private final ThreadContext context;
 	private NodeListener listener;
@@ -65,11 +69,21 @@ public class AtomixClusterManager implements ClusterManager {
 	private Vertx vertx;
 	private final ClusterMembershipEventListener clusterListener = this::handleClusterEvent;
 	private final LoadingCache<String, CompletableFuture<AtomicLock>> lockCache = CacheBuilder.newBuilder()
-			.maximumSize(100)
-			.build(new CacheLoader<String, CompletableFuture<AtomicLock>>() {
+			.maximumSize(DEFAULT_LOCK_CACHE_SIZE)
+			.build(new CacheLoader<>() {
 				@Override
 				public CompletableFuture<AtomicLock> load(String key) throws Exception {
 					return atomix.atomicLockBuilder(key)
+							.withProtocol(getProtocol())
+							.buildAsync();
+				}
+			});
+	private final LoadingCache<String, CompletableFuture<AtomicCounter>> counterCache = CacheBuilder.newBuilder()
+			.maximumSize(DEFAULT_COUNTER_CACHE_SIZE)
+			.build(new CacheLoader<>() {
+				@Override
+				public CompletableFuture<AtomicCounter> load(String key) throws Exception {
+					return atomix.atomicCounterBuilder(key)
 							.withProtocol(getProtocol())
 							.buildAsync();
 				}
@@ -174,11 +188,11 @@ public class AtomixClusterManager implements ClusterManager {
 
 	@Override
 	public void getCounter(String name, Handler<AsyncResult<Counter>> handler) {
-		atomix.atomicCounterBuilder(name)
-				.withProtocol(getProtocol())
-				.buildAsync()
-				.whenComplete(VertxFutures.convertHandler(
-						handler, counter -> new AtomixCounter(vertx, counter.async()), vertx.getOrCreateContext()));
+		Context context = vertx.getOrCreateContext();
+		counterCache.getUnchecked(name).whenComplete(VertxFutures.convertHandler(
+				handler, counter -> new AtomixCounter(vertx, counter.async()).setCloseHandler(v -> {
+					counterCache.invalidate(name);
+				}), context));
 	}
 
 	@Override

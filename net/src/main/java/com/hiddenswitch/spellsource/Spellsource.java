@@ -612,7 +612,15 @@ public class Spellsource {
 									json("$unset", json("roles", null)),
 									new UpdateOptions().setMulti(true));
 						}))
-				.migrateTo(38, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(39)
+						.withUp(thisVertx -> {
+							// Remove all the presence status from mongo, it will be computed on the fly
+							mongo().updateCollectionWithOptions(Accounts.USERS,
+									json(),
+									json("$unset", json("friends.$[].presence", null)), new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(39, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

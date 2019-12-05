@@ -144,8 +144,9 @@ public class FriendTest extends SpellsourceTestBase {
 					ws2.handler(buf -> {
 						Envelope msg = Json.decodeValue(buf, Envelope.class);
 						atLeastConnected.countDown();
-						if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
-							Friend friend = msg.getChanged().getFriend();
+						if ((msg.getChanged() != null && msg.getChanged().getFriend() != null)
+								|| (msg.getAdded() != null && msg.getAdded().getFriend() != null)) {
+							Friend friend = msg.getChanged() == null ? msg.getAdded().getFriend() : msg.getChanged().getFriend();
 							switch (friend.getPresence()) {
 								case ONLINE:
 									context.assertTrue(didGetOffline.compareAndSet(false, false));
