@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableCounter;
 import com.hiddenswitch.spellsource.impl.util.FriendRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Mongo;
@@ -25,7 +26,9 @@ public interface Friends {
 				try {
 					UserRecord user = mongo().findOne(Accounts.USERS, json("_id", connection.userId()), UserRecord.class);
 					for (FriendRecord friend : user.getFriends()) {
-						connection.write(new Envelope().added(new EnvelopeAdded().friend(friend.toFriendDto())));
+						connection.write(new Envelope().added(new EnvelopeAdded().friend(
+								friend.toFriendDto()
+										.presence(Presence.connections(friend.getFriendId()).get() == 0L ? PresenceEnum.OFFLINE : PresenceEnum.ONLINE))));
 					}
 					fut.handle(Future.succeededFuture());
 				} catch (RuntimeException any) {
@@ -88,16 +91,16 @@ public interface Friends {
 
 		// Update both users with the new friend records
 		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
-		userConnection.write(new Envelope().added(new EnvelopeAdded().friend(friendRecord.toFriendDto())));
+		Friend clientFriendRecord = friendRecord.toFriendDto()
+				.presence(Presence.getPresence(friendRecord.getFriendId()));
+		userConnection.write(new Envelope().added(new EnvelopeAdded().friend(clientFriendRecord)));
 
 		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
-		friendConnection.write(new Envelope().added(new EnvelopeAdded().friend(friendOfFriendRecord.toFriendDto())));
+		friendConnection.write(new Envelope().added(
+				new EnvelopeAdded().friend(friendOfFriendRecord.toFriendDto()
+						.presence(Presence.getPresence(friendOfFriendRecord.getFriendId())))));
 
-
-		// Update presence for both users
-		Presence.updatePresence(userId);
-		Presence.updatePresence(friendId);
-		return new FriendPutResponse().friend(friendRecord.toFriendDto());
+		return new FriendPutResponse().friend(clientFriendRecord);
 	}
 
 	static UnfriendResponse unfriend(UserRecord myAccount, String friendId) throws SuspendExecution, InterruptedException {
@@ -134,6 +137,6 @@ public interface Friends {
 		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
 		friendConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendOfFriendRecord.getFriendId())));
 
-		return new UnfriendResponse().deletedFriend(friendRecord.toFriendDto());
+		return new UnfriendResponse().deletedFriend(friendRecord.toFriendDto().presence(PresenceEnum.UNKNOWN));
 	}
 }

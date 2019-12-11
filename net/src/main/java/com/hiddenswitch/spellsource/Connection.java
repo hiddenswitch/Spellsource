@@ -104,23 +104,6 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	/**
-	 * Closes the connection, if the user has one.
-	 *
-	 * @param userId
-	 * @param handler
-	 */
-	static void close(String userId, Handler<AsyncResult<Void>> handler) {
-		Vertx.currentContext().owner().eventBus().send(Connection.toBusAddress(userId) + "/closer", Buffer.buffer("close"), res -> {
-			if (res.failed()) {
-				handler.handle(Future.failedFuture(res.cause()));
-				return;
-			}
-
-			handler.handle(Future.succeededFuture());
-		});
-	}
-
-	/**
 	 * Creates a handler for the verticle's {@link io.vertx.ext.web.Router} that upgrades the web socket and manages the
 	 * messaging over the cluster for the user.
 	 *

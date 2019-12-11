@@ -31,7 +31,6 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	public static final String LOGIN_TOKENS = "loginTokens";
 	public static final String SERVICES_RESUME_LOGIN_TOKENS = SERVICES + "." + RESUME + "." + LOGIN_TOKENS;
 	public static final String SERVICES_PASSWORD_SCRYPT = "services.password.scrypt";
-	public static final String ROLES = "roles";
 
 	private List<EmailRecord> emails = new ArrayList<>();
 	private String username;
@@ -66,8 +65,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	}
 
 	/**
-	 * Indicates whether the user is authorized for the given Spellsource authority found in {@link
-	 * com.hiddenswitch.spellsource.Accounts.Authorities}.
+	 * Authorization checks are not supported.
 	 *
 	 * @param authority
 	 * @param resultHandler
@@ -76,25 +74,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	@Override
 	@JsonIgnore
 	public UserRecord isAuthorized(String authority, Handler<AsyncResult<Boolean>> resultHandler) {
-		if (authority == null || authority.isEmpty()) {
-			resultHandler.handle(Future.succeededFuture(true));
-			return this;
-		}
-
-		resultHandler.handle(isAuthorized(Accounts.Authorities.valueOf(authority))
-				? Future.succeededFuture()
-				: Future.failedFuture(new SecurityException("not authorized for " + authority)));
-		return this;
-	}
-
-	@JsonIgnore
-	public boolean isAuthorized(Accounts.Authorities... authorities) {
-		for (Accounts.Authorities authority : authorities) {
-			if (!authority.has(this)) {
-				return false;
-			}
-		}
-		return true;
+		throw new UnsupportedOperationException("authorities are not supported");
 	}
 
 	@Override

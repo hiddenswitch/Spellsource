@@ -53,13 +53,16 @@ Options:
 
 Commands:
   change-password       Changes a Spellsource user's password.
+  create-cards-db       Saves a cards.json database for the client.
   create-user           Creates an AWS user named USERNAME.
+  fix-merge             Fixes card catalogue merge issues.
   format-cards          Formats JSON card files.
   hearthcards-stubs     Creates stubs from the Hearthcards.
   hs-replay-matchups    Prints a table of HSReplay matchups in TSV format.
   image-stubs           Converts images to card stubs.
   markdown-to-textmesh  Renders a Markdown file to TextMesh markup.
   replicate-database    Replicates mongo databases.
+  run                   Runs the server.
   simulate              Run a simulation using AIs of a given deck matchup.
   update-dbf            Updates Hearthstone IDs.
   update-decklists      Updates the deck lists from Tempostorm.

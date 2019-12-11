@@ -32,10 +32,13 @@ public class TargetActionPair implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("target")
-  private Integer target = null;
+  private Integer target = -1;
+
+  @JsonProperty("friendlyBattlefieldIndex")
+  private Integer friendlyBattlefieldIndex = null;
 
   @JsonProperty("action")
-  private Integer action = null;
+  private Integer action = -1;
 
   public TargetActionPair target(Integer target) {
     this.target = target;
@@ -43,16 +46,34 @@ public class TargetActionPair implements Serializable {
   }
 
    /**
-   * Get target
+   * The corresponding target for this action. When -1, this indicates there is no target for this particular pair. This is relevant for summon actions which would ordinarily have a null value. A -1 here indicates the rightmost position on the battlefield. 
    * @return target
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The corresponding target for this action. When -1, this indicates there is no target for this particular pair. This is relevant for summon actions which would ordinarily have a null value. A -1 here indicates the rightmost position on the battlefield. ")
   public Integer getTarget() {
     return target;
   }
 
   public void setTarget(Integer target) {
     this.target = target;
+  }
+
+  public TargetActionPair friendlyBattlefieldIndex(Integer friendlyBattlefieldIndex) {
+    this.friendlyBattlefieldIndex = friendlyBattlefieldIndex;
+    return this;
+  }
+
+   /**
+   * The corresponding index on the friendly side of the battlefield for a summon action. The minion will be summoned to the left of this index. 
+   * @return friendlyBattlefieldIndex
+  **/
+  @ApiModelProperty(value = "The corresponding index on the friendly side of the battlefield for a summon action. The minion will be summoned to the left of this index. ")
+  public Integer getFriendlyBattlefieldIndex() {
+    return friendlyBattlefieldIndex;
+  }
+
+  public void setFriendlyBattlefieldIndex(Integer friendlyBattlefieldIndex) {
+    this.friendlyBattlefieldIndex = friendlyBattlefieldIndex;
   }
 
   public TargetActionPair action(Integer action) {
@@ -84,12 +105,13 @@ public class TargetActionPair implements Serializable {
     }
     TargetActionPair targetActionPair = (TargetActionPair) o;
     return Objects.equals(this.target, targetActionPair.target) &&
+        Objects.equals(this.friendlyBattlefieldIndex, targetActionPair.friendlyBattlefieldIndex) &&
         Objects.equals(this.action, targetActionPair.action);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(target, action);
+    return Objects.hash(target, friendlyBattlefieldIndex, action);
   }
 
 
@@ -99,6 +121,7 @@ public class TargetActionPair implements Serializable {
     sb.append("class TargetActionPair {\n");
     
     sb.append("    target: ").append(toIndentedString(target)).append("\n");
+    sb.append("    friendlyBattlefieldIndex: ").append(toIndentedString(friendlyBattlefieldIndex)).append("\n");
     sb.append("    action: ").append(toIndentedString(action)).append("\n");
     sb.append("}");
     return sb.toString();

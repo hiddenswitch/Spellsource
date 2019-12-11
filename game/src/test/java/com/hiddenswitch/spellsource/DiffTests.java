@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 public class DiffTests {
 	@Test
 	public void testDiffSequence() {
+		testBothWays(Arrays.asList("a"), Arrays.asList());
+		testBothWays(Arrays.asList("a"), Arrays.asList("A"));
 		testBothWays(Arrays.asList("a", "b", "c"), Arrays.asList("c", "b", "a"));
 		testBothWays(Arrays.asList("a", "b", "c"), Collections.emptyList());
 		testBothWays(Arrays.asList("a", "b", "c"), Arrays.asList("e", "f"));

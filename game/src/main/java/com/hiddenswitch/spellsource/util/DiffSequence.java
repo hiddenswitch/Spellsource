@@ -102,6 +102,7 @@ public interface DiffSequence {
 						context.added(newDocId, newDoc);
 					} else {
 						oldDoc = oldResults.get(oldIndexOfId.get(newDocId));
+						// TODO: Perform actual comparison here
 						context.possiblyChanged(newDocId, oldDoc, newDoc);
 						context.movedBefore(newDocId, groupId);
 					}

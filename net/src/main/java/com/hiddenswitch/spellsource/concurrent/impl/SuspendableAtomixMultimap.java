@@ -24,12 +24,14 @@ import java.util.function.Supplier;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class SuspendableAtomixMultimap<K, V> implements SuspendableMultimap<K, V> {
+	private final Vertx vertx;
 	private String name;
 	private AtomixAsyncMultiMap<K, V> map = null;
 	private ReentrantLock mapLock = new ReentrantLock();
 
-	public SuspendableAtomixMultimap(String name) {
+	public SuspendableAtomixMultimap(String name, Vertx vertx) {
 		this.name = name;
+		this.vertx = vertx;
 	}
 
 	@Suspendable
@@ -37,7 +39,7 @@ public class SuspendableAtomixMultimap<K, V> implements SuspendableMultimap<K, V
 		mapLock.lock();
 		try {
 			if (map != null) {
-				map = awaitResult(h -> AtomixHelpers.getClusterManager().getAsyncMultiMap(name, v -> h.handle(v.map(innerMap -> (AtomixAsyncMultiMap<K, V>) innerMap))));
+				map = awaitResult(h -> AtomixHelpers.getClusterManager(vertx).getAsyncMultiMap(name, v -> h.handle(v.map(innerMap -> (AtomixAsyncMultiMap<K, V>) innerMap))));
 			}
 		} finally {
 			mapLock.unlock();

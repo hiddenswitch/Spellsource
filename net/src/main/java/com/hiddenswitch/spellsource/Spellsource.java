@@ -5,7 +5,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -14,9 +13,7 @@ import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
 import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
-import io.netty.channel.EventLoop;
 import io.vertx.core.*;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -24,7 +21,6 @@ import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -161,11 +157,6 @@ public class Spellsource {
 											"type", CollectionTypes.DECK.toString()),
 									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));
-
-							// Update to the latest decklist
-
-							Decks.updateAllDecks(new DeckListUpdateRequest()
-									.withDeckCreateRequests(Spellsource.spellsource().getStandardDecks()));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(3)
@@ -439,10 +430,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(26)
 						.withUp(thisVertx -> {
-							// DoctorPangloss is the first and only admin user
-							mongo().updateCollectionWithOptions(Accounts.USERS, json(), json("$set", json(UserRecord.ROLES, array())), new UpdateOptions().setMulti(true));
-							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
-							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
+							// No more administrative behaviour
 						}))
 				.add(new MigrationRequest()
 						.withVersion(27)
@@ -607,7 +595,23 @@ public class Spellsource {
 							changeCardId("minion_thassarian", "minion_the_vein_wyrm");
 							changeCardId("weapon_souldrinker_axe", "weapon_consuming_blade");
 						}))
-				.migrateTo(37, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(38)
+						.withUp(thisVertx -> {
+							mongo().updateCollectionWithOptions(Accounts.USERS,
+									json(),
+									json("$unset", json("roles", null)),
+									new UpdateOptions().setMulti(true));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(39)
+						.withUp(thisVertx -> {
+							// Remove all the presence status from mongo, it will be computed on the fly
+							mongo().updateCollectionWithOptions(Accounts.USERS,
+									json(),
+									json("$unset", json("friends.$[].presence", null)), new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(39, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -670,7 +674,7 @@ public class Spellsource {
 		if (getPersistAttributeHandlers().containsKey(id)) {
 			return this;
 		}
-		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(suspendableHandler(handler), id, event, attribute));
+		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(handler, id, event, attribute));
 		return this;
 	}
 

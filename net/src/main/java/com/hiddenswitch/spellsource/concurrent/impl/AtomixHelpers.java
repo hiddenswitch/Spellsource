@@ -10,7 +10,10 @@ import io.vertx.core.impl.VertxInternal;
 
 public class AtomixHelpers {
 	public static AtomixClusterManager getClusterManager() {
-		return (AtomixClusterManager) ((VertxInternal) Vertx.currentContext().owner()).getClusterManager();
+		return getClusterManager(Vertx.currentContext().owner());
+	}
+	public static AtomixClusterManager getClusterManager(Vertx vertx) {
+		return (AtomixClusterManager) ((VertxInternal) vertx).getClusterManager();
 	}
 
 	public static PrimitiveProtocolConfig<MultiPrimaryProtocolConfig> getProtocol() {

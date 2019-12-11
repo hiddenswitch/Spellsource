@@ -13,6 +13,7 @@ import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -270,11 +271,11 @@ public class InvitesTest extends SpellsourceTestBase {
 			try (UnityClient sender = new UnityClient(testContext) {
 				@Override
 				protected int getActionIndex(ServerToClientMessage message) {
-					if (message.getActions().getEndTurn() != null) {
-						return message.getActions().getEndTurn();
-					} else {
-						return super.getActionIndex(message);
+					Optional<SpellAction> endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+					if (endTurn.isPresent()) {
+						return endTurn.get().getAction();
 					}
+					return super.getActionIndex(message);
 				}
 
 				@Override
@@ -285,11 +286,11 @@ public class InvitesTest extends SpellsourceTestBase {
 				try (UnityClient recipient = new UnityClient(testContext) {
 					@Override
 					protected int getActionIndex(ServerToClientMessage message) {
-						if (message.getActions().getEndTurn() != null) {
-							return message.getActions().getEndTurn();
-						} else {
-							return super.getActionIndex(message);
+						Optional<SpellAction> endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+						if (endTurn.isPresent()) {
+							return endTurn.get().getAction();
 						}
+						return super.getActionIndex(message);
 					}
 
 					@Override

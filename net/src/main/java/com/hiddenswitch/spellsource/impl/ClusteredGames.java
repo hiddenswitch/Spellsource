@@ -61,9 +61,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				.start();
 		try (Scope s1 = tracer.activateSpan(span)) {
 			span.log(json(request).getMap());
-			if (Games.LOGGER.isDebugEnabled()) {
-				Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
-			}
+			Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
 
 			if (request.getGameId() == null) {
 				throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
@@ -119,7 +117,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					// Deal with ending the game
 					context.handleEndGame(session -> {
 						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
-						final GameId gameOverId = new GameId(session.getGameId());
+						GameId gameOverId = new GameId(session.getGameId());
 						// The players should not accidentally wind back up in games
 						removeGameAndRecordReplay(gameOverId);
 					});
@@ -240,9 +238,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 								.setDeckIds(deckIds)
 								.setPlayerNames(playerNames);
 						Replay replay = Games.replayFromGameContext(gameContext);
-						if (replay == null) {
-							LOGGER.error("endGame {}: Could not save replay due to error restoring the game state", gameId);
-						}
 						gameRecord.setReplay(replay);
 						mongo().insert(Games.GAMES, mapFrom(gameRecord));
 					} catch (Throwable any) {
@@ -262,18 +257,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	}
 
 	@Override
-	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		final GameId key = new GameId(request.getGameId());
-		if (contexts.containsKey(key)) {
-			Games.LOGGER.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
-			removeGameAndRecordReplay(new GameId(request.getGameId()));
-		} else {
-			throw new IllegalArgumentException("request.gameId");
-		}
-		return new EndGameSessionResponse();
-	}
-
-	@Override
 	public UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
@@ -281,27 +264,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	@Override
 	public PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
-		final GameId key = new GameId(request.getGameId());
-		if (contexts.containsKey(key)) {
-			Games.LOGGER.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
-			removeGameAndRecordReplay(new GameId(request.getGameId()));
-		} else {
-			Games.LOGGER.debug("concedeGameSession: This instance does not contain the gameId " + request.getGameId()
-					+ ". Redirecting your request to the correct deployment.");
-			SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
-			CreateGameSessionResponse connection = connections.get(key);
-			if (connection == null) {
-				Games.LOGGER.error("concedeGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
-				return new ConcedeGameSessionResponse();
-			}
-
-			Rpc.connect(Games.class).sync(connection.deploymentId).concedeGameSession(request);
-		}
-		return new ConcedeGameSessionResponse();
 	}
 
 	@Override
