@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.concurrent.impl;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.SuspendableCounter;
 import com.hiddenswitch.spellsource.util.Sync;
+import io.vertx.core.Closeable;
 import io.vertx.core.shareddata.Counter;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
@@ -54,5 +55,13 @@ public class SuspendableVertxCounter implements SuspendableCounter {
 	@Suspendable
 	public boolean compareAndSet(long expected, long value) {
 		return invoke(counter::compareAndSet, expected, value);
+	}
+
+	@Override
+	@Suspendable
+	public void close() {
+		if (counter instanceof Closeable) {
+			Void t = io.vertx.ext.sync.Sync.awaitResult(((Closeable) counter)::close);
+		}
 	}
 }

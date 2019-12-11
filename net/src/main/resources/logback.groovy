@@ -56,7 +56,6 @@ appender("STDOUT", ConsoleAppender) {
 root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 
 logger("io.netty", ERROR)
-logger("com.hazelcast", ERROR)
 logger("io.atomix", WARN)
 logger("org.reflections", ERROR)
 logger("co.paralleluniverse", ERROR)
@@ -75,6 +74,7 @@ logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", defaultLevel)
 logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
 logger("com.hiddenswitch.spellsource.Gateway", INFO)
 logger("io.atomix.cluster.messaging.impl", ERROR)
+logger("io.atomix.cluster.discovery", DEBUG)
 
 // Test group
 logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)

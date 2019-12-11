@@ -14,7 +14,7 @@ import java.io.OptionalDataException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by bberman on 6/7/17.
+ * Uses buffers to transmit data across the event bus for calls.
  */
 class BufferEventBusHandler<T, R> implements SuspendableAction1<Message<Buffer>> {
 	private final SuspendableFunction<T, R> method;

@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -11,12 +10,11 @@ import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.WorkerExecutor;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.web.client.WebClient;
 import io.vertx.test.core.Repeat;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
@@ -27,8 +25,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -37,7 +35,7 @@ import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 
 public class GatewayTest extends SpellsourceTestBase {
-	private static Logger logger = LoggerFactory.getLogger(GatewayTest.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(GatewayTest.class);
 
 	@Test(timeout = 30000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
@@ -240,15 +238,16 @@ public class GatewayTest extends SpellsourceTestBase {
 			try (UnityClient client = new UnityClient(context) {
 				@Override
 				protected int getActionIndex(ServerToClientMessage message) {
-					if (message.getActions().getEndTurn() != null) {
-						return message.getActions().getEndTurn();
+					Optional<SpellAction> endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+					if (endTurn.isPresent()) {
+						return endTurn.get().getAction();
 					}
 					return super.getActionIndex(message);
 				}
 
 				@Override
 				protected boolean onRequestAction(ServerToClientMessage message) {
-					logger.trace("testGameDoesntCloseAfterActivity: Sending request {}", counter.get());
+					LOGGER.trace("testGameDoesntCloseAfterActivity: Sending request {}", counter.get());
 					int andIncrement = counter.getAndIncrement();
 					if (andIncrement == 0) {
 						startTime.set(System.currentTimeMillis());
@@ -346,5 +345,15 @@ public class GatewayTest extends SpellsourceTestBase {
 			}
 		}, context);
 
+	}
+
+	@Test
+	public void testHealthcheck(TestContext context) {
+		sync(() -> {
+			try (UnityClient client1 = new UnityClient(context)) {
+				String res = invoke(client1.getApi()::healthCheck);
+				context.assertEquals(res, "OK");
+			}
+		}, context);
 	}
 }

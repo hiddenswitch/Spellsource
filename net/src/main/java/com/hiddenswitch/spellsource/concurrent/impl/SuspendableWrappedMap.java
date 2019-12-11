@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class SuspendableWrappedMap<K, V> implements SuspendableMap<K, V> {
+public class SuspendableWrappedMap<K, V> extends SuspendableMap<K, V> {
 	private final LocalMap<K, V> localMap;
 
 	public SuspendableWrappedMap(LocalMap<K, V> localMap) {

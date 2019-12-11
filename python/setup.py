@@ -16,8 +16,8 @@ try:
 except:
     sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
 
-SRC_PATH = './'
-with open('../README.md', 'r') as readme_file:
+SRC_PATH = '../'
+with open(os.path.join(SRC_PATH, 'README.md'), 'r') as readme_file:
     README = readme_file.read()
 
 
@@ -55,7 +55,7 @@ setup(name='spellsource',
       ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
-      license='GPLv3',
+      license='AGPLv3',
       install_requires=['py4j==0.10.8.1',
                         'tqdm>=4',
                         'objdict',

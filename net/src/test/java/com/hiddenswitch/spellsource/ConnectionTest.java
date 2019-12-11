@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import io.vertx.core.Future;
@@ -22,7 +23,7 @@ public class ConnectionTest extends SpellsourceTestBase {
 		sync(() -> {
 			HttpClient client = Vertx.currentContext().owner().createHttpClient();
 			CountDownLatch latch = new CountDownLatch(1);
-			client.websocket(Port.port(), "localhost", "/realtime", (ws) -> {
+			client.websocket(Configuration.apiGatewayPort(), "localhost", "/realtime", (ws) -> {
 				testContext.fail("Should not be connected");
 			}, excepted -> {
 				testContext.assertEquals(WebsocketRejectedException.class, excepted.getClass());
@@ -41,7 +42,7 @@ public class ConnectionTest extends SpellsourceTestBase {
 				CreateAccountResponse account = createRandomAccount();
 
 				HttpClient client = Vertx.currentContext().owner().createHttpClient();
-				socket = awaitEvent(h -> client.websocket(Port.port(), "localhost", "/realtime?X-Auth-Token=" + account.getLoginToken().getToken(), h, testContext::fail));
+				socket = awaitEvent(h -> client.websocket(Configuration.apiGatewayPort(), "localhost", "/realtime?X-Auth-Token=" + account.getLoginToken().getToken(), h, testContext::fail));
 				socket.handler(buf -> {
 					Envelope env = Json.decodeValue(buf, Envelope.class);
 					latch.countDown();
@@ -64,7 +65,7 @@ public class ConnectionTest extends SpellsourceTestBase {
 			});
 
 			HttpClient client = Vertx.currentContext().owner().createHttpClient();
-			client.websocket(Port.port(), "localhost", "/realtime?X-Auth-Token=invalid:auth", (ws) -> {
+			client.websocket(Configuration.apiGatewayPort(), "localhost", "/realtime?"+ SpellsourceAuthHandler.HEADER+"=invalid:auth", (ws) -> {
 				testContext.fail("Should not connect");
 			}, excepted -> {
 				testContext.assertEquals(WebsocketRejectedException.class, excepted.getClass());

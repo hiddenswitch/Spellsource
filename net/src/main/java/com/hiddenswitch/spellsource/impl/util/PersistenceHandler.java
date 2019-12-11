@@ -1,28 +1,29 @@
 package com.hiddenswitch.spellsource.impl.util;
 
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 
 public class PersistenceHandler<T extends GameEvent> {
-	private Handler<PersistenceContext<T>> handler;
+	private SuspendableAction1<PersistenceContext<T>> handler;
 	private String id;
 	private GameEventType type;
 	private Attribute attribute;
 
-	public PersistenceHandler(Handler<PersistenceContext<T>> handler, String id, GameEventType type, Attribute attribute) {
+	public PersistenceHandler(SuspendableAction1<PersistenceContext<T>> handler, String id, GameEventType type, Attribute attribute) {
 		this.setHandler(handler);
 		this.setId(id);
 		this.setType(type);
 		this.setAttribute(attribute);
 	}
 
-	public Handler<PersistenceContext<T>> getHandler() {
+	public SuspendableAction1<PersistenceContext<T>> getHandler() {
 		return handler;
 	}
 
-	public void setHandler(Handler<PersistenceContext<T>> handler) {
+	public void setHandler(SuspendableAction1<PersistenceContext<T>> handler) {
 		this.handler = handler;
 	}
 

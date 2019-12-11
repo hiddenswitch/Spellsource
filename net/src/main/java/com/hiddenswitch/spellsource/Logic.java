@@ -110,7 +110,7 @@ public interface Logic {
 				(PersistenceContext<KillEvent> context) -> {
 					Actor victim = (Actor) context.event().getVictim();
 
-					final GameContext gameContext = context.event().getGameContext();
+					GameContext gameContext = context.event().getGameContext();
 					Optional<Minion> lowestAttackMinionStillOnBattlefield = gameContext.getEntities()
 							.filter(Objects::nonNull)
 							.filter(e -> e.getEntityType() == EntityType.MINION)

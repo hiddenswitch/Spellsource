@@ -4,6 +4,7 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
@@ -135,16 +136,17 @@ public class FriendTest extends SpellsourceTestBase {
 				AtomicBoolean didGetOffline = new AtomicBoolean();
 				CountDownLatch atLeastConnected = new CountDownLatch(1);
 
-				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), sockets::add);
+				httpClient.websocket(8080, "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=" + account1.getLoginToken().getToken(), sockets::add);
 
-				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), ws2 -> {
+				httpClient.websocket(8080, "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=" + account2.getLoginToken().getToken(), ws2 -> {
 					sockets.add(ws2);
 
 					ws2.handler(buf -> {
 						Envelope msg = Json.decodeValue(buf, Envelope.class);
 						atLeastConnected.countDown();
-						if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
-							Friend friend = msg.getChanged().getFriend();
+						if ((msg.getChanged() != null && msg.getChanged().getFriend() != null)
+								|| (msg.getAdded() != null && msg.getAdded().getFriend() != null)) {
+							Friend friend = msg.getChanged() == null ? msg.getAdded().getFriend() : msg.getChanged().getFriend();
 							switch (friend.getPresence()) {
 								case ONLINE:
 									context.assertTrue(didGetOffline.compareAndSet(false, false));
