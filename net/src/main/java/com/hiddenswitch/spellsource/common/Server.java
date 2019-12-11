@@ -27,18 +27,28 @@ public interface Server extends ClientConnectionHandler {
 	/**
 	 * Have both players connected?
 	 *
-	 * @return {@code true} if both players have sent their first messages.
-	 * to the game session.
+	 * @return {@code true} if both players have sent their first messages. to the game session.
 	 */
 	boolean isGameReady();
 
 	/**
 	 * Gets the server's random instance
+	 *
 	 * @return
 	 */
 	Random getRandom();
 
+	/**
+	 * Get this game's ID, or some fixed string if this is a local game.
+	 *
+	 * @return A game ID.
+	 */
 	String getGameId();
 
+	/**
+	 * Gets the span context that corresponds to the lifetime of the game.
+	 *
+	 * @return
+	 */
 	SpanContext getSpanContext();
 }

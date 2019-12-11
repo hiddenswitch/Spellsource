@@ -79,6 +79,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
 	private Span span;
+	private GameOver gameOver;
 
 
 	public UnityClientBehaviour(Server server,
@@ -478,6 +479,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private void sendMessage(WriteStream<ServerToClientMessage> socket, ServerToClientMessage message) {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
+		// If the game is over, always include whether the current player has won
+		switch (message.getMessageType()) {
+			case TOUCH:
+			case EMOTE:
+			case PINGPONG:
+				break;
+			default:
+				message.gameOver(gameOver);
+		}
 		socket.write(message);
 	}
 
@@ -587,15 +597,16 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void sendGameOver(com.hiddenswitch.spellsource.common.GameState state, Player winner) {
 		flush();
 		if (state == null || lastStateSent == null) {
+			this.gameOver = new GameOver()
+					.localPlayerWon(false);
 			sendMessage(new ServerToClientMessage()
 					.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_END)
-					.gameOver(new GameOver()
-							.localPlayerWon(false)));
+					.gameOver(gameOver));
 			return;
 		}
 
-		final com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
-		GameOver gameOver = new GameOver();
+		com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
+		gameOver = new GameOver();
 		if (winner == null) {
 			gameOver.localPlayerWon(false)
 					.winningPlayerId(null);
