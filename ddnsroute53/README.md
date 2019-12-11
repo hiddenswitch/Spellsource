@@ -19,8 +19,9 @@ Usage: ddnsroute53 update [OPTIONS] [IN_DOMAINS]...
   Instead of providing these arguments, you can use environment variables
   corresponding to the argument names prefixed with DDNSROUTE53:
 
-   - DDNSROUTE53_IN_DOMAINS (space separated list)  - DDNSROUTE53_TTL (in
-   seconds)  - DDNSROUTE53_IP_ADDRESS (an IPv4 address, or PUBLIC to use the
+   - DDNSROUTE53_IN_DOMAINS (space separated list)  
+   - DDNSROUTE53_TTL (in seconds)
+   - DDNSROUTE53_IP_ADDRESS (an IPv4 address, or PUBLIC to use the
    public IP address at runtime)
 
 Options:
