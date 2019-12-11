@@ -1,5 +1,34 @@
 # Route53 DynDNS Script for Docker
 
+Updates Route53 with the current machine's IP address with a specified list of domains. Supports an easy way to install itself into CRON.
+
+```
+Usage: ddnsroute53 update [OPTIONS] [IN_DOMAINS]...
+
+  Updates each domain in the list IN_DOMAINS in Route53.
+
+  Requires AWS credentials to be configured. Uses the AWS_ACCESS_KEY_ID and
+  AWS_SECRET_ACCESS_KEY environment vars, for example.
+
+  Uses the public IP address of the executing machine by default. Or, set to
+  the string PUBLIC to use the public IP address.
+
+  Expects full domains, i.e. if the hosted zone is example.com and you want
+  to route to *, specify *.example.com.
+
+  Instead of providing these arguments, you can use environment variables
+  corresponding to the argument names prefixed with DDNSROUTE53:
+
+   - DDNSROUTE53_IN_DOMAINS (space separated list)  - DDNSROUTE53_TTL (in
+   seconds)  - DDNSROUTE53_IP_ADDRESS (an IPv4 address, or PUBLIC to use the
+   public IP address at runtime)
+
+Options:
+  --ttl INTEGER      the TTL  [default: 300]
+  --ip-address TEXT  the IP address to use  [default: 157.131.201.94]
+  --help             Show this message and exit.
+```
+
 **Installation**:
 
 Installs the package and its crontab entry.
