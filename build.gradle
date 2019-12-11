@@ -176,7 +176,7 @@ allprojects {
         }
     }
 
-    project.version = '0.8.54'
+    project.version = '0.8.55'
 }
 
 subprojects {
