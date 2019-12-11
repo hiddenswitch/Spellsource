@@ -607,9 +607,12 @@ public class Spellsource {
 						.withVersion(39)
 						.withUp(thisVertx -> {
 							// Remove all the presence status from mongo, it will be computed on the fly
-							mongo().updateCollectionWithOptions(Accounts.USERS,
-									json(),
-									json("$unset", json("friends.$[].presence", null)), new UpdateOptions().setMulti(true));
+							MongoClientUpdateResult res;
+							do {
+								res = mongo().updateCollectionWithOptions(Accounts.USERS,
+										json("friends.presence", json("$exists", true)),
+										json("$unset", json("friends.$.presence", null)), new UpdateOptions().setMulti(true));
+							} while (res.getDocModified() != 0);
 						}))
 				.migrateTo(39, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
