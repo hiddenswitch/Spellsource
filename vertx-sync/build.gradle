@@ -17,3 +17,11 @@ dependencies {
     testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.8.3'
     testCompile group: 'io.vertx', name: 'vertx-core', version: '3.8.3', classifier: 'tests'
 }
+
+compileJava {
+    options.warnings = false
+}
+
+test {
+    enableAssertions = false
+}

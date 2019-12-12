@@ -39,7 +39,8 @@ public class DestroyAllExceptOneSpell extends DestroySpell {
 		}
 
 		for (Entity entity : destroyedTargets) {
-			onCast(context, player, null, null, entity);
+			SpellDesc arguments = DestroySpell.create();
+			onCast(context, player, arguments, source, entity);
 		}
 	}
 }
