@@ -111,7 +111,11 @@ public class DiffTests {
 
 		@Override
 		public Function<JsonObject, K> getKeyer() {
-			return (obj) -> (K) obj.getMap().get("_id");
+			return (obj) -> {
+				@SuppressWarnings("unchecked")
+				K id = (K) obj.getMap().get("_id");
+				return id;
+			};
 		}
 
 		public List<JsonObject> getResult() {

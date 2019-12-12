@@ -176,6 +176,10 @@ allprojects {
         }
     }
 
+    test {
+        enableAssertions = false
+    }
+
     project.version = '0.8.55'
 }
 

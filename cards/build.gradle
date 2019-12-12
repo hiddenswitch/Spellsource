@@ -11,4 +11,5 @@ test {
     testLogging {
         events "standardError"
     }
+    enableAssertions = false
 }

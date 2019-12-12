@@ -233,7 +233,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		});
 	}
 
-	@Test(invocationCount = 6)
+	@Test(invocationCount = 600)
 	public void testGrandArchivistRenounceDarknessInteraction() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 10; i++) {
