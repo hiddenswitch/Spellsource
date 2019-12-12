@@ -14,9 +14,13 @@
         "value": 3
       },
       {
-        "class": "AddAttributeSpell",
+        "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
-        "attribute": "BOTH_CHOOSE_ONE_OPTIONS",
+        "aura": {
+          "class": "ChooseOneOverrideAura",
+          "target": "FRIENDLY_PLAYER",
+          "chooseOneOverride": "BOTH_COMBINED"
+        },
         "revertTrigger": {
           "class": "CardPlayedTrigger",
           "requiredAttribute": "CHOOSE_ONE",

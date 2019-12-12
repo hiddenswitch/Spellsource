@@ -253,6 +253,22 @@ services:
     deploy:
       placement:
         constraints: [node.platform.arch == x86_64]
+  skyhook:
+    image: doctorpangloss/skyhook
+    networks:
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:skyhook.hiddenswitch.com"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=8080"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
 volumes:
   mongodata:
   mancenterdata:

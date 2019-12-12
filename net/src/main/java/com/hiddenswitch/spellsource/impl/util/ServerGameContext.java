@@ -90,10 +90,10 @@ public class ServerGameContext extends GameContext implements Server {
 
 	private final transient ReentrantLock lock = new ReentrantLock();
 	private final transient Queue<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
-	private final transient Map<Integer, Future<Client>> clientsReady = new ConcurrentHashMap<>();
+	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new ArrayList<>();
-	private final transient Deque<Future> registrationsReady = new ConcurrentLinkedDeque<>();
-	private final transient Future<Void> initialization = Future.future();
+	private final transient Deque<Promise> registrationsReady = new ConcurrentLinkedDeque<>();
+	private final transient Promise<Void> initialization = Promise.promise();
 	private transient SpanContext spanContext;
 	private transient TimerId turnTimerId;
 	private final Deque<Configuration> playerConfigurations = new ConcurrentLinkedDeque<>();
@@ -193,7 +193,7 @@ public class ServerGameContext extends GameContext implements Server {
 				consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 				producer.setWriteQueueMaxSize(Integer.MAX_VALUE);
 
-				Future<Void> registration = Future.future();
+				Promise<Void> registration = Promise.promise();
 				consumer.completionHandler(registration);
 				registrationsReady.add(registration);
 
@@ -221,9 +221,9 @@ public class ServerGameContext extends GameContext implements Server {
 					consumer.unregister();
 					getClients().clear();
 					CompositeFuture.join(getBehaviours().stream().filter(Closeable.class::isInstance).map(Closeable.class::cast).map(c -> {
-						Future<Void> future = Future.future();
-						c.close(future);
-						return future;
+						Promise<Void> promise = Promise.promise();
+						c.close(promise);
+						return promise.future();
 					}).collect(toList())).setHandler(h -> fut.handle(h.succeeded() ? Future.succeededFuture() : Future.failedFuture(h.cause())));
 					setBehaviour(0, null);
 					setBehaviour(1, null);
@@ -236,7 +236,7 @@ public class ServerGameContext extends GameContext implements Server {
 				getClients().add(client);
 				// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
 				// will only be notified to send this message when the constructor finishes.
-				Future<Client> fut = Future.future();
+				Promise<Client> fut = Promise.promise();
 				clientsReady.put(configuration.getPlayerId(), fut);
 			}
 		}
@@ -313,9 +313,9 @@ public class ServerGameContext extends GameContext implements Server {
 			Connection.getHandlers().remove(handler);
 
 			CompositeFuture.all(consumers.stream().map(mc -> {
-				Future<Void> future = Future.future();
-				mc.unregister(future);
-				return future;
+				Promise<Void> promise = Promise.promise();
+				mc.unregister(promise);
+				return promise.future();
 			}).collect(toList())).setHandler(v1 -> {
 				if (v1.succeeded()) {
 					completionHandler.handle(Future.succeededFuture());
@@ -424,9 +424,9 @@ public class ServerGameContext extends GameContext implements Server {
 			initialization.complete();
 			Future bothClientsReady;
 			long timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
-			if (!clientsReady.values().stream().allMatch(Future::isComplete)) {
+			if (!clientsReady.values().stream().allMatch(fut -> fut.future().isComplete())) {
 				// If this is interrupted, it will bubble up to the general interrupt handler
-				bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, timeout);
+				bothClientsReady = awaitResult(CompositeFuture.join(clientsReady.values().stream().map(Promise::future).collect(toList()))::setHandler, timeout);
 			} else {
 				bothClientsReady = Future.succeededFuture();
 			}
@@ -435,8 +435,8 @@ public class ServerGameContext extends GameContext implements Server {
 					|| bothClientsReady.failed()) {
 				// Mark the players that have not connected in time as destroyed, which in updateAndGetGameOver will eventually
 				// lead to a double loss
-				for (Map.Entry<Integer, Future<Client>> entry : clientsReady.entrySet()) {
-					if (!entry.getValue().isComplete()) {
+				for (Map.Entry<Integer, Promise<Client>> entry : clientsReady.entrySet()) {
+					if (!entry.getValue().future().isComplete()) {
 						LOGGER.warn("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
 						getLogic().concede(entry.getKey());
 					}
@@ -477,8 +477,8 @@ public class ServerGameContext extends GameContext implements Server {
 			updateClientsWithGameState();
 
 			// Simultaneous mulligans now
-			Future<List<Card>> mulligansActive = Future.future();
-			Future<List<Card>> mulligansNonActive = Future.future();
+			Promise<List<Card>> mulligansActive = Promise.promise();
+			Promise<List<Card>> mulligansNonActive = Promise.promise();
 
 			List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
 			List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
@@ -494,7 +494,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			// If this is interrupted, it'll bubble up to the general interrupt handler
-			CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive, mulligansNonActive)::setHandler);
+			CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive.future(), mulligansNonActive.future())::setHandler);
 
 			// If we got this far, we should cancel the time
 			if (mulliganTimerId != null) {
@@ -507,12 +507,12 @@ public class ServerGameContext extends GameContext implements Server {
 				throw new VertxException(simultaneousMulligans == null ? new TimeoutException() : simultaneousMulligans.cause());
 			}
 
-			List<Card> discardedCardsActive = mulligansActive.result();
-			List<Card> discardedCardsNonActive = mulligansNonActive.result();
+			List<Card> discardedCardsActive = mulligansActive.future().result();
+			List<Card> discardedCardsNonActive = mulligansNonActive.future().result();
 			getLogic().handleMulligan(getActivePlayer(), true, discardedCardsActive);
 			getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
 
-			traceMulligans(mulligansActive.result(), mulligansNonActive.result());
+			traceMulligans(mulligansActive.future().result(), mulligansNonActive.future().result());
 
 			try {
 				startGame();
@@ -899,7 +899,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			for (UserId userId : userIds) {
-				res.result().removeIfPresent(userId, gameId, Future.future());
+				res.result().removeIfPresent(userId, gameId, Promise.promise());
 			}
 		});
 	}
@@ -974,7 +974,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public boolean isGameReady() {
-		return clientsReady.values().stream().allMatch(Future::succeeded);
+		return clientsReady.values().stream().allMatch(promise -> promise.future().succeeded());
 	}
 
 	@Override
@@ -1018,8 +1018,8 @@ public class ServerGameContext extends GameContext implements Server {
 	public void onPlayerReady(Client client) {
 		if (clientsReady.containsKey(client.getPlayerId())) {
 			@SuppressWarnings("unchecked")
-			Future<Client> fut = clientsReady.get(client.getPlayerId());
-			if (!fut.isComplete()) {
+			Promise<Client> fut = clientsReady.get(client.getPlayerId());
+			if (!fut.future().isComplete()) {
 				fut.complete(client);
 			}
 		}
@@ -1035,7 +1035,7 @@ public class ServerGameContext extends GameContext implements Server {
 			while (listIterator.hasNext()) {
 				Client next = listIterator.next();
 				if (next.getPlayerId() == client.getPlayerId() && client != next) {
-					next.close(Future.future());
+					next.close(Promise.promise());
 					listIterator.set(client);
 					next = client;
 				}
@@ -1106,7 +1106,11 @@ public class ServerGameContext extends GameContext implements Server {
 		if (!isRunning()) {
 			throw new IllegalStateException("must call play(true)");
 		}
-		CompositeFuture res = awaitResult(CompositeFuture.join(Stream.concat(registrationsReady.stream(), Stream.of(initialization)).collect(toList()))::setHandler);
+		CompositeFuture join = CompositeFuture.join(Stream.concat(
+				registrationsReady.stream().map(Promise::future),
+				Stream.of(initialization.future())
+		).collect(toList()));
+		CompositeFuture res = awaitResult(join::setHandler);
 	}
 
 	/**

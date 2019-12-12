@@ -100,10 +100,10 @@ public class GeneratorTest {
 							}
 							return value.toString();
 						}).reduce((a1, a2) -> a1 + "," + a2).orElse("")).reduce((l1, l2) -> l1 + "\n" + l2).orElse(""));
-		Files.write(csv, new File("data.csv"), Charset.defaultCharset());
+		Files.asCharSink(new File("data.csv"), Charset.defaultCharset()).write(csv);
 
 		// Output CGPM population
-		Files.write("CREATE POPULATION spells for hearthstone_spells WITH SCHEMA(\n    " + Stream.concat(columns.stream().sorted().map(column -> {
+		Files.asCharSink(new File("population.bql"), Charset.defaultCharset()).write("CREATE POPULATION spells for hearthstone_spells WITH SCHEMA(\n    " + Stream.concat(columns.stream().sorted().map(column -> {
 			if (column.endsWith("LABEL") || column.equals("SUMMON_TRIGGERS")) {
 				return String.format("IGNORE %s", column);
 			} else if (nCategories.containsKey(column)
@@ -117,7 +117,7 @@ public class GeneratorTest {
 //			} else {
 				return String.format("MODEL %s AS COUNTS", column);
 			}
-		}), Stream.of("IGNORE index")).reduce((a1, a2) -> a1 + ";\n    " + a2).orElse("") + "\n);", new File("population.bql"), Charset.defaultCharset());
+		}), Stream.of("IGNORE index")).reduce((a1, a2) -> a1 + ";\n    " + a2).orElse("") + "\n);");
 	}
 
 }

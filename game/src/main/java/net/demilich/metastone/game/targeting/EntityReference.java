@@ -552,7 +552,7 @@ public final class EntityReference implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new Integer(id).hashCode();
+		return id;
 	}
 
 	public boolean isTargetGroup() {

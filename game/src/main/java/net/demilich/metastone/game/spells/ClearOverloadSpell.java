@@ -11,17 +11,20 @@ import net.demilich.metastone.game.cards.Attribute;
 import java.util.Map;
 
 /**
- * @deprecated Use a {@link SetAttributeSpell} instead:
- * 		<pre>
- * 				  {
- * 				    "class": "SetAttributeSpell",
- * 				    "target": "FRIENDLY_PLAYER",
- * 				    "attribute": "OVERLOAD",
- * 				    "value": 0
- * 				  }
- * 				</pre>
- * 		Resets the player's overload status.
+ * Use a {@link SetAttributeSpell} instead:
+ * <pre>
+ *   {
+ *     "class": "SetAttributeSpell",
+ *     "target": "FRIENDLY_PLAYER",
+ *     "attribute": "OVERLOAD",
+ *     "value": 0
+ *   }
+ * </pre>
+ * Resets the player's overload status.
+ *
+ * @deprecated
  */
+@Deprecated
 public class ClearOverloadSpell extends Spell {
 
 	public static SpellDesc create() {

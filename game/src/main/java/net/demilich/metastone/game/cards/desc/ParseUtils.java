@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.dynamicdescription.*;
@@ -337,7 +338,7 @@ public class ParseUtils {
 			}
 			case BATTLECRY:
 				try {
-					return Json.mapper.readerFor(BattlecryDesc.class).readValue(jsonData);
+					return DatabindCodec.mapper().readerFor(BattlecryDesc.class).readValue(jsonData);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -406,7 +407,7 @@ public class ParseUtils {
 
 	private static EnchantmentDesc getTriggerDesc(JsonNode jsonData) {
 		try {
-			return Json.mapper.readerFor(EnchantmentDesc.class).readValue(jsonData);
+			return DatabindCodec.mapper().readerFor(EnchantmentDesc.class).readValue(jsonData);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

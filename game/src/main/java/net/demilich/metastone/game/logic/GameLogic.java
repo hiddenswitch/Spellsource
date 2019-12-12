@@ -2018,11 +2018,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		// TODO: Remove this legacy attribute for both choose one options
-		if (hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
-			override = ChooseOneOverride.BOTH_COMBINED;
-		}
-
 		return override;
 	}
 
@@ -3560,6 +3555,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public Card replaceCard(int playerId, Card oldCard, Card newCard, boolean keepCardCostModifiers) {
 		Player player = context.getPlayer(playerId);
+		@SuppressWarnings("unchecked")
 		EntityZone<? super Card> zone = (EntityZone<? super Card>) player.getZone(oldCard.getZone());
 		if (zone == null) {
 			throw new ClassCastException(String.format("replaceCard must be called on entities in a zone that can accept cards, which is not a %s", oldCard.getZone()));

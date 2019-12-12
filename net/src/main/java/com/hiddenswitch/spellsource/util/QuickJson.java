@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.util;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,7 +67,7 @@ public class QuickJson {
 		if (json == null) {
 			return null;
 		}
-		return Json.mapper.convertValue(json.getMap(), classOfT);
+		return DatabindCodec.mapper().convertValue(json.getMap(), classOfT);
 	}
 
 	public static <T> List<T> fromJson(List<JsonObject> jsons, Class<T> elementClass) {

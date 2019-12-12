@@ -184,23 +184,23 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 				if (!(ex instanceof IOException)) {
 					Tracing.error(new VertxException(ex), span, false);
 				}
-				connection.close(Future.future());
+				connection.close(Promise.promise());
 			});
 			// All handlers should run simultaneously but we'll wait until the handlers have run
 			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
-				Future<Void> fut = Future.future();
+				Promise<Void> fut = Promise.promise();
 				Vertx.currentContext().runOnContext(v -> {
 					span.log("setupHandler");
 					setupHandler.handle(connection, fut);
 				});
-				return fut;
+				return fut.future();
 			}).collect(toList())).setHandler(h));
 			// Send an envelope to indicate that the connection is ready.
 			connection.write(new Envelope());
 		} catch (RuntimeException runtimeException) {
 			Tracing.error(runtimeException, span, true);
 			// This also closes the socket and cleans up its handlers
-			connection.close(Future.future());
+			connection.close(Promise.promise());
 		}
 	}
 
@@ -306,7 +306,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		@Override
 		@Suspendable
 		default void handle(Connection event) {
-			handle(event, Future.future());
+			handle(event, Promise.promise());
 		}
 
 		@Suspendable
