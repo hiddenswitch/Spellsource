@@ -66,7 +66,8 @@ setup(name='spellsource',
                         'boto3',
                         'hearthstone',
                         'pymongo',
-                        'mistletoe'],
+                        'mistletoe',
+                        'GitPython'],
       extras_require={
           'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
       },
