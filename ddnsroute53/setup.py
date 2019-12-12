@@ -20,10 +20,11 @@ class InstallCrontab(install):
 
             pip_install('python-crontab')
             from crontab import CronTab
-        system_cron = CronTab(tabfile='/etc/crontab', user='root')
+        system_cron = CronTab(tabfile='/etc/crontab', user=False)
         if len(list(system_cron.find_comment(CRONTAB_COMMENT_ID))) == 0:
             # Automatically reads from environment variables with the DDNSROUTE53 prefix.
-            job = system_cron.new('ddnsroute53 update', comment=CRONTAB_COMMENT_ID, user='root')
+            job = system_cron.new(command='ddnsroute53 update', comment=CRONTAB_COMMENT_ID, user='root')
+            assert (job.user == 'root')
             job.minute.every(5)
             system_cron.write()
 
