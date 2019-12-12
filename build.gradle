@@ -180,7 +180,7 @@ allprojects {
         enableAssertions = false
     }
 
-    project.version = '0.8.55'
+    project.version = '0.8.56'
 }
 
 subprojects {
