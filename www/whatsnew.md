@@ -6,6 +6,23 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.56-3.0.1 (December 11th, 2019)
+
+Fixes to the client.
+
+##### Usability Fixes:
+
+ - Spells without targets are now easier to play and are easier to cancel. (client fix #6)
+ - Mulligan button spam should no longer cause a crash. (client fix #5)
+ - You can no longer drag non-targeted skills. (client fix #4)
+ - Skills should no longer cause glitches when played. (client fix #3)
+ - Double digit values are now visible on cards. (client fix #2)
+ - Cards in the collection show descriptions again. (client fix #1)
+ - The hand no longer obscures the skill when you are holding more than 8 cards.
+ - Summoning into the rightmost position is easier.
+ - Canceling a no-target spell or card is easier.
+ - The opponent's play card animations are disabled for now, the played card visualization should appear much more reliably.
+
 ### 0.8.55-3.0.0 (December 10th, 2019)
 
 The Version 3 client is now live and quite buggy.
