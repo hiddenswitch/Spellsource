@@ -10,6 +10,20 @@ Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Pla
 
 Fixes to the client.
 
+##### Known Issues:
+
+ - If you're upgrading from the previous version, the collection on macOS and Windows clients is missing cards.
+ - There is no power history.
+ - There are no status indicators for minions on the battlefield, like Dodge.
+ - Sometimes damage indicators remain on the battlefield.
+ - Sometimes restoring health is rendered as a damage effect instead.
+ - Discards, roasts and draws are not visualized.
+ - The draft view is not updated.
+ - There are grey circles around many buttons, or icons are missing.
+ - There are extraneous UI elements while playing a match, like a redundant enemy Lun tray.
+ - All minions have the same temporary art.
+ - All champions have the same temporary art.
+
 ##### Usability Fixes:
 
  - Spells without targets are now easier to play and are easier to cancel. (client fix #6)
@@ -26,22 +40,6 @@ Fixes to the client.
 ### 0.8.55-3.0.0 (December 10th, 2019)
 
 The Version 3 client is now live and quite buggy.
-
-##### Known Issues:
-
- - You must target a summon card near the center of the battlefield in order to summon a minion.
- - There is no power history.
- - There are no status indicators for minions on the battlefield, like Dodge.
- - Sometimes damage indicators remain on the battlefield.
- - Sometimes restoring health is rendered as a damage effect instead.
- - Discards, roasts and draws are not visualized.
- - The draft view is not updated.
- - There are grey circles around many buttons, or icons are missing.
- - There are extraneous UI elements while playing a match, like a redundant enemy Lun tray.
- - All minions have the same temporary art.
- - All champions have the same temporary art.
- - In order to use a skill that takes no target, you need to drag it.
- - It is difficult to cancel playing a card once it is being dragged.
 
 ##### Content Fixes:
 
