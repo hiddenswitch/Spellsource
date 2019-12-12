@@ -7,14 +7,12 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.PasswordResetRecord;
-import com.hiddenswitch.spellsource.util.QuickJson;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
@@ -23,7 +21,8 @@ import io.vertx.ext.mail.MailClient;
 import io.vertx.ext.mail.MailConfig;
 import io.vertx.ext.mail.MailMessage;
 import io.vertx.ext.mail.MailResult;
-import io.vertx.ext.mongo.*;
+import io.vertx.ext.mongo.MongoClientDeleteResult;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -41,7 +40,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.*;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -651,7 +649,7 @@ public interface Accounts {
 						return;
 					}
 
-					routingContext.addCookie(Cookie.cookie("token", token));
+					routingContext.addCookie(io.vertx.core.http.Cookie.cookie("token", token));
 					routingContext.response().putHeader("Location", "passwordreset.html");
 					routingContext.response().end();
 				}));
@@ -674,7 +672,7 @@ public interface Accounts {
 						return;
 					}
 
-					Cookie cookie = routingContext.getCookie("token");
+					io.vertx.core.http.Cookie cookie = routingContext.getCookie("token");
 					String token;
 					if (cookie == null) {
 						token = routingContext.queryParams().get("token");

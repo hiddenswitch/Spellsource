@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.NoSuchElementException;
@@ -71,14 +72,14 @@ public interface RpcClient<T> {
 	 * @param <Res>    The response type of the method to call.
 	 * @return A {@link Future} whose completer is passed to {@link #async(Handler)}
 	 */
-	default <Res> Future<Res> promise(SuspendableFunction<T, Res> callHere) {
-		Future<Res> future = Future.future();
+	default <Res> Promise<Res> promise(SuspendableFunction<T, Res> callHere) {
+		Promise<Res> promise = Promise.promise();
 		try {
-			callHere.apply(async(future.completer()));
+			callHere.apply(async(promise));
 		} catch (SuspendExecution | InterruptedException | IllegalAccessException | InvocationTargetException ignore) {
 			// Ignored, since this is just around to ensure fiber stuff gets fiber'ed
 		}
-		return future;
+		return promise;
 	}
 
 	/**

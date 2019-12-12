@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
 import com.hiddenswitch.spellsource.util.Simulation;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
@@ -34,8 +35,8 @@ public class PythonBridge {
 
 	public static void startServer() {
 		CompletableFuture<String> cf = new CompletableFuture<>();
-		Future<String> fut = Future.future();
-		fut.setHandler(res -> {
+		Promise<String> fut = Promise.promise();
+		fut.future().setHandler(res -> {
 			if (res.succeeded()) {
 				cf.complete(res.result());
 			} else {

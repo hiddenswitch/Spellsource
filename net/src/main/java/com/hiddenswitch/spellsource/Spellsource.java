@@ -10,13 +10,12 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.CollectionTypes;
 import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
-import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
 import io.vertx.core.*;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
@@ -48,7 +47,6 @@ import static com.hiddenswitch.spellsource.Inventory.INVENTORY;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
-import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -73,7 +71,7 @@ public class Spellsource {
 	private Map<String, Spell> spells = new ConcurrentHashMap<>();
 
 	static {
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+		DatabindCodec.mapper().setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 	}
 
 	protected Spellsource() {
@@ -712,9 +710,9 @@ public class Spellsource {
 
 		// Correctly use event loops
 		for (Supplier<Verticle> verticle : services()) {
-			final Future<String> future = Future.future();
+			Promise<String> future = Promise.promise();
 			vertx.deployVerticle(verticle, new DeploymentOptions().setInstances(concurrency), future);
-			futures.add(future);
+			futures.add(future.future());
 		}
 
 		CompositeFuture.all(futures).setHandler(deployments);

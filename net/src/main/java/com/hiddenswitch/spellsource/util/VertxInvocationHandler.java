@@ -164,6 +164,6 @@ final class VertxInvocationHandler<T> implements InvocationHandler, Serializable
 			throw new RuntimeException("Unspecified serialization option in invocation.");
 		}
 
-		eb.send(address, message, deliveryOptions, suspendableHandler(handler));
+		eb.request(address, message, deliveryOptions, suspendableHandler(handler));
 	}
 }

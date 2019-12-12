@@ -39,7 +39,11 @@ public class SuspendableAtomixMultimap<K, V> implements SuspendableMultimap<K, V
 		mapLock.lock();
 		try {
 			if (map != null) {
-				map = awaitResult(h -> AtomixHelpers.getClusterManager(vertx).getAsyncMultiMap(name, v -> h.handle(v.map(innerMap -> (AtomixAsyncMultiMap<K, V>) innerMap))));
+				map = awaitResult(h -> AtomixHelpers.getClusterManager(vertx).getAsyncMultiMap(name, v -> h.handle(v.map(innerMap -> {
+					@SuppressWarnings("unchecked")
+					AtomixAsyncMultiMap<K, V> innerMap1 = (AtomixAsyncMultiMap<K, V>) innerMap;
+					return innerMap1;
+				}))));
 			}
 		} finally {
 			mapLock.unlock();
@@ -188,7 +192,11 @@ public class SuspendableAtomixMultimap<K, V> implements SuspendableMultimap<K, V
 						if (Fiber.isCurrentFiber()) {
 							Void v2 = Sync.get(getOrCreate().removeListener(kvAtomicMultimapEventListener));
 						} else {
-							AtomixHelpers.getClusterManager().getAsyncMultiMap(name, v -> v.map(innerMap -> (AtomixAsyncMultiMap<K, V>) innerMap).result().getMap().removeListener(kvAtomicMultimapEventListener));
+							AtomixHelpers.getClusterManager().getAsyncMultiMap(name, v -> v.map(innerMap -> {
+								@SuppressWarnings("unchecked")
+								AtomixAsyncMultiMap<K, V> innerMap1 = (AtomixAsyncMultiMap<K, V>) innerMap;
+								return innerMap1;
+							}).result().getMap().removeListener(kvAtomicMultimapEventListener));
 						}
 					} else {
 						map.getMap().removeListener(kvAtomicMultimapEventListener);

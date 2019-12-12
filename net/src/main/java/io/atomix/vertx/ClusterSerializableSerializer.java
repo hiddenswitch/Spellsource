@@ -23,6 +23,8 @@ import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Cluster serializable serializer.
  *
@@ -43,10 +45,10 @@ public class ClusterSerializableSerializer<T extends ClusterSerializable> extend
     try {
       byte[] bytes = input.readBytes(input.readVarInt(true));
       Buffer buffer = Buffer.buffer(bytes);
-      T object = type.newInstance();
+      T object = type.getConstructor().newInstance();
       object.readFromBuffer(0, buffer);
       return object;
-    } catch (InstantiationException | IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
       throw new VertxException("failed to instantiate serializable type: " + type);
     }
   }

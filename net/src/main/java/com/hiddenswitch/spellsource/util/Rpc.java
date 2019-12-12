@@ -148,9 +148,9 @@ public class Rpc {
 
 		CompositeFuture.join(registration.getMessageConsumers()
 				.stream().map(consumer -> {
-					Future<Void> future = Future.future();
+					Promise<Void> future = Promise.promise();
 					consumer.completionHandler(future);
-					return future;
+					return future.future();
 				}).collect(Collectors.toList())).setHandler(then -> {
 			if (then.succeeded()) {
 				handler.handle(Future.succeededFuture(registration));
@@ -240,9 +240,9 @@ public class Rpc {
 	public static void unregister(Registration registration, Handler<AsyncResult<CompositeFuture>> handler) {
 		List<MessageConsumer> consumers = registration.getMessageConsumers();
 		CompositeFuture.all(consumers.stream().map(consumer -> {
-			Future<Void> future = Future.future();
-			consumer.unregister(future.completer());
-			return (Future) future;
+			Promise<Void> promise = Promise.promise();
+			consumer.unregister(promise);
+			return (Future) promise.future();
 		}).collect(Collectors.toList())).setHandler(handler);
 	}
 

@@ -17,10 +17,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Closeable;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -784,7 +781,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			}
 
 			if (reader instanceof Closeable) {
-				((Closeable) reader).close(Future.future());
+				((Closeable) reader).close(Promise.promise());
 			}
 
 			if (reader instanceof MessageConsumer) {

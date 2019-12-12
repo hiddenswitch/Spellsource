@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.Configuration;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 	private Map<NetworkInterface, DatagramSocket> hostSockets = new HashMap<>();
 
 	@Override
-	public void start(Future<Void> startFuture) throws Exception {
+	public void start(Promise<Void> startFuture) throws Exception {
 		final NetworkInterface networkInterface = Gateway.mainInterface();
 		if (networkInterface == null) {
 			startFuture.fail("No valid network interface found.");
@@ -35,7 +36,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 		hostSockets.put(networkInterface, createDatagramSocket(networkInterface, startFuture));
 	}
 
-	private DatagramSocket createDatagramSocket(final NetworkInterface networkInterface, Future<Void> isListening) throws SocketException {
+	private DatagramSocket createDatagramSocket(final NetworkInterface networkInterface, Promise<Void> isListening) throws SocketException {
 		String host = Gateway.getHostIpAddress();
 
 		return vertx.createDatagramSocket(new DatagramSocketOptions()
@@ -51,7 +52,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 
 							logger.debug("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Configuration.apiGatewayPort() + "/", getMulticastPort(), getMulticastAddress(), Future.future());
+							socket.send(getResponsePrefix() + "http://" + host + ":" + Configuration.apiGatewayPort() + "/", getMulticastPort(), getMulticastAddress(), Promise.promise());
 						});
 
 						isListening.complete();
@@ -60,11 +61,11 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 	}
 
 	@Override
-	public void stop(Future<Void> stopFuture) throws Exception {
+	public void stop(Promise<Void> stopFuture) throws Exception {
 		CompositeFuture.join(hostSockets.values().stream().map(ds -> {
-			Future<Void> future = Future.future();
+			Promise<Void> future = Promise.promise();
 			ds.close(future);
-			return future;
+			return future.future();
 		}).collect(Collectors.toList())).setHandler(then -> stopFuture.complete());
 	}
 

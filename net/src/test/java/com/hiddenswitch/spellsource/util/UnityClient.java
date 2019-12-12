@@ -562,9 +562,9 @@ public class UnityClient implements AutoCloseable {
 		if (tracer.activeSpan() != null) {
 			tracer.activeSpan().finish();
 		}
-		if (tracer.scopeManager().active() != null) {
-			tracer.scopeManager().active().close();
-		}
+//		if (tracer.scopeManager().active() != null) {
+//			tracer.scopeManager().active().close();
+//		}
 		tracer.close();
 	}
 
