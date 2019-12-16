@@ -21,9 +21,9 @@ import java.util.List;
  * <ul>
  * <li>{@link EntityFilterArg#CARD_TYPE}.</li>
  * <li>{@link EntityFilterArg#RACE}.</li>
- * <li>{@link EntityFilterArg#HERO_CLASS}</li>, including the special hero classes {@link HeroClass#OPPONENT} and {@link
- * HeroClass#SELF}.
- * <li>{@link EntityFilterArg#HERO_CLASSES}</li> to check if the entity's hero class matches any in the list.
+ * <li>{@link EntityFilterArg#HERO_CLASS}, including the special hero classes {@link HeroClass#OPPONENT} and {@link
+ * HeroClass#SELF}.</li>
+ * <li>{@link EntityFilterArg#HERO_CLASSES} to check if the entity's hero class matches any in the list.</li>
  * <li>{@link EntityFilterArg#MANA_COST} for the entity's base mana cost. Use {@link ManaCostFilter} for its current
  * cost instead.</li>
  * <li>{@link EntityFilterArg#RARITY}.</li>

@@ -6,12 +6,12 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
-### 0.8.56-3.0.1 (December 11th, 2019)
+### 0.8.56-3.0.4 (December 15th, 2019)
 
-Fixes to the client.
+Android release.
 
 ##### Known Issues:
-
+ 
  - If you're upgrading from the previous version, the collection on macOS and Windows clients is missing cards.
  - There is no power history.
  - There are no status indicators for minions on the battlefield, like Dodge.
@@ -20,9 +20,26 @@ Fixes to the client.
  - Discards, roasts and draws are not visualized.
  - The draft view is not updated.
  - There are grey circles around many buttons, or icons are missing.
- - There are extraneous UI elements while playing a match, like a redundant enemy Lun tray.
  - All minions have the same temporary art.
  - All champions have the same temporary art.
+
+### 0.8.56-3.0.3 (December 14th, 2019)
+
+Maintenance iOS release.
+
+### 0.8.56-3.0.2 (December 12th, 2019)
+
+Fixes to the client.
+
+##### Usability Fixes:
+
+ - There are no longer lines between the tiles of the background grid. (client fix #7)
+ - The entire battlefield is visible on mobile, and portrait mode has been enabled.
+ - Tapping a targetable card to play it now works.
+
+### 0.8.56-3.0.1 (December 11th, 2019)
+
+Fixes to the client.
 
 ##### Usability Fixes:
 

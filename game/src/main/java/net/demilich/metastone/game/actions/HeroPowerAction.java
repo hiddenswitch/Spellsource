@@ -15,9 +15,6 @@ import java.io.Serializable;
 
 /**
  * Indicates an action that is a hero power card.
- * <p>
- * It otherwise behaves like a normal spell card, except {@link net.demilich.metastone.game.logic.GameLogic#useHeroPower(int)}
- * is also called.
  */
 public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
 

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * {@link net.demilich.metastone.game.GameContext}.
  * <p>
  * Create an instance of this class and add cards using {@link #getCards()}'s {@link CardList#addCard(String)} method.
- * Set the hero class using {@link #setHeroClass(HeroClass)}. Set the format using {@link #setFormat(DeckFormat)}. This
+ * Set the hero class using {@link #setHeroClass(String)}. Set the format using {@link #setFormat(DeckFormat)}. This
  * format should correspond to the one the {@link GameContext#getDeckFormat()} uses.
  */
 public class GameDeck implements Serializable, Cloneable, Deck {

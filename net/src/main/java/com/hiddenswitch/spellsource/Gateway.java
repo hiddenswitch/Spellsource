@@ -187,7 +187,6 @@ public interface Gateway extends Verticle {
 	 * Heuristically retrieves the primary networking interface for this device.
 	 *
 	 * @return A Java {@link NetworkInterface} object that can be used by {@link io.vertx.core.Vertx}.
-	 * @throws SocketException Typically if the application is not permitted to enumerate network interfaces.
 	 */
 	static NetworkInterface mainInterface() {
 		final ArrayList<NetworkInterface> interfaces;

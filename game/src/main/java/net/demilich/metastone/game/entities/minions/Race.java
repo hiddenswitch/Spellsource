@@ -17,13 +17,14 @@ public class Race {
 	public static final String FAE = "FAE";
 	public static final String SPIRIT = "SPIRIT";
 	public static final String MURLOC = "MURLOC";
+	public static final String TOTEM = "TOTEM";
 
 	/**
 	 * Returns {@code true} if the given race string is considered as having the race {@code rhs}, accounting for whether
 	 * or not the specification is {@code "ALL"}, {@code "NONE"}.
 	 * <p>
 	 * If {@code lhs} contains an ampersand-separated list of races, the {@code lhs} counts as having both races, and can
-	 * match as long as {@rhs} is any one of the races in {@lhs}.
+	 * match as long as {@code rhs} is any one of the races in {@code lhs}.
 	 *
 	 * @param lhs
 	 * @param rhs
