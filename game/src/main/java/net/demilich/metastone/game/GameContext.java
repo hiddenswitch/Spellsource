@@ -226,8 +226,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
 	 * <p>
 	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use {@link
-	 * #GameContext(HeroClass...)} with hero classes of your choosing to create a game context with enough initial state
-	 * to actually start playing immediately.
+	 * #GameContext(String...)} to create a game initialized with the specified hero classes.
 	 */
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
