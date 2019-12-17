@@ -7,13 +7,14 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "Hidden. Aftermath: Your opponent draws a Fatigue card.",
-  "deathrattle": {
+  "description": "Hidden. Opener: Your opponent draws a Fatigue card.",
+  "battlecry": {
+    "targetSelection": "NONE",
     "class": "FatigueSpell",
     "targetPlayer": "OPPONENT"
   },
   "attributes": {
-    "DEATHRATTLES": true,
+    "BATTLECRY": true,
     "STEALTH": true
   },
   "collectible": true,
