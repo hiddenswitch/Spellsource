@@ -1,10 +1,10 @@
 {
   "name": "Rallying Speech",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Give all friendly minions on the battlefield and in hand +1 Attack.",
+  "description": "Give minions in your hand, deck, and battlefield +1 Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
