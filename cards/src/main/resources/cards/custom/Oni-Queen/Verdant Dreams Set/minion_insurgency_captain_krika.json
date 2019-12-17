@@ -18,7 +18,7 @@
         "value1": {
           "class": "AttributeValueProvider",
           "attribute": "ATTACKS_THIS_GAME",
-          "target": "FRIENDLY_HERO"
+          "target": "FRIENDLY_PLAYER"
         },
         "value2": 3
       },
@@ -48,7 +48,7 @@
         "value1": {
           "class": "AttributeValueProvider",
           "attribute": "ATTACKS_THIS_GAME",
-          "target": "FRIENDLY_HERO"
+          "target": "FRIENDLY_PLAYER"
         },
         "value2": 3
       },
@@ -66,7 +66,7 @@
               "value2": {
                 "class": "AttributeValueProvider",
                 "attribute": "ATTACKS_THIS_GAME",
-                "target": "FRIENDLY_HERO"
+                "target": "FRIENDLY_PLAYER"
               }
             }
           },
