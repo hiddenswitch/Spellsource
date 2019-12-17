@@ -51,13 +51,14 @@ public final class DrainSpell extends Spell {
 		List<DrainEvent> events = new ArrayList<>(targets.size());
 		for (Entity target : targets) {
 			int damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-			int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageType.DRAIN);
-			events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
+			int thisDamageDealt = drainDamage(context, player, source, target, damage, events);
 			damageDealt += thisDamageDealt;
 		}
 
 		Entity defaultSource;
-		if (source.getSourceCard().getCardType() == CardType.SPELL || source.getEntityType() == EntityType.WEAPON) {
+		if (source.getSourceCard().getCardType().isCardType(CardType.SPELL)
+				|| source.getSourceCard().getCardType().isCardType(CardType.HERO_POWER)
+				|| source.getEntityType() == EntityType.WEAPON) {
 			defaultSource = context.resolveSingleTarget(context.getPlayer(source.getOwner()), source, EntityReference.FRIENDLY_HERO);
 		} else {
 			defaultSource = source;
@@ -93,6 +94,13 @@ public final class DrainSpell extends Spell {
 		}
 		healingTarget.modifyAttribute(Attribute.DRAINED_THIS_TURN, amount);
 		healingTarget.modifyAttribute(Attribute.TOTAL_DRAINED, amount);
+	}
+
+	@Suspendable
+	public static int drainDamage(GameContext context, Player player, Entity source, Entity target, int damage, List<DrainEvent> events) {
+		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageType.DRAIN);
+		events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
+		return thisDamageDealt;
 	}
 
 	@Override

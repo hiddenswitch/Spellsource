@@ -3,13 +3,56 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import org.jetbrains.annotations.NotNull;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
 public class VampireLordTests extends TestBase {
+	@NotNull
+	@Override
+	public String getDefaultHeroClass() {
+		return HeroClass.BLOOD;
+	}
+
+	@Test
+	public void testYaganLifetaker() {
+		runGym((context, player, opponent) -> {
+			Minion otherTarget = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			int heroHp = player.getHero().getHp();
+			Minion lifetaker = playMinionCard(context, player, "minion_yagan_lifetaker");
+			assertEquals(player.getHero().getHp(), heroHp / 2);
+			assertEquals(otherTarget.getHp() + lifetaker.getHp(), lifetaker.getBaseHp() + otherTarget.getBaseHp() + (heroHp - heroHp / 2));
+		});
+	}
+
+	@Test
+	public void testLividZealotBadSwarmInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion batSwarm = playMinionCard(context, player, "minion_vampiric_savage");
+			Minion shouldBeBuffed = playMinionCard(context, player, "minion_livid_zealot");
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_gorthal_the_ravager");
+			context.endTurn();
+			attack(context, player, batSwarm, target);
+			assertTrue(batSwarm.isDestroyed());
+			useHeroPower(context, player);
+			assertEquals(shouldBeBuffed.getMaxHp(), shouldBeBuffed.getBaseHp() + 2);
+		}, HeroClass.BLOOD, HeroClass.NAVY);
+	}
+
+	@Test
+	public void testBatSwarm() {
+		runGym((context, player, opponent) -> {
+			// i.e. bat swarm
+			Minion shouldBeBuffed = playMinionCard(context, player, "minion_vampiric_savage");
+			useHeroPower(context, player);
+			assertEquals(shouldBeBuffed.getMaxHp(), shouldBeBuffed.getBaseHp() + 2);
+		});
+	}
 
 	@Test
 	public void testRendingCurseEternalSteedInteraction() {
@@ -217,3 +260,5 @@ public class VampireLordTests extends TestBase {
 	}
 
 }
+
+

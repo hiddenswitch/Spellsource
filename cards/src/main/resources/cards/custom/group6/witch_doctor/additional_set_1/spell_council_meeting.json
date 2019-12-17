@@ -1,7 +1,7 @@
 {
   "name": "Council Meeting",
   "baseManaCost": 8,
-  "type": "MINION",
+  "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
   "description": "Costs (1) less for each other card in your hand. Restore 8 Health.",

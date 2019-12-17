@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
+import io.vertx.core.json.jackson.JacksonCodec;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -88,7 +89,7 @@ public interface Bots {
 				GameId gameId = request.gameId;
 				Buffer buf = map.get(gameId);
 				if (buf != null) {
-					List<Integer> indexPlan = Json.decodeValue(buf, LIST_INTEGER_TYPE);
+					List<Integer> indexPlan = JacksonCodec.decodeValue(buf, LIST_INTEGER_TYPE);
 					gsvb.setIndexPlan(new ArrayDeque<>(indexPlan));
 					span.setTag("indexPlan", indexPlan.size());
 				}

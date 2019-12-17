@@ -21,8 +21,8 @@
           "card": "hero_power_unnatural_restoration"
         },
         {
-        "class": "RefreshHeroPowerSpell",
-        "targetPlayer": "SELF"
+          "class": "RefreshHeroPowerSpell",
+          "targetPlayer": "SELF"
         }
       ]
     }

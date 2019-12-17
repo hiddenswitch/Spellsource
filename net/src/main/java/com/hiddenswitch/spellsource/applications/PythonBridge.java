@@ -1,18 +1,17 @@
 package com.hiddenswitch.spellsource.applications;
 
+import com.hiddenswitch.spellsource.Broadcaster;
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
 import com.hiddenswitch.spellsource.util.Simulation;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import py4j.GatewayServer;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,15 +35,15 @@ public class PythonBridge {
 
 	public static void startServer() {
 		CompletableFuture<String> cf = new CompletableFuture<>();
-		Future<String> fut = Future.future();
-		fut.setHandler(res -> {
+		Promise<String> fut = Promise.promise();
+		fut.future().setHandler(res -> {
 			if (res.succeeded()) {
 				cf.complete(res.result());
 			} else {
 				cf.completeExceptionally(res.cause());
 			}
 		});
-		LocalClustered.startServer(fut);
+		Applications.startServer(vertx -> vertx.result().deployVerticle(Broadcaster.create(), fut));
 		cf.join();
 	}
 

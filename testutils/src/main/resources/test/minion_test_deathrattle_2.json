@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Aftermath: Summon.",
+  "description": "Aftermath: Summon a neutral 2/2 test minion.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "minion_neutral_test"

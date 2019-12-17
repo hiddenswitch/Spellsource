@@ -17,10 +17,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Closeable;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -79,6 +76,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
 	private Span span;
+	private GameOver gameOver;
 
 
 	public UnityClientBehaviour(Server server,
@@ -309,6 +307,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
+	/**
+	 * Handles a mulligan from a Unity client.
+	 * <p>
+	 * The starting hand is also sent in the {@link net.demilich.metastone.game.targeting.Zones#SET_ASIDE_ZONE}, where the
+	 * index in the set aside zone corresponds to the index that should be sent to discard.
+	 *
+	 * @param messageId
+	 * @param discardedCardIndices A list of indices in the list of starter cards that should be discarded.
+	 */
 	@Suspendable
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
 		requestsLock.lock();
@@ -469,6 +476,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private void sendMessage(WriteStream<ServerToClientMessage> socket, ServerToClientMessage message) {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
+		// If the game is over, always include whether the current player has won
+		switch (message.getMessageType()) {
+			case TOUCH:
+			case EMOTE:
+			case PINGPONG:
+				break;
+			default:
+				message.gameOver(gameOver);
+		}
 		socket.write(message);
 	}
 
@@ -578,15 +594,16 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void sendGameOver(com.hiddenswitch.spellsource.common.GameState state, Player winner) {
 		flush();
 		if (state == null || lastStateSent == null) {
+			this.gameOver = new GameOver()
+					.localPlayerWon(false);
 			sendMessage(new ServerToClientMessage()
 					.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_END)
-					.gameOver(new GameOver()
-							.localPlayerWon(false)));
+					.gameOver(gameOver));
 			return;
 		}
 
-		final com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
-		GameOver gameOver = new GameOver();
+		com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
+		gameOver = new GameOver();
 		if (winner == null) {
 			gameOver.localPlayerWon(false)
 					.winningPlayerId(null);
@@ -669,6 +686,17 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
 
+	/**
+	 * Sends a mulligan request to a Unity client.
+	 * <p>
+	 * The {@link net.demilich.metastone.game.targeting.Zones#SET_ASIDE_ZONE} will contain the cards that can be
+	 * mulliganned.
+	 *
+	 * @param id
+	 * @param state    The game state
+	 * @param cards    The cards that can be discarded
+	 * @param playerId The player doing the discards
+	 */
 	@Override
 	@Suspendable
 	public void onMulligan(String id, com.hiddenswitch.spellsource.common.GameState state, List<Card> cards, int playerId) {
@@ -680,6 +708,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.timers(new Timers()
 						.millisRemaining(state.getMillisRemaining()))
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_MULLIGAN)
+				.changes(getChangeSet(state))
+				.gameState(getClientGameState(state))
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
 
@@ -725,7 +755,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private EntityChangeSet getChangeSet(com.hiddenswitch.spellsource.common.GameState current) {
-		EntityChangeSet changes = Games.computeChangeSet(lastStateSent, current);
+		EntityChangeSet changes = Games.computeChangeSet(current);
 		lastStateSent = current;
 		return changes;
 	}
@@ -751,7 +781,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			}
 
 			if (reader instanceof Closeable) {
-				((Closeable) reader).close(Future.future());
+				((Closeable) reader).close(Promise.promise());
 			}
 
 			if (reader instanceof MessageConsumer) {

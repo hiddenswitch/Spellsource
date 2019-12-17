@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -70,7 +71,7 @@ public class CardValidation {
 		} catch (DecodeException ex) {
 			// Decode again to throw the inner exception
 			try {
-				CardDesc desc = Json.mapper.readValue(new FileInputStream(cardFile), CardDesc.class);
+				CardDesc desc = DatabindCodec.mapper().readValue(new FileInputStream(cardFile), CardDesc.class);
 			} catch (JsonProcessingException innerEx) {
 				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile,0,0,0);
 				Assert.fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",

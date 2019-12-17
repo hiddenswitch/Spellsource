@@ -1,13 +1,35 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.common.util.Objects;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.testng.annotations.Test;
 
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 public class OccultistTests extends TestBase {
+
+	@Test
+	public void testRevelation() {
+		for (int j = 0; j < 10; j++) {
+			final int k = j;
+			runGym((context, player, opponent) -> {
+				for (int i = 0; i < k; i++) {
+					context.endTurn();
+					context.endTurn();
+				}
+
+				Card card = receiveCard(context, player, "spell_lunstone");
+				playCard(context, player, "spell_revelation");
+				assertEquals(player.getMana(), 0);
+				assertEquals(player.getMaxMana(), 0);
+				assertEquals(costOf(context, player, card), 1);
+			});
+		}
+
+	}
 
 	@Test
 	public void testImperfectDuplicate() {
@@ -44,10 +66,14 @@ public class OccultistTests extends TestBase {
 			String firstHp = player.getHeroPowerZone().get(0).getCardId();
 			target.setMaxHp(5);
 			target.setHp(3);
+			player.setMana(GameLogic.MAX_MANA);
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equal(ga.getSourceReference(), player.getHeroPowerZone().get(0).getReference())));
 			useHeroPower(context, player, target.getReference());
 			assertTrue(target.getHp() == 1 || target.getHp() == 5);
 			String secondHp = player.getHeroPowerZone().get(0).getCardId();
 			assertNotEquals(firstHp, secondHp);
+			player.setMana(GameLogic.MAX_MANA);
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equal(ga.getSourceReference(), player.getHeroPowerZone().get(0).getReference())));
 		});
 	}
 }

@@ -17,9 +17,11 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.EntityState;
+import com.hiddenswitch.spellsource.client.models.EntityLocation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -93,8 +95,287 @@ public class Entity implements Serializable {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("state")
-  private EntityState state = null;
+  @JsonProperty("l")
+  private EntityLocation l = null;
+
+  @JsonProperty("background")
+  private String background = null;
+
+  @JsonProperty("portrait")
+  private String portrait = null;
+
+  @JsonProperty("gold")
+  private Boolean gold = false;
+
+  @JsonProperty("boardPosition")
+  private Integer boardPosition = null;
+
+  @JsonProperty("owner")
+  private Integer owner = -1;
+
+  @JsonProperty("heroClass")
+  private String heroClass = null;
+
+  @JsonProperty("baseHp")
+  private Integer baseHp = null;
+
+  @JsonProperty("hp")
+  private Integer hp = null;
+
+  @JsonProperty("durability")
+  private Integer durability = null;
+
+  @JsonProperty("maxHp")
+  private Integer maxHp = null;
+
+  @JsonProperty("baseAttack")
+  private Integer baseAttack = null;
+
+  @JsonProperty("attack")
+  private Integer attack = null;
+
+  @JsonProperty("baseManaCost")
+  private Integer baseManaCost = null;
+
+  @JsonProperty("manaCost")
+  private Integer manaCost = null;
+
+  @JsonProperty("armor")
+  private Integer armor = null;
+
+  @JsonProperty("destroyed")
+  private Boolean destroyed = false;
+
+  @JsonProperty("summoningSickness")
+  private Boolean summoningSickness = false;
+
+  @JsonProperty("frozen")
+  private Boolean frozen = false;
+
+  @JsonProperty("uncensored")
+  private Boolean uncensored = false;
+
+  @JsonProperty("deflect")
+  private Boolean deflect = false;
+
+  @JsonProperty("silenced")
+  private Boolean silenced = false;
+
+  @JsonProperty("windfury")
+  private Boolean windfury = false;
+
+  @JsonProperty("permanent")
+  private Boolean permanent = false;
+
+  @JsonProperty("collectible")
+  private Boolean collectible = false;
+
+  @JsonProperty("taunt")
+  private Boolean taunt = false;
+
+  @JsonProperty("discarded")
+  private Boolean discarded = false;
+
+  @JsonProperty("roasted")
+  private Boolean roasted = false;
+
+  @JsonProperty("spellDamage")
+  private Integer spellDamage = null;
+
+  @JsonProperty("charge")
+  private Boolean charge = false;
+
+  @JsonProperty("rush")
+  private Boolean rush = false;
+
+  @JsonProperty("lifesteal")
+  private Boolean lifesteal = false;
+
+  @JsonProperty("poisonous")
+  private Boolean poisonous = false;
+
+  @JsonProperty("enraged")
+  private Boolean enraged = false;
+
+  @JsonProperty("battlecry")
+  private Boolean battlecry = false;
+
+  @JsonProperty("deathrattles")
+  private Boolean deathrattles = false;
+
+  @JsonProperty("immune")
+  private Boolean immune = false;
+
+  @JsonProperty("divineShield")
+  private Boolean divineShield = false;
+
+  @JsonProperty("stealth")
+  private Boolean stealth = false;
+
+  @JsonProperty("combo")
+  private Boolean combo = false;
+
+  @JsonProperty("overload")
+  private Integer overload = null;
+
+  @JsonProperty("chooseOne")
+  private Boolean chooseOne = false;
+
+  @JsonProperty("untargetableBySpells")
+  private Boolean untargetableBySpells = false;
+
+  @JsonProperty("cannotAttack")
+  private Boolean cannotAttack = false;
+
+  @JsonProperty("underAura")
+  private Boolean underAura = false;
+
+  @JsonProperty("customRenderer")
+  private String customRenderer = null;
+
+  @JsonProperty("customData")
+  private String customData = null;
+
+  @JsonProperty("playable")
+  private Boolean playable = false;
+
+  @JsonProperty("conditionMet")
+  private Boolean conditionMet = false;
+
+  @JsonProperty("mana")
+  private Integer mana = null;
+
+  @JsonProperty("maxMana")
+  private Integer maxMana = null;
+
+  @JsonProperty("lockedMana")
+  private Integer lockedMana = null;
+
+  @JsonProperty("hostsTrigger")
+  private Boolean hostsTrigger = false;
+
+  @JsonProperty("note")
+  private String note = null;
+
+  /**
+   * When not null, indicates this card entity has a specified type.
+   */
+  public enum CardTypeEnum {
+    HERO("HERO"),
+    
+    MINION("MINION"),
+    
+    SPELL("SPELL"),
+    
+    WEAPON("WEAPON"),
+    
+    HERO_POWER("HERO_POWER"),
+    
+    CHOOSE_ONE("CHOOSE_ONE"),
+    
+    CLASS("CLASS"),
+    
+    FORMAT("FORMAT");
+
+    private String value;
+
+    CardTypeEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static CardTypeEnum fromValue(String text) {
+      for (CardTypeEnum b : CardTypeEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+  @JsonProperty("cardType")
+  private CardTypeEnum cardType = null;
+
+  @JsonProperty("tribe")
+  private String tribe = null;
+
+  @JsonProperty("fires")
+  private Integer fires = 0;
+
+  @JsonProperty("countUntilCast")
+  private Integer countUntilCast = 0;
+
+  @JsonProperty("cardSet")
+  private String cardSet = null;
+
+  /**
+   * The rarity of the card 
+   */
+  public enum RarityEnum {
+    FREE("FREE"),
+    
+    COMMON("COMMON"),
+    
+    RARE("RARE"),
+    
+    EPIC("EPIC"),
+    
+    LEGENDARY("LEGENDARY"),
+    
+    ALLIANCE("ALLIANCE");
+
+    private String value;
+
+    RarityEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static RarityEnum fromValue(String text) {
+      for (RarityEnum b : RarityEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+  @JsonProperty("rarity")
+  private RarityEnum rarity = null;
+
+  @JsonProperty("gameStarted")
+  private Boolean gameStarted = false;
+
+  @JsonProperty("color")
+  private List<Float> color = null;
+
+  @JsonProperty("blackText")
+  private Boolean blackText = false;
+
+  @JsonProperty("cardSets")
+  private List<String> cardSets = null;
 
   public Entity id(Integer id) {
     this.id = id;
@@ -186,22 +467,1172 @@ public class Entity implements Serializable {
     this.description = description;
   }
 
-  public Entity state(EntityState state) {
-    this.state = state;
+  public Entity l(EntityLocation l) {
+    this.l = l;
     return this;
   }
 
    /**
-   * Get state
-   * @return state
+   * Get l
+   * @return l
   **/
   @ApiModelProperty(value = "")
-  public EntityState getState() {
-    return state;
+  public EntityLocation getL() {
+    return l;
   }
 
-  public void setState(EntityState state) {
-    this.state = state;
+  public void setL(EntityLocation l) {
+    this.l = l;
+  }
+
+  public Entity background(String background) {
+    this.background = background;
+    return this;
+  }
+
+   /**
+   * When not null, override the default background for this entity&#39;s card ID with this key corresponding to backgrounds from the server. 
+   * @return background
+  **/
+  @ApiModelProperty(value = "When not null, override the default background for this entity's card ID with this key corresponding to backgrounds from the server. ")
+  public String getBackground() {
+    return background;
+  }
+
+  public void setBackground(String background) {
+    this.background = background;
+  }
+
+  public Entity portrait(String portrait) {
+    this.portrait = portrait;
+    return this;
+  }
+
+   /**
+   * When not null, override the default portrait for this entity&#39;s card ID with this key corresponding to portraits from the server. 
+   * @return portrait
+  **/
+  @ApiModelProperty(value = "When not null, override the default portrait for this entity's card ID with this key corresponding to portraits from the server. ")
+  public String getPortrait() {
+    return portrait;
+  }
+
+  public void setPortrait(String portrait) {
+    this.portrait = portrait;
+  }
+
+  public Entity gold(Boolean gold) {
+    this.gold = gold;
+    return this;
+  }
+
+   /**
+   * Render this entity with a \&quot;gold\&quot; effect.
+   * @return gold
+  **/
+  @ApiModelProperty(value = "Render this entity with a \"gold\" effect.")
+  public Boolean isGold() {
+    return gold;
+  }
+
+  public void setGold(Boolean gold) {
+    this.gold = gold;
+  }
+
+  public Entity boardPosition(Integer boardPosition) {
+    this.boardPosition = boardPosition;
+    return this;
+  }
+
+   /**
+   * The index of the entity in its zone.
+   * @return boardPosition
+  **/
+  @ApiModelProperty(value = "The index of the entity in its zone.")
+  public Integer getBoardPosition() {
+    return boardPosition;
+  }
+
+  public void setBoardPosition(Integer boardPosition) {
+    this.boardPosition = boardPosition;
+  }
+
+  public Entity owner(Integer owner) {
+    this.owner = owner;
+    return this;
+  }
+
+   /**
+   * An integer corresponding to the entity&#39;s owner.
+   * @return owner
+  **/
+  @ApiModelProperty(value = "An integer corresponding to the entity's owner.")
+  public Integer getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Integer owner) {
+    this.owner = owner;
+  }
+
+  public Entity heroClass(String heroClass) {
+    this.heroClass = heroClass;
+    return this;
+  }
+
+   /**
+   * The string enum value that corresponds to this entity&#39;s hero class.
+   * @return heroClass
+  **/
+  @ApiModelProperty(value = "The string enum value that corresponds to this entity's hero class.")
+  public String getHeroClass() {
+    return heroClass;
+  }
+
+  public void setHeroClass(String heroClass) {
+    this.heroClass = heroClass;
+  }
+
+  public Entity baseHp(Integer baseHp) {
+    this.baseHp = baseHp;
+    return this;
+  }
+
+   /**
+   * The base hitpoints of the entity.
+   * @return baseHp
+  **/
+  @ApiModelProperty(value = "The base hitpoints of the entity.")
+  public Integer getBaseHp() {
+    return baseHp;
+  }
+
+  public void setBaseHp(Integer baseHp) {
+    this.baseHp = baseHp;
+  }
+
+  public Entity hp(Integer hp) {
+    this.hp = hp;
+    return this;
+  }
+
+   /**
+   * The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token. 
+   * @return hp
+  **/
+  @ApiModelProperty(value = "The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token. ")
+  public Integer getHp() {
+    return hp;
+  }
+
+  public void setHp(Integer hp) {
+    this.hp = hp;
+  }
+
+  public Entity durability(Integer durability) {
+    this.durability = durability;
+    return this;
+  }
+
+   /**
+   * The durability (number of uses) that the weapon still has.
+   * @return durability
+  **/
+  @ApiModelProperty(value = "The durability (number of uses) that the weapon still has.")
+  public Integer getDurability() {
+    return durability;
+  }
+
+  public void setDurability(Integer durability) {
+    this.durability = durability;
+  }
+
+  public Entity maxHp(Integer maxHp) {
+    this.maxHp = maxHp;
+    return this;
+  }
+
+   /**
+   * The maximum number of hitpoints this entity can have.
+   * @return maxHp
+  **/
+  @ApiModelProperty(value = "The maximum number of hitpoints this entity can have.")
+  public Integer getMaxHp() {
+    return maxHp;
+  }
+
+  public void setMaxHp(Integer maxHp) {
+    this.maxHp = maxHp;
+  }
+
+  public Entity baseAttack(Integer baseAttack) {
+    this.baseAttack = baseAttack;
+    return this;
+  }
+
+   /**
+   * The entity&#39;s base attack value.
+   * @return baseAttack
+  **/
+  @ApiModelProperty(value = "The entity's base attack value.")
+  public Integer getBaseAttack() {
+    return baseAttack;
+  }
+
+  public void setBaseAttack(Integer baseAttack) {
+    this.baseAttack = baseAttack;
+  }
+
+  public Entity attack(Integer attack) {
+    this.attack = attack;
+    return this;
+  }
+
+   /**
+   * The entity&#39;s current attack value. Conventionally, this value should be rendered on the attack token. 
+   * @return attack
+  **/
+  @ApiModelProperty(value = "The entity's current attack value. Conventionally, this value should be rendered on the attack token. ")
+  public Integer getAttack() {
+    return attack;
+  }
+
+  public void setAttack(Integer attack) {
+    this.attack = attack;
+  }
+
+  public Entity baseManaCost(Integer baseManaCost) {
+    this.baseManaCost = baseManaCost;
+    return this;
+  }
+
+   /**
+   * The entity&#39;s base mana cost. 
+   * @return baseManaCost
+  **/
+  @ApiModelProperty(value = "The entity's base mana cost. ")
+  public Integer getBaseManaCost() {
+    return baseManaCost;
+  }
+
+  public void setBaseManaCost(Integer baseManaCost) {
+    this.baseManaCost = baseManaCost;
+  }
+
+  public Entity manaCost(Integer manaCost) {
+    this.manaCost = manaCost;
+    return this;
+  }
+
+   /**
+   * The entity&#39;s current mana cost. Conventionally, this value should be rendered on the mana token. 
+   * @return manaCost
+  **/
+  @ApiModelProperty(value = "The entity's current mana cost. Conventionally, this value should be rendered on the mana token. ")
+  public Integer getManaCost() {
+    return manaCost;
+  }
+
+  public void setManaCost(Integer manaCost) {
+    this.manaCost = manaCost;
+  }
+
+  public Entity armor(Integer armor) {
+    this.armor = armor;
+    return this;
+  }
+
+   /**
+   * The entity&#39;s armor. Conventionally, this value should be rendered on a hero entity&#39;s armor token. 
+   * @return armor
+  **/
+  @ApiModelProperty(value = "The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token. ")
+  public Integer getArmor() {
+    return armor;
+  }
+
+  public void setArmor(Integer armor) {
+    this.armor = armor;
+  }
+
+  public Entity destroyed(Boolean destroyed) {
+    this.destroyed = destroyed;
+    return this;
+  }
+
+   /**
+   * When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but still in a zone other than the graveyard; render a death icon over the entity when it is so marked. 
+   * @return destroyed
+  **/
+  @ApiModelProperty(value = "When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but still in a zone other than the graveyard; render a death icon over the entity when it is so marked. ")
+  public Boolean isDestroyed() {
+    return destroyed;
+  }
+
+  public void setDestroyed(Boolean destroyed) {
+    this.destroyed = destroyed;
+  }
+
+  public Entity summoningSickness(Boolean summoningSickness) {
+    this.summoningSickness = summoningSickness;
+    return this;
+  }
+
+   /**
+   * When true, the entity cannot attack this turn because it has \&quot;summoning sickness,\&quot; or a disability related to the first turn the entity came into play. Typically rendered with snooze icons. 
+   * @return summoningSickness
+  **/
+  @ApiModelProperty(value = "When true, the entity cannot attack this turn because it has \"summoning sickness,\" or a disability related to the first turn the entity came into play. Typically rendered with snooze icons. ")
+  public Boolean isSummoningSickness() {
+    return summoningSickness;
+  }
+
+  public void setSummoningSickness(Boolean summoningSickness) {
+    this.summoningSickness = summoningSickness;
+  }
+
+  public Entity frozen(Boolean frozen) {
+    this.frozen = frozen;
+    return this;
+  }
+
+   /**
+   * When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack. 
+   * @return frozen
+  **/
+  @ApiModelProperty(value = "When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack. ")
+  public Boolean isFrozen() {
+    return frozen;
+  }
+
+  public void setFrozen(Boolean frozen) {
+    this.frozen = frozen;
+  }
+
+  public Entity uncensored(Boolean uncensored) {
+    this.uncensored = uncensored;
+    return this;
+  }
+
+   /**
+   * When true, indicates that this entity that is ordinarily censored to this user is not. It can be \&quot;flipped\&quot; and shown to the opponent. 
+   * @return uncensored
+  **/
+  @ApiModelProperty(value = "When true, indicates that this entity that is ordinarily censored to this user is not. It can be \"flipped\" and shown to the opponent. ")
+  public Boolean isUncensored() {
+    return uncensored;
+  }
+
+  public void setUncensored(Boolean uncensored) {
+    this.uncensored = uncensored;
+  }
+
+  public Entity deflect(Boolean deflect) {
+    this.deflect = deflect;
+    return this;
+  }
+
+   /**
+   * When true, the entity&#39;s first incoming hit will hit its owner rather than itself. 
+   * @return deflect
+  **/
+  @ApiModelProperty(value = "When true, the entity's first incoming hit will hit its owner rather than itself. ")
+  public Boolean isDeflect() {
+    return deflect;
+  }
+
+  public void setDeflect(Boolean deflect) {
+    this.deflect = deflect;
+  }
+
+  public Entity silenced(Boolean silenced) {
+    this.silenced = silenced;
+    return this;
+  }
+
+   /**
+   * Indicates that the entity was silenced. 
+   * @return silenced
+  **/
+  @ApiModelProperty(value = "Indicates that the entity was silenced. ")
+  public Boolean isSilenced() {
+    return silenced;
+  }
+
+  public void setSilenced(Boolean silenced) {
+    this.silenced = silenced;
+  }
+
+  public Entity windfury(Boolean windfury) {
+    this.windfury = windfury;
+    return this;
+  }
+
+   /**
+   * Indicates the entity can attack twice a turn. 
+   * @return windfury
+  **/
+  @ApiModelProperty(value = "Indicates the entity can attack twice a turn. ")
+  public Boolean isWindfury() {
+    return windfury;
+  }
+
+  public void setWindfury(Boolean windfury) {
+    this.windfury = windfury;
+  }
+
+  public Entity permanent(Boolean permanent) {
+    this.permanent = permanent;
+    return this;
+  }
+
+   /**
+   * Indicates the entity is an on-battlefield permanent. 
+   * @return permanent
+  **/
+  @ApiModelProperty(value = "Indicates the entity is an on-battlefield permanent. ")
+  public Boolean isPermanent() {
+    return permanent;
+  }
+
+  public void setPermanent(Boolean permanent) {
+    this.permanent = permanent;
+  }
+
+  public Entity collectible(Boolean collectible) {
+    this.collectible = collectible;
+    return this;
+  }
+
+   /**
+   * Indicates the card is collectible - valid for putting into decks. 
+   * @return collectible
+  **/
+  @ApiModelProperty(value = "Indicates the card is collectible - valid for putting into decks. ")
+  public Boolean isCollectible() {
+    return collectible;
+  }
+
+  public void setCollectible(Boolean collectible) {
+    this.collectible = collectible;
+  }
+
+  public Entity taunt(Boolean taunt) {
+    this.taunt = taunt;
+    return this;
+  }
+
+   /**
+   * Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent&#39;s physical attack action targeting. 
+   * @return taunt
+  **/
+  @ApiModelProperty(value = "Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's physical attack action targeting. ")
+  public Boolean isTaunt() {
+    return taunt;
+  }
+
+  public void setTaunt(Boolean taunt) {
+    this.taunt = taunt;
+  }
+
+  public Entity discarded(Boolean discarded) {
+    this.discarded = discarded;
+    return this;
+  }
+
+   /**
+   * Indicates the entity was discarded from the hand. 
+   * @return discarded
+  **/
+  @ApiModelProperty(value = "Indicates the entity was discarded from the hand. ")
+  public Boolean isDiscarded() {
+    return discarded;
+  }
+
+  public void setDiscarded(Boolean discarded) {
+    this.discarded = discarded;
+  }
+
+  public Entity roasted(Boolean roasted) {
+    this.roasted = roasted;
+    return this;
+  }
+
+   /**
+   * Indicates the entity was roasted (removed due to excess cards or otherwise discarded from the deck). 
+   * @return roasted
+  **/
+  @ApiModelProperty(value = "Indicates the entity was roasted (removed due to excess cards or otherwise discarded from the deck). ")
+  public Boolean isRoasted() {
+    return roasted;
+  }
+
+  public void setRoasted(Boolean roasted) {
+    this.roasted = roasted;
+  }
+
+  public Entity spellDamage(Integer spellDamage) {
+    this.spellDamage = spellDamage;
+    return this;
+  }
+
+   /**
+   * Indicates the amount of additional spell damage this entity gives its owning player. 
+   * @return spellDamage
+  **/
+  @ApiModelProperty(value = "Indicates the amount of additional spell damage this entity gives its owning player. ")
+  public Integer getSpellDamage() {
+    return spellDamage;
+  }
+
+  public void setSpellDamage(Integer spellDamage) {
+    this.spellDamage = spellDamage;
+  }
+
+  public Entity charge(Boolean charge) {
+    this.charge = charge;
+    return this;
+  }
+
+   /**
+   * When true, the entity can attack the same turn it is summoned. 
+   * @return charge
+  **/
+  @ApiModelProperty(value = "When true, the entity can attack the same turn it is summoned. ")
+  public Boolean isCharge() {
+    return charge;
+  }
+
+  public void setCharge(Boolean charge) {
+    this.charge = charge;
+  }
+
+  public Entity rush(Boolean rush) {
+    this.rush = rush;
+    return this;
+  }
+
+   /**
+   * When true, the entity can attack a minion the same turn it is summoned. 
+   * @return rush
+  **/
+  @ApiModelProperty(value = "When true, the entity can attack a minion the same turn it is summoned. ")
+  public Boolean isRush() {
+    return rush;
+  }
+
+  public void setRush(Boolean rush) {
+    this.rush = rush;
+  }
+
+  public Entity lifesteal(Boolean lifesteal) {
+    this.lifesteal = lifesteal;
+    return this;
+  }
+
+   /**
+   * When true, the entity heals its owner when it deals damage. 
+   * @return lifesteal
+  **/
+  @ApiModelProperty(value = "When true, the entity heals its owner when it deals damage. ")
+  public Boolean isLifesteal() {
+    return lifesteal;
+  }
+
+  public void setLifesteal(Boolean lifesteal) {
+    this.lifesteal = lifesteal;
+  }
+
+  public Entity poisonous(Boolean poisonous) {
+    this.poisonous = poisonous;
+    return this;
+  }
+
+   /**
+   * When true, the entity will destroy any target it damages. 
+   * @return poisonous
+  **/
+  @ApiModelProperty(value = "When true, the entity will destroy any target it damages. ")
+  public Boolean isPoisonous() {
+    return poisonous;
+  }
+
+  public void setPoisonous(Boolean poisonous) {
+    this.poisonous = poisonous;
+  }
+
+  public Entity enraged(Boolean enraged) {
+    this.enraged = enraged;
+    return this;
+  }
+
+   /**
+   * When true, this entity is under the influence of \&quot;enrage,\&quot; or a bonus when it takes damage the first time. 
+   * @return enraged
+  **/
+  @ApiModelProperty(value = "When true, this entity is under the influence of \"enrage,\" or a bonus when it takes damage the first time. ")
+  public Boolean isEnraged() {
+    return enraged;
+  }
+
+  public void setEnraged(Boolean enraged) {
+    this.enraged = enraged;
+  }
+
+  public Entity battlecry(Boolean battlecry) {
+    this.battlecry = battlecry;
+    return this;
+  }
+
+   /**
+   * When true, this entity has an effect that gets triggered when it is played from the hand. 
+   * @return battlecry
+  **/
+  @ApiModelProperty(value = "When true, this entity has an effect that gets triggered when it is played from the hand. ")
+  public Boolean isBattlecry() {
+    return battlecry;
+  }
+
+  public void setBattlecry(Boolean battlecry) {
+    this.battlecry = battlecry;
+  }
+
+  public Entity deathrattles(Boolean deathrattles) {
+    this.deathrattles = deathrattles;
+    return this;
+  }
+
+   /**
+   * When true, this entity has an effect that gets triggered when it is destroyed. 
+   * @return deathrattles
+  **/
+  @ApiModelProperty(value = "When true, this entity has an effect that gets triggered when it is destroyed. ")
+  public Boolean isDeathrattles() {
+    return deathrattles;
+  }
+
+  public void setDeathrattles(Boolean deathrattles) {
+    this.deathrattles = deathrattles;
+  }
+
+  public Entity immune(Boolean immune) {
+    this.immune = immune;
+    return this;
+  }
+
+   /**
+   * Indicates the entity does not take damage. 
+   * @return immune
+  **/
+  @ApiModelProperty(value = "Indicates the entity does not take damage. ")
+  public Boolean isImmune() {
+    return immune;
+  }
+
+  public void setImmune(Boolean immune) {
+    this.immune = immune;
+  }
+
+  public Entity divineShield(Boolean divineShield) {
+    this.divineShield = divineShield;
+    return this;
+  }
+
+   /**
+   * When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage. 
+   * @return divineShield
+  **/
+  @ApiModelProperty(value = "When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage. ")
+  public Boolean isDivineShield() {
+    return divineShield;
+  }
+
+  public void setDivineShield(Boolean divineShield) {
+    this.divineShield = divineShield;
+  }
+
+  public Entity stealth(Boolean stealth) {
+    this.stealth = stealth;
+    return this;
+  }
+
+   /**
+   * When true, the minion cannot be targeted by the opponent until the entity attacks for the first time. 
+   * @return stealth
+  **/
+  @ApiModelProperty(value = "When true, the minion cannot be targeted by the opponent until the entity attacks for the first time. ")
+  public Boolean isStealth() {
+    return stealth;
+  }
+
+  public void setStealth(Boolean stealth) {
+    this.stealth = stealth;
+  }
+
+  public Entity combo(Boolean combo) {
+    this.combo = combo;
+    return this;
+  }
+
+   /**
+   * Indicates this minion has a combo effect. 
+   * @return combo
+  **/
+  @ApiModelProperty(value = "Indicates this minion has a combo effect. ")
+  public Boolean isCombo() {
+    return combo;
+  }
+
+  public void setCombo(Boolean combo) {
+    this.combo = combo;
+  }
+
+  public Entity overload(Integer overload) {
+    this.overload = overload;
+    return this;
+  }
+
+   /**
+   * Indicates the amount of mana that would be locked if this card were played. 
+   * @return overload
+  **/
+  @ApiModelProperty(value = "Indicates the amount of mana that would be locked if this card were played. ")
+  public Integer getOverload() {
+    return overload;
+  }
+
+  public void setOverload(Integer overload) {
+    this.overload = overload;
+  }
+
+  public Entity chooseOne(Boolean chooseOne) {
+    this.chooseOne = chooseOne;
+    return this;
+  }
+
+   /**
+   * Indicates this card has a choose-one effect. 
+   * @return chooseOne
+  **/
+  @ApiModelProperty(value = "Indicates this card has a choose-one effect. ")
+  public Boolean isChooseOne() {
+    return chooseOne;
+  }
+
+  public void setChooseOne(Boolean chooseOne) {
+    this.chooseOne = chooseOne;
+  }
+
+  public Entity untargetableBySpells(Boolean untargetableBySpells) {
+    this.untargetableBySpells = untargetableBySpells;
+    return this;
+  }
+
+   /**
+   * Indicates this entity cannot be targeted by spells. 
+   * @return untargetableBySpells
+  **/
+  @ApiModelProperty(value = "Indicates this entity cannot be targeted by spells. ")
+  public Boolean isUntargetableBySpells() {
+    return untargetableBySpells;
+  }
+
+  public void setUntargetableBySpells(Boolean untargetableBySpells) {
+    this.untargetableBySpells = untargetableBySpells;
+  }
+
+  public Entity cannotAttack(Boolean cannotAttack) {
+    this.cannotAttack = cannotAttack;
+    return this;
+  }
+
+   /**
+   * When true, indicates this minion cannot attack, even though it normally can.
+   * @return cannotAttack
+  **/
+  @ApiModelProperty(value = "When true, indicates this minion cannot attack, even though it normally can.")
+  public Boolean isCannotAttack() {
+    return cannotAttack;
+  }
+
+  public void setCannotAttack(Boolean cannotAttack) {
+    this.cannotAttack = cannotAttack;
+  }
+
+  public Entity underAura(Boolean underAura) {
+    this.underAura = underAura;
+    return this;
+  }
+
+   /**
+   * When true, indicates this minion is benefiting from the aura of another effect.
+   * @return underAura
+  **/
+  @ApiModelProperty(value = "When true, indicates this minion is benefiting from the aura of another effect.")
+  public Boolean isUnderAura() {
+    return underAura;
+  }
+
+  public void setUnderAura(Boolean underAura) {
+    this.underAura = underAura;
+  }
+
+  public Entity customRenderer(String customRenderer) {
+    this.customRenderer = customRenderer;
+    return this;
+  }
+
+   /**
+   * Get customRenderer
+   * @return customRenderer
+  **/
+  @ApiModelProperty(value = "")
+  public String getCustomRenderer() {
+    return customRenderer;
+  }
+
+  public void setCustomRenderer(String customRenderer) {
+    this.customRenderer = customRenderer;
+  }
+
+  public Entity customData(String customData) {
+    this.customData = customData;
+    return this;
+  }
+
+   /**
+   * Get customData
+   * @return customData
+  **/
+  @ApiModelProperty(value = "")
+  public String getCustomData() {
+    return customData;
+  }
+
+  public void setCustomData(String customData) {
+    this.customData = customData;
+  }
+
+  public Entity playable(Boolean playable) {
+    this.playable = playable;
+    return this;
+  }
+
+   /**
+   * When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
+   * @return playable
+  **/
+  @ApiModelProperty(value = "When true, indicates the card can be played, or the hero / minion can initiate a physical attack.")
+  public Boolean isPlayable() {
+    return playable;
+  }
+
+  public void setPlayable(Boolean playable) {
+    this.playable = playable;
+  }
+
+  public Entity conditionMet(Boolean conditionMet) {
+    this.conditionMet = conditionMet;
+    return this;
+  }
+
+   /**
+   * When true, indicates that a condition written on the card is met and the player should be informed.
+   * @return conditionMet
+  **/
+  @ApiModelProperty(value = "When true, indicates that a condition written on the card is met and the player should be informed.")
+  public Boolean isConditionMet() {
+    return conditionMet;
+  }
+
+  public void setConditionMet(Boolean conditionMet) {
+    this.conditionMet = conditionMet;
+  }
+
+  public Entity mana(Integer mana) {
+    this.mana = mana;
+    return this;
+  }
+
+   /**
+   * The player&#39;s current mana.
+   * @return mana
+  **/
+  @ApiModelProperty(value = "The player's current mana.")
+  public Integer getMana() {
+    return mana;
+  }
+
+  public void setMana(Integer mana) {
+    this.mana = mana;
+  }
+
+  public Entity maxMana(Integer maxMana) {
+    this.maxMana = maxMana;
+    return this;
+  }
+
+   /**
+   * The player&#39;s maximum amount of mana.
+   * @return maxMana
+  **/
+  @ApiModelProperty(value = "The player's maximum amount of mana.")
+  public Integer getMaxMana() {
+    return maxMana;
+  }
+
+  public void setMaxMana(Integer maxMana) {
+    this.maxMana = maxMana;
+  }
+
+  public Entity lockedMana(Integer lockedMana) {
+    this.lockedMana = lockedMana;
+    return this;
+  }
+
+   /**
+   * The amount of mana that was locked due to overload.
+   * @return lockedMana
+  **/
+  @ApiModelProperty(value = "The amount of mana that was locked due to overload.")
+  public Integer getLockedMana() {
+    return lockedMana;
+  }
+
+  public void setLockedMana(Integer lockedMana) {
+    this.lockedMana = lockedMana;
+  }
+
+  public Entity hostsTrigger(Boolean hostsTrigger) {
+    this.hostsTrigger = hostsTrigger;
+    return this;
+  }
+
+   /**
+   * When true, indicates this entity has an effect that triggers on game events.
+   * @return hostsTrigger
+  **/
+  @ApiModelProperty(value = "When true, indicates this entity has an effect that triggers on game events.")
+  public Boolean isHostsTrigger() {
+    return hostsTrigger;
+  }
+
+  public void setHostsTrigger(Boolean hostsTrigger) {
+    this.hostsTrigger = hostsTrigger;
+  }
+
+  public Entity note(String note) {
+    this.note = note;
+    return this;
+  }
+
+   /**
+   * A renderable note attached to this entity.
+   * @return note
+  **/
+  @ApiModelProperty(value = "A renderable note attached to this entity.")
+  public String getNote() {
+    return note;
+  }
+
+  public void setNote(String note) {
+    this.note = note;
+  }
+
+  public Entity cardType(CardTypeEnum cardType) {
+    this.cardType = cardType;
+    return this;
+  }
+
+   /**
+   * When not null, indicates this card entity has a specified type.
+   * @return cardType
+  **/
+  @ApiModelProperty(value = "When not null, indicates this card entity has a specified type.")
+  public CardTypeEnum getCardType() {
+    return cardType;
+  }
+
+  public void setCardType(CardTypeEnum cardType) {
+    this.cardType = cardType;
+  }
+
+  public Entity tribe(String tribe) {
+    this.tribe = tribe;
+    return this;
+  }
+
+   /**
+   * When not null, indicates the card&#39;s tribe/race. Typically only minions have this field set.
+   * @return tribe
+  **/
+  @ApiModelProperty(value = "When not null, indicates the card's tribe/race. Typically only minions have this field set.")
+  public String getTribe() {
+    return tribe;
+  }
+
+  public void setTribe(String tribe) {
+    this.tribe = tribe;
+  }
+
+  public Entity fires(Integer fires) {
+    this.fires = fires;
+    return this;
+  }
+
+   /**
+   * The number of times this enchantment (secret, quest or trigger on card) has fired.
+   * @return fires
+  **/
+  @ApiModelProperty(value = "The number of times this enchantment (secret, quest or trigger on card) has fired.")
+  public Integer getFires() {
+    return fires;
+  }
+
+  public void setFires(Integer fires) {
+    this.fires = fires;
+  }
+
+  public Entity countUntilCast(Integer countUntilCast) {
+    this.countUntilCast = countUntilCast;
+    return this;
+  }
+
+   /**
+   * The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered. 
+   * @return countUntilCast
+  **/
+  @ApiModelProperty(value = "The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is triggered. ")
+  public Integer getCountUntilCast() {
+    return countUntilCast;
+  }
+
+  public void setCountUntilCast(Integer countUntilCast) {
+    this.countUntilCast = countUntilCast;
+  }
+
+  public Entity cardSet(String cardSet) {
+    this.cardSet = cardSet;
+    return this;
+  }
+
+   /**
+   * The card expansion set this entity belongs to. 
+   * @return cardSet
+  **/
+  @ApiModelProperty(value = "The card expansion set this entity belongs to. ")
+  public String getCardSet() {
+    return cardSet;
+  }
+
+  public void setCardSet(String cardSet) {
+    this.cardSet = cardSet;
+  }
+
+  public Entity rarity(RarityEnum rarity) {
+    this.rarity = rarity;
+    return this;
+  }
+
+   /**
+   * The rarity of the card 
+   * @return rarity
+  **/
+  @ApiModelProperty(value = "The rarity of the card ")
+  public RarityEnum getRarity() {
+    return rarity;
+  }
+
+  public void setRarity(RarityEnum rarity) {
+    this.rarity = rarity;
+  }
+
+  public Entity gameStarted(Boolean gameStarted) {
+    this.gameStarted = gameStarted;
+    return this;
+  }
+
+   /**
+   * For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the other player to finish mulligan or, if both players have this field as true, indicates the game has begun on turn 0. 
+   * @return gameStarted
+  **/
+  @ApiModelProperty(value = "For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the other player to finish mulligan or, if both players have this field as true, indicates the game has begun on turn 0. ")
+  public Boolean isGameStarted() {
+    return gameStarted;
+  }
+
+  public void setGameStarted(Boolean gameStarted) {
+    this.gameStarted = gameStarted;
+  }
+
+  public Entity color(List<Float> color) {
+    this.color = color;
+    return this;
+  }
+
+  public Entity addColorItem(Float colorItem) {
+    if (this.color == null) {
+      this.color = new ArrayList<>();
+    }
+    this.color.add(colorItem);
+    return this;
+  }
+
+   /**
+   * The color for the class 
+   * @return color
+  **/
+  @ApiModelProperty(value = "The color for the class ")
+  public List<Float> getColor() {
+    return color;
+  }
+
+  public void setColor(List<Float> color) {
+    this.color = color;
+  }
+
+  public Entity blackText(Boolean blackText) {
+    this.blackText = blackText;
+    return this;
+  }
+
+   /**
+   * Whether the class should use black text instead of the default white 
+   * @return blackText
+  **/
+  @ApiModelProperty(value = "Whether the class should use black text instead of the default white ")
+  public Boolean isBlackText() {
+    return blackText;
+  }
+
+  public void setBlackText(Boolean blackText) {
+    this.blackText = blackText;
+  }
+
+  public Entity cardSets(List<String> cardSets) {
+    this.cardSets = cardSets;
+    return this;
+  }
+
+  public Entity addCardSetsItem(String cardSetsItem) {
+    if (this.cardSets == null) {
+      this.cardSets = new ArrayList<>();
+    }
+    this.cardSets.add(cardSetsItem);
+    return this;
+  }
+
+   /**
+   * The card sets listed by the card 
+   * @return cardSets
+  **/
+  @ApiModelProperty(value = "The card sets listed by the card ")
+  public List<String> getCardSets() {
+    return cardSets;
+  }
+
+  public void setCardSets(List<String> cardSets) {
+    this.cardSets = cardSets;
   }
 
 
@@ -219,12 +1650,75 @@ public class Entity implements Serializable {
         Objects.equals(this.entityType, entity.entityType) &&
         Objects.equals(this.name, entity.name) &&
         Objects.equals(this.description, entity.description) &&
-        Objects.equals(this.state, entity.state);
+        Objects.equals(this.l, entity.l) &&
+        Objects.equals(this.background, entity.background) &&
+        Objects.equals(this.portrait, entity.portrait) &&
+        Objects.equals(this.gold, entity.gold) &&
+        Objects.equals(this.boardPosition, entity.boardPosition) &&
+        Objects.equals(this.owner, entity.owner) &&
+        Objects.equals(this.heroClass, entity.heroClass) &&
+        Objects.equals(this.baseHp, entity.baseHp) &&
+        Objects.equals(this.hp, entity.hp) &&
+        Objects.equals(this.durability, entity.durability) &&
+        Objects.equals(this.maxHp, entity.maxHp) &&
+        Objects.equals(this.baseAttack, entity.baseAttack) &&
+        Objects.equals(this.attack, entity.attack) &&
+        Objects.equals(this.baseManaCost, entity.baseManaCost) &&
+        Objects.equals(this.manaCost, entity.manaCost) &&
+        Objects.equals(this.armor, entity.armor) &&
+        Objects.equals(this.destroyed, entity.destroyed) &&
+        Objects.equals(this.summoningSickness, entity.summoningSickness) &&
+        Objects.equals(this.frozen, entity.frozen) &&
+        Objects.equals(this.uncensored, entity.uncensored) &&
+        Objects.equals(this.deflect, entity.deflect) &&
+        Objects.equals(this.silenced, entity.silenced) &&
+        Objects.equals(this.windfury, entity.windfury) &&
+        Objects.equals(this.permanent, entity.permanent) &&
+        Objects.equals(this.collectible, entity.collectible) &&
+        Objects.equals(this.taunt, entity.taunt) &&
+        Objects.equals(this.discarded, entity.discarded) &&
+        Objects.equals(this.roasted, entity.roasted) &&
+        Objects.equals(this.spellDamage, entity.spellDamage) &&
+        Objects.equals(this.charge, entity.charge) &&
+        Objects.equals(this.rush, entity.rush) &&
+        Objects.equals(this.lifesteal, entity.lifesteal) &&
+        Objects.equals(this.poisonous, entity.poisonous) &&
+        Objects.equals(this.enraged, entity.enraged) &&
+        Objects.equals(this.battlecry, entity.battlecry) &&
+        Objects.equals(this.deathrattles, entity.deathrattles) &&
+        Objects.equals(this.immune, entity.immune) &&
+        Objects.equals(this.divineShield, entity.divineShield) &&
+        Objects.equals(this.stealth, entity.stealth) &&
+        Objects.equals(this.combo, entity.combo) &&
+        Objects.equals(this.overload, entity.overload) &&
+        Objects.equals(this.chooseOne, entity.chooseOne) &&
+        Objects.equals(this.untargetableBySpells, entity.untargetableBySpells) &&
+        Objects.equals(this.cannotAttack, entity.cannotAttack) &&
+        Objects.equals(this.underAura, entity.underAura) &&
+        Objects.equals(this.customRenderer, entity.customRenderer) &&
+        Objects.equals(this.customData, entity.customData) &&
+        Objects.equals(this.playable, entity.playable) &&
+        Objects.equals(this.conditionMet, entity.conditionMet) &&
+        Objects.equals(this.mana, entity.mana) &&
+        Objects.equals(this.maxMana, entity.maxMana) &&
+        Objects.equals(this.lockedMana, entity.lockedMana) &&
+        Objects.equals(this.hostsTrigger, entity.hostsTrigger) &&
+        Objects.equals(this.note, entity.note) &&
+        Objects.equals(this.cardType, entity.cardType) &&
+        Objects.equals(this.tribe, entity.tribe) &&
+        Objects.equals(this.fires, entity.fires) &&
+        Objects.equals(this.countUntilCast, entity.countUntilCast) &&
+        Objects.equals(this.cardSet, entity.cardSet) &&
+        Objects.equals(this.rarity, entity.rarity) &&
+        Objects.equals(this.gameStarted, entity.gameStarted) &&
+        Objects.equals(this.color, entity.color) &&
+        Objects.equals(this.blackText, entity.blackText) &&
+        Objects.equals(this.cardSets, entity.cardSets);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, state);
+    return Objects.hash(id, cardId, entityType, name, description, l, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText, cardSets);
   }
 
 
@@ -238,7 +1732,70 @@ public class Entity implements Serializable {
     sb.append("    entityType: ").append(toIndentedString(entityType)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    state: ").append(toIndentedString(state)).append("\n");
+    sb.append("    l: ").append(toIndentedString(l)).append("\n");
+    sb.append("    background: ").append(toIndentedString(background)).append("\n");
+    sb.append("    portrait: ").append(toIndentedString(portrait)).append("\n");
+    sb.append("    gold: ").append(toIndentedString(gold)).append("\n");
+    sb.append("    boardPosition: ").append(toIndentedString(boardPosition)).append("\n");
+    sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
+    sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
+    sb.append("    baseHp: ").append(toIndentedString(baseHp)).append("\n");
+    sb.append("    hp: ").append(toIndentedString(hp)).append("\n");
+    sb.append("    durability: ").append(toIndentedString(durability)).append("\n");
+    sb.append("    maxHp: ").append(toIndentedString(maxHp)).append("\n");
+    sb.append("    baseAttack: ").append(toIndentedString(baseAttack)).append("\n");
+    sb.append("    attack: ").append(toIndentedString(attack)).append("\n");
+    sb.append("    baseManaCost: ").append(toIndentedString(baseManaCost)).append("\n");
+    sb.append("    manaCost: ").append(toIndentedString(manaCost)).append("\n");
+    sb.append("    armor: ").append(toIndentedString(armor)).append("\n");
+    sb.append("    destroyed: ").append(toIndentedString(destroyed)).append("\n");
+    sb.append("    summoningSickness: ").append(toIndentedString(summoningSickness)).append("\n");
+    sb.append("    frozen: ").append(toIndentedString(frozen)).append("\n");
+    sb.append("    uncensored: ").append(toIndentedString(uncensored)).append("\n");
+    sb.append("    deflect: ").append(toIndentedString(deflect)).append("\n");
+    sb.append("    silenced: ").append(toIndentedString(silenced)).append("\n");
+    sb.append("    windfury: ").append(toIndentedString(windfury)).append("\n");
+    sb.append("    permanent: ").append(toIndentedString(permanent)).append("\n");
+    sb.append("    collectible: ").append(toIndentedString(collectible)).append("\n");
+    sb.append("    taunt: ").append(toIndentedString(taunt)).append("\n");
+    sb.append("    discarded: ").append(toIndentedString(discarded)).append("\n");
+    sb.append("    roasted: ").append(toIndentedString(roasted)).append("\n");
+    sb.append("    spellDamage: ").append(toIndentedString(spellDamage)).append("\n");
+    sb.append("    charge: ").append(toIndentedString(charge)).append("\n");
+    sb.append("    rush: ").append(toIndentedString(rush)).append("\n");
+    sb.append("    lifesteal: ").append(toIndentedString(lifesteal)).append("\n");
+    sb.append("    poisonous: ").append(toIndentedString(poisonous)).append("\n");
+    sb.append("    enraged: ").append(toIndentedString(enraged)).append("\n");
+    sb.append("    battlecry: ").append(toIndentedString(battlecry)).append("\n");
+    sb.append("    deathrattles: ").append(toIndentedString(deathrattles)).append("\n");
+    sb.append("    immune: ").append(toIndentedString(immune)).append("\n");
+    sb.append("    divineShield: ").append(toIndentedString(divineShield)).append("\n");
+    sb.append("    stealth: ").append(toIndentedString(stealth)).append("\n");
+    sb.append("    combo: ").append(toIndentedString(combo)).append("\n");
+    sb.append("    overload: ").append(toIndentedString(overload)).append("\n");
+    sb.append("    chooseOne: ").append(toIndentedString(chooseOne)).append("\n");
+    sb.append("    untargetableBySpells: ").append(toIndentedString(untargetableBySpells)).append("\n");
+    sb.append("    cannotAttack: ").append(toIndentedString(cannotAttack)).append("\n");
+    sb.append("    underAura: ").append(toIndentedString(underAura)).append("\n");
+    sb.append("    customRenderer: ").append(toIndentedString(customRenderer)).append("\n");
+    sb.append("    customData: ").append(toIndentedString(customData)).append("\n");
+    sb.append("    playable: ").append(toIndentedString(playable)).append("\n");
+    sb.append("    conditionMet: ").append(toIndentedString(conditionMet)).append("\n");
+    sb.append("    mana: ").append(toIndentedString(mana)).append("\n");
+    sb.append("    maxMana: ").append(toIndentedString(maxMana)).append("\n");
+    sb.append("    lockedMana: ").append(toIndentedString(lockedMana)).append("\n");
+    sb.append("    hostsTrigger: ").append(toIndentedString(hostsTrigger)).append("\n");
+    sb.append("    note: ").append(toIndentedString(note)).append("\n");
+    sb.append("    cardType: ").append(toIndentedString(cardType)).append("\n");
+    sb.append("    tribe: ").append(toIndentedString(tribe)).append("\n");
+    sb.append("    fires: ").append(toIndentedString(fires)).append("\n");
+    sb.append("    countUntilCast: ").append(toIndentedString(countUntilCast)).append("\n");
+    sb.append("    cardSet: ").append(toIndentedString(cardSet)).append("\n");
+    sb.append("    rarity: ").append(toIndentedString(rarity)).append("\n");
+    sb.append("    gameStarted: ").append(toIndentedString(gameStarted)).append("\n");
+    sb.append("    color: ").append(toIndentedString(color)).append("\n");
+    sb.append("    blackText: ").append(toIndentedString(blackText)).append("\n");
+    sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -603,7 +603,7 @@ public class CustomHearthstoneTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_commander_garrosh");
 			player.setMana(10);
-			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			useHeroPower(context, player);
 			assertEquals(player.getHero().getArmor(), 13);
 			assertEquals(player.getMana(), 0);
 		});
@@ -612,7 +612,7 @@ public class CustomHearthstoneTests extends TestBase {
 			playCard(context, player, "hero_commander_garrosh");
 			playCard(context, player, "minion_raza_the_chained");
 			player.setMana(10);
-			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			useHeroPower(context, player);
 			assertEquals(player.getHero().getArmor(), 14);
 			assertEquals(player.getMana(), 0);
 		});

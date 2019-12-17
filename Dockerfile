@@ -51,7 +51,7 @@ ENV PATH="/opt/java/openjdk/bin:$PATH"
 RUN javac --version; \
     java --version;
 
-ENV SPELLSOURCE_VERSION=0.8.53
+ENV SPELLSOURCE_VERSION=0.8.56
 ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}.jar
 
 RUN mkdir /etc/service/java

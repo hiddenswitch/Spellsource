@@ -16,8 +16,8 @@ try:
 except:
     sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
 
-SRC_PATH = './'
-with open('../README.md', 'r') as readme_file:
+SRC_PATH = '../'
+with open(os.path.join(SRC_PATH, 'README.md'), 'r') as readme_file:
     README = readme_file.read()
 
 
@@ -40,7 +40,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.8.53',
+      version='0.8.56',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -50,12 +50,12 @@ setup(name='spellsource',
       data_files=[
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.53.jar'),
+          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.56.jar'),
                                  os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
-      license='GPLv3',
+      license='AGPLv3',
       install_requires=['py4j==0.10.8.1',
                         'tqdm>=4',
                         'objdict',
@@ -66,7 +66,8 @@ setup(name='spellsource',
                         'boto3',
                         'hearthstone',
                         'pymongo',
-                        'mistletoe'],
+                        'mistletoe',
+                        'GitPython'],
       extras_require={
           'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
       },

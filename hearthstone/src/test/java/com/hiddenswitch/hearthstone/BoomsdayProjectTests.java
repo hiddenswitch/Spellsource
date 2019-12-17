@@ -382,7 +382,7 @@ public class BoomsdayProjectTests extends TestBase {
 	@Test
 	public void testRecklessExperimenter() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().modifyCurrentMana(player.getId(), 10, false);
+			context.getLogic().modifyCurrentMana(player.getId(), 9, false);
 			playCard(context, player, "minion_reckless_experimenter");
 			assertEquals(player.getMana(), 5);
 			playCard(context, player, "minion_devilsaur_egg");

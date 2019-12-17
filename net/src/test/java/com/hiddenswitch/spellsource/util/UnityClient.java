@@ -8,7 +8,7 @@ import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Matchmaking;
-import com.hiddenswitch.spellsource.Port;
+import com.hiddenswitch.spellsource.Configuration;
 import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
@@ -31,10 +31,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -44,7 +41,7 @@ public class UnityClient implements AutoCloseable {
 	private static Logger LOGGER = LoggerFactory.getLogger(UnityClient.class);
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
-	public static String BASE_PATH = BASE + Integer.toString(Port.port());
+	public static String BASE_PATH = BASE + Integer.toString(Configuration.apiGatewayPort());
 	private final Tracer tracer = Tracing.initialize("unity", ProbabilisticSampler.TYPE, 1.0);
 	private final Span parentSpan;
 	private int id;
@@ -453,21 +450,20 @@ public class UnityClient implements AutoCloseable {
 		context.assertNotNull(message.getChanges());
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
-		context.assertTrue(message.getChanges().stream().allMatch(e -> e.getId() >= 0));
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.PLAYER).count() == 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() >= 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
 				e.getEntityType() == Entity.EntityTypeEnum.HERO
-						&& e.getState().getL().getZ() == EntityLocation.ZEnum.E
+						&& e.getL().getZ() == EntityLocation.ZEnum.E
 		).allMatch(h ->
-				null != h.getState().getMaxMana()));
+				null != h.getMaxMana()));
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		if (message.getGameState().getTurnNumber() > 0) {
 			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).anyMatch(h ->
-					h.getState().getMaxMana() >= 1));
+					h.getMaxMana() >= 1));
 		}
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
-		final Set<Integer> changeIds = message.getChanges().stream().map(EntityChangeSetInner::getId).collect(Collectors.toSet());
+		final Set<Integer> changeIds = new HashSet<>(message.getChanges().getIds());
 		final boolean contains = entityIds.containsAll(changeIds);
 		if (!contains) {
 			context.fail(/*message.toString()*/ "An ID is missing! " + Sets.difference(changeIds, entityIds).toString());
@@ -566,9 +562,9 @@ public class UnityClient implements AutoCloseable {
 		if (tracer.activeSpan() != null) {
 			tracer.activeSpan().finish();
 		}
-		if (tracer.scopeManager().active() != null) {
-			tracer.scopeManager().active().close();
-		}
+//		if (tracer.scopeManager().active() != null) {
+//			tracer.scopeManager().active().close();
+//		}
 		tracer.close();
 	}
 

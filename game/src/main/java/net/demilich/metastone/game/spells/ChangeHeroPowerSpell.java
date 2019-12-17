@@ -47,7 +47,7 @@ public class ChangeHeroPowerSpell extends Spell {
 			return;
 		}
 
-		Card heroPower = context.getLogic().getRandom(cards);
+		Card heroPower = context.getLogic().getRandom(cards).getCopy();
 
 		heroPower.setId(context.getLogic().generateId());
 		heroPower.setOwner(hero.getOwner());

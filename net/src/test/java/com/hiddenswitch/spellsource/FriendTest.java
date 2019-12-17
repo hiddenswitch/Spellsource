@@ -4,9 +4,11 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.WebSocket;
@@ -125,7 +127,7 @@ public class FriendTest extends SpellsourceTestBase {
 	@Test
 	public void testDoesNotifyPresence(TestContext context) {
 		sync(() -> {
-			Collection<WebSocket> sockets = new ConcurrentLinkedDeque<>();
+			Collection<AsyncResult<WebSocket>> sockets = new ConcurrentLinkedDeque<>();
 			CountDownLatch latch = new CountDownLatch(1);
 			try {
 				CreateAccountResponse account1 = createRandomAccount();
@@ -135,37 +137,43 @@ public class FriendTest extends SpellsourceTestBase {
 				AtomicBoolean didGetOffline = new AtomicBoolean();
 				CountDownLatch atLeastConnected = new CountDownLatch(1);
 
-				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), sockets::add);
+				httpClient.webSocket(8080, "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=" + account1.getLoginToken().getToken(), sockets::add);
 
-				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), ws2 -> {
+				httpClient.webSocket(8080, "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=" + account2.getLoginToken().getToken(), ws2 -> {
 					sockets.add(ws2);
 
-					ws2.handler(buf -> {
-						Envelope msg = Json.decodeValue(buf, Envelope.class);
-						atLeastConnected.countDown();
-						if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
-							Friend friend = msg.getChanged().getFriend();
-							switch (friend.getPresence()) {
-								case ONLINE:
-									context.assertTrue(didGetOffline.compareAndSet(false, false));
-									context.assertTrue(didGetOnline.compareAndSet(false, true));
-									latch.countDown();
-									break;
-								case OFFLINE:
-									context.assertTrue(didGetOnline.compareAndSet(true, false));
-									context.assertTrue(didGetOffline.compareAndSet(false, true));
-									latch.countDown();
-									break;
+					if (ws2.succeeded()) {
+						ws2.result().handler(buf -> {
+							Envelope msg = Json.decodeValue(buf, Envelope.class);
+							atLeastConnected.countDown();
+							if ((msg.getChanged() != null && msg.getChanged().getFriend() != null)
+									|| (msg.getAdded() != null && msg.getAdded().getFriend() != null)) {
+								Friend friend = msg.getChanged() == null ? msg.getAdded().getFriend() : msg.getChanged().getFriend();
+								switch (friend.getPresence()) {
+									case ONLINE:
+										context.assertTrue(didGetOffline.compareAndSet(false, false));
+										context.assertTrue(didGetOnline.compareAndSet(false, true));
+										latch.countDown();
+										break;
+									case OFFLINE:
+										context.assertTrue(didGetOnline.compareAndSet(true, false));
+										context.assertTrue(didGetOffline.compareAndSet(false, true));
+										latch.countDown();
+										break;
+								}
 							}
-						}
-					});
+						});
+					}
+
 				});
 				atLeastConnected.await();
 				Friends.putFriend(mongo().findOne(Accounts.USERS, json("_id", account1.getUserId()), UserRecord.class), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
 				latch.await();
 			} finally {
-				for (WebSocket socket : sockets) {
-					socket.close();
+				for (AsyncResult<WebSocket> socket : sockets) {
+					if (socket.result() != null) {
+						socket.result().close();
+					}
 				}
 			}
 		}, context);

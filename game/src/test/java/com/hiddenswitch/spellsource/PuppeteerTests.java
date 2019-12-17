@@ -1,12 +1,39 @@
 package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.targeting.Zones;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 
 public class PuppeteerTests extends TestBase {
+
+	@Test
+	public void testBellringerJuriso() {
+		runGym((context, player, opponent) -> {
+			for (String cardId : new String[]{"minion_test_deathrattle", "minion_test_deathrattle_2", "minion_test_deathrattle_3"}) {
+				Minion inGraveyardAftermath = playMinionCard(context, player, cardId);
+				destroy(context, inGraveyardAftermath);
+			}
+			// Also destroy the extra minion on the board from the minion_test_deathrattle_2
+			destroy(context, player.getMinions().get(0));
+			assertEquals(player.getMinions().size(), 0);
+
+			Card shouldBeDrawn = shuffleToDeck(context, player, "spell_lunstone");
+
+			// control deathrattle
+			playCard(context, player, "minion_test_deathrattle");
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "minion_bellringer_juriso");
+			assertEquals(shouldBeDrawn.getZone(), Zones.HAND, "Should have triggered a minion_test_deathrattle");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 1, "should have triggered a minion_test_deathrattle_3");
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "minion_neutral_test", "should have triggered a minion_test_deathrattle_2");
+		});
+	}
+
 	@Test
 	public void testKeywordBuffsIncorrectlyRetained() {
 		runGym((context, player, opponent) -> {

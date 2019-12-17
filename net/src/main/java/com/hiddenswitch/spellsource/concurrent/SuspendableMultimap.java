@@ -3,6 +3,8 @@ package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
@@ -19,38 +21,38 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
-	Map<String, LocalMultimap> LOCAL_MULTIMAPS = new ConcurrentHashMap<>();
+	Map<String, SuspendableMultimap> MAP_CACHE = new ConcurrentHashMap<>();
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	static <K, V> SuspendableMultimap<K, V> getOrCreate(String name) {
-		final Vertx vertx = Vertx.currentContext().owner();
-		if (vertx.isClustered()) {
-			return new SuspendableAtomixMultimap<>(name);
-		} else {
-			return (SuspendableMultimap<K, V>) LOCAL_MULTIMAPS.computeIfAbsent(name, (k) -> new LocalMultimap<K, V>());
-		}
+		Vertx vertx = Vertx.currentContext().owner();
+		String key = vertx.hashCode() + name;
+
+		return MAP_CACHE.computeIfAbsent(key, new Function<>() {
+			@Override
+			@Suspendable
+			public SuspendableMultimap apply(String ignored) {
+				if (vertx.isClustered()) {
+					return new SuspendableAtomixMultimap<>(name, vertx);
+				} else {
+					return new LocalMultimap<K, V>();
+				}
+			}
+		});
 	}
 
 	@Suspendable
 	static <K, V> AddedChangedRemoved<K, V> subscribeToKeyInMultimap(String name, K key) throws SuspendExecution {
-		final Vertx vertx = Vertx.currentContext().owner();
-		if (vertx.isClustered()) {
-			/*
-			final RxEntryListenerAdaptor<K, V> adaptor = new RxEntryListenerAdaptor<>();
-			MultiMap<K, V> map = Sync.invoke(Hazelcast.getHazelcastInstance()::getMultiMap, name);
-			map.addEntryListener(adaptor, key, true);
-			return adaptor;
+		SuspendableMultimap<K, V> map = getOrCreate(name);
+		return new SingleKeyAddedChangedRemoved<>(key, map);
 
-			 */
-			throw new UnsupportedOperationException("");
-		} else {
-			SuspendableMultimap<K, V> map = getOrCreate(name);
-			return new SingleKeyAddedChangedRemoved<>(key, map);
-		}
 	}
 
 	// Query Operations

@@ -81,9 +81,13 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@Override
 	public void sort(Comparator<? super E> c) {
 		Object[] a = this.toArray();
-		Arrays.sort(a, (Comparator) c);
+		@SuppressWarnings("unchecked")
+		Comparator<Object> c1 = (Comparator<Object>) c;
+		Arrays.sort(a, c1);
 		for (int i = 0; i < a.length; i++) {
-			setUnchecked(i, (E) a[i]);
+			@SuppressWarnings("unchecked")
+			E element = (E) a[i];
+			setUnchecked(i, element);
 		}
 	}
 
@@ -225,8 +229,8 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		return player;
 	}
 
-	public static EntityZone empty(int player) {
-		return new EntityZone(player, Zones.NONE, null);
+	public static EntityZone<Entity> empty(int player) {
+		return new EntityZone<>(player, Zones.NONE, null);
 	}
 
 	/**

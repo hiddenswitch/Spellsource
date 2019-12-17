@@ -72,7 +72,7 @@ public class TestBase {
 	}
 
 	protected static <T extends Card> T putOnTopOfDeck(GameContext context, Player player, String cardId) {
-		final T card = (T) CardCatalogue.getCardById(cardId);
+		@SuppressWarnings("unchecked") final T card = (T) CardCatalogue.getCardById(cardId);
 		context.getLogic().insertIntoDeck(player, card, player.getDeck().size());
 		return card;
 	}
@@ -140,7 +140,7 @@ public class TestBase {
 		};
 
 		Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
-		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.any(Multiset.class));
+		Mockito.doAnswer(answer).when(spyLogic).removeRandom(ArgumentMatchers.<Multiset<?>>any());
 		Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
 		return handle;
 	}
@@ -213,12 +213,14 @@ public class TestBase {
 	}
 
 	public static <T extends Card> T receiveCard(GameContext context, Player player, String cardId) {
+		@SuppressWarnings("unchecked")
 		T card = (T) CardCatalogue.getCardById(cardId);
 		context.getLogic().receiveCard(player.getId(), card);
 		return card;
 	}
 
 	public static <T extends Card> T shuffleToDeck(GameContext context, Player player, String cardId) {
+		@SuppressWarnings("unchecked")
 		T card = (T) CardCatalogue.getCardById(cardId);
 		context.getLogic().shuffleToDeck(player, card);
 		return card;

@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -29,7 +30,7 @@ import java.util.List;
  * GameLogic#requestAction(Player, List)}, so they will always be some kind of "recursive" call inside a {@link
  * Behaviour}.
  */
-public class DiscoverAction extends GameAction {
+public class DiscoverAction extends GameAction implements HasCard {
 
 	private SpellDesc spell;
 	private Card card;
@@ -161,5 +162,10 @@ public class DiscoverAction extends GameAction {
 				.appendSuper(super.hashCode())
 				.append(spell)
 				.build();
+	}
+
+	@Override
+	public Card getSourceCard() {
+		return card;
 	}
 }

@@ -10,7 +10,8 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "DrainSpell",
-      "value": 3
+      "value": 3,
+      "secondaryTarget": "FRIENDLY_HERO"
     }
   },
   "collectible": false,

@@ -34,11 +34,11 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 	public boolean await() {
 		HandlerReceiverAdaptor<Buffer> adaptor = Sync.streamAdaptor();
 		MessageConsumer<Buffer> consumer = Vertx.currentContext().owner().eventBus().consumer(address);
-		Future<Void> future = Future.future();
+		Promise<Void> future = Promise.promise();
 		consumer.completionHandler(future);
 		consumer.bodyStream().handler(adaptor);
 		Buffer message;
-		Void t = awaitResult(h -> future.setHandler(h));
+		Void t = awaitResult(h -> future.future().setHandler(h));
 
 		try {
 			LOGGER.trace("vertx {} awaiting on {}", getNodeID(), address);
@@ -70,11 +70,11 @@ public final class SuspendableEventBusCondition implements SuspendableCondition,
 		long start = System.currentTimeMillis();
 		HandlerReceiverAdaptor<Buffer> adaptor = Sync.streamAdaptor();
 		MessageConsumer<Buffer> consumer = Vertx.currentContext().owner().eventBus().consumer(address);
-		Future<Void> future = Future.future();
+		Promise<Void> future = Promise.promise();
 		consumer.completionHandler(future);
 		consumer.bodyStream().handler(adaptor);
 		Buffer message;
-		Void t = awaitResult(h -> future.setHandler(h));
+		Void t = awaitResult(h -> future.future().setHandler(h));
 		long res = 0;
 
 		try {

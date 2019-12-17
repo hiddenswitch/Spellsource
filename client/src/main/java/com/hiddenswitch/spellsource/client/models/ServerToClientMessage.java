@@ -34,8 +34,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * ServerToClientMessage
+ * An envelope for messages from the server during gameplay. 
  */
+@ApiModel(description = "An envelope for messages from the server during gameplay. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class ServerToClientMessage implements Serializable {

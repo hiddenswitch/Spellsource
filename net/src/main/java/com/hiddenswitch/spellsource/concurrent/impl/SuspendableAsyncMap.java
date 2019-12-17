@@ -12,7 +12,7 @@ import java.util.Set;
 import static io.vertx.ext.sync.Sync.awaitFiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
-public final class SuspendableAsyncMap<K, V> implements SuspendableMap<K, V> {
+public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	private final AsyncMap<K, V> map;
 
 	public SuspendableAsyncMap(AsyncMap<K, V> map) {

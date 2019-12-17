@@ -17,8 +17,6 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * A suspendable, cluster-wide lock.
  */
 public interface SuspendableLock {
-	Semaphore LOCK_SERIALIZATION = new Semaphore(1);
-	String LOCK_SEMAPHORE_PREFIX = "__vertx.";
 	Logger LOGGER = LoggerFactory.getLogger(SuspendableLock.class);
 
 

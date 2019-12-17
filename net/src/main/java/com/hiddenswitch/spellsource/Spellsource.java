@@ -5,26 +5,21 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.CollectionTypes;
 import com.hiddenswitch.spellsource.models.DeckDeleteRequest;
-import com.hiddenswitch.spellsource.models.DeckListUpdateRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
 import com.hiddenswitch.spellsource.util.Mongo;
-import io.netty.channel.EventLoop;
 import io.vertx.core.*;
-import io.vertx.core.impl.VertxInternal;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -52,7 +47,6 @@ import static com.hiddenswitch.spellsource.Inventory.INVENTORY;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
-import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -77,7 +71,7 @@ public class Spellsource {
 	private Map<String, Spell> spells = new ConcurrentHashMap<>();
 
 	static {
-		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
+		DatabindCodec.mapper().setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 	}
 
 	protected Spellsource() {
@@ -161,11 +155,6 @@ public class Spellsource {
 											"type", CollectionTypes.DECK.toString()),
 									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));
-
-							// Update to the latest decklist
-
-							Decks.updateAllDecks(new DeckListUpdateRequest()
-									.withDeckCreateRequests(Spellsource.spellsource().getStandardDecks()));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(3)
@@ -439,10 +428,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(26)
 						.withUp(thisVertx -> {
-							// DoctorPangloss is the first and only admin user
-							mongo().updateCollectionWithOptions(Accounts.USERS, json(), json("$set", json(UserRecord.ROLES, array())), new UpdateOptions().setMulti(true));
-							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
-							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
+							// No more administrative behaviour
 						}))
 				.add(new MigrationRequest()
 						.withVersion(27)
@@ -607,7 +593,26 @@ public class Spellsource {
 							changeCardId("minion_thassarian", "minion_the_vein_wyrm");
 							changeCardId("weapon_souldrinker_axe", "weapon_consuming_blade");
 						}))
-				.migrateTo(37, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(38)
+						.withUp(thisVertx -> {
+							mongo().updateCollectionWithOptions(Accounts.USERS,
+									json(),
+									json("$unset", json("roles", null)),
+									new UpdateOptions().setMulti(true));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(39)
+						.withUp(thisVertx -> {
+							// Remove all the presence status from mongo, it will be computed on the fly
+							MongoClientUpdateResult res;
+							do {
+								res = mongo().updateCollectionWithOptions(Accounts.USERS,
+										json("friends.presence", json("$exists", true)),
+										json("$unset", json("friends.$.presence", null)), new UpdateOptions().setMulti(true));
+							} while (res.getDocModified() != 0);
+						}))
+				.migrateTo(39, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -670,7 +675,7 @@ public class Spellsource {
 		if (getPersistAttributeHandlers().containsKey(id)) {
 			return this;
 		}
-		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(suspendableHandler(handler), id, event, attribute));
+		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(handler, id, event, attribute));
 		return this;
 	}
 
@@ -705,9 +710,9 @@ public class Spellsource {
 
 		// Correctly use event loops
 		for (Supplier<Verticle> verticle : services()) {
-			final Future<String> future = Future.future();
+			Promise<String> future = Promise.promise();
 			vertx.deployVerticle(verticle, new DeploymentOptions().setInstances(concurrency), future);
-			futures.add(future);
+			futures.add(future.future());
 		}
 
 		CompositeFuture.all(futures).setHandler(deployments);

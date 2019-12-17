@@ -6,6 +6,8 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.impl.util.MongoRecord;
+import com.mongodb.MongoClientException;
+import com.mongodb.MongoCommandException;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.tag.Tags;
@@ -406,6 +408,12 @@ public class Mongo {
 		Span span = getSpan("createCollection", json("collectionName", collectionName));
 		try {
 			return awaitResult(h -> client().createCollection(collectionName, h));
+		} catch (MongoCommandException ex) {
+			if (ex.getErrorCode() == 48 /*Namespace already exists*/) {
+				return null;
+			} else {
+				throw ex;
+			}
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -559,17 +567,6 @@ public class Mongo {
 	@Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
 	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
 	*/
-
-	/**
-	 * Close this client.
-	 */
-	public void close() {
-		if (client() == null) {
-			return;
-		}
-		client().close();
-		clients.remove(Vertx.currentContext().owner().hashCode());
-	}
 
 	public MongoClient client() {
 		if (Vertx.currentContext() == null) {

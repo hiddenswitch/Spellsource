@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
- * Created by bberman on 2/6/17.
+ * A base class for data that should be stored as a top-level document in mongo.
  */
 public class MongoRecord implements Serializable {
 	public static final String ID = "_id";
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty(value = ID)
-	protected String _id;
+	public String _id;
 
 	@JsonIgnore
 	public String getId() {

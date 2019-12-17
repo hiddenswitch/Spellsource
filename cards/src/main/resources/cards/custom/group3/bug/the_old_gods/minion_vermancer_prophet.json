@@ -16,7 +16,8 @@
         "class": "DiscoverSpell",
         "cardSource": {
           "class": "GraveyardDiedMinionsSource",
-          "targetPlayer": "BOTH"
+          "targetPlayer": "BOTH",
+          "distinct": true
         }
       }
     }

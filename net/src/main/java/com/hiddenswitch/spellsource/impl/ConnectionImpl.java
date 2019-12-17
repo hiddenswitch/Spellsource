@@ -103,7 +103,7 @@ public class ConnectionImpl implements Connection {
 			}
 		});
 
-		socket.endHandler(suspendableHandler(v1 -> {
+		socket.endHandler(v1 -> {
 			try {
 				span.log("ending");
 				for (Handler<Void> handler : endHandlers) {
@@ -121,14 +121,14 @@ public class ConnectionImpl implements Connection {
 			} finally {
 				span.finish();
 			}
-		}));
+		});
 
 		if (readyHandler != null) {
-			Future<Void> v1 = Future.future();
-			Future<Void> v2 = Future.future();
+			Promise<Void> v1 = Promise.promise();
+			Promise<Void> v2 = Promise.promise();
 			consumer.completionHandler(v1);
 			closeConsumer.completionHandler(v2);
-			CompositeFuture.join(v1, v2).setHandler(v -> {
+			CompositeFuture.join(v1.future(), v2.future()).setHandler(v -> {
 				readyHandler.handle(v.succeeded() ? Future.succeededFuture() : Future.failedFuture(v.cause()));
 			});
 		}

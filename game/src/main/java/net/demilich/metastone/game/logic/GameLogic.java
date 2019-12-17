@@ -2018,11 +2018,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		// TODO: Remove this legacy attribute for both choose one options
-		if (hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
-			override = ChooseOneOverride.BOTH_COMBINED;
-		}
-
 		return override;
 	}
 
@@ -2035,11 +2030,26 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param attr   Which attribute to find
 	 * @return The highest value from all sources. -1 is considered infinite.
 	 */
-	private int getGreatestAttributeValue(Player player, Attribute attr) {
-		int greatest = Math.max(INFINITE, player.getHero().getAttributeValue(attr));
-		if (greatest == INFINITE) {
-			return greatest;
+	public int getGreatestAttributeValue(Player player, Attribute attr) {
+		int greatest = 0;
+		if (player.getHero().hasAttribute(Attribute.HERO_POWER_USAGES)) {
+			int attributeValue = player.getHero().getAttributeValue(attr);
+			if (attributeValue == INFINITE) {
+				return greatest;
+			} else {
+				greatest = Math.max(attributeValue, greatest);
+			}
 		}
+
+		if (player.hasAttribute(Attribute.HERO_POWER_USAGES)) {
+			int attributeValue = player.getAttributeValue(attr);
+			if (attributeValue == INFINITE) {
+				return greatest;
+			} else {
+				greatest = Math.max(attributeValue, greatest);
+			}
+		}
+
 		for (Entity minion : player.getMinions()) {
 			if (minion.hasAttribute(attr)) {
 				if (minion.getAttributeValue(attr) > greatest) {
@@ -2475,6 +2485,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.updateLookup(heroPower);
 		assignEntityIds(player.getDeck(), playerId);
 		assignEntityIds(player.getHand(), playerId);
+		// The player can use a hero power once per turn by default
+		player.setAttribute(Attribute.HERO_POWER_USAGES, 1);
 
 		// Implements Open the Waygate
 		Stream.concat(player.getDeck().stream(),
@@ -2508,6 +2520,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// Cards are now in the set aside zone
 		starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
 
+		// After quests, fill the remainder of the starter cards
 		for (int j = starterCards.size(); j < numberOfStarterCards && !player.getDeck().isEmpty(); j++) {
 			Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
 			if (randomCard != null) {
@@ -2738,7 +2751,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void modifyCurrentMana(int playerId, int mana, boolean spent) {
 		Player player = context.getPlayer(playerId);
-		int newMana = Math.min(Math.max(0, player.getMana()) + mana, MAX_MANA);
+		int newMana = MathUtils.clamp(player.getMana() + mana, 0, MAX_MANA + Math.abs(mana));
 		player.setMana(newMana);
 		if ((mana < 0 && spent) || mana > 0) {
 			context.getPlayer(playerId).modifyAttribute(Attribute.MANA_SPENT_THIS_TURN, mana < 0 ? -mana : 0);
@@ -2802,6 +2815,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
+	/**
+	 * Sets the cards that the player discarded during the mulligan phase.
+	 *
+	 * @param player
+	 * @param begins
+	 * @param discardedCards
+	 */
 	@Suspendable
 	public void handleMulligan(Player player, boolean begins, List<Card> discardedCards) {
 		// Get the entity ids of the discarded cards and then replace the discarded cards with them
@@ -3535,6 +3555,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public Card replaceCard(int playerId, Card oldCard, Card newCard, boolean keepCardCostModifiers) {
 		Player player = context.getPlayer(playerId);
+		@SuppressWarnings("unchecked")
 		EntityZone<? super Card> zone = (EntityZone<? super Card>) player.getZone(oldCard.getZone());
 		if (zone == null) {
 			throw new ClassCastException(String.format("replaceCard must be called on entities in a zone that can accept cards, which is not a %s", oldCard.getZone()));
@@ -4491,29 +4512,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
-	}
-
-	/**
-	 * Uses the player's hero power.
-	 *
-	 * @param playerId The player whose power should be used.
-	 */
-	@Suspendable
-	public void useHeroPower(int playerId) {
-		Player player = context.getPlayer(playerId);
-		Card power = player.getHero().getHeroPower();
-		// Hero powers could also cost health
-		int modifiedManaCost = getModifiedManaCost(player, power);
-		boolean cardCostsHealth = doesCardCostHealth(player, power);
-		if (cardCostsHealth) {
-			damage(player, (Actor) player.getHero(), modifiedManaCost, (Entity) power, true);
-		} else {
-			modifyCurrentMana(playerId, -modifiedManaCost, true);
-			player.getStatistics().manaSpent(modifiedManaCost);
-		}
-		power.markUsed();
-		player.getStatistics().cardPlayed(power, context.getTurn());
-		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
 	public Random getRandom() {

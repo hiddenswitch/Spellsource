@@ -131,6 +131,8 @@ services:
       - MEDIAWIKI_DB_PREFIX=mediawiki
       - MEDIAWIKI_SECURITY_KEY=${MEDIAWIKI_SECURITY_KEY}
       - MEDIAWIKI_UPGRADE_KEY=${MEDIAWIKI_UPGRADE_KEY}
+      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
+      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
     volumes:
       - mediawikidata:/var/www/html/images
     deploy:
@@ -174,10 +176,12 @@ services:
     volumes:
       - mariadbdata:/var/lib/mysql
   jaeger-collector:
-    image: jaegertracing/jaeger-collector:1.13
+    image: jaegertracing/jaeger-collector:1.15.1
     environment:
-      - SPAN_STORAGE_TYPE=elasticsearch
-      - ES_SERVER_URLS=http://elasticsearch:9200
+      - SPAN_STORAGE_TYPE=cassandra
+      - CASSANDRA_SERVERS=cassandra
+      - CASSANDRA_KEYSPACE=jaeger_tenant_1
+      - MODE=test
     networks:
       - backend
       - web
@@ -193,12 +197,28 @@ services:
         - "traefik.enable=true"
       placement:
         constraints: [node.platform.arch == x86_64]
-  jaeger-query:
-    image: jaegertracing/jaeger-query:1.13
+  jaeger-schema:
+    image: jaegertracing/jaeger-cassandra-schema:1.15.1
     environment:
-      - SPAN_STORAGE_TYPE=elasticsearch
-      - ES_SERVER_URLS=http://elasticsearch:9200
+      - CQLSH_HOST=cassandra
+      - MODE=test
+      - REPLICATION_FACTOR=1
+      - KEYSPACE=jaeger_tenant_1
+    deploy:
+      restart_policy:
+        condition: none
+      placement:
+        constraints: [node.platform.arch == x86_64]
+    networks:
+      - backend
+  jaeger-query:
+    image: jaegertracing/jaeger-query:1.15.1
+    environment:
+      - SPAN_STORAGE_TYPE=cassandra
+      - CASSANDRA_SERVERS=cassandra
       - QUERY_BASE_PATH=/jaeger
+      - MODE=test
+      - CASSANDRA_KEYSPACE=jaeger_tenant_1
     networks:
       - backend
       - web
@@ -215,24 +235,47 @@ services:
         - "traefik.enable=true"
       placement:
         constraints: [node.platform.arch == x86_64]
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.2
+  cassandra:
+    image: cassandra:3.11
+    volumes:
+      - cassandradata2:/var/lib/cassandra
     networks:
       - backend
-    volumes:
-      - elasticsearchdata:/usr/share/elasticsearch/data
+  ddnsroute53:
+    image: doctorpangloss/ddnsroute53:latest
+    networks:
+      - web
     environment:
-      - cluster.name=docker-cluster
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    healthcheck:
-      test: curl --fail -s http://127.0.0.1:9200/_cat/health || exit 1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DDNSROUTE53_IN_DOMAINS=*.hiddenswitch.com
+      - DDNSROUTE53_IP_ADDRESS=PUBLIC
+    deploy:
+      placement:
+        constraints: [node.platform.arch == x86_64]
+  skyhook:
+    image: doctorpangloss/skyhook
+    networks:
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:skyhook.hiddenswitch.com"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=8080"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
 volumes:
   mongodata:
   mancenterdata:
   loadbalancerdata:
   mediawikidata:
   mariadbdata:
-  elasticsearchdata:
+  cassandradata2:
 networks:
   web:
     external: true

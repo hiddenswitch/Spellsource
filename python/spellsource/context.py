@@ -45,7 +45,7 @@ class Context(contextlib.AbstractContextManager):
         :param port: When non-zero, forces the gateway to start on a specific port. Cannot start more than 1 context
         per port.
         """
-        self._is_closed = False
+        self._is_closing = False
         if os.name == 'nt' and 'java' not in os.environ['PATH']:
             # As a friendly gesture, append the OpenJDK bin build that is specified in the readme.
             _OPEN_JDK_11_0_1 = 'C:\\Program Files\\ojdkbuild\\java-11-openjdk-11.0.1-1\\bin'
@@ -120,6 +120,9 @@ class Context(contextlib.AbstractContextManager):
         """
         return self._gateway.jvm
 
+    def string_array(self, size: int = 0):
+        return self._gateway.new_array(self._gateway.jvm.java.lang.String, size)
+
     def close(self):
         """
         Closes the context by terminating the JVM and closing the sockets used by the proxy system in py4j.
@@ -127,21 +130,20 @@ class Context(contextlib.AbstractContextManager):
         """
         if not hasattr(self, '_gateway'):
             return
+        if self._is_closing:
+            return
         # self.process.send_signal(signal=signal.SIGINT)
+        self._is_closing = True
         self._gateway.close()
-        self._is_closed = True
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
     def __del__(self):
-        if self._is_closed:
-            return
-
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-0.8.53.jar'):
+    def find_resource_path(filename='net-0.8.56.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -149,7 +151,7 @@ class Context(contextlib.AbstractContextManager):
         paths.append(filename)
         # local
         dirname = os.path.dirname(os.path.realpath(__file__))
-        paths.append(os.path.join(dirname, '..', 'net', 'build', 'libs', filename))
+        paths.append(os.path.join(dirname, '..', '..', 'net', 'build', 'libs', filename))
         paths.append(os.path.join(dirname, '..', 'docs', filename))
         paths.append(os.path.join(dirname, '..', 'net', 'lib', filename))
         paths.append(os.path.join(dirname, '..', 'share', 'spellsource', filename))
@@ -176,7 +178,7 @@ class Context(contextlib.AbstractContextManager):
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         port = launch_gateway(port=port,
-                              classpath=Context.find_resource_path('net-0.8.53.jar'),
+                              classpath=Context.find_resource_path('net-0.8.56.jar'),
                               javaopts=["--add-modules", "java.se",
                                         "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
                                         "--add-opens", "java.base/java.lang=ALL-UNNAMED",
