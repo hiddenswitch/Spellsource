@@ -1,6 +1,6 @@
 {
   "name": "Bluefist Trainer",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BLUEGREY",
   "baseAttack": 1,
