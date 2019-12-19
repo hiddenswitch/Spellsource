@@ -6,6 +6,16 @@ permalink: /whats-new/
 
 Join the Discord at https://discord.gg/HmbESh2! If you've been playing Quick Play, this is the community for you.
 
+### 0.8.56-3.0.5 (December 18th, 2019)
+
+Improvements to the client.
+
+ - The hand now expands to the width of the screen on desktops again.
+ - Better aspect ratio / zooming management on desktops.
+ - Some exceptions should occur less frequently.
+ - Remove unneeded assets
+ - Cards can now be cancelled in the click activation event patttern.
+ - On non-mobile devices, the hand tray no longer needs to open and close. Your cards will raise automatically when you hover over them.
 ### 0.8.56-3.0.4 (December 15th, 2019)
 
 Android release.
