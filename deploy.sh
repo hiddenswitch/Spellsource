@@ -23,6 +23,7 @@ where:
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
         binaries for your platform necessary for deployment
     -A  visits the AWS console for Hidden Switch
+    -o  deploys docs to github.io
 
 Invoking this script always rebuilds Spellsource-Server.
 
@@ -41,13 +42,14 @@ deploy_www=false
 deploy_python=false
 deploy_launcher=false
 deploy_wiki=false
+deploy_docs=false
 bump_version=false
 install_dependencies=false
 deploy_java=false
 build_client=false
-while getopts "hcedwpjvlWDA" opt; do
+while getopts "hcedwpjvlWDAo" opt; do
   case "$opt" in
-  h) echo "$usage"
+  h*) echo "$usage"
      exit
      ;;
   e) deploy_elastic_beanstalk=true
@@ -79,6 +81,9 @@ while getopts "hcedwpjvlWDA" opt; do
      ;;
   D) install_dependencies=true
      echo "Installing dependencies"
+     ;;
+  o) deploy_docs=true
+     echo "Deploying docs"
      ;;
   A) open https://786922801148.signin.aws.amazon.com/console
      exit
@@ -475,4 +480,8 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
 
   eb use metastone-dev >/dev/null
   eb deploy --staged
+fi
+
+if [[ "$deploy_docs" = true ]] ; then
+  git subtree push --prefix docs origin gh-pages
 fi
