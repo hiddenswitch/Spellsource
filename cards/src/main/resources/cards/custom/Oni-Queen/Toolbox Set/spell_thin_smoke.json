@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Draw two 0-Cost cards from your deck.",
+  "description": "Draw two 0-Cost cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
