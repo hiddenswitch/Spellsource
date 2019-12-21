@@ -1,0 +1,24 @@
+{
+  "name": "Waygate Captain",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Opener: Add two 2/2 Dragon Watchmen to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "card": "token_dragon_watchman"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
