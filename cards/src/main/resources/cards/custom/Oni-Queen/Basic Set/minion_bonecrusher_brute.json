@@ -7,11 +7,11 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "Dash. Opener: Discard a random card.",
+  "description": "Dash. Opener: Destroy one of your Lun.",
   "battlecry": {
     "spell": {
-      "class": "DiscardSpell",
-      "value": 1
+      "class": "ModifyMaxManaSpell",
+      "value": -1
     }
   },
   "attributes": {
