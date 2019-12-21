@@ -1,0 +1,31 @@
+{
+  "name": "Rampant Aggression",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "EPIC",
+  "description": "Destroy 2 of your Lun. Give all minions in your deck +2/+2.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": -2
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_DECK",
+        "attackBonus": 2,
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "hpBonus": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
