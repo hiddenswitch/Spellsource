@@ -70,10 +70,8 @@ import static java.util.stream.Collectors.toList;
  * Therefore, the best way to describe this AI is: It is a "single turn horizon" AI. That is, it tries to pick actions
  * to maximize a score by the end of the turn.
  * <p>
- * This means the AI doesn't see some effects that start at the beginning of an opponent's turn, like Doomsayer, or of
- * its turn, like the Cursed card. This class special cases cards like these to maintain its basic architecture.
- * Additionally, playing around secrets is difficult without a long-term vision of the game, so enemy secrets are
- * omitted from the simulation entirely.
+ * Playing around secrets is difficult without a long-term vision of the game, so enemy secrets are omitted from the
+ * simulation entirely. The bot's and opponennt's start turn effects are heuristically triggered at the end of the turn.
  * <p>
  * How does the AI do scoring? Clearly, it can't be as simple as, "The highest score is whatever reduces the opponent's
  * health the most." Indeed, this class uses a complex model for a score, called a {@link Heuristic}, which is capable
@@ -487,7 +485,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// Depth-first search loop with a twist.
 		// We will expand the longest nodes first. However, nodes that are terminal go to the end of the context stack,
-		// instead of the beginning, where they are popped first. Our heuristic is to prune all but the shortest terminal
+		// instead of the beginning, where they are popped first. Our heuristic is to prune all but the longest terminal
 		// nodes in order to save memory.
 		try {
 			while (contextStack.size() > 0) {
@@ -610,7 +608,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	}
 
 	/**
-	 * Prunes the context stack to the
+	 * Prunes the context stack to save memory. Removes terminal nodes that are not worth exploring heuristically.
 	 *
 	 * @param contextStack
 	 * @param playerId

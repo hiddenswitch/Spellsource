@@ -1,9 +1,9 @@
 plugins {
-    id "net.saliman.cobertura" version "2.5.4"
+//    id "net.saliman.cobertura" version "2.5.4"
     id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
-apply plugin: "net.saliman.cobertura"
+//apply plugin: "net.saliman.cobertura"
 apply plugin: "com.github.johnrengelman.shadow"
 
 group 'com.hiddenswitch'

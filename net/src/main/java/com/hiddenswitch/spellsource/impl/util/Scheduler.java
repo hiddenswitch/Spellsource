@@ -9,5 +9,8 @@ public interface Scheduler {
 	TimerId setTimer(long delay, Handler<Long> handler);
 
 	@Suspendable
+	TimerId setInterval(long delay, Handler<Long> handler);
+
+	@Suspendable
 	boolean cancelTimer(TimerId id);
 }

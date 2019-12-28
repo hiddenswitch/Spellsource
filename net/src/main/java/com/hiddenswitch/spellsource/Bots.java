@@ -4,6 +4,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
+import io.vertx.codegen.annotations.Nullable;
+import io.vertx.core.Context;
 import io.vertx.core.json.jackson.JacksonCodec;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -42,7 +44,13 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * A service that processes bot actions, mulligans and conveniently creates bot games.
  */
 public interface Bots {
-	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
+	// Return a non-parallelized GSVB instance
+	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(
+			() -> new GameStateValueBehaviour()
+					.setParallel(false)
+					.setTargetContextStackSize(8)
+					.setTimeout(150)
+					.setLethalTimeout(1500));
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {
 	};
 
@@ -124,24 +132,33 @@ public interface Bots {
 		context.setDeckFormat(request.format);
 		context.setGameState(request.gameState);
 		context.setActivePlayerId(request.playerId);
-
+		@Nullable Context executionContext = Vertx.currentContext();
 		try {
-			GameAction result = awaitResult(res -> Vertx.currentContext().executeBlocking(fut -> {
-				// TODO: We shouldn't really tie up a general blocking executor for this computation.
-				try {
-					long startTime = System.currentTimeMillis();
-					final GameAction res1 = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
-					long endTime = System.currentTimeMillis();
-					long thinkingDelay = getDefaultBotThinkingDelay();
-					long waitTime = Math.max(thinkingDelay - endTime + startTime, 0);
-					if (waitTime > 0L) {
-						Strand.sleep(waitTime);
+			GameAction result = awaitResult(res -> {
+				executionContext.executeBlocking(fut -> {
+					// TODO: We shouldn't really tie up a general blocking executor for this computation.
+					try {
+						long startTime = System.currentTimeMillis();
+						Strand thread = Strand.currentStrand();
+						String oldName = thread.getName();
+						thread.setName("spellsource-bot-thread-" + oldName);
+						// Force a yield so that the name gets recorded?
+						Strand.yield();
+						final GameAction res1 = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+						Strand.yield();
+						thread.setName(oldName);
+						long endTime = System.currentTimeMillis();
+						long thinkingDelay = getDefaultBotThinkingDelay();
+						long waitTime = Math.max(thinkingDelay - endTime + startTime, 0);
+						if (waitTime > 0L) {
+							Strand.sleep(waitTime);
+						}
+						fut.complete(res1);
+					} catch (Throwable t) {
+						fut.fail(t);
 					}
-					fut.complete(res1);
-				} catch (Throwable t) {
-					fut.fail(t);
-				}
-			}, false, res));
+				}, false, res);
+			});
 
 			response.gameAction = result;
 		} catch (Throwable throwable) {

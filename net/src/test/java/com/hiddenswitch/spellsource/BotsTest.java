@@ -51,7 +51,7 @@ public class BotsTest extends SpellsourceTestBase {
 			context1.startTurn(context1.getActivePlayerId());
 			int startTurn = context1.getTurn();
 			GameAction gameAction = null;
-			Bots.BEHAVIOUR.set(GameStateValueBehaviour::new);
+			Bots.BEHAVIOUR.set(() -> new GameStateValueBehaviour().setParallel(false));
 			while (gameAction == null
 					|| gameAction.getActionType() != ActionType.END_TURN) {
 				RequestActionRequest requestActionRequest = new RequestActionRequest(new GameId(context1.getGameId()),

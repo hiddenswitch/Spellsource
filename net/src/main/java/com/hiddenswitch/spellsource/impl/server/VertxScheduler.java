@@ -21,6 +21,12 @@ public class VertxScheduler implements Scheduler {
 
 	@Override
 	@Suspendable
+	public TimerId setInterval(long delay, Handler<Long> handler) {
+		return new TimerId(vertx.setPeriodic(delay, handler));
+	}
+
+	@Override
+	@Suspendable
 	public boolean cancelTimer(TimerId id) {
 		return vertx.cancelTimer(id.longValue());
 	}

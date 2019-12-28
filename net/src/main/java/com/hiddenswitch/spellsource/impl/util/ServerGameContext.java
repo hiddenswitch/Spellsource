@@ -94,7 +94,6 @@ public class ServerGameContext extends GameContext implements Server {
 	private final transient List<Client> clients = new ArrayList<>();
 	private final transient Deque<Promise> registrationsReady = new ConcurrentLinkedDeque<>();
 	private final transient Promise<Void> initialization = Promise.promise();
-	private transient SpanContext spanContext;
 	private transient TimerId turnTimerId;
 	private final Deque<Configuration> playerConfigurations = new ConcurrentLinkedDeque<>();
 	private final Deque<Closeable> closeables = new ConcurrentLinkedDeque<>();
@@ -117,128 +116,135 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	public ServerGameContext(@NotNull GameId gameId, @NotNull Scheduler scheduler, @NotNull List<Configuration> playerConfigurations) {
 		super();
-
-		if (gameId == null) {
-			throw new IllegalArgumentException("gameId cannot be null");
+		Tracer tracer = GlobalTracer.get();
+		Tracer.SpanBuilder spanBuilder = tracer.buildSpan("ServerGameContext/init")
+				.withTag("gameId", gameId.toString());
+		for (int i = 0; i < playerConfigurations.size(); i++) {
+			spanBuilder.withTag("playerConfigurations." + i + ".userId", playerConfigurations.get(i).getUserId().toString());
+			spanBuilder.withTag("playerConfigurations." + i + ".deckId", playerConfigurations.get(i).getDeck().getDeckId());
+			spanBuilder.withTag("playerConfigurations." + i + ".isBot", playerConfigurations.get(i).isBot());
 		}
-
-		if (scheduler == null) {
-			throw new IllegalArgumentException("scheduler cannot be null");
-		}
-
-		if (playerConfigurations == null || playerConfigurations.size() != 2) {
-			throw new IllegalArgumentException("playerConfigurations.size must be 2");
-		}
-
-		this.gameId = gameId;
-		this.scheduler = scheduler;
-		// Save the information used to create this game
-		this.playerConfigurations.addAll(playerConfigurations);
-
-		// The deck format will be the smallest one that can contain all the cards in the decks.
-		setDeckFormat(DeckFormat.getSmallestSupersetFormat(playerConfigurations
-				.stream()
-				.map(Configuration::getDeck)
-				// These must be game decks at this point
-				.map(deck -> (GameDeck) deck)
-				.collect(toList())));
-		// Mulligans should happen simultaneously
-		setLogic(new NetworkedGameLogic());
-
-		// Persistence effects mean cards that remember things that have happened to them in other games
-		enablePersistenceEffects();
-		enableTriggers();
-
-		List<Integer> usedPlayerIds = new ArrayList<>(2);
-
-		// Each configuration corresponds to a human or bot player
-		// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
-		for (Configuration configuration : getPlayerConfigurations()) {
-			UserId userId = configuration.getUserId();
-			if (userId == null) {
-				throw new IllegalArgumentException("userId cannot be null");
+		Span span = spanBuilder.start();
+		try (Scope s1 = tracer.activateSpan(span)) {
+			if (playerConfigurations.size() != 2) {
+				throw new IllegalArgumentException("playerConfigurations.size must be 2");
 			}
 
-			// Initialize the player objects
-			// This will create an actual valid deck and player object
-			GameDeck deck = (GameDeck) configuration.getDeck().clone();
-			if (deck == null) {
-				throw new IllegalArgumentException("deck cannot be null");
+			this.gameId = gameId;
+			this.scheduler = scheduler;
+			// Save the information used to create this game
+			this.playerConfigurations.addAll(playerConfigurations);
+
+			// The deck format will be the smallest one that can contain all the cards in the decks.
+			setDeckFormat(DeckFormat.getSmallestSupersetFormat(playerConfigurations
+					.stream()
+					.map(Configuration::getDeck)
+					// These must be game decks at this point
+					.map(deck -> (GameDeck) deck)
+					.collect(toList())));
+			// Mulligans should happen simultaneously
+			setLogic(new NetworkedGameLogic());
+
+			// Persistence effects mean cards that remember things that have happened to them in other games
+			enablePersistenceEffects();
+			enableTriggers();
+
+			List<Integer> usedPlayerIds = new ArrayList<>(2);
+
+			// Each configuration corresponds to a human or bot player
+			// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
+			for (Configuration configuration : getPlayerConfigurations()) {
+				UserId userId = configuration.getUserId();
+				if (userId == null) {
+					throw new IllegalArgumentException("userId cannot be null");
+				}
+
+				// Initialize the player objects
+				// This will create an actual valid deck and player object
+				GameDeck deck = (GameDeck) configuration.getDeck().clone();
+				if (deck == null) {
+					throw new IllegalArgumentException("deck cannot be null");
+				}
+
+				Player player = Player.forUser(userId.toString(), configuration.getPlayerId(), deck);
+				if (usedPlayerIds.contains(configuration.getPlayerId())) {
+					throw new IllegalArgumentException("playerId already used");
+				}
+				usedPlayerIds.add(configuration.getPlayerId());
+
+				setPlayer(configuration.getPlayerId(), player);
+				// ...and import all the attributes that might be specific to the queue and its rules (typically just the
+				// DECK_ID and USER_ID attributes at the moment.
+				for (Map.Entry<Attribute, Object> kv : configuration.getPlayerAttributes().entrySet()) {
+					player.getAttributes().put(kv.getKey(), kv.getValue());
+				}
+
+				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
+				if (configuration.isBot()) {
+					player.getAttributes().put(Attribute.AI_OPPONENT, true);
+					setBehaviour(configuration.getPlayerId(), new BotsServiceBehaviour());
+					// Does not have a client representing it
+				} else {
+					// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
+					EventBus bus = Vertx.currentContext().owner().eventBus();
+					MessageConsumer<ClientToServerMessage> consumer = toClient(userId, bus);
+					// By using a publisher, we do not require that there be a working connection while sending
+					MessageProducer<ServerToClientMessage> producer = toServer(userId, bus);
+					consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
+					producer.setWriteQueueMaxSize(Integer.MAX_VALUE);
+
+					Promise<Void> registration = Promise.promise();
+					consumer.completionHandler(registration);
+					registrationsReady.add(registration);
+
+					// We'll want to unregister and close these when this instance is disposed
+					closeables.add(consumer::unregister);
+					closeables.add(fut -> {
+						producer.close();
+						fut.handle(Future.succeededFuture());
+					});
+
+					// Create a client that handles game events and action/mulligan requests
+					UnityClientBehaviour client = new UnityClientBehaviour(this,
+							new VertxScheduler(Vertx.currentContext().owner()),
+							consumer.bodyStream(),
+							producer,
+							userId,
+							configuration.getPlayerId(),
+							configuration.getNoActivityTimeout());
+
+					// This client too needs to be closed
+					closeables.add(client);
+
+					// Once the game is disposed, there should be no more client instances referenced here
+					closeables.add(fut -> {
+						consumer.unregister();
+						getClients().clear();
+						CompositeFuture.join(getBehaviours().stream()
+								.filter(Closeable.class::isInstance)
+								.map(Closeable.class::cast).map(c -> {
+									Promise<Void> promise = Promise.promise();
+									c.close(promise);
+									return promise.future();
+								}).collect(toList()))
+								.setHandler(h -> fut.handle(h.succeeded() ? Future.succeededFuture() : Future.failedFuture(h.cause())));
+						setBehaviour(0, null);
+						setBehaviour(1, null);
+					});
+
+					// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
+					// and mulligan calls
+					setBehaviour(configuration.getPlayerId(), client);
+					// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
+					getClients().add(client);
+					// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
+					// will only be notified to send this message when the constructor finishes.
+					Promise<Client> fut = Promise.promise();
+					clientsReady.put(configuration.getPlayerId(), fut);
+				}
 			}
-
-			Player player = Player.forUser(userId.toString(), configuration.getPlayerId(), deck);
-			if (usedPlayerIds.contains(configuration.getPlayerId())) {
-				throw new IllegalArgumentException("playerId already used");
-			}
-			usedPlayerIds.add(configuration.getPlayerId());
-
-			setPlayer(configuration.getPlayerId(), player);
-			// ...and import all the attributes that might be specific to the queue and its rules (typically just the
-			// DECK_ID and USER_ID attributes at the moment.
-			for (Map.Entry<Attribute, Object> kv : configuration.getPlayerAttributes().entrySet()) {
-				player.getAttributes().put(kv.getKey(), kv.getValue());
-			}
-
-			// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
-			if (configuration.isBot()) {
-				player.getAttributes().put(Attribute.AI_OPPONENT, true);
-				setBehaviour(configuration.getPlayerId(), new BotsServiceBehaviour());
-				// Does not have a client representing it
-			} else {
-				// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
-				EventBus bus = Vertx.currentContext().owner().eventBus();
-				MessageConsumer<ClientToServerMessage> consumer = toClient(userId, bus);
-				// By using a publisher, we do not require that there be a working connection while sending
-				MessageProducer<ServerToClientMessage> producer = toServer(userId, bus);
-				consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
-				producer.setWriteQueueMaxSize(Integer.MAX_VALUE);
-
-				Promise<Void> registration = Promise.promise();
-				consumer.completionHandler(registration);
-				registrationsReady.add(registration);
-
-				// We'll want to unregister and close these when this instance is disposed
-				closeables.add(consumer::unregister);
-				closeables.add(fut -> {
-					producer.close();
-					fut.handle(Future.succeededFuture());
-				});
-
-				// Create a client that handles game events and action/mulligan requests
-				UnityClientBehaviour client = new UnityClientBehaviour(this,
-						new VertxScheduler(Vertx.currentContext().owner()),
-						consumer.bodyStream(),
-						producer,
-						userId,
-						configuration.getPlayerId(),
-						configuration.getNoActivityTimeout());
-
-				// This client too needs to be closed
-				closeables.add(client);
-
-				// Once the game is disposed, there should be no more client instances referenced here
-				closeables.add(fut -> {
-					consumer.unregister();
-					getClients().clear();
-					CompositeFuture.join(getBehaviours().stream().filter(Closeable.class::isInstance).map(Closeable.class::cast).map(c -> {
-						Promise<Void> promise = Promise.promise();
-						c.close(promise);
-						return promise.future();
-					}).collect(toList())).setHandler(h -> fut.handle(h.succeeded() ? Future.succeededFuture() : Future.failedFuture(h.cause())));
-					setBehaviour(0, null);
-					setBehaviour(1, null);
-				});
-
-				// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
-				// and mulligan calls
-				setBehaviour(configuration.getPlayerId(), client);
-				// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
-				getClients().add(client);
-				// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
-				// will only be notified to send this message when the constructor finishes.
-				Promise<Client> fut = Promise.promise();
-				clientsReady.put(configuration.getPlayerId(), fut);
-			}
+		} finally {
+			span.finish();
 		}
 	}
 
@@ -485,12 +491,24 @@ public class ServerGameContext extends GameContext implements Server {
 			if (firstHandActive.isEmpty()) {
 				mulligansActive.complete(Collections.emptyList());
 			} else {
-				getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, mulligansActive::complete);
+				getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, res -> {
+					mulligansActive.complete(res);
+					// TODO: Game started should not be set here, strictly speaking
+					// Fixes issues with mulligans not being dismissed correctly
+					getActivePlayer().setAttribute(Attribute.GAME_STARTED);
+					// Update this user
+					updateClientWithGameState(startingPlayerId);
+				});
 			}
+
 			if (firstHandNonActive.isEmpty()) {
 				mulligansNonActive.complete(Collections.emptyList());
 			} else {
-				getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, mulligansNonActive::complete);
+				getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, (res) -> {
+					mulligansNonActive.complete(res);
+					getNonActivePlayer().setAttribute(Attribute.GAME_STARTED);
+					updateClientWithGameState(getNonActivePlayerId());
+				});
 			}
 
 			// If this is interrupted, it'll bubble up to the general interrupt handler
@@ -568,16 +586,19 @@ public class ServerGameContext extends GameContext implements Server {
 						// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
 						// is allowed to interrupt the fiber. So we don't need to call endGame here.
 					} else {
-						Tracing.error(throwable);
+						getTrace().setTraceErrors(true);
 						try {
 							endGame();
 						} catch (Throwable endGameError) {
-							Tracing.error(endGameError);
+							Tracing.error(endGameError, span, false);
 						}
+						Tracing.error(throwable);
 					}
 
 				} finally {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
+					// Always set the trace
+					span.setTag("trace", getTrace().dump());
 					span.finish();
 					scope.close();
 					UserId[] userIds = getPlayerConfigurations().stream().map(Configuration::getUserId).toArray(UserId[]::new);
@@ -721,6 +742,16 @@ public class ServerGameContext extends GameContext implements Server {
 		GameState state = getGameStateCopy();
 		for (Client client : getClients()) {
 			client.onUpdate(state);
+		}
+	}
+
+	@Suspendable
+	private void updateClientWithGameState(int playerId) {
+		GameState state = getGameStateCopy();
+		for (Client client : getClients()) {
+			if (client.getPlayerId() == playerId) {
+				client.onUpdate(state);
+			}
 		}
 	}
 
@@ -888,20 +919,37 @@ public class ServerGameContext extends GameContext implements Server {
 		}
 	}
 
-	private static void releaseUsers(GameId gameId, UserId[] userIds) {
-		@Nullable Context context = Vertx.currentContext();
-		if (context == null) {
-			return;
+	private static void releaseUsers(GameId gameId, @NotNull UserId[] userIds) {
+		Tracer tracer = GlobalTracer.get();
+		Tracer.SpanBuilder spanBuilder = tracer.buildSpan("ServerGameContext/releaseUsers")
+				.withTag("gameId", gameId.toString());
+
+		for (int i = 0; i < userIds.length; i++) {
+			spanBuilder.withTag("userId." + i, userIds[i].toString());
 		}
-		context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
-			if (res.failed()) {
+		Span span = spanBuilder.start();
+
+		try (Scope s1 = tracer.activateSpan(span)) {
+			@Nullable Context context = Vertx.currentContext();
+			if (context == null) {
 				return;
 			}
+			context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
+				try (Scope s2 = tracer.activateSpan(span)) {
+					if (res.failed()) {
+						Tracing.error(res.cause());
+						return;
+					}
 
-			for (UserId userId : userIds) {
-				res.result().removeIfPresent(userId, gameId, Promise.promise());
-			}
-		});
+					for (UserId userId : userIds) {
+						res.result().removeIfPresent(userId, gameId, Promise.promise());
+					}
+				} finally {
+					span.finish();
+				}
+			});
+		}
+
 	}
 
 	/**
@@ -920,18 +968,28 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void dispose() {
-		Iterator<Closeable> iter = closeables.iterator();
-		while (iter.hasNext()) {
-			try {
-				Closeable closeable = iter.next();
-				Void res = awaitResult(closeable::close);
-			} catch (Throwable any) {
-				LOGGER.error("dispose", any);
-			} finally {
-				iter.remove();
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("ServerGameContext/dispose")
+				.asChildOf(getSpanContext())
+				.withTag("gameId", getGameId())
+				.start();
+
+		try (Scope s1 = tracer.activateSpan(span)) {
+			Iterator<Closeable> iter = closeables.iterator();
+			while (iter.hasNext()) {
+				try {
+					Closeable closeable = iter.next();
+					Void res = awaitResult(closeable::close);
+				} catch (Throwable any) {
+					LOGGER.error("dispose", any);
+				} finally {
+					iter.remove();
+				}
 			}
+			super.dispose();
+		} finally {
+			span.finish();
 		}
-		super.dispose();
 	}
 
 	public Collection<Trigger> getGameTriggers() {
@@ -1048,7 +1106,8 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			onPlayerReady(client);
-			updateClientsWithGameState();
+			// Only update the reconnecting client
+			client.onUpdate(getGameStateCopy());
 		} finally {
 			lock.unlock();
 		}
@@ -1111,21 +1170,5 @@ public class ServerGameContext extends GameContext implements Server {
 				Stream.of(initialization.future())
 		).collect(toList()));
 		CompositeFuture res = awaitResult(join::setHandler);
-	}
-
-	/**
-	 * Provides context for tracing in this context. This is the OpenTracing span context, typically assigned by the
-	 * matchmaker or whatever created this instance.
-	 *
-	 * @return
-	 */
-	@Override
-	public SpanContext getSpanContext() {
-		return spanContext;
-	}
-
-	public ServerGameContext setSpanContext(SpanContext spanContext) {
-		this.spanContext = spanContext;
-		return this;
 	}
 }

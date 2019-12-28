@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 4.0.0
+  version: 4.0.1
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -622,14 +622,10 @@ definitions:
   MessageType:
     type: 'string'
     enum:
-      - 'REGISTER_PLAYER'
       - 'UPDATE_ACTION'
       - 'ON_GAME_EVENT'
       - 'ON_GAME_END'
-      - 'SET_PLAYERS'
-      - 'ON_ACTIVE_PLAYER'
       - 'ON_UPDATE'
-      - 'ON_TURN_END'
       - 'ON_REQUEST_ACTION'
       - 'FIRST_MESSAGE'
       - 'ON_MULLIGAN'
@@ -638,6 +634,7 @@ definitions:
       - 'TOUCH'
       - 'CONCEDE'
       - 'PINGPONG'
+      - 'TIMER'
   Emote:
     description: |
       An emote that should play from the specified entity.

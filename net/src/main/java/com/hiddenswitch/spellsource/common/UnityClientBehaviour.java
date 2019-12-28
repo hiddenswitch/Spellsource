@@ -9,15 +9,19 @@ import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Tracing;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.Scheduler;
 import com.hiddenswitch.spellsource.util.NoOpLock;
+import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
-import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.*;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Closeable;
+import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -38,6 +42,7 @@ import net.demilich.metastone.game.logic.TurnState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -66,16 +71,16 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final UserId userId;
 	private final int playerId;
 	private final Scheduler scheduler;
-	private final ReentrantLock requestsLock = new NoOpLock();
+	private final ReentrantLock requestsLock = new ReentrantLock();
 	private final ReadStream<ClientToServerMessage> reader;
 	private final WriteStream<ServerToClientMessage> writer;
 	private final Server server;
+	private final TimerId turnTimer;
 
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
-	private Span span;
 	private GameOver gameOver;
 
 
@@ -92,13 +97,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
-		Tracer tracer = GlobalTracer.get();
-		this.span = tracer.buildSpan("UnityClientBehaviour")
-				.asChildOf(server.getSpanContext())
-				.withTag(Tags.SAMPLING_PRIORITY, 0)
-				.start();
-		span.setTag("userId", userId.toString());
-		span.setTag("gameId", server.getGameId());
+		this.turnTimer = scheduler.setInterval(1000L, this::secondIntervalElapsed);
 		if (noActivityTimeout > 0L) {
 			ActivityMonitor activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
 			activityMonitor.activity();
@@ -110,9 +109,20 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		reader.handler(suspendableHandler(this::handleWebSocketMessage));
 	}
 
+	private void secondIntervalElapsed(Long timer) {
+		Long millisRemaining = server.getMillisRemaining();
+		if (millisRemaining == null) {
+			return;
+		}
+
+		sendMessage(new ServerToClientMessage()
+				.messageType(MessageType.TIMER)
+				.timers(new Timers()
+						.millisRemaining(millisRemaining)));
+	}
+
 	@Suspendable
 	private void noActivity(ActivityMonitor activityMonitor) {
-		span.log("noActivity");
 		elapseAwaitingRequests();
 		server.onConcede(this);
 	}
@@ -134,7 +144,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void elapseAwaitingRequests() {
-		span.log("elapseAwaitingRequests");
 		requestsLock.lock();
 		elapsed = true;
 		try {
@@ -178,84 +187,100 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Suspendable
 	protected void handleWebSocketMessage(ClientToServerMessage message) throws SuspendExecution {
-		if (inboundMessagesClosed) {
-			Tracing.error(new IllegalStateException("inbound messages closed"), span, false);
-			return;
-		}
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("UnityClientBehaviour/handleWebSocketMessage")
+				.withTag("message.messageType", message.getMessageType().getValue())
+				.withTag("playerId", getPlayerId())
+				.withTag("userId", getUserId())
+				.withTag("gameId", server.getGameId())
+				.asChildOf(server.getSpanContext())
+				.start();
+		Scope scope = tracer.activateSpan(span);
+		try {
+			if (inboundMessagesClosed) {
+				Tracing.error(new IllegalStateException("inbound messages closed"), span, false);
+				return;
+			}
 
-		switch (message.getMessageType()) {
-			case PINGPONG:
-				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
-					activityMonitor.activity();
-				}
-				// Server is responsible for replying
-				sendMessage(new ServerToClientMessage().messageType(MessageType.PINGPONG));
-				break;
-			case FIRST_MESSAGE:
-				lastStateSent = null;
-				// The first message indicates the player has connected or reconnected.
-				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
-					activityMonitor.activity();
-				}
+			switch (message.getMessageType()) {
+				case PINGPONG:
+					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+						activityMonitor.activity();
+					}
+					// Server is responsible for replying
+					sendMessage(new ServerToClientMessage().messageType(MessageType.PINGPONG));
+					break;
+				case FIRST_MESSAGE:
+					lastStateSent = null;
+					// The first message indicates the player has connected or reconnected.
+					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+						activityMonitor.activity();
+					}
 
-
-				if (server.isGameReady()) {
-					// Replace the client
-					span.log("receiveFirstMessage/reconnected");
-					server.onPlayerReconnected(this);
-					// Since the player may have pending requests, we're going to send the data the client needs again.
-					retryRequests();
-				} else {
-					span.log("receiveFirstMessage/playerReady");
-					server.onPlayerReady(this);
-				}
-				break;
-			case UPDATE_ACTION:
-				// Indicates the player has made a choice about which action to take.
-				if (server == null) {
-					throw new RuntimeException();
-				}
-				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
-					activityMonitor.activity();
-				}
-				final String messageId = message.getRepliesTo();
-				onActionReceived(messageId, message.getActionIndex());
-				break;
-			case UPDATE_MULLIGAN:
-				if (server == null) {
-					throw new RuntimeException();
-				}
-				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
-					activityMonitor.activity();
-				}
-				final String messageId2 = message.getRepliesTo();
-				onMulliganReceived(messageId2, message.getDiscardedCardIndices());
-				break;
-			case EMOTE:
-				if (server == null) {
+					if (server.isGameReady()) {
+						// Replace the client
+						span.log("receiveFirstMessage/reconnected");
+						server.onPlayerReconnected(this);
+						// Since the player may have pending requests, we're going to send the data the client needs again.
+						retryRequests();
+					} else {
+						span.log("receiveFirstMessage/playerReady");
+						server.onPlayerReady(this);
+					}
 					break;
-				}
-				server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage());
-				break;
-			case TOUCH:
-				if (server == null) {
+				case UPDATE_ACTION:
+					// Indicates the player has made a choice about which action to take.
+					if (server == null) {
+						throw new RuntimeException();
+					}
+					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+						activityMonitor.activity();
+					}
+					final String messageId = message.getRepliesTo();
+					onActionReceived(messageId, message.getActionIndex());
 					break;
-				}
-				for (ActivityMonitor activityMonitor : getActivityMonitors()) {
-					activityMonitor.activity();
-				}
-				if (null != message.getEntityTouch()) {
-					server.onTouch(this, message.getEntityTouch());
-				} else if (null != message.getEntityUntouch()) {
-					server.onUntouch(this, message.getEntityUntouch());
-				}
-				break;
-			case CONCEDE:
-				if (server == null) {
+				case UPDATE_MULLIGAN:
+					if (server == null) {
+						throw new RuntimeException();
+					}
+					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+						activityMonitor.activity();
+					}
+					final String messageId2 = message.getRepliesTo();
+					onMulliganReceived(messageId2, message.getDiscardedCardIndices());
 					break;
-				}
-				server.onConcede(this);
-				break;
+				case EMOTE:
+					if (server == null) {
+						break;
+					}
+					server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage());
+					break;
+				case TOUCH:
+					if (server == null) {
+						break;
+					}
+					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+						activityMonitor.activity();
+					}
+					if (null != message.getEntityTouch()) {
+						server.onTouch(this, message.getEntityTouch());
+					} else if (null != message.getEntityUntouch()) {
+						server.onUntouch(this, message.getEntityUntouch());
+					}
+					break;
+				case CONCEDE:
+					if (server == null) {
+						break;
+					}
+					server.onConcede(this);
+					break;
+			}
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			throw runtimeException;
+		} finally {
+			span.finish();
+			scope.close();
 		}
 	}
 
@@ -481,6 +506,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			case TOUCH:
 			case EMOTE:
 			case PINGPONG:
+			case TIMER:
 				break;
 			default:
 				message.gameOver(gameOver);
@@ -527,8 +553,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		ServerToClientMessage message = new ServerToClientMessage()
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
-				.timers(new Timers()
-						.millisRemaining(state.getMillisRemaining()))
 				.gameState(getClientGameState(state));
 
 		final Class<? extends Notification> eventClass = event.getClass();
@@ -621,16 +645,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void onActivePlayer(Player activePlayer) {
-		sendMessage(new ServerToClientMessage()
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_ACTIVE_PLAYER));
 	}
 
 	@Override
 	@Suspendable
 	public void onTurnEnd(Player activePlayer, int turnNumber, TurnState turnState) {
-		// TODO: Do nothing?
-		sendMessage(new ServerToClientMessage()
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_TURN_END));
 	}
 
 	@Override
@@ -640,8 +659,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		sendMessage(new ServerToClientMessage()
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_UPDATE)
 				.changes(getChangeSet(state))
-				.timers(new Timers()
-						.millisRemaining(state.getMillisRemaining()))
 				.gameState(gameState));
 	}
 
@@ -680,8 +697,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.id(id)
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
-				.timers(new Timers()
-						.millisRemaining(state.getMillisRemaining()))
 				.gameState(getClientGameState(state))
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
@@ -705,8 +720,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		simulatedContext.setGameState(state);
 		sendMessage(new ServerToClientMessage()
 				.id(id)
-				.timers(new Timers()
-						.millisRemaining(state.getMillisRemaining()))
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_MULLIGAN)
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state))
@@ -744,7 +757,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void closeInboundMessages() {
-		span.log("inboundMessageClosed");
 		inboundMessagesClosed = true;
 	}
 
@@ -766,35 +778,33 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
+	@Suspendable
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
+		closeInboundMessages();
+		scheduler.cancelTimer(turnTimer);
+		for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+			activityMonitor.cancel();
+		}
+		getActivityMonitors().clear();
+		requests.clear();
+		messageBuffer.clear();
 		try {
-			span.log("closing");
-			for (ActivityMonitor activityMonitor : getActivityMonitors()) {
-				activityMonitor.cancel();
-			}
-			getActivityMonitors().clear();
-			requests.clear();
-			messageBuffer.clear();
+			writer.end();
+		} catch (IllegalStateException alreadyClosed) {
+		}
+
+		if (reader instanceof Closeable) {
+			((Closeable) reader).close(Promise.promise());
+		} else if (reader instanceof java.io.Closeable) {
 			try {
-				writer.end();
-			} catch (IllegalStateException alreadyClosed) {
+				((java.io.Closeable) reader).close();
+			} catch (IOException ignored) {
+//				throw new RuntimeException(e);
 			}
+		}
 
-			if (reader instanceof Closeable) {
-				((Closeable) reader).close(Promise.promise());
-			}
-
-			if (reader instanceof MessageConsumer) {
-				((MessageConsumer) reader).unregister();
-			}
-
-			span.log("closed");
-		} catch (Throwable ignore) {
-			Tracing.error(ignore, span, true);
-			LOGGER.error("close {}", getUserId(), ignore);
-		} finally {
-			span.finish();
-			completionHandler.handle(Future.succeededFuture());
+		if (reader instanceof MessageConsumer) {
+			((MessageConsumer) reader).unregister();
 		}
 	}
 
