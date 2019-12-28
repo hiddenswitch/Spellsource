@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import io.vertx.core.impl.VertxInternal;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -741,7 +742,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.atZone(ZoneId.systemDefault())
 				.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
 
-		Replay replay = record.getReplay();
+		Replay replay = Games.replayFromGameContext(GameContext.fromTrace(record.getTrace()));
 
 		// Censor non-bot games
 		if (!record.isBotGame()) {

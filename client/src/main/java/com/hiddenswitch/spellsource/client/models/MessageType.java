@@ -26,21 +26,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 public enum MessageType {
   
-  REGISTER_PLAYER("REGISTER_PLAYER"),
-  
   UPDATE_ACTION("UPDATE_ACTION"),
   
   ON_GAME_EVENT("ON_GAME_EVENT"),
   
   ON_GAME_END("ON_GAME_END"),
   
-  SET_PLAYERS("SET_PLAYERS"),
-  
-  ON_ACTIVE_PLAYER("ON_ACTIVE_PLAYER"),
-  
   ON_UPDATE("ON_UPDATE"),
-  
-  ON_TURN_END("ON_TURN_END"),
   
   ON_REQUEST_ACTION("ON_REQUEST_ACTION"),
   
@@ -56,7 +48,9 @@ public enum MessageType {
   
   CONCEDE("CONCEDE"),
   
-  PINGPONG("PINGPONG");
+  PINGPONG("PINGPONG"),
+  
+  TIMER("TIMER");
 
   private String value;
 

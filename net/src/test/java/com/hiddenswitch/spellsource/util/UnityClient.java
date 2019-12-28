@@ -63,6 +63,7 @@ public class UnityClient implements AutoCloseable {
 	protected ReentrantLock messagingLock = new NoOpLock();
 	private boolean receivedGameOverMessage;
 	private AtomicInteger turnsPlayed = new AtomicInteger();
+	private int lastTurnPlayed = 0;
 
 	private UnityClient() {
 		id = ids.getAndIncrement();
@@ -265,15 +266,16 @@ public class UnityClient implements AutoCloseable {
 		}
 
 		switch (message.getMessageType()) {
-			case ON_TURN_END:
-				turnsPlayed.incrementAndGet();
-				if (turnsToPlay.getAndDecrement() <= 0
-						&& shouldDisconnect) {
-					disconnect();
-				}
-				break;
 			case ON_UPDATE:
-				assertValidStateAndChanges(message);
+				Integer turnNumber = message.getGameState().getTurnNumber();
+				if (turnNumber!=null && lastTurnPlayed!=turnNumber) {
+					turnsPlayed.incrementAndGet();
+				}
+				if (turnNumber != null && turnNumber >= turnsToPlay.get() && shouldDisconnect) {
+					disconnect();
+				} else {
+					assertValidStateAndChanges(message);
+				}
 				break;
 			case ON_GAME_EVENT:
 				context.assertNotNull(message.getEvent());
@@ -366,6 +368,7 @@ public class UnityClient implements AutoCloseable {
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
 		this.turnsPlayed = new AtomicInteger();
+		this.lastTurnPlayed=0;
 		LOGGER.debug("play {} {}: Playing", id, getUserId());
 
 		ensureConnected();

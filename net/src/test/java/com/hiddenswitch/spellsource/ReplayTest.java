@@ -52,7 +52,7 @@ public class ReplayTest extends SpellsourceTestBase {
 				context.assertTrue(player.getTurnsPlayed() > 0);
 
 				// Sleep to let the replay actually get saved
-				Strand.sleep(12000);
+				Strand.sleep(4000);
 
 				GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
 				context.assertEquals(gameIds.getGameIds().size(), 1);

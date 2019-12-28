@@ -2,6 +2,10 @@ package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -2902,28 +2906,40 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
-		context.onWillPerformGameAction(playerId, action);
-		if (playerId != context.getActivePlayerId()) {
-			logger.warn("Player {} tries to perform an action, but it is not his turn!", context.getPlayer(playerId).getName());
-		}
-		if (action.getTargetRequirement() != TargetSelection.NONE) {
-			Entity target = context.resolveSingleTarget(action.getTargetReference());
-			if (target != null) {
-				context.getEnvironment().put(Environment.TARGET, target.getReference());
-			} else {
-				context.getEnvironment().put(Environment.TARGET, null);
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("GameLogic/performGameAction")
+				.withTag("gameId", context.getGameId())
+				.withTag("action.id", action.getId())
+				.withTag("action.actionType", action.getActionType().toString())
+				.withTag("action.description", action.getDescription(context, playerId))
+				.asChildOf(context.getSpanContext())
+				.start();
+		try (Scope s1 = tracer.activateSpan(span)) {
+			context.onWillPerformGameAction(playerId, action);
+			if (playerId != context.getActivePlayerId()) {
+				logger.warn("Player {} tries to perform an action, but it is not his turn!", context.getPlayer(playerId).getName());
 			}
+			if (action.getTargetRequirement() != TargetSelection.NONE) {
+				Entity target = context.resolveSingleTarget(action.getTargetReference());
+				if (target != null) {
+					context.getEnvironment().put(Environment.TARGET, target.getReference());
+				} else {
+					context.getEnvironment().put(Environment.TARGET, null);
+				}
+			}
+
+			action.execute(context, playerId);
+
+			context.getEnvironment().remove(Environment.TARGET);
+			if (action.getActionType() != ActionType.BATTLECRY) {
+				endOfSequence();
+			}
+
+			// Calculate how all the entities changed.
+			context.onDidPerformGameAction(playerId, action);
+		} finally {
+			span.finish();
 		}
-
-		action.execute(context, playerId);
-
-		context.getEnvironment().remove(Environment.TARGET);
-		if (action.getActionType() != ActionType.BATTLECRY) {
-			endOfSequence();
-		}
-
-		// Calculate how all the entities changed.
-		context.onDidPerformGameAction(playerId, action);
 	}
 
 	/**
@@ -3850,7 +3866,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card
 	 * @param index
 	 * @param quiet  If {@code true}, does not fire the {@link CardAddedToDeckEvent}.
-	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@code MAX_DECK_SIZE}).
+	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@code
+	 * 		MAX_DECK_SIZE}).
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {

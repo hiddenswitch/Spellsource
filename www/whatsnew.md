@@ -4,6 +4,29 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.57-3.0.6 (December 28th, 2019)
+
+Improvements to the client and server.
+
+ - Icons throughout the interface are hot-fixed and cards in your deck can be deleted again. (client fix #8)
+ - When your opponent reconnects during your turn, you no longer lose the ability to take actions. (client fix #16, client fix #17, server fix #1464)
+ - The turn timer is visible again and should be more reliable.
+ - The cards database is now loaded in the background, preventing a common freeze at the beginning of loading. (server fix #1453)
+ - Openers and discovers no longer prompt you with a panel rendered off-screen, allowing you to correctly perform an action.
+ - When you complete a mulligan, your mulligan prompt correctly goes away; when your opponent completes a mulligan, you can again safely mulligan; spamming the mulligan button no longer crashes the game.
+
+##### Known Issues
+
+ - There is no power history.
+ - There are no status indicators for minions on the battlefield, like Dodge.
+ - The friends list incorrectly shows many duplicate entries for the same friends.
+ - Sometimes damage indicators remain on the battlefield.
+ - Sometimes restoring health is rendered as a damage effect instead.
+ - Discards, roasts and draws are not visualized.
+ - The draft view is no longer accessible.
+ - All minions have the same temporary art.
+ - All champions have the same temporary art.
+
 ### 0.8.56-3.0.5 (December 18th, 2019)
 
 Improvements to the client.
@@ -22,15 +45,6 @@ Android release.
 ##### Known Issues:
  
  - If you're upgrading from the previous version, the collection on macOS and Windows clients is missing cards.
- - There is no power history.
- - There are no status indicators for minions on the battlefield, like Dodge.
- - Sometimes damage indicators remain on the battlefield.
- - Sometimes restoring health is rendered as a damage effect instead.
- - Discards, roasts and draws are not visualized.
- - The draft view is not updated.
- - There are grey circles around many buttons, or icons are missing.
- - All minions have the same temporary art.
- - All champions have the same temporary art.
 
 ### 0.8.56-3.0.3 (December 14th, 2019)
 

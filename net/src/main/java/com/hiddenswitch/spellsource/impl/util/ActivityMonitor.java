@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
@@ -42,6 +43,7 @@ public class ActivityMonitor {
 		lastTimerId = scheduler.setTimer(noActivityTimeout, suspendableHandler(this::handleTimeout));
 	}
 
+	@Suspendable
 	public void cancel() {
 		Scheduler scheduler = this.scheduler.get();
 

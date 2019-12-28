@@ -1,13 +1,20 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.PlayGameLogicRandomBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -204,6 +211,81 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Assert.assertTrue(player.getWeaponZone().isEmpty());
 			assertTrue(context.updateAndGetGameOver());
 		});
+	}
+
+	@Test
+	public void testSingleMatchBenchmark() {
+		GameContext gameContext = new GameContext();
+		GameDeck deck1 = DeckCreateRequest.fromCardIds(HeroClass.CAMO,
+				"minion_shadowveiler",
+				"minion_swift_stinger",
+				"spell_smokescreen",
+				"minion_natural_convert",
+				"minion_towering_treant",
+				"minion_mother_matron",
+				"minion_lightning_elemental",
+				"minion_blackboar",
+				"minion_sly_conquistador",
+				"minion_oni_entrapper",
+				"minion_peacock_mystic",
+				"minion_smug_theorist",
+				"minion_cinderslinger",
+				"minion_holdout_soldier",
+				"spell_espionage",
+				"minion_bighand_brute",
+				"minion_roadblock_pufferfish",
+				"minion_novice_enchantress",
+				"minion_lounge_brownie",
+				"minion_mutated_brute",
+				"minion_anarking",
+				"minion_captain_stashin",
+				"minion_uccian_hydra",
+				"minion_divine_cleric",
+				"minion_draining_ooze",
+				"minion_holdover_lich",
+				"minion_haunted_armor",
+				"minion_lava_manticore",
+				"minion_twilight_mercenary",
+				"spell_last_man_standing").toGameDeck();
+		GameDeck deck2 = DeckCreateRequest.fromCardIds(HeroClass.NAVY,
+				"minion_little_helper",
+				"spell_gather_strength",
+				"minion_sleepy_sprite",
+				"minion_refracting_golem",
+				"spell_scurvy_sights",
+				"minion_fairytale_tracker",
+				"minion_sea_stowaway",
+				"spell_ensnare",
+				"minion_sly_conquistador",
+				"minion_fae_trickster",
+				"minion_sky_high_surveyor",
+				"minion_gustbreaker",
+				"spell_reinforcements",
+				"minion_wolfcrier",
+				"minion_seven_shot_gunner",
+				"minion_reckless_hero",
+				"minion_jungle_operative",
+				"minion_primal_mother",
+				"spell_alternate_timeline",
+				"minion_holdout_soldier",
+				"minion_nightmare_dragonflight",
+				"minion_yokai_shapeshifter",
+				"minion_polychrome_hydra",
+				"minion_emerald_cleanser",
+				"minion_doctor_hatchett",
+				"minion_crazed_explorer",
+				"minion_magma_hound",
+				"minion_oppressor_defender",
+				"minion_sourceborn_aelin",
+				"spell_clash").toGameDeck();
+		gameContext.setDeck(0, deck1);
+		gameContext.setDeck(1, deck2);
+		gameContext.setDeckFormat(DeckFormat.spellsource());
+		// set a seed
+		gameContext.setLogic(new GameLogic(10101L));
+		gameContext.setBehaviour(1, new GameStateValueBehaviour().setParallel(false));
+		gameContext.setBehaviour(0, new PlayGameLogicRandomBehaviour());
+		gameContext.play();
 	}
 
 	@Test

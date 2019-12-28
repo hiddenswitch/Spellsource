@@ -51,4 +51,11 @@ public interface Server extends ClientConnectionHandler {
 	 * @return
 	 */
 	SpanContext getSpanContext();
+
+	/**
+	 * Returns the number of milliseconds left in this turn, or {@code null} if there is no limit.
+	 *
+	 * @return
+	 */
+	Long getMillisRemaining();
 }

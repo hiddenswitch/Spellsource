@@ -49,6 +49,11 @@ public class ServerGameContextTest extends SpellsourceTestBase {
 		}
 
 		@Override
+		public TimerId setInterval(long delay, Handler<Long> handler) {
+			return new TimerId(id.getAndIncrement());
+		}
+
+		@Override
 		public boolean cancelTimer(TimerId id) {
 			return true;
 		}
@@ -80,10 +85,6 @@ public class ServerGameContextTest extends SpellsourceTestBase {
 
 		assertThrows(IllegalArgumentException.class, () -> {
 			new ServerGameContext(new GameId("test"), new TestScheduler(), Collections.singletonList(configuration2));
-		});
-
-		assertThrows(IllegalArgumentException.class, () -> {
-			new ServerGameContext(null, new TestScheduler(), playerConfigurations);
 		});
 	}
 }

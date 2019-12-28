@@ -3,6 +3,11 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.actions.ActionType;
@@ -200,6 +205,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
+	protected transient SpanContext spanContext;
 	private Player[] players = new Player[2];
 	private Behaviour[] behaviours = new Behaviour[2];
 	private GameLogic logic;
@@ -286,6 +292,15 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		for (int i = 0; i < heroClasses.length; i++) {
 			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero(getPlayer(i)));
 		}
+	}
+
+	/**
+	 * Creates a game context from a trace.
+	 * @param trace
+	 * @return
+	 */
+	public static GameContext fromTrace(Trace trace) {
+		return trace.replayContext();
 	}
 
 	/**
@@ -936,8 +951,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 			getFiber().start();
 		} else {
-			init();
-			resume();
+			try {
+				init();
+				resume();
+			} catch (Throwable throwable) {
+				getTrace().setTraceErrors(true);
+				throw throwable;
+			}
 		}
 	}
 
@@ -953,39 +973,48 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public boolean takeActionInTurn() {
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("GameContext/takeActionInTurn")
+				.withTag("gameId", getGameId())
+				.withTag("turn", getTurn())
+				.withTag("actionsThisTurn", getActionsThisTurn())
+				.asChildOf(getSpanContext())
+				.start();
 		setActionsThisTurn(getActionsThisTurn() + 1);
-		if (getActionsThisTurn() > 99) {
-			LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
-			endTurn();
-			return false;
+		try (Scope s1 = tracer.activateSpan(span)) {
+			if (getActionsThisTurn() > 99) {
+				LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
+				endTurn();
+				return false;
+			}
+			if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
+				performAction(getActivePlayerId(), getAutoHeroPowerAction());
+				return true;
+			}
+
+			boolean gameOver = updateAndGetGameOver();
+			if (gameOver) {
+				return false;
+			}
+
+			List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
+
+			if (validActions.size() == 0) {
+				return false;
+			}
+
+			GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
+
+			if (nextAction == null) {
+				throw new NullPointerException("nextAction");
+			}
+
+			trace.addAction(nextAction.getId(), nextAction, this);
+			getLogic().performGameAction(getActivePlayerId(), nextAction);
+			return nextAction.getActionType() != ActionType.END_TURN;
+		} finally {
+			span.finish();
 		}
-		if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
-			performAction(getActivePlayerId(), getAutoHeroPowerAction());
-			return true;
-		}
-
-		boolean gameOver = updateAndGetGameOver();
-		if (gameOver) {
-			return false;
-		}
-
-		List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
-
-		if (validActions.size() == 0) {
-			return false;
-		}
-
-		GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
-
-		if (nextAction == null) {
-			throw new NullPointerException("nextAction");
-		}
-
-		trace.addAction(nextAction.getId(), nextAction, this);
-
-		getLogic().performGameAction(getActivePlayerId(), nextAction);
-
-		return nextAction.getActionType() != ActionType.END_TURN;
 	}
 
 	/**
@@ -1931,11 +1960,16 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return this;
 	}
 
+	/**
+	 * Sets the specified player's deck and hero (by implication)
+	 *
+	 * @param playerId
+	 * @param deck
+	 */
 	public void setDeck(int playerId, GameDeck deck) {
 		getPlayer(playerId).getDeck().clear();
 		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
 		getPlayer(playerId).setHero(deck.getHeroCard().createHero(getPlayer(playerId)));
-		getTrace().getDeckCardIds();
 	}
 
 	/**
@@ -1952,5 +1986,20 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	protected void setTrace(Trace trace) {
 		this.trace = trace;
+	}
+
+	/**
+	 * Provides context for tracing in this context. This is the OpenTracing span context, typically assigned by the
+	 * matchmaker or whatever created this instance.
+	 *
+	 * @return
+	 */
+	public SpanContext getSpanContext() {
+		return spanContext;
+	}
+
+	public GameContext setSpanContext(SpanContext spanContext) {
+		this.spanContext = spanContext;
+		return this;
 	}
 }

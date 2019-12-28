@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	private long seed;
 	private int catalogueVersion;
 	private String[] heroClasses;
@@ -46,6 +46,7 @@ public class Trace implements Serializable, Cloneable {
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
 	private String id;
+	private boolean traceErrors;
 	@JsonIgnore
 	private transient List<GameAction> rawActions = new ArrayList<>();
 
@@ -94,7 +95,7 @@ public class Trace implements Serializable, Cloneable {
 
 	@JsonIgnore
 	public GameContext replayContext() {
-		return replayContext(false, null);
+		return replayContext(isTraceErrors(), null);
 	}
 
 	@JsonIgnore
@@ -279,6 +280,15 @@ public class Trace implements Serializable, Cloneable {
 
 	public Trace setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
+	}
+
+	public boolean isTraceErrors() {
+		return traceErrors;
+	}
+
+	public Trace setTraceErrors(boolean traceErrors) {
+		this.traceErrors = traceErrors;
 		return this;
 	}
 }

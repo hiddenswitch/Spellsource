@@ -220,33 +220,34 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			}
 
 			try {
-				// Let's kick this off to be nonblocking of ending the game here, since things are sensitive to this timing
 				boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
 				List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
 				List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(toList());
-				defer(v -> {
-					Span saveSpan = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay/saveReplay")
-							.asChildOf(span)
-							.start();
-					Scope scope2 = tracer.activateSpan(saveSpan);
-					try {
-						GameRecord gameRecord = new GameRecord(gameId.toString())
-								.setTrace(gameContext.getTrace().clone())
-								.setCreatedAt(new Date())
-								.setBotGame(botGame)
-								.setPlayerUserIds(userIds)
-								.setDeckIds(deckIds)
-								.setPlayerNames(playerNames);
-						Replay replay = Games.replayFromGameContext(gameContext);
-						gameRecord.setReplay(replay);
-						mongo().insert(Games.GAMES, mapFrom(gameRecord));
-					} catch (Throwable any) {
-						Tracing.error(any);
-					} finally {
-						saveSpan.finish();
-						scope2.close();
-					}
-				});
+				// No longer defer since we're no longer storing a huge record.
+//				defer(v -> {
+				Span saveSpan = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay/saveReplay")
+						.asChildOf(span)
+						.start();
+				Scope scope2 = tracer.activateSpan(saveSpan);
+				try {
+					GameRecord gameRecord = new GameRecord(gameId.toString())
+							.setTrace(gameContext.getTrace().clone())
+							.setCreatedAt(new Date())
+							.setBotGame(botGame)
+							.setPlayerUserIds(userIds)
+							.setDeckIds(deckIds)
+							.setPlayerNames(playerNames);
+					// No longer record the replay because it is too large (5 MBs of data for a 1 kB trace)
+//						Replay replay = Games.replayFromGameContext(gameContext);
+//						gameRecord.setReplay(replay);
+					mongo().insert(Games.GAMES, mapFrom(gameRecord));
+				} catch (Throwable any) {
+					Tracing.error(any);
+				} finally {
+					saveSpan.finish();
+					scope2.close();
+				}
+//				});
 			} catch (Throwable ex) {
 				Tracing.error(ex);
 			}
