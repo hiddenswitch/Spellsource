@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.Replay;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
@@ -127,9 +129,14 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					contexts.put(request.getGameId(), context);
 					// Plays the game context in its own fiber
 					context.play(true);
+					span.log("awaitingRegistration");
 					context.awaitReadyForConnections();
 					return response;
 				} catch (RuntimeException any) {
+					if (Throwables.getRootCause(any) instanceof TimeoutException) {
+						span.log("timeout");
+					}
+					Tracing.error(any, span, true);
 					// If an error occurred, make sure to remove users from the games we just put them into.
 					for (Configuration configuration : request.getConfigurations()) {
 						games.remove(configuration.getUserId(), request.getGameId());
