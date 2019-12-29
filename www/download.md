@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Download
+title: Play
 permalink: /download/
 ---
  - [Play Now (Firefox and Chrome)](/game)
@@ -13,7 +13,7 @@ To run the game locally on your computer, use the following links:
 To join the mobile betas:
 
  - [iOS Beta](https://testflight.apple.com/join/pkMfO2qa)
- - [Android Beta](https://play.google.com/apps/testing/com.hiddenswitch.Spellsource)
+ - Join the [Spellsource Google Group](https://groups.google.com/forum/#!forum/spellsource-alpha-testers), then follow the instructions in the welcome message to participate in testing.
 
 #### Windows Users
 
@@ -25,4 +25,4 @@ You will be prompted to join our TestFlight group, which is Apple's testing serv
 
 #### Android Users
 
-You must be logged into Google Play to join the testing program. Your e-mail will be shared with the developers.
+You must be logged into Google Play to join the testing program. Your e-mail will be shared with the developers. 
