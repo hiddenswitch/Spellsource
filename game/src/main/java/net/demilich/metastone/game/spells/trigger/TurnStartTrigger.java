@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class TurnStartTrigger extends EventTrigger {
+public class TurnStartTrigger extends TurnTrigger {
 
 	public TurnStartTrigger() {
 		this(new EventTriggerDesc(TurnStartTrigger.class));

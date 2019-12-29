@@ -26,10 +26,7 @@ import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
-import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
+import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -122,7 +119,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected boolean expandDepthForLethal = true;
 	protected boolean triggerStartTurns = true;
 	protected boolean pruneEarlyEndTurn = true;
-//	protected int numberOfLowestScoringNodesToPrune = 0;
+	//	protected int numberOfLowestScoringNodesToPrune = 0;
 	protected long lethalTimeout = DEFAULT_LETHAL_TIMEOUT;
 	protected int targetContextStackSize = DEFAULT_TARGET_CONTEXT_STACK_SIZE;
 	protected long requestActionStartTime = Long.MAX_VALUE;
@@ -545,7 +542,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 					continue;
 				}
 
-				if (isPruneEarlyEndTurn() && edges.size() > 1) {
+				// Don't prune end turns if there are start or end turn triggers in play, because it may be significant to keep
+				// them around to get their effects.
+				if (isPruneEarlyEndTurn()
+						&& edges.size() > 1
+						&& context.getTriggerManager().getTriggers()
+						.stream().flatMap(t -> t instanceof Enchantment ? ((Enchantment) t).getTriggers().stream() : Stream.empty()).noneMatch(t -> t instanceof TurnTrigger)) {
 					edges.removeIf(ga -> ga.getActionType() == ActionType.END_TURN);
 				}
 
