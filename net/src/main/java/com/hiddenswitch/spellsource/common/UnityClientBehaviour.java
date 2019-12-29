@@ -18,10 +18,7 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Closeable;
-import io.vertx.core.Handler;
-import io.vertx.core.Promise;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -250,15 +247,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					onMulliganReceived(messageId2, message.getDiscardedCardIndices());
 					break;
 				case EMOTE:
-					if (server == null) {
-						break;
-					}
 					server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage());
 					break;
 				case TOUCH:
-					if (server == null) {
-						break;
-					}
 					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
@@ -269,9 +260,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					}
 					break;
 				case CONCEDE:
-					if (server == null) {
-						break;
-					}
 					server.onConcede(this);
 					break;
 			}
@@ -792,20 +780,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			writer.end();
 		} catch (IllegalStateException alreadyClosed) {
 		}
-
-		if (reader instanceof Closeable) {
-			((Closeable) reader).close(Promise.promise());
-		} else if (reader instanceof java.io.Closeable) {
-			try {
-				((java.io.Closeable) reader).close();
-			} catch (IOException ignored) {
-//				throw new RuntimeException(e);
-			}
-		}
-
-		if (reader instanceof MessageConsumer) {
-			((MessageConsumer) reader).unregister();
-		}
+		completionHandler.handle(Future.succeededFuture());
 	}
 
 	public Deque<GameplayRequest> getRequests() {

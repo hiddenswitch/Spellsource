@@ -84,6 +84,8 @@ import static java.util.stream.Collectors.toList;
  * PersistenceTrigger}.
  */
 public class ServerGameContext extends GameContext implements Server {
+	private static final long CLOSE_TIMEOUT_MILLIS = 4000L;
+	private static final long REGISTRATION_TIMEOUT = 4000L;
 	private static Logger LOGGER = LoggerFactory.getLogger(ServerGameContext.class);
 	public static final String WRITER_ADDRESS_PREFIX = "Games/writer[";
 	public static final String READER_ADDRESS_PREFIX = "Games/reader[";
@@ -979,9 +981,9 @@ public class ServerGameContext extends GameContext implements Server {
 			while (iter.hasNext()) {
 				try {
 					Closeable closeable = iter.next();
-					Void res = awaitResult(closeable::close);
+					Void res = awaitResult(closeable::close, CLOSE_TIMEOUT_MILLIS);
 				} catch (Throwable any) {
-					LOGGER.error("dispose", any);
+					Tracing.error(any, span, false);
 				} finally {
 					iter.remove();
 				}
@@ -1094,8 +1096,10 @@ public class ServerGameContext extends GameContext implements Server {
 				Client next = listIterator.next();
 				if (next.getPlayerId() == client.getPlayerId() && client != next) {
 					next.close(Promise.promise());
+					closeables.remove(next);
 					listIterator.set(client);
 					next = client;
+					closeables.add(client);
 				}
 				next.onActivePlayer(getActivePlayer());
 			}
@@ -1169,6 +1173,6 @@ public class ServerGameContext extends GameContext implements Server {
 				registrationsReady.stream().map(Promise::future),
 				Stream.of(initialization.future())
 		).collect(toList()));
-		CompositeFuture res = awaitResult(join::setHandler);
+		CompositeFuture res = awaitResult(join::setHandler, REGISTRATION_TIMEOUT);
 	}
 }
