@@ -12,6 +12,20 @@ Hotfixes to the client and server.
  - Commands now correctly issue on the first turn when the player starts. (client fix #22)
  - Damage indicators now properly go away and their pacing is improved overall. (client fix #13, server fix #1457)
  - Pacing has been improved, making it easier to notice card draws.
+ 
+##### Known Issues
+
+ - There is no power history.
+ - There are no status indicators for minions on the battlefield, like Dodge.
+ - The friends list incorrectly shows many duplicate entries for the same friends.
+ - Sometimes restoring health is rendered as a damage effect instead.
+ - Discards, roasts and draws are not visualized.
+ - The draft view is no longer accessible.
+ - All minions have the same temporary art.
+ - All champions have the same temporary art.
+ - When connected in multiple places, the latest connected client will not render the battlefield.
+ - On mobile devices, the game will not rotate to landscape if portrait orientation lock is enabled.
+ - The notch cutout obscures part of the end turn button on iPhone X devices when oriented landscape right.
 
 ### 0.8.58-3.0.6.1 (December 29th, 2019)
 
@@ -30,17 +44,6 @@ Improvements to the client and server.
  - The cards database is now loaded in the background, preventing a common freeze at the beginning of loading. (server fix #1453)
  - Openers and discovers no longer prompt you with a panel rendered off-screen, allowing you to correctly perform an action.
  - When you complete a mulligan, your mulligan prompt correctly goes away; when your opponent completes a mulligan, you can again safely mulligan; spamming the mulligan button no longer crashes the game.
-
-##### Known Issues
-
- - There is no power history.
- - There are no status indicators for minions on the battlefield, like Dodge.
- - The friends list incorrectly shows many duplicate entries for the same friends.
- - Sometimes restoring health is rendered as a damage effect instead.
- - Discards, roasts and draws are not visualized.
- - The draft view is no longer accessible.
- - All minions have the same temporary art.
- - All champions have the same temporary art.
 
 ### 0.8.56-3.0.5 (December 18th, 2019)
 
