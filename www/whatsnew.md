@@ -4,6 +4,15 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.59-3.0.6.2 (December 29th, 2019)
+
+Hotfixes to the client and server.
+
+ - The end game screen now appears correctly. (client fix #21)
+ - Commands now correctly issue on the first turn when the player starts. (client fix #22)
+ - Damage indicators now properly go away and their pacing is improved overall. (client fix #13, server fix #1457)
+ - Pacing has been improved, making it easier to notice card draws.
+
 ### 0.8.58-3.0.6.1 (December 29th, 2019)
 
 Hotfixes to the client and server.
@@ -27,7 +36,6 @@ Improvements to the client and server.
  - There is no power history.
  - There are no status indicators for minions on the battlefield, like Dodge.
  - The friends list incorrectly shows many duplicate entries for the same friends.
- - Sometimes damage indicators remain on the battlefield.
  - Sometimes restoring health is rendered as a damage effect instead.
  - Discards, roasts and draws are not visualized.
  - The draft view is no longer accessible.
