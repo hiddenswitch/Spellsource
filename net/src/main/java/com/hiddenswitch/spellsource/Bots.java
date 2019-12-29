@@ -48,7 +48,6 @@ public interface Bots {
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(
 			() -> new GameStateValueBehaviour()
 					.setParallel(false)
-					.setTargetContextStackSize(8)
 					.setTimeout(150)
 					.setLethalTimeout(1500));
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {

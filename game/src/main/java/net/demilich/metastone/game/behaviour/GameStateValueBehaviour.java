@@ -71,7 +71,8 @@ import static java.util.stream.Collectors.toList;
  * to maximize a score by the end of the turn.
  * <p>
  * Playing around secrets is difficult without a long-term vision of the game, so enemy secrets are omitted from the
- * simulation entirely. The bot's and opponennt's start turn effects are heuristically triggered at the end of the turn.
+ * simulation entirely. The bot's and opponennt's start turn effects are heuristically triggered at the end of the
+ * turn.
  * <p>
  * How does the AI do scoring? Clearly, it can't be as simple as, "The highest score is whatever reduces the opponent's
  * health the most." Indeed, this class uses a complex model for a score, called a {@link Heuristic}, which is capable
@@ -120,6 +121,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected boolean debug;
 	protected boolean expandDepthForLethal = true;
 	protected boolean triggerStartTurns = true;
+	protected boolean pruneEarlyEndTurn = true;
+//	protected int numberOfLowestScoringNodesToPrune = 0;
 	protected long lethalTimeout = DEFAULT_LETHAL_TIMEOUT;
 	protected int targetContextStackSize = DEFAULT_TARGET_CONTEXT_STACK_SIZE;
 	protected long requestActionStartTime = Long.MAX_VALUE;
@@ -475,7 +478,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// Now we will actually start expanding game states
 		int playerId = player.getId();
-		Deque<Node> contextStack = new ConcurrentLinkedDeque<>();
+		Deque<Node> contextStack;
+		if (isParallel()) {
+			contextStack = new ConcurrentLinkedDeque<>();
+		} else {
+			contextStack = new ArrayDeque<>(getTargetContextStackSize() * getMaxDepth());
+		}
 		// Immediately score terminal nodes to save memory.
 		Optional<Node> maxScore = Optional.empty();
 		double score = Double.NEGATIVE_INFINITY;
@@ -537,16 +545,20 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 					continue;
 				}
 
+				if (isPruneEarlyEndTurn() && edges.size() > 1) {
+					edges.removeIf(ga -> ga.getActionType() == ActionType.END_TURN);
+				}
+
 				// Parallelize the expansion of nodes.
 				if (isParallel()) {
 					edges
 							.parallelStream()
 							.unordered()
-							.forEach(edge -> rollout(contextStack, playerId, v, edge, depth));
+							.forEach(edge -> evaluate(contextStack, playerId, v, edge, depth));
 				} else {
 					// Non-parallel expansion of nodes
 					for (GameAction edge : edges) {
-						rollout(contextStack, playerId, v, edge, depth);
+						evaluate(contextStack, playerId, v, edge, depth);
 					}
 				}
 
@@ -676,7 +688,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	}
 
 	/**
-	 * Expands the provided game state with the provided action, then appends a new game state with potential actions to
+	 * Evaluates the provided game state with the provided action, then appends a new game state with potential actions to
 	 * the {@code contextStack}. This expands the game tree by one unit of depth.
 	 * <p>
 	 * If rolling out the specified action leads to calls to {@link GameLogic#requestAction(Player, List)}, like a
@@ -712,7 +724,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 *                     state that {@link #requestAction(GameContext, Player, List)} was called with.
 	 */
 	@Suspendable
-	protected void rollout(Deque<Node> contextStack, int playerId, Node node, GameAction action, int depth) {
+	protected void evaluate(Deque<Node> contextStack, int playerId, Node node, GameAction action, int depth) {
 		// Clone out the context because we're not going to mutate the node's context.
 		GameContext mutateContext = getClone(node.context);
 
@@ -1103,6 +1115,33 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		this.triggerStartTurns = triggerStartTurns;
 		return this;
 	}
+
+	/**
+	 * Indicates if end turns should only be evaluated if they are the only action available
+	 *
+	 * @return
+	 */
+	public boolean isPruneEarlyEndTurn() {
+		return pruneEarlyEndTurn;
+	}
+
+	public GameStateValueBehaviour setPruneEarlyEndTurn(boolean pruneEarlyEndTurn) {
+		this.pruneEarlyEndTurn = pruneEarlyEndTurn;
+		return this;
+	}
+
+	/*
+	 * Gets the number of lowest-scoring nodes that should be trimmed from the evaluation stack.
+	 *
+	 * @return
+	public int getNumberOfLowestScoringNodesToPrune() {
+		return numberOfLowestScoringNodesToPrune;
+	}
+
+	public GameStateValueBehaviour setNumberOfLowestScoringNodesToPrune(int numberOfLowestScoringNodesToPrune) {
+		this.numberOfLowestScoringNodesToPrune = numberOfLowestScoringNodesToPrune;
+		return this;
+	}*/
 
 	/**
 	 * This helper class represents an action with an index. Useful for referencing discover and battlecry actions without

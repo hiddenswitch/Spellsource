@@ -11,14 +11,19 @@ import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
+import io.opentracing.noop.NoopSpan;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public interface Tracing {
+	Logger LOGGER = LoggerFactory.getLogger(Tracing.class);
+
 	static void initializeGlobal(Vertx vertx) {
 		GlobalTracer.registerIfAbsent(initialize("spellsource"));
 		vertx.exceptionHandler(Tracing::error);
@@ -30,6 +35,10 @@ public interface Tracing {
 	}
 
 	static void error(Throwable throwable, Span span, boolean finish) {
+		if (span instanceof NoopSpan) {
+			LOGGER.error("", throwable);
+			return;
+		}
 		if (span == null) {
 			return;
 		}
