@@ -79,7 +79,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			highValueTarget.setAttribute(Attribute.SPELL_DAMAGE, 1000);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setExpandDepthForLethal(true);
-			behaviour.setParallel(true);
+			behaviour.setParallel(false);
 			behaviour.setPruneContextStack(true);
 			context.setBehaviour(player.getId(), behaviour);
 

@@ -378,14 +378,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			} else {
 				// Send a state update for the other player too
 				GameState state = context.getGameStateCopy();
-				onUpdate(state);
-				for (Behaviour behaviour : context.getBehaviours()) {
-					if (!behaviour.equals(this) && behaviour instanceof UnityClientBehaviour) {
-						// TODO: Perhaps delegate this to the ServerGameContext
-						((UnityClientBehaviour) behaviour).onUpdate(state);
-					}
-				}
-
 				getRequests().add(request);
 				onRequestAction(id, state, actions);
 			}

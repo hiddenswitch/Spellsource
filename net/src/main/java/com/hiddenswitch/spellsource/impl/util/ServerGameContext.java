@@ -10,8 +10,8 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.common.*;
 import com.hiddenswitch.spellsource.common.GameState;
+import com.hiddenswitch.spellsource.common.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.BinaryCarrier;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -24,10 +24,8 @@ import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
 import io.opentracing.Scope;
 import io.opentracing.Span;
-import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
-import io.opentracing.propagation.Binary;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.codegen.annotations.Nullable;
@@ -494,12 +492,12 @@ public class ServerGameContext extends GameContext implements Server {
 				mulligansActive.complete(Collections.emptyList());
 			} else {
 				getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, res -> {
-					mulligansActive.complete(res);
 					// TODO: Game started should not be set here, strictly speaking
 					// Fixes issues with mulligans not being dismissed correctly
 					getActivePlayer().setAttribute(Attribute.GAME_STARTED);
 					// Update this user
-					updateClientWithGameState(startingPlayerId);
+					updateClientWithGameState(getActivePlayerId());
+					mulligansActive.complete(res);
 				});
 			}
 
@@ -507,9 +505,9 @@ public class ServerGameContext extends GameContext implements Server {
 				mulligansNonActive.complete(Collections.emptyList());
 			} else {
 				getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, (res) -> {
-					mulligansNonActive.complete(res);
 					getNonActivePlayer().setAttribute(Attribute.GAME_STARTED);
 					updateClientWithGameState(getNonActivePlayerId());
+					mulligansNonActive.complete(res);
 				});
 			}
 
