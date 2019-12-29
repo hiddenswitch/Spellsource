@@ -4,6 +4,13 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.58-3.0.6.1 (December 29th, 2019)
+
+Hotfixes to the client and server.
+
+ - Some issues with selection have been addressed.
+ - Sometimes, games would linger and not end. The most common cause of this issue has been addressed.
+
 ### 0.8.57-3.0.6 (December 28th, 2019)
 
 Improvements to the client and server.
