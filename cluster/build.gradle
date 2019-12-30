@@ -25,7 +25,7 @@ dependencies {
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'io.jenetics', name: 'jenetics', version: '4.1.0'
     compile group: 'io.jenetics', name: 'jenetics.ext', version: '4.1.0'
-    compile project(':net')
+compile project(':net')
     testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
 }
 

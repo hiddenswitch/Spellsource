@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.common.util.ConcurrentSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -7,7 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementors of this interface will get loaded by the {@code CardCatalogue} to find all the cards available to play

@@ -10,9 +10,7 @@ repositories {
 
 dependencies {
     compile project(':quasar-core')
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'io.jaegertracing', name: 'jaeger-client', version: '0.35.5'
-    compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
+compile group: 'io.jaegertracing', name: 'jaeger-client', version: '0.35.5'
     compile group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
 }

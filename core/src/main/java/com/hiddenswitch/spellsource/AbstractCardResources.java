@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
  * game in a way that is totally separate from the {@code Spellsource-Server} code, you'll need to obey these same
  * contracts.
  * <p>
- * There are two pieces to this contract. The first is a class that extends this one. Create it in the {@code
- * com.hiddenswitch.spellsource} package, which will be in a folder like {@code src/main/java/com/hiddenswitch/spellsource}.
+ * First, create a class that extends this one. Create it in the {@code com.hiddenswitch.spellsource} package, which
+ * will be in a folder like {@code src/main/java/com/hiddenswitch/spellsource}.
  * <p>
- * Then, create a class that extends {@link CardsModule} in the same package.
+ * Then, make sure your class contains "CardResources" in its name.
  * <p>
  * Finally, put cards in the directory you specify by overriding {@link #getDirectoryPrefix()}.
  * <h2>Where exactly to cards go?</h2>
@@ -52,8 +52,7 @@ import java.util.stream.Collectors;
  * src/main/resources/}, followed by the string returned by {@link #getDirectoryPrefix()}. For example, if the string
  * returned is {@code "testcards"}, the path where the card JSON files go is {@code src/main/resources/testcards}.
  * <h2>How do the cards get loaded?</h2>
- * Spellsource uses Google Guice to find all the {@link CardsModule} classes on the classpath, loads their {@link
- * CardResources}, and adds all those cards to the {@code CardCatalogue}.
+ * By calling {@code CardCatalogue#loadCardsFromPackage()} in the games module.
  * <p>
  * The classpath is like a list of files (Java Archives that we talked about earlier) that are made "available" to
  * Spellsource. Only code and files specified on the classpath is visible to Spellsource.
