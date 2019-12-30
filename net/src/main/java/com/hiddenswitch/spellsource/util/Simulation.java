@@ -2,15 +2,18 @@ package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
-import net.demilich.metastone.game.decks.DeckListParsingException;
+import com.google.common.collect.ImmutableMap;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.behaviour.TycheBehaviour;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckListParsingException;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
 import org.jetbrains.annotations.NotNull;
-import org.reflections.Reflections;
 
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
@@ -48,10 +51,11 @@ public class Simulation {
 	}
 
 	public static Map<String, Class<? extends Behaviour>> getAllBehaviours() {
-		return Stream.of("com.hiddenswitch", "net.demilich")
-				.flatMap(packagePrefix -> new Reflections(packagePrefix).getSubTypesOf(Behaviour.class).stream())
-				.distinct()
-				.collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
+		return ImmutableMap.of(
+				"GameStateValueBehaviour", GameStateValueBehaviour.class,
+				"PlayRandomBehaviour", PlayRandomBehaviour.class,
+				"TycheBehaviour", TycheBehaviour.class
+		);
 	}
 
 	public static ConcurrentMap<String, GameDeck> getDecks(List<String> deckLists) {

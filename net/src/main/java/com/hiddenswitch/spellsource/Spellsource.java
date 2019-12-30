@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
+import com.google.common.reflect.ClassPath;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -29,8 +30,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +39,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
@@ -618,6 +618,15 @@ public class Spellsource {
 	}
 
 	/**
+	 * Gets the location in the resources directory containing the decklists.
+	 *
+	 * @return
+	 */
+	private String getStandardDecksDirectoryPrefix() {
+		return "decklists/current";
+	}
+
+	/**
 	 * Gets the current deck lists specified in the decklists.current resources directory.
 	 *
 	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
@@ -626,18 +635,31 @@ public class Spellsource {
 		if (cachedStandardDecks == null) {
 			cachedStandardDecks = Collections.synchronizedList(new ArrayList<>());
 			CardCatalogue.loadCardsFromPackage();
-			Reflections reflections = new Reflections("decklists.current", new ResourcesScanner());
-			Set<URL> resourceList = reflections.getResources(x -> x != null && x.endsWith(".txt")).stream().map(Resources::getResource).collect(toSet());
-			if (resourceList.size() == 0) {
+			List<String> deckLists;
+			try {
+				deckLists = ClassPath.from(Spellsource.class.getClassLoader())
+						.getResources()
+						.stream()
+						.filter(resource -> resource.getResourceName().startsWith(getStandardDecksDirectoryPrefix()) && resource.getResourceName().endsWith(".txt"))
+						.map(resource -> {
+							try {
+								return Resources.toString(resource.url(), Charset.defaultCharset());
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
+						})
+						.collect(toList());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+			if (deckLists.size() == 0) {
 				throw new IllegalStateException("no bot decks were loaded");
 			}
-			cachedStandardDecks.addAll(resourceList.stream().map(c -> {
-				try {
-					return Resources.toString(c, Charset.defaultCharset());
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}).map((deckList) -> DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true)).filter(Objects::nonNull).collect(toList()));
+			cachedStandardDecks.addAll(deckLists.stream()
+					.map((deckList) -> DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true))
+					.filter(Objects::nonNull)
+					.collect(toList()));
 		}
 
 		return cachedStandardDecks;
