@@ -5,6 +5,7 @@ plugins {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
+apply from: '../gradle/instrument.gradle'
 
 def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
 
@@ -43,26 +44,7 @@ repositories {
     jcenter()
 }
 
-configurations {
-    compile {
-        attributes {
-            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'instrumented-jar'))
-        }
-    }
-    testCompile {
-        attributes {
-            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'instrumented-jar'))
-        }
-    }
-}
-
 dependencies {
-    attributesSchema {
-        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE) {
-            compatibilityRules.add(InstrumentedJarsRule)
-        }
-    }
-
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.9.9'
     compile 'com.fasterxml.jackson.module:jackson-module-afterburner:2.9.9'
@@ -88,12 +70,15 @@ dependencies {
     compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
     compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
 
-    compile project(':game')
     compile project(':cards')
     compile project(':client')
+    compile project(':game')
     compile project(':vertx-sync')
+    instrumentedClasspath project(path: ':game', configuration: 'instrumentedJars')
+    instrumentedClasspath project(path: ':vertx-sync', configuration: 'instrumentedJars')
 
-    testCompile project(':testutils')
+    testCompile project(':game')
+    testCompile project(path: ':testutils', configuration: 'instrumentedJars')
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile 'io.vertx:vertx-core:3.8.0:tests'
     testCompile 'org.powermock:powermock-module-junit4:2.0.2'
