@@ -18,6 +18,10 @@ module game {
 	exports com.hiddenswitch.spellsource.draft;
 	exports com.hiddenswitch.spellsource.util;
 	exports net.demilich.metastone.game;
+	exports net.demilich.metastone.game.cards;
+	exports net.demilich.metastone.game.cards.desc;
+	exports net.demilich.metastone.game.actions;
+	exports net.demilich.metastone.game.decks;
 	exports net.demilich.metastone.game.behaviour;
 	exports net.demilich.metastone.game.logic;
 }

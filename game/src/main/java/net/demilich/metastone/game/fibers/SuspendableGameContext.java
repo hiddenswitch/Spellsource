@@ -11,7 +11,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.MulliganTrace;
 import net.demilich.metastone.game.logic.Trace;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -57,7 +57,7 @@ public class SuspendableGameContext extends GameContext {
 	 * @return a context
 	 */
 	@Suspendable
-	public static SuspendableGameContext fromTrace(@NonNull GameContext sourceContext) {
+	public static SuspendableGameContext fromTrace(@NotNull GameContext sourceContext) {
 		try {
 			Trace trace = Objects.requireNonNull(sourceContext.getTrace());
 			SuspendableGameContext destinationContext = new SuspendableGameContext();

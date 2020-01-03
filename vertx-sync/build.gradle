@@ -3,9 +3,9 @@ plugins {
 }
 
 apply plugin: 'java-library'
+apply from: '../gradle/instrument.gradle'
 
 dependencies {
-    compile project(':quasar-core')
     compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'
     compile group: 'io.vertx', name: 'vertx-core', version: '3.8.3'
     // Docgen appears to be missing from maven?

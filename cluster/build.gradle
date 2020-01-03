@@ -5,7 +5,8 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'java'
+apply plugin: 'application'
+apply from: '../gradle/instrument.gradle'
 
 shadowJar {
     zip64 true
@@ -15,18 +16,14 @@ repositories {
     jcenter()
 }
 
-configurations.all {
-    exclude module: 'slf4j-log4j12'
-}
-
 dependencies {
-    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0'
-    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'io.jenetics', name: 'jenetics', version: '4.1.0'
-    compile group: 'io.jenetics', name: 'jenetics.ext', version: '4.1.0'
-    compile project(':net')
-    testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
+    implementation group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0'
+    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    implementation group: 'io.jenetics', name: 'jenetics', version: '4.1.0'
+    implementation group: 'io.jenetics', name: 'jenetics.ext', version: '4.1.0'
+    implementation project(path: ':net', configuration: 'instrumentedJars')
+    testImplementation group: 'org.testng', name: 'testng', version: '6.14.3'
 }
 
 test {

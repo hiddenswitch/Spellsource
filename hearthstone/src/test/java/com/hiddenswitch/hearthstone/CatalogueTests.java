@@ -4,20 +4,22 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.minions.Race;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CatalogueTests {
 
@@ -43,7 +45,10 @@ public class CatalogueTests {
 		URL url = new URL(currentCards);
 		URLConnection connection = url.openConnection();
 		connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15");
-		String cards = IOUtils.toString(connection.getInputStream(), Charset.defaultCharset());
+		InputStream inputStream = connection.getInputStream();
+		String cards = new BufferedReader(new InputStreamReader(inputStream)).lines()
+				.parallel().collect(Collectors.joining("\n"));
+		inputStream.close();
 
 
 		JsonArray json = new JsonArray(cards);

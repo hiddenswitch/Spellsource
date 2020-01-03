@@ -1,10 +1,12 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version "5.2.0"
     id 'java-library'
+    id 'org.javamodularity.moduleplugin'
 }
 
 apply plugin: 'java-library'
 apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'org.javamodularity.moduleplugin'
 
 group 'com.hiddenswitch'
 version '0.9.0'
@@ -264,7 +266,6 @@ configure(javadoc) {
 
 defaultTasks 'build'
 
-
 task artifacts {
     group = "Help"
     description = "Displays the artifacts associated with each configuration of " + project
@@ -307,10 +308,9 @@ def scanAndInstrument(SourceSet sset, configs) {
         }
     }
 
-    /*
     // Filter out the 'requires org.objectweb.asm' from quasar-core's module-info, as it will be shadowed into the jar
     ant.taskdef(name: 'filterModules', classname: 'co.paralleluniverse.fibers.instrument.ModuleFilterTask', classpath: cp)
     ant.filterModules(module: 'org.objectweb.asm') {
-        fileset(dir: sset.output.classesDir)
-    }*/
+        fileset(dir: sset.output.classesDirs.asPath)
+    }
 }
