@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.jackson.DatabindCodec;

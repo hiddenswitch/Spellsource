@@ -3676,7 +3676,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (action == null) {
 			throw new NullPointerException("Behaviour did not return action");
 		}
-		context.getTrace().addAction(action.getId(), action, context);
+		context.getTrace().addAction(action.getId());
 		return action;
 	}
 

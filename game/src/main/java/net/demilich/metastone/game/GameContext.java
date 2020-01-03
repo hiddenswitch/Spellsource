@@ -61,6 +61,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -296,6 +297,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	/**
 	 * Creates a game context from a trace.
+	 *
 	 * @param trace
 	 * @return
 	 */
@@ -891,10 +893,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	protected void traceMulligans(List<Card> mulligansActive, List<Card> mulligansNonActive) {
-		int[][] tracedMulligans = new int[2][];
-		tracedMulligans[getActivePlayerId()] = mulligansActive.stream().mapToInt(Card::getId).toArray();
-		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligansNonActive.stream().mapToInt(Card::getId).toArray();
-		trace.setMulligans(tracedMulligans);
+		trace.setMulligans(Arrays.asList(
+				new MulliganTrace()
+						.setPlayerId(getActivePlayerId())
+						.setEntityIds(mulligansActive.stream().mapToInt(Card::getId).boxed().collect(Collectors.toUnmodifiableList())),
+				new MulliganTrace()
+						.setPlayerId(getNonActivePlayerId())
+						.setEntityIds(mulligansNonActive.stream().mapToInt(Card::getId).boxed().collect(Collectors.toUnmodifiableList()))
+		));
 	}
 
 	/**
@@ -1009,7 +1015,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				throw new NullPointerException("nextAction");
 			}
 
-			trace.addAction(nextAction.getId(), nextAction, this);
+			trace.addAction(nextAction.getId());
 			getLogic().performGameAction(getActivePlayerId(), nextAction);
 			return nextAction.getActionType() != ActionType.END_TURN;
 		} finally {

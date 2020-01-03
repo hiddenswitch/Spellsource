@@ -1,0 +1,10 @@
+micronaut:
+  application:
+    name: micro
+jackson:
+  bean-introspection-module: false
+tracing:
+  jaeger:
+    enabled: true
+    sampler:
+      probability: 1.0

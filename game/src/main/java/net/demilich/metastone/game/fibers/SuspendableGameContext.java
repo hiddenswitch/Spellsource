@@ -9,6 +9,7 @@ import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.MulliganTrace;
 import net.demilich.metastone.game.logic.Trace;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -65,12 +66,12 @@ public class SuspendableGameContext extends GameContext {
 				return destinationContext;
 			}
 			destinationContext.play(true);
-			int[][] mulligans = trace.getMulligans();
+			List<MulliganTrace> mulligans = trace.getMulligans();
 			if (mulligans == null) {
 				return destinationContext;
 			}
 			for (int i : new int[]{destinationContext.getActivePlayerId(), destinationContext.getNonActivePlayerId()}) {
-				int[] mulligan = mulligans[i];
+				List<Integer> mulligan = mulligans.get(i).getEntityIds();
 				if (mulligan == null) {
 					continue;
 				}
@@ -79,8 +80,7 @@ public class SuspendableGameContext extends GameContext {
 				destinationContext.getReady().await(1);
 				List<Card> cards = behaviour.getMulliganCards();
 
-				behaviour.setMulligan(Arrays.stream(mulligan)
-						.boxed()
+				behaviour.setMulligan(mulligan.stream()
 						.map(j -> {
 							Optional<Card> card = cards
 									.stream()
@@ -122,7 +122,7 @@ public class SuspendableGameContext extends GameContext {
 		this();
 		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero(getPlayer1()));
 		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero(getPlayer2()));
-		getTrace().setHeroClasses(new String[]{heroClass1, heroClass2});
+		getTrace().setHeroClasses(Arrays.asList(heroClass1, heroClass2));
 	}
 
 	public SuspendableGameContext(GameDeck... decks) {

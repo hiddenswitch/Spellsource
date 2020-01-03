@@ -6,6 +6,7 @@ import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.io.Resources;
 import com.google.common.reflect.ClassPath;
+import com.hiddenswitch.spellsource.cards.base.BaseCardResources;
 import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -34,12 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
@@ -48,7 +47,6 @@ import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 /**
  * The Spellsource Server API. Access it with {@link Spellsource#spellsource()}.

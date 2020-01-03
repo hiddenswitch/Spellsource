@@ -5,9 +5,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.ClassPath;
-import com.hiddenswitch.spellsource.CardResource;
-import com.hiddenswitch.spellsource.CardResources;
-import com.hiddenswitch.spellsource.ResourceInputStream;
+import com.hiddenswitch.spellsource.core.CardResource;
+import com.hiddenswitch.spellsource.core.CardResources;
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.jetbrains.annotations.NotNull;
@@ -216,7 +216,7 @@ public class CardCatalogue {
 
 		try {
 			List<CardResources> cardResources = ClassPath.from(ClassLoader.getSystemClassLoader())
-					.getTopLevelClasses("com.hiddenswitch.spellsource")
+					.getTopLevelClassesRecursive("com.hiddenswitch.spellsource.cards")
 					.stream()
 					.filter(info -> info.getName().contains("CardResources"))
 					.map(ClassPath.ClassInfo::load)

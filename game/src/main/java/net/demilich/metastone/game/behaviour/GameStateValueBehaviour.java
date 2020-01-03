@@ -29,7 +29,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -179,8 +178,9 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return maxDepth;
 	}
 
-	public void setMaxDepth(int maxDepth) {
+	public GameStateValueBehaviour setMaxDepth(int maxDepth) {
 		this.maxDepth = maxDepth;
+		return this;
 	}
 
 	/**
@@ -600,7 +600,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 			this.strictPlan = strictPlan;
 			this.indexPlan = indexPlan;
-			// Pop off the last element of the plan
+			// Pop off the first element of the plan
 			this.indexPlan.pollFirst();
 			GameAction gameAction = strictPlan.pollFirst();
 			if (gameAction == null) {
@@ -1215,7 +1215,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			return predecessor;
 		}
 
-		@NonNull
+		@NotNull
 		public GameAction[] getActions() {
 			return actions;
 		}

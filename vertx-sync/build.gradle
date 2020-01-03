@@ -1,3 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'java-library'
+
 dependencies {
     compile project(':quasar-core')
     compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'

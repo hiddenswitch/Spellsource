@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
-import com.hiddenswitch.spellsource.TestCardResources;
+import com.hiddenswitch.spellsource.cards.test.TestCardResources;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;

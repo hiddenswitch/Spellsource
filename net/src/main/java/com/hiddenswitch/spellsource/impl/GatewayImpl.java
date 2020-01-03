@@ -2,6 +2,9 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -10,6 +13,7 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
@@ -54,6 +58,13 @@ import static java.util.stream.Collectors.toList;
  * @see Gateway for a detailed description on how to add methods to the API gateway.
  */
 public class GatewayImpl extends SyncVerticle implements Gateway {
+	// Only use the afterburner if a gateway is deployed
+	static {
+		DatabindCodec.mapper().configure(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION, true);
+		DatabindCodec.mapper().configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, true);
+		DatabindCodec.mapper().registerModule(new AfterburnerModule());
+	}
+
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	private final int port;
 	private HttpServer server;

@@ -1,16 +1,15 @@
 plugins {
-    id 'java'
+    id 'java-library'
 }
+
+apply plugin: 'java-library'
 
 group 'com.hiddenswitch'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile project(':quasar-core')
-compile group: 'io.jaegertracing', name: 'jaeger-client', version: '0.35.5'
-    compile group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
-    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
 }

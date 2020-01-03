@@ -213,6 +213,12 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				.withHeroClass(heroClass);
 	}
 
+	public static DeckCreateRequest fromCardIds(String heroClass, List<String> cardIds) {
+		return new DeckCreateRequest()
+				.withCardIds(cardIds)
+				.withHeroClass(heroClass);
+	}
+
 	public String getUserId() {
 		return userId;
 	}
