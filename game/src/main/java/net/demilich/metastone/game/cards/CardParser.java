@@ -1,11 +1,7 @@
 package net.demilich.metastone.game.cards;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import com.hiddenswitch.spellsource.ResourceInputStream;
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.Json;
-import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.io.IOUtils;
 
@@ -16,12 +12,6 @@ import java.nio.charset.Charset;
  * A class responsible for deserializing JSON representations of cards.
  */
 public class CardParser {
-
-	static {
-		DatabindCodec.mapper().configure(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION, true);
-		DatabindCodec.mapper().configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, true);
-		DatabindCodec.mapper().registerModule(new AfterburnerModule());
-	}
 
 	@SuppressWarnings("unchecked")
 	public CardCatalogueRecord parseCard(ResourceInputStream resourceInputStream) throws IOException {

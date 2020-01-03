@@ -1,8 +1,10 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.1.0"
+    id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id 'application'
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
 
 def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
 
@@ -32,7 +34,6 @@ artifacts {
 }
 
 repositories {
-    mavenCentral()
     maven {
         url 'http://oss.sonatype.org/content/repositories/snapshots'
     }
@@ -42,7 +43,30 @@ repositories {
     jcenter()
 }
 
+configurations {
+    compile {
+        attributes {
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'instrumented-jar'))
+        }
+    }
+    testCompile {
+        attributes {
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'instrumented-jar'))
+        }
+    }
+}
+
 dependencies {
+    attributesSchema {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE) {
+            compatibilityRules.add(InstrumentedJarsRule)
+        }
+    }
+
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.9.9'
+    compile 'com.fasterxml.jackson.module:jackson-module-afterburner:2.9.9'
+
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'

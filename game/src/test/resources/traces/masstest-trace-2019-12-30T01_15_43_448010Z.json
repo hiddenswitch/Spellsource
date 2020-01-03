@@ -7,7 +7,7 @@
   "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
   "secondPlayerBonusCards" : [ "spell_lunstone" ],
   "mulligans" : [ [ 28, 24 ], [ 56 ] ],
-  "actions" : [ 1, 0, 0, 0, 4, 2, 1, 1, 0, 0, 5, 10, 1, 1, 5, 5, 11, 4, 1, 0, 1, 0, 18, 3, 4, 2, 2, 2, 8, 13, 12, 11, 8, 6, 3, 6, 22, 2, 5, 4, 4, 27, 10, 8, 8, 20, 23, 8, 7, 16, 8, 0, 2, 36, 4, 33, 13, 9, 1, 0, 18, 10, 0, 1, 7, 3, 2, 3, 2, 1, 1, 8, 1, 0, 29, 6, 16, 11, 10, 3, 0, 2 ],
+  "actions" : [ 1],
   "id" : null,
-  "traceErrors" : true
+  "traceErrors" : false
 }

@@ -4,13 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.smile.SmileFactory;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import io.netty.buffer.ByteBufInputStream;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
-import io.vertx.core.json.Json;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public abstract class JsonMessageCodec<T> implements MessageCodec<T, T> {
 

@@ -1,117 +1,24 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'io.swagger:swagger-codegen:2.3.0'
         classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0"
+        classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0'
+        classpath 'org.javamodularity:moduleplugin:1.6.0'
     }
 }
 
 apply plugin: 'java'
-
-
-import io.swagger.codegen.ClientOptInput
-import io.swagger.codegen.ClientOpts
-import io.swagger.codegen.CodegenProperty
-import io.swagger.codegen.DefaultGenerator
-import io.swagger.codegen.config.CodegenConfigurator
-import io.swagger.codegen.languages.CSharpClientCodegen
-import io.swagger.models.Swagger
-import io.swagger.parser.SwaggerParser
-
-task(swagger) {
-    def input = "swagger-api.yaml"
-    def output = file('client')
-    def templateDir = file('swagger-templates/java')
-
-    inputs.file(input)
-    outputs.dir(output)
-    doLast {
-        def config = new CodegenConfigurator()
-        config.setInputSpec(input)
-        config.setOutputDir(output.path)
-        config.setTemplateDir(templateDir.absolutePath)
-        config.setLang('java')
-        config.setAdditionalProperties([
-                'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
-                'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
-                'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
-                'library'                : 'jersey1',
-                'serializableModel'      : 'true',
-                'dateLibrary'            : 'java8',
-                'artifactId'             : 'client',
-                'artifactVersion'        : '0.8.7',
-                'hideGenerationTimestamp': 'true'
-        ])
-        config.setGroupId('com.hiddenswitch')
-        config.setArtifactId('spellsource-client')
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
-    }
-}
-
-
-class CSharpNullableGenerator extends CSharpClientCodegen {
-    @Override
-    String getTypeDeclaration(io.swagger.models.properties.Property p) {
-        def declaration = super.getTypeDeclaration(p)
-        if (!Boolean.parseBoolean(p.vendorExtensions.getOrDefault("x-nullable", "true").toString()) && declaration.contains("?")) {
-            return declaration.replaceAll("\\?", "")
-        }
-        return declaration
-    }
-
-    @Override
-    void updateCodegenPropertyEnum(CodegenProperty var) {
-        super.updateCodegenPropertyEnum(var)
-        if (var.vendorExtensions.containsKey("x-enum-varnames")) {
-            List<Map<String, String>> enumVars = (List<Map<String, String>>) var.allowableValues.get("enumVars");
-            def varNames = (ArrayList) var.vendorExtensions.get("x-enum-varnames");
-            for (int i = 0; i < enumVars.size(); i++) {
-                enumVars.get(i).put("xEnumVarname", (String) varNames.get(i));
-            }
-        }
-    }
-}
-
-task(swaggerClient) {
-    def input = "swagger-api.yaml"
-    def outputDir = 'clientcsharp'
-    def output = file(outputDir)
-    def templateDir = file('swagger-templates/csharp')
-    inputs.file(input)
-    outputs.dir(output)
-    doLast {
-        def config = new CSharpNullableGenerator()
-        config.setInputSpec(input)
-        config.setOutputDir(output.path)
-        config.setTemplateDir(templateDir.absolutePath)
-        config.additionalProperties().putAll([
-                'supportFiles'           : 'false',
-                'apiTests'               : 'false',
-                'modelTests'             : 'false',
-                'modelDocs'              : 'false',
-                'packageName'            : 'Spellsource.Client',
-                'targetFramework'        : 'v3.5',
-                'sourceFolder'           : 'Scripts',
-                'hideGenerationTimestamp': 'true',
-                'optionalProjectFile'    : 'false',
-                'optionalAssemblyFile'   : 'false'
-        ])
-
-        def optInput = new ClientOptInput();
-        Swagger swagger = new SwaggerParser().read(input, [], true);
-        optInput.config(config)
-                .opts(new ClientOpts())
-                .swagger(swagger)
-        new DefaultGenerator().opts(optInput).generate()
-    }
-}
-
-apply plugin: "com.vanniktech.maven.publish"
+apply plugin: 'com.vanniktech.maven.publish'
 apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'org.javamodularity.moduleplugin'
+apply from: 'gradle/swagger.gradle'
+
+dependencies {
+    gradleApi()
+}
 
 mavenPublish {
     targets {
@@ -124,13 +31,60 @@ mavenPublish {
 
 
 allprojects {
-    java {
-        // We are always source-compatible with Java 1.8 (no advanced language features)
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        // But we target the JVM that is currently used to compile this code. Many Windows users can only practically
-        // install Java 8 because that's what there are installers for, so we have a parallel support for it. To build
-        // for Java 8, the JAVA_HOME must point to a Java 8 JDK and gradle should be started with 
-        targetCompatibility = JavaVersion.current()
+    project.version = '0.8.59'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'com.vanniktech.maven.publish'
+    apply plugin: 'org.javamodularity.moduleplugin'
+
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        implementation group: 'io.jaegertracing', name: 'jaeger-client', version: '0.35.5'
+        implementation group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
+
+        if (project.name != 'quasar-core') {
+            compile project(':quasar-core')
+        }
+    }
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    configurations {
+        instrumentedJars {
+            canBeConsumed = true
+            canBeResolved = false
+            attributes {
+                attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
+                attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+                attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, Bundling.EXTERNAL))
+                attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JavaVersion.current().majorVersion.toInteger())
+                attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'instrumented-jar'))
+            }
+        }
+    }
+
+    task instrumentedJar(type: org.gradle.jvm.tasks.Jar) {
+        dependsOn processResources
+        doLast {
+            ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
+            ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
+                fileset(dir: sourceSets.main.output.classesDirs.asPath)
+            }
+        }
+    }
+
+    artifacts {
+        instrumentedJars(instrumentedJar.archiveFile) {
+            builtBy(instrumentedJar)
+        }
     }
 
     // Standardize versions of all the dependent modules in our projects
@@ -172,26 +126,27 @@ allprojects {
                 if (details.requested.group == 'ch.qos.logback') {
                     details.useVersion "1.1.7"
                 }
+
+                if (details.requested.group == 'junit') {
+                    details.useVersion '4.12'
+                }
+
+                if (details.requested.group == 'com.google.truth') {
+                    details.useVersion '0.42'
+                }
+
+                if (details.requested.module.name == 'mockito-core') {
+                    details.useVersion '2.24.5'
+                }
             }
         }
     }
 
     test {
         enableAssertions = false
-    }
-
-    project.version = '0.8.59'
-}
-
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
-    apply plugin: "com.vanniktech.maven.publish"
-
-    repositories {
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
+        moduleOptions {
+            runOnClasspath = true
+        }
     }
 
     compileJava.dependsOn processResources
@@ -199,7 +154,9 @@ subprojects {
         options.encoding = 'UTF-8'
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
-        if (project.name != 'quasar-core' && project.name != 'client') {
+        if (project.name != 'quasar-core'
+                && project.name != 'client'
+                && project.name != 'micro') {
             doLast {
                 ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
                 ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
