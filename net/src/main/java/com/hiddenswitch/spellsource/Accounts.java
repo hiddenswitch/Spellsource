@@ -31,6 +31,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -471,12 +472,13 @@ public interface Accounts {
 	}
 
 	/**
-	 * Gets a user by the specified user ID.
+	 * Gets a user by the specified user ID, or {@code null} if one was not found/
 	 *
-	 * @param userId
-	 * @return
+	 * @param userId The user's ID.
+	 * @return The {@link UserRecord} or {@code null} if none was found for this ID.
 	 */
 	@Suspendable
+	@Nullable
 	static UserRecord get(String userId) {
 		return mongo().findOne(USERS, json("_id", userId), UserRecord.class);
 	}

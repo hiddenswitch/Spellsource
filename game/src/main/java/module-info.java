@@ -1,18 +1,18 @@
-module game {
+module spellsource.game {
 	requires io.opentracing.api;
 	requires io.opentracing.util;
 	requires annotations.java5;
 	requires co.paralleluniverse.quasar.core;
 	requires commons.math3;
 	requires logback.classic;
-	requires slf4j.api;
 	requires com.fasterxml.jackson.databind;
 	requires com.fasterxml.jackson.core;
-	requires core;
+	requires spellsource.core;
 	requires com.google.common;
 	requires com.fasterxml.jackson.annotation;
 	requires vertx.core;
 	requires commons.lang3;
+	requires spellsource.client;
 	exports com.hiddenswitch.spellsource.cards.base;
 	exports com.hiddenswitch.spellsource.common;
 	exports com.hiddenswitch.spellsource.draft;
@@ -24,4 +24,25 @@ module game {
 	exports net.demilich.metastone.game.decks;
 	exports net.demilich.metastone.game.behaviour;
 	exports net.demilich.metastone.game.logic;
+	exports net.demilich.metastone.game.spells.desc;
+	exports net.demilich.metastone.game.targeting;
+	exports net.demilich.metastone.game.spells.trigger;
+	exports net.demilich.metastone.game.entities;
+	exports net.demilich.metastone.game.entities.minions;
+	exports net.demilich.metastone.game.spells;
+	exports net.demilich.metastone.game.entities.heroes;
+	exports net.demilich.metastone.game.entities.weapons;
+	exports net.demilich.metastone.game.fibers;
+	exports net.demilich.metastone.game.spells.trigger.secrets;
+	exports net.demilich.metastone.game.spells.desc.trigger;
+	exports net.demilich.metastone.game.spells.desc.aura;
+	exports net.demilich.metastone.game.spells.desc.condition;
+	exports net.demilich.metastone.game.spells.desc.filter;
+	exports net.demilich.metastone.game.spells.desc.manamodifier;
+	exports net.demilich.metastone.game.spells.desc.source;
+	exports net.demilich.metastone.game.spells.desc.valueprovider;
+	exports net.demilich.metastone.game.events;
+	exports net.demilich.metastone.game.statistics;
+	exports net.demilich.metastone.game.spells.aura;
+	exports net.demilich.metastone.game.environment;
 }

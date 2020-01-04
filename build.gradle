@@ -1,131 +1,22 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
-        classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0'
-        classpath 'org.javamodularity:moduleplugin:1.6.0'
-    }
-}
-
-apply plugin: 'java'
-apply plugin: 'com.vanniktech.maven.publish'
-apply plugin: 'io.codearte.nexus-staging'
-apply plugin: 'org.javamodularity.moduleplugin'
+//plugins {
+//    id 'org.javamodularity.moduleplugin' version '1.6.0'
+//}
 apply from: 'gradle/swagger.gradle'
 
 dependencies {
     gradleApi()
+    localGroovy()
 }
-
-mavenPublish {
-    targets {
-        uploadArchives {
-            releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-}
-
 
 allprojects {
     project.version = '0.8.59'
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'com.vanniktech.maven.publish'
-    apply plugin: 'org.javamodularity.moduleplugin'
+//    apply plugin: 'org.javamodularity.moduleplugin'
 
     repositories {
         jcenter()
-        maven { url 'https://jitpack.io' }
-    }
-
-    dependencies {
-        implementation group: 'io.jaegertracing', name: 'jaeger-client', version: '0.35.5'
-        implementation group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
-    }
-
-    sourceCompatibility = 11
-    targetCompatibility = 11
-
-    // Standardize versions of all the dependent modules in our projects
-    configurations.all {
-        if (project.name == 'cluster') {
-            exclude module: 'slf4j-log4j12'
-        }
-
-        resolutionStrategy {
-            eachDependency { DependencyResolveDetails details ->
-                if (['com.fasterxml.jackson.core', 'com.fasterxml.jackson.jaxrs'].contains(details.requested.group)) {
-                    details.useVersion "2.9.9"
-                }
-
-                if (details.requested.module.name == 'netty-all') {
-                    details.useVersion "4.1.42.Final"
-                }
-
-                if (details.requested.module.name.contains('jackson-databind')) {
-                    details.useVersion "2.9.9.1"
-                }
-
-                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
-                    details.useVersion "3.5"
-                }
-
-                if (details.requested.group == 'commons-lang') {
-                    details.useVersion "2.5"
-                }
-
-                if (details.requested.group == 'commons-collections') {
-                    details.useVersion "3.2.2"
-                }
-
-                if (details.requested.group == 'commons-io') {
-                    details.useVersion "2.5"
-                }
-
-                if (details.requested.group == 'commons-logging') {
-                    details.useVersion "1.2"
-                }
-
-                if (details.requested.group == 'ch.qos.logback') {
-                    details.useVersion "1.1.7"
-                }
-
-                if (details.requested.group == 'junit') {
-                    details.useVersion '4.12'
-                }
-
-                if (details.requested.group == 'com.google.truth') {
-                    details.useVersion '0.42'
-                }
-
-                if (details.requested.module.name == 'mockito-core') {
-                    details.useVersion '2.24.5'
-                }
-            }
-        }
-    }
-
-    test {
-        enableAssertions = false
-    }
-}
-
-if (System.env.TRAVIS == 'true') {
-    allprojects {
-        tasks.withType(GroovyCompile) {
-            groovyOptions.fork = false
-        }
-        tasks.withType(Test) {
-            // containers (currently) have 2 dedicated cores and 4GB of memory
-            maxParallelForks = 2
-            minHeapSize = '128m'
-        }
+        mavenCentral()
     }
 }

@@ -70,6 +70,9 @@ public class SuspendableGameContext extends GameContext {
 			if (mulligans == null) {
 				return destinationContext;
 			}
+			if (mulligans.get(0).getPlayerId() == destinationContext.getNonActivePlayerId()) {
+				Collections.reverse(mulligans);
+			}
 			for (int i : new int[]{destinationContext.getActivePlayerId(), destinationContext.getNonActivePlayerId()}) {
 				List<Integer> mulligan = mulligans.get(i).getEntityIds();
 				if (mulligan == null) {

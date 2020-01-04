@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -7,14 +8,12 @@ import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.MultiMap;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.web.client.HttpResponse;
-import io.vertx.ext.web.client.WebClient;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.function.Executable;
 
 import java.sql.Date;
 import java.time.Instant;
@@ -31,7 +30,7 @@ public class AccountsTest extends SpellsourceTestBase {
 		sync(() -> {
 			CreateAccountResponse account = createRandomAccount();
 			assertTrue(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
-			ChangePasswordResponse res = Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "test"));
+			ChangePasswordResponse res = Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "io/vertx/test"));
 			assertFalse("should log out user", Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
 		}, context);
 	}
@@ -123,8 +122,8 @@ public class AccountsTest extends SpellsourceTestBase {
 			assertNotNull(profile);
 			assertEquals(profile.getEmails().get(0).getAddress(), emailAddress);
 			assertEquals(profile.getUsername(), username);
-			assertThrows(() -> Accounts.get("a"));
-			assertThrows(() -> Accounts.get((String) null));
+			assertNull(Accounts.get("a"));
+			assertNull(Accounts.get((String) null));
 		}, context);
 	}
 
@@ -135,7 +134,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			try (UnityClient client = new UnityClient(context)) {
 				Sync.invoke0(client::createUserAccount);
 				String token = Accounts.createResetToken(client.getUserId().toString()).getToken();
-				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
+				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "io/vertx/test", "io/vertx/test"));
 				/*
 				HttpResponse<Buffer> res = awaitResult(h -> WebClient.create(contextRule.vertx())
 						.post(client.getApiClient().getBasePath() + "/reset/passwords/with-token")
@@ -146,7 +145,7 @@ public class AccountsTest extends SpellsourceTestBase {
 				*/
 
 				try (UnityClient client2 = new UnityClient(context)) {
-					com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
+					com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("io/vertx/test"));
 					context.assertNotNull(res2.getLoginToken());
 				}
 			}
@@ -159,7 +158,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			try (UnityClient client = new UnityClient(context)) {
 				Sync.invoke0(client::createUserAccount);
 				String token = "faketoken";
-				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
+				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "io/vertx/test", "io/vertx/test"));
 				/*
 				HttpResponse<Buffer> res = awaitResult(h -> WebClient.create(contextRule.vertx())
 						.post(client.getApiClient().getBasePath() + "/reset/passwords/with-token")
@@ -171,7 +170,7 @@ public class AccountsTest extends SpellsourceTestBase {
 
 				try (UnityClient client2 = new UnityClient(context)) {
 					try {
-						com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
+						com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("io/vertx/test"));
 						context.fail("should not reach");
 					} catch (RuntimeException ex) {
 						context.assertTrue(((ApiException) ex.getCause()).getResponseBody().contains("Bad password"));

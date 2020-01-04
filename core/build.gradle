@@ -1,15 +1,18 @@
 plugins {
     id 'java-library'
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
 apply plugin: 'java-library'
+apply plugin: 'org.javamodularity.moduleplugin'
 
 group 'com.hiddenswitch'
 
-repositories {
-    jcenter()
-}
+sourceCompatibility = 11
+targetCompatibility = 11
 
 dependencies {
-    compile project(':quasar-core')
+    implementation 'org.slf4j:slf4j-api:1.7.+'
+    implementation 'com.google.guava:guava:26+';
+    implementation 'org.jetbrains:annotations-java5:15.0'
 }

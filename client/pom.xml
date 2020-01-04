@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hiddenswitch</groupId>
-    <artifactId>spellsource-client</artifactId>
+    <artifactId>client</artifactId>
     <packaging>jar</packaging>
-    <name>spellsource-client</name>
-    <version>0.8.7</version>
+    <name>client</name>
+    <version>0.8.59</version>
     <url>https://github.com/swagger-api/swagger-codegen</url>
     <description>Swagger Java</description>
     <scm>

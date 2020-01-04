@@ -1,8 +1,7 @@
 package net.demilich.metastone.tests.util;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableRunnable;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.cards.test.TestCardResources;
 import net.demilich.metastone.game.GameContext;
@@ -30,13 +29,11 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeAll;
 import org.mockito.ArgumentMatchers;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -44,8 +41,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static org.junit.Assert.fail;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBase {
 
@@ -84,27 +80,27 @@ public class TestBase {
 
 	protected static void assertAdapted(String name, Minion minion) {
 		if (name.equals("Crackling Shield")) {
-			Assert.assertTrue(minion.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertTrue(minion.hasAttribute(Attribute.DIVINE_SHIELD));
 		} else if (name.equals("Flaming Claws")) {
-			Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 3);
+			assertEquals(minion.getAttack(), minion.getBaseAttack() + 3);
 		} else if (name.equals("Lightning Speed")) {
-			Assert.assertTrue(minion.hasAttribute(Attribute.WINDFURY));
+			assertTrue(minion.hasAttribute(Attribute.WINDFURY));
 		} else if (name.equals("Liquid Membrane")) {
-			Assert.assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+			assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
 		} else if (name.equals("Living Spores")) {
-			Assert.assertNotNull(minion.getDeathrattles());
-			Assert.assertEquals(minion.getDeathrattles().size(), 1);
+			assertNotNull(minion.getDeathrattles());
+			assertEquals(minion.getDeathrattles().size(), 1);
 		} else if (name.equals("Massive")) {
-			Assert.assertTrue(minion.hasAttribute(Attribute.TAUNT));
+			assertTrue(minion.hasAttribute(Attribute.TAUNT));
 		} else if (name.equals("Poison Spit")) {
-			Assert.assertTrue(minion.hasAttribute(Attribute.POISONOUS));
+			assertTrue(minion.hasAttribute(Attribute.POISONOUS));
 		} else if (name.equals("Rocky Carapace")) {
-			Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 3);
+			assertEquals(minion.getHp(), minion.getBaseHp() + 3);
 		} else if (name.equals("Shrouding Mist")) {
-			Assert.assertTrue(minion.hasAttribute(Attribute.STEALTH));
+			assertTrue(minion.hasAttribute(Attribute.STEALTH));
 		} else if (name.equals("Volcanic Might")) {
-			Assert.assertEquals(minion.getHp(), minion.getBaseHp() + 1);
-			Assert.assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
+			assertEquals(minion.getHp(), minion.getBaseHp() + 1);
+			assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
 		}
 	}
 
@@ -230,7 +226,8 @@ public class TestBase {
 		return context.getLogic().getModifiedManaCost(player, deckCard);
 	}
 
-	public static void assertThrows(ThrowingRunnable runnable) {
+	@Suspendable
+	public static void assertThrows(SuspendableRunnable runnable) {
 		assertThrows(Throwable.class, runnable);
 	}
 
@@ -246,12 +243,12 @@ public class TestBase {
 	 */
 	@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 	@Suspendable
-	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
+	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, SuspendableRunnable runnable) {
 		expectThrows(throwableClass, runnable);
 	}
 
 	@Suspendable
-	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, ThrowingRunnable runnable) {
+	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, SuspendableRunnable runnable) {
 		try {
 			runnable.run();
 		} catch (Throwable t) {
@@ -414,10 +411,8 @@ public class TestBase {
 				: StreamSupport.stream(split, false);
 	}
 
-	@BeforeMethod
-	public void loadCards() throws Exception {
-		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.DEBUG);
+	@BeforeAll
+	public static void loadCards() throws Exception {
 		CardCatalogue.loadCardsFromPackage();
 	}
 
@@ -571,11 +566,5 @@ public class TestBase {
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
 		context.performAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
-	}
-
-
-	public interface ThrowingRunnable {
-		@Suspendable
-		void run() throws Throwable;
 	}
 }
