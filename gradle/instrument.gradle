@@ -1,13 +1,15 @@
-configurations {
-    instrumentedClasspath {
-        canBeConsumed = false
-        canBeResolved = true
-    }
+apply plugin: 'java-library'
 
-    instrumentedJars {
-        canBeConsumed = true
-        canBeResolved = false
-        extendsFrom compile
+configurations {
+//    uninstrumentedClasspath {
+//        canBeConsumed = false
+//        canBeResolved = true
+//    }
+//
+//    instrumentedJars {
+//        canBeConsumed = true
+//        canBeResolved = false
+//        extendsFrom compile
 //        attributes {
 //            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.LIBRARY))
 //            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
@@ -15,12 +17,10 @@ configurations {
 //            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JavaVersion.current().majorVersion.toInteger())
 //            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, 'instrumented-jar'))
 //        }
-    }
-
-    testRuntimeClasspath.extendsFrom instrumentedClasspath
+//    }
+//
+//    testRuntimeClasspath.extendsFrom instrumentedClasspath
 }
-
-apply plugin: 'org.javamodularity.moduleplugin'
 
 dependencies {
 //    attributesSchema {
@@ -28,28 +28,29 @@ dependencies {
 //            compatibilityRules.add(InstrumentedJarsRule)
 //        }
 //    }
-    compile project(':quasar-core')
+    api project(':quasar-core')
 }
 
-task instrument {
-    dependsOn compileJava, processResources, project(':quasar-core').tasks.jar
+compileJava.dependsOn processResources
+compileJava {
+//    dependsOn compileJava, processResources, project(':quasar-core').tasks.jar
     doLast {
-        ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
+        ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compileClasspath.asPath)
         ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
         }
     }
 }
-
-task instrumentedJar(type: org.gradle.jvm.tasks.Jar) {
-    dependsOn processResources, instrument
-}
-
-artifacts {
-    instrumentedJars(instrumentedJar.archiveFile) {
-        builtBy(instrumentedJar)
-    }
-}
+//
+//task instrumentedJar(type: org.gradle.jvm.tasks.Jar) {
+//    dependsOn processResources, instrument
+//}
+//
+//artifacts {
+//    instrumentedJars(instrumentedJar.archiveFile) {
+//        builtBy(instrumentedJar)
+//    }
+//}
 
 compileTestJava.dependsOn processTestResources
 compileTestJava {
@@ -57,7 +58,7 @@ compileTestJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
     doLast {
-        ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
+        ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compileClasspath.asPath)
         ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
             fileset(dir: sourceSets.test.output.classesDirs.asPath)

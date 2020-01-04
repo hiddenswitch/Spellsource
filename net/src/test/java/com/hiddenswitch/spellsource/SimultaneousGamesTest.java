@@ -25,7 +25,7 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 
 	@Test(timeout = 80000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
-		Tracer tracer = Tracing.initialize("test");
+		Tracer tracer = Tracing.initialize("io/vertx/test");
 		Span span = tracer.buildSpan("testSimultaneousGames").start();
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * 3;
 		int checkpointTotal = count * 6;

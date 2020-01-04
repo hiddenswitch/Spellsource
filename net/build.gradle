@@ -1,10 +1,12 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
     id 'application'
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
+apply plugin: 'org.javamodularity.moduleplugin'
 apply from: '../gradle/instrument.gradle'
 
 def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
@@ -61,6 +63,8 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.8.3'
     compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.8.3'
     compile group: 'io.vertx', name: 'vertx-dropwizard-metrics', version: '3.8.3'
+    compile 'org.jetbrains:annotations-java5:15.0'
+    compile 'io.jaegertracing:jaeger-client:0.35.5'
     compile 'io.netty:netty-transport-native-epoll:4.1.15.Final:linux-x86_64'
     compile 'io.netty:netty-transport-native-kqueue:4.1.15.Final:osx-x86_64'
     compile 'io.atomix:atomix:3.1.5'
@@ -74,11 +78,9 @@ dependencies {
     compile project(':client')
     compile project(':game')
     compile project(':vertx-sync')
-    instrumentedClasspath project(path: ':game', configuration: 'instrumentedJars')
-    instrumentedClasspath project(path: ':vertx-sync', configuration: 'instrumentedJars')
+    compile project(':game')
 
-    testCompile project(':game')
-    testCompile project(path: ':testutils', configuration: 'instrumentedJars')
+    testCompile project(':testutils')
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile 'io.vertx:vertx-core:3.8.0:tests'
     testCompile 'org.powermock:powermock-module-junit4:2.0.2'

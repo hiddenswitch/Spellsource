@@ -1,4 +1,4 @@
-# spellsource-client
+# client
 
 ## Requirements
 
@@ -27,8 +27,8 @@ Add this dependency to your project's POM:
 ```xml
 <dependency>
     <groupId>com.hiddenswitch</groupId>
-    <artifactId>spellsource-client</artifactId>
-    <version>0.8.7</version>
+    <artifactId>client</artifactId>
+    <version>0.8.59</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:spellsource-client:0.8.7"
+compile "com.hiddenswitch:client:0.8.59"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/spellsource-client-0.8.7.jar
+* target/client-0.8.59.jar
 * target/lib/*.jar
 
 ## Getting Started

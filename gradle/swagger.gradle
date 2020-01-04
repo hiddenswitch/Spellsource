@@ -24,12 +24,12 @@ task swagger {
     inputs.file(input)
     outputs.dir(output)
     doLast {
-        def config = new CodegenConfigurator()
+        def config = new JavaModuleInfoGenerator();
         config.setInputSpec(input)
         config.setOutputDir(output.path)
         config.setTemplateDir(templateDir.absolutePath)
-        config.setLang('java')
-        config.setAdditionalProperties([
+//        config.setLang('java')
+        config.additionalProperties().putAll([
                 'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
                 'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
                 'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
@@ -37,12 +37,17 @@ task swagger {
                 'serializableModel'      : 'true',
                 'dateLibrary'            : 'java8',
                 'artifactId'             : 'client',
-                'artifactVersion'        : '0.8.7',
+                'artifactVersion'        : project.version,
                 'hideGenerationTimestamp': 'true'
         ])
         config.setGroupId('com.hiddenswitch')
         config.setArtifactId('spellsource-client')
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+        def optInput = new ClientOptInput();
+        Swagger swagger = new SwaggerParser().read(input, [], true);
+        optInput.config(config)
+                .opts(new ClientOpts())
+                .swagger(swagger)
+        new DefaultGenerator().opts(optInput).generate()
     }
 }
 

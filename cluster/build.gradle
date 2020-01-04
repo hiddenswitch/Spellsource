@@ -22,8 +22,8 @@ dependencies {
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
     implementation group: 'io.jenetics', name: 'jenetics', version: '4.1.0'
     implementation group: 'io.jenetics', name: 'jenetics.ext', version: '4.1.0'
-    implementation project(path: ':net', configuration: 'instrumentedJars')
-    testImplementation group: 'org.testng', name: 'testng', version: '6.14.3'
+    implementation project(':net')
+    testImplementation group: 'org.testng', name: 'testng', version: '7.+'
 }
 
 test {
