@@ -19,9 +19,7 @@ open module co.paralleluniverse.quasar.core {
 	requires org.objectweb.asm;
 	requires org.objectweb.asm.util;
 	requires org.objectweb.asm.commons;
-	requires static kryo;
 	requires objenesis;
-	requires static kryo.serializers;
 
 	exports co.paralleluniverse.fibers;
 	exports co.paralleluniverse.fibers.futures;
