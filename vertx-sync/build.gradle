@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
+    id 'org.javamodularity.moduleplugin' version '1.6.0' version '1.6.0'
 }
 
 apply plugin: 'java-library'

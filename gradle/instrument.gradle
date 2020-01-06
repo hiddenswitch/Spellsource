@@ -1,9 +1,41 @@
 apply plugin: 'java-library'
 
+configurations {
+    uninstrumentedClasspath {
+        canBeConsumed = false
+        canBeResolved = true
+        extendsFrom implementation
+    }
+
+    uninstrumentedJars {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
 dependencies {
     implementation(project(path: ':quasar-core', configuration: 'shadowedJar')) {
         exclude group: 'org.ow2.asm', module: '*'
         because "it has been relocated in the quasar shadow jar"
+    }
+}
+
+task uninstrumentedCompileJava(type: JavaCompile) {
+    source(sourceSets.main.java)
+    classpath = configurations.uninstrumentedClasspath.asFileTree
+    destinationDir = file(project.buildDir.path + '/uninstrumentedClasses/java/main')
+}
+
+task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
+    exclude '**/module-info.java'
+    dependsOn uninstrumentedCompileJava
+    from { uninstrumentedCompileJava.destinationDir }
+    archiveClassifier = 'uninstrumented'
+}
+
+artifacts {
+    uninstrumentedJars(uninstrumentedJar.archiveFile) {
+        builtBy(uninstrumentedJar)
     }
 }
 
