@@ -11,9 +11,9 @@ import io.atomix.utils.net.Address;
 import io.atomix.vertx.AtomixClusterManager;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBusOptions;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -27,7 +27,7 @@ public interface Applications {
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		int atomixPort = Configuration.atomixPort();
 		int vertxClusterPort = Configuration.vertxClusterPort();
-		LoggerFactory.initialise();
+		io.vertx.core.logging.LoggerFactory.initialise();
 		long nanos = Duration.of(RpcClient.DEFAULT_TIMEOUT, ChronoUnit.MILLIS).toNanos();
 		Node[] nodes = new Node[0];
 		if (Configuration.atomixBootstrapNode() != null) {
