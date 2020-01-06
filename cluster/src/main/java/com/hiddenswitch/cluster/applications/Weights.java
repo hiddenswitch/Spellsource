@@ -1,8 +1,8 @@
 package com.hiddenswitch.cluster.applications;
 
 import co.paralleluniverse.strands.Strand;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Simulation;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import io.jenetics.*;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;

@@ -1,7 +1,7 @@
 open module spellsource.customhearthstone {
 	requires spellsource.testutils;
 	requires spellsource.game;
-	requires annotations.java5;
+	requires annotations;
 	requires logback.classic;
 	requires org.slf4j;
 	requires org.mockito;

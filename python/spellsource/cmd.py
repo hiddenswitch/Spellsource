@@ -462,7 +462,7 @@ def run(mongo_url: str = None, gradle_cmd: str = 'gradle', default_gradle: bool 
             def run(self):
                 from .context import Context
                 with Context() as context:
-                    context.root_namespace().com.hiddenswitch.spellsource.applications.Local.main(
+                    context.root_namespace().com.hiddenswitch.spellsource.net.applications.LocalClustered.main(
                         context.string_array(0))
 
             def __exit__(self, exc_type, exc_val, exc_tb):

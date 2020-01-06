@@ -1,6 +1,3 @@
-//plugins {
-//    id 'org.javamodularity.moduleplugin' version '1.6.0'
-//}
 apply from: 'gradle/swagger.gradle'
 
 dependencies {
@@ -13,10 +10,108 @@ allprojects {
 }
 
 subprojects {
-//    apply plugin: 'org.javamodularity.moduleplugin'
-
     repositories {
         jcenter()
         mavenCentral()
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            preferProjectModules()
+            failOnVersionConflict()
+            eachDependency { DependencyResolveDetails details ->
+                if (details.requested.module.name == 'slf4j-api') {
+                    details.useVersion '1.7.29'
+                }
+                if ([
+                        'com.fasterxml.jackson.core',
+                        'com.fasterxml.jackson.jaxrs',
+                        'com.fasterxml.jackson.datatype',
+                        'com.fasterxml.jackson.module'
+                ].contains(details.requested.group)) {
+                    details.useVersion "2.10.2"
+                }
+
+                if (details.requested.group == 'io.netty' && details.requested.version.contains('Final')) {
+                    details.useVersion "4.1.43.Final"
+                }
+
+                if (details.requested.module.name == 'reactive-streams') {
+                    details.useVersion '1.0.3'
+                }
+
+                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
+                    details.useVersion "3.5"
+                }
+
+                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-lang3") {
+                    details.useVersion "3.7"
+                }
+
+                if (details.requested.group == 'commons-lang') {
+                    details.useVersion "2.5"
+                }
+
+                if (details.requested.group == 'commons-collections') {
+                    details.useVersion "3.2.2"
+                }
+
+                if (details.requested.group == 'commons-io') {
+                    details.useVersion "2.5"
+                }
+
+                if (details.requested.group == 'commons-logging') {
+                    details.useVersion "1.2"
+                }
+
+                if (details.requested.group == 'ch.qos.logback') {
+                    details.useVersion "1.1.7"
+                }
+
+                if (details.requested.group == 'com.google.truth') {
+                    details.useVersion '0.42'
+                }
+
+                if (details.requested.module.name == 'mockito-core') {
+                    details.useVersion '2.24.5'
+                }
+
+                if (details.requested.group == 'com.google.guava') {
+                    details.useVersion '26.0-jre'
+                }
+
+                if (details.requested.name == 'micronaut-inject') {
+                    details.useVersion '1.3.0.M2'
+                }
+
+                if (details.requested.name == 'micronaut-runtime') {
+                    details.useVersion '1.3.0.M2'
+                }
+
+                if (details.requested.group == 'org.junit.jupiter') {
+                    details.useVersion '5.6.0-M1'
+                }
+
+                if (details.requested.name == 'joda-time') {
+                    details.useVersion '2.10.2'
+                }
+
+                if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
+                    details.useVersion '16.0.2'
+                }
+
+                if (details.requested.group == 'net.bytebuddy') {
+                    details.useVersion '1.9.7'
+                }
+
+                if (details.requested.group == 'org.javassist') {
+                    details.useVersion '3.24.0-GA'
+                }
+
+                if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
+                    details.useVersion '4.5.4'
+                }
+            }
+        }
     }
 }

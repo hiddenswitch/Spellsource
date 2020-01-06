@@ -4,10 +4,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
-import com.google.common.reflect.ClassPath;
 import com.hiddenswitch.spellsource.core.CardResource;
 import com.hiddenswitch.spellsource.core.CardResources;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -213,13 +216,18 @@ public class CardCatalogue {
 		if (!loaded.compareAndSet(false, true)) {
 			return;
 		}
-
-		try {
-			List<CardResources> cardResources = ClassPath.from(ClassLoader.getSystemClassLoader())
-					.getTopLevelClassesRecursive("com.hiddenswitch.spellsource.cards")
+		List<CardResources> cardResources = null;
+		try (ScanResult scanResult =
+				     new ClassGraph()
+						     .enableClassInfo()
+						     .disableRuntimeInvisibleAnnotations()
+						     .whitelistPackages("com.hiddenswitch.spellsource.cards")
+						     .scan()) {
+			cardResources = scanResult
+					.getAllClasses()
 					.stream()
 					.filter(info -> info.getName().contains("CardResources"))
-					.map(ClassPath.ClassInfo::load)
+					.map(ClassInfo::loadClass)
 					.filter(CardResources.class::isAssignableFrom)
 					.filter(c -> !Modifier.isAbstract(c.getModifiers()))
 					.map(thisClass -> {
@@ -234,7 +242,12 @@ public class CardCatalogue {
 				bannedCardIds.addAll(cardResource.getDraftBannedCardIds());
 				hardRemovalCardIds.addAll(cardResource.getHardRemovalCardIds());
 			}
-			Collection<ResourceInputStream> inputStreams = cardResources.stream().flatMap(resource -> resource.getResources().stream()).map(resource -> ((CardResource) resource)).map(resource -> (ResourceInputStream) resource).collect(Collectors.toList());
+			Collection<ResourceInputStream> inputStreams = cardResources
+					.stream()
+					.flatMap(resource -> resource.getResources().stream())
+					.map(resource -> ((CardResource) resource))
+					.map(resource -> (ResourceInputStream) resource)
+					.collect(Collectors.toList());
 			Map<String, CardDesc> cardDesc = new HashMap<>();
 			ArrayList<String> badCards = new ArrayList<>();
 			CardParser cardParser = new CardParser();
@@ -294,6 +307,17 @@ public class CardCatalogue {
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			if (cardResources != null) {
+				for (CardResources cardResources1 : cardResources) {
+					try {
+						cardResources1.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+
 		}
 	}
 

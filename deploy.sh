@@ -475,7 +475,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.59.jar \
+      ./net/build/libs/net-0.8.59-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

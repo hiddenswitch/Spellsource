@@ -50,7 +50,7 @@ setup(name='spellsource',
       data_files=[
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.59.jar'),
+          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.59-all.jar'),
                                  os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,

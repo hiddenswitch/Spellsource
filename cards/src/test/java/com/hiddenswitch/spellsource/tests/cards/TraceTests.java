@@ -2,7 +2,8 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
-import com.google.common.io.Resources;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -17,15 +18,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -37,30 +33,36 @@ public class TraceTests {
 	private static Logger LOGGER = LoggerFactory.getLogger(TraceTests.class);
 
 	public static Object[][] getTraces() {
-		List<Trace> traces = new Reflections("traces", new ResourcesScanner())
-				.getResources(x -> true)
-				.stream()
-				.filter(Objects::nonNull)
-				.map(Resources::getResource)
-				.filter(Objects::nonNull)
-				.sorted(Comparator.comparing(URL::getFile).reversed())
-				.map(c -> {
-					try {
-						Trace trace = Trace.load(Resources.toString(c, Charset.defaultCharset()));
-						if (trace.getId() == null) {
-							trace.setId(c.toString());
+		try (ScanResult scanResult = new ClassGraph()
+				.disableRuntimeInvisibleAnnotations()
+				.whitelistPaths(getDirectoryPrefix()).scan()) {
+			List<Trace> traces = scanResult
+					.getResourcesWithExtension(".json")
+					.stream()
+					.filter(Objects::nonNull)
+					.map(c -> {
+						try {
+							Trace trace = Trace.load(c.getContentAsString());
+							if (trace.getId() == null) {
+								trace.setId(c.toString());
+							}
+							return trace;
+						} catch (IOException e) {
+							throw new RuntimeException(e);
 						}
-						return trace;
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				}).collect(toList());
+					}).collect(toList());
 
-		Object[][] data = new Object[traces.size()][1];
-		for (int i = 0; i < traces.size(); i++) {
-			data[i][0] = traces.get(i);
+			Object[][] data = new Object[traces.size()][1];
+			for (int i = 0; i < traces.size(); i++) {
+				data[i][0] = traces.get(i);
+			}
+
+			return data;
 		}
-		return data;
+	}
+
+	private static String getDirectoryPrefix() {
+		return "traces";
 	}
 
 	@BeforeAll

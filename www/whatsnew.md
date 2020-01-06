@@ -4,6 +4,11 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.60-3.0.7 (In Progress)
+
+ - Surveyor Skag no longer puts the same card copied multiple times at the bottom of your deck. 
+ - Destroying minions that go dormant during their summoning phase no longer crashes the game. For example, if Paven, Elemental of Surprise gained Miserable Conclusion (a destroy effect) on its Opener due to Alagard's Infusion and then destroys itself in the Opener, it correctly transforms into its permanent.
+
 ### 0.8.59-3.0.6.2 (December 29th, 2019)
 
 Hotfixes to the client and server.

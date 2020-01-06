@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.core;
 
-import com.google.common.reflect.ClassPath;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +69,7 @@ public abstract class AbstractCardResources<T> implements CardResources {
 	private final Class<T> thisClass;
 	private AtomicBoolean isLoaded = new AtomicBoolean();
 	private List<ResourceInputStream> resources;
+	private AutoCloseable closeable;
 
 	protected AbstractCardResources(Class<T> thisClass) {
 		this.thisClass = thisClass;
@@ -75,22 +77,28 @@ public abstract class AbstractCardResources<T> implements CardResources {
 	}
 
 	@Override
-	public void load() {
+	public AutoCloseable load() {
 		if (!isLoaded.compareAndSet(false, true)) {
-			return;
+			return () -> {
+			};
 		}
-		try {
-			ClassLoader classLoader = thisClass.getClassLoader();
-			resources = ClassPath.from(classLoader)
-					.getResources()
-					.stream()
-					.filter(resource -> resource.getResourceName().startsWith(getDirectoryPrefix()) && resource.getResourceName().endsWith(".json"))
-					.map(resource -> new ResourceInputStream(resource.getResourceName(), CardResources.getInputStream(classLoader, true, resource.getResourceName()), false))
-					.collect(Collectors.toList());
-			LOGGER.debug("load {}: {} cards", getDirectoryPrefix(), resources.size());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		ScanResult scanResult = new ClassGraph()
+				.disableRuntimeInvisibleAnnotations()
+				.whitelistPaths(getDirectoryPrefix()).scan();
+
+		resources = scanResult
+				.getResourcesWithExtension(".json")
+				.stream()
+				.map(resource -> {
+					try {
+						return new ResourceInputStream(resource.getPath(), resource.open(), false);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.collect(Collectors.toList());
+		LOGGER.debug("load {}: {} cards", getDirectoryPrefix(), resources.size());
+		return scanResult;
 	}
 
 	/**
@@ -102,8 +110,14 @@ public abstract class AbstractCardResources<T> implements CardResources {
 
 	@Override
 	public List<ResourceInputStream> getResources() {
-		load();
+		closeable = load();
 		return resources;
 	}
 
+	@Override
+	public void close() throws Exception {
+		if (closeable != null) {
+			closeable.close();
+		}
+	}
 }

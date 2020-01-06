@@ -11,16 +11,17 @@
  * under the terms of the GNU Lesser General Public License version 3.0
  * as published by the Free Software Foundation.
  */
-module co.paralleluniverse.quasar.core {
+open module co.paralleluniverse.quasar.core {
 	requires java.management;
 	requires java.instrument;
 	requires jdk.unsupported; // needed for ThreadAccess and ExtendedStackTraceHotSpot
-
+	requires com.google.common;
 	requires org.objectweb.asm;
 	requires org.objectweb.asm.util;
 	requires org.objectweb.asm.commons;
-	requires com.google.common;
-	requires static kryo; // automatic module
+	requires static kryo;
+	requires objenesis;
+	requires static kryo.serializers;
 
 	exports co.paralleluniverse.fibers;
 	exports co.paralleluniverse.fibers.futures;

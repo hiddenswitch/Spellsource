@@ -16,6 +16,9 @@ test {
     moduleOptions {
         runOnClasspath = true
     }
+    filter {
+        exclude '**/module-info.class'
+    }
     testLogging {
         events "standardError"
     }

@@ -386,7 +386,7 @@ public enum Attribute {
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * 		the battlefield.
-	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
+	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**

@@ -10,7 +10,7 @@ group 'com.hiddenswitch'
 
 dependencies {
     implementation project(':core')
-    testImplementation 'org.jetbrains:annotations-java5:15.0'
+    testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation project(':testutils')
     testImplementation project(':cards')
     testImplementation project(':hearthstone')
@@ -20,6 +20,9 @@ test {
     useJUnitPlatform()
     moduleOptions {
         runOnClasspath = true
+    }
+    filter {
+        exclude '**/module-info.class'
     }
     testLogging {
         events "standardError"
