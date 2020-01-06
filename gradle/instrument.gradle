@@ -21,13 +21,13 @@ dependencies {
 }
 
 task uninstrumentedCompileJava(type: JavaCompile) {
+    exclude '**/module-info.java'
     source(sourceSets.main.java)
     classpath = configurations.uninstrumentedClasspath.asFileTree
     destinationDir = file(project.buildDir.path + '/uninstrumentedClasses/java/main')
 }
 
 task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
-    exclude '**/module-info.java'
     dependsOn uninstrumentedCompileJava
     from { uninstrumentedCompileJava.destinationDir }
     archiveClassifier = 'uninstrumented'

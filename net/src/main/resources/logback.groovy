@@ -4,7 +4,7 @@
  * To set a specific minimum logging level for all game code, set the environment variable SPELLSOURCE_LOGGING_LEVEL.
  * For example, to see all tracing while running a server:
  *
- * SPELLSOURCE_LOGGING_LEVEL=TRACE gradle net:local
+ * SPELLSOURCE_LOGGING_LEVEL=TRACE gradle net:run
  */
 import ca.pjer.logback.AwsLogsAppender
 import ch.qos.logback.classic.Level
