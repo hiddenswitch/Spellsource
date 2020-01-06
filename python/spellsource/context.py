@@ -75,8 +75,8 @@ class Context(contextlib.AbstractContextManager):
                               ('targeting', 'net.demilich.metastone.game.targeting.*'),
                               ('utils', 'net.demilich.metastone.game.utils.*'),
                               ('behaviour', 'net.demilich.metastone.game.behaviour.*'),
-                              ('spellsource', 'com.hiddenswitch.spellsource.*'),
-                              ('applications', 'com.hiddenswitch.spellsource.applications.*'),
+                              ('spellsource', 'com.hiddenswitch.spellsource.net.*'),
+                              ('applications', 'com.hiddenswitch.spellsource.net.applications.*'),
                               ('util', 'java.util.*')):
             view = self._gateway.new_jvm_view(name)
             java_import(view, package)
@@ -143,7 +143,7 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-0.8.59.jar'):
+    def find_resource_path(filename='net-0.8.59-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -178,8 +178,10 @@ class Context(contextlib.AbstractContextManager):
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         port = launch_gateway(port=port,
-                              classpath=Context.find_resource_path('net-0.8.59.jar'),
+                              classpath=Context.find_resource_path('net-0.8.59-all.jar'),
                               javaopts=["--add-modules", "java.se",
+                                        '--add-opens', 'java.base/java.util.concurrent.atomic=kryo',
+                                        '--add-opens', 'java.base/java.lang=co.paralleluniverse.quasar.core',
                                         "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
                                         "--add-opens", "java.base/java.lang=ALL-UNNAMED",
                                         "--add-opens", "java.base/java.nio=ALL-UNNAMED",

@@ -28,7 +28,4 @@ public class ResourceInputStream implements CardResource {
 		return inputStream;
 	}
 
-	public boolean isFromFilesystem() {
-		return fromFilesystem;
-	}
 }

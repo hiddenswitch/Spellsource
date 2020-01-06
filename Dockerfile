@@ -52,7 +52,8 @@ RUN javac --version; \
     java --version;
 
 ENV SPELLSOURCE_VERSION=0.8.59
-ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}.jar
+ENV SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
+ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar /data/net-${SPELLSOURCE_VERSION}-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar
 
 RUN mkdir /etc/service/java
 COPY server.sh /etc/service/java/run

@@ -2,23 +2,23 @@ package com.hiddenswitch.spellsource.testutils;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
-import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CardValidation {
 	private static final CardParser CARD_PARSER = new CardParser();
@@ -69,11 +69,9 @@ public class CardValidation {
 				}
 			}
 		} catch (DecodeException ex) {
-			// Decode again to throw the inner exception
-			try {
-				CardDesc desc = DatabindCodec.mapper().readValue(new FileInputStream(cardFile), CardDesc.class);
-			} catch (JsonProcessingException innerEx) {
-				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile,0,0,0);
+			JsonProcessingException innerEx = (JsonProcessingException) Throwables.getRootCause(ex);// Decode again to throw the inner exception
+			if (innerEx != null) {
+				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile, 0, 0, 0);
 				fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",
 						cardFile.getName(),
 						innerEx.getMessage(),

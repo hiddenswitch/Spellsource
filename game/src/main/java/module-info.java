@@ -1,9 +1,10 @@
-module spellsource.game {
+open module spellsource.game {
 	requires io.opentracing.api;
 	requires io.opentracing.util;
-	requires annotations.java5;
+	requires io.github.classgraph;
+	requires annotations;
 	requires co.paralleluniverse.quasar.core;
-	requires commons.math3;
+	requires org.apache.commons.lang3;
 	requires logback.classic;
 	requires com.fasterxml.jackson.databind;
 	requires com.fasterxml.jackson.core;
@@ -11,8 +12,9 @@ module spellsource.game {
 	requires com.google.common;
 	requires com.fasterxml.jackson.annotation;
 	requires vertx.core;
-	requires commons.lang3;
 	requires spellsource.client;
+	requires commons.io;
+	requires org.slf4j;
 	exports com.hiddenswitch.spellsource.cards.base;
 	exports com.hiddenswitch.spellsource.common;
 	exports com.hiddenswitch.spellsource.draft;
@@ -45,4 +47,5 @@ module spellsource.game {
 	exports net.demilich.metastone.game.statistics;
 	exports net.demilich.metastone.game.spells.aura;
 	exports net.demilich.metastone.game.environment;
+	exports net.demilich.metastone.game.cards.dynamicdescription;
 }

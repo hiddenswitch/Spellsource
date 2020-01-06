@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -4492,6 +4493,17 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_test_discover1");
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_paven_elemental_of_surprise");
 		}));
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion minion = playMinionCard(context, opponent, 10, 10);
+			context.endTurn();
+			// Forces miserable conclusion to be added to paven elemental of surprise, whose aftermath is a transform effect
+			context.setDeckFormat(new FixedCardsDeckFormat("spell_miserable_conclusion"));
+			Card paven = receiveCard(context, player, "minion_paven_elemental_of_surprise");
+			playCard(context, player, "spell_alagards_infusion");
+			playCard(context, player, paven);
+		});
 	}
 
 	@Test
@@ -4518,9 +4530,22 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-	@Test
+	@RepeatedTest(100)
 	public void testSurveyorSkag() {
+		FixedCardsDeckFormat fixedCardsDeckFormat = new FixedCardsDeckFormat(
+				"minion_alien_ravager",
+				"minion_ankylo_devotee",
+				"minion_barside_slinker",
+				"minion_bighand_brute",
+				"minion_bromeliad_pup",
+				"minion_buffeting_elemental",
+				"minion_channeled_spirit",
+				"minion_daring_duelist",
+				"minion_disco_inferno",
+				"minion_doomed_diver"
+		);
 		runGym(((context, player, opponent) -> {
+			context.setDeckFormat(fixedCardsDeckFormat);
 			for (int i = 0; i < 5; i++) {
 				receiveCard(context, player, "spell_lunstone");
 			}
@@ -4530,6 +4555,7 @@ public class CustomCardsTests extends TestBase {
 		}));
 
 		runGym(((context, player, opponent) -> {
+			context.setDeckFormat(fixedCardsDeckFormat);
 			for (int i = 0; i < 10; i++) {
 				receiveCard(context, player, "spell_lunstone");
 			}
@@ -4539,6 +4565,7 @@ public class CustomCardsTests extends TestBase {
 		}));
 
 		runGym(((context, player, opponent) -> {
+			context.setDeckFormat(fixedCardsDeckFormat);
 			playCard(context, player, "minion_surveyor_skag");
 			assertEquals(player.getHand().size(), 10);
 			assertEquals(player.getDeck().size(), 0);

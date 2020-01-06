@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -33,7 +34,7 @@ public class SuspendableGameContextTests extends TestBase {
 		assertTrue(context.updateAndGetGameOver());
 	}
 
-	@Test
+	@RepeatedTest(100)
 	public void testCopySuspendableContext() throws ExecutionException, InterruptedException {
 		SuspendableGameContext context1 = new SuspendableGameContext("JADE", "OBSIDIAN");
 		SuspendableGameContext context2 = context1.clone();

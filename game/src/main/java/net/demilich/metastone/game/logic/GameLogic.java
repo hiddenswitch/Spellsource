@@ -4459,25 +4459,36 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Minions removed from play due to being transformed are not considered to have died, and so cannot be resummoned by
 	 * effects like Resurrect or Kel'Thuzad.
 	 *
+	 * @param spellDesc The spell responsible for this transform minion effect
 	 * @param minion    The original minion in play
 	 * @param newMinion The new minion to transform into
 	 * @see net.demilich.metastone.game.spells.TransformMinionSpell for the complete transformation logic.
 	 */
 	@Suspendable
-	public void transformMinion(@NotNull Minion minion, @NotNull Minion newMinion) {
+	public void transformMinion(SpellDesc spellDesc, @NotNull Minion minion, @NotNull Minion newMinion) {
 		Objects.requireNonNull(newMinion);
 		// Remove any spell triggers associated with the old minion.
 		removeEnchantments(minion);
 
 		Player owner = context.getPlayer(minion.getOwner());
 		// We may be transforming minions before they hit the board.
-		int index = owner.getMinions().size() - 1;
+		int index;
 		// Tracking of old index implements Sherazin, Seed
 		Zones oldZone = minion.getZone();
+
 		// It's okay to transform in the battlefield or graveyard (handles Sherazin)
-		if (minion.getZone() == Zones.BATTLEFIELD || minion.getZone() == Zones.GRAVEYARD) {
+		if (minion.getZone() == Zones.BATTLEFIELD) {
 			index = minion.getEntityLocation().getIndex();
 			owner.getZone(minion.getEntityLocation().getZone()).remove(index);
+		} else if (minion.getZone() == Zones.GRAVEYARD) {
+			// Are we evaluating a deathrattle?
+			if (spellDesc.containsKey(SpellArg.DEATHRATTLE_ID)) {
+				// Resurrect to its original position if there is one, or the rightmost position on the board
+				index = spellDesc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE, owner.getMinions().size() - 1);
+			} else {
+				index = Math.min(minion.getEntityLocation().getIndex(), owner.getMinions().size() - 1);
+			}
+			owner.getZone(minion.getEntityLocation().getZone()).remove(minion.getEntityLocation().getIndex());
 		} else {
 			// Transforming a minion before it hits the board? Probably a bug
 			throw new UnsupportedOperationException("not on board");
