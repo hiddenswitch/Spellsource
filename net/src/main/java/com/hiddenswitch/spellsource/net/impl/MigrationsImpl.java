@@ -8,11 +8,11 @@ import com.hiddenswitch.spellsource.net.models.MigrationRequest;
 import com.hiddenswitch.spellsource.net.models.MigrationResponse;
 import com.hiddenswitch.spellsource.net.models.MigrationToResponse;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.mongo.WriteOption;
 import io.vertx.ext.sync.SyncVerticle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.time.Instant;
