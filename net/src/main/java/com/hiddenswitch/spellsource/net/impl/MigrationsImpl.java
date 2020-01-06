@@ -53,7 +53,7 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 				logger.error("Invalid migration version specified: " + System.getenv("MIGRATE"));
 			} catch (InterruptedException ignored) {
 			} catch (Exception e2) {
-				logger.fatal("Failed to migrate! Deployment will fail.");
+				logger.error("Failed to migrate! Deployment will fail.");
 				throw e2;
 			}
 		}

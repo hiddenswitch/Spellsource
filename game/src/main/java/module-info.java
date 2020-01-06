@@ -15,6 +15,7 @@ open module spellsource.game {
 	requires spellsource.client;
 	requires commons.io;
 	requires org.slf4j;
+	requires commons.math3;
 	exports com.hiddenswitch.spellsource.cards.base;
 	exports com.hiddenswitch.spellsource.common;
 	exports com.hiddenswitch.spellsource.draft;

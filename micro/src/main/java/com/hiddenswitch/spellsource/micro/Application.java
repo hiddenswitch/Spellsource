@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.micro;
 
 import io.micronaut.runtime.Micronaut;
-import net.demilich.metastone.game.cards.CardCatalogue;
 
 public class Application {
 

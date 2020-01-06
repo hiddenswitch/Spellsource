@@ -38,6 +38,15 @@ configurations {
     timewarp
     shadowedJar.extendsFrom runtime
     archives.extendsFrom runtime
+    uninstrumentedClasspath {
+        canBeConsumed = false
+        canBeResolved = true
+        extendsFrom runtime
+    }
+    uninstrumentedJars {
+        canBeConsumed = true
+        canBeResolved = false
+    }
 }
 
 sourceSets {
@@ -174,6 +183,19 @@ compileJava {
     }
 }
 
+task uninstrumentedCompileJava(type: JavaCompile) {
+    exclude '**/module-info.java'
+    source(sourceSets.main.java)
+    classpath = compileJava.classpath
+    destinationDir = file(project.buildDir.path + '/uninstrumentedClasses/java/main')
+}
+
+task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
+    dependsOn uninstrumentedCompileJava
+    from { uninstrumentedCompileJava.destinationDir }
+    archiveClassifier = 'uninstrumented'
+}
+
 test.dependsOn shadowJar
 test {
     useJUnit()
@@ -240,6 +262,9 @@ configurations.runtime.artifacts.with { archives ->
 artifacts {
     archives shadowJar
     shadowedJar shadowJar
+    uninstrumentedJars(uninstrumentedJar.archiveFile) {
+        builtBy(uninstrumentedJar)
+    }
 }
 
 assemble.dependsOn shadowJar
