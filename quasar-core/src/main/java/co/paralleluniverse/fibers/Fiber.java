@@ -16,31 +16,26 @@ package co.paralleluniverse.fibers;
 import co.paralleluniverse.common.monitoring.FlightRecorder;
 import co.paralleluniverse.common.monitoring.FlightRecorderMessage;
 import co.paralleluniverse.common.reflection.ASMUtil;
-import co.paralleluniverse.common.util.Debug;
-import co.paralleluniverse.common.util.Exceptions;
-import co.paralleluniverse.common.util.ExtendedStackTrace;
-import co.paralleluniverse.common.util.ExtendedStackTraceElement;
-import co.paralleluniverse.common.util.Objects;
-import co.paralleluniverse.common.util.Pair;
-import co.paralleluniverse.common.util.SystemProperties;
-import co.paralleluniverse.common.util.UtilUnsafe;
-import co.paralleluniverse.common.util.VisibleForTesting;
+import co.paralleluniverse.common.util.*;
 import co.paralleluniverse.concurrent.util.ThreadAccess;
 import co.paralleluniverse.concurrent.util.ThreadUtil;
 import co.paralleluniverse.fibers.FiberForkJoinScheduler.FiberForkJoinTask;
 import co.paralleluniverse.fibers.instrument.SuspendableHelper;
 import co.paralleluniverse.io.serialization.ByteArraySerializer;
-import co.paralleluniverse.io.serialization.kryo.KryoSerializer;
+import co.paralleluniverse.io.serialization.JDKSerializer;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.Stranded;
 import co.paralleluniverse.strands.SuspendableCallable;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import co.paralleluniverse.strands.SuspendableUtils.VoidSuspendableCallable;
-import static co.paralleluniverse.strands.SuspendableUtils.runnableToCallable;
 import co.paralleluniverse.strands.dataflow.Val;
+
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.security.AccessControlContext;
 import java.security.AccessController;
@@ -50,16 +45,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Registration;
-import com.esotericsoftware.kryo.Serializer;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.serializers.FieldSerializer;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
+
+import static co.paralleluniverse.strands.SuspendableUtils.runnableToCallable;
+
 // import java.lang.reflect.Executable;
-import java.lang.reflect.Member;
 
 /**
  * A lightweight thread.
@@ -81,6 +70,7 @@ import java.lang.reflect.Member;
 public class Fiber<V> extends Strand implements Joinable<V>, Serializable, Future<V> {
     static final boolean USE_VAL_FOR_RESULT = true;
     private static final Object RESET = new Object();
+    private static final JDKSerializer jdkSerializer = new JDKSerializer();
     private static final boolean traceInterrupt = SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.traceInterrupt");
     private static final boolean disableAgentWarning = true; // SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableAgentWarning");
     public static final int DEFAULT_STACK_SIZE = 32;
@@ -2071,19 +2061,10 @@ public class Fiber<V> extends Strand implements Joinable<V>, Serializable, Futur
      *                            causes other issues.
      */
     public static ByteArraySerializer getFiberSerializer(boolean includeThreadLocals) {
-        final KryoSerializer s = new KryoSerializer();
-        s.getKryo().addDefaultSerializer(Fiber.class, new FiberSerializer(includeThreadLocals));
-        s.getKryo().addDefaultSerializer(ThreadLocal.class, new ThreadLocalSerializer());
-        s.getKryo().addDefaultSerializer(FiberWriter.class, new FiberWriterSerializer());
-        s.getKryo().addDefaultSerializer(CustomFiberWriter.class, new CustomFiberWriterSerializer());
-        s.getKryo().register(Fiber.class);
-        s.getKryo().register(ThreadLocal.class);
-        s.getKryo().register(InheritableThreadLocal.class);
-        s.getKryo().register(ThreadLocalSerializer.DEFAULT.class);
-        s.getKryo().register(FiberWriter.class);
-        return s;
+        return jdkSerializer;
     }
 
+    /*
     private static class FiberSerializer extends Serializer<Fiber> {
         private boolean includeThreadLocals;
 
@@ -2170,4 +2151,5 @@ public class Fiber<V> extends Strand implements Joinable<V>, Serializable, Futur
             }
         }
     }
+     */
 }

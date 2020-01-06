@@ -14,6 +14,6 @@ targetCompatibility = 11
 dependencies {
     implementation 'io.github.classgraph:classgraph:4.8.59'
     implementation 'org.slf4j:slf4j-api:1.7.20'
-    implementation 'com.google.guava:guava:26.0-jre';
+    implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.jetbrains:annotations:16.0.2'
 }

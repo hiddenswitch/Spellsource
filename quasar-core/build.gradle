@@ -88,7 +88,7 @@ dependencies {
 
     provided "org.apache.ant:ant:1.10.5"
     implementation 'com.google.errorprone:error_prone_annotations:2.1.3'
-    compile("com.google.guava:guava:${guavaVer}") {
+    implementation("com.google.guava:guava:${guavaVer}") {
         exclude group: 'com.google.errorprone', module: '*'
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
@@ -120,25 +120,15 @@ dependencies {
     implementation("org.latencyutils:LatencyUtils:2.0.3") {
         exclude group: "org.hdrhistogram", module: '*'
     }
+
+    // Will be shadowed
     compile "org.ow2.asm:asm:$asmVer"
     compile "org.ow2.asm:asm-analysis:$asmVer"
     compile "org.ow2.asm:asm-commons:$asmVer"
     compile "org.ow2.asm:asm-util:$asmVer"
 
     // The exclusions are needed to get asm 5.0.4 whilst Kryo still depends on 5.0.3
-    implementation "org.objenesis:objenesis:2.6"
-    implementation('com.esotericsoftware:reflectasm:1.11.3') {
-        exclude group: "org.ow2.asm", module: '*'
-        exclude group: 'org.objectweb.asm', module: '*'
-    }
-    implementation("com.esotericsoftware:kryo:4.0.2") {
-        exclude group: "org.ow2.asm", module: '*'
-        exclude group: "org.objenesis", module: '*'
-    }
-    implementation("de.javakaffee:kryo-serializers:0.42") {
-        exclude group: "com.esotericsoftware", module: '*'
-        exclude group: "com.esotericsoftware.kryo", module: '*'
-    }
+    compile "org.objenesis:objenesis:2.6"
 
     // this happens after we've filtered the dependency on ASM from core's module-info
     compileTestJava {
@@ -180,10 +170,11 @@ compileJava {
     options.compilerArgs << '-Xlint:-varargs'
 
     doLast {
-        scanAndInstrument(sourceSets.main, [configurations.provided, configurations.runtime])
+        scanAndInstrument(sourceSets.main, [configurations.provided, configurations.runtime, configurations.compileClasspath])
     }
 }
 
+test.dependsOn shadowJar
 test {
     useJUnit()
     moduleOptions {
@@ -257,6 +248,7 @@ check.dependsOn test
 tasks.withType(JavaExec) {
     classpath += sourceSets.test.runtimeClasspath + sourceSets.test.output
 }
+
 run.dependsOn compileJava, testClasses
 
 javadoc {
@@ -266,35 +258,30 @@ javadoc {
 
 assemble.dependsOn shadowJar
 build.dependsOn shadowJar
+//jar.finalizedBy(shadowJar)
 
 shadowJar {
     classifier = '' // overwrite jar
     destinationDir = file("$buildDir/libs")
-
     from sourceSets.main.output
-
     configurations = [project.configurations.runtime]
     dependencies {
         include(dependency('org.ow2.asm:.*:.*'))
-//            include(dependency(':high-scale-lib'))
     }
     exclude 'META-INF/INDEX.LIST'
-//      exclude 'module-info.class'
-
     relocate 'org.objectweb.asm.', 'co.paralleluniverse.asm.'
-//        relocate 'org.cliffc.high_scale_lib.', 'co.paralleluniverse.high_scale_lib.'
 
     manifest {
         attributes(
-                "Implementation-Title"      :   project.name,
-                "Implementation-Version"    :   version,
-                "Implementation-Vendor"     :   vendor,
-                "Automatic-Module-Name"     :   project.moduleName,
-                "Premain-Class"             :   "co.paralleluniverse.fibers.instrument.JavaAgent",
-                "Agent-Class"               :   "co.paralleluniverse.fibers.instrument.JavaAgent",
-                "Can-Retransform-Classes"   :   "true",
-                "Can-Redefine-Classes"      :   "true",
-                "Built-By"                  :   System.getProperty("user.name"),
+                "Implementation-Title": project.name,
+                "Implementation-Version": version,
+                "Implementation-Vendor": vendor,
+                "Automatic-Module-Name": moduleName,
+                "Premain-Class": "co.paralleluniverse.fibers.instrument.JavaAgent",
+                "Agent-Class": "co.paralleluniverse.fibers.instrument.JavaAgent",
+                "Can-Retransform-Classes": "true",
+                "Can-Redefine-Classes": "true",
+                "Built-By": System.getProperty("user.name"),
         )
     }
 }
@@ -352,6 +339,12 @@ def scanAndInstrument(SourceSet sset, configs) {
     // Filter out the 'requires org.objectweb.asm' from quasar-core's module-info, as it will be shadowed into the jar
     ant.taskdef(name: 'filterModules', classname: 'co.paralleluniverse.fibers.instrument.ModuleFilterTask', classpath: cp)
     ant.filterModules(module: 'org.objectweb.asm') {
+        fileset(dir: sset.output.classesDirs.asPath)
+    }
+    ant.filterModules(module: 'org.objectweb.asm.util') {
+        fileset(dir: sset.output.classesDirs.asPath)
+    }
+    ant.filterModules(module: 'org.objectweb.asm.commons') {
         fileset(dir: sset.output.classesDirs.asPath)
     }
 }
