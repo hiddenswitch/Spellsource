@@ -488,12 +488,12 @@ def run(mongo_url: str = None, gradle_cmd: str = 'gradle', default_gradle: bool 
     import os.path
     if os.path.isfile('build.gradle'):
         try:
-            java = Popen(split(f'{gradle_cmd} net:local'))
+            java = Popen(split(f'{gradle_cmd} net:run'))
         except OSError as e:
             if e.errno == errno.ENOENT:
                 gradle_cmd = get_gradle_cmd()
                 try:
-                    java = Popen(split(f'{gradle_cmd} net:local'))
+                    java = Popen(split(f'{gradle_cmd} net:run'))
                 except OSError as e2:
                     if e2.errno == errno.ENOENT:
                         java = java_main()

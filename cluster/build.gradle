@@ -22,6 +22,7 @@ dependencies {
     implementation project(':cards')
     implementation project(':hearthstone')
 
+    implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.7'
     implementation 'commons-io:commons-io:2.5'
     implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'

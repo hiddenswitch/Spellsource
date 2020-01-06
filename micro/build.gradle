@@ -3,7 +3,10 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "application"
     id "net.ltgt.apt-eclipse" version "0.21"
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
+
+apply plugin: 'org.javamodularity.moduleplugin'
 
 group 'com.hiddenswitch'
 version '0.8.59'
