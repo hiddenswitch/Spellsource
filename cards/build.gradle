@@ -8,6 +8,8 @@ apply plugin: 'org.javamodularity.moduleplugin'
 
 dependencies {
     implementation project(':core')
+    testImplementation project(':quasar-core')
+    testImplementation 'com.google.guava:guava:26.0-jre'
     testImplementation 'io.github.classgraph:classgraph:4.8.59'
     testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation project(':testutils')
