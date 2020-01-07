@@ -11,7 +11,7 @@ import com.hiddenswitch.spellsource.net.Broadcaster;
 public class LocalClustered {
 	public static void main(String args[]) {
 		Applications.startServer(vertx -> vertx.result().deployVerticle(Broadcaster.create(), done -> {
-			System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
+			Applications.LOGGER.info("main: Broadcaster deployed");
 		}));
 	}
 }
