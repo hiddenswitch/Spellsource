@@ -13,7 +13,7 @@ import java.io.IOException;
  * method to ensure that each card is well formed and can be parsed.
  */
 public class CardValidationTests extends TestBase {
-	private static final String CARDS_DIR = "src/main/resources/hearthstone/"; // relative path from module root
+	private static final String CARDS_DIR = "src/main/resources/cards/hearthstone/"; // relative path from module root
 
 	public static Object[][] getCardFiles() {
 		return CardValidation.getCardFiles(CARDS_DIR);
