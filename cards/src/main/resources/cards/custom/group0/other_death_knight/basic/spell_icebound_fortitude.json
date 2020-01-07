@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Gain 10 Armor. Freeze your champion.",
+  "description": "Gain 10 Armor. Stun your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -4400,6 +4400,7 @@ public class CustomCardsTests extends TestBase {
 	public void testGravekeeperGallows() {
 		runGym(((context, player, opponent) -> {
 			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
+			Card notWeapon = receiveCard(context,player,CardCatalogue.getOneOneNeutralMinionCardId());
 			Card weapon = receiveCard(context, player, "weapon_slapdagger");
 			destroy(context, grallows);
 			assertEquals(weapon.getDescription(), "Aftermath: Summon Grallows.");

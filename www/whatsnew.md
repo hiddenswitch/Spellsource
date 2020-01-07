@@ -4,8 +4,18 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.60-3.0.7 (In Progress)
+### 0.8.60-3.0.7 (January 7, 2020)
 
+ - Lesser Old One, Doomed Expedition and Raise the Dead are now correctly in the collection. (server fix #1475)
+ - Phanton Advisor no longer has text for the purposes of Fifi Fizzlewarp. (server fix #1469, server fix #1466)
+ - Changes to the way games are kept alive via "ping pong" style messages should prevent old matches from lingering and corrupting the battlefield. (server fix #1473, server fix #1464)
+ - Hive Mind and other force attacks will no longer expend attacks despite not attacking if the target is already destroyed. (server fix #1472)
+ - Deepsea Duel no longer accepts targets. (server fix #1471)
+ - Buffeting Elemental is now an elemental. (server fix #1468)
+ - Stun is now correctly used on Spellsource cards. (server fix #1443)
+ - Gravekeeper Gallows no longer gives its aftermath to non-weapon cards. (server fix #1463)
+ - Many statuses are now visualized on the battlefield. Tooltips will be added soon.
+ - You can now attack as quickly as you can issue commands.
  - Surveyor Skag no longer puts the same card copied multiple times at the bottom of your deck. 
  - Destroying minions that go dormant during their summoning phase no longer crashes the game. For example, if Paven, Elemental of Surprise gained Miserable Conclusion (a destroy effect) on its Opener due to Alagard's Infusion and then destroys itself in the Opener, it correctly transforms into its permanent.
 

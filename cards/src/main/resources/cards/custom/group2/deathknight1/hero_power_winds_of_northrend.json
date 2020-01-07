@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Gain 8 Armor, then Freeze your champion.",
+  "description": "Gain 8 Armor, then Stun your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

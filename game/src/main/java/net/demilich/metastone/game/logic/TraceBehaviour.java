@@ -33,7 +33,7 @@ class TraceBehaviour extends UtilityBehaviour {
 	 */
 	TraceBehaviour(
 			int playerId,
-			List<MulliganTrace> mulligans,
+			@Nullable List<MulliganTrace> mulligans,
 			AtomicInteger nextAction,
 			List<Integer> actions,
 			@Nullable Consumer<GameContext> beforeRequestActionHandler) {
@@ -55,6 +55,9 @@ class TraceBehaviour extends UtilityBehaviour {
 		if (recorder != null) {
 			recorder.accept(context);
 		}
+		if (mulligans == null || mulligans.isEmpty()) {
+			throw new CancellationException();
+		}
 		int id = player.getId();
 		int index = 0;
 		if (mulligans.get(1).getPlayerId() == id) {
@@ -62,9 +65,6 @@ class TraceBehaviour extends UtilityBehaviour {
 		}
 		if (playerId != id) {
 			return Collections.emptyList();
-		}
-		if (mulligans == null) {
-			throw new CancellationException();
 		}
 		return mulligans.get(index)
 				.getEntityIds()

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
-  "description": "Quest: Freeze, Silence, or heal 9 characters. Reward: The Omega Rune.",
+  "description": "Quest: Stun, Silence, or heal 9 characters. Reward: The Omega Rune.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
