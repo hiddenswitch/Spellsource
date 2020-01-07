@@ -2,7 +2,7 @@ micronaut:
   application:
     name: micro
 jackson:
-  bean-introspection-module: false
+  bean-introspection-module: true
 tracing:
   jaeger:
     enabled: true

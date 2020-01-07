@@ -76,7 +76,7 @@ public final class HearthstoneCardResources extends AbstractCardResources<Hearth
 
 	@Override
 	public String getDirectoryPrefix() {
-		return "hearthstone";
+		return "cards/hearthstone";
 	}
 
 	@Override
