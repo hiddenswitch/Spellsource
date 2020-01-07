@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
-	private final Logger logger = LoggerFactory.getLogger(Broadcaster.class.getName());
+	private final Logger LOGGER = LoggerFactory.getLogger(Broadcaster.class);
 	private final String multicastAddress = "230.0.0.1";
 	private final String clientCall = "LOXX";
 	private final String responsePrefix = "SPLL";
@@ -31,7 +31,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 			startFuture.fail("No valid network interface found.");
 			return;
 		}
-		logger.debug("Broadcasting " + networkInterface.toString());
+		LOGGER.info("start: Broadcasting {}", networkInterface.toString());
 		hostSockets.put(networkInterface, createDatagramSocket(networkInterface, startFuture));
 	}
 
@@ -43,13 +43,17 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 				.setReusePort(true))
 				.listen(getMulticastPort(), "0.0.0.0", next -> {
 					next.result().listenMulticastGroup(multicastAddress, networkInterface.getName(), null, listener -> {
+						if (listener.failed()) {
+							LOGGER.error("createDatagramSocket: Failed to listen to multicast group", listener.cause());
+							isListening.fail(listener.cause());
+						}
 						final DatagramSocket socket = listener.result();
 						socket.handler(packet -> {
 							if (!packet.data().getString(0, clientCall.length()).equals(clientCall)) {
 								return;
 							}
 
-							logger.debug("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
+							LOGGER.info("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
 							socket.send(getResponsePrefix() + "http://" + host + ":" + Configuration.apiGatewayPort() + "/", getMulticastPort(), getMulticastAddress(), Promise.promise());
 						});
