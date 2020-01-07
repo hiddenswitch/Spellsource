@@ -11,7 +11,7 @@ services:
       --retry \
       --acme \
       --acme.tlschallenge \
-      --acme.email="benjamin.s.berman@gmail.com" \
+      --acme.email="${ACME_EMAIL}" \
       --acme.storage="/data/acme.json" \
       --acme.entrypoint="https" \
       --acme.ondemand=true \
@@ -35,14 +35,13 @@ services:
     image: doctorpangloss/spellsource:latest
     environment:
       - MONGO_URL=mongodb://mongo:27017/metastone
-      - SPELLSOURCE_APPLICATION=Local
+      - SPELLSOURCE_APPLICATION=Clustered
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
-      - SPAN_STORAGE_TYPE=elasticsearch
       - REPORTER_GRPC_HOST_PORT=jaeger-collector:14250
     networks:
       - web
@@ -119,8 +118,8 @@ services:
       - MEDIAWIKI_SITE_NAME=Spellsource
       - MEDIAWIKI_URL=https://wiki.hiddenswitch.com
       - MEDIAWIKI_LOGO_URL=/resources/assets/wiki.png
-      - MEDIAWIKI_AWS_REGION=us-east-2
-      - MEDIAWIKI_AWS_BUCKET_ID=minionate
+      - MEDIAWIKI_AWS_REGION=${MEDIAWIKI_AWS_REGION}
+      - MEDIAWIKI_AWS_BUCKET_ID=${MEDIAWIKI_AWS_BUCKET_ID}
       - MEDIAWIKI_PARSOID_URL=http://parsoid:8000
       - MEDIAWIKI_PARSOID_DOMAIN=mediawiki
       - MEDIAWIKI_DB_TYPE=mysql

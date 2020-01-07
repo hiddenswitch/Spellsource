@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.59
+SPELLSOURCE_VERSION=0.8.60
+SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -211,10 +212,8 @@ if [[ "$bump_version" = true ]] ; then
     build.gradle \
     python/setup.py \
     deploy.sh \
-    server.sh \
-    Dockerfile \
     python/spellsource/context.py \
-    net/src/main/java/com/hiddenswitch/spellsource/Version.java \
+    net/src/main/java/com/hiddenswitch/spellsource/net/Version.java \
     gradle.properties
   SPELLSOURCE_VERSION=new_version
 fi
@@ -387,10 +386,33 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_
     exit 1
   }
 
-  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}.jar" ]] ; then
+  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar" ]] ; then
     echo "Failed to build. jar not found!"
     exit 1
   fi
+fi
+
+if [[ "$deploy_docker" = true ]] ; then
+
+  # Build image and upload to docker
+  echo "Building and uploading Docker image"
+  docker build -t doctorpangloss/spellsource . && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest && \
+  docker push doctorpangloss/spellsource:latest
+  docker push doctorpangloss/spellsource:${SPELLSOURCE_VERSION}
+
+
+  # Update specific service for now instead of stack
+  { # try
+    # Figure out the service ID
+    service_name=spellsource_game
+    portainer_image_name="doctorpangloss/spellsource:latest"
+    update_portainer ${service_name} ${portainer_image_name}
+  } || { # catch
+    echo "Failed to update service"
+    exit 1
+  }
 fi
 
 if [[ "$deploy_www" = true ]] ; then
@@ -404,32 +426,16 @@ if [[ "$deploy_www" = true ]] ; then
     exit 1
   fi
 
-  cd www
-  ./deploy.sh
-  cd ..
-  echo "Deployed web"
-fi
-
-if [[ "$deploy_docker" = true ]] ; then
-
-  # Build image and upload to docker
-  echo "Building and uploading Docker image"
-  docker build -t doctorpangloss/spellsource . && \
-  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} && \
-  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest && \
-  docker push doctorpangloss/spellsource:latest
-
-
-  # Update specific service for now instead of stack
   { # try
-    # Figure out the service ID
-    service_name=spellsource_game
-    portainer_image_name="doctorpangloss/spellsource:latest"
-    update_portainer ${service_name} ${portainer_image_name}
+    cd www
+    ./deploy.sh
+    cd ..
   } || { # catch
-    echo "Failed to update service"
+    echo "Failed to publish the website, try using java 8 with sdkman"
     exit 1
   }
+
+  echo "Deployed web"
 fi
 
 if [[ "$deploy_python" = true ]] ; then
@@ -475,7 +481,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.59-all.jar \
+      ./net/build/libs/net-0.8.60-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

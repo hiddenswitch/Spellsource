@@ -78,13 +78,13 @@ public class FightSpell extends Spell {
 			return;
 		}
 
-		// Only attack sources that aren't destroyed
-		if (!target.isInPlay() || target.isDestroyed()) {
-			logger.debug("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
-			return;
-		}
-
 		for (Entity resolvedSource : resolvedSources) {
+			// Only attack sources that aren't destroyed
+			if (!target.isInPlay() || target.isDestroyed()) {
+				logger.debug("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
+				return;
+			}
+
 			if (!(resolvedSource instanceof Actor)) {
 				logger.error("onCast {} {}: Source entity {} targeting {} is not an Actor", context.getGameId(), source, resolvedSource, target);
 				continue;

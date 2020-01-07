@@ -10,6 +10,6 @@ public interface Version {
 	 * @return A semver version.
 	 */
 	static String version() {
-		return "0.8.59";
+		return "0.8.60";
 	}
 }

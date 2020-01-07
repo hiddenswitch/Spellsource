@@ -213,8 +213,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 			if (routingContext.failure() != null) {
 				if (!routingContext.response().closed()) {
-					routingContext.response().end(Serialization.serialize(new SpellsourceException().message(
-							routingContext.failure().getMessage() + "\n" + Throwables.getStackTraceAsString(routingContext.failure()))));
+					routingContext.response().end(Serialization.serialize(new SpellsourceException().message(routingContext.failure().getMessage())));
 				}
 			} else {
 				if (!routingContext.response().closed()) {
