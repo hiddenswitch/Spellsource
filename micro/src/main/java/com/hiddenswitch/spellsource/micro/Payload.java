@@ -1,21 +1,20 @@
 package com.hiddenswitch.spellsource.micro;
 
-//import io.micronaut.core.annotation.Introspected;
-import net.demilich.metastone.game.logic.Trace;
+import io.micronaut.core.annotation.Introspected;
 
-//@Introspected
+@Introspected
 public class Payload {
-	private Trace trace;
+	private RequestTrace trace;
 	private int playerId;
 
 	public Payload() {
 	}
 
-	public Trace getTrace() {
+	public RequestTrace getTrace() {
 		return trace;
 	}
 
-	public Payload setTrace(Trace trace) {
+	public Payload setTrace(RequestTrace trace) {
 		this.trace = trace;
 		return this;
 	}

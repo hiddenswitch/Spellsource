@@ -66,13 +66,11 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractCardResources<T> implements CardResources {
 	protected final Logger LOGGER;
-	private final Class<T> thisClass;
 	private AtomicBoolean isLoaded = new AtomicBoolean();
 	private List<ResourceInputStream> resources;
 	private AutoCloseable closeable;
 
 	protected AbstractCardResources(Class<T> thisClass) {
-		this.thisClass = thisClass;
 		LOGGER = LoggerFactory.getLogger(thisClass);
 	}
 

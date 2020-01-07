@@ -9,6 +9,8 @@ apply plugin: 'application'
 apply plugin: 'org.javamodularity.moduleplugin'
 apply from: '../gradle/instrument.gradle'
 
+mainClassName = 'com.hiddenswitch.cluster.application.Simulate'
+
 shadowJar {
     zip64 true
 }

@@ -28,8 +28,9 @@ task uninstrumentedCompileJava(type: JavaCompile) {
 }
 
 task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
-    dependsOn uninstrumentedCompileJava
+    dependsOn uninstrumentedCompileJava, processResources
     from { uninstrumentedCompileJava.destinationDir }
+    from { processResources.destinationDir }
     archiveClassifier = 'uninstrumented'
 }
 
