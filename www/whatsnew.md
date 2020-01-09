@@ -6,6 +6,8 @@ permalink: /whats-new/
 
 ### 0.8.61-3.0.8 (In Progress)
 
+ - Secrets and quests now render on the battlefield.
+ - The champion now shows when it is stunned. (server fix #368)
  - Thousand Year Hatred now destroys all minions wherever they are, not just if they are on the battlefield. (server fix #1478)
  - Yokai Fire now deals 4 damage only when a Demon is destroyed that turn. (server fix #1479)
  - The AI has been reverted to a higher performance level and should no longer heal its opponent. However, there may be another underlying issue that is causing the AI to be confused about which point of view it should play from. (server fix #1477)
