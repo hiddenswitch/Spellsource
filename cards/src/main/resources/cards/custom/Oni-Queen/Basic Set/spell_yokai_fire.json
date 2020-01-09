@@ -12,9 +12,12 @@
       "class": "ComparisonCondition",
       "value1": {
         "class": "DiedThisTurnValueProvider",
-        "targetPlayer": "BOTH"
+        "targetPlayer": "BOTH",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "DEMON"
+        }
       },
-      "race": "DEMON",
       "value2": 0,
       "operation": "GREATER"
     },

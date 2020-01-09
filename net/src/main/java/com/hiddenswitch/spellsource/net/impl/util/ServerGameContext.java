@@ -31,7 +31,6 @@ import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -182,10 +181,13 @@ public class ServerGameContext extends GameContext implements Server {
 					player.getAttributes().put(kv.getKey(), kv.getValue());
 				}
 
+				Closeable closeableBehaviour = null;
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
-					setBehaviour(configuration.getPlayerId(), new BotsServiceBehaviour());
+					BotsServiceBehaviour behaviour = new BotsServiceBehaviour(gameId);
+					setBehaviour(configuration.getPlayerId(), behaviour);
+					closeableBehaviour = behaviour;
 					// Does not have a client representing it
 				} else {
 					// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
@@ -217,7 +219,7 @@ public class ServerGameContext extends GameContext implements Server {
 							configuration.getNoActivityTimeout());
 
 					// This client too needs to be closed
-					closeables.add(client);
+					closeableBehaviour = client;
 
 					// Once the game is disposed, there should be no more client instances referenced here
 					closeables.add(fut -> {
@@ -245,6 +247,8 @@ public class ServerGameContext extends GameContext implements Server {
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
+
+				closeables.add(closeableBehaviour);
 			}
 		} finally {
 			span.finish();
@@ -933,7 +937,7 @@ public class ServerGameContext extends GameContext implements Server {
 		Span span = spanBuilder.start();
 
 		try (Scope s1 = tracer.activateSpan(span)) {
-			@Nullable Context context = Vertx.currentContext();
+			Context context = Vertx.currentContext();
 			if (context == null) {
 				return;
 			}

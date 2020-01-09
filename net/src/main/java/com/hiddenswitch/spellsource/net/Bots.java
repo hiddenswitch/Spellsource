@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
 import io.vertx.core.Context;
+import io.vertx.core.Promise;
 import io.vertx.core.json.jackson.JacksonCodec;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.net.impl.GameId;
@@ -47,10 +48,12 @@ public interface Bots {
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(
 			() -> new GameStateValueBehaviour()
 					.setParallel(false)
-					.setTimeout(150)
-					.setLethalTimeout(1500));
+					.setMaxDepth(3)
+					.setTimeout(1250)
+					.setLethalTimeout(10000));
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {
 	};
+	String BOTS_INDEX_PLANS = "Bots/indexPlans";
 
 	/**
 	 * Decide which cards to mulligan given a starting hand.
@@ -91,7 +94,7 @@ public interface Bots {
 			// See if there's a cache of bot plans for this action
 			if (behaviour instanceof GameStateValueBehaviour) {
 				GameStateValueBehaviour gsvb = (GameStateValueBehaviour) behaviour;
-				SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate("Bots/indexPlans");
+				SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate(BOTS_INDEX_PLANS);
 				GameId gameId = request.gameId;
 				Buffer buf = map.get(gameId);
 				if (buf != null) {
@@ -129,6 +132,15 @@ public interface Bots {
 		context.setLogic(new GameLogic());
 		context.setDeckFormat(request.format);
 		context.setGameState(request.gameState);
+		int playerId;
+		if (context.getActivePlayerId() != request.playerId) {
+			span.setTag("botRequestedPlayedId", request.playerId);
+			span.setTag("activePlayerId", request.gameState.getActivePlayerId());
+			Tracing.error(new IllegalArgumentException("A bot request action was done for a botId that did not match the active player in the context. The botId should be 1, the active player was " + context.getActivePlayerId() + " and the requested player was " + request.playerId), span, false);
+			playerId = 1;
+		} else {
+			playerId = request.playerId;
+		}
 		context.setActivePlayerId(request.playerId);
 		Context executionContext = Vertx.currentContext();
 		try {
@@ -142,7 +154,7 @@ public interface Bots {
 						thread.setName("spellsource-bot-thread-" + oldName);
 						// Force a yield so that the name gets recorded?
 						Strand.yield();
-						final GameAction res1 = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+						final GameAction res1 = behaviour.requestAction(context, context.getPlayer(playerId), request.validActions);
 						Strand.yield();
 						thread.setName(oldName);
 						long endTime = System.currentTimeMillis();
@@ -209,6 +221,24 @@ public interface Bots {
 	static String getRandomDeck(UserRecord bot) {
 		// TODO: Prevent the bot from choosing a tavern brawl configuration here.
 		return bot.getDecks().get(RandomUtils.nextInt(0, bot.getDecks().size()));
+	}
+
+	/**
+	 * Removes the index (cached bot computation) for the specified game asynchronously.
+	 *
+	 * @param gameId The game to remove the index for.
+	 * @return A promise with the index.
+	 */
+	static Promise<Buffer> removeIndex(GameId gameId) {
+		Promise<Buffer> promise = Promise.promise();
+		SuspendableMap.<GameId, Buffer>getOrCreate(BOTS_INDEX_PLANS, res -> {
+			if (res.succeeded()) {
+				res.result().remove(gameId, promise);
+			} else {
+				promise.fail(res.cause());
+			}
+		});
+		return promise;
 	}
 
 	static Supplier<? extends Behaviour> getBehaviour() {

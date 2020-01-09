@@ -14,9 +14,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -386,7 +384,8 @@ public enum Attribute {
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * 		the battlefield.
-	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual situation where minions enter the battlefield.
+	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual
+	 * 		situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**
@@ -426,6 +425,9 @@ public enum Attribute {
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the full spell damage calculation.
 	 */
 	SPELL_DAMAGE_AMPLIFY_MULTIPLIER,
+	/**
+	 * Applies a multiplier to the amount of hero damage the owning player's skill deals.
+	 */
 	HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER,
 	/**
 	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
@@ -979,21 +981,44 @@ public enum Attribute {
 	 */
 	QUICK_DRAW,
 	/**
-	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
-	 * <p>
+	 * Allows spell effects to count and keep track of values without a dedicate enchantment.
 	 */
 	RESERVED_INTEGER_1,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_2,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_3,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_4,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_5,
 	/**
-	 * Allows spell effects to mark things, interpreted however they'd like.
+	 * Allows spell effects to mark things without a dedicated enchantment.
 	 */
 	RESERVED_BOOLEAN_1,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_2,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_3,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_4,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_5,
 	/**
 	 * Counts the number of supremacies (kills, but not overkills) that the {@link Actor} has achieved.
@@ -1054,34 +1079,92 @@ public enum Attribute {
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
 	TREANT,
+	/**
+	 * Indicates how much an entity has {@link net.demilich.metastone.game.spells.DrainSpell} drained this turn.
+	 */
 	DRAINED_THIS_TURN,
+	/**
+	 * Indicates how much an entity has {@link net.demilich.metastone.game.spells.DrainSpell} drained over its lifetime.
+	 */
 	TOTAL_DRAINED,
+	/**
+	 * Indicates how much an entity has {@link net.demilich.metastone.game.spells.DrainSpell} drained last turn.
+	 */
 	DRAINED_LAST_TURN,
 	/**
 	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
 	 */
 	SURGE,
+	/**
+	 * An override for the entity's description that indicates it has an {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
+	 * <p>
+	 * Contains an array {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc[]}.
+	 */
 	DYNAMIC_DESCRIPTION,
+	/**
+	 * Stores passive auras, i.e., auras that are active while the entity is in the hand.
+	 */
 	PASSIVE_AURAS,
 	CURSE,
+	/**
+	 * Drain indicates the card will deal damage to the specified target and buffs the source's HP by that amount.
+	 *
+	 * @see net.demilich.metastone.game.spells.DrainSpell for more on drains
+	 */
 	DRAIN,
 	/**
 	 * Records how much damage was dealt to minions by this player or entity this game.
 	 */
-	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME, ATTACKS_LAST_TURN;
+	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME,
+	/**
+	 * Records how many attacks last turn an actor made.
+	 */
+	ATTACKS_LAST_TURN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
 	}
 
-	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
 	private static final List<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toUnmodifiableList());
+	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
+			Attribute.ROASTED,
+			Attribute.DISCARDED,
+			Attribute.PLAYED_FROM_HAND_OR_DECK,
+			Attribute.LAST_TURN,
+			Attribute.RECEIVED_ON_TURN,
+			Attribute.SUMMONED_ON_TURN,
+			Attribute.DIED_ON_TURN
+	);
 
+	/**
+	 * Contains the list of attributes that enchant cards as opposed to actors.
+	 *
+	 * @return A list of attributes.
+	 */
 	public static List<Attribute> getCardEnchantmentAttributes() {
 		return cardEnchantmentAttributes;
 	}
 
+	/**
+	 * Contains attributes that are the {@link net.demilich.metastone.game.spells.aura.Aura} version of a corresponding
+	 * attribute.
+	 *
+	 * @return A list of attributes.
+	 */
 	public static List<Attribute> getAuraAttributes() {
 		return auraAttributes;
+	}
+
+	/**
+	 * Contains the set of attributes that store turn numbers.
+	 * <p>
+	 * This affects whether or not the entity is considered having an integer attribute in the {@link
+	 * Entity#hasAttribute(Attribute)} call.
+	 *
+	 * @return A set of attributes.
+	 */
+	public static Set<Attribute> getStoresTurnNumberAttributes() {
+		return storesTurnNumberAttributes;
 	}
 }

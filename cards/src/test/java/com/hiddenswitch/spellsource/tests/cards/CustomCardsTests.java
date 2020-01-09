@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -16,6 +17,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -23,6 +25,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +56,26 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "spell_test_spellpower", "should have drawn 1 card");
 			assertEquals(player.getDeck().size(), 29, "should have drawn 1 card");
 		});
+	}
+
+	@Test
+	public void testVohkrovanisStartOfGame() {
+		DebugContext context = createContext(HeroClass.TEST, HeroClass.TEST, false, new DeckFormat().withCardSets(CardSet.SPELLSOURCE_BASIC));
+		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(CardCatalogue::getOneOneNeutralMinionCardId)
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_vohkrovanis"));
+		});
+
+		context.init();
+		for (Player player : context.getPlayers()) {
+			assertTrue(player.getDeck().stream().noneMatch(c -> c.getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())));
+			assertTrue(player.getHand().stream().noneMatch(c -> c.getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())));
+			assertTrue(player.getHand().size() >= GameLogic.STARTER_CARDS);
+		}
 	}
 
 	@Test
@@ -3058,6 +3081,21 @@ public class CustomCardsTests extends TestBase {
 			Minion argentSquire = playMinionCard(context, player, shouldBeDrawn);
 			assertTrue(argentSquire.hasAttribute(Attribute.DIVINE_SHIELD));
 		});
+
+		// Card cost modifiers like Timebidding Magi's should work
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_timebidding_magi"));
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_mechanical_monstrosity");
+			int baseCost = shouldBeDrawn.getBaseManaCost();
+			assertTrue(baseCost > 4);
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			context.getLogic().discardCard(player, fifi);
+			Card drawnCard = context.getLogic().drawCard(player.getId(), player);
+			assertEquals(drawnCard, shouldBeDrawn.transformResolved(context));
+			shouldBeDrawn = (Card) shouldBeDrawn.transformResolved(context);
+			assertEquals(0, costOf(context, player, shouldBeDrawn));
+		});
 	}
 
 	@Test
@@ -4400,7 +4438,7 @@ public class CustomCardsTests extends TestBase {
 	public void testGravekeeperGallows() {
 		runGym(((context, player, opponent) -> {
 			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
-			Card notWeapon = receiveCard(context,player,CardCatalogue.getOneOneNeutralMinionCardId());
+			Card notWeapon = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
 			Card weapon = receiveCard(context, player, "weapon_slapdagger");
 			destroy(context, grallows);
 			assertEquals(weapon.getDescription(), "Aftermath: Summon Grallows.");

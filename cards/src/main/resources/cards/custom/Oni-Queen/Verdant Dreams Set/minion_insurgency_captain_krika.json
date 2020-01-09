@@ -10,26 +10,23 @@
   "description": "Opener: If your champion attacked 3 times this game, give your minions Dash this game.[]",
   "battlecry": {
     "targetSelection": "NONE",
-    "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "ComparisonCondition",
-        "operation": "GREATER_OR_EQUAL",
-        "value1": {
-          "class": "AttributeValueProvider",
-          "attribute": "ATTACKS_THIS_GAME",
-          "target": "FRIENDLY_HERO"
-        },
-        "value2": 3
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACKS_THIS_GAME",
+        "target": "FRIENDLY_HERO"
       },
-      "spell": {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "aura": {
-          "class": "AttributeAura",
-          "target": "FRIENDLY_MINIONS",
-          "attribute": "AURA_RUSH"
-        }
+      "value2": 3
+    },
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "AttributeAura",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "AURA_RUSH"
       }
     }
   },

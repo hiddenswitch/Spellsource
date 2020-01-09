@@ -8,6 +8,10 @@ import com.hiddenswitch.spellsource.net.models.MulliganRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionResponse;
 import io.opentracing.SpanContext;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Closeable;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -18,8 +22,14 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public class BotsServiceBehaviour extends UtilityBehaviour {
+public class BotsServiceBehaviour extends UtilityBehaviour implements Closeable {
 	private static final Logger logger = org.slf4j.LoggerFactory.getLogger(BotsServiceBehaviour.class);
+	private final GameId gameId;
+
+	public BotsServiceBehaviour(GameId gameId) {
+		this.gameId = gameId;
+	}
+
 
 	@Override
 	public String getName() {
@@ -59,5 +69,17 @@ public class BotsServiceBehaviour extends UtilityBehaviour {
 	@Override
 	public boolean isHuman() {
 		return false;
+	}
+
+	@Override
+	public void close(Handler<AsyncResult<Void>> completionHandler) {
+		// Remove the index plan entry
+		Bots.removeIndex(gameId).future().setHandler(h -> {
+			if (h.succeeded()) {
+				completionHandler.handle(Future.succeededFuture());
+			} else {
+				completionHandler.handle(Future.failedFuture(h.cause()));
+			}
+		});
 	}
 }

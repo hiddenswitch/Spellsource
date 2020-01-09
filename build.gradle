@@ -9,6 +9,9 @@ allprojects {
     project.version = '0.8.60'
 }
 
+def jacksonVersion = '2.10.2'
+def jacksonDatabindVersion = '2.10.2'
+
 subprojects {
     repositories {
         jcenter()
@@ -27,9 +30,14 @@ subprojects {
                         'com.fasterxml.jackson.core',
                         'com.fasterxml.jackson.jaxrs',
                         'com.fasterxml.jackson.datatype',
-                        'com.fasterxml.jackson.module'
+                        'com.fasterxml.jackson.module',
+                        'com.fasterxml.jackson.dataformat'
                 ].contains(details.requested.group)) {
-                    details.useVersion "2.10.2"
+                    if (details.requested.name == 'jackson-databind') {
+                        details.useVersion jacksonDatabindVersion
+                    } else {
+                        details.useVersion jacksonVersion
+                    }
                 }
 
                 if (details.requested.group == 'io.jaegertracing') {

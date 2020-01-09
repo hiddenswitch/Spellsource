@@ -4,9 +4,25 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.61-3.0.7 (In Progress)
+### 0.8.61-3.0.8 (In Progress)
 
  - Thousand Year Hatred now destroys all minions wherever they are, not just if they are on the battlefield. (server fix #1478)
+ - Yokai Fire now deals 4 damage only when a Demon is destroyed that turn. (server fix #1479)
+ - The AI has been reverted to a higher performance level and should no longer heal its opponent. However, there may be another underlying issue that is causing the AI to be confused about which point of view it should play from. (server fix #1477)
+ - Discards on the first turn now occur. (server fix #1470, server fix #1070)
+ - Other effects that rely on the turn when an event occurred now track correctly on the first turn. This includes roasting, discarding, the turn a card was played from the hand or the deck, the last turn a player played (for the purposes of extra turns), the turn a card was put into the hand, the turn a minion was summoned, and the turn a minion died.
+ - When playing Fifi, a card given Timebidding Magi's text will now reduce the cost of the card by the host card's base cost, i.e. down to 0. (server fix #1474)
+ - Formless cards are now correctly labeled in the card text as being Permanents. (server fix #1467)
+ - Permanents now no longer have an attack and HP value shown. (server fix #1467)
+ - The spacing between minions on the battlefield has been tightened.
+ - Weapons now have a default sprite shown.
+ - Doodles now refreshes your skill when she comes into play. (server fix #1465)
+ - Duplifairy now correctly references itself. (server fix #1458)
+ - Putting cards from the deck to the hand (as opposed to drawing them from the top of the deck) now correctly increments the count of cards the player has drawn.
+ - Gather in the Shadows now correctly reduces the cost of Undertide Terror. (server fix #1456)
+ - Terrified Tanuki is now a 1/3, down from 1/4. (server fix #1454)
+ - Insurgency Captain Krika now correctly activates every time its owner's hero attacks. (server fix #1442)
+ - Bluefist Trainer, Liver Eater, and Bogovey Traitor now have their appropriate tribes. (server fix #1442)
 
 ### 0.8.60-3.0.7 (January 7, 2020)
 

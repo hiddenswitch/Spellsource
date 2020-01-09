@@ -26,6 +26,54 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test
+	public void testShouldNotHealEnemyChampion() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 9; i++) {
+				receiveCard(context, player, DeckFormat.spellsource().getSecondPlayerBonusCards()[0]);
+			}
+			opponent.getHero().setHp(29);
+			GameStateValueBehaviour gsvb = new GameStateValueBehaviour()
+					.setParallel(false)
+					.setTimeout(150)
+					.setLethalTimeout(1500);
+			player.setMana(10);
+			context.setBehaviour(player.getId(), gsvb);
+			while (context.takeActionInTurn()) {
+			}
+			assertEquals(29, opponent.getHero().getHp());
+		}, HeroClass.OLIVE, HeroClass.OLIVE);
+
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 9; i++) {
+				receiveCard(context, player, "spell_restorative_words");
+			}
+			opponent.getHero().setHp(29);
+			GameStateValueBehaviour gsvb = new GameStateValueBehaviour()
+					.setParallel(false)
+					.setTimeout(150)
+					.setLethalTimeout(1500);
+			player.setMana(10);
+			context.setBehaviour(player.getId(), gsvb);
+			while (context.takeActionInTurn()) {
+			}
+			assertEquals(29, opponent.getHero().getHp());
+		}, HeroClass.OLIVE, HeroClass.OLIVE);
+
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(29);
+			GameStateValueBehaviour gsvb = new GameStateValueBehaviour()
+					.setParallel(false)
+					.setTimeout(150)
+					.setLethalTimeout(1500);
+			player.setMana(10);
+			context.setBehaviour(player.getId(), gsvb);
+			while (context.takeActionInTurn()) {
+			}
+			assertEquals(30, player.getHero().getHp());
+		}, HeroClass.OLIVE, HeroClass.OLIVE);
+	}
+
+	@Test
 	public void testDesertMaiden() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_test_gain_mana");
