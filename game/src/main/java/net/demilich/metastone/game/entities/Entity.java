@@ -225,7 +225,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			return (boolean) value;
 		}
 
-		if (value instanceof Integer) {
+		if (value instanceof Integer && !Attribute.getStoresTurnNumberAttributes().contains(attribute)) {
 			return ((int) value) != 0;
 		}
 

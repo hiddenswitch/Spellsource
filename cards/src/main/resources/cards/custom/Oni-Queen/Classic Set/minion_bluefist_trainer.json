@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "RARE",
+  "race": "DEMON",
   "description": "After another friendly minion survives damage, give it +2 Attack.",
   "trigger": {
     "eventTrigger": {

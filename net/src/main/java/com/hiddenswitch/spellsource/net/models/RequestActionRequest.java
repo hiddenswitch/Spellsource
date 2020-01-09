@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by bberman on 12/7/16.
+ * Encodes a request for a bot to make a move.
  */
 public class RequestActionRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +28,6 @@ public class RequestActionRequest implements Serializable {
 		this.playerId = playerId;
 		this.validActions = validActions;
 		this.format = format;
-		this.spanContext=spanContext;
+		this.spanContext = spanContext;
 	}
 }

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -10,6 +11,37 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OniQueenTests extends TestBase {
+
+	@Test
+	public void testInsurgencyCaptainKrika() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			playCard(context, player, "weapon_test_1_3");
+			attack(context, player, player.getHero(), opponent.getHero());
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertFalse(target.hasAttribute(Attribute.AURA_RUSH));
+			playCard(context, player, "minion_insurgency_captain_krika");
+			assertFalse(target.hasAttribute(Attribute.AURA_RUSH));
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertFalse(target.hasAttribute(Attribute.AURA_RUSH));
+			playCard(context, player, "minion_insurgency_captain_krika");
+			assertTrue(target.hasAttribute(Attribute.AURA_RUSH));
+		});
+	}
+
+	@Test
+	public void testGatherInTheShadows() {
+		runGym((context, player, opponent) -> {
+			Card undertideTerror = receiveCard(context, player, "minion_storm_giant");
+			receiveCard(context, player, "minion_storm_giant");
+			for (int i = 0; i < 4; i++) {
+				putOnTopOfDeck(context, player, "minion_storm_giant");
+			}
+			playCard(context, player, "spell_gather_in_the_shadows");
+			assertEquals(2 + 3, player.getHand().size(), "start with 2 + 3 drawn");
+			assertEquals(undertideTerror.getBaseManaCost() - 3, costOf(context, player, undertideTerror), "should have decreased by 3");
+		});
+	}
 
 	@Test
 	public void testThousandYearHatred() {

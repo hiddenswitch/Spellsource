@@ -36,6 +36,12 @@
               "howMany": 1
             }
           }
+        },
+        {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RefreshHeroPowerSpell"
+          }
         }
       ]
     }

@@ -1630,7 +1630,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public Card drawCard(int playerId, Card card, Entity source) {
 		Player player = context.getPlayer(playerId);
-		player.getStatistics().cardDrawn();
 		card = receiveCard(playerId, card, source, true);
 		return card;
 	}
@@ -1657,6 +1656,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		hero.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		hero.getAttributes().remove(Attribute.HERO_POWER_USAGES);
 		player.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
+		hero.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
 		if (hero.getWeapon() != null) {
 			hero.getWeapon().getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
@@ -1899,10 +1899,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 			context.getPlayer(hero.getOwner()).modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
 			context.getPlayer(hero.getOwner()).modifyAttribute(Attribute.ATTACKS_THIS_TURN, 1);
-		} else {
-			attacker.modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
-			attacker.modifyAttribute(Attribute.ATTACKS_THIS_TURN, 1);
 		}
+		attacker.modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
+		attacker.modifyAttribute(Attribute.ATTACKS_THIS_TURN, 1);
+
 		if (attacker.isDestroyed() && !attackerWasDestroyed) {
 			incrementedDestroyedThisSequenceCount();
 		}
@@ -3336,6 +3336,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (source instanceof Card) {
 				Card sourceCard = (Card) source;
 				sourceType = sourceCard.getCardType();
+			}
+			if (drawn) {
+				player.getStatistics().cardDrawn();
 			}
 			context.fireGameEvent(new DrawCardEvent(context, playerId, card, sourceType, drawn));
 		} else {

@@ -10,7 +10,7 @@
   "race": "BEAST",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
       "sourceEntityType": "MINION"
     },
     "spell": {

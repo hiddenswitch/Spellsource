@@ -1,0 +1,42 @@
+package com.hiddenswitch.spellsource.tests.cards;
+
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.minions.Minion;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CoreTests extends TestBase {
+	@Test
+	public void testYokaiFire() {
+		runGym((context, player, opponent) -> {
+			Minion demon = playMinionCard(context, player, "minion_demon_test");
+			int hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_yokai_fire", opponent.getHero());
+			assertEquals(hp - 2, opponent.getHero().getHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion demon = playMinionCard(context, player, "minion_demon_test");
+			demon.setHp(3);
+			playCard(context, player, "spell_yokai_fire", demon);
+			assertEquals(1, demon.getHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion demon = playMinionCard(context, player, "minion_demon_test");
+			destroy(context, demon);
+			int hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_yokai_fire", opponent.getHero());
+			assertEquals(hp - 4, opponent.getHero().getHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion notDemon = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			destroy(context, notDemon);
+			int hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_yokai_fire", opponent.getHero());
+			assertEquals(hp - 2, opponent.getHero().getHp());
+		});
+	}
+}
