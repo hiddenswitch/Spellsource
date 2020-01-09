@@ -17,6 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CustomHearthstoneInteractionTests extends TestBase {
+
+	@Test
+	public void testDeathwhelpHatchesInteraction() {
+		runGym((context, player, opponent) -> {
+			Card hatches = receiveCard(context, player, "minion_hatches_the_dragon");
+			playCard(context, player, "minion_deathwhelp");
+			assertEquals(1, player.getMinions().size());
+			assertEquals("minion_deathwhelp", player.getMinions().get(0).getSourceCard().getCardId());
+		});
+	}
+
 	@Test
 	public void testRenoJackson() {
 		runGym((context, player, opponent) -> {
