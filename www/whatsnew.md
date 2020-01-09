@@ -6,6 +6,9 @@ permalink: /whats-new/
 
 ### 0.8.61-3.0.8 (In Progress)
 
+ - The friends list now renders wider. (client fix #23)
+ - Scaling on Android should be improved. Please report issues for your specific device.
+ - Negative attack and health values will now be clipped to zero. (server fix #404, client fix #10)
  - Secrets and quests now render on the battlefield.
  - The champion now shows when it is stunned. (server fix #368)
  - Thousand Year Hatred now destroys all minions wherever they are, not just if they are on the battlefield. (server fix #1478)
