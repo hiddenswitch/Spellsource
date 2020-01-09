@@ -4,6 +4,10 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.61-3.0.7 (In Progress)
+
+ - Thousand Year Hatred now destroys all minions wherever they are, not just if they are on the battlefield. (server fix #1478)
+
 ### 0.8.60-3.0.7 (January 7, 2020)
 
  - Lesser Old One, Doomed Expedition and Raise the Dead are now correctly in the collection. (server fix #1475)

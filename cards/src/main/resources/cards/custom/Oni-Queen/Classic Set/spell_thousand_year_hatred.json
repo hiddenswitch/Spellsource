@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
-  "description": "Choose an enemy minion. Destroy all minions with the same name.",
+  "description": "Choose an enemy minion. Destroy all minions with the same name. (Wherever they are)",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -15,6 +15,22 @@
       {
         "class": "DestroySpell",
         "target": "ALL_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      },
+      {
+        "class": "RemoveCardSpell",
+        "target": "BOTH_HANDS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      },
+      {
+        "class": "RemoveCardSpell",
+        "target": "BOTH_DECKS",
         "filter": {
           "class": "SpecificCardFilter",
           "secondaryTarget": "TARGET"
