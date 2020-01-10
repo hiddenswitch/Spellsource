@@ -4,7 +4,7 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.61-3.0.8 (In Progress)
+### 0.8.61-3.0.8 (January 9, 2020)
 
  - Faceless Nightmare, Totemic Split, Ichor Conversion, Felstalker, Shadow Satyr, Nightmare Portal, and Nemsy, Awakened Calamity have been moved out of the Spellsource set. Eternal Time Eater is now in the Timeweaver class. (server fix #1441)
  - Fae Flyrider, Forest Get-Together, and Tall Tales are now correctly in the Spellsource format. (server fix #1460)
