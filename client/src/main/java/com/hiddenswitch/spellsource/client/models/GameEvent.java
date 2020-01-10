@@ -78,6 +78,8 @@ public class GameEvent implements Serializable {
     
     ARMOR_GAINED("ARMOR_GAINED"),
     
+    BEFORE_PHYSICAL_ATTACK("BEFORE_PHYSICAL_ATTACK"),
+    
     BEFORE_SUMMON("BEFORE_SUMMON"),
     
     BOARD_CHANGED("BOARD_CHANGED"),
