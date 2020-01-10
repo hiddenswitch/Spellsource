@@ -7,6 +7,22 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CoreTests extends TestBase {
+
+	@Test
+	public void testBrawlerBushiBuffsBeforeAttack() {
+		runGym((context, player, opponent) -> {
+			Minion source = playMinionCard(context, player, 3, 4);
+			context.endTurn();
+			Minion target = playMinionCard(context, player, 0, 4);
+			context.endTurn();
+			playCard(context, player, "minion_brawler_bushi");
+			attack(context, player, source, target);
+			assertEquals(4, source.getAttack());
+			assertEquals(3, source.getHp());
+			assertTrue(target.isDestroyed());
+		});
+	}
+
 	@Test
 	public void testYokaiFire() {
 		runGym((context, player, opponent) -> {

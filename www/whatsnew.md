@@ -6,6 +6,9 @@ permalink: /whats-new/
 
 ### 0.8.61-3.0.8 (In Progress)
 
+ - Faceless Nightmare, Totemic Split, Ichor Conversion, Felstalker, Shadow Satyr, Nightmare Portal, and Nemsy, Awakened Calamity have been moved out of the Spellsource set. Eternal Time Eater is now in the Timeweaver class. (server fix #1441)
+ - Fae Flyrider, Forest Get-Together, and Tall Tales are now correctly in the Spellsource format. (server fix #1460)
+ - Brawler Bushi now swaps the health and attack of a minion before it deals damage with the attack, not after. (server fix #1455)
  - The friends list now renders wider. (client fix #23)
  - Scaling on Android should be improved. Please report issues for your specific device.
  - Negative attack and health values will now be clipped to zero. (server fix #404, client fix #10)

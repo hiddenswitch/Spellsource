@@ -26,6 +26,6 @@
     "RUSH": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

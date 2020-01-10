@@ -610,7 +610,20 @@ public class Spellsource {
 										json("$unset", json("friends.$.presence", null)), new UpdateOptions().setMulti(true));
 							} while (res.getDocModified() != 0);
 						}))
-				.migrateTo(39, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(40)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							removeCards(
+									"totemic_split",
+									"secret_ichor_conversion",
+									"minion_felstalker",
+									"minion_shadow_satyr",
+									"spell_nightmare_portal",
+									"hero_nemsy_awakened_calamity",
+									"minion_faceless_nightmare");
+						}))
+				.migrateTo(40, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

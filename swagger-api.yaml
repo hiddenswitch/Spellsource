@@ -872,6 +872,7 @@ definitions:
           - 'AFTER_SUMMON'
           - 'ATTRIBUTE_APPLIED'
           - 'ARMOR_GAINED'
+          - 'BEFORE_PHYSICAL_ATTACK'
           - 'BEFORE_SUMMON'
           - 'BOARD_CHANGED'
           - 'CARD_ADDED_TO_DECK'
