@@ -117,8 +117,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected boolean debug;
 	protected boolean expandDepthForLethal = true;
 	protected boolean triggerStartTurns = true;
-	protected boolean pruneEarlyEndTurn = true;
-	//	protected int numberOfLowestScoringNodesToPrune = 0;
+	protected boolean pruneEarlyEndTurn = false;
 	protected long lethalTimeout = DEFAULT_LETHAL_TIMEOUT;
 	protected int targetContextStackSize = DEFAULT_TARGET_CONTEXT_STACK_SIZE;
 	protected long requestActionStartTime = Long.MAX_VALUE;

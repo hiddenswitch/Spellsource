@@ -141,7 +141,7 @@ public interface Bots {
 		} else {
 			playerId = request.playerId;
 		}
-		context.setActivePlayerId(request.playerId);
+		context.setActivePlayerId(playerId);
 		Context executionContext = Vertx.currentContext();
 		try {
 			GameAction result = awaitResult(res -> {

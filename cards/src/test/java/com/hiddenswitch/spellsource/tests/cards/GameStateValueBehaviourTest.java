@@ -60,7 +60,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 		}, HeroClass.OLIVE, HeroClass.OLIVE);
 
 		runGym((context, player, opponent) -> {
-			player.getHero().setHp(29);
+			player.getHero().setHp(14);
 			GameStateValueBehaviour gsvb = new GameStateValueBehaviour()
 					.setParallel(false)
 					.setTimeout(150)
@@ -69,7 +69,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			context.setBehaviour(player.getId(), gsvb);
 			while (context.takeActionInTurn()) {
 			}
-			assertEquals(30, player.getHero().getHp());
+			assertEquals(17, player.getHero().getHp());
 		}, HeroClass.OLIVE, HeroClass.OLIVE);
 	}
 
