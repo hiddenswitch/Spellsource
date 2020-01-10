@@ -40,7 +40,9 @@ public class MulliganTrace implements Serializable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}
-		clone.entityIds = new ArrayList<>(entityIds);
+		if (entityIds!=null){
+			clone.entityIds = new ArrayList<>(entityIds);
+		}
 		return clone;
 	}
 }

@@ -275,14 +275,20 @@ public class Trace implements Serializable, Cloneable {
 		try {
 			Trace clone = (Trace) super.clone();
 			List<MulliganTrace> mulliganTraces = new ArrayList<>();
-			for (MulliganTrace mulliganTrace : getMulligans()) {
-				mulliganTraces.add(mulliganTrace.clone());
+			if (getMulligans() != null) {
+				for (MulliganTrace mulliganTrace : getMulligans()) {
+					mulliganTraces.add(mulliganTrace.clone());
+				}
+				clone.setMulligans(mulliganTraces);
+
 			}
-			clone.setMulligans(mulliganTraces);
-			clone.actions = new ArrayList<>(actions);
+
+			if (clone.actions != null) {
+				clone.actions = new ArrayList<>(actions);
+			}
 			return clone;
 		} catch (Exception ex) {
-			return null;
+			throw new RuntimeException(ex);
 		}
 	}
 
