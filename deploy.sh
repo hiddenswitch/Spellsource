@@ -407,7 +407,7 @@ if [[ "$deploy_docker" = true ]] ; then
   { # try
     # Figure out the service ID
     service_name=spellsource_game
-    portainer_image_name="doctorpangloss/spellsource:latest"
+    portainer_image_name="doctorpangloss/spellsource:${SPELLSOURCE_VERSION}"
     update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update service"

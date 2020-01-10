@@ -147,16 +147,17 @@ public interface Bots {
 			GameAction result = awaitResult(res -> {
 				executionContext.executeBlocking(fut -> {
 					// TODO: We shouldn't really tie up a general blocking executor for this computation.
+					Strand thread = Strand.currentStrand();
+					String oldName = thread.getName();
 					try {
 						long startTime = System.currentTimeMillis();
-						Strand thread = Strand.currentStrand();
-						String oldName = thread.getName();
-						thread.setName("spellsource-bot-thread-" + oldName);
+						if (!oldName.contains("spellsource-bot-thread-")) {
+							thread.setName("spellsource-bot-thread-" + oldName);
+						}
 						// Force a yield so that the name gets recorded?
 						Strand.yield();
 						final GameAction res1 = behaviour.requestAction(context, context.getPlayer(playerId), request.validActions);
 						Strand.yield();
-						thread.setName(oldName);
 						long endTime = System.currentTimeMillis();
 						long thinkingDelay = getDefaultBotThinkingDelay();
 						long waitTime = Math.max(thinkingDelay - endTime + startTime, 0);
@@ -166,6 +167,8 @@ public interface Bots {
 						fut.complete(res1);
 					} catch (Throwable t) {
 						fut.fail(t);
+					} finally {
+						thread.setName(oldName);
 					}
 				}, false, res);
 			});
