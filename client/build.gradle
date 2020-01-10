@@ -9,7 +9,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.javamodularity.moduleplugin'
 
 group = 'com.hiddenswitch'
-version = '0.8.59'
+version = '0.8.61'
 
 repositories {
     jcenter()
@@ -45,7 +45,6 @@ ext {
     jodatime_version = "2.10.2"
     junit_version = "4.12"
 }
-
 
 compileJava {
     options.compilerArgs += ['--add-exports=com.fasterxml.jackson.jaxrs.json/com.fasterxml.jackson.jaxrs.json=spellsource.client']
