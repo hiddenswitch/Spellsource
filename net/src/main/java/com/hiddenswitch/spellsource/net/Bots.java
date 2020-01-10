@@ -45,12 +45,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public interface Bots {
 	// Return a non-parallelized GSVB instance
-	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(
-			() -> new GameStateValueBehaviour()
-					.setParallel(false)
-					.setMaxDepth(3)
-					.setTimeout(1250)
-					.setLethalTimeout(10000));
+	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {
 	};
 	String BOTS_INDEX_PLANS = "Bots/indexPlans";
@@ -142,36 +137,23 @@ public interface Bots {
 			playerId = request.playerId;
 		}
 		context.setActivePlayerId(playerId);
-		Context executionContext = Vertx.currentContext();
 		try {
-			GameAction result = awaitResult(res -> {
-				executionContext.executeBlocking(fut -> {
-					// TODO: We shouldn't really tie up a general blocking executor for this computation.
-					Strand thread = Strand.currentStrand();
-					String oldName = thread.getName();
-					try {
-						long startTime = System.currentTimeMillis();
-						if (!oldName.contains("spellsource-bot-thread-")) {
-							thread.setName("spellsource-bot-thread-" + oldName);
-						}
-						// Force a yield so that the name gets recorded?
-						Strand.yield();
-						final GameAction res1 = behaviour.requestAction(context, context.getPlayer(playerId), request.validActions);
-						Strand.yield();
-						long endTime = System.currentTimeMillis();
-						long thinkingDelay = getDefaultBotThinkingDelay();
-						long waitTime = Math.max(thinkingDelay - endTime + startTime, 0);
-						if (waitTime > 0L) {
-							Strand.sleep(waitTime);
-						}
-						fut.complete(res1);
-					} catch (Throwable t) {
-						fut.fail(t);
-					} finally {
-						thread.setName(oldName);
+			GameAction result = awaitResult(res -> Vertx.currentContext().executeBlocking(fut -> {
+				// TODO: We shouldn't really tie up a general blocking executor for this computation.
+				try {
+					long startTime = System.currentTimeMillis();
+					final GameAction res1 = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+					long endTime = System.currentTimeMillis();
+					long thinkingDelay = getDefaultBotThinkingDelay();
+					long waitTime = Math.max(thinkingDelay - endTime + startTime, 0);
+					if (waitTime > 0L) {
+						Strand.sleep(waitTime);
 					}
-				}, false, res);
-			});
+					fut.complete(res1);
+				} catch (Throwable t) {
+					fut.fail(t);
+				}
+			}, false, res));
 
 			response.gameAction = result;
 		} catch (Throwable throwable) {
