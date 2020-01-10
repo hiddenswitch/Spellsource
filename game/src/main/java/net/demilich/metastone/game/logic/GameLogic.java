@@ -1837,6 +1837,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
+		// This BeforePhysicalAttackEvent tracks after targets are resolved and possibly overriden, but before stealth is
+		// lost, the number of attacks is modified or immunity is applied.
+		context.fireGameEvent(new BeforePhysicalAttackEvent(context, attacker, defender));
+
 		Entity entityGrantedImmunity = null;
 		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING) || attacker.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING)) {
 			applyAttribute(attacker, Attribute.IMMUNE);
@@ -1854,7 +1858,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// Damage is computed before the physical attack event, in case it is buffed. To buff before a physical attack, use
-		// a TargetAcquisitionTrigger.
+		// a BeforePhysicalAttackTrigger
 		int attackerDamage = attacker.getAttack();
 		int defenderDamage = defender.getAttack();
 		// Defender should not be changed in a physical attack event, so target overrides are ignored
@@ -4489,8 +4493,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				// Resurrect to its original position if there is one, or the rightmost position on the board
 				index = spellDesc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE, owner.getMinions().size() - 1);
 			} else {
-				index = Math.min(minion.getEntityLocation().getIndex(), owner.getMinions().size() - 1);
+				index = minion.getEntityLocation().getIndex();
 			}
+			// Make sure that the position specifically does not insert the minion somewhere it can't be, because we might be
+			// processing multiple deathrattles and thus multiple minions have been removed, but not in the right order.
+			index = MathUtils.clamp(index, 0, Math.max(0, owner.getMinions().size() - 1));
 			owner.getZone(minion.getEntityLocation().getZone()).remove(minion.getEntityLocation().getIndex());
 		} else {
 			// Transforming a minion before it hits the board? Probably a bug
