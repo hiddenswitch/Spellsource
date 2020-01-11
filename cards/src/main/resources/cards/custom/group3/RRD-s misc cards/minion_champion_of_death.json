@@ -1,13 +1,13 @@
 {
   "name": "Champion of Death",
-  "baseManaCost": 6,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Opener: Destroy a minion and discard a card",
+  "description": "Opener: Destroy a minion and discard a card.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
