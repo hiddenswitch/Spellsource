@@ -1,6 +1,6 @@
 {
   "name": "Gemstone Terror",
-  "baseManaCost": 12,
+  "baseManaCost": 16,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 7,
