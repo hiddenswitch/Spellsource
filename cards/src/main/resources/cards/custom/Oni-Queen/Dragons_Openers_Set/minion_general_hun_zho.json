@@ -7,19 +7,38 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If your deck has no duplicates, transform your other minions into Legendary minions.",
+  "description": "Opener: If your deck has no duplicates, promote your other minions and those in hand to Legendary status.",
   "battlecry": {
+    "targetSelection": "NONE",
     "condition": {
       "class": "HighlanderDeckCondition"
     },
     "spell": {
-      "class": "TransformToRandomMinionSpell",
-      "target": "OTHER_FRIENDLY_MINIONS",
-      "cardFilter": {
-        "class": "CardFilter",
-        "rarity": "LEGENDARY",
-        "cardType": "MINION"
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReplaceCardsSpell",
+          "target": "FRIENDLY_HAND",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "TransformToRandomMinionSpell",
+          "target": "OTHER_FRIENDLY_MINIONS",
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          }
+        }
+      ]
     }
   },
   "attributes": {

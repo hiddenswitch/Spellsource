@@ -1,6 +1,6 @@
 {
   "name": "Hex: Pig",
-  "baseManaCost": 4,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",

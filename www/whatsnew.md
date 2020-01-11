@@ -4,6 +4,17 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.62-3.0.8 (In Progress)
+
+ - Bonecrusher Brute now destroys Lun instead of discard cards. (1461)
+ - Rowdy Fire Goblin now has 0 Attack. (1461)
+ - Bluefist Trainer now costs 3. (1461)
+ - Redhide Saboteur is now an Opener instead of an Aftermath. (1461)
+ - Sluggish Brute is now "Dash. Has +2 Attack while damaged." (1461)
+ - Waygate Commander now reads: "Your Demons have Dash." (1461)
+ - General Hun'zho now affects hand as well as board. (1461)
+ - Rallying Speech now costs 1. (1461)
+
 ### 0.8.61-3.0.8 (January 9, 2020)
 
  - Faceless Nightmare, Totemic Split, Ichor Conversion, Felstalker, Shadow Satyr, Nightmare Portal, and Nemsy, Awakened Calamity have been moved out of the Spellsource set. Eternal Time Eater is now in the Timeweaver class. (server fix #1441)
