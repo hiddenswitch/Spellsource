@@ -6,6 +6,7 @@ permalink: /whats-new/
 
 ### 0.8.62-3.0.8 (In Progress)
 
+ - Crystal Giant now costs 16, up from 12. (1459)
  - Bonecrusher Brute now destroys Lun instead of discard cards. (1461)
  - Rowdy Fire Goblin now has 0 Attack. (1461)
  - Bluefist Trainer now costs 3. (1461)
