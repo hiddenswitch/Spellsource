@@ -1,27 +1,27 @@
 {
-  "name": "Rallying Speech",
-  "baseManaCost": 1,
+  "name": "Rampant Aggression",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "BLUEGREY",
-  "rarity": "COMMON",
-  "description": "Give minions in your hand and battlefield +1 Attack.",
+  "rarity": "EPIC",
+  "description": "Destroy 2 of your Lun. Give all minions in your deck +2/+2.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BuffSpell",
-        "target": "FRIENDLY_HAND",
-        "attackBonus": 1,
-        "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        }
+        "class": "ModifyMaxManaSpell",
+        "value": -2
       },
       {
         "class": "BuffSpell",
-        "target": "FRIENDLY_MINIONS",
-        "attackBonus": 1
+        "target": "FRIENDLY_DECK",
+        "attackBonus": 2,
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "hpBonus": 2
       }
     ]
   },

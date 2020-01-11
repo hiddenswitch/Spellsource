@@ -69,7 +69,7 @@ public class CardValidation {
 				}
 			}
 		} catch (DecodeException ex) {
-			JsonProcessingException innerEx = (JsonProcessingException) Throwables.getRootCause(ex);// Decode again to throw the inner exception
+			JsonProcessingException innerEx = (JsonProcessingException) ex.getCause();// Decode again to throw the inner exception
 			if (innerEx != null) {
 				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile, 0, 0, 0);
 				fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",

@@ -1,13 +1,13 @@
 {
-  "name": "Bonecrusher Brute",
-  "baseManaCost": 5,
+  "name": "Jikininki",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "BLUEGREY",
-  "baseAttack": 6,
-  "baseHp": 6,
-  "rarity": "FREE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Dash. Opener: Destroy one of your Lun.",
+  "description": "Opener: Destroy one of your Lun.",
   "battlecry": {
     "spell": {
       "class": "ModifyMaxManaSpell",
@@ -15,10 +15,9 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "RUSH": true
+    "BATTLECRY": true
   },
   "collectible": true,
-  "set": "SPELLSOURCE_BASIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
