@@ -6,6 +6,7 @@ permalink: /whats-new/
 
 ### 0.8.62-3.0.8 (In Progress)
 
+ - Changes to the Occultist champion: 20 cards rebalanced and the introduction of Ancient Blood and changes to Jikr, Occult One. (1450)
  - Crystal Giant now costs 16, up from 12. (1459)
  - Bonecrusher Brute now destroys Lun instead of discard cards. (1461)
  - Rowdy Fire Goblin now has 0 Attack. (1461)
