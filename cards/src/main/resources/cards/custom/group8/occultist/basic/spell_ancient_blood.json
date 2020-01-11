@@ -26,6 +26,7 @@
       "class": "ValueDescription",
       "value": {
         "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH",
         "multiplier": 3
       }
     }
