@@ -1,0 +1,50 @@
+{
+  "name": "Menagerie Mogul",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Your Customers count as Beasts, Fae and Dragons. Opener: Summon two 1/1 Customers.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_customer"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_customer"
+        }
+      ]
+    }
+  },
+  "aura": {
+    "class": "RaceAura",	### I dont think this exists, but as far as I can tell there's no logical way to add a race tag to minions as an aura right now
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "race": {
+	  "BEAST",
+	  "FAE",
+	  "DRAGON"
+    },
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "token_customer"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ],
+  "fileFormatVersion": 1
+}

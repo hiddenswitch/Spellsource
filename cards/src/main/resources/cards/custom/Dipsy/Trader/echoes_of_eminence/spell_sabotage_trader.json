@@ -1,0 +1,39 @@
+{
+  "name": "Sabotage!",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "EPIC",
+  "description": "Discover a copy of a card in your opponent's hand. Shuffle their copy back into their deck.",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+		"class": "MetaSpell",
+	    "spells": [
+			{
+			  "class": "ShuffleToDeckSpell",
+			  "targetPlayer": "OPPONENT"
+			},
+            {
+              "class": "ReceiveCardSpell",
+              "targetPlayer": "SELF"
+            }
+        ]
+      },
+      "cardSource": {
+        "class": "HandSource",
+        "distinct": false,
+        "targetPlayer": "OPPONENT"
+      }
+  },
+  "attributes": {
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ],
+  "fileFormatVersion": 1
+}

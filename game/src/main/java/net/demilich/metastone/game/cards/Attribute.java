@@ -1119,7 +1119,13 @@ public enum Attribute {
 	/**
 	 * Records how many attacks last turn an actor made.
 	 */
-	ATTACKS_LAST_TURN;
+	ATTACKS_LAST_TURN,
+	/**
+	 * An Attribute that indicates a card can be used to Discover something, offering a choice of 3 options to the player with an occurence bonus for class cards. 
+	 *
+	 * This is only really used for one Trader card right now, but it seemed like a useful one to add for future cards and their effects.
+	 */
+	DISCOVER;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

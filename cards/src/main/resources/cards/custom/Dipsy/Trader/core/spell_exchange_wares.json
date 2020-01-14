@@ -1,0 +1,22 @@
+{
+  "name": "Exchange Wares",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "RARE",
+  "description": "Both players draw a card from their opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "StealCardSpell",
+    "target": "ENEMY_DECK",
+    "cardLocation": "HAND",	### This is not quite what I want, but I'm not sure if my intentions for this card are possible or not. The idea is that you actually DRAW the card from their deck,
+    "randomTarget": true,	### whereas an effect like this places it directly into your hand. Draw-related synergies should activate, and Storesmaster should offer you three cards from their
+    "targetPlayer": "BOTH"	### deck to choose from. Let me know how doable this is and I can always change its text if that idea won't work.
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

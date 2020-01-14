@@ -1,0 +1,89 @@
+{
+  "name": "Uus-Yai the Illustrious",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Start of Game: If your deck contains only Legendary cards, they all cost (1) less and cast a random spell when played.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "GameStartTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY"
+          }
+        },
+        "value2": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_DECK"
+        }
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",		
+		  "target": "FRIENDLY_HAND",
+		  "cardCostModifier": {
+			"class": "CardCostModifier",
+			"target": "SELF",
+			"value": 1,
+			"operation": "SUBTRACT"
+		  },
+        },
+		{
+          "class": "CardCostModifierSpell",
+		  "target": "FRIENDLY_DECK",
+		  "cardCostModifier": {
+			"class": "CardCostModifier",
+			"target": "SELF",
+			"value": 1,
+			"operation": "SUBTRACT"
+		  },
+        },
+        {
+          "class": "AddBattlecrySpell",		### Not entirely sure if this works or not - the idea is that even Legendary spells should cast a random spell when played from hand.
+          "target": "FRIENDLY_HAND",
+          "battlecry": {
+            "spell": {
+              "class": "CastRandomSpellSpell",
+              "cardFilter": {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+              }
+            }
+          } 
+        },
+		{
+          "class": "AddBattlecrySpell",
+          "target": "FRIENDLY_DECK",
+          "battlecry": {
+            "spell": {
+              "class": "CastRandomSpellSpell",
+              "cardFilter": {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+              }
+            }
+          } 
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ],
+  "fileFormatVersion": 1
+}

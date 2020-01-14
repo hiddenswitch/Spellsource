@@ -1,0 +1,22 @@
+{
+  "name": "Ro'Hei the Bold",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you Discover a card, shuffle copies of the options you didn't choose into your deck.",
+  
+	### This one is difficult, and I'm not really sure how to get it working. It needs to shuffle all the not chosen options regardless of how many, since I'll be adding a card later that gives
+    ### you extra options for all your Discovers, but it needs to NOT work on things like Timeweaver's Reshuffle that technically use a DiscoverSpell but aren't really "properly" Discovering anything.
+	### It also can't rely entirely on the DISCOVER Attribute, since it needs to work with triggered Discovers that won't have the tag. Hopefully this isn't too much of a nightmare to figure out.
+  
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ],
+  "fileFormatVersion": 1
+}

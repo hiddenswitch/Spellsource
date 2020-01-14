@@ -29,7 +29,9 @@
       }
     }
   },
-  "attributes": {},
+  "attributes": {
+	"DISCOVER": true
+  },
   "collectible": true,
   "sets": [
     "CUSTOM",

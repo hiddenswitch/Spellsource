@@ -1,0 +1,28 @@
+{
+  "name": "Platinum Coin",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "FREE",
+  "description": "The next card you play costs (3) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 3,
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "operation": "SUBTRACT"
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ],
+  "fileFormatVersion": 1
+}

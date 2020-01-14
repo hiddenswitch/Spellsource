@@ -24,6 +24,9 @@
       "class": "UnweightedCatalogueSource"
     }
   },
+  "attributes": {
+	"DISCOVER": true
+  },
   "collectible": false,
   "set": "SPELLSOURCE",
   "fileFormatVersion": 1

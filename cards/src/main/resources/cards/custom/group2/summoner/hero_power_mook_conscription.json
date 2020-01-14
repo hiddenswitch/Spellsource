@@ -28,6 +28,9 @@
       }
     }
   },
+  "attributes": {
+	"DISCOVER": true
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

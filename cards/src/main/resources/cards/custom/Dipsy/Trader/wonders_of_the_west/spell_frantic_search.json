@@ -1,0 +1,31 @@
+{
+  "name": "Frantic Search",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "RARE",
+  "description": "Draw 3 cards. Discard any even-Cost cards drawn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3,
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ManaCostCondition",
+        "target": "OUTPUT",
+        "operation": "ISEVENCOST"  ### Doesnt exist, but I'm not sure how to do this with the OddCostFilter
+      },
+      "spell": {
+        "class": "DiscardSpell",
+        "target": "OUTPUT"
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Flood the Market",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "LEGENDARY",
+  "description": "Discover five spells from other classes. Cast any that won't fit in your hand with random targets.",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "DiscoverSpell",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+		  {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardFilter",
+            "heroClass": "SELF",
+            "invert": true
+          },
+          {
+            "class": "CardFilter",
+            "heroClass": "ANY",
+            "invert": true
+          }
+        ]
+      },
+	  "cardSource": {
+        "class": "UnweightedCatalogueSource"
+	  },
+	  "howmany": 
+	  
+	  ### Honestly, I'm not sure where to start on this one. I was thinking I could combine the effects of Surveyor Skag and something like Archmage Vargoth, but I can't really make sense 
+	  ### of how to do so.
+  },
+  "attributes": {
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}
