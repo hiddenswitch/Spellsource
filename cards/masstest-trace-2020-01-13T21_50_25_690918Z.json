@@ -1,0 +1,26 @@
+{
+  "seed" : -68026569163534309,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CRIMSON", "DARKGREEN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_owlbear_mother", "pact_binding_nightmare", "minion_tree_giant", "minion_magelight_dragon", "minion_little_purrsuer", "minion_commander_gareth", "spell_transfer_life", "minion_doomed_diver", "minion_bone_napper", "minion_tribemaster", "minion_fae_wraith_caroline", "minion_zathahun_bloodthirsty", "spell_auto_cannibalism", "minion_deepwood_barghest", "pact_nothing_to_waste", "spell_blood_boil_wraith", "pact_nothing_to_waste", "pact_binding_nightmare", "minion_expert_explorer", "minion_bone_napper", "spell_curse_on_strength", "minion_crystal_shatterer", "minion_bone_man", "minion_beholder_of_the_beginning", "minion_pathetic_squire", "minion_siege_elephant", "minion_swarmed_captive", "minion_abandoned_geneticist", "spell_recycle_the_dead", "minion_spectral_steed" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_faerie_nightmare", "spell_ire_of_the_primordial", "minion_flamerunner", "minion_centaur_acumen", "spell_abduct", "minion_hulking_magmass", "minion_magma_hound", "spell_celestial_imprisonment", "minion_fiery_tyrant", "minion_feral_child", "spell_grasp_of_god", "minion_bighand_brute", "spell_evil_rises", "spell_horrible_hallucination", "minion_daring_duelist", "minion_fassnu_avenger", "spell_foul_manifest", "minion_shuffling_horror", "minion_shifting_sands", "minion_shub-rhogog", "minion_ominous_obliterator", "minion_bromeliad_pup", "spell_underwater_horrors", "minion_stowaway_scoundrel", "minion_spawn_of_gobogeg", "minion_cult_promoter", "minion_reader_eater", "spell_mind_flay", "spell_revelation", "spell_ancient_waygate" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 29 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 43, 58, 49 ]
+  } ],
+  "actions" : [ 0, 0, 1, 1, 1, 0, 1, 2, 0, 2, 2, 4, 5, 3, 0, 0, 0, 1, 0, 19, 1, 5, 1, 1, 0, 1, 29, 8, 0, 2, 3, 1, 3, 0, 31, 25, 16, 0, 4, 1, 0, 6, 10, 5, 2, 1, 11, 1, 0, 1, 8, 2, 0, 24, 6, 2, 2, 8, 5, 0, 1, 0, 17, 2, 1, 4, 2, 1, 4, 0, 1, 0, 2, 1, 0, 1, 8, 7, 0, 0, 0, 9, 12, 2, 4, 10, 4, 0, 5, 4, 3, 13, 2, 5, 0, 9, 11, 9, 1, 1, 2, 15, 18, 0, 11, 4, 2, 18, 8, 16, 0, 1, 1, 0, 1, 12, 4, 3, 3, 2, 5, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 2, 1, 6, 18, 1, 1, 1, 3, 3, 1, 0, 1, 1, 2, 2, 1, 1, 1, 1, 0, 0, 3, 2, 1, 1, 0, 1, 1, 0, 5, 2, 7, 8, 4, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

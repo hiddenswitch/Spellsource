@@ -1,0 +1,26 @@
+{
+  "seed" : 5894897546333048328,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CRIMSON", "ICE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_fae_wraith_caroline", "minion_dark_artist", "spell_transfer_life", "minion_warclub_ruffian", "minion_jungle_king", "spell_auto_cannibalism", "minion_dark_artist", "spell_boon_of_the_dead", "minion_bone_man", "minion_clumsy_dryad", "minion_xavius", "minion_grave_carer_yorn", "minion_daring_duelist", "minion_tribemaster", "minion_crew_commander", "minion_bullet_bull", "spell_break_all_bones", "minion_mari_anette", "minion_clumsy_dryad", "pact_deaths_hand", "pact_binding_nightmare", "minion_cursing_disciple", "minion_frigid_bones", "spell_wraith_ancient_curse", "spell_recipe_for_power", "minion_acolyte_of_peroth'arn", "minion_fumewalker_zin", "minion_eyeweaver", "minion_blight_harvester", "minion_bronze_timekeeper" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_blubber_behemoth", "spell_frost_strike", "spell_death_strike", "minion_magedrainer", "weapon_runeforged_blade", "minion_demonic_frontrunner", "minion_gilnean_witchhuntress", "minion_ice_frost_wyrm", "spell_winter_is_coming", "minion_crouching_tiger", "spell_runic_empowerment", "minion_gilnean_witchhuntress", "minion_rimefang", "minion_lord_cookie", "minion_timewalker_initiate", "spell_tremble_before_me", "minion_inora_spellbound", "spell_unholy_frenzy", "spell_frost_strike", "minion_lounge_brownie", "minion_headless_horseman", "weapon_stick", "weapon_ebon_blade_greatsword", "spell_dark_transformation", "spell_acherus_deathgate", "weapon_ebon_blade_greatsword", "spell_icy_talon", "minion_treeleach", "minion_fiery_tyrant", "spell_abominations_might" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 28, 20 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 37 ]
+  } ],
+  "actions" : [ 0, 3, 1, 1, 1, 0, 0, 0, 0, 3, 0, 2, 0, 0, 6, 4, 0, 2, 0, 1, 1, 0, 0, 1, 6, 2, 0, 1, 1, 3, 2, 6, 4, 0, 3, 6, 0, 2, 9, 4, 2 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

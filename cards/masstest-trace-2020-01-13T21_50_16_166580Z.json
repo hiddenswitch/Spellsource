@@ -1,0 +1,26 @@
+{
+  "seed" : 1532031428203502007,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CRIMSON", "CORAL" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_timebidding_magi", "spell_blood_cleave", "minion_underworld_guard", "minion_blood_golem", "pact_nothing_to_waste", "minion_bone_napper", "minion_bloodshard_elemental", "spell_auto_cannibalism", "minion_void_reaper", "minion_fae_wraith_caroline", "minion_bone_man", "minion_slitherbow", "minion_crazed_wraith", "minion_articus__dragon_giant", "minion_centaur_acumen", "minion_oni_entrapper", "minion_fae_embalmer", "minion_shouting_soldier", "minion_knight_eternal", "minion_giant_reaper", "pact_extraction", "minion_cinderslinger", "minion_shadownest_arachne", "minion_timewalker_stormlord", "spell_blight_hosts", "minion_stalwart_sculptor", "pact_extraction", "spell_transfer_life", "minion_xavius", "spell_plague_of_flesh" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_storm_giant", "minion_storm_giant", "minion_wolfcrier", "minion_chainwrecker_corsair", "minion_emerald_cleanser", "minion_primalist_kirra", "minion_ambushing_rose", "minion_ghuun", "minion_crystal_golem", "minion_wyrmrest_sniper", "minion_kodama_bulwark", "spell_power_chord", "minion_slitherbow", "weapon_frisky_fiddle", "spell_crescendo", "weapon_frisky_fiddle", "spell_crescendo", "minion_timewalker_stormlord", "minion_mrs_merria", "minion_defender_of_tomorrow", "minion_reckless_hero", "spell_adoring_crowd", "minion_fiery_warchief", "minion_cadenza", "minion_timewalker_mistweaver", "minion_crystal_shatterer", "minion_roadblock_pufferfish", "minion_composer", "minion_channeled_spirit", "spell_soundwave" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 43, 44, 51 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 6, 9, 21 ]
+  } ],
+  "actions" : [ 0, 1, 1, 0, 1, 2, 0, 4, 0, 0, 5, 3, 5, 0, 0, 2, 1, 21, 9, 13, 2, 4, 1, 1, 12, 1, 1, 2, 0, 6, 3, 2, 0, 6, 3, 3, 15, 0, 4, 12, 12, 4, 23, 19, 3 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

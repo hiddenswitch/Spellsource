@@ -1,0 +1,26 @@
+{
+  "seed" : -4574628576492500241,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "COPPER", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_hard_puncher", "minion_spooky_turret", "minion_forged_defender", "minion_alien_ravager", "minion_dustytown_defender", "spell_trigger_happy", "minion_deranged_greengill", "minion_natural_convert", "minion_polycephalos", "minion_whiptail_gatherer", "minion_polycephalos", "minion_aegwynn", "minion_trigger_happy_rebel", "minion_giant_reaper", "spell_sheriffs_badge", "minion_lingering_spirit", "minion_mrs_merria", "spell_reloading", "minion_highmountain_primalist", "minion_treeleach", "spell_mass_betrayal", "minion_centaur_acumen", "minion_cheating_wrangler", "minion_mechanical_golem", "spell_one_in_the_chamber", "minion_holdout_soldier", "minion_dustytown_defender", "minion_nilfheim_needlegunner", "minion_centaur_acumen", "minion_kodama_bulwark" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_bone_napper", "minion_bookkeeper", "minion_blighted_ent", "minion_large_spiderling", "minion_mari_anette", "minion_roadblock_pufferfish", "spell_back_for_more", "minion_darkbent_drake", "pact_deaths_hand", "minion_bone_man", "spell_rise_and_fall", "spell_wraith_ancient_curse", "minion_giant_serpent", "spell_rise_and_fall", "spell_bone_shield_wraith", "spell_recycle_the_dead", "minion_crazed_wraith", "minion_zathahun_bloodthirsty", "minion_servant_of_twilight", "minion_bone_man", "minion_bone_napper", "minion_blight_harvester", "minion_lord_henryk", "minion_eranikus", "minion_purifying_ooze", "minion_roadblock_pufferfish", "minion_tick_and_tock", "minion_glass_golem", "spell_break_all_bones", "spell_back_for_more" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 11, 21, 32 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 47, 44 ]
+  } ],
+  "actions" : [ 0, 1, 2, 0, 2, 1, 0, 2, 1, 6, 0, 3, 0, 1, 13, 0, 0, 4, 10, 3, 0, 1, 1, 1, 1, 0, 7, 8, 3, 18, 0, 1, 1, 7, 4, 5, 14, 3, 0, 0, 0, 16, 3, 28, 1, 15, 6, 2 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

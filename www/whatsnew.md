@@ -6,6 +6,7 @@ permalink: /whats-new/
 
 ### 0.8.62-3.0.8 (In Progress)
 
+ - Wraith has been updated as the Overlord. (1445)
  - Adding Steel Smash ("Deal damage equal to your Armor to a minion.") to Archaeologist. (1446)
  - Champion of Death costs 7, up from 6. (1447)
  - Changes to the Occultist champion: 20 cards rebalanced and the introduction of Ancient Blood and changes to Jikr, Occult One. (1450)

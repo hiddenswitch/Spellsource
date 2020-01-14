@@ -1,5 +1,5 @@
 {
-  "name": "Binding Nightmare",
+  "name": "A Coven's Debt",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "CRIMSON",
@@ -22,11 +22,11 @@
           "filter": {
             "class": "SpecificCardFilter",
             "cards": [
-              "pact_deaths_hand",
+              "pact_brutish_counterattack",
               "pact_extraction",
               "pact_nothing_to_waste",
-              "pact_soul_lightning",
-              "pact_binding_nightmare"
+              "pact_voids_bargain",
+              "pact_a_covens_debt"
             ]
           }
         }

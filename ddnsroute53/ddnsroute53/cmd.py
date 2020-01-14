@@ -24,11 +24,11 @@ def version():
 
 
 @_cli.command()
-@click.argument('in_domains', nargs=-1)
+@click.option('--in-domains', multiple=True, required=True)
 @click.option('--ttl', required=False, help='the TTL', type=int, show_default=True, default=300)
 @click.option('--ip-address', required=False, help='the IP address to use', type=str, show_default=True,
               default=PUBLIC_IP)
-def update(in_domains: List[str], ttl: int = 300, ip_address: str = PUBLIC_IP):
+def update(in_domains: List[str] = (), ttl: int = 300, ip_address: str = PUBLIC_IP):
     """
     Updates each domain in the list IN_DOMAINS in Route53.
 
@@ -41,9 +41,11 @@ def update(in_domains: List[str], ttl: int = 300, ip_address: str = PUBLIC_IP):
     Instead of providing these arguments, you can use environment variables corresponding to the argument names prefixed
     with DDNSROUTE53:
 
-     - DDNSROUTE53_IN_DOMAINS (space separated list)
-     - DDNSROUTE53_TTL (in seconds)
-     - DDNSROUTE53_IP_ADDRESS (an IPv4 address, or PUBLIC to use the public IP address at runtime)
+     - DDNSROUTE53_UPDATE_IN_DOMAINS (space separated list)
+
+     - DDNSROUTE53_UPDATE_TTL (in seconds)
+
+     - DDNSROUTE53_UPDATE_IP_ADDRESS (an IPv4 address, or PUBLIC to use the public IP address at runtime)
     """
     if len(in_domains) == 0:
         return

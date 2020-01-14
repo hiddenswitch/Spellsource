@@ -1,0 +1,37 @@
+{
+  "name": "Dark Rule",
+  "heroPower": "hero_power_conscript",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Take 2 damage. Discover a follower.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "DiscoverCardSpell",
+        "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+            "minion_assassin_overlord",
+            "minion_defender_overlord",
+            "minion_duelist_overlord"
+          ]
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

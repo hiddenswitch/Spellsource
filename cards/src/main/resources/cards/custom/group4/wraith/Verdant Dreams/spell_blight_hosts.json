@@ -1,16 +1,17 @@
 {
-  "name": "Blight Hosts",
-  "baseManaCost": 3,
+  "name": "Meat Shields",
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "Summon two 2/2 Skeletons with Guard.",
+  "description": "Summon three 2/2 Captives with <b>Guard</b>.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "cards": [
-      "token_skeleton2guard_wraith",
-      "token_skeleton2guard_wraith"
+      "token_captiveguard_overlord",
+      "token_captiveguard_overlord",
+      "token_captiveguard_overlord"
     ]
   },
   "collectible": true,

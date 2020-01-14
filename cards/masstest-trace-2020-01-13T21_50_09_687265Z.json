@@ -1,0 +1,26 @@
+{
+  "seed" : -1542866769913495927,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "ICE", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_whiptail_gatherer", "permanent_the_end_time", "minion_colrum", "spell_lingering_apparition", "spell_chains_of_ice", "minion_rainbow_runner", "minion_disco_inferno", "spell_all_will_serve", "spell_runic_empowerment", "spell_all_will_serve", "minion_timewalker_initiate", "spell_tremble_before_me", "spell_bone_shield", "spell_rune_tap", "minion_owlbear_mother", "spell_rune_tap", "minion_alemental", "minion_shambling_horror", "minion_bullet_bull", "spell_runic_attunement", "minion_barside_slinker", "minion_fairytale_tracker", "minion_mutated_brute", "minion_veteran_of_the_third_war", "secret_anti_magic_zone", "minion_gilnean_witchhuntress", "minion_mindswapper", "spell_frost_strike", "weapon_bloodcaked_axe", "spell_winter_is_coming" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_bloodshard_elemental", "pact_nothing_to_waste", "minion_wavering_diabloist", "spell_curse_of_pain", "minion_headless_horseman_revengeance", "minion_grave_carer_yorn", "spell_transfer_life", "spell_blight_hosts", "spell_curse_of_aim", "spell_bone_shield_wraith", "minion_mindswapper", "minion_kodama_bulwark", "minion_fumewalker_zin", "minion_hypnotic_beetle", "minion_blood_golem", "minion_nightmare_warden", "minion_gold_picaroon", "minion_emissary_of_the_end", "minion_captain_stashin", "minion_flutterer", "minion_ursol_the_wise", "minion_bone_man", "spell_back_for_more", "spell_plague_of_flesh", "minion_commander_gareth", "spell_boon_of_the_dead", "minion_augmented_pixie", "minion_dark_artist", "spell_rise_and_fall", "minion_timebidding_magi" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 59, 58, 49 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 31, 27 ]
+  } ],
+  "actions" : [ 0, 1, 0, 0, 2, 3, 0, 0, 0, 0, 0, 1, 4, 9, 0, 8, 0, 0, 7, 9, 7, 2, 4, 0, 20, 11, 4, 16, 1, 0, 0, 0, 7, 3, 2, 5, 8 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

@@ -18,7 +18,6 @@
         "target": "FRIENDLY_HAND",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "SELF",
           "value": 1,
           "operation": "SET"
         }

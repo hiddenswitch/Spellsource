@@ -1,0 +1,26 @@
+{
+  "seed" : 6067474487857114115,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CORAL", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_bromeliad_pup", "minion_wolfcrier", "minion_freyas_familliar", "spell_bass_boost", "spell_mute", "minion_eranikus", "minion_composer", "spell_sheet_music", "minion_primal_mother", "weapon_soundhorn", "minion_dreamway_whale", "minion_bullet_bull", "minion_flashbulb_spider", "minion_jack_of_all_trades", "spell_earworm", "minion_cadenza", "minion_spirited_announcer_v2", "minion_songbird", "minion_noteweaver", "minion_flingin_alchemist", "minion_pumpkin_abomination", "minion_giant_serpent", "minion_jabberwocky", "minion_anarking", "spell_uplifting_melody", "minion_songbird", "minion_miniature_gunner", "minion_wink_dog", "spell_soundwave", "minion_emissary_of_the_end" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_crew_commander", "minion_blood_golem", "minion_lounge_brownie", "minion_blighted_ent", "minion_novice_enchantress", "spell_curse_of_pain", "pact_extraction", "minion_blight_harvester", "minion_blighted_ent", "minion_sky_high_surveyor", "minion_jungle_operative", "minion_dark_artist", "spell_blood_cleave", "minion_forest_magistrate", "minion_doodles", "minion_expert_explorer", "minion_matriarch_aiiran", "minion_redhide_butcher", "minion_dark_artist", "minion_smogg", "minion_petal_knight", "minion_emerald_cleanser", "minion_stallius_the_horned", "minion_wee_bat", "minion_the_imperial_soul", "minion_dragon_pod", "spell_bone_shield_wraith", "minion_bone_man", "minion_blood_cultist", "minion_lord_henryk" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 55, 39, 50 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 12, 22, 23 ]
+  } ],
+  "actions" : [ 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 7, 3, 1, 0, 8, 9, 5, 1, 0, 0, 8, 7, 0, 0, 24 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}
