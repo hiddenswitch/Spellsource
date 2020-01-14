@@ -143,7 +143,7 @@ class _JavaSimulationResultGenerator(abc.ABC):
         pass
 
     class Java:
-        implements = ['com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator']
+        implements = ['com.hiddenswitch.spellsource.net.impl.util.SimulationResultGenerator']
 
 
 class SimulationGenerator(_JavaSimulationResultGenerator):
