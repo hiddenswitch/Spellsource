@@ -5,7 +5,7 @@
   "heroClass": "JADE",
   "rarity": "RARE",
   "description": "Draw 2 spells from your deck. Restore #5 Health.",
-  "targetSelection": "NONE",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [
