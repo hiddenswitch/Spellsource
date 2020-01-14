@@ -1,0 +1,28 @@
+{
+  "name": "Gold Coin",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "FREE",
+  "description": "The next card you play costs (1) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 1,
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "operation": "SUBTRACT"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

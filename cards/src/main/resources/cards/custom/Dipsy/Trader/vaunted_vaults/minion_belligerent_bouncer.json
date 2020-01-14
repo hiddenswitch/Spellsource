@@ -1,0 +1,23 @@
+{
+  "name": "Belligerent Bouncer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "Guard. Your Coins don't discount each other.",
+  
+		### Since Gold/Platinum Coins' discount fades after you play something, playing them in succession will only make them discount one another; they can't be stacked.
+		### This card should make stacking them possible. I assume that will involve modifying their expiry condition somehow, but I'm afraid I don't really know how to manage it myself.
+  
+  "collectible": true,
+  "attributes": {
+	"TAUNT": true
+  },
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ],
+  "fileFormatVersion": 1
+}

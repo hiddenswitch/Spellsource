@@ -1,0 +1,22 @@
+{
+  "name": "Xii'Da the Curious",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you play an odd-Cost card, play it again (on the same target).",
+  
+	### Another one that I'm not really sure on. Doubling Openers is simple enough, but the idea is that the entire card gets played an additional time; minions, spells and weapons. These
+	### should be successive - for example, playing an odd-Cost Afermath weapon with Xii'Da out would equip it, and then equip it again, destroying the first one and activating its Aftermath.
+	### The target should be the same as the first cast where possible, but for things like Discover effects I think it makes sense for the player to be able to choose for both.
+	### Hopefully this thing won't be too much of a headache to get working, let me know if there are any issues with my idea.
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Guard Pup",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Summon another Guard Pup.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_guard_pup",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ],
+  "fileFormatVersion": 1
+}

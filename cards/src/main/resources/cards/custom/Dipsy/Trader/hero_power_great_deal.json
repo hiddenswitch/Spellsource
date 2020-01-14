@@ -1,0 +1,20 @@
+{
+  "name": "Great Deal",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "MAGENTA",
+  "rarity": "FREE",
+  "description": "Both players draw 2 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2,
+      "targetPlayer": "BOTH"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

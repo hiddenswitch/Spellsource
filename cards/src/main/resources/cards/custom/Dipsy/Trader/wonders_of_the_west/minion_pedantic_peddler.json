@@ -1,0 +1,22 @@
+{
+  "name": "Pedantic Peddler",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Opener: If your hand contains only an odd number of odd-Cost cards, deal 5 damage.",
+  
+	### Aight won't lie, no clue at all on this one. For clarity, the hand needs to contain an odd number of odd-Cost cards AFTER this card is played; any even cards at all instantly invalidate it.
+  
+  "attributes": {
+    "OPENER": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ],
+  "fileFormatVersion": 1
+}

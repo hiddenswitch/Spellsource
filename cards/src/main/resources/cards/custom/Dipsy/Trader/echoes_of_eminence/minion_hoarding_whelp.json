@@ -1,0 +1,22 @@
+{
+  "name": "Hoarding Whelp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Your \"both players\" effects only affect you.",
+  
+  ### Honestly, I have NO clue how to manage this one. Maybe there's a way to filter card descriptions and change targetPlayers on those cards? 
+  ### The intention is that any card that includes the text "both players" has its effect, or the part of the effect that benefits both players, changed to only benefit you.
+  ### But cards that technically affect both players but, for example, reference "both sides of the board", "both champions" and so on should be unchanged.
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ],
+  "fileFormatVersion": 1
+}
