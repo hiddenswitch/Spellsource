@@ -721,6 +721,10 @@ public enum Attribute {
 	 */
 	HEALING_THIS_TURN,
 	/**
+	 * Every time an {@link Actor} has its max HP increased, this value increases.
+	 */
+	TOTAL_HP_INCREASES,
+	/**
 	 * Every time an {@link Actor} is damaged, increment this attribute with the amount of damage and set it to zero at
 	 * the end of the turn.
 	 */

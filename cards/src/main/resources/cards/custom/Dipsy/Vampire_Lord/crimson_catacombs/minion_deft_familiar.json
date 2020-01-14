@@ -3,8 +3,8 @@
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "BLOOD",
-  "baseAttack": 2,
-  "baseHp": 1,
+  "baseAttack": 1,
+  "baseHp": 3,
   "rarity": "COMMON",
   "description": "Your Vampire Lord Skill can target minions.",
   "auras": [

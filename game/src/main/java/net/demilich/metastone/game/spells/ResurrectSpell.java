@@ -90,11 +90,12 @@ public class ResurrectSpell extends Spell {
 				}
 			} else summonedMinion = card.summon();
 
-			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
+			boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
+			Entity newMinion = summonedMinion.transformResolved(context);
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)
-					&& summonedMinion.getZone() == Zones.BATTLEFIELD) {
-				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, summonedMinion, summonedMinion);
+					&& newMinion.isInPlay()) {
+				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, newMinion, newMinion);
 			}
 			deadMinions.remove(resurrectedMinion);
 		}

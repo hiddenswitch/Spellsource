@@ -6,6 +6,7 @@ permalink: /whats-new/
 
 ### 0.8.62-3.0.8 (In Progress)
 
+ - New Vampire Lord cards and updates. (1444)
  - Wraith has been updated as the Overlord. (1445)
  - Adding Steel Smash ("Deal damage equal to your Armor to a minion.") to Archaeologist. (1446)
  - Champion of Death costs 7, up from 6. (1447)

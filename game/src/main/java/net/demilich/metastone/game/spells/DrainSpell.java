@@ -94,6 +94,8 @@ public final class DrainSpell extends Spell {
 		}
 		healingTarget.modifyAttribute(Attribute.DRAINED_THIS_TURN, amount);
 		healingTarget.modifyAttribute(Attribute.TOTAL_DRAINED, amount);
+		player.modifyAttribute(Attribute.DRAINED_THIS_TURN, amount);
+		player.modifyAttribute(Attribute.TOTAL_DRAINED, amount);
 	}
 
 	@Suspendable
