@@ -1,14 +1,12 @@
 {
-  "name": "Removed Spell Card",
+  "name": "Removed Minion Card",
   "baseManaCost": 0,
-  "type": "SPELL",
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 1,
   "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Do nothing.",
-  "targetSelection": "NONE",
-  "spell": {
-    "class": "NullSpell"
-  },
   "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
