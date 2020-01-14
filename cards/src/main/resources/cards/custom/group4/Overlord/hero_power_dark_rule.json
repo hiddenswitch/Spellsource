@@ -24,8 +24,8 @@
         "cardFilter": {
           "class": "SpecificCardFilter",
           "cards": [
-            "minion_assassin_overlord",
-            "minion_defender_overlord",
+            "token_assassin",
+            "token_bone_boy",
             "minion_duelist_overlord"
           ]
         }

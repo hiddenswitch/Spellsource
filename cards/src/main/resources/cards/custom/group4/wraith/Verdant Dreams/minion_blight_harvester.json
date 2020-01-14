@@ -20,7 +20,7 @@
           "cards": [
             "token_underling_overlord",
             "token_captive_overlord",
-            "token_captiveGuard_overlord"
+            "token_captiveguard_overlord"
           ]
         }
       }

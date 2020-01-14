@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -90,10 +91,10 @@ public class CardValidation {
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
 			record.getDesc().bfs().build().forEach(node -> {
-				if (node.getKey().equals(SpellArg.CARD)) {
+				if (node.getKey().equals(SpellArg.CARD) || node.getKey().equals(EntityFilterArg.CARD)) {
 					String card = (String) node.getValue();
 					CardCatalogue.getCardById(card);
-				} else if (node.getKey().equals(SpellArg.CARDS)) {
+				} else if (node.getKey().equals(SpellArg.CARDS) || node.getKey().equals(EntityFilterArg.CARDS)) {
 					if (node.getValue() instanceof String[]) {
 						String[] cards = (String[]) node.getValue();
 						for (String card : cards) {
@@ -105,7 +106,7 @@ public class CardValidation {
 		} catch (DecodeException ex) {
 			// Does not deal with this issue here
 		} catch (Exception ex) {
-			fail(cardFile.getName(), ex);
+			fail("Card " + cardFile.getAbsolutePath() + " references " + ex.getMessage() + " which cannot be found", ex);
 		}
 	}
 }

@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.GameContext;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class ReplayTest extends SpellsourceTestBase {
 	}
 
 	@Test
+	@Ignore("needs to be revisited")
 	public void testReplayMatchesClientData(TestContext context) {
 		sync(() -> {
 			List<GameState> receivedStates = new ArrayList<>();
