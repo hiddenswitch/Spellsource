@@ -12,13 +12,14 @@
     "spells": [
       {
         "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
         "value": 2
       },
       {
         "class": "DiscoverCardSpell",
         "spell": {
-            "class": "ReceiveCardSpell",
-            "targetPlayer": "SELF"
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
         },
         "cardFilter": {
           "class": "SpecificCardFilter",

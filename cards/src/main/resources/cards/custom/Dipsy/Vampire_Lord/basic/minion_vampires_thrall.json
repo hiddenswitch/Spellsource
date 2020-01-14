@@ -4,14 +4,15 @@
   "type": "MINION",
   "heroClass": "BLOOD",
   "baseAttack": 1,
-  "baseHp": 3,
+  "baseHp": 2,
   "rarity": "FREE",
-  "description": "Minions adjacent to this one have Guard.",
+  "description": "Minions adjacent to this one have +1 Health.",
   "auras": [
     {
-      "class": "AttributeAura",
+      "class": "BuffAura",
       "target": "ADJACENT_MINIONS",
-      "attribute": "AURA_TAUNT"
+      "attackBonus": 0,
+      "hpBonus": 1
     }
   ],
   "collectible": true,

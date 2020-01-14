@@ -86,3 +86,4 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 		return cards;
 	}
 }
+

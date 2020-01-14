@@ -4,13 +4,13 @@
   "type": "HERO_POWER",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Drain 3 Health from a character.",
+  "description": "Drain 5 Health from a character.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
       "class": "DrainSpell",
-      "value": 3,
+      "value": 5,
       "secondaryTarget": "FRIENDLY_HERO"
     }
   },

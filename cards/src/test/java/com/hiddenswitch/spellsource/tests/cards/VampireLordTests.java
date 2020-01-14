@@ -3,8 +3,10 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +17,97 @@ public class VampireLordTests extends TestBase {
 	@Override
 	public String getDefaultHeroClass() {
 		return HeroClass.BLOOD;
+	}
+
+	@Test
+	public void testBloodlordGoa() {
+		runGym((context, player, opponent) -> {
+			Minion drawsCard = playMinionCard(context, player, "minion_test_deathrattle");
+			Card shouldBeDrawn = putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			destroy(context, drawsCard);
+			assertEquals(Zones.DECK, shouldBeDrawn.getZone(), "should not yet be drawn");
+			Minion goa = playMinionCard(context, player, "minion_bloodlord_goa");
+			destroy(context, goa);
+			assertEquals(Zones.HAND, shouldBeDrawn.getZone(), "goa repeats draw card deathrattle");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion drawsCard = playMinionCard(context, player, "minion_test_deathrattle");
+			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "spell_lunstone");
+			putOnTopOfDeck(context, player, "spell_lunstone");
+			assertEquals(Zones.DECK, shouldNotBeDrawn.getZone(), "should not yet be drawn");
+			Minion goa = playMinionCard(context, player, "minion_bloodlord_goa");
+			destroy(context, goa);
+			assertEquals(Zones.DECK, shouldNotBeDrawn.getZone(), "goa does NOT repeat draw card deathrattle because it hasn't triggered yet");
+		});
+	}
+
+	@Test
+	public void testUnendingNightmare() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			playCard(context, player, "spell_unending_nightmare", target);
+			context.endTurn();
+			assertEquals(opponent.getId(), context.getActivePlayerId(), "should be opponent's turn");
+			assertTrue(target.isDestroyed(), "should be destroyed");
+			assertEquals(1, player.getMinions().size(), "should have summoned replacement");
+			target = player.getMinions().get(0);
+			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), target.getSourceCard().getCardId(), "should have resummoned");
+			assertEquals(1L, player.getGraveyard().stream().filter(c -> c.getEntityType() == EntityType.MINION && c.getSourceCard().getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())).count(), "should only have been destroyed once so far");
+			context.endTurn();
+			assertEquals(player.getId(), context.getActivePlayerId(), "should be player's turn");
+			context.endTurn();
+			target = player.getMinions().get(0);
+			assertEquals(2L, player.getGraveyard().stream().filter(c -> c.getEntityType() == EntityType.MINION && c.getSourceCard().getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())).count(), "should be two destroyed minions now");
+			assertEquals(1, player.getMinions().size(), "should still just be one unending nightmare minion");
+			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), target.getSourceCard().getCardId(), "should have resummoned");
+			assertEquals(opponent.getId(), context.getActivePlayerId(), "should be opponent's turn");
+		});
+	}
+
+	@Test
+	public void testSanguineShiv() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_sanguine_shiv");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getBaseDurability() - 1, player.getWeaponZone().get(0).getDurability(), "no drain this turn");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_sanguine_shiv");
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getBaseDurability(), player.getWeaponZone().get(0).getDurability(), "drained this turn");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_sanguine_shiv");
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			context.endTurn();
+			context.endTurn();
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getBaseDurability() - 1, player.getWeaponZone().get(0).getDurability(), "drained last turn should spend durability normally");
+		});
+	}
+
+	@Test
+	public void testMaliciousMirage() {
+		runGym((context, player, opponent) -> {
+			Card shouldNotDraw = putOnTopOfDeck(context, player, "spell_lunstone");
+			Minion malicious = playMinionCard(context, player, "minion_malicious_mirage");
+			destroy(context, malicious);
+			assertEquals(Zones.DECK, shouldNotDraw.getZone());
+		});
+
+		// Increase health via regular buff
+		runGym((context, player, opponent) -> {
+			Card shouldNotDraw = putOnTopOfDeck(context, player, "spell_lunstone");
+			Minion malicious = playMinionCard(context, player, "minion_malicious_mirage");
+			playMinionCard(context, player, "minion_test_buff", malicious);
+			destroy(context, malicious);
+			assertEquals(Zones.HAND, shouldNotDraw.getZone());
+		});
 	}
 
 	@Test

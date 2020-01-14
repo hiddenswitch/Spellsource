@@ -54,7 +54,7 @@ public class CardValidation {
 				if (description.startsWith("Battlecry:")
 						|| description.startsWith("Opener:")) {
 					assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY),
-							"An Opener card is missing the BATTLECRY attribute.");
+							"An Opener card " + cardFile.getAbsolutePath() + " is missing the BATTLECRY attribute.");
 				}
 
 				if (description.startsWith("Deathrattle:")

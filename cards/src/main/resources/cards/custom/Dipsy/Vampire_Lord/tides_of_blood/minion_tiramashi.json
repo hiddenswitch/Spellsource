@@ -10,6 +10,7 @@
   "trigger": {
     "eventTrigger": {
       "class": "DrainTrigger",
+	  "targetEntityType": "MINION",
       "sourcePlayer": "SELF"
     },
     "spell": {
