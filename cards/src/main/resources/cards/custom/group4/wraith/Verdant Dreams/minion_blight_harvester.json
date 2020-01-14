@@ -1,5 +1,5 @@
 {
-  "name": "Blight Harvester",
+  "name": "Fairy Whip-master",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "CRIMSON",
@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Opener: Draw a card for each Skeleton you control.",
+  "description": "Opener: Draw a card for each Captive and Underling you control.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -18,9 +18,9 @@
         "filter": {
           "class": "SpecificCardFilter",
           "cards": [
-            "token_skeleton_wraith",
-            "token_skeleton2_wraith",
-            "token_skeleton2guard_wraith"
+            "token_underling_overlord",
+            "token_captive_overlord",
+            "token_captiveGuard_overlord"
           ]
         }
       }

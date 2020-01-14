@@ -7,7 +7,7 @@
   "description": "Destroy a friendly minion. At the start of your next turn, resummon it.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "custom.JailMinionSpell",
+    "class": "JailMinionSpell",
     "secondaryTarget": "FRIENDLY_PLAYER",
     "revertTrigger": {
       "class": "TurnStartTrigger",

@@ -1,0 +1,26 @@
+{
+  "seed" : -2500372939192405058,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "RUST", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_petal_knight", "minion_duskwind_vanguard", "minion_stowaway_scoundrel", "spell_dragonhorn", "minion_dracomancer", "minion_hoffis_the_dunewalker", "minion_runt_leader", "minion_dragon_pod", "minion_pumpkin_abomination", "minion_scarlet_squire", "minion_warclub_ruffian", "minion_onis_eye", "minion_red_agressor", "minion_draining_ooze", "minion_duskwind_vanguard", "minion_gracious_timekeeper", "minion_flare_fireworker", "minion_rainbow_whelp", "minion_scarlet_magiserpent", "minion_bone_guard", "minion_chromatic_vohlok", "minion_blubber_behemoth", "minion_soup_savant", "spell_incinerate", "minion_giant_serpent", "spell_dragonforce", "weapon_seething_axe", "minion_trailblazer", "minion_vanal_petkiper", "minion_sweeper_drake" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_augmented_pixie", "spell_boon_of_the_dead", "minion_fae_wraith_caroline", "minion_petal_knight", "minion_phantom_advisor", "spell_curse_of_pain", "minion_magic_muffler", "minion_floating_crystal", "minion_dragon_pod", "minion_sly_conquistador", "spell_boon_of_the_dead", "spell_rise_and_fall", "minion_mollusk_meister", "spell_auto_cannibalism", "minion_stallius_the_horned", "minion_grave_carer_yorn", "spell_blood_boil_wraith", "spell_rise_and_fall", "spell_wraith_ancient_curse", "minion_sunbender", "minion_lord_henryk", "minion_chronocaller", "spell_blood_boil_wraith", "spell_blood_cleave", "minion_bone_man", "minion_bogovanis", "minion_rafaam_philanthropist", "permanent_the_end_time", "minion_fiery_warchief", "spell_recycle_the_dead" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 37, 38 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 33, 20 ]
+  } ],
+  "actions" : [ 0, 0, 1, 0, 0, 0, 0, 2, 2, 4, 1, 0, 0, 1, 0, 0, 7, 4, 4, 3, 1, 0, 8, 4, 0, 25, 5, 10, 8, 2, 1, 1, 13, 10, 2, 2, 12, 13, 1, 0, 1, 0, 9, 1, 14, 42, 46, 37, 0, 0, 4, 8, 18, 0, 2, 1, 4, 0, 42, 16, 1, 4, 5, 1, 0, 0, 3, 3, 8, 1, 0, 0, 33, 0, 34, 3, 19, 0, 0, 0, 27, 28, 16, 4, 10, 1, 9, 2, 14, 10 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

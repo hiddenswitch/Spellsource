@@ -1,0 +1,26 @@
+{
+  "seed" : -8032999600426906836,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "RUST", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_twilight_mercenary", "spell_dragonforce", "minion_amathyst_panther", "minion_tower_ophidian", "minion_scarlet_squire", "spell_despair", "minion_heavy_duty_dragoon", "minion_kodama_bulwark", "minion_dante_the_outlaw", "minion_throat_cutter", "minion_lounge_brownie", "minion_antique_collector", "spell_beast_hunting", "minion_grape_merchant", "minion_grape_merchant", "minion_sweeper_drake", "minion_rheastrasza", "minion_exotic_menace", "minion_underminer", "minion_exotic_menace", "minion_drakonid_bruiser", "minion_faceless_envoy", "minion_deep_borer", "minion_void_reaper", "spell_incinerate", "minion_perplexed_courtsman", "minion_spellquaker", "minion_flutterer", "minion_mountain_whelp", "minion_omega_dragon" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_pathetic_squire", "minion_bone_man", "minion_crouching_tiger", "minion_jungle_king", "spell_blood_cleave", "minion_fumewalker_zin", "minion_fae_wraith_caroline", "minion_lord_henryk", "minion_savage_sprite", "minion_headless_horseman_revengeance", "minion_darkbent_drake", "spell_break_all_bones", "minion_zathahun_bloodthirsty", "minion_magedrainer", "minion_savage_sprite", "minion_sourceborn_aelin", "minion_shouting_soldier", "spell_break_all_bones", "minion_rafaam_archivist", "minion_nightmare_dragonflight", "minion_enthralled_knight", "minion_zealous_deckhand", "minion_fae_embalmer", "minion_gentleman_s_giant", "spell_blood_cleave", "spell_bone_shield_wraith", "spell_recycle_the_dead", "minion_bone_man", "minion_bone_napper", "minion_gustbreaker" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 33, 18 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 64 ]
+  } ],
+  "actions" : [ 0, 1, 0, 0, 0, 0, 2, 1, 0, 0, 0, 3, 0, 5, 9, 0, 1, 0, 2, 1, 0, 6, 4, 5, 3, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

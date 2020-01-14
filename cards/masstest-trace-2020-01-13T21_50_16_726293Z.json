@@ -1,0 +1,26 @@
+{
+  "seed" : -7338208581913524093,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "TEAL", "TIME" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_blackboar", "spell_gift_of_the_queen", "minion_thuggish_fae", "spell_frostfire", "minion_gilblin_plunderer", "spell_scry_me_a_river", "minion_n_zoth_s_battlemaiden", "minion_undead_trickster", "minion_dawn_drake", "minion_antique_collector", "minion_gilblin_plunderer", "minion_storm_giant", "minion_magma_hound", "minion_mother_matron", "minion_warlord_kalithresh", "spell_murloc_mating_call", "minion_skeletal_warrior", "spell_condensation", "minion_rafaam_archivist", "minion_lingering_spirit", "minion_dragon_pod", "minion_holdover_lich", "minion_nazjatar_seahorseman", "minion_timewalker_mistweaver", "spell_evaporation", "minion_infinite_behemoth", "minion_polychrome_hydra", "minion_ironplate_samurai", "minion_hoffis_the_dunewalker", "minion_primal_mother" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "secret_desperation", "minion_giants_toad", "minion_lightning_elemental", "minion_haunted_armor", "minion_swarmed_captive", "spell_firesilk_chrysalis", "spell_trials_of_the_weave", "minion_corona_fae_defender", "minion_gold_picaroon", "minion_blue_nestwatcher", "minion_blubber_behemoth", "weapon_scepter_of_the_first_king", "minion_headless_horseman_revengeance", "minion_centaur_acumen", "minion_xavius", "minion_knight_eternal", "spell_firesilk_chrysalis", "minion_jack_in_the_box", "minion_sand_giant", "minion_meek_inheritor", "minion_petal_knight", "minion_ambushing_rose", "minion_cinderslinger", "minion_whiptail_gatherer", "spell_trials_of_the_weave", "minion_sourceborn_aelin", "secret_afterimage", "minion_arcane_accelerator", "minion_novice_time_traveler", "minion_gasbelly_oni" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 31, 4 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 40 ]
+  } ],
+  "actions" : [ 0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 1, 2, 0, 7, 2, 3, 1, 0, 0, 3, 5, 2, 0, 0, 3, 0, 8, 4, 1, 1, 1, 4, 1, 0, 0, 6, 7, 0, 1, 0, 10, 5, 0, 0, 18, 1, 9, 3, 17, 15, 3, 1, 0, 0, 0, 3, 6, 9, 4, 3, 9, 2, 16, 7, 5, 3, 13, 14, 4, 5, 2, 1, 0, 0, 1, 2, 1, 0, 0, 3, 3, 3, 6, 0, 1, 2, 0, 0, 0, 4, 6, 0, 3, 12, 3, 4, 0, 0, 7, 8, 10, 24, 19, 2, 13, 14, 13, 3, 0, 2, 19, 4, 11, 2, 4, 8, 1, 2, 0, 0, 10, 1, 4, 0, 0, 1, 16, 0, 1, 6, 2, 2, 7, 7, 8, 19, 13, 4, 7, 2, 4, 3, 0, 0, 0, 10, 21, 4, 8, 20, 1, 28, 12, 1, 14, 3, 4, 2, 0, 0, 15, 0, 5, 3, 21, 15, 10, 9, 1, 5, 0, 0, 1, 0, 4, 20, 20, 4, 0, 11, 8, 0, 25 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

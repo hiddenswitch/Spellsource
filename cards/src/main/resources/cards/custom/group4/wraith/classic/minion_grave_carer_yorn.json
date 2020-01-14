@@ -1,12 +1,12 @@
 {
-  "name": "Grave-Carer Yorn",
+  "name": "Slave-Trainer Yorn",
   "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 4,
+  "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Your Skeletons have +1/+1 and <b>Guard</b>. <b>Opener</b>: Summon four 1/1 Skeletons.",
+  "description": "Your Captives have +1/+1 and <b>Guard</b>. <b>Opener</b>: Summon two 2/2 Captives.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -16,16 +16,14 @@
           "class": "SummonSpell",
           "boardPositionRelative": "RIGHT",
           "cards": [
-            "token_skeleton_wraith",
-            "token_skeleton_wraith"
+            "token_captive_overlord"
           ]
         },
         {
           "class": "SummonSpell",
           "boardPositionRelative": "LEFT",
           "cards": [
-            "token_skeleton_wraith",
-            "token_skeleton_wraith"
+            "token_captive_overlord"
           ]
         }
       ]
@@ -40,9 +38,8 @@
       "filter": {
         "class": "SpecificCardFilter",
         "cards": [
-          "token_skeleton_wraith",
-          "token_skeleton2_wraith",
-          "token_skeleton2guard_wraith"
+          "token_captive_overlord",
+          "token_captiveGuard_overlord"
         ]
       }
     },
@@ -53,9 +50,8 @@
       "filter": {
         "class": "SpecificCardFilter",
         "cards": [
-          "token_skeleton_wraith",
-          "token_skeleton2_wraith",
-          "token_skeleton2guard_wraith"
+          "token_captive_overlord",
+          "token_captiveGuard_overlord"
         ]
       }
     }

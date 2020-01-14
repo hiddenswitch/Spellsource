@@ -6,18 +6,35 @@
   "baseAttack": 1,
   "baseHp": 20,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Deal [0] damage to all characters. (Increases for every damage dealt to this)",
+  "description": "Aftermath: Deal all damage dealt to this minion to all characters. (Deals [0] damage",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "LAST_HIT"
+      },
+      "attribute": "RESERVED_INTEGER_1"
+    }
+  },
   "deathrattle": {
     "class": "DamageSpell",
     "target": "ALL_CHARACTERS",
     "value": {
       "class": "AttributeValueProvider",
       "target": "SELF",
-      "attribute": "TOTAL_DAMAGE_RECEIVED"
+      "attribute": "RESERVED_INTEGER_1"
     }
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "RESERVED_INTEGER_1": 0
   },
   "collectible": true,
   "set": "CUSTOM",
@@ -28,7 +45,7 @@
       "value": {
         "class": "AttributeValueProvider",
         "target": "SELF",
-        "attribute": "TOTAL_DAMAGE_RECEIVED"
+        "attribute": "RESERVED_INTEGER_1"
       }
     }
   ]

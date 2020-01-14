@@ -1,0 +1,26 @@
+{
+  "seed" : 8618493009979884220,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "NEONGREEN", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_nebulous_entity", "minion_crystal_giant", "minion_shadownest_arachne", "minion_tribemaster", "minion_selfburner", "minion_sunbender", "minion_pumpkin_abomination", "minion_skeletal_warrior", "minion_grandmother_vratta", "spell_malignancy", "minion_chainwrecker_corsair", "permanent_formless_wormhole", "minion_infinite_futurist", "minion_articus__dragon_giant", "minion_mountain_nightmare", "permanent_formless_celerity", "minion_end_reveler", "minion_ceaseless_ghast", "minion_colrum", "minion_blood_cultist", "minion_degenerator", "permanent_formless_immortal", "minion_faldoran_the_ninja", "spell_cannibalize", "minion_blackflame_bomber", "minion_aeonus", "minion_squirrel_knight", "spell_anti-anomaly_scales", "minion_treasure_hunter", "minion_magma_hound" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_ironplate_samurai", "minion_fiendish_giant", "minion_chief_vigilante", "minion_bloodshard_elemental", "minion_bone_man", "spell_back_for_more", "minion_blight_harvester", "minion_sonorous_spectre", "minion_seeker_of_knowledge", "minion_mossy_giant", "minion_grave_carer_yorn", "spell_boon_of_the_dead", "minion_crazed_wraith", "minion_feral_child", "minion_dragonling_pet", "spell_break_all_bones", "spell_bone_shield_wraith", "minion_bloodshard_elemental", "minion_doctor_hatchett", "minion_nezumi_master", "minion_bramblebound_warrior", "minion_lightning_elemental", "spell_break_all_bones", "minion_fel_manticore", "minion_wee_bat", "spell_blight_hosts", "minion_ghuun", "minion_sourcing_specialist", "minion_deranged_greengill", "spell_rise_and_fall" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 46 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 4, 30 ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 1, 4, 2, 5, 0, 0, 0, 2, 0, 15, 0, 0, 2, 3, 0, 0, 0, 0, 3, 0, 7, 0, 0, 5, 2, 0, 21, 7, 6, 7, 2, 1, 0, 2, 0, 6, 21, 12, 0, 6 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

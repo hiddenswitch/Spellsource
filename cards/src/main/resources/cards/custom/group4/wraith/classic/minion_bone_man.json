@@ -1,15 +1,15 @@
 {
-  "name": "Bone-Man",
+  "name": "Hired Beserker",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "CRIMSON",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "<b>Blitz</b>. <b>Aftermath:</b> Summon a 2/3 Bone-Boy with <b>Guard</b>.",
+  "description": "<b>Blitz</b>. <b>Aftermath:</b> Summon a 2/3 Hired Guard with <b>Guard</b>.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_bone_boy"
+    "card": "token_captiveguard_overlord"
   },
   "attributes": {
     "DEATHRATTLES": true,

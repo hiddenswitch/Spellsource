@@ -2,7 +2,7 @@
   "name": "Necronomicon",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DARKGREEN",
+  "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
   "description": "Take 3 damage, Discover a card. Repeatable this turn.",
   "targetSelection": "NONE",
@@ -10,17 +10,17 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "DamageSpell",
-        "target": "FRIENDLY_HERO",
-        "value": 3,
-        "ignoreSpellDamage": true
-      },
-      {
         "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"
         }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2,
+        "ignoreSpellDamage": true
       }
     ]
   },

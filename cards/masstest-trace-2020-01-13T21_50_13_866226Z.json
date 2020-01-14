@@ -1,0 +1,26 @@
+{
+  "seed" : 4693411768035623820,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "JADE", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_emerald_cleanser", "minion_ebisus_chosen", "minion_kairozdormu", "spell_touch_of_karma", "minion_glass_golem", "minion_mechanical_monstrosity", "minion_plucky_pilgrim", "minion_tree_giant", "spell_windswept_strike", "minion_ebisus_chosen", "minion_redhide_butcher", "minion_emerald_cleanser", "spell_fiery_kitsune_punch", "minion_dead_horse", "minion_vohkrovanis", "minion_glass_memory_golem", "spell_chi_restoration", "spell_fury_of_the_elements", "spell_fortifying_prayer", "minion_hypnotist", "minion_enchanted_tapestry", "minion_warden_saihan", "minion_nilfheim_needlegunner", "minion_enchanted_tapestry", "spell_dream_of_revitilization", "minion_jungle_operative", "minion_chaotic_cutthroat", "minion_giants_toad", "minion_mutated_brute", "minion_throat_cutter" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_plague_of_flesh", "minion_spirited_bomber", "minion_gasbelly_oni", "minion_grave_carer_yorn", "spell_bone_shield_wraith", "minion_kiljaeden_deceiver", "minion_pathetic_squire", "minion_nice_cream", "minion_alemental", "spell_boon_of_the_dead", "minion_zathahun_bloodthirsty", "minion_fae_wraith_caroline", "minion_crouching_tiger", "minion_large_spiderling", "spell_transfer_life", "spell_blood_boil_wraith", "minion_grape_merchant", "minion_bone_man", "minion_bloodshard_elemental", "minion_timewalker_strider", "minion_deep_borer", "minion_fae_embalmer", "spell_plague_of_flesh", "minion_crazed_wraith", "minion_blood_cultist", "minion_garbasu_monster", "minion_wyrmrest_sniper", "spell_blight_hosts", "minion_brawler_bushi", "spell_boon_of_the_dead" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 21, 17 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 41, 65, 58 ]
+  } ],
+  "actions" : [ 0, 3, 1, 1, 4, 3, 0, 2, 1, 0, 2, 3, 0, 0, 6, 4, 6, 1, 0, 0, 2, 4, 6, 4, 11, 0, 0, 2, 6, 9, 0, 3, 1, 10, 6, 0, 19, 4, 5 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

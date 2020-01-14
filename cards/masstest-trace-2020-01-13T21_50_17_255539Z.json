@@ -1,0 +1,26 @@
+{
+  "seed" : -3919498795287969700,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CAMO", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_kodama_bulwark", "minion_wolfcrier", "minion_ambushing_rose", "weapon_pilfered_dagger", "minion_burrows_sniper", "minion_sourcing_specialist", "spell_espionage", "minion_sky_high_surveyor", "minion_nightmare_whelp", "minion_matriarch_aiiran", "spell_low_sweep", "minion_mighty_mufunga", "minion_polycephalos", "weapon_dreamscape_scythe", "spell_chokehold", "spell_scavenge", "spell_ragged_phalanx", "minion_parallel_protector", "weapon_splintered_spear", "minion_mountain_nightmare", "spell_low_sweep", "minion_primalist_kirra", "minion_cursing_disciple", "spell_reserve_corps", "minion_quest_giver", "minion_rafaam_archivist", "spell_smokebomb", "spell_skirmish", "minion_infinite_futurist", "minion_skeletower" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_lord_henryk", "spell_curse_of_pain", "minion_bone_napper", "minion_dark_artist", "weapon_stick", "minion_bloodshard_elemental", "minion_blackboar", "minion_end_reveler", "minion_dark_artist", "minion_highmountain_primalist", "spell_curse_of_pain", "spell_break_all_bones", "minion_bone_man", "minion_bone_man", "spell_wraith_ancient_curse", "permanent_the_end_time", "minion_giant_serpent", "spell_blood_cleave", "minion_zealous_deckhand", "pact_deaths_hand", "minion_dragonfruit_whelp", "minion_mind_controlled_mech", "spell_plague_of_flesh", "spell_back_for_more", "minion_rafaam_archivist", "minion_sunbender", "minion_onis_eye", "minion_pathetic_squire", "pact_nothing_to_waste", "spell_recipe_for_power" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 13, 15, 4 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 42, 53, 38 ]
+  } ],
+  "actions" : [ 0, 1, 1, 3, 4, 0, 1, 4, 0, 0, 3, 3, 7, 2, 0, 2, 3, 1, 3, 4, 7, 0, 2, 9, 3, 1, 0, 0, 18, 5, 2, 0, 6, 5, 1, 1, 12, 7, 2, 4, 1, 9, 2, 6, 1, 0, 0, 10, 1, 6, 6, 2, 1, 6, 5, 12, 8, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

@@ -1,10 +1,10 @@
 {
-  "name": "Auto-Cannibalism",
+  "name": "Unstable Feyfire",
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
-  "description": "Lifedrain. Take 16 damage. Deal $2 damage to all enemy minions.",
+  "description": "Lifedrain. Take 14 damage. Deal $2 damage to all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -12,7 +12,7 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 16,
+        "value": 14,
         "ignoreSpellDamage": true
       },
       {

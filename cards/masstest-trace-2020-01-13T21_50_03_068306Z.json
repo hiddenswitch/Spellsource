@@ -1,0 +1,26 @@
+{
+  "seed" : 8158538917718125110,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CRIMSON", "BLOOD" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_selfburner", "spell_transfer_life", "minion_micro_raptors", "minion_amathyst_panther", "minion_grave_carer_yorn", "spell_bone_shield_wraith", "pact_nothing_to_waste", "spell_bone_shield_wraith", "minion_timewalker_stormlord", "spell_recipe_for_power", "minion_shifting_sands", "minion_pathetic_squire", "spell_recycle_the_dead", "minion_massive_turtle", "pact_nothing_to_waste", "spell_break_all_bones", "spell_recipe_for_power", "minion_inora_spellbound", "spell_curse_of_pain", "minion_mother_matron", "minion_tempest_elemental", "minion_holdover_lich", "minion_the_imperial_soul", "minion_ankylo_devotee", "pact_soul_lightning", "minion_jungle_king", "minion_lounge_brownie", "minion_bone_man", "spell_curse_of_pain", "minion_pathetic_squire" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_dead_horse", "minion_dimensional_courier", "minion_faldoran_the_ninja", "spell_vampire_red_lightning", "minion_skeletal_warrior", "spell_hemoblast", "minion_bloodfuser", "spell_bloodburn", "spell_proselytize", "minion_costume_seller", "minion_timewalker_stormlord", "minion_chromie", "minion_flutterer", "spell_final_feast", "minion_ichor_surger", "minion_sunbender", "minion_deft_familiar", "minion_alien_ravager", "spell_essence_shock", "spell_bloodburn", "minion_harbinger_of_hope", "minion_darkbent_drake", "minion_heartstopper", "minion_end", "weapon_heartpiercer", "spell_twilight_ritual", "minion_timewalker_strider", "spell_hemoshape_brand", "minion_blood_elf_champion", "minion_wink_dog" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 51, 56, 40 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 8, 27, 29 ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 0, 4, 2, 2, 0, 0, 1, 0, 7, 2, 0, 0, 6, 0, 12, 1, 1, 1, 6, 1, 4, 7, 5, 2, 1, 5, 1, 1, 2, 1, 0, 2, 2, 0, 1, 4, 2, 8, 9, 5, 1, 16, 5, 1, 1, 4, 2, 1, 0, 0, 4, 2, 2, 4, 3, 25, 8, 1, 0, 0, 13, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

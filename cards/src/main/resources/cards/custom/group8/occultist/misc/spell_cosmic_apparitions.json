@@ -7,20 +7,25 @@
   "description": "Discover a minion. Shuffle two copies of it into your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
-    "cardSource": {
-      "class": "CatalogueSource"
-    },
-    "spell": {
-      "class": "ShuffleToDeckSpell",
-      "value": 2
-    }
-  },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ShuffleToDeckSpell",
+          "value": 2,
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          "cardSource": {
+            "class": "CatalogueSource"
+          }
+         }
+        }
+       ]
+      },
+      "collectible": true,
+      "set": "CUSTOM",
+      "fileFormatVersion": 1
 }
