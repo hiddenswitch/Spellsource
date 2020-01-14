@@ -4,7 +4,7 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.62-3.0.8 (In Progress)
+### 0.8.62-3.0.8 (January 13, 2020)
 
  - New Vampire Lord cards and updates. (1444)
  - Wraith has been updated as the Overlord. (1445)
