@@ -247,8 +247,8 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - DDNSROUTE53_IN_DOMAINS=*.hiddenswitch.com
-      - DDNSROUTE53_IP_ADDRESS=PUBLIC
+      - DDNSROUTE53_UPDATE_IN_DOMAINS=*.hiddenswitch.com
+      - DDNSROUTE53_UPDATE_IP_ADDRESS=PUBLIC
     deploy:
       placement:
         constraints: [node.platform.arch == x86_64]
