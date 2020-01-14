@@ -11,7 +11,10 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "custom.ActivateTriggeredEffectSpell"
+      "class": "custom.ActivateTriggeredEffectSpell",
+      "filter": {
+        "class": "HasTurnEffectsFilter"
+      }
     }
   },
   "attributes": {

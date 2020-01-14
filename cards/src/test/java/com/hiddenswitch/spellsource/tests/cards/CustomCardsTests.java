@@ -3785,8 +3785,23 @@ public class CustomCardsTests extends TestBase {
 	public void testBronzeTimekeeper() {
 		runGym((context, player, opponent) -> {
 			Minion jelly = playMinionCard(context, player, "minion_end_of_turn_trigger");
+			playMinionCard(context, player, "minion_neutral_test_1");
 			playMinionCard(context, player, "minion_bronze_timekeeper", jelly);
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 1);
+				return battlecryActions.get(0);
+			});
 			assertEquals(player.getDeck().size(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, opponent, "minion_neutral_test_1");
+			playMinionCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "minion_bronze_timekeeper");
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 0);
+				return battlecryActions.get(0);
+			});
 		});
 	}
 
