@@ -18,7 +18,8 @@
       "target": "FRIENDLY_PLAYER",
       "trigger": {
         "eventTrigger": {
-          "class": "AfterMinionPlayedTrigger"
+          "class": "AfterMinionPlayedTrigger",
+          "targetPlayer": "SELF"
         },
         "spell": {
           "class": "AddDeathrattleSpell",
@@ -27,7 +28,7 @@
             "class": "SummonSpell",
             "card": "token_lesser_oni"
           }
-		    }
+        }
       }
     }
   },
