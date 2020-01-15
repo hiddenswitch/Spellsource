@@ -673,6 +673,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testBrothersInBlood() {
 		runGym((context, player, opponent) -> {
+			/*
 			Minion target = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_brothers_in_blood", target);
 			Minion buffed = playMinionCard(context, player, "minion_neutral_test");
@@ -681,6 +682,17 @@ public class CustomCardsTests extends TestBase {
 			Minion notBuffed = playMinionCard(context, player, "minion_black_test");
 			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
 			assertEquals(notBuffed.getMaxHp(), notBuffed.getBaseHp());
+			*/
+
+
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(player.getMinions().size(), 1);
+			playCard(context, player, "spell_brothers_in_blood", target);
+			assertEquals(player.getMinions().size(), 1);
+			playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(player.getMinions().size(), 3);
+			playMinionCard(context, player, "minion_black_test");
+			assertEquals(player.getMinions().size(), 4);
 		});
 	}
 
