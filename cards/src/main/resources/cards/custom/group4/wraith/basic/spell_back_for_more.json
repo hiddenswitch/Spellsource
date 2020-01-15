@@ -1,17 +1,16 @@
 {
-  "name": "Back For More",
-  "baseManaCost": 2,
+  "name": "Bring The Bait",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Summon three 1/1 Skeletons.",
+  "description": "Summon two 2/2 Captives.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "cards": [
-      "token_skeleton_wraith",
-      "token_skeleton_wraith",
-      "token_skeleton_wraith"
+      "token_captive_overlord",
+      "token_captive_overlord"
     ]
   },
   "collectible": true,

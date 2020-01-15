@@ -27,10 +27,7 @@ import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.EntityZoneTable;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.environment.EnvironmentDeque;
-import net.demilich.metastone.game.environment.EnvironmentMap;
-import net.demilich.metastone.game.environment.EnvironmentValue;
+import net.demilich.metastone.game.environment.*;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.logic.*;
@@ -1480,6 +1477,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence(int playerId) {
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(playerId);
+	}
+
+	public EnvironmentDeathrattleTriggeredList getDeathrattles() {
+		return (EnvironmentDeathrattleTriggeredList) getEnvironment().computeIfAbsent(Environment.DEATHRATTLES_TRIGGERED, environment1 -> new EnvironmentDeathrattleTriggeredList());
 	}
 
 	protected Player getNonActivePlayer() {

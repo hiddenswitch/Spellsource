@@ -1,6 +1,7 @@
 import git
 from typing import List
 import os.path as path
+import os
 import shutil
 import json
 from glob import glob
@@ -36,7 +37,10 @@ class PullRequestFixSession(object):
                     continue
                 # continue with fix
                 newpath = path.basename(diff.rename_from)
-                shutil.move(diff.rename_to, path.join(path.dirname(diff.rename_from), newpath))
+                # check that the directory exists
+                destination = path.join(path.dirname(diff.rename_from), newpath)
+                os.makedirs(path.dirname(destination), exist_ok=True)
+                shutil.move(diff.rename_to, destination)
                 res += [newpath]
         # fix all missing .json extensions and double .json extensions
         for filepath in glob('cards/src/main/resources/cards/**', recursive=True):

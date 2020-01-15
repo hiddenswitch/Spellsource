@@ -49,7 +49,7 @@ public class TriggerDeathrattleSpell extends Spell {
 				SpellUtils.castChildSpell(context, player, card.getDesc().getDeathrattle(), source, target);
 			}
 			for (SpellDesc deathrattle : card.getDeathrattleEnchantments()) {
-				SpellUtils.castChildSpell(context, player, card.getDesc().getDeathrattle(), source, target);
+				SpellUtils.castChildSpell(context, player, deathrattle, source, target);
 			}
 
 			if (card.getDesc().getDeathrattle() == null && card.getDeathrattleEnchantments().isEmpty()) {

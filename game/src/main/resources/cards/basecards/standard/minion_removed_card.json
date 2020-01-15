@@ -1,0 +1,13 @@
+{
+  "name": "Removed Minion Card",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Do nothing.",
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

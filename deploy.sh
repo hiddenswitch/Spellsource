@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.61
+SPELLSOURCE_VERSION=0.8.63
 SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
@@ -380,6 +380,7 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_
   echo "Building Spellsource JAR file"
   { # try
     # Build the server
+    ${GRADLE_CMD} net:clean 2>&1 > /dev/null && \
     ${GRADLE_CMD} net:shadowJar 2>&1 > /dev/null
   } || { # catch
     echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
@@ -481,7 +482,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.61-all.jar \
+      ./net/build/libs/net-0.8.63-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

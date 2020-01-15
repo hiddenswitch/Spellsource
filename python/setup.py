@@ -33,14 +33,16 @@ class CompileSpellsource(install):
         # Compile Spellsource
         # This will throw an exception if compilation fails, which is exactly what we want
         if os.name == "nt":
-            subprocess.check_call(["./gradlew.bat net:shadowJar"], cwd=SRC_PATH, shell=True)
+            gradle_cmd = './gradlew.bat'
         else:
-            subprocess.check_call(["./gradlew net:shadowJar"], cwd=SRC_PATH, shell=True)
+            gradle_cmd = './gradlew'
+        subprocess.check_call([f"{gradle_cmd} net:shadowJar"], cwd=SRC_PATH, shell=True)
+        subprocess.check_call([f"{gradle_cmd} hearthstone:jar"], cwd=SRC_PATH, shell=True)
         install.run(self)
 
 
 setup(name='spellsource',
-      version='0.8.61',
+      version='0.8.63',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -50,7 +52,8 @@ setup(name='spellsource',
       data_files=[
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.61-all.jar'),
+          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.63-all.jar'),
+                                 os.path.join(SRC_PATH, 'hearthstone', 'build', 'libs', 'hearthstone-0.8.63.jar'),
                                  os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,

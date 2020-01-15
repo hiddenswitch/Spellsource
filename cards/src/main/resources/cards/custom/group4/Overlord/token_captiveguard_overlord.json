@@ -1,20 +1,21 @@
 {
-  "name": "Peeling Zombie",
+  "name": "Captive",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "CRIMSON",
   "baseAttack": 2,
   "baseHp": 2,
-  "rarity": "RARE",
-  "description": "Aftermath: Summon a 2/2 Skeleton.",
+  "rarity": "FREE",
+  "description": "<b>Guard. Aftermath:</b> Summon an underling.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_skeleton2_wraith"
+    "card": "token_underling_overlord"
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

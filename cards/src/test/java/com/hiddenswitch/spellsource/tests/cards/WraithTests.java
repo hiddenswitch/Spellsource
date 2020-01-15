@@ -12,35 +12,36 @@ import static org.junit.jupiter.api.Assertions.*;
 public class WraithTests extends TestBase {
 	@Test
 	public void testPlagueOfFlesh() {
+		int ATTACK_DEBUFF = 2;
+		int HP_DEBUFF = 2;
 		runGym(((context, player, opponent) -> {
-			Minion enemyMinion = playMinionCard(context, opponent, "minion_test_3_2");
+			Minion enemyMinion = playMinionCard(context, opponent, 0, HP_DEBUFF);
 			playCard(context, player, "spell_plague_of_flesh");
 			assertTrue(enemyMinion.isDestroyed());
 		}));
 
 		runGym(((context, player, opponent) -> {
-			Minion enemyMinion = playMinionCard(context, opponent, "minion_test_4_5");
+			Minion enemyMinion = playMinionCard(context, opponent, ATTACK_DEBUFF + 1, HP_DEBUFF + 1);
 			playCard(context, player, "spell_plague_of_flesh");
 			assertFalse(enemyMinion.isDestroyed());
-			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack() - 1);
-			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - 2);
+			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack() - ATTACK_DEBUFF);
+			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - HP_DEBUFF);
 		}));
 
 		runGym(((context, player, opponent) -> {
-			Minion enemyMinion = playMinionCard(context, opponent, "minion_test_1_3");
+			Minion enemyMinion = playMinionCard(context, opponent, 1, HP_DEBUFF + 1);
 			playCard(context, player, "spell_plague_of_flesh");
 			assertFalse(enemyMinion.isDestroyed());
-			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack());
-			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - 2);
+			assertEquals(enemyMinion.getBaseAttack(), enemyMinion.getAttack());
+			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - HP_DEBUFF);
 		}));
 
 		runGym((context, player, opponent) -> {
-			Minion enemyMinion = playMinionCard(context, opponent, "minion_test_1_3");
-			enemyMinion.setAttack(0);
+			Minion enemyMinion = playMinionCard(context, opponent, 0, HP_DEBUFF + 1);
 			playCard(context, player, "spell_plague_of_flesh");
 			assertFalse(enemyMinion.isDestroyed());
 			assertEquals(enemyMinion.getAttack(), 0);
-			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - 2);
+			assertEquals(enemyMinion.getHp(), enemyMinion.getBaseHp() - HP_DEBUFF);
 		});
 
 		runGym(((context, player, opponent) -> {
@@ -48,8 +49,8 @@ public class WraithTests extends TestBase {
 			enemyMinion.setHp(4);
 			playCard(context, player, "spell_plague_of_flesh");
 			assertFalse(enemyMinion.isDestroyed());
-			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack() - 1);
-			assertEquals(enemyMinion.getHp(), 2);
+			assertEquals(enemyMinion.getAttack(), enemyMinion.getBaseAttack() - ATTACK_DEBUFF);
+			assertEquals(enemyMinion.getHp(), 4 - HP_DEBUFF);
 		}));
 	}
 
@@ -121,7 +122,7 @@ public class WraithTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			playCard(context, player, "pact_nothing_to_waste");
 			playCard(context, player, "spell_test_deal_5_to_enemy_hero");
-			assertEquals(player.getMinions().size(), 2);
+			assertEquals(1, player.getMinions().size());
 		}));
 
 		runGym(((context, player, opponent) -> {
@@ -129,7 +130,7 @@ public class WraithTests extends TestBase {
 			playCard(context, opponent, "minion_test_1_3");
 			playCard(context, opponent, "minion_test_1_3");
 			playCard(context, player, "spell_test_1_aoe");
-			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMinions().size(), 1);
 		}));
 	}
 
@@ -144,11 +145,11 @@ public class WraithTests extends TestBase {
 			player.getHero().setHp(15);
 			assertTrue(context.getLogic().canPlayCard(player, autoCannibalism));
 			int hp = player.getHero().getHp();
-			int hpCost = 16;
+			int hpCost = 14;
 			int perMinionLifesteal = 2;
 			int minions = opponent.getMinions().size();
 			playCard(context, player, autoCannibalism);
-			assertEquals(player.getHero().getHp(), hp - hpCost + perMinionLifesteal * minions);
+			assertEquals(hp - hpCost + perMinionLifesteal * minions, player.getHero().getHp());
 			assertFalse(player.getHero().isDestroyed());
 		});
 	}

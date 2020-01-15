@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "<b>Guard</b>. <b>Opener</b>: If your champion has 20 or less Health, gain +1/+4.",
+  "description": "<b>Guard</b>. <b>Opener</b>: If your champion has 20 or less Health, gain +1/+3.",
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",
@@ -19,7 +19,7 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "hpBonus": 4
+      "hpBonus": 3
     }
   },
   "attributes": {

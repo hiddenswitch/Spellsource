@@ -18,7 +18,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -27,7 +27,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {

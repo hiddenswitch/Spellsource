@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.ext.unit.TestContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class ConversationTest extends SpellsourceTestBase {
 	private static Logger LOGGER = LoggerFactory.getLogger(ConversationTest.class);
 
 	@Test
+	@Ignore("needs to be revisited")
 	public void testConversationRealtime(TestContext context) {
 		sync(() -> {
 			CreateAccountResponse user1 = createRandomAccount();

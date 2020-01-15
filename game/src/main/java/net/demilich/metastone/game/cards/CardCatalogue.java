@@ -92,10 +92,10 @@ public class CardCatalogue {
 		if (card != null) {
 			card = card.getCopy();
 		} else {
-			throw new NullPointerException(String.format("getCardById: %s could not be found", id));
+			throw new NullPointerException(id);
 		}
 		if (card.getDesc().getFileFormatVersion() > version) {
-			throw new NullPointerException(String.format("getCardById: %s is not in this version", id));
+			throw new NullPointerException(id);
 		}
 		return card;
 	}

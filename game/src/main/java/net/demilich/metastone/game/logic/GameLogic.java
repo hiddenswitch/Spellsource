@@ -239,6 +239,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
+	 * Modifies the {@code target} entity's HP, firing the {@link MaxHpIncreasedEvent} and incrementing its
+	 *
+	 * @param source
+	 * @param target
+	 * @param hpBonus
+	 */
+	@Suspendable
+	public void modifyHpSpell(Entity source, Entity target, int hpBonus) {
+		target.modifyHpBonus(hpBonus);
+		if (hpBonus > 0) {
+			target.modifyAttribute(Attribute.TOTAL_HP_INCREASES, hpBonus);
+			context.fireGameEvent(new MaxHpIncreasedEvent(context, target, hpBonus, source.getOwner()));
+		}
+	}
+
+	/**
 	 * Adds a {@link Trigger} to a specified {@link Entity}. These are typically {@link Enchantment} instances that react
 	 * to game events.
 	 *
@@ -2799,7 +2815,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		actor.setHp(newMaxHp);
 		handleHpChange(actor);
 		if (newMaxHp > currentMaxHp) {
-			context.fireGameEvent(new MaxHpIncreasedEvent(context, actor, newMaxHp - currentMaxHp, -1));
+			int amount = newMaxHp - currentMaxHp;
+			actor.modifyAttribute(Attribute.TOTAL_HP_INCREASES, amount);
+			context.fireGameEvent(new MaxHpIncreasedEvent(context, actor, amount, -1));
 		}
 	}
 
@@ -3806,6 +3824,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void resolveDeathrattles(int playerId, EntityReference sourceReference, List<SpellDesc> deathrattles, int sourceOwner, int boardPosition) {
+		resolveDeathrattles(playerId, sourceReference, deathrattles, sourceOwner, boardPosition, true);
+	}
+
+	/**
+	 * Casts a list of deathrattle spells given information about the entity that "hosts" those deathrattles
+	 *
+	 * @param playerId                         The casting player
+	 * @param sourceReference                  A reference to the source
+	 * @param deathrattles                     The actual deathrattles to cast
+	 * @param sourceOwner                      The owner of the source
+	 * @param boardPosition                    The former board position of the source
+	 * @param shouldAddToDeathrattlesTriggered {@code true} if the deathrattle should be recorded in the list of triggered
+	 *                                         deathrattles
+	 */
+	@Suspendable
+	public void resolveDeathrattles(int playerId, EntityReference sourceReference, List<SpellDesc> deathrattles, int sourceOwner, int boardPosition, boolean shouldAddToDeathrattlesTriggered) {
 		boolean doubleDeathrattles = false;
 		List<DoubleDeathrattlesAura> doubleDeathrattleAuras = SpellUtils.getAuras(context, sourceOwner, DoubleDeathrattlesAura.class);
 		if (!doubleDeathrattleAuras.isEmpty()) {
@@ -3826,6 +3860,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (doubleDeathrattles) {
 				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
 				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, true, null);
+			}
+			if (shouldAddToDeathrattlesTriggered) {
+				context.getDeathrattles().addDeathrattle(playerId, sourceReference, deathrattle);
 			}
 		}
 	}

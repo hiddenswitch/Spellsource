@@ -4,8 +4,18 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.62-3.0.8 (In Progress)
+### 0.8.63-3.0.8 (January 14, 2020)
 
+ - New Oni Queen cards and updates. (since 0.8.62)
+ - Deft Familiar now correctly upgrades your hero power.
+ - Dark Rule now correctly selects from different Overlord tokens.
+ - Fifi Fizzlewarp no longer interacts specially with cards that also trigger at the start of the game.
+ - Zilch, God of Nothing correctly does not count permanents for its effect.
+
+### 0.8.62-3.0.8 (January 13, 2020)
+
+ - New Vampire Lord cards and updates. (1444)
+ - Wraith has been updated as the Overlord. (1445)
  - Adding Steel Smash ("Deal damage equal to your Armor to a minion.") to Archaeologist. (1446)
  - Champion of Death costs 7, up from 6. (1447)
  - Changes to the Occultist champion: 20 cards rebalanced and the introduction of Ancient Blood and changes to Jikr, Occult One. (1450)
