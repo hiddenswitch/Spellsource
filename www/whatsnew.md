@@ -4,6 +4,15 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### 0.8.64-3.0.8 (In Progress)
+
+ - Bloodlord Goa now reads, Opener: Gain the aftermath, "Repeat all other friendly aftermaths."
+ - Minions can now have a maximum of 16 active aftermaths.
+ - Aftermaths on a minion that were not in its text are removed after they process.
+ - All cards that triggered aftermaths, like Vein Burster, now correctly trigger aftermaths that were added by effects other than the target minion's text.
+ - Haunted Berserker now correctly deals Toxic and Lifedrain damage (i.e. splash damage) with its effect.
+ - Playing cards randomly is not recursive.
+
 ### 0.8.63-3.0.8 (January 14, 2020)
 
  - New Oni Queen cards and updates. (since 0.8.62)

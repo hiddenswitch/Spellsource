@@ -77,6 +77,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int MAX_MINIONS = 7;
 	/**
+	 * The maximum number of deathrattle enchantments that can be added to an actor.
+	 */
+	public static final int MAX_DEATHRATTLES = 16;
+	/**
 	 * The maximum number of {@link Card} entities that can be in a {@link Zones#HAND}.
 	 */
 	public static final int MAX_HAND_CARDS = 10;
@@ -138,6 +142,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int MEGA_WINDFURY_ATTACKS = 4;
 	/**
+	 * Represents the maximum number of spells that can be evaluated by the game logic since the start of performing a
+	 * game action.
+	 * <p>
+	 * This will probably be migrated to the entire game context when it becomes possible to programmatically perform a
+	 * game action.
+	 */
+	public static final int MAX_PROGRAM_COUNTER = 1000;
+	/**
 	 * This {@link Set} stores each {@link Attribute} that is not cleared when an {@link Entity} is silenced.
 	 *
 	 * @see #silence(int, Actor) for the silence game logic.
@@ -157,6 +169,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private long seed = XORShiftRandom.createSeed();
 	private XORShiftRandom random = new XORShiftRandom(seed);
 	private transient int spellDepth = 0;
+	private transient int programCounter = 0;
 	protected transient GameContext context;
 
 	static {
@@ -690,6 +703,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
+		programCounter++;
+		if (programCounter > MAX_PROGRAM_COUNTER) {
+			throw new IllegalStateException("program counter");
+		}
 		spellDepth++;
 		if (spellDepth > MAX_SPELL_DEPTH) {
 			throw new UnsupportedOperationException("infinite spell depth");
@@ -1451,7 +1468,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		for (Actor target : reversed) {
 			if (!target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-				removeEnchantments(target, false, false);
+				removeEnchantments(target, false, false, false);
 			}
 			previousLocations.put(target, target.getEntityLocation());
 			target.moveOrAddTo(context, Zones.GRAVEYARD);
@@ -1496,7 +1513,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			resolveDeathrattles(owner, target, previousLocations.get(target));
 		}
 		for (Actor target : targets) {
-			removeEnchantments(target, true, false);
+			removeEnchantments(target, true, false, true);
 		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
@@ -1734,7 +1751,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		entity.setAttribute(Attribute.DESTROYED);
 		entity.getAttributes().remove(Attribute.DEATHRATTLES);
-		removeEnchantments(entity, true, false);
+		removeEnchantments(entity, true, false, false);
 		entity.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 	}
 
@@ -2928,6 +2945,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void performGameAction(int playerId, GameAction action) {
+		programCounter = 0;
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("GameLogic/performGameAction")
 				.withTag("gameId", context.getGameId())
@@ -3534,16 +3552,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	public void removeEnchantments(Entity entity) {
-		removeEnchantments(entity, true, false);
+		removeEnchantments(entity, true, false, false);
 	}
 
 	@Suspendable
-	private void removeEnchantments(Entity entity, boolean removeAuras, boolean keepSelfCardCostModifiers) {
+	private void removeEnchantments(Entity entity, boolean removeAuras, boolean keepSelfCardCostModifiers, boolean removeAddedDeathrattles) {
 		EntityReference entityReference = entity.getReference();
 		// Remove all card enchantments
 		if (entity.getEntityType() == EntityType.CARD) {
 			for (Attribute cardEnchantmentAttribute : Attribute.getCardEnchantmentAttributes()) {
 				entity.getAttributes().remove(cardEnchantmentAttribute);
+			}
+		}
+
+		if (removeAddedDeathrattles) {
+			// Remove all the deathrattles that were added as part of other effects.
+			if (entity instanceof HasDeathrattleEnchantments) {
+				HasDeathrattleEnchantments hasDeathrattleEnchantments = (HasDeathrattleEnchantments) entity;
+				hasDeathrattleEnchantments.clearAddedDeathrattles();
 			}
 		}
 
@@ -4032,7 +4058,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			// Remove passive triggers if the card was in a place they were active
 			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
-				removeEnchantments(card, true, keepCardCostModifiers);
+				removeEnchantments(card, true, keepCardCostModifiers, false);
 			}
 
 			if (count == 0) {
@@ -4060,7 +4086,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 			return true;
 		} else if (card.getId() != IdFactory.UNASSIGNED) {
-			removeEnchantments(card, true, keepCardCostModifiers);
+			removeEnchantments(card, true, keepCardCostModifiers, false);
 			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
 		return false;
@@ -4524,7 +4550,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (minion.getZone() == Zones.BATTLEFIELD) {
 			index = minion.getEntityLocation().getIndex();
 			owner.getZone(minion.getEntityLocation().getZone()).remove(index);
-		} else if (minion.getZone() == Zones.GRAVEYARD) {
+		} else if (minion.getZone() == Zones.GRAVEYARD || minion.getZone() == Zones.SET_ASIDE_ZONE) {
 			// Are we evaluating a deathrattle?
 			if (spellDesc.containsKey(SpellArg.DEATHRATTLE_ID)) {
 				// Resurrect to its original position if there is one, or the rightmost position on the board
