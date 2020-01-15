@@ -638,6 +638,21 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
+	 * Determines if the card's target selection ought to be overrided, and does so via applying or
+	 * removing {@link Attribute#TARGET_SELECTION} on the card.
+	 *
+	 */
+	public void processTargetSelectionOverride(GameContext context, Player player) {
+		if (getTargetSelectionCondition() != null && getTargetSelectionOverride() != null) {
+			if (getTargetSelectionCondition().create().isFulfilled(context, player, player, this)) {
+				getAttributes().put(Attribute.TARGET_SELECTION, getTargetSelectionOverride());
+			} else if (Objects.equals(getAttributes().get(Attribute.TARGET_SELECTION), getTargetSelectionOverride())){
+				getAttributes().remove(Attribute.TARGET_SELECTION);
+			}
+		}
+	}
+
+	/**
 	 * Indicates this card plays an actor, like a minion, weapon or hero, from the hand.
 	 *
 	 * @return {@code true} if this is an actor card
@@ -889,6 +904,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			}
 		}
 
+		processTargetSelectionOverride(context, player);
 		TargetSelection selection = hasChoices() || isHeroPower() ?
 				getTargetSelection() :
 				context.getLogic().processTargetModifiers(play()).getTargetRequirement();
@@ -1256,5 +1272,21 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	public int[] getColor() {
 		return getDesc().getColor();
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return getDesc().targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return getDesc().targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		getDesc().setTargetSelectionCondition(targetSelectionCondition);
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		getDesc().setTargetSelectionOverride(targetSelectionOverride);
 	}
 }

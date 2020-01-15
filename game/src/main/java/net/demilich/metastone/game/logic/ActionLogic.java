@@ -57,6 +57,7 @@ public class ActionLogic implements Serializable {
 		if (heroPower.isChooseOne()) {
 			rolloutChooseOnesWithOverrides(context, player, heroPowerActions, heroPower);
 		} else {
+			heroPower.processTargetSelectionOverride(context, player);
 			rollout(heroPower.play(), context, player, heroPowerActions);
 		}
 
@@ -113,6 +114,7 @@ public class ActionLogic implements Serializable {
 			if (card.isChooseOne()) {
 				rolloutChooseOnesWithOverrides(context, player, playCardActions, card);
 			} else {
+				card.processTargetSelectionOverride(context, player);
 				rollout(card.play(), context, player, playCardActions);
 			}
 

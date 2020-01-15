@@ -147,6 +147,7 @@ public class SpellUtils {
 				}
 			}
 		} else {
+			card.processTargetSelectionOverride(context, player);
 			action = card.play();
 		}
 

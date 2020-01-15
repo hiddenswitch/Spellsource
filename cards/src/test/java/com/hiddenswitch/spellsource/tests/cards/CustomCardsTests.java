@@ -4778,4 +4778,23 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getDeck().stream().filter(card -> card.getSourceCard().getCardId().equals("minion_test_3_2")).collect(Collectors.toList()).size(), 3);
 		});
 	}
+
+	@Test
+	public void test8thHeavenFormation() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_8th_heaven_formation");
+			player.setMana(6);
+			assertEquals(1, context.getValidActions().stream()
+					.filter(ga -> ga.getActionType() == ActionType.SPELL).count());
+			Minion demon = playMinionCard(context, player, "minion_demon_test");
+			destroy(context, demon);
+			playMinionCard(context, player, "minion_demon_test");
+			playMinionCard(context, opponent, "minion_demon_test");
+			player.setMana(6);
+			assertEquals(4, context.getValidActions().stream()
+					.filter(ga -> ga.getActionType() == ActionType.SPELL).count());
+		});
+
+
+	}
 }
