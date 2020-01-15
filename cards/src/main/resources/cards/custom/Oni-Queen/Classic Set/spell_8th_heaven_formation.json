@@ -5,7 +5,21 @@
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
   "description": "Deal $8 damage randomly among all enemies. If a Demon died this turn, deal $8 damage instead.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
+  "targetSelectionOverride": "ANY",
+  "targetSelectionCondition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "DiedThisTurnValueProvider",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "DEMON"
+      },
+      "targetPlayer": "BOTH"
+    },
+    "value2": 0,
+    "operation": "GREATER"
+  },
   "spell": {
     "class": "EitherOrSpell",
     "condition": {

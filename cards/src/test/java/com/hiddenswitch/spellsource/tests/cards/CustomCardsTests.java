@@ -673,6 +673,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testBrothersInBlood() {
 		runGym((context, player, opponent) -> {
+			/*
 			Minion target = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_brothers_in_blood", target);
 			Minion buffed = playMinionCard(context, player, "minion_neutral_test");
@@ -681,6 +682,17 @@ public class CustomCardsTests extends TestBase {
 			Minion notBuffed = playMinionCard(context, player, "minion_black_test");
 			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
 			assertEquals(notBuffed.getMaxHp(), notBuffed.getBaseHp());
+			*/
+
+
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(player.getMinions().size(), 1);
+			playCard(context, player, "spell_brothers_in_blood", target);
+			assertEquals(player.getMinions().size(), 1);
+			playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(player.getMinions().size(), 3);
+			playMinionCard(context, player, "minion_black_test");
+			assertEquals(player.getMinions().size(), 4);
 		});
 	}
 
@@ -3785,8 +3797,23 @@ public class CustomCardsTests extends TestBase {
 	public void testBronzeTimekeeper() {
 		runGym((context, player, opponent) -> {
 			Minion jelly = playMinionCard(context, player, "minion_end_of_turn_trigger");
+			playMinionCard(context, player, "minion_neutral_test_1");
 			playMinionCard(context, player, "minion_bronze_timekeeper", jelly);
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 1);
+				return battlecryActions.get(0);
+			});
 			assertEquals(player.getDeck().size(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, opponent, "minion_neutral_test_1");
+			playMinionCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "minion_bronze_timekeeper");
+			overrideBattlecry(context, player, battlecryActions -> {
+				assertEquals(battlecryActions.size(), 0);
+				return battlecryActions.get(0);
+			});
 		});
 	}
 
@@ -4750,5 +4777,24 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_shuffle_minion_to_opponents_deck", opponentMinion);
 			assertEquals(opponent.getDeck().stream().filter(card -> card.getSourceCard().getCardId().equals("minion_test_3_2")).collect(Collectors.toList()).size(), 3);
 		});
+	}
+
+	@Test
+	public void test8thHeavenFormation() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_8th_heaven_formation");
+			player.setMana(6);
+			assertEquals(1, context.getValidActions().stream()
+					.filter(ga -> ga.getActionType() == ActionType.SPELL).count());
+			Minion demon = playMinionCard(context, player, "minion_demon_test");
+			destroy(context, demon);
+			playMinionCard(context, player, "minion_demon_test");
+			playMinionCard(context, opponent, "minion_demon_test");
+			player.setMana(6);
+			assertEquals(4, context.getValidActions().stream()
+					.filter(ga -> ga.getActionType() == ActionType.SPELL).count());
+		});
+
+
 	}
 }
