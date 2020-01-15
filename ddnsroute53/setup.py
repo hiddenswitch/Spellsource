@@ -30,7 +30,7 @@ class InstallCrontab(install):
 
 
 setup(name='ddnsroute53',
-      version='0.0.3',
+      version='0.0.4',
       description='Update Route53 DNS with the originator\'s public IP address, install to crontab using install_cron',
       url='https://github.com/hiddenswitch/Spellsource-Server/tree/master/ddnsroute53',
       python_requires='>3.7',

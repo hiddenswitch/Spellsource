@@ -1,16 +1,16 @@
 {
-  "name": "Skeleton",
-  "baseManaCost": 2,
+  "name": "Lesser Vampire",
+  "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "CRIMSON",
-  "baseAttack": 2,
-  "baseHp": 2,
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
   "rarity": "FREE",
   "description": "",
   "collectible": false,
   "sets": [
     "CUSTOM",
-    "BASIC"
+    "CLASSIC"
   ],
   "fileFormatVersion": 1
 }

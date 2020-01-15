@@ -1,12 +1,11 @@
 {
-  "name": "Wee Bat",
+  "name": "Magic Burster",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "CRIMSON",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "FREE",
-  "race": "BEAST",
   "description": "<b>Opener:</b> Deal 3 damage to both champions.",
   "battlecry": {
     "targetSelection": "NONE",

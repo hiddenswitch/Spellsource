@@ -1,9 +1,9 @@
 {
   "name": "Enthralled Knight",
-  "baseManaCost": 7,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 5,
+  "baseAttack": 4,
   "baseHp": 5,
   "rarity": "FREE",
   "description": "<b>Opener:</b> Deal 3 damage to an enemy. Restore #3 Health to your champion.",

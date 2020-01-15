@@ -4,10 +4,10 @@
   "type": "MINION",
   "heroClass": "CRIMSON",
   "baseAttack": 3,
-  "baseHp": 6,
+  "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Guard. Opener: Deal 4 damage to your champion, bypassing armor.",
+  "description": "Guard. Opener: Deal 3 damage to your champion, bypassing armor.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

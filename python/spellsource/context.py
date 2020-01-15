@@ -143,7 +143,7 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-0.8.61-all.jar'):
+    def find_resource_path(filename='net-0.8.63-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -152,8 +152,8 @@ class Context(contextlib.AbstractContextManager):
         # local
         dirname = os.path.dirname(os.path.realpath(__file__))
         paths.append(os.path.join(dirname, '..', '..', 'net', 'build', 'libs', filename))
+        paths.append(os.path.join(dirname, '..', '..', 'hearthstone', 'build', 'libs', filename))
         paths.append(os.path.join(dirname, '..', 'docs', filename))
-        paths.append(os.path.join(dirname, '..', 'net', 'lib', filename))
         paths.append(os.path.join(dirname, '..', 'share', 'spellsource', filename))
         paths.append(os.path.join(sys.prefix, 'share', 'spellsource', filename))
         # pip install py4j
@@ -177,17 +177,10 @@ class Context(contextlib.AbstractContextManager):
     def _start_gateway(port=0) -> JavaGateway:
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
+        hearthstone_jar_path = Context.find_resource_path('hearthstone-0.8.63.jar')
+        net_jar_path = Context.find_resource_path('net-0.8.63-all.jar')
         port = launch_gateway(port=port,
-                              classpath=Context.find_resource_path('net-0.8.61-all.jar'),
-                              javaopts=["--add-modules", "java.se",
-                                        '--add-opens', 'java.base/java.util.concurrent.atomic=kryo',
-                                        '--add-opens', 'java.base/java.lang=co.paralleluniverse.quasar.core',
-                                        "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
-                                        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                                        "--add-opens", "java.base/java.nio=ALL-UNNAMED",
-                                        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
-                                        "--add-opens", "java.management/sun.management=ALL-UNNAMED",
-                                        "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED"],
+                              classpath=os.pathsep.join((hearthstone_jar_path, net_jar_path)),
                               die_on_exit=True)
 
         # connect python side to Java side with Java dynamic port and start python

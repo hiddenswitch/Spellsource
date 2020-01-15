@@ -6,16 +6,41 @@
   "baseAttack": 7,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you deal damage to this minion, restore it to full Health.",
-  "trigger": {
+  "description": "Whenever this minion takes damage from your cards or your skill, restore it to full Health.",
+  "passiveTrigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
+      "queueCondition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "WEAPON"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "HERO_POWER"
+          }
+        ]
+      },
       "sourcePlayer": "SELF",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "HealSpell",
-      "target": "TRIGGER_HOST",
+      "target": "SELF",
       "value": {
         "class": "AttributeValueProvider",
         "attribute": "MAX_HP"

@@ -3,8 +3,8 @@
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "BLOOD",
-  "baseAttack": 2,
-  "baseHp": 1,
+  "baseAttack": 1,
+  "baseHp": 3,
   "rarity": "COMMON",
   "description": "Your Vampire Lord Skill can target minions.",
   "auras": [
@@ -14,7 +14,7 @@
       "card": "hero_power_familiar_eternal_soul",
       "filter": {
         "class": "SpecificCardFilter",
-        "card": "herp_power_crimson_gift"
+        "card": "hero_power_crimson_gift"
       }
     },
     {
@@ -23,7 +23,7 @@
       "card": "hero_power_familiar_eternal_suffering",
       "filter": {
         "class": "SpecificCardFilter",
-        "card": "herp_power_crimson_tide"
+        "card": "hero_power_crimson_tide"
       }
     }
   ],

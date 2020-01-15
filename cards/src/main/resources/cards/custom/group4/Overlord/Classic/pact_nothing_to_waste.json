@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "<b>Pact:</b> After you've dealt 4 damage, summon two 2/2 Skeletons.",
+  "description": "<b>Pact:</b> After you've dealt 2 damage, summon a 2/2 Captive with <b>Guard</b>.",
   "condition": {
     "class": "CanPlayPactCondition"
   },
@@ -12,7 +12,7 @@
   "spell": {
     "class": "AddPactSpell",
     "pact": {
-      "countUntilCast": 4,
+      "countUntilCast": 2,
       "eventTrigger": {
         "class": "DamageCausedTrigger",
         "sourcePlayer": "SELF"
@@ -21,8 +21,7 @@
       "spell": {
         "class": "SummonSpell",
         "cards": [
-          "token_skeleton2_wraith",
-          "token_skeleton2_wraith"
+          "token_captiveguard_overlord"
         ]
       }
     }

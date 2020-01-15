@@ -3,7 +3,7 @@
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 4,
+  "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
   "description": "Guard. Opener: Summon a copy of this minion. If your champion has 15 or less Health, summon 2 instead.",

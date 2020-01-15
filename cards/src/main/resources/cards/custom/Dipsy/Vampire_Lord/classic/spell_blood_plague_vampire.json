@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Choose a minion. At the start of each turn, it Drains 2 Health from all other minions.",
+  "description": "Choose a minion. Whenever your turn ends, it Drains 2 Health from all other minions.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
     "trigger": {
       "eventTrigger": {
-        "class": "TurnStartTrigger",
-        "targetPlayer": "BOTH"
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "DrainSpell",

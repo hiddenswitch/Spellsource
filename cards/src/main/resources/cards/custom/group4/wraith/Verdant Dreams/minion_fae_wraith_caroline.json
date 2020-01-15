@@ -1,11 +1,12 @@
 {
-  "name": "Fae-Wraith Caroline",
+  "name": "Fae-Lady Caroline",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "CRIMSON",
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "LEGENDARY",
+  "race": "FAE",
   "description": "Guard. Opener: Draw a card. Aftermath: Shuffle this into your deck",
   "battlecry": {
     "targetSelection": "NONE",

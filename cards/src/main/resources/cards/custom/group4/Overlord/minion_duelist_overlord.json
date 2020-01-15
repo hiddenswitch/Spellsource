@@ -1,14 +1,14 @@
 {
-  "name": "Skeleton",
+  "name": "Duelist",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 2,
-  "baseHp": 2,
+  "baseAttack": 4,
+  "baseHp": 1,
   "rarity": "FREE",
-  "description": "Guard",
+  "description": "<b>Dodge</b>",
   "attributes": {
-    "TAUNT": true
+    "DIVINE_SHIELD": true
   },
   "collectible": false,
   "sets": [

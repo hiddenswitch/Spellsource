@@ -173,10 +173,10 @@ RUN python setup.py install install_cron \
     && ddnsroute53 version
 
 # Required environment variables
-ENV DDNSROUTE53_IN_DOMAINS=www.example.com
+ENV DDNSROUTE53_UPDATE_IN_DOMAINS=www.example.com
 ENV AWS_ACCESS_KEY_ID=accesskey
 ENV AWS_SECRET_ACCESS_KEY=secret
-ENV DDNSROUTE53_IP_ADDRESS=PUBLIC
+ENV DDNSROUTE53_UPDATE_IP_ADDRESS=PUBLIC
 
 RUN cat /etc/crontab
 
