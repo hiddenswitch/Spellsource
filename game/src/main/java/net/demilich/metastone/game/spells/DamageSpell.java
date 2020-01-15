@@ -141,7 +141,7 @@ public class DamageSpell extends Spell {
 		if (damage < 0) {
 			logger.error("onCast {} {}: Suspicious negative damage call", context.getGameId(), source);
 		}
-		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage, getDamageType());
+		context.getLogic().damage(player, (Actor) target, damage, source, ignoreSpellDamage, getDamageType(context, player, source));
 	}
 
 	public static int getDamage(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -158,7 +158,7 @@ public class DamageSpell extends Spell {
 		return damage;
 	}
 
-	protected DamageType getDamageType() {
+	protected DamageType getDamageType(GameContext context, Player player, Entity source) {
 		return DamageType.MAGICAL;
 	}
 }

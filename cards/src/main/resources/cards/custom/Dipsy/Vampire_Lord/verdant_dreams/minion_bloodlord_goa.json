@@ -7,12 +7,19 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Aftermath: Repeat every other friendly Aftermath you've triggered this game.",
-  "deathrattle": {
-    "class": "custom.RepeatAllAftermathsSpell"
+  "description": "Opener: Gain the aftermath, \"Repeat all other friendly aftermaths.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "custom.RepeatAllAftermathsSpell"
+      }
+    }
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "sets": [
