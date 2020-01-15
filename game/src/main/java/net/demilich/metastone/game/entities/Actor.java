@@ -29,6 +29,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	private Card sourceCard;
 	private List<Enchantment> enchantments = new ArrayList<>();
 	private CardCostModifier cardCostModifier;
+	private int frozenDeathrattlesSize;
 
 	public Actor(Card sourceCard) {
 		this.setName(sourceCard != null ? sourceCard.getName() : null);
@@ -40,7 +41,9 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		if (!hasAttribute(Attribute.DEATHRATTLES)) {
 			setAttribute(Attribute.DEATHRATTLES, new ArrayList<SpellDesc>());
 		}
-		getDeathrattles().add(deathrattleSpell);
+		if (getDeathrattles().size() < GameLogic.MAX_DEATHRATTLES) {
+			getDeathrattles().add(deathrattleSpell);
+		}
 	}
 
 	@Override
@@ -378,5 +381,27 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		clone.getAttributes().remove(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
+	}
+
+	/**
+	 * Indicates that all the deathrattles currently on this actor should be frozen, i.e., they are intrinsic to this
+	 * actor's text.
+	 */
+	public void freezeDeathrattles() {
+		if (getAttributes().get(Attribute.DEATHRATTLES) instanceof Boolean) {
+			frozenDeathrattlesSize = 0;
+			return;
+		}
+		frozenDeathrattlesSize = getDeathrattles().size();
+	}
+
+	/**
+	 * Removes the deathrattles that were not frozen, i.e., added as part of other effects.
+	 */
+	@Override
+	public void clearAddedDeathrattles() {
+		for (int i = getDeathrattles().size() - 1; i >= frozenDeathrattlesSize; i--) {
+			getDeathrattles().remove(i);
+		}
 	}
 }

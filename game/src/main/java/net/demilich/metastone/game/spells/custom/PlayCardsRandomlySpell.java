@@ -57,6 +57,11 @@ public class PlayCardsRandomlySpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		// Do not allow recursive calls for this spell.
+		if (SpellUtils.isRecursive(PlayCardsRandomlySpell.class)) {
+			return;
+		}
+
 		CardList cards = getCards(context, player, desc, source, target);
 		// Shuffle
 		cards.shuffle(context.getLogic().getRandom());
