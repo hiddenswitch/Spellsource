@@ -16,6 +16,7 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.custom.RepeatAllAftermathsSpell;
 import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -887,6 +888,18 @@ public class SpellUtils {
 		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
 	}
 
+	/**
+	 * Returns {@code true} if the caller is in a recursive stack
+	 * @param callingClass
+	 * @return
+	 */
+	public static boolean isRecursive(Class<? extends Spell> callingClass) {
+		return StackWalker.getInstance().walk(s -> s
+				.takeWhile(f -> f.getClassName().contains(GameContext.class.getPackageName()))
+				.skip(2)
+				.limit(16)
+				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));
+	}
 	/**
 	 * An object that contains results of a {@link #determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)}
 	 * call.

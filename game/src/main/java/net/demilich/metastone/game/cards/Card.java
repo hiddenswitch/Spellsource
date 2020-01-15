@@ -1036,6 +1036,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			}
 		}
 
+		instance.freezeDeathrattles();
+
 		return instance;
 	}
 
@@ -1288,5 +1290,10 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
 		getDesc().setTargetSelectionOverride(targetSelectionOverride);
+	}
+
+	@Override
+	public void clearAddedDeathrattles() {
+		getDeathrattleEnchantments().clear();
 	}
 }

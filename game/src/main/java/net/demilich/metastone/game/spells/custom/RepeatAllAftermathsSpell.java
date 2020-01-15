@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.ImmutableSet;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -25,6 +26,10 @@ public final class RepeatAllAftermathsSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		if (SpellUtils.isRecursive(RepeatAllAftermathsSpell.class)) {
+			return;
+		}
+
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
 		List<EnvironmentDeathrattleTriggeredList.EnvironmentDeathrattleTriggeredItem> deathrattles = new ArrayList<>(context.getDeathrattles().getDeathrattles());
 		boolean isItselfDeathrattle = desc.containsKey(SpellArg.DEATHRATTLE_ID);

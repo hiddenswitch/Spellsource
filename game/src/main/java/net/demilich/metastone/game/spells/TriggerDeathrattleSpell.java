@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -49,7 +50,7 @@ public class TriggerDeathrattleSpell extends Spell {
 				SpellUtils.castChildSpell(context, player, card.getDesc().getDeathrattle(), source, target);
 				context.getDeathrattles().addDeathrattle(player.getId(), source.getReference(), card.getDesc().getDeathrattle());
 			}
-			for (SpellDesc deathrattle : card.getDeathrattleEnchantments()) {
+			for (SpellDesc deathrattle : new ArrayList<>(card.getDeathrattleEnchantments())) {
 				SpellUtils.castChildSpell(context, player, deathrattle, source, target);
 				context.getDeathrattles().addDeathrattle(player.getId(), source.getReference(), deathrattle);
 			}
