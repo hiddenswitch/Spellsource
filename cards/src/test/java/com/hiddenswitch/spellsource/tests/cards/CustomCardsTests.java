@@ -4794,7 +4794,19 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(4, context.getValidActions().stream()
 					.filter(ga -> ga.getActionType() == ActionType.SPELL).count());
 		});
+	}
 
-
+	@Test
+	public void testMosshorn() {
+		runGym((context, player, opponent) -> {
+			Card mosshorn = receiveCard(context, player, "minion_mosshorn");
+			assertEquals(costOf(context, player, mosshorn), mosshorn.getBaseManaCost());
+			playCard(context, player, "spell_lunstone");
+			assertEquals(costOf(context, player, mosshorn), mosshorn.getBaseManaCost() - 1);
+			playCard(context, player, "spell_revelation");
+			assertEquals(costOf(context, player, mosshorn), 1);
+			playCard(context, player, "spell_lunstone");
+			assertEquals(costOf(context, player, mosshorn), 0);
+		});
 	}
 }
