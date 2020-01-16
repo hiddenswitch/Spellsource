@@ -21,14 +21,11 @@
           "class": "ReceiveCardSpell",
           "targetPlayer": "SELF"
         },
-        "cardFilter": {
-          "class": "SpecificCardFilter",
-          "cards": [
-            "token_assassin",
-            "token_bone_boy",
-            "minion_duelist_overlord"
-          ]
-        }
+        "cards": [
+          "token_assassin",
+          "token_bone_boy",
+          "minion_duelist_overlord"
+        ]
       }
     ]
   },
