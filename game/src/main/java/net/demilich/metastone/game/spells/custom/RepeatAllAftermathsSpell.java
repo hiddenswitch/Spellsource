@@ -4,6 +4,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableSet;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.environment.EnvironmentDeathrattleTriggeredList;
@@ -41,6 +43,7 @@ public final class RepeatAllAftermathsSpell extends Spell {
 			index = -1;
 		}
 		if (isItselfDeathrattle) {
+			CardList cards = new CardArrayList();
 			List<SpellDesc> spells = deathrattles.stream().filter(item -> {
 				if (RepeatAllAftermathsSpell.class.isAssignableFrom(item.getSpell().getDescClass())) {
 					return false;
@@ -49,12 +52,13 @@ public final class RepeatAllAftermathsSpell extends Spell {
 				if (item.getPlayerId() != player.getId()) {
 					return false;
 				}
-
+				cards.add(context.resolveSingleTarget(item.getSource()).getSourceCard());
 				return true;
 			}).map(EnvironmentDeathrattleTriggeredList.EnvironmentDeathrattleTriggeredItem::getSpell)
 					.collect(Collectors.toList());
 
 			context.getLogic().resolveDeathrattles(player.getId(), source.getReference(), spells, player.getId(), index, false);
+			cards.forEach(card -> context.getLogic().revealCard(player, card));
 		} else {
 			for (EnvironmentDeathrattleTriggeredList.EnvironmentDeathrattleTriggeredItem item : deathrattles) {
 				if (RepeatAllAftermathsSpell.class.isAssignableFrom(item.getSpell().getDescClass())) {
@@ -72,6 +76,7 @@ public final class RepeatAllAftermathsSpell extends Spell {
 				}
 				Player castingPlayer = determineCastingPlayer.getCastingPlayer();
 				SpellUtils.castChildSpell(context, castingPlayer, item.getSpell(), source, null);
+				context.getLogic().revealCard(player, context.resolveSingleTarget(item.getSource()).getSourceCard());
 			}
 		}
 
