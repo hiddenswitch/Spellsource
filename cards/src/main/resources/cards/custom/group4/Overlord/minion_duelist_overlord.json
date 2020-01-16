@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 4,
+  "baseAttack": 3,
   "baseHp": 1,
   "rarity": "FREE",
   "description": "<b>Dodge</b>",
