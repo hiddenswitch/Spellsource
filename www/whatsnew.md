@@ -12,6 +12,7 @@ permalink: /whats-new/
  - All cards that triggered aftermaths, like Vein Burster, now correctly trigger aftermaths that were added by effects other than the target minion's text.
  - Haunted Berserker now correctly deals Toxic and Lifedrain damage (i.e. splash damage) with its effect.
  - Playing cards randomly is not recursive.
+ - Bloodlord Goa now shows the source cards of cast Aftermaths. (1488)
 
 The following changes since 0.8.63
  - Silver Timekeeper now properly filters selectable targets. (1482)
