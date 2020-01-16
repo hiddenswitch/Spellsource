@@ -16,15 +16,6 @@ public class DeckContainsCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		EntityFilter cardFilter = (EntityFilter) desc.get(ConditionArg.CARD_FILTER);
-		if (desc.containsKey(ConditionArg.TARGET_PLAYER)) {
-			switch ((TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)) {
-				case OPPONENT:
-					player = context.getOpponent(player);
-					break;
-				default:
-					break;
-			}
-		}
 		for (Card card : player.getDeck()) {
 			if (cardFilter == null || cardFilter.matches(context, player, card, source)) {
 				return true;
@@ -32,5 +23,4 @@ public class DeckContainsCondition extends Condition {
 		}
 		return false;
 	}
-
 }

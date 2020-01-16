@@ -1,22 +1,16 @@
 package net.demilich.metastone.game.logic;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.util.Serialization;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -26,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Stores information about a game context that allows you to reproduce exactly what happened in the match.
@@ -40,31 +35,34 @@ import java.util.function.Consumer;
  * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 4L;
 	private long seed;
 	private int catalogueVersion;
-	private HeroClass[] heroClasses;
-	private String[][] deckCardIds;
+	private List<String> heroClasses;
+	private List<DeckTrace> deckCardIds;
 	private String deckFormatName;
-	private CardSet[] deckFormatSets;
-	private int[][] mulligans;
+	private List<String> deckFormatSets;
+	private List<String> secondPlayerBonusCards;
+	private List<MulliganTrace> mulligans;
 	private List<Integer> actions = new ArrayList<>();
-	private transient List<String> log = new ArrayList<>();
 	private String id;
+	private boolean traceErrors;
+	private int version = 4;
 
 	public Trace() {
 	}
 
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
-		Player[] players = new Player[]{gameState.player1, gameState.player2};
-		deckFormatSets = gameState.deckFormat.getCardSets().toArray(new CardSet[0]);
-		deckFormatName = gameState.deckFormat.getName();
-		setHeroClasses(new HeroClass[2]);
-		setDeckCardIds(new String[2][]);
+		Player[] players = new Player[]{gameState.getPlayer1(), gameState.getPlayer2()};
+		deckFormatSets = new ArrayList<>(gameState.getDeckFormat().getCardSets());
+		deckFormatName = gameState.getDeckFormat().getName();
+		secondPlayerBonusCards = Arrays.asList(gameState.getDeckFormat().getSecondPlayerBonusCards());
+		setHeroClasses(Arrays.asList(null, null));
+		setDeckCardIds(Arrays.asList(new DeckTrace().setPlayerId(0), new DeckTrace().setPlayerId(1)));
 		for (int i = 0; i < 2; i++) {
-			getHeroClasses()[i] = players[i].getHero().getHeroClass();
-			getDeckCardIds()[i] = players[i].getDeck().stream().map(Card::getCardId).toArray(String[]::new);
+			getHeroClasses().set(i, players[i].getHero().getHeroClass());
+			getDeckCardIds().get(i).setCardIds(players[i].getDeck().stream().map(Card::getCardId).collect(Collectors.toList()));
 		}
 	}
 
@@ -89,18 +87,13 @@ public class Trace implements Serializable, Cloneable {
 	}
 
 	@JsonIgnore
-	public void addAction(int actionId, GameAction action, GameContext context) {
+	public void addAction(int actionId) {
 		actions.add(actionId);
-		if (context == null) {
-			log.add(action.toString());
-		} else {
-			log.add(action.getDescription(context, context.getActivePlayerId()));
-		}
 	}
 
 	@JsonIgnore
 	public GameContext replayContext() {
-		return replayContext(false, null);
+		return replayContext(isTraceErrors(), null);
 	}
 
 	@JsonIgnore
@@ -121,52 +114,62 @@ public class Trace implements Serializable, Cloneable {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = getStartingGameContext();
+		GameContext gameContext = new GameContext();
+		restoreStartingStateTo(gameContext);
 
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
 
-		stateRestored.setBehaviour(
+		gameContext.setBehaviour(
 				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
-		stateRestored.setBehaviour(
+		gameContext.setBehaviour(
 				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
 
 		try {
-			stateRestored.init();
-			stateRestored.resume();
+			gameContext.init();
+			gameContext.resume();
 		} catch (CancellationException ex) {
 			// DO NOT REMOVE, resume throws cancellation on purpose.
 		}
 		CardCatalogue.setVersion(originalCatalogueVersion);
-		return stateRestored;
-	}
-
-	@NotNull
-	private GameContext getStartingGameContext() {
-		GameContext gameContext = new GameContext();
-		restoreStartingStateTo(gameContext);
 		return gameContext;
 	}
 
 	public void restoreStartingStateTo(GameContext context) {
 		if (heroClasses != null && deckCardIds != null) {
-			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses[0], deckCardIds[0]).withFormat(deckFormatName).toGameDeck(), "Player 0"));
-			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses[1], deckCardIds[1]).withFormat(deckFormatName).toGameDeck(), "Player 1"));
+			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0"));
+			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1"));
 		} else if (heroClasses != null) {
-			context.setPlayer(0, new Player(heroClasses[0]));
-			context.setPlayer(1, new Player(heroClasses[1]));
+			context.setPlayer(0, new Player(heroClasses.get(0)));
+			context.setPlayer(1, new Player(heroClasses.get(1)));
 		} else {
 			context.setPlayer(0, new Player());
 			context.setPlayer(1, new Player());
 		}
 
-		if (deckFormatSets != null && deckFormatName != null) {
-			context.setDeckFormat(new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets));
-		} else {
-			context.setDeckFormat(DeckFormat.STANDARD);
+		// Compatibility with previous deck formats
+		DeckFormat deckFormat = new DeckFormat();
+		if (secondPlayerBonusCards != null) {
+			deckFormat.setSecondPlayerBonusCards(secondPlayerBonusCards.toArray(new String[0]));
 		}
+		if (deckFormatSets != null) {
+			deckFormat.withCardSets(deckFormatSets);
+		}
+		if (deckFormatName != null) {
+			if (deckFormatSets == null || deckFormatSets.size() == 0) {
+				deckFormat = DeckFormat.getFormat(deckFormatName);
+			} else {
+				deckFormat.setName(deckFormatName);
+			}
+		}
+
+		// Compatibility with previous traces
+		if (getCatalogueVersion() == 1 && secondPlayerBonusCards == null) {
+			deckFormat.setSecondPlayerBonusCards(new String[]{"spell_the_coin"});
+		}
+		context.setDeckFormat(deckFormat);
 
 		GameLogic logic = new GameLogic((IdFactoryImpl) context.getLogic().getIdFactory(), getSeed());
 		logic.setContext(context);
@@ -181,47 +184,20 @@ public class Trace implements Serializable, Cloneable {
 		return Json.decodeValue(trace, Trace.class);
 	}
 
-	public void setMulligans(int[][] mulligans) {
-		this.mulligans = mulligans;
-	}
-
-	@Override
-	public Trace clone() {
-		try {
-			Trace clone = (Trace) super.clone();
-			if (mulligans != null) {
-				int[][] mulliganCopy = new int[mulligans.length][];
-				for (int i = 0; i < mulligans.length; i++) {
-					mulliganCopy[i] = Arrays.copyOf(mulligans[i], mulligans[i].length);
-				}
-				clone.mulligans = mulliganCopy;
-			}
-			clone.actions = new ArrayList<>(actions);
-			return clone;
-		} catch (Exception ex) {
-			return null;
-		}
-	}
-
-	@JsonIgnore
-	public List<String> getLog() {
-		return log;
-	}
-
-	public HeroClass[] getHeroClasses() {
+	public List<String> getHeroClasses() {
 		return heroClasses;
 	}
 
-	public Trace setHeroClasses(HeroClass[] heroClasses) {
+	public Trace setHeroClasses(List<String> heroClasses) {
 		this.heroClasses = heroClasses;
 		return this;
 	}
 
-	public String[][] getDeckCardIds() {
+	public List<DeckTrace> getDeckCardIds() {
 		return deckCardIds;
 	}
 
-	public Trace setDeckCardIds(String[][] deckCardIds) {
+	public Trace setDeckCardIds(List<DeckTrace> deckCardIds) {
 		this.deckCardIds = deckCardIds;
 		return this;
 	}
@@ -235,17 +211,31 @@ public class Trace implements Serializable, Cloneable {
 		return this;
 	}
 
-	public CardSet[] getDeckFormatSets() {
+	public List<String> getDeckFormatSets() {
 		return deckFormatSets;
 	}
 
-	public Trace setDeckFormatSets(CardSet[] deckFormatSets) {
+	public Trace setDeckFormatSets(List<String> deckFormatSets) {
 		this.deckFormatSets = deckFormatSets;
 		return this;
 	}
 
-	public int[][] getMulligans() {
+	public List<String> getSecondPlayerBonusCards() {
+		return secondPlayerBonusCards;
+	}
+
+	public Trace setSecondPlayerBonusCards(List<String> secondPlayerBonusCards) {
+		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
+	}
+
+	public List<MulliganTrace> getMulligans() {
 		return mulligans;
+	}
+
+	public Trace setMulligans(List<MulliganTrace> mulligans) {
+		this.mulligans = mulligans;
+		return this;
 	}
 
 	public Trace setActions(List<Integer> actions) {
@@ -261,6 +251,47 @@ public class Trace implements Serializable, Cloneable {
 		this.id = id;
 		return this;
 	}
+
+	public boolean isTraceErrors() {
+		return traceErrors;
+	}
+
+	public Trace setTraceErrors(boolean traceErrors) {
+		this.traceErrors = traceErrors;
+		return this;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public Trace setVersion(int version) {
+		this.version = version;
+		return this;
+	}
+
+	@Override
+	public Trace clone() {
+		try {
+			Trace clone = (Trace) super.clone();
+			List<MulliganTrace> mulliganTraces = new ArrayList<>();
+			if (getMulligans() != null) {
+				for (MulliganTrace mulliganTrace : getMulligans()) {
+					mulliganTraces.add(mulliganTrace.clone());
+				}
+				clone.setMulligans(mulliganTraces);
+
+			}
+
+			if (clone.actions != null) {
+				clone.actions = new ArrayList<>(actions);
+			}
+			return clone;
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 
 	@Override
 	public String toString() {

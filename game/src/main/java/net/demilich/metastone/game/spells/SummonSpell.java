@@ -8,14 +8,14 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.source.SummonWithoutReplacementCardSource;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
  * <p>
  * When a {@link SpellArg#CARD} or {@link SpellArg#CARDS} are specified, all the specified cards are summoned {@link
  * SpellArg#VALUE} times. When {@link SpellArg#RANDOM_TARGET} is also set to {@code true} instead of its default, {@code
- * false}, a random card from the {@link SpellArg#CARDS} is chosen. {@link SpellArg#VALUE} (default 1) choices will be
- * made, summoning a total of {@link SpellArg#VALUE} minions.
+ * false}, a random card from the {@link SpellArg#CARDS} is chosen. Choices are made <b>with replacement</b>. {@link
+ * SpellArg#VALUE} (default 1) choices will be made, summoning a total of {@link SpellArg#VALUE} minions.
  * <p>
  * If a {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARD_SOURCE} is specified, {@link SpellArg#VALUE} minions will
  * be summoned from the generated cards, <b>without replacement</b>. Any {@link SpellArg#CARD} or {@link SpellArg#CARDS}
@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
  * it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link Minion}, the
  * target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then the
  * enchantments are copied.
+ * <p>
+ * This effect will summon {@link SpellArg#VALUE} copies of whatever is specified, defaulting to {@code 1}.
  * <p>
  * All of the successfully summoned minions will get the {@link SpellArg#SPELL} subspell cast on each of them, where
  * {@link EntityReference#OUTPUT} will reference each summoned minion.
@@ -140,6 +142,22 @@ import java.util.stream.Collectors;
  *          ],
  *          "exclusive": true,
  *          "randomTarget": true
+ *     }
+ * </pre>
+ * <p>
+ * To summon minions from a list of cards without replacement:
+ * <pre>
+ *     "spell": {
+ *     "class": "SummonSpell",
+ *     "value": 2,
+ *     "cards": [
+ *       "token_bellowing_spirit",
+ *       "token_unearthed_spirit",
+ *       "token_burning_spirit"
+ *     ],
+ *     "randomTarget": true,
+ *     "cardSource": {
+ *       "class": "SummonWithoutReplacementCardSource"
  *     }
  * </pre>
  *
@@ -248,7 +266,9 @@ public class SummonSpell extends Spell {
 		List<Card> cards = new ArrayList<>();
 
 		final boolean hasFilter = desc.getCardFilter() != null || desc.getCardSource() != null;
-		if (hasFilter) {
+		final boolean isSummonWithoutReplacementCardSource = desc.getCardSource() != null
+				&& desc.getCardSource().getClass().isAssignableFrom(SummonWithoutReplacementCardSource.class);
+		if (hasFilter && !isSummonWithoutReplacementCardSource) {
 			cards.addAll(desc.getFilteredCards(context, player, source));
 			// The SpellArg.CARD field should be interpreted as a replacement card in this scenario.
 		} else {
@@ -267,11 +287,14 @@ public class SummonSpell extends Spell {
 		cards.removeIf(c -> c.getCardType() != CardType.MINION);
 
 		if (cards.size() > 0) {
+			// We are summoning one card at a time from the list, however the list of cards was generated
 			if (desc.getBool(SpellArg.RANDOM_TARGET)
 					|| hasFilter) {
 				for (int i = 0; i < count; i++) {
 					Card card = context.getLogic().getRandom(cards);
+					// The list is empty, use a replacement card
 					if (card == null) {
+						// Only a single replacement card can be used
 						if (desc.containsKey(SpellArg.CARD)) {
 							String replacementCard = desc.getString(SpellArg.CARD);
 							card = context.getCardById(replacementCard);
@@ -280,14 +303,18 @@ public class SummonSpell extends Spell {
 							continue;
 						}
 					}
-					final Minion minion = card.summon();
 
+					Minion minion = card.summon();
 					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
-						cards.remove(card);
+						// If this is summoning from a filter or card source, as per the rules, the summoning occurs without replacement.
+						if (hasFilter) {
+							cards.remove(card);
+						}
 					}
 				}
 			} else {
+				// We're just summoning all the cards in the list for COUNT times.
 				for (Card card : cards) {
 					for (int i = 0; i < count; i++) {
 						card = count == 1 ? card : card.clone();
@@ -301,6 +328,7 @@ public class SummonSpell extends Spell {
 			}
 		} else if (target != null
 				&& !(target.getReference().equals(EntityReference.NONE))) {
+			// We're cloning from a target (no list of cards or card source / filter specified)
 			for (int i = 0; i < count; i++) {
 				Minion minion;
 				// Keep track if we ultimately summoned from the base card, because we shouldn't copy triggers in that case.
@@ -337,8 +365,10 @@ public class SummonSpell extends Spell {
 
 					// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
 					final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-					for (Card card : list.getCards(context, target)) {
-						list.add(minion, card);
+					for (EntityReference reference : list.getReferences(context, target)) {
+						if (!reference.equals(EntityReference.NONE)) {
+							list.add(minion, context.resolveSingleTarget(reference));
+						}
 					}
 				}
 			}
@@ -348,7 +378,8 @@ public class SummonSpell extends Spell {
 			logger.debug("onCast {} {}: No minions were successfully summoned. Usually this is due to a full board or a secret.", context.getGameId(), source);
 		}
 
-		for (Minion summoned : summonedMinions) {
+		for (Minion summonedBeforeTransform : summonedMinions) {
+			Entity summoned = summonedBeforeTransform.transformResolved(context);
 			// Shouldn't cast spells on minions that wound up in the graveyard somehow due to other subspells.
 			// This checks if a subspell has ended the sequence with {@link GameLogic#endOfSequence()}
 			if (summoned.isDestroyed()

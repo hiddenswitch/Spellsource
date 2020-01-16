@@ -140,6 +140,7 @@ public class AddEnchantmentSpell extends Spell {
 
 		if (enchantmentDesc != null) {
 			Enchantment enchantment = enchantmentDesc.create();
+			// TODO: This implies persistent owner!
 			enchantment.setOwner(player.getId());
 			enchantment.setSourceCard(source.getSourceCard());
 			context.getLogic().addGameEventListener(player, enchantment, target);
@@ -148,6 +149,7 @@ public class AddEnchantmentSpell extends Spell {
 
 		if (aura != null) {
 			aura = aura.clone();
+			// TODO: This implies persistent owner!
 			aura.setOwner(player.getId());
 			aura.setSourceCard(source.getSourceCard());
 			// Enchantments added this way don't trigger a board changed event. They come into play immediately if the owning
@@ -165,13 +167,15 @@ public class AddEnchantmentSpell extends Spell {
 			}
 		}
 
-		if (desc.containsKey(SpellArg.REVERT_TRIGGER) && added.size() > 0) {
-			// Convenience method for removing the enchantments added this way
-			EnchantmentDesc revertDesc = new EnchantmentDesc();
-			revertDesc.eventTrigger = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
-			revertDesc.spell = MetaSpell.create(added.stream().map(RemoveEnchantmentSpell::create).toArray(SpellDesc[]::new));
-			revertDesc.maxFires = 1;
-			context.getLogic().addGameEventListener(player, revertDesc.create(), player);
+		for (SpellArg arg : new SpellArg[]{SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER}) {
+			if (desc.containsKey(arg) && added.size() > 0) {
+				// Convenience method for removing the enchantments added this way
+				EnchantmentDesc revertDesc = new EnchantmentDesc();
+				revertDesc.eventTrigger = (EventTriggerDesc) desc.get(arg);
+				revertDesc.spell = MetaSpell.create(added.stream().map(RemoveEnchantmentSpell::create).toArray(SpellDesc[]::new));
+				revertDesc.maxFires = 1;
+				context.getLogic().addGameEventListener(player, revertDesc.create(), player);
+			}
 		}
 	}
 }

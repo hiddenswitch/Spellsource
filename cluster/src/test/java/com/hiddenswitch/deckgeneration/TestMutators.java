@@ -40,8 +40,8 @@ public class TestMutators {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC))
 				.collect(toList());
 
 		// Create random decks for the tournament

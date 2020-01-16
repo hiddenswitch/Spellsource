@@ -1,0 +1,24 @@
+{
+  "name": "Hired Beserker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "<b>Blitz</b>. <b>Aftermath:</b> Summon a 2/3 Hired Guard with <b>Guard</b>.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_captiveguard_overlord"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

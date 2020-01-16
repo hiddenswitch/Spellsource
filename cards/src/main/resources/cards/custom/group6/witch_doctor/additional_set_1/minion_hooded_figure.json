@@ -1,0 +1,24 @@
+{
+  "name": "Hexwarder",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Elusive. Your Secrets cost (0).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 0,
+    "cardType": "SPELL",
+    "operation": "SET",
+    "requiredAttribute": "SECRET",
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

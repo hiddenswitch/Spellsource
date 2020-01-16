@@ -2,15 +2,15 @@
   "name": "Eternal Time Eater",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "WHITE",
+  "heroClass": "TIME",
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Lifesteal. Whenever this is shuffled into a deck, shuffle an extra copy.",
+  "description": "Lifedrain. Whenever this is shuffled into a deck, shuffle an extra copy.",
   "triggers": [
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "SELF",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
@@ -23,7 +23,7 @@
     },
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "OPPONENT",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
@@ -38,7 +38,7 @@
   "passiveTriggers": [
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "SELF",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
@@ -51,7 +51,7 @@
     },
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "OPPONENT",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },

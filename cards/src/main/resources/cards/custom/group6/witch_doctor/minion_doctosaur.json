@@ -2,12 +2,12 @@
   "name": "Doctosaur",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "ROSE",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "After your hero attacks, your Mechs attack the same target.",
+  "description": "After your champion attacks, your Mechs attack the same target.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

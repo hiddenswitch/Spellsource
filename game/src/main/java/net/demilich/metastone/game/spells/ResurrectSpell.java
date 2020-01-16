@@ -4,17 +4,12 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.filter.AndFilter;
-import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
@@ -35,6 +30,8 @@ import java.util.stream.Collectors;
  * If the minion was successfully summoned, {@link SpellArg#SPELL} will be cast with {@link EntityReference#OUTPUT}
  * <b>and</b> {@code target} as the summoned minion.
  * <p>
+ * Uses the filter specified in {@link SpellArg#CARD_FILTER}. Always only resurrects minions.
+ * <p>
  * For <b>example</b>, to resurrect <b>2 different</b> friendly minions:
  * <pre>
  *   {
@@ -54,9 +51,7 @@ public class ResurrectSpell extends Spell {
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		List<Entity> graveyard = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyard) {
-			if (deadEntity.getEntityType() == EntityType.MINION
-					// Check that this died on a turn to indicate whether or not it was removed peacefully
-					&& !deadEntity.isRemovedPeacefully()) {
+			if (deadEntity.diedOnBattlefield()) {
 				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}
@@ -83,7 +78,7 @@ public class ResurrectSpell extends Spell {
 			if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
 				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
 					summonedMinion = card.summon();
-					context.getLogic().removeAttribute(summonedMinion, Attribute.MAGNETS);
+					context.getLogic().removeAttribute(summonedMinion, null, Attribute.MAGNETS);
 					String[] magnets = (String[]) resurrectedMinion.getAttribute(Attribute.MAGNETS);
 					for (String magnet : magnets) {
 						Card magnetCard = context.getCardById(magnet);
@@ -95,11 +90,12 @@ public class ResurrectSpell extends Spell {
 				}
 			} else summonedMinion = card.summon();
 
-			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
+			boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
+			Entity newMinion = summonedMinion.transformResolved(context);
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)
-					&& summonedMinion.getZone() == Zones.BATTLEFIELD) {
-				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, summonedMinion, summonedMinion);
+					&& newMinion.isInPlay()) {
+				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, newMinion, newMinion);
 			}
 			deadMinions.remove(resurrectedMinion);
 		}

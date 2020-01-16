@@ -1,0 +1,16 @@
+{
+  "name": "Hex: Pig",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Transform an enemy minion into a 2/2 Pig that restores 5 Health to your champion when it dies.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "token_sacrificial_pig"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

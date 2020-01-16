@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
@@ -25,11 +26,11 @@ import java.util.Collection;
  * <p>
  * Typically, the battlecry is resolved in this action. The {@link #PlayMinionCardAction(net.demilich.metastone.game.targeting.EntityReference)}
  * will retrieve the battlecry that appears once the minion is summoned. Choose one minion cards override the battlecry
- * using {@link #PlayMinionCardAction(net.demilich.metastone.game.targeting.EntityReference, BattlecryAction)}.
+ * using {@link #PlayMinionCardAction(EntityReference, BattlecryDesc)}.
  */
 public final class PlayMinionCardAction extends PlayCardAction implements HasBattlecry {
 
-	private BattlecryAction battlecry;
+	private BattlecryDesc battlecry;
 
 	private PlayMinionCardAction() {
 		super(null);
@@ -41,7 +42,7 @@ public final class PlayMinionCardAction extends PlayCardAction implements HasBat
 		this(EntityReference, null);
 	}
 
-	public PlayMinionCardAction(EntityReference minionCard, BattlecryAction battlecry) {
+	public PlayMinionCardAction(EntityReference minionCard, BattlecryDesc battlecry) {
 		super(minionCard);
 		this.battlecry = battlecry;
 		setTargetRequirement(TargetSelection.FRIENDLY_MINIONS);
@@ -66,7 +67,7 @@ public final class PlayMinionCardAction extends PlayCardAction implements HasBat
 		}
 		Player player = context.getPlayer(playerId);
 		int index = player.getMinions().indexOf(nextTo);
-		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && nextTo.getRace().hasRace(Race.MECH)) {
+		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && Race.hasRace(nextTo.getRace(), "MECH")) {
 			context.getLogic().magnetize(playerId, card, (Minion) nextTo);
 		} else {
 			minion.getAttributes().remove(Attribute.MAGNETIC);
@@ -75,12 +76,12 @@ public final class PlayMinionCardAction extends PlayCardAction implements HasBat
 	}
 
 	@Override
-	public BattlecryAction getBattlecry() {
+	public BattlecryDesc getBattlecry() {
 		return battlecry;
 	}
 
 	@Override
-	public void setBattlecry(BattlecryAction action) {
+	public void setBattlecry(BattlecryDesc action) {
 		battlecry = action;
 	}
 }

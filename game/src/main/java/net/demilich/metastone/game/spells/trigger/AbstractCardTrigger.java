@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.CardEvent;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -9,13 +10,19 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * The base class for triggers that fire off card-adjacent effects.
+ * <p>
+ * This supports the {@link EventTriggerArg#REQUIRED_ATTRIBUTE}, {@link EventTriggerArg#RACE} and {@link
+ * EventTriggerArg#CARD_TYPE} arguments on the {@link HasCard#getCard()} entity.
+ */
 public abstract class AbstractCardTrigger extends EventTrigger {
 	public AbstractCardTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		HasCard cardPlayedEvent = (HasCard) event;
 		CardType cardType = (CardType) getDesc().get(EventTriggerArg.CARD_TYPE);
 		if (cardType != null && !cardPlayedEvent.getCard().getCardType().isCardType(cardType)) {
@@ -27,8 +34,8 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 			return false;
 		}
 
-		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !cardPlayedEvent.getCard().getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !Race.hasRace(cardPlayedEvent.getCard().getRace(), race)) {
 			return false;
 		}
 

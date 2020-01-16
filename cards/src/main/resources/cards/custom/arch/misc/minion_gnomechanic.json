@@ -1,0 +1,69 @@
+{
+  "name": "Gnomechanic",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Opener: If you've lost 10 Armor this game, gain 10 Armor.[]",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "ARMOR_LOST",
+        "targetPlayer": "SELF"
+      },
+      "value2": 10
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 10
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "ARMOR_LOST",
+          "targetPlayer": "SELF"
+        },
+        "value2": 10
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 10,
+              "value2": {
+                "class": "PlayerAttributeValueProvider",
+                "playerAttribute": "ARMOR_LOST",
+                "targetPlayer": "SELF"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
+}

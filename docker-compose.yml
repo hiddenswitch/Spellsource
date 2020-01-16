@@ -11,7 +11,7 @@ services:
       --retry \
       --acme \
       --acme.tlschallenge \
-      --acme.email="benjamin.s.berman@gmail.com" \
+      --acme.email="${ACME_EMAIL}" \
       --acme.storage="/data/acme.json" \
       --acme.entrypoint="https" \
       --acme.ondemand=true \
@@ -35,22 +35,18 @@ services:
     image: doctorpangloss/spellsource:latest
     environment:
       - MONGO_URL=mongodb://mongo:27017/metastone
-      - HAZELCAST_URLS=spellsource-server_game_1:5701
-      - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
-      - SPELLSOURCE_APPLICATION=${SPELLSOURCE_APPLICATION}
+      - SPELLSOURCE_APPLICATION=Clustered
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - SMTP_HOST=${SMTP_HOST}
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
+      - REPORTER_GRPC_HOST_PORT=jaeger-collector:14250
     networks:
       - web
       - backend
     deploy:
-      restart_policy:
-        condition: on-failure
-        window: 30s
       labels:
         - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
         - "traefik.versionedhost.frontend.entryPoints=http,https"
@@ -62,11 +58,6 @@ services:
         - "traefik.enable=true"
       placement:
         constraints: [node.platform.arch == x86_64]
-    healthcheck:
-      test: curl --fail -s http://localhost:80/ || exit 1
-      interval: 8s
-      timeout: 4s
-      retries: 3
   launcher:
     image: doctorpangloss/launcher:latest
     networks:
@@ -112,21 +103,6 @@ services:
       interval: 8s
       timeout: 4s
       retries: 3
-  hazelcastmancenter:
-    image: hazelcast/management-center
-    networks:
-      - backend
-    volumes:
-      - mancenterdata:/data
-    environment:
-      - MC_CONTEXT=/admin/mancenter
-      - MANCENTER_DATA=/data
-      - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
-    deploy:
-      labels:
-        - "traefik.enable=false"
-      placement:
-        constraints: [node.platform.arch == x86_64]
   mediawiki:
     image: "doctorpangloss/wiki:latest"
     networks:
@@ -142,8 +118,8 @@ services:
       - MEDIAWIKI_SITE_NAME=Spellsource
       - MEDIAWIKI_URL=https://wiki.hiddenswitch.com
       - MEDIAWIKI_LOGO_URL=/resources/assets/wiki.png
-      - MEDIAWIKI_AWS_REGION=us-east-2
-      - MEDIAWIKI_AWS_BUCKET_ID=minionate
+      - MEDIAWIKI_AWS_REGION=${MEDIAWIKI_AWS_REGION}
+      - MEDIAWIKI_AWS_BUCKET_ID=${MEDIAWIKI_AWS_BUCKET_ID}
       - MEDIAWIKI_PARSOID_URL=http://parsoid:8000
       - MEDIAWIKI_PARSOID_DOMAIN=mediawiki
       - MEDIAWIKI_DB_TYPE=mysql
@@ -154,6 +130,8 @@ services:
       - MEDIAWIKI_DB_PREFIX=mediawiki
       - MEDIAWIKI_SECURITY_KEY=${MEDIAWIKI_SECURITY_KEY}
       - MEDIAWIKI_UPGRADE_KEY=${MEDIAWIKI_UPGRADE_KEY}
+      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
+      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
     volumes:
       - mediawikidata:/var/www/html/images
     deploy:
@@ -196,12 +174,107 @@ services:
       - MYSQL_ROOT_HOST=%
     volumes:
       - mariadbdata:/var/lib/mysql
+  jaeger-collector:
+    image: jaegertracing/jaeger-collector:1.15.1
+    environment:
+      - SPAN_STORAGE_TYPE=cassandra
+      - CASSANDRA_SERVERS=cassandra
+      - CASSANDRA_KEYSPACE=jaeger_tenant_1
+      - MODE=test
+    networks:
+      - backend
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/api/traces"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=14268"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
+  jaeger-schema:
+    image: jaegertracing/jaeger-cassandra-schema:1.15.1
+    environment:
+      - CQLSH_HOST=cassandra
+      - MODE=test
+      - REPLICATION_FACTOR=1
+      - KEYSPACE=jaeger_tenant_1
+    deploy:
+      restart_policy:
+        condition: none
+      placement:
+        constraints: [node.platform.arch == x86_64]
+    networks:
+      - backend
+  jaeger-query:
+    image: jaegertracing/jaeger-query:1.15.1
+    environment:
+      - SPAN_STORAGE_TYPE=cassandra
+      - CASSANDRA_SERVERS=cassandra
+      - QUERY_BASE_PATH=/jaeger
+      - MODE=test
+      - CASSANDRA_KEYSPACE=jaeger_tenant_1
+    networks:
+      - backend
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/jaeger"
+        - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=16686"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
+  cassandra:
+    image: cassandra:3.11
+    volumes:
+      - cassandradata2:/var/lib/cassandra
+    networks:
+      - backend
+  ddnsroute53:
+    image: doctorpangloss/ddnsroute53:latest
+    networks:
+      - web
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DDNSROUTE53_UPDATE_IN_DOMAINS=*.hiddenswitch.com
+      - DDNSROUTE53_UPDATE_IP_ADDRESS=PUBLIC
+    deploy:
+      placement:
+        constraints: [node.platform.arch == x86_64]
+  skyhook:
+    image: doctorpangloss/skyhook
+    networks:
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:skyhook.hiddenswitch.com"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=8080"
+        - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
 volumes:
   mongodata:
   mancenterdata:
   loadbalancerdata:
   mediawikidata:
   mariadbdata:
+  cassandradata2:
 networks:
   web:
     external: true

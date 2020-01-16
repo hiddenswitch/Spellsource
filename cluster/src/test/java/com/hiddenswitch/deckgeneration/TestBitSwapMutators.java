@@ -37,13 +37,13 @@ public class TestBitSwapMutators {
 		Stream<Card> ones = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 1).limit(2);
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC) && card.getBaseManaCost() == 1).limit(2);
 		Stream<Card> twos = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 2).limit(2);
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC) && card.getBaseManaCost() == 2).limit(2);
 		List<Card> indexInBitmap = Stream.concat(ones, twos).collect(toList()); // two cards of cost 1, two cards of cost 2
 		int size = indexInBitmap.size();
 
@@ -130,8 +130,8 @@ public class TestBitSwapMutators {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 1).collect(Collectors.toList());
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC) && card.getBaseManaCost() == 1).collect(Collectors.toList());
 		int size = indexInBitmap.size();
 
 		BitSet bits = new BitSet(size);
@@ -435,13 +435,13 @@ public class TestBitSwapMutators {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 1).limit(10).collect(Collectors.toList());
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC) && card.getBaseManaCost() == 1).limit(10).collect(Collectors.toList());
 		indexInBitmap.addAll(CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 1).limit(10).collect(Collectors.toList()));
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC) && card.getBaseManaCost() == 1).limit(10).collect(Collectors.toList()));
 		int size = indexInBitmap.size();
 
 		BitSet bits = new BitSet(size);
@@ -467,7 +467,7 @@ public class TestBitSwapMutators {
 			if (testChromosome.getGene(i) != value.getResult().getGene(i)) {
 				differences++;
 				for (int j = 0; j < indexInBitmap.size(); j++) {
-					if (indexInBitmap.get(i).getCardId() == indexInBitmap.get(j).getCardId() && i != j && value.getResult().getGene(j).getAllele()) {
+					if (indexInBitmap.get(i).getCardId().equals(indexInBitmap.get(j).getCardId()) && i != j && value.getResult().getGene(j).getAllele()) {
 						mutationForDuplicates += 1;
 					}
 				}

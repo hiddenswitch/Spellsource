@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
- * 		{@link CreateCardFromChoicesSpell} for an example.
+ * This spell is fairly brittle and you will be better off implementing the intended effects directly. See {@link
+ * CreateCardFromChoicesSpell} for an example.
  */
 @Deprecated
 public class CreateSummonSpell extends Spell {
@@ -36,7 +36,7 @@ public class CreateSummonSpell extends Spell {
 		cardDesc.setId(context.getLogic().generateCardId());
 		cardDesc.setName(desc.getString(SpellArg.NAME));
 		if (desc.containsKey(SpellArg.RACE)) {
-			cardDesc.setRace((Race) desc.get(SpellArg.RACE));
+			cardDesc.setRace((String) desc.get(SpellArg.RACE));
 		}
 		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
 		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
@@ -48,7 +48,7 @@ public class CreateSummonSpell extends Spell {
 		if (attribute != null) {
 			cardDesc.getAttributes().put(attribute, true);
 		}
-		cardDesc.setSet(CardSet.BASIC);
+		cardDesc.setSet("BASIC");
 		cardDesc.setCollectible(false);
 		cardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
 		Card newCard = cardDesc.create();
@@ -62,9 +62,14 @@ public class CreateSummonSpell extends Spell {
 			Card card = newCard.clone();
 			Minion minion = card.summon();
 			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
-				SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, minion, minion);
+				Entity newMinion = minion.transformResolved(context);
+				if (minion.isInPlay()) {
+					SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, newMinion, newMinion);
+				}
 			}
-			SpellUtils.castChildSpell(context, player, spell, source, target, minion);
+			if (spell != null) {
+				SpellUtils.castChildSpell(context, player, spell, source, target, minion);
+			}
 		}
 	}
 }

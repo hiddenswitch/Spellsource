@@ -1,0 +1,32 @@
+{
+  "name": "Bend Will",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "RARE",
+  "description": "Secret: When a spell is cast on a friendly minion, it targets a random friendly minion instead.",
+  "secret": {
+    "class": "TargetAcquisitionTrigger",
+    "actionType": "SPELL",
+    "fireCondition": {
+      "class": "MinionCountCondition",
+      "value": 1,
+      "operation": "GREATER"
+    },
+    "queueCondition": {
+      "class": "MinionCountCondition",
+      "value": 1,
+      "operation": "GREATER"
+    },
+    "targetEntityType": "MINION",
+    "targetPlayer": "SELF"
+  },
+  "spell": {
+    "class": "OverrideTargetSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

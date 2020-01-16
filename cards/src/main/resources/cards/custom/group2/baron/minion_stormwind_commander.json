@@ -4,13 +4,13 @@
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 5,
-  "baseHp": 5,
+  "baseHp": 4,
   "rarity": "RARE",
-  "description": "Your Knights have Blitz.",
+  "description": "Your Knights have Dash.",
   "aura": {
     "class": "AttributeAura",
     "target": "OTHER_FRIENDLY_MINIONS",
-    "attribute": "AURA_CHARGE",
+    "attribute": "AURA_RUSH",
     "filter": {
       "class": "SpecificCardFilter",
       "card": "token_knight"

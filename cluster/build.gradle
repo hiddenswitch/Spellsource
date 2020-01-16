@@ -1,58 +1,39 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.0.RC2"
-    }
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
-apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'org.javamodularity.moduleplugin'
+apply from: '../gradle/instrument.gradle'
+
+mainClassName = 'com.hiddenswitch.cluster.application.Simulate'
 
 shadowJar {
     zip64 true
 }
 
 repositories {
-    mavenCentral()
-}
-
-dependencyManagement {
-    imports {
-        mavenBom 'com.amazonaws:aws-java-sdk-bom:1.11.52'
-    }
-}
-
-configurations.all {
-    exclude module: 'slf4j-log4j12'
+    jcenter()
 }
 
 dependencies {
-    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0'
-    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.52'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-ec2', version: '1.11.52'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.52'
-    compile group: 'com.amazonaws', name: 'aws-java-sdk-emr', version: '1.11.52'
-    compile group: 'org.apache.hadoop', name: 'hadoop-aws', version: '2.7.3'
-    compile group: 'io.jenetics', name: 'jenetics', version: '4.4.0'
-    compile group: 'io.jenetics', name: 'jenetics.ext', version: '4.4.0'
-//    compile group: 'org.tensorflow', name: 'tensorflow', version: '1.12.0'
-//    compile group: 'org.deeplearning4j', name: 'deeplearning4j-core', version: '0.9.1'
-//    compile group: 'org.nd4j', name: 'nd4j-native-platform', version: '0.9.1'
-    compile project(':net')
-    testCompile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
-    testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.24.5'
-    testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
-    testCompile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
+
+    implementation project(':game')
+    implementation project(':cards')
+    implementation project(':hearthstone')
+
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'commons-io:commons-io:2.5'
+    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    implementation group: 'io.jenetics', name: 'jenetics', version: '4.4.0'
+    implementation group: 'io.jenetics', name: 'jenetics.ext', version: '4.4.0'
+    testImplementation project(':testutils')
+    testImplementation group: 'org.testng', name: 'testng', version: '7.+'
 }
 
 test {

@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Whenever this attacks, both players draw a Beast from their deck",
+  "description": "Dash. Whenever this attacks, draw a Beast from your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
@@ -16,13 +16,16 @@
     },
     "spell": {
       "class": "FromDeckToHandSpell",
-      "targetPlayer": "BOTH",
+      "targetPlayer": "SELF",
       "value": 1,
       "cardFilter": {
         "class": "CardFilter",
         "race": "BEAST"
       }
     }
+  },
+  "attributes": {
+    "RUSH": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

@@ -12,6 +12,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.DoubleTurnEndTriggersAura;
 import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -20,10 +21,9 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,13 +35,13 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 /**
  * An enchantment is a type of entity that reacts to certain events using a trigger by casting a spell.
  * <p>
- * Enchantments live inside {@link TriggerManager#triggers}; some enchantments, like {@link Secret} and {@link Quest},
- * live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in Hearthstone,
- * enchantments are generally not targetable and do not "live" on cards or in zones.
+ * Enchantments live inside {@link TriggerManager#getTriggers()}; some enchantments, like {@link Secret} and {@link
+ * Quest}, live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in
+ * Hearthstone, enchantments are generally not targetable and do not "live" on cards or in zones.
  * <p>
  * Enchantments consistent of two important features: a {@link EventTrigger} built from an {@link EventTriggerDesc}, and
  * a {@link SpellDesc} indicating which spell should be cast when the enchantment's {@link EventTrigger} and its
- * conditions {@link EventTrigger#fire(GameEvent, Entity)}.
+ * conditions {@link EventTrigger#innerQueues(GameEvent, Entity)}.
  * <p>
  * Enchantments are specified by a {@link EnchantmentDesc} in the card JSON. They can also be specified as fields in
  * e.g., {@link AddEnchantmentSpell}.
@@ -62,7 +62,6 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * @see EnchantmentDesc for a description of the format of an enchantment.
  */
 public class Enchantment extends Entity implements Trigger {
-	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	protected List<EventTrigger> triggers = new ArrayList<>();
 	protected SpellDesc spell;
 	protected EntityReference hostReference;
@@ -78,7 +77,6 @@ public class Enchantment extends Entity implements Trigger {
 	protected boolean usesSpellTrigger = true;
 	protected Integer maxFiresPerSequence;
 	protected int firesThisSequence;
-
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		usesSpellTrigger = true;
@@ -184,6 +182,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (!usesSpellTrigger) {
 			return false;
 		}
+		// Maybe have to add a thing to prevent the maxfires from counting twice because of TURN_END_TRIGGERS_TWICE
 		if (countByValue && event instanceof HasValue) {
 			int value = ((HasValue) event).getValue();
 			fires += value;
@@ -215,9 +214,12 @@ public class Enchantment extends Entity implements Trigger {
 				expire();
 			}
 			if (this instanceof Secret && SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
-				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 			}
-			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+			if (event.getEventType().equals(GameEventType.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0){
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+			}
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 		}
 		if (maxFires != null
 				&& fires >= maxFires) {
@@ -271,6 +273,7 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public void setOwner(int playerIndex) {
+		super.setOwner(playerIndex);
 		for (EventTrigger trigger : triggers) {
 			trigger.setOwner(playerIndex);
 		}
@@ -291,25 +294,22 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	public boolean canFire(GameEvent event) {
+	public final boolean queues(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
 		for (EventTrigger trigger : triggers) {
-			if (triggerFires(trigger, event, host)) {
+			if (trigger == null) {
+				continue;
+			}
+			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
+				continue;
+			}
+			if (trigger.queues(event, host)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean triggerFires(EventTrigger trigger, GameEvent event, Entity host) {
-		if (trigger == null) {
-			return false;
-		}
-		if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
-			return false;
-		}
-		return trigger.fires(event, host);
-	}
 
 	public boolean hasPersistentOwner() {
 		return persistentOwner;
@@ -323,13 +323,14 @@ public class Enchantment extends Entity implements Trigger {
 		return oneTurn;
 	}
 
-	public boolean canFireCondition(GameEvent event) {
+	public boolean fires(GameEvent event) {
+		// Expired
 		if (isExpired()) {
 			return false;
 		}
 
 		for (EventTrigger trigger : triggers) {
-			if (trigger.canFireCondition(event)) {
+			if (trigger.fires(event)) {
 				return true;
 			}
 		}

@@ -29,10 +29,6 @@ public enum ParseValueType {
 	 */
 	TARGET_PLAYER,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.entities.minions.Race} enum.
-	 */
-	RACE,
-	/**
 	 * A {@link net.demilich.metastone.game.spells.desc.SpellDesc}.
 	 */
 	SPELL,
@@ -126,14 +122,6 @@ public enum ParseValueType {
 	 */
 	RARITY,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.entities.heroes.HeroClass} enum.
-	 */
-	HERO_CLASS,
-	/**
-	 * An array of strings matching the name of a {@link net.demilich.metastone.game.entities.heroes.HeroClass} enum.
-	 */
-	HERO_CLASS_ARRAY,
-	/**
 	 * An integer, or a {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc}.
 	 */
 	VALUE,
@@ -161,10 +149,6 @@ public enum ParseValueType {
 	 * An array of {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} objects.
 	 */
 	TRIGGERS,
-	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.cards.CardSet} enum.
-	 */
-	CARD_SET,
 	/**
 	 * An {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} that should be interpreted as a {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Quest}.

@@ -38,8 +38,8 @@ public class TestMulliganOptimization {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 1)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(CARDS_IN_DECK - 1)
 				.collect(toList());
 
 		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
@@ -89,8 +89,8 @@ public class TestMulliganOptimization {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 1)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(CARDS_IN_DECK - 1)
 				.collect(toList());
 
 		GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE, Collections.singletonList(indexInBitmap.get(0).getCardId()));
@@ -139,8 +139,8 @@ public class TestMulliganOptimization {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC))
 				.collect(toList());
 
 		// Create random decks for the tournament

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
@@ -111,14 +112,14 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String heroPower;
 	public int baseManaCost;
 	public CardType type;
-	public HeroClass heroClass;
-	public HeroClass[] heroClasses;
+	public String heroClass = HeroClass.NONE;
+	public String[] heroClasses;
 	public int baseAttack;
 	public int baseHp;
 	public int damage;
 	public int durability;
 	public Rarity rarity;
-	public Race race;
+	public String race;
 	public String description;
 	public TargetSelection targetSelection;
 	public EventTriggerDesc secret;
@@ -131,6 +132,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public EnchantmentDesc[] triggers;
 	public AuraDesc aura;
 	public AuraDesc[] auras;
+	public AuraDesc[] passiveAuras;
 	public CardCostModifierDesc cardCostModifier;
 	public BattlecryDesc[] chooseOneBattlecries;
 	public BattlecryDesc chooseBothBattlecry;
@@ -153,12 +155,17 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String wiki;
 	public boolean collectible = true;
 	@JsonProperty
-	public CardSet set;
-	public CardSet[] sets;
+	public String set;
+	public String[] sets;
 	public int fileFormatVersion = 1;
 	public DynamicDescriptionDesc[] dynamicDescription;
 	public Boolean legacy;
-
+	public String hero;
+	public int[] color;
+	public boolean blackText;
+	public String[] secondPlayerBonusCards;
+	public TargetSelection targetSelectionOverride;
+	public ConditionDesc targetSelectionCondition;
 	public CardDesc() {
 		super();
 	}
@@ -285,11 +292,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * <p>
 	 * Choose {@link HeroClass#ANY} for a neutral card.
 	 */
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return heroClass;
 	}
 
-	public void setHeroClass(HeroClass heroClass) {
+	public void setHeroClass(String heroClass) {
 		this.heroClass = heroClass;
 	}
 
@@ -297,11 +304,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * For tri-class cards from the MSOG Hearthstone expansion, this field contains their three classes. Typically
 	 * uninteresting to use for custom cards.
 	 */
-	public HeroClass[] getHeroClasses() {
+	public String[] getHeroClasses() {
 		return heroClasses;
 	}
 
-	public void setHeroClasses(HeroClass[] heroClasses) {
+	public void setHeroClasses(String[] heroClasses) {
 		this.heroClasses = heroClasses;
 	}
 
@@ -324,14 +331,18 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
 	@JsonIgnore
-	public CardSet getSet() {
+	public String getSet() {
 		if (sets != null && sets.length > 0) {
 			return sets[0];
 		}
 		return set;
 	}
 
-	public void setSet(CardSet set) {
+	public String[] getSets() {
+		return sets;
+	}
+
+	public void setSet(String set) {
 		this.set = set;
 	}
 
@@ -575,6 +586,10 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return wiki;
 	}
 
+	public String getHero() {
+		return hero;
+	}
+
 	public void setWiki(String wiki) {
 		this.wiki = wiki;
 	}
@@ -694,11 +709,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	/**
 	 * The actor's race, or "tribe."
 	 */
-	public Race getRace() {
+	public String getRace() {
 		return race;
 	}
 
-	public void setRace(Race race) {
+	public void setRace(String race) {
 		this.race = race;
 	}
 
@@ -992,6 +1007,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.DEATHRATTLE, deathrattle),
 				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(trigger, triggers, EnchantmentDesc.class)),
 				immutableEntry(CardDescArg.AURAS, auras),
+				immutableEntry(CardDescArg.PASSIVE_AURAS, passiveAuras),
 				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
 				immutableEntry(CardDescArg.BASE_HP, baseHp),
 				immutableEntry(CardDescArg.DAMAGE, damage),
@@ -1082,5 +1098,46 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {
 		return dynamicDescription;
+	}
+
+	public int[] getColor() {
+		return color;
+	}
+
+	public boolean isBlackText() {
+		return blackText;
+	}
+
+	public String[] getSecondPlayerBonusCards() {
+		return secondPlayerBonusCards;
+	}
+
+	public CardDesc setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+		this.secondPlayerBonusCards = secondPlayerBonusCards;
+		return this;
+	}
+
+	public AuraDesc[] getPassiveAuras() {
+		return passiveAuras;
+	}
+
+	public void setPassiveAuras(AuraDesc[] passiveAuras) {
+		this.passiveAuras=passiveAuras;
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		this.targetSelectionCondition = targetSelectionCondition;
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		this.targetSelectionOverride = targetSelectionOverride;
 	}
 }

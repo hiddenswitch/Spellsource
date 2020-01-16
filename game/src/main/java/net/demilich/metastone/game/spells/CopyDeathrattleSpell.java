@@ -36,8 +36,6 @@ import java.util.Map;
  * {@link SpellArg#CARD} argument will be added to the sub-spell corresponding to each of the generated cards.
  */
 public class CopyDeathrattleSpell extends Spell {
-	private static Logger logger = LoggerFactory.getLogger(CopyDeathrattleSpell.class);
-
 	public static SpellDesc create(EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(CopyDeathrattleSpell.class);
 		arguments.put(SpellArg.TARGET, target);
@@ -51,7 +49,7 @@ public class CopyDeathrattleSpell extends Spell {
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
 			copyTo = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
-		int max = (int) desc.getOrDefault(SpellArg.HOW_MANY, 99);
+		int max = (int) desc.getOrDefault(SpellArg.HOW_MANY, 16);
 		List<SpellDesc> deathrattles = new ArrayList<>();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, max);
 		if (!impliedCards.isEmpty()) {
@@ -63,8 +61,7 @@ public class CopyDeathrattleSpell extends Spell {
 					deathrattles.add(impliedCard.getDesc().getDeathrattle());
 				}
 			}
-		}
-		if (target instanceof Card) {
+		} else if (target instanceof Card) {
 			final CardDesc actorCardDesc = ((Card) target).getDesc();
 			if (actorCardDesc.getDeathrattle() != null) {
 				deathrattles.add(actorCardDesc.getDeathrattle());

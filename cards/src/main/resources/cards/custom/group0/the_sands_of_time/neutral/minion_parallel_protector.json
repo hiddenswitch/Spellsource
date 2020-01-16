@@ -12,7 +12,7 @@
       "class": "ComparisonCondition",
       "operation": "GREATER",
       "value1": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_HAND",
         "filter": {
           "class": "CardFilter",
@@ -25,7 +25,7 @@
       "class": "BuffSpell",
       "target": "SELF",
       "hpBonus": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_HAND",
         "filter": {
           "class": "CardFilter",

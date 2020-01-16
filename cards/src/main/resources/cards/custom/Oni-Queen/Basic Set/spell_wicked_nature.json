@@ -1,0 +1,25 @@
+{
+  "name": "Wicked Nature",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Draw 2 cards. Destroy one of your Lun.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": -1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

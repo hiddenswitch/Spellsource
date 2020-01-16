@@ -39,5 +39,4 @@ public class TransformCardSpell extends Spell {
 		context.getLogic().receiveCard(player.getId(), newCard);
 		card.getAttributes().put(Attribute.TRANSFORM_REFERENCE, newCard.getReference());
 	}
-
 }

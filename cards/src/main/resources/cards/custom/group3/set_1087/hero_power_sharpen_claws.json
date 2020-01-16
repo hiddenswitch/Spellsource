@@ -5,20 +5,14 @@
   "type": "HERO_POWER",
   "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "Skill: Restore #1 Health and give the character +1 Attack this turn.",
+  "description": "Skill: Give a character +1 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
-    "spells": [
-      {
-        "class": "HealSpell",
-        "value": 1
-      },
-      {
-        "class": "TemporaryAttackSpell",
-        "value": 1
-      }
-    ]
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "value": 1
+    }
   },
   "attributes": {},
   "collectible": false,

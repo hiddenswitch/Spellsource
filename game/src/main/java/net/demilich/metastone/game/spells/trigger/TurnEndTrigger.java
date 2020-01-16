@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class TurnEndTrigger extends EventTrigger {
+public class TurnEndTrigger extends TurnTrigger {
 
 	public static EventTriggerDesc create(TargetPlayer targetPlayer) {
 		EventTriggerDesc desc = new EventTriggerDesc(TurnEndTrigger.class);
@@ -29,7 +29,7 @@ public class TurnEndTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		return true;
 	}
 

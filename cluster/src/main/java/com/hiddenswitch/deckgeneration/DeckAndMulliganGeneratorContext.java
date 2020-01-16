@@ -18,7 +18,7 @@ public class DeckAndMulliganGeneratorContext extends DeckGeneratorContext {
 	}
 
 	@Override
-	public double fitness(Genotype<BitGene> individual, HeroClass heroClass) {
+	public double fitness(Genotype<BitGene> individual, String heroClass) {
 		GameDeck gameDeck = deckFromBitGenotype(individual, heroClass);
 
 		if (individual.getChromosome().

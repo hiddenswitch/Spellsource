@@ -1,12 +1,12 @@
 {
-  "name": "Timewalker Strider",
+  "name": "Pearl Bay Inquisitor",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Whenever this minion attacks, it gains +2 Attack",
+  "description": "After this minion attacks, it gains +2 Attack",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

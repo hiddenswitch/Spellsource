@@ -1,17 +1,17 @@
 {
   "name": "Harden",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Give a friendly minion +4/+4, then gain Armor equal to its Health.",
+  "description": "Give a friendly minion +4 Health, then gain Armor equal to its Health.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 4
+        "hpBonus": 4
       },
       {
         "class": "BuffSpell",

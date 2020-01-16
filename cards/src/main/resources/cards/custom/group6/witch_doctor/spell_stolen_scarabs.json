@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Discover a Beast. Summon three 1/1 Scarabs with Guard.",
+  "description": "Discover a Beast. Summon three 1/1 Scarabs.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -31,7 +31,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

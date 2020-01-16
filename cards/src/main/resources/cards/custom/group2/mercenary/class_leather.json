@@ -1,0 +1,11 @@
+{
+  "name": "Mercenary",
+  "type": "CLASS",
+  "hero": "hero_quarnassio",
+  "heroClass": "LEATHER",
+  "color": [223, 129, 0],
+  "blackText": false,
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

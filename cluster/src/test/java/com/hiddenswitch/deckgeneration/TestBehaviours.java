@@ -22,7 +22,7 @@ import static org.testng.Assert.assertTrue;
 
 public class TestBehaviours extends TestBase {
 	@Test
-	public static void testValidActionsFilterForDamagingSelf() {
+	public void testValidActionsFilterForDamagingSelf() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "spell_shock_0");
 			context.getPlayer2().getHero().setHp(5);
@@ -35,7 +35,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testValidBattlecryActionsFilterForDamagingSelf() {
+	public void testValidBattlecryActionsFilterForDamagingSelf() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_with_damage_3");
 			PlayRandomWithoutSelfDamageBehaviour behaviour = new PlayRandomWithoutSelfDamageBehaviour();
@@ -51,7 +51,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testValidBattlecryActionsFilterForDamagingOwnMinions() {
+	public void testValidBattlecryActionsFilterForDamagingOwnMinions() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_with_damage_3");
 			receiveCard(context, player, "minion_stat_3");
@@ -71,7 +71,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithDefinedMulligan() {
+	public void testPlayRandomWithDefinedMulligan() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_with_damage_3");
 			receiveCard(context, player, "minion_stat_3");
@@ -91,7 +91,7 @@ public class TestBehaviours extends TestBase {
 	// 2. Attacking enemy face
 	// 3. Attacking enemy minions
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyHero() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyHero() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			HashSet<String> minionsThatDoNotAttackEnemyHero = new HashSet<>();
@@ -108,7 +108,7 @@ public class TestBehaviours extends TestBase {
 
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyMinion() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorSomeMinionsDoNotAttackEnemyMinion() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_stat_1");
@@ -126,7 +126,7 @@ public class TestBehaviours extends TestBase {
 
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorAlwaysAttackEnemyHero() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorAlwaysAttackEnemyHero() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_stat_1");
@@ -144,7 +144,7 @@ public class TestBehaviours extends TestBase {
 
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorMinionDoesNotAttack() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorMinionDoesNotAttack() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_stat_1");
@@ -172,7 +172,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorMulligan() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorMulligan() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_with_damage_3");
 			receiveCard(context, player, "minion_stat_3");
@@ -188,7 +188,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorCannotEndTurn() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorCannotEndTurn() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_stat_1");
@@ -214,7 +214,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorStillCanAttackTauntMinionWithOnlyHitEnemyHeroActive() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorStillCanAttackTauntMinionWithOnlyHitEnemyHeroActive() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_goldshire_footman");
@@ -232,7 +232,7 @@ public class TestBehaviours extends TestBase {
 
 
 	@Test
-	public static void testGetTargetedMinionEntityIdForBuffSpellFromMetaSpell() {
+	public void testGetTargetedMinionEntityIdForBuffSpellFromMetaSpell() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			receiveCard(context, player, "spell_blessing_of_might");
@@ -252,7 +252,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForBuffingEnemyMinions() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForBuffingEnemyMinions() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_goldshire_footman");
@@ -280,7 +280,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testGetTargetedMinionEntityIdForHealingSpellFromMetaSpell() {
+	public void testGetTargetedMinionEntityIdForHealingSpellFromMetaSpell() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_void_terror");
@@ -314,7 +314,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingEnemyEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingEnemyEntities() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_with_damage_3");
 			playCard(context, opponent, "minion_goldshire_footman");
@@ -341,7 +341,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingFullHealthEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForHealingFullHealthEntities() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_stat_3");
 			playCard(context, opponent, "minion_goldshire_footman");
@@ -368,7 +368,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
 		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
@@ -398,7 +398,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities2() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetEnemyEntities2() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
 		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
@@ -429,7 +429,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetEnemyEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetEnemyEntities() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
 		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
@@ -461,14 +461,14 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetEnemyEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetEnemyEntities() {
 		NeverUseOnEnemyMinions neverUseOnEnemyMinions = new NeverUseOnEnemyMinions();
 		HashSet<String> cardsThatCannotBeUsedOnEnemyEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnEnemyEntities.addAll(neverUseOnEnemyMinions.classicAndBasicSets);
 		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_CARDS_CANNOT_TARGET_ENEMY_ENTITIES), Collections.singletonList(cardsThatCannotBeUsedOnEnemyEntities));
 
 		runGym((context, player, opponent) -> {
-			Hero priest = new Hero(CardCatalogue.getCardById("hero_anduin"), CardCatalogue.getCardById("hero_power_lesser_heal"));
+			Hero priest = CardCatalogue.getCardById("hero_anduin").createHero(player);
 			player.setHero(priest);
 			player.getHero().setHp(30);
 			player.setMana(2);
@@ -491,7 +491,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetOwnEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeCardsCannotTargetOwnEntities() {
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
 		HashSet<String> cardsThatCannotBeUsedOnOwnEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnOwnEntities.addAll(neverUseOnOwnMinion.classicAndBasicSets);
@@ -521,7 +521,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetOwnEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeBattlecriesCannotTargetOwnEntities() {
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
 		HashSet<String> cardsThatCannotBeUsedOnOwnEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnOwnEntities.addAll(neverUseOnOwnMinion.classicAndBasicSets);
@@ -553,7 +553,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetOwnEntities() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeHeroPowersCannotTargetOwnEntities() {
 		NeverUseOnOwnMinion neverUseOnOwnMinion = new NeverUseOnOwnMinion();
 		HashSet<String> cardsThatCannotBeUsedOnOwnEntities = new HashSet<>();
 		cardsThatCannotBeUsedOnOwnEntities.addAll(neverUseOnOwnMinion.classicAndBasicSets);
@@ -580,7 +580,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeDamageCardsCannotTargetWeakMinions() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForSomeDamageCardsCannotTargetWeakMinions() {
 		HashSet<String> cardsThatCannotBeUsedOnWeakMinions = new HashSet<>();
 		cardsThatCannotBeUsedOnWeakMinions.add("spell_explosive_shot");
 		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(Collections.singletonList(DecisionType.SOME_DAMAGE_SPELLS_CANNOT_TARGET_WEAK_MINIONS), Collections.singletonList(cardsThatCannotBeUsedOnWeakMinions));
@@ -610,7 +610,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForCannotAttackWithMinionThatWillDieAndNotKillOtherMinion() {
+	public void testPlayRandomWithoutSelfDamageWithDefinedBehaviorForCannotAttackWithMinionThatWillDieAndNotKillOtherMinion() {
 		HashSet<DecisionType> booleanDecisionTypes = new HashSet<>();
 		booleanDecisionTypes.add(DecisionType.CANNOT_ATTACK_WITH_A_MINION_THAT_WILL_DIE_AND_NOT_KILL_OTHER_MINION);
 		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions(booleanDecisionTypes);
@@ -640,7 +640,7 @@ public class TestBehaviours extends TestBase {
 	}
 
 	@Test
-	public static void testValidActionsBySource() {
+	public void testValidActionsBySource() {
 		PlayRandomWithoutSelfDamageWithDefinedDecisions behaviour = new PlayRandomWithoutSelfDamageWithDefinedDecisions();
 
 		runGym((context, player, opponent) -> {

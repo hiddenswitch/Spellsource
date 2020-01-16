@@ -112,8 +112,8 @@ public class TestDeckGenerationOptimization {
 		halfIndexInBitmap.addAll(CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(9)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(9)
 				.collect(toList()));
 		indexInBitmap.addAll(halfIndexInBitmap);
 		indexInBitmap.addAll(halfIndexInBitmap);
@@ -199,8 +199,8 @@ public class TestDeckGenerationOptimization {
 		halfIndexInBitmap.addAll(CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(7)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(7)
 				.collect(toList()));
 		indexInBitmap.addAll(halfIndexInBitmap);
 		indexInBitmap.addAll(halfIndexInBitmap);
@@ -646,8 +646,8 @@ public class TestDeckGenerationOptimization {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC))
 				.collect(toList());
 
 		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));
@@ -706,8 +706,8 @@ public class TestDeckGenerationOptimization {
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC))
 				.collect(toList());
 
 		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));

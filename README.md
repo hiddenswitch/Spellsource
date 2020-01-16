@@ -4,9 +4,7 @@
 [![Discord](https://img.shields.io/badge/chat-join%20us%20on%20discord-blue.svg?longCache=true&style=flat&icon=discord)](https://discord.gg/HmbESh2)
 [![Documentation](https://img.shields.io/badge/docs-java-yellow.svg?longCache=true&style=flat)](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html)
 
-![In-Game Screenshot](https://thumbs.gfycat.com/EverlastingGiddyBluetickcoonhound-size_restricted.gif)
-
-This is a simulator and game server for community and official Hearthstone cards.
+This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
 
 **Play Now**: Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
 
@@ -16,24 +14,24 @@ Please see the Issues tab to report bugs or request functionality.
 
 ### Contents
 
- 1. [Description](#description)
- 2. [AI Research FAQ](#ai-research-faq)
- 3. [Quick Start Python](#quick-start-python)
- 4. [Quick Start Multiplayer](#quick-start-multiplayer)
- 5. [Quick Start Contributing Cards](#quick-start-contributing-cards)
- 6. [Using the Command Line Simulator](#using-the-command-line-simulator)
- 7. [Automated Deckbuilding FAQ](#automated-deckbuilding-faq)
- 8. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
- 9. [Troubleshooting](#troubleshooting)
- 10. [Contributing Cards](#contributing-cards)
+ 1. [Changelist](www/whatsnew.md)
+ 2. [Description](#description)
+ 3. [AI Research FAQ](#ai-research-faq)
+ 4. [Quick Start Python](#quick-start-python)
+ 5. [Quick Start Multiplayer](#quick-start-multiplayer)
+ 6. [Quick Start Contributing Cards](#quick-start-contributing-cards)
+ 7. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
+ 8. [Contributing Cards](#contributing-cards)
+
+### Changelist
+
+Read [the latest changes here](www/whatsnew.md) or the deployed changes on the [website](https://playspellsource.com/whats-new).
 
 ### Description
 
-The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained Hearthstone simulator, to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, plus hundreds of community cards.
+The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
-The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
-
-See the complete reference [here](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html).
+See the complete code reference [here](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html).
 
 ### AI Research FAQ
 
@@ -55,22 +53,25 @@ Options:
 
 Commands:
   change-password       Changes a Spellsource user's password.
+  create-cards-db       Saves a cards.json database for the client.
   create-user           Creates an AWS user named USERNAME.
+  fix-merge             Fixes card catalogue merge issues.
   format-cards          Formats JSON card files.
   hearthcards-stubs     Creates stubs from the Hearthcards.
   hs-replay-matchups    Prints a table of HSReplay matchups in TSV format.
   image-stubs           Converts images to card stubs.
   markdown-to-textmesh  Renders a Markdown file to TextMesh markup.
   replicate-database    Replicates mongo databases.
+  run                   Runs the server.
   simulate              Run a simulation using AIs of a given deck matchup.
   update-dbf            Updates Hearthstone IDs.
   update-decklists      Updates the deck lists from Tempostorm.
 ```
 
-You can also use the `spellsource` package programmatically. This requires **Python 3** and **Java 8 or higher** (only **Java 11** tested). To get started:
+You can also use the `spellsource` package programmatically. This requires **Python 3** and **Java 12 or higher** (only **Java 12** tested). To get started:
 
  1. Install a Java JDK.
-    - On Windows: Visit [this link](https://github.com/ojdkbuild/ojdkbuild) for the latest OpenJDK builds, which we test on. Choose a `java-11 ... msi` link, like [this one](https://github.com/ojdkbuild/ojdkbuild/releases/download/11.0.1-1/java-11-openjdk-11.0.1.13-1.ojdkbuild.windows.x86_64.msi).
+    - On Windows: Visit [this link](https://github.com/ojdkbuild/ojdkbuild) for the latest OpenJDK builds.
     - On macOS: Install `brew`, then `brew cask install java`.
  2. `pip3 install spellsource` to install the latest version of the package. To build from Git, use `pip3 install -e .` to install the package from the root of this repository, and run `./gradlew net:shadowJar` to build the engine.
  3. Start a game and play it with the specified bots:
@@ -99,84 +100,24 @@ Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see
 
 ### Quick Start Contributing Cards
 
-If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
-
- 1. Install the Java JDK from [Oracle's website](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
- 2. Clone this repository.
- 3. To run the server locally, execute the following on a command prompt:
-    * Linux/Mac OS X: Run `./gradlew net:local`.
-    * Windows: See the **Getting started with Development on Windows** guide below.
- 4. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
- 5. Download the Spellsource Client from within the launcher and start it.
- 6. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
- 
-### Automated Deckbuilding FAQ
- 
-Visit the [Cluster README](cluster/README.md) for some theory on automated deckbuilding and useful scripts and extensions for performing it with Spellsource.
+If you'd like to **contribute or edit cards**, **write new game mechanics** or **improve the server**, visit the [Windows Development Guide](http://playspellsource.com/windows-development).
  
 ### Getting started with Development on Windows
 
-   1. Windows Defender significantly slows down or fails install processes. To temporarily turn off Windows Defender, hit the `Windows` key, type `Windows Defender` and open the `Windows Defender Security Center`.
-     1. Then, visit the `Virus & threat protection` page, then `Virus & threat protection settings`, and turn off all protection modes.
-     2. Go back to the home page by clicking the `Home` icon on the left. Visit `Firewall & network protection`, then turn off firewall for both `Private` and `Public` networks.
-     3. You will be reminded to re-enable real-time protection at the end of this document.
-   2. Hit `Start`, type `PowerShell`, right click on the `Windows PowerShell` result and choose `Run as Administrator`.
-   3. From the `chocolatey` docs, we'll run the following commands:
-      ```
-      Set-ExecutionPolicy AllSigned;
-      Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
-      choco feature enable -n allowGlobalConfirmation;
-      ```
-      This installs `chocolatey`, the Windows development package manager.
-   4. We'll now install basic development packages. This includes the MongoDB, Java 8 SDK, `git` and `ConEmu`, a great Windows terminal emulator.
-      ```
-      choco install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu
-      ```
-      Then, install [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/download/#section=windows) to edit the `Spellsource-Server` Java project. Since sometimes `choco` packages fail to install, you might need to manually install [MongoDB](https://www.mongodb.com/download-center#community), [JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), and [git](https://git-scm.com/download/win).  
-   5. Exit `Windows PowerShell`
-   6. Start `ConEmu`. If you're starting it for the first time, observe you can specify a startup task. Choose `{Shells::PowerShell (Admin)}`.
-   7. Navigate to your preferred directory for cloning the GitHub repository using `cd path\to\directory`. In this example, we'll use your user's `Documents` folder. Then, clone the repository. It is strongly recommended to clone in order to get the latest updates, instead of using `Download as zip...` from the GitHub.com interface.
-      ```
-      cd Documents
-      git clone https://github.com/hiddenswitch/Spellsource-Server.git
-      ```
-   8. Enter the directory with the code files in it with the following command. Whenever you want to execute commands on files located inside the code, you'll have to **cd** (change directory) into it.
-      ```
-      cd Spellsource-Server
-      ```
-   8. Start by running the tests that don't require networking behavior to verify your installation worked. To do this, execute the following command:
-      ```
-      ./gradlew game:test
-      ```
-      A lot of packages should install. You should observe no errors.
-   9. If the tests pass, you're now ready to start the server.
-      1. In one tab in `ConEmu`, `cd` into your `Spellsource-Server` directory. You'll see an example of this below. Then, start MongoDB with the commands:
-         ```
-         cd Spellsource-Server
-         md -Force .\net\.mongo\db
-         & "C:\Program Files\MongoDB\Server\3.6\bin\mongod" --dbpath .\net\.mongo\db
-         ```
-      2. Then, in another tab, start the server. `cd` into your `Spellsource-Server` directory and run the command:
-         ```
-         ./gradlew net:localWindows
-         ```
-   10. When making changes to the files in the `cards` directory, you will need to restart the server. To restart it, you need to send the correct command to shut down the server. Unfortunately, batch files do not generally support this command correctly. To shut down correctly, you must configure the `SIGINT` command in `ConEmu`. **Never end execution by closing the console tab or Window.** Instead, use ConEmu, and configure a hotkey to send the Break key. In ConEmu, you can do this by clicking the Hamburger menu in the upper right corner, choosing settings, and then configuring a break command as documented on [StackOverflow](https://stackoverflow.com/questions/41074403/conemusend-sigint-to-running-application).
-   11. Install the `Hidden Switch Launcher`, start it, `Download` the latest client in it and start the client. It will automatically connect to the local server.
+Visit the [Windows Development Guide](http://playspellsource.com/windows-development) for more about Windows development.
 
-### Troubleshooting
-
-**My download got interrupted in the launcher and it won't restart.**
-
-On Windows, delete the `%APPDATA%\Hidden Switch Launcher` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Hidden Switch Launcher`)*.
-
-**I receive an error about Weaponized Piñata when I try to run tests while contributing cards on Windows.**
-
-This message can be safely ignored.
 
 ### Contributing Cards
 
 Visit our [website](http://playspellsource.com/contribute) for more about contributions, including guidelines.
- 
-##### Programming New Cards
 
-Visit our [website](http://playspellsource.com/contribute) for more about programming cards, including an example.
+
+### Special Thanks
+
+![YourKit](https://www.yourkit.com/images/yklogo.png)
+
+YourKit supports open source projects with its full-featured Java Profiler.
+
+YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a>
+and <a href="https://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>,
+innovative and intelligent tools for profiling Java and .NET applications.

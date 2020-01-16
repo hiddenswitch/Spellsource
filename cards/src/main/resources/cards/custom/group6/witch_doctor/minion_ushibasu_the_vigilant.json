@@ -1,0 +1,48 @@
+{
+  "name": "Ushibasu the Vigilant",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever your champion would take damage, deal it to the enemy champion instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "fireCondition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "minion_ushibasu_the_vigilant"
+        },
+        "invert": true
+      },
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_HERO",
+          "value": {
+            "class": "EventValueProvider"
+          }
+        },
+        {
+          "class": "ModifyDamageSpell",
+          "value": 0,
+          "operation": "SET"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

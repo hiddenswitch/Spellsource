@@ -1,0 +1,18 @@
+{
+  "name": "Greater Custom",
+  "description": "The greater Custom set for Spellsource. Terrible, yes, but great.",
+  "type": "FORMAT",
+  "collectible": true,
+  "sets": [
+    "BATTLE_FOR_ASHENVALE",
+    "SANDS_OF_TIME",
+    "VERDANT_DREAMS",
+    "HALL_OF_FAME",
+    "SPELLSOURCE_BASIC",
+    "CUSTOM"
+  ],
+  "secondPlayerBonusCards": [
+    "spell_lunstone"
+  ],
+  "fileFormatVersion": 1
+}

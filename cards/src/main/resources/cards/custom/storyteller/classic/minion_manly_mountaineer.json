@@ -1,0 +1,42 @@
+{
+  "name": "Manly Mountaineer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Dash. Whenever this attacks another minion and survives, restore #4 health to this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "EVENT_TARGET"
+          },
+          {
+            "class": "IsDeadCondition",
+            "target": "TRIGGER_HOST",
+            "invert": true
+          }
+        ]
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "TRIGGER_HOST",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

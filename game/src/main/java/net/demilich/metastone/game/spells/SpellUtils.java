@@ -16,6 +16,9 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.custom.RepeatAllAftermathsSpell;
+import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
@@ -26,13 +29,11 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,28 +60,27 @@ public class SpellUtils {
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		EntityReference targetReference = spell.getTarget();
+
 		// Inherit target
 		if (targetReference == null && target != null) {
 			targetReference = target.getReference();
 		}
+
 		if (sourceReference == null) {
 			sourceReference = EntityReference.NONE;
 		}
+
 		if (targetReference == null) {
 			targetReference = EntityReference.NONE;
 		}
-		// Determine casting player here
-		/*
-		if (spell.containsKey(SpellArg.TARGET_PLAYER)) {
-			CastRandomSpellSpell.DetermineCastingPlayer castingPlayer = determineCastingPlayer(context, player, source, spell.getTargetPlayer());
-			player = castingPlayer.getCastingPlayer();
-		}
-		*/
-		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
+
+		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, TargetSelection.NONE, true, null);
 	}
 
 	/**
 	 * Plays a card "randomly."
+	 * <p>
+	 * This will cause it to select random targets if, after target selection modification, it accepts targets.
 	 *
 	 * @param context
 	 * @param player
@@ -115,8 +115,7 @@ public class SpellUtils {
 			return false;
 		}
 
-		Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-
+		player = determineCastingPlayer.getCastingPlayer();
 		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
 
 		PlayCardAction action = null;
@@ -149,11 +148,13 @@ public class SpellUtils {
 				}
 			}
 		} else {
+			card.processTargetSelectionOverride(context, player);
 			action = card.play();
 		}
 
 		if (action == null) {
 			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -174,48 +175,24 @@ public class SpellUtils {
 			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
 			// Do we resolve battlecries?
 			if (resolveBattlecry) {
-				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
-				// the action from the actor that would be summoned.
-				BattlecryAction specifiedAction;
-				if (actionWithBattlecry.getBattlecry() == null) {
-					// Look at the actor
-					Actor actor = card.actor();
-					if (actor == null) {
-						logger.error("playCardRandom {} {}: The actor is missing from the card {}", context.getGameId(), source, card);
-						return false;
-					}
-					specifiedAction = actor.getBattlecry();
-				} else {
-					specifiedAction = actionWithBattlecry.getBattlecry();
-				}
-
-				if (specifiedAction != null) {
-					// We found a battlecry
-					specifiedAction = specifiedAction.clone();
-
-					// If a target is required then we'll see if there are valid targets and execute it. If a target isn't required,
-					// then the battlecry will do what it needs to do.
-					if (specifiedAction.getTargetRequirement() != null
-							&& specifiedAction.getTargetRequirement() != TargetSelection.NONE) {
-						List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
-						if (targets.isEmpty()) {
-							// Don't execute the battlecry if there are no valid targets for one that requires targets but still
-							// put the actor into play
-							specifiedAction = BattlecryAction.NONE;
-						} else {
-							EntityReference battlecryTarget = context.getLogic().getRandom(targets).getReference();
-							specifiedAction.setTargetReference(battlecryTarget);
-						}
-						actionWithBattlecry.setBattlecry(specifiedAction);
-					}
+				// TODO: Doesn't quite do what it's supposed to
+				if (RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, card, (Actor) source)) {
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+					return true;
 				}
 			} else {
 				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
 				// true but this method's parameter to not resolve battlecries will be respected
-				actionWithBattlecry.setBattlecry(BattlecryAction.NONE);
+				BattlecryDesc nullBattlecry = new BattlecryDesc();
+				nullBattlecry.spell = NullSpell.create();
+				actionWithBattlecry.setBattlecry(nullBattlecry);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
-			// This is some other kind of action that takes a target
+			// This is some other kind of action that takes a target. Process possible target modification first.
+			if (!card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+				action.setSourceReference(card.getReference());
+				context.getLogic().processTargetModifiers(action);
+			}
 			if (action.getTargetRequirement() != null && action.getTargetRequirement() != TargetSelection.NONE) {
 				List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 				EntityReference randomTarget = null;
@@ -225,6 +202,7 @@ public class SpellUtils {
 				} else {
 					// Card should be revealed, but there were no valid targets so the spell isn't cast
 					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 					return true;
 				}
 			}
@@ -232,6 +210,7 @@ public class SpellUtils {
 			// Target requirement may have been none, but the action is still valid.
 		} else {
 			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -239,6 +218,7 @@ public class SpellUtils {
 		if (playFromHand) {
 			action.execute(context, player.getId());
 		} else {
+			action.setOverrideChild(true);
 			int playedFromHandOrDeck = -1;
 			// Reference the real card
 			if (card.getId() != IdFactory.UNASSIGNED) {
@@ -476,7 +456,7 @@ public class SpellUtils {
 	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
 	 *                inherited from this spell.
 	 * @param spells  A list of spells from which to generate virtual cards.
-	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
+	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecries()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
 	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
@@ -511,7 +491,7 @@ public class SpellUtils {
 			Card card = spellCardDesc.create();
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
-			context.addTempCard(card.clone());
+			context.addTempCard(card);
 			card.moveOrAddTo(context, Zones.DISCOVER);
 			cards.add(card);
 
@@ -772,6 +752,8 @@ public class SpellUtils {
 	 * <p>
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
 	 * card source used is {@link net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource}.
+	 * <p>
+	 * The cards are chosen randomly <b>without replacement</b>.
 	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved
@@ -830,7 +812,7 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves all of the unexpired, active auras that are instances of the {@code auraClass} hosted by {@link
-	 * Entity#isInPlay()} entities belonging to the {@code playerId}.
+	 * Entity#isInPlay()} entities belonging to the {@code playerId} or passive auras hosted by hero powers and cards.
 	 *
 	 * @param context
 	 * @param playerId
@@ -838,15 +820,14 @@ public class SpellUtils {
 	 * @param <T>
 	 * @return A list of aura instances.
 	 */
-	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
-		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, @NotNull Class<T> auraClass) {
+		return context.getTriggerManager()
+				.getTriggers()
+				.stream()
+				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e))
+				.map(auraClass::cast)
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
-				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
-						.filter(auraClass::isInstance)
-						.map(t -> (T) t)
-						.filter(((Predicate<Aura>) Aura::isExpired).negate()))
 				.collect(toList());
 	}
 
@@ -863,7 +844,7 @@ public class SpellUtils {
 		return context.getTriggerManager().getTriggers().stream()
 				.filter(auraClass::isInstance)
 				.map(auraClass::cast)
-				.filter(aura -> aura.getAffectedEntities().contains(target.getId()))
+				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(Collectors.toList());
 	}
 
@@ -907,6 +888,18 @@ public class SpellUtils {
 		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
 	}
 
+	/**
+	 * Returns {@code true} if the caller is in a recursive stack
+	 * @param callingClass
+	 * @return
+	 */
+	public static boolean isRecursive(Class<? extends Spell> callingClass) {
+		return StackWalker.getInstance().walk(s -> s
+				.takeWhile(f -> f.getClassName().contains(GameContext.class.getPackageName()))
+				.skip(2)
+				.limit(16)
+				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));
+	}
 	/**
 	 * An object that contains results of a {@link #determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)}
 	 * call.

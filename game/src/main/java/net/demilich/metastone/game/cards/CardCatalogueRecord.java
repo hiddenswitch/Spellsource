@@ -10,7 +10,6 @@ import java.io.Serializable;
  */
 public class CardCatalogueRecord implements Serializable {
 	private String id;
-	private transient JsonObject cachedJson;
 	private CardDesc desc;
 
 	public CardCatalogueRecord(String id, CardDesc desc) {
@@ -19,8 +18,7 @@ public class CardCatalogueRecord implements Serializable {
 	}
 
 	/**
-	 * An ID that corresponds to the file name, less the {@code .json} extension, in the {@link
-	 * CardCatalogue#CARDS_FOLDER} in the {@code cards/src/main/resources} directory.
+	 * An ID that corresponds to the file name, less the {@code .json} extension.
 	 *
 	 * @return
 	 */

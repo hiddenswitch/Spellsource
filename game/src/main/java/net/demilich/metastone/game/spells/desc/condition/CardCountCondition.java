@@ -3,62 +3,28 @@ package net.demilich.metastone.game.spells.desc.condition;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
-/**
- * Evaluates to {@code true} if the {@link ConditionArg#TARGET_PLAYER} has card-count [ {@link ConditionArg#OPERATION} ]
- * {@link ConditionArg#VALUE} cards in their hand.
- */
-public class CardCountCondition extends Condition {
+public class CardCountCondition extends CountCondition {
 
 	public CardCountCondition(ConditionDesc desc) {
 		super(desc);
 	}
 
 	@Override
-	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		TargetPlayer targetPlayer = desc.containsKey(ConditionArg.TARGET_PLAYER) ? (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)
-				: TargetPlayer.SELF;
-		int cardCount = 0;
-		switch (targetPlayer) {
-			case EITHER:
-				ConditionDesc playerDesc = desc.clone();
-				playerDesc.put(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
-				ConditionDesc opponentDesc = desc.clone();
-				opponentDesc.put(ConditionArg.TARGET_PLAYER, TargetPlayer.OPPONENT);
-				return isFulfilled(context, player, playerDesc, source, target) || isFulfilled(context, player, opponentDesc, source, target);
-			case BOTH:
-				cardCount = player.getHand().getCount() + context.getOpponent(player).getHand().getCount();
-				break;
-			case OPPONENT:
-				cardCount = context.getOpponent(player).getHand().getCount();
-				break;
-			case SELF:
-				cardCount = player.getHand().getCount();
-				break;
-			case ACTIVE:
-				cardCount = context.getActivePlayer().getHand().getCount();
-				break;
-			case INACTIVE:
-				cardCount = context.getOpponent(context.getActivePlayer()).getHand().getCount();
-				break;
-			case OWNER:
-				cardCount = context.getPlayer(source.getOwner()).getHand().getCount();
-				break;
-			case PLAYER_1:
-				cardCount = context.getPlayer1().getHand().getCount();
-				break;
-			case PLAYER_2:
-				cardCount = context.getPlayer2().getHand().getCount();
-			default:
-				break;
-
+	protected int getCountForPlayer(GameContext context, Player player, Entity source, Entity target) {
+		int count = 0;
+		EntityFilter filter = (EntityFilter) getDesc().get(ConditionArg.FILTER);
+		if (filter == null) {
+			filter = (EntityFilter) getDesc().get(ConditionArg.CARD_FILTER);
 		}
-		int targetValue = desc.getInt(ConditionArg.VALUE);
-		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
-		return SpellUtils.evaluateOperation(operation, cardCount, targetValue);
+		for (Entity card : player.getHand()) {
+			if (filter == null || filter.matches(context, player, source, card)) {
+				count++;
+			}
+		}
+		return count;
 	}
-
 }
+

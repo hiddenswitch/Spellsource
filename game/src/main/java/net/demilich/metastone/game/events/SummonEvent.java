@@ -10,16 +10,16 @@ import org.jetbrains.annotations.NotNull;
 public class SummonEvent extends GameEvent implements HasCard {
 
 	private final boolean resolvedBattlecry;
-	private final BattlecryAction battlecryAction;
+	private final BattlecryAction[] battlecryActions;
 	private final Actor minion;
 	private final Entity source;
 
-	public SummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean resolvedBattlecry, BattlecryAction battlecryAction) {
+	public SummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean resolvedBattlecry, BattlecryAction... battlecryActions) {
 		super(context, minion.getOwner(), source.getOwner());
 		this.minion = minion;
 		this.source = source;
 		this.resolvedBattlecry = resolvedBattlecry;
-		this.battlecryAction = battlecryAction;
+		this.battlecryActions = battlecryActions;
 	}
 
 	@Override
@@ -50,11 +50,6 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public boolean isClientInterested() {
-		return true;
-	}
-
-	@Override
 	@NotNull
 	public Card getCard() {
 		return source.getSourceCard();
@@ -64,7 +59,7 @@ public class SummonEvent extends GameEvent implements HasCard {
 		return resolvedBattlecry;
 	}
 
-	public BattlecryAction getBattlecryAction() {
-		return battlecryAction;
+	public BattlecryAction[] getBattlecryActions() {
+		return battlecryActions;
 	}
 }

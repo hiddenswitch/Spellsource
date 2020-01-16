@@ -1,0 +1,23 @@
+{
+  "name": "Spritely Scamp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "FAE",
+  "description": "Opener: Add all spells your opponent cast last turn to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.ReceiveOpponentsCastSpellsSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

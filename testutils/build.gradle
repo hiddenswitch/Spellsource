@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'org.javamodularity.moduleplugin'
+apply from: '../gradle/instrument.gradle'
+
+group 'com.hiddenswitch'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    api project(':game')
+    api 'org.slf4j:slf4j-api:1.7.20'
+    api 'org.junit.jupiter:junit-jupiter-api:5.6.0-M1'
+    api 'org.junit.jupiter:junit-jupiter-params:5.6.0-M1'
+    api 'io.vertx:vertx-core:3.8.3'
+    api 'org.jsoup:jsoup:1.11.2'
+    api 'org.mockito:mockito-core:2.24.5'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'org.jetbrains:annotations:16.0.2'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'commons-io:commons-io:2.5'
+    implementation 'com.google.guava:guava:26.0-jre'
+    runtimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.0-M1"
+}

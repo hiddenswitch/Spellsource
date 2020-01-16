@@ -1,0 +1,17 @@
+{
+  "name": "Soundwaves",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "Deal $2 damage to all enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

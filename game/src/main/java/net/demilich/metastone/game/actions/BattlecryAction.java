@@ -28,16 +28,6 @@ public final class BattlecryAction extends GameAction {
 	private Condition condition;
 
 	/**
-	 * Creates a battlecry that performs the specify spell. Does not ask for target selection.
-	 *
-	 * @param spell The spell to cast for this battlecry action.
-	 * @return An instance
-	 */
-	public static BattlecryAction createBattlecry(SpellDesc spell) {
-		return createBattlecry(spell, TargetSelection.NONE);
-	}
-
-	/**
 	 * Creates a battlecry action that performs the specified spell and requests a target.
 	 * <p>
 	 * To filter the target, make sure to add a {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} to the
@@ -124,7 +114,7 @@ public final class BattlecryAction extends GameAction {
 		return getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetReference();
 	}
 
-	private Condition getCondition() {
+	public Condition getCondition() {
 		return condition;
 	}
 
@@ -181,6 +171,13 @@ public final class BattlecryAction extends GameAction {
 				.build();
 	}
 
+	/**
+	 * Creates a formatted description for the battlecry given its target.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @return
+	 */
 	@Override
 	public String getDescription(GameContext context, int playerId) {
 		Entity source = context.resolveSingleTarget(getSourceReference());

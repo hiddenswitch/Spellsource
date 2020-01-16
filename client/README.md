@@ -1,4 +1,4 @@
-# spellsource-client
+# client
 
 ## Requirements
 
@@ -27,8 +27,8 @@ Add this dependency to your project's POM:
 ```xml
 <dependency>
     <groupId>com.hiddenswitch</groupId>
-    <artifactId>spellsource-client</artifactId>
-    <version>0.8.7</version>
+    <artifactId>client</artifactId>
+    <version>0.8.61</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:spellsource-client:0.8.7"
+compile "com.hiddenswitch:client:0.8.61"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/spellsource-client-0.8.7.jar
+* target/client-0.8.61.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -126,6 +126,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 *DefaultApi* | [**postInvite**](docs/DefaultApi.md#postInvite) | **POST** /invites | 
+*DefaultApi* | [**postPasswordReset**](docs/DefaultApi.md#postPasswordReset) | **POST** /reset/passwords/with-token | 
 
 
 ## Documentation for Models
@@ -133,12 +134,12 @@ Class | Method | HTTP request | Description
  - [AcceptInviteRequest](docs/AcceptInviteRequest.md)
  - [AcceptInviteResponse](docs/AcceptInviteResponse.md)
  - [Account](docs/Account.md)
+ - [ActionType](docs/ActionType.md)
  - [CardEvent](docs/CardEvent.md)
  - [CardRecord](docs/CardRecord.md)
  - [ChangePasswordRequest](docs/ChangePasswordRequest.md)
  - [ChangePasswordResponse](docs/ChangePasswordResponse.md)
  - [ChatMessage](docs/ChatMessage.md)
- - [ChooseOneOptions](docs/ChooseOneOptions.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
@@ -160,9 +161,7 @@ Class | Method | HTTP request | Description
  - [Enchantment](docs/Enchantment.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
- - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
  - [EntityLocation](docs/EntityLocation.md)
- - [EntityState](docs/EntityState.md)
  - [Envelope](docs/Envelope.md)
  - [EnvelopeAdded](docs/EnvelopeAdded.md)
  - [EnvelopeChanged](docs/EnvelopeChanged.md)
@@ -181,8 +180,6 @@ Class | Method | HTTP request | Description
  - [FriendPutRequest](docs/FriendPutRequest.md)
  - [FriendPutResponse](docs/FriendPutResponse.md)
  - [GameActions](docs/GameActions.md)
- - [GameActionsDiscoveries](docs/GameActionsDiscoveries.md)
- - [GameActionsPhysicalAttacks](docs/GameActionsPhysicalAttacks.md)
  - [GameEvent](docs/GameEvent.md)
  - [GameEventAfterSpellCasted](docs/GameEventAfterSpellCasted.md)
  - [GameEventArmorGained](docs/GameEventArmorGained.md)
@@ -233,10 +230,9 @@ Class | Method | HTTP request | Description
  - [ReplayDeltas](docs/ReplayDeltas.md)
  - [ReplayGameStates](docs/ReplayGameStates.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
+ - [SpanContext](docs/SpanContext.md)
  - [SpellAction](docs/SpellAction.md)
  - [SpellsourceException](docs/SpellsourceException.md)
- - [SummonAction](docs/SummonAction.md)
- - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)
  - [TargetActionPair](docs/TargetActionPair.md)
  - [Timers](docs/Timers.md)
  - [UnfriendResponse](docs/UnfriendResponse.md)

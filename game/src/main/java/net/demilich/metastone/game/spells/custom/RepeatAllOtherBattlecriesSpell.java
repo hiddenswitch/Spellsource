@@ -8,6 +8,8 @@ import net.demilich.metastone.game.actions.BattlecryAsPlaySpellCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.ChooseOneOverride;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.Spell;
@@ -25,7 +27,13 @@ import java.util.List;
 
 import static net.demilich.metastone.game.spells.SpellUtils.determineCastingPlayer;
 
-public class RepeatAllOtherBattlecriesSpell extends Spell {
+/**
+ * Retrieves a list of cards using {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)} and
+ * plays their openers with this {@code source} actor as the source.
+ *
+ * If the {@code source} is not an actor, an exception will be thrown.
+ */
+public final class RepeatAllOtherBattlecriesSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(RepeatAllOtherBattlecriesSpell.class);
 
@@ -44,7 +52,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
 			if (!card.hasBattlecry()) {
-				logger.error("onCast {} {}: Matched a card {} that does not have a battlecry specified.", context.getGameId(), source, card);
+				logger.error("onCast {} {}: Matched a card {} that does not have a opener specified.", context.getGameId(), source, card);
 				continue;
 			}
 
@@ -55,64 +63,108 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			}
 
 			Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-			BattlecryDesc battlecryDesc = card.getDesc().getBattlecry();
-			// Skip calls to this specific battlecry
-			if (battlecryDesc.getSpell() != null && battlecryDesc.getSpell().getDescClass().equals(RepeatAllOtherBattlecriesSpell.class)) {
-				logger.debug("onCast {} {}: Matched a card {} that has RepeatAllOtherBattlecriesSpell, so it was skipped.", context.getGameId(), source, card);
-				continue;
-			}
-
-			if (battlecryDesc.getCondition() != null && !battlecryDesc.getCondition().create().isFulfilled(context, player, source, target)) {
-				continue;
-			}
 
 			// Execute the battlecry on a random target
-			BattlecryAction action;
-			if (card.getAttributes().containsKey(Attribute.CHOICE)) {
-				int choice = card.getAttributeValue(Attribute.CHOICE);
-				if (choice == -1) {
-					action = card.getDesc().getChooseBothBattlecry().toBattlecryAction();
-				} else {
-					action = card.getDesc().getChooseOneBattlecries()[choice].toBattlecryAction();
-				}
-			} else {
-				action = card.getDesc().getBattlecryAction();
-			}
-			if (action == null) {
-				logger.error("onCast {} {}: Matched a card {} that does not have a battlecry action.", context.getGameId(), source, card);
+			if (!castBattlecryRandomly(context, castingPlayer, card, (Actor) source)) {
 				continue;
 			}
-			action = action.clone();
-			action.setSourceReference(source.getReference());
-			EntityReference battlecryTarget;
-			if (action.getTargetRequirement() != TargetSelection.NONE) {
-				// Compute the battlecry's valid targets as though it was a spell, so that the battlecry can target Shudderwock
-				PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), battlecryDesc.spell, card, battlecryDesc.targetSelection);
-				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), spellCardAction);
-				if (targets != null && !targets.isEmpty() && targets.contains(source)) {
-					// They shouldn't actually be able to target Shudderwock
-					targets.remove(source);
-				}
-				if (targets.isEmpty()) {
-					context.getLogic().revealCard(player, card);
-					context.getLogic().endOfSequence();
-					continue;
-				}
-				battlecryTarget = context.getLogic().getRandom(targets).getReference();
-				action.setTargetReference(battlecryTarget);
-				context.getEnvironment().put(Environment.TARGET, battlecryTarget);
-			} else {
-				battlecryTarget = EntityReference.NONE;
-			}
-			// Actually execute the battlecry
-			context.getLogic().revealCard(player, card);
 
-			context.getLogic().castSpell(castingPlayer.getId(), action.getSpell(), source.getReference(), battlecryTarget, action.getTargetRequirement(), false, action);
 			context.getEnvironment().remove(Environment.TARGET);
 			context.getLogic().endOfSequence();
 		}
 
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 		context.getOpponent(player).getAttributes().remove(Attribute.RANDOM_CHOICES);
+	}
+
+	/**
+	 * Executes battlecries from the given card with random targets
+	 *
+	 * @param context             The game context
+	 * @param player              The player who is casting the effect
+	 * @param battlecryCardSource The card from which the battlecry is being read
+	 * @param battlecrySource     The source entity that is actually casting the battlecry. Should typically be an actor.
+	 * @return
+	 */
+	public static boolean castBattlecryRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource) {
+		BattlecryAction action;
+		BattlecryDesc[] chooseOneBattlecries = battlecryCardSource.getDesc().getChooseOneBattlecries();
+
+		if (chooseOneBattlecries != null) {
+			if (battlecryCardSource.getAttributes().containsKey(Attribute.CHOICE)) {
+				int choice = battlecryCardSource.getAttributeValue(Attribute.CHOICE);
+				if (choice == -1) {
+					action = battlecryCardSource.getDesc().getChooseBothBattlecry().toBattlecryAction();
+				} else {
+					action = chooseOneBattlecries[choice].toBattlecryAction();
+				}
+
+			} else {
+
+				// Choose randomly
+				action = chooseOneBattlecries[context.getLogic().getRandom().nextInt()].toBattlecryAction();
+			}
+
+			// Make a rules-based choice
+			ChooseOneOverride chooseOneOverride = context.getLogic().getChooseOneAuraOverrides(player, battlecryCardSource);
+			if (chooseOneOverride != ChooseOneOverride.NONE) {
+				switch (chooseOneOverride) {
+					case ALWAYS_FIRST:
+						action = chooseOneBattlecries[0].toBattlecryAction();
+						break;
+					case ALWAYS_SECOND:
+						action = chooseOneBattlecries[1].toBattlecryAction();
+						break;
+					case BOTH_COMBINED:
+						action = battlecryCardSource.getDesc().getChooseBothBattlecry().toBattlecryAction();
+						break;
+				}
+			}
+		} else {
+			action = battlecryCardSource.getDesc().getBattlecry().toBattlecryAction();
+		}
+
+		if (action == null) {
+			logger.error("onCast {} {}: Matched a card {} that does not have a battlecry action.", context.getGameId(), battlecrySource, battlecryCardSource);
+			return true;
+		}
+
+		// Skip calls to this specific battlecry
+		if (action.getSpell() != null && action.getSpell().getDescClass().equals(RepeatAllOtherBattlecriesSpell.class)) {
+			logger.debug("onCast {} {}: Matched a card {} that has RepeatAllOtherBattlecriesSpell, so it was skipped.", context.getGameId(), battlecrySource, battlecryCardSource);
+			return false;
+		}
+
+
+		action = action.clone();
+		action.setSourceReference(battlecrySource.getReference());
+		EntityReference battlecryTarget;
+		if (action.getTargetRequirement() != TargetSelection.NONE) {
+			PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), action.getSpell(), battlecryCardSource, action.getTargetRequirement(), action.getCondition());
+			// Compute the battlecry's valid targets as though it was a spell
+			List<Entity> targets = context.getLogic().getValidTargets(player.getId(), spellCardAction);
+			if (targets != null && !targets.isEmpty()) {
+				// They shouldn't actually be able to target the source
+				targets.remove(battlecrySource);
+			}
+			if (targets == null || targets.isEmpty()) {
+				context.getLogic().revealCard(player, battlecryCardSource);
+				context.getLogic().endOfSequence();
+				return false;
+			}
+			battlecryTarget = context.getLogic().getRandom(targets).getReference();
+			action.setTargetReference(battlecryTarget);
+			context.getEnvironment().put(Environment.TARGET, battlecryTarget);
+		} else {
+			battlecryTarget = EntityReference.NONE;
+			if (action.getCondition() != null && !action.getCondition().isFulfilled(context, player, battlecrySource, null)) {
+				return false;
+			}
+		}
+
+		// Actually execute the battlecry
+		context.getLogic().revealCard(player, battlecryCardSource);
+		context.getLogic().castSpell(player.getId(), action.getSpell(), battlecrySource.getReference(), battlecryTarget, action.getTargetRequirement(), false, action);
+		return true;
 	}
 }

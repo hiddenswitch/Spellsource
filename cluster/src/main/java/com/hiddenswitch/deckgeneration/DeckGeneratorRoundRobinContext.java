@@ -24,7 +24,7 @@ public class DeckGeneratorRoundRobinContext extends DeckGeneratorContext {
 		super(indexInBitmap, new ArrayList<>());
 	}
 
-	public void runTournament(List<Genotype<BitGene>> genotypes, HeroClass heroClass) {
+	public void runTournament(List<Genotype<BitGene>> genotypes, String heroClass) {
 		HashMap<GameDeck, Genotype<BitGene>> deckToGenotypeMap = new HashMap<>();
 		List<GameDeck> decks = new ArrayList<>();
 		for (Genotype<BitGene> genotype : genotypes) {

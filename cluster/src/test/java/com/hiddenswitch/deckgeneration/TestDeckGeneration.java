@@ -8,13 +8,17 @@ import io.jenetics.util.Factory;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
+import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertTrue;
@@ -25,18 +29,34 @@ import static org.testng.Assert.assertTrue;
 public class TestDeckGeneration {
 	int maxCardsPerDeck = 4;
 
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
+	@NotNull
+	public static List<Card> getBitmap(Predicate<Card>... predicates) {
+		Stream<Card> cardStream = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)
+						&& card.getCardType().isCardType(CardType.MINION) || card.getCardType().isCardType(CardType.SPELL));
+		if (predicates != null && predicates.length > 0) {
+			for (Predicate<? super Card> predicate : predicates) {
+				cardStream = cardStream.filter(predicate);
+			}
+		}
+		return cardStream
+				.collect(toList());
+	}
+
 	// Tests that the deckFromBitGenotype function correctly translates
 	// a Genotype<BitGene> into the corresponding deck
 	@Test
 	public void testDeckFromBitGenotype() {
 		XORShiftRandom random = new XORShiftRandom(101010L);
-		CardCatalogue.loadCardsFromPackage();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+
+		List<Card> indexInBitmap = getBitmap();
 		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, new ArrayList<>(0));
 		BitSet bits = new BitSet(CardCatalogue.getAll().size());
 		GameDeck testDeck = new GameDeck(HeroClass.BLUE);
@@ -56,9 +76,8 @@ public class TestDeckGeneration {
 	}
 
 	/**
-	 * Tests the "invalid" card aspect of DeckGeneFactory, which asserts that
-	 * the card represented by any integer passed in cannot be used in the initial population
-	 * of decks
+	 * Tests the "invalid" card aspect of DeckGeneFactory, which asserts that the card represented by any integer passed
+	 * in cannot be used in the initial population of decks
 	 */
 	@Test
 	public void invalidCardTest() {
@@ -86,10 +105,10 @@ public class TestDeckGeneration {
 	}
 
 	/**
-	 * Generate decks under a simple encoding. A bitmap that corresponds to whether or not a card is in a deck.
-	 * In our simple scheme, we are only going to deal with mage cards. We're going to use only basic cards from
-	 * mage and basic neutrals. We will only have at most one card. Decks of size 30. Any decks that are invalid
-	 * will always be ranked at the bottom when sorted by whatever evaluated Jenetics actually uses.
+	 * Generate decks under a simple encoding. A bitmap that corresponds to whether or not a card is in a deck. In our
+	 * simple scheme, we are only going to deal with mage cards. We're going to use only basic cards from mage and basic
+	 * neutrals. We will only have at most one card. Decks of size 30. Any decks that are invalid will always be ranked at
+	 * the bottom when sorted by whatever evaluated Jenetics actually uses.
 	 */
 	@Test
 	public void testDeckGeneratorForWinTheGameCardWithOnlyBitSwapMutator() {
@@ -107,14 +126,9 @@ public class TestDeckGeneration {
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap();
 
 		// Create random decks for the tournament
 		for (int i = 0; i < 10; i++) {
@@ -160,14 +174,9 @@ public class TestDeckGeneration {
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<Genotype<BitGene>> basicTournamentDeckGenotypes = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap();
 
 		for (int i = 0; i < 9; i++) {
 			BitSet bits = new BitSet(indexInBitmap.size() + 1);
@@ -214,10 +223,9 @@ public class TestDeckGeneration {
 	}
 
 	/**
-	 * Here, instead of having a constant set of tournament decks and evolving our decks based on the
-	 * win rate against those decks, we instead let the fitnesses be the win rates of the decks
-	 * against the other decks in the pool (survival of the fittest essentially). Then, we take the best deck
-	 * from the last population.
+	 * Here, instead of having a constant set of tournament decks and evolving our decks based on the win rate against
+	 * those decks, we instead let the fitnesses be the win rates of the decks against the other decks in the pool
+	 * (survival of the fittest essentially). Then, we take the best deck from the last population.
 	 */
 	@Test
 	public void testDeckGeneratorForContinuallyUpdatingTournamentDecks() {
@@ -227,13 +235,8 @@ public class TestDeckGeneration {
 		int POPULATION_SIZE = 10;
 		int NUMBER_OF_GENERATIONS = 30;
 
-		CardCatalogue.loadCardsFromPackage();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+
+		List<Card> indexInBitmap = getBitmap();
 
 		// Ensure that we do not begin with "win the game"
 		// in any of our original population decks
@@ -283,14 +286,9 @@ public class TestDeckGeneration {
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap();
 
 		// Create random decks for the tournament
 		for (int i = 0; i < 10; i++) {
@@ -341,16 +339,9 @@ public class TestDeckGeneration {
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC
-						&& card.getBaseManaCost() == 1
-				)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap(card -> card.getBaseManaCost() == 1);
 
 		// Create random decks for the tournament
 		for (int i = 0; i < 10; i++) {
@@ -394,8 +385,8 @@ public class TestDeckGeneration {
 	}
 
 	/**
-	 * Our previous test uses a longer exhaustive approach to find combos
-	 * Let's see if utilizing swapping between decks helps at all
+	 * Our previous test uses a longer exhaustive approach to find combos Let's see if utilizing swapping between decks
+	 * helps at all
 	 */
 	@Test(invocationCount = 14)
 	public void testDeckGeneratorForComboWithOnlyOneCostCardsUsingBitSwapBetweenTwoSequences() {
@@ -407,16 +398,9 @@ public class TestDeckGeneration {
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC
-						&& card.getBaseManaCost() == 1
-				)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap(card -> card.getBaseManaCost() == 1);
 
 		// Create random decks for the tournament
 		for (int i = 0; i < 10; i++) {
@@ -460,10 +444,8 @@ public class TestDeckGeneration {
 	}
 
 	/**
-	 * A test primarily for reference
-	 * With a player behaviour that can cast buff cards on enemy minions,
-	 * a gentic algorithm may not necessarily add a +10/+10 buff card
-	 * to the deck
+	 * A test primarily for reference With a player behaviour that can cast buff cards on enemy minions, a gentic
+	 * algorithm may not necessarily add a +10/+10 buff card to the deck
 	 */
 	@Ignore
 	@Test(invocationCount = 10)
@@ -475,14 +457,9 @@ public class TestDeckGeneration {
 		int STABLE_GENERATIONS = 10;
 		int NUMBER_OF_DECKS = 10;
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap();
 
 		indexInBitmap.add(CardCatalogue.getCardById("spell_buff_10"));
 		int buffIndex = indexInBitmap.size() - 1;
@@ -529,9 +506,8 @@ public class TestDeckGeneration {
 	}
 
 	/**
-	 * With a player behaviour that never casts buff cards on enemy minions,
-	 * tests that the genetic algorithm adds a +10/+10 buff card to the deck
-	 * if avaialable
+	 * With a player behaviour that never casts buff cards on enemy minions, tests that the genetic algorithm adds a
+	 * +10/+10 buff card to the deck if avaialable
 	 */
 	@Test(invocationCount = 10)
 	public void testWillFindBuffCardIfBuffingEnemyMinionsIsForbidden() {
@@ -542,14 +518,9 @@ public class TestDeckGeneration {
 		int STABLE_GENERATIONS = 10;
 		int NUMBER_OF_DECKS = 10;
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+		List<Card> indexInBitmap = getBitmap();
 
 		indexInBitmap.add(CardCatalogue.getCardById("spell_buff_10"));
 		int buffIndex = indexInBitmap.size() - 1;
@@ -605,7 +576,7 @@ public class TestDeckGeneration {
 		int STABLE_GENERATIONS = 10;
 		int GAMES_PER_MATCH = 200;
 
-		CardCatalogue.loadCardsFromPackage();
+
 		List<Card> indexInBitmap = new ArrayList<>();
 		indexInBitmap.add(CardCatalogue.getCardById("spell_win_the_game"));
 		indexInBitmap.add(CardCatalogue.getCardById("minion_novice_engineer"));

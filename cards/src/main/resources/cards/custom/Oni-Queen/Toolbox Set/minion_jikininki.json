@@ -1,0 +1,23 @@
+{
+  "name": "Jikininki",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Opener: Destroy one of your Lun.",
+  "battlecry": {
+    "spell": {
+      "class": "ModifyMaxManaSpell",
+      "value": -1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -26,10 +26,8 @@ import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static io.vertx.ext.sync.Sync.*;
-
-import static org.hamcrest.core.Is.*;
 
 /**
  *
@@ -211,9 +209,7 @@ public class TestVerticle extends SyncVerticle {
       String res = awaitResult(h -> ai.methodThatFails("oranges", h));
       fail("Should throw exception");
     } catch (Exception e) {
-      assertTrue(e instanceof VertxException);
-      VertxException ve = (VertxException)e;
-      assertEquals("oranges", ve.getCause().getMessage());
+      assertEquals("oranges", e.getCause().getMessage());
       complete();
     }
 
@@ -238,7 +234,7 @@ public class TestVerticle extends SyncVerticle {
     try {
     	long tid = awaitEvent(h -> vertx.setTimer(500, h), 250);
     } catch(NullPointerException npe) {
-    	assertThat(npe, isA(NullPointerException.class));
+      assertEquals(npe.getClass(), NullPointerException.class);
     } catch(Exception e) {
     	assertTrue(false);
     } finally {

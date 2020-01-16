@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener and Aftermath: Freeze all other minions.",
+  "description": "Opener and Aftermath: Stun all other minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

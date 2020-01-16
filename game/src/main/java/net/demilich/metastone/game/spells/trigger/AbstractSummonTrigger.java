@@ -10,6 +10,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.targeting.Zones;
 
 public abstract class AbstractSummonTrigger extends EventTrigger {
 
@@ -18,11 +19,11 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
 
-		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !summonEvent.getMinion().getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !Race.hasRace(summonEvent.getMinion().getRace(), race)) {
 			return false;
 		}
 
@@ -48,6 +49,16 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean fires(GameEvent event) {
+		SummonEvent summonEvent = (SummonEvent) event;
+		// Don't trigger if the minion is no longer on the board
+		if (!summonEvent.getMinion().isInPlay() || summonEvent.getMinion().isRemovedPeacefully()) {
+			return false;
+		}
+		return super.fires(event);
 	}
 
 	protected boolean onlyPlayedFromHandOrDeck() {

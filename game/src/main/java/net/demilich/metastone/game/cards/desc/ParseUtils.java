@@ -1,11 +1,13 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.dynamicdescription.*;
@@ -119,6 +121,8 @@ public class ParseUtils {
 				return EntityReference.ALL_ENTITIES;
 			case "opposite_minions":
 				return EntityReference.OPPOSITE_MINIONS;
+			case "opposite_characters":
+				return EntityReference.OPPOSITE_CHARACTERS;
 			case "friendly_hero":
 				return EntityReference.FRIENDLY_HERO;
 			case "friendly_weapon":
@@ -221,7 +225,7 @@ public class ParseUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) {
+	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) throws JsonMappingException {
 		switch (valueType) {
 			case INTEGER:
 				return jsonData.asInt();
@@ -251,10 +255,6 @@ public class ParseUtils {
 				return parseEntityReference(jsonData.asText());
 			case TARGET_PLAYER:
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
-			case RACE:
-				return Enum.valueOf(Race.class, jsonData.asText());
-			case CARD_SET:
-				return Enum.valueOf(CardSet.class, jsonData.asText());
 			case SPELL:
 				return spellParser.innerDeserialize(ctxt, jsonData);
 			case SPELL_ARRAY: {
@@ -272,18 +272,8 @@ public class ParseUtils {
 				return Enum.valueOf(PlayerAttribute.class, jsonData.asText());
 			case RARITY:
 				return Enum.valueOf(Rarity.class, jsonData.asText());
-			case HERO_CLASS:
-				return Enum.valueOf(HeroClass.class, jsonData.asText());
 			case GAME_VALUE:
 				return Enum.valueOf(GameValue.class, jsonData.asText());
-			case HERO_CLASS_ARRAY: {
-				ArrayNode jsonArray = (ArrayNode) jsonData;
-				HeroClass[] array = new HeroClass[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).asText());
-				}
-				return array;
-			}
 			case BOARD_POSITION_RELATIVE:
 				return Enum.valueOf(BoardPositionRelative.class, jsonData.asText());
 			case CARD_LOCATION:
@@ -348,7 +338,7 @@ public class ParseUtils {
 			}
 			case BATTLECRY:
 				try {
-					return Json.mapper.readerFor(BattlecryDesc.class).readValue(jsonData);
+					return DatabindCodec.mapper().readerFor(BattlecryDesc.class).readValue(jsonData);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -417,7 +407,7 @@ public class ParseUtils {
 
 	private static EnchantmentDesc getTriggerDesc(JsonNode jsonData) {
 		try {
-			return Json.mapper.readerFor(EnchantmentDesc.class).readValue(jsonData);
+			return DatabindCodec.mapper().readerFor(EnchantmentDesc.class).readValue(jsonData);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

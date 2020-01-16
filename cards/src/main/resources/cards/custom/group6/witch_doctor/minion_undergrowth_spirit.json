@@ -1,0 +1,17 @@
+{
+  "name": "Undergrowth Spirit",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "<b>Repeatable this turn</b>, <b>Spellpower +1</b>",
+  "attributes": {
+    "ECHO": true,
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

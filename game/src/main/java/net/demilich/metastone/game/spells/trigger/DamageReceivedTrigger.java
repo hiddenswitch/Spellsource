@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public final class DamageReceivedTrigger extends EventTrigger {
+public class DamageReceivedTrigger extends EventTrigger {
 
 	public DamageReceivedTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -27,7 +27,7 @@ public final class DamageReceivedTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Entity host) {
 		DamageEvent damageEvent = (DamageEvent) event;
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);

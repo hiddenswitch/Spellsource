@@ -9,8 +9,9 @@ import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.MulliganTrace;
 import net.demilich.metastone.game.logic.Trace;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -56,7 +57,7 @@ public class SuspendableGameContext extends GameContext {
 	 * @return a context
 	 */
 	@Suspendable
-	public static SuspendableGameContext fromTrace(@NonNull GameContext sourceContext) {
+	public static SuspendableGameContext fromTrace(@NotNull GameContext sourceContext) {
 		try {
 			Trace trace = Objects.requireNonNull(sourceContext.getTrace());
 			SuspendableGameContext destinationContext = new SuspendableGameContext();
@@ -65,12 +66,15 @@ public class SuspendableGameContext extends GameContext {
 				return destinationContext;
 			}
 			destinationContext.play(true);
-			int[][] mulligans = trace.getMulligans();
+			List<MulliganTrace> mulligans = trace.getMulligans();
 			if (mulligans == null) {
 				return destinationContext;
 			}
+			if (mulligans.get(0).getPlayerId() == 1) {
+				Collections.reverse(mulligans);
+			}
 			for (int i : new int[]{destinationContext.getActivePlayerId(), destinationContext.getNonActivePlayerId()}) {
-				int[] mulligan = mulligans[i];
+				List<Integer> mulligan = mulligans.get(i).getEntityIds();
 				if (mulligan == null) {
 					continue;
 				}
@@ -79,8 +83,7 @@ public class SuspendableGameContext extends GameContext {
 				destinationContext.getReady().await(1);
 				List<Card> cards = behaviour.getMulliganCards();
 
-				behaviour.setMulligan(Arrays.stream(mulligan)
-						.boxed()
+				behaviour.setMulligan(mulligan.stream()
 						.map(j -> {
 							Optional<Card> card = cards
 									.stream()
@@ -118,11 +121,11 @@ public class SuspendableGameContext extends GameContext {
 		ready = new SimpleConditionSynchronizer(this);
 	}
 
-	public SuspendableGameContext(HeroClass heroClass1, HeroClass heroClass2) {
+	public SuspendableGameContext(String heroClass1, String heroClass2) {
 		this();
-		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero());
-		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero());
-		getTrace().setHeroClasses(new HeroClass[]{heroClass1, heroClass2});
+		getPlayer1().setHero(HeroClass.getHeroCard(heroClass1).createHero(getPlayer1()));
+		getPlayer2().setHero(HeroClass.getHeroCard(heroClass2).createHero(getPlayer2()));
+		getTrace().setHeroClasses(Arrays.asList(heroClass1, heroClass2));
 	}
 
 	public SuspendableGameContext(GameDeck... decks) {

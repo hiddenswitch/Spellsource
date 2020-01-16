@@ -22,14 +22,14 @@
         },
         "value2": {
           "class": "AttributeValueProvider",
-          "target": "SELF",
+          "target": "TRIGGER_HOST",
           "attribute": "ATTACK"
         }
       }
     },
     "spell": {
       "class": "MetaSpell",
-      "target": "SELF",
+      "target": "TRIGGER_HOST",
       "spells": [
         {
           "class": "DoubleAttackSpell"

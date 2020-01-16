@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
-  "description": "Freeze all enemies. Summon seven 2/2 Ghouls. This game, your spells have Lifesteal.",
+  "description": "Stun all enemies. Summon seven 2/2 Ghouls. This game, your spells have Lifesteal.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -39,7 +39,7 @@
           "eventTrigger": {
             "class": "CardPlayedTrigger",
             "cardType": "SPELL",
-            "sourcePlayer": "SELF"
+            "targetPlayer": "SELF"
           },
           "spell": {
             "class": "AddAttributeSpell",

@@ -11,18 +11,24 @@ import org.junit.Assert;
 import org.testng.annotations.Test;
 
 public class TestCards extends TestBase {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
+	private DeckFormat custom = DeckFormat.getFormat("Custom Hearthstone");
+
 	@Test
 	public void testWinWhenStartsInHand() {
 		CardCatalogue.loadCardsFromPackage();
 
-		DebugContext context = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.CUSTOM);
+		DebugContext context = createContext(HeroClass.BLUE, HeroClass.BLUE, false, custom);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayer1().getHand().add(CardCatalogue.getCardById("minion_win_when_starts_in_hand"));
 		Assert.assertTrue(!context.getPlayer2().getHero().isDestroyed());
 		context.init();
 		Assert.assertTrue(context.getPlayer2().getHero().isDestroyed());
 
-		DebugContext badContext = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.CUSTOM);
+		DebugContext badContext = createContext(HeroClass.BLUE, HeroClass.BLUE, false, custom);
 		badContext.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		for (int i = 0; i < 100; i++) {
 			badContext.getPlayer1().getDeck().add(CardCatalogue.getCardById("minion_novice_engineer"));

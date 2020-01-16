@@ -14,29 +14,7 @@ public class HeroClassCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		HeroClass heroClass = (HeroClass) desc.get(ConditionArg.HERO_CLASS);
-		TargetPlayer targetPlayer = (TargetPlayer) desc.getOrDefault(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
-		Player opponent = context.getOpponent(player);
-		switch (targetPlayer) {
-			case BOTH:
-				return player.getHero().getSourceCard().hasHeroClass(heroClass)
-						&& opponent.getHero().getSourceCard().hasHeroClass(heroClass);
-			case OPPONENT:
-				return opponent.getHero().getSourceCard().hasHeroClass(heroClass);
-			case ACTIVE:
-				return context.getActivePlayer().getHero().getSourceCard().hasHeroClass(heroClass);
-			case INACTIVE:
-				return context.getOpponent(context.getActivePlayer()).getHero().getSourceCard().hasHeroClass(heroClass);
-			case OWNER:
-				return context.getPlayer(target.getOwner()).getHero().getSourceCard().hasHeroClass(heroClass);
-			case PLAYER_1:
-				return context.getPlayer1().getHero().getSourceCard().hasHeroClass(heroClass);
-			case PLAYER_2:
-				return context.getPlayer2().getHero().getSourceCard().hasHeroClass(heroClass);
-			case SELF:
-			default:
-				return player.getHero().getSourceCard().hasHeroClass(heroClass);
-		}
-
+		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
+		return player.getHero().getSourceCard().hasHeroClass(heroClass);
 	}
 }

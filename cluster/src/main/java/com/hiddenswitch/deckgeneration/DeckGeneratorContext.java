@@ -68,7 +68,7 @@ public class DeckGeneratorContext {
 	 * @param heroClass  The {@link HeroClass} of the deck
 	 * @return
 	 */
-	public GameDeck deckFromBitGenotype(Genotype<BitGene> individual, HeroClass heroClass) {
+	public GameDeck deckFromBitGenotype(Genotype<BitGene> individual, String heroClass) {
 		GameDeck deck = new GameDeck(heroClass);
 		int count = 0;
 		for (int i = 0; i < individual.getChromosome().length(); i++) {
@@ -92,7 +92,7 @@ public class DeckGeneratorContext {
 	 * @return {@code Double.MIN_VALUE} if the deck is invalid, otherwise the average winrate of the deck
 	 * under test with random players
 	 */
-	public double fitness(Genotype<BitGene> individual, HeroClass heroClass) {
+	public double fitness(Genotype<BitGene> individual, String heroClass) {
 
 		GameDeck gameDeck = deckFromBitGenotype(individual, heroClass);
 

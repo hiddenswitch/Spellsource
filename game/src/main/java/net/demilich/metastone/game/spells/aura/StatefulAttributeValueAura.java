@@ -4,7 +4,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -29,7 +31,7 @@ import java.util.Map;
  *     "class": "StatefulAttributeValueAura",
  *     "attribute": "AURA_ATTACK_BONUS",
  *     "value": {
- *       "class": "EntityCounter",
+ *       "class": "EntityCountValueProvider",
  *       "target": "OTHER_FRIENDLY_MINIONS"
  *     },
  *     "target": "SELF"
@@ -86,11 +88,10 @@ public final class StatefulAttributeValueAura extends Aura {
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		super.onGameEvent(event);
-
 		GameContext context = event.getGameContext();
 		Entity host = context.resolveSingleTarget(getHostReference());
 
-		for (Integer affectedEntity : getAffectedEntities()) {
+		for (int affectedEntity : getAffectedEntities()) {
 			Entity target = context.resolveSingleTarget(new EntityReference(affectedEntity));
 			int targetValue = getDesc().getValue(AuraArg.VALUE, context, context.getPlayer(getOwner()), target, host, 0);
 			int currentValue = currentValues.get(affectedEntity);
@@ -99,7 +100,6 @@ public final class StatefulAttributeValueAura extends Aura {
 				currentValues.put(affectedEntity, targetValue);
 			}
 		}
-
 	}
 
 	@Override
@@ -109,6 +109,7 @@ public final class StatefulAttributeValueAura extends Aura {
 
 	@Override
 	protected void removeAuraEffect(GameContext context, Entity target) {
+		// This will sometimes be applied to targets that have been removed from play, which is the correct behaviour!
 		target.modifyAttribute(getAttribute(), -currentValues.get(target.getId()));
 		currentValues.remove(target.getId());
 	}

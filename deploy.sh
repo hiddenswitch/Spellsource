@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.29
+SPELLSOURCE_VERSION=0.8.63
+SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -23,6 +24,7 @@ where:
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
         binaries for your platform necessary for deployment
     -A  visits the AWS console for Hidden Switch
+    -o  deploys docs to github.io
 
 Invoking this script always rebuilds Spellsource-Server.
 
@@ -41,13 +43,14 @@ deploy_www=false
 deploy_python=false
 deploy_launcher=false
 deploy_wiki=false
+deploy_docs=false
 bump_version=false
 install_dependencies=false
 deploy_java=false
 build_client=false
-while getopts "hcedwpjvlWDA" opt; do
+while getopts "hcedwpjvlWDAo" opt; do
   case "$opt" in
-  h) echo "$usage"
+  h*) echo "$usage"
      exit
      ;;
   e) deploy_elastic_beanstalk=true
@@ -79,6 +82,9 @@ while getopts "hcedwpjvlWDA" opt; do
      ;;
   D) install_dependencies=true
      echo "Installing dependencies"
+     ;;
+  o) deploy_docs=true
+     echo "Deploying docs"
      ;;
   A) open https://786922801148.signin.aws.amazon.com/console
      exit
@@ -125,6 +131,11 @@ if [[ "$install_dependencies" = true ]] ; then
     if ! command -v java -version > /dev/null ; then
       echo "Installing java..."
       brew cask install java
+    fi
+
+    if ! command -v asdf > /dev/null ; then
+      echo "Installing asdf for version management..."
+      brew install asdf
     fi
 
     if ! command -v python3 --version > /dev/null ; then
@@ -199,14 +210,10 @@ if [[ "$bump_version" = true ]] ; then
   new_version=$(bump2version --allow-dirty --current-version ${SPELLSOURCE_VERSION} --dry-run --list patch | grep new_version  | sed s,"^.*=",,)
   bump2version --allow-dirty --current-version "${SPELLSOURCE_VERSION}" patch \
     build.gradle \
-    setup.py \
+    python/setup.py \
     deploy.sh \
-    server.sh \
-    Dockerfile \
-    spellsource/context.py \
-    cluster/runsims.sh \
-    client/build.gradle \
-    net/src/main/java/com/hiddenswitch/spellsource/Version.java \
+    python/spellsource/context.py \
+    net/src/main/java/com/hiddenswitch/spellsource/net/Version.java \
     gradle.properties
   SPELLSOURCE_VERSION=new_version
 fi
@@ -373,16 +380,40 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_
   echo "Building Spellsource JAR file"
   { # try
     # Build the server
+    ${GRADLE_CMD} net:clean 2>&1 > /dev/null && \
     ${GRADLE_CMD} net:shadowJar 2>&1 > /dev/null
   } || { # catch
     echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
     exit 1
   }
 
-  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}.jar" ]] ; then
+  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar" ]] ; then
     echo "Failed to build. jar not found!"
     exit 1
   fi
+fi
+
+if [[ "$deploy_docker" = true ]] ; then
+
+  # Build image and upload to docker
+  echo "Building and uploading Docker image"
+  docker build -t doctorpangloss/spellsource . && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest && \
+  docker push doctorpangloss/spellsource:latest
+  docker push doctorpangloss/spellsource:${SPELLSOURCE_VERSION}
+
+
+  # Update specific service for now instead of stack
+  { # try
+    # Figure out the service ID
+    service_name=spellsource_game
+    portainer_image_name="doctorpangloss/spellsource:${SPELLSOURCE_VERSION}"
+    update_portainer ${service_name} ${portainer_image_name}
+  } || { # catch
+    echo "Failed to update service"
+    exit 1
+  }
 fi
 
 if [[ "$deploy_www" = true ]] ; then
@@ -396,32 +427,16 @@ if [[ "$deploy_www" = true ]] ; then
     exit 1
   fi
 
-  cd www
-  ./deploy.sh
-  cd ..
-  echo "Deployed web"
-fi
-
-if [[ "$deploy_docker" = true ]] ; then
-
-  # Build image and upload to docker
-  echo "Building and uploading Docker image"
-  docker build -t doctorpangloss/spellsource . && \
-  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} && \
-  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest && \
-  docker push doctorpangloss/spellsource:latest
-
-
-  # Update specific service for now instead of stack
   { # try
-    # Figure out the service ID
-    service_name=spellsource_game
-    portainer_image_name="doctorpangloss/spellsource:latest"
-    update_portainer ${service_name} ${portainer_image_name}
+    cd www
+    ./deploy.sh
+    cd ..
   } || { # catch
-    echo "Failed to update service"
+    echo "Failed to publish the website, try using java 8 with sdkman"
     exit 1
   }
+
+  echo "Deployed web"
 fi
 
 if [[ "$deploy_python" = true ]] ; then
@@ -434,13 +449,21 @@ if [[ "$deploy_python" = true ]] ; then
     echo "Failed to deploy python: Missing twine binary. Install with pip3 install twine"
     exit 1
   fi
+
+  cd python
+  {
+    rm -rf dist/
+    mkdir -pv dist
+    pip3 install wheel twine >/dev/null
+    python3 setup.py sdist bdist_wheel >/dev/null
+    echo Deploying
+    TWINE_USERNAME=${TWINE_USERNAME} TWINE_PASSWORD=${TWINE_PASSWORD} twine upload dist/*
+  } || {
+    echo "Failed to build python"
+  }
+
   rm -rf dist/
-  mkdir -pv dist
-  pip3 install wheel twine >/dev/null
-  python3 setup.py sdist bdist_wheel >/dev/null
-  echo Deploying
-  TWINE_USERNAME=${TWINE_USERNAME} TWINE_PASSWORD=${TWINE_PASSWORD} twine upload dist/*
-  rm -rf dist/
+  cd ..
 fi
 
 if [[ "$deploy_elastic_beanstalk" = true ]] ; then
@@ -459,9 +482,13 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.29-all.jar \
+      ./net/build/libs/net-0.8.63-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null
   eb deploy --staged
+fi
+
+if [[ "$deploy_docs" = true ]] ; then
+  git subtree push --prefix docs origin gh-pages
 fi

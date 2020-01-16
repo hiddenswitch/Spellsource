@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 3.0.3
+  version: 4.0.1
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -58,6 +58,8 @@ definitions:
             $ref: '#/definitions/Invite'
           match:
             $ref: '#/definitions/Match'
+          spanContext:
+            $ref: '#/definitions/SpanContext'
       changed:
         description: |
           Indicates that a record's fields have changed.
@@ -412,33 +414,6 @@ definitions:
           A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
           otherwise specified.
         type: 'string'
-        enum:
-          - 'BROWN'
-          - 'GREEN'
-          - 'BLUE'
-          - 'GOLD'
-          - 'WHITE'
-          - 'BLACK'
-          - 'SILVER'
-          - 'VIOLET'
-          - 'RED'
-          - 'JADE'
-          - 'NAVY'
-          - 'LEATHER'
-          - 'RUST'
-          - 'EGGPLANT'
-          - 'ICE'
-          - 'OBSIDIAN'
-          - 'ICECREAM'
-          - 'AMBER'
-          - 'TOAST'
-          - 'ROSE'
-          - 'BLOOD'
-          - 'NEONGREEN'
-          - 'TEAL'
-          - 'DARKGREEN'
-          - 'PURPLE'
-          - 'TIME'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -462,12 +437,6 @@ definitions:
           Certain queues only support certain formats. Typically, when requesting the listing of queues with
           matchmakingGet, the queues will specify which current decks can be chosen.
         type: 'string'
-        enum:
-          - 'Standard'
-          - 'Wild'
-          - 'Custom'
-          - 'Spellsource'
-          - 'All'
       deckList:
         type: 'string'
         description: |
@@ -627,7 +596,6 @@ definitions:
         description: |
           When true, indicates this is a standard deck provided by the server.
         type: 'boolean'
-        default: false
       inventory:
         type: 'array'
         items:
@@ -654,14 +622,10 @@ definitions:
   MessageType:
     type: 'string'
     enum:
-      - 'REGISTER_PLAYER'
       - 'UPDATE_ACTION'
       - 'ON_GAME_EVENT'
       - 'ON_GAME_END'
-      - 'SET_PLAYERS'
-      - 'ON_ACTIVE_PLAYER'
       - 'ON_UPDATE'
-      - 'ON_TURN_END'
       - 'ON_REQUEST_ACTION'
       - 'FIRST_MESSAGE'
       - 'ON_MULLIGAN'
@@ -670,6 +634,7 @@ definitions:
       - 'TOUCH'
       - 'CONCEDE'
       - 'PINGPONG'
+      - 'TIMER'
   Emote:
     description: |
       An emote that should play from the specified entity.
@@ -716,6 +681,8 @@ definitions:
           The ID of the player who has won. Null if no player has won.
   ServerToClientMessage:
     type: 'object'
+    description: >
+      An envelope for messages from the server during gameplay.
     required:
       - messageType
     properties:
@@ -726,6 +693,7 @@ definitions:
           ClientToServerMessage if this field is not null.
       localPlayerId:
         type: 'integer'
+        x-nullable: false
         description: |
           The ID of the player that corresponds to the local player (the recipient).
       timers:
@@ -806,22 +774,21 @@ definitions:
         type: 'integer'
   EntityLocation:
     type: 'object'
+    description: |
+      Encodes the location of the entity. Its index should be ordered in the entity change set.
     required:
-      - zone
-      - index
-      - player
+      - z
+      - i
     properties:
-      player:
+      i:
         type: 'integer'
-        enum:
-          - -1
-          - 0
-          - 1
-      index:
-        type: 'integer'
-      zone:
+        x-nullable: false
+        description: |
+          The index of the entity inside its zone.
+      z:
         type: 'string'
-        enum:
+        x-nullable: false
+        x-enum-varnames:
           - 'NONE'
           - 'HAND'
           - 'DECK'
@@ -837,31 +804,33 @@ definitions:
           - 'DISCOVER'
           - 'REMOVED_FROM_PLAY'
           - 'PLAYER'
+        enum:
+          - 'N' # 'NONE'
+          - 'H' # 'HAND'
+          - 'D' # 'DECK'
+          - 'G' # 'GRAVEYARD'
+          - 'B' # 'BATTLEFIELD'
+          - 'S' # 'SECRET'
+          - 'Q' # 'QUEST'
+          - 'K' # 'HERO_POWER'
+          - 'E' # 'HERO'
+          - 'W' # 'WEAPON'
+          - 'A' # 'SET_ASIDE_ZONE'
+          - 'Z' # 'HIDDEN'
+          - 'V' # 'DISCOVER'
+          - 'R' # 'REMOVED_FROM_PLAY'
+          - 'P' # 'PLAYER'
   EntityChangeSet:
     description: |
-      An abbreviated description of changes since the last change set this client received.
-    type: 'array'
-    items:
-      type: 'object'
-      properties:
-        op:
-          description: |
-            Describes a change to an entity. 'A' corresponds to added/inserted, 'C' corresponds to changed, 'R' corresponds to
-            removed. p0 is the previous value, if it exists. p1 is the current value. Only the entity's locatino is currently
-            populated in this changeset.
-          type: 'string'
-          enum:
-            - 'A'
-            - 'C'
-            - 'R'
-        id:
-          description: |
-            The ID of the entity in this change set.
+      An array that corresponds to the visible entities in this game state notification. The client is responsible for
+      determining which indices have been added, changed or removed.
+    type: 'object'
+    properties:
+      ids:
+        type: 'array'
+        items:
           type: 'integer'
-        p0:
-          $ref: '#/definitions/EntityState'
-        p1:
-          $ref: '#/definitions/EntityState'
+          x-nullable: false
   CardEvent:
     type: 'object'
     properties:
@@ -903,12 +872,16 @@ definitions:
           - 'AFTER_SUMMON'
           - 'ATTRIBUTE_APPLIED'
           - 'ARMOR_GAINED'
+          - 'BEFORE_PHYSICAL_ATTACK'
           - 'BEFORE_SUMMON'
           - 'BOARD_CHANGED'
           - 'CARD_ADDED_TO_DECK'
           - 'CARD_SHUFFLED'
           - 'DAMAGE'
+          - 'DECAY'
+          - 'DID_END_SEQUENCE'
           - 'DISCARD'
+          - 'DISCOVER'
           - 'DRAIN'
           - 'DRAW_CARD'
           - 'ENRAGE_CHANGED'
@@ -923,6 +896,7 @@ definitions:
           - 'KILL'
           - 'LOSE_DIVINE_SHIELD'
           - 'LOSE_DEFLECT'
+          - 'LOSE_STEALTH'
           - 'MAX_HP_INCREASED'
           - 'MAX_MANA'
           - 'MANA_MODIFIED'
@@ -1275,97 +1249,106 @@ definitions:
     type: 'object'
     properties:
       target:
+        description: >
+          The corresponding target for this action.
+
+          When -1, this indicates there is no target for this particular pair. This is relevant for summon actions which
+          would ordinarily have a null value. A -1 here indicates the rightmost position on the battlefield.
+        type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
+      friendlyBattlefieldIndex:
+        description: >
+          The corresponding index on the friendly side of the battlefield for a summon action.
+
+          The minion will be summoned to the left of this index.
         type: 'integer'
       action:
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
+  ActionType:
+    type: 'string'
+    x-nullable: false
+    enum:
+      - 'SYSTEM'
+      - 'END_TURN'
+      - 'PHYSICAL_ATTACK'
+      - 'SPELL'
+      - 'SUMMON'
+      - 'HERO_POWER'
+      - 'BATTLECRY'
+      - 'EQUIP_WEAPON'
+      - 'DISCOVER'
+      - 'HERO'
   SpellAction:
     type: 'object'
-    description: |
-      A spell action or battlecry.
+    description: >
+      A spell action describes a possible action the player can take. The list of SpellAction objects in the
+      ServerToClientMessage is exhaustive and represents every possible action.
     properties:
       sourceId:
-        description: |
-          The ID of the source card in your hand or the minion that originates this spell or battlecry.
+        description: >
+          The ID of the entity (minion or card) that is the source of the action.
+
+          The client is guaranteed to have this entity in its entities array.
+
+          For a SpellAction whose actionType is DISCOVER, the source is the entity in the acting player's discover zone.
+          In the engine, the source is the entity that is prompting the discover (e.g. a minion if an opener is causing
+          the discover, or the spell card being played).
+
+          Sometimes ENDTURN will not be available, this is because some actions like DISCOVER and BATTLECRY cannot be
+          interrupted.
+
+          Running out of time will result in ENDTURN being chosen or a random DISCOVER or BATTLECRY action. This will
+          occur on the server, not the client.
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
+      actionType:
+        $ref: '#/definitions/ActionType'
+      description:
+        type: 'string'
+        description: |
+          A user-readable description of this action. This is typically not rendered in the client except in logs.
+      entity:
+        $ref: '#/definitions/Entity'
+      choices:
+        type: 'array'
+        description: >
+          When set, represents a choose one action with entities set to render.
+
+          Those entities' id property corresponds to the choices's sourceId property. The parent/root action's
+          sourceId corresponds to the actual entity that reveals the choices.
+        items:
+          $ref: '#/definitions/SpellAction'
       action:
         description: |
-          The action for this spell. Defined when this spell is not targetable.
+          The action index corresponding to this action.
+
+          If targetKeyToActions is length zero or null, the action is valid and set, corresponding to an action that
+          does not take a user-specified target. This includes all DISCOVER actions, ENDTURN, but *never* a summon,
+          even if no minions are on the board.
         type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
       targetKeyToActions:
         description: |
           An array of entity ID-action pairs that let you convert a valid target to an action index to respond with.
           Defined if this spell is targetable.
+
+          This is null or length zero if the target does not have targeted actions. Use the action property instead for
+          that situation.
+
+          A SpellAction with actionType SUMMON will have a targetKeyToActions entry with a target of -1 corresponding to
+          the *last* (rightmost) minion position to summon, while all other targets correspond to minions on the board.
         type: 'array'
         items:
           $ref: '#/definitions/TargetActionPair'
-  SummonAction:
-    description: |
-      A summon action that originates from a specific card.
-    type: 'object'
-    properties:
-      sourceId:
-        description: |
-          The ID of the source card in your hand.
-        type: 'integer'
-      indexToActions:
-        description: |
-          An array of index-action pairs that let you convert a battlefield location to an action index to
-          respond with.
-        type: 'array'
-        items:
-          description: |
-            A single index-action pair.
-          type: 'object'
-          properties:
-            index:
-              description: |
-                The position in the battlefield that corresponds to this summon action.
-              type: 'integer'
-            action:
-              description: |
-                The action index of this particular summon index position for this card.
-              type: 'integer'
-  ChooseOneOptions:
-    description: |
-      A prompt to choose from specified options.
-    type: 'object'
-    properties:
-      cardInHandId:
-        type: 'integer'
-        description: |
-          The card in the hand that corresponds to these two options.
-      entities:
-        type: 'array'
-        description: |
-          The virtual cards used to render the options.
-        items:
-          $ref: '#/definitions/Entity'
-      spells:
-        type: 'array'
-        description: |
-          The spells that correspond to the virtual entities. Their sourceId is set to the
-          corresponding virtual entity.
-        items:
-          $ref: '#/definitions/SpellAction'
-      summons:
-        type: 'array'
-        description: |
-          The summons that correspond to the virtual entities. Their sourceId is set to the
-          corresponding virtual entity.
-        items:
-          $ref: '#/definitions/SummonAction'
-      heroPowers:
-        type: 'array'
-        description: |
-          The spells that correspond to virtual hero power entities.
-        items:
-          $ref: '#/definitions/SpellAction'
-      heroes:
-        type: 'array'
-        description: |
-          Choose one hero cards corresponding to their virtual entities.
-        items:
-          $ref: '#/definitions/SpellAction'
   GameActions:
     description: |
       An object representing all valid game actions in this action request.
@@ -1378,82 +1361,13 @@ definitions:
         type: 'array'
         items:
           type: 'integer'
-      endTurn:
-        description: |
-          The end turn action. Not necessarily always available, because you cannot end your turn in the middle of
-          a discover or a battlecry. The value corresponds to which integer index to reply with.
-        type: 'integer'
-      physicalAttacks:
-        description: |
-          An array of entity ID - target IDs pairs that represent valid physical attacks.
-        type: 'array'
-        items:
-          type: 'object'
-          properties:
-            sourceId:
-              description: |
-                The entity (minion or hero) that corresponds to the source of this physical attack.
-              type: 'integer'
-            defenders:
-              description: |
-                Valid defenders for this attacker.
-              type: 'array'
-              items:
-                $ref: '#/definitions/TargetActionPair'
-      summons:
-        description: |
-          The cards in your hand that can be summoned. These are typically only minions.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SummonAction'
-      heroPower:
-        $ref: '#/definitions/SpellAction'
-      heroes:
-        description:
-          The cards in your hand that are heroes
+      all:
+        description: >
+          An array of actions containing source, target, type and a short description of the action. Some actions make
+          come with additional display data like a specific card, card ID or other content.
         type: 'array'
         items:
           $ref: '#/definitions/SpellAction'
-      spells:
-        description: |
-          The cards in your hand that are spells that take targets.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SpellAction'
-      battlecries:
-        description: |
-          A set of possible targetable battlecry actions.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SpellAction'
-      discoveries:
-        description: |
-          Card discovers.
-        type: 'array'
-        items:
-          description: |
-            Card IDs and their corresponding action indices.
-          type: 'object'
-          properties:
-            cardId:
-              type: 'integer'
-            action:
-              type: 'integer'
-      weapons:
-        description: |
-          The weapons in your hand that can be equipped. These are the equivalent of summons that only have a single
-          index, but do not require targeting on the battlefield.
-        type: 'array'
-        items:
-          $ref: '#/definitions/SummonAction'
-      chooseOnes:
-        description: |
-          An array of choose one spells or summons. Each spell/summon is represented by a different card. An entity
-          that can be used to render a card for the option is provided. Use the spell action's card ID to figure out
-          which options correspond to which cards in the hand.
-        type: 'array'
-        items:
-          $ref: '#/definitions/ChooseOneOptions'
   Entity:
     type: 'object'
     properties:
@@ -1462,6 +1376,8 @@ definitions:
         type: 'integer'
         format: 'int32'
         default: -1
+        x-nullable: false
+        x-unity-serializable: true
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
         type: 'string'
@@ -1478,15 +1394,7 @@ definitions:
         description: |
           The text that would go into the entity's description field.
         type: 'string'
-      state:
-        $ref: '#/definitions/EntityState'
-  EntityState:
-    type: 'object'
-    description: |
-      The entity state contains all the mutable values of an entity. In the future, the server will provide a list of
-      exact changes to this state.
-    properties:
-      location:
+      l:
         $ref: '#/definitions/EntityLocation'
       background:
         description: |
@@ -1511,6 +1419,7 @@ definitions:
         type: 'integer'
         format: 'int32'
         default: -1
+        x-nullable: false
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
@@ -1610,6 +1519,18 @@ definitions:
           physical attack action targeting.
         type: 'boolean'
         default: false
+      discarded:
+        description: |
+          Indicates the entity was discarded from the hand.
+        type: 'boolean'
+        default: false
+        x-nullable: false
+      roasted:
+        description: |
+          Indicates the entity was roasted (removed due to excess cards or otherwise discarded from the deck).
+        type: 'boolean'
+        default: false
+        x-nullable: false
       spellDamage:
         description: |
           Indicates the amount of additional spell damage this entity gives its owning player.
@@ -1734,6 +1655,8 @@ definitions:
           - 'WEAPON'
           - 'HERO_POWER'
           - 'CHOOSE_ONE'
+          - 'CLASS'
+          - 'FORMAT'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1771,6 +1694,24 @@ definitions:
           turn 0.
         type: 'boolean'
         default: false
+      color:
+        description: |
+          The color for the class
+        type: 'array'
+        items:
+          type: 'number'
+          format: 'float'
+      blackText:
+        description: |
+          Whether the class should use black text instead of the default white
+        type: 'boolean'
+        default: false
+      cardSets:
+        description: |
+          The card sets listed by the card
+        type: 'array'
+        items:
+          type: 'string'
   DraftsChooseCardRequest:
     type: 'object'
     required:
@@ -1981,7 +1922,7 @@ definitions:
           $ref: '#/definitions/ReplayDeltas'
   ReplayDeltas:
     description: |
-      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+      The forward and backward deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
     type: 'object'
     properties:
       backward:
@@ -2040,6 +1981,15 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+  SpanContext:
+    type: 'object'
+    description: |
+      A piece of data that assists in OpenTracing from the client.
+    properties:
+      data:
+        type: 'string'
+        format: 'binary'
+        description: Binary carried opentracing span context
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
@@ -2054,7 +2004,17 @@ paths:
       responses:
         "200":
           description: |
-            The server is okay!
+            The server is healthy.
+          schema:
+            type: 'string'
+        "401":
+          description: |
+            The server did not successfully connect to a cluster yet.
+          schema:
+            type: 'string'
+        default:
+          $ref: '#/responses/InternalServerError'
+
   /accounts/{targetUserId}:
     get:
       description: |
@@ -2651,3 +2611,39 @@ paths:
             The semver version
           schema:
             type: 'string'
+  /reset/passwords/with-token:
+    post:
+      description: >
+        Provided a valid reset token, resets a user's password.
+      operationId: postPasswordReset
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: token
+          in: query
+          type: 'string'
+          required: true
+        - name: password1
+          in: formData
+          type: 'string'
+          required: true
+        - name: password2
+          in: formData
+          type: 'string'
+          required: true
+      responses:
+        "303":
+          description: |
+            Redirects to the result of the password reset request delivered in the HTML body.
+
+            Possible Location response header values:
+             - passwordresetted.html: successfully reset password.
+             - passwordresetexpired.html: invalid token, or token was not passed in cookie.
+             - passwordsdidnotmatch.html: if the passwords provided in the form data did not match.
+          headers:
+            Location:
+              type: "string"
+              enum:
+                - 'passwordresetted.html'
+                - 'passwordresetexpired.html'
+                - 'passwordsdidnotmatch.html'

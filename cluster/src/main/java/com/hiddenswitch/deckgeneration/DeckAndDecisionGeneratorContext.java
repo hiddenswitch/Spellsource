@@ -62,7 +62,7 @@ public class DeckAndDecisionGeneratorContext extends DeckGeneratorContext {
 	 * @return the win percentage of the genotype, ranging from 0.0 to 1.0
 	 */
 	@Override
-	public double fitness(Genotype<BitGene> individual, HeroClass heroClass) {
+	public double fitness(Genotype<BitGene> individual, String heroClass) {
 		GameDeck gameDeck = deckFromBitGenotype(individual, heroClass);
 
 		if (individual.getChromosome().

@@ -1,0 +1,20 @@
+{
+  "name": "Rapid Fire",
+  "heroPower": "hero_power_rapider_fire",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "description": "Deal $1 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

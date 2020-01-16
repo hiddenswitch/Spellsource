@@ -4,21 +4,13 @@
 ## Enum
 
 
-* `REGISTER_PLAYER` (value: `"REGISTER_PLAYER"`)
-
 * `UPDATE_ACTION` (value: `"UPDATE_ACTION"`)
 
 * `ON_GAME_EVENT` (value: `"ON_GAME_EVENT"`)
 
 * `ON_GAME_END` (value: `"ON_GAME_END"`)
 
-* `SET_PLAYERS` (value: `"SET_PLAYERS"`)
-
-* `ON_ACTIVE_PLAYER` (value: `"ON_ACTIVE_PLAYER"`)
-
 * `ON_UPDATE` (value: `"ON_UPDATE"`)
-
-* `ON_TURN_END` (value: `"ON_TURN_END"`)
 
 * `ON_REQUEST_ACTION` (value: `"ON_REQUEST_ACTION"`)
 
@@ -35,6 +27,8 @@
 * `CONCEDE` (value: `"CONCEDE"`)
 
 * `PINGPONG` (value: `"PINGPONG"`)
+
+* `TIMER` (value: `"TIMER"`)
 
 
 

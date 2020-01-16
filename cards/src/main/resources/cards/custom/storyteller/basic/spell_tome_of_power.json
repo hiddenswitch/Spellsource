@@ -1,0 +1,37 @@
+{
+  "name": "Tome of Power",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "description": "Give a friendly minion +1/+1. Gain an empty Lun.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      },
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "ManaMaxedCondition"
+        },
+        "spell1": {
+          "class": "ReceiveCardSpell",
+          "card": "spell_too_many_books",
+          "targetPlayer": "SELF"
+        },
+        "spell2": {
+          "class": "ModifyMaxManaSpell",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

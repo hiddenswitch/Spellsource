@@ -1,0 +1,25 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "Whenever your champion attacks, deal 1 damage to your champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourcePlayer": "SELF",
+      "sourceEntityType": "HERO"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1,
+      "target" : "FRIENDLY_HERO"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

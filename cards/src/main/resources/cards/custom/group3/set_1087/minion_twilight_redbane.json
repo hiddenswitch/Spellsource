@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: If your C'Thun has at least 10 Attack, give a character +5 Attack this turn.",
+  "description": "Opener: If your Big Guy has at least 10 Attack, give a character +5 Attack this turn.",
   "battlecry": {
     "condition": {
       "class": "OrCondition",
@@ -21,7 +21,7 @@
             "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
-              "card": "minion_cthun"
+              "card": "minion_removed_card"
             }
           },
           "value2": 10
@@ -35,7 +35,7 @@
             "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
-              "card": "minion_cthun"
+              "card": "minion_removed_card"
             }
           },
           "value2": 10
@@ -61,7 +61,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

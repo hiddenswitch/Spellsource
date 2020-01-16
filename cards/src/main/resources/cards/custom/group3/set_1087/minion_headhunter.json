@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 9,
   "rarity": "EPIC",
-  "description": "Supremacy: Add an Echo of the destroyed minion to your hand.",
+  "description": "Supremacy: Add a copy of the destroyed minion to your hand. Remove it at the end of your turn.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

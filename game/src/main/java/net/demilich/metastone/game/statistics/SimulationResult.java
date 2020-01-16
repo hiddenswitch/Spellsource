@@ -4,6 +4,9 @@ package net.demilich.metastone.game.statistics;
 import net.demilich.metastone.game.GameContext;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Summarizing the results of one or more games.
@@ -17,6 +20,7 @@ public class SimulationResult implements Cloneable, Serializable {
 	private long duration;
 	private int numberOfGames;
 	private int exceptionCount;
+	private transient List<Throwable> exceptions = Collections.synchronizedList(new ArrayList<>());
 
 	public SimulationResult(int numberOfGames) {
 		this.startTimestamp = System.currentTimeMillis();
@@ -88,6 +92,15 @@ public class SimulationResult implements Cloneable, Serializable {
 
 	public SimulationResult setExceptionCount(int exceptionCount) {
 		this.exceptionCount = exceptionCount;
+		return this;
+	}
+
+	public List<Throwable> getExceptions() {
+		return exceptions;
+	}
+
+	public SimulationResult setExceptions(List<Throwable> exceptions) {
+		this.exceptions = exceptions;
 		return this;
 	}
 }

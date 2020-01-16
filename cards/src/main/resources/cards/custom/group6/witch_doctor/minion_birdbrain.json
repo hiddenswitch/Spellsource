@@ -1,13 +1,13 @@
 {
   "name": "Birdbrain",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "MECH",
-  "description": "<b>Opener</b>: Give a friendly Mech +3 Attack or +3 Health (at random).",
+  "race": "BEAST",
+  "description": "<b>Opener</b>: Give a friendly Beast +3 Attack or +3 Health (at random).",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
@@ -17,7 +17,7 @@
       },
       "filter": {
         "class": "RaceFilter",
-        "race": "MECH"
+        "race": "BEAST"
       },
       "spell1": {
         "class": "BuffSpell",

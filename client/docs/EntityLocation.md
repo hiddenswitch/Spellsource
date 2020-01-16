@@ -4,30 +4,29 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**player** | **Integer** |  | 
-**index** | **Integer** |  | 
-**zone** | [**ZoneEnum**](#ZoneEnum) |  | 
+**i** | **Integer** | The index of the entity inside its zone.  | 
+**z** | [**ZEnum**](#ZEnum) |  | 
 
 
-<a name="ZoneEnum"></a>
-## Enum: ZoneEnum
+<a name="ZEnum"></a>
+## Enum: ZEnum
 Name | Value
 ---- | -----
-NONE | &quot;NONE&quot;
-HAND | &quot;HAND&quot;
-DECK | &quot;DECK&quot;
-GRAVEYARD | &quot;GRAVEYARD&quot;
-BATTLEFIELD | &quot;BATTLEFIELD&quot;
-SECRET | &quot;SECRET&quot;
-QUEST | &quot;QUEST&quot;
-HERO_POWER | &quot;HERO_POWER&quot;
-HERO | &quot;HERO&quot;
-WEAPON | &quot;WEAPON&quot;
-SET_ASIDE_ZONE | &quot;SET_ASIDE_ZONE&quot;
-HIDDEN | &quot;HIDDEN&quot;
-DISCOVER | &quot;DISCOVER&quot;
-REMOVED_FROM_PLAY | &quot;REMOVED_FROM_PLAY&quot;
-PLAYER | &quot;PLAYER&quot;
+N | &quot;N&quot;
+H | &quot;H&quot;
+D | &quot;D&quot;
+G | &quot;G&quot;
+B | &quot;B&quot;
+S | &quot;S&quot;
+Q | &quot;Q&quot;
+K | &quot;K&quot;
+E | &quot;E&quot;
+W | &quot;W&quot;
+A | &quot;A&quot;
+Z | &quot;Z&quot;
+V | &quot;V&quot;
+R | &quot;R&quot;
+P | &quot;P&quot;
 
 
 

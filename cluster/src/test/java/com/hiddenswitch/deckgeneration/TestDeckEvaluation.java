@@ -25,7 +25,11 @@ import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
 
 public class TestDeckEvaluation {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
 	int GAMES_PER_MATCH = 15;
+	private DeckFormat hearthstone = DeckFormat.getFormat("hearthstone");
 
 	public List<Map.Entry<GameDeck, Double>> statsFromTournament(List<GameDeck> decks) throws InterruptedException {
 		Map<GameDeck[], SimulationResult> resultList = new HashMap<>();
@@ -63,7 +67,7 @@ public class TestDeckEvaluation {
 				.filter(Card::isCollectible)
 				.filter(card -> !card.getCardId().equals("spell_win_the_game"))
 				.filter(card -> card.getBaseManaCost() == 1)
-				.filter(card -> card.getHeroClass() == HeroClass.ANY)
+				.filter(card -> card.getHeroClass().equals(HeroClass.ANY))
 				.collect(toList());
 
 		GameDeck winningDeck = new GameDeck(HeroClass.ANY, Collections.singletonList("spell_win_the_game"));
@@ -96,7 +100,7 @@ public class TestDeckEvaluation {
 				.filter(card -> !card.getCardId().equals("minion_combo_win_1"))
 				.filter(card -> !card.getCardId().equals("minion_combo_win_2"))
 				.filter(card -> card.getBaseManaCost() == 1)
-				.filter(card -> card.getHeroClass() == HeroClass.ANY)
+				.filter(card -> card.getHeroClass().equals(HeroClass.ANY))
 				.collect(toList());
 
 		List<String> winningDeckList = new ArrayList<>();
@@ -124,7 +128,7 @@ public class TestDeckEvaluation {
 	@Ignore
 	public void testFullRandomDecks() throws InterruptedException {
 		CardCatalogue.loadCardsFromPackage();
-		List<GameDeck> decks = Stream.generate(() -> Deck.randomDeck(HeroClass.ANY, DeckFormat.STANDARD))
+		List<GameDeck> decks = Stream.generate(() -> Deck.randomDeck(HeroClass.ANY, hearthstone))
 				.limit(20)
 				.collect(toList());
 		for (int i = 0; i < 20; i++) {

@@ -1,10 +1,10 @@
 {
   "name": "Split Personality",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Choose a friendly minion. It attacks your hero, then the enemy champion.",
+  "description": "Choose a friendly minion. It attacks your champion, then the enemy champion.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

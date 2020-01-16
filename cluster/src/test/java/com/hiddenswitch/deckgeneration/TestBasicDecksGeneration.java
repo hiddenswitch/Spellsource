@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 public class TestBasicDecksGeneration {
 	BasicTournamentDecks basicTournamentDecks = new BasicTournamentDecks();
 
-	public void deckGenerationForClass(HeroClass heroClass) {
+	public void deckGenerationForClass(String heroClass) {
 		int MAX_CARDS_PER_DECK = 30;
 		int GAMES_PER_MATCH = 20;
 		int STARTING_HP = 30;
@@ -36,15 +36,15 @@ public class TestBasicDecksGeneration {
 
 		List<Card> indexInBitmap = CardCatalogue.getAll().stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == heroClass || card.getHeroClass() == HeroClass.ANY)
-						&& (card.getCardSet() == CardSet.BASIC))
+						&& (card.getHeroClass().equals(heroClass) || card.getHeroClass().equals(HeroClass.ANY))
+						&& (card.getCardSet().equals(CardSet.BASIC)))
 				.collect(toList());
 
 		indexInBitmap.addAll(CardCatalogue.getAll().stream()
 				.filter(card -> card.isCollectible()
 						&& (!card.getRarity().equals(Rarity.LEGENDARY))
-						&& (card.getHeroClass() == heroClass || card.getHeroClass() == HeroClass.ANY)
-						&& (card.getCardSet() == CardSet.BASIC))
+						&& (card.getHeroClass().equals(heroClass) || card.getHeroClass().equals(HeroClass.ANY))
+						&& (card.getCardSet().equals(CardSet.BASIC)))
 				.collect(toList()));
 
 		BasicTournamentDecks basicTournamentDecks = new BasicTournamentDecks();

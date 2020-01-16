@@ -1,23 +1,20 @@
 package net.demilich.metastone.game.entities;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.cards.Attribute;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -30,8 +27,9 @@ import java.util.stream.Collectors;
 public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
 	private Card sourceCard;
-	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
+	private List<Enchantment> enchantments = new ArrayList<>();
 	private CardCostModifier cardCostModifier;
+	private int frozenDeathrattlesSize;
 
 	public Actor(Card sourceCard) {
 		this.setName(sourceCard != null ? sourceCard.getName() : null);
@@ -43,7 +41,9 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		if (!hasAttribute(Attribute.DEATHRATTLES)) {
 			setAttribute(Attribute.DEATHRATTLES, new ArrayList<SpellDesc>());
 		}
-		getDeathrattles().add(deathrattleSpell);
+		if (getDeathrattles().size() < GameLogic.MAX_DEATHRATTLES) {
+			getDeathrattles().add(deathrattleSpell);
+		}
 	}
 
 	@Override
@@ -91,6 +91,14 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 				clone.addDeathrattle(deathrattleClone);
 			}
 		}
+		if (hasAttribute(Attribute.BATTLECRY)
+				|| (getDeathrattles().size() > 0)) {
+			clone.getAttributes().remove(Attribute.BATTLECRY);
+			for (BattlecryDesc battlecry : getBattlecries()) {
+				BattlecryDesc battlecryClone = battlecry.clone();
+				clone.addBattlecry(battlecryClone);
+			}
+		}
 
 		if (cardCostModifier != null) {
 			clone.cardCostModifier = cardCostModifier.clone();
@@ -98,6 +106,13 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 
 		updateTriggers();
 		return clone;
+	}
+
+	public void addBattlecry(BattlecryDesc battlecry) {
+		if (!hasAttribute(Attribute.BATTLECRY)) {
+			setAttribute(Attribute.BATTLECRY, new ArrayList<BattlecryDesc>());
+		}
+		getBattlecries().add(battlecry);
 	}
 
 	public int getArmor() {
@@ -137,13 +152,15 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		return getAttributeValue(Attribute.BASE_HP);
 	}
 
-	public @Nullable
-	BattlecryAction getBattlecry() {
-		BattlecryAction action = (BattlecryAction) getAttribute(Attribute.BATTLECRY);
-		if (action != null) {
-			action.setSourceReference(getReference());
+	@SuppressWarnings("unchecked")
+	@NotNull
+	public List<BattlecryDesc> getBattlecries() {
+		Object attribute = getAttribute(Attribute.BATTLECRY);
+		if (attribute == null) {
+			return new ArrayList<>();
+		} else {
+			return (List<BattlecryDesc>) attribute;
 		}
-		return action;
 	}
 
 	public CardCostModifier getCardCostModifier() {
@@ -151,7 +168,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	}
 
 	@SuppressWarnings("unchecked")
-	@NonNls
+	@NotNull
 	public List<SpellDesc> getDeathrattles() {
 		Object attribute = getAttribute(Attribute.DEATHRATTLES);
 		if (attribute == null) {
@@ -196,15 +213,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		return enchantments.size() != 0;
 	}
 
-	public int getMaxNumberOfAttacks() {
-		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
-			return GameLogic.MEGA_WINDFURY_ATTACKS;
-		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
-			return GameLogic.WINDFURY_ATTACKS;
-		}
-		return 1;
-	}
-
 
 	/**
 	 * Indicates whether or not the actor is mortally wounded.
@@ -241,13 +249,11 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	@Override
 	public void modifyHpBonus(int value) {
 		modifyAttribute(Attribute.HP_BONUS, value);
-		if (value > 0) {
-			modifyAttribute(Attribute.HP, value);
-		}
+		modifyAttribute(Attribute.HP, value);
+
 		if (getHp() > getMaxHp()) {
 			setHp(getMaxHp());
 		}
-
 	}
 
 	public void setAttack(int value) {
@@ -262,9 +268,16 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		setAttribute(Attribute.BASE_HP, value);
 	}
 
-	public void setBattlecry(BattlecryAction battlecry) {
+	public void setBattlecry(BattlecryDesc battlecry) {
 		if (battlecry != null) {
-			setAttribute(Attribute.BATTLECRY, battlecry);
+			if (!hasAttribute(Attribute.BATTLECRY)) {
+				setAttribute(Attribute.BATTLECRY, new ArrayList<BattlecryDesc>());
+			}
+			if (getBattlecries().size() == 0) {
+				getBattlecries().add(battlecry);
+			} else {
+				getBattlecries().set(0, battlecry);
+			}
 		}
 	}
 
@@ -280,7 +293,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		setAttribute(Attribute.MAX_HP, value);
 	}
 
-	public HeroClass getHeroClass() {
+	public String getHeroClass() {
 		return getSourceCard().getHeroClass();
 	}
 
@@ -302,7 +315,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		}
 	}
 
-	public void setRace(Race race) {
+	public void setRace(String race) {
 		if (race != null) {
 			setAttribute(Attribute.RACE, race);
 		}
@@ -310,18 +323,13 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 
 	@Override
 	public String toString() {
-		String result = "[" + getEntityType() + " '" + getName() + "'id:" + getId() + " ";
-		result += getAttack() + "/" + getHp();
-		String prefix = " ";
-		for (Attribute tag : getAttributes().keySet()) {
-			if (false) {
-				result += prefix + tag;
-				prefix = ", ";
-			}
-		}
-		result += " hashCode: " + hashCode();
-		result += "]";
-		return result;
+		return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
+				.append("name", getName())
+				.append("id", getId())
+				.append("zone", getZone())
+				.append(getAttack() + "/" + getHp())
+				.append("description", getDescription())
+				.toString();
 	}
 
 	@Override
@@ -373,5 +381,27 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		clone.getAttributes().remove(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
+	}
+
+	/**
+	 * Indicates that all the deathrattles currently on this actor should be frozen, i.e., they are intrinsic to this
+	 * actor's text.
+	 */
+	public void freezeDeathrattles() {
+		if (getAttributes().get(Attribute.DEATHRATTLES) instanceof Boolean) {
+			frozenDeathrattlesSize = 0;
+			return;
+		}
+		frozenDeathrattlesSize = getDeathrattles().size();
+	}
+
+	/**
+	 * Removes the deathrattles that were not frozen, i.e., added as part of other effects.
+	 */
+	@Override
+	public void clearAddedDeathrattles() {
+		for (int i = getDeathrattles().size() - 1; i >= frozenDeathrattlesSize; i--) {
+			getDeathrattles().remove(i);
+		}
 	}
 }

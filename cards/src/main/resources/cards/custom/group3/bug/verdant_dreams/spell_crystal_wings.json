@@ -1,0 +1,26 @@
+{
+  "name": "Crystal Wings",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Give a minion +6 Health and Elusive.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 0,
+        "hpBonus": 6
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "UNTARGETABLE_BY_SPELLS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

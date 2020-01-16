@@ -7,11 +7,11 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import java.util.List;
 
 /**
- * Created by bberman on 12/14/16.
+ * A behaviour which makes <b>no</b> choices, so its reply handlers are <b>never</b> called.
  */
 public class NullDraftBehaviour implements DraftBehaviour {
 	@Override
-	public void chooseHeroAsync(List<HeroClass> classes, Handler<AsyncResult<HeroClass>> result) {
+	public void chooseHeroAsync(List<String> classes, Handler<AsyncResult<String>> result) {
 	}
 
 	@Override

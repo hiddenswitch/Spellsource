@@ -50,6 +50,12 @@ public class DrawCardSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(int count) {
+		Map<SpellArg, Object> arguments = new SpellDesc(DrawCardSpell.class);
+		arguments.put(SpellArg.VALUE, count);
+		return new SpellDesc(arguments);
+	}
+
 	private static Logger logger = LoggerFactory.getLogger(DrawCardSpell.class);
 
 	@Override

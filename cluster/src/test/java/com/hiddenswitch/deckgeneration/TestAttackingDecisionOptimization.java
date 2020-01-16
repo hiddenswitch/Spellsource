@@ -22,6 +22,9 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class TestAttackingDecisionOptimization {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
 	/**
 	 * In a deck with a 30/1 charge minion, tests if the player
 	 * will optimize to always attack the opponent's hero instead
@@ -35,18 +38,18 @@ public class TestAttackingDecisionOptimization {
 		int CARDS_IN_DECK = 30;
 		int STABLE_GENERATIONS = 5;
 
-		CardCatalogue.loadCardsFromPackage();
+		
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 1)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(CARDS_IN_DECK - 1)
 				.collect(toList());
 
 		indexInBitmap.add(CardCatalogue.getCardById("minion_charge_30"));
 
-		GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE, indexInBitmap.stream().map(card -> card.getCardId()).collect(toList()));
+		GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE, indexInBitmap.stream().map(Card::getCardId).collect(toList()));
 		basicTournamentDecks.add(tournamentDeck);
 
 		DeckAndDecisionGeneratorContext deckAndDecisionGeneratorContext = new DeckAndDecisionGeneratorContext(indexInBitmap, basicTournamentDecks, new ArrayList<>(), Collections.singletonList(DecisionType.ALWAYS_ATTACK_ENEMY_HERO));
@@ -88,13 +91,13 @@ public class TestAttackingDecisionOptimization {
 		int CARDS_IN_DECK = 30;
 		int STABLE_GENERATIONS = 10;
 
-		CardCatalogue.loadCardsFromPackage();
+		
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 1)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(CARDS_IN_DECK - 1)
 				.collect(toList());
 
 		indexInBitmap.add(CardCatalogue.getCardById("minion_charge_30"));
@@ -141,14 +144,9 @@ public class TestAttackingDecisionOptimization {
 		int STABLE_GENERATIONS = 10;
 		int NUMBER_OF_DECKS = 10;
 
-		CardCatalogue.loadCardsFromPackage();
+		
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
-		List<Card> indexInBitmap = CardCatalogue.getAll()
-				.stream()
-				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC)
-				.collect(toList());
+		List<Card> indexInBitmap = TestDeckGeneration.getBitmap();
 
 		indexInBitmap.add(CardCatalogue.getCardById("minion_charge_30"));
 		int chargeIndex = indexInBitmap.size() - 1;
@@ -210,13 +208,13 @@ public class TestAttackingDecisionOptimization {
 		int STABLE_GENERATIONS = 10;
 
 		Random random = new XORShiftRandom(101010L);
-		CardCatalogue.loadCardsFromPackage();
+		
 		List<GameDeck> basicTournamentDecks = new ArrayList<>();
 		List<Card> indexInBitmap = CardCatalogue.getAll()
 				.stream()
 				.filter(card -> card.isCollectible()
-						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
-						&& card.getCardSet() == CardSet.BASIC).limit(CARDS_IN_DECK - 2)
+						&& (card.getHeroClass().equals(HeroClass.BLUE) || card.getHeroClass().equals(HeroClass.ANY))
+						&& card.getCardSet().equals(CardSet.BASIC)).limit(CARDS_IN_DECK - 2)
 				.collect(toList());
 
 		indexInBitmap.add(CardCatalogue.getCardById("secret_explosive_trap"));

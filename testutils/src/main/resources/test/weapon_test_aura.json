@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "Your minions have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 0
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

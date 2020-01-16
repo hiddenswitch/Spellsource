@@ -1,0 +1,20 @@
+{
+  "name": "Thin Smoke",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Draw two 0-Cost cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": 0
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

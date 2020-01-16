@@ -4,39 +4,21 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Add up to 3 different friendly Beasts that died this turn to your hand.",
+  "description": "Discover a Beast in your graveyard.",
   "targetSelection": "NONE",
-  "condition": {
-    "class": "AnyMatchFilterCondition",
-    "target": "FRIENDLY_GRAVEYARD",
-    "filter": {
-      "class": "CardFilter",
-      "race": "BEAST",
-      "cardType": "MINION",
-      "attribute": "DIED_ON_TURN",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "operation": "EQUAL"
-    }
-  },
   "spell": {
-    "class": "ReceiveCardSpell",
-    "value": 3,
-    "exclusive": true,
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
     "cardFilter": {
       "class": "CardFilter",
-      "race": "BEAST",
-      "cardType": "MINION",
-      "attribute": "DIED_ON_TURN",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "operation": "EQUAL"
+      "race": "BEAST"
     },
     "cardSource": {
       "class": "GraveyardActorsSource",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "distinct": true
     }
   },
   "collectible": true,
