@@ -13,6 +13,13 @@ permalink: /whats-new/
  - Haunted Berserker now correctly deals Toxic and Lifedrain damage (i.e. splash damage) with its effect.
  - Playing cards randomly is not recursive.
 
+The following changes since 0.8.63
+ - Silver Timekeeper now properly filters selectable targets. (1482)
+ - Brain Stun now properly says "Stunned" in its text. (1483)
+ - Slave-Trader Yorn is now "Yorn th Recruiter" and Fairy Whipmaster is now "Fairy Enforcer". (1487)
+ - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
+ - The 4th Ring Warden now correctly only affects your own minions. (1490)
+
 ### 0.8.63-3.0.8 (January 14, 2020)
 
  - New Oni Queen cards and updates. (since 0.8.62)
