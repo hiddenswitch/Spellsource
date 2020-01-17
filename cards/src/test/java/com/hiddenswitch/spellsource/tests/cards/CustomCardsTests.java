@@ -4809,4 +4809,19 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(costOf(context, player, mosshorn), 0);
 		});
 	}
+
+	@Test
+	public void testAllForOne() {
+		for (int i = 1; i <= 7; i++) {
+			int finalI = i;
+			runGym((context, player, opponent) -> {
+				Minion guy = null;
+				for (int j = 0; j < finalI; j++) {
+					guy = playMinionCard(context, player, "minion_neutral_test_1");
+				}
+				playCard(context, player, "spell_all_for_one", guy);
+				assertEquals(guy.getAttack(), guy.getBaseAttack() + finalI);
+			});
+		}
+	}
 }
