@@ -4,13 +4,13 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Give a minion +1 Attack for every other friendly minion.",
+  "description": "Give a minion +1 Attack for each friendly minion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
     "attackBonus": {
       "class": "EntityCountValueProvider",
-      "target": "OTHER_FRIENDLY_MINIONS"
+      "target": "FRIENDLY_MINIONS"
     },
     "hpBonus": 0
   },

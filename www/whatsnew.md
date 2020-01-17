@@ -16,6 +16,7 @@ permalink: /whats-new/
  - Mosshorn now interacts more favorably with Revelation, and also has Guard as it was originally supposed to. ([1492](https://i.pinimg.com/originals/cf/8d/62/cf8d6265db8c31180c9fb3c458152581.jpg))
  - The Overlord's Skill Dark Rule now functions properly. (1494)
  - Fixed a typo with Hired Berserker and made it properly summon a 2/3 with Guard. (1495)
+ - All for One's description now matches its actual effect. (1484)
 
 The following changes since 0.8.63
  - Silver Timekeeper now properly filters selectable targets. (1482)
