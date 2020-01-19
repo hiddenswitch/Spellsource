@@ -4,7 +4,7 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.64-3.0.8 (In Progress)
+### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
  - Adding new Archaeologist cards!
