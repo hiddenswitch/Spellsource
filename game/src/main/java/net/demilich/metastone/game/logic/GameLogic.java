@@ -200,10 +200,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_BOOLEAN_2);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_BOOLEAN_3);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_BOOLEAN_4);
+		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_BOOLEAN_5);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_1);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_2);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_3);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_4);
+		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_5);
 		IMMUNE_TO_SILENCE.add(Attribute.CARD_INVENTORY_ID);
 		IMMUNE_TO_SILENCE.add(Attribute.TREANT);
 		IMMUNE_TO_SILENCE.add(Attribute.LACKEY);
@@ -1662,7 +1664,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public Card drawCard(int playerId, Card card, Entity source) {
-		Player player = context.getPlayer(playerId);
 		card = receiveCard(playerId, card, source, true);
 		return card;
 	}
@@ -2124,6 +2125,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Gets the mana cost of a card considering any {@link CardCostModifier} objects that may apply to it.
+	 * <p>
+	 * If the card is not in play, the deck or the hand, returns the base mana cost of the card.
 	 *
 	 * @param player The player whose point of view to consider for the card cost.
 	 * @param card   The card to cost.
@@ -2132,6 +2135,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public int getModifiedManaCost(Player player, Card card) {
 		int manaCost = card.getManaCost(context, player);
+		if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+			return manaCost;
+		}
 		int minValue = 0;
 		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
 			if (!(trigger instanceof CardCostModifier)) {
@@ -2995,7 +3001,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = Race.hasRace(card.getRace(), Race.MURLOC)
+		final boolean murlocsCostHealthCondition = Race.hasRace(context, card, Race.MURLOC)
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -3085,7 +3091,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (spellsCastTwice(player, card, card, target)) {
+			if (spellsCastTwice(player, card, target)) {
 				context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 			}
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
@@ -3106,7 +3112,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (spellsCastTwice(player, card, card, target)) {
+			if (spellsCastTwice(player, card, target)) {
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 			}
@@ -3119,25 +3125,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Determines if spells should be casting twice. Allows auras to control double spell casting.
 	 *
-	 * @param player
-	 * @param card
-	 * @param source
-	 * @param target
+	 * @param player The player casting the spell
+	 * @param card   The card that is the spell being cast
+	 * @param target The spell's target, if there is one
 	 * @return
 	 */
-	public boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
+	public boolean spellsCastTwice(Player player, Card card, Entity target) {
 		boolean playerHasAttribute = context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE);
-		boolean playerHasSilentDreamer = false;
-		if (target != null && source != null) {
-			for (TheliaSilentdreamerAura aura : SpellUtils.getAuras(context, TheliaSilentdreamerAura.class, target)) {
-				if (aura.getSpellCondition().isFulfilled(context, player, source, card)) {
-					playerHasSilentDreamer = true;
+		boolean playerHasAura = false;
+		if (card != null) {
+			for (SpellsCastTwiceAura aura : SpellUtils.getAuras(context, SpellsCastTwiceAura.class, card)) {
+				if (aura.isFulfilled(context, player, card, target)) {
+					playerHasAura = true;
 					break;
 				}
 			}
 		}
 
-		return playerHasAttribute || playerHasSilentDreamer;
+		return playerHasAttribute || playerHasAura;
 	}
 
 	/**
@@ -4140,6 +4145,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void silence(int playerId, Actor target) {
 		removeBonusAttributes(target);
 		removeEnchantments(target);
+		target.setAttribute(Attribute.SILENCED);
 		context.fireGameEvent(new SilenceEvent(context, playerId, target));
 	}
 

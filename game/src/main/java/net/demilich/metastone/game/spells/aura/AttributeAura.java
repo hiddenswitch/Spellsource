@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.spells.ModifyAttributeSpell;
 import net.demilich.metastone.game.spells.RemoveAttributeSpell;
@@ -27,6 +28,7 @@ import net.demilich.metastone.game.cards.Attribute;
  *     }
  *   }
  * </pre>
+ *
  * @see Aura for a description of how the fields in the {@link AuraDesc} are interpreted.
  */
 public final class AttributeAura extends Aura {
@@ -40,6 +42,15 @@ public final class AttributeAura extends Aura {
 				desc.getCondition());
 		setDesc(desc);
 		includeExtraTriggers(desc);
+	}
+
+	@Override
+	protected boolean notApplied(Entity target) {
+		if (Attribute.getAuraAttributes().contains(getDesc().getAttribute())) {
+			return !target.hasAttribute(getDesc().getAttribute());
+		} else {
+			return super.notApplied(target);
+		}
 	}
 }
 

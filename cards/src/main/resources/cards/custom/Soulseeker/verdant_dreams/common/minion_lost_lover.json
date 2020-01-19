@@ -8,33 +8,35 @@
   "rarity": "COMMON",
   "race": "SPIRIT",
   "description": "Opener: Add a 1/1 copy of a friendly minion to your hand. It costs (1).",
-  "targetSelection": "FRIENDLY_MINIONS",
-  "spell": {
-    "class": "CopyCardSpell",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "MetaSpell",
-      "target": "OUTPUT",
-      "spells": [
-        {
-          "class": "CardCostModifierSpell",
-          "cardCostModifier": {
-            "class": "CardCostModifier",
-            "target": "SELF",
+      "class": "CopyCardSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "CardCostModifierSpell",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SET"
+            }
+          },
+          {
+            "class": "SetAttackSpell",
             "value": 1,
-            "operation": "SET"
+            "exclusive": true
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 1,
+            "exclusive": true
           }
-        },
-        {
-          "class": "SetAttackSpell",
-          "value": 1,
-          "exclusive": true
-        },
-        {
-          "class": "SetHpSpell",
-          "value": 1,
-          "exclusive": true
-        }
-      ]
+        ]
+      }
     }
   },
   "attributes": {

@@ -85,7 +85,7 @@ import java.util.*;
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(Aura.class);
-	private EntityReference targets;
+	protected EntityReference targets;
 	protected SpellDesc applyAuraEffect;
 	protected SpellDesc removeAuraEffect;
 	private EntityFilter entityFilter;
@@ -200,22 +200,24 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			}
 		}
 
-		boolean alwaysApply = alwaysApply();
-
 		for (Entity target : relevantTargets) {
-			if (affects(context, owner, target, resolvedTargets) && (!affectedEntities.contains(target.getId()) || alwaysApply)) {
+			if (affects(context, owner, target, resolvedTargets) && notApplied(target)) {
 				affectedEntities.add(target.getId());
 				applyAuraEffect(context, target);
 				// target is not affected anymore, remove effect
-			} else if (!affects(context, owner, target, resolvedTargets) && affectedEntities.contains(target.getId())) {
+			} else if (!affects(context, owner, target, resolvedTargets) && applied(target)) {
 				affectedEntities.remove(target.getId());
 				removeAuraEffect(context, target);
 			}
 		}
 	}
 
-	protected boolean alwaysApply() {
-		return getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+	protected boolean applied(Entity target) {
+		return affectedEntities.contains(target.getId());
+	}
+
+	protected boolean notApplied(Entity target) {
+		return !applied(target) || getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
 	}
 
 	@Suspendable

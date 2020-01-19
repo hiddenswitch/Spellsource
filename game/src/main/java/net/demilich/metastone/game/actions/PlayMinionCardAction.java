@@ -67,7 +67,7 @@ public final class PlayMinionCardAction extends PlayCardAction implements HasBat
 		}
 		Player player = context.getPlayer(playerId);
 		int index = player.getMinions().indexOf(nextTo);
-		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && Race.hasRace(nextTo.getRace(), "MECH")) {
+		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && Race.hasRace(context, nextTo, "MECH")) {
 			context.getLogic().magnetize(playerId, card, (Minion) nextTo);
 		} else {
 			minion.getAttributes().remove(Attribute.MAGNETIC);

@@ -577,8 +577,8 @@ public class BoomsdayProjectTests extends TestBase {
 			receiveCard(context, opponent, "spell_fireball");
 			playCard(context, player, "spell_demonic_project");
 
-			assertTrue(Race.hasRace(player.getHand().get(0).getRace(), "DEMON"), player.getHand().get(0).getName());
-			assertTrue(Race.hasRace(opponent.getHand().get(0).getRace(), "DEMON"), opponent.getHand().get(0).getName());
+			assertTrue(Race.hasRace(context, player.getHand().get(0), Race.DEMON), player.getHand().get(0).getName());
+			assertTrue(Race.hasRace(context, opponent.getHand().get(0), Race.DEMON), opponent.getHand().get(0).getName());
 		});
 	}
 

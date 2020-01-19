@@ -24,6 +24,9 @@ public class AddDescriptionSpell extends SetDescriptionSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String description = "";
+		if (target == null) {
+			return;
+		}
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
 			Entity secondaryTarget = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
 			description = secondaryTarget.getDescription();
@@ -37,7 +40,7 @@ public class AddDescriptionSpell extends SetDescriptionSpell {
 		} else if (desc.containsKey(SpellArg.DESCRIPTION)) {
 			description = desc.getString(SpellArg.DESCRIPTION);
 		}
-		if (target != null && target.getDescription() != null && target.getDescription().equals("")) {
+		if (target.getDescription() != null && target.getDescription().equals("")) {
 			target.setAttribute(Attribute.DESCRIPTION, description);
 		} else {
 			target.setAttribute(Attribute.DESCRIPTION, target.getDescription() + " " + description);

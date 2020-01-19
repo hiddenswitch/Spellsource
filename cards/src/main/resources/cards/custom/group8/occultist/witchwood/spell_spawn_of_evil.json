@@ -7,8 +7,10 @@
   "description": "Choose a minion. Summon a copy of it for both players.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "SummonSpell",
-    "targetPlayer": "BOTH"
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "SummonSpell"
+    }
   },
   "collectible": true,
   "sets": [

@@ -27,6 +27,9 @@
       "targetPlayer": "SELF"
     }
   },
+  "attributes": {
+	"DISCOVER": true
+  },
   "collectible": true,
   "sets": [
     "CUSTOM",

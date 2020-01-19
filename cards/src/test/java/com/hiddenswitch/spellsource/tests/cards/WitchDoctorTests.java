@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Actor;
 
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -14,6 +15,21 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WitchDoctorTests extends TestBase {
+
+	@Test
+	public void testUshibashiVersusEldritchampion() {
+		runGym((context, player, opponent) -> {
+			// Extremely sensitive to order of play here
+			playCard(context, player, "minion_elven_woundsealer");
+			playCard(context, player, "minion_eldritchampion");
+			context.endTurn();
+			playCard(context, opponent, "minion_ushibasu_the_vigilant");
+			Minion target = playMinionCard(context, opponent, 1, 7);
+			context.endTurn();
+			assertEquals(context.getActivePlayerId(), player.getId());
+			playCard(context, player, "spell_blood_cleave", target);
+		});
+	}
 
 	@Test
 	public void testHotheadedVillager() {
@@ -34,7 +50,7 @@ public class WitchDoctorTests extends TestBase {
 			Minion dragon = playMinionCard(context, player, "minion_dragon_test");
 			playMinionCard(context, player, "minion_irena_dragon_knight");
 			assertEquals(dragon.getAttack(), dragon.getBaseAttack() * 2);
-			playCard(context,player,"minion_mari_anette");
+			playCard(context, player, "minion_mari_anette");
 			context.endTurn();
 			context.endTurn();
 			context.endTurn();
@@ -62,10 +78,19 @@ public class WitchDoctorTests extends TestBase {
 	public void testTheliaSilentdreamer() {
 		runGym((context, player, opponent) -> {
 			Minion thelia = playMinionCard(context, player, "minion_thelia_silentdreamer");
+			Minion shouldNotDouble = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion shouldNotDouble2 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_test_cost_3_buff", thelia);
-			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 1);
+			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 1, "thelia but less than 5, so should not double");
 			playCard(context, player, "spell_test_cost_6_buff", thelia);
-			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 3);
+			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 3, "thelia and greater than 5, so should double");
+			playCard(context, player, "spell_test_cost_6_buff", shouldNotDouble);
+			assertEquals(shouldNotDouble.getBaseAttack() + 1, shouldNotDouble.getAttack(), "not Thelia so should not double");
+			context.endTurn();
+			playCard(context, opponent, "spell_test_cost_6_buff", shouldNotDouble2);
+			assertEquals(shouldNotDouble2.getBaseAttack() + 1, shouldNotDouble2.getAttack(), "not friendly and not Thelia so should not double");
+			playCard(context, opponent, "spell_test_cost_6_buff", thelia);
+			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 4, "thelia and greater than 5 but not friendly, so should not double");
 		});
 	}
 

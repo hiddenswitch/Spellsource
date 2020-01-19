@@ -1,0 +1,52 @@
+{
+  "name": "Guard Sprite",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Whenever you summon another Beast, Fae or Dragon, add a Gold Coin to your hand.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "race": "BEAST",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "card": "spell_gold_coin"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "race": "FAE",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "card": "spell_gold_coin"
+      }
+    },
+	{
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "race": "DRAGON",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "card": "spell_gold_coin"
+      }
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ],
+  "fileFormatVersion": 1
+}

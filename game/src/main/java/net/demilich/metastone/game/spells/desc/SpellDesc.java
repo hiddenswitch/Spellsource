@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.desc.SpellDescDeserializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.AndFilter;
@@ -116,12 +117,14 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		super(spellClass, SpellArg.class);
 	}
 
+	@NotNull
 	public SpellDesc addArg(SpellArg spellArg, Object value) {
 		SpellDesc clone = clone();
 		clone.put(spellArg, value);
 		return clone;
 	}
 
+	@NotNull
 	public SpellDesc removeArg(SpellArg spellArg) {
 		SpellDesc clone = clone();
 		clone.remove(spellArg);
@@ -129,6 +132,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	}
 
 	@Override
+	@NotNull
 	public SpellDesc clone() {
 		return (SpellDesc) copyTo(new SpellDesc(getDescClass()));
 	}
@@ -232,21 +236,23 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	 *                    SpellArg#TARGET} and {@link SpellArg#RANDOM_TARGET} attributes to put into the {@link
 	 *                    MetaSpell}.
 	 * @param childSpells The spells that will occur after the {@code masterSpell} is casted.
-	 * @return A new {@link SpellDesc}.
+	 * @return A new {@link SpellDesc}, or a {@link net.demilich.metastone.game.spells.NullSpell} spell desc if all the
+	 * 		inputs were null.
 	 */
+	@NotNull
 	public static SpellDesc join(SpellDesc masterSpell, SpellDesc... childSpells) {
 		// Remove nulls
 		childSpells = Arrays.stream(childSpells).filter(Objects::nonNull).toArray(SpellDesc[]::new);
 
 		if (masterSpell == null) {
-			if (childSpells == null || childSpells.length == 0) {
-				return null;
+			if (childSpells.length == 0) {
+				return NullSpell.create();
 			} else if (childSpells.length == 1) {
 				return childSpells[0].clone();
 			} else {
 				return SpellDesc.join(childSpells[0], Arrays.copyOfRange(childSpells, 1, childSpells.length));
 			}
-		} else if (childSpells == null || childSpells.length == 0) {
+		} else if (childSpells.length == 0) {
 			return masterSpell.clone();
 		}
 
@@ -320,5 +326,9 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 
 	public SpellDesc getSpell() {
 		return (SpellDesc) get(SpellArg.SPELL);
+	}
+
+	public String[] getCards() {
+		return (String[]) get(SpellArg.CARDS);
 	}
 }

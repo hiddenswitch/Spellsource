@@ -6,6 +6,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Evaluates to {@code true} if the player has the specified {@link ConditionArg#ATTRIBUTE} anywhere.
+ */
 public class AttributeExistsCondition extends Condition {
 
 	public AttributeExistsCondition(ConditionDesc desc) {

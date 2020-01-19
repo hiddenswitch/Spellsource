@@ -4,19 +4,21 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Summon a random 3-Cost minion for both champions.",
+  "description": "Summon a random 3-Cost minion for both players.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION",
-      "manaCost": 3
-    },
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
-    },
-    "targetPlayer": "BOTH"
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 3
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
