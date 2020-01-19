@@ -292,6 +292,20 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 	}
 
+	/**
+	 * Gets the card ID of the {@link CardDesc} that was originally used to create this instance.
+	 *
+	 * @return
+	 */
+	public String getOriginalCardId() {
+		return desc.getId();
+	}
+
+	/**
+	 * For a {@link CardType#CLASS}, specifies the default hero (champion).
+	 *
+	 * @return
+	 */
 	public String getHero() {
 		return getDesc().getHero();
 	}
@@ -638,15 +652,14 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
-	 * Determines if the card's target selection ought to be overrided, and does so via applying or
-	 * removing {@link Attribute#TARGET_SELECTION} on the card.
-	 *
+	 * Determines if the card's target selection ought to be overrided, and does so via applying or removing {@link
+	 * Attribute#TARGET_SELECTION} on the card.
 	 */
 	public void processTargetSelectionOverride(GameContext context, Player player) {
 		if (getTargetSelectionCondition() != null && getTargetSelectionOverride() != null) {
 			if (getTargetSelectionCondition().create().isFulfilled(context, player, player, this)) {
 				getAttributes().put(Attribute.TARGET_SELECTION, getTargetSelectionOverride());
-			} else if (Objects.equals(getAttributes().get(Attribute.TARGET_SELECTION), getTargetSelectionOverride())){
+			} else if (Objects.equals(getAttributes().get(Attribute.TARGET_SELECTION), getTargetSelectionOverride())) {
 				getAttributes().remove(Attribute.TARGET_SELECTION);
 			}
 		}

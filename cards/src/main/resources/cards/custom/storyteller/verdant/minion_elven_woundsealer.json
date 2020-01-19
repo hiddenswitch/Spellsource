@@ -17,7 +17,8 @@
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
       "value": 2
-    }
+    },
+    "maxFiresPerSequence": 15
   },
   "attributes": {
     "STEALTH": true,

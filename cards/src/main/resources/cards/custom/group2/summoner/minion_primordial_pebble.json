@@ -29,7 +29,8 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "TAUNT": true
+    "TAUNT": true,
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

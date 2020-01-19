@@ -14,8 +14,10 @@
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "DrawCardSpell",
-        "targetPlayer": "BOTH"
+        "class": "BothPlayersSpell",
+        "spell": {
+          "class": "DrawCardSpell"
+        }
       }
     },
     {

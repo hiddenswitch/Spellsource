@@ -4,28 +4,21 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "LEGENDARY",
-  "description": "Each player summons minions from their deck until their board is full. Give your minions Dash.",
+  "description": "Both players summon minions from their deck until their board is full. Give your minions Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "RecruitSpell",
-        "value": 7,
-        "cardLocation": "DECK",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        }
-      },
-      {
-        "class": "RecruitSpell",
-        "value": 7,
-        "cardLocation": "DECK",
-        "targetPlayer": "OPPONENT",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
+        "class": "BothPlayersSpell",
+        "spell": {
+          "class": "RecruitSpell",
+          "value": 7,
+          "cardLocation": "DECK",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
         }
       },
       {

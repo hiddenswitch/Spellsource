@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -52,10 +53,13 @@ public class TraceTests {
 						}
 					}).collect(toList());
 
+			Collections.reverse(traces);
+
 			Object[][] data = new Object[traces.size()][1];
 			for (int i = 0; i < traces.size(); i++) {
 				data[i][0] = traces.get(i);
 			}
+
 
 			return data;
 		}

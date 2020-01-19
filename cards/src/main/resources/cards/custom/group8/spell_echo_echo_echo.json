@@ -22,7 +22,8 @@
     }
   },
   "attributes": {
-    "ECHO": true
+    "ECHO": true,
+	"DISCOVER": true
   },
   "collectible": false,
   "set": "CUSTOM",

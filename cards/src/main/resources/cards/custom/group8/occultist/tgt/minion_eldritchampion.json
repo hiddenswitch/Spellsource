@@ -21,7 +21,8 @@
       "class": "DamageSpell",
       "target": "ENEMY_HERO",
       "value": 3
-    }
+    },
+    "maxFiresPerSequence": 10
   },
   "collectible": true,
   "fileFormatVersion": 1,

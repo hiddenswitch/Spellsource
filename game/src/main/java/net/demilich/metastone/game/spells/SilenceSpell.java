@@ -49,5 +49,4 @@ public class SilenceSpell extends Spell {
 
 		context.getLogic().silence(player.getId(), (Actor) target);
 	}
-
 }

@@ -1123,14 +1123,22 @@ public enum Attribute {
 	/**
 	 * Records how many attacks last turn an actor made.
 	 */
-	ATTACKS_LAST_TURN;
+	ATTACKS_LAST_TURN,
+	/**
+	 * An attribute that indicates a card can be used to Discover something, offering a choice of 3 options to the player
+	 * with a 4x increase in frequency of class cards.
+	 * <p>
+	 * This is only really used for one Trader card right now, but it seemed like a useful one to add for future cards and
+	 * their effects.
+	 */
+	DISCOVER;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
 	}
 
 	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
-	private static final List<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toUnmodifiableList());
+	private static final Set<Attribute> auraAttributes = EnumSet.copyOf(Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toList()));
 	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
 			Attribute.ROASTED,
 			Attribute.DISCARDED,
@@ -1156,7 +1164,7 @@ public enum Attribute {
 	 *
 	 * @return A list of attributes.
 	 */
-	public static List<Attribute> getAuraAttributes() {
+	public static Set<Attribute> getAuraAttributes() {
 		return auraAttributes;
 	}
 

@@ -40,7 +40,8 @@
           "operation": "SET"
         }
       ]
-    }
+    },
+    "maxFiresPerSequence": 30
   },
   "collectible": true,
   "set": "CUSTOM",

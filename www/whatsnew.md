@@ -6,6 +6,7 @@ permalink: /whats-new/
 
 ### 0.8.64-3.0.8 (In Progress)
 
+ - Introducing the Trader champion!
  - Bloodlord Goa now reads, Opener: Gain the aftermath, "Repeat all other friendly aftermaths."
  - Minions can now have a maximum of 16 active aftermaths.
  - Aftermaths on a minion that were not in its text are removed after they process.
@@ -14,6 +15,8 @@ permalink: /whats-new/
  - Playing cards randomly is not recursive.
  - Bloodlord Goa now shows the source cards of cast Aftermaths. (1488)
  - Mosshorn now interacts more favorably with Revelation, and also has Guard as it was originally supposed to. ([1492](https://i.pinimg.com/originals/cf/8d/62/cf8d6265db8c31180c9fb3c458152581.jpg))
+ - Auras that gave minions the same attribute now stack.
+ - Elven Woundsealer, Edlritchampion and Ushibasu the Vigilante no longer interact to cause an infinite loop.
  - The Overlord's Skill Dark Rule now functions properly. (1494)
  - Fixed a typo with Hired Berserker and made it properly summon a 2/3 with Guard. (1495)
  - All for One's description now matches its actual effect. (1484)

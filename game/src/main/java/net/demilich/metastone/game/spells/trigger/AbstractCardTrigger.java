@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import com.hiddenswitch.spellsource.client.models.CardEvent;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -35,7 +34,7 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 		}
 
 		String race = (String) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !Race.hasRace(cardPlayedEvent.getCard().getRace(), race)) {
+		if (race != null && !Race.hasRace(event.getGameContext(), cardPlayedEvent.getCard(), race)) {
 			return false;
 		}
 

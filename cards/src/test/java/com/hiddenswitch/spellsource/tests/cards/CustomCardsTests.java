@@ -9,7 +9,6 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -1219,8 +1218,8 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_murloc_fixpicker");
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(player.getHand().size(), 2);
-			assertTrue(Race.hasRace(player.getHand().get(0).getRace(), "FAE"));
-			assertTrue(Race.hasRace(player.getHand().get(1).getRace(), "FAE"));
+			assertTrue(Race.hasRace(context, player.getHand().get(0), Race.FAE));
+			assertTrue(Race.hasRace(context, player.getHand().get(1), Race.FAE));
 			assertEquals(player.getDeck().size(), 0);
 		});
 	}
@@ -3052,7 +3051,7 @@ public class CustomCardsTests extends TestBase {
 
 			for (Card card : player.getHand().subList(0, 2)) {
 				assertEquals(card.getCardId(), "minion_test_race_filtered_opener");
-				assertEquals(card.getRace(), "FAE");
+				assertEquals(card.getRace(), Race.FAE);
 			}
 
 			final Card blank = player.getHand().get(2);
@@ -3606,7 +3605,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_test_destroy_all");
 			playCard(context, player, "spell_slain_party");
 			for (Minion minion : player.getMinions()) {
-				assertTrue(Race.hasRace(minion.getRace(), "MECH"));
+				assertTrue(Race.hasRace(context, minion, "MECH"));
 			}
 		});
 	}
@@ -3660,7 +3659,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_test_destroy_all");
 			assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference()));
 			useHeroPower(context, player);
-			assertTrue(Race.hasRace(player.getMinions().get(0).getRace(), "DRAGON"));
+			assertTrue(Race.hasRace(context, player.getMinions().get(0), "DRAGON"));
 		});
 	}
 
@@ -3787,8 +3786,8 @@ public class CustomCardsTests extends TestBase {
 	public void testDragonfly() {
 		runGym((context, player, opponent) -> {
 			Minion dragonfly = playMinionCard(context, player, "minion_dragonfly");
-			assertTrue(Race.hasRace(dragonfly.getRace(), "BEAST"));
-			assertTrue(Race.hasRace(dragonfly.getRace(), "DRAGON"));
+			assertTrue(Race.hasRace(context, dragonfly, "BEAST"));
+			assertTrue(Race.hasRace(context, dragonfly, "DRAGON"));
 		});
 
 	}
@@ -3822,7 +3821,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
 			Minion fae = playMinionCard(context, opponent, "minion_neutral_test_1");
-			fae.setRace("FAE");
+			fae.setRace(Race.FAE);
 			Minion beast = playMinionCard(context, opponent, "minion_neutral_test_1");
 			beast.setRace("BEAST");
 			Minion dragon = playMinionCard(context, opponent, "minion_neutral_test_1");

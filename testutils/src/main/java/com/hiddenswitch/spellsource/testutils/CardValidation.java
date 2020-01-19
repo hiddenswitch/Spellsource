@@ -56,6 +56,7 @@ public class CardValidation {
 						|| description.startsWith("Opener:")) {
 					assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY),
 							"An Opener card " + cardFile.getAbsolutePath() + " is missing the BATTLECRY attribute.");
+					assertNull(record.getDesc().getSpell(), "An Opener card " + cardFile.getAbsolutePath() + " has a spell specified and it probably should be an opener.");
 				}
 
 				if (description.startsWith("Deathrattle:")
@@ -73,11 +74,9 @@ public class CardValidation {
 			JsonProcessingException innerEx = (JsonProcessingException) ex.getCause();// Decode again to throw the inner exception
 			if (innerEx != null) {
 				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile, 0, 0, 0);
-				fail(String.format("%s has a parse exception %s, Line: %d, Column: %d",
-						cardFile.getName(),
-						innerEx.getMessage(),
-						location.getLineNr(),
-						location.getColumnNr()), innerEx);
+				fail(String.format("%s\n%s",
+						cardFile.getAbsolutePath() + ":" + location.getLineNr(),
+						innerEx.getMessage()));
 			}
 		} catch (Exception ex) {
 			fail(cardFile.getName(), ex);
