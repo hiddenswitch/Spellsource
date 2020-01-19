@@ -17,5 +17,5 @@ public enum ConditionArg {
 	INVERT,
 	CARD_FILTER,
 	FILTER,
-	HERO_CLASS
+	RARITY, HERO_CLASS
 }

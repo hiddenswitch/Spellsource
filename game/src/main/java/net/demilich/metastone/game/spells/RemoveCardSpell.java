@@ -27,7 +27,7 @@ import net.demilich.metastone.game.targeting.Zones;
  *   }
  * </pre>
  */
-public class RemoveCardSpell extends Spell {
+public class RemoveCardSpell extends AbstractRemoveCardSpell {
 
 	public static SpellDesc create(EntityReference target, EntityFilter filter, boolean randomTarget) {
 		return new SpellDesc(RemoveCardSpell.class, target, filter, randomTarget);

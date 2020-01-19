@@ -6,15 +6,17 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Each player discards a card that either has played this game.",
+  "description": "Opener: Both players discard a card that they've played this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscardSpell",
-      "targetPlayer": "BOTH",
-      "cardFilter": {
-        "class": "CopiesHaveBeenPlayedFilter",
-        "targetPlayer": "EITHER"
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "DiscardSpell",
+        "cardFilter": {
+          "class": "CopiesHaveBeenPlayedFilter",
+          "targetPlayer": "EITHER"
+        }
       }
     }
   },

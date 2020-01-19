@@ -8,7 +8,8 @@
   "rarity": "LEGENDARY",
   "description": "Your Supremacy effect triggers twice.",
   "aura": {
-    "class": "SupremaciesTriggerTwiceAura"
+    "class": "SupremaciesTriggerTwiceAura",
+    "target": "FRIENDLY_CARDS"
   },
   "collectible": true,
   "set": "CUSTOM",

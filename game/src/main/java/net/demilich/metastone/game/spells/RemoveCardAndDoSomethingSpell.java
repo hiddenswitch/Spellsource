@@ -5,5 +5,5 @@ package net.demilich.metastone.game.spells;
  * 		{"class": ..., "target": "OUTPUT"}}} instead.
  */
 @Deprecated
-public class RemoveCardAndDoSomethingSpell extends RemoveCardSpell {
+public final class RemoveCardAndDoSomethingSpell extends RemoveCardSpell {
 }

@@ -842,7 +842,7 @@ public class SpellUtils {
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
 		return context.getTriggerManager().getTriggers().stream()
-				.filter(auraClass::isInstance)
+				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired())
 				.map(auraClass::cast)
 				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(Collectors.toList());
@@ -890,6 +890,7 @@ public class SpellUtils {
 
 	/**
 	 * Returns {@code true} if the caller is in a recursive stack
+	 *
 	 * @param callingClass
 	 * @return
 	 */
@@ -900,6 +901,7 @@ public class SpellUtils {
 				.limit(16)
 				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));
 	}
+
 	/**
 	 * An object that contains results of a {@link #determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)}
 	 * call.
