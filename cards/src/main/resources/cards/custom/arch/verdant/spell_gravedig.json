@@ -13,7 +13,8 @@
       "targetPlayer": "SELF"
     },
     "cardSource": {
-      "class": "GraveyardCardsSource",
+      "class": "GraveyardCardAndActorSourceCardSource",
+      "distinct": true,
       "targetPlayer": "SELF"
     }
   },

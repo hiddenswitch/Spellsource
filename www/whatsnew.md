@@ -7,6 +7,7 @@ permalink: /whats-new/
 ### 0.8.64-3.0.8 (In Progress)
 
  - Introducing the Trader champion!
+ - Adding new Archaeologist cards!
  - Bloodlord Goa now reads, Opener: Gain the aftermath, "Repeat all other friendly aftermaths."
  - Minions can now have a maximum of 16 active aftermaths.
  - Aftermaths on a minion that were not in its text are removed after they process.

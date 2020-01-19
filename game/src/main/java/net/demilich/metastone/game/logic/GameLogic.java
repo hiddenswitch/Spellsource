@@ -3372,6 +3372,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			card.getAttributes().remove(Attribute.INVOKED);
 			// Should have included if the card was discarded
 			card.getAttributes().remove(Attribute.DISCARDED);
+			// Clears the played from hand status
+			card.getAttributes().remove(Attribute.PLAYED_FROM_HAND_OR_DECK);
+			// Clears the roasted status
+			card.getAttributes().remove(Attribute.ROASTED);
+			// No mana has been spent yet
+			card.getAttributes().remove(Attribute.MANA_SPENT);
+			// Does not retain hand index history
+			card.getAttributes().remove(Attribute.HAND_INDEX);
+			// Clears countered
+			card.getAttributes().remove(Attribute.COUNTERED);
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
 			processPassiveAuras(player, card);

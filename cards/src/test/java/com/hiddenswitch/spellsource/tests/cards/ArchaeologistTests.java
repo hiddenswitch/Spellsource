@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,34 @@ public class ArchaeologistTests extends TestBase {
 			playCard(context, player, "minion_archivist_krag");
 			assertEquals(player.getMana(), 1, "played 1 lunstone");
 			assertEquals(player.getDeck().size(), 1);
+		});
+	}
+
+	@Test
+	public void testSpiritFromLongPast() {
+		runGym((context, player, opponent) -> {
+			destroy(context, playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId()));
+			playCard(context, player, "minion_spirit_from_long_past");
+			assertEquals(3, player.getGraveyard().size(), "should contain two cards and the minion");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(1, player.getGraveyard().size(), "should have drawn the 1/1 neutral out of the graveyard - both it and its source card");
+			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId(), "should have drawn 1/1 neutral");
+		});
+	}
+
+	@Test
+	public void testGravedig() {
+		runGym((context, player, opponent) -> {
+			destroy(context, playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId()));
+			assertEquals(2, player.getGraveyard().size(), "should contain both the card and the minion");
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(1, discoverActions.size());
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_gravedig");
+			assertEquals(1, player.getHand().size());
+			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId());
 		});
 	}
 }
