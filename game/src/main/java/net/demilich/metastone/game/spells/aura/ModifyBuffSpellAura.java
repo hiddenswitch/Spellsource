@@ -18,11 +18,10 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  *   }
  * </pre>
  */
-public class ModifyBuffSpellAura extends Aura {
+public class ModifyBuffSpellAura extends AbstractFriendlyCardAura {
 
 	public ModifyBuffSpellAura(AuraDesc desc) {
-		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
-		setDesc(desc);
+		super(desc);
 	}
 }
 

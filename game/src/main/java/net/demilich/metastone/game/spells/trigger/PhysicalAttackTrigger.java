@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -20,7 +19,7 @@ public class PhysicalAttackTrigger extends EventTrigger {
 		PhysicalAttackEvent physicalAttackEvent = (PhysicalAttackEvent) event;
 
 		String race = (String) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !Race.hasRace(physicalAttackEvent.getDefender().getRace(), race)) {
+		if (race != null && !Race.hasRace(event.getGameContext(), physicalAttackEvent.getDefender(), race)) {
 			return false;
 		}
 

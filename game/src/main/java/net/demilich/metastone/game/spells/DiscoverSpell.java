@@ -13,6 +13,7 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.spells.aura.DiscoverNotSelectedSpellBonusAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
@@ -298,7 +299,6 @@ public class DiscoverSpell extends Spell {
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 
 		if (exclusive
-				&& cardSource != null
 				&& (cardSource instanceof HasCardCreationSideEffects)) {
 			throw new UnsupportedOperationException("Cannot specify exclusive (use original copies) with cards that have" +
 					" card creation side effects. The original copies came from the catalogue, and thus have entity " +
@@ -307,15 +307,29 @@ public class DiscoverSpell extends Spell {
 
 		// SPELL and SPELL_1 are cast on the chosen cards
 		SpellDesc chosenSpellTemplate = SpellDesc.join((SpellDesc) desc.get(SpellArg.SPELL), (SpellDesc) desc.get(SpellArg.SPELL1));
-		if (chosenSpellTemplate == null) {
+		if (Objects.equals(chosenSpellTemplate.getDescClass(), NullSpell.class)) {
 			chosenSpellTemplate = ReceiveCardSpell.create();
 		}
 
 		// SPELL_2 is cast on the cards that aren't chosen
-		SpellDesc otherSpell = (SpellDesc) desc.getOrDefault(SpellArg.SPELL2, NullSpell.create());
+		SpellDesc otherSpellDesc = (SpellDesc) desc.getOrDefault(SpellArg.SPELL2, NullSpell.create());
 		CardList allCards = new CardArrayList();
 		allCards.addAll(specificCards);
 		allCards.addAll(filteredCards);
+
+		SpellDesc otherSpell;
+		// Implements Rohei the Bold
+		if (ReceiveCardSpell.class.isAssignableFrom(chosenSpellTemplate.getDescClass())) {
+			if (Objects.equals(otherSpellDesc.getDescClass(), NullSpell.class)
+					|| AbstractRemoveCardSpell.class.isAssignableFrom(otherSpellDesc.getDescClass())) {
+				;
+				otherSpell = SpellDesc.join(null, SpellUtils.getBonusesFromAura(context, player.getId(), DiscoverNotSelectedSpellBonusAura.class, source, target));
+			} else {
+				otherSpell = SpellDesc.join(otherSpellDesc, ReceiveCardSpell.create());
+			}
+		} else {
+			otherSpell = otherSpellDesc;
+		}
 
 		if (cannotReceiveOwned) {
 			allCards = allCards.stream().filter(c -> !context.getLogic().hasCard(player, c)).collect(java.util.stream.Collectors.toCollection(CardArrayList::new));
@@ -323,14 +337,9 @@ public class DiscoverSpell extends Spell {
 
 		CardList choices = new CardArrayList();
 		// Apply the weights
-		final boolean isWeighted = (cardSource instanceof HasWeights)
-				|| (specificCards.size() == 0 && cardSource == null && !hasFilter);
+		final boolean isWeighted = cardSource instanceof HasWeights;
 		// Compute weights if weighting is implied
 		if (isWeighted) {
-			if (cardSource == null) {
-				cardSource = CatalogueSource.create();
-			}
-
 			final HasWeights weightedSource = (HasWeights) cardSource;
 			final Multiset<Card> weightedOptions = LinkedHashMultiset.create();
 

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -8,6 +9,12 @@ import net.demilich.metastone.game.spells.SpellUtils;
 
 import java.util.Map;
 
+/**
+ * Gets the {@code target}'s in-hand mana cost or its base mana cost, and compares it using {@link
+ * EntityFilterArg#OPERATION} to the value {@link EntityFilterArg#VALUE}.
+ * <p>
+ * The value is evaluated with a {@code null} target.
+ */
 public class ManaCostFilter extends EntityFilter {
 
 	public static ManaCostFilter create(int manaCost, ComparisonOperation operation) {
@@ -23,10 +30,15 @@ public class ManaCostFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		Card card = entity.getSourceCard();
+		int actualValue = getManaCost(context, player, entity);
 		int mana = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, host, 0);
 		ComparisonOperation operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
-		int actualValue = context.getLogic().getModifiedManaCost(player, card);
 		return SpellUtils.evaluateOperation(operation, actualValue, mana);
+	}
+
+	@Suspendable
+	protected int getManaCost(GameContext context, Player player, Entity entity) {
+		Card card = entity.getSourceCard();
+		return context.getLogic().getModifiedManaCost(player, card);
 	}
 }

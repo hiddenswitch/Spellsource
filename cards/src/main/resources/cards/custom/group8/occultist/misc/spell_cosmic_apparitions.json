@@ -21,11 +21,14 @@
           "cardSource": {
             "class": "CatalogueSource"
           }
-         }
         }
-       ]
-      },
-      "collectible": true,
-      "set": "CUSTOM",
-      "fileFormatVersion": 1
+      }
+  ]
+  },
+  "attributes": {
+	"DISCOVER": true
+  },	  
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

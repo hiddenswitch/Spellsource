@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.desc.filter;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.Entity;
@@ -67,7 +66,7 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 		String race = (String) getDesc().get(EntityFilterArg.RACE);
-		if (race != null && !Race.hasRace(card.getRace(), race)) {
+		if (race != null && !Race.hasRace(context, card, race)) {
 			return false;
 		}
 

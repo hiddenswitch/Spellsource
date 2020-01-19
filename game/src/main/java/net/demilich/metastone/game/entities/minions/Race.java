@@ -1,5 +1,12 @@
 package net.demilich.metastone.game.entities.minions;
 
+import com.google.common.collect.ObjectArrays;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.MenagerieMogulAura;
+
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -18,6 +25,7 @@ public class Race {
 	public static final String SPIRIT = "SPIRIT";
 	public static final String MURLOC = "MURLOC";
 	public static final String TOTEM = "TOTEM";
+	public static final String DEMON = "DEMON";
 
 	/**
 	 * Returns {@code true} if the given race string is considered as having the race {@code rhs}, accounting for whether
@@ -26,23 +34,36 @@ public class Race {
 	 * If {@code lhs} contains an ampersand-separated list of races, the {@code lhs} counts as having both races, and can
 	 * match as long as {@code rhs} is any one of the races in {@code lhs}.
 	 *
-	 * @param lhs
+	 * @param gameContext A context that will be scanned for auras that potentially change the result of this evaluation.
+	 * @param entity
 	 * @param rhs
 	 * @return {@code true} if {@code lhs} has the race specified in {@code rhs}, including ALL.
 	 */
-	public static boolean hasRace(String lhs, String rhs) {
-		if (Objects.equals(lhs, ALL) && !Objects.equals(rhs, NONE)) {
+	public static boolean hasRace(GameContext gameContext, Entity entity, String rhs) {
+		if (Objects.equals(entity.getRace(), ALL) && !Objects.equals(rhs, NONE)) {
 			return true;
 		}
-		if (Objects.equals(rhs, ALL) && !Objects.equals(lhs, NONE)) {
+		if (Objects.equals(rhs, ALL) && !Objects.equals(entity.getRace(), NONE)) {
 			return true;
 		}
 
 		String[] lhsRaces;
-		if (lhs.contains("&")) {
-			lhsRaces = lhs.split("&");
+		String lhsRaceStr = entity.getRace();
+		if (lhsRaceStr.contains("&")) {
+			lhsRaces = lhsRaceStr.split("&");
 		} else {
-			lhsRaces = new String[]{lhs};
+			lhsRaces = new String[]{lhsRaceStr};
+		}
+
+		final List<MenagerieMogulAura> auras = SpellUtils.getAuras(gameContext, MenagerieMogulAura.class, entity);
+		if (!auras.isEmpty()) {
+			for (MenagerieMogulAura aura : auras) {
+				if (aura.isExpired()) {
+					continue;
+				}
+
+				lhsRaces = ObjectArrays.concat(lhsRaces, aura.getRaces(), String.class);
+			}
 		}
 
 		String[] rhsRaces;

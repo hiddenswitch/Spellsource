@@ -1,0 +1,29 @@
+{
+  "name": "Debt Collecting",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "COMMON",
+  "description": "Deal 5 damage. Add two Gold Coins to your hand.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+		"value": 5
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_gold_coin",
+		"value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}
