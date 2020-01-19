@@ -1,0 +1,32 @@
+{
+  "name": "Calamity Beckons",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "LEGENDARY",
+  "description": "Destroy your deck. Summon every minion you destroyed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RecruitSpell",
+		"value": 7,
+		"cardFilter": {
+		  "class": "CardFilter",
+		  "cardType": "MINION"	### This technically works, but isn't ideal. The idea is that the destroyed cards are actually destroyed before being revived, and so go to the graveyard.
+		}
+      },
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

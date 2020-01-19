@@ -1,0 +1,38 @@
+{
+  "name": "Ryun, Mad Prophet",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If your opponent has 15 or more Health remaining than you, choose how to break them.",
+  "battlecry": {
+    "condition": {
+      "class": "RyunCondition"	### There might be a functional way of doing this involving a whole load of nested comparison conditions, but that seems ridiculous.
+    },							### I may be wrong, but I would assume that a custom condition is probably the easiest way forward here, since as far as I know there's
+    "targetSelection": "NONE",	### No easy way to check the difference between two things right now, just compare them.
+    "spell": {
+	  "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
+      "cards": [
+        "token_spell_snap_their_bones",
+        "token_spell_crush_their_will",
+        "token_spell_drive_them_insane",
+        "token_spell_warp_their_soul"
+      ],
+      "howMany": 4
+    }
+  },
+  "collectible": true,
+  "attributes": {
+	"BATTLECRY": true
+  },
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Psychotic Servant",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Opener: Steal 3 Health from an allied minion.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 3
+        },
+        {
+          "class": "EitherOrSpell",
+		  "condition": {
+			"class": "AttributeCondition",
+			"value": 3,
+			"attribute": "HP",
+			"operation": "GREATER_OR_EQUAL"
+		  },
+		  "spell1": {
+		    "class": "BuffSpell",
+			"target": "SELF",
+			"hpBonus": 3
+		  },
+		  "spell2": {
+		    "class": "BuffSpell",	### Not entirely sure if this works or not, it might be targeting itself. I think you can see what I want to do, though - if the target minion has less than
+			"target": "SELF",		### 3 Health remaining, Psychotic Servant should only be able to buff its own HP for that much.
+			"hpBonus": {
+			  "class": "AttributeValueProvider",
+			  "target": "TARGET",
+			  "attribute": "HP"
+			}
+		  }
+		}
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

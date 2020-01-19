@@ -1,0 +1,30 @@
+{
+  "name": "Soulscream",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Deal [0] damage. (Increases by 1 for each Aftermath you've triggered this game)",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      ### I know the triggered Aftermaths are stored somewhere, since Goa references them, but I don't know how to actually access them for effects like this.
+	  ### And yes, this should increase by 2 for each Aftermath if Sha is in play.
+    }
+  },
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        
+      }
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Spirit Saber",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "TWILIGHT",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Discover an Aftermath you triggered this game. Give it to this weapon.",
+  "battlecry": {
+	
+	### Not sure how to access the stored Aftermaths that you've triggered, since Goa just uses a custom spell, so I'll leave this for now.
+	### Obviously, this is a weapon so can't do things like gaining Dash or Taunt, but it should in theory be able to revive itself, shuffle itself into your deck etc. Hopefully those
+	### interactions are manageable. It would also be awesome if this could interact with Xue's Aftermath to turn itself into a dormant weapon, but that's probably a little too much to ask.
+	
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Siphon",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Deal $2 damage. This has Lifedrain if you have less Health remaining than your opponent.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",	### I'm not actually sure how to conditionally give something Lifesteal, since it appears to be done entirely via attribute and spells 
+    "value": 2				### can't provide it to themselves via an aura, which is how any existing cards do this.
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

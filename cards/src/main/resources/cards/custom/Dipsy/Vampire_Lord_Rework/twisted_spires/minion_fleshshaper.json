@@ -1,0 +1,20 @@
+{
+  "name": "Fleshshaper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Your Lifedrain effects grant Armor instead.",
+  
+	### I thought this could be done with a SpellOverrideAura... And then I realised that there is no LifestealSpell, nor any LifestealEvent or LifestealTrigger as far as I can tell.
+	### Maybe it could override cards' Lifesteal Attribute with an enchantment? I'm not really sure.
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

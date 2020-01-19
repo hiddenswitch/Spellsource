@@ -1,0 +1,19 @@
+{
+  "name": "Warp Their Soul",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Any spells they cast from now on are recast by you with the same targets.",
+  "targetSelection": "NONE",
+  
+	### Is this even doable? I hope so, but if it is I have NO clue how to manage it. Anything targeted would attempt to strike the same target; it's up to you whether they strike a random
+	### target or fail to cast if that target is no longer available. Anything non-targeted, like drawing cards, you just cast for yourself normally.
+  
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

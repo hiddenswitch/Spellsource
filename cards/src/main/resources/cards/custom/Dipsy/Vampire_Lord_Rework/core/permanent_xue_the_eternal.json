@@ -1,0 +1,46 @@
+{
+  "name": "Xue the Eternal",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Restore [10] more excess Health to allies to revive this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "queueCondition": {
+        
+		### Sorry to leave you with so many cards I can't do, but I don't think we have a way to track excess healing right now, especially not relative to specific cards. 
+		### Xue should track the excess healing you have AFTER he goes dormant, not any that happens or has happened before. For example, let's say you restore 5 Health to an allied (friendly) minion
+		### that has 2 Health missing - Xue would gain 3 points towards revival if he's currently dormant. There are a few other cards that track your excess healing in similar ways.
+		
+      }
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "minion_xue_the_eternal"
+    }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": 
+        "multiplier": -1,
+        "offset": 10
+      }
+    }
+  ],
+  "fileFormatVersion": 1
+}

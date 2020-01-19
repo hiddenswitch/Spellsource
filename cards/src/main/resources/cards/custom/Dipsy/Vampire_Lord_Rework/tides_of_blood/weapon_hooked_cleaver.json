@@ -1,0 +1,36 @@
+{
+  "name": "Hooked Cleaver",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "TWILIGHT",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Your champion also damages the minions adjacent to whomever they attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",	### Does this count as being part of the initial attack? It needs to be incorporated by the Lifedrain from the Skill, and cards like Seeker Ashi.
+          "target": "FRIENDLY_HERO",
+          "attribute": "ATTACK"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

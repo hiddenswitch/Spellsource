@@ -1,0 +1,28 @@
+{
+  "name": "Lan the Forsaken",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Your Lifedrain effects heal ALL allies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LifestealTrigger"	### This doesn't exist right now, but I have no idea how else I could get this to work.
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_MINIONS",
+      "value": {
+        "class": "EventValueProvider"
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

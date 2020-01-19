@@ -1,0 +1,20 @@
+{
+  "name": "Gravelord's Gambit",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Repeat the last 3 Aftermaths you triggered this game.",
+  "targetSelection": "NONE",
+  
+	### I honestly wouldn't even know where to start on this one. To be clear, since it says "repeat", the intention is to keep the original targets of the Aftermaths - so, for example,
+	### repeating Xue the Eternal's Aftermath would summon a dormant Xue the Eternal. What happens if the Aftermath requires conditions that no longer exist, like checking a minion's stats
+	### at the moment of death, it's up to you whether that just fails or uses the same values the original Aftermath had. 
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

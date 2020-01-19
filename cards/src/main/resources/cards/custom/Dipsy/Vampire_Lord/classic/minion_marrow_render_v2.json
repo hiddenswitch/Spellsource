@@ -20,7 +20,7 @@
     "TAUNT": true,
 	"DRAIN": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "CLASSIC"

@@ -1,0 +1,33 @@
+{
+  "name": "Gorge",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Give a minion +4/+4 and \"Aftermath: Deal 4 damage to all minions\".",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+		"attackBonus": 4,
+		"hpBonus": 4
+      },
+      {
+        "class": "AddDeathrattleSpell",
+		"spell": {
+		  "class": "DamageSpell",
+		  "target": "ALL_MINIONS",
+		  "value": 4
+		}
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

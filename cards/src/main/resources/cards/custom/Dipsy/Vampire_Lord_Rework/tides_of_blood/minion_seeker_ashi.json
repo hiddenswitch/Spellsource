@@ -1,0 +1,33 @@
+{
+  "name": "Seeker Ashi",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your champion attacks, draw a card with Cost equal to the total damage they dealt.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "FromDeckToSpell",
+	  "value": 1,
+	  "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+		  ### This is the hard part. I would just put champion attack value in here, but it needs to include the bonus damage from effects like Warp Scythe and Hooked Cleaver.
+		}
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

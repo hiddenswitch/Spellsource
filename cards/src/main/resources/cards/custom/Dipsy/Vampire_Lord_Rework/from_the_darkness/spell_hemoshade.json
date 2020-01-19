@@ -1,0 +1,36 @@
+{
+  "name": "Hemoshade",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Take 3 damage. Summon one 3/2 Shadow.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "CreateSummonSpell",
+        "name": "Shadow",
+        "spell": {
+          "class": "NullSpell"	### Set it out this way to hopefully make it more easily compatible with Sha, although I'm unsure as to how he would make it summon two tokens.
+        },						### For clarity's sake, Sha should turn this spell into a 2 Lun "Take 4 damage. Summon two 3/2 Shadows".
+        "attackBonus": 3,
+        "hpBonus": 2,
+        "mana": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

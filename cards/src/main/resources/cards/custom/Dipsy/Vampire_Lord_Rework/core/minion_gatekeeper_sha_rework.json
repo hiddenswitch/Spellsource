@@ -1,0 +1,21 @@
+{
+  "name": "Gatekeeper Sha",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "All the numbers on your spells are (1) higher.",
+  
+	### Honestly, I wouldn't even know where to start on this one. Vampire Lord doesn't have any innate steal effects, so it only working on their card wouldn't be much of an issue if that helps.
+	### For clarity's sake, this should affect everything from Cost to healing to damage to number of cards drawn, and so on. I've already formatted all the VL cards (bar one) to only have numerical
+	### values ("draw 1 card" instead of "draw a card", etc) to hopefully make this a little easier, but let me know if it's an issue.
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

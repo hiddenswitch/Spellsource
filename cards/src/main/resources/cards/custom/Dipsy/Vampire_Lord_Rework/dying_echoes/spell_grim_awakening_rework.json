@@ -1,0 +1,30 @@
+{
+  "name": "Grim Awakening",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Give all minions in your board and graveyard Lifedrain.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+		"target": "FRIENDLY_MINIONS",
+        "attribute": "LIFESTEAL"
+      },
+      {
+        "class": "AddAttributeSpellSpell",
+		"target": "FRIENDLY_GRAVEYARD",	### As far as I could tell, manipulating the graveyard is currently impossible; you can only use it as a source or count what's in it.
+		"attribute": "LIFESTEAL"
+      }
+    ]
+  }
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ],
+  "fileFormatVersion": 1
+}

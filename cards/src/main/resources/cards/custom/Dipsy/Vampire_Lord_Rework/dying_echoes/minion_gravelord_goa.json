@@ -1,0 +1,28 @@
+{
+  "name": "Gravelord Goa",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Gain \"Aftermath: Repeat every other Aftermath you've triggered this game\".",
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "custom.RepeatAllAftermathsSpell"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ],
+  "fileFormatVersion": 1
+}

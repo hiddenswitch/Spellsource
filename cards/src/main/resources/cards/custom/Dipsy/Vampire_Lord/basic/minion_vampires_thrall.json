@@ -14,7 +14,7 @@
       "attribute": "AURA_TAUNT"
     }
   ],
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

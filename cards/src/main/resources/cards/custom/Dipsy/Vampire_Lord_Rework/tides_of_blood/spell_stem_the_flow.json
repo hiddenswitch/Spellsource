@@ -1,0 +1,22 @@
+{
+  "name": "Stem the Flow",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Restore #10 Health to an ally. If that overheals it, give it that much Health.",
+  "targetSelection": "FRIENDLY_CHARACTERS",
+  "spell": {
+    "class": "HealSpell",
+    "value": 10,
+		### Once again, I don't know of any way to easily track excess healing, so I'll leave this as is for now.
+		### The intention is for this to track overhealing before it gives the Health. So if you use it on your champion and you're at 25 of 30 HP, you heal for 5, the
+		### game tracks that you overhealed yourself for 5, and then you gain +5 bonus Health.
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

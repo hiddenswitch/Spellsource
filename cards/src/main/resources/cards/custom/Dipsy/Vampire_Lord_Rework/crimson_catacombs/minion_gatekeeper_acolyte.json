@@ -1,0 +1,19 @@
+{
+  "name": "Gatekeeper Acolyte",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Both players' healing is increased by (1).",
+  
+	### As far as I can tell the only healing-changing effect right now is fully doubling it, but I assume increasing it by a flat amount shouldn't be too tough.
+  
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

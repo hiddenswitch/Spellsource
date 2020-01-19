@@ -1,0 +1,42 @@
+{
+  "name": "Dark Skies",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Draw a spell. Convert (3) of its Cost into a Health Cost.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 1,
+	"cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "spell": {
+	  "class": "MetaSpell",
+	  "spells": [
+		{
+		  "class": "CardCostModifierSpell",
+		  "target": "OUTPUT",
+		  "cardCostModifier": {
+			"class": "CardCostModifier",
+			"target": "SELF",
+			"value": 3,
+			"operation": "SUBTRACT"
+		  }
+		},
+		{
+		  ### Not sure on this one. As far as I can tell, the game currently only allows for fully converting something's Cost to a Health Cost, not adding a specific Health cost to a card. 
+		  ### Also worth pointing out that the Health Cost should scale down with the card's base Cost if it costs less than 3 - so if this draws a 2-Cost spell, it costs 0 Lun and 2 Health.
+		}
+	  ]
+	}
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

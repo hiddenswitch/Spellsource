@@ -11,7 +11,7 @@
     "target": "FRIENDLY_CHARACTERS",
     "hpBonus": 5
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_TWISTEDSPIRES"
