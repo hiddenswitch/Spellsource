@@ -9,7 +9,7 @@
   "description": "<b>Blitz</b>. <b>Aftermath:</b> Summon a 2/3 Hired Guard with <b>Guard</b>.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_bone_boy"
+    "card": "token_hired_guard"
   },
   "attributes": {
     "DEATHRATTLES": true,
