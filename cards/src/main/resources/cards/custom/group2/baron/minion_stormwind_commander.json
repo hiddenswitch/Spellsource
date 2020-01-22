@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 5,
-  "baseHp": 6,
+  "baseHp": 4,
   "rarity": "RARE",
   "description": "Your Knights have Dash.",
   "aura": {

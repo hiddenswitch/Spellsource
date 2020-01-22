@@ -1,0 +1,32 @@
+{
+  "name": "Ragged Phalanx",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "COMMON",
+  "description": "Give your minions +1/+1 and Guard. They can't attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "CANNOT_ATTACK"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

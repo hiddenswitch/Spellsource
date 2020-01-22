@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
@@ -163,6 +164,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int[] color;
 	public boolean blackText;
 	public String[] secondPlayerBonusCards;
+	public TargetSelection targetSelectionOverride;
+	public ConditionDesc targetSelectionCondition;
 	public CardDesc() {
 		super();
 	}
@@ -1120,5 +1123,21 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setPassiveAuras(AuraDesc[] passiveAuras) {
 		this.passiveAuras=passiveAuras;
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		this.targetSelectionCondition = targetSelectionCondition;
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		this.targetSelectionOverride = targetSelectionOverride;
 	}
 }

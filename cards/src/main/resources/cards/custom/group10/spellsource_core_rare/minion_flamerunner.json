@@ -7,11 +7,18 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Whenever you restore Health, summon a 2/2 Elemental.",
+  "description": "At the end of your turn, if you restored Health this turn, summon a 2/2 Elemental.",
   "trigger": {
     "eventTrigger": {
-      "class": "HealingTrigger",
-      "sourcePlayer": "SELF"
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "HEALING_THIS_TURN",
+        "operation": "GREATER",
+        "value": 0
+      }
     },
     "spell": {
       "class": "SummonSpell",

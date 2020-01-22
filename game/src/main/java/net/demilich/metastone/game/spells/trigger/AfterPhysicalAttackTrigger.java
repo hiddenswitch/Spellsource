@@ -14,3 +14,4 @@ public class AfterPhysicalAttackTrigger extends PhysicalAttackTrigger {
 		return GameEventType.AFTER_PHYSICAL_ATTACK;
 	}
 }
+

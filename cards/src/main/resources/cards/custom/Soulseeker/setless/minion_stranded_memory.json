@@ -10,9 +10,11 @@
   "description": "Opener: Both players draw 2 cards.",
   "battlecry": {
     "spell": {
-      "class": "DrawCardSpell",
-      "value": 2,
-      "targetPlayer": "BOTH"
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 2
+      }
     }
   },
   "attributes": {

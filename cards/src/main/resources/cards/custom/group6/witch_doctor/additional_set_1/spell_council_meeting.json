@@ -1,0 +1,22 @@
+{
+  "name": "Council Meeting",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "EPIC",
+  "description": "Costs (1) less for each other card in your hand. Restore 8 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 8
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "offset": -1,
+    "playerAttribute": "HAND_COUNT",
+    "targetPlayer": "SELF"
+  }
+}

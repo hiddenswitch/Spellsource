@@ -41,7 +41,7 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 		int currentTurn = context.getTurn();
 		List<Entity> graveyardSnapshot = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyardSnapshot) {
-			if (deadEntity.getEntityType() != EntityType.MINION || deadEntity.isRemovedPeacefully()) {
+			if (!deadEntity.diedOnBattlefield()) {
 				continue;
 			}
 			if (desc.containsKey(SpellArg.FILTER)) {

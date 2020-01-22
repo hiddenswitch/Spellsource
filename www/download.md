@@ -1,22 +1,28 @@
 ---
 layout: page
-title: Download
+title: Play
 permalink: /download/
 ---
-[![Play Now](https://img.shields.io/badge/All%20Browsers-Play%20Now-blue.png?logo=Google-Chrome&longCache=true&style=for-the-badge)](/game)
+ - [Play Now (Firefox and Chrome)](/game)
 
 To run the game locally on your computer, use the following links:
 
-[![Download for Windows](https://img.shields.io/badge/Windows-Download-blue.png?logo=windows&longCache=true&style=for-the-badge)](http://go.hiddenswitch.com/win)
+ - [Download for Windows](http://go.hiddenswitch.com/win)
+ - [Download for macOS](http://go.hiddenswitch.com/win)
+ 
+To join the mobile betas:
 
-[![Download for iOS](https://img.shields.io/badge/iOS-Testflight-black.png?logo=apple&longCache=true&style=for-the-badge)](https://testflight.apple.com/join/pkMfO2qa)
+ - [iOS Beta](https://testflight.apple.com/join/pkMfO2qa)
+ - Join the [Spellsource Google Group](https://groups.google.com/forum/#!forum/spellsource-alpha-testers), then follow the instructions in the welcome message to participate in testing.
 
-[![Download for macOS](https://img.shields.io/badge/macOS-Download-silver.png?logo=apple&longCache=true&style=for-the-badge)](http://go.hiddenswitch.com/win)
-
-##### Windows Users
+#### Windows Users
 
 Choose **Extract All**, and double click on **Hidden Switch Launcher**. This will download the latest version of Spellsource. 
 
-##### iOS Users
+#### iOS Users
 
 You will be prompted to join our TestFlight group, which is Apple's testing service. You will remain anonymous when you join Testflight this way.
+
+#### Android Users
+
+You must be logged into Google Play to join the testing program. Your e-mail will be shared with the developers. 

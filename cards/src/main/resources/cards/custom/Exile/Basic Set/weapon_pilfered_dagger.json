@@ -1,0 +1,23 @@
+{
+  "name": "Pilfered Dagger",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "CAMO",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "FREE",
+  "description": "Opener: Gain 5 Armor.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

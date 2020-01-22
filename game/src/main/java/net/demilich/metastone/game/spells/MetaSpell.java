@@ -27,7 +27,7 @@ import java.util.Map;
  *   {
  *     "class": "MetaSpell",
  *     "value": {
- *       "class": "EntityCounter",
+ *       "class": "EntityCountValueProvider",
  *       "target": "ALL_MINIONS",
  *       "filter": {
  *         "class": "AttributeFilter",
@@ -99,18 +99,18 @@ public class MetaSpell extends Spell {
 		}
 		for (int i = 0; i < howMany; i++) {
 			if (spell != null) {
-				SpellUtils.castChildSpell(context, player, spell, source, target);
+				each(context, player, source, target, spell);
 			}
 			if (spells != null && spells.length > 0) {
 				for (SpellDesc subSpell : spells) {
-					SpellUtils.castChildSpell(context, player, subSpell, source, target);
+					each(context, player, source, target, subSpell);
 				}
 			}
 			if (spell1 != null) {
-				SpellUtils.castChildSpell(context, player, spell1, source, target);
+				each(context, player, source, target, spell1);
 			}
 			if (spell2 != null) {
-				SpellUtils.castChildSpell(context, player, spell2, source, target);
+				each(context, player, source, target, spell2);
 			}
 		}
 		if (desc.containsKey(SpellArg.VALUE)) {
@@ -118,4 +118,17 @@ public class MetaSpell extends Spell {
 		}
 	}
 
+	/**
+	 * Override to augment each effect.
+	 *
+	 * @param context
+	 * @param player
+	 * @param source
+	 * @param target
+	 * @param spell
+	 */
+	@Suspendable
+	protected void each(GameContext context, Player player, Entity source, Entity target, SpellDesc spell) {
+		SpellUtils.castChildSpell(context, player, spell, source, target);
+	}
 }

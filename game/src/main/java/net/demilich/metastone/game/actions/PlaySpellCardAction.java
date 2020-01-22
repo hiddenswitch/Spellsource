@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Objects;
 
@@ -42,8 +41,8 @@ public class PlaySpellCardAction extends PlayCardAction {
 	public void innerExecute(GameContext context, int playerId) {
 		Entity source = Objects.equals(getSourceReference(), EntityReference.NONE) ? null : context.resolveSingleTarget(getSourceReference());
 		Entity target = Objects.equals(getTargetReference(), EntityReference.NONE) ? null : context.resolveSingleTarget(getTargetReference());
-		if (context.getLogic().spellsCastTwice(context.getPlayer(playerId), (Card) source, source, target)) {
-			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
+		if (context.getLogic().spellsCastTwice(context.getPlayer(playerId), (Card) source, target)) {
+			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), true, this);
 		}
 		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}

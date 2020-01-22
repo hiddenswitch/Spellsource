@@ -108,7 +108,7 @@ public class RandomCardTargetSpell extends Spell {
 			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return;
 		}
-
+		spellCard.processTargetSelectionOverride(context, player);
 		action = spellCard.play();
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 		EntityReference randomTarget = null;

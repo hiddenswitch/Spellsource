@@ -1,12 +1,13 @@
 {
-  "name": "Knight Eternal",
+  "name": "Duplifairy",
   "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Opener: Transform a random card in your hand into a Knight Eternal.",
+  "race": "FAE",
+  "description": "Opener: Transform a random card in your hand into a Duplifairy.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

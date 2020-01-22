@@ -1,0 +1,21 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give your Dragons +1/+1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DRAGON"
+    },
+    "value": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

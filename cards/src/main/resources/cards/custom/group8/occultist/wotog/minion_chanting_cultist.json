@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: If your C'Thun has at least 10 Attack, draw 10 cards.",
+  "description": "Opener: If your Big Guy has at least 10 Attack, draw 10 cards.",
   "battlecry": {
     "condition": {
       "class": "OrCondition",
@@ -20,7 +20,7 @@
             "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
-              "card": "minion_cthun"
+              "card": "minion_removed_card"
             }
           },
           "value2": 10
@@ -34,7 +34,7 @@
             "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
-              "card": "minion_cthun"
+              "card": "minion_removed_card"
             }
           },
           "value2": 10
@@ -59,7 +59,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",

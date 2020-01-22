@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "RARE",
-  "description": "Echo. Discover a 1-cost minion, then summon three copies of it",
+  "description": "Repeatable this turn. Discover a 1-cost minion, then summon three copies of it",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
@@ -19,7 +19,8 @@
     }
   },
   "attributes": {
-    "ECHO": true
+    "ECHO": true,
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

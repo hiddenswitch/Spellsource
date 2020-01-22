@@ -1,10 +1,10 @@
 {
-  "name": "Brain Freeze",
+  "name": "Brain Stun",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Freeze a character. If it was already Frozen, draw a card instead.",
+  "description": "Stun a character. If it was already Stunned, draw a card instead.",
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",

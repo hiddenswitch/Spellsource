@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.events.MaxHpIncreasedEvent;
 import net.demilich.metastone.game.spells.aura.ModifyBuffSpellAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -36,6 +35,10 @@ import java.util.Map;
  * <li>If this spell has {@link SpellArg#HP_BONUS}, the aura's {@link AuraArg#HP_BONUS} will be used</li>
  * <li>{@link AuraArg#VALUE} is always added.</li>
  * </ul>
+ * When a {@link ModifyBuffSpellAura} is in play, this effect sets the {@link GameValue#SPELL_VALUE} retrieved by
+ * {@link net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider} (1) to the HP bonus specified on this
+ * effect when querying the aura for the amount of additional HP bonus to apply, and then (2) to the attack bonus
+ * specified on this effect when querying the aura for the amount of additional attack bonus to apply.
  * <p>
  * For example, this trigger implements "Whenever you cast a spell, gain Armor equal to its Cost:"
  * <pre>
@@ -165,8 +168,12 @@ public class BuffSpell extends RevertableSpell {
 		List<ModifyBuffSpellAura> auras = SpellUtils.getAuras(context, ModifyBuffSpellAura.class, source);
 
 		for (ModifyBuffSpellAura aura : auras) {
+			context.getSpellValueStack().push(attackBonus);
 			int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
+			context.getSpellValueStack().pop();
+			context.getSpellValueStack().push(hpBonus);
 			int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
+			context.getSpellValueStack().pop();
 			int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
 			if (desc.containsKey(SpellArg.VALUE)) {
 				attackBonus += auraAttackBonus + auraValueBonus;
@@ -196,10 +203,7 @@ public class BuffSpell extends RevertableSpell {
 			if (target instanceof Weapon) {
 				context.getLogic().modifyDurability((Weapon) target, hpBonus);
 			} else {
-				target.modifyHpBonus(hpBonus);
-				if (hpBonus > 0) {
-					context.fireGameEvent(new MaxHpIncreasedEvent(context, target, hpBonus, source.getOwner()));
-				}
+				context.getLogic().modifyHpSpell(source, target, hpBonus);
 			}
 		}
 
@@ -217,5 +221,6 @@ public class BuffSpell extends RevertableSpell {
 			}
 		}
 	}
+
 }
 

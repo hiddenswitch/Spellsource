@@ -81,9 +81,13 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@Override
 	public void sort(Comparator<? super E> c) {
 		Object[] a = this.toArray();
-		Arrays.sort(a, (Comparator) c);
+		@SuppressWarnings("unchecked")
+		Comparator<Object> c1 = (Comparator<Object>) c;
+		Arrays.sort(a, c1);
 		for (int i = 0; i < a.length; i++) {
-			setUnchecked(i, (E) a[i]);
+			@SuppressWarnings("unchecked")
+			E element = (E) a[i];
+			setUnchecked(i, element);
 		}
 	}
 
@@ -131,6 +135,7 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public E remove(int index) {
 		E result = internal.remove(index);
 		result.setEntityLocation(EntityLocation.UNASSIGNED);
+		lookup.remove(result.getId());
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
@@ -168,6 +173,10 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	@SuppressWarnings("unchecked")
 	public void move(int index, EntityZone destination, int destinationIndex) {
 		Entity result = internal.remove(index);
+		// Must remove entity now because we might be changing owners
+		if (destination.getPlayer() != getPlayer()) {
+			lookup.remove(result.getId());
+		}
 		for (int i = index; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(zone, player, i));
 		}
@@ -220,8 +229,8 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		return player;
 	}
 
-	public static EntityZone empty(int player) {
-		return new EntityZone(player, Zones.NONE, null);
+	public static EntityZone<Entity> empty(int player) {
+		return new EntityZone<>(player, Zones.NONE, null);
 	}
 
 	/**

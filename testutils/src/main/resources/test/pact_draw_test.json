@@ -5,6 +5,9 @@
   "heroClass": "ANY",
   "rarity": "FREE",
   "description": "<b>Pact:</b> After you play a card, draw a card.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",

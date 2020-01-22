@@ -1,15 +1,12 @@
 {
   "name": "Shanga's Spirit Brew",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "LEGENDARY",
   "description": "Remove the top cards of your deck until you remove a minion. Summon it.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS",
-    "targetPlayer": "SELF"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {

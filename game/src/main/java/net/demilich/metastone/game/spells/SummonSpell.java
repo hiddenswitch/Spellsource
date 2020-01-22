@@ -378,7 +378,8 @@ public class SummonSpell extends Spell {
 			logger.debug("onCast {} {}: No minions were successfully summoned. Usually this is due to a full board or a secret.", context.getGameId(), source);
 		}
 
-		for (Minion summoned : summonedMinions) {
+		for (Minion summonedBeforeTransform : summonedMinions) {
+			Entity summoned = summonedBeforeTransform.transformResolved(context);
 			// Shouldn't cast spells on minions that wound up in the graveyard somehow due to other subspells.
 			// This checks if a subspell has ended the sequence with {@link GameLogic#endOfSequence()}
 			if (summoned.isDestroyed()

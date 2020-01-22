@@ -1,9 +1,9 @@
 {
   "name": "Lil Wormy",
-  "baseManaCost": 0,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 0,
+  "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",

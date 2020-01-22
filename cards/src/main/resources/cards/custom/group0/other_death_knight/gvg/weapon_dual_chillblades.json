@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 4,
   "rarity": "RARE",
-  "description": "Extra Strike, Freeze any character damaged by this.",
+  "description": "Extra Strike, Stun any character damaged by this.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

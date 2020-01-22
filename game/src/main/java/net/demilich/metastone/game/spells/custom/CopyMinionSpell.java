@@ -41,7 +41,7 @@ import java.util.Map;
  *     }
  * </pre>
  *
- * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for more about transformations.
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion) for more about transformations.
  */
 public final class CopyMinionSpell extends Spell {
 
@@ -61,7 +61,7 @@ public final class CopyMinionSpell extends Spell {
 		Minion clone = ((Minion) target).getCopy();
 		clone.clearEnchantments();
 		clone.setCardCostModifier(null);
-		context.getLogic().transformMinion((Minion) source, clone);
+		context.getLogic().transformMinion(desc, (Minion) source, clone);
 
 		boolean didTransform = context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE);
 

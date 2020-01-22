@@ -1,18 +1,19 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
+
+apply plugin: 'java-library'
+apply plugin: 'org.javamodularity.moduleplugin'
 
 group 'com.hiddenswitch'
 
-repositories {
-    mavenCentral()
-}
+sourceCompatibility = 11
+targetCompatibility = 11
 
 dependencies {
-    compile project(':quasar-core')
-    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-    compile group: 'io.jaegertracing', name: 'jaeger-client', version: '0.35.5'
-    compile group: 'com.google.inject', name: 'guice', version: '4.2.2'
-    compile group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
-    runtime group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.6'
+    implementation 'io.github.classgraph:classgraph:4.8.59'
+    implementation 'org.slf4j:slf4j-api:1.7.20'
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation 'org.jetbrains:annotations:16.0.2'
 }

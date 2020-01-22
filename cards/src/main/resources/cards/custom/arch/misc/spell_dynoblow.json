@@ -1,6 +1,6 @@
 {
   "name": "Dynoblow",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",

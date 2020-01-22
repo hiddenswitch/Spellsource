@@ -1,0 +1,16 @@
+{
+  "name": "Draconic Diplomacy",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "EPIC",
+  "description": "Your Skill becomes 'Your Dragons have +3 Attack.'",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ChangeHeroPowerSpell",
+    "card": "hero_power_overpower"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

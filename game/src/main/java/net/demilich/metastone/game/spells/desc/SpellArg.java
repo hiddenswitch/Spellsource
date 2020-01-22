@@ -150,7 +150,6 @@ public enum SpellArg {
 	 * Describes the kind of card created in a {@link net.demilich.metastone.game.spells.CreateCardSpell}. Considered
 	 * obsolete.
 	 */
-	@Deprecated
 	CARD_DESC_TYPE,
 	/**
 	 * An {@link net.demilich.metastone.game.spells.desc.filter.EntityFilter} that typically operates on cards. These
@@ -284,7 +283,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to indicate how much the card it creates should cost. Considered obsolete.
 	 */
-	@Deprecated
 	MANA,
 	/**
 	 * Used by various spells to put a name on a card or to change the name of a target card.
@@ -300,7 +298,7 @@ public enum SpellArg {
 	 */
 	OPERATION,
 	/**
-	 * Like a {@link SpellArg.QUEST} but a player can have multiple of these active at once.
+	 * Like a {@link SpellArg#QUEST} but a player can have multiple of these active at once.
 	 */
 	PACT,
 	/**
@@ -345,7 +343,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to name the card is creates. Considered obsolete.
 	 */
-	@Deprecated
 	SECONDARY_NAME,
 	/**
 	 * Typically interpreted as a second target for effects that have a {@code source}, a {@code target}, and another

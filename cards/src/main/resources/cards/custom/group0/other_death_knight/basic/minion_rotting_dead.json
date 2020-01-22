@@ -15,7 +15,7 @@
       "class": "ConditionalAttackBonusSpell",
       "target": "SELF",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "OTHER_FRIENDLY_MINIONS"
       }
     }

@@ -22,7 +22,10 @@
       "cardType": "MINION"
     }
   },
+  "attributes": {
+	"DISCOVER": true
+  },
   "collectible": true,
-  "set": "LEAGUE_OF_EXPLORERS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

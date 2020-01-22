@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
 
 /**
  * The {@link Player} class stores almost the state that corresponds to a particular player, like a collection of {@link
- * EntityZone} objects and select {@link Attribute} and {@link PlayerAttribute}
- * attributes as an {@link Entity} that exists in the game.
+ * EntityZone} objects and select {@link Attribute} and {@link PlayerAttribute} attributes as an {@link Entity} that
+ * exists in the game.
  * <p>
  * Unusually, the {@link Zones#WEAPON} and {@link Zones#HERO_POWER} zones are located on the {@link Hero} entity
  * retrievable by {@link #getHero()}.
@@ -100,8 +100,7 @@ public class Player extends Entity implements Serializable {
 	 * Creates a player for the given integer id, userId and deck.
 	 *
 	 * @param userId The networked user ID of the player.
-	 * @param id     The player's ID, {@link IdFactory#PLAYER_1} or {@link
-	 *               IdFactory#PLAYER_2}
+	 * @param id     The player's ID, {@link IdFactory#PLAYER_1} or {@link IdFactory#PLAYER_2}
 	 * @param deck   The deck to initialize the player with.
 	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
@@ -151,7 +150,8 @@ public class Player extends Entity implements Serializable {
 				+ heroPowerZone.size()
 				+ weaponZone.size());
 		for (Zones zone : Zones.values()) {
-			EntityZone zone1 = getZone(zone);
+			@SuppressWarnings("unchecked")
+			EntityZone<? extends Entity> zone1 = (EntityZone<? extends Entity>) getZone(zone);
 			zone1.setLookup(lookup);
 			for (Object entity : zone1) {
 				Entity entity1 = (Entity) entity;
@@ -315,8 +315,8 @@ public class Player extends Entity implements Serializable {
 	 * of each secret in their {@link #secretZone}.
 	 *
 	 * @return The set of secret card IDs.
-	 * @see GameLogic#canPlaySecret(Player, Card) to see how this method plays into
-	 * 		rules regarding the ability to play secrets.
+	 * @see GameLogic#canPlaySecret(Player, Card) to see how this method plays into rules regarding the ability to play
+	 * 		secrets.
 	 */
 	public Set<String> getSecretCardIds() {
 		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
@@ -354,8 +354,7 @@ public class Player extends Entity implements Serializable {
 	 * Sets the player's current hero. If a {@link Hero} currently exists in the hero zone, it is removed.
 	 *
 	 * @param hero The hero entity.
-	 * @see GameLogic#changeHero(Player, Hero) for the appropriate hero changing method
-	 * 		for spells.
+	 * @see GameLogic#changeHero(Player, Hero) for the appropriate hero changing method for spells.
 	 */
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
@@ -432,8 +431,7 @@ public class Player extends Entity implements Serializable {
 	/**
 	 * Sets the player's ID. Can only be called once. Sets the owner fields on the zones stored in this player object.
 	 *
-	 * @param id The ID to set to, either {@link IdFactory#PLAYER_1} or {@link
-	 *           IdFactory#PLAYER_2}.
+	 * @param id The ID to set to, either {@link IdFactory#PLAYER_1} or {@link IdFactory#PLAYER_2}.
 	 */
 	@Override
 	public void setId(int id) {
@@ -529,8 +527,7 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the weapon zone belonging to this player's hero entity.
 	 *
 	 * @return A weapon zone.
-	 * @see GameLogic#equipWeapon(int, Weapon, Card, boolean) for the appropriate way to
-	 * 		mutate this zone.
+	 * @see GameLogic#equipWeapon(int, Weapon, Card, boolean) for the appropriate way to mutate this zone.
 	 */
 	public EntityZone<Weapon> getWeaponZone() {
 		return weaponZone;
@@ -608,7 +605,9 @@ public class Player extends Entity implements Serializable {
 	}
 
 	public <T extends Entity> Optional<T> findEntity(int id) {
-		return Optional.ofNullable((T) lookup.getOrDefault(id, null));
+		@SuppressWarnings("unchecked")
+		Optional<T> val = Optional.ofNullable((T) lookup.getOrDefault(id, null));
+		return val;
 	}
 
 	public Map<Integer, Entity> getLookup() {

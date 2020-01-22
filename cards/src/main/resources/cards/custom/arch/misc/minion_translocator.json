@@ -6,16 +6,16 @@
   "baseHp": 6,
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Whenever you shuffle a card into your deck, gain 2 Armor.",
+  "description": "Whenever you shuffle a card into your deck, restore 2 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",
       "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "BuffSpell",
+      "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 2
+      "value": 2
     }
   },
   "collectible": true,

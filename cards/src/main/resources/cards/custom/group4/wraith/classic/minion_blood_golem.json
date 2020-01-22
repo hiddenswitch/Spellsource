@@ -1,12 +1,12 @@
 {
-  "name": "Blood Golem",
-  "baseManaCost": 7,
+  "name": "Blood-Bound Golem",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "CRIMSON",
-  "baseAttack": 7,
-  "baseHp": 7,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "EPIC",
-  "description": "<b>Guard</b>. Costs (5) if your champion took damage this turn.",
+  "description": "<b>Guard</b>. Costs (3) if your champion took damage this turn.",
   "attributes": {
     "TAUNT": true
   },

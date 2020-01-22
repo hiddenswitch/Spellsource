@@ -31,10 +31,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * @see net.demilich.metastone.game.logic.GameLogic#getChooseOneAuraOverrides(Player, Card) to see the bulk of the logic
  * 		implementing this effect.
  */
-public class ChooseOneOverrideAura extends Aura {
+public class ChooseOneOverrideAura extends AbstractFriendlyCardAura {
 	public ChooseOneOverrideAura(AuraDesc desc) {
-		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
-		setDesc(desc);
+		super(desc);
 	}
 
 	public ChooseOneOverride getChooseOneOverride() {

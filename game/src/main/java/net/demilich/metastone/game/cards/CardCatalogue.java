@@ -1,28 +1,25 @@
 package net.demilich.metastone.game.cards;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.hiddenswitch.spellsource.CardResource;
-import com.hiddenswitch.spellsource.CardResources;
-import com.hiddenswitch.spellsource.CardsModule;
-import com.hiddenswitch.spellsource.ResourceInputStream;
-import io.vertx.core.json.Json;
+import com.hiddenswitch.spellsource.core.CardResource;
+import com.hiddenswitch.spellsource.core.CardResources;
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,7 +35,6 @@ public class CardCatalogue {
 	private static Map<String, Card> classCards;
 	private static Map<String, Card> heroCards;
 	private static LoadingCache<DeckFormat, CardList> classCardsForFormat;
-	private static List<String> baseClasses;
 	private static LoadingCache<DeckFormat, List<String>> baseClassesForFormat;
 
 	public static Set<String> getBannedDraftCards() {
@@ -55,33 +51,6 @@ public class CardCatalogue {
 
 	public static String getNeutralHero() {
 		return "hero_neutral";
-	}
-
-	/**
-	 * A class that describes injected card resources used internally by a static global card catalogue..
-	 */
-	public static class InjectedCardResources {
-		private Set<CardResources> cardResources;
-
-		@Inject
-		public InjectedCardResources(Set<CardResources> cardResources) {
-			this.cardResources = cardResources;
-		}
-	}
-
-	private static final Injector INJECTOR;
-
-	static {
-		// This code iterates through all the classes on the classpath that are subtypes of CardsModule as "plugins", then
-		// makes the cards they define available to the card catalogue.
-		List<? extends CardsModule> plugins = new Reflections("com.hiddenswitch.spellsource").getSubTypesOf(CardsModule.class).stream().map(clazz -> {
-			try {
-				return clazz.getConstructor().newInstance();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}).collect(Collectors.toList());
-		INJECTOR = Guice.createInjector(plugins);
 	}
 
 	private static Logger LOGGER = LoggerFactory.getLogger(CardCatalogue.class);
@@ -123,10 +92,10 @@ public class CardCatalogue {
 		if (card != null) {
 			card = card.getCopy();
 		} else {
-			throw new NullPointerException(String.format("getCardById: %s could not be found", id));
+			throw new NullPointerException(id);
 		}
 		if (card.getDesc().getFileFormatVersion() > version) {
-			throw new NullPointerException(String.format("getCardById: %s is not in this version", id));
+			throw new NullPointerException(id);
 		}
 		return card;
 	}
@@ -247,14 +216,38 @@ public class CardCatalogue {
 		if (!loaded.compareAndSet(false, true)) {
 			return;
 		}
-
-		try {
-			InjectedCardResources cardResources = INJECTOR.getInstance(InjectedCardResources.class);
-			for (CardResources cardResource : cardResources.cardResources) {
+		List<CardResources> cardResources = null;
+		try (ScanResult scanResult =
+				     new ClassGraph()
+						     .enableClassInfo()
+						     .disableRuntimeInvisibleAnnotations()
+						     .whitelistPackages("com.hiddenswitch.spellsource.cards")
+						     .scan()) {
+			cardResources = scanResult
+					.getAllClasses()
+					.stream()
+					.filter(info -> info.getName().contains("CardResources"))
+					.map(ClassInfo::loadClass)
+					.filter(CardResources.class::isAssignableFrom)
+					.filter(c -> !Modifier.isAbstract(c.getModifiers()))
+					.map(thisClass -> {
+						try {
+							return (CardResources) thisClass.getConstructor().newInstance();
+						} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+							throw new RuntimeException(e);
+						}
+					})
+					.collect(Collectors.toList());
+			for (CardResources cardResource : cardResources) {
 				bannedCardIds.addAll(cardResource.getDraftBannedCardIds());
 				hardRemovalCardIds.addAll(cardResource.getHardRemovalCardIds());
 			}
-			Collection<ResourceInputStream> inputStreams = cardResources.cardResources.stream().flatMap(resource -> resource.getResources().stream()).map(resource -> ((CardResource) resource)).map(resource -> (ResourceInputStream) resource).collect(Collectors.toList());
+			Collection<ResourceInputStream> inputStreams = cardResources
+					.stream()
+					.flatMap(resource -> resource.getResources().stream())
+					.map(resource -> ((CardResource) resource))
+					.map(resource -> (ResourceInputStream) resource)
+					.collect(Collectors.toList());
 			Map<String, CardDesc> cardDesc = new HashMap<>();
 			ArrayList<String> badCards = new ArrayList<>();
 			CardParser cardParser = new CardParser();
@@ -302,7 +295,6 @@ public class CardCatalogue {
 						}
 					});
 			heroCards = Maps.transformEntries(classCards, (key, value) -> getCardById(Objects.requireNonNull(value).getHero()));
-			baseClasses = classCards.values().stream().filter(Card::isCollectible).map(Card::getHeroClass).collect(Collectors.toList());
 			baseClassesForFormat = CacheBuilder.newBuilder()
 					.maximumSize(32)
 					.build(new CacheLoader<>() {
@@ -315,6 +307,17 @@ public class CardCatalogue {
 			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			if (cardResources != null) {
+				for (CardResources cardResources1 : cardResources) {
+					try {
+						cardResources1.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+
 		}
 	}
 

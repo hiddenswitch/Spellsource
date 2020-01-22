@@ -20,6 +20,6 @@ public final class RaceEqualsFilter extends EntityFilter {
 			return false;
 		}
 
-		return Race.hasRace(entity.getRace(), comparedTo.getRace());
+		return Race.hasRace(context, entity, comparedTo.getRace());
 	}
 }

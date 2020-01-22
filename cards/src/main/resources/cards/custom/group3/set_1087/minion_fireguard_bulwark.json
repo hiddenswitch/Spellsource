@@ -14,7 +14,7 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "target": "FRIENDLY_MINIONS",
     "filter": {
       "class": "RaceFilter",

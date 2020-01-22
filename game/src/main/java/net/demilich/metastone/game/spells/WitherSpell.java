@@ -9,22 +9,29 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.AttributeCondition;
+import net.demilich.metastone.game.spells.desc.condition.ComparisonCondition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
+import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
- * Reduces the health of the {@code target} by the {@code source} entity's {@link Attribute#WITHER} value. If {@link
- * SpellArg#VALUE} is specified, use that instead. At the start of the casting {@code player}'s next turn, restores
- * (without triggering healing) the health of the minion.
- * <p>
- * Wither is blocked by shields like {@link Attribute#DIVINE_SHIELD} and {@link Attribute#DEFLECT}.
+ * Reduces the attack of the {@code target} by the {@code source} entity's {@link Attribute#WITHER} value. If {@link
+ * SpellArg#VALUE} is specified, use that instead. At the end of the {@link Attribute#WITHERED} minion's owner's turn,
+ * if the minions attacks equal its max attacks, wither is removed.
  * <p>
  * Wither does <b>not</b> affect {@link EntityType#HERO} entities.
+ * <p>
+ * Wither hits shields like {@link Attribute#DIVINE_SHIELD} and {@link Attribute#DEFLECT}.
  * <p>
  * Wither stacks.
  * <p>
@@ -49,30 +56,22 @@ public final class WitherSpell extends Spell {
 			return;
 		}
 
-		EventTriggerDesc revertTrigger = TurnStartTrigger.create(player.getId() == GameContext.PLAYER_1 ? TargetPlayer.PLAYER_1 : TargetPlayer.PLAYER_2);
+		ConditionDesc turnEndConditionDesc = new ConditionDesc(ComparisonCondition.class);
+		turnEndConditionDesc.put(ConditionArg.VALUE1, AttributeValueProvider.create(Attribute.MAX_ATTACKS, EntityReference.TRIGGER_HOST).create());
+		turnEndConditionDesc.put(ConditionArg.VALUE2, AttributeValueProvider.create(Attribute.NUMBER_OF_ATTACKS, EntityReference.TRIGGER_HOST).create());
+		turnEndConditionDesc.put(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
+		EventTriggerDesc revertTrigger = TurnEndTrigger.create(TargetPlayer.getTargetPlayerForOwner(target.getOwner()));
+		revertTrigger.put(EventTriggerArg.FIRE_CONDITION, turnEndConditionDesc.create());
 		SpellDesc modifyWitheredSpell = new SpellDesc(ModifyAttributeSpell.class);
 		modifyWitheredSpell.put(SpellArg.ATTRIBUTE, Attribute.WITHERED);
 		modifyWitheredSpell.put(SpellArg.VALUE, witherAmount);
-
-		SpellDesc reduceHpSpell = new SpellDesc(ModifyAttributeSpell.class);
-		reduceHpSpell.put(SpellArg.ATTRIBUTE, Attribute.HP);
-		reduceHpSpell.put(SpellArg.VALUE, -witherAmount);
+		modifyWitheredSpell.put(SpellArg.REVERT_TRIGGER, revertTrigger);
 
 		SpellDesc debuffAttackSpell = new SpellDesc(BuffSpell.class);
 		debuffAttackSpell.put(SpellArg.ATTACK_BONUS, -witherAmount);
 		debuffAttackSpell.put(SpellArg.REVERT_TRIGGER, revertTrigger);
 
-		EnchantmentDesc restoreHpAndReduceWitheredEnchantment = new EnchantmentDesc();
-		restoreHpAndReduceWitheredEnchantment.eventTrigger = revertTrigger;
-		restoreHpAndReduceWitheredEnchantment.maxFires = 1;
-		restoreHpAndReduceWitheredEnchantment.persistentOwner = true;
-		SpellDesc restoreHealthPeacefullySpell = new SpellDesc(RestoreHealthPeacefullySpell.class, EntityReference.SELF, null, false);
-		restoreHealthPeacefullySpell.put(SpellArg.VALUE, witherAmount);
-		restoreHpAndReduceWitheredEnchantment.spell = MetaSpell.create(
-				ModifyAttributeSpell.create(EntityReference.SELF, Attribute.WITHERED, witherAmount),
-				restoreHealthPeacefullySpell);
-		SpellDesc addRebuffEnchantmentSpell = AddEnchantmentSpell.create(target.getReference(), restoreHpAndReduceWitheredEnchantment);
-		SpellDesc effects = MetaSpell.create(debuffAttackSpell, reduceHpSpell, modifyWitheredSpell, addRebuffEnchantmentSpell);
+		SpellDesc effects = MetaSpell.create(debuffAttackSpell, modifyWitheredSpell);
 		SpellUtils.castChildSpell(context, player, effects, source, target);
 	}
 }

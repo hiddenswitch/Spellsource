@@ -29,6 +29,6 @@ public final class EntityTypeFilter extends EntityFilter {
 		if (entityType == EntityType.ANY) {
 			return true;
 		}
-		return entity.getEntityType() == entityType;
+		return entity.getEntityType().hasEntityType(entityType);
 	}
 }

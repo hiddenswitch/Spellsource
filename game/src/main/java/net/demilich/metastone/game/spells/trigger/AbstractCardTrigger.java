@@ -9,6 +9,12 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * The base class for triggers that fire off card-adjacent effects.
+ * <p>
+ * This supports the {@link EventTriggerArg#REQUIRED_ATTRIBUTE}, {@link EventTriggerArg#RACE} and {@link
+ * EventTriggerArg#CARD_TYPE} arguments on the {@link HasCard#getCard()} entity.
+ */
 public abstract class AbstractCardTrigger extends EventTrigger {
 	public AbstractCardTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -28,7 +34,7 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 		}
 
 		String race = (String) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !Race.hasRace(cardPlayedEvent.getCard().getRace(), race)) {
+		if (race != null && !Race.hasRace(event.getGameContext(), cardPlayedEvent.getCard(), race)) {
 			return false;
 		}
 
