@@ -3,6 +3,9 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
+### Upcoming Changes
+ - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
+
 
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
@@ -19,14 +22,13 @@ permalink: /whats-new/
  - Auras that gave minions the same attribute now stack.
  - Elven Woundsealer, Edlritchampion and Ushibasu the Vigilante no longer interact to cause an infinite loop.
  - The Overlord's Skill Dark Rule now functions properly. (1494)
- - Fixed a typo with Hired Berserker and made it properly summon a 2/3 with Guard. (1495, 1497)
+ - Fixed a typo with Hired Berserker and made it properly summon a 2/3 with Guard. (1495)
  - All for One's description now matches its actual effect. (1484)
  - Silver Timekeeper now properly filters selectable targets. (1482)
  - Brain Stun now properly says "Stunned" in its text. (1483)
  - Slave-Trader Yorn is now "Yorn th Recruiter" and Fairy Whipmaster is now "Fairy Enforcer". (1487)
  - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
  - The 4th Ring Warden now correctly only affects your own minions. (1490)
- - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
 
 ### 0.8.63-3.0.8 (January 14, 2020)
 
