@@ -26,6 +26,7 @@ permalink: /whats-new/
  - Slave-Trader Yorn is now "Yorn th Recruiter" and Fairy Whipmaster is now "Fairy Enforcer". (1487)
  - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
  - The 4th Ring Warden now correctly only affects your own minions. (1490)
+ - Indoctrination and Dream of Death both now properly Drain health. (1501)
 
 ### 0.8.63-3.0.8 (January 14, 2020)
 
