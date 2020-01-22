@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "The next battlecry played this turn is triggered twice.",
+  "description": "The next opener played this turn is triggered twice.",
   "triggers": [
     {
       "eventTrigger": {

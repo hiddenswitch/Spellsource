@@ -1,10 +1,8 @@
 package com.hiddenswitch.cluster.applications;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.strands.Strand;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
-import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Simulation;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import io.jenetics.*;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
@@ -157,7 +155,6 @@ public class Weights {
 	}
 
 	public static void main(String[] args) {
-		Logging.setLoggingLevel(Level.INFO);
 		Factory<Genotype<IntegerGene>> gtf = Genotype.of(Weights.weightedChromosome());
 
 		double mutatorProbability = 0.5;

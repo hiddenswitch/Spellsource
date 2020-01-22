@@ -1,0 +1,28 @@
+{
+  "name": "Soulbinder",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "After a minion dies, deal 2 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

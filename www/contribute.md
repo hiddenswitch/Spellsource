@@ -6,12 +6,13 @@ permalink: /contribute/
 ### Table of Contents
 
  1. [How to Use This Document](#1-how-to-use-this-document)
- 2. [Contribution Guidelines](#2-contribution-guidelines)
-    1. [Priority of Accepting Contributions based on Engineering](#21-priority-of-accepting-contributions-based-on-engineering)
-    2. [Priority of Accepting Contributions based on Gameplay Quality](#22-priority-of-accepting-contributions-based-on-gameplay-quality)
- 3. [Card Merging Process](#3-card-merging-process)
-    1. [Addressing Engineering Problems with Existing Cards](#31-addressing-engineering-problems-with-existing-cards)
-    2. [Addressing Other Problems with Cards](#32-addressing-other-problems-with-cards)
+ 2. [Basic Engineering Rules](#2-basic-engineering-rules)
+ 3. [Contribution Guidelines](#3-contribution-guidelines)
+    1. [Priority of Accepting Contributions based on Engineering](#31-priority-of-accepting-contributions-based-on-engineering)
+    2. [Priority of Accepting Contributions based on Gameplay Quality](#32-priority-of-accepting-contributions-based-on-gameplay-quality)
+ 4. [Card Merging Process](#4-card-merging-process)
+    1. [Addressing Engineering Problems with Existing Cards](#41-addressing-engineering-problems-with-existing-cards)
+    2. [Addressing Other Problems with Cards](#42-addressing-other-problems-with-cards)
 
 ### 1. How to Use This Document
 
@@ -19,7 +20,18 @@ If you're making a contribution to Spellsource, please skim this document for wh
 
 To read more about engineering, visit [Getting Started with Windows Development](/windows-development/).
 
-### 2. Contribution Guidelines
+### 2. Basic Engineering Rules
+
+ - Do not rename already existing card files, even if the `"name"` changes.
+ - Do not delete existing card files. Instead, set `"collectible": false`.
+ - Make sure each file ends in a `.json` extension.
+ - Card file names should be all lowercase and alphanumerics with their type first and separated by underscores. For example, `spell_card_name.json`.
+ - Use Spellsource keywords. See the [Whats New: Keywords](/whats-new#keywords) section for a complete list of keywords.
+ - Store cards in the `cards/src/main/java/resources/cards/custom/` directories in this repository.
+ 
+See the [Windows Development Guide](/windows-development/) for more information on authoring cards.
+
+### 3. Contribution Guidelines
 
 Visit our [Discord](https://discord.gg/HmbESh2) to chat about these guidelines and what cards you'd like to add.
 
@@ -29,7 +41,7 @@ The long term goal of accepting contributions from the community is to make an *
 
 With regards to **engineering**, maintainers prioritize content based on its engineering quality in this order:
 
-#### 2.1 Priority of Accepting Contributions based on Engineering
+#### 3.1 Priority of Accepting Contributions based on Engineering
 
  1. Fully coded in JSON, passing tests, tests for specific cards and placed in a Pull Request.
  2. Fully coded in JSON, passing tests and placed in a Pull Request.
@@ -47,7 +59,7 @@ Observe that the way you may be used to sharing a card--as an image with careful
 
 With regards to **gameplay quality**, maintainers prioritize content based on its gameplay quality in this order:
 
-#### 2.2 Priority of Accepting Contributions based on Gameplay Quality
+#### 3.2 Priority of Accepting Contributions based on Gameplay Quality
 
  1. Original hero classes (60+ cards) with some evidence of being judged positively by the community (e.g. Hearthpwn competitions, weekly /r/customhearthstone competitions).
  2. Original cards with some evidence of being judged positively by the community.
@@ -70,7 +82,7 @@ The way to read this chart is to think about how your content can meet the quali
 
 As a general policy, except in very rare instances, we say a hard no to joke cards.
 
-### 3. Card Merging Process
+### 4. Card Merging Process
 
 The current maintainer, **@doctorpangloss**, merges the highest quality (engineering and gameplay) cards on a first-come, first-serve basis. Merging means taking work someone else did and reconciling it with work that happened simultaneously by others. In practice, card merging is done one-group-of-contributions-at-a-time, and a certain amount of quality assurance and automated testing is performed.
 
@@ -105,7 +117,7 @@ Concretely, the maintainers perform the following steps:
  
 In practice, deployment occurs as frequently as once a day and as infrequently as once a week. It depends on the work load and the number of players currently playing Spellsource. Doing a deployment ends all currently running games, so it can be disruptive to do it too frequently.
 
-#### 3.1 Addressing Engineering Problems with Existing Cards
+#### 4.1 Addressing Engineering Problems with Existing Cards
 
 To report issues, use the GitHub Issues functionality and follow the template there. The template emphasizes reproduction steps. In particular, a great issue contains the word **should** in its title, indicating what **should** be happening in the game but isn't.
 
@@ -113,7 +125,7 @@ Issues reported in the `#bugs` channel will still be addressed, but at a lower p
 
 You can also request changes to gameplay by making the change using a code editor of your choice, editing the card file and submitting a pull request.
 
-#### 3.2 Addressing Other Problems with Cards
+#### 4.2 Addressing Other Problems with Cards
 
 To address other problems with cards, consider if the problem falls into any of the categories below. Each of these categories has a process for addressing the card's issue:
 

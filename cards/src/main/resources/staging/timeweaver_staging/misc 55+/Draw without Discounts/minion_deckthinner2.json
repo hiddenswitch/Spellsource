@@ -15,7 +15,7 @@
     "spell": {
       "class": "SwapCardsSpell",
       "target": "FRIENDLY_DECK",
-      "randomTarget": "true",
+      "randomTarget": true,
       "secondaryTarget": "SELF"
     }
   },

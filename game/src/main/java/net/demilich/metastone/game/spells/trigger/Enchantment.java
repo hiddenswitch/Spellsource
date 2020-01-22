@@ -21,6 +21,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -213,12 +214,12 @@ public class Enchantment extends Entity implements Trigger {
 				expire();
 			}
 			if (this instanceof Secret && SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
-				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 			}
 			if (event.getEventType().equals(GameEventType.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0){
-				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 			}
-			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 		}
 		if (maxFires != null
 				&& fires >= maxFires) {

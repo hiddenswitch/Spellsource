@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.cards;
 
-import com.hiddenswitch.spellsource.client.models.EntityState;
+import com.hiddenswitch.spellsource.client.models.Entity;
 
 /**
  * Possible rarities of different cards.
@@ -28,20 +28,20 @@ public enum Rarity {
 		return false;
 	}
 
-	public EntityState.RarityEnum getClientRarity() {
+	public Entity.RarityEnum getClientRarity() {
 		switch (this) {
 			case FREE:
-				return EntityState.RarityEnum.FREE;
+				return Entity.RarityEnum.FREE;
 			case COMMON:
-				return EntityState.RarityEnum.COMMON;
+				return Entity.RarityEnum.COMMON;
 			case RARE:
-				return EntityState.RarityEnum.RARE;
+				return Entity.RarityEnum.RARE;
 			case EPIC:
-				return EntityState.RarityEnum.EPIC;
+				return Entity.RarityEnum.EPIC;
 			case LEGENDARY:
-				return EntityState.RarityEnum.LEGENDARY;
+				return Entity.RarityEnum.LEGENDARY;
 			case ALLIANCE:
-				return EntityState.RarityEnum.ALLIANCE;
+				return Entity.RarityEnum.ALLIANCE;
 		}
 		return null;
 	}

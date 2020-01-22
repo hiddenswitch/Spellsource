@@ -1,0 +1,17 @@
+{
+  "name": "Bass Boost",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "EPIC",
+  "description": "Your next spell this turn casts twice.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_double_next_spell"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

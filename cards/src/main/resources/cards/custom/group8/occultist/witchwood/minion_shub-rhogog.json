@@ -6,16 +6,18 @@
   "baseAttack": 4,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Opener: Choose a minion. Fill both sides of the board with copies of it.",
+  "description": "Opener: Choose a minion. Fill both players' boards with copies of it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "RecastWhileSpell",
-      "targetPlayer": "BOTH",
+      "class": "BothPlayersSpell",
       "spell": {
-        "class": "SummonSpell"
-      },
-      "howMany": 7
+        "class": "RecastWhileSpell",
+        "spell": {
+          "class": "SummonSpell"
+        },
+        "howMany": 7
+      }
     }
   },
   "attributes": {

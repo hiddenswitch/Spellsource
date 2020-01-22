@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "MECH",
-  "description": "When a player has at least 4 minions and summons another, return it to their hand.",
+  "description": "When a player has at least 4 minions and summons another, return it to their hand. Peacefully.",
   "triggers": [
     {
       "eventTrigger": {
@@ -21,8 +21,28 @@
         }
       },
       "spell": {
-        "class": "ReturnTargetToHandSpell",
-        "target": "EVENT_TARGET"
+        "class": "EitherOrSpell",
+        "target": "EVENT_TARGET",
+        "condition": {
+          "class": "CardCountCondition",
+          "targetPlayer": "OWNER",
+          "value": 10,
+          "operation": "LESS"
+        },
+        "spell1": {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "ReturnTargetToHandSpell",
+            "target": "SPELL_TARGET"
+          }
+        },
+        "spell2": {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RemoveActorPeacefullySpell",
+            "target": "SPELL_TARGET"
+          }
+        }
       }
     },
     {
@@ -37,12 +57,32 @@
         }
       },
       "spell": {
-        "class": "ReturnTargetToHandSpell",
-        "target": "EVENT_TARGET"
+        "class": "EitherOrSpell",
+        "target": "EVENT_TARGET",
+        "condition": {
+          "class": "CardCountCondition",
+          "targetPlayer": "OWNER",
+          "value": 10,
+          "operation": "LESS"
+        },
+        "spell1": {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "ReturnTargetToHandSpell",
+            "target": "SPELL_TARGET"
+          }
+        },
+        "spell2": {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RemoveActorPeacefullySpell",
+            "target": "SPELL_TARGET"
+          }
+        }
       }
     }
   ],
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

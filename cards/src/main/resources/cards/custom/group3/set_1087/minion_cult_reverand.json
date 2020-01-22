@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Whenever you summon a minion, give your C'Thun +1/+1 (wherever it is).",
+  "description": "Whenever you summon a minion, give your Big Guy +1/+1 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",
@@ -21,7 +21,7 @@
           "value": 1,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -30,7 +30,7 @@
           "value": 1,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -49,7 +49,7 @@
     }
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

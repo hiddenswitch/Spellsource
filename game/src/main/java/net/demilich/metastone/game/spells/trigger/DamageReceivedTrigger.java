@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public final class DamageReceivedTrigger extends EventTrigger {
+public class DamageReceivedTrigger extends EventTrigger {
 
 	public DamageReceivedTrigger(EventTriggerDesc desc) {
 		super(desc);

@@ -1,11 +1,11 @@
 package io.vertx.ext.sync;
 
-import co.paralleluniverse.common.util.Exceptions;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberExecutorScheduler;
 import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.channels.Channel;
+import com.google.common.base.Throwables;
 import io.vertx.core.*;
 import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;
@@ -22,9 +22,8 @@ import java.util.function.Consumer;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class Sync {
-
 	protected static final String FIBER_SCHEDULER_CONTEXT_KEY = "__vertx-sync.fiberScheduler";
-	public static final int DEFAULT_STACK_SIZE = 128;
+	public static final int DEFAULT_STACK_SIZE = 32;
 
 	/**
 	 * Invoke an asynchronous operation and obtain the result synchronous. The fiber will be blocked until the result is
@@ -41,11 +40,8 @@ public class Sync {
 				@Override
 				@Suspendable
 				protected void requestAsync() {
-					try {
-						consumer.accept(this);
-					} catch (Exception e) {
-						throw makeSafe(e);
-					}
+					super.requestAsync();
+					consumer.accept(this);
 				}
 			}.run();
 		} catch (Throwable t) {
@@ -70,12 +66,14 @@ public class Sync {
 				protected void requestAsync() {
 					if (Fiber.isCurrentFiber()) {
 						try {
+							super.requestAsync();
 							consumer.accept(this);
 						} catch (Exception e) {
 							throw makeSafe(e);
 						}
 					} else {
 						fiberHandler((Handler<Void> ignored) -> {
+							super.requestAsync();
 							consumer.accept(this);
 						}).handle(null);
 					}
@@ -87,7 +85,7 @@ public class Sync {
 	}
 
 	private static RuntimeException makeSafe(Throwable exception) {
-		Throwable res = Exceptions.unwrap(exception);
+		Throwable res = Throwables.getRootCause(exception);
 		if (!(res instanceof RuntimeException)) {
 			return new RuntimeException(res);
 		} else {
@@ -112,6 +110,7 @@ public class Sync {
 				@Suspendable
 				protected void requestAsync() {
 					try {
+						super.requestAsync();
 						consumer.accept(this);
 					} catch (Exception e) {
 						throw new VertxException(e);

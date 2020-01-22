@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -24,6 +22,8 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -147,7 +147,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 		// If a target race is specified, does it match?
 		applies &= !(getRequiredRace() != null
-				&& !Race.hasRace(card.getRace(), getRequiredRace()));
+				&& !Race.hasRace(context, card, getRequiredRace()));
 
 		// Is the enchantment owner / caster the same as the card owner?
 		switch (getTargetPlayer()) {
@@ -309,12 +309,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	public int process(GameContext context, Entity host, Card card, int currentManaCost, Player player) {
-		AlgebraicOperation operation = (AlgebraicOperation) desc.get(CardCostModifierArg.OPERATION);
+		AlgebraicOperation operation = (AlgebraicOperation) desc.getOrDefault(CardCostModifierArg.OPERATION, AlgebraicOperation.ADD);
 		int value = desc.getValue(CardCostModifierArg.VALUE, context, player, card, host, 0);
-		if (operation != null) {
-			return operation.performOperation(currentManaCost, value);
-		}
-		return currentManaCost + desc.getInt(CardCostModifierArg.VALUE);
+		return operation.performOperation(currentManaCost, value);
 	}
 
 	@Override

@@ -9,11 +9,20 @@
   "description": "Spells that cost (5) or more that you cast on this are cast twice.",
   "aura": {
     "class": "TheliaSilentdreamerAura",
-    "target": "SELF",
-    "spellCondition": {
-      "class": "ManaCostCondition",
-      "value": 5,
-      "operation": "GREATER_OR_EQUAL"
+    "target": "FRIENDLY_CARDS",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "ManaCostFilter",
+          "value": 5,
+          "operation": "GREATER_OR_EQUAL"
+        }
+      ]
     }
   },
   "collectible": true,

@@ -1,0 +1,15 @@
+{
+  "name": "Trader",
+  "type": "CLASS",
+  "hero": "hero_yasha",
+  "heroClass": "MAGENTA",
+  "color": [
+    225,
+    25,
+    150
+  ],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

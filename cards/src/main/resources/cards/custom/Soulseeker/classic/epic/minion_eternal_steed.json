@@ -7,18 +7,26 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "SPIRIT",
-  "description": "Aftermath: Summon an Eternal Steed.",
+  "description": "Aftermath: At the end of this turn, summon an Eternal Steed.",
   "deathrattle": {
-    "class": "CastAfterSequenceSpell",
-    "spell": {
-      "class": "SummonSpell",
-      "card": "minion_eternal_steed"
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "maxFires": 1,
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_eternal_steed"
+      }
     }
   },
   "attributes": {
     "DEATHRATTLES": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

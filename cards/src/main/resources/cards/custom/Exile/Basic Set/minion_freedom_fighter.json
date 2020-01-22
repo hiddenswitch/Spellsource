@@ -1,0 +1,17 @@
+{
+  "name": "Freedom Fighter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "PIRATE",
+  "description": "Blitz",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

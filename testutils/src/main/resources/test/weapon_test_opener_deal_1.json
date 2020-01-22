@@ -1,0 +1,23 @@
+{
+  "name": "Opener Deal 1",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "Opener: Deal 1 damage",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

@@ -4,20 +4,22 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Each player draws until they have seven cards.",
+  "description": "Both players draw until they have seven cards.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardSpell",
-    "value": {
-      "class": "AlgebraicValueProvider",
-      "operation": "SUBTRACT",
-      "value1": 7,
-      "value2": {
-        "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "HAND_COUNT"
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": 7,
+        "value2": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT"
+        }
       }
-    },
-    "targetPlayer": "BOTH"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

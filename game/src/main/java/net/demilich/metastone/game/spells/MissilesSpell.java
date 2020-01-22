@@ -50,7 +50,9 @@ public class MissilesSpell extends DamageSpell {
 
 		SpellDesc subSpell = desc.getSpell();
 
-		if ((damage == 1 || desc.getBool(SpellArg.EXCLUSIVE)) && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
+		if ((damage == 1 || desc.getBool(SpellArg.EXCLUSIVE))
+				&& ((source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL))
+				|| source.getEntityType() == EntityType.SECRET)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {

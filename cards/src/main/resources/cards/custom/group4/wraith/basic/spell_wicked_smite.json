@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Deal $5 damage to both champions.",
+  "description": "Deal $4 damage to both champions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -12,16 +12,16 @@
       {
         "class": "DamageSpell",
         "target": "ENEMY_HERO",
-        "value": 5
+        "value": 4
       },
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 5
+        "value": 4
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

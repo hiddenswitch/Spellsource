@@ -1,5 +1,5 @@
 {
-  "name": "Acolyte of Arn'peroth",
+  "name": "Paucha's Acolyte",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
@@ -15,7 +15,7 @@
         "class": "ComparisonCondition",
         "operation": "EQUAL",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK",
           "filter": {
             "class": "CardFilter",

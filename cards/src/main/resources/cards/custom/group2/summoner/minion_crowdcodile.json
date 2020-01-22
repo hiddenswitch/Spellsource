@@ -15,7 +15,7 @@
     "spell": {
       "class": "SummonSpell",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "OTHER_FRIENDLY_MINIONS"
       },
       "card": "token_river_crowdcolisk"

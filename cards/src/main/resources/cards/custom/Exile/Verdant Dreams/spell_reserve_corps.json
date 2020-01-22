@@ -1,0 +1,41 @@
+{
+  "name": "Reserve Corps",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "COMMON",
+  "description": "Draw a Demon, Dragon, and Pirate from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DEMON"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DRAGON"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "PIRATE"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

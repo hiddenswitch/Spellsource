@@ -31,8 +31,6 @@ import java.util.Map;
  */
 public class NullSpell extends Spell {
 
-	private static Logger logger = LoggerFactory.getLogger(NullSpell.class);
-
 	/**
 	 * Creates a spell that does nothing.
 	 *

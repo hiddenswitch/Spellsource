@@ -1,0 +1,24 @@
+{
+  "name": "Chokehold",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "COMMON",
+  "description": "Silence a minion, then deal $3 damage to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -4,26 +4,33 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "For the rest of the game, whenever a friendly Beast dies, gain 1 Armor.",
+  "description": "Gain [0] Armor. (Increases for each Beast in your graveyard)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "trigger": {
-      "eventTrigger": {
-        "class": "MinionDeathTrigger",
-        "race": "BEAST",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "BuffSpell",
-        "target": "FRIENDLY_HERO",
-        "armorBonus": 1
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": {
+      "class": "GraveyardMinionCountValueProvider",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
       }
     }
   },
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "GraveyardMinionCountValueProvider",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        }
+      }
+    }
+  ]
 }

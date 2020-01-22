@@ -20,8 +20,8 @@ public class GraveyardContainsCondition extends Condition {
 			cardId = context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).get(0).getSourceCard().getCardId();
 		}
 		for (Entity deadEntity : player.getGraveyard()) {
-			Card card = null;
-			if (deadEntity instanceof Actor && !deadEntity.isRemovedPeacefully()) {
+			Card card;
+			if (deadEntity instanceof Actor && deadEntity.diedOnBattlefield()) {
 				Actor actor = (Actor) deadEntity;
 				card = actor.getSourceCard();
 			} else {

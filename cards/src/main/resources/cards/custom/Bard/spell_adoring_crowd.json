@@ -1,0 +1,22 @@
+{
+  "name": "Adoring Crowd",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Summon five 1/1 Fans.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_patron",
+      "token_patron",
+      "token_patron",
+      "token_patron",
+      "token_patron"
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

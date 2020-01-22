@@ -1,13 +1,16 @@
 {
-  "name": "Holy Giant",
+  "name": "Lightlash Terror",
   "baseManaCost": 12,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8,
-  "baseHp": 8,
+  "baseAttack": 4,
+  "baseHp": 10,
   "rarity": "EPIC",
-  "description": "Cost (1) less each time a friendly character is healed.",
-  "attributes": {},
+  "race": "ELEMENTAL",
+  "description": "Lifesteal. Costs (1) less each time a friendly character was healed this game.",
+  "attributes": {
+    "LIFESTEAL": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

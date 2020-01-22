@@ -18,7 +18,7 @@
       "target": "ENEMY_CHARACTERS",
       "value": 1,
       "howMany": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "RaceFilter",

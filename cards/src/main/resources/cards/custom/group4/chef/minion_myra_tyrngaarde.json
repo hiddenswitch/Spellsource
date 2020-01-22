@@ -17,7 +17,7 @@
         "operation": "SUBTRACT",
         "value1": 30,
         "value2": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK"
         }
       }

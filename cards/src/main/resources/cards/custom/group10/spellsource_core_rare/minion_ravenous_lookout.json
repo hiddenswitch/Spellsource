@@ -19,7 +19,7 @@
       "card": "token_hungry_pirate"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

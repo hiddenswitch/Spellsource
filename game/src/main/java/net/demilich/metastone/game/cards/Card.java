@@ -32,6 +32,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -149,8 +150,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	/**
 	 * Creates a hero entity from the text on the card. Works similarly to {@link #summon()}, except for heroes.
 	 *
-	 * @return A new hero instance.
 	 * @param player
+	 * @return A new hero instance.
 	 */
 	public Hero createHero(Player player) {
 		if (getCardType() != CardType.HERO) {
@@ -291,6 +292,20 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 	}
 
+	/**
+	 * Gets the card ID of the {@link CardDesc} that was originally used to create this instance.
+	 *
+	 * @return
+	 */
+	public String getOriginalCardId() {
+		return desc.getId();
+	}
+
+	/**
+	 * For a {@link CardType#CLASS}, specifies the default hero (champion).
+	 *
+	 * @return
+	 */
 	public String getHero() {
 		return getDesc().getHero();
 	}
@@ -533,7 +548,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	@Override
 	public String toString() {
-		return String.format("[%s '%s' %s Manacost:%d]", getCardType(), getName(), getReference(), getBaseManaCost());
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.append("name", getName())
+				.append("description", getDescription())
+				.append("cardId", getCardId())
+				.toString();
 	}
 
 	/**
@@ -629,6 +649,20 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	public TargetSelection getTargetSelection() {
 		return (TargetSelection) getAttributes().getOrDefault(Attribute.TARGET_SELECTION, getDesc().getTargetSelection() == null ? TargetSelection.NONE : getDesc().getTargetSelection());
+	}
+
+	/**
+	 * Determines if the card's target selection ought to be overrided, and does so via applying or removing {@link
+	 * Attribute#TARGET_SELECTION} on the card.
+	 */
+	public void processTargetSelectionOverride(GameContext context, Player player) {
+		if (getTargetSelectionCondition() != null && getTargetSelectionOverride() != null) {
+			if (getTargetSelectionCondition().create().isFulfilled(context, player, player, this)) {
+				getAttributes().put(Attribute.TARGET_SELECTION, getTargetSelectionOverride());
+			} else if (Objects.equals(getAttributes().get(Attribute.TARGET_SELECTION), getTargetSelectionOverride())) {
+				getAttributes().remove(Attribute.TARGET_SELECTION);
+			}
+		}
 	}
 
 	/**
@@ -878,11 +912,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		Player opponent = context.getOpponent(player);
 
 		if (getCondition() != null) {
-			if (!getCondition().create().isFulfilled(context, player, null, null)) {
+			if (!getCondition().create().isFulfilled(context, player, this, null)) {
 				return false;
 			}
 		}
 
+		processTargetSelectionOverride(context, player);
 		TargetSelection selection = hasChoices() || isHeroPower() ?
 				getTargetSelection() :
 				context.getLogic().processTargetModifiers(play()).getTargetRequirement();
@@ -1013,6 +1048,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				instance.addEnchantment(storedEnchantment.create());
 			}
 		}
+
+		instance.freezeDeathrattles();
 
 		return instance;
 	}
@@ -1250,5 +1287,26 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	public int[] getColor() {
 		return getDesc().getColor();
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return getDesc().targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return getDesc().targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		getDesc().setTargetSelectionCondition(targetSelectionCondition);
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		getDesc().setTargetSelectionOverride(targetSelectionOverride);
+	}
+
+	@Override
+	public void clearAddedDeathrattles() {
+		getDeathrattleEnchantments().clear();
 	}
 }

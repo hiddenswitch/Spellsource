@@ -1,10 +1,13 @@
 {
-  "name": "Death's Hand",
+  "name": "Void's Bargain",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
   "description": "<b>Pact:</b> After four cards are played, draw 3 cards.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "AddPactSpell",

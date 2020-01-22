@@ -1,0 +1,14 @@
+--add-modules
+    spellsource.testutils
+
+--add-reads
+    spellsource.net=spellsource.testutils
+
+--add-opens
+    spellsource.net/com.hiddenswitch.spellsource.net.tests.impl=vertx.unit
+
+--add-opens
+    spellsource.net/com.hiddenswitch.spellsource.net.tests=vertx.unit
+
+--add-opens
+    java.base/java.lang=co.paralleluniverse.quasar.core

@@ -6,12 +6,14 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,9 +31,9 @@ import java.util.List;
  * GameLogic#requestAction(Player, List)}, so they will always be some kind of "recursive" call inside a {@link
  * Behaviour}.
  */
-public class DiscoverAction extends GameAction {
+public class DiscoverAction extends GameAction implements HasCard {
 
-	private SpellDesc spell;
+	private final SpellDesc spell;
 	private Card card;
 
 	private static final String DISCOVERED_NAME = "discovered";
@@ -42,17 +44,13 @@ public class DiscoverAction extends GameAction {
 	 * @param spell A spell that takes {@link net.demilich.metastone.game.spells.desc.SpellArg#CARD} as an argument.
 	 * @return A DiscoverAction.
 	 */
-	public static DiscoverAction createDiscover(SpellDesc spell) {
+	public static DiscoverAction createDiscover(@NotNull SpellDesc spell) {
 		DiscoverAction discover = new DiscoverAction(spell);
 		discover.setTargetRequirement(TargetSelection.NONE);
 		return discover;
 	}
 
-	private DiscoverAction() {
-		setActionType(ActionType.DISCOVER);
-	}
-
-	protected DiscoverAction(SpellDesc spell) {
+	protected DiscoverAction(@NotNull SpellDesc spell) {
 		this.spell = spell;
 		setActionType(ActionType.DISCOVER);
 	}
@@ -127,6 +125,7 @@ public class DiscoverAction extends GameAction {
 		}
 	}
 
+	@NotNull
 	public SpellDesc getSpell() {
 		return spell;
 	}
@@ -161,5 +160,10 @@ public class DiscoverAction extends GameAction {
 				.appendSuper(super.hashCode())
 				.append(spell)
 				.build();
+	}
+
+	@Override
+	public Card getSourceCard() {
+		return card;
 	}
 }

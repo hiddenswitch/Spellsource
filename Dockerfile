@@ -51,18 +51,13 @@ ENV PATH="/opt/java/openjdk/bin:$PATH"
 RUN javac --version; \
     java --version;
 
-ENV SPELLSOURCE_VERSION=0.8.49
-ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}.jar
-
-RUN mkdir /etc/service/java
-COPY server.sh /etc/service/java/run
-RUN chmod +x /etc/service/java/run
-
-RUN mkdir /etc/service/jaegeragent
-COPY agent.sh /etc/service/jaegeragent/run
-RUN chmod +x /etc/service/jaegeragent/run
-
+ENV SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
+COPY ./net/build/libs/net-*-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar /data/net.jar
+COPY docker/root /
 COPY --from=jaegertracing/jaeger-agent:1.13 /go/bin/agent-linux /go/bin/agent-linux
+
+# Health check
+RUN java -cp /data/net.jar com.hiddenswitch.spellsource.net.applications.HealthCheck
 
 # Define working directory.
 WORKDIR /data

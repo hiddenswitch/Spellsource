@@ -1,0 +1,14 @@
+{
+  "name": "Lesser Oni",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

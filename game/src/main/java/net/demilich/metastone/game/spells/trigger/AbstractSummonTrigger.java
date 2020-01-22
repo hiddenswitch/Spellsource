@@ -10,7 +10,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.Zones;
 
 public abstract class AbstractSummonTrigger extends EventTrigger {
 
@@ -23,7 +22,7 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 		SummonEvent summonEvent = (SummonEvent) event;
 
 		String race = (String) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !Race.hasRace(summonEvent.getMinion().getRace(), race)) {
+		if (race != null && !Race.hasRace(event.getGameContext(), summonEvent.getMinion(), race)) {
 			return false;
 		}
 

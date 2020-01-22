@@ -1,6 +1,6 @@
 {
   "name": "Titanic Fanatic",
-  "baseManaCost": 8,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 7,

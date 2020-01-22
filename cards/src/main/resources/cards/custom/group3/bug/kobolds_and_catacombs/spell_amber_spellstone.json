@@ -1,5 +1,5 @@
 {
-  "name": "Amber Spellstone",
+  "name": "Amber Lunstone",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "AMBER",
@@ -31,6 +31,9 @@
       "cardType": "MINION",
       "manaCost": 6
     }
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": false,
   "set": "CUSTOM",

@@ -50,7 +50,7 @@
       "name": "Koi Stance",
       "description": "Restore 2 Health to your champion for each friendly minion.",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_MINIONS",
         "multiplier": 2
       }

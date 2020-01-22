@@ -1,11 +1,11 @@
 {
   "name": "Mandron",
-  "heroPower": "hero_power_spill_blood",
+  "heroPower": "hero_power_dark_rule",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Ability: Deal 2 damage to an enemy and your champion.",
+  "description": "Skill: Take 2 damage. Discover a follower.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

@@ -1,12 +1,12 @@
 {
-  "name": "Flashbulb Spider",
+  "name": "Wildwood Hypnotist",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "race": "MECH",
+  "race": "FAE",
   "description": "Enemies opposite this minion can't attack.",
   "aura": {
     "class": "AttributeAura",

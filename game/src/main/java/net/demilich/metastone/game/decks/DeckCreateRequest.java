@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.decks;
 
-import com.hiddenswitch.spellsource.util.CommunityDeckStringSerializer;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
@@ -9,10 +8,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,17 +82,6 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	 *                                  related to deck list parsing, not just one error.
 	 */
 	public static DeckCreateRequest fromDeckList(String deckList) throws DeckListParsingException {
-		if (!deckList.startsWith("#")
-				&& !deckList.contains("\n")
-				&& !deckList.startsWith("Name")
-				&& !deckList.startsWith("name")) {
-			try {
-				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, "Decklist (" + deckList + ")", deckList);
-			} catch (Throwable ex) {
-				throw new DeckListParsingException(Collections.singletonList(ex), deckList);
-			}
-		}
-
 		DeckCreateRequest request = new DeckCreateRequest()
 				.withCardIds(new ArrayList<>());
 		// Parse with a regex
@@ -225,6 +210,12 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public static DeckCreateRequest fromCardIds(String heroClass, String... cardIds) {
 		return new DeckCreateRequest()
 				.withCardIds(Arrays.asList(cardIds))
+				.withHeroClass(heroClass);
+	}
+
+	public static DeckCreateRequest fromCardIds(String heroClass, List<String> cardIds) {
+		return new DeckCreateRequest()
+				.withCardIds(cardIds)
 				.withHeroClass(heroClass);
 	}
 

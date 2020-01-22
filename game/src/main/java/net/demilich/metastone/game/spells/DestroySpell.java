@@ -20,9 +20,9 @@ import java.util.function.Predicate;
  * Destroys the {@code target} {@link Actor}.
  * <p>
  * Actors that are destroyed in this way do not get their hitpoints reduced to zero and are not dealt any damage. They
- * receive the {@link Attribute#DESTROYED} attribute, and during an {@link
- * GameLogic#endOfSequence()}, they are moved to the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD} "not
- * peacefully" (i.e., deathrattles will trigger).
+ * receive the {@link Attribute#DESTROYED} attribute, and during an {@link GameLogic#endOfSequence()}, they are moved to
+ * the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD} "not peacefully" (i.e., deathrattles will
+ * trigger).
  * <p>
  * For example, to destroy all frozen minions:
  * <pre>
@@ -37,8 +37,7 @@ import java.util.function.Predicate;
  *   }
  * </pre>
  *
- * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link
- * 		Attribute#DESTROYED} attribute.
+ * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link Attribute#DESTROYED} attribute.
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
  */
 public class DestroySpell extends Spell {
@@ -70,8 +69,14 @@ public class DestroySpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc);
+		if (target == null) {
+			throw new UnsupportedOperationException("must specify a target");
+		}
+		// Give the source a kill if the target isn't already destroyed
+		if (!target.isDestroyed()) {
+			source.modifyAttribute(Attribute.TOTAL_KILLS, 1);
+		}
 		context.getLogic().markAsDestroyed((Actor) target);
 	}
-
 }
 

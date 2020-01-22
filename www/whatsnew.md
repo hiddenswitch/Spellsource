@@ -1,16 +1,397 @@
 ---
 layout: page
-title: What's New
+title: Updates
 permalink: /whats-new/
 ---
 
-### 0.8.50-2.0.35 (In Progress)
+### 0.8.64-3.0.8 (January 19th, 2020)
+
+ - Introducing the Trader champion!
+ - Adding new Archaeologist cards!
+ - Bloodlord Goa now reads, Opener: Gain the aftermath, "Repeat all other friendly aftermaths."
+ - Minions can now have a maximum of 16 active aftermaths.
+ - Aftermaths on a minion that were not in its text are removed after they process.
+ - All cards that triggered aftermaths, like Vein Burster, now correctly trigger aftermaths that were added by effects other than the target minion's text.
+ - Haunted Berserker now correctly deals Toxic and Lifedrain damage (i.e. splash damage) with its effect.
+ - Playing cards randomly is not recursive.
+ - Bloodlord Goa now shows the source cards of cast Aftermaths. (1488)
+ - Mosshorn now interacts more favorably with Revelation, and also has Guard as it was originally supposed to. (1492)
+ - Auras that gave minions the same attribute now stack.
+ - Elven Woundsealer, Edlritchampion and Ushibasu the Vigilante no longer interact to cause an infinite loop.
+ - The Overlord's Skill Dark Rule now functions properly. (1494)
+ - Fixed a typo with Hired Berserker and made it properly summon a 2/3 with Guard. (1495)
+ - All for One's description now matches its actual effect. (1484)
+ - Silver Timekeeper now properly filters selectable targets. (1482)
+ - Brain Stun now properly says "Stunned" in its text. (1483)
+ - Slave-Trader Yorn is now "Yorn th Recruiter" and Fairy Whipmaster is now "Fairy Enforcer". (1487)
+ - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
+ - The 4th Ring Warden now correctly only affects your own minions. (1490)
+
+### 0.8.63-3.0.8 (January 14, 2020)
+
+ - New Oni Queen cards and updates. (since 0.8.62)
+ - Deft Familiar now correctly upgrades your hero power.
+ - Dark Rule now correctly selects from different Overlord tokens.
+ - Fifi Fizzlewarp no longer interacts specially with cards that also trigger at the start of the game.
+ - Zilch, God of Nothing correctly does not count permanents for its effect.
+
+### 0.8.62-3.0.8 (January 13, 2020)
+
+ - New Vampire Lord cards and updates. (1444)
+ - Wraith has been updated as the Overlord. (1445)
+ - Adding Steel Smash ("Deal damage equal to your Armor to a minion.") to Archaeologist. (1446)
+ - Champion of Death costs 7, up from 6. (1447)
+ - Changes to the Occultist champion: 20 cards rebalanced and the introduction of Ancient Blood and changes to Jikr, Occult One. (1450)
+ - Crystal Giant now costs 16, up from 12. (1459)
+ - Bonecrusher Brute now destroys Lun instead of discard cards. (1461)
+ - Rowdy Fire Goblin now has 0 Attack. (1461)
+ - Bluefist Trainer now costs 3. (1461)
+ - Redhide Saboteur is now an Opener instead of an Aftermath. (1461)
+ - Sluggish Brute is now "Dash. Has +2 Attack while damaged." (1461)
+ - Waygate Commander now reads: "Your Demons have Dash." (1461)
+ - General Hun'zho now affects hand as well as board. (1461)
+ - Rallying Speech now costs 1. (1461)
+
+### 0.8.61-3.0.8 (January 9, 2020)
+
+ - Faceless Nightmare, Totemic Split, Ichor Conversion, Felstalker, Shadow Satyr, Nightmare Portal, and Nemsy, Awakened Calamity have been moved out of the Spellsource set. Eternal Time Eater is now in the Timeweaver class. (server fix #1441)
+ - Fae Flyrider, Forest Get-Together, and Tall Tales are now correctly in the Spellsource format. (server fix #1460)
+ - Brawler Bushi now swaps the health and attack of a minion before it deals damage with the attack, not after. (server fix #1455)
+ - The friends list now renders wider. (client fix #23)
+ - Scaling on Android should be improved. Please report issues for your specific device.
+ - Negative attack and health values will now be clipped to zero. (server fix #404, client fix #10)
+ - Secrets and quests now render on the battlefield.
+ - The champion now shows when it is stunned. (server fix #368)
+ - Thousand Year Hatred now destroys all minions wherever they are, not just if they are on the battlefield. (server fix #1478)
+ - Yokai Fire now deals 4 damage only when a Demon is destroyed that turn. (server fix #1479)
+ - The AI has been reverted to a higher performance level and should no longer heal its opponent. However, there may be another underlying issue that is causing the AI to be confused about which point of view it should play from. (server fix #1477)
+ - Discards on the first turn now occur. (server fix #1470, server fix #1070)
+ - Other effects that rely on the turn when an event occurred now track correctly on the first turn. This includes roasting, discarding, the turn a card was played from the hand or the deck, the last turn a player played (for the purposes of extra turns), the turn a card was put into the hand, the turn a minion was summoned, and the turn a minion died.
+ - When playing Fifi, a card given Timebidding Magi's text will now reduce the cost of the card by the host card's base cost, i.e. down to 0. (server fix #1474)
+ - Formless cards are now correctly labeled in the card text as being Permanents. (server fix #1467)
+ - Permanents now no longer have an attack and HP value shown. (server fix #1467)
+ - The spacing between minions on the battlefield has been tightened.
+ - Weapons now have a default sprite shown.
+ - Doodles now refreshes your skill when she comes into play. (server fix #1465)
+ - Duplifairy now correctly references itself. (server fix #1458)
+ - Putting cards from the deck to the hand (as opposed to drawing them from the top of the deck) now correctly increments the count of cards the player has drawn.
+ - Gather in the Shadows now correctly reduces the cost of Undertide Terror. (server fix #1456)
+ - Terrified Tanuki is now a 1/3, down from 1/4. (server fix #1454)
+ - Insurgency Captain Krika now correctly activates every time its owner's hero attacks. (server fix #1442)
+ - Bluefist Trainer, Liver Eater, and Bogovey Traitor now have their appropriate tribes. (server fix #1442)
+
+### 0.8.60-3.0.7 (January 7, 2020)
+
+ - Lesser Old One, Doomed Expedition and Raise the Dead are now correctly in the collection. (server fix #1475)
+ - Phanton Advisor no longer has text for the purposes of Fifi Fizzlewarp. (server fix #1469, server fix #1466)
+ - Changes to the way games are kept alive via "ping pong" style messages should prevent old matches from lingering and corrupting the battlefield. (server fix #1473, server fix #1464)
+ - Hive Mind and other force attacks will no longer expend attacks despite not attacking if the target is already destroyed. (server fix #1472)
+ - Deepsea Duel no longer accepts targets. (server fix #1471)
+ - Buffeting Elemental is now an elemental. (server fix #1468)
+ - Stun is now correctly used on Spellsource cards. (server fix #1443)
+ - Gravekeeper Gallows no longer gives its aftermath to non-weapon cards. (server fix #1463)
+ - Many statuses are now visualized on the battlefield. Tooltips will be added soon.
+ - You can now attack as quickly as you can issue commands.
+ - Surveyor Skag no longer puts the same card copied multiple times at the bottom of your deck. 
+ - Destroying minions that go dormant during their summoning phase no longer crashes the game. For example, if Paven, Elemental of Surprise gained Miserable Conclusion (a destroy effect) on its Opener due to Alagard's Infusion and then destroys itself in the Opener, it correctly transforms into its permanent.
+
+### 0.8.59-3.0.6.2 (December 29th, 2019)
+
+Hotfixes to the client and server.
+
+ - The end game screen now appears correctly. (client fix #21)
+ - Commands now correctly issue on the first turn when the player starts. (client fix #22)
+ - Damage indicators now properly go away and their pacing is improved overall. (client fix #13, server fix #1457)
+ - Pacing has been improved, making it easier to notice card draws.
+ 
+##### Known Issues
+
+ - There is no power history.
+ - There are no status indicators for minions on the battlefield, like Dodge.
+ - The friends list incorrectly shows many duplicate entries for the same friends.
+ - Sometimes restoring health is rendered as a damage effect instead.
+ - Discards, roasts and draws are not visualized.
+ - The draft view is no longer accessible.
+ - All minions have the same temporary art.
+ - All champions have the same temporary art.
+ - When connected in multiple places, the latest connected client will not render the battlefield.
+ - On mobile devices, the game will not rotate to landscape if portrait orientation lock is enabled.
+ - The notch cutout obscures part of the end turn button on iPhone X devices when oriented landscape right.
+
+### 0.8.58-3.0.6.1 (December 29th, 2019)
+
+Hotfixes to the client and server.
+
+ - Some issues with selection have been addressed.
+ - Sometimes, games would linger and not end. The most common cause of this issue has been addressed.
+
+### 0.8.57-3.0.6 (December 28th, 2019)
+
+Improvements to the client and server.
+
+ - Icons throughout the interface are hot-fixed and cards in your deck can be deleted again. (client fix #8)
+ - When your opponent reconnects during your turn, you no longer lose the ability to take actions. (client fix #16, client fix #17, server fix #1464)
+ - The turn timer is visible again and should be more reliable.
+ - The cards database is now loaded in the background, preventing a common freeze at the beginning of loading. (server fix #1453)
+ - Openers and discovers no longer prompt you with a panel rendered off-screen, allowing you to correctly perform an action.
+ - When you complete a mulligan, your mulligan prompt correctly goes away; when your opponent completes a mulligan, you can again safely mulligan; spamming the mulligan button no longer crashes the game.
+
+### 0.8.56-3.0.5 (December 18th, 2019)
+
+Improvements to the client.
+
+ - The hand now expands to the width of the screen on desktops again.
+ - Better aspect ratio / zooming management on desktops.
+ - Some exceptions should occur less frequently.
+ - Remove unneeded assets
+ - Cards can now be cancelled in the click activation event patttern.
+ - On non-mobile devices, the hand tray no longer needs to open and close. Your cards will raise automatically when you hover over them.
+
+### 0.8.56-3.0.4 (December 15th, 2019)
+
+Android release.
+
+##### Known Issues:
+ 
+ - If you're upgrading from the previous version, the collection on macOS and Windows clients is missing cards.
+
+### 0.8.56-3.0.3 (December 14th, 2019)
+
+Maintenance iOS release.
+
+### 0.8.56-3.0.2 (December 12th, 2019)
+
+Fixes to the client.
+
+##### Usability Fixes:
+
+ - There are no longer lines between the tiles of the background grid. (client fix #7)
+ - The entire battlefield is visible on mobile, and portrait mode has been enabled.
+ - Tapping a targetable card to play it now works.
+
+### 0.8.56-3.0.1 (December 11th, 2019)
+
+Fixes to the client.
+
+##### Usability Fixes:
+
+ - Spells without targets are now easier to play and are easier to cancel. (client fix #6)
+ - Mulligan button spam should no longer cause a crash. (client fix #5)
+ - You can no longer drag non-targeted skills. (client fix #4)
+ - Skills should no longer cause glitches when played. (client fix #3)
+ - Double digit values are now visible on cards. (client fix #2)
+ - Cards in the collection show descriptions again. (client fix #1)
+ - The hand no longer obscures the skill when you are holding more than 8 cards.
+ - Summoning into the rightmost position is easier.
+ - Canceling a no-target spell or card is easier.
+ - The opponent's play card animations are disabled for now, the played card visualization should appear much more reliably.
+
+### 0.8.55-3.0.0 (December 10th, 2019)
+
+The Version 3 client is now live and quite buggy.
+
+##### Content Fixes:
+
+ - Obvious Ambush now reads, "Destroy a friendly minion. Summon a 3/3 Worm." (1437)
+
+### 0.8.54-2.0.38 (October 27th, 2019)
+
+Bug fixes.
+
+Giving yourself more than 10 Lun (but not Lun stones) during your turn now preserves that lun. This means you can use the Lunstone while you have 10 lun, and you will correctly have 11 lun. Other effects which spend all your lun will scale correctly to that 11th lun.
+
+Using a skill now spends its lun before the skill effects are evaluating, making skills behave like cards played from the hand.
+
+##### Content Fixes:
+
+ - Yagan Lifetaker now correctly buffs minions randomly. (1438)
+ - Flame Burp now deals the correct amount of damage, 1. (1436)
+ - Livid Zealot and other text copying effects now correctly copy triggers and auras onto actors already in play. (1435)
+ - Council Meeting is a spell now. (1434)
+ - Dinosoul now shows distinct Beasts. (1433)
+ - Bellringer Juriso now correctly triggers distinct aftermaths. (1433)
+ - General Hun'zho now only transforms other friendly minions. (1432)
+ - Thousand Year Hatred is now an Oni Queen card. (1431)
+ - Fae-wraith Caroline is now a Wraith card. (1431)
+ - Skill refreshing effects like Ghatanothoa's switching now work. (1430)
+ - Obsigon, Bounty Sorcerer now has Dash. (1426)
+ - Chokehold is now named correctly. (1425)
+ - Fassnu Oathbreaker now has the Dragon tag. (1424)
+ - Revelation should no longer break the game. (1423)
+ - Tainted Sight now only draws minions. (1422)
+ - Alpha Raptor now has a Beast tag. (1421)
+ - Conjure Club and Conjure Kanobo now correctly buff the champion. (1420)
+ - Spritely Scamp now correctly receives spells casted by the opponent during the opponent's last turn. (1419)
+ - Vohkrovanis now replaces the deck and draws correctly. (1418)
+ - Devour now correctly drains to the friendly champion. (1417)
+ - The Reiri minion token now correctly shows how much damage is left for it to activate. (1417)
+
+### 0.8.53-2.0.38 (October 25th, 2019)
+
+Bug fixes, balance changes and massive content additions.
+
+Please note that the client is currently in maintenance mode while the new build is being developed!
+
+##### Content Additions:
+
+ - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
+ - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
+ - Introducing the Exile class, the Oni-Queen class, and new Witch Doctor cards! (1414)
+ - New Storyteller cards. (1394)
+ - New Occultist cards. (1398)
+ - The Vampire Lord has been reworked. (1413)
+ - Bard has been reworked. (1416)
+ 
+##### Content Fixes:
+
+ - Imperfect Duplicate now correctly summons a minion based on the target's stats. (1404)
+ - Sneaky Kaeru now returns to the hand when its health is 1. (1401)
+ - Bloodmoon Ritual is now in the collection. (1399)
+ - Quick Chant is now in the collection. (1400)
+ - Secrets that fire missiles are now affected by spellpower. (1402)
+ - Stubborn Stegodon is now a Beast. (1415)
+ - Champion of Death now correctly destroys minions.
+ - Catta the Merciless, Terrain Devourer, Ravenous Lookout, Broodmother Narvina, Sylas Fate's Hand, Northot Necromaster and Eternal Steed are no longer collectible due to infinite loop interactions.
+ - Effects which target friendly cards now also target Skills if the effects did not already.
+ - Effects which play cards randomly may now play cards of the same base card randomly. However, during the invocation of a specific card's random play effect, it will never be able to play itself randomly recursively.
+ - One on One no longer causes a crash if it is randomly played in such a way to select an enemy minion when it's the only minion on the board.
+ - Some effects which resurrect or discover destroyed minions now correctly only consider minions in cases that they did not before.
+ - Fleeting Firebug no longer interacts with War Trebuchet to cause an infinite loop. Fleeting Firebug now summons at the end of its owner's turn.
+ - Two Commander Gareths on the battlefield no longer cause an infinite loop. It now reads, "At most once."
+ - Storyteller buffs and nerfs. (1394)
+ - Unnatural Restoration now restores 4 Health. (1378)
+ - Cryptlady Zara is no longer collectible. (1373)
+ - Anobii, the Trapper is now known as Crypto, the Trapper. (1373)
+ - Locust Swarm now costs 8. (1373)
+ - Tiger Ant now costs 11. (1373)
+ - Harden now gives +4 Health instead of +4/+4 and costs 4. (1373)
+ - Reclamation now reads, "Gain 0 Armor. (Increases for each Beast in your graveyard)" (1373)
+ - The Prophet now reads, "Opener: Discover and summon two minions that died this game." (1373)
+ - Lil Wormy is now a 1/3 Beast. (1373)
+ - Nanny now reads, "At the end of your turn, give a random minion in your hand +1/+1." (1373)
+ - Dream of Kingship now reads, "Discover a Beast, a Dragon and a Fae. Summon them all." (1373)
+ - Other changes to Hive Queen descriptions. (1373) 
+ - Archaeologist has several reworked cards. (1385)
+ - Wicked Smite is removed for a new basic minion, "Peeling Zombie." (1388)
+ - Blood Golem is changed to be a 5 mana 4/5 so that it can be played more flexibly. (1388)
+ - Large Spiderling is buffed to now deal 4 damage to the friendly champion instead of 5. (1388)
+ - Ancient Curse is buffed to cost 3 mana instead of 4 mana,. (1388)
+ - Bone Shield now only does 1 damage to a friendly minion. (1388)
+ - Some neutrals have been removed. (1403)
+ - Some Sands of Time neutrals have been buffed and nerfed. (1403)
+ - Archivist Jerrard now looks for a deck in your collection called The Archive. (1403)
+ - Rektan, Warrior of the Wild now reads, "Opener: Your champion has +1 Attack for the rest of the game." (1403)
+ - Stonecold Sergeant now has 5 Health. (1407)
+ - Stormwind Commander now has 4 Health. (1407)
+ - Forces Unite now costs 6. (1407)
+
+### 0.8.52-2.0.38 (September 20th, 2019)
+
+Thanks to @Logovaz for a great contribution to Witch Doctor.
+
+Bug fixes.
+
+##### Content Additions:
+
+ - Quick Chant - 1 Lun Basic Spell "Restore a friendly minion to full Health. Give it +3 Health."
+ - Jungle Survivalist - 2/1/2 Common Minion "Opener: Discover a spell."
+ - Cemetary Party - 4 Lun Rare Spell "Resurrect a friendly Aftermath minion. Add a copy of it to your hand."
+ - Story Collector - 3/1/5 Epic Minion "Opener: If you cast a spell this turn, add two random Witch Doctor spells to your hand."
+
+##### Content Fixes:
+
+ - Lifedrain now does not apply if the source shares an owner with the target, the source is a spell, and the target is a hero. In other words, "Take X damage" effects no longer are influenced by Lifedrain.
+ - Auto-Cannibalism can now be cast with less than 16 health. (1383)
+ - Vermancer is now called Hive Queen (1397)
+ - Tournament Trial can now target any minion. (1392)
+ - Mollusk Meister now reads, "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health." (1391)
+ - Death's Messenger is no longer collectible. (1390)
+ - The Mercenary champion and class are no longer collectible. (1389)
+ - Ushibasu is now a 7/4/7 from 7/5/8.
+ - Split Personality, Devilry Flare, and Sliver of Silver all now cost 3 Lun from 2 Lun.
+ - Shanga's Spirit Brew now costs 3 Lun from 4 Lun.
+ - Chant Leader and Hexcrazed Vessel both now cost 5 Lun from 6 Lun.
+ - Titanic Fanatic now costs 7 Lun from 8 Lun.
+ - High Shaman Mawliki now costs 9 Lun from 10 Lun.
+ - Gaitha the Protector is now a 7/4/8 from 7/4/6.
+ - Entranced Dancer is now a 3/4/3 from 3/4/2.
+ - Bloodseeker is now a 2/2/3 from 2/2/2.
+ - Ritual Shaman is now "Opener: Play a Secret from your deck." from "Opener: If you played a spell this turn, play a Secret from your deck."
+ - Legendary hero card Puppeteer Senzaku and Basic minion Spiritcaller have been removed.
+ - Ptero Max has fixed text "Your Beasts gain an extra attack after attacking and killing minions." from "Your Beasts can attack again after they attack and kill a minion." No change in interaction.
+
+### 0.8.51-2.0.38 (September 2nd, 2019)
+
+Tribes are now visible on cards again. (1358)
+
+### 0.8.51-2.0.37 (September 1st, 2019)
+
+Content additions and bug fixes.
+
+Thanks @Bromora for the contribution to Wraith!
+
+##### Usability Fixes:
+
+ - Deleting a deck no longer glitches out the client on non-Windows platforms. (1372)
+ - Legibility of buffs has been improved, showing a darkened rectangle when a buff is applied. Buffs will be visualized differently in the new client. (1367)
+
+##### Content Additions:
+
+ - Wraith Verdant Dreams cards. Thanks @Bromora!
+
+##### Content Fixes:
+
+ - Some Fae cards have been renamed. (1362)
+ - Wither now reads: "Wither (X): Whenever this hits a minion, its attack is reduced by X next time it could attack."
+ - Changing skills with skills, like Ghanathoa's effects, no longer cause a draw. (1370)
+ - Bioweaponize now works on minions that have not previously had a Wither effect. (1369)
+ - Witherdrake's Opener now correctly applies Wither. (1368)
+ - A variety of other incorrectly themed cards have been renamed and their descriptions updated. (1361)
+ - Defensive Position's description is no longer missing a space. (1360)
+ - Mandron now correctly specifies Skill. (1359)
+ - Servant Wasp and Dark Order Knight are no longer collectible since their mechanic is deprecated. (1361)
+ - Wicked Smite now deals 4 damage to both champions.
+ - Recipe for Power now only gives an armor bonus. (1355)
+ - Treasure Trove now counts the owner's cards correctly.
+ - Terrain Devourer no longer interacts with Undying Tentacles in a way that causes a crash.
+ - Plague of Flesh and other negative-HP buffs now reduce the health of wounded minions. The behaviour for aura-based buffs has not changed. (1354)
+ - Spells that are not castable when the board is full, like many summoning spells, no longer incorrectly count permanents (regression).
+ - Shuffling Unearthed Horrors while Xitalu is in play will now correctly shuffle in buffed cards. Additionally, other shuffle trigger effects now have synergy with Xitalu in the expected way. (1338)
+ - Jae'kilden now references itself in its description correctly. (1374)
+
+### 0.8.50-2.0.36 (August 21st, 2019)
+
+Quality of life improvements for the client.
+
+##### Usability Fixes:
+
+ - It should be easier to drag your own hero for a physical attack. Be careful not to cast a spell on yourself!
+ - Memory usage should be lower on web.
+ - Deck lists now show the card counts again. (1352)
+ - Popups are less jarring and more legible.
+ - Text is more legible.
+ - The appearance of lun, attack and health values is more consistent.
+
+### 0.8.50-2.0.35 (August 20th, 2019)
 
 Bug fixes and new cards.
 
 ##### Content Additions:
 
  - New cards for Otherworlder (thanks @AnterogradeNil!)
+ 
+##### Content Fixes:
+
+ - Flamerunner now reads "At the end of your turn, if you restored Health this turn, summon a 2/2  Elemental." (1323)
+ - The Glutton now correctly eats enemy minions. (1351)
+ - Effects which count minions no longer count permanents.
+ - Conditions that change when evaluated from a different player's point of view work more reliably. 
+ - Conditions that count the number of cards in your hand, graveyard or battlefield work more reliably.
+ - Bloodshard Elemental no longer has Guard. (1349)
+ - Plague of Flesh no longer gives 0-Attack minions 1 Attack. (1348) 
+ - Broodmother Narvina no longer interacts with Terrain Devourer to cause an infinite loop when the board is full.
+ - Pacts no longer appear as playable in the hand when a pact of the same source card is already in play. (1347)
+ - Lord Henryk now deals 10 damage, costs (10) and is an 8/8. (1345)
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
 
@@ -233,85 +614,3 @@ For Python users, the build is now compatible with Java 11.
 Fixing issues with cards not being found or detected after their IDs were changed.
 
 Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
-
-### 0.8.34-2.0.31 (June 30th, 2019)
-
-Bug fixes and content additions.
-
-The 0.8 series will be the last to contain content external from Spellsource.
-
-##### Content Additions:
-
- - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
- - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
- - Thanks to contributions from @Muhframos, Occultist updates! (1198)
-
-##### Content Fixes:
-
- - Yig's Mastermind and other cards that interact with deck cards would incorrectly cast pre-transformation versions of those cards. It no longer crashes the game.
- - Mari Anette and Irena, Dragon Knight no longer interact in a way that crashes the game.
- - Fairy Fixpicker no longer causes crashes when it attempts to replace cards that are immediately roasted or discarded.
- - Failed Experiment now has the correct stats. (1128)
- - Firegate Commander now provides a Dash aura instead of a Blitz aura. (1131)
- - Kahl of the Deep is now a 3/5, cost 5, that draws 3 cards for the opponent instead of 8. (1182)
- - Yig's Mastermind cost increased from 8 to 10. (1184)
- - Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
- - Stealing a card when a deck is full no longer causes a crash.
- - Wavering Diabolist correctly indicates that it does not have Guard. (1203)
- - Timewalker Strider now reads "After this minion attacks, it gains +2 Attack." (1201)
- - Energetic Mentee now specifies that it's first abilitiy is an opener. (1202)
- - Fireguard Bulwark now properly has Guard. (1200)
-
-### Basic Rules
-
-This is a summary of the basic rules of Spellsource.
-
-#### Gameplay
-
-Players combat each other using cards in a one-versus-one matchup until one of the player's champions is destroyed.
-
-Each player starts the match by choosing which cards to discard from their initial hand (the Mulligan). Then, one of the two players takes his first turn, while the other receives a bonus Mana card called the coin.
-
-At the start of each turn, players gain 1 mana, up to 10. This mana is spent playing cards.
-
-Some cards can put minions on the board. Minions have an attack value (the lower left number) and a health (the lower right number). At the start of the next turn, minions can attack opposing minions or the opposing hero, dealing and taking damage. Minions whose health goes below zero are destroyed.
-
-Some minions and spells accept targets when they are played. For a minion, this is typically part of an "Opener," or action played from the hand.
-
-Text comes "into play" as soon as both players see it. This is typically on the battlefield, or the two rows (yours and your opponent's) of minions, the champions, the weapons they have equipped, and the Skill.
-
-The weapon is a bonus item that grants your champion the ability to attack.
-
-The Skill is a spell that is playable once per turn specific to your champion.
-
-#### Keywords:
-
- - Aftermath: Occurs whenever a minion dies (horribly) on the battlefield.
- - Armor: Instead of losing health, lose this instead.
- - Blitz: This can attack enemies even if it is exhausted.
- - Champion: Your player character. When this dies, you lose the game.
- - Dash: This can attack enemy minions even if it is exhausted.
- - Deflect: The first time this minion takes damage, deal it to its Champion instead.
- - Dodge: The first time this minion takes damage, it takes zero instead.
- - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
- - Elusive: Cannot be targeted by spells or skills.
- - Enchantment: Occurs as long as the target this is attached to is in play.
- - Exhausted: During the turn it comes into play or changes sides, this minion is exhausted and cannot attack this turn. It loses exhaustion at the start of next turn.
- - Extra Strike: A character can attack twice.
- - Guard: This must be destroyed before minions can attack its champion.
- - Hidden: This minion cannot be targeted by enemies until it deals damage.
- - Litedrain: Restores health for each damage dealt.
- - Opener: Occurs whenever the card is played from the hand.
- - Quad Strike: A character can attack four times.
- - Quick Draw: This happens whenever a card is drawn.
- - Reservoir (X): Occurs when your deck is larger than this amount.
- - Roast: Remove a card from the top of your deck.
- - Sacrifice: Occurs whenever a friendly minion dies.
- - Silence: The text on this card and any enchantments added later are no longer in play.
- - Skill: A spell your Champion can play every turn.
- - Spellpower (X): Your Spells deal this much more damage.
- - Stunned: A character that cannot attack this turn and the next.
- - Supremacy: Occurs whenever this minion attacks and kills another.
- - Surge: Occurs when a card is played from the hand on the same turn it was added to the hand.
- - Toxic: This kills minions it damages.
- - Wither (X): This reduces its target's health by this amount, and restores the health at the start of the caster's turn.

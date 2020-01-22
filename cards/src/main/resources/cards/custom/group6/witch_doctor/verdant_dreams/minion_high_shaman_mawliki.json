@@ -1,6 +1,6 @@
 {
   "name": "High Shaman Mawliki",
-  "baseManaCost": 10,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 9,

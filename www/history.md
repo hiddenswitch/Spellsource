@@ -4,6 +4,34 @@ title: History
 permalink: /history/
 ---
 
+### 0.8.34-2.0.31 (June 30th, 2019)
+
+Bug fixes and content additions.
+
+The 0.8 series will be the last to contain content external from Spellsource.
+
+##### Content Additions:
+
+ - Thanks to contributions from @Grand, there are now Monk class updates! (1189)
+ - Thanks to contributions from @Logovaz, there are now Senzaku updates! (1197)
+ - Thanks to contributions from @Muhframos, Occultist updates! (1198)
+
+##### Content Fixes:
+
+ - Yig's Mastermind and other cards that interact with deck cards would incorrectly cast pre-transformation versions of those cards. It no longer crashes the game.
+ - Mari Anette and Irena, Dragon Knight no longer interact in a way that crashes the game.
+ - Fairy Fixpicker no longer causes crashes when it attempts to replace cards that are immediately roasted or discarded.
+ - Failed Experiment now has the correct stats. (1128)
+ - Firegate Commander now provides a Dash aura instead of a Blitz aura. (1131)
+ - Kahl of the Deep is now a 3/5, cost 5, that draws 3 cards for the opponent instead of 8. (1182)
+ - Yig's Mastermind cost increased from 8 to 10. (1184)
+ - Ahn'quiraj Portal renamed to Ancient Waygate and reads "Deal 2 damage to all minions. Summon a random 2-Cost minion." (1185)
+ - Stealing a card when a deck is full no longer causes a crash.
+ - Wavering Diabolist correctly indicates that it does not have Guard. (1203)
+ - Timewalker Strider now reads "After this minion attacks, it gains +2 Attack." (1201)
+ - Energetic Mentee now specifies that it's first abilitiy is an opener. (1202)
+ - Fireguard Bulwark now properly has Guard. (1200)
+ 
 ### 0.8.33-2.0.31 (June 18th, 2019)
 
 Bug fixes.

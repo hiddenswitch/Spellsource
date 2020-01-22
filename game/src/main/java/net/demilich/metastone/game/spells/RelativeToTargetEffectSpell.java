@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,11 +49,11 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 		}
 
 		if (primary != null) {
-			context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
+			SpellUtils.castChildSpell(context, player, primary, source, target);
 		}
 
 		for (Entity adjacent : adjacentMinions) {
-			context.getLogic().castSpell(player.getId(), secondary, sourceReference, adjacent.getReference(), true);
+			SpellUtils.castChildSpell(context, player, secondary, source, adjacent);
 		}
 	}
 
