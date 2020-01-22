@@ -4,6 +4,13 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+ - Default Occultist decks have been updated! (1500)
+    - Cultist's Vision: "Play minions with big stats/aftermaths and copy them."
+    - The Grandmage's Grandcult: "Generate cards/spells and your spells are more powerful."
+    - The Imperial Ritual: "Combo deck which needs you to have a setup turn, playing Imperial Soul and Grasp of God, then on the next turn, copying imperial soul with Spawn of Evil, the second one being affected by Forgotten Science, then you play Freying Familiar, and then you cast Doom Project for the win."
+
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
@@ -26,11 +33,7 @@ permalink: /whats-new/
  - Slave-Trader Yorn is now "Yorn th Recruiter" and Fairy Whipmaster is now "Fairy Enforcer". (1487)
  - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
  - The 4th Ring Warden now correctly only affects your own minions. (1490)
- - Default Occultist decks have been updated! (1500)
-    - Cultist's Vision: "Play minions with big stats/aftermaths and copy them."
-    - The Grandmage's Grandcult: "Generate cards/spells and your spells are more powerful."
-    - The Imperial Ritual: "Combo deck which needs you to have a setup turn, playing Imperial Soul and Grasp of God, then on the next turn, copying imperial soul with Spawn of Evil, the second one being affected by Forgotten Science, then you play Freying Familiar, and then you cast Doom Project for the win."
-
+ 
 ### 0.8.63-3.0.8 (January 14, 2020)
 
  - New Oni Queen cards and updates. (since 0.8.62)
