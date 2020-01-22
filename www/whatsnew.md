@@ -4,6 +4,10 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+ - Ruffian Shiro now properly only buffs Demons in your hand. (1496)
+
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
@@ -26,7 +30,6 @@ permalink: /whats-new/
  - Slave-Trader Yorn is now "Yorn th Recruiter" and Fairy Whipmaster is now "Fairy Enforcer". (1487)
  - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
  - The 4th Ring Warden now correctly only affects your own minions. (1490)
- - Ruffian Shiro now properly only buffs Demons in your hand. (1496)
 
 ### 0.8.63-3.0.8 (January 14, 2020)
 
