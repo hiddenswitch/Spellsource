@@ -4,6 +4,9 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+ - Lost City's Guardian now summons the actual minion you chose. (1405)
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
