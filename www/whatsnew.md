@@ -4,6 +4,9 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+ - Mantis Lady no longer mistakenly treats certain tokens as Commons. (865)
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
