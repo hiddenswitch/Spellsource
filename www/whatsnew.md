@@ -4,6 +4,9 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+ - Necronomicon now correctly inflicts 3 damage instead of 2. (1503)
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
