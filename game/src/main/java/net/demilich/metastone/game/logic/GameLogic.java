@@ -3692,6 +3692,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			BattlecryAction battlecry = battlecries.get(i).toBattlecryAction();
 			battlecry.setSourceReference(actor.getReference());
 			Player player = context.getPlayer(playerId);
+			if (battlecry.shouldOverrideTargetSelection(context, player, actor)) {
+				battlecry.setTargetRequirement(battlecry.getTargetSelectionOverride());
+			}
 			processTargetModifiers(battlecry);
 			if (!battlecry.canBeExecuted(context, player)) {
 				battlecryActions[i] = BattlecryAction.NONE;
