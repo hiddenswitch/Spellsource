@@ -20,7 +20,7 @@
         "description": "Decks must have 30 cards",
         "class": "ComparisonCondition",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK"
         },
         "operation": "EQUAL",
@@ -57,7 +57,7 @@
         "description": "Pauper Decks can't have Rare cards",
         "class": "ComparisonCondition",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK",
           "filter": {
             "class": "CardFilter",
@@ -71,7 +71,7 @@
         "description": "Pauper Decks can't have Epic cards",
         "class": "ComparisonCondition",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK",
           "filter": {
             "class": "CardFilter",
@@ -85,7 +85,7 @@
         "description": "Pauper Decks can't have Legendary cards",
         "class": "ComparisonCondition",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK",
           "filter": {
             "class": "CardFilter",

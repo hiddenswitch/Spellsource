@@ -20,7 +20,7 @@
         "description": "Decks must have 30 cards",
         "class": "ComparisonCondition",
         "value1": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_DECK"
         },
         "operation": "EQUAL",
