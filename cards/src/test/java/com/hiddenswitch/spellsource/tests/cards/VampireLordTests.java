@@ -376,6 +376,20 @@ public class VampireLordTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testDreamOfDeath() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_neutral_test");
+			playMinionCard(context, player, "minion_neutral_test");
+			playMinionCard(context, player, "minion_neutral_test");
+			playMinionCard(context, player, "minion_neutral_test");
+			playMinionCard(context, player, "minion_neutral_test");
+
+			playCard(context, player, "spell_dream_of_death");
+
+			assertEquals(player.getHero().getHp(), 11);
+		});
+	}
 }
 
 

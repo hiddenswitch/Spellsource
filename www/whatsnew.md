@@ -5,7 +5,12 @@ permalink: /whats-new/
 ---
 
 ### Upcoming Changes
+
  - Necronomicon now correctly inflicts 3 damage instead of 2. (1503)
+ - Lost City's Guardian now summons the actual minion you chose. (1405)
+ - Mantis Lady no longer mistakenly treats certain tokens as Commons. (865)
+ - Ruffian Shiro now properly only buffs Demons in your hand. (1496)
+ - Indoctrination and Dream of Death both now properly Drain health. (1501)
 
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
