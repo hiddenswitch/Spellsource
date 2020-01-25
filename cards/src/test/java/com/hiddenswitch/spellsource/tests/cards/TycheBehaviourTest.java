@@ -7,7 +7,6 @@ import net.demilich.metastone.game.behaviour.TycheBehaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
 import org.junit.jupiter.api.Disabled;
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,10 +29,9 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	@Test
 	@Disabled
 	public void testTycheBehaviour() {
-		SuspendableGameContext context = new SuspendableGameContext(Deck.randomDeck(), Deck.randomDeck());
+		GameContext context = GameContext.fromDecks(Arrays.asList(Deck.randomDeck(), Deck.randomDeck()));
+		context.init();
 		context.play();
-		context.setMulligan(context.getActivePlayerId(), Collections.emptyList());
-		context.setMulligan(context.getNonActivePlayerId(), Collections.emptyList());
 		TycheBehaviour behaviour1 = new TycheBehaviour();
 		TycheBehaviour behaviour2 = new TycheBehaviour();
 		int i = 10;
