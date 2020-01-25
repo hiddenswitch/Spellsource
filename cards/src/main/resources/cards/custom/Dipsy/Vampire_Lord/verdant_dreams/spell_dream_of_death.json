@@ -16,7 +16,11 @@
       },
       {
         "class": "DrainSpell",
-        "target": "ALL_MINIONS"
+        "target": "ALL_MINIONS",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
       }
     ]
   },
