@@ -5,6 +5,7 @@ permalink: /whats-new/
 ---
 
 ### Upcoming Changes
+ - Ruffian Shiro now properly only buffs Demons in your hand. (1496)
  - Indoctrination and Dream of Death both now properly Drain health. (1501)
 
 ### 0.8.64-3.0.8 (January 19th, 2020)
