@@ -22,6 +22,12 @@ permalink: /whats-new/
     - The Imperial Ritual: "Combo deck which needs you to have a setup turn, playing Imperial Soul and Grasp of God, then on the next turn, copying imperial soul with Spawn of Evil, the second one being affected by Forgotten Science, then you play Freying Familiar, and then you cast Doom Project for the win."
 
 
+### Upcoming Changes
+ - New Archaeologist Decks! (1499)
+    - Elemental Arch
+    - Discover Archaeologist
+    - Armor-Hulk's Reign
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
 
  - Introducing the Trader champion!
