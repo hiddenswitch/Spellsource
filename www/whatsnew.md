@@ -3,6 +3,9 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
+### Upcoming Changes
+ - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
+
 
 ### Upcoming Changes
 
