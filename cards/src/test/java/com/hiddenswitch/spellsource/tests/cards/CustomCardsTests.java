@@ -4862,4 +4862,19 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getBaseDurability() + 1);
 		}));
 	}
+
+	@Test
+	public void testChefStitchesInteractions() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_chef_stitches");
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "minion_neutral_test");
+				shuffleToDeck(context, player, "minion_neutral_test");
+			}
+			playCard(context, player, "minion_burping_whelp");
+			playCard(context, player, "minion_food_critic");
+			assertEquals(player.getDeck().size(), 9); //doesn't cause a loop that would destroy your whole deck
+			assertEquals(opponent.getHero().getHp(), 29); //overdrawing does still counts as roasting for other purposes
+		});
+	}
 }
