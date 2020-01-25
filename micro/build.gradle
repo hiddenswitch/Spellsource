@@ -41,7 +41,7 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-graal"
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
-    compileOnly "org.graalvm.nativeimage:svm:19.3.0"
+    compileOnly "org.graalvm.nativeimage:svm:19.3.+"
     implementation platform("io.micronaut:micronaut-bom:1.3.+")
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-inject"
