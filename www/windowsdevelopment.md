@@ -392,7 +392,7 @@ Use these to help you debug rare interactions or errors you didn't test in your 
  4. Start the server inside the IntelliJ editor.
     1. Navigate to the `LocalClustered.java` file.
     2. Click the play button in the editor's left gutter to execute it. Be patient.
-    3. Once you observe `***** SERVER IS READY. START THE CLIENT. *****`, navigate to the next step.
+    3. Once you observe `main: Broadcaster deployed`, navigate to the next step.
  5. Start a client to connect to the local server.
     1. Download and install the [Hidden Switch Launcher](http://go.hiddenswitch.com/win) if you haven't already.
     2. Launch the game.
