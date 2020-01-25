@@ -447,7 +447,7 @@ public class DiscoverSpell extends Spell {
 		}
 
 		// Execute the discovery (the target is the both the output and the discovery)
-		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, Arrays.asList(cardsInDiscover), discoverActions);
+		DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, Arrays.asList(cardsInDiscover), discoverActions);
 		SpellUtils.castChildSpell(context, player, chosenAction.getSpell(), source, target);
 		// Remove the attribute that was set on all the cards
 		if (attribute != null) {
