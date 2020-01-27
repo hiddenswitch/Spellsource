@@ -71,4 +71,23 @@ public class OniQueenTests extends TestBase {
 			assertEquals(Zones.HAND, shouldNotRemove2.getZone());
 		}, HeroClass.BLUEGREY, HeroClass.BLUEGREY);
 	}
+
+	@Test
+	public void testRuffianShiro() {
+		for (int i = 0; i < 10; i++) {
+			runGym((context, player, opponent) -> {
+				Minion boardDemon = playMinionCard(context, player, "minion_demon_test");
+				Card handDemon = receiveCard(context, player, "minion_demon_test");
+
+				receiveCard(context, player, "minion_neutral_test");
+				receiveCard(context, player, "minion_neutral_test");
+				receiveCard(context, player, "minion_neutral_test");
+				receiveCard(context, player, "minion_neutral_test");
+
+				playCard(context, player, "minion_ruffian_shiro", boardDemon);
+
+				assertEquals(handDemon.getBonusAttack(), 2);
+			});
+		}
+	}
 }
