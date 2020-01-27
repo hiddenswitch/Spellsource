@@ -3,7 +3,7 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
-### 0.8.65-3.0.9 (January 24th, 2020)
+### 0.8.65-3.0.8 (January 24th, 2020)
 
  - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
  - Necronomicon now correctly inflicts 3 damage instead of 2. (1503)
