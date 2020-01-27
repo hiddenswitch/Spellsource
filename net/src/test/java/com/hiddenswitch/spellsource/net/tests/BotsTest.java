@@ -12,10 +12,8 @@ import com.hiddenswitch.spellsource.net.models.RequestActionResponse;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -24,7 +22,6 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
@@ -69,25 +66,6 @@ public class BotsTest extends SpellsourceTestBase {
 			}
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 			assertTrue(context1.getTurn() > startTurn);
-		}, context);
-	}
-
-	@Test
-	public void testFiberBehaviour(TestContext context) {
-		sync(() -> {
-			GameContext gc = GameContext.fromTwoRandomDecks();
-			FiberBehaviour fb1 = new FiberBehaviour();
-			FiberBehaviour fb2 = new FiberBehaviour();
-			gc.setBehaviour(0, fb1);
-			gc.setBehaviour(1, fb2);
-			gc.play(true);
-			while (!fb1.getMulliganCards().isEmpty() || !fb2.getMulliganCards().isEmpty()) {
-				fb1.setMulligan(Collections.emptyList());
-				fb2.setMulligan(Collections.emptyList());
-			}
-			FiberBehaviour active = (FiberBehaviour) gc.getBehaviours().get(gc.getActivePlayerId());
-			assertTrue(!active.getValidActions().isEmpty());
-			active.setAction(active.getValidActions().get(0));
 		}, context);
 	}
 

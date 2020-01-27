@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -35,6 +36,7 @@ public final class OneTurnCostModifier extends CardCostModifier {
 	}
 
 	@Override
+	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
 		if (event.getEventType() == turnStartTrigger.interestedIn() && turnStartTrigger.queues(event, host)) {
