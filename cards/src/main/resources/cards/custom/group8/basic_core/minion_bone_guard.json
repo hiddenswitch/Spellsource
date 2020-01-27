@@ -3,17 +3,18 @@
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 5,
-  "baseHp": 3,
+  "baseAttack": 3,
+  "baseHp": 5,
   "rarity": "FREE",
-  "description": "Opener: Draw a card.",
+  "description": "Guard. Opener: Draw a card.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell"
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
