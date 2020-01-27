@@ -2,7 +2,7 @@
   "name": "Echolocation",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "NEUTRAL",
+  "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Choose a target. Your Blind Acolytes attack it.",
   "targetSelection": "ANY",
