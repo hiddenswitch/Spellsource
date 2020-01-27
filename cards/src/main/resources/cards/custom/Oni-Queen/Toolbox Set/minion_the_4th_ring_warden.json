@@ -28,7 +28,8 @@
             "class": "SummonSpell",
             "card": "token_lesser_oni"
           }
-        }
+        },
+        "exclusive": true #Check changes description
       }
     }
   },
