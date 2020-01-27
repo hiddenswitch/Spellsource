@@ -1,5 +1,5 @@
 #FROM oracle/graalvm-ce:19.3.0-java8 as graalvm
-FROM oracle/graalvm-ce:19.3.0-java11 as graalvm
+FROM oracle/graalvm-ce:19.3.1-java11 as graalvm
 RUN gu install native-image
 COPY . /home/app/micro
 WORKDIR /home/app/micro

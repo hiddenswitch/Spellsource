@@ -12,9 +12,17 @@
     "target": "OTHER_FRIENDLY_MINIONS",
     "attackBonus": 1,
     "filter": {
-      "class": "CardFilter",
-      "rarity": "COMMON",
-      "cardType": "MINION"
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "rarity": "COMMON",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CollectibleFilter"
+        }
+      ]
     },
     "hpBonus": 0
   },
