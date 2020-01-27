@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -52,6 +53,7 @@ public final class ToggleCostModifier extends CardCostModifier {
 	}
 
 	@Override
+	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
 		if (toggleOnTrigger.interestedIn() == event.getEventType() && toggleOnTrigger.queues(event, host)) {
