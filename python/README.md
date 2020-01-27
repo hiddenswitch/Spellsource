@@ -4,8 +4,10 @@ On **macOS**, from the root `Spellsource-Server` directory:
 
 ```shell script
 # install basic dependencies
-brew install python@3 mongod
+brew install python@3
 # the following lines change CONSTANTLY so always search for how to install java
+brew tap mongodb/brew
+brew install mongodb-community
 brew tap adoptopenjdk/openjdk # assuming this tap was not already added
 brew cask install adoptopenjdk11 # this command *may* need a password to succeed
 ```
