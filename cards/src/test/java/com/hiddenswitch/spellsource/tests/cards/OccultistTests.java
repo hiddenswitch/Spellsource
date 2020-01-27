@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import co.paralleluniverse.common.util.Objects;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -75,5 +76,21 @@ public class OccultistTests extends TestBase {
 			player.setMana(GameLogic.MAX_MANA);
 			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equal(ga.getSourceReference(), player.getHeroPowerZone().get(0).getReference())));
 		});
+	}
+
+	@Test
+	public void testLostCitysGuardian() {
+		for (int i = 0; i < 5; i++) {
+			runGym((context, player, opponent) -> {
+				shuffleToDeck(context, player, "minion_neutral_test_1");
+				shuffleToDeck(context, player, "minion_neutral_test");
+				shuffleToDeck(context, player, "minion_neutral_test_big");
+
+				overrideDiscover(context, player, "minion_neutral_test");
+				playCard(context, player, "spell_lost_city_champion");
+				assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_neutral_test");
+				assertTrue(player.getMinions().get(0).hasAttribute(Attribute.TAUNT));
+			});
+		}
 	}
 }

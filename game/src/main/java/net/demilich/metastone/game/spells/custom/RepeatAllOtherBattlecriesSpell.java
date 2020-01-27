@@ -86,6 +86,7 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 	 * @param battlecrySource     The source entity that is actually casting the battlecry. Should typically be an actor.
 	 * @return
 	 */
+	@Suspendable
 	public static boolean castBattlecryRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource) {
 		BattlecryAction action;
 		BattlecryDesc[] chooseOneBattlecries = battlecryCardSource.getDesc().getChooseOneBattlecries();

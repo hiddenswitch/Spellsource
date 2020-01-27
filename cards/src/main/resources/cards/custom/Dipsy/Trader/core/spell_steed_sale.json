@@ -17,8 +17,7 @@
         "class": "BothPlayersSpell",
         "spell": {
           "class": "SummonSpell",
-          "card": "token_horse",
-          "targetPlayer": "BOTH"
+          "card": "token_horse"
         }
       }
     ]

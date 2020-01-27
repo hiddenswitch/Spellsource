@@ -35,7 +35,6 @@ open module spellsource.game {
 	exports net.demilich.metastone.game.spells;
 	exports net.demilich.metastone.game.entities.heroes;
 	exports net.demilich.metastone.game.entities.weapons;
-	exports net.demilich.metastone.game.fibers;
 	exports net.demilich.metastone.game.spells.trigger.secrets;
 	exports net.demilich.metastone.game.spells.desc.trigger;
 	exports net.demilich.metastone.game.spells.desc.aura;
