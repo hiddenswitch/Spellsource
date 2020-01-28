@@ -9,24 +9,35 @@
   "description": "After you play a minion, Discover one of the same Tribe.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterMinionPlayedTrigger",
-      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
-      "targetPlayer": "SELF"
+      "class": "AfterCardPlayedTrigger",
+      "sourcePlayer": "SELF",
+      "cardType": "MINION"
     },
     "spell": {
-      "class": "DiscoverSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "RaceEqualsFilter",
-            "secondaryTarget": "EVENT_SOURCE"
-          },
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "spell": {
+          "class": "DiscoverSpell",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceEqualsFilter",
+                "secondaryTarget": "EVENT_SOURCE"
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
           }
-        ]
+        },
+        "condition": {
+          "class": "IsDeadCondition",
+          "target": "SELF",
+          "invert": true
+        }
       }
     }
   },
