@@ -34,7 +34,7 @@ public class ManaCostModifierValueProvider extends ValueProvider {
 		CardList cards = cardSource.getCards(context, host, player).filtered(cardFilter.matcher(context, player, host));
 
 		for (Card card : cards) {
-			value -= card.getManaCostModification(context, player);
+			value += card.getManaCostModification(context, player);
 		}
 
 		return value;
