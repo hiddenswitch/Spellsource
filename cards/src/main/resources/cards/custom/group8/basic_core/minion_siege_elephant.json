@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Whenever this minion takes damage, gain 1 Armor.",
+  "description": "Whenever this minion takes damage, gain 2 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -16,7 +16,7 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
-      "armorBonus": 1
+      "armorBonus": 2
     }
   },
   "collectible": true,
