@@ -93,7 +93,7 @@ public class OniQueenTests extends TestBase {
 	}
 
 	@Test
-	public void testLumina() {
+	public void testLuminaHunZhoInteraction() {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_lumina", "minion_demon_test"));
 			playMinionCard(context, player, "minion_neutral_test");
