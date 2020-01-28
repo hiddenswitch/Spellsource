@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
-  "baseHp": 2,
+  "baseHp": 4,
   "rarity": "FREE",
   "description": "Opener: Summon two 0/1 Shards with <b>Guard</b>.",
   "battlecry": {
