@@ -3,18 +3,18 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2,
+  "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Opener: The next Dash minion you play costs (2) less.",
+  "description": "Opener: The next Dash minion you play this turn costs (2) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
-        "class": "CardCostModifier",
+        "class": "OneTurnCostModifier",
         "value": 2,
         "requiredAttribute": "RUSH",
         "cardType": "MINION",
