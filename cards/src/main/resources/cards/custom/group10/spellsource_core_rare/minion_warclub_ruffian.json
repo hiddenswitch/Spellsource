@@ -7,10 +7,11 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "Dash, Dodge.",
+  "description": "Dash, Dodge, Guard",
   "attributes": {
     "RUSH": true,
-    "DIVINE_SHIELD": true
+    "DIVINE_SHIELD": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
