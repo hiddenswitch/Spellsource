@@ -5,11 +5,13 @@
   "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 7,
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Toxic.",
+  "description": "Toxic. Hidden for 1 turn.",
   "attributes": {
-    "POISONOUS": true
+    "POISONOUS": true,
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
