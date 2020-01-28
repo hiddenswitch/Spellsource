@@ -45,7 +45,8 @@
     }
   },
   "attributes": {
-    "STEALTH": true
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
