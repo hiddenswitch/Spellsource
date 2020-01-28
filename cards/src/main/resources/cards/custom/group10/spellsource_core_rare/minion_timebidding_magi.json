@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "description": "Costs (0) if this is the only card in your hand.",
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1,
   "manaCostModifier": {
