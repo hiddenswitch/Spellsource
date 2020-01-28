@@ -1,6 +1,6 @@
 {
   "name": "Oni's Eye",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 0,
