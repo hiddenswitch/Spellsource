@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Opener: The next Dash minion you play this turn costs (2) less.",
+  "description": "Opener: The next Dash minion you play this turn costs (3) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,7 +15,7 @@
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "OneTurnCostModifier",
-        "value": 2,
+        "value": 3,
         "requiredAttribute": "RUSH",
         "cardType": "MINION",
         "expirationTrigger": {
