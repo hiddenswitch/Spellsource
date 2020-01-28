@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 2,
-  "race": "FAE"
+  "race": "FAE",
   "rarity": "RARE",
   "description": "Opener: Swap your leftmost card with your opponent's.",
   "battlecry": {
