@@ -7,7 +7,18 @@
   "baseHp": 10,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "<b>Guard</b>",
+  "description": "<b>Guard</b>. At the start of your turn, restore 5 Health to this.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "SELF",
+      "value": 5
+    }
+  },
   "attributes": {
     "TAUNT": true
   },
