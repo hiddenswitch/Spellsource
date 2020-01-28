@@ -1,0 +1,30 @@
+{
+  "name": "Herald of Fate",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Aftermath: The next two Openers trigger twice.",
+  "deathrattle": {
+    "spell": {
+    "class": "AddEnchantmentSpell",
+    "targetPlayer": "BOTH",
+    "card": "enchantment_double_next_battlecry",
+	"expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "attribute": "BATTLECRY",
+        "cardType": "MINION",
+        "targetPlayer": "BOTH",
+		"value": 2
+      },
+	}
+  },
+  "attributes": {
+    "DEATHRATTLE": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "set": "CUSTOM"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Cyaegha the Curious",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Add a copy of your opponent's hand to your hand.",
+   "deathrattle": {
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "ENEMY_HAND"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLE": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "set": "CUSTOM"
+}
