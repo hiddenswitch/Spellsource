@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: If you cast 3 spells this turn, your next card costs (1) this turn.",
+  "description": "Opener: If you cast 3 spells this turn, your next card costs (0) this turn.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
@@ -42,7 +42,7 @@
       "target": "FRIENDLY_PLAYER",
       "cardCostModifier": {
         "class": "OneTurnCostModifier",
-        "value": 1,
+        "value": 0,
         "expirationTrigger": {
           "class": "CardPlayedTrigger",
           "targetPlayer": "SELF"
