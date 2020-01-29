@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -296,6 +297,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
+	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
 		if (expirationTrigger != null && event.getEventType() == expirationTrigger.interestedIn() && expirationTrigger.queues(event, host)) {

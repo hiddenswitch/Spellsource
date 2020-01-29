@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "DrainSpell",
-        "hpBonus": 2
+        "value": 2
       },
       {
         "class": "CopyCardSpell"

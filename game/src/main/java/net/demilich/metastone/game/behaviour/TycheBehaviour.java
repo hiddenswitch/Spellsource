@@ -14,7 +14,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.spells.trigger.InspireTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -138,8 +137,7 @@ public class TycheBehaviour extends IntelligentBehaviour {
 			onMyTurnBegin(context, player);
 		}
 
-		// Creates a special game context that can be resumed from any point
-		context = SuspendableGameContext.fromTrace(context);
+		context = GameContext.fromTrace(context.getTrace());
 
 		GameAction chosenTask = chooseTask(context, player, validActions);
 

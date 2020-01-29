@@ -40,7 +40,8 @@
           },
           "filter": {
             "class": "CardFilter",
-            "cardType": "MINION"
+            "cardType": "MINION",
+            "race": "DEMON"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
