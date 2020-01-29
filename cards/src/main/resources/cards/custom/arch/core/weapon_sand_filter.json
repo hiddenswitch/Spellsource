@@ -25,6 +25,15 @@
       "class": "DrawCardSpell"
     }
   },
+    "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
   "collectible": true,
   "attributes": {
     "DECAY": true
