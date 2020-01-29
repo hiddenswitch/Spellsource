@@ -96,6 +96,8 @@ public interface Accounts {
 
 	/**
 	 * Creates an account.
+	 * <p>
+	 * Does <b>not</b> create the standard decks for the user.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
@@ -104,6 +106,7 @@ public interface Accounts {
 	 * 		The token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
+	 * @see Logic#initializeUser(InitializeUserRequest) to create standard decks for the user
 	 */
 	@NotNull
 	static CreateAccountResponse createAccount(@NotNull CreateAccountRequest request) throws SuspendExecution, InterruptedException {

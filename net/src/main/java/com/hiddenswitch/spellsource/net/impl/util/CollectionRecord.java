@@ -14,6 +14,9 @@ import java.util.List;
 public class CollectionRecord extends MongoRecord {
 	public static final String FORMAT = "format";
 	public static final String HERO_CLASS = "heroClass";
+	public static final String TYPE = "type";
+	public static final String USER_ID = "userId";
+	public static final String VALIDATION_RECORD = "validationRecord";
 	private String userId;
 	private CollectionTypes type;
 	private boolean trashed;

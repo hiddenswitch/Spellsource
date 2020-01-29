@@ -4,6 +4,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
 import com.hiddenswitch.spellsource.client.models.ValidationReport;
+import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
+import com.hiddenswitch.spellsource.net.impl.util.MongoRecord;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -32,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.hiddenswitch.spellsource.net.Inventory.COLLECTIONS;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.jsonPut;
@@ -312,7 +315,24 @@ public interface Decks {
 	}
 
 	@Suspendable
-	static ValidationReport validateDeck(List<String> cards, String heroClass, String deckFormat) {
-		return validateDeck(new GameDeck(heroClass, cards), deckFormat);
+	static ValidationReport validateDeck(List<String> cardIds, String heroClass, String deckFormat) {
+		return validateDeck(new GameDeck(heroClass, cardIds), deckFormat);
+	}
+
+	@Suspendable
+	static void validateAllDecks() {
+		CardCatalogue.loadCardsFromPackage();
+		// Set a validation record for every deck (actually validate it)
+		var decks = mongo().findWithOptions(COLLECTIONS,
+				json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()),
+				new FindOptions().setFields(json(MongoRecord.ID, true, CollectionRecord.USER_ID, true, CollectionRecord.FORMAT, true)));
+		for (JsonObject collectionRecord : decks) {
+			var deckId = collectionRecord.getString(MongoRecord.ID);
+			var userId = collectionRecord.getString(CollectionRecord.USER_ID);
+			var format = collectionRecord.getString(CollectionRecord.FORMAT);
+			var gameDeck = Inventory.getCollection(GetCollectionRequest.deck(deckId)).asDeck(userId);
+			var validationRecord = validateDeck(gameDeck, format);
+			mongo().updateCollection(COLLECTIONS, json(MongoRecord.ID, deckId), json("$set", json(CollectionRecord.VALIDATION_RECORD, json(validationRecord))));
+		}
 	}
 }
