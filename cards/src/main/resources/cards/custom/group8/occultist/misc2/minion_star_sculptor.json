@@ -1,5 +1,5 @@
 {
- 
+
   "name": "Star Sculptor",
   "baseManaCost": 4,
   "type": "MINION",
@@ -14,16 +14,17 @@
       "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
       "spell": {
-	   "class": "MetaSpell",
+	    "class": "MetaSpell",
+        "target": "OUTPUT",
 	    "spells": [
-		{
-         "class": "AddAttributeSpell",
-         "attribute": "TAUNT"
-		},
-		{
-		 "class": "AddAttributeSpell",
-         "attribute": "CANNOT_ATTACK"
-		}
+          {
+           "class": "AddAttributeSpell",
+           "attribute": "TAUNT"
+          },
+          {
+           "class": "AddAttributeSpell",
+           "attribute": "CANNOT_ATTACK"
+          }
 	    ]
       }
     }
@@ -34,4 +35,4 @@
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
-}
+}I

@@ -3,6 +3,10 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
+
+### Upcoming Changes
+ - Star Sculptor now correctly gives the summoned minion Guard/Can't Attack and not the original. (1518)
+
 ### 0.8.65-3.0.8 (January 24th, 2020)
 
  - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
