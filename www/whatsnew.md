@@ -3,6 +3,10 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
+
+### Upcoming Changes
+ - Fixed an interaction when General Hun'Zho summons Lumina, Light of the Forest. (1516)
+
 ### 0.8.65-3.0.8 (January 24th, 2020)
 
  - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
