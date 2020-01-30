@@ -95,9 +95,9 @@ import static java.util.stream.Collectors.toList;
  * 		with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
-	public static final int DEFAULT_TARGET_CONTEXT_STACK_SIZE = 7 * 6 - 1;
-	public static final int DEFAULT_MAXIMUM_DEPTH = 2;
-	public static final int DEFAULT_TIMEOUT = 2800;
+	public static final int DEFAULT_TARGET_CONTEXT_STACK_SIZE = 2 * 7 * 6 - 1;
+	public static final int DEFAULT_MAXIMUM_DEPTH = 3;
+	public static final int DEFAULT_TIMEOUT = 11800;
 	public static final int DEFAULT_LETHAL_TIMEOUT = 15000;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
