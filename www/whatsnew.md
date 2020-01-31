@@ -3,6 +3,9 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
+### Upcoming Changes
+- Forge Suit now properly only gives Health and not Attack. (1525)
+
 ### 0.8.65-3.0.8 (January 24th, 2020)
 
  - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
