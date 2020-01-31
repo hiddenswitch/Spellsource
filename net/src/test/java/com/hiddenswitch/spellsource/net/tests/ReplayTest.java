@@ -51,8 +51,9 @@ public class ReplayTest extends SpellsourceTestBase {
 				player.matchmakeQuickPlay(null);
 				invoke0(player::waitUntilDone);
 				context.assertTrue(player.getTurnsPlayed() > 0);
+				Strand.sleep(100);
 				GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
-				context.assertEquals(gameIds.getGameIds().size(), 1);
+				context.assertEquals(1, gameIds.getGameIds().size(), "should have saved game");
 				GetGameRecordResponse gameRecordResponse = invoke(player.getApi()::getGameRecord, gameIds.getGameIds().get(0));
 				context.assertNotNull(gameRecordResponse.getReplay());
 			}
