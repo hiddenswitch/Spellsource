@@ -82,6 +82,8 @@ public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryD
 	public ConditionDesc condition;
 	public String name;
 	public String description;
+	public TargetSelection targetSelectionOverride;
+	public ConditionDesc targetSelectionCondition;
 
 	public BattlecryDesc() {
 		super();
@@ -103,6 +105,12 @@ public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryD
 		BattlecryAction battlecry = BattlecryAction.createBattlecry(getSpell(), getTargetSelection());
 		if (condition != null) {
 			battlecry.setCondition(condition.create());
+		}
+		if (targetSelectionOverride != null) {
+			battlecry.setTargetSelectionOverride(targetSelectionOverride);
+		}
+		if (targetSelectionCondition != null) {
+			battlecry.setTargetSelectionCondition(targetSelectionCondition.create());
 		}
 		return battlecry;
 	}
@@ -178,7 +186,9 @@ public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryD
 				immutableEntry(BattlecryDescArg.TARGET_SELECTION, targetSelection),
 				immutableEntry(BattlecryDescArg.CONDITION, condition),
 				immutableEntry(BattlecryDescArg.NAME, name),
-				immutableEntry(BattlecryDescArg.DESCRIPTION, description)
+				immutableEntry(BattlecryDescArg.DESCRIPTION, description),
+				immutableEntry(BattlecryDescArg.TARGET_SELECTION_OVERRIDE, targetSelectionOverride),
+				immutableEntry(BattlecryDescArg.TARGET_SELECTION_CONDITION, targetSelectionCondition)
 		);
 		return entries;
 	}
@@ -197,5 +207,21 @@ public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryD
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		this.targetSelectionCondition = targetSelectionCondition;
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		this.targetSelectionOverride = targetSelectionOverride;
 	}
 }
