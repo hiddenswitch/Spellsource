@@ -438,11 +438,23 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
-		int actualManaCost = getBaseManaCost();
+		return getBaseManaCost() - getManaCostModification(context, player);
+	}
+
+	/**
+	 * Computes the modificatation of this card's built in mana cost modifier for a given context / player.
+	 * Positive numbers are a reduction in cost, while negative numbers are an increase,
+	 * so the result of this method should usually be subtracted.
+	 * @param context The {@link GameContext} to compute the cost modification against.
+	 * @param player The {@link Player} whose point of view should be considered, i.e. the owner.
+	 * @return The cost modfication
+	 */
+	@Suspendable
+	public int getManaCostModification(GameContext context, Player player) {
 		if (getManaCostModifier() != null) {
-			actualManaCost -= getManaCostModifier().getValue(context, player, null, this);
+			return getManaCostModifier().getValue(context, player, null, this);
 		}
-		return actualManaCost;
+		return 0;
 	}
 
 	protected ValueProvider getManaCostModifier() {
