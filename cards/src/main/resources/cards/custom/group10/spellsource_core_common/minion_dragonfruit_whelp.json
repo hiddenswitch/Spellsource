@@ -4,10 +4,10 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
-  "baseHp": 5,
+  "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Whenever this takes damage, restore #3 Health to your champion.",
+  "description": "Whenever this takes damage, restore #2 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -16,7 +16,7 @@
     "spell": {
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "value": 3
+      "value": 2
     }
   },
   "collectible": true,
