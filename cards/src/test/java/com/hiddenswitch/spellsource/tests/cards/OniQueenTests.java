@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
@@ -92,6 +93,17 @@ public class OniQueenTests extends TestBase {
 	}
 
 	@Test
+	public void testLuminaHunZhoInteraction() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_lumina", "minion_demon_test"));
+			playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(0, player.getHand().size());
+			playCard(context, player, "minion_general_hun_zho");
+			assertEquals("minion_lumina", player.getMinions().get(0).getSourceCard().getCardId());
+			assertEquals(0, player.getHand().size());
+		});
+	}
+  
 	public void testRuffianShiroTargetSelection() {
 		runGym((context, player, opponent) -> {
 			Card handDemon = receiveCard(context, player, "minion_demon_test");
