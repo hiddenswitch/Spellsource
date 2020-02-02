@@ -6,15 +6,21 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Silence all other minions.",
+  "race": "SPIRIT",
+  "description": "Opener and Aftermath: Silence all other minions.",
   "battlecry": {
     "spell": {
       "class": "SilenceSpell",
       "target": "ALL_OTHER_MINIONS"
     }
   },
+  "deathrattle": {
+    "class": "SilenceSpell",
+    "target": "ALL_OTHER_MINIONS"
+  },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

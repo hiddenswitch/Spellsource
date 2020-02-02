@@ -1,6 +1,6 @@
 {
   "name": "Skeletower",
-  "baseManaCost": 8,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 7,

@@ -233,18 +233,19 @@ public class WitchDoctorTests extends TestBase {
 
 	@Test
 	public void testWitchingTraveler() {
+		int SET_COST = 0;
 		runGym((context, player, opponent) -> {
-			Card coin = receiveCard(context, player, "spell_test_gain_mana");
-			assertEquals(costOf(context, player, coin), 0);
+			Card spell = receiveCard(context, player, "spell_test_heal_8");
+			assertEquals(costOf(context, player, spell), spell.getBaseManaCost());
 			playCard(context, player, "spell_test_gain_mana");
 			playCard(context, player, "minion_witching_traveler");
-			assertEquals(costOf(context, player, coin), 0);
+			assertEquals(costOf(context, player, spell), spell.getBaseManaCost());
 			playCard(context, player, "spell_test_gain_mana");
 			playCard(context, player, "minion_witching_traveler");
-			assertEquals(costOf(context, player, coin), 0);
+			assertEquals(costOf(context, player, spell), spell.getBaseManaCost());
 			playCard(context, player, "spell_test_gain_mana");
 			playCard(context, player, "minion_witching_traveler");
-			assertEquals(costOf(context, player, coin), 1);
+			assertEquals(costOf(context, player, spell), SET_COST);
 		});
 	}
 

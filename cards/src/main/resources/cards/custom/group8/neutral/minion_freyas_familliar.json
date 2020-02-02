@@ -1,13 +1,13 @@
 {
-  "name": "Freying Faimilliar",
+  "name": "Forest Familiar",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "race": "BEAST",
-  "description": "Opener: Your champion Immune this turn.",
+  "race": "FAE",
+  "description": "Opener: Your champion is Immune this turn.",
   "battlecry": {
     "spell": {
       "class": "AddAttributeSpell",

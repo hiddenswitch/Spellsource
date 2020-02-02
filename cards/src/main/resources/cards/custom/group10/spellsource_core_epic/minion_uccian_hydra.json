@@ -1,13 +1,13 @@
 {
   "name": "Uccian Hydra",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2,
-  "baseHp": 2,
+  "baseAttack": 3,
+  "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "After a minion with more Attack than this dies, double this minion's stats.",
+  "description": "Hidden for 1 turn. After a minion with more Attack than this dies, double this minion's stats.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
@@ -43,6 +43,10 @@
         }
       ]
     }
+  },
+  "attributes": {
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

@@ -209,7 +209,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion hydra = playMinionCard(context, player, "minion_uccian_hydra");
 			Minion dead = playMinionCard(context, player, "minion_neutral_test");
-			dead.setAttack(3);
+			dead.setAttack(hydra.getBaseAttack() + 1);
 			destroy(context, dead);
 			assertEquals(hydra.getAttack(), hydra.getBaseAttack() * 2);
 		});
@@ -3095,7 +3095,7 @@ public class CustomCardsTests extends TestBase {
 
 		// Card cost modifiers like Timebidding Magi's should work
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new FixedCardsDeckFormat("minion_timebidding_magi"));
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_cost_modifier_zero"));
 			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_mechanical_monstrosity");
 			int baseCost = shouldBeDrawn.getBaseManaCost();

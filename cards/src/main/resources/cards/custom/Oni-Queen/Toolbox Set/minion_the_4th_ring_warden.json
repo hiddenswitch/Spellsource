@@ -7,28 +7,27 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If your deck has no duplicates, your played minions are reborn as 2/2 Lesser Oni this game.",
+  "description": "Opener: If your deck has no duplicates, minions you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {
       "class": "HighlanderDeckCondition"
     },
     "spell": {
-      "class": "AddEnchantmentSpell",
-      "target": "FRIENDLY_PLAYER",
-      "trigger": {
-        "eventTrigger": {
-          "class": "AfterMinionPlayedTrigger",
-          "targetPlayer": "SELF"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_ring_warden_aftermath"
         },
-        "spell": {
-          "class": "AddDeathrattleSpell",
-          "target": "EVENT_TARGET",
-          "spell": {
-            "class": "SummonSpell",
-            "card": "token_lesser_oni"
-          }
-        }
+        "target": "FRIENDLY_PLAYER",
+        "invert": true
+      },
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_ring_warden_aftermath"
       }
     }
   },

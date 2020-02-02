@@ -17,15 +17,14 @@
       },
       "spell": {
         "class": "MetaSpell",
+        "target": "OUTPUT",
         "spells": [
           {
             "class": "SetAttackSpell",
-            "target": "OUTPUT",
             "value": 1
           },
           {
             "class": "SetHpSpell",
-            "target": "OUTPUT",
             "value": 1
           }
         ]

@@ -18,6 +18,8 @@ public class OniQueenTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
 			playCard(context, player, "weapon_test_1_3");
+			player.getWeaponZone().get(0).setHp(4);
+			attack(context, player, player.getHero(), opponent.getHero());
 			attack(context, player, player.getHero(), opponent.getHero());
 			attack(context, player, player.getHero(), opponent.getHero());
 			assertFalse(target.hasAttribute(Attribute.AURA_RUSH));
@@ -52,22 +54,22 @@ public class OniQueenTests extends TestBase {
 			Minion shouldNotDestroy1 = playMinionCard(context, opponent, "minion_neutral_test");
 			Card shouldNotRemove1 = receiveCard(context, opponent, "minion_neutral_test");
 			Card shouldRemove1 = receiveCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
-			Card shouldRemove2 = putOnTopOfDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
 			context.endTurn();
 			Minion shouldDestroy2 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
 			Minion shouldNotDestroy2 = playMinionCard(context, player, "minion_neutral_test");
 			Card shouldNotRemove2 = receiveCard(context, player, "minion_neutral_test");
 			Card shouldRemove3 = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Card shouldRemove4 = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card shouldNotRemove3 = putOnTopOfDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card shouldNotRemove4 = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_thousand_year_hatred", shouldDestroy1);
 			assertTrue(shouldDestroy1.isDestroyed());
 			assertTrue(shouldDestroy2.isDestroyed());
 			assertFalse(shouldNotDestroy1.isDestroyed());
 			assertFalse(shouldNotDestroy2.isDestroyed());
 			assertEquals(Zones.GRAVEYARD, shouldRemove1.getZone());
-			assertEquals(Zones.GRAVEYARD, shouldRemove2.getZone());
 			assertEquals(Zones.GRAVEYARD, shouldRemove3.getZone());
-			assertEquals(Zones.GRAVEYARD, shouldRemove4.getZone());
+			assertEquals(Zones.DECK, shouldNotRemove3.getZone());
+			assertEquals(Zones.DECK, shouldNotRemove4.getZone());
 			assertEquals(Zones.HAND, shouldNotRemove1.getZone());
 			assertEquals(Zones.HAND, shouldNotRemove2.getZone());
 		}, HeroClass.BLUEGREY, HeroClass.BLUEGREY);
@@ -103,7 +105,7 @@ public class OniQueenTests extends TestBase {
 			assertEquals(0, player.getHand().size());
 		});
 	}
-  
+
 	public void testRuffianShiroTargetSelection() {
 		runGym((context, player, opponent) -> {
 			Card handDemon = receiveCard(context, player, "minion_demon_test");

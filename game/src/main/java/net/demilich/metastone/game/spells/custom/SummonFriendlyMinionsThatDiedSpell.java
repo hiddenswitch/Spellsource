@@ -53,10 +53,11 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 			Minion deadMinion = (Minion) deadEntity;
 			if (deadMinion.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {
 				Card card = deadMinion.getSourceCard();
-				boolean summoned = context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
-				final SpellDesc subSpell = desc.getSpell();
-				if (summoned && subSpell != null) {
-					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+				Minion summon = card.summon();
+				boolean summoned = context.getLogic().summon(player.getId(), summon, source, -1, false);
+				SpellDesc subSpell = desc.getSpell();
+				if (summoned && subSpell != null && summon.isInPlay()) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, summon);
 				}
 			}
 		}

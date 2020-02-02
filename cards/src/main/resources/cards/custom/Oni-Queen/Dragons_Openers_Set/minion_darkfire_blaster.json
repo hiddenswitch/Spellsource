@@ -1,10 +1,10 @@
 {
   "name": "Darkfire Blaster",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "BLUEGREY",
   "baseAttack": 3,
-  "baseHp": 6,
+  "baseHp": 7,
   "rarity": "RARE",
   "race": "DRAGON",
   "description": "Opener: Deal damage equal to this minion's Attack.",
