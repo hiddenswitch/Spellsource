@@ -1,6 +1,6 @@
 {
-  "name": "Channeler Initiate",
-  "baseManaCost": 2,
+  "name": "Seeker Initiate",
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "DARKBLUE",
   "baseAttack": 1,

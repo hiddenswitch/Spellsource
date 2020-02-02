@@ -2,7 +2,7 @@
   "name": "Spirit",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "LIGHTBROWN",
+  "heroClass": "NEUTRAL",
   "baseAttack": 1,
   "baseHp": 1,
   "race": "SPIRIT",

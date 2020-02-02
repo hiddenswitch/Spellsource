@@ -1,0 +1,30 @@
+{
+  "name": "Mother Magoria",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "At the end of your turn, fill your board with random minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": 7,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
