@@ -332,7 +332,7 @@ public interface Decks {
 			var format = collectionRecord.getString(CollectionRecord.FORMAT);
 			var gameDeck = Inventory.getCollection(GetCollectionRequest.deck(deckId)).asDeck(userId);
 			var validationRecord = validateDeck(gameDeck, format);
-			mongo().updateCollection(COLLECTIONS, json(MongoRecord.ID, deckId), json("$set", json(CollectionRecord.VALIDATION_RECORD, json(validationRecord))));
+			mongo().updateCollection(COLLECTIONS, json(MongoRecord.ID, deckId), json("$set", json(CollectionRecord.VALIDATION_REPORT, json(validationRecord))));
 		}
 	}
 }
