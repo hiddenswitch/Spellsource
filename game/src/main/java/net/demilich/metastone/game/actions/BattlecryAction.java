@@ -3,6 +3,7 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -26,6 +27,8 @@ public final class BattlecryAction extends GameAction {
 	private static final String BATTLECRY_NAME = "Battlecry";
 	private final SpellDesc spell;
 	private Condition condition;
+	private TargetSelection targetSelectionOverride;
+	private Condition targetSelectionCondition;
 
 	/**
 	 * Creates a battlecry action that performs the specified spell and requests a target.
@@ -198,5 +201,28 @@ public final class BattlecryAction extends GameAction {
 		} else {
 			return String.format("A %s occurred.", BATTLECRY_NAME);
 		}
+	}
+
+	public boolean shouldOverrideTargetSelection(GameContext context, Player player, Actor actor) {
+		if (targetSelectionCondition != null && targetSelectionOverride != null) {
+			return targetSelectionCondition.isFulfilled(context, player, actor, actor);
+		}
+		return false;
+	}
+
+	public Condition getTargetSelectionCondition() {
+		return targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(Condition targetSelectionCondition) {
+		this.targetSelectionCondition = targetSelectionCondition;
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		this.targetSelectionOverride = targetSelectionOverride;
 	}
 }

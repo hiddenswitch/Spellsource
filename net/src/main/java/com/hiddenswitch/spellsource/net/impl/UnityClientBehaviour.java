@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitEvent;
@@ -334,9 +335,19 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			}
 
 			getRequests().remove(request);
+			if (discardedCardIndices == null) {
+				// the mulligan is being received twice
+				discardedCardIndices = Collections.emptyList();
+			}
 			List<Card> discardedCards = discardedCardIndices
 					.stream()
-					.map(i -> request.getStarterCards().get(i))
+					.flatMap(i -> {
+						if (request.getStarterCards() == null || request.getStarterCards().size() <= i) {
+							// We already processed this card
+							return Stream.empty();
+						}
+						return Stream.of(request.getStarterCards().get(i));
+					})
 					.collect(toList());
 
 			@SuppressWarnings("unchecked")

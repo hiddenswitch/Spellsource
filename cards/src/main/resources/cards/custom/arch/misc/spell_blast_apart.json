@@ -30,7 +30,7 @@
       },
       {
         "class": "BuffSpell",
-        "value": {
+        "hpBonus": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         }
