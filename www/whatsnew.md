@@ -4,7 +4,11 @@ title: Updates
 permalink: /whats-new/
 ---
 ### Upcoming Changes
+
  - Necronomicon is now an Occultist card like it was supposed to be. (1523)
+ - Forge Suit now properly only gives Health and not Attack. (1525)
+ - Sand Filter now actually Decays, and is properly now only active on your own turn. (1525)
+
 
 ### 0.8.65-3.0.8 (January 24th, 2020)
 

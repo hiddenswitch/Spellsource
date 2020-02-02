@@ -3,17 +3,17 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 1,
-  "baseHp": 2,
+  "baseAttack": 2,
+  "baseHp": 3,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Opener: Restore #5 Health to your champion.",
+  "description": "Opener: Restore #2 Health to your champion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "value": 5
+      "value": 2
     }
   },
   "attributes": {
