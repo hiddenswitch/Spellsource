@@ -4,11 +4,17 @@
 --add-reads
     spellsource.net=spellsource.testutils
 
+--add-reads
+    spellsource.net=org.junit.jupiter.api
+
 --add-opens
     spellsource.net/com.hiddenswitch.spellsource.net.tests.impl=vertx.unit
 
 --add-opens
     spellsource.net/com.hiddenswitch.spellsource.net.tests=vertx.unit
+
+--add-opens
+    spellsource.net/com.hiddenswitch.spellsource.net.tests=org.junit.jupiter.api
 
 --add-opens
     java.base/java.lang=co.paralleluniverse.quasar.core

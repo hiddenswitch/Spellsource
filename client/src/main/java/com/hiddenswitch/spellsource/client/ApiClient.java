@@ -84,7 +84,7 @@ public class ApiClient {
     dateFormat = ApiClient.buildDefaultDateFormat();
 
     // Set default User-Agent.
-    setUserAgent("Swagger-Codegen/0.8.61/java");
+    setUserAgent("Swagger-Codegen/0.8.65/java");
 
     // Setup authentications (key: authentication name, value: authentication).
     authentications = new HashMap<String, Authentication>();

@@ -1,0 +1,42 @@
+package com.hiddenswitch.spellsource.net.tests;
+
+import com.hiddenswitch.spellsource.net.Decks;
+import com.hiddenswitch.spellsource.net.Inventory;
+import com.hiddenswitch.spellsource.net.Logic;
+import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
+import com.hiddenswitch.spellsource.net.models.CollectionTypes;
+import com.hiddenswitch.spellsource.net.models.InitializeUserRequest;
+import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.unit.TestContext;
+import org.junit.Test;
+
+import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+
+public class MigrationTest extends SpellsourceTestBase {
+
+	@Test
+	public void testMigrateAllDecks(TestContext testContext) {
+		sync(() -> {
+			var account = createRandomAccount();
+			Logic.initializeUser(InitializeUserRequest.create(account.getUserId()));
+			// Remove the validation record to test adding it in
+			mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$unset", json(CollectionRecord.VALIDATION_RECORD, null)), new UpdateOptions().setMulti(true));
+			/**
+			 * {"$unset": {"fieldName": 1}}
+			 */
+			var decks = mongo().find(Inventory.COLLECTIONS, json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()));
+			testContext.assertTrue(decks.size() > 0, "should find decks");
+			for (JsonObject deck : decks) {
+				testContext.assertNull(deck.getJsonObject(CollectionRecord.VALIDATION_RECORD), "should not have validation record because we removed it");
+			}
+			Decks.validateAllDecks();
+			decks = mongo().find(Inventory.COLLECTIONS, json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()));
+			for (JsonObject deck : decks) {
+				testContext.assertNotNull(deck.getJsonObject(CollectionRecord.VALIDATION_RECORD), "SHOULD have validation record because we removed it");
+			}
+		}, testContext);
+	}
+}

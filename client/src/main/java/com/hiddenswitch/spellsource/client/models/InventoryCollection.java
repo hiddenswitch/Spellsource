@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -132,6 +133,9 @@ public class InventoryCollection implements Serializable {
 
   @JsonProperty("inventory")
   private List<CardRecord> inventory = null;
+
+  @JsonProperty("validationReport")
+  private ValidationReport validationReport = null;
 
   public InventoryCollection id(String id) {
     this.id = id;
@@ -303,6 +307,24 @@ public class InventoryCollection implements Serializable {
     this.inventory = inventory;
   }
 
+  public InventoryCollection validationReport(ValidationReport validationReport) {
+    this.validationReport = validationReport;
+    return this;
+  }
+
+   /**
+   * Get validationReport
+   * @return validationReport
+  **/
+  @ApiModelProperty(value = "")
+  public ValidationReport getValidationReport() {
+    return validationReport;
+  }
+
+  public void setValidationReport(ValidationReport validationReport) {
+    this.validationReport = validationReport;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -321,12 +343,13 @@ public class InventoryCollection implements Serializable {
         Objects.equals(this.type, inventoryCollection.type) &&
         Objects.equals(this.deckType, inventoryCollection.deckType) &&
         Objects.equals(this.isStandardDeck, inventoryCollection.isStandardDeck) &&
-        Objects.equals(this.inventory, inventoryCollection.inventory);
+        Objects.equals(this.inventory, inventoryCollection.inventory) &&
+        Objects.equals(this.validationReport, inventoryCollection.validationReport);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userId, name, heroClass, format, type, deckType, isStandardDeck, inventory);
+    return Objects.hash(id, userId, name, heroClass, format, type, deckType, isStandardDeck, inventory, validationReport);
   }
 
 
@@ -344,6 +367,7 @@ public class InventoryCollection implements Serializable {
     sb.append("    deckType: ").append(toIndentedString(deckType)).append("\n");
     sb.append("    isStandardDeck: ").append(toIndentedString(isStandardDeck)).append("\n");
     sb.append("    inventory: ").append(toIndentedString(inventory)).append("\n");
+    sb.append("    validationReport: ").append(toIndentedString(validationReport)).append("\n");
     sb.append("}");
     return sb.toString();
   }
