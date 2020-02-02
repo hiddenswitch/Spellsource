@@ -6,12 +6,12 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Opener: Restore #5 Health.",
+  "description": "Opener: Restore #4 Health.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {
       "class": "HealSpell",
-      "value": 5
+      "value": 4
     }
   },
   "attributes": {
