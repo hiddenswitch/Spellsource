@@ -39,7 +39,7 @@
     "BATTLECRY": true,
     "POISONOUS": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

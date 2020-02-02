@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Give your minions +1/+1 and Guard.",
+  "description": "Give your minions +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -13,11 +13,6 @@
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
         "value": 1
-      },
-      {
-        "class": "AddAttributeSpell",
-        "target": "FRIENDLY_MINIONS",
-        "attribute": "TAUNT"
       }
     ]
   },

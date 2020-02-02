@@ -1,6 +1,6 @@
 {
   "name": "Extract Nightmare",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
