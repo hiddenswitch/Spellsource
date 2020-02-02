@@ -33,6 +33,7 @@ public class ConditionDescDeserializer extends DescDeserializer<ConditionDesc, C
 		ctx.add(ConditionArg.FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(ConditionArg.CARD_FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(ConditionArg.HERO_CLASS, ParseValueType.STRING);
+		ctx.add(ConditionArg.DESCRIPTION, ParseValueType.STRING);
 		ctx.add(ConditionArg.RARITY, ParseValueType.RARITY);
 	}
 
