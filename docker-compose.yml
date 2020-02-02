@@ -30,7 +30,10 @@ services:
         condition: on-failure
         window: 8s
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   game:
     image: doctorpangloss/spellsource:latest
     environment:
@@ -57,7 +60,10 @@ services:
         - "traefik.port=80"
         - "traefik.enable=true"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   launcher:
     image: doctorpangloss/launcher:latest
     networks:
@@ -78,7 +84,10 @@ services:
         - "traefik.port=3000"
         - "traefik.enable=true"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
     healthcheck:
       test: curl --fail -s http://localhost:3000/ || exit 1
       interval: 8s
@@ -97,7 +106,10 @@ services:
       labels:
         - "traefik.enable=false"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/metastone --quiet
       interval: 8s
@@ -142,7 +154,10 @@ services:
         - "traefik.port=80"
         - "traefik.enable=true"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   parsoid:
     image: "thenets/parsoid:0.10.0"
     networks:
@@ -151,7 +166,10 @@ services:
       labels:
         - "traefik.enable=false"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
     environment:
       - PARSOID_DOMAIN_mediawiki=http://mediawiki/api.php
   mariadb:
@@ -165,7 +183,10 @@ services:
       labels:
         - "traefik.enable=false"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
     environment:
       - MYSQL_DATABASE=spellsource
       - MYSQL_PASSWORD=password
@@ -195,7 +216,10 @@ services:
         - "traefik.port=14268"
         - "traefik.enable=true"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == low
+          - node.labels.disk == hd
   jaeger-schema:
     image: jaegertracing/jaeger-cassandra-schema:1.15.1
     environment:
@@ -207,7 +231,10 @@ services:
       restart_policy:
         condition: none
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == low
+          - node.labels.disk == hd
     networks:
       - backend
   jaeger-query:
@@ -233,13 +260,32 @@ services:
         - "traefik.port=16686"
         - "traefik.enable=true"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   cassandra:
     image: cassandra:3.11
     volumes:
       - cassandradata2:/var/lib/cassandra
     networks:
       - backend
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/jaeger"
+        - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.port=16686"
+        - "traefik.enable=true"
+      placement:
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == low
+          - node.labels.disk == hd
   ddnsroute53:
     image: doctorpangloss/ddnsroute53:latest
     networks:
@@ -251,7 +297,10 @@ services:
       - DDNSROUTE53_UPDATE_IP_ADDRESS=PUBLIC
     deploy:
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   skyhook:
     image: doctorpangloss/skyhook
     networks:
@@ -267,7 +316,10 @@ services:
         - "traefik.port=8080"
         - "traefik.enable=true"
       placement:
-        constraints: [node.platform.arch == x86_64]
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
 volumes:
   mongodata:
   mancenterdata:

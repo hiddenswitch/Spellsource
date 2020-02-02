@@ -283,7 +283,7 @@ public class Trace implements Serializable, Cloneable {
 
 			}
 
-			if (clone.actions != null) {
+			if (actions != null) {
 				clone.actions = new ArrayList<>(actions);
 			}
 			return clone;

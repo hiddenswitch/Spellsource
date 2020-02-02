@@ -49,4 +49,18 @@ public class ArchaeologistTests extends TestBase {
 			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId());
 		});
 	}
+
+	@Test
+	public void testSandFilter() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_sand_filter");
+			context.endTurn();
+			assertEquals(3, player.getWeaponZone().get(0).getDurability());
+			overrideDiscover(context, player, discoverActions -> {
+				fail();
+				return discoverActions.get(0);
+			});
+			playCard(context, opponent, "minion_shady_stranger");
+		});
+	}
 }

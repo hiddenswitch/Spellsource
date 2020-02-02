@@ -2134,9 +2134,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public int getModifiedManaCost(Player player, Card card) {
-		int manaCost = card.getManaCost(context, player);
+		int manaCost = card.getBaseManaCost();
 		if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-			return manaCost;
+			return manaCost - card.getManaCostModification(context, player);
 		}
 		int minValue = 0;
 		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
@@ -2154,7 +2154,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				minValue = costModifier.getMinValue();
 			}
 		}
-
+		manaCost -= card.getManaCostModification(context, player);
 		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
 		if (canActivateInvokeKeyword(player, card)) {
 			if (card.hasAttribute(Attribute.AURA_INVOKE)) {
@@ -3692,6 +3692,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			BattlecryAction battlecry = battlecries.get(i).toBattlecryAction();
 			battlecry.setSourceReference(actor.getReference());
 			Player player = context.getPlayer(playerId);
+			if (battlecry.shouldOverrideTargetSelection(context, player, actor)) {
+				battlecry.setTargetRequirement(battlecry.getTargetSelectionOverride());
+			}
 			processTargetModifiers(battlecry);
 			if (!battlecry.canBeExecuted(context, player)) {
 				battlecryActions[i] = BattlecryAction.NONE;

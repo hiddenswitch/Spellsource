@@ -234,7 +234,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				Scope scope2 = tracer.activateSpan(saveSpan);
 				try {
 					GameRecord gameRecord = new GameRecord(gameId.toString())
-							.setTrace(gameContext.getTrace().clone())
+							.setTrace(gameContext.getTrace())
 							.setCreatedAt(new Date())
 							.setBotGame(botGame)
 							.setPlayerUserIds(userIds)
