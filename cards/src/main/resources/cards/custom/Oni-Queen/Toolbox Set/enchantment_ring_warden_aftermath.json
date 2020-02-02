@@ -1,0 +1,27 @@
+{
+  "name": "Ring Warding",
+  "type": "ENCHANTMENT",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Minions you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "AfterMinionPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddDeathrattleSpell",
+        "target": "EVENT_TARGET",
+        "spell": {
+          "class": "SummonSpell",
+          "card": "token_lesser_oni"
+        }
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

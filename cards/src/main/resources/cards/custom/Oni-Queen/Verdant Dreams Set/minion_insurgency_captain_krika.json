@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If your champion attacked 3 times this game, give your minions Dash this game.[]",
+  "description": "Opener: If your champion attacked 4 times this game, give your minions Dash this game.[]",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {
@@ -18,7 +18,7 @@
         "attribute": "ATTACKS_THIS_GAME",
         "target": "FRIENDLY_HERO"
       },
-      "value2": 3
+      "value2": 4
     },
     "spell": {
       "class": "AddEnchantmentSpell",
@@ -47,7 +47,7 @@
           "attribute": "ATTACKS_THIS_GAME",
           "target": "FRIENDLY_HERO"
         },
-        "value2": 3
+        "value2": 4
       },
       "description1": " (Ready!)",
       "description2": {
@@ -59,7 +59,7 @@
             "value": {
               "class": "AlgebraicValueProvider",
               "operation": "SUBTRACT",
-              "value1": 3,
+              "value1": 4,
               "value2": {
                 "class": "AttributeValueProvider",
                 "attribute": "ATTACKS_THIS_GAME",

@@ -11,6 +11,59 @@ permalink: /whats-new/
  - Necronomicon is now an Occultist card like it was supposed to be. (1523)
  - Forge Suit now properly only gives Health and not Attack. (1525)
  - Sand Filter now actually Decays, and is properly now only active on your own turn. (1525)
+ 
+In addition, extensive edits by @Logovaz summarized here:
+
+#### Uncollectible Neutrals
+ - Jek the Bonelord, Firefoxie, Sunbender, Timebidding Magi, Toothpick Fighter, Pawshop Trader, Vanal Petkiper
+
+#### Neutral Changes
+
+ - Freying Faimiliar is now a Fae from a Beast and called "Forest Familiar"
+ - Stone Sentinel (10/9/9 -> 10/10/10), Stalwart Sculptor (4/3/2 -> 4/3/4)
+ - Skeletower (Costs 8 -> Costs 7)
+ - Siege Elephant is now ("Whenever this minion takes damage, gain 2 Armor.") from 1 Armor.
+ - Macabre Samaritan is now ("Whenever this minion takes damage, restore 4 Health to your champion.") from 2 Health.
+ - Hunchback Supplier now has Lifedrain
+ - Forest Magistrate (Opener: Deals 2 damage -> Opener: Deals 3 damage)
+ - Floating Crystal (2/0/4 -> 2/0/6), Fae Horncaster (2/1/2 -> 2/1/3), Burst Bug (4/2/1 -> 4/3/1)
+ - Bone Guard is now (5/3/5 "Guard. Opener: Draw a card.")
+ - Mind Controlled Mech reflavored to be Blind Acolyte. Also: (4/2/8 -> 4/3/8). The skill has been renamed to Echolocation from Mental Command.
+ - Warclub Ruffian is now a (4/3/2 Demon, Dodge, Guard)
+ - Mindswapper (3/3/2 -> 3/4/2) and is now a Fae.
+ - Lightning Elemental is now ("Whenever this takes damage, deal 1 damage to all other minions.") from "After this..."
+ - Hold Hunter is now a (1/1/2 Pirate "After this attacks and kills a minion, gain Dodge.")
+ - Giant Serpent now has Hidden for 1 turn and is a Common.
+ - Captain of the Guard (4/3/3 -> 3/3/3)
+ - Mrs. Merria is now (4/4/4 Fae "Opener: If you played 4 other cards this turn, take control of an enemy minion.") from (7/6/6) and 5 cards.
+ - Fixed text on Marie Annette
+ - Corona, Fae Defender's aura is now ("Your other Fae have +2/+1 and Elusive.") from +1/+1.
+ - Wolfcrier (4/3/7 -> 3/3/7 and summons a 3/3 wolf instead of a 2/3 wolf)
+ - Uccian Hydra (5/2/2 -> 4/3/3 and has Hidden for 1 turn) 
+ - Sonorous Spectre is now (6/4/4 Spirit "Opener and Aftermath: Silence all other minions.") from just Opener.
+ - Oni's Eye (2/0/2 -> 1/0/2), Sleepy Scarecrow (1/0/2 -> 1/0/3)
+ - Crew Commander properly has Pirate Tag
+ - Blackboar is now (3/3/3 Beast "Opener: Your next Dash minion this turn costs (3) less.")
+ - Hybreeder is now (3/1/4 "At the end of your turn, summon a 1/1 Mutt with Guard.")
+ - Nice Cream is now (3/3/3 Elemental "Opener: Restore 3 Health to all other characters.")
+ - Holdout Soldier is now a Rare (4/2/6 "Opener: If your opponent has 4 or more minions, draw 3 cards.") from 2 and 1 respectively.
+ - Added missing minion: Henchman Helper (5/5/2 "Opener: Give a friendly Guard minion +4/+4.")
+ - Disco Inferno (4/4/3 -> 3/4/3), Alien Ravager now says ("Extra Strike")
+ - Timewalker Initiate renamed to Patient Initiate
+
+#### Oni Queen Changes
+ - Lead by Example now costs 3 and does not draw a card.
+ - Insurgency Captain Krika now requires 4 Champion Attacks (from 3).
+ - Ruffian Shiro (2/2/2 -> 3/2/2)
+ - 4th Ring Warden's effect should no longer stack.
+ - Bogovey Jester is now an Aftermath from an Opener.
+ - Darkfire Blaster (5/3/6 -> 6/3/7)
+ - Warmongering is now ("Give a minion 'After this attacks, gain +2/+2'.")
+ - Thousand Year Hatred is now ("Choose an enemy minion. Destroy all minions on the battlefield and in hand with the same name.")
+
+#### Witch Doc Changes
+ 
+ - Witching Traveler now sets cost of card to 0 from 1.
 
 ### 0.8.65-3.0.8 (January 24th, 2020)
 

@@ -7,6 +7,10 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "BEAST",
+  "description": "Guard",
+  "attributes": {
+    "TAUNT": true
+  },
   "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1

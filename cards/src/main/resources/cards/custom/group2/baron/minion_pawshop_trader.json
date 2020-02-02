@@ -38,9 +38,9 @@
   },
   "attributes": {
     "BATTLECRY": true,
-	"DISCOVER": true
+    "DISCOVER": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
