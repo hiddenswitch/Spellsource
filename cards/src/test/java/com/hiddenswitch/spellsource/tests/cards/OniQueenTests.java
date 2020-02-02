@@ -103,4 +103,20 @@ public class OniQueenTests extends TestBase {
 			assertEquals(0, player.getHand().size());
 		});
 	}
+  
+	public void testRuffianShiroTargetSelection() {
+		runGym((context, player, opponent) -> {
+			Card handDemon = receiveCard(context, player, "minion_demon_test");
+			playCard(context, player, "minion_ruffian_shiro");
+			assertEquals(2, handDemon.getBonusAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Card handDemon = receiveCard(context, player, "minion_demon_test");
+			Minion boardDemon = playMinionCard(context, player, "minion_demon_test");
+			playCard(context, player, "minion_ruffian_shiro");
+			assertEquals(4, boardDemon.getAttack());
+			assertEquals(2, handDemon.getBonusAttack());
+		});
+	}
 }

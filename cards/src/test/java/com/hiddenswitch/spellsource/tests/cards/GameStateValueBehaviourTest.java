@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -399,17 +400,17 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testAIWillNotPlayIntoDoomsayer() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_end_reveler");
+			playCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			receiveCard(context, opponent, "minion_rapier_rodent");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			assertEquals(action.getActionType(), ActionType.END_TURN);
+			assertEquals(ActionType.END_TURN, action.getActionType(), "should not play rapier rodent");
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion doomsayer = playMinionCard(context, player, "minion_end_reveler");
+			Minion clearsEndTurn = playMinionCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			for (int i = 0; i < 3; i++) {
 				playMinionCard(context, opponent, "minion_charge_test");
@@ -417,27 +418,27 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
-			assertEquals(action.getTargetReference(), doomsayer.getReference());
+			assertEquals(ActionType.PHYSICAL_ATTACK, action.getActionType(), "should attack");
+			assertEquals(clearsEndTurn.getReference(), action.getTargetReference(), "should attack board clear");
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion doomsayer = playMinionCard(context, player, "minion_end_reveler");
+			Minion clearsEndTurn = playMinionCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			playMinionCard(context, opponent, "minion_floating_crystal");
-			receiveCard(context, opponent, "spell_test_deal_6");
+			Card card = receiveCard(context, opponent, "spell_test_deal_6");
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			assertEquals(action.getActionType(), ActionType.SPELL);
-			assertEquals(action.getTargetReference(), doomsayer.getReference());
+			assertEquals(action.getSourceReference(), card.getReference(), "should deal 6 damage");
+			assertEquals(clearsEndTurn.getReference(), action.getTargetReference(), "should target board clear");
 		});
 	}
 
 	@Test
-	public void testAIWillPlayIntoSnakeTrap() {
+	public void testAIPlaysIntoSecrets() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_trap");
 			Minion targetDummy = playMinionCard(context, player, "minion_test_taunts");
