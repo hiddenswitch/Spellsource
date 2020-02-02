@@ -198,6 +198,12 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		if (getBattlecry().getCondition() != null) {
 			battlecryAction.setCondition(getBattlecry().getCondition().create());
 		}
+		if (getBattlecry().getTargetSelectionOverride() != null) {
+			battlecryAction.setTargetSelectionOverride(getBattlecry().getTargetSelectionOverride());
+		}
+		if (getBattlecry().getTargetSelectionCondition() != null) {
+			battlecryAction.setTargetSelectionCondition(getBattlecry().getTargetSelectionCondition().create());
+		}
 		return battlecryAction;
 	}
 
@@ -1020,7 +1026,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
 				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
 				immutableEntry(CardDescArg.QUEST, quest),
-				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription)
+				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription),
+				immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, targetSelectionOverride),
+				immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, targetSelectionCondition)
 		);
 		return entries;
 	}
