@@ -23,19 +23,23 @@ public class MigrationTest extends SpellsourceTestBase {
 			var account = createRandomAccount();
 			Logic.initializeUser(InitializeUserRequest.create(account.getUserId()));
 			// Remove the validation record to test adding it in
-			mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$unset", json(CollectionRecord.VALIDATION_RECORD, null)), new UpdateOptions().setMulti(true));
+			mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$unset", json(CollectionRecord.VALIDATION_REPORT, null)), new UpdateOptions().setMulti(true));
 			/**
 			 * {"$unset": {"fieldName": 1}}
 			 */
 			var decks = mongo().find(Inventory.COLLECTIONS, json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()));
 			testContext.assertTrue(decks.size() > 0, "should find decks");
 			for (JsonObject deck : decks) {
-				testContext.assertNull(deck.getJsonObject(CollectionRecord.VALIDATION_RECORD), "should not have validation record because we removed it");
+				testContext.assertNull(deck.getJsonObject(CollectionRecord.VALIDATION_REPORT), "should not have validation report because we removed it");
 			}
 			Decks.validateAllDecks();
 			decks = mongo().find(Inventory.COLLECTIONS, json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()));
 			for (JsonObject deck : decks) {
-				testContext.assertNotNull(deck.getJsonObject(CollectionRecord.VALIDATION_RECORD), "SHOULD have validation record because we removed it");
+				testContext.assertNotNull(deck.getJsonObject(CollectionRecord.VALIDATION_REPORT), "SHOULD have validation report because we removed it");
+			}
+			var decksDeserialized = mongo().find(Inventory.COLLECTIONS, json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()), CollectionRecord.class);
+			for (var deck : decksDeserialized) {
+				testContext.assertNotNull(deck.getValidationReport(), "SHOULD have validation report because we removed it");
 			}
 		}, testContext);
 	}

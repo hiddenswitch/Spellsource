@@ -2,15 +2,17 @@ package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.GameState;
+import com.hiddenswitch.spellsource.client.models.GetGameRecordIdsResponse;
+import com.hiddenswitch.spellsource.client.models.GetGameRecordResponse;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.impl.util.GameRecord;
+import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.GameContext;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ import java.util.List;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
-import static org.junit.Assert.assertTrue;
 
 public class ReplayTest extends SpellsourceTestBase {
 
