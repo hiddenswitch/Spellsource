@@ -136,4 +136,16 @@ public class TraderTests extends TestBase {
 			assertEquals(customer.getBaseAttack() + 1, customer.getAttack(), "should buff customers counted as dragons");
 		});
 	}
+
+	@Test
+	public void testFloodTheMarket() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("spell_howling_blast")); //have to use this instead of spell_test_1_aoe because of class
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "spell_lunstone");
+			}
+			playCard(context, player, "spell_flood_the_market");
+			assertEquals(player.getHero().getMaxHp() - 5, player.getHero().getHp());
+		});
+	}
 }
