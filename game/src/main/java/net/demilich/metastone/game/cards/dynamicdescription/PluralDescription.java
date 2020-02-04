@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 /**
  * Appends the {@link DynamicDescriptionArg#VALUE} with {@link DynamicDescriptionArg#DESCRIPTION1} if the value is
  * singular, otherwise appends {@link DynamicDescriptionArg#DESCRIPTION2}.
- *
+ * <p>
  * For <b>example</b>, this code will read the {@code RESERVED_INTEGER_1} attribute on the card and render it with the
  * appropriate pluralized count.
  * <pre>

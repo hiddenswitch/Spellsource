@@ -6,22 +6,23 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Opener: Give all minions in your deck +5/+5. They die after they attack.",
+  "description": "Opener: Give all minions in your deck +5/+5. They deal 5 damage to your champion when drawn.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "custom.AddEnchantmentToMinionCardSpell",
+          "class": "AddEnchantmentSpell",
           "target": "FRIENDLY_DECK",
           "trigger": {
             "eventTrigger": {
-              "class": "AfterPhysicalAttackTrigger",
-              "hostTargetType": "IGNORE_OTHER_SOURCES"
+              "class": "CardDrawnTrigger",
+              "hostTargetType": "IGNORE_OTHER_TARGETS"
             },
             "spell": {
-              "class": "DestroySpell",
-              "target": "SELF"
+              "class": "DamageSpell",
+              "value": 5,
+              "target": "FRIENDLY_HERO"
             }
           },
           "filter": {

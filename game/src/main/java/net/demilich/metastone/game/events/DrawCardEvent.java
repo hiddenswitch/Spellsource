@@ -8,13 +8,11 @@ import net.demilich.metastone.game.entities.Entity;
 public final class DrawCardEvent extends GameEvent implements HasCard {
 
 	private final Card card;
-	private final CardType sourceType;
 	private final boolean drawn;
 
-	public DrawCardEvent(GameContext context, int playerId, Card card, CardType sourceType, boolean drawn) {
+	public DrawCardEvent(GameContext context, int playerId, Card card, boolean drawn) {
 		super(context, playerId, -1);
 		this.card = card;
-		this.sourceType = sourceType;
 		this.drawn = drawn;
 	}
 
@@ -30,10 +28,6 @@ public final class DrawCardEvent extends GameEvent implements HasCard {
 	@Override
 	public GameEventType getEventType() {
 		return GameEventType.DRAW_CARD;
-	}
-
-	public CardType getSourceType() {
-		return sourceType;
 	}
 
 	public boolean isDrawn() {
