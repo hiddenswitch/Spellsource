@@ -7,6 +7,11 @@ import net.demilich.metastone.game.entities.Entity;
 /**
  * Concatenates the strings and {@link DynamicDescription} objects specified in its {@link
  * DynamicDescriptionArg#DESCRIPTIONS} array.
+ * <p>
+ * An element in the array can be a {@link DynamicDescriptionDesc} dynamic description argument <b>or</b> a {@code
+ * String} literal. Make sure to include the appropriate whitespace, concatenation is not performed with spaces.
+ *
+ * @see PluralDescription for a common use of combining elements to get a good plural dynamic description.
  */
 public class MetaDescription extends DynamicDescription {
 	public MetaDescription(DynamicDescriptionDesc desc) {

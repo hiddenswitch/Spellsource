@@ -854,11 +854,9 @@ public class CustomCardsTests extends TestBase {
 			putOnTopOfDeck(context, player, "minion_neutral_test");
 			playCard(context, player, "minion_chaugnar_the_corruptor");
 			context.endTurn();
+			int hp = player.getHero().getHp();
 			context.endTurn();
-			Minion test = playMinionCard(context, player, player.getHand().get(0));
-			test.setAttribute(Attribute.CHARGE);
-			attack(context, player, test, opponent.getHero());
-			assertTrue(test.isDestroyed());
+			assertEquals(hp - 5, player.getHero().getHp());
 		});
 	}
 
