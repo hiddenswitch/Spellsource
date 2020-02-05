@@ -11,6 +11,7 @@ permalink: /whats-new/
  - Necronomicon is now an Occultist card like it was supposed to be. (1523)
  - Forge Suit now properly only gives Health and not Attack. (1525)
  - Sand Filter now actually Decays, and is properly now only active on your own turn. (1525)
+ - Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
  
 In addition, extensive edits by @Logovaz summarized here:
 
