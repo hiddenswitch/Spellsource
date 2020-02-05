@@ -1,9 +1,11 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import co.paralleluniverse.common.util.Objects;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.jupiter.api.Test;
@@ -102,6 +104,21 @@ public class OccultistTests extends TestBase {
 			assertEquals(3, player.getMinions().size());
 			assertFalse(test.hasAttribute(Attribute.TAUNT));
 			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.TAUNT));
+		});
+	}
+
+	@Test
+	public void testCosmicApparitions() {
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context,player, discoverActions -> {
+				for (DiscoverAction discoverAction : discoverActions) {
+					assertEquals(CardType.MINION, discoverAction.getCard().getCardType());
+				}
+				return discoverActions.get(context.getLogic().random(discoverActions.size()));
+			});
+			playCard(context, player, "spell_cosmic_apparitions");
+			assertEquals(1, player.getHand().size());
+			assertEquals(2, player.getDeck().size());
 		});
 	}
 }
