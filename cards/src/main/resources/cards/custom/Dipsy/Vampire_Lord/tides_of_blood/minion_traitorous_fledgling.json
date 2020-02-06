@@ -19,7 +19,7 @@
     "BATTLECRY": true,
 	"DRAIN": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_TIDESOFBLOOD"

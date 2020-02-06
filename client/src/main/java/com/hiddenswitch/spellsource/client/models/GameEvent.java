@@ -114,6 +114,8 @@ public class GameEvent implements Serializable {
     
     ENTITY_UNTOUCHED("ENTITY_UNTOUCHED"),
     
+    EXCESS_HEAL("EXCESS_HEAL"),
+    
     FATIGUE("FATIGUE"),
     
     GAME_START("GAME_START"),

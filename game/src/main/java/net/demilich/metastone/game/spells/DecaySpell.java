@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -17,8 +18,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.function.Predicate;
 
+/**
+ * Deals {@link DamageTypeEnum#DECAY} damage to the {@code source}.
+ * <p>
+ * Counts as damage, but cannot be overriden by effects that specifically target {@link DamageSpell}.
+ */
 public final class DecaySpell extends Spell {
-	private static Logger logger = LoggerFactory.getLogger(DamageSpell.class);
+	private static Logger logger = LoggerFactory.getLogger(DecaySpell.class);
 
 	public static SpellDesc create(EntityReference target) {
 		return create(target, 1);
@@ -70,7 +76,7 @@ public final class DecaySpell extends Spell {
 			if (damage < 0) {
 				logger.error("onCast {} {}: Suspicious negative damage call", context.getGameId(), source);
 			}
-			context.getLogic().damage(player, (Actor) target, damage, source, true);
+			context.getLogic().damage(player, (Actor) target, damage, source, true, DamageTypeEnum.DECAY);
 		} else if (target instanceof Weapon) {
 			int durabilityChange = desc.getValue(SpellArg.VALUE, context, player, target, source, -1);
 			context.getLogic().modifyDurability(player.getHero().getWeapon(), durabilityChange);

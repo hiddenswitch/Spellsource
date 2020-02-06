@@ -32,7 +32,7 @@
   "attributes": {
 	"DISCOVER": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_FROMTHEDARKNESS"

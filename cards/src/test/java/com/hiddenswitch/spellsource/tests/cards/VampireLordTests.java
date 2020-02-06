@@ -9,6 +9,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,6 +19,51 @@ public class VampireLordTests extends TestBase {
 	@Override
 	public String getDefaultHeroClass() {
 		return HeroClass.BLOOD;
+	}
+
+	@Test
+	public void testSiphon() {
+
+	}
+
+	@Test
+	public void testGatekeeperAcolyte() {
+
+	}
+
+	@Test
+	public void testFleshshaper() {
+
+	}
+
+	@Test
+	public void testPsychoticServant() {
+
+	}
+
+	@Test
+	public void testCalamityBeckonsSpell() {
+
+	}
+
+	@Test
+	public void testSeekerAshi() {
+
+	}
+
+	@Test
+	public void testStemTheFlow() {
+
+	}
+
+	@Test
+	public void testXueTheEternal() {
+
+	}
+
+	@Test
+	public void testGravelordsGambit() {
+
 	}
 
 	@Test
@@ -39,14 +86,20 @@ public class VampireLordTests extends TestBase {
 	}
 
 	@Test
-	public void testBloodlordGoa() {
+	public void testGrimAwakeningRework() {
+
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"minion_gravelord_goa", "minion_bloodlord_goa"})
+	public void testBloodlordGoa(String cardId) {
 		runGym((context, player, opponent) -> {
 			Minion drawsCard = playMinionCard(context, player, "minion_test_deathrattle");
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "spell_lunstone");
 			putOnTopOfDeck(context, player, "spell_lunstone");
 			destroy(context, drawsCard);
 			assertEquals(Zones.DECK, shouldBeDrawn.getZone(), "should not yet be drawn");
-			Minion goa = playMinionCard(context, player, "minion_bloodlord_goa");
+			Minion goa = playMinionCard(context, player, cardId);
 			destroy(context, goa);
 			assertEquals(Zones.HAND, shouldBeDrawn.getZone(), "goa repeats draw card deathrattle");
 		});
@@ -56,7 +109,7 @@ public class VampireLordTests extends TestBase {
 			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "spell_lunstone");
 			putOnTopOfDeck(context, player, "spell_lunstone");
 			assertEquals(Zones.DECK, shouldNotBeDrawn.getZone(), "should not yet be drawn");
-			Minion goa = playMinionCard(context, player, "minion_bloodlord_goa");
+			Minion goa = playMinionCard(context, player, cardId);
 			destroy(context, goa);
 			assertEquals(Zones.DECK, shouldNotBeDrawn.getZone(), "goa does NOT repeat draw card deathrattle because it hasn't triggered yet");
 		});
@@ -67,7 +120,7 @@ public class VampireLordTests extends TestBase {
 			putOnTopOfDeck(context, player, "spell_lunstone");
 			playMinionCard(context, player, "minion_vein_burster", drawsCard);
 			assertEquals(Zones.DECK, shouldBeDrawn.getZone(), "should not yet be drawn");
-			Minion goa = playMinionCard(context, player, "minion_bloodlord_goa");
+			Minion goa = playMinionCard(context, player, cardId);
 			destroy(context, goa);
 			assertEquals(Zones.HAND, shouldBeDrawn.getZone(), "goa repeats draw card deathrattle");
 		});
@@ -80,7 +133,7 @@ public class VampireLordTests extends TestBase {
 			putOnTopOfDeck(context, player, "spell_lunstone");
 			playCard(context, player, "spell_soulscream");
 			assertEquals(Zones.DECK, shouldBeDrawn.getZone(), "should not yet be drawn");
-			Minion goa = playMinionCard(context, player, "minion_bloodlord_goa");
+			Minion goa = playMinionCard(context, player, cardId);
 			destroy(context, goa);
 			assertEquals(Zones.HAND, shouldBeDrawn.getZone(), "goa repeats draw card deathrattle");
 			assertEquals(Zones.HAND, shouldBeDrawnToo.getZone(), "goa repeats draw card deathrattle again");

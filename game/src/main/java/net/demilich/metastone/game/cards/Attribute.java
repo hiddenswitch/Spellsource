@@ -218,6 +218,22 @@ public enum Attribute {
 	 */
 	AURA_SPELL_DAMAGE,
 	/**
+	 * The additional amount of healing an {@link Entity} contributes.
+	 */
+	HEALING_BONUS,
+	/**
+	 * The additional amount of healing an {@link Entity} contributes to this owner's enemy.
+	 */
+	ENEMY_HEALING_BONUS,
+	/**
+	 * The aura version of {@link #HEALING_BONUS}.
+	 */
+	AURA_HEALING_BONUS,
+	/**
+	 * The aura version of {@link #ENEMY_HEALING_BONUS}.
+	 */
+	AURA_ENEMY_HEALING_BONUS,
+	/**
 	 * Some cards give the opponent spell damage. This attribute stores how much.
 	 */
 	OPPONENT_SPELL_DAMAGE,
@@ -283,8 +299,8 @@ public enum Attribute {
 	 * <p>
 	 * This implements Baron Rivendare's text.
 	 *
-	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
-	 * complete rules for deathrattles.
+	 * @see GameLogic#resolveAftermaths(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
+	 * 		complete rules for deathrattles.
 	 */
 	@Deprecated
 	DOUBLE_DEATHRATTLES,
@@ -721,6 +737,11 @@ public enum Attribute {
 	 */
 	HEALING_THIS_TURN,
 	/**
+	 * Every time an {@link Actor} is healed, increment this attribute with the amount of healing and set to zero at the
+	 * end of the turn.
+	 */
+	EXCESS_HEALING_THIS_TURN,
+	/**
 	 * Every time an {@link Actor} has its max HP increased, this value increases.
 	 */
 	TOTAL_HP_INCREASES,
@@ -1077,8 +1098,16 @@ public enum Attribute {
 	/**
 	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability at the end of every
 	 * owner's turn
+	 * <p>
+	 * Requires an appropriate trigger to actually implement the effect.
 	 */
 	DECAY,
+	/**
+	 * The {@link net.demilich.metastone.game.spells.aura.Aura} version of the {@link #DECAY} keyword.
+	 * <p>
+	 * Requires an appropriate trigger to actually implement the effect.
+	 */
+	AURA_DECAY,
 	/**
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
@@ -1131,7 +1160,11 @@ public enum Attribute {
 	 * This is only really used for one Trader card right now, but it seemed like a useful one to add for future cards and
 	 * their effects.
 	 */
-	DISCOVER;
+	DISCOVER,
+	/**
+	 * Keeps track of damage dealt by this {@code source} minion <b>this game</b>.
+	 */
+	TOTAL_DAMAGE_DEALT_THIS_GAME;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

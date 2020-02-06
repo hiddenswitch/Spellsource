@@ -227,6 +227,9 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 			return;
 		}
+		if (removeAuraEffect == null) {
+			return;
+		}
 		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
 	}
 
@@ -235,6 +238,9 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		// By default, never cast on targets that have been removed from play. This prevents auras from casting twice on the
 		// same target, once on the original target and again on its transformed replacement.
 		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
+			return;
+		}
+		if (applyAuraEffect == null) {
 			return;
 		}
 		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
@@ -291,6 +297,10 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	@Override
 	public boolean hasPersistentOwner() {
 		return getDesc() != null && getDesc().getBool(AuraArg.PERSISTENT_OWNER);
+	}
+
+	public EntityReference getSecondaryTarget() {
+		return getDesc().getSecondaryTarget();
 	}
 }
 

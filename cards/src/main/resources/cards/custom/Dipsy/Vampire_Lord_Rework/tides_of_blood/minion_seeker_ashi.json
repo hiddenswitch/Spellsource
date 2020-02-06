@@ -1,0 +1,44 @@
+{
+  "name": "Seeker Ashi",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your champion attacks, draw a card with Cost equal to the total damage they dealt.",
+  "aura": {
+    "class": "SeekerAshiAura",
+    "target": "FRIENDLY_HERO",
+    "spell": {
+      "class": "DrawCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+          "class": "EventValueProvider"
+        }
+      }
+    },
+    "triggers": [
+      {
+        "class": "BeforePhysicalAttackTrigger",
+        "sourceEntityType": "HERO",
+        "sourcePlayer": "SELF"
+      },
+      {
+        "class": "AfterPhysicalAttackTrigger",
+        "sourceEntityType": "HERO",
+        "sourcePlayer": "SELF"
+      },
+      {
+        "class": "DidEndSequenceTrigger"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

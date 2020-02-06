@@ -14,7 +14,7 @@
       "attribute": "HP"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "attributes": {
     "DRAIN": true
   },

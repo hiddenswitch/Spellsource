@@ -1,0 +1,25 @@
+{
+  "name": "Stem the Flow",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Restore #10 Health to an ally. If that overheals it, give it that much Health.",
+  "targetSelection": "FRIENDLY_CHARACTERS",
+  "spell": {
+    "class": "ExcessHealSpell",
+    "value": 10,
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": {
+        "class": "EventValueProvider"
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

@@ -24,7 +24,7 @@
     "attribute": "SPELLS_COST_HEALTH"
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_CRIMSONCATACOMBS"

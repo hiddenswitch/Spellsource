@@ -1,0 +1,29 @@
+{
+  "name": "Ichor Blast",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Deal $5 damage. Give your minions +2 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 5
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+		"hpBonus": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

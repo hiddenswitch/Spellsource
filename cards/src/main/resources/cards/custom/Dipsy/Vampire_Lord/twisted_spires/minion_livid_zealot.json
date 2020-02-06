@@ -18,7 +18,7 @@
       "secondaryTarget": "EVENT_TARGET"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "attributes": {},
   "sets": [
     "CUSTOM",

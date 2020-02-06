@@ -1050,15 +1050,24 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param targetKey The reference to find.
 	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
-	 * reference was {@code null} or {@link EntityReference#NONE}
-	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
+	 * 		reference was {@code null} or {@link EntityReference#NONE}
+	 * @throws TargetNotFoundException if the reference could not be found. Game rules shouldn't be looking for references
 	 *                              that cannot be found.
 	 */
-	public Entity resolveSingleTarget(EntityReference targetKey) throws NullPointerException {
+	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
 		return resolveSingleTarget(targetKey, true);
 	}
 
-	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) {
+	/**
+	 * Resolves a single target given the specification, even if the specification is a {@link
+	 * EntityReference#isTargetGroup()}
+	 *
+	 * @param targetKey
+	 * @param rejectRemovedFromPlay
+	 * @return
+	 * @throws TargetNotFoundException
+	 */
+	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) throws TargetNotFoundException {
 		if (targetKey == null) {
 			return null;
 		}
@@ -1085,7 +1094,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
-		final List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
+		List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
 		if (entities == null) {
 			return null;
 		}
@@ -1482,8 +1491,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(playerId);
 	}
 
-	public EnvironmentDeathrattleTriggeredList getDeathrattles() {
-		return (EnvironmentDeathrattleTriggeredList) getEnvironment().computeIfAbsent(Environment.DEATHRATTLES_TRIGGERED, environment1 -> new EnvironmentDeathrattleTriggeredList());
+	public EnvironmentAftermathTriggeredList getAftermaths() {
+		return (EnvironmentAftermathTriggeredList) getEnvironment().computeIfAbsent(Environment.DEATHRATTLES_TRIGGERED, environment1 -> new EnvironmentAftermathTriggeredList());
 	}
 
 	protected Player getNonActivePlayer() {

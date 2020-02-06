@@ -1,0 +1,31 @@
+{
+  "name": "Fleshshaper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Your Lifedrain effects grant Armor instead.",
+  "aura": {
+    "class": "LifedrainGrantsArmorInsteadAura",
+    "target": "FRIENDLY_CARDS",
+    "triggers": [
+      {
+        "class": "CardPlayedTrigger"
+      },
+      {
+        "class": "BoardChangedTrigger"
+      },
+      {
+        "class": "WillEndSequenceTrigger"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

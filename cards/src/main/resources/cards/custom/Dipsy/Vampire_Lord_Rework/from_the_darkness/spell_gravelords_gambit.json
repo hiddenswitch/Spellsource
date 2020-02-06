@@ -1,0 +1,19 @@
+{
+  "name": "Gravelord's Gambit",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Repeat the last 3 Aftermaths you triggered this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.RepeatLastAftermathsSpell",
+    "value": 3
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

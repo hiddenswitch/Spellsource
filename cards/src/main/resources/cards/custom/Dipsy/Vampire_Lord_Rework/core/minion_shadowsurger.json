@@ -1,0 +1,29 @@
+{
+  "name": "Shadowsurger",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Aftermath: Give your champion this minion's Attack this turn.",
+  "deathrattle": {
+    "class": "TemporaryAttackSpell",
+    "target": "FRIENDLY_HERO",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "SELF",
+      "attribute": "ATTACK"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

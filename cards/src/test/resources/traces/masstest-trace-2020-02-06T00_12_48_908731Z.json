@@ -1,0 +1,26 @@
+{
+  "seed" : -5083727308200238125,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "LIGHTBROWN", "ROSE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_sly_conquistador", "minion_giants_toad", "minion_enhancing_shaman", "spell_quicksand", "minion_flingin_alchemist", "minion_bronze_timekeeper", "minion_fiery_tyrant", "minion_holy_giant", "minion_volcanic_elemental", "minion_nightmare_warden", "spell_shelter", "minion_rejan_last_defender", "minion_dreamwing_scout", "minion_magedrainer", "minion_infinite_futurist", "minion_evergreen_grower", "weapon_translife_mirror", "minion_chaotic_cutthroat", "minion_taletellers", "minion_gnomechanic", "minion_corona_fae_defender", "spell_steel_smash", "minion_faerie_nightmare", "minion_flutterer", "minion_atumjun_trapfinder", "minion_hoffis_the_dunewalker", "minion_purifying_ooze", "minion_warclub_ruffian", "minion_beholder_of_the_beginning", "minion_streetwise_specialist" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_tormentaxx_hulk", "minion_deepwood_barghest", "minion_jungle_survivalist", "minion_blackflame_bomber", "minion_antique_collector", "minion_dead_horse", "minion_eranikus", "spell_bat-talion", "spell_voodoo_infusion", "minion_cacodemon", "minion_mari_anette", "minion_ritual_shaman", "minion_channeled_spirit", "minion_jungle_king", "minion_vexspewer", "minion_titanic_fanatic", "weapon_bloodshed_reaver", "secret_greater_good", "spell_false_promise", "weapon_spiritbinder", "secret_black_magic", "minion_flutterer", "spell_jinx", "minion_darkbent_drake", "minion_hold_hunter", "minion_volcanic_elemental", "minion_squirrel_knight", "minion_sourceborn_aelin", "spell_ghostly_essence", "minion_chromatic_vohlok" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 25 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 49, 48 ]
+  } ],
+  "actions" : [ 2, 1, 3, 4, 1, 0, 0, 2, 1, 0, 0, 2, 10, 5, 0, 1, 1, 0, 7, 24, 10, 2, 0, 1, 0, 6, 1, 0, 0, 11, 10, 11, 0, 7, 2, 2, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Glyph Carver",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Dash. Aftermath: If you have less Health remaining than your opponent, draw a card.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "target": "ENEMY_HERO",
+		"attribute": "HP"
+      },
+      "value2": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+		"attribute": "HP"
+      }
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "RUSH": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ],
+  "fileFormatVersion": 1
+}

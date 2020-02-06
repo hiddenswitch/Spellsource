@@ -1023,6 +1023,7 @@ definitions:
           - 'ENRAGE_CHANGED'
           - 'ENTITY_TOUCHED'
           - 'ENTITY_UNTOUCHED'
+          - 'EXCESS_HEAL'
           - 'FATIGUE'
           - 'GAME_START'
           - 'HEAL'

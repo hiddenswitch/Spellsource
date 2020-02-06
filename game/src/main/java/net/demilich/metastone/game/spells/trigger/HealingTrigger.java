@@ -8,6 +8,11 @@ import net.demilich.metastone.game.events.HealEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires whenever a {@code target} is healed.
+ * <p>
+ * Obeys the {@link EventTriggerArg#TARGET_ENTITY_TYPE} constraint.
+ */
 public class HealingTrigger extends EventTrigger {
 
 	public HealingTrigger(EventTriggerDesc desc) {

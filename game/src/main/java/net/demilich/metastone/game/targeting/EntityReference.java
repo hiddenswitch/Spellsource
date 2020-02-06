@@ -555,6 +555,13 @@ public final class EntityReference implements Serializable {
 		return id;
 	}
 
+	/**
+	 * When {@code true}, indicates that this entity reference references <b>not</b> to a specific {@link Entity} but to a
+	 * pointer to an entity, like {@link EntityReference#SELF}.
+	 *
+	 * @return {@code true} if the {@link #id} is negative, which all the special {@link EntityReference} static elements
+	 * 		are.
+	 */
 	public boolean isTargetGroup() {
 		return id < 0;
 	}
