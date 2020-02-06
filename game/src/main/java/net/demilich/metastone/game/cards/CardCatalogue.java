@@ -331,6 +331,13 @@ public class CardCatalogue {
 		return heroCards.getOrDefault(heroClass, getCardById(CardCatalogue.getNeutralHero()));
 	}
 
+	/**
+	 * Retrieves all the "class_" {@link CardType#CLASS} cards that specify a hero card, color, heroClass string, etc. for
+	 * the specified class in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
 	public static CardList getClassCards(DeckFormat format) {
 		try {
 			return classCardsForFormat.get(format);
@@ -339,6 +346,13 @@ public class CardCatalogue {
 		}
 	}
 
+	/**
+	 * Retrieves the {@link net.demilich.metastone.game.entities.heroes.HeroClass} strings that correspond to the classes
+	 * in the specified format.
+	 *
+	 * @param deckFormat
+	 * @return
+	 */
 	public static List<String> getBaseClasses(DeckFormat deckFormat) {
 		try {
 			return baseClassesForFormat.get(deckFormat);

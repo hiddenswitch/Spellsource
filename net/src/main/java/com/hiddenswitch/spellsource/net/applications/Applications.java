@@ -1,9 +1,6 @@
 package com.hiddenswitch.spellsource.net.applications;
 
-import com.hiddenswitch.spellsource.net.Cluster;
-import com.hiddenswitch.spellsource.net.Configuration;
-import com.hiddenswitch.spellsource.net.Spellsource;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.RpcClient;
 import io.atomix.cluster.Node;
 import io.atomix.core.Atomix;
@@ -17,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 
 public interface Applications {
 	Logger LOGGER = LoggerFactory.getLogger(Applications.class);
@@ -52,7 +48,7 @@ public interface Applications {
 
 			Vertx vertx = then.result();
 			Tracing.initializeGlobal(vertx);
-			Spellsource.spellsource().migrate(vertx, v1 -> {
+			Migrations.migrate(vertx, v1 -> {
 				if (v1.failed()) {
 					LOGGER.error("main: Migration failed", v1.cause());
 					handler.handle(Future.failedFuture(v1.cause()));
