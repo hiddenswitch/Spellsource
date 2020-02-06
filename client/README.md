@@ -28,7 +28,7 @@ Add this dependency to your project's POM:
 <dependency>
     <groupId>com.hiddenswitch</groupId>
     <artifactId>client</artifactId>
-    <version>0.8.61</version>
+    <version>0.8.65</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:client:0.8.61"
+compile "com.hiddenswitch:client:0.8.65"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/client-0.8.61.jar
+* target/client-0.8.65.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -236,6 +236,7 @@ Class | Method | HTTP request | Description
  - [TargetActionPair](docs/TargetActionPair.md)
  - [Timers](docs/Timers.md)
  - [UnfriendResponse](docs/UnfriendResponse.md)
+ - [ValidationReport](docs/ValidationReport.md)
 
 
 ## Documentation for Authorization

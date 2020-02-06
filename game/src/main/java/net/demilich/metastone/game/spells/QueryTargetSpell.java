@@ -55,9 +55,10 @@ import java.util.stream.Collectors;
  * be evaluated with the {@code target} given by {@link EntityReference#TARGET} or {@link EntityReference#EVENT_TARGET},
  * or {@code null}.
  * <h1>Casting:</h1>
- * Finally, the {@link SpellArg#SPELL} is cast on each target in order. If a {@link SpellArg#CONDITION} is specified,
- * casting only continues so long as there are elements <b>and</b> the condition is {@code true}, evaluated with the
- * {@code target} we are currently potentially casting on.
+ * Finally, the {@link SpellArg#SPELL} is cast on each {@code target} in order. You should <b>not</b> use {@link
+ * EntityReference#OUTPUT} here, the selected target is passed directly as a target of the spell. If a {@link
+ * SpellArg#CONDITION} is specified, casting only continues so long as there are elements <b>and</b> the condition is
+ * {@code true}, evaluated with the {@code target} we are currently potentially casting on.
  * <p>
  * For example, to target the top 5 minions in your deck:
  * <pre>
@@ -78,7 +79,7 @@ import java.util.stream.Collectors;
  *         "multiplier": -1
  *       },
  *       "spell": {
- *         (Your spell here)
+ *         (Your spell here, cast on each target, do not use OUTPUT)
  *       }
  *     }
  * </pre>

@@ -63,6 +63,7 @@ public interface Inventory {
 				record1.setHeroCardId(request.getHeroCardId());
 				record1.setFormat(request.getFormat());
 				record1.setStandardDeck(request.isStandard());
+				record1.setValidationReport(request.getValidationReport());
 				final String deckId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record1));
 
 				if (request.getInventoryIds() != null
@@ -339,7 +340,7 @@ public interface Inventory {
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
 			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed())
-					.setStandard(deck.isStandardDeck());
+					.setStandard(deck.isStandardDeck()).setValidationReport(deck.getValidationReport());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(userId, inventoryRecords);
 		} /*  else {

@@ -2,15 +2,17 @@ package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.GameState;
+import com.hiddenswitch.spellsource.client.models.GetGameRecordIdsResponse;
+import com.hiddenswitch.spellsource.client.models.GetGameRecordResponse;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.impl.util.GameRecord;
+import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.GameContext;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ import java.util.List;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
-import static org.junit.Assert.assertTrue;
 
 public class ReplayTest extends SpellsourceTestBase {
 
@@ -35,7 +36,6 @@ public class ReplayTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	@Ignore("needs to be revisited")
 	public void testReplayMatchesClientData(TestContext context) {
 		sync(() -> {
 			List<GameState> receivedStates = new ArrayList<>();
@@ -52,29 +52,12 @@ public class ReplayTest extends SpellsourceTestBase {
 				player.matchmakeQuickPlay(null);
 				invoke0(player::waitUntilDone);
 				context.assertTrue(player.getTurnsPlayed() > 0);
-
-				// Sleep to let the replay actually get saved
-				Strand.sleep(4000);
-
+				Strand.sleep(100);
 				GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
-				context.assertEquals(gameIds.getGameIds().size(), 1);
+				context.assertEquals(1, gameIds.getGameIds().size(), "should have saved game");
 				GetGameRecordResponse gameRecordResponse = invoke(player.getApi()::getGameRecord, gameIds.getGameIds().get(0));
 				context.assertNotNull(gameRecordResponse.getReplay());
 			}
-
-
-
-
-			/*
-			// Check that every state we received was in this response
-			Set<GameState> firsts = gameRecordResponse.getReplay().getGameStates().stream().map(ReplayGameStates::getFirst).collect(Collectors.toSet());
-			Set<GameState> seconds = gameRecordResponse.getReplay().getGameStates().stream().map(ReplayGameStates::getSecond).collect(Collectors.toSet());
-
-			// TODO: Use the stricter criteria when ready.
-			for (GameState receivedState : receivedStates) {
-				context.assertTrue(firsts.contains(receivedState) || seconds.contains(receivedState));
-			}
-			*/
 		}, context);
 	}
 }

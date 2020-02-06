@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **deckType** | [**DeckTypeEnum**](#DeckTypeEnum) | Indicates whether this is a deck meant for draft or constructed play.  |  [optional]
 **isStandardDeck** | **Boolean** | When true, indicates this is a standard deck provided by the server.  |  [optional]
 **inventory** | [**List&lt;CardRecord&gt;**](CardRecord.md) |  |  [optional]
+**validationReport** | [**ValidationReport**](ValidationReport.md) |  |  [optional]
 
 
 <a name="TypeEnum"></a>

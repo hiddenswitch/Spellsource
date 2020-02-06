@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 public class CardCatalogue {
 	private static Map<String, Card> classCards;
 	private static Map<String, Card> heroCards;
+	private static Map<String, Card> formatCards;
 	private static LoadingCache<DeckFormat, CardList> classCardsForFormat;
 	private static LoadingCache<DeckFormat, List<String>> baseClassesForFormat;
 
@@ -281,9 +282,10 @@ public class CardCatalogue {
 				}
 			});
 			DeckFormat.populateAll(sets);
-			DeckFormat.populateFormats(new CardArrayList(cards.values().stream()
-					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList())));
-
+			CardList formats = cards.values().stream()
+					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toCollection(CardArrayList::new));
+			DeckFormat.populateFormats(formats);
+			formatCards = formats.stream().collect(Collectors.toMap(Card::getName, Function.identity()));
 			// Populate the class and hero cards
 			classCards = cards.values().stream().filter(c -> c.getCardType() == CardType.CLASS).collect(Collectors.toMap(Card::getHeroClass, Function.identity()));
 			classCardsForFormat = CacheBuilder.newBuilder()
@@ -319,6 +321,10 @@ public class CardCatalogue {
 			}
 
 		}
+	}
+
+	public static Card getFormatCard(String name) {
+		return formatCards.getOrDefault(name, null);
 	}
 
 	public static Card getHeroCard(String heroClass) {

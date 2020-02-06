@@ -1,6 +1,6 @@
 {
   "name": "Domineer",
-  "baseManaCost": 6,
+  "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",

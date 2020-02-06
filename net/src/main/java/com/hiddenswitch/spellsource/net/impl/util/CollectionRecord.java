@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.net.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.net.models.CollectionTypes;
 
 import java.util.Arrays;
@@ -13,6 +14,9 @@ import java.util.List;
 public class CollectionRecord extends MongoRecord {
 	public static final String FORMAT = "format";
 	public static final String HERO_CLASS = "heroClass";
+	public static final String TYPE = "type";
+	public static final String USER_ID = "userId";
+	public static final String VALIDATION_REPORT = "validationReport";
 	private String userId;
 	private CollectionTypes type;
 	private boolean trashed;
@@ -22,6 +26,7 @@ public class CollectionRecord extends MongoRecord {
 	private boolean isStandardDeck;
 	private int wins;
 	private int totalGames;
+	private ValidationReport validationReport;
 
 	/**
 	 * Hero class for deck collection records.
@@ -192,6 +197,14 @@ public class CollectionRecord extends MongoRecord {
 	public CollectionRecord setStandardDeck(boolean standardDeck) {
 		isStandardDeck = standardDeck;
 		return this;
+	}
+
+	public void setValidationReport(ValidationReport validationReport) {
+		this.validationReport = validationReport;
+	}
+
+	public ValidationReport getValidationReport() {
+		return validationReport;
 	}
 }
 

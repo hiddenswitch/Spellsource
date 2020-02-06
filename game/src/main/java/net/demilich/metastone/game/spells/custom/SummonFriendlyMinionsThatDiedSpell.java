@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
@@ -52,7 +53,12 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 			Minion deadMinion = (Minion) deadEntity;
 			if (deadMinion.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {
 				Card card = deadMinion.getSourceCard();
-				context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
+				Minion summon = card.summon();
+				boolean summoned = context.getLogic().summon(player.getId(), summon, source, -1, false);
+				SpellDesc subSpell = desc.getSpell();
+				if (summoned && subSpell != null && summon.isInPlay()) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, summon);
+				}
 			}
 		}
 	}

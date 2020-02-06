@@ -23,6 +23,19 @@
     },
     "removeEffect": {
       "class": "DrawCardSpell"
+    },
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
     }
   },
   "collectible": true,

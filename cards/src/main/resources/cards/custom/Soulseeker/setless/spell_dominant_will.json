@@ -1,6 +1,6 @@
 {
   "name": "Dominant Will",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",

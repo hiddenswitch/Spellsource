@@ -3,7 +3,69 @@ layout: page
 title: Updates
 permalink: /whats-new/
 ---
-### 0.8.65-3.0.9 (January 24th, 2020)
+
+### Upcoming Changes
+
+ - Star Sculptor now correctly gives the summoned minion Guard/Can't Attack and not the original. (1518)
+ - Fixed an interaction when General Hun'Zho summons Lumina, Light of the Forest. (1516)
+ - Necronomicon is now an Occultist card like it was supposed to be. (1523)
+ - Forge Suit now properly only gives Health and not Attack. (1525)
+ - Sand Filter now actually Decays, and is properly now only active on your own turn. (1525)
+ 
+In addition, extensive edits by @Logovaz summarized here:
+
+#### Uncollectible Neutrals
+ - Jek the Bonelord, Firefoxie, Sunbender, Timebidding Magi, Toothpick Fighter, Pawshop Trader, Vanal Petkiper
+
+#### Neutral Changes
+
+ - Freying Faimiliar is now a Fae from a Beast and called "Forest Familiar"
+ - Stone Sentinel (10/9/9 -> 10/10/10), Stalwart Sculptor (4/3/2 -> 4/3/4)
+ - Skeletower (Costs 8 -> Costs 7)
+ - Siege Elephant is now ("Whenever this minion takes damage, gain 2 Armor.") from 1 Armor.
+ - Macabre Samaritan is now ("Whenever this minion takes damage, restore 4 Health to your champion.") from 2 Health.
+ - Hunchback Supplier now has Lifedrain
+ - Forest Magistrate (Opener: Deals 2 damage -> Opener: Deals 3 damage)
+ - Floating Crystal (2/0/4 -> 2/0/6), Fae Horncaster (2/1/2 -> 2/1/3), Burst Bug (4/2/1 -> 4/3/1)
+ - Bone Guard is now (5/3/5 "Guard. Opener: Draw a card.")
+ - Mind Controlled Mech reflavored to be Blind Acolyte. Also: (4/2/8 -> 4/3/8). The skill has been renamed to Echolocation from Mental Command.
+ - Warclub Ruffian is now a (4/3/2 Demon, Dodge, Guard)
+ - Mindswapper (3/3/2 -> 3/4/2) and is now a Fae.
+ - Lightning Elemental is now ("Whenever this takes damage, deal 1 damage to all other minions.") from "After this..."
+ - Hold Hunter is now a (1/1/2 Pirate "After this attacks and kills a minion, gain Dodge.")
+ - Giant Serpent now has Hidden for 1 turn and is a Common.
+ - Captain of the Guard (4/3/3 -> 3/3/3)
+ - Mrs. Merria is now (4/4/4 Fae "Opener: If you played 4 other cards this turn, take control of an enemy minion.") from (7/6/6) and 5 cards.
+ - Fixed text on Marie Annette
+ - Corona, Fae Defender's aura is now ("Your other Fae have +2/+1 and Elusive.") from +1/+1.
+ - Wolfcrier (4/3/7 -> 3/3/7 and summons a 3/3 wolf instead of a 2/3 wolf)
+ - Uccian Hydra (5/2/2 -> 4/3/3 and has Hidden for 1 turn) 
+ - Sonorous Spectre is now (6/4/4 Spirit "Opener and Aftermath: Silence all other minions.") from just Opener.
+ - Oni's Eye (2/0/2 -> 1/0/2), Sleepy Scarecrow (1/0/2 -> 1/0/3)
+ - Crew Commander properly has Pirate Tag
+ - Blackboar is now (3/3/3 Beast "Opener: Your next Dash minion this turn costs (3) less.")
+ - Hybreeder is now (3/1/4 "At the end of your turn, summon a 1/1 Mutt with Guard.")
+ - Nice Cream is now (3/3/3 Elemental "Opener: Restore 3 Health to all other characters.")
+ - Holdout Soldier is now a Rare (4/2/6 "Opener: If your opponent has 4 or more minions, draw 3 cards.") from 2 and 1 respectively.
+ - Added missing minion: Henchman Helper (5/5/2 "Opener: Give a friendly Guard minion +4/+4.")
+ - Disco Inferno (4/4/3 -> 3/4/3), Alien Ravager now says ("Extra Strike")
+ - Timewalker Initiate renamed to Patient Initiate
+
+#### Oni Queen Changes
+ - Lead by Example now costs 3 and does not draw a card.
+ - Insurgency Captain Krika now requires 4 Champion Attacks (from 3).
+ - Ruffian Shiro (2/2/2 -> 3/2/2)
+ - 4th Ring Warden's effect should no longer stack.
+ - Bogovey Jester is now an Aftermath from an Opener.
+ - Darkfire Blaster (5/3/6 -> 6/3/7)
+ - Warmongering is now ("Give a minion 'After this attacks, gain +2/+2'.")
+ - Thousand Year Hatred is now ("Choose an enemy minion. Destroy all minions on the battlefield and in hand with the same name.")
+
+#### Witch Doc Changes
+ 
+ - Witching Traveler now sets cost of card to 0 from 1.
+
+### 0.8.65-3.0.8 (January 24th, 2020)
 
  - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
  - Necronomicon now correctly inflicts 3 damage instead of 2. (1503)
@@ -16,6 +78,78 @@ permalink: /whats-new/
  - The Grandmage's Grandcult: "Generate cards/spells and your spells are more powerful."
  - The Imperial Ritual: "Combo deck which needs you to have a setup turn, playing Imperial Soul and Grasp of God, then on the next turn, copying imperial soul with Spawn of Evil, the second one being affected by Forgotten Science, then you play Freying Familiar, and then you cast Doom Project for the win."
  - New Archaeologist Decks: Elemental Arch, Discover Archaeologist and Armor-Hulk's Reign! (1499)
+
+### Upcoming Changes
+
+Soulseeker v0.2 (from @birb):
+ Summary:
+  - “Obvious nerfs.”
+  - Card deletions.
+  - Reflavoring and set changes.
+  - New cards, in particular Secrets archetype.
+ 
+ New Cards:
+ 
+ Verdant Dreams:
+ - Reverse Volition: 1 mana common spell "Secret: When your opponent plays a minion, return it to their hand." (Replaces Dormant Spirits)
+ 
+ Setless:
+ - Rebirth: 0 mana common spell "Destroy a friendly minion. Summon a random minion with the same Cost."
+ - Seeker of Mysteries: 2 mana 2/3 common "Opener: If you control a secret, Soulbind twice."
+ - Render Imaginary: 2 mana common spell "Destroy a minion. Its owner draws 2 cards."
+ - Transmute Life: 1 mana rare spell "Secret: When a friendly minion dies, give your other minions +1/+1."
+ - Mirror Phantom: 1 mana 1/3 rare Spirit "While in your hand, this is a copy of the last Spirit you played."
+ - Split Soul: 2 mana epic spell "Destroy a friendly minion. Add two 1/1 copies of it to your hand that cost (1)."
+ - Soul Warden: 4 mana 3/4 Spirit "Opener: Summon 1/1 copies of your minions that died this turn."
+ - Knowledge Feeder: 4 mana 3/3 epic Spirit "Opener: Destroy a friendly minion to put three Secrets from your deck into the battlefield."
+ - Ranabosh, in Memory: 3 mana 4/2 Legendary Spirit "Aftermath: Go dormant. Trigger two friendly Secrets to revive this minion."
+ - Prophet Elenthris: 4 mana 4/5 Legendary "Opener: Add five Soulstones to your hand. Play them all to summon Magoria."
+      - Soulstone (Token): 2 mana spell "Destroy a friendly minion. If you've played all five of these, awaken Magoria!"
+      - Mother Magoria: 10 mana 10/10 "At the end of your turn, fill your board with random minions."
+ 
+ Nerfs:
+ - Channeler Initiate costs (3).
+ - Dominant Will now costs (3).
+ - Extract Nightmare costs (6).
+ - Domineer costs (7).
+ - Spectral Host no longer gives guard.
+ - Essence Harvester’s heal reduced to 8.
+ 
+ Alterations:
+ - Rite of Promise costs (1) and only Soulbinds once.
+ - Rite of Pain costs (2) and only Soulbinds once.
+ - Rite of Passage costs (3) and only Soulbinds once.
+ 
+ Reworks:
+ - Stranded Memory is reworked into “Twisted Pathology”, a 5 mana 3/4 common spirit with “Dash. Opener: Each player draws 2 cards.”
+ - Ravenous Soul has been reworked into Devoted Denizen,  2 mana 2/2 Spirit with Guard and "Aftermath: Soulbind."
+ - Osiris is now a 5 mana 3/6 with "Opener: Return your other minions to your hand. Summon random minions with the same Costs."
+ 
+ Deletions:
+ - Wailing Banshee is deleted.
+ - Delve Into Memory is deleted.
+ - Vaash Trinity is deleted.
+ - Dormant Spirits is deleted.
+ - Otherworld Wayfinder is deleted.
+ 
+ *deleted = made uncollectible
+ 
+ Buffs:
+ - Olivia, the Successor is now a 4/3.
+ 
+ Reflavoring:
+ - Channeler Initiate is now called "Seeker Initiate"
+ - Jekk Trinity is now called "Lost Legionnaire"
+ - Stranded Thought is now called “Afterthought”
+ - Tortured Soul is now called "Dormant Soul"
+ - Brink of Reality is now called "Brink of Existence"
+ 
+ Set Changes:
+ - Awaken is now a basic card (was core/classic).
+ - Essence Harvester is now a core (classic) card (was setless).
+ - Lost Legionnaire (formerly Jekk Trinity) is now a core (classic) card (was setless)
+
+
 
 ### 0.8.64-3.0.8 (January 19th, 2020)
 

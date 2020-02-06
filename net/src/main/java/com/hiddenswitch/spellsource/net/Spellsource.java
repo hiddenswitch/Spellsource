@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -623,7 +622,12 @@ public class Spellsource {
 									"hero_nemsy_awakened_calamity",
 									"minion_faceless_nightmare");
 						}))
-				.migrateTo(40, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(41)
+						.withUp(thisVertx -> {
+							Decks.validateAllDecks();
+						}))
+				.migrateTo(41, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

@@ -3,8 +3,8 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKBLUE",
-  "baseAttack": 3,
-  "baseHp": 2,
+  "baseAttack": 4,
+  "baseHp": 3,
   "rarity": "LEGENDARY",
   "description": "Opener: Your Spirits cost (2) less this turn.",
   "battlecry": {

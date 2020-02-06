@@ -9,7 +9,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.javamodularity.moduleplugin'
 
 group = 'com.hiddenswitch'
-version = '0.8.61'
+version = '0.8.65'
 
 repositories {
     jcenter()
