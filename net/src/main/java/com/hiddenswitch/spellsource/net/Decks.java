@@ -330,8 +330,8 @@ public interface Decks {
 		var validClasses = classCards.stream().map(Card::getDesc).map(CardDesc::getHeroClass).collect(toList());
 		var replacementHeroCard = validHeroCards.get(0);
 		mongo().updateCollectionWithOptions(COLLECTIONS,
-				json(CollectionRecord.HERO_CARD_ID, json("$nin", validHeroCards)),
-				json("$set", json(CollectionRecord.HERO_CARD_ID, replacementHeroCard)),
+				json(CollectionRecord.HERO_CARD_ID, json("$exists", true, "$nin", validHeroCards)),
+				json("$unset", json(CollectionRecord.HERO_CARD_ID, null)),
 				new UpdateOptions().setMulti(true));
 		mongo().updateCollectionWithOptions(COLLECTIONS,
 				json(CollectionRecord.HERO_CLASS, json("$nin", validClasses)),
