@@ -2134,9 +2134,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public int getModifiedManaCost(Player player, Card card) {
-		int manaCost = card.getManaCost(context, player);
+		int manaCost = card.getBaseManaCost();
 		if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-			return manaCost;
+			return manaCost - card.getManaCostModification(context, player);
 		}
 		int minValue = 0;
 		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
@@ -2154,7 +2154,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				minValue = costModifier.getMinValue();
 			}
 		}
-
+		manaCost -= card.getManaCostModification(context, player);
 		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
 		if (canActivateInvokeKeyword(player, card)) {
 			if (card.hasAttribute(Attribute.AURA_INVOKE)) {
@@ -3349,11 +3349,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId
 	 * @param card
 	 * @param source
-	 * @param drawn    {@code true} if the card was drawn by a deck-drawing process, otherwise {@code false}.
+	 * @param isDrawnFromDeck {@code true} if the card was drawn by a deck-drawing process, otherwise {@code false}.
 	 * @return The card that was received (the card may have been transformed after it was received).
 	 */
 	@Suspendable
-	public Card receiveCard(int playerId, Card card, Entity source, boolean drawn) {
+	public Card receiveCard(int playerId, Card card, Entity source, boolean isDrawnFromDeck) {
 		Player player = context.getPlayer(playerId);
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
@@ -3382,20 +3382,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			card.getAttributes().remove(Attribute.HAND_INDEX);
 			// Clears countered
 			card.getAttributes().remove(Attribute.COUNTERED);
+			// Put triggers/enchantments into play that have not yet been put into play. Passive indicates active inside the
+			// hand.
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
 			processPassiveAuras(player, card);
 			card.getAttributes().put(Attribute.RECEIVED_ON_TURN, context.getTurn());
 			card.moveOrAddTo(context, Zones.HAND);
-			CardType sourceType = null;
-			if (source instanceof Card) {
-				Card sourceCard = (Card) source;
-				sourceType = sourceCard.getCardType();
-			}
-			if (drawn) {
+			if (isDrawnFromDeck) {
 				player.getStatistics().cardDrawn();
 			}
-			context.fireGameEvent(new DrawCardEvent(context, playerId, card, sourceType, drawn));
+			context.fireGameEvent(new DrawCardEvent(context, playerId, card, isDrawnFromDeck));
 		} else {
 			discardCard(player, card);
 		}
@@ -3668,7 +3665,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (zone.getZone() == Zones.HAND) {
 			processPassiveTriggers(player, newCard);
 			processPassiveAuras(player, newCard);
-			context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, newCard.getCardType(), false));
+			context.fireGameEvent(new DrawCardEvent(context, playerId, newCard, false));
 		} else if (zone.getZone() == Zones.DECK) {
 			processDeckTriggers(player, newCard);
 		}
@@ -3692,6 +3689,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			BattlecryAction battlecry = battlecries.get(i).toBattlecryAction();
 			battlecry.setSourceReference(actor.getReference());
 			Player player = context.getPlayer(playerId);
+			if (battlecry.shouldOverrideTargetSelection(context, player, actor)) {
+				battlecry.setTargetRequirement(battlecry.getTargetSelectionOverride());
+			}
 			processTargetModifiers(battlecry);
 			if (!battlecry.canBeExecuted(context, player)) {
 				battlecryActions[i] = BattlecryAction.NONE;

@@ -15,14 +15,12 @@
     }
   },
   "deathrattle": {
-    "spell": {
-      "class": "SilenceSpell",
-      "target": "ALL_OTHER_MINIONS"
-    }
+    "class": "SilenceSpell",
+    "target": "ALL_OTHER_MINIONS"
   },
   "attributes": {
     "BATTLECRY": true,
-    "DEATHRATTLE": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

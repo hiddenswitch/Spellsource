@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.models;
 
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.net.Logic;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.Entity;
@@ -35,6 +36,7 @@ public final class GetCollectionResponse implements Serializable {
 	private String heroCardId;
 	private String format;
 	private boolean standard;
+	private ValidationReport validationReport;
 
 	private GetCollectionResponse() {
 	}
@@ -231,6 +233,7 @@ public final class GetCollectionResponse implements Serializable {
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
 				.isStandardDeck(isStandard())
+				.validationReport(validationReport == null ? new com.hiddenswitch.spellsource.client.models.ValidationReport() : validationReport)
 				.inventory(records);
 
 		if (getHeroClass() != null) {
@@ -330,6 +333,15 @@ public final class GetCollectionResponse implements Serializable {
 	public GetCollectionResponse setStandard(boolean standard) {
 		this.standard = standard;
 		return this;
+	}
+
+	public GetCollectionResponse setValidationReport(ValidationReport validationReport) {
+		this.validationReport = validationReport;
+		return this;
+	}
+
+	public ValidationReport getValidationReport() {
+		return validationReport;
 	}
 }
 

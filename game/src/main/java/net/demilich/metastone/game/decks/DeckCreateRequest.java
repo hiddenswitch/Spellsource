@@ -359,7 +359,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 
 	public static DeckCreateRequest empty(String userId, String name, String heroClass) {
 		return new DeckCreateRequest()
-				.withFormat("Standard")
+				.withFormat("Spellsource")
 				.withDraft(false)
 				.withHeroClass(heroClass)
 				.withName(name)

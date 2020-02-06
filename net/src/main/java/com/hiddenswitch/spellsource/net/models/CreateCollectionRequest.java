@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.models;
 
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.net.Spellsource;
 
 import java.io.Serializable;
@@ -25,19 +26,21 @@ public final class CreateCollectionRequest implements Serializable {
 	private String heroCardId;
 	private String format;
 	private boolean standard;
+	private ValidationReport validationReport;
 
 	private CreateCollectionRequest() {
 	}
 
-	public static CreateCollectionRequest deck(String userId, String name, String heroClass, List<String> inventoryIds, boolean draft) {
+	public static CreateCollectionRequest deck(String userId, String name, String heroClass, List<String> inventoryIds, boolean draft, ValidationReport validationReport) {
 		return new CreateCollectionRequest()
 				.withType(CollectionTypes.DECK)
 				.withName(name)
 				.withUserId(userId)
 				.withHeroClass(heroClass)
 				.withInventoryIds(inventoryIds)
-				.withFormat("Standard")
-				.withDraft(draft);
+				.withFormat("Spellsource")
+				.withDraft(draft)
+				.setValidationReport(validationReport);
 	}
 
 	public static CreateCollectionRequest startingCollection(String userId) {
@@ -256,6 +259,15 @@ public final class CreateCollectionRequest implements Serializable {
 
 	public CreateCollectionRequest setStandard(boolean standard) {
 		this.standard = standard;
+		return this;
+	}
+
+	public ValidationReport getValidationReport() {
+		return validationReport;
+	}
+
+	public CreateCollectionRequest setValidationReport(ValidationReport validationReport) {
+		this.validationReport = validationReport;
 		return this;
 	}
 }

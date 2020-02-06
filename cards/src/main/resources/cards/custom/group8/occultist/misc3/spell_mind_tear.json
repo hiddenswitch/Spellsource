@@ -1,0 +1,35 @@
+{
+  "name": "Mind Tear",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Whenever you cast a spell this turn, Discover a copy of a card in your opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "AfterSpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardSource": {
+          "class": "DeckSource",
+          "distinct": true,
+          "targetPlayer": "OPPONENT"
+        }
+      },
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

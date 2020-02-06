@@ -329,4 +329,20 @@ public class SoulseekerTests extends TestBase {
 			assertEquals(player.getMinions().size(), 5);
 		});
 	}
+
+	@Test
+	public void testProphetElenthris() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_prophet_elenthris");
+			assertEquals(player.getHand().size(), 5);
+			for (int i = 0; i < 4; i++) {
+				playCard(context, player, "token_spirit");
+			}
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, player.getHand().get(0), player.getMinions().get(0));
+			}
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_magoria");
+		});
+	}
 }

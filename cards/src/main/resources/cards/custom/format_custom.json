@@ -14,5 +14,58 @@
   "secondPlayerBonusCards": [
     "spell_lunstone"
   ],
+  "condition": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "description": "Decks must have 30 cards",
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_DECK"
+        },
+        "operation": "EQUAL",
+        "value2": 30
+      },
+      {
+        "description": "Decks must not contain cards from other classes",
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "heroClass": "ANY",
+              "invert": true
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "SELF",
+              "invert": true
+            }
+          ]
+        },
+        "invert": true
+      },
+      {
+        "description": "Decks can't have more than 2 copies of a card",
+        "class": "NumberOfCopiesCondition",
+        "target": "FRIENDLY_DECK",
+        "operation": "LESS_OR_EQUAL",
+        "value": 2
+      },
+      {
+        "description": "Decks can only have 1 copy of Legendary cards",
+        "class": "NumberOfCopiesCondition",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY"
+        },
+        "operation": "EQUAL",
+        "value": 1
+      }
+    ]
+  },
   "fileFormatVersion": 1
 }

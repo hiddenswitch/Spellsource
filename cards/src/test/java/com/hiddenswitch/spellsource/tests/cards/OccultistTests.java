@@ -93,4 +93,15 @@ public class OccultistTests extends TestBase {
 			});
 		}
 	}
+
+	@Test
+	public void testStarSculptor() {
+		runGym((context, player, opponent) -> {
+			Minion test = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_star_sculptor", test);
+			assertEquals(3, player.getMinions().size());
+			assertFalse(test.hasAttribute(Attribute.TAUNT));
+			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.TAUNT));
+		});
+	}
 }

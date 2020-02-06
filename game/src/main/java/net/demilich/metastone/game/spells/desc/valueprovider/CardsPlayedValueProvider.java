@@ -7,6 +7,12 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 import java.util.Map;
 
+/**
+ * Returns the count of the number of cards played that by the {@link ValueProviderArg#TARGET_PLAYER} that satisfies the
+ * specified {@link ValueProviderArg#FILTER}.
+ * <p>
+ * The filter is run against the base cards that were played, not the cards that were actually played.
+ */
 public class CardsPlayedValueProvider extends ValueProvider {
 
 	public CardsPlayedValueProvider(ValueProviderDesc desc) {

@@ -1,7 +1,15 @@
 package com.hiddenswitch.spellsource.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
+import com.hiddenswitch.spellsource.client.models.ValidationReport;
+import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
+import com.hiddenswitch.spellsource.net.impl.util.MongoRecord;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.models.*;
@@ -13,6 +21,11 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.hiddenswitch.spellsource.net.Inventory.COLLECTIONS;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.jsonPut;
@@ -63,6 +77,8 @@ public interface Decks {
 				inventoryIds.addAll(request.getInventoryIds());
 			}
 
+			ValidationReport validationReport;
+
 			if (request.getCardIds() != null
 					&& request.getCardIds().size() > 0) {
 				// Find the card IDs in the user's collection, using copies wherever available, to put into the deck
@@ -86,6 +102,11 @@ public interface Decks {
 					String record = entry.remove(0);
 					inventoryIds.add(record);
 				}
+				validationReport = validateDeck(request.getCardIds(), request.getHeroClass(), request.getFormat());
+			} else {
+				validationReport = new ValidationReport();
+				validationReport.setValid(true);
+				validationReport.setErrors(new ArrayList<>());
 			}
 
 			if (inventoryIds.size() > getMaxDeckSize()) {
@@ -101,7 +122,7 @@ public interface Decks {
 			// Creates a new collection representing this deck
 			final String userId = request.getUserId();
 			CreateCollectionResponse createCollectionResponse = Inventory
-					.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft())
+					.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft(), validationReport)
 							.setStandard(request.isStandardDeck())
 							.withHeroCardId(request.getHeroCardId())
 							.withFormat(request.getFormat()));
@@ -193,6 +214,21 @@ public interface Decks {
 				SetCollectionResponse result = Inventory.setCollection(new SetCollectionRequest(deckId, inventoryIds));
 				// TODO: Populate the appropriate added/removed response here
 			}
+
+			GetCollectionResponse getCollectionResponse = Inventory.getCollection(GetCollectionRequest.deck(deckId));
+			ValidationReport validationReport = validateDeck(getCollectionResponse.asDeck(userId), getCollectionResponse.getFormat());
+
+			collectionUpdate = new JsonObject();
+
+			if (validationReport != null) {
+				jsonPut(collectionUpdate, "$set", json("validationReport", json("valid", validationReport.isValid(),
+						"errors", validationReport.getErrors())));
+			}
+
+			if (!collectionUpdate.isEmpty()) {
+				MongoClientUpdateResult result = mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckId), collectionUpdate);
+			}
+
 			return DeckUpdateResponse.changed(added, removed);
 		} catch (RuntimeException runtimeException) {
 			Tracing.error(runtimeException, span, true);
@@ -240,6 +276,63 @@ public interface Decks {
 		} finally {
 			span.finish();
 			scope.close();
+		}
+	}
+
+	@Suspendable
+	static ValidationReport validateDeck(GameDeck deck, String deckFormat) {
+		ValidationReport validationReport = new ValidationReport();
+		validationReport.setValid(true);
+		validationReport.setErrors(new ArrayList<>());
+
+		GameContext context = new GameContext();
+		Player player1 = new Player(deck);
+		context.setPlayer1(player1);
+		context.setPlayer2(new Player(HeroClass.TEST));
+		context.setDeckFormat(DeckFormat.getFormat(deckFormat));
+		if (context.getDeckFormat() == null) {
+			validationReport.setValid(false);
+			validationReport.addErrorsItem("Invalid Format");
+			return validationReport;
+		}
+		Card formatCard = CardCatalogue.getFormatCard(context.getDeckFormat().getName());
+		if (formatCard == null) {
+			validationReport.setValid(true);
+			return validationReport;
+		}
+
+		Condition[] conditions = (Condition[]) formatCard.getCondition().get(ConditionArg.CONDITIONS);
+		for (Condition condition : conditions) {
+			boolean pass = condition.isFulfilled(context, player1, player1, player1);
+			if (!pass) {
+				validationReport.setValid(false);
+				String error = condition.getDesc().getString(ConditionArg.DESCRIPTION);
+				validationReport.addErrorsItem(error);
+			}
+		}
+
+		return validationReport;
+	}
+
+	@Suspendable
+	static ValidationReport validateDeck(List<String> cardIds, String heroClass, String deckFormat) {
+		return validateDeck(new GameDeck(heroClass, cardIds), deckFormat);
+	}
+
+	@Suspendable
+	static void validateAllDecks() {
+		CardCatalogue.loadCardsFromPackage();
+		// Set a validation record for every deck (actually validate it)
+		var decks = mongo().findWithOptions(COLLECTIONS,
+				json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()),
+				new FindOptions().setFields(json(MongoRecord.ID, true, CollectionRecord.USER_ID, true, CollectionRecord.FORMAT, true)));
+		for (JsonObject collectionRecord : decks) {
+			var deckId = collectionRecord.getString(MongoRecord.ID);
+			var userId = collectionRecord.getString(CollectionRecord.USER_ID);
+			var format = collectionRecord.getString(CollectionRecord.FORMAT);
+			var gameDeck = Inventory.getCollection(GetCollectionRequest.deck(deckId)).asDeck(userId);
+			var validationRecord = validateDeck(gameDeck, format);
+			mongo().updateCollection(COLLECTIONS, json(MongoRecord.ID, deckId), json("$set", json(CollectionRecord.VALIDATION_REPORT, json(validationRecord))));
 		}
 	}
 }

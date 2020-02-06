@@ -1,0 +1,34 @@
+{
+  "name": "Reshape It",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Destroy all Even-Cost cards in your deck. Set the Cost of all cards in your deck to (0)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "EvenCostFilter"
+        }
+      },
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_DECK",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 0,
+          "operation": "SET"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

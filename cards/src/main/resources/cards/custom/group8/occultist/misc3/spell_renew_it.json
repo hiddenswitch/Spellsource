@@ -1,0 +1,56 @@
+{
+  "name": "Renew It",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Destroy all Odd-Cost cards in your deck. Set the Attack, Health and Cost of all minions in your deck to (10)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "OddCostFilter"
+        }
+      },
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_DECK",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 10,
+          "operation": "SET"
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "SetAttackSpell",
+        "target": "FRIENDLY_DECK",
+        "value": 10,
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "SetHpSpell",
+        "target": "FRIENDLY_DECK",
+        "value": 10,
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "DARKBLUE",
-  "rarity": "COMMON",
+  "rarity": "FREE",
   "description": "Destroy a friendly minion. Summon a 4/4 Awoken.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {

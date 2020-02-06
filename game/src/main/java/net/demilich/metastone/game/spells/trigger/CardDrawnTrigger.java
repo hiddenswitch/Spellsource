@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class CardDrawnTrigger extends EventTrigger {
+public class CardDrawnTrigger extends AbstractCardTrigger {
 
 	public CardDrawnTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -18,16 +18,11 @@ public class CardDrawnTrigger extends EventTrigger {
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		DrawCardEvent drawEvent = (DrawCardEvent) event;
 
-		CardType sourceType = (CardType) getDesc().get(EventTriggerArg.SOURCE_TYPE);
-		if (sourceType != null && drawEvent.getSourceType() != sourceType) {
-			return false;
-		}
-
 		if (!drawEvent.isDrawn()) {
 			return false;
 		}
 
-		return true;
+		return super.innerQueues(event, host);
 	}
 
 	@Override

@@ -1,0 +1,29 @@
+{
+  "name": "Prophet Elenthris",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Add five Soulstones to your hand. Play them all to summon Magoria.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_soul_stone",
+        "spell_soul_stone",
+        "spell_soul_stone",
+        "spell_soul_stone",
+        "spell_soul_stone"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
