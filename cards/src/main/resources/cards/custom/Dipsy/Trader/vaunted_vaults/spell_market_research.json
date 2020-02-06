@@ -14,18 +14,21 @@
         "target": "FRIENDLY_HAND"
       },
       {
-        "class": "DiscoverSpell",
+        "class": "CastRepeatedlySpell",
 		"howMany": 4,
-        "spell": {
-          "class": "ReceiveCardSpell",
-          "targetPlayer": "SELF"
-        },
-        "cardSource": {
-          "class": "DeckSource",
-          "distinct": true,
-          "targetPlayer": "OPPONENT"
+		"spell": {
+		  "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardSource": {
+            "class": "DeckSource",
+            "distinct": true,
+            "targetPlayer": "OPPONENT"
+          }
         }
-      }
+	  },
     ]
   },
   "attributes": {
