@@ -19,23 +19,19 @@
 		"attribute": "TAUNT"
       },
 	  {
-	    "class": "AddEnchantmentSpell",
-		"spell": {
-          "class": "AddEnchantmentSpell",
-          "target": "EVENT_TARGET",
-          "trigger": {
-            "eventTrigger": {
-              "class": "DamageReceivedTrigger",
-              "hostTargetType": "IGNORE_OTHER_TARGETS"
-            },
-            "spell": {
-              "class": "ReceiveCardSpell",
-              "card": "spell_gold_coin"
-            },
-		    "persistentOwner": true
-          }
-        },
-	  }
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "DamageReceivedTrigger",
+            "hostTargetType": "IGNORE_OTHER_TARGETS"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "card": "spell_gold_coin"
+          },
+		  "persistentOwner": true
+        }
+      }
     ]
   },
   "collectible": true,
