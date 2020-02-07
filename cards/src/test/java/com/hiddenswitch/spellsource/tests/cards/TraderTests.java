@@ -153,4 +153,17 @@ public class TraderTests extends TestBase {
 			assertEquals("minion_neutral_test", opponent.getHand().get(0).getCardId());
 		});
 	}
+
+	@Test
+	public void testSabotageTrader() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, opponent, "minion_neutral_test");
+			receiveCard(context, opponent, "spell_lunstone");
+			receiveCard(context, opponent, "minion_neutral_test_1");
+			playCard(context, player, "spell_sabotage_trader");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(opponent.getHand().size(), 2);
+			assertEquals(opponent.getDeck().size(), 1);
+		});
+	}
 }
