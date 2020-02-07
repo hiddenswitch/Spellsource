@@ -4,6 +4,9 @@ title: Updates
 permalink: /whats-new/
 ---
 
+# Upcoming Changes
+ - The Council of Fate's spells are no longer mistakenly collectible and are also now all named properly. (1539)
+
 ### 0.8.66-3.0.9 (February 6, 2020)
 
  - The client now shows colors on cards.
