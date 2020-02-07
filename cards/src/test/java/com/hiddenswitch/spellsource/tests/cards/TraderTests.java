@@ -138,4 +138,19 @@ public class TraderTests extends TestBase {
 			assertEquals(customer.getBaseAttack() + 1, customer.getAttack(), "should buff customers counted as dragons");
 		});
 	}
+
+	@Test
+	public void testExchangeWares() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_neutral_test");
+			shuffleToDeck(context, opponent, "spell_lunstone");
+			playCard(context, player, "spell_exchange_wares");
+			assertEquals(0, player.getDeck().size());
+			assertEquals(0, opponent.getDeck().size());
+			assertEquals(1, player.getHand().size());
+			assertEquals(1, opponent.getHand().size());
+			assertEquals("spell_lunstone", player.getHand().get(0).getCardId());
+			assertEquals("minion_neutral_test", opponent.getHand().get(0).getCardId());
+		});
+	}
 }
