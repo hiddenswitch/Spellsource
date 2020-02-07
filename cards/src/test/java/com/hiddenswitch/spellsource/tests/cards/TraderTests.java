@@ -82,6 +82,7 @@ public class TraderTests extends TestBase {
 			Minion target = playMinionCard(context, player, 3, 3);
 			playCard(context, player, "spell_test_deal_1", target);
 			assertEquals(target.getMaxHp() - 2, target.getHp(), "spell played again on same target");
+			assertEquals(3, player.getMinions().size());
 		});
 
 		runGym((context, player, opponent) -> {
@@ -89,6 +90,7 @@ public class TraderTests extends TestBase {
 			Minion target = playMinionCard(context, player, 3, 3);
 			playMinionCard(context, player, "minion_test_deal_1", target);
 			assertEquals(target.getMaxHp() - 2, target.getHp(), "battlecry played again on same target");
+			assertEquals(5, player.getMinions().size());
 		});
 	}
 

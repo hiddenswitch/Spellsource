@@ -4,6 +4,9 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+ - Xii'da the Curious now correctly doubles the minions as well as their openers. (1544)
+
 ### 0.8.66-3.0.9 (February 6, 2020)
 
  - The client now shows colors on cards.
