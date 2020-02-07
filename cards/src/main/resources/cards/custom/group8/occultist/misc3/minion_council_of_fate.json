@@ -1,6 +1,6 @@
 {
   "name": "Council of Fate",
-  "baseManaCost": 8,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 10,
