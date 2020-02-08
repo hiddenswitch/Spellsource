@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.testutils;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import net.demilich.metastone.game.cards.*;
@@ -42,7 +41,7 @@ public class CardValidation {
 	}
 
 	public static void validateCard(File cardFile) throws IOException {
-		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
+		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
@@ -85,7 +84,7 @@ public class CardValidation {
 
 	public static void validateCardReferences(File cardFile) throws IOException {
 		CardCatalogue.loadCardsFromPackage();
-		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
+		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);

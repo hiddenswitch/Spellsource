@@ -82,6 +82,7 @@ public abstract class AbstractCardResources<T> implements CardResources {
 		}
 		ScanResult scanResult = new ClassGraph()
 				.disableRuntimeInvisibleAnnotations()
+				.disableNestedJarScanning()
 				.whitelistPaths(getDirectoryPrefix()).scan();
 
 		resources = scanResult
@@ -89,7 +90,7 @@ public abstract class AbstractCardResources<T> implements CardResources {
 				.stream()
 				.map(resource -> {
 					try {
-						return new ResourceInputStream(resource.getPath(), resource.open(), false);
+						return new ResourceInputStream(resource.getPath(), resource.open());
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
