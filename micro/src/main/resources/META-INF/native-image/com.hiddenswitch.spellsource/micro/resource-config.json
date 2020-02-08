@@ -1,0 +1,14 @@
+{
+  "resources":[
+    {"pattern":"META-INF/services/com.fasterxml.jackson.databind.Module"}, 
+    {"pattern":"META-INF/services/io.micronaut.context.env.PropertySourceLoader"}, 
+    {"pattern":"META-INF/services/io.micronaut.core.beans.BeanIntrospectionReference"}, 
+    {"pattern":"META-INF/services/io.micronaut.inject.BeanConfiguration"}, 
+    {"pattern":"META-INF/services/io.micronaut.inject.BeanDefinitionReference"}, 
+    {"pattern":"META-INF/services/io.vertx.core.spi.json.JsonCodec"}, 
+    {"pattern":"META-INF/services/java.nio.file.spi.FileSystemProvider"}, 
+    {"pattern":"application.yml"}, 
+    {"pattern":"logback.xml"}, 
+    {"pattern":"org/slf4j/impl/StaticLoggerBinder.class"}
+  ]
+}

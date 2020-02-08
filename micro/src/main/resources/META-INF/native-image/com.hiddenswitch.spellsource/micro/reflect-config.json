@@ -1,0 +1,3114 @@
+[
+{
+  "name":"ch.qos.logback.classic.encoder.PatternLayoutEncoder",
+  "allPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.DateConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.LevelConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.LineSeparatorConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.LoggerConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.MessageConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.ThreadConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.core.ConsoleAppender",
+  "allPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.core.pattern.color.CyanCompositeConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.core.pattern.color.GrayCompositeConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"ch.qos.logback.core.pattern.color.MagentaCompositeConverter",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7HandlersImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.fasterxml.jackson.module.jaxb.deser.DataHandlerJsonDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.fasterxml.jackson.module.jaxb.ser.DataHandlerJsonSerializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.google.common.util.concurrent.AbstractFuture",
+  "fields":[
+    {"name":"listeners", "allowUnsafeAccess":true}, 
+    {"name":"value", "allowUnsafeAccess":true}, 
+    {"name":"waiters", "allowUnsafeAccess":true}
+  ]
+},
+{
+  "name":"com.google.common.util.concurrent.AbstractFuture$Waiter",
+  "fields":[
+    {"name":"next", "allowUnsafeAccess":true}, 
+    {"name":"thread", "allowUnsafeAccess":true}
+  ]
+},
+{
+  "name":"com.hiddenswitch.spellsource.cards.base.BaseCardResources",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.cards.custom.SpellsourceCardResources",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$BotsControllerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$BotsServiceImplDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$Payload$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$RequestTrace$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$RequestTraceDeck$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$RequestTraceMulligan$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.$Response$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.hiddenswitch.spellsource.micro.Payload",
+  "allDeclaredFields":true,
+  "allPublicMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"io.micronaut.buffer.netty.$NettyByteBufferFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.$AsyncCacheErrorHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.$DefaultCacheConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.$DefaultCacheErrorHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.$DefaultCacheManagerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.$DefaultDynamicCacheManagerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.$DefaultSyncCacheDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.interceptor.$CacheInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.interceptor.$DefaultCacheKeyGenerator$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.cache.jcache.$JCacheManagerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.context.env.PropertiesPropertySourceLoader",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.context.env.yaml.YamlPropertySourceLoader",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.$DefaultCompositeDiscoveryClientDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.$DefaultServiceInstanceIdGeneratorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.aws.$AmazonComputeInstanceMetadataResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.aws.$AmazonMetadataConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.digitalocean.$DigitalOceanMetadataConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.digitalocean.$DigitalOceanMetadataResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.gcp.$GoogleComputeInstanceMetadataResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.gcp.$GoogleComputeMetadataConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.oraclecloud.$OracleCloudMetadataConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.cloud.oraclecloud.$OracleCloudMetadataResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.discovery.config.$DefaultCompositeConfigurationClientDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.health.$DefaultCurrentHealthStatusDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.health.$HealthStatus$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.health.$HeartbeatConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.health.$HeartbeatDiscoveryClientCondition$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.health.$HeartbeatTaskDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.$MediaTypeConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.bind.$DefaultRequestBinderRegistryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$DefaultHttpClientConfiguration$DefaultConnectionPoolConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$DefaultHttpClientConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$DefaultHttpClientDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$DefaultLoadBalancerResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientCondition$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientConfiguration$ServiceConnectionPoolConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientConfiguration$ServiceSslClientConfiguration$DefaultKeyConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientConfiguration$ServiceSslClientConfiguration$DefaultKeyStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientConfiguration$ServiceSslClientConfiguration$DefaultTrustStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientConfiguration$ServiceSslClientConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientFactory$ServiceHttpClient1DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientFactory$ServiceInstanceList0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.$ServiceHttpClientFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.converters.$ClientResponseConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.converters.$LoadBalancerConvertersDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.converters.$SocketAddressConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.filter.$HttpClientFilterResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.interceptor.$HttpClientIntroductionAdviceDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.interceptor.configuration.$DefaultClientVersioningConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.interceptor.configuration.$NamedClientVersioningConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.loadbalance.$DiscoveryClientLoadBalancerFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.loadbalance.$ServiceInstanceListLoadBalancerFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.reactor.$ReactorReactiveClientResultTransformerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.rxjava2.$RxReactiveClientResultTransformerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.scope.$ClientScopeDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.client.ssl.$NettyClientSslBuilderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.codec.$CodecConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateoas.$AbstractResource$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateoas.$DefaultLink$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateoas.$JsonError$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateoas.$VndError$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateos.$DefaultLink$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateos.$JsonError$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.hateos.$VndError$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.netty.channel.$NettyThreadFactory$NettyThreadFactory0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.netty.channel.$NettyThreadFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.netty.websocket.$NettyServerWebSocketBroadcasterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.netty.websocket.$WebSocketMessageEncoderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.resource.$ResourceLoaderFactory$FileSystemResourceLoader1DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.resource.$ResourceLoaderFactory$GetClassPathResourceLoader0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.resource.$ResourceLoaderFactory$ReadableTypeConverter3DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.resource.$ResourceLoaderFactory$ResourceResolver2DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.resource.$ResourceLoaderFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.$HttpServerConfiguration$CorsConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.$HttpServerConfiguration$HostResolutionConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.$HttpServerConfiguration$MultipartConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.$HttpServerConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.binding.$RequestArgumentSatisfierDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.codec.$TextStreamCodecDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.context.$ServerRequestContextFilterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.context.$ServerRequestContextInstrumentationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.cors.$BeanConfiguration",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.cors.$CorsFilterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.cors.$CorsOriginConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.exceptions.$ContentLengthExceededHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.exceptions.$ConversionErrorHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.exceptions.$HttpStatusHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.exceptions.$JsonExceptionHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.exceptions.$UnsatisfiedArgumentHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$DefaultHttpCompressionStrategyDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$DefaultHttpContentProcessorResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$EpollAvailabilityCondition$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$EpollEventLoopGroupFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$FormDataHttpContentSubscriberFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$KQueueAvailabilityCondition$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$KQueueEventLoopGroupFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$NettyEmbeddedServerInstanceDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$NettyHttpServerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$NettyRequestArgumentSatisfierDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.$NioEventLoopGroupFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.binders.$BasicAuthArgumentBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.binders.$CompletableFutureBodyBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.binders.$MaybeBodyBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.binders.$ObservableBodyBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.binders.$PublisherBodyBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.binders.$SingleBodyBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.configuration.$NettyChannelOptionConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.configuration.$NettyHttpServerConfiguration$ParentDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.configuration.$NettyHttpServerConfiguration$WorkerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.configuration.$NettyHttpServerConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$AttributeConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$ByteBufConverters$ByteArrayToByteBuffTypeConverter3DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$ByteBufConverters$ByteBufCharSequenceTypeConverter0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$ByteBufConverters$ByteBufToArrayTypeConverter2DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$ByteBufConverters$CompositeByteBufCharSequenceTypeConverter1DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$ByteBufConvertersDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$ByteBufToObjectConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$DuplicateRouteHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$FileUploadToCompletedFileUploadConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$FileUploadToObjectConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$HttpDataToByteArrayConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$HttpDataToStringConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$NettyPartDataToArrayConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$NettyPartDataToObjectConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.converters.$UnsatisfiedRouteHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.jackson.$JsonHttpContentSubscriberFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.jackson.$JsonViewMediaTypeCodecFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.jackson.$JsonViewServerFilterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.multipart.$MultipartBodyArgumentBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.ssl.$CertificateProvidedSslBuilderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.ssl.$SelfSignedSslBuilderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.types.$DefaultCustomizableResponseTypeHandlerRegistryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.types.files.$FileTypeHandlerConfiguration$CacheControlConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.types.files.$FileTypeHandlerConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.netty.types.files.$FileTypeHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.util.$DefaultHttpClientAddressResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.util.$DefaultHttpHostResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.server.websocket.$ServerWebSocketProcessorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ClientSslConfiguration$DefaultKeyConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ClientSslConfiguration$DefaultKeyStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ClientSslConfiguration$DefaultTrustStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ClientSslConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$DefaultSslConfiguration$DefaultKeyConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$DefaultSslConfiguration$DefaultKeyStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$DefaultSslConfiguration$DefaultTrustStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$DefaultSslConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ServerSslConfiguration$DefaultKeyConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ServerSslConfiguration$DefaultKeyStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ServerSslConfiguration$DefaultTrustStoreConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.ssl.$ServerSslConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.http.util.$OutgoingHttpRequestProcessorImplDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.$BeanConfiguration",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.$JacksonConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.$ObjectMapperFactory$ObjectMapper0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.$ObjectMapperFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.bind.$CharSequencePropertyNamingStrategyConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.bind.$JacksonBeanPropertyBinderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.bind.$MapToObjectConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.codec.$JsonMediaTypeCodecDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.codec.$JsonStreamMediaTypeCodecDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.convert.$ArrayNodeToArrayConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.convert.$ArrayNodeToIterableConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.convert.$JsonNodeToObjectConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.convert.$ObjectNodeToConvertibleValuesConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.convert.$ObjectToJsonNodeConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.env.EnvJsonPropertySourceLoader",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.env.JsonPropertySourceLoader",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.modules.$BeanIntrospectionModuleDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.serialize.$ConvertibleMultiValuesSerializerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.serialize.$ConvertibleValuesSerializerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.serialize.$JacksonObjectSerializerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.serialize.$OptionalValuesSerializerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.serialize.$ResourceModuleDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.jackson.serialize.$ResourceSerializerModifierDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.logging.$PropertiesLoggingLevelsConfigurerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.logging.impl.$LogbackLoggingSystemDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.flow.converters.$FlowConverterRegistrarDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.reactor.$ReactorInstrumentationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.reactor.converters.$ObjectToFluxConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.reactor.converters.$ObjectToMonoConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.reactor.converters.$PublisherToFluxConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.reactor.converters.$PublisherToMonoConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.rxjava1.converters.$RxJava1ConverterRegistrarDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.rxjava2.$RxInstrumenterFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.rxjava2.$RxJava2InstrumentationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.reactive.rxjava2.converters.$RxJavaConverterRegistrarDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.retry.intercept.$DefaultRetryInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.retry.intercept.$RecoveryInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.$ApplicationConfiguration$InstanceConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.$ApplicationConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.context.$CompositeMessageSourceDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.context.env.$ConfigurationIntroductionAdviceDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.context.scope.$ThreadLocalCustomScopeDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.context.scope.refresh.$RefreshInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.context.scope.refresh.$RefreshScopeDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.converters.time.$TimeConverterRegistrarDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.http.codec.$MediaTypeCodecRegistryFactory$MediaTypeCodecRegistry0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.http.codec.$MediaTypeCodecRegistryFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.http.codec.$TextPlainCodecDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.http.converters.$HttpStatusConverterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.http.scope.$RequestCustomScopeDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.runtime.server.watch.event.$FileWatchRestartListenerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.$DefaultTaskExceptionHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.$ScheduledExecutorTaskSchedulerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.async.$AsyncInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$DefaultExecutorSelectorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$DefaultThreadFactory$ThreadFactory0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$DefaultThreadFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$ExecutorFactory$ExecutorService0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$ExecutorFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$IOExecutorServiceConfig$Configuration0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$IOExecutorServiceConfigDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$ScheduledExecutorServiceConfig$Configuration0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$ScheduledExecutorServiceConfigDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$UserExecutorConfiguration$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.executor.$UserExecutorConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.instrument.$ExecutorServiceInstrumenterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.instrument.$ThreadFactoryInstrumenterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.io.watch.$DefaultWatchThreadDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.io.watch.$FileWatchCondition$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.io.watch.$FileWatchConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.io.watch.$WatchServiceFactory$WatchService0DefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.io.watch.$WatchServiceFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.scheduling.processor.$ScheduledMethodProcessorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.$ValidatingInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.exceptions.$ConstraintExceptionHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.exceptions.$ValidationExceptionHandlerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.$DefaultClockProviderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.$DefaultValidatorConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.$DefaultValidatorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.$DefaultValidatorFactoryDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.constraints.$DefaultConstraintValidators$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.constraints.$DefaultConstraintValidators$ValidatorKey$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.constraints.$DefaultConstraintValidatorsDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.constraints.$EmailValidatorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.constraints.$PatternValidatorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.extractors.$DefaultValueExtractors$IntrospectionRef",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.extractors.$DefaultValueExtractorsDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.messages.$DefaultValidationMessagesDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.validation.validator.resolver.$CompositeTraversableResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.$AnnotatedFilterRouteBuilderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.$AnnotatedMethodRouteBuilderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.$DefaultRouterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.naming.$ConfigurableUriNamingStrategyDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.naming.$HyphenatedUriNamingStrategyDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.resource.$StaticResourceConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.resource.$StaticResourceResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.$ConfigurationDefaultVersionProviderDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.$RouteVersionFilterDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.$RoutesVersioningConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.$VersionAwareRouterListenerDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.resolution.$HeaderVersionResolverConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.resolution.$HeaderVersionResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.resolution.$ParameterVersionResolverConfigurationDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.web.router.version.resolution.$ParameterVersionResolverDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.micronaut.websocket.interceptor.$ClientWebSocketInterceptorDefinitionClass",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.netty.bootstrap.ServerBootstrap$ServerBootstrapAcceptor",
+  "methods":[
+    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
+    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
+  ]
+},
+{
+  "name":"io.netty.buffer.AbstractByteBufAllocator",
+  "allDeclaredMethods":true
+},
+{
+  "name":"io.netty.channel.ChannelInboundHandlerAdapter",
+  "methods":[
+    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
+    {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
+  ]
+},
+{
+  "name":"io.netty.channel.ChannelInitializer",
+  "methods":[
+    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
+  ]
+},
+{
+  "name":"io.netty.channel.DefaultChannelPipeline$HeadContext",
+  "methods":[
+    {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
+    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
+    {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"close","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
+    {"name":"connect","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
+    {"name":"deregister","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
+    {"name":"disconnect","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
+    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, 
+    {"name":"flush","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"read","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
+    {"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }
+  ]
+},
+{
+  "name":"io.netty.channel.DefaultChannelPipeline$TailContext",
+  "methods":[
+    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
+    {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelUnregistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelWritabilityChanged","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, 
+    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
+  ]
+},
+{
+  "name":"io.netty.channel.socket.nio.NioServerSocketChannel",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueColdProducerFields",
+  "fields":[{"name":"producerLimit", "allowUnsafeAccess":true}]
+},
+{
+  "name":"io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueConsumerFields",
+  "fields":[{"name":"consumerIndex", "allowUnsafeAccess":true}]
+},
+{
+  "name":"io.netty.util.internal.shaded.org.jctools.queues.BaseMpscLinkedArrayQueueProducerFields",
+  "fields":[{"name":"producerIndex", "allowUnsafeAccess":true}]
+},
+{
+  "name":"java.io.Serializable",
+  "allDeclaredMethods":true
+},
+{
+  "name":"java.lang.Class",
+  "methods":[{"name":"getModule","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.Cloneable",
+  "allDeclaredMethods":true
+},
+{
+  "name":"java.lang.Enum",
+  "allDeclaredMethods":true,
+  "methods":[{"name":"valueOf","parameterTypes":["java.lang.Class","java.lang.String"] }]
+},
+{
+  "name":"java.lang.Module",
+  "methods":[{"name":"getLayer","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.ModuleLayer",
+  "methods":[
+    {"name":"boot","parameterTypes":[] }, 
+    {"name":"configuration","parameterTypes":[] }, 
+    {"name":"findLoader","parameterTypes":["java.lang.String"] }, 
+    {"name":"parents","parameterTypes":[] }
+  ]
+},
+{
+  "name":"java.lang.StackWalker",
+  "methods":[
+    {"name":"forEach","parameterTypes":["java.util.function.Consumer"] }, 
+    {"name":"getInstance","parameterTypes":["java.lang.StackWalker$Option"] }
+  ]
+},
+{
+  "name":"java.lang.StackWalker$Option"
+},
+{
+  "name":"java.lang.StackWalker$StackFrame",
+  "methods":[{"name":"getDeclaringClass","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.Throwable",
+  "methods":[{"name":"getSuppressed","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.management.ManagementFactory",
+  "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.management.RuntimeMXBean",
+  "methods":[
+    {"name":"getInputArguments","parameterTypes":[] }, 
+    {"name":"getName","parameterTypes":[] }
+  ]
+},
+{
+  "name":"java.lang.module.Configuration",
+  "methods":[{"name":"modules","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.module.ModuleDescriptor",
+  "methods":[
+    {"name":"name","parameterTypes":[] }, 
+    {"name":"packages","parameterTypes":[] }, 
+    {"name":"rawVersion","parameterTypes":[] }
+  ]
+},
+{
+  "name":"java.lang.module.ModuleReader",
+  "methods":[
+    {"name":"list","parameterTypes":[] }, 
+    {"name":"open","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"java.lang.module.ModuleReference",
+  "methods":[
+    {"name":"descriptor","parameterTypes":[] }, 
+    {"name":"location","parameterTypes":[] }, 
+    {"name":"open","parameterTypes":[] }
+  ]
+},
+{
+  "name":"java.lang.module.ResolvedModule",
+  "methods":[{"name":"reference","parameterTypes":[] }]
+},
+{
+  "name":"java.nio.Bits",
+  "fields":[{"name":"UNALIGNED"}]
+},
+{
+  "name":"java.nio.Buffer",
+  "fields":[{"name":"address", "allowUnsafeAccess":true}]
+},
+{
+  "name":"java.nio.DirectByteBuffer",
+  "methods":[{"name":"<init>","parameterTypes":["long","int"] }]
+},
+{
+  "name":"java.sql.Date"
+},
+{
+  "name":"java.sql.Timestamp"
+},
+{
+  "name":"java.util.AbstractMap",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"java.util.EnumMap",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"java.util.Map",
+  "allDeclaredMethods":true
+},
+{
+  "name":"java.util.Optional",
+  "methods":[
+    {"name":"get","parameterTypes":[] }, 
+    {"name":"isPresent","parameterTypes":[] }
+  ]
+},
+{
+  "name":"java.util.function.Consumer"
+},
+{
+  "name":"java.util.stream.Collector"
+},
+{
+  "name":"java.util.stream.Collectors",
+  "methods":[{"name":"toList","parameterTypes":[] }]
+},
+{
+  "name":"java.util.stream.Stream",
+  "methods":[{"name":"collect","parameterTypes":["java.util.stream.Collector"] }]
+},
+{
+  "name":"javax.management.ObjectName"
+},
+{
+  "name":"jdk.internal.misc.Unsafe",
+  "methods":[{"name":"getUnsafe","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.Attribute",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.AttributeMap",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.BaseMap",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.CardType",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.Rarity",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.costmodifier.CardCostModifier",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.costmodifier.OneTurnCostModifier",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.AuraDescDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.CardCostModifierDescDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.CardDesc",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.ConditionDescDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.EventTriggerDescDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.HasEntrySet",
+  "allDeclaredMethods":true
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.SpellDescDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.desc.ValueProviderDescDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.dynamicdescription.ConditionalDescription"
+},
+{
+  "name":"net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDeserializer",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.dynamicdescription.MetaDescription",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.dynamicdescription.PluralDescription",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.dynamicdescription.StringDescription",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.cards.dynamicdescription.ValueDescription",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddAttributeSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddBattlecrySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddDeathrattleSecondaryAsTargetSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddDeathrattleSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddDescriptionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddEnchantmentSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddPactSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddQuestSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AddSecretSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AdjacentEffectSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.AuraBuffSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.BothPlayersSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.BuffSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CardCostModifierSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CastAfterSequenceSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CastCardsSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CastRandomSpellSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CastRepeatedlySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ChangeHeroPowerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ChangeHeroSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ChooseAndReshuffleSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ConditionalAttackBonusSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ConditionalEffectSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ConditionalSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CopyCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CopyDeathrattleSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.CreateSummonSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DamageIgnoringArmorSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DamageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DecaySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DestroySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DiscardCardsFromDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DiscardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DiscoverCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DiscoverFilteredCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DiscoverSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DoubleAttackSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DrainSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DrawCardFromGraveyardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DrawCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DrawCardUntilConditionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.DuelSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.EitherOrSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.EnrageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.EquipWeaponSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ExcessDamageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.FatigueSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.FightSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.FirstConditionalSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ForceDeathPhaseSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.FromDeckToHandSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.FumbleSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.GainManaSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.HealSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.HealingMissilesSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.HeroPowerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.JoustSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.MetaSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.MindControlSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.MisdirectSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.MissilesSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ModifyAttributeSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ModifyDamageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ModifyDurabilitySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ModifyMaxManaSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ModifyWitherAttributeSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.MultiTargetSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.NullSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.OppositeEffectSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.OverkillSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.OverrideTargetSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.PutCopyInHandSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.PutDeckTopSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.PutMinionOnBoardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.PutOnBottomOfDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.QueryTargetSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RandomCardTargetSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.RandomlyCastSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RecastWhileSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReceiveCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReceiveLastCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RecruitSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RefreshAttacksSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RefreshHeroPowerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RefreshManaSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RemoveActorPeacefullySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RemoveAttributeSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RemoveBonusAttributes"
+},
+{
+  "name":"net.demilich.metastone.game.spells.RemoveCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RemoveEnchantmentSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReplaceCardsSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReservoirSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ResetDeckSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.ResurrectFromBothSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ResurrectSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReturnTargetToHandSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReturnToHandWithEnchantmentsSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.RevealCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ReviveMinionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.RoastSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetAttackSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetAttackerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetAttributeSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetDescriptionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetHeroHpSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SetHpSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ShuffleOriginalToDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ShuffleToDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SilenceSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SortDeckByManaCostSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SplashDamageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.StealCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SummonCardFromAttributeSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SummonSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SupremacySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SwapAttackAndHpSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SwapAttackSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SwapCardsSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.SwapHpSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.TargetToSourceSecondaryToTargetSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.TemporaryAttackSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.TransformMinionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.TransformToRandomMinionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.TriggerDeathrattleSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.TriggerOpenerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.ValueToHowManySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.WhereverTheyAreSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.WitherSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.AttributeAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.AttributeValueAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.Aura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.BuffAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.CaptnCookishAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.CardAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.CardCostInsteadAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.DiscoverNotSelectedSpellBonusAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.DoubleBattlecriesAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.HeroPowerBonusAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.HoardingWhelpAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.MenagerieMogulAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.ModifyBuffSpellAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.ModifyTemporaryAttackSpellAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.ReservoirsAlwaysActiveAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.ReservoirsNeverActiveAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.SpellEffectsCastTwiceAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.SpellOverrideAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.SpellTargetsAdjacentAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.SpellsCastTwiceAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.StatefulAttributeValueAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.SupremaciesTriggerTwiceAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.SupremacyBonusEffectAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.TargetSelectionOverrideAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.aura.TheliaSilentdreamerAura",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.aura.AuraDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.AbholosSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.ActivateTriggeredEffectSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.AddActorEffectsToTargetActorSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.AddTriggerToCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.AdjacentDeathrattleSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.AnobiiSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.AysaCloudsingerSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.BaulPocuseSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.BloodElfChampionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.BrothersInBloodSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.CopyLastRoastedCardSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.CopyMinionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.CreationSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.DamageOppositeMinionsSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.DestroyAndSummonInPlaceSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.DuelRandomSecondarySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.FightRandomAdjacentMinionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.FinalFeastSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.FormlessAgonyMissilesSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.HealAndBuffExcessAsDrainSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.HeroPowerToSpellSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.JailMinionSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.PlayCardsRandomlySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.PlayLastCardsRandomlySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.ProphetWaRanSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.PutIntoEggSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.RecastIfMinionsDestroyedSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.ReceiveCardsInStorageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.ReceiveOpponentsCastSpellsSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.RemoveTopUntilMinionAndSummonSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.RepeatAllAftermathsSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.ResurrectFromEntityStorageSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SleightOfHandSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SowDistrustSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.StoreEntitySpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SummonFriendlyMinionsThatDiedSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SwapCardsInHandAndDeckSpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SwapHpAndCostSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SwapMinionWithDeckSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.SwapWithHandSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.TextifySpell"
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.TransformInHandSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.TransformToAndBackSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.TriggerDistinctAftermathsInGraveyard",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.UpgradeHeroPowerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.VohkrovanisSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.custom.YaganLifetakerSpell",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.BattlecryDesc",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AdjacentToPermanentCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AllMatchFilterCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AllModuloValueEqualsZeroCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AmalgamRaceCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AndCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AnyMatchFilterCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.AttributeCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.CanPlayPactCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.CanSummonCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.CardCountCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.CardPropertyCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.ComparisonCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.ControlsSecretCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.DeckContainsCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.EventTargetMatchesReferenceCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.GraveyardContainsCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.HasAttackedCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.HasWeaponCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.HighlanderDeckCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.HighlanderHandCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.HoldsCardCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.InvokeCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.IsAdjacentCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.IsDamagedCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.IsDeadCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.ManaCostCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.ManaMaxedCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.MinionCountCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.MinionOnBoardCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.NumberOfCopiesCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.OrCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.OwnedByPlayerCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.PlayedLastTurnCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.RaceCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.RandomCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.ReservoirCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.condition.SurgeCondition",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.condition.ConditionDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.AmalgamRaceFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.AndFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.AttributeFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.CardFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.CollectibleFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.CopiesHaveBeenPlayedFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.DamagedFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.DeckContainsFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.EntityEqualsFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.EntityTypeFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.EvenCostFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HasAttackedFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HasAttackedLastTurnFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HasEffectsFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HasTextFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HasTurnEffectsFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.HighestAttributeFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.IsDestroyedFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.ManaCostFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.OddCostFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.OrFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.OwnedByPlayerFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.RaceEqualsFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.RaceFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.SummonedByPlayerFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.filter.TargetSelectionFilter",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.CatalogueSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.DeckCollectionSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.DeckSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.GraveyardCardAndActorSourceCardSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.GraveyardCardsSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.GraveyardDiedMinionsSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.HandSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.MinionsSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.ShuffledCardsSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.SummonWithoutReplacementCardSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.TopThreeCardsOfDeckSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.UncollectibleCatalogueSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.source.CardSourceDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true,
+  "allDeclaredConstructors":true
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.BoardCountValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.CardCountValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.CardsPlayedValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.ConditionalValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.CurrentTurnValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.DestroyedThisSequenceValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.DiedThisTurnValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.DistinctTribesValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.EntityCountValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.EventValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.FiresLeftValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.GraveyardMinionCountValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.LastTurnValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.ManaCostProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.MaxBoardSizeValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.OriginalValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.PlayedLastTurnValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.PlayedThisTurnValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.PlayerAttributeValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.RandomValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.ReduceValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.SpellDamageValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.SpellstoneValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.desc.valueprovider.TurnsNoCardPlayedValueProvider",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.AfterCardPlayedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.AfterMinionPlayedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.AfterMinionSummonedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.AfterPhysicalAttackTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.AfterSpellCastedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.ArmorChangedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.AttributeAppliedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.BattlecryResolvedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.BeforeMinionPlayedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.BeforeMinionSummonedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.BeforePhysicalAttackTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.BoardChangedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.CardAddedToDeckTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.CardDrawnTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.CardPlayedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.CardReceivedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.CavernsBelowTrigger"
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.DamageCausedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.DidEndSequenceTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.DiscardTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.DiscoverTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.DrainTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.EnrageChangedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.FatalDamageTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.FatigueTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.GameStartTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.GameStateChangedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.HealingTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.HeroPowerUsedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.InspireTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.InvokedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.LoseDeflectTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.LoseDivineShieldTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.LoseStealthTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.MaxHpIncreasedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.MinionDeathTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.MinionPlayedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.NonDrainDamageReceivedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.NonFatigueDamageCausedTrigger"
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.NullTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.PhysicalAttackTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.PreDamageTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.PreDeflectDamageTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.ReturnToHandTrigger"
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.RoastTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.SecretPlayedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.SecretRevealedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.ShuffledOnlyOriginalCopiesTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.ShuffledTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.SilenceTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.SpellCastedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.SupremacyTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.TargetAcquisitionTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.TurnEndTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.TurnStartTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.WeaponDestroyedTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger",
+  "methods":[{"name":"<init>","parameterTypes":["net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc"] }]
+},
+{
+  "name":"net.demilich.metastone.game.targeting.TargetSelection",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.AntClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.EquinoxClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.EquinoxContextFinderClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.FallbackClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.FelixClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.JBossClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.JPMSClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.OSGiDefaultClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.ParentLastDelegationOrderTestClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.PlexusClassWorldsClassRealmClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.SpringBootRestartClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.TomcatWebappClassLoaderBaseHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.URLClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.WeblogicClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.WebsphereLibertyClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.classloaderhandler.WebsphereTraditionalClassLoaderHandler",
+  "methods":[
+    {"name":"canHandle","parameterTypes":["java.lang.Class","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClassLoaderOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClassLoaderOrder","nonapi.io.github.classgraph.utils.LogNode"] }, 
+    {"name":"findClasspathOrder","parameterTypes":["java.lang.ClassLoader","nonapi.io.github.classgraph.classpath.ClasspathOrder","nonapi.io.github.classgraph.scanspec.ScanSpec","nonapi.io.github.classgraph.utils.LogNode"] }
+  ]
+},
+{
+  "name":"nonapi.io.github.classgraph.scanspec.ScanSpec",
+  "allDeclaredFields":true
+},
+{
+  "name":"sun.misc.Unsafe",
+  "allDeclaredFields":true,
+  "methods":[
+    {"name":"copyMemory","parameterTypes":["java.lang.Object","long","java.lang.Object","long","long"] }, 
+    {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }, 
+    {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }
+  ]
+},
+{
+  "name":"sun.nio.ch.SelectorImpl",
+  "fields":[
+    {"name":"publicSelectedKeys", "allowUnsafeAccess":true}, 
+    {"name":"selectedKeys", "allowUnsafeAccess":true}
+  ]
+}
+]

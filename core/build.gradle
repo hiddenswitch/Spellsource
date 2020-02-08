@@ -12,6 +12,8 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 dependencies {
+    implementation 'io.vertx:vertx-core:3.8.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
     implementation 'io.github.classgraph:classgraph:4.8.59'
     implementation 'org.slf4j:slf4j-api:1.7.20'
     implementation 'com.google.guava:guava:26.0-jre'
