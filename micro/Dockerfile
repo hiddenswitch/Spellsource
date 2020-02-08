@@ -7,7 +7,7 @@ WORKDIR /home/app/micro
 RUN native-image \
     --no-server \
     --no-fallback \
-    --initialize-at-build-time=com.hiddenswitch.spellsource.core.JsonConfiguration,io.vertx.core.json,net.demilich,com.google.common.base.Preconditions,com.google.common.base.Ascii,com.google.common.base.CharMatcher,com.google.common.base.CharMatcher\$InRange,com.google.common.base.CharMatcher\$Is,com.google.common.base.CharMatcher\$FastMatcher,com.google.common.base.CaseFormat,com.google.common.base.CaseFormat\$3,com.google.common.base.CaseFormat\$1,com.google.common.base.CaseFormat\$4,com.google.common.base.CaseFormat\$2,com.google.common.base.CaseFormat\$5 \
+    --initialize-at-build-time=com.hiddenswitch.spellsource.micro.BotsController,com.hiddenswitch.spellsource.core.JsonConfiguration,io.vertx.core.json,net.demilich,com.google.common.base.Preconditions,com.google.common.base.Ascii,com.google.common.base.CharMatcher,com.google.common.base.CharMatcher\$InRange,com.google.common.base.CharMatcher\$Is,com.google.common.base.CharMatcher\$FastMatcher,com.google.common.base.CaseFormat,com.google.common.base.CaseFormat\$3,com.google.common.base.CaseFormat\$1,com.google.common.base.CaseFormat\$4,com.google.common.base.CaseFormat\$2,com.google.common.base.CaseFormat\$5 \
     --static \
     -H:+TraceClassInitialization \
     -H:ReflectionConfigurationFiles=src/main/resources/META-INF/native-image/com.hiddenswitch.spellsource/micro/reflect-config.json \
