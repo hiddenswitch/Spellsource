@@ -21,6 +21,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CardValidation {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
 	private static final CardParser CARD_PARSER = new CardParser();
 
 	public static Object[][] getCardFiles(String path) {

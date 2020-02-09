@@ -280,12 +280,16 @@ public class CardCatalogue {
 			var key = DeckFormat.getFormat(kv.getKey());
 			return classCards.values().stream().filter(key::isInFormat).collect(Collectors.toCollection(CardArrayList::new));
 		}));
+		var allClassCards = new CardArrayList();
+		allClassCards.addAll(classCards.values());
+		classCardsForFormat.put(DeckFormat.all(), allClassCards);
 		heroCards =
 				classCards.values().stream().map(value -> getCardById(Objects.requireNonNull(value).getHero())).collect(toMap(Card::getHeroClass, i -> i));
 		baseClassesForFormat = formatCards.entrySet().stream().collect(toMap(kv -> DeckFormat.getFormat(kv.getKey()), kv -> {
 			var key = DeckFormat.getFormat(kv.getKey());
 			return classCards.values().stream().filter(c -> c.isCollectible() && key.isInFormat(c)).map(Card::getHeroClass).collect(Collectors.toList());
 		}));
+		baseClassesForFormat.put(DeckFormat.all(), allClassCards.stream().map(Card::getHeroClass).distinct().collect(Collectors.toList()));
 	}
 
 	/**

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.cards.desc;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
@@ -41,6 +42,8 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Stream;
+
+import static com.google.common.collect.Maps.immutableEntry;
 
 /**
  * The class that card JSON files deserialize (get decoded) into.
@@ -989,43 +992,43 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
-		Set<Map.Entry<CardDescArg, Object>> entries = Set.of(
-				Map.entry(CardDescArg.ID, id),
-				Map.entry(CardDescArg.NAME, name),
-				Map.entry(CardDescArg.DESCRIPTION, description),
-				Map.entry(CardDescArg.LEGACY, legacy),
-				Map.entry(CardDescArg.TYPE, type),
-				Map.entry(CardDescArg.HERO_CLASS, heroClass),
-				Map.entry(CardDescArg.HERO_CLASSES, heroClasses),
-				Map.entry(CardDescArg.RARITY, rarity),
-				Map.entry(CardDescArg.SET, set),
-				Map.entry(CardDescArg.BASE_MANA_COST, baseManaCost),
-				Map.entry(CardDescArg.COLLECTIBLE, collectible),
-				Map.entry(CardDescArg.ATTRIBUTES, attributes),
-				Map.entry(CardDescArg.MANA_COST_MODIFIER, manaCostModifier),
-				Map.entry(CardDescArg.PASSIVE_TRIGGERS, HasEntrySet.link(passiveTrigger, passiveTriggers, EnchantmentDesc.class)),
-				Map.entry(CardDescArg.DECK_TRIGGERS, HasEntrySet.link(deckTrigger, deckTriggers, EnchantmentDesc.class)),
-				Map.entry(CardDescArg.GAME_TRIGGERS, HasEntrySet.link(null, gameTriggers, EnchantmentDesc.class)),
-				Map.entry(CardDescArg.BATTLECRY, battlecry),
-				Map.entry(CardDescArg.DEATHRATTLE, deathrattle),
-				Map.entry(CardDescArg.TRIGGERS, HasEntrySet.link(trigger, triggers, EnchantmentDesc.class)),
-				Map.entry(CardDescArg.AURAS, auras),
-				Map.entry(CardDescArg.PASSIVE_AURAS, passiveAuras),
-				Map.entry(CardDescArg.BASE_ATTACK, baseAttack),
-				Map.entry(CardDescArg.BASE_HP, baseHp),
-				Map.entry(CardDescArg.DAMAGE, damage),
-				Map.entry(CardDescArg.DURABILITY, durability),
-				Map.entry(CardDescArg.TARGET_SELECTION, targetSelection),
-				Map.entry(CardDescArg.GROUP, group),
-				Map.entry(CardDescArg.SPELL, spell),
-				Map.entry(CardDescArg.CONDITION, condition),
-				Map.entry(CardDescArg.SECRET, secret),
-				Map.entry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
-				Map.entry(CardDescArg.COUNT_BY_VALUE, countByValue),
-				Map.entry(CardDescArg.QUEST, quest),
-				Map.entry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription),
-				Map.entry(CardDescArg.TARGET_SELECTION_OVERRIDE, targetSelectionOverride),
-				Map.entry(CardDescArg.TARGET_SELECTION_CONDITION, targetSelectionCondition)
+		Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
+				immutableEntry(CardDescArg.ID, id),
+				immutableEntry(CardDescArg.NAME, name),
+				immutableEntry(CardDescArg.DESCRIPTION, description),
+				immutableEntry(CardDescArg.LEGACY, legacy),
+				immutableEntry(CardDescArg.TYPE, type),
+				immutableEntry(CardDescArg.HERO_CLASS, heroClass),
+				immutableEntry(CardDescArg.HERO_CLASSES, heroClasses),
+				immutableEntry(CardDescArg.RARITY, rarity),
+				immutableEntry(CardDescArg.SET, set),
+				immutableEntry(CardDescArg.BASE_MANA_COST, baseManaCost),
+				immutableEntry(CardDescArg.COLLECTIBLE, collectible),
+				immutableEntry(CardDescArg.ATTRIBUTES, attributes),
+				immutableEntry(CardDescArg.MANA_COST_MODIFIER, manaCostModifier),
+				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, HasEntrySet.link(passiveTrigger, passiveTriggers, EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.DECK_TRIGGERS, HasEntrySet.link(deckTrigger, deckTriggers, EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.GAME_TRIGGERS, HasEntrySet.link(null, gameTriggers, EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.BATTLECRY, battlecry),
+				immutableEntry(CardDescArg.DEATHRATTLE, deathrattle),
+				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(trigger, triggers, EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.AURAS, auras),
+				immutableEntry(CardDescArg.PASSIVE_AURAS, passiveAuras),
+				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
+				immutableEntry(CardDescArg.BASE_HP, baseHp),
+				immutableEntry(CardDescArg.DAMAGE, damage),
+				immutableEntry(CardDescArg.DURABILITY, durability),
+				immutableEntry(CardDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(CardDescArg.GROUP, group),
+				immutableEntry(CardDescArg.SPELL, spell),
+				immutableEntry(CardDescArg.CONDITION, condition),
+				immutableEntry(CardDescArg.SECRET, secret),
+				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
+				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
+				immutableEntry(CardDescArg.QUEST, quest),
+				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription),
+				immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, targetSelectionOverride),
+				immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, targetSelectionCondition)
 		);
 		return entries;
 	}
