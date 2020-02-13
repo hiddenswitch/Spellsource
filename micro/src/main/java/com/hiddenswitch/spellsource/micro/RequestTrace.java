@@ -15,7 +15,7 @@ public class RequestTrace {
 	private List<String> deckFormatSets;
 	private List<String> secondPlayerBonusCards;
 	private List<RequestTraceMulligan> mulligans;
-	private List<Integer> actions = new ArrayList();
+	private List<Integer> actions = new ArrayList<>();
 	private String id;
 	private boolean traceErrors;
 	private int version = 4;

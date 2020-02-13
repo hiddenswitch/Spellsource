@@ -44,6 +44,9 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBase {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
 		return playChooseOneCard(context, player, baseCardId, chosenCardId, null);

@@ -166,6 +166,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String[] secondPlayerBonusCards;
 	public TargetSelection targetSelectionOverride;
 	public ConditionDesc targetSelectionCondition;
+
 	public CardDesc() {
 		super();
 	}
@@ -518,8 +519,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
-	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link
-	 * GameLogic#startGameForPlayer(Player)} phase.
+	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link GameLogic#startGameForPlayer(Player)} phase.
 	 * <p>
 	 * Note that the {@link net.demilich.metastone.game.events.GameStartEvent} is raised twice, once for each player, so
 	 * your {@link EventTriggerDesc} should specify a {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#TARGET_PLAYER}.
@@ -992,7 +992,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
-		HashSet<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
+		Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
 				immutableEntry(CardDescArg.ID, id),
 				immutableEntry(CardDescArg.NAME, name),
 				immutableEntry(CardDescArg.DESCRIPTION, description),
@@ -1130,7 +1130,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	}
 
 	public void setPassiveAuras(AuraDesc[] passiveAuras) {
-		this.passiveAuras=passiveAuras;
+		this.passiveAuras = passiveAuras;
 	}
 
 	public ConditionDesc getTargetSelectionCondition() {
