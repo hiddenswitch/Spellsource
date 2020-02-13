@@ -6,15 +6,15 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Whenever you shuffle a card into your deck, play it instead.",
+  "description": "Whenever you shuffle a card into your deck, play a copy of it.",
   "trigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-          "class": "PlayCardsRandomlySpell",
-          "target": "EVENT_TARGET"        
+      "class": "PlayCardsRandomlySpell",
+      "target": "EVENT_TARGET"
     }
   },
   "collectible": true,

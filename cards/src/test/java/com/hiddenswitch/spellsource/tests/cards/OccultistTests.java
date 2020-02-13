@@ -104,4 +104,21 @@ public class OccultistTests extends TestBase {
 			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.TAUNT));
 		});
 	}
+
+	@Test
+	public void testSunkenTerrorOtherwordlyTruth() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, opponent, "minion_neutral_test_1");
+			shuffleToDeck(context, opponent, "minion_neutral_test");
+			shuffleToDeck(context, opponent, "minion_neutral_test_big");
+
+			playCard(context, player, "minion_sunken_terror");
+			playCard(context, player, "spell_otherwordly_truth");
+			assertEquals(opponent.getDeck().size(), 3);
+			assertEquals(player.getDeck().size(), 3);
+			assertEquals(player.getMinions().size(), 4);
+			int totalAttack = player.getMinions().stream().mapToInt(Minion::getAttack).sum();
+			assertEquals(5 + 2 + 1 + 20, totalAttack);
+		});
+	}
 }

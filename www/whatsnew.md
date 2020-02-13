@@ -4,6 +4,10 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+- Sunken Terror's text now reflects how it plays a copy of shuffled cards, not the originals. (1547)
+- Otherwordly Truth now correctly shuffles all 3 cards and not 1 at random. (1547)
+
 ### 0.8.66-3.0.9 (February 6, 2020)
 
  - The client now shows colors on cards.
