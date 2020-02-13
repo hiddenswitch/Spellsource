@@ -16,6 +16,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.Micronaut;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,6 +31,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest(application = Application.class)
 public class BotsServiceTest {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
 	@Inject
 	private EmbeddedServer server;
 

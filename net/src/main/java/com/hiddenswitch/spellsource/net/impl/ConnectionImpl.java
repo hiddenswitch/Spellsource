@@ -1,9 +1,10 @@
 package com.hiddenswitch.spellsource.net.impl;
 
 import com.google.common.collect.ImmutableMap;
+import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.core.JsonConfiguration;
 import com.hiddenswitch.spellsource.net.Connection;
 import com.hiddenswitch.spellsource.net.Tracing;
-import com.hiddenswitch.spellsource.client.models.Envelope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
@@ -21,9 +22,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
-
 public class ConnectionImpl implements Connection {
+	static {
+		JsonConfiguration.configureJson();
+	}
+
 	private ServerWebSocket socket;
 	private SpanContext parentSpan;
 	private final String userId;
