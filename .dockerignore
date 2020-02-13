@@ -1,7 +1,8 @@
 # Elastic Beanstalk Files
 *
 !net/build/libs/*
-!server.sh
-!agent.sh
+!game/src/main/resources/*
+!cards/src/main/resources/*
+!micro/
 !Docker*
 !docker*

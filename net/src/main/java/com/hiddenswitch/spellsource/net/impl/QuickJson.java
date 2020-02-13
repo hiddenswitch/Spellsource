@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.impl;
 
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by bberman on 2/6/17.
+ * Utilities for working with JSON.
  */
 public class QuickJson {
 	@SafeVarargs
@@ -86,5 +87,6 @@ public class QuickJson {
 			return fromJson(jo, listElement);
 		}).collect(Collectors.toList());
 	}
+
 }
 

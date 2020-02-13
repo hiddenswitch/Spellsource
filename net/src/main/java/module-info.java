@@ -42,4 +42,5 @@ open module spellsource.net {
 	requires logback.core;
 	requires logback.classic;
 	requires logback.awslogs.appender;
+	requires spellsource.core;
 }
