@@ -107,4 +107,16 @@ public class OccultistTests extends TestBase {
 			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.TAUNT));
 		});
 	}
+
+	@Test
+	public void testYigsMastermind() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				shuffleToDeck(context, player, "minion_neutral_test");
+			}
+			playCard(context, player, "spell_yig_mastermind");
+			assertEquals(3, player.getMinions().size());
+			assertEquals(2, player.getDeck().size());
+		});
+	}
 }
