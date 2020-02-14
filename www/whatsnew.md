@@ -6,6 +6,7 @@ permalink: /whats-new/
 
 ### Upcoming Changes
 
+ - The Council of Fate's spells are no longer mistakenly collectible and are also now all named properly. (1539)
  - Xii'da the Curious now correctly doubles the minions as well as their openers. (1544)
  - Exchange Wares now actually does its effect. (1544)
  - Sabotage! now properly shuffles the opponent's card back into their deck. (1544)
