@@ -1,5 +1,5 @@
 {
-  "name": "Ruin It",
+  "name": "Restore It",
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
@@ -28,7 +28,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
