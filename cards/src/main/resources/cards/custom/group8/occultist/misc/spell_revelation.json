@@ -19,7 +19,8 @@
         "cardCostModifier": {
           "class": "CardCostModifier",
           "value": 1,
-          "operation": "SET"
+          "operation": "SET",
+          "target": "SELF"
         }
       }
     ]
