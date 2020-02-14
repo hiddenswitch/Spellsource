@@ -3,7 +3,7 @@ package net.demilich.metastone.game.cards.costmodifier;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
@@ -27,7 +27,7 @@ public final class OneTurnCostModifier extends CardCostModifier {
 	}
 
 	@Override
-	public boolean interestedIn(GameEventType eventType) {
+	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
 		if (turnStartTrigger.interestedIn() == eventType) {
 			return true;
 		}

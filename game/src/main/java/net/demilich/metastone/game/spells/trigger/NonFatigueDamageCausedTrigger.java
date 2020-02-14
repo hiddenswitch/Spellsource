@@ -4,7 +4,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DamageEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.DamageType;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 
 /**
  * Triggers as damage caused only if the damage is not fatigue damage.
@@ -22,7 +22,7 @@ public class NonFatigueDamageCausedTrigger extends DamageCausedTrigger {
 		}
 
 		DamageEvent damageEvent = (DamageEvent) event;
-		if (damageEvent.getDamageType() == DamageType.FATIGUE) {
+		if (damageEvent.getDamageType() == DamageTypeEnum.FATIGUE) {
 			return false;
 		}
 

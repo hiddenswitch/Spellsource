@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.net.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.base.Throwables;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.logic.GameLogic;
 

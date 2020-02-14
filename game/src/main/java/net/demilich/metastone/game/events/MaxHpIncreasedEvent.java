@@ -25,8 +25,8 @@ public final class MaxHpIncreasedEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.MAX_HP_INCREASED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.MAX_HP_INCREASED;
 	}
 
 	@Override

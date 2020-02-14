@@ -218,8 +218,8 @@ services:
       placement:
         constraints:
           - node.platform.arch == x86_64
-          - node.labels.cpu == low
-          - node.labels.disk == hd
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   jaeger-schema:
     image: jaegertracing/jaeger-cassandra-schema:1.15.1
     environment:
@@ -233,8 +233,8 @@ services:
       placement:
         constraints:
           - node.platform.arch == x86_64
-          - node.labels.cpu == low
-          - node.labels.disk == hd
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
     networks:
       - backend
   jaeger-query:
@@ -274,18 +274,11 @@ services:
       restart_policy:
         condition: on-failure
         window: 15s
-      labels:
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/jaeger"
-        - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
-        - "traefik.versionedurl.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.port=16686"
-        - "traefik.enable=true"
       placement:
         constraints:
           - node.platform.arch == x86_64
-          - node.labels.cpu == low
-          - node.labels.disk == hd
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
   ddnsroute53:
     image: doctorpangloss/ddnsroute53:latest
     networks:

@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.DrainEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.DamageType;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public final class DrainSpell extends Spell {
 
 	@Suspendable
 	public static int drainDamage(GameContext context, Player player, Entity source, Entity target, int damage, List<DrainEvent> events) {
-		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageType.DRAIN);
+		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageTypeEnum.DRAIN);
 		events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
 		return thisDamageDealt;
 	}

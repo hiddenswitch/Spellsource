@@ -3,6 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 
 public final class WeaponEquippedEvent extends GameEvent implements HasCard {
@@ -21,8 +22,8 @@ public final class WeaponEquippedEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.WEAPON_EQUIPPED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.WEAPON_EQUIPPED;
 	}
 
 	public Weapon getWeapon() {
@@ -40,7 +41,7 @@ public final class WeaponEquippedEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public Card getCard() {
+	public Card getSourceCard() {
 		return source;
 	}
 }

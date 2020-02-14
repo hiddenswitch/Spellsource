@@ -14,6 +14,7 @@
 package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Gets or Sets ActionType
+ * Action types correspond to things the player can do.   - SYSTEM: Indicates the action isn&#39;t player-initiated and is of a special system type. Currently unused.  - END_TURN: Indicates the action ends the turn.  - PHYSICAL_ATTACK: Indicates the action is an attack of one entity against another.  - SPELL: Indicates the action is casting a spell, possibly with a target.  - SUMMON: Indicates the action is summoning a minion, possibly with a minion targeted to summon it \&quot;next to.\&quot;  - HERO_POWER: Indicates the action is to use a hero power, possibly with a target.  - BATTLECRY: Indicates the action is an opener. When not targeted, the opener action is executed automatically.  - EQUIP_WEAPON: Indicates the action resulted in equipping a weapon.  - DISCOVER: Indicates the action is to discover among choices.  - HERO: Indicates the action is playing a hero card, replacing the current hero. 
  */
 public enum ActionType {
   

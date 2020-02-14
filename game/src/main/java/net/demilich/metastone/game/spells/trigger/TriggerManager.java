@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -106,10 +106,10 @@ public class TriggerManager implements Cloneable, Serializable {
 			event.getGameContext().getTriggerHostStack().push(hostReference);
 			// In order to stop premature expiration, check
 			// for a oneTurnOnly tag and that it isn't delayed.
-			if (event.getEventType() == GameEventType.TURN_END) {
+			if (event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END) {
 				if (trigger.oneTurnOnly() &&
-						!trigger.interestedIn(GameEventType.TURN_START) &&
-						!trigger.interestedIn(GameEventType.TURN_END)) {
+						!trigger.interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START) &&
+						!trigger.interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END)) {
 					trigger.expire();
 				}
 			}

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.CardPropertyCondition;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
@@ -25,8 +26,8 @@ public class MinionSummonedTrigger extends AbstractSummonTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.SUMMON;
+	public GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SUMMON;
 	}
 
 }

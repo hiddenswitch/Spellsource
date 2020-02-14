@@ -17,9 +17,10 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -31,32 +32,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class GameEventTriggerFired implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("description")
-  private String description = null;
-
   @JsonProperty("triggerSourceId")
   private Integer triggerSourceId = null;
 
-  @JsonProperty("triggerSource")
-  private Entity triggerSource = null;
-
-  public GameEventTriggerFired description(String description) {
-    this.description = description;
-    return this;
-  }
-
-   /**
-   * A plain text description of an explanation of this trigger firing. 
-   * @return description
-  **/
-  @ApiModelProperty(value = "A plain text description of an explanation of this trigger firing. ")
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
+  @JsonProperty("triggerTargetIds")
+  private List<Integer> triggerTargetIds = null;
 
   public GameEventTriggerFired triggerSourceId(Integer triggerSourceId) {
     this.triggerSourceId = triggerSourceId;
@@ -76,22 +56,30 @@ public class GameEventTriggerFired implements Serializable {
     this.triggerSourceId = triggerSourceId;
   }
 
-  public GameEventTriggerFired triggerSource(Entity triggerSource) {
-    this.triggerSource = triggerSource;
+  public GameEventTriggerFired triggerTargetIds(List<Integer> triggerTargetIds) {
+    this.triggerTargetIds = triggerTargetIds;
+    return this;
+  }
+
+  public GameEventTriggerFired addTriggerTargetIdsItem(Integer triggerTargetIdsItem) {
+    if (this.triggerTargetIds == null) {
+      this.triggerTargetIds = new ArrayList<>();
+    }
+    this.triggerTargetIds.add(triggerTargetIdsItem);
     return this;
   }
 
    /**
-   * Get triggerSource
-   * @return triggerSource
+   * The targets of the trigger&#39;s effect. 
+   * @return triggerTargetIds
   **/
-  @ApiModelProperty(value = "")
-  public Entity getTriggerSource() {
-    return triggerSource;
+  @ApiModelProperty(value = "The targets of the trigger's effect. ")
+  public List<Integer> getTriggerTargetIds() {
+    return triggerTargetIds;
   }
 
-  public void setTriggerSource(Entity triggerSource) {
-    this.triggerSource = triggerSource;
+  public void setTriggerTargetIds(List<Integer> triggerTargetIds) {
+    this.triggerTargetIds = triggerTargetIds;
   }
 
 
@@ -104,14 +92,13 @@ public class GameEventTriggerFired implements Serializable {
       return false;
     }
     GameEventTriggerFired gameEventTriggerFired = (GameEventTriggerFired) o;
-    return Objects.equals(this.description, gameEventTriggerFired.description) &&
-        Objects.equals(this.triggerSourceId, gameEventTriggerFired.triggerSourceId) &&
-        Objects.equals(this.triggerSource, gameEventTriggerFired.triggerSource);
+    return Objects.equals(this.triggerSourceId, gameEventTriggerFired.triggerSourceId) &&
+        Objects.equals(this.triggerTargetIds, gameEventTriggerFired.triggerTargetIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, triggerSourceId, triggerSource);
+    return Objects.hash(triggerSourceId, triggerTargetIds);
   }
 
 
@@ -120,9 +107,8 @@ public class GameEventTriggerFired implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameEventTriggerFired {\n");
     
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    triggerSourceId: ").append(toIndentedString(triggerSourceId)).append("\n");
-    sb.append("    triggerSource: ").append(toIndentedString(triggerSource)).append("\n");
+    sb.append("    triggerTargetIds: ").append(toIndentedString(triggerTargetIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }
