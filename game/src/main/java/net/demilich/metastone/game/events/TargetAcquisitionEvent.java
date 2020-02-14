@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Entity;
 
@@ -35,8 +35,8 @@ public class TargetAcquisitionEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.TARGET_ACQUISITION;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TARGET_ACQUISITION;
 	}
 
 	public Entity getSource() {

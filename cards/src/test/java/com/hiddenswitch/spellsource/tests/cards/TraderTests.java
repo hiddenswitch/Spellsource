@@ -82,6 +82,7 @@ public class TraderTests extends TestBase {
 			Minion target = playMinionCard(context, player, 3, 3);
 			playCard(context, player, "spell_test_deal_1", target);
 			assertEquals(target.getMaxHp() - 2, target.getHp(), "spell played again on same target");
+			assertEquals(3, player.getMinions().size());
 		});
 
 		runGym((context, player, opponent) -> {
@@ -89,6 +90,7 @@ public class TraderTests extends TestBase {
 			Minion target = playMinionCard(context, player, 3, 3);
 			playMinionCard(context, player, "minion_test_deal_1", target);
 			assertEquals(target.getMaxHp() - 2, target.getHp(), "battlecry played again on same target");
+			assertEquals(5, player.getMinions().size());
 		});
 	}
 
@@ -134,6 +136,34 @@ public class TraderTests extends TestBase {
 			assertEquals("token_customer", customer.getSourceCard().getCardId());
 			playCard(context, player, "spell_test_buff_dragons");
 			assertEquals(customer.getBaseAttack() + 1, customer.getAttack(), "should buff customers counted as dragons");
+		});
+	}
+
+	@Test
+	public void testExchangeWares() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_neutral_test");
+			shuffleToDeck(context, opponent, "spell_lunstone");
+			playCard(context, player, "spell_exchange_wares");
+			assertEquals(0, player.getDeck().size());
+			assertEquals(0, opponent.getDeck().size());
+			assertEquals(1, player.getHand().size());
+			assertEquals(1, opponent.getHand().size());
+			assertEquals("spell_lunstone", player.getHand().get(0).getCardId());
+			assertEquals("minion_neutral_test", opponent.getHand().get(0).getCardId());
+		});
+	}
+
+	@Test
+	public void testSabotageTrader() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, opponent, "minion_neutral_test");
+			receiveCard(context, opponent, "spell_lunstone");
+			receiveCard(context, opponent, "minion_neutral_test_1");
+			playCard(context, player, "spell_sabotage_trader");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(opponent.getHand().size(), 2);
+			assertEquals(opponent.getDeck().size(), 1);
 		});
 	}
 }

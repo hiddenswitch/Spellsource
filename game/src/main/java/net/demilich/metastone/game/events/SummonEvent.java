@@ -5,6 +5,7 @@ import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 import org.jetbrains.annotations.NotNull;
 
 public class SummonEvent extends GameEvent implements HasCard {
@@ -35,8 +36,8 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.SUMMON;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SUMMON;
 	}
 
 	@NotNull
@@ -51,7 +52,7 @@ public class SummonEvent extends GameEvent implements HasCard {
 
 	@Override
 	@NotNull
-	public Card getCard() {
+	public Card getSourceCard() {
 		return source.getSourceCard();
 	}
 

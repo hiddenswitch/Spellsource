@@ -1,6 +1,7 @@
 open module spellsource.hearthstone {
 	requires spellsource.testutils;
 	requires spellsource.game;
+	requires spellsource.client;
 	requires annotations;
 	requires logback.classic;
 	requires org.slf4j;

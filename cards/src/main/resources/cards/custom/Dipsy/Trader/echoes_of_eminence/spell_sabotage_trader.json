@@ -7,25 +7,26 @@
   "description": "Discover a copy of a card in your opponent's hand. Shuffle their copy back into their deck.",
   "targetSelection": "NONE",
   "spell": {
-      "class": "DiscoverSpell",
-      "spell": {
-		"class": "MetaSpell",
-	    "spells": [
-			{
-			  "class": "ShuffleToDeckSpell",
-			  "targetPlayer": "OPPONENT"
-			},
-            {
-              "class": "ReceiveCardSpell",
-              "targetPlayer": "SELF"
-            }
-        ]
-      },
-      "cardSource": {
-        "class": "HandSource",
-        "distinct": false,
-        "targetPlayer": "OPPONENT"
-      }
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ShuffleToDeckSpell",
+          "targetPlayer": "OPPONENT"
+        },
+        {
+          "class": "StealCardSpell",
+          "cardLocation": "HAND"
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "HandSource",
+      "distinct": false,
+      "targetPlayer": "OPPONENT"
+    },
+    "exclusive": true
   },
   "attributes": {
 	"DISCOVER": true

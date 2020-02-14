@@ -23,6 +23,24 @@
       }
     }
   ],
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "EVENT_TARGET",
+        "filter": {
+          "class": "OddCostFilter"
+        }
+      }
+    },
+    "spell": {
+      "class": "PlayCardsRandomlySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
   "collectible": true,
   "sets": [
     "CUSTOM",

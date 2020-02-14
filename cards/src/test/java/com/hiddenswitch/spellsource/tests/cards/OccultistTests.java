@@ -29,6 +29,9 @@ public class OccultistTests extends TestBase {
 				assertEquals(player.getMana(), 0);
 				assertEquals(player.getMaxMana(), 0);
 				assertEquals(costOf(context, player, card), 1);
+				shuffleToDeck(context, player, "spell_lunstone");
+				context.getLogic().drawCard(player.getId(), null);
+				assertEquals(0, costOf(context, player, player.getHand().get(1)));
 			});
 		}
 
@@ -118,6 +121,17 @@ public class OccultistTests extends TestBase {
 			});
 			playCard(context, player, "spell_cosmic_apparitions");
 			assertEquals(1, player.getHand().size());
+		});
+	}
+  
+	@Test
+	public void testYigsMastermind() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				shuffleToDeck(context, player, "minion_neutral_test");
+			}
+			playCard(context, player, "spell_yig_mastermind");
+			assertEquals(3, player.getMinions().size());
 			assertEquals(2, player.getDeck().size());
 		});
 	}

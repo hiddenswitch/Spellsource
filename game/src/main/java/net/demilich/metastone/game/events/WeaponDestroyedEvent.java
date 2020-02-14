@@ -19,8 +19,8 @@ public class WeaponDestroyedEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.WEAPON_DESTROYED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.WEAPON_DESTROYED;
 	}
 
 	public Weapon getWeapon() {
