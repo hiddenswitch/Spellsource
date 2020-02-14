@@ -6,11 +6,20 @@
   "damage": 2,
   "durability": 7,
   "rarity": "COMMON",
-   "description": "<b>Decay<b>",
+  "description": "<b>Decay<b>",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
   "attributes": {
-  "DECAY": true
+    "DECAY": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

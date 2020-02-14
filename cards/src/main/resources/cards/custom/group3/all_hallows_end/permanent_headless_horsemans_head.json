@@ -1,8 +1,8 @@
 {
-  "name": "Headless Horseman's Head",
+  "name": "Maskless Manhorse's Mask",
   "baseManaCost": 0,
   "type": "MINION",
-  "heroClass": "VIOLET",
+  "heroClass": "ANY",
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",

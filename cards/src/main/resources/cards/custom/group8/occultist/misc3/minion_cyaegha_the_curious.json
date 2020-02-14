@@ -7,14 +7,12 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "description": "Aftermath: Add a copy of your opponent's hand to your hand.",
-   "deathrattle": {
-    "spell": {
-      "class": "CopyCardSpell",
-      "target": "ENEMY_HAND"
-    }
+  "deathrattle": {
+    "class": "CopyCardSpell",
+    "target": "ENEMY_HAND"
   },
   "attributes": {
-    "DEATHRATTLE": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "fileFormatVersion": 1,

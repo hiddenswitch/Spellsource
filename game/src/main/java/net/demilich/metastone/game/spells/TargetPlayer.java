@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.spells;
 
+import net.demilich.metastone.game.GameContext;
+
 /**
  * Indicates a player reference.
  */
@@ -40,5 +42,22 @@ public enum TargetPlayer {
 	/**
 	 * Indicates either player. Used for filters and conditions.
 	 */
-	EITHER
+	EITHER;
+
+	/**
+	 * Returns a target player specific to the specified owner.
+	 *
+	 * @param owner
+	 * @return
+	 */
+	public static TargetPlayer getTargetPlayerForOwner(int owner) {
+		switch (owner) {
+			case GameContext.PLAYER_1:
+				return TargetPlayer.PLAYER_1;
+			case GameContext.PLAYER_2:
+				return TargetPlayer.PLAYER_2;
+			default:
+				throw new UnsupportedOperationException("invalid owner");
+		}
+	}
 }

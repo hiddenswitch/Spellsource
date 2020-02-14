@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Deal $2 damage. Add a Coin to your hand.",
+  "description": "Deal $2 damage. Add a Lunstone to your hand.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -15,7 +15,7 @@
       },
       {
         "class": "ReceiveCardSpell",
-        "card": "spell_the_coin"
+        "card": "spell_lunstone"
       }
     ]
   },

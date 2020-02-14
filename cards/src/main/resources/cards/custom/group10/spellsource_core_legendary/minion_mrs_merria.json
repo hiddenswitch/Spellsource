@@ -1,12 +1,13 @@
 {
   "name": "Mrs. Merria",
-  "baseManaCost": 7,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6,
-  "baseHp": 6,
+  "baseAttack": 4,
+  "baseHp": 4,
+  "race": "FAE",
   "rarity": "LEGENDARY",
-  "description": "Opener: If you played five cards this turn, take control of an enemy minion.",
+  "description": "Opener: If you played four other cards this turn, take control of an enemy minion.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "condition": {
@@ -17,7 +18,7 @@
         "attribute": "COMBO",
         "offset": 1
       },
-      "value2": 5,
+      "value2": 4,
       "operation": "GREATER_OR_EQUAL"
     },
     "spell": {

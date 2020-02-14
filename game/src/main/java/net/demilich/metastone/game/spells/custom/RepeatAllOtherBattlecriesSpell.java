@@ -27,7 +27,13 @@ import java.util.List;
 
 import static net.demilich.metastone.game.spells.SpellUtils.determineCastingPlayer;
 
-public class RepeatAllOtherBattlecriesSpell extends Spell {
+/**
+ * Retrieves a list of cards using {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)} and
+ * plays their openers with this {@code source} actor as the source.
+ *
+ * If the {@code source} is not an actor, an exception will be thrown.
+ */
+public final class RepeatAllOtherBattlecriesSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(RepeatAllOtherBattlecriesSpell.class);
 
@@ -46,7 +52,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
 			if (!card.hasBattlecry()) {
-				logger.error("onCast {} {}: Matched a card {} that does not have a battlecry specified.", context.getGameId(), source, card);
+				logger.error("onCast {} {}: Matched a card {} that does not have a opener specified.", context.getGameId(), source, card);
 				continue;
 			}
 
@@ -80,6 +86,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 	 * @param battlecrySource     The source entity that is actually casting the battlecry. Should typically be an actor.
 	 * @return
 	 */
+	@Suspendable
 	public static boolean castBattlecryRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource) {
 		BattlecryAction action;
 		BattlecryDesc[] chooseOneBattlecries = battlecryCardSource.getDesc().getChooseOneBattlecries();

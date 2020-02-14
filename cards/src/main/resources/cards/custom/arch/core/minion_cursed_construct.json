@@ -1,13 +1,13 @@
 {
-  "name": "Cursed Construct",  
+  "name": "Cursed Construct",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
   "baseAttack": 4,
   "baseHp": 1,
   "rarity": "COMMON",
-   "description": "<b>Opener:<b> If you have 7 or more cards in hand, gain +4 Health.",
-     "battlecry": {
+  "description": "<b>Opener:<b> If you have 7 or more cards in hand, gain +4 Health.",
+  "battlecry": {
     "condition": {
       "class": "CardCountCondition",
       "value": 7,
@@ -26,8 +26,8 @@
   },
   "collectible": true,
   "sets": [
-  "CUSTOM",
-  "CLASSIC"
+    "CUSTOM",
+    "CLASSIC"
   ],
-  "fileFormatVersion": 1,
+  "fileFormatVersion": 1
 }

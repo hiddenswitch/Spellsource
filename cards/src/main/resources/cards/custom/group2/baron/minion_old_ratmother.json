@@ -11,12 +11,14 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonSpell",
-      "cards": [
-        "token_rat",
-        "token_rat"
-      ],
-      "targetPlayer": "BOTH"
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_rat",
+          "token_rat"
+        ]
+      }
     }
   },
   "attributes": {

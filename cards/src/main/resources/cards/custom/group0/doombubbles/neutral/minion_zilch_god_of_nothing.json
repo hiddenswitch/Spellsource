@@ -32,8 +32,9 @@
                     "attribute": "STARTED_IN_DECK"
                   },
                   {
-                    "class": "SpecificCardFilter",
-                    "card": "passive",
+                    "class": "AttributeFilter",
+                    "attribute": "PERMANENT",
+                    "operation": "HAS",
                     "invert": true
                   },
                   {
@@ -57,8 +58,9 @@
                     "attribute": "STARTED_IN_DECK"
                   },
                   {
-                    "class": "SpecificCardFilter",
-                    "card": "passive",
+                    "class": "AttributeFilter",
+                    "attribute": "PERMANENT",
+                    "operation": "HAS",
                     "invert": true
                   },
                   {

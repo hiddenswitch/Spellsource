@@ -5,7 +5,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -19,7 +18,7 @@ import java.util.Map;
  * Transforms the {@code target} minion into the {@link SpellArg#CARD} or the <b>source card</b> of the entity pointed
  * to by {@link SpellArg#SECONDARY_TARGET}.
  *
- * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for the complete rules on
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion) for the complete rules on
  * 		transformations.
  */
 public class TransformMinionSpell extends Spell {
@@ -62,7 +61,7 @@ public class TransformMinionSpell extends Spell {
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
 			card = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET)).getSourceCard();
 		}
-		context.getLogic().transformMinion((Minion) target, card.summon());
+		context.getLogic().transformMinion(desc, (Minion) target, card.summon());
 	}
 
 }

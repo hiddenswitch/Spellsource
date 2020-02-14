@@ -23,8 +23,8 @@ public final class KillEvent extends GameEvent implements HasVictim {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.KILL;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.KILL;
 	}
 
 	@Override

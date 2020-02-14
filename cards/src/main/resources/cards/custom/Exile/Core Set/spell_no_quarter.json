@@ -1,0 +1,19 @@
+{
+  "name": "No Quarter",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "EPIC",
+  "description": "Destroy a minion. Costs (1) less for each minion that died this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DiedThisTurnValueProvider",
+    "targetPlayer": "BOTH"
+  }
+}

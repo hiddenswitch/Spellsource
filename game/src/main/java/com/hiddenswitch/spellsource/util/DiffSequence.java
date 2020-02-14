@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * Helps compute differences in sequences.
+ */
 public interface DiffSequence {
 	Logger logger = LoggerFactory.getLogger(DiffSequence.class);
 
@@ -99,6 +102,7 @@ public interface DiffSequence {
 						context.added(newDocId, newDoc);
 					} else {
 						oldDoc = oldResults.get(oldIndexOfId.get(newDocId));
+						// TODO: Perform actual comparison here
 						context.possiblyChanged(newDocId, oldDoc, newDoc);
 						context.movedBefore(newDocId, groupId);
 					}

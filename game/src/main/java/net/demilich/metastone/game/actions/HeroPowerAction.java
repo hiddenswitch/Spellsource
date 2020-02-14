@@ -1,8 +1,14 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.HeroPowerUsedEvent;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -10,9 +16,6 @@ import java.io.Serializable;
 
 /**
  * Indicates an action that is a hero power card.
- * <p>
- * It otherwise behaves like a normal spell card, except {@link net.demilich.metastone.game.logic.GameLogic#useHeroPower(int)}
- * is also called.
  */
 public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
 
@@ -43,8 +46,23 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
+		GameLogic gameLogic = context.getLogic();
+		Player player = context.getPlayer(playerId);
+		Card power = (Card) getSource(context);
+		// Hero powers could also cost health
+		int modifiedManaCost = gameLogic.getModifiedManaCost(player, power);
+		boolean cardCostsHealth = gameLogic.doesCardCostHealth(player, power);
+		if (cardCostsHealth) {
+			gameLogic.damage(player, (Actor) player.getHero(), modifiedManaCost, (Entity) power, true);
+		} else {
+			gameLogic.modifyCurrentMana(playerId, -modifiedManaCost, true);
+			player.getStatistics().manaSpent(modifiedManaCost);
+		}
+		player.getStatistics().cardPlayed(power, context.getTurn());
+
 		innerExecute(context, playerId);
-		context.getLogic().useHeroPower(playerId);
+		power.markUsed();
+		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
 	@Override

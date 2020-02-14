@@ -1,0 +1,29 @@
+{
+  "name": "Smoke Flash",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Give a minion +3 Attack and Hidden for a turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "STEALTH",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

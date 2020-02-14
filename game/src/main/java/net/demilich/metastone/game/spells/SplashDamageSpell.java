@@ -5,9 +5,11 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
@@ -16,6 +18,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * <p>
  * Appropriate to use with a {@link DamageCausedTrigger} or {@link DamageReceivedTrigger} to correctly account for a
  * {@link Attribute#POISONOUS} or {@link Attribute#LIFESTEAL} source.
+ * <p>
+ * Splash damage from an {@link net.demilich.metastone.game.entities.Actor} deals {@link DamageTypeEnum#PHYSICAL}.
  */
 public final class SplashDamageSpell extends DamageSpell {
 
@@ -27,5 +31,13 @@ public final class SplashDamageSpell extends DamageSpell {
 			source = context.resolveSingleTarget(eventSource);
 		}
 		super.onCast(context, player, desc, source, target);
+	}
+
+	@Override
+	protected DamageTypeEnum getDamageType(GameContext context, Player player, Entity source) {
+		if (source.getEntityType().hasEntityType(EntityType.ACTOR)) {
+			return DamageTypeEnum.PHYSICAL;
+		}
+		return super.getDamageType(context, player, source);
 	}
 }

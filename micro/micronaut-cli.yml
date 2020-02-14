@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: com.hiddenswitch
+---
+testFramework: junit
+sourceLanguage: java

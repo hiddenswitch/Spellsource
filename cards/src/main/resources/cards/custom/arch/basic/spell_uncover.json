@@ -7,15 +7,15 @@
   "description": "Add a random Fossil to your hand.",
   "targetSelection": "NONE",
   "spell": {
-     "spell": {
-      "class": "ReceiveCardSpell",
-      "cards": [
-        "token_bone_bouncer",
-        "token_bone_bruiser",
-        "token_bone_bowman"
-      ],
-      "randomTarget": true
-    }
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_bone_bouncer",
+      "token_bone_bruiser",
+      "token_bone_bowman"
+    ],
+    "randomTarget": true
+  },
+  "collectible": true,
   "sets": [
     "CUSTOM",
     "BASIC"

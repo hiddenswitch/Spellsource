@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class ShuffledTrigger extends AbstractCardTrigger {
@@ -10,7 +11,7 @@ public class ShuffledTrigger extends AbstractCardTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.CARD_SHUFFLED;
+	public GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.CARD_SHUFFLED;
 	}
 }

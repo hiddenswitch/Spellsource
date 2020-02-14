@@ -17,8 +17,8 @@ public final class LoseDeflectEvent extends GameEvent implements HasVictim {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.LOSE_DEFLECT;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.LOSE_DEFLECT;
 	}
 
 	@Override

@@ -1,0 +1,24 @@
+{
+  "name": "Spirit from Long Past",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "During your turn, draw from your graveyard instead. (Alters history!)",
+  "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "DrawCardFromGraveyardSpell"
+    },
+    "removeEffect": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

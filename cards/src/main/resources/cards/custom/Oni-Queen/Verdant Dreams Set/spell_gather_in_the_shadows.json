@@ -1,0 +1,39 @@
+{
+  "name": "Gather in the Shadows",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "EPIC",
+  "description": "Draw a Hidden minion from your deck. If your hand has duplicates, draw 3 instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "HighlanderHandCondition",
+      "invert": true
+    },
+    "spell1": {
+      "class": "FromDeckToHandSpell",
+      "value": 3,
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "STEALTH",
+        "cardType": "MINION",
+        "operation": "HAS"
+      }
+    },
+    "spell2": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "STEALTH",
+        "cardType": "MINION",
+        "operation": "HAS"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

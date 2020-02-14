@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.events.MaxHpIncreasedEvent;
 import net.demilich.metastone.game.spells.aura.ModifyBuffSpellAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -36,6 +35,10 @@ import java.util.Map;
  * <li>If this spell has {@link SpellArg#HP_BONUS}, the aura's {@link AuraArg#HP_BONUS} will be used</li>
  * <li>{@link AuraArg#VALUE} is always added.</li>
  * </ul>
+ * When a {@link ModifyBuffSpellAura} is in play, this effect sets the {@link GameValue#SPELL_VALUE} retrieved by
+ * {@link net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider} (1) to the HP bonus specified on this
+ * effect when querying the aura for the amount of additional HP bonus to apply, and then (2) to the attack bonus
+ * specified on this effect when querying the aura for the amount of additional attack bonus to apply.
  * <p>
  * For example, this trigger implements "Whenever you cast a spell, gain Armor equal to its Cost:"
  * <pre>
@@ -150,12 +153,12 @@ public class BuffSpell extends RevertableSpell {
 
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
+		int totalArmorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 
 		if (value != 0) {
 			if (target instanceof Hero) {
-				attackBonus = armorBonus = value;
+				attackBonus = totalArmorBonus = value;
 			} else {
 				attackBonus = hpBonus = value;
 			}
@@ -165,8 +168,12 @@ public class BuffSpell extends RevertableSpell {
 		List<ModifyBuffSpellAura> auras = SpellUtils.getAuras(context, ModifyBuffSpellAura.class, source);
 
 		for (ModifyBuffSpellAura aura : auras) {
+			context.getSpellValueStack().push(attackBonus);
 			int auraAttackBonus = aura.getDesc().getValue(AuraArg.ATTACK_BONUS, context, player, target, source, 0);
+			context.getSpellValueStack().pop();
+			context.getSpellValueStack().push(hpBonus);
 			int auraHpBonus = aura.getDesc().getValue(AuraArg.HP_BONUS, context, player, target, source, 0);
+			context.getSpellValueStack().pop();
 			int auraValueBonus = aura.getDesc().getValue(AuraArg.VALUE, context, player, target, source, 0);
 			if (desc.containsKey(SpellArg.VALUE)) {
 				attackBonus += auraAttackBonus + auraValueBonus;
@@ -196,16 +203,13 @@ public class BuffSpell extends RevertableSpell {
 			if (target instanceof Weapon) {
 				context.getLogic().modifyDurability((Weapon) target, hpBonus);
 			} else {
-				target.modifyHpBonus(hpBonus);
-				if (hpBonus > 0) {
-					context.fireGameEvent(new MaxHpIncreasedEvent(context, target, hpBonus, source.getOwner()));
-				}
+				context.getLogic().modifyHpSpell(source, target, hpBonus);
 			}
 		}
 
-		if (armorBonus != 0) {
+		if (totalArmorBonus != 0) {
 			if (target != null && target.getEntityType() == EntityType.HERO) {
-				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), armorBonus);
+				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), totalArmorBonus);
 			} else {
 				if (target == null) {
 					LOGGER.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
@@ -213,9 +217,10 @@ public class BuffSpell extends RevertableSpell {
 					LOGGER.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
 							" differs from the player {}", context.getGameId(), source, target, player);
 				}
-				context.getLogic().gainArmor(player, armorBonus);
+				context.getLogic().gainArmor(player, totalArmorBonus);
 			}
 		}
 	}
+
 }
 

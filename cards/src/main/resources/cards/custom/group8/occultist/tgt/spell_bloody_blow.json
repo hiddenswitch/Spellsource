@@ -17,11 +17,15 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 2
+        "value": 2,
+        "ignoreSpellDamage": true
       }
     ]
   },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }

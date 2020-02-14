@@ -10,6 +10,7 @@ source "https://rubygems.org"
 # Happy Jekylling!
 gem "jekyll", "~> 3.8.4"
 gem "s3_website", "~> 3.4.0"
+# gem "s3_website", :git => "https://github.com/yanokwa/s3_website.git", :branch => "jre-upgrade"
 
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
 gem "minima", "~> 2.0"

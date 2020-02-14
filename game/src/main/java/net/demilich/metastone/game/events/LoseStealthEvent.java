@@ -18,8 +18,8 @@ public final class LoseStealthEvent extends GameEvent implements HasVictim {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.LOSE_STEALTH;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.LOSE_STEALTH;
 	}
 
 	@Override

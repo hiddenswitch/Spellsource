@@ -1,56 +1,45 @@
 plugins {
-    id "com.palantir.graal" version "0.3.0-37-g77aa98f"
-    id "com.github.johnrengelman.shadow" version "5.1.0"
+    id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
+    id "org.beryx.jlink" version "2.17.0"
+    id 'application'
 }
 
-apply plugin: 'com.palantir.graal'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
+apply plugin: 'org.javamodularity.moduleplugin'
+apply plugin: "org.beryx.jlink"
+apply from: '../gradle/instrument.gradle'
 
-def jdk8 = JavaVersion.current() == JavaVersion.VERSION_1_8
+import org.javamodularity.moduleplugin.tasks.ModularJavaExec
 
-def hazelcastJvmArgs = jdk8 ? [] : ["--add-modules", "java.se",
-                                    "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
-                                    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                                    "--add-opens", "java.base/java.nio=ALL-UNNAMED",
-                                    "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
-                                    "--add-opens", "java.management/sun.management=ALL-UNNAMED",
-                                    "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED"]
 
-def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
+def localMainClassName = "$moduleName/com.hiddenswitch.spellsource.net.applications.LocalClustered"
+def defaultMainClass = "$moduleName/com.hiddenswitch.spellsource.net.applications.Clustered"
 
-def debugSystemProperties = ["spellsource.port"                        : "8080",
+def debugSystemProperties = ["spellsource.port"                        : System.getenv().getOrDefault("PORT", "8080"),
                              "spellsource.root.logger.level"           : "DEBUG",
                              "games.defaultNoActivityTimeout"          : "999999000",
                              "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory"]
 
-def mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
-apply plugin: 'com.github.johnrengelman.shadow'
 
-configurations.all {
-    resolutionStrategy {
-        force 'com.hazelcast:hazelcast:3.11'
+mainClassName = localMainClassName
+
+jlink {
+    options.addAll(['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages'])
+    launcher {
+        name = 'spellsource_server'
+        jvmArgs = ['--add-opens', 'java.base/java.util.concurrent.atomic=kryo', '--add-opens', 'java.base/java.lang=co.paralleluniverse.quasar.core']
     }
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-}
 
 shadowJar {
     mergeServiceFiles()
-    archiveClassifier.set(null)
-    configurations = [project.configurations.compile]
     zip64 true
-}
-
-graal {
-    mainClass mainClassName
-    outputName 'spellsource-server'
-    graalVersion '19.1.0'
-    option "--no-fallback"
-    option "--report-unsupported-elements-at-runtime"
+    manifest {
+        attributes 'Main-Class': defaultMainClass
+    }
 }
 
 artifacts {
@@ -58,7 +47,6 @@ artifacts {
 }
 
 repositories {
-    mavenCentral()
     maven {
         url 'http://oss.sonatype.org/content/repositories/snapshots'
     }
@@ -68,50 +56,131 @@ repositories {
     jcenter()
 }
 
+configurations.runtime {
+    exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    exclude group: 'javax.ws.rs', module: 'jsr311-api'
+}
+
 dependencies {
-    compile group: 'com.hazelcast', name: 'hazelcast', version: '3.11'
-    compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.3'
-    compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
-    compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
-    compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
-    compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-web', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.6.0'
-    compile group: 'io.vertx', name: 'vertx-dropwizard-metrics', version: '3.6.0'
-    compile group: 'javax.cache', name: 'cache-api', version: '1.1.1'
-    compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
-    compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
+    implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
-    compile project(':game')
-    compile project(':cards')
-    compile project(':hearthstone')
-    compile project(':client')
-    compile project(':vertx-sync')
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
+    implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.2') {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
+    }
+    implementation('com.fasterxml.jackson.module:jackson-module-afterburner:2.10.2') {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
+    }
+    implementation 'io.github.classgraph:classgraph:4.8.59'
+    implementation group: 'joda-time', name: 'joda-time', version: '2.10.2'
+    implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
+    implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
+    api group: 'io.vertx', name: 'vertx-core', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-web-client', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-web', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-rx-java2', version: '3.8.3'
+    implementation group: 'io.vertx', name: 'vertx-mail-client', version: '3.8.3'
+    implementation 'org.jetbrains:annotations:16.0.2'
+    implementation 'io.jaegertracing:jaeger-client:1.0.0'
+    implementation 'io.netty:netty-transport-native-epoll:4.1.43.Final:linux-x86_64'
 
-    testCompile project(':testutils')
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile 'io.vertx:vertx-core:3.6.0:tests'
-    testCompile 'org.powermock:powermock-module-junit4:2.0.2'
-    testCompile 'org.powermock:powermock-api-mockito2:2.0.2'
-    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
-    testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
-    testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
-    testCompile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9'
-    testCompile group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.6'
+    implementation('com.esotericsoftware:kryo:4.0.2') {
+        exclude group: 'org.objenesis', module: '*'
+    }
+
+    implementation('io.atomix:atomix:3.1.5') {
+        exclude group: 'org.objenesis', module: '*'
+        exclude group: 'io.github.classgraph', module: 'classgraph'
+    }
+    implementation('io.atomix:atomix-raft:3.1.5') {
+        exclude group: 'org.objenesis', module: '*'
+        exclude group: 'io.github.classgraph', module: 'classgraph'
+    }
+    implementation('io.atomix:atomix-primary-backup:3.1.5') {
+        exclude group: 'org.objenesis', module: '*'
+        exclude group: 'io.github.classgraph', module: 'classgraph'
+    }
+    implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
+    implementation group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
+    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
+
+    implementation project(':cards')
+    implementation(project(':client')) {
+        exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
+        exclude group: 'javax.ws.rs', module: 'jsr311-api'
+        exclude group: 'jakarta.ws.rs', module: '*'
+    }
+
+    implementation project(':game')
+    implementation project(':vertx-sync')
+    implementation project(':game')
+
+    testRuntimeOnly group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
+    testRuntimeOnly 'org.glassfish.jersey.core:jersey-common:2.+'
+
+    testImplementation(platform("org.junit:junit-bom:5.6.0-M1"))
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine") {
+        because 'allows JUnit 3 and JUnit 4 tests to run'
+    }
+    testRuntimeOnly(project(':client')) {
+        exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
+        exclude group: 'javax.ws.rs', module: 'jsr311-api'
+    }
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher") {
+        because 'allows tests to run from IDEs that bundle older version of launcher'
+    }
+
+    testImplementation project(':testutils')
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'io.vertx:vertx-core:3.8.3:tests'
+    testImplementation('org.powermock:powermock-module-junit4:2.0.2') {
+        exclude group: 'org.objenesis', module: '*'
+    }
+    testImplementation('org.powermock:powermock-api-mockito2:2.0.2') {
+        exclude group: 'org.objenesis', module: '*'
+    }
+    testImplementation group: 'io.vertx', name: 'vertx-unit', version: '3.8.3'
+    testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.9.3.Final') {
+        exclude group: 'javax.activation', module: 'activation'
+        exclude group: 'org.jboss.spec.javax.annotation', module: '*'
+        exclude group: 'org.jboss.spec.javax.ws.rs', module: '*'
+        exclude group: 'org.jboss.spec.javax.xml.bind', module: '*'
+    }
+    testImplementation(group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9') {
+        exclude group: 'com.sun.activation', module: '*'
+    }
+    testImplementation group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.6'
+}
+
+run {
+    moduleOptions {
+        addOpens = ['java.base/java.util.concurrent.atomic': 'kryo', 'java.base/java.lang': 'co.paralleluniverse.quasar.core']
+    }
+    setSystemProperties(debugSystemProperties)
+}
+
+task(runDebug, dependsOn: 'classes', type: ModularJavaExec) {
+    setSystemProperties(debugSystemProperties)
+    setJvmArgs(["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
+    main = localMainClassName
 }
 
 test {
     setSystemProperties(debugSystemProperties)
-    //setJvmArgs(hazelcastJvmArgs+ ["-agentlib:native-image-agent=config-output-dir=${project.projectDir.absolutePath}/src/main/resources/META-INF/native-image"] as List<String>)
-    setJvmArgs(hazelcastJvmArgs)
-    useJUnit()
+    useJUnitPlatform()
     maxParallelForks = 1
+    enableAssertions = false
+
+    moduleOptions {
+        addOpens = ['java.base/java.util.concurrent.atomic': 'kryo', 'java.base/java.lang': 'co.paralleluniverse.quasar.core']
+    }
 
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
@@ -120,39 +189,4 @@ test {
     if (System.properties.containsKey("exclude-tests")) {
         exclude(System.properties.getProperty("exclude-tests").split(","))
     }
-}
-
-task(runDebug, dependsOn: 'classes', type: JavaExec) {
-    setSystemProperties(debugSystemProperties)
-    main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs + ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task(local, dependsOn: 'classes', type: JavaExec) {
-    setSystemProperties(debugSystemProperties)
-    main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs)
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task(localWindows, dependsOn: 'classes', type: JavaExec) {
-    doFirst {
-        println "Local Windows Server Command"
-        println ""
-        println "Exiting batch scripts in Windows command line is very finicky. Never end execution by closing the console tab or Window. Instead, use ConEmu, and configure a hotkey to send the Break key. In ConEmu, you can do this by clicking the Hamburger menu in the upper right corner, choosing settings, and then configuring a break command as documented in  https://stackoverflow.com/questions/41074403/conemusend-sigint-to-running-application"
-        println "MongoDB must be running before you start this command. If it's not installed, visit the Windows Development guide install for more details. You can install it with chocolatey using the command:"
-        println "  choco install mongodb.install --version 3.6.0"
-        println "Then, start mongodb with the commands:"
-        println "  cd .\\Spellsource-Server"
-        println "  md -Force .\\net\\.mongo\\db"
-        println "  & \"C:\\Program Files\\MongoDB\\Server\\3.6\\bin\\mongod\" --dbpath .\\net\\.mongo\\db"
-        println "When the server is ready, you'll see the text:"
-        println "  Server is ready."
-        println "Otherwise, you will see an error. Make sure mongod is running, as this is the most common mistake you will make."
-    }
-    setSystemProperties(debugSystemProperties)
-    main = localMainClassName
-    setJvmArgs(hazelcastJvmArgs)
-    classpath = sourceSets.main.runtimeClasspath
 }

@@ -2,10 +2,10 @@ package net.demilich.metastone.game.behaviour;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayMinionCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
@@ -13,9 +13,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.spells.trigger.InspireTrigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -139,8 +137,7 @@ public class TycheBehaviour extends IntelligentBehaviour {
 			onMyTurnBegin(context, player);
 		}
 
-		// Creates a special game context that can be resumed from any point
-		context = SuspendableGameContext.fromTrace(context);
+		context = GameContext.fromTrace(context.getTrace());
 
 		GameAction chosenTask = chooseTask(context, player, validActions);
 

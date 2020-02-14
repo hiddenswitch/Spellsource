@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Deflect. Your spells that cost 3 or more have Echo.",
+  "description": "Deflect. Your spells that cost 3 or more have Repeatable this turn.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_HAND",

@@ -1,9 +1,9 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.util.Collections;

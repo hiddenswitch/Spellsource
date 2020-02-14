@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-   "description": "Deal $2 damage. Gain 4 Armor.",
+  "description": "Deal $2 damage. Gain 4 Armor.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -20,6 +20,7 @@
       }
     ]
   },
+  "collectible": true,
   "sets": [
     "CUSTOM",
     "BASIC"

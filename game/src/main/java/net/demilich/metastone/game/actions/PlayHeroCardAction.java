@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -38,7 +39,7 @@ public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		Card heroCard = (Card) context.resolveSingleTarget(getSourceReference());
-		Hero hero = heroCard.createHero();
+		Hero hero = heroCard.createHero(context.getPlayer(playerId));
 		if (battlecry != null) {
 			hero.setBattlecry(battlecry);
 		}

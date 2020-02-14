@@ -19,8 +19,8 @@ public class HeroPowerUsedEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.HERO_POWER_USED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HERO_POWER_USED;
 	}
 
 	public Card getHeroPower() {

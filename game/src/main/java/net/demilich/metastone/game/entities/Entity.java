@@ -225,11 +225,20 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			return (boolean) value;
 		}
 
-		if (value instanceof Integer) {
+		if (value instanceof Integer && !Attribute.getStoresTurnNumberAttributes().contains(attribute)) {
 			return ((int) value) != 0;
 		}
 
 		return true;
+	}
+
+	public int getMaxNumberOfAttacks() {
+		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
+			return GameLogic.MEGA_WINDFURY_ATTACKS;
+		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
+			return GameLogic.WINDFURY_ATTACKS;
+		}
+		return 1;
 	}
 
 	/**
@@ -364,8 +373,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * <p>
 	 *
 	 * @return The entity's location in the match encoded as a {@link EntityLocation}, or {@link
-	 * 		EntityLocation#UNASSIGNED} if the entity has not yet been assigned a location or placed into an {@link
-	 * 		EntityZone}.
+	 *    EntityLocation#UNASSIGNED} if the entity has not yet been assigned a location or placed into an {@link
+	 *    EntityZone}.
 	 * @see EntityLocation for a complete description of how to use {@link EntityLocation} objects.
 	 */
 	public EntityLocation getEntityLocation() {
@@ -473,7 +482,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets the possibly modified description of the entity to render to the end user.
 	 *
 	 * @return The {@link #getSourceCard()}'s {@link Card#getDescription()} field, or the value specified in {@link
-	 * 		Attribute#DESCRIPTION}.
+	 *    Attribute#DESCRIPTION}.
 	 */
 	public String getDescription() {
 		return (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) != null) ?
@@ -526,8 +535,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	@NotNull
-	public Race getRace() {
-		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
+	public String getRace() {
+		return (String) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}
 
 	/**
@@ -631,31 +640,29 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		// Healing
-		if (true) {
-			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
-			StringBuffer newDescription = new StringBuffer();
+		Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
+		StringBuffer newDescription = new StringBuffer();
 
-			boolean matchedAtLeastOnce = false;
-			while (matcher.find()) {
-				// Skip the # in the beginning
-				int healing = Integer.parseInt(matcher.group(1));
-				int modifiedHealing = healing;
-				if (card.getId() != GameLogic.UNASSIGNED) {
-					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-					if (card.isSpell()) {
-						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
-					}
-					if (card.isHeroPower()) {
-						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
-					}
+		boolean matchedAtLeastOnce = false;
+		while (matcher.find()) {
+			// Skip the # in the beginning
+			int healing = Integer.parseInt(matcher.group(1));
+			int modifiedHealing = healing;
+			if (card.getId() != GameLogic.UNASSIGNED) {
+				modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+				if (card.isSpell()) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 				}
-				modifyDescription(matcher, newDescription, healing, modifiedHealing);
-				matchedAtLeastOnce = true;
+				if (card.isHeroPower()) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+				}
 			}
-			if (matchedAtLeastOnce) {
-				matcher.appendTail(newDescription);
-				description = newDescription.toString();
-			}
+			modifyDescription(matcher, newDescription, healing, modifiedHealing);
+			matchedAtLeastOnce = true;
+		}
+		if (matchedAtLeastOnce) {
+			matcher.appendTail(newDescription);
+			description = newDescription.toString();
 		}
 
 		return description;
@@ -667,5 +674,19 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		} else {
 			matcher.appendReplacement(newDescription, Integer.toString(newValue));
 		}
+	}
+
+	/**
+	 * Indicates whether the minion died a natural death (not removed peacefully, not removed by spells, not a permanent)
+	 * on the battlefield.
+	 *
+	 * @return {@code true} if this minion died a natural death on the battlefield, is not a permanent, is in the
+	 * 		graveyard and is definitely a minion.
+	 */
+	public boolean diedOnBattlefield() {
+		return getEntityType() == EntityType.MINION
+				&& getZone() == Zones.GRAVEYARD
+				&& hasAttribute(Attribute.DIED_ON_TURN)
+				&& !hasAttribute(Attribute.PERMANENT);
 	}
 }

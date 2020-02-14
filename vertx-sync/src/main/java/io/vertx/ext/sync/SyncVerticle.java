@@ -18,6 +18,7 @@ public abstract class SyncVerticle extends AbstractVerticle {
   protected FiberScheduler instanceScheduler;
 
   @Override
+  @SuppressWarnings("deprecation")
   public void start(Future<Void> startFuture) throws Exception {
     instanceScheduler = Sync.getContextScheduler();
     new Fiber<Void>(null, instanceScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
@@ -31,6 +32,7 @@ public abstract class SyncVerticle extends AbstractVerticle {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void stop(Future<Void> stopFuture) throws Exception {
     new Fiber<Void>(null, instanceScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
       try {

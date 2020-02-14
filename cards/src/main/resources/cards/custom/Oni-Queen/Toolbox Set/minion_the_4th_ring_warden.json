@@ -1,0 +1,40 @@
+{
+  "name": "The 4th Ring Warden",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Opener: If your deck has no duplicates, minions you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_ring_warden_aftermath"
+        },
+        "target": "FRIENDLY_PLAYER",
+        "invert": true
+      },
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_ring_warden_aftermath"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

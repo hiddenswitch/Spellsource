@@ -2,7 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class GameStateChangedTrigger extends EventTrigger {
@@ -17,8 +17,7 @@ public class GameStateChangedTrigger extends EventTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.ALL;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.ALL;
 	}
-
 }

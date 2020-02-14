@@ -1,0 +1,30 @@
+{
+  "name": "Elven Woundsealer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Hidden for 1 turn. Whenever your champion takes damage, restore #2 Health to it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    },
+    "maxFiresPerSequence": 15
+  },
+  "attributes": {
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

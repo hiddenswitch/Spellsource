@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.entities.Actor;
@@ -13,7 +14,7 @@ public final class BeforeSummonEvent extends SummonEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.BEFORE_SUMMON;
+	public GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BEFORE_SUMMON;
 	}
 }

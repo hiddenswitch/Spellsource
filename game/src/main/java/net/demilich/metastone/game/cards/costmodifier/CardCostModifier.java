@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,7 +10,7 @@ import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -24,6 +23,8 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -147,7 +148,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 		// If a target race is specified, does it match?
 		applies &= !(getRequiredRace() != null
-				&& !card.getRace().hasRace(getRequiredRace()));
+				&& !Race.hasRace(context, card, getRequiredRace()));
 
 		// Is the enchantment owner / caster the same as the card owner?
 		switch (getTargetPlayer()) {
@@ -262,8 +263,8 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		return (Attribute) desc.get(CardCostModifierArg.REQUIRED_ATTRIBUTE);
 	}
 
-	protected Race getRequiredRace() {
-		return (Race) get(CardCostModifierArg.RACE);
+	protected String getRequiredRace() {
+		return (String) get(CardCostModifierArg.RACE);
 	}
 
 	/**
@@ -279,11 +280,11 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
-	public boolean interestedIn(GameEventType eventType) {
+	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
 		if (expirationTrigger == null) {
 			return false;
 		}
-		return eventType == expirationTrigger.interestedIn() || expirationTrigger.interestedIn() == GameEventType.ALL;
+		return eventType == expirationTrigger.interestedIn() || expirationTrigger.interestedIn() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL;
 	}
 
 	@Override
@@ -296,6 +297,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
+	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
 		if (expirationTrigger != null && event.getEventType() == expirationTrigger.interestedIn() && expirationTrigger.queues(event, host)) {
@@ -309,12 +311,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	public int process(GameContext context, Entity host, Card card, int currentManaCost, Player player) {
-		AlgebraicOperation operation = (AlgebraicOperation) desc.get(CardCostModifierArg.OPERATION);
+		AlgebraicOperation operation = (AlgebraicOperation) desc.getOrDefault(CardCostModifierArg.OPERATION, AlgebraicOperation.ADD);
 		int value = desc.getValue(CardCostModifierArg.VALUE, context, player, card, host, 0);
-		if (operation != null) {
-			return operation.performOperation(currentManaCost, value);
-		}
-		return currentManaCost + desc.getInt(CardCostModifierArg.VALUE);
+		return operation.performOperation(currentManaCost, value);
 	}
 
 	@Override

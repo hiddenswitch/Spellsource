@@ -1,6 +1,6 @@
 {
   "name": "Devilry Flare",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",

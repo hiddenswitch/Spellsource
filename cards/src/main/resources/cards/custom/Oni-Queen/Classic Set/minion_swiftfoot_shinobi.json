@@ -1,0 +1,17 @@
+{
+  "name": "Swiftfoot Shinobi",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Hidden, Dodge",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

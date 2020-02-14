@@ -7,28 +7,28 @@
   "description": "Destroy all Even-Cost cards in your deck. Set the Cost of all cards in your deck to (0)",
   "targetSelection": "NONE",
   "spell": {
-   "class": "MetaSpell",
-   "target": "FRIENDLY_DECK",
-   "spells": [
-     {
-      "class": "RemoveCardSpell",
-      "target": "FRIENDLY_DECK",
-      "cardFilter": {
-        "class": "EvenCostFilter"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "EvenCostFilter"
+        }
+      },
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_DECK",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 0,
+          "operation": "SET"
+        }
       }
-     },
-	 {
-      "class": "CardCostModifierSpell",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 0,
-        "operation": "SET"
-      }
-     }		
-	]
-   },
-  "collectible": true,
+    ]
+  },
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

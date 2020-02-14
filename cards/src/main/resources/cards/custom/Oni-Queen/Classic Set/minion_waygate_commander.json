@@ -1,0 +1,23 @@
+{
+  "name": "Waygate Commander",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Your Demons have Dash.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_RUSH",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

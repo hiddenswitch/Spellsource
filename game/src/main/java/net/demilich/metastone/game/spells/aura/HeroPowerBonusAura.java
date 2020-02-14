@@ -22,3 +22,4 @@ public class HeroPowerBonusAura extends Aura {
 	public void onGameEvent(GameEvent event) {
 	}
 }
+

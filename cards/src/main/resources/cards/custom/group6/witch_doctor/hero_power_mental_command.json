@@ -1,10 +1,10 @@
 {
-  "name": "Mental Command",
+  "name": "Echolocation",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "ROSE",
+  "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Choose a target. Your Mind Controlled Mechs attack it.",
+  "description": "Choose a target. Your Blind Acolytes attack it.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",

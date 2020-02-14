@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Opener: Give your C'Thun +2/+2 (wherever it is).",
+  "description": "Opener: Give your Big Guy +2/+2 (wherever it is).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -18,7 +18,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -27,7 +27,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -48,7 +48,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

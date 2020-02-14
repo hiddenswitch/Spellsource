@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Guard. Aftermath: Recruit any copies of this.",
+  "description": "Guard. Aftermath: Summon any copies of this from your deck.",
   "deathrattle": {
     "class": "RecruitSpell",
     "value": 7,

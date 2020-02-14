@@ -9,7 +9,7 @@
   "description": "Whenever you shuffle a card into your deck, add a random Highborne card, instead.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
+      "class": "ShuffledOnlyOriginalCopiesTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {

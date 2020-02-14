@@ -1,0 +1,16 @@
+{
+  "name": "Gain 1 Mana Collectible",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Gain 1 Lun this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": 1
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

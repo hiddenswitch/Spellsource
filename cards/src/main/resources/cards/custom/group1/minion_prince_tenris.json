@@ -1,21 +1,14 @@
 {
-  "name": "Prince Tenris",
-  "baseManaCost": 1,
+  "name": "Rektan, Warrior of the Wild",
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
+  "race": "BEAST",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Opener: If your deck has no 1-Cost cards, your champion has +1 Attack for the rest of the game.",
+  "description": "Opener: Your champion has +1 Attack for the rest of the game.",
   "battlecry": {
-    "condition": {
-      "class": "DeckContainsCondition",
-      "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 1
-      },
-      "invert": true
-    },
     "targetSelection": "NONE",
     "spell": {
       "class": "AddEnchantmentSpell",

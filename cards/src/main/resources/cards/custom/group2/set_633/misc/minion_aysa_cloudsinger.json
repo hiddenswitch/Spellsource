@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "Opener: Swap your hero with Aysa Cloudsinger. When she dies, return your champion.",
+  "description": "Opener: Swap your champion with Aysa Cloudsinger. When she dies, return your champion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

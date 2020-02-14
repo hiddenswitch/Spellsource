@@ -14,7 +14,7 @@ mongo testdb --eval "printjson(db.dropDatabase())" > /dev/null
 echo "Running tests"
 
 # Configure the gradle command
-if test "$CI" = "true" || ! command -v gradle > /dev/null ; then
+if [[ "$CI" = "true" ]] || ! command -v gradle > /dev/null ; then
   export GRADLE_CMD="./gradlew"
 else
   export GRADLE_CMD=gradle
@@ -23,5 +23,5 @@ fi
 ${GRADLE_CMD} game:test
 ${GRADLE_CMD} cards:test
 ${GRADLE_CMD} hearthstone:test
-${GRADLE_CMD} net:test -Dexclude-tests="**/InvitesTest.class"
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.InvitesTest
+${GRADLE_CMD} customhearthstone:test
+${GRADLE_CMD} net:test

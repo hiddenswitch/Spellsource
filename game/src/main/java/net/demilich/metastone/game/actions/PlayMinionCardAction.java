@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -67,7 +68,7 @@ public final class PlayMinionCardAction extends PlayCardAction implements HasBat
 		}
 		Player player = context.getPlayer(playerId);
 		int index = player.getMinions().indexOf(nextTo);
-		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && nextTo.getRace().hasRace(Race.MECH)) {
+		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && Race.hasRace(context, nextTo, "MECH")) {
 			context.getLogic().magnetize(playerId, card, (Minion) nextTo);
 		} else {
 			minion.getAttributes().remove(Attribute.MAGNETIC);

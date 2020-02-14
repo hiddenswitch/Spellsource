@@ -16,7 +16,7 @@
       "class": "ConditionalAttackBonusSpell",
       "target": "SELF",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_HAND",
         "filter": {
           "class": "SpecificCardFilter",

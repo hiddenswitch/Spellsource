@@ -1,11 +1,8 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.events.LoseDivineShieldEvent;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class LoseDivineShieldTrigger extends EventTrigger {
@@ -19,8 +16,8 @@ public class LoseDivineShieldTrigger extends EventTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.LOSE_DIVINE_SHIELD;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.LOSE_DIVINE_SHIELD;
 	}
 }
 

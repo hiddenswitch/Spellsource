@@ -61,7 +61,7 @@ public enum PlayerAttribute {
 	 */
 	SUPREMACIES_THIS_GAME,
 	/**
-	 * Unused.
+	 * Indicates the amount of damage the player's hero has taken this turn.
 	 */
 	DAMAGE_THIS_TURN,
 	/**
@@ -79,5 +79,9 @@ public enum PlayerAttribute {
 	/**
 	 * The total healing done by friendly sources
 	 */
-	HEALING_DONE
+	HEALING_DONE,
+	/**
+	 * The total amount of armor lost this game
+	 */
+	ARMOR_LOST
 }

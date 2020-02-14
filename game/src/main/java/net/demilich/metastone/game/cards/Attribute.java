@@ -2,7 +2,6 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Actor;
@@ -15,9 +14,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A list of attributes on entities.
@@ -156,9 +154,6 @@ public enum Attribute {
 	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a {@link net.demilich.metastone.game.spells.SilenceSpell}
 	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the minion
 	 * was {@link #FROZEN}.
-	 *
-	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
-	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
 	/**
@@ -251,6 +246,10 @@ public enum Attribute {
 	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
 	 */
 	EXTRA_ATTACKS,
+	/**
+	 * A virtual attribute that will call {@link Actor#getMaxNumberOfAttacks()} and return it.
+	 */
+	MAX_ATTACKS,
 	/**
 	 * When an {@link Actor} is {@link #ENRAGED}, its {@link #CONDITIONAL_ATTACK_BONUS} is set to the amount of damage
 	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
@@ -385,7 +384,8 @@ public enum Attribute {
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * 		the battlefield.
-	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
+	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual
+	 * 		situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**
@@ -425,6 +425,9 @@ public enum Attribute {
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the full spell damage calculation.
 	 */
 	SPELL_DAMAGE_AMPLIFY_MULTIPLIER,
+	/**
+	 * Applies a multiplier to the amount of hero damage the owning player's skill deals.
+	 */
 	HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER,
 	/**
 	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
@@ -576,10 +579,7 @@ public enum Attribute {
 	 */
 	SPELLS_COST_HEALTH,
 	/**
-	 * When any {@link Entity} has this attribute in play, a {@link Card} with the {@link
-	 * net.demilich.metastone.game.entities.minions.Race#MURLOC} costs health instead of mana.
-	 * <p>
-	 * This attribute implements Seadevil Stinger.
+	 * When any {@link Entity} has this attribute in play, minions cost health instead of mana.
 	 */
 	MINIONS_COST_HEALTH,
 	/**
@@ -708,6 +708,10 @@ public enum Attribute {
 	 */
 	TOTAL_DAMAGE_DEALT,
 	/**
+	 * Every time an {@link Actor} kills a target, increment this attribute.
+	 */
+	TOTAL_KILLS,
+	/**
 	 * Every time an {@link Actor} receives damage, increment this attribute with the total amount of damage dealt.
 	 */
 	TOTAL_DAMAGE_RECEIVED,
@@ -716,6 +720,10 @@ public enum Attribute {
 	 * end of the turn.
 	 */
 	HEALING_THIS_TURN,
+	/**
+	 * Every time an {@link Actor} has its max HP increased, this value increases.
+	 */
+	TOTAL_HP_INCREASES,
 	/**
 	 * Every time an {@link Actor} is damaged, increment this attribute with the amount of damage and set it to zero at
 	 * the end of the turn.
@@ -734,11 +742,6 @@ public enum Attribute {
 	 * battlefield.
 	 */
 	WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
-	/**
-	 * If a {@link Player} has this attribute, the player had a deck named "The Supreme Archive" in the player's
-	 * collection when the game began.
-	 */
-	HAS_SUPREME_ARCHIVE_DECK,
 	/**
 	 * A shorthand implementation of the Poisonous keyword. Indicates that whenever the source minion deals more than 0
 	 * damage to the target minion, the target minion  is destroyed.
@@ -982,21 +985,44 @@ public enum Attribute {
 	 */
 	QUICK_DRAW,
 	/**
-	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
-	 * <p>
+	 * Allows spell effects to count and keep track of values without a dedicate enchantment.
 	 */
 	RESERVED_INTEGER_1,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_2,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_3,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_4,
+	/**
+	 * Allows spell effects to count and keep track of values without a dedicated enchantment.
+	 */
 	RESERVED_INTEGER_5,
 	/**
-	 * Allows spell effects to mark things, interpreted however they'd like.
+	 * Allows spell effects to mark things without a dedicated enchantment.
 	 */
 	RESERVED_BOOLEAN_1,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_2,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_3,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_4,
+	/**
+	 * Allows spell effects to mark things without a dedicated enchantment.
+	 */
 	RESERVED_BOOLEAN_5,
 	/**
 	 * Counts the number of supremacies (kills, but not overkills) that the {@link Actor} has achieved.
@@ -1049,25 +1075,108 @@ public enum Attribute {
 	 */
 	LACKEY,
 	/**
+	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability at the end of every
+	 * owner's turn
+	 */
+	DECAY,
+	/**
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
 	TREANT,
+	/**
+	 * Indicates how much an entity has {@link net.demilich.metastone.game.spells.DrainSpell} drained this turn.
+	 */
 	DRAINED_THIS_TURN,
-    TOTAL_DRAINED,
-    DRAINED_LAST_TURN,
-    /**
-     * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
-     */
-    SURGE,
-    DYNAMIC_DESCRIPTION, PASSIVE_AURAS;
+	/**
+	 * Indicates how much an entity has {@link net.demilich.metastone.game.spells.DrainSpell} drained over its lifetime.
+	 */
+	TOTAL_DRAINED,
+	/**
+	 * Indicates how much an entity has {@link net.demilich.metastone.game.spells.DrainSpell} drained last turn.
+	 */
+	DRAINED_LAST_TURN,
+	/**
+	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+	 */
+	SURGE,
+	/**
+	 * An override for the entity's description that indicates it has an {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
+	 * <p>
+	 * Contains an array {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc[]}.
+	 */
+	DYNAMIC_DESCRIPTION,
+	/**
+	 * Stores passive auras, i.e., auras that are active while the entity is in the hand.
+	 */
+	PASSIVE_AURAS,
+	CURSE,
+	/**
+	 * Drain indicates the card will deal damage to the specified target and buffs the source's HP by that amount.
+	 *
+	 * @see net.demilich.metastone.game.spells.DrainSpell for more on drains
+	 */
+	DRAIN,
+	/**
+	 * Records how much damage was dealt to minions by this player or entity this game.
+	 */
+	TOTAL_MINION_DAMAGE_DEALT_THIS_GAME,
+	/**
+	 * Records how many attacks last turn an actor made.
+	 */
+	ATTACKS_LAST_TURN,
+	/**
+	 * An attribute that indicates a card can be used to Discover something, offering a choice of 3 options to the player
+	 * with a 4x increase in frequency of class cards.
+	 * <p>
+	 * This is only really used for one Trader card right now, but it seemed like a useful one to add for future cards and
+	 * their effects.
+	 */
+	DISCOVER;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
 	}
 
-	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
+	private static final Set<Attribute> auraAttributes = EnumSet.copyOf(Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toList()));
+	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
+			Attribute.ROASTED,
+			Attribute.DISCARDED,
+			Attribute.PLAYED_FROM_HAND_OR_DECK,
+			Attribute.LAST_TURN,
+			Attribute.RECEIVED_ON_TURN,
+			Attribute.SUMMONED_ON_TURN,
+			Attribute.DIED_ON_TURN
+	);
 
+	/**
+	 * Contains the list of attributes that enchant cards as opposed to actors.
+	 *
+	 * @return A list of attributes.
+	 */
 	public static List<Attribute> getCardEnchantmentAttributes() {
 		return cardEnchantmentAttributes;
+	}
+
+	/**
+	 * Contains attributes that are the {@link net.demilich.metastone.game.spells.aura.Aura} version of a corresponding
+	 * attribute.
+	 *
+	 * @return A list of attributes.
+	 */
+	public static Set<Attribute> getAuraAttributes() {
+		return auraAttributes;
+	}
+
+	/**
+	 * Contains the set of attributes that store turn numbers.
+	 * <p>
+	 * This affects whether or not the entity is considered having an integer attribute in the {@link
+	 * Entity#hasAttribute(Attribute)} call.
+	 *
+	 * @return A set of attributes.
+	 */
+	public static Set<Attribute> getStoresTurnNumberAttributes() {
+		return storesTurnNumberAttributes;
 	}
 }

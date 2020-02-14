@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Whenever your hero takes damage on your turn, deal 3 damage to the enemy champion.",
+  "description": "Whenever your champion takes damage on your turn, deal 3 damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -21,7 +21,8 @@
       "class": "DamageSpell",
       "target": "ENEMY_HERO",
       "value": 3
-    }
+    },
+    "maxFiresPerSequence": 10
   },
   "collectible": true,
   "fileFormatVersion": 1,

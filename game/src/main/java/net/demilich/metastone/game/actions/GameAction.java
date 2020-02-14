@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -33,6 +34,7 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	private ActionType actionType = ActionType.SYSTEM;
 	private EntityReference sourceReference;
 	private EntityReference targetReference;
+	private boolean overrideChild;
 
 	public boolean canBeExecutedOn(GameContext gameContext, Player player, Entity entity) {
 		return true;
@@ -184,5 +186,14 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 				.append("sourceReference", sourceReference)
 				.append("targetReference", targetReference)
 				.toString();
+	}
+
+	public boolean isOverrideChild() {
+		return overrideChild;
+	}
+
+	public GameAction setOverrideChild(boolean overrideChild) {
+		this.overrideChild = overrideChild;
+		return this;
 	}
 }
