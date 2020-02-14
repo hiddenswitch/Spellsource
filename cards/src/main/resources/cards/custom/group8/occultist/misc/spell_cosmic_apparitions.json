@@ -4,23 +4,28 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Discover a minion. Shuffle two copies of it into your deck.",
+  "description": "Discover a minion and shuffle two copies of it into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DiscoverSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
         "spell": {
-          "class": "ShuffleToDeckSpell",
-          "value": 2,
-          "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          "cardSource": {
-            "class": "CatalogueSource"
-          }
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ReceiveCardSpell"
+            },
+            {
+              "class": "ShuffleToDeckSpell",
+              "howMany": 2
+            }
+          ]
         }
       }
   ]
