@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.DamageType;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -158,8 +158,8 @@ public class DamageSpell extends Spell {
 		return damage;
 	}
 
-	protected DamageType getDamageType(GameContext context, Player player, Entity source) {
-		return DamageType.MAGICAL;
+	protected DamageTypeEnum getDamageType(GameContext context, Player player, Entity source) {
+		return DamageTypeEnum.MAGICAL;
 	}
 }
 

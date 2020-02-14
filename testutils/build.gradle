@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     api project(':game')
+    api project(':client')
     api 'org.slf4j:slf4j-api:1.7.20'
     api 'org.junit.jupiter:junit-jupiter-api:5.6.0-M1'
     api 'org.junit.jupiter:junit-jupiter-params:5.6.0-M1'

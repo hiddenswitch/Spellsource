@@ -14,6 +14,7 @@
 package com.hiddenswitch.spellsource.client.models;
 
 import java.util.Objects;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -22,13 +23,23 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Gets or Sets DamageTypeEnum
+ * Types of damage.   - PHYSICAL: Physical damage is caused by physical attacks by actors.  - FATIGUE: Fatigue damage is caused by drawing from an empty deck.  - MAGICAL: Magical damage is caused by spells and effects. It is typically rendered by missiles in the client.  - DECAY: Decay damage is specific to the DECAY keyword. It deals one damage to the entity at the end of every one    of its owner&#39;s turns  - DEFLECT: Damage dealt from the Deflect ability to the hero.  - DRAIN: Damage dealt by a Drain ability.  - IGNORES_ARMOR: Damage that ignores armor when it is dealt to the hero. 
  */
 public enum DamageTypeEnum {
   
   PHYSICAL("PHYSICAL"),
   
-  MAGICAL("MAGICAL");
+  FATIGUE("FATIGUE"),
+  
+  MAGICAL("MAGICAL"),
+  
+  DECAY("DECAY"),
+  
+  DEFLECT("DEFLECT"),
+  
+  DRAIN("DRAIN"),
+  
+  IGNORES_ARMOR("IGNORES_ARMOR");
 
   private String value;
 

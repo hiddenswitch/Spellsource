@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -57,7 +57,7 @@ public interface Trigger extends Serializable {
 	 * @return {@code true} if this trigger wants its {@link #onGameEvent(GameEvent)} method called whenever it {@link
 	 *    #queues(GameEvent)} to the specified {@code eventType}.
 	 */
-	boolean interestedIn(GameEventType eventType);
+	boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType);
 
 	/**
 	 * Checks if, due to the execution of possibly complex rules inside or outside the trigger, the trigger is expired (no
@@ -75,7 +75,7 @@ public interface Trigger extends Serializable {
 	void onAdd(GameContext context);
 
 	/**
-	 * Handles an event this trigger {@link #queues(GameEvent)} for and is {@link #interestedIn(GameEventType)}.
+	 * Handles an event this trigger {@link #queues(GameEvent)} for and is {@link #interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum)}.
 	 *
 	 * @param event The game event this trigger is now processing.
 	 */

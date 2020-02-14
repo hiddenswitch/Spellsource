@@ -3,7 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.entities.HasCard;
 
 public class SpellCastedEvent extends GameEvent implements HasCard {
 
@@ -27,16 +27,12 @@ public class SpellCastedEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.SPELL_CASTED;
-	}
-
-	public Card getSourceCard() {
-		return sourceCard;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SPELL_CASTED;
 	}
 
 	@Override
-	public Card getCard() {
+	public Card getSourceCard() {
 		return sourceCard;
 	}
 }
