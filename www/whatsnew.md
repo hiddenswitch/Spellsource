@@ -11,6 +11,8 @@ permalink: /whats-new/
  - Exchange Wares now actually does its effect. (1544)
  - Sabotage! now properly shuffles the opponent's card back into their deck. (1544)
  - Revelation no longer permanently makes all cards in hand cost (1). (1545)
+ - Cosmic Apparitions now correctly only discovers minions and also adds a copy to your hand. (1534)
+ - Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
 
 ### 0.8.66-3.0.9 (February 6, 2020)
 
@@ -22,7 +24,6 @@ permalink: /whats-new/
  - Necronomicon is now an Occultist card like it was supposed to be. (1523)
  - Forge Suit now properly only gives Health and not Attack. (1525)
  - Sand Filter now actually Decays, and is properly now only active on your own turn. (1525)
- - Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
  
 In addition, extensive edits by @Logovaz summarized here:
 
