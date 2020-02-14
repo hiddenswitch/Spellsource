@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.tests.hearthstone;
 
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;

@@ -1,12 +1,8 @@
 package net.demilich.metastone.game.decks;
 
-import com.google.common.base.Objects;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public final class FixedCardsDeckFormat extends DeckFormat {
@@ -14,7 +10,7 @@ public final class FixedCardsDeckFormat extends DeckFormat {
 
 	public FixedCardsDeckFormat(String... cardIds) {
 		super();
-		this.cardIds = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(cardIds)));
+		this.cardIds = Set.of(cardIds);
 	}
 
 	@Override
@@ -32,11 +28,11 @@ public final class FixedCardsDeckFormat extends DeckFormat {
 		if (this == o) return true;
 		if (!(o instanceof FixedCardsDeckFormat)) return false;
 		FixedCardsDeckFormat that = (FixedCardsDeckFormat) o;
-		return Objects.equal(cardIds, that.cardIds);
+		return Objects.equals(cardIds, that.cardIds);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(cardIds);
+		return Objects.hash(cardIds);
 	}
 }

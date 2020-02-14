@@ -5,9 +5,11 @@ permalink: /whats-new/
 ---
 
 ### Upcoming Changes
+
  - Xii'da the Curious now correctly doubles the minions as well as their openers. (1544)
  - Exchange Wares now actually does its effect. (1544)
  - Sabotage! now properly shuffles the opponent's card back into their deck. (1544)
+ - Revelation no longer permanently makes all cards in hand cost (1). (1545)
 
 ### 0.8.66-3.0.9 (February 6, 2020)
 

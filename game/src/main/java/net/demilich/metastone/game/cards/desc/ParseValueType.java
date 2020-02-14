@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
@@ -98,7 +99,7 @@ public enum ParseValueType {
 	 */
 	ENTITY_TYPE,
 	/**
-	 * A string matching the name of an {@link net.demilich.metastone.game.actions.ActionType} enum.
+	 * A string matching the name of an {@link ActionType} enum.
 	 */
 	ACTION_TYPE,
 	/**

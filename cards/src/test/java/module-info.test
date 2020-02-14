@@ -10,6 +10,8 @@
 --add-modules
     spellsource.cards
 --add-modules
+    spellsource.client
+--add-modules
     annotations
 --add-modules
     logback.classic
@@ -36,6 +38,8 @@
     spellsource.cards=spellsource.game
 --add-reads
     spellsource.cards=spellsource.core
+--add-reads
+    spellsource.cards=spellsource.client
 --add-reads
     spellsource.cards=annotations
 --add-reads

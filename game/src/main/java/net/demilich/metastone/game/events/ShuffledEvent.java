@@ -3,6 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
 public class ShuffledEvent extends GameEvent implements HasCard {
 
@@ -25,7 +26,7 @@ public class ShuffledEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public Card getCard() {
+	public Card getSourceCard() {
 		return card == null ? target.getSourceCard() : card;
 	}
 
@@ -35,8 +36,8 @@ public class ShuffledEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.CARD_SHUFFLED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.CARD_SHUFFLED;
 	}
 
 	public boolean isExtraCopy() {

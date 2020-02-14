@@ -40,8 +40,8 @@ public class PhysicalAttackEvent extends GameEvent implements HasVictim, HasValu
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.PHYSICAL_ATTACK;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.PHYSICAL_ATTACK;
 	}
 
 	@Override

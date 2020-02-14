@@ -14,7 +14,7 @@ public class DidEndSequenceEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.DID_END_SEQUENCE;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DID_END_SEQUENCE;
 	}
 }

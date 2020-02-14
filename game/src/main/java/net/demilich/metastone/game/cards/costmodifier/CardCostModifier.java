@@ -10,7 +10,7 @@ import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -280,11 +280,11 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	@Override
-	public boolean interestedIn(GameEventType eventType) {
+	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
 		if (expirationTrigger == null) {
 			return false;
 		}
-		return eventType == expirationTrigger.interestedIn() || expirationTrigger.interestedIn() == GameEventType.ALL;
+		return eventType == expirationTrigger.interestedIn() || expirationTrigger.interestedIn() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL;
 	}
 
 	@Override

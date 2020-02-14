@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.tests.hearthstone;
 
 
 import com.google.common.collect.Sets;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;

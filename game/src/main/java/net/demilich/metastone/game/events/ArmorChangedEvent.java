@@ -20,8 +20,8 @@ public final class ArmorChangedEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.ARMOR_GAINED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ARMOR_GAINED;
 	}
 
 	@Override

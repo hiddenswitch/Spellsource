@@ -22,7 +22,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
@@ -52,7 +52,7 @@ public interface Logic {
 	static void triggers() {
 		Spellsource.spellsource().persistAttribute(
 				"last-minion-destroyed-1",
-				GameEventType.AFTER_PHYSICAL_ATTACK,
+				com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_PHYSICAL_ATTACK,
 				Attribute.LAST_MINION_DESTROYED_INVENTORY_ID,
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					if (context.event().getDefender() == null
@@ -65,7 +65,7 @@ public interface Logic {
 
 		Spellsource.spellsource().persistAttribute(
 				"last-minion-destroyed-2",
-				GameEventType.AFTER_PHYSICAL_ATTACK,
+				com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_PHYSICAL_ATTACK,
 				Attribute.LAST_MINION_DESTROYED_CARD_ID,
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					if (context.event().getDefender() == null
@@ -78,7 +78,7 @@ public interface Logic {
 
 		Spellsource.spellsource().persistAttribute(
 				"total-damage-dealt-1",
-				GameEventType.AFTER_PHYSICAL_ATTACK,
+				com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_PHYSICAL_ATTACK,
 				Attribute.TOTAL_DAMAGE_DEALT,
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					int attackerDamage = context.event().getDamageDealt();
@@ -89,7 +89,7 @@ public interface Logic {
 
 		Spellsource.spellsource().persistAttribute(
 				"unique-champion-ids-1",
-				GameEventType.BEFORE_SUMMON,
+				com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BEFORE_SUMMON,
 				Attribute.UNIQUE_CHAMPION_IDS_SIZE,
 				(PersistenceContext<BeforeSummonEvent> context) -> {
 					if (context.event().getSource().getCardInventoryId() == null) {
@@ -103,7 +103,7 @@ public interface Logic {
 
 		Spellsource.spellsource().persistAttribute(
 				"one-upper-1",
-				GameEventType.KILL,
+				com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.KILL,
 				Attribute.WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
 				(PersistenceContext<KillEvent> context) -> {
 					Actor victim = (Actor) context.event().getVictim();

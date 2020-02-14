@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -24,7 +25,7 @@ import java.util.List;
 public final class BattlecryAction extends GameAction {
 
 	public static final BattlecryAction NONE = new BattlecryAction(NullSpell.create());
-	private static final String BATTLECRY_NAME = "Battlecry";
+	private static final String BATTLECRY_NAME = "Opener";
 	private final SpellDesc spell;
 	private Condition condition;
 	private TargetSelection targetSelectionOverride;
@@ -187,7 +188,7 @@ public final class BattlecryAction extends GameAction {
 		final EntityReference targetReference = getPredefinedSpellTargetOrUserTarget();
 
 		if (targetReference == null || targetReference.isTargetGroup()) {
-			return String.format("%s's %s occurred.", BATTLECRY_NAME, source.getName());
+			return String.format("%s's %s occurred.", source.getName(), BATTLECRY_NAME);
 		}
 		Entity target = context.resolveSingleTarget(targetReference);
 
