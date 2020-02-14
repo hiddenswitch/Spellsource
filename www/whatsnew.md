@@ -24,6 +24,7 @@ permalink: /whats-new/
  - Necronomicon is now an Occultist card like it was supposed to be. (1523)
  - Forge Suit now properly only gives Health and not Attack. (1525)
  - Sand Filter now actually Decays, and is properly now only active on your own turn. (1525)
+ - Flood the Market now properly casts the spells when your hand is full. (1532)
  
 In addition, extensive edits by @Logovaz summarized here:
 

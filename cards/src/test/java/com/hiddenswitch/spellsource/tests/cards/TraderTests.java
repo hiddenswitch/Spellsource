@@ -140,7 +140,19 @@ public class TraderTests extends TestBase {
 	}
 
 	@Test
-	public void testExchangeWares() {
+	public void testFloodTheMarket() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("spell_howling_blast")); //have to use this instead of spell_test_1_aoe because of class
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "spell_lunstone");
+			}
+			playCard(context, player, "spell_flood_the_market");
+			assertEquals(player.getHero().getMaxHp() - 5, player.getHero().getHp());
+		});
+	}
+  
+	@Test
+  public void testExchangeWares() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_neutral_test");
 			shuffleToDeck(context, opponent, "spell_lunstone");
