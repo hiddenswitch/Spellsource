@@ -2,7 +2,7 @@ package net.demilich.metastone.game.logic;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
@@ -11,22 +11,18 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.EntityZone;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -106,7 +102,9 @@ public class TargetLogic implements Serializable {
 			return environmentResult;
 		}
 
-		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId).findFirst();
+		Optional<Entity> entity = context.getPlayer(0).findEntity(targetId)
+				.or(() -> context.getPlayer(1).findEntity(targetId));
+
 		if (entity.isPresent()) {
 			return entity.get();
 		} else {
@@ -133,20 +131,31 @@ public class TargetLogic implements Serializable {
 	private List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement, boolean omitPermanents) {
 		Player opponent = context.getOpponent(player);
 		List<Entity> entities = new ArrayList<>();
-		if (targetRequirement == TargetSelection.ENEMY_HERO || targetRequirement == TargetSelection.ENEMY_CHARACTERS
-				|| targetRequirement == TargetSelection.ANY || targetRequirement == TargetSelection.HEROES) {
+		if (targetRequirement == TargetSelection.ENEMY_HERO
+				|| targetRequirement == TargetSelection.ENEMY_CHARACTERS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.HEROES) {
 			entities.add(opponent.getHero());
 		}
-		if (targetRequirement == TargetSelection.ENEMY_MINIONS || targetRequirement == TargetSelection.ENEMY_CHARACTERS
-				|| targetRequirement == TargetSelection.MINIONS || targetRequirement == TargetSelection.ANY) {
+		if (targetRequirement == TargetSelection.ENEMY_MINIONS
+				|| targetRequirement == TargetSelection.ENEMY_CHARACTERS
+				|| targetRequirement == TargetSelection.MINIONS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
 			entities.addAll(opponent.getMinions());
 		}
-		if (targetRequirement == TargetSelection.FRIENDLY_HERO || targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
-				|| targetRequirement == TargetSelection.ANY || targetRequirement == TargetSelection.HEROES) {
+		if (targetRequirement == TargetSelection.FRIENDLY_HERO
+				|| targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.HEROES
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
 			entities.add(player.getHero());
 		}
-		if (targetRequirement == TargetSelection.FRIENDLY_MINIONS || targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
-				|| targetRequirement == TargetSelection.MINIONS || targetRequirement == TargetSelection.ANY) {
+		if (targetRequirement == TargetSelection.FRIENDLY_MINIONS
+				|| targetRequirement == TargetSelection.FRIENDLY_CHARACTERS
+				|| targetRequirement == TargetSelection.MINIONS
+				|| targetRequirement == TargetSelection.ANY
+				|| targetRequirement == TargetSelection.FRIENDLY_HERO_AND_MINIONS) {
 			entities.addAll(player.getMinions());
 		}
 
@@ -298,6 +307,12 @@ public class TargetLogic implements Serializable {
 			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()).getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
 			return new ArrayList<>(context.getOppositeMinions(source.getReference()));
+		} else if (targetKey.equals(EntityReference.OPPOSITE_CHARACTERS)) {
+			List<Actor> oppositeMinions = context.getOppositeMinions(source.getReference());
+			if (oppositeMinions.isEmpty()) {
+				return singleTargetAsList(context.getOpponent(player).getHero());
+			}
+			return new ArrayList<>(oppositeMinions);
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
 			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
@@ -458,7 +473,9 @@ public class TargetLogic implements Serializable {
 			friendlyCards.addAll(player.getHand());
 			friendlyCards.addAll(player.getDeck());
 			friendlyCards.addAll(player.getMinions());
+			friendlyCards.addAll(player.getWeaponZone());
 			friendlyCards.addAll(player.getSetAsideZone());
+			friendlyCards.addAll(player.getHeroPowerZone());
 			friendlyCards.add(player.getHero());
 			friendlyCards.addAll(player
 					.getGraveyard()
@@ -473,7 +490,9 @@ public class TargetLogic implements Serializable {
 			enemyCards.addAll(context.getOpponent(player).getHand());
 			enemyCards.addAll(context.getOpponent(player).getDeck());
 			enemyCards.addAll(context.getOpponent(player).getMinions());
+			enemyCards.addAll(context.getOpponent(player).getWeaponZone());
 			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
+			enemyCards.addAll(context.getOpponent(player).getHeroPowerZone());
 			enemyCards.add(context.getOpponent(player).getHero());
 			enemyCards.addAll(context.getOpponent(player).getGraveyard()
 					.stream()

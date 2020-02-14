@@ -1,111 +1,63 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath 'io.swagger:swagger-codegen:2.3.0'
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0"
-    }
+apply from: 'gradle/swagger.gradle'
+
+dependencies {
+    gradleApi()
+    localGroovy()
 }
-
-apply plugin: 'java'
-
-import io.swagger.codegen.config.CodegenConfigurator
-import io.swagger.codegen.DefaultGenerator
-
-task(swagger) {
-    def input = "swagger-api.yaml"
-    def output = file('client')
-    def templateDir = file('swagger-templates/java')
-
-    inputs.file(input)
-    outputs.dir(output)
-    doLast {
-        def config = new CodegenConfigurator()
-        config.setInputSpec(input)
-        config.setOutputDir(output.path)
-        config.setTemplateDir(templateDir.absolutePath)
-        config.setLang('java')
-        config.setAdditionalProperties([
-                'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
-                'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
-                'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
-                'library'                : 'jersey1',
-                'serializableModel'      : 'true',
-                'dateLibrary'            : 'java8',
-                'artifactId'             : 'client',
-                'artifactVersion'        : '0.8.7',
-                'hideGenerationTimestamp': 'true'
-        ])
-        config.setGroupId('com.hiddenswitch')
-        config.setArtifactId('spellsource-client')
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
-    }
-}
-
-
-task(swaggerClient) {
-    def input = "swagger-api.yaml"
-    def outputDir = 'clientcsharp'
-    def output = file(outputDir)
-    inputs.file(input)
-    outputs.dir(output)
-    doLast {
-        def config = new CodegenConfigurator()
-        config.setInputSpec(input)
-        config.setOutputDir(output.path)
-        config.setLang('csharp')
-        config.setAdditionalProperties([
-                'supportFiles'           : 'false',
-                'apiTests'               : 'false',
-                'modelTests'             : 'false',
-                'modelDocs'              : 'false',
-                'packageName'            : 'Spellsource.Client',
-                'targetFramework'        : 'v3.5',
-                'sourceFolder'           : 'Scripts',
-                'hideGenerationTimestamp': 'true',
-                'optionalProjectFile'    : 'false',
-                'optionalAssemblyFile'   : 'false'
-        ])
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
-    }
-}
-
-apply plugin: "com.vanniktech.maven.publish"
-apply plugin: 'io.codearte.nexus-staging'
-
-mavenPublish {
-    targets {
-        uploadArchives {
-            releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
-    }
-}
-
 
 allprojects {
-    java {
-        // We are always source-compatible with Java 1.8 (no advanced language features)
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        // But we target the JVM that is currently used to compile this code. Many Windows users can only practically
-        // install Java 8 because that's what there are installers for, so we have a parallel support for it. To build
-        // for Java 8, the JAVA_HOME must point to a Java 8 JDK and gradle should be started with 
-        targetCompatibility = JavaVersion.current()
+    project.version = '0.8.66'
+}
+
+def jacksonVersion = '2.10.2'
+def jacksonDatabindVersion = '2.10.2'
+
+subprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
     }
 
-    // Standardize versions of all the dependent modules in our projects
     configurations.all {
         resolutionStrategy {
+            preferProjectModules()
+            failOnVersionConflict()
             eachDependency { DependencyResolveDetails details ->
-                if (['com.fasterxml.jackson.core', 'com.fasterxml.jackson.jaxrs'].contains(details.requested.group)) {
-                    details.useVersion "2.9.9"
+                if (details.requested.module.name == 'slf4j-api') {
+                    details.useVersion '1.7.29'
+                }
+                if ([
+                        'com.fasterxml.jackson.core',
+                        'com.fasterxml.jackson.jaxrs',
+                        'com.fasterxml.jackson.datatype',
+                        'com.fasterxml.jackson.module',
+                        'com.fasterxml.jackson.dataformat'
+                ].contains(details.requested.group)) {
+                    if (details.requested.name == 'jackson-databind') {
+                        details.useVersion jacksonDatabindVersion
+                    } else {
+                        details.useVersion jacksonVersion
+                    }
+                }
+
+                if (details.requested.group == 'io.jaegertracing') {
+                    details.useVersion '1.0.0'
+                }
+
+                if (details.requested.group == 'io.netty' && details.requested.version.contains('Final')) {
+                    details.useVersion "4.1.43.Final"
+                }
+
+                if (details.requested.module.name == 'reactive-streams') {
+                    details.useVersion '1.0.3'
                 }
 
                 if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
                     details.useVersion "3.5"
+                }
+
+                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-lang3") {
+                    details.useVersion "3.7"
                 }
 
                 if (details.requested.group == 'commons-lang') {
@@ -119,7 +71,7 @@ allprojects {
                 if (details.requested.group == 'commons-io') {
                     details.useVersion "2.5"
                 }
-                
+
                 if (details.requested.group == 'commons-logging') {
                     details.useVersion "1.2"
                 }
@@ -127,65 +79,47 @@ allprojects {
                 if (details.requested.group == 'ch.qos.logback') {
                     details.useVersion "1.1.7"
                 }
-            }
-        }
-    }
 
-    project.version = '0.8.40'
-}
+                if (details.requested.group == 'com.google.truth') {
+                    details.useVersion '0.42'
+                }
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'eclipse'
-    apply plugin: 'idea'
-    apply plugin: "com.vanniktech.maven.publish"
+                if (details.requested.module.name == 'mockito-core') {
+                    details.useVersion '2.24.5'
+                }
 
-    repositories {
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
+                if (details.requested.group == 'com.google.guava') {
+                    details.useVersion '26.0-jre'
+                }
 
-    compileJava.dependsOn processResources
-    compileJava {
-        options.encoding = 'UTF-8'
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+                if (details.requested.name == 'micronaut-inject' || details.requested.name == 'micronaut-runtime') {
+                    details.useVersion '1.3.0'
+                }
 
-        if (project.name != 'quasar-core' && project.name != 'client') {
-            doLast {
-                ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
-                ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
-                    fileset(dir: sourceSets.main.output.classesDirs.asPath)
+                if (details.requested.group == 'org.junit.jupiter') {
+                    details.useVersion '5.6.0-M1'
+                }
+
+                if (details.requested.name == 'joda-time') {
+                    details.useVersion '2.10.2'
+                }
+
+                if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
+                    details.useVersion '16.0.2'
+                }
+
+                if (details.requested.group == 'net.bytebuddy') {
+                    details.useVersion '1.9.7'
+                }
+
+                if (details.requested.group == 'org.javassist') {
+                    details.useVersion '3.24.0-GA'
+                }
+
+                if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
+                    details.useVersion '4.5.4'
                 }
             }
-        }
-    }
-
-    compileTestJava.dependsOn processTestResources
-    compileTestJava {
-        options.encoding = 'UTF-8'
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-
-        doLast {
-            if (project.name != 'quasar-core' && project.name != 'client') {
-                ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
-                ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
-                    fileset(dir: sourceSets.main.output.classesDirs.asPath)
-                    fileset(dir: sourceSets.test.output.classesDirs.asPath)
-                }
-            }
-        }
-    }
-}
-
-if (System.env.TRAVIS == 'true') {
-    allprojects {
-        tasks.withType(GroovyCompile) {
-            groovyOptions.fork = false
-        }
-        tasks.withType(Test) {
-            // containers (currently) have 2 dedicated cores and 4GB of memory
-            maxParallelForks = 2
-            minHeapSize = '128m'
         }
     }
 }

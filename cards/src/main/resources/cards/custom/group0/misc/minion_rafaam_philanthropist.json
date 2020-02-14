@@ -1,5 +1,5 @@
 {
-  "name": "Rafaam, Philanthropist",
+  "name": "Faraam, Philanthropist",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
@@ -33,7 +33,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

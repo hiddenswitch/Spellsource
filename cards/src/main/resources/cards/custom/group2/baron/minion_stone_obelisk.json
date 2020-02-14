@@ -5,7 +5,7 @@
   "heroClass": "NAVY",
   "baseAttack": 0,
   "baseHp": 12,
-  "rarity": "RARE",
+  "rarity": "FREE",
   "description": "Your minions have Guard.",
   "aura": {
     "class": "AttributeAura",

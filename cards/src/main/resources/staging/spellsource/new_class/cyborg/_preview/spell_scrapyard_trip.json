@@ -12,7 +12,7 @@
       "token_steel_reel",
       "token_wally"
     ],
-    "randomTarget": "true"
+    "randomTarget": true
   },
   "collectible": true,
   "set": "SPELLSOURCE",

@@ -10,6 +10,7 @@
   "deathrattle": {
     "class": "ModifyAttributeSpell",
     "target": "ENEMY_MINIONS",
+    "randomTarget": true,
     "value": {
       "class": "AttributeValueProvider",
       "attribute": "ATTACK",

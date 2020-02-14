@@ -1,0 +1,25 @@
+{
+  "name": "Twisted Pathology",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "Dash. Opener: Both players draw 2 cards.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2,
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

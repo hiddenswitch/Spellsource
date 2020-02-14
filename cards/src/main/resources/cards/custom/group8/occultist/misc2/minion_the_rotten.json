@@ -1,5 +1,4 @@
 {
- 
   "name": "The Rotten",
   "baseManaCost": 6,
   "type": "MINION",
@@ -7,22 +6,10 @@
   "baseAttack": 2,
   "baseHp": 12,
   "rarity": "LEGENDARY",
-  "description": "Can't attack champions. Infinite attacks each turn.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES"
-    },
-    "spell": {
-      "class": "ModifyAttributeSpell",
-      "target": "SELF",
-      "value": 50,
-      "attribute": "EXTRA_ATTACKS"
-    }
-  },
+  "description": "Can't attack champions. Unlimited attacks each turn.",
   "attributes": {
-    "EXTRA_ATTACKS": 50,
-	"CANNOT_ATTACK_HEROES": true,
+    "UNLIMITED_ATTACKS": true,
+    "CANNOT_ATTACK_HEROES": true
   },
   "collectible": true,
   "set": "CUSTOM",

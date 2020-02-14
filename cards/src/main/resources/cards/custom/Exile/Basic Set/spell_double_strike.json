@@ -1,0 +1,27 @@
+{
+  "name": "Double Strike",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "FREE",
+  "description": "Deal $2 damage to two random enemy minions.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 1,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

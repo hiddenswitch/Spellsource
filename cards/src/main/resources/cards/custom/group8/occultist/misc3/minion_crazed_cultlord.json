@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Opener: Destroy a friendly minion then resummon it with Dash.",
+  "description": "Opener: Destroy a friendly minion. Then, resummon it with Dash.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
@@ -16,13 +16,16 @@
           "class": "DestroySpell"
         },
         {
-        "class": "ReviveMinionSpell",
-        "targetPlayer": "OWNER",
-        "spell": {
-          "class": "AddAttributeSpell",
-          "target": "OUTPUT",
-          "attribute": "RUSH"
-        }
+          "class": "ForceDeathPhaseSpell"
+        },
+        {
+          "class": "ReviveMinionSpell",
+          "targetPlayer": "OWNER",
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "RUSH"
+          }
         }
       ]
     }

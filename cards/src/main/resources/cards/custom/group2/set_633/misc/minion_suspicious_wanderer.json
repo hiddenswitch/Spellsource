@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Echo. Deflect.",
+  "description": "Repeatable this turn. Deflect.",
   "attributes": {
     "DEFLECT": true,
     "ECHO": true

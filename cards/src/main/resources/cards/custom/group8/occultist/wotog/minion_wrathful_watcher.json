@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Whenever your champion takes damage, give your C'Thun +2/+2 (wherever it is).",
+  "description": "Whenever your champion takes damage, give your Big Guy +2/+2 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -23,7 +23,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -32,7 +32,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -50,7 +50,7 @@
       ]
     }
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",

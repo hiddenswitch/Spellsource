@@ -1,6 +1,6 @@
 {
   "name": "Disco Inferno",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,

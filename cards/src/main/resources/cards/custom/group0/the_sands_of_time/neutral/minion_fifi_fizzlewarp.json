@@ -93,11 +93,6 @@
                     "invert": true
                   },
                   {
-                    "class": "SpecificCardFilter",
-                    "card": "minion_prince_malchezaar",
-                    "invert": true
-                  },
-                  {
                     "class": "AttributeFilter",
                     "attribute": "PERMANENT",
                     "invert": true,
@@ -136,11 +131,6 @@
                   {
                     "class": "SpecificCardFilter",
                     "card": "minion_fifi_fizzlewarp",
-                    "invert": true
-                  },
-                  {
-                    "class": "SpecificCardFilter",
-                    "card": "minion_prince_malchezaar",
                     "invert": true
                   },
                   {

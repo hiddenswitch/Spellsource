@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -153,7 +154,7 @@ public class ReceiveCardSpell extends Spell {
 
 			CardList cards = desc.getFilteredCards(context, player, source).getCopy();
 			String replacementCard = (String) desc.get(SpellArg.CARD);
-			if (count == -1) {
+			if (count == GameLogic.INFINITE) {
 				count = cards.getCount();
 			}
 			for (int i = 0; i < count; i++) {

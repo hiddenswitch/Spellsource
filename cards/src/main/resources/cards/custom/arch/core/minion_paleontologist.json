@@ -6,39 +6,23 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-   "description": "Opener: Shuffle two random Fossils into your deck.",
-   "battlecry": {
+  "description": "Opener: Shuffle two random Fossils into your deck.",
+  "battlecry": {
     "spell": {
-	 "class": "MetaSpell",
-	  "spells": [
-	  {
-     "class": "ShuffleToDeckSpell",
-      "cards": [
-        "token_bone_bouncer",
-        "token_bone_bruiser",
-        "token_bone_bowman"
-      ],
-      "randomTarget": true
-     },
-	 {
       "class": "ShuffleToDeckSpell",
       "cards": [
         "token_bone_bouncer",
         "token_bone_bruiser",
         "token_bone_bowman"
       ],
-      "randomTarget": true
-	 }
-	  ]
+      "randomTarget": true,
+      "howMany": 2
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "CLASSIC"
-  ],
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

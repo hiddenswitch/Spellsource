@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Destroy a minion. Add its Attack and Health to your C'Thun's (wherever it is).",
+  "description": "Destroy a minion. Add its Attack and Health to your Big Guy's (wherever it is).",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -19,7 +19,7 @@
         },
         "filter": {
           "class": "SpecificCardFilter",
-          "card": "minion_cthun"
+          "card": "minion_removed_card"
         },
         "hpBonus": {
           "class": "AttributeValueProvider",
@@ -37,7 +37,7 @@
         },
         "filter": {
           "class": "SpecificCardFilter",
-          "card": "minion_cthun"
+          "card": "minion_removed_card"
         },
         "hpBonus": {
           "class": "AttributeValueProvider",
@@ -70,7 +70,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -1,6 +1,6 @@
 {
   "name": "Berserk",
-  "baseManaCost": 3,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",

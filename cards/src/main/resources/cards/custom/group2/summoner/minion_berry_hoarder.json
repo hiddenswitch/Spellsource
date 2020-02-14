@@ -21,8 +21,7 @@
         "cardFilter": {
           "class": "CardFilter",
           "manaCost": 0
-        },
-        "exclusive": true
+        }
       },
       "spell2": {
         "class": "RemoveCardSpell",

@@ -1,30 +1,32 @@
 package net.demilich.metastone.game.cards;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.hiddenswitch.spellsource.core.JsonConfiguration;
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import com.hiddenswitch.spellsource.ResourceInputStream;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A class responsible for deserializing JSON representations of cards.
  */
 public class CardParser {
-
 	static {
-		Json.mapper.configure(JsonGenerator.Feature.STRICT_DUPLICATE_DETECTION, true);
-		Json.mapper.configure(DeserializationFeature.FAIL_ON_TRAILING_TOKENS, true);
+		JsonConfiguration.configureJson();
 	}
 
 	@SuppressWarnings("unchecked")
 	public CardCatalogueRecord parseCard(ResourceInputStream resourceInputStream) throws IOException {
-		String input = IOUtils.toString(resourceInputStream.getInputStream()).trim();
+		var inputStream = resourceInputStream.getInputStream();
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int length;
+		while ((length = inputStream.read(buffer)) != -1) {
+			result.write(buffer, 0, length);
+		}
+		var input = result.toString(StandardCharsets.UTF_8);
 		CardDesc desc = Json.decodeValue(input, CardDesc.class);
 
 		final String fileName = resourceInputStream.getFileName();
@@ -33,6 +35,11 @@ public class CardParser {
 
 		if (desc.getId() == null) {
 			desc.setId(id);
+		}
+
+		// Remove tags in description
+		if (desc.description != null) {
+			desc.description = desc.description.replaceAll("(</?[bi]>)|\\[x\\]", "");
 		}
 
 		return new CardCatalogueRecord(id, desc);

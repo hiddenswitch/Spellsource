@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
 
@@ -29,7 +30,28 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 	@Suspendable
 	public boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		boolean invert = desc.getBool(ConditionArg.INVERT);
-		return isFulfilled(context, player, desc, source, target) != invert;
+		TargetPlayer targetPlayer = (TargetPlayer) desc.getOrDefault(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
+		switch (targetPlayer) {
+			default:
+			case SELF:
+				return isFulfilled(context, player, desc, source, target) != invert;
+			case ACTIVE:
+				return isFulfilled(context, context.getActivePlayer(), desc, source, target) != invert;
+			case PLAYER_1:
+				return isFulfilled(context, context.getPlayer1(), desc, source, target) != invert;
+			case PLAYER_2:
+				return isFulfilled(context, context.getPlayer2(), desc, source, target) != invert;
+			case OWNER:
+				return isFulfilled(context, context.getPlayer(target.getOwner()), desc, source, target) != invert;
+			case OPPONENT:
+				return isFulfilled(context, context.getOpponent(player), desc, source, target) != invert;
+			case INACTIVE:
+				return isFulfilled(context, context.getPlayer(context.getNonActivePlayerId()), desc, source, target) != invert;
+			case BOTH:
+				return (isFulfilled(context, player, desc, source, target) && isFulfilled(context, context.getOpponent(player), desc, source, target)) != invert;
+			case EITHER:
+				return (isFulfilled(context, player, desc, source, target) || isFulfilled(context, context.getOpponent(player), desc, source, target)) != invert;
+		}
 	}
 
 	@Override

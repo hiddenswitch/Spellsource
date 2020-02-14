@@ -1,0 +1,22 @@
+{
+  "name": "Bring The Bait",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Summon two 2/2 Captives.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_captive_overlord",
+      "token_captive_overlord"
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

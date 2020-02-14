@@ -14,15 +14,15 @@
         {
           "class": "AddEnchantmentSpell",
           "target": "FRIENDLY_DECK",
-           "trigger": {
-        "eventTrigger": {
-          "class": "CardDrawnTrigger",
-          "hostTargetType": "IGNORE_OTHER_TARGETS"
-        },
-        "spell": {
-          "class": "DamageSpell",
-          "value": 5,
-          "target": "FRIENDLY_HERO"
+          "trigger": {
+            "eventTrigger": {
+              "class": "CardDrawnTrigger",
+              "hostTargetType": "IGNORE_OTHER_TARGETS"
+            },
+            "spell": {
+              "class": "DamageSpell",
+              "value": 5,
+              "target": "FRIENDLY_HERO"
             }
           },
           "filter": {

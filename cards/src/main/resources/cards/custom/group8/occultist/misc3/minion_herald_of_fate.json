@@ -8,21 +8,12 @@
   "rarity": "RARE",
   "description": "Aftermath: The next two Openers trigger twice.",
   "deathrattle": {
-    "spell": {
     "class": "AddEnchantmentSpell",
-    "targetPlayer": "BOTH",
-    "card": "enchantment_double_next_battlecry",
-	"expirationTrigger": {
-        "class": "CardPlayedTrigger",
-        "attribute": "BATTLECRY",
-        "cardType": "MINION",
-        "targetPlayer": "BOTH",
-		"value": 2
-      },
-	}
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_double_next_battlecry_twice"
   },
   "attributes": {
-    "DEATHRATTLE": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "fileFormatVersion": 1,

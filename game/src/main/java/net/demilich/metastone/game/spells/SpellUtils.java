@@ -16,6 +16,7 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.custom.RepeatAllAftermathsSpell;
 import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -28,6 +29,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +74,7 @@ public class SpellUtils {
 			targetReference = EntityReference.NONE;
 		}
 
-		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
+		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, TargetSelection.NONE, true, null);
 	}
 
 	/**
@@ -146,6 +148,7 @@ public class SpellUtils {
 				}
 			}
 		} else {
+			card.processTargetSelectionOverride(context, player);
 			action = card.play();
 		}
 
@@ -215,6 +218,7 @@ public class SpellUtils {
 		if (playFromHand) {
 			action.execute(context, player.getId());
 		} else {
+			action.setOverrideChild(true);
 			int playedFromHandOrDeck = -1;
 			// Reference the real card
 			if (card.getId() != IdFactory.UNASSIGNED) {
@@ -571,7 +575,7 @@ public class SpellUtils {
 			return UNDEFINED;
 		}
 
-		int sourcePosition = ((Minion) source).getEntityLocation().getIndex();
+		int sourcePosition = source.getEntityLocation().getIndex();
 		if (sourcePosition == UNDEFINED) {
 			return UNDEFINED;
 		}
@@ -748,6 +752,8 @@ public class SpellUtils {
 	 * <p>
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
 	 * card source used is {@link net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource}.
+	 * <p>
+	 * The cards are chosen randomly <b>without replacement</b>.
 	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved
@@ -814,15 +820,14 @@ public class SpellUtils {
 	 * @param <T>
 	 * @return A list of aura instances.
 	 */
-	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
-		return context.getEntities()
-				.filter(e -> e.getOwner() == playerId && (e.isInPlay() || e.getZone() == Zones.HAND || e.getZone() == Zones.HERO_POWER))
+	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, @NotNull Class<T> auraClass) {
+		return context.getTriggerManager()
+				.getTriggers()
+				.stream()
+				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e))
+				.map(auraClass::cast)
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
-				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
-						.filter(auraClass::isInstance)
-						.map(t -> (T) t)
-						.filter(((Predicate<Aura>) Aura::isExpired).negate()))
 				.collect(toList());
 	}
 
@@ -837,9 +842,9 @@ public class SpellUtils {
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
 		return context.getTriggerManager().getTriggers().stream()
-				.filter(auraClass::isInstance)
+				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired())
 				.map(auraClass::cast)
-				.filter(aura -> aura.getAffectedEntities().contains(target.getId()))
+				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(Collectors.toList());
 	}
 
@@ -881,6 +886,20 @@ public class SpellUtils {
 	 */
 	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
 		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
+	}
+
+	/**
+	 * Returns {@code true} if the caller is in a recursive stack
+	 *
+	 * @param callingClass
+	 * @return
+	 */
+	public static boolean isRecursive(Class<? extends Spell> callingClass) {
+		return StackWalker.getInstance().walk(s -> s
+				.takeWhile(f -> f.getClassName().contains(GameContext.class.getPackageName()))
+				.skip(2)
+				.limit(16)
+				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));
 	}
 
 	/**

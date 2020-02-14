@@ -1,0 +1,24 @@
+{
+  "name": "Iron Preserver",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Whenever your weapon is destroyed, return it to your hand instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "WeaponDestroyedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

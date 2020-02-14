@@ -1,0 +1,22 @@
+{
+  "name": "Feral Forager",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Aftermath: Gain 5 Armor.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 5
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

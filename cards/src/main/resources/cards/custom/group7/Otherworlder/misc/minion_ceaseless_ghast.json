@@ -1,0 +1,41 @@
+{
+  "name": "Ceaseless Ghast",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "TITAN",
+  "description": "Aftermath: If this has more than 1 Attack, resummon it with -1 Attack.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "ATTACK",
+      "operation": "GREATER"
+    },
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "SetAttackSpell",
+        "target": "OUTPUT",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "ATTACK",
+          "offset": -1
+        }
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

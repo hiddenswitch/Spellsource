@@ -1,0 +1,36 @@
+{
+  "name": "Bogovey Jester",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Dash. Aftermath: If this has 2 or more Attack, draw a Dragon.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "value": 2,
+      "attribute": "ATTACK",
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

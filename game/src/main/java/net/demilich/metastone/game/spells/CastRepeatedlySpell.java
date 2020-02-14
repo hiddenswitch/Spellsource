@@ -30,8 +30,6 @@ import java.util.Map;
  *
  * @see RecastWhileSpell for a more appropriate way to cast a spell multiple times with a condition.
  * @see ForceDeathPhaseSpell to see how to cause the end of a sequence and clean dead minions off the battlefield.
- * @deprecated See {@link RecastWhileSpell} for a better implementation of this spell, since this one is prone to
- * 		errors.
  */
 public class CastRepeatedlySpell extends Spell {
 

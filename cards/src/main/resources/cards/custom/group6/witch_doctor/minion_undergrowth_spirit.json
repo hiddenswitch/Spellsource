@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "<b>Echo</b>, <b>Spellpower +1</b>",
+  "description": "<b>Repeatable this turn</b>, <b>Spellpower +1</b>",
   "attributes": {
     "ECHO": true,
     "SPELL_DAMAGE": 1

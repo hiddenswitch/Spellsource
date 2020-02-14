@@ -9,3 +9,6 @@ include 'vertx-sync'
 include 'hearthstone'
 include 'testutils'
 include 'core'
+include 'customhearthstone'
+include 'micro'
+

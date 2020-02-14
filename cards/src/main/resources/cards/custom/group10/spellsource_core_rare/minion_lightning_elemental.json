@@ -7,15 +7,10 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "After this takes damage, deal 1 damage to all other minions.",
+  "description": "Whenever this takes damage, deal 1 damage to all other minions.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
-      "fireCondition": {
-        "class": "IsDeadCondition",
-        "invert": true,
-        "target": "TRIGGER_HOST"
-      },
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {

@@ -1,0 +1,40 @@
+{
+  "name": "Story Collector",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Opener: If you cast a spell this turn, add two random Witch Doctor spells to your hand.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayedThisTurnValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      },
+      "value2": 1
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "ROSE",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

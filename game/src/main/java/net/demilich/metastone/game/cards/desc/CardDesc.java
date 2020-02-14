@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
@@ -118,7 +119,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int damage;
 	public int durability;
 	public Rarity rarity;
-	public Race race;
+	public String race;
 	public String description;
 	public TargetSelection targetSelection;
 	public EventTriggerDesc secret;
@@ -163,6 +164,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int[] color;
 	public boolean blackText;
 	public String[] secondPlayerBonusCards;
+	public TargetSelection targetSelectionOverride;
+	public ConditionDesc targetSelectionCondition;
+
 	public CardDesc() {
 		super();
 	}
@@ -194,6 +198,12 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		BattlecryAction battlecryAction = BattlecryAction.createBattlecry(getBattlecry().getSpell(), getBattlecry().getTargetSelection());
 		if (getBattlecry().getCondition() != null) {
 			battlecryAction.setCondition(getBattlecry().getCondition().create());
+		}
+		if (getBattlecry().getTargetSelectionOverride() != null) {
+			battlecryAction.setTargetSelectionOverride(getBattlecry().getTargetSelectionOverride());
+		}
+		if (getBattlecry().getTargetSelectionCondition() != null) {
+			battlecryAction.setTargetSelectionCondition(getBattlecry().getTargetSelectionCondition().create());
 		}
 		return battlecryAction;
 	}
@@ -509,8 +519,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
-	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link
-	 * GameLogic#startGameForPlayer(Player)} phase.
+	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link GameLogic#startGameForPlayer(Player)} phase.
 	 * <p>
 	 * Note that the {@link net.demilich.metastone.game.events.GameStartEvent} is raised twice, once for each player, so
 	 * your {@link EventTriggerDesc} should specify a {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#TARGET_PLAYER}.
@@ -706,11 +715,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	/**
 	 * The actor's race, or "tribe."
 	 */
-	public Race getRace() {
+	public String getRace() {
 		return race;
 	}
 
-	public void setRace(Race race) {
+	public void setRace(String race) {
 		this.race = race;
 	}
 
@@ -983,7 +992,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
-		HashSet<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
+		Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
 				immutableEntry(CardDescArg.ID, id),
 				immutableEntry(CardDescArg.NAME, name),
 				immutableEntry(CardDescArg.DESCRIPTION, description),
@@ -1017,7 +1026,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
 				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
 				immutableEntry(CardDescArg.QUEST, quest),
-				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription)
+				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription),
+				immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, targetSelectionOverride),
+				immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, targetSelectionCondition)
 		);
 		return entries;
 	}
@@ -1119,6 +1130,22 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	}
 
 	public void setPassiveAuras(AuraDesc[] passiveAuras) {
-		this.passiveAuras=passiveAuras;
+		this.passiveAuras = passiveAuras;
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return targetSelectionCondition;
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return targetSelectionOverride;
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		this.targetSelectionCondition = targetSelectionCondition;
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		this.targetSelectionOverride = targetSelectionOverride;
 	}
 }

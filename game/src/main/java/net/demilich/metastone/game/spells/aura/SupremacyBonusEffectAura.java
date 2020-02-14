@@ -10,7 +10,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  *
  * @see net.demilich.metastone.game.spells.SupremacySpell for more about supremacies.
  */
-public final class SupremacyBonusEffectAura extends Aura {
+public final class SupremacyBonusEffectAura extends AbstractFriendlyCardAura {
 
 	public SupremacyBonusEffectAura(AuraDesc desc) {
 		super(desc);

@@ -1,0 +1,39 @@
+{
+  "name": "Osiris",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Return your other minions to your hand. Summon random minions of the same cost.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "spells": [
+        {
+          "class": "ReturnTargetToHandSpell"
+        },
+        {
+          "class": "SummonSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": {
+              "class": "AttributeValueProvider",
+              "target": "SPELL_TARGET",
+              "attribute": "BASE_MANA_COST"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

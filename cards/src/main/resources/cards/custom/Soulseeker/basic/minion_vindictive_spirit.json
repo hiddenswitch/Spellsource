@@ -1,0 +1,23 @@
+{
+  "name": "Vindictive Spirit",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Opener: Destroy a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

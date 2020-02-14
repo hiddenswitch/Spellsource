@@ -1,0 +1,22 @@
+{
+  "name": "Scout",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Discover a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

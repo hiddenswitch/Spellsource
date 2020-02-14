@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * <h1>Shuffling:</h1>
  * If {@link SpellArg#RANDOM_TARGET} is {@code true}, the list is now shuffled.
  * <h1>Filtering:</h1>
- * The the targets are filtered using {@link SpellArg#FILTER} or {@link SpellArg#CARD_FILTER}. If {@link
+ * The targets are filtered using {@link SpellArg#FILTER} or {@link SpellArg#CARD_FILTER}. If {@link
  * SpellArg#TARGET} is specified with a {@link SpellArg#CARD_FILTER}, the <b>source cards</b> of the targets are used.
  * Otherwise, if a {@link SpellArg#FILTER} is specified, the filter is evaluated normally.
  * <h1>Sorting:</h1>
@@ -55,9 +55,10 @@ import java.util.stream.Collectors;
  * be evaluated with the {@code target} given by {@link EntityReference#TARGET} or {@link EntityReference#EVENT_TARGET},
  * or {@code null}.
  * <h1>Casting:</h1>
- * Finally, the {@link SpellArg#SPELL} is cast on each target in order. If a {@link SpellArg#CONDITION} is specified,
- * casting only continues so long as there are elements <b>and</b> the condition is {@code true}, evaluated with the
- * {@code target} we are currently potentially casting on.
+ * Finally, the {@link SpellArg#SPELL} is cast on each {@code target} in order. You should <b>not</b> use {@link
+ * EntityReference#OUTPUT} here, the selected target is passed directly as a target of the spell. If a {@link
+ * SpellArg#CONDITION} is specified, casting only continues so long as there are elements <b>and</b> the condition is
+ * {@code true}, evaluated with the {@code target} we are currently potentially casting on.
  * <p>
  * For example, to target the top 5 minions in your deck:
  * <pre>
@@ -78,9 +79,25 @@ import java.util.stream.Collectors;
  *         "multiplier": -1
  *       },
  *       "spell": {
- *         (Your spell here)
+ *         (Your spell here, cast on each target, do not use OUTPUT)
  *       }
  *     }
+ * </pre>
+ * To destroy all the opponent's minions except the one with the highest attack:
+ * <pre>
+ *   {
+ *     "class": "QueryTargetSpell",
+ *     "spell": {
+ *       "class": "DestroySpell"
+ *     },
+ *     "target": "ENEMY_MINIONS",
+ *     "value": {
+ *       "class": "AttributeValueProvider",
+ *       "attribute": "ATTACK",
+ *       "multiplier": -1
+ *     },
+ *     "secondaryValue": 1
+ *   }
  * </pre>
  */
 public class QueryTargetSpell extends Spell {
@@ -93,7 +110,6 @@ public class QueryTargetSpell extends Spell {
 			target = context.resolveSingleTarget(player, source, EntityReference.EVENT_TARGET);
 		}
 
-		int limit = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		int skip = desc.getValue(SpellArg.SECONDARY_VALUE, context, player, target, source, 0);
 		boolean shuffled = desc.getBool(SpellArg.RANDOM_TARGET);
 		EntityFilter filter = desc.getEntityFilter();
@@ -127,6 +143,8 @@ public class QueryTargetSpell extends Spell {
 			targets.sort(Comparator.comparingInt(t -> desc.getValue(SpellArg.VALUE, context, player, t, source, t.getIndex())));
 		}
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
+
+		int limit = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, targets.size());
 		for (int i = skip; i < targets.size() && i < skip + limit; i++) {
 			if (condition != null && !condition.isFulfilled(context, player, source, targets.get(i))) {
 				break;

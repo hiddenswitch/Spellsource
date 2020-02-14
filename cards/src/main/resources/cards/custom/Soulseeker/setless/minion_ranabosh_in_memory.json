@@ -1,0 +1,22 @@
+{
+  "name": "Ranabosh, in Memory",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "heroClass": "DARKBLUE",
+  "rarity": "LEGENDARY",
+  "race": "SPIRIT",
+  "description": "Aftermath: Go Dormant. Trigger two friendly Secrets to revive this minion.",
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "SELF",
+    "card": "permanent_memory_of_ranabosh"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -28,7 +28,7 @@ Follow this guide to be able to test your cards and make changes to the game cod
 
  1. Install some helpful Windows development utilities.
     1. [7-Zip](https://www.7-zip.org/a/7z1900-x64.exe) for a friendlier way to open zip files.
-    2. [ConEmu](https://www.fosshub.com/ConEmu.html?dwl=ConEmuSetup.190526.exe) for a better console.
+    2. [ConEmu](https://www.fosshub.com/ConEmu.html?dwl=ConEmuSetup.190526.exe) (download the installer) for a better console.
     3. [Git for Windows](https://github.com/git-for-windows/git/releases/download/v2.22.0.windows.1/Git-2.22.0-64-bit.exe) which also installs some helpful console programs. Hit next on all the prompts, since it's a little confusing.
  2. Install Java 12.
     1. Start by [downloading the zip file for Windows (OpenJDK 12.0.1)](https://download.java.net/java/GA/jdk12.0.1/69cfe15208a647278a19ef0990eea691/12/GPL/openjdk-12.0.1_windows-x64_bin.zip) from the [OpenJDK website](https://jdk.java.net/12/).
@@ -41,10 +41,12 @@ Follow this guide to be able to test your cards and make changes to the game cod
     4. Click the Advanced Tab.
     5. Click the Environment Variables button.
     6. In the System variables pane, double click Path to edit it.
-    7. For each of the following paths, click the New button and set the text to the specified values below. You will make 3 entries.
+    7. For each of the following paths, click the New button and set the text to the specified values below. You will make the below 3 entries, then click "OK."
         1. `C:\Program Files\jdk-12.0.1\bin`
         2. `C:\Program Files\MongoDB\Server\4.0\bin`
         3. `C:\Program Files\Git\bin`
+    8. Back to the System variables pane, click "New..."
+        1. In the "New System Variable" tab, enter `JAVA_HOME` as variable name, and `C:\Program Files\jdk-12.0.1` as variable value.
  5. Install [IntelliJ IDEA Community Edition](https://download.jetbrains.com/idea/ideaIC-2019.1.3-jbr11.exe) to use as a code editor.
  
 ### 2. Download Spellsource
@@ -390,7 +392,7 @@ Use these to help you debug rare interactions or errors you didn't test in your 
  4. Start the server inside the IntelliJ editor.
     1. Navigate to the `LocalClustered.java` file.
     2. Click the play button in the editor's left gutter to execute it. Be patient.
-    3. Once you observe `***** SERVER IS READY. START THE CLIENT. *****`, navigate to the next step.
+    3. Once you observe `main: Broadcaster deployed`, navigate to the next step.
  5. Start a client to connect to the local server.
     1. Download and install the [Hidden Switch Launcher](http://go.hiddenswitch.com/win) if you haven't already.
     2. Launch the game.

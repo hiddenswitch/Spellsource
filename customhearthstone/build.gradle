@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.javamodularity.moduleplugin' version '1.6.0'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'org.javamodularity.moduleplugin'
+
+group 'com.hiddenswitch'
+
+dependencies {
+    implementation project(':core')
+    testImplementation 'org.jetbrains:annotations:16.0.2'
+    testImplementation 'com.google.guava:guava:26.0-jre'
+    testImplementation project(':quasar-core')
+    testImplementation project(':testutils')
+    testImplementation project(':cards')
+    testImplementation project(':hearthstone')
+}
+
+test {
+    useJUnitPlatform()
+    moduleOptions {
+        runOnClasspath = true
+    }
+    filter {
+        exclude '**/module-info.class'
+    }
+    testLogging {
+        events "standardError"
+    }
+    enableAssertions = false
+}

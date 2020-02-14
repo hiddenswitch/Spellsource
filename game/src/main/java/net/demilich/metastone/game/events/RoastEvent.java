@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 
@@ -9,8 +10,8 @@ public final class RoastEvent extends DiscardEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.ROASTED;
+	public GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ROASTED;
 	}
 
 	@Override
@@ -20,6 +21,6 @@ public final class RoastEvent extends DiscardEvent {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		return String.format("%s roasted %s", context.getPlayer(playerId).getName(), getCard().getName());
+		return String.format("%s roasted %s", context.getPlayer(playerId).getName(), getSourceCard().getName());
 	}
 }

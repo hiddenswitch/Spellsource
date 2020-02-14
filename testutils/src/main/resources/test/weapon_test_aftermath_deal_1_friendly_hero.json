@@ -1,0 +1,21 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "Deal 1 damage to your champion",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

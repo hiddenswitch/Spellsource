@@ -1,0 +1,16 @@
+{
+  "name": "Ophelia",
+  "heroPower": "hero_power_lost_soul",
+  "baseManaCost": 2,
+  "type": "HERO",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Skill: Summon a 1/1 Spirit.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

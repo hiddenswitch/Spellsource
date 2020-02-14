@@ -15,7 +15,7 @@
     }
   },
   "attributes": {
-    "DEATHRATTLE": true
+    "DEATHRATTLES": true
     "RUSH": true
   },
   "collectible": true,

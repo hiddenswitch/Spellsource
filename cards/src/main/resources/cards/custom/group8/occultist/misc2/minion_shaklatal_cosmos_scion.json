@@ -1,5 +1,4 @@
 {
- 
   "name": "Shaklatal, Cosmos' Scion",
   "baseManaCost": 10,
   "type": "MINION",
@@ -7,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Double the Attack and Health of all minions in your hand.",
+  "description": "Opener: Double the Attack and Health of all minions in your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

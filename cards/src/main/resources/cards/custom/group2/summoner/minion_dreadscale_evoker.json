@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Shuffle three 3/3 Murlocs into your deck.",
+  "description": "Opener: Shuffle three 3/3 Fae into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

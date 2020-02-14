@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.filter;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public final class RaceEqualsFilter extends EntityFilter {
@@ -19,6 +20,6 @@ public final class RaceEqualsFilter extends EntityFilter {
 			return false;
 		}
 
-		return entity.getRace().hasRace(comparedTo.getRace());
+		return Race.hasRace(context, entity, comparedTo.getRace());
 	}
 }

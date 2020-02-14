@@ -6,8 +6,8 @@
   "damage": 0,
   "durability": 3,
   "rarity": "RARE",
-   "description": "<b>Decay<b> At the end of your turn, summon two 1/1 Spirits.",
-    "trigger": {
+  "description": "<b>Decay<b>. At the end of your turn, summon two 1/1 Spirits.",
+  "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
@@ -22,14 +22,17 @@
         {
           "class": "SummonSpell",
           "card": "token_spirit"
+        },
+        {
+          "class": "DecaySpell"
         }
       ]
     }
   },
   "attributes": {
-  "DECAY": true
+    "DECAY": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

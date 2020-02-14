@@ -1,62 +1,64 @@
 package net.demilich.metastone.game.cards;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.hiddenswitch.spellsource.CardResource;
-import com.hiddenswitch.spellsource.CardResources;
-import com.hiddenswitch.spellsource.CardsModule;
-import com.hiddenswitch.spellsource.ResourceInputStream;
-import io.vertx.core.json.Json;
+import com.hiddenswitch.spellsource.core.CardResource;
+import com.hiddenswitch.spellsource.core.CardResources;
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.nio.file.spi.FileSystemProvider;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
  */
 public class CardCatalogue {
-	/**
-	 * A class that describes injected card resources used internally by a static global card catalogue..
-	 */
-	public static class InjectedCardResources {
-		private Set<CardResources> cardResources;
+	private static Map<String, Card> classCards;
+	private static Map<String, Card> heroCards;
+	private static Map<String, Card> formatCards;
+	private static Map<DeckFormat, CardList> classCardsForFormat;
+	private static Map<DeckFormat, List<String>> baseClassesForFormat;
 
-		@Inject
-		public InjectedCardResources(Set<CardResources> cardResources) {
-			this.cardResources = cardResources;
-		}
+	public static Set<String> getBannedDraftCards() {
+		return Collections.unmodifiableSet(bannedCardIds);
 	}
 
-	private static final Injector INJECTOR;
+	public static Set<String> getHardRemovalCardIds() {
+		return Collections.unmodifiableSet(hardRemovalCardIds);
+	}
 
-	static {
-		// This code iterates through all the classes on the classpath that are subtypes of CardsModule as "plugins", then
-		// makes the cards they define available to the card catalogue.
-		INJECTOR = Guice.createInjector(new Reflections("com.hiddenswitch.spellsource").getSubTypesOf(CardsModule.class).stream().map(clazz -> {
-			try {
-				return clazz.getConstructor().newInstance();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		}).collect(Collectors.toList()));
+	public static String getOneOneNeutralMinionCardId() {
+		return "minion_neutral_test_1";
+	}
+
+	public static String getNeutralHero() {
+		return "hero_neutral";
 	}
 
 	private static Logger LOGGER = LoggerFactory.getLogger(CardCatalogue.class);
 	private static int version = 2;
+	private static final Set<String> bannedCardIds = new HashSet<>();
 	private static AtomicBoolean loaded = new AtomicBoolean();
+	private static final Set<String> hardRemovalCardIds = new HashSet<>();
 	private final static Map<String, Card> cards = new LinkedHashMap<>();
 	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>();
 	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>();
@@ -91,10 +93,10 @@ public class CardCatalogue {
 		if (card != null) {
 			card = card.getCopy();
 		} else {
-			throw new NullPointerException(String.format("getCardById: %s could not be found", id));
+			throw new NullPointerException(id);
 		}
 		if (card.getDesc().getFileFormatVersion() > version) {
-			throw new NullPointerException(String.format("getCardById: %s is not in this version", id));
+			throw new NullPointerException(id);
 		}
 		return card;
 	}
@@ -132,10 +134,6 @@ public class CardCatalogue {
 			return getCardById(namedCards.get(0).getId());
 		}
 		return getCardById(recordsByName.get(name).get(0).getDesc().getId());
-	}
-
-	public static CardList getHeroes() {
-		return query(null, card -> card.getCardSet().equals("BASIC") && card.getCardType() == CardType.HERO);
 	}
 
 	public static CardList query(DeckFormat deckFormat) {
@@ -212,58 +210,289 @@ public class CardCatalogue {
 	}
 
 	/**
+	 * Loads all the cards from the specified {@link CardResources} instances.
+	 *
+	 * @param cardResources
+	 */
+	public static void loadCardsFromPackage(List<CardResources> cardResources) {
+		for (CardResources cardResource : cardResources) {
+			bannedCardIds.addAll(cardResource.getDraftBannedCardIds());
+			hardRemovalCardIds.addAll(cardResource.getHardRemovalCardIds());
+		}
+		Collection<ResourceInputStream> inputStreams = cardResources
+				.stream()
+				.flatMap(resource -> resource.getResources().stream())
+				.map(resource -> ((CardResource) resource))
+				.map(resource -> (ResourceInputStream) resource)
+				.collect(Collectors.toList());
+		loadCards(inputStreams);
+
+		LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
+	}
+
+	/**
+	 * Loads all the cards from the specified {@link ResourceInputStream} instances, which can be a mix of files and
+	 * resources.
+	 *
+	 * @param inputStreams
+	 */
+	public static void loadCards(Collection<ResourceInputStream> inputStreams) {
+		Map<String, CardDesc> cardDesc = new HashMap<>();
+		ArrayList<String> badCards = new ArrayList<>();
+		CardParser cardParser = new CardParser();
+
+		for (ResourceInputStream resourceInputStream : inputStreams) {
+			try {
+				final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
+				CardDesc desc = record.getDesc();
+				if (cardDesc.containsKey(desc.getId())) {
+					LOGGER.error("loadCards: Card id {} is duplicated!", desc.getId());
+				}
+				cardDesc.put(desc.getId(), desc);
+				records.put(desc.getId(), record);
+				recordsByName.putIfAbsent(desc.getName(), new ArrayList<>());
+				recordsByName.get(desc.getName()).add(record);
+			} catch (Exception e) {
+				LOGGER.error("loadCards: An error occurred while processing {}: {}", resourceInputStream.getFileName(), e.toString());
+				badCards.add(resourceInputStream.getFileName());
+			}
+		}
+
+		for (CardDesc desc : cardDesc.values()) {
+			Card instance = desc.create();
+			cards.put(instance.getCardId(), instance);
+		}
+
+		List<String> sets = new ArrayList<>();
+		cards.forEach((s, card) -> {
+			if (!sets.contains(card.getCardSet())) {
+				sets.add(card.getCardSet());
+			}
+		});
+		DeckFormat.populateAll(sets);
+		CardList formats = cards.values().stream()
+				.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toCollection(CardArrayList::new));
+		DeckFormat.populateFormats(formats);
+		formatCards = formats.stream().collect(toMap(Card::getName, Function.identity()));
+		// Populate the class and hero cards
+		classCards = cards.values().stream().filter(c -> c.getCardType() == CardType.CLASS).collect(toMap(Card::getHeroClass, Function.identity()));
+		classCardsForFormat = formatCards.entrySet().stream().collect(toMap(kv -> DeckFormat.getFormat(kv.getKey()), kv -> {
+			var key = DeckFormat.getFormat(kv.getKey());
+			return classCards.values().stream().filter(key::isInFormat).collect(Collectors.toCollection(CardArrayList::new));
+		}));
+		var allClassCards = new CardArrayList();
+		allClassCards.addAll(classCards.values());
+		classCardsForFormat.put(DeckFormat.all(), allClassCards);
+		heroCards =
+				classCards.values().stream().map(value -> getCardById(Objects.requireNonNull(value).getHero())).collect(toMap(Card::getHeroClass, i -> i));
+		baseClassesForFormat = formatCards.entrySet().stream().collect(toMap(kv -> DeckFormat.getFormat(kv.getKey()), kv -> {
+			var key = DeckFormat.getFormat(kv.getKey());
+			return classCards.values().stream().filter(c -> c.isCollectible() && key.isInFormat(c)).map(Card::getHeroClass).collect(Collectors.toList());
+		}));
+		baseClassesForFormat.put(DeckFormat.all(), allClassCards.stream().map(Card::getHeroClass).distinct().collect(Collectors.toList()));
+	}
+
+	/**
+	 * Loads all the cards from all classpath resources that are recursively inside the "cards" directory.
+	 */
+	public static void loadAllCards() {
+		loadAllCards("cards");
+	}
+
+	public static void loadCardsFromFilesystemDirectories(String... directories) {
+		if (!firstLoad()) {
+			return;
+		}
+
+		var inputStreams = new ArrayList<ResourceInputStream>();
+
+		try {
+			for (var directory : directories) {
+				var path = Path.of(directory);
+				Stream<Path> walk = null;
+				walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS);
+
+				for (var it = walk.iterator(); it.hasNext(); ) {
+					var filename = it.next();
+					if (filename.getFileName().toString().endsWith(".json")) {
+						inputStreams.add(new ResourceInputStream(filename.getFileName().toString(), Files.newInputStream(filename)));
+					}
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		loadCards(inputStreams);
+
+		for (var inputStream : inputStreams) {
+			try {
+				inputStream.getInputStream().close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	/**
+	 * Loads all the cards from the specified directory.
+	 * <p>
+	 * Prevents {@link CardCatalogue#loadCardsFromPackage()} from also redundantly loading the same cards.
+	 * <p>
+	 * Does <b>not</b> use ClassGraph so does not need to allocate direct byte buffers.
+	 *
+	 * @param directory
+	 */
+	public static void loadAllCards(String directory) {
+		if (!firstLoad()) {
+			return;
+		}
+
+		var inputStreams = new ArrayList<ResourceInputStream>();
+		var closeables = new ArrayList<AutoCloseable>();
+
+		try {
+			var allCardDirs = ClassLoader.getSystemClassLoader().getResources(directory).asIterator();
+			for (; allCardDirs.hasNext(); ) {
+				var uri = allCardDirs.next().toURI();
+				var JAR = "jar";
+				if (Objects.equals(uri.getScheme(), JAR)) {
+					for (FileSystemProvider provider : FileSystemProvider.installedProviders()) {
+						if (provider.getScheme().equalsIgnoreCase(JAR)) {
+							try {
+								closeables.add(provider.getFileSystem(uri));
+							} catch (FileSystemNotFoundException e) {
+								// in this case we need to initialize it first:
+								closeables.add(provider.newFileSystem(uri, Collections.emptyMap()));
+							}
+						}
+					}
+				}
+				var path = Paths.get(uri);
+				var walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS);
+				for (var it = walk.iterator(); it.hasNext(); ) {
+					var filename = it.next();
+					if (filename.getFileName().toString().endsWith(".json")) {
+						inputStreams.add(new ResourceInputStream(filename.getFileName().toString(), Files.newInputStream(filename)));
+					}
+				}
+			}
+		} catch (IOException | URISyntaxException e) {
+			throw new RuntimeException(e);
+		}
+
+		loadCards(inputStreams);
+
+		for (var inputStream : inputStreams) {
+			try {
+				inputStream.getInputStream().close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		for (var closeable : closeables) {
+			try {
+				closeable.close();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	/**
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
 	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
-		if (!loaded.compareAndSet(false, true)) {
+		if (!firstLoad()) {
 			return;
 		}
+		List<CardResources> cardResources = null;
+//		workaroundClassGraphCreatingDirectBuffers();
 
-		try {
-			InjectedCardResources cardResources = INJECTOR.getInstance(InjectedCardResources.class);
-			Collection<ResourceInputStream> inputStreams = cardResources.cardResources.stream().flatMap(resource -> resource.getResources().stream()).map(resource -> ((CardResource) resource)).map(resource -> (ResourceInputStream) resource).collect(Collectors.toList());
-			Map<String, CardDesc> cardDesc = new HashMap<>();
-			ArrayList<String> badCards = new ArrayList<>();
-			CardParser cardParser = new CardParser();
-
-			for (ResourceInputStream resourceInputStream : inputStreams) {
-				try {
-					final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
-					CardDesc desc = record.getDesc();
-					if (cardDesc.containsKey(desc.getId())) {
-						LOGGER.error("loadCards: Card id {} is duplicated!", desc.getId());
-					}
-					cardDesc.put(desc.getId(), desc);
-					records.put(desc.getId(), record);
-					recordsByName.putIfAbsent(desc.getName(), new ArrayList<>());
-					recordsByName.get(desc.getName()).add(record);
-				} catch (Exception e) {
-					LOGGER.error("loadCards: An error occurred while processing {}: {}", resourceInputStream.getFileName(), e.toString());
-					badCards.add(resourceInputStream.getFileName());
-				}
-			}
-
-			for (CardDesc desc : cardDesc.values()) {
-				Card instance = desc.create();
-				cards.put(instance.getCardId(), instance);
-			}
-
-			List<String> sets = new ArrayList<>();
-			cards.forEach((s, card) -> {
-				if (!sets.contains(card.getCardSet())) {
-					sets.add(card.getCardSet());
-				}
-			});
-			DeckFormat.populateAll(sets);
-			DeckFormat.populateFormats(new CardArrayList(cards.values().stream()
-					.filter(card -> card.getCardType() == CardType.FORMAT).collect(Collectors.toList())));
-
-
-			LOGGER.debug("loadCards: {} cards loaded.", CardCatalogue.cards.size());
+		try (ScanResult scanResult =
+				     new ClassGraph()
+						     .enableClassInfo()
+						     .disableRuntimeInvisibleAnnotations()
+						     .whitelistPackages("com.hiddenswitch.spellsource.cards")
+						     .scan()) {
+			cardResources = scanResult
+					.getAllClasses()
+					.stream()
+					.filter(info -> info.getName().contains("CardResources"))
+					.map(ClassInfo::loadClass)
+					.filter(CardResources.class::isAssignableFrom)
+					.filter(c -> !Modifier.isAbstract(c.getModifiers()))
+					.map(thisClass -> {
+						try {
+							return (CardResources) thisClass.getConstructor().newInstance();
+						} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+							throw new RuntimeException(e);
+						}
+					})
+					.collect(Collectors.toList());
+			loadCardsFromPackage(cardResources);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			if (cardResources != null) {
+				for (CardResources cardResources1 : cardResources) {
+					try {
+						cardResources1.close();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+
 		}
+	}
+
+	public static boolean firstLoad() {
+		return loaded.compareAndSet(false, true);
+	}
+
+	private static void workaroundClassGraphCreatingDirectBuffers() {
+		// Workaround for scan result
+		try {
+			var initialized1 = ScanResult.class.getDeclaredField("initialized");
+			initialized1.setAccessible(true);
+			AtomicBoolean initialized = (AtomicBoolean) initialized1.get(null);
+			initialized.set(true);
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Card getFormatCard(String name) {
+		return formatCards.getOrDefault(name, null);
+	}
+
+	public static Card getHeroCard(String heroClass) {
+		return heroCards.getOrDefault(heroClass, getCardById(CardCatalogue.getNeutralHero()));
+	}
+
+	/**
+	 * Retrieves all the "class_" {@link CardType#CLASS} cards that specify a hero card, color, heroClass string, etc. for
+	 * the specified class in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
+	public static CardList getClassCards(DeckFormat format) {
+		return classCardsForFormat.get(format);
+	}
+
+	/**
+	 * Retrieves the {@link net.demilich.metastone.game.entities.heroes.HeroClass} strings that correspond to the classes
+	 * in the specified format.
+	 *
+	 * @param deckFormat
+	 * @return
+	 */
+	public static List<String> getBaseClasses(DeckFormat deckFormat) {
+		return baseClassesForFormat.get(deckFormat);
 	}
 
 	public static CardList query(DeckFormat deckFormat, Predicate<Card> filter) {

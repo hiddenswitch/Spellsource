@@ -4,57 +4,67 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-   "description": "Summon [0] random [0]-Cost minions. (Increases for each 10-Cost minion you played this game).",
-    "spell": {
-      "class": "SummonSpell",
-      "value": {
-       "class": "CardsPlayedValueProvider",
-       "filter": {
-      "class": "CardFilter",
-      "cardType": "MINION",
-      "manaCost": 10
-       },
-	  "offset": 1
-      },
-      "cardFilter": {
+  "description": "Summon [1 random 5-Cost minions]. (Increases for each 10-Cost minion you played this game).",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "CardsPlayedValueProvider",
+      "filter": {
         "class": "CardFilter",
         "cardType": "MINION",
-        "manaCost": {
-         "class": "CardsPlayedValueProvider",
-         "filter": {
-         "class": "CardFilter",
-          "cardType": "MINION",
-          "manaCost": 10,
-		  "offset": 5
-          }
-         }
-      }
+        "manaCost": 10
+      },
+      "offset": 1
     },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": {
+        "class": "CardsPlayedValueProvider",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 10
+        },
+        "offset": 5
+      }
+    }
+  },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
   "dynamicDescription": [
     {
-      "class": "ValueDescription",
-      "value": {
-        "class": "CardsPlayedValueProvider",
-       "filter": {
-      "class": "CardFilter",
-      "cardType": "MINION",
-      "manaCost": 10
-       },
-	  "offset": 1
-    },
-    {
-      "class": "ValueDescription",
-      "class": "CardsPlayedValueProvider",
-       "filter": {
-      "class": "CardFilter",
-      "cardType": "MINION",
-      "manaCost": 10
-       },
-	  "offset": 5
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "CardsPlayedValueProvider",
+            "filter": {
+              "class": "CardFilter",
+              "cardType": "MINION",
+              "manaCost": 10
+            },
+            "offset": 1
+          }
+        },
+        " random ",
+        {
+          "class": "PluralDescription",
+          "value": {
+            "class": "CardsPlayedValueProvider",
+            "filter": {
+              "class": "CardFilter",
+              "cardType": "MINION",
+              "manaCost": 10
+            },
+            "offset": 5
+          },
+          "description1": "-Cost minion",
+          "description2": "-Cost minions"
+        }
+      ]
     }
-   ]
-  }
+  ]
 }

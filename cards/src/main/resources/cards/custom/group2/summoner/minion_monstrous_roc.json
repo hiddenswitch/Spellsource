@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Invoke (8): Recruit a Monstrous Roc.",
+  "description": "Invoke (8): Summon a Monstrous Roc from your deck.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"

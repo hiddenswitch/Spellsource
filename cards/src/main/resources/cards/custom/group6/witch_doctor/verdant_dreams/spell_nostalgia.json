@@ -22,6 +22,9 @@
       "targetPlayer": "SELF"
     }
   },
+  "attributes": {
+	"DISCOVER": true
+  },
   "collectible": true,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1

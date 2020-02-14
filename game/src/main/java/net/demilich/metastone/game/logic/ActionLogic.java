@@ -29,7 +29,7 @@ public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
 
 	@Suspendable
-	public GameAction getAutoHeroPower(GameContext context, Player player) {
+	GameAction getAutoHeroPower(GameContext context, Player player) {
 		return getHeroPowerActions(context, player).get(0);
 	}
 
@@ -57,6 +57,7 @@ public class ActionLogic implements Serializable {
 		if (heroPower.isChooseOne()) {
 			rolloutChooseOnesWithOverrides(context, player, heroPowerActions, heroPower);
 		} else {
+			heroPower.processTargetSelectionOverride(context, player);
 			rollout(heroPower.play(), context, player, heroPowerActions);
 		}
 
@@ -113,6 +114,7 @@ public class ActionLogic implements Serializable {
 			if (card.isChooseOne()) {
 				rolloutChooseOnesWithOverrides(context, player, playCardActions, card);
 			} else {
+				card.processTargetSelectionOverride(context, player);
 				rollout(card.play(), context, player, playCardActions);
 			}
 
@@ -141,6 +143,14 @@ public class ActionLogic implements Serializable {
 		}
 	}
 
+	/**
+	 * Iterates through the cards and minions belonging to the player, and determines what actions are available. This
+	 * also takes into account the available mana, game rules, etc.
+	 *
+	 * @param context
+	 * @param player
+	 * @return
+	 */
 	@Suspendable
 	public List<GameAction> getValidActions(GameContext context, Player player) {
 		List<GameAction> validActions = new ArrayList<GameAction>();
@@ -161,7 +171,7 @@ public class ActionLogic implements Serializable {
 	}
 
 	@Suspendable
-	public boolean hasAutoHeroPower(GameContext context, Player player) {
+	boolean hasAutoHeroPower(GameContext context, Player player) {
 		Card heroPower = player.getHero().getHeroPower();
 
 		EntityReference heroPowerReference = new EntityReference(heroPower.getId());

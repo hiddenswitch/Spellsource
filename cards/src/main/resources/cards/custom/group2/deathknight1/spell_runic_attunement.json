@@ -9,7 +9,7 @@
   "spell": {
     "class": "ReceiveCardSpell",
     "value": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ALL_CHARACTERS",
       "filter": {
         "class": "AttributeFilter",

@@ -2,12 +2,13 @@
   "name": "Spirit",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "LIGHTBROWN",
+  "heroClass": "NEUTRAL",
   "baseAttack": 1,
   "baseHp": 1,
+  "race": "SPIRIT",
   "rarity": "FREE",
   "description": "",
   "collectible": false,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

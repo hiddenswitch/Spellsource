@@ -1,12 +1,11 @@
 {
   "name": "Enchanted Tapestry",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "ELEMENTAL",
   "description": "Whenever you summon a minion, give it Deflect.",
   "trigger": {
     "eventTrigger": {

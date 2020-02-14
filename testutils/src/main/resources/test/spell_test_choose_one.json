@@ -5,7 +5,7 @@
   "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "chooseOneCardIds": [
     "spell_test_choose_one_1",
     "spell_test_choose_one_2"

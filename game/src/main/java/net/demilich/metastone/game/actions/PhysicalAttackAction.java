@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -26,6 +27,12 @@ public class PhysicalAttackAction extends GameAction {
 		return (PhysicalAttackAction) super.clone();
 	}
 
+	/**
+	 * Creates a physical attack with the specified {@code attackerReference} as the attacker. This should be an {@code
+	 * Actor}.
+	 *
+	 * @param attackerReference
+	 */
 	public PhysicalAttackAction(EntityReference attackerReference) {
 		this();
 		this.setSourceReference(attackerReference);

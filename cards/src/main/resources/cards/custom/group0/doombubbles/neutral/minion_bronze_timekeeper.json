@@ -1,5 +1,5 @@
 {
-  "name": "Bronze Timekeeper",
+  "name": "Silver Timekeeper",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
@@ -11,7 +11,10 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "custom.ActivateTriggeredEffectSpell"
+      "class": "custom.ActivateTriggeredEffectSpell",
+      "filter": {
+        "class": "HasTurnEffectsFilter"
+      }
     }
   },
   "attributes": {

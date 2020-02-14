@@ -9,7 +9,7 @@
   "spell": {
     "class": "DiscoverSpell",
     "spell": {
-      "class": "RecruitSpell",
+      "class": "PutMinionOnBoardFromDeckSpell",
       "spell": {
         "target": "OUTPUT",
         "class": "AddAttributeSpell",
@@ -26,6 +26,9 @@
       "distinct": true,
       "targetPlayer": "SELF"
     }
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": true,
   "sets": [

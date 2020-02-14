@@ -507,10 +507,15 @@ public final class EntityReference implements Serializable {
 	public static final EntityReference LEFTMOST_ENEMY_CARD_HAND = new EntityReference(-75);
 	/**
 	 * References the last spell played by this player this turn only.
-	 *
+	 * <p>
 	 * Implements Recurring Torrent.
 	 */
 	public static final EntityReference FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN = new EntityReference(-76);
+	/**
+	 * Returns the opposing characters from the {@code source}. If there is no minion opposite of the {@code source},
+	 * returns the opposing champion instead.
+	 */
+	public static final EntityReference OPPOSITE_CHARACTERS = new EntityReference(-77);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
@@ -547,7 +552,7 @@ public final class EntityReference implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return new Integer(id).hashCode();
+		return id;
 	}
 
 	public boolean isTargetGroup() {

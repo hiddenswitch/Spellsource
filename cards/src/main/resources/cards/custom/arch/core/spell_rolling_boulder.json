@@ -4,17 +4,17 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-    "description": "Destroy a minion and the minions opposite it.",
-   "targetSelection": "MINIONS",
-      {
-        "class": "OppositeEffectSpell",
-        "spell1": {
-          "class": "DestroySpell"
-        },
-        "spell2": {
-          "class": "DestroySpell",
-        }
-	},
+  "description": "Destroy a minion and the minions opposite it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "OppositeEffectSpell",
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
   "sets": [
     "CUSTOM",
     "CLASSIC"

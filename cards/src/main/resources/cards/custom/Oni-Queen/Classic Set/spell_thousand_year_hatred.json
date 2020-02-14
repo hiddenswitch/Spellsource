@@ -1,0 +1,36 @@
+{
+  "name": "Thousand Year Hatred",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "EPIC",
+  "description": "Choose an enemy minion. Destroy all minions on the battlefield and in hand with the same name.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      },
+      {
+        "class": "RemoveCardSpell",
+        "target": "BOTH_HANDS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

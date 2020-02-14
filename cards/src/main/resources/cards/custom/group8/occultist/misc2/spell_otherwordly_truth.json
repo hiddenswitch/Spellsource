@@ -10,10 +10,11 @@
     "class": "ShuffleToDeckSpell",
     "cardSource": {
       "class": "TopThreeCardsOfDeckSource",
-	  "targetPlayer": "OPPONENT",
+      "targetPlayer": "OPPONENT"
     },
-    "exclusive": true,
+    "exclusive": true
   },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
+}

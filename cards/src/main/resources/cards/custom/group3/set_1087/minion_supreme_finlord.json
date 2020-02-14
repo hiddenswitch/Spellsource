@@ -1,12 +1,12 @@
 {
-  "name": "Supreme Finlord",
+  "name": "Supreme Faelord",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Your Supremacy effects also draw a card.",
   "aura": {
     "class": "SupremacyBonusEffectAura",

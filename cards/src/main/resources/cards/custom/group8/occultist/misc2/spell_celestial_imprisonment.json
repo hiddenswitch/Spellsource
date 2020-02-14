@@ -14,7 +14,7 @@
       "class": "AttributeFilter",
       "value": 5,
       "attribute": "ATTACK",
-      "operation": "MORE_OR_EQUAL"
+      "operation": "GREATER_OR_EQUAL"
     }
   },
   "collectible": true,

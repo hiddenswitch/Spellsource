@@ -1,0 +1,25 @@
+{
+  "name": "Jerra, the Deforger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your weapon is destroyed, deal 2 damage to all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "WeaponDestroyedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

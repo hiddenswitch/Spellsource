@@ -7,9 +7,7 @@
   "rarity": "FREE",
   "description": "Summon a 0/1 Pebble with Guard.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {

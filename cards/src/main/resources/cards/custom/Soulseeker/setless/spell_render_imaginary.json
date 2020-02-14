@@ -1,0 +1,25 @@
+{
+  "name": "Render Imaginary",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "COMMON",
+  "description": "Destroy a minion. Its owner draws 2 cards.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 2,
+        "targetPlayer": "OWNER"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

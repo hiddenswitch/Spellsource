@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -31,6 +32,16 @@ public class HeroClass {
 	public static final String VIOLET = "VIOLET";
 	public static final String RED = "RED";
 	public static final String OLIVE = "OLIVE";
+	public static final String TEST = "TEST";
+	public static final String CORAL = "CORAL";
+	public static final String COPPER = "COPPER";
+	public static final String DARKBLUE = "DARKBLUE";
+	public static final String BLOOD = "BLOOD";
+	public static final String NAVY = "NAVY";
+	public static final String CAMO = "CAMO";
+	public static final String BLUEGREY = "BLUEGREY";
+	public static final String CRIMSON = "CRIMSON";
+	public static final String MAGENTA = "MAGENTA";
 
 
 	/**
@@ -41,11 +52,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static Card getHeroCard(String heroClass) {
-		CardList classCards = getClassCards(DeckFormat.getFormat("All")).filtered(card -> card.getHeroClass().equals(heroClass));
-		if (classCards.isEmpty()) {
-			return CardCatalogue.getCardById("hero_neutral");
-		}
-		return CardCatalogue.getCardById(classCards.get(0).getHero());
+		return CardCatalogue.getHeroCard(heroClass);
 	}
 
 
@@ -57,7 +64,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static List<String> getBaseClasses(DeckFormat deckFormat) {
-		return getClassCards(deckFormat).filtered(Card::isCollectible).stream().map(Card::getHeroClass).collect(Collectors.toList());
+		return CardCatalogue.getBaseClasses(deckFormat);
 	}
 
 	/**
@@ -68,7 +75,7 @@ public class HeroClass {
 	 */
 	@NotNull
 	public static CardList getClassCards(DeckFormat deckFormat) {
-		return CardCatalogue.query(deckFormat, CardType.CLASS);
+		return CardCatalogue.getClassCards(deckFormat);
 	}
 
 	/**

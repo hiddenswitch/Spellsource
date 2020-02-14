@@ -39,13 +39,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.*;
+
 import static org.hamcrest.CoreMatchers.*;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Rule;
+
 import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 
@@ -798,6 +796,7 @@ public class FiberTest implements Serializable {
     }
 
     @Test
+    @Ignore("no more Kryo")
     public void testSerialization1() throws Exception {
         // com.esotericsoftware.minlog.Log.set(1);
         final SettableFuture<byte[]> buf = new SettableFuture<>();
@@ -828,6 +827,7 @@ public class FiberTest implements Serializable {
     }
 
     @Test
+    @Ignore("no more Kryo")
     public void testSerialization2() throws Exception {
         // com.esotericsoftware.minlog.Log.set(1);
         final SettableFuture<byte[]> buf = new SettableFuture<>();
@@ -859,6 +859,7 @@ public class FiberTest implements Serializable {
     }
 
     @Test
+    @Ignore("no more Kryo")
     public void testSerializationWithThreadLocals() throws Exception {
         final ThreadLocal<String> tl1 = new ThreadLocal<>();
         final InheritableThreadLocal<String> tl2 = new InheritableThreadLocal<>();
@@ -921,6 +922,7 @@ public class FiberTest implements Serializable {
     }
 
     @Test
+    @Ignore("disable custom serialization")
     public void testCustomSerialization() throws Exception {
         // com.esotericsoftware.minlog.Log.set(1);
         final SettableFuture<byte[]> buf = new SettableFuture<>();

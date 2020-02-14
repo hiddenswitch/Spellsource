@@ -10,9 +10,10 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "Damagepell",
-        "target": "FRINDLY_HERO",
-        "value": 2
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2,
+        "ignoreSpellDamage": true
       },
       {
         "class": "DrawCardSpell",

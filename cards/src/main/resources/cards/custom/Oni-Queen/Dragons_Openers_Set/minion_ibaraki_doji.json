@@ -1,0 +1,28 @@
+{
+  "name": "Ibaraki Doji",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Extra Strike. After this attacks, your opponent draws a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1,
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

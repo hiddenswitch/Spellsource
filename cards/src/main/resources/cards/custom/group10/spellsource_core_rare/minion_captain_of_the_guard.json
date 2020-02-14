@@ -1,6 +1,6 @@
 {
   "name": "Captain of the Guard",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
