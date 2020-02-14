@@ -466,7 +466,7 @@ public class ServerGameContext extends GameContext implements Server {
 			getLogic().contextReady();
 
 			for (Client client : getClients()) {
-				client.onActivePlayer(getActivePlayer());
+				client.onConnectionStarted(getActivePlayer());
 			}
 
 			// Record the time that we started the game in system milliseconds, in case a card wants to use this for an event-based thing.
@@ -487,6 +487,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			// Send the clients the current game state
+			// This is the first time the client should be receiving data
 			updateClientsWithGameState();
 
 			// Simultaneous mulligans now
@@ -1106,7 +1107,7 @@ public class ServerGameContext extends GameContext implements Server {
 					next = client;
 					closeables.add(client);
 				}
-				next.onActivePlayer(getActivePlayer());
+				next.onConnectionStarted(getActivePlayer());
 			}
 
 			if (client instanceof Behaviour) {

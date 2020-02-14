@@ -20,7 +20,7 @@ public class BotsController {
 	static {
 		// Forces the card catalogue to be initialized at compile time, which is the only time when we need access to it.
 		// This includes all the classes that make up the "Desc" hierarchy of reflection-based card JSON parsing.
-		CardCatalogue.loadCardsFromPackage();
+		CardCatalogue.loadCardsFromFilesystemDirectories("../cards/src/main/resources/cards", "../game/src/main/resources/cards");
 	}
 
 	@Inject

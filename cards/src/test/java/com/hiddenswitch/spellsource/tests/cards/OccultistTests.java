@@ -1,9 +1,11 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import co.paralleluniverse.common.util.Objects;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,9 @@ public class OccultistTests extends TestBase {
 				assertEquals(player.getMana(), 0);
 				assertEquals(player.getMaxMana(), 0);
 				assertEquals(costOf(context, player, card), 1);
+				shuffleToDeck(context, player, "spell_lunstone");
+				context.getLogic().drawCard(player.getId(), null);
+				assertEquals(0, costOf(context, player, player.getHand().get(1)));
 			});
 		}
 
@@ -102,6 +107,32 @@ public class OccultistTests extends TestBase {
 			assertEquals(3, player.getMinions().size());
 			assertFalse(test.hasAttribute(Attribute.TAUNT));
 			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.TAUNT));
+		});
+	}
+
+	@Test
+	public void testCosmicApparitions() {
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context,player, discoverActions -> {
+				for (DiscoverAction discoverAction : discoverActions) {
+					assertEquals(CardType.MINION, discoverAction.getCard().getCardType());
+				}
+				return discoverActions.get(context.getLogic().random(discoverActions.size()));
+			});
+			playCard(context, player, "spell_cosmic_apparitions");
+			assertEquals(1, player.getHand().size());
+		});
+	}
+  
+	@Test
+	public void testYigsMastermind() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				shuffleToDeck(context, player, "minion_neutral_test");
+			}
+			playCard(context, player, "spell_yig_mastermind");
+			assertEquals(3, player.getMinions().size());
+			assertEquals(2, player.getDeck().size());
 		});
 	}
 }

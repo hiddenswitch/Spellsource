@@ -4,7 +4,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DamageEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.DamageType;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 
 public final class NonDrainDamageReceivedTrigger extends DamageReceivedTrigger {
 
@@ -15,7 +15,7 @@ public final class NonDrainDamageReceivedTrigger extends DamageReceivedTrigger {
 	@Override
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		DamageEvent damageEvent=(DamageEvent)event;
-		if (damageEvent.getDamageType()== DamageType.DRAIN) {
+		if (damageEvent.getDamageType()== DamageTypeEnum.DRAIN) {
 			return false;
 		}
 		return super.innerQueues(event, host);

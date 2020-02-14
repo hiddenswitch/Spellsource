@@ -19,12 +19,12 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.spells.BuffSpell;
@@ -109,7 +109,7 @@ public interface Games extends Verticle {
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
 		class ActionKey {
 			private int sourceReference;
-			private net.demilich.metastone.game.actions.ActionType actionType;
+			private ActionType actionType;
 
 			private ActionKey(GameAction gameAction) {
 				this.sourceReference = gameAction.getSourceReference() == null ? -1 : gameAction.getSourceReference().getId();
@@ -142,15 +142,15 @@ public interface Games extends Verticle {
 								.stream()
 								.unordered()
 								.flatMap(kv -> {
-									if (kv.getKey().actionType == net.demilich.metastone.game.actions.ActionType.SUMMON) {
+									if (kv.getKey().actionType == ActionType.SUMMON) {
 										return Stream.of(new SpellAction()
 												.sourceId(kv.getKey().sourceReference)
-												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
+												.actionType(kv.getKey().actionType)
 												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
 														.action(ga.getId())
 														.friendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(), ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
 														.target((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 : ga.getTargetReference().getId())).collect(toList())));
-									} else if (kv.getKey().actionType == net.demilich.metastone.game.actions.ActionType.DISCOVER) {
+									} else if (kv.getKey().actionType == ActionType.DISCOVER) {
 										// Find the corresponding cards in the discover zone
 										kv.getValue().sort(Comparator.comparingInt(GameAction::getId));
 										return IntStream.range(0, discovers.size())
@@ -173,7 +173,7 @@ public interface Games extends Verticle {
 									} else {
 										return Stream.of(new SpellAction()
 												.sourceId(kv.getKey().sourceReference)
-												.actionType(ActionType.valueOf(kv.getKey().actionType.name()))
+												.actionType(kv.getKey().actionType)
 												.targetKeyToActions(kv.getValue().stream().map(ga -> new TargetActionPair()
 														.action(ga.getId())
 														.target((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 : ga.getTargetReference().getId())).collect(toList())));
@@ -203,116 +203,62 @@ public interface Games extends Verticle {
 	static com.hiddenswitch.spellsource.client.models.GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
 		com.hiddenswitch.spellsource.client.models.GameEvent clientEvent = new com.hiddenswitch.spellsource.client.models.GameEvent();
 
-		clientEvent.eventType(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.valueOf(event.getEventType().toString()));
+		clientEvent.eventType(event.getEventType());
 
 		GameContext workingContext = event.getGameContext().clone();
-		// Handle the event types here.
-		if (event instanceof PhysicalAttackEvent) {
-			net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
-					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
-			Actor attacker = physicalAttackEvent.getAttacker();
-			Actor defender = physicalAttackEvent.getDefender();
-			int damageDealt = physicalAttackEvent.getDamageDealt();
-			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
-			if (event.getEventType() == GameEventType.PHYSICAL_ATTACK) {
-				clientEvent.physicalAttack(physicalAttack);
-			} else if (event.getEventType() == GameEventType.AFTER_PHYSICAL_ATTACK) {
-				clientEvent.afterPhysicalAttack(physicalAttack);
-			}
-		} else if (event instanceof DiscardEvent) {
-			// Handles discard and roast events
-			DiscardEvent discardEvent = (DiscardEvent) event;
-			// You always see which cards get discarded
-			CardEvent cardEvent = new CardEvent()
-					.card(getEntity(workingContext, discardEvent.getCard(), playerId));
-			if (discardEvent.getEventType() == GameEventType.DISCARD) {
-				clientEvent.discard(cardEvent);
-			} else if (discardEvent.getEventType() == GameEventType.ROASTED) {
-				clientEvent.roasted(cardEvent);
-			}
-		} else if (event instanceof DrawCardEvent) {
-			DrawCardEvent drawCardEvent = (DrawCardEvent) event;
-			Card card = drawCardEvent.getCard();
-			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
-			// You never see which cards are drawn by your opponent when they go
-			if (card.getOwner() != playerId) {
-				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
-			}
-			clientEvent.drawCard(new CardEvent()
-					.card(entity));
-		} else if (event instanceof KillEvent) {
-			KillEvent killEvent = (KillEvent) event;
-			net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
-			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, victim, playerId);
+		var source = event.getSource(workingContext);
+		var target = event.getTarget();
+		var value = event instanceof HasValue ? ((HasValue) event).getValue() : null;
+		var card = event instanceof HasCard ? ((HasCard) event).getSourceCard() : null;
+		var description = event.isPowerHistory() ? event.getDescription(workingContext, playerId) : null;
 
-			clientEvent.kill(new GameEventKill()
-					.victim(entity));
-		} else if (event instanceof CardPlayedEvent
-				|| event instanceof CardRevealedEvent) {
-			HasCard cardPlayedEvent = (HasCard) event;
-			Card card = cardPlayedEvent.getCard();
-			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
+		clientEvent
+				.description(description)
+				.value(value);
+
+		// Deal with censoring the card for secrets
+		if (card != null) {
+			var cardEvent = new CardEvent();
+			clientEvent.cardEvent(cardEvent);
 			if (card.getCardType() == CardType.SPELL
 					&& card.isSecret()
 					&& card.getOwner() != playerId
-					&& event instanceof CardPlayedEvent) {
-				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+					&& !(event instanceof SecretRevealedEvent)) {
+				var censoredCard = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				cardEvent.card(censoredCard);
+				if (source != null) {
+					clientEvent.source(censoredCard);
+				}
+				if (target != null) {
+					clientEvent.target(censoredCard);
+				}
+			} else {
+				cardEvent.card(getEntity(workingContext, card, playerId));
 			}
+		}
 
-			clientEvent.cardPlayed(new CardEvent()
-					.showLocal(event instanceof CardRevealedEvent)
-					.card(entity));
-		} else if (event instanceof HeroPowerUsedEvent) {
-			HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;
-			Card card = heroPowerUsedEvent.getHeroPower();
-			clientEvent.heroPowerUsed(new GameEventHeroPowerUsed()
-					.heroPower(getEntity(workingContext, card, playerId)));
-			// Only send exactly the before summon event data
-		} else if (event.getClass().equals(BeforeSummonEvent.class)) {
-			SummonEvent summonEvent = (SummonEvent) event;
+		if (source != null && clientEvent.getSource() == null) {
+			clientEvent.source(getEntity(workingContext, source, playerId));
+		}
 
-			clientEvent.summon(new GameEventBeforeSummon()
-					.minion(getEntity(workingContext, summonEvent.getMinion(), playerId))
-					.source(getEntity(workingContext, summonEvent.getSource(), playerId)));
-		} else if (event instanceof DamageEvent) {
-			DamageEvent damageEvent = (DamageEvent) event;
-			clientEvent.damage(new GameEventDamage()
-					.damage(damageEvent.getDamage())
-					.source(getEntity(workingContext, damageEvent.getSource(), playerId))
-					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId))
-					.damageType(DamageTypeEnum.fromValue(damageEvent.getDamageType().name())));
-		} else if (event instanceof AfterSpellCastedEvent) {
-			AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
-			Card card = afterSpellCastedEvent.getCard();
-			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
-			if (card.getCardType() == CardType.SPELL
-					&& card.isSecret()
-					&& card.getOwner() != playerId) {
-				entity = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
-			}
+		if (target != null && clientEvent.getTarget() == null) {
+			clientEvent.target(getEntity(workingContext, target, playerId));
+		}
 
-			clientEvent.afterSpellCasted(new GameEventAfterSpellCasted()
-					.sourceCard(entity)
-					.spellTarget(getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), playerId)));
-		} else if (event instanceof SecretRevealedEvent) {
-			SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
-			clientEvent.secretRevealed(new GameEventSecretRevealed()
-					.secret(getEntity(workingContext, secretRevealedEvent.getCard(), playerId)));
-		} else if (event instanceof QuestSuccessfulEvent) {
-			QuestSuccessfulEvent questSuccessfulEvent = (QuestSuccessfulEvent) event;
-			clientEvent.questSuccessful(new GameEventQuestSuccessful()
-					.quest(getEntity(workingContext, questSuccessfulEvent.getCard(), playerId)));
-		} else if (event instanceof JoustEvent) {
-			JoustEvent joustEvent = (JoustEvent) event;
-			clientEvent.joust(new GameEventJoust()
-					.ownCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId))
-					.opponentCard(getEntity(workingContext, joustEvent.getOpponentCard(), playerId))
-					.won(joustEvent.isWon()));
-		} else if (event instanceof FatigueEvent) {
-			FatigueEvent fatigueEvent = (FatigueEvent) event;
-			clientEvent.fatigue(new GameEventFatigue()
-					.damage(fatigueEvent.getValue())
-					.playerId(fatigueEvent.getTargetPlayerId()));
+		clientEvent
+				.isTargetPlayerLocal(event.getTargetPlayerId() == playerId)
+				.isSourcePlayerLocal(event.getSourcePlayerId() == playerId);
+
+		// Only a handful of special cases need to be dealt with
+		if (event instanceof DamageEvent) {
+			clientEvent.damage(new GameEventDamage().damageType(((DamageEvent) event).getDamageType()));
+		}
+
+		if (event instanceof JoustEvent) {
+			var joustEvent = (JoustEvent) event;
+			clientEvent
+					.joust(new GameEventJoust().opponentCard(getEntity(workingContext, joustEvent.getOpponentCard(), playerId))
+							.ownCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId)));
 		}
 
 		return clientEvent;

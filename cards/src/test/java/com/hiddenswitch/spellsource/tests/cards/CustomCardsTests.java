@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
@@ -854,11 +854,9 @@ public class CustomCardsTests extends TestBase {
 			putOnTopOfDeck(context, player, "minion_neutral_test");
 			playCard(context, player, "minion_chaugnar_the_corruptor");
 			context.endTurn();
+			int hp = player.getHero().getHp();
 			context.endTurn();
-			Minion test = playMinionCard(context, player, player.getHand().get(0));
-			test.setAttribute(Attribute.CHARGE);
-			attack(context, player, test, opponent.getHero());
-			assertTrue(test.isDestroyed());
+			assertEquals(hp - 5, player.getHero().getHp());
 		});
 	}
 

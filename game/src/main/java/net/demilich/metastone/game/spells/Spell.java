@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -34,8 +33,8 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	/**
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
-	private static final Set<SpellArg> COMMON_ARGS = Sets.newEnumSet(
-			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE, SpellArg.DEATHRATTLE_ID), SpellArg.class);
+	private static final Set<SpellArg> COMMON_ARGS = EnumSet.of(
+			SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE, SpellArg.DEATHRATTLE_ID);
 
 	/**
 	 * Casts a spell for the given arguments.
