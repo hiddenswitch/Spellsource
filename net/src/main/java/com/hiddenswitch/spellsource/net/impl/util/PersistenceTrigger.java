@@ -15,7 +15,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
@@ -100,7 +100,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean interestedIn(GameEventType eventType) {
+	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
 		return true;
 	}
 

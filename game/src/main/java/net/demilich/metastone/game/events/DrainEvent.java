@@ -27,8 +27,8 @@ public final class DrainEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.DRAIN;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DRAIN;
 	}
 
 	@Override

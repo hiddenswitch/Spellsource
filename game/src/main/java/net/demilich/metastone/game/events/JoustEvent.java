@@ -1,8 +1,10 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
 /**
  * A joust event describes which cards were drawn and who won a joust from a point of view of a particular player.
@@ -26,8 +28,8 @@ public class JoustEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.JOUST;
+	public EventTypeEnum getEventType() {
+		return EventTypeEnum.JOUST;
 	}
 
 	public boolean isWon() {
@@ -48,7 +50,7 @@ public class JoustEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public Card getCard() {
+	public Card getSourceCard() {
 		return ownCard;
 	}
 }

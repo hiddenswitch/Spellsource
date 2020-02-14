@@ -9,8 +9,9 @@
   "spell": {
     "class": "BothPlayersSpell",
     "spell": {
-      "class": "FromDeckToHandSpell",
-      "target": "ENEMY_TOP_CARD"
+      "class": "StealCardSpell",
+      "target": "ENEMY_TOP_CARD",
+      "cardLocation": "HAND"
     }
   },
   "collectible": true,

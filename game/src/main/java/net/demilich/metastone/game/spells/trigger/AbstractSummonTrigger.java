@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -64,5 +64,5 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 		return false;
 	}
 
-	public abstract GameEventType interestedIn();
+	public abstract com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn();
 }

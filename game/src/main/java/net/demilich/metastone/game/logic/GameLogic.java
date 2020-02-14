@@ -2,6 +2,8 @@ package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.client.models.ActionType;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -1150,7 +1152,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param baseDamage The base amount of damage to deal.
 	 * @param source     The source of the damage.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean, DamageType) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, DamageTypeEnum) for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source) {
@@ -1166,13 +1168,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param source            The source of the damage.
 	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean, DamageType) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, DamageTypeEnum) for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
 		// sanity check to prevent StackOverFlowError with Mistress of Pain +
 		// Auchenai Soulpriest
-		return damage(player, target, baseDamage, source, ignoreSpellDamage, DamageType.MAGICAL);
+		return damage(player, target, baseDamage, source, ignoreSpellDamage, DamageTypeEnum.MAGICAL);
 	}
 
 	/**
@@ -1203,7 +1205,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return The amount of damage that was actually dealt
 	 */
 	@Suspendable
-	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, DamageType damageType) {
+	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, DamageTypeEnum damageType) {
 		return damage(player, target, baseDamage, source, ignoreSpellDamage, false, damageType);
 	}
 
@@ -1236,7 +1238,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return The amount of damage that was actually dealt
 	 */
 	@Suspendable
-	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, boolean ignoreLifesteal, DamageType damageType) {
+	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, boolean ignoreLifesteal, DamageTypeEnum damageType) {
 		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage, damageType);
 		resolveDamageEvent(player, target, source, damageDealt, ignoreLifesteal, damageType);
 		if (source.getEntityType() == EntityType.CARD) {
@@ -1249,12 +1251,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, DamageType damageType) {
+	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, DamageTypeEnum damageType) {
 		resolveDamageEvent(player, target, source, damageDealt, false, damageType);
 	}
 
 	@Suspendable
-	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, boolean ignoreLifesteal, DamageType damageType) {
+	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, boolean ignoreLifesteal, DamageTypeEnum damageType) {
 		// Check if the target is already destroyed. This allows kills to be tracked properly (one source per kill).
 		boolean startedDestroyed = target.isDestroyed();
 		if (damageDealt > 0) {
@@ -1314,7 +1316,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage, DamageType damageType) {
+	protected int applyDamageToActor(Actor target, final int baseDamage, Player player, Entity source, boolean ignoreSpellDamage, DamageTypeEnum damageType) {
 		if (target.getHp() < -100) {
 			return 0;
 		}
@@ -1372,7 +1374,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	private int damageHero(Hero hero, final int damage, Entity source, DamageType damageType) {
+	private int damageHero(Hero hero, final int damage, Entity source, DamageTypeEnum damageType) {
 		if (hero.hasAttribute(Attribute.IMMUNE) || hero.hasAttribute(Attribute.AURA_IMMUNE)) {
 			return 0;
 		}
@@ -1385,7 +1387,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		int effectiveHp;
 		int newHp;
-		if (damageType == DamageType.IGNORES_ARMOR) {
+		if (damageType == DamageTypeEnum.IGNORES_ARMOR) {
 			effectiveHp = hero.getHp();
 			newHp = effectiveHp - damage;
 		} else {
@@ -1446,7 +1448,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (target.hasAttribute(Attribute.DEFLECT)
 				&& target.getHp() <= damage) {
 			removeAttribute(target, source, Attribute.DEFLECT);
-			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true, DamageType.DEFLECT);
+			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true, DamageTypeEnum.DEFLECT);
 			return true;
 		}
 		return false;
@@ -1647,7 +1649,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			fatigue++;
 			player.setAttribute(Attribute.FATIGUE, fatigue);
 
-			damage(player, hero, fatigue, player, true, true, DamageType.FATIGUE);
+			damage(player, hero, fatigue, player, true, true, DamageTypeEnum.FATIGUE);
 			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 			player.getStatistics().fatigueDamage(fatigue);
 		}
@@ -1921,11 +1923,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// This could change, theoretically, if the minion has an ability  whose damage depends on the other minion's HP.
 		boolean attackerWasDestroyed = attacker.isDestroyed();
 		boolean defenderWasDestroyed = defender.isDestroyed();
-		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true, DamageType.PHYSICAL);
-		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true, DamageType.PHYSICAL);
+		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true, DamageTypeEnum.PHYSICAL);
+		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true, DamageTypeEnum.PHYSICAL);
 		// Defender queues first. Damage events should not change the attacker
-		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageType.PHYSICAL);
-		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageType.PHYSICAL);
+		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageTypeEnum.PHYSICAL);
+		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageTypeEnum.PHYSICAL);
 
 		clearImmuneWhileAttacking(entityGrantedImmunity);
 

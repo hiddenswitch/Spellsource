@@ -20,8 +20,8 @@ public final class HealEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.HEAL;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HEAL;
 	}
 
 	@Override

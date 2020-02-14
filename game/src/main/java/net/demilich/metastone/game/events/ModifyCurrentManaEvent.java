@@ -18,8 +18,8 @@ public class ModifyCurrentManaEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.MANA_MODIFIED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.MANA_MODIFIED;
 	}
 
 	@Override

@@ -27,6 +27,9 @@ public class OccultistTests extends TestBase {
 				assertEquals(player.getMana(), 0);
 				assertEquals(player.getMaxMana(), 0);
 				assertEquals(costOf(context, player, card), 1);
+				shuffleToDeck(context, player, "spell_lunstone");
+				context.getLogic().drawCard(player.getId(), null);
+				assertEquals(0, costOf(context, player, player.getHand().get(1)));
 			});
 		}
 

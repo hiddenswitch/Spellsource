@@ -27,7 +27,7 @@ import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -142,7 +142,7 @@ public class Spellsource {
 	 *     {@code
 	 *     		Spellsource.Spellsource().persistAttribute(
 	 *              "total-damage-dealt-1",
-	 *              GameEventType.AFTER_PHYSICAL_ATTACK,
+	 *              com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_PHYSICAL_ATTACK,
 	 *              Attribute.LIFETIME_DAMAGE_DEALT,
 	 *              (PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 	 *                  int attackerDamage = context.event().getDamageDealt();
@@ -159,9 +159,9 @@ public class Spellsource {
 	 *                  mechanism to update the entity with a new attribute value (both in the {@link GameContext} where
 	 *                  this event is currently taking place and in the entity's corresponding {@link InventoryRecord}
 	 *                  where the value will be persisted in a database.
-	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
+	 * @param <T>       The type of the event that corresponds to the provided {@link EventTypeEnum}.
 	 */
-	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, SuspendableAction1<PersistenceContext<T>> handler) {
+	public <T extends GameEvent> Spellsource persistAttribute(String id, EventTypeEnum event, Attribute attribute, SuspendableAction1<PersistenceContext<T>> handler) {
 		if (getPersistAttributeHandlers().containsKey(id)) {
 			return this;
 		}
