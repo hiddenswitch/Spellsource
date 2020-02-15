@@ -4,8 +4,17 @@ title: Updates
 permalink: /whats-new/
 ---
 
-### Upcoming Changes
+### 0.8.67-3.0.10 (February 14, 2020)
 
+ - End turn button just says the text for now in a tweak of its appearance.
+ - No longer show the full screen button on mobile platforms. (fix client 29)
+ - Account creation should be easier on portrait mobile since the fields aren't obscured anymore.
+ - Android devices now correctly show three columns in the hand tray instead of two.
+ - Power history is now visible. It will be moved to make it easier to read on mobile devices.
+ - Pacing of many events has improved.
+ - Fewer issues should occur trying to connect to games for the first time on mobile. The issue was related to mulligan timings.
+ - Many popups now show in game, like You Go Second!
+ - Playing a targeted card from the highest row of 10 cards and cancelling playing a card that takes no targets is now easier. (fix client #29)
  - The Council of Fate's spells are no longer mistakenly collectible and are also now all named properly. (1539)
  - Xii'da the Curious now correctly doubles the minions as well as their openers. (1544)
  - Exchange Wares now actually does its effect. (1544)
