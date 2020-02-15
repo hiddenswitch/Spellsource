@@ -1,17 +1,40 @@
 {
   "name": "Bring The Bait",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Summon two 2/2 Captives.",
+  "description": "Choose and discard a card. Summon two 2/2 Captives.",
   "targetSelection": "NONE",
-  "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_captive_overlord",
-      "token_captive_overlord"
-    ]
+    "spell": {
+     "class": "DiscoverSpell",
+         "howMany": 10
+     }
+    "class": "MetaSpell",
+    "spells": [
+        {
+          "class": "DiscardSpell",
+          "target": "OUTPUT"
+        }
+        {
+        "class": "SummonSpell",
+        "cards": [
+        "token_captive_overlord",
+        "token_captive_overlord"
+         ]
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "HandSource",
+      "distinct": false,
+      "targetPlayer": "SELF"
+    },
+    "exclusive": true
+  },
+  "attributes": {
+	"DISCOVER": true
+  },
   },
   "collectible": true,
   "sets": [
