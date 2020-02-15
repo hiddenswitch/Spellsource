@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class AfterPhysicalAttackTrigger extends PhysicalAttackTrigger {
@@ -10,8 +11,8 @@ public class AfterPhysicalAttackTrigger extends PhysicalAttackTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.AFTER_PHYSICAL_ATTACK;
+	public GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_PHYSICAL_ATTACK;
 	}
 }
 

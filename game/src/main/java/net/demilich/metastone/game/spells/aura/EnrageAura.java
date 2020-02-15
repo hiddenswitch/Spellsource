@@ -5,7 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -62,7 +62,7 @@ public final class EnrageAura extends Aura {
 	@Override
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
-		if (event.getEventType() == GameEventType.ENRAGE_CHANGED) {
+		if (event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ENRAGE_CHANGED) {
 			active = event.getEventTarget().hasAttribute(Attribute.ENRAGED);
 		}
 		super.onGameEvent(event);

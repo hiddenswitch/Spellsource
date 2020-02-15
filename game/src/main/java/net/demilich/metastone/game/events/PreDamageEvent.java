@@ -1,17 +1,17 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.DamageType;
 
 public final class PreDamageEvent extends GameEvent implements HasValue, HasVictim {
 
 	private final Entity victim;
 	private final Entity source;
 	private final int amount;
-	private final DamageType damageType;
+	private final DamageTypeEnum damageType;
 
-	public PreDamageEvent(GameContext context, Entity victim, Entity source, int amount, DamageType damageType) {
+	public PreDamageEvent(GameContext context, Entity victim, Entity source, int amount, DamageTypeEnum damageType) {
 		super(context, victim.getOwner(), source.getOwner());
 		this.victim = victim;
 		this.source = source;
@@ -30,8 +30,8 @@ public final class PreDamageEvent extends GameEvent implements HasValue, HasVict
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.PRE_DAMAGE;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.PRE_DAMAGE;
 	}
 
 	public Entity getSource() {
@@ -52,7 +52,7 @@ public final class PreDamageEvent extends GameEvent implements HasValue, HasVict
 		return amount;
 	}
 
-	public DamageType getDamageType() {
+	public DamageTypeEnum getDamageType() {
 		return damageType;
 	}
 }

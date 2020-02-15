@@ -1,8 +1,8 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
 
 public class BeforePhysicalAttackEvent extends PhysicalAttackEvent {
 	public BeforePhysicalAttackEvent(GameContext context, Actor attacker, Actor defender) {
@@ -10,8 +10,8 @@ public class BeforePhysicalAttackEvent extends PhysicalAttackEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.BEFORE_PHYSICAL_ATTACK;
+	public GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BEFORE_PHYSICAL_ATTACK;
 	}
 
 	@Override

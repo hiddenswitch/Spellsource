@@ -21,7 +21,7 @@ import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
@@ -31,8 +31,6 @@ import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.TurnState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -53,7 +51,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable, HasElapsableTurns {
-	private static Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
+	public static final int MAX_POWER_HISTORY_SIZE = 10;
 
 	private final Queue<ServerToClientMessage> messageBuffer = new ConcurrentLinkedQueue<>();
 	private final AtomicInteger eventCounter = new AtomicInteger();
@@ -64,7 +62,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final ReentrantLock requestsLock = new ReentrantLock();
-	private final ReadStream<ClientToServerMessage> reader;
 	private final WriteStream<ServerToClientMessage> writer;
 	private final Server server;
 	private final TimerId turnTimer;
@@ -74,6 +71,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
 	private GameOver gameOver;
+	private boolean needsPowerHistory;
 
 
 	public UnityClientBehaviour(Server server,
@@ -84,7 +82,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
-		this.reader = reader;
 		this.writer = writer;
 		this.userId = userId;
 		this.playerId = playerId;
@@ -542,9 +539,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		final Class<? extends Notification> eventClass = event.getClass();
 
-		if (net.demilich.metastone.game.events.GameEvent.class.isAssignableFrom(eventClass)) {
+		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
 			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
-		} else if (TriggerFired.class.isAssignableFrom(eventClass)) {
+		} else if (event instanceof TriggerFired) {
 			TriggerFired triggerEvent = (TriggerFired) event;
 			GameEvent clientTriggerEvent = new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
@@ -553,10 +550,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			net.demilich.metastone.game.entities.Entity source = triggerEvent.getSource(workingContext);
 			if (source != null && source.getSourceCard() != null && source.getSourceCard().getDesc().revealsSelf()) {
 				// Cards that reveal themselves should populate the trigger information here
-				clientTriggerEvent.getTriggerFired().triggerSource(Games.getEntity(workingContext, source, playerId));
+				clientTriggerEvent
+						.source(Games.getEntity(workingContext, source, playerId))
+						.getTriggerFired().triggerSourceId(source.getId());
 			}
 			message.event(clientTriggerEvent);
-		} else if (GameAction.class.isAssignableFrom(eventClass)) {
+		} else if (event instanceof GameAction) {
+			var action = (GameAction) event;
 			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
 			com.hiddenswitch.spellsource.client.models.Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
 
@@ -575,8 +575,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			message.event(new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.PERFORMED_GAME_ACTION)
 					.performedGameAction(new GameEventPerformedGameAction()
-							.source(source)
-							.target(target)));
+							.actionType(action.getActionType()))
+					.source(source)
+					.target(target));
 		} else {
 			throw new RuntimeException("Unsupported notification.");
 		}
@@ -589,7 +590,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			toClient.id(eventCounter.getAndIncrement())
 					.description((event.getDescription(workingContext, playerId)));
 
-			if (powerHistory.size() > 10) {
+			if (powerHistory.size() > MAX_POWER_HISTORY_SIZE) {
 				powerHistory.pop();
 			}
 			powerHistory.add(toClient);
@@ -629,7 +630,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void onActivePlayer(Player activePlayer) {
+	public void onConnectionStarted(Player activePlayer) {
+		needsPowerHistory = true;
 	}
 
 	@Override
@@ -641,6 +643,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void onUpdate(com.hiddenswitch.spellsource.common.GameState state) {
 		final com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
+		if (needsPowerHistory) {
+			gameState.powerHistory(new ArrayList<>(powerHistory));
+			needsPowerHistory = false;
+		}
 		sendMessage(new ServerToClientMessage()
 				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_UPDATE)
 				.changes(getChangeSet(state))
@@ -665,8 +671,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalStateException("playerId");
 		}
 		simulatedContext.setIgnoreEvents(true);
-		return Games.getGameState(simulatedContext, local, opponent)
-				.powerHistory(new ArrayList<>(powerHistory));
+		return Games.getGameState(simulatedContext, local, opponent);
 	}
 
 	@Override

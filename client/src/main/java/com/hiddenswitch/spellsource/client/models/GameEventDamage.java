@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
-import com.hiddenswitch.spellsource.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -32,71 +31,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class GameEventDamage implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("victim")
-  private Entity victim = null;
-
-  @JsonProperty("damage")
-  private Integer damage = null;
-
-  @JsonProperty("source")
-  private Entity source = null;
-
   @JsonProperty("damageType")
   private DamageTypeEnum damageType = null;
-
-  public GameEventDamage victim(Entity victim) {
-    this.victim = victim;
-    return this;
-  }
-
-   /**
-   * Get victim
-   * @return victim
-  **/
-  @ApiModelProperty(value = "")
-  public Entity getVictim() {
-    return victim;
-  }
-
-  public void setVictim(Entity victim) {
-    this.victim = victim;
-  }
-
-  public GameEventDamage damage(Integer damage) {
-    this.damage = damage;
-    return this;
-  }
-
-   /**
-   * Get damage
-   * @return damage
-  **/
-  @ApiModelProperty(value = "")
-  public Integer getDamage() {
-    return damage;
-  }
-
-  public void setDamage(Integer damage) {
-    this.damage = damage;
-  }
-
-  public GameEventDamage source(Entity source) {
-    this.source = source;
-    return this;
-  }
-
-   /**
-   * Get source
-   * @return source
-  **/
-  @ApiModelProperty(value = "")
-  public Entity getSource() {
-    return source;
-  }
-
-  public void setSource(Entity source) {
-    this.source = source;
-  }
 
   public GameEventDamage damageType(DamageTypeEnum damageType) {
     this.damageType = damageType;
@@ -126,15 +62,12 @@ public class GameEventDamage implements Serializable {
       return false;
     }
     GameEventDamage gameEventDamage = (GameEventDamage) o;
-    return Objects.equals(this.victim, gameEventDamage.victim) &&
-        Objects.equals(this.damage, gameEventDamage.damage) &&
-        Objects.equals(this.source, gameEventDamage.source) &&
-        Objects.equals(this.damageType, gameEventDamage.damageType);
+    return Objects.equals(this.damageType, gameEventDamage.damageType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(victim, damage, source, damageType);
+    return Objects.hash(damageType);
   }
 
 
@@ -143,9 +76,6 @@ public class GameEventDamage implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameEventDamage {\n");
     
-    sb.append("    victim: ").append(toIndentedString(victim)).append("\n");
-    sb.append("    damage: ").append(toIndentedString(damage)).append("\n");
-    sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    damageType: ").append(toIndentedString(damageType)).append("\n");
     sb.append("}");
     return sb.toString();

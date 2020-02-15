@@ -3,6 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
 /**
  * Encapsulates the information related to returning a target to the hand.
@@ -35,12 +36,12 @@ public final class ReturnToHandEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.RETURNED_TO_HAND;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.RETURNED_TO_HAND;
 	}
 
 	@Override
-	public Card getCard() {
+	public Card getSourceCard() {
 		return card;
 	}
 }

@@ -15,8 +15,8 @@ public class BoardChangedEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.BOARD_CHANGED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BOARD_CHANGED;
 	}
 
 }

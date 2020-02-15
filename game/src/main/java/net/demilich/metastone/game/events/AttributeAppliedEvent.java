@@ -22,8 +22,8 @@ public class AttributeAppliedEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.ATTRIBUTE_APPLIED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ATTRIBUTE_APPLIED;
 	}
 
 	@Override

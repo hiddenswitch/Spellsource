@@ -28,7 +28,7 @@ Add this dependency to your project's POM:
 <dependency>
     <groupId>com.hiddenswitch</groupId>
     <artifactId>client</artifactId>
-    <version>0.8.65</version>
+    <version>0.8.66</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:client:0.8.65"
+compile "com.hiddenswitch:client:0.8.66"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/client-0.8.65.jar
+* target/client-0.8.66.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -181,25 +181,10 @@ Class | Method | HTTP request | Description
  - [FriendPutResponse](docs/FriendPutResponse.md)
  - [GameActions](docs/GameActions.md)
  - [GameEvent](docs/GameEvent.md)
- - [GameEventAfterSpellCasted](docs/GameEventAfterSpellCasted.md)
- - [GameEventArmorGained](docs/GameEventArmorGained.md)
- - [GameEventBeforeSummon](docs/GameEventBeforeSummon.md)
  - [GameEventDamage](docs/GameEventDamage.md)
- - [GameEventFatigue](docs/GameEventFatigue.md)
- - [GameEventHeal](docs/GameEventHeal.md)
- - [GameEventHeroPowerUsed](docs/GameEventHeroPowerUsed.md)
  - [GameEventJoust](docs/GameEventJoust.md)
- - [GameEventKill](docs/GameEventKill.md)
- - [GameEventOverload](docs/GameEventOverload.md)
  - [GameEventPerformedGameAction](docs/GameEventPerformedGameAction.md)
- - [GameEventPreDamage](docs/GameEventPreDamage.md)
- - [GameEventQuestSuccessful](docs/GameEventQuestSuccessful.md)
- - [GameEventSecretPlayed](docs/GameEventSecretPlayed.md)
- - [GameEventSecretRevealed](docs/GameEventSecretRevealed.md)
- - [GameEventSilence](docs/GameEventSilence.md)
- - [GameEventTargetAcquisition](docs/GameEventTargetAcquisition.md)
  - [GameEventTriggerFired](docs/GameEventTriggerFired.md)
- - [GameEventWeaponDestroyed](docs/GameEventWeaponDestroyed.md)
  - [GameOver](docs/GameOver.md)
  - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)

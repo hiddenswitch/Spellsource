@@ -1,5 +1,6 @@
 open module spellsource.testutils {
 	requires spellsource.game;
+	requires spellsource.client;
 	requires com.fasterxml.jackson.core;
 	requires vertx.core;
 	requires spellsource.core;

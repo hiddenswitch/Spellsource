@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -48,7 +48,7 @@ public final class ToggleCostModifier extends CardCostModifier {
 	}
 
 	@Override
-	public boolean interestedIn(GameEventType eventType) {
+	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
 		return eventType == toggleOnTrigger.interestedIn() || eventType == toggleOffTrigger.interestedIn();
 	}
 

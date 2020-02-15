@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.tests.hearthstone;
 
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.cards.Attribute;

@@ -2,8 +2,8 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
 public final class DrawCardEvent extends GameEvent implements HasCard {
 
@@ -16,7 +16,7 @@ public final class DrawCardEvent extends GameEvent implements HasCard {
 		this.drawn = drawn;
 	}
 
-	public Card getCard() {
+	public Card getSourceCard() {
 		return card;
 	}
 
@@ -26,8 +26,8 @@ public final class DrawCardEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.DRAW_CARD;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DRAW_CARD;
 	}
 
 	public boolean isDrawn() {
