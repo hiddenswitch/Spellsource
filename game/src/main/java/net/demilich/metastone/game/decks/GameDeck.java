@@ -92,15 +92,15 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 	}
 
 	public boolean isComplete() {
-		return cards.getCount() == GameLogic.DECK_SIZE;
+		return cards.getCount() == (format == null ? GameLogic.DECK_SIZE : format.getDeckSize());
 	}
 
 	public boolean isFull() {
-		return cards.getCount() == GameLogic.MAX_DECK_SIZE;
+		return cards.getCount() == (format == null ? GameLogic.MAX_DECK_SIZE : format.getMaxDeckSize());
 	}
 
 	public boolean isTooBig() {
-		return cards.getCount() > GameLogic.DECK_SIZE;
+		return cards.getCount() > (format == null ? GameLogic.DECK_SIZE : format.getDeckSize());
 	}
 
 	public void setDescription(String description) {

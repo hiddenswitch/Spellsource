@@ -1,6 +1,6 @@
 {
-  "name": "Spellsource",
-  "description": "The format with just normal Spellsource cards.",
+  "name": "Sixty Card",
+  "description": "Default Spellsource, but with a 60 card deck!",
   "type": "FORMAT",
   "collectible": true,
   "sets": [
@@ -13,11 +13,13 @@
   "secondPlayerBonusCards": [
     "spell_lunstone"
   ],
+  "deckSize": 60,
+  "maxDeckSize": 120,
   "condition": {
     "class": "AndCondition",
     "conditions": [
       {
-        "description": "Decks must have 30 cards",
+        "description": "Decks must have 60 cards (that's kinda the whole point)",
         "class": "ComparisonCondition",
         "value1": {
           "class": "EntityCountValueProvider",

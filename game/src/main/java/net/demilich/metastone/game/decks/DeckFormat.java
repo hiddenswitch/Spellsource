@@ -2,6 +2,7 @@ package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 
 import java.io.Serializable;
@@ -21,6 +22,9 @@ public class DeckFormat implements Serializable, Cloneable {
 	private Set<String> sets;
 	private String[] secondPlayerBonusCards = new String[0];
 	private ConditionDesc validDeckCondition;
+	private int deckSize;
+	private int maxDeckSize;
+	private int turnTime;
 
 	public static DeckFormat ALL = new DeckFormat()
 			.withName("All");
@@ -41,6 +45,9 @@ public class DeckFormat implements Serializable, Cloneable {
 					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
 					.setValidDeckCondition(formatCard.getDesc().getCondition())
 					.withName(formatCard.getName())
+					.withMaxDeckSize(formatCard.getDesc().getMaxDeckSize())
+					.withDeckSize(formatCard.getDesc().getDeckSize())
+					.withTurnTime(formatCard.getDesc().getTurnTime())
 					.withCardSets(formatCard.getCardSets()));
 		}
 	}
@@ -86,6 +93,9 @@ public class DeckFormat implements Serializable, Cloneable {
 
 	public DeckFormat() {
 		sets = new HashSet<>();
+		deckSize = GameLogic.DECK_SIZE;
+		maxDeckSize = GameLogic.MAX_DECK_SIZE;
+		turnTime = GameLogic.DEFAULT_TURN_TIME;
 	}
 
 	/**
@@ -150,6 +160,21 @@ public class DeckFormat implements Serializable, Cloneable {
 		return this;
 	}
 
+	public DeckFormat withDeckSize(int deckSize) {
+		this.deckSize = deckSize;
+		return this;
+	}
+
+	public DeckFormat withMaxDeckSize(int maxDeckSize) {
+		this.maxDeckSize = maxDeckSize;
+		return this;
+	}
+
+	public DeckFormat withTurnTime(int turnTime) {
+		this.turnTime = turnTime;
+		return this;
+	}
+
 	public static String latestHearthstoneExpansion() {
 		return "RISE_OF_SHADOWS";
 	}
@@ -196,6 +221,18 @@ public class DeckFormat implements Serializable, Cloneable {
 	public DeckFormat setValidDeckCondition(ConditionDesc validDeckCondition) {
 		this.validDeckCondition = validDeckCondition;
 		return this;
+	}
+
+	public int getDeckSize() {
+		return deckSize;
+	}
+
+	public int getMaxDeckSize() {
+		return maxDeckSize;
+	}
+
+	public int getTurnTime() {
+		return turnTime;
 	}
 }
 

@@ -166,6 +166,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String[] secondPlayerBonusCards;
 	public TargetSelection targetSelectionOverride;
 	public ConditionDesc targetSelectionCondition;
+	public int deckSize;
+	public int maxDeckSize;
+	public int turnTime;
 
 	public CardDesc() {
 		super();
@@ -1147,5 +1150,17 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
 		this.targetSelectionOverride = targetSelectionOverride;
+	}
+
+	public int getMaxDeckSize() {
+		return maxDeckSize > 0 ? maxDeckSize : GameLogic.MAX_DECK_SIZE;
+	}
+
+	public int getDeckSize() {
+		return deckSize > 0 ? deckSize : GameLogic.DECK_SIZE;
+	}
+
+	public int getTurnTime() {
+		return turnTime > 0 ? turnTime : GameLogic.DEFAULT_TURN_TIME;
 	}
 }

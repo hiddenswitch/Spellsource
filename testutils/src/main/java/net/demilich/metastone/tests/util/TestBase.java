@@ -430,7 +430,7 @@ public class TestBase {
 	}
 
 	public DeckFormat getDefaultFormat() {
-		return DeckFormat.getFormat("All");
+		return DeckFormat.all();
 	}
 
 	public DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {

@@ -113,7 +113,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int DECK_SIZE = 30;
 	/**
-	 * The maximum number of {@link Card} entities that can be in a {@link Zones#DECK} zone.
+	 * The maximum number of {@link Card} entities that can be in a {@link Zones#DECK} zone by default.
 	 */
 	public static final int MAX_DECK_SIZE = 60;
 	/**
@@ -3959,7 +3959,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {
 		int count = player.getDeck().getCount();
-		if (count < MAX_DECK_SIZE) {
+		if (count < context.getDeckFormat().getMaxDeckSize()) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
 				card.setId(generateId());
 			}
@@ -4065,7 +4065,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean extraCopy, boolean keepCardCostModifiers, int sourcePlayerId) {
 		int count = player.getDeck().getCount();
-		if (count < MAX_DECK_SIZE) {
+		if (count < context.getDeckFormat().getMaxDeckSize()) {
 			if (card.getId() == IdFactory.UNASSIGNED) {
 				card.setId(generateId());
 			}
@@ -4873,6 +4873,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return The turn time in milliseconds.
 	 */
 	public int getTurnTimeMillis(int playerId) {
-		return Integer.parseInt(System.getProperty("games.turnTimeMillis", System.getenv().getOrDefault("SPELLSOURCE_TURN_TIME", Integer.toString(DEFAULT_TURN_TIME * 1000))));
+		return Integer.parseInt(System.getProperty("games.turnTimeMillis", System.getenv().getOrDefault("SPELLSOURCE_TURN_TIME", Integer.toString(context.getDeckFormat().getTurnTime() * 1000))));
 	}
 }

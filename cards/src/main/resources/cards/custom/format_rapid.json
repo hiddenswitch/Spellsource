@@ -1,6 +1,6 @@
 {
-  "name": "Spellsource",
-  "description": "The format with just normal Spellsource cards.",
+  "name": "Rapid",
+  "description": "Normal Spellsource, but with only 15 second turns.",
   "type": "FORMAT",
   "collectible": true,
   "sets": [
@@ -13,6 +13,7 @@
   "secondPlayerBonusCards": [
     "spell_lunstone"
   ],
+  "turnTime": 15,
   "condition": {
     "class": "AndCondition",
     "conditions": [

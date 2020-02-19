@@ -1,6 +1,6 @@
 {
-  "name": "Spellsource",
-  "description": "The format with just normal Spellsource cards.",
+  "name": "Singleton",
+  "description": "There can only be one! (of the Spellsource cards in your deck)",
   "type": "FORMAT",
   "collectible": true,
   "sets": [
@@ -47,21 +47,10 @@
         "invert": true
       },
       {
-        "description": "Decks can't have more than 2 copies of a card",
+        "description": "Singleton decks can't have more than 1 copy of a card",
         "class": "NumberOfCopiesCondition",
         "target": "FRIENDLY_DECK",
         "operation": "LESS_OR_EQUAL",
-        "value": 2
-      },
-      {
-        "description": "Decks can only have 1 copy of Legendary cards",
-        "class": "NumberOfCopiesCondition",
-        "target": "FRIENDLY_DECK",
-        "filter": {
-          "class": "CardFilter",
-          "rarity": "LEGENDARY"
-        },
-        "operation": "EQUAL",
         "value": 1
       }
     ]

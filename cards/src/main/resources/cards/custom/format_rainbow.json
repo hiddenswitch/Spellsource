@@ -1,6 +1,6 @@
 {
-  "name": "Spellsource",
-  "description": "The format with just normal Spellsource cards.",
+  "name": "Rainbow",
+  "description": "Normal Spellsource, except you can use cards from any class.",
   "type": "FORMAT",
   "collectible": true,
   "sets": [
@@ -25,26 +25,6 @@
         },
         "operation": "EQUAL",
         "value2": 30
-      },
-      {
-        "description": "Decks must not contain cards from other classes",
-        "class": "DeckContainsCondition",
-        "cardFilter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "CardFilter",
-              "heroClass": "ANY",
-              "invert": true
-            },
-            {
-              "class": "CardFilter",
-              "heroClass": "SELF",
-              "invert": true
-            }
-          ]
-        },
-        "invert": true
       },
       {
         "description": "Decks can't have more than 2 copies of a card",

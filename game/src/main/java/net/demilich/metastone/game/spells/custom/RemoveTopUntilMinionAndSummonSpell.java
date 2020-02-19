@@ -30,9 +30,9 @@ public final class RemoveTopUntilMinionAndSummonSpell extends Spell {
 		Card card = null;
 
 		int i = 0;
-		while (!player.getDeck().isEmpty() && i < GameLogic.MAX_DECK_SIZE) {
+		while (!player.getDeck().isEmpty() && i < context.getDeckFormat().getMaxDeckSize()) {
 			i++;
-			if (i == GameLogic.MAX_DECK_SIZE) {
+			if (i == context.getDeckFormat().getMaxDeckSize()) {
 				LOGGER.error("onCast {} {}: Deck never emptying loop check!", context.getGameId(), source);
 				throw new RuntimeException("infinite loop");
 			}
