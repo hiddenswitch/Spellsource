@@ -1,0 +1,35 @@
+{
+  "name": "Devastation",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "RARE",
+  "description": "Destroy a minion. If your champion has 12 Health or less, deal it's Attack as damage to all enemy minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_HERO",
+          "value": 15,
+          "attribute": "HP",
+          "operation": "LESS_OR_EQUAL"
+        },
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "ATTACK"
+        }
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

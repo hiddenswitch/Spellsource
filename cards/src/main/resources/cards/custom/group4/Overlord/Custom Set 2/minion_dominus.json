@@ -1,0 +1,35 @@
+{
+  "name": "Dominus",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Discard your lowest-cost card as many times as you want. Restore #5 Health to your Champion for each.",
+  "battlecry": {
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
+      "cards": [
+        "spell_dominus_stop",
+        "spell_dominus_discard"
+      ],
+      "howMany": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
