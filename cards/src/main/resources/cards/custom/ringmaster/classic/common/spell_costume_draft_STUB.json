@@ -1,0 +1,11 @@
+{
+  "name": "Costume Draft",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Add a copy of your Signature to your hand. Give a minion +1/+1.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

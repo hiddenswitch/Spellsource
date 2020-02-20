@@ -1164,7 +1164,11 @@ public enum Attribute {
 	/**
 	 * Keeps track of damage dealt by this {@code source} minion <b>this game</b>.
 	 */
-	TOTAL_DAMAGE_DEALT_THIS_GAME;
+	TOTAL_DAMAGE_DEALT_THIS_GAME,
+	/**
+	 * Temporary attribute used for testing Signature effects
+	 */
+	SIGNATURE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

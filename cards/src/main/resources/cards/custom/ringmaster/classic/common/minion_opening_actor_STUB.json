@@ -1,0 +1,34 @@
+{
+  "name": "Opening Actor",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Your next Signature costs (1) less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 1,
+        "cardType": "SPELL",
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "targetPlayer": "SELF",
+          ""
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

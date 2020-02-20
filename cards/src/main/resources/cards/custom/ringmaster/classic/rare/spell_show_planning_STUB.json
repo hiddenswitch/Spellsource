@@ -1,0 +1,11 @@
+{
+  "name": "Show Planning",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "RARE",
+  "description": "Shuffle two copies of your Signature into your deck. Draw a card.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
