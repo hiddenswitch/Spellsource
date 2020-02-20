@@ -6,6 +6,8 @@ permalink: /whats-new/
 
 ### Upcoming Changes
 
+ - Sunken Terror's text now reflects how it plays a copy of shuffled cards, not the originals. (1547)
+ - Otherwordly Truth now correctly shuffles all 3 cards and not 1 at random. (1547)
  - Crate of Dynamite can now only be cast on friendly minions for simplicity's sake (1356)
 
 ### 0.8.67-3.0.10 (February 14, 2020)

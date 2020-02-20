@@ -12,6 +12,7 @@
       "class": "TopThreeCardsOfDeckSource",
       "targetPlayer": "OPPONENT"
     },
+    "value": 3,
     "exclusive": true
   },
   "collectible": true,
