@@ -1,0 +1,11 @@
+{
+  "name": "Brutal Tango",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "EPIC",
+  "description": "Your next Signature deals 3 damage to the enemy hero for each minion that dies.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

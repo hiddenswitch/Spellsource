@@ -1,0 +1,33 @@
+{
+  "name": "Assistant Tumbler",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Battlecry: Restore 4 Health to a minion and your hero.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "HealSpell",
+          "value": 4
+        },
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 4
+        }
+      ]
+    },
+    "attributes": {
+      "BATTLECRY": true
+    },
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Lyre Liar",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Summon a copy of a minion that has 1 or less Attack.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SummonSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
