@@ -6,15 +6,28 @@ permalink: /whats-new/
 
 ### Upcoming Changes
 
-- The Council of Fate's spells are no longer mistakenly collectible and are also now all named properly. (1539)
-- Xii'da the Curious now correctly doubles the minions as well as their openers. (1544)
-- Exchange Wares now actually does its effect. (1544)
-- Sabotage! now properly shuffles the opponent's card back into their deck. (1544)
-- Revelation no longer permanently makes all cards in hand cost (1). (1545)
-- Cosmic Apparitions now correctly only discovers minions and also adds a copy to your hand. (1534)
-- Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
-- Sunken Terror's text now reflects how it plays a copy of shuffled cards, not the originals. (1547)
-- Otherwordly Truth now correctly shuffles all 3 cards and not 1 at random. (1547)
+ - Sunken Terror's text now reflects how it plays a copy of shuffled cards, not the originals. (1547)
+ - Otherwordly Truth now correctly shuffles all 3 cards and not 1 at random. (1547)
+ - Crate of Dynamite can now only be cast on friendly minions for simplicity's sake (1356)
+
+### 0.8.67-3.0.10 (February 14, 2020)
+
+ - End turn button just says the text for now in a tweak of its appearance.
+ - No longer show the full screen button on mobile platforms. (fix client 29)
+ - Account creation should be easier on portrait mobile since the fields aren't obscured anymore.
+ - Android devices now correctly show three columns in the hand tray instead of two.
+ - Power history is now visible. It will be moved to make it easier to read on mobile devices.
+ - Pacing of many events has improved.
+ - Fewer issues should occur trying to connect to games for the first time on mobile. The issue was related to mulligan timings.
+ - Many popups now show in game, like You Go Second!
+ - Playing a targeted card from the highest row of 10 cards and cancelling playing a card that takes no targets is now easier. (fix client #29)
+ - The Council of Fate's spells are no longer mistakenly collectible and are also now all named properly. (1539)
+ - Xii'da the Curious now correctly doubles the minions as well as their openers. (1544)
+ - Exchange Wares now actually does its effect. (1544)
+ - Sabotage! now properly shuffles the opponent's card back into their deck. (1544)
+ - Revelation no longer permanently makes all cards in hand cost (1). (1545)
+ - Cosmic Apparitions now correctly only discovers minions and also adds a copy to your hand. (1534)
+ - Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
 
 ### 0.8.66-3.0.9 (February 6, 2020)
 

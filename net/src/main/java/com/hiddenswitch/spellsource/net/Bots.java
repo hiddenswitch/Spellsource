@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
-import io.vertx.core.Context;
 import io.vertx.core.Promise;
 import io.vertx.core.json.jackson.JacksonCodec;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
@@ -57,7 +56,7 @@ public interface Bots {
 	 * @return A response that specifies which cards to mulligan.
 	 */
 	@Suspendable
-	static MulliganResponse mulligan(MulliganRequest request) {
+	static MulliganResponse mulligan(BotMulliganRequest request) {
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("Bots/mulligan").start();
 		// Reject cards that cost more than 3
