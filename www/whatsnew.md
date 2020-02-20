@@ -4,6 +4,10 @@ title: Updates
 permalink: /whats-new/
 ---
 
+### Upcoming Changes
+
+ - Crate of Dynamite can now only be cast on friendly minions for simplicity's sake (1356)
+
 ### 0.8.67-3.0.10 (February 14, 2020)
 
  - End turn button just says the text for now in a tweak of its appearance.
@@ -22,7 +26,6 @@ permalink: /whats-new/
  - Revelation no longer permanently makes all cards in hand cost (1). (1545)
  - Cosmic Apparitions now correctly only discovers minions and also adds a copy to your hand. (1534)
  - Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
- - Crate of Dynamite can now only be cast on friendly minions for simplicity's sake (1356)
 
 ### 0.8.66-3.0.9 (February 6, 2020)
 
