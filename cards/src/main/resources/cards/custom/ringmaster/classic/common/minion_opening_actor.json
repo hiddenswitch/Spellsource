@@ -18,10 +18,21 @@
         "cardType": "SPELL",
         "expirationTrigger": {
           "class": "CardPlayedTrigger",
-          "targetPlayer": "SELF",
-          ""
+          "sourcePlayer": "SELF",
+          "fireCondition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "EVENT_TARGET",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "FRIENDLY_SIGNATURE"
+            }
+          }
         },
-        "operation": "SUBTRACT"
+        "operation": "SUBTRACT",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
       }
     }
   },

@@ -17,7 +17,6 @@
         "targetPlayer": "SELF"
       },
       "sourcePlayer": "SELF",
-      "targetEntityType": "CHARACTER",
       "targetPlayer": "OPPONENT"
     },
     "spell": {
@@ -25,11 +24,11 @@
       "target": "SELF",
       "secondaryTarget": "EVENT_SOURCE"
     }
-},
+  },
   "attributes": {
     "SPELL_DAMAGE": 2
-},
-  "collectible": true,
+  },
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

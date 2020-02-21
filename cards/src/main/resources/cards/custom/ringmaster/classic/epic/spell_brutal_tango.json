@@ -5,7 +5,11 @@
   "heroClass": "CANDY",
   "rarity": "EPIC",
   "description": "Your next Signature deals 3 damage to the enemy hero for each minion that dies.",
-  "collectible": true,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
