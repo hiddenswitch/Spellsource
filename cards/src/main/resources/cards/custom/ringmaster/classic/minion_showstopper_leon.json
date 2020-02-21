@@ -8,10 +8,16 @@
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Battlecry: Replace the minions in your hand with copies of your Signature.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
   "attributes": {
     "BATTLECRY": true
-},
-  "collectible": true,
+  },
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

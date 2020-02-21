@@ -1,26 +1,25 @@
 {
-  "name": "Light Show",
-  "baseManaCost": 6,
+  "name": "Costume Draft",
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "COMMON",
-  "description": "Give a minion +2/+4 and draw 2 cards.",
+  "description": "Give a minion +1/+1. Shuffle a copy of your Signature into your deck.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": 2,
-        "hpBonus": 4
+        "value": 1
       },
       {
-        "class": "DrawCardSpell",
-        "value": 2
+        "class": "ShuffleToDeckSpell",
+        "target": "FRIENDLY_SIGNATURE"
       }
     ]
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

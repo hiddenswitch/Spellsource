@@ -22,12 +22,12 @@
           "value": 4
         }
       ]
-    },
-    "attributes": {
-      "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
-  }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

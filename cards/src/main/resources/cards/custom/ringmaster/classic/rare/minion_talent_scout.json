@@ -1,16 +1,17 @@
 {
-  "name": "Lyre Liar",
+  "name": "Talent Scout",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "CANDY",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Summon a copy of a minion that has 1 or less Attack.",
+  "description": "Battlecry: Choose a minion with 1 or less Attack. Summon a copy of it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
       "class": "SummonSpell",
+      "targetPlayer": "SELF",
       "filter": {
         "class": "AttributeFilter",
         "value": 1,
@@ -21,7 +22,7 @@
   },
   "attributes": {
     "BATTLECRY": true
-},
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
