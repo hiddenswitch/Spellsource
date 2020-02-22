@@ -1,21 +1,15 @@
 {
   "name": "Bungling Busker",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "CANDY",
-  "baseAttack": 1,
-  "baseHp": 6,
+  "baseAttack": 3,
+  "baseHp": 1,
   "rarity": "EPIC",
   "description": "Spell Damage +2. After you cast a spell on an enemy, cast a copy of it on this.",
   "trigger": {
     "eventTrigger": {
-      "class": "TargetAcquisitionTrigger",
-      "actionType": "SPELL",
-      "queueCondition": {
-        "class": "OwnedByPlayerCondition",
-        "target": "EVENT_TARGET",
-        "targetPlayer": "SELF"
-      },
+      "class": "AfterSpellCastedTrigger",
       "sourcePlayer": "SELF",
       "targetPlayer": "OPPONENT"
     },

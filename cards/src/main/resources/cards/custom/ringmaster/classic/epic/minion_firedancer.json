@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "CANDY",
   "baseAttack": 4,
-  "baseHp": 3,
+  "baseHp": 2,
   "rarity": "EPIC",
   "description": "Battlecry: Your next Signature also targets adjacent minions.",
   "battlecry": {

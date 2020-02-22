@@ -10,10 +10,23 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "FromDeckToHandSpell",
-      "cardFilter": {
-        "class": "SpecificCardFilter",
-        "secondaryTarget": "FRIENDLY_SIGNATURE"
+      "class": "EitherOrSpell",
+      "spell1": {
+        "class": "FromDeckToHandSpell",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "condition": {
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "spell2": {
+        "class": "DrawCardSpell"
       }
     }
   },
