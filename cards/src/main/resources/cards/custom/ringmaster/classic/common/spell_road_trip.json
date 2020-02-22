@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "COMMON",
-  "description": "Restore #4 Health. Your next Signature restores 4 Health to your hero.",
+  "description": "Restore #4 Health. Your next Signature restores #4 Health to your hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -22,7 +22,7 @@
             "targetPlayer": "SELF",
             "fireCondition": {
               "class": "AnyMatchFilterCondition",
-              "target": "EVENT_SOURCE",
+              "target": "EVENT_TARGET",
               "filter": {
                 "class": "SpecificCardFilter",
                 "secondaryTarget": "FRIENDLY_SIGNATURE"

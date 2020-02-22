@@ -58,31 +58,35 @@
                   }
                 },
                 "spell": {
-                  "class": "MetaSpell",
-                  "spells": [
-                    {
-                      "class": "ModifyAttributeSpell",
-                      "target": "FRIENDLY_PLAYER",
-                      "attribute": "RESERVED_INTEGER_5",
-                      "value": {
-                        "class": "CardCountValueProvider",
-                        "cardSource": {
-                          "class": "GraveyardDiedMinionsSource",
-                          "targetPlayer": "BOTH"
-                        }
-                      }
-                    },
-                    {
-                      "class": "DamageSpell",
-                      "target": "ENEMY_HERO",
-                      "value": {
-                        "class": "AttributeValueProvider",
+                  "class": "CastAfterSequenceSpell",
+                  "spell": {
+                    "class": "MetaSpell",
+                    "spells": [
+                      {
+                        "class": "ModifyAttributeSpell",
                         "target": "FRIENDLY_PLAYER",
                         "attribute": "RESERVED_INTEGER_5",
-                        "multiplier": 2
+                        "value": {
+                          "class": "CardCountValueProvider",
+                          "cardSource": {
+                            "class": "GraveyardDiedMinionsSource",
+                            "targetPlayer": "BOTH"
+                          }
+                        }
+                      },
+                      {
+                        "class": "DamageSpell",
+                        "target": "ENEMY_HERO",
+                        "value": {
+                          "class": "AttributeValueProvider",
+                          "target": "FRIENDLY_PLAYER",
+                          "attribute": "RESERVED_INTEGER_5",
+                          "multiplier": 2
+                        },
+                        "ignoreSpellDamage": 2
                       }
-                    }
-                  ]
+                    ]
+                  }
                 },
                 "maxFires": 1
               }
