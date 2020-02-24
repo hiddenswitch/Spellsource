@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Your next Signature costs (1) less.",
+  "description": "Opener: Your next Signature costs (1) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

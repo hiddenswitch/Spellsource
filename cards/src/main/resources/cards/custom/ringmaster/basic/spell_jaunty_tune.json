@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "FREE",
-  "description": "Summon three 2/2 Cats with Taunt.",
+  "description": "Summon three 2/2 Cats with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
