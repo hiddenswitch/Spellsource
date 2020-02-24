@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Restore 4 Health to your hero.",
+  "description": "Opener: Restore 4 Health to your champion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
