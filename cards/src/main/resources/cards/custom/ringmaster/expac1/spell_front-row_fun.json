@@ -1,0 +1,47 @@
+{
+  "name": "Front-Row Fun",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "RARE",
+  "description": "Give a minion +1/+4. Your next Signature also targets your left-most minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 4
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardPlayedTrigger",
+            "targetPlayer": "SELF",
+            "fireCondition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "EVENT_TARGET",
+              "filter": {
+                "class": "SpecificCardFilter",
+                "secondaryTarget": "FRIENDLY_SIGNATURE"
+              }
+            }
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "target": "LEFTMOST_FRIENDLY_MINION",
+            "attackBonus": 1,
+            "hpBonus": 4
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

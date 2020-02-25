@@ -1,0 +1,21 @@
+{
+  "name": "Sword Swallower",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Aftermath: Give adjacent minions +3 Attack.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 3
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -176,4 +176,80 @@ public class RingmasterTests extends TestBase {
             assertEquals(player.getMinions().size(), 5);
         });
     }
+
+    @Test
+    public void testFrontRowFun() {
+        runGym((context, player, opponent) -> {
+            player.setAttribute(Attribute.SIGNATURE, "spell_front-row_fun");
+            Minion guy = playMinionCard(context, player, "minion_neutral_test");
+            Minion gal = playMinionCard(context, player, "minion_neutral_test");
+            playCard(context, player, "spell_front-row_fun", gal);
+            assertEquals(guy.getHp(), guy.getBaseHp());
+            assertEquals(gal.getHp(), gal.getBaseHp() + 4);
+            playCard(context, player, "spell_front-row_fun", gal);
+            assertEquals(guy.getHp(), guy.getBaseHp() + 4);
+            assertEquals(gal.getHp(), gal.getBaseHp() + 4 + 4);
+        });
+    }
+
+    @Test
+    public void testHandsomeHandler() {
+        runGym((context, player, opponent) -> {
+            player.setAttribute(Attribute.SIGNATURE, "spell_front-row_fun");
+            shuffleToDeck(context, player, "spell_chain_dance");
+            for (int i = 0; i < 5; i++) {
+                shuffleToDeck(context, player, "spell_front-row_fun");
+                playMinionCard(context, player, "minion_neutral_test");
+            }
+            shuffleToDeck(context, player, "spell_chain_dance");
+
+            playMinionCard(context, player, "minion_handsome_handler");
+
+            assertEquals(player.getDeck().size(), 2);
+            assertEquals(player.getHand().size(), 5);
+
+            for (Card card : player.getHand()) {
+                assertEquals(card.getCardId(), "spell_front-row_fun");
+            }
+            for (Card card : player.getDeck()) {
+                assertEquals(card.getCardId(), "spell_chain_dance");
+            }
+        });
+    }
+
+    @Test
+    public void testAperration() {
+        runGym((context, player, opponent) -> {
+            player.setAttribute(Attribute.SIGNATURE, "spell_front-row_fun");
+            receiveCard(context, player, "spell_chain_dance");
+            for (int i = 0; i < 5; i++) {
+                receiveCard(context, player, "minion_neutral_test");
+            }
+            playCard(context, player, "minion_aperration");
+
+            boolean chain = false;
+            boolean fun = false;
+
+            for (Card card : player.getHand()) {
+                if (card.getCardId().equals("spell_chain_dance")) chain = true;
+                if (card.getCardId().equals("spell_front-row_fun")) fun = true;
+            }
+
+            assertTrue(chain);
+            assertTrue(fun);
+        });
+    }
+
+    @Test
+    public void testSpiritbladeDancer() {
+        runGym((context, player, opponent) -> {
+            player.getHero().setHp(1);
+            player.setAttribute(Attribute.SIGNATURE, "spell_chain_dance");
+            Minion sbd = playMinionCard(context, player, "minion_spiritblade_dancer");
+            Minion enemy = playMinionCard(context, opponent, "minion_neutral_test");
+            destroy(context, sbd);
+            playCard(context, player, "spell_chain_dance", enemy);
+            assertEquals(player.getHero().getHp(), 1 + 3);
+        });
+    }
 }
