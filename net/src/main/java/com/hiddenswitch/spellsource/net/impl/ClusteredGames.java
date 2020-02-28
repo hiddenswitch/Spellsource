@@ -261,16 +261,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	}
 
 	@Override
-	public UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	@Suspendable
 	public void stop() throws Exception {
 		Games.LOGGER.debug("stop: Stopping the ClusteredGamesImpl.");

@@ -537,8 +537,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(state));
 
-		final Class<? extends Notification> eventClass = event.getClass();
-
 		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
 			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
 		} else if (event instanceof TriggerFired) {
@@ -548,8 +546,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.triggerFired(new GameEventTriggerFired()
 							.triggerSourceId(triggerEvent.getEnchantment().getHostReference().getId()));
 			net.demilich.metastone.game.entities.Entity source = triggerEvent.getSource(workingContext);
-			if (source != null && source.getSourceCard() != null && source.getSourceCard().getDesc().revealsSelf()) {
-				// Cards that reveal themselves should populate the trigger information here
+			var hasSource = source != null && source.getSourceCard() != null;
+			// Send the source entity if there is one. Always send it if the source is owned by the receiving player or if
+			// the source is in play.
+			if (hasSource && (source.isInPlay() || source.getOwner() == playerId)) {
 				clientTriggerEvent
 						.source(Games.getEntity(workingContext, source, playerId))
 						.getTriggerFired().triggerSourceId(source.getId());

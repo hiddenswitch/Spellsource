@@ -10,6 +10,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -420,6 +421,7 @@ public class RiseOfShadowsTests extends TestBase {
 	}
 
 	@Test
+	@Disabled("flakey")
 	public void testTakNozwhisker() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_tak_nozwhisker");

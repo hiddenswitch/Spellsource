@@ -264,20 +264,12 @@ public interface Games extends Verticle {
 		return clientEvent;
 	}
 
-	static com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent getPhysicalAttack(GameContext workingContext, Actor attacker, Actor defender, int damageDealt, int playerId) {
-		return new com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent()
-				.attacker(getEntity(workingContext, attacker, playerId))
-				.defender(getEntity(workingContext, defender, playerId))
-				.damageDealt(damageDealt);
-	}
-
-	@Suspendable
 	/**
 	 * Retrieves the current connections by Game ID
 	 *
-	 * @param vertx The {@link Vertx} that the verticle should use to connect for {@link Hazelcast}
 	 * @return A map.
 	 */
+	@Suspendable
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
 		return SuspendableMap.getOrCreate("Games/connections");
 	}
@@ -327,29 +319,6 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException;
-
-	/**
-	 * Updates an entity specified inside the game with specific attributes. Currently unsupported. This allows real-time
-	 * manipulation of a game in progress. This call should punt the request to the next instance in the cluster if it
-	 * does not have the specified game.
-	 *
-	 * @param request Information about the game and the updates to the entity this service should do.
-	 * @return Information about the entity update.
-	 * @throws UnsupportedOperationException
-	 */
-	@Suspendable
-	UpdateEntityResponse updateEntity(UpdateEntityRequest request) throws UnsupportedOperationException;
-
-	/**
-	 * Performs a game action in the specified game.
-	 *
-	 * @param request A request containing the ID of the game and action to perform.
-	 * @return A response indicating the new game state.
-	 * @throws InterruptedException
-	 * @throws SuspendExecution
-	 */
-	@Suspendable
-	PerformGameActionResponse performGameAction(PerformGameActionRequest request) throws InterruptedException, SuspendExecution;
 
 	/**
 	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
