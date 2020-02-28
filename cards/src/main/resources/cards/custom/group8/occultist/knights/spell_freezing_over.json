@@ -17,7 +17,7 @@
         "class": "AddEnchantmentSpell",
         "trigger": {
           "eventTrigger": {
-            "class": "MinionSummonedTrigger",
+            "class": "MinionPlayedTrigger",
             "targetPlayer": "SELF"
           },
           "oneTurn": true,
