@@ -14,7 +14,7 @@
       "targetEntityType": "MINION",
       "fireCondition": {
         "class": "AttributeCondition",
-        "attribute": "MAX_HP",
+        "attribute": "HP",
         "value": 1,
         "operation": "EQUAL"
       }
