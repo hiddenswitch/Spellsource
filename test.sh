@@ -22,6 +22,4 @@ fi
 
 ${GRADLE_CMD} game:test
 ${GRADLE_CMD} cards:test
-${GRADLE_CMD} hearthstone:test
-${GRADLE_CMD} customhearthstone:test
 ${GRADLE_CMD} net:test

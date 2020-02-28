@@ -22,7 +22,6 @@ repositories {
 dependencies {
     implementation project(':game')
     implementation project(':cards')
-    implementation project(':hearthstone')
 
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.7'
