@@ -1,0 +1,26 @@
+{
+  "name": "Terrifying Display",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Change a minion's Attack to 1. Give your minions +1/+1.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SetAttackSpell",
+        "value": 1
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

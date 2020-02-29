@@ -5,7 +5,7 @@
   "heroClass": "CANDY",
   "rarity": "COMMON",
   "description": "Restore #4 Health. Your next Signature restores #4 Health to your champion.",
-  "targetSelection": "NONE",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [

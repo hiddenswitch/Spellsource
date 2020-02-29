@@ -35,11 +35,7 @@ public class ChooseSignatureSpell extends Spell {
                 .distinct().map(context::getCardById).collect(Collectors.toSet()));
 
         validChoices.removeIf(card -> card.getCardId().equals("passive_signature"));
-        DiscoverAction result = SpellUtils.discoverCard(context, player, source, desc, validChoices);
-
-        Card choice = result.getCard();
-
-        player.setAttribute(Attribute.SIGNATURE, choice.getCardId());
+        SpellUtils.discoverCard(context, player, source, desc, validChoices);
     }
 
 

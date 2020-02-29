@@ -8,9 +8,12 @@
   "rarity": "COMMON",
   "description": "Aftermath: Give adjacent minions +3 Attack.",
   "deathrattle": {
-    "class": "BuffSpell",
-    "target": "ADJACENT_MINIONS",
-    "attackBonus": 3
+    "class": "custom.AdjacentDeathrattleSpell",
+    "target": "SELF",
+    "spell2": {
+      "class": "BuffSpell",
+      "attackBonus": 3
+    }
   },
   "attributes": {
     "DEATHRATTLES": true
