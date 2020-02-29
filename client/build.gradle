@@ -1,12 +1,10 @@
 plugins {
     id 'maven-publish'
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
 apply plugin: 'java-library'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
-apply plugin: 'org.javamodularity.moduleplugin'
 
 group = 'com.hiddenswitch'
 version = '0.8.66'

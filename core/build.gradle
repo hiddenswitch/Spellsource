@@ -1,15 +1,10 @@
 plugins {
     id 'java-library'
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
 apply plugin: 'java-library'
-apply plugin: 'org.javamodularity.moduleplugin'
 
 group 'com.hiddenswitch'
-
-sourceCompatibility = 11
-targetCompatibility = 11
 
 dependencies {
     implementation 'io.vertx:vertx-core:3.8.3'
