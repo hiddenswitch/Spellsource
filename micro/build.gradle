@@ -2,13 +2,9 @@ plugins {
     id "application"
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "net.ltgt.apt-eclipse" version "0.21"
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
-apply plugin: 'org.javamodularity.moduleplugin'
-
 group 'com.hiddenswitch'
-version '0.8.59'
 
 repositories {
     jcenter()
@@ -66,9 +62,6 @@ mainClassName = "com.hiddenswitch.spellsource.micro.Application"
 // use JUnit 5 platform
 test {
     useJUnitPlatform()
-    filter {
-        exclude '**/module-info.class'
-    }
 }
 
 shadowJar {

@@ -1,18 +1,11 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version "5.2.0"
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
-    id "org.beryx.jlink" version "2.17.0"
     id 'application'
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
-apply plugin: 'org.javamodularity.moduleplugin'
-apply plugin: "org.beryx.jlink"
 apply from: '../gradle/instrument.gradle'
-
-import org.javamodularity.moduleplugin.tasks.ModularJavaExec
-
 
 def localMainClassName = "$moduleName/com.hiddenswitch.spellsource.net.applications.LocalClustered"
 def defaultMainClass = "$moduleName/com.hiddenswitch.spellsource.net.applications.Clustered"
@@ -24,15 +17,6 @@ def debugSystemProperties = ["spellsource.port"                        : System.
 
 
 mainClassName = localMainClassName
-
-jlink {
-    options.addAll(['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages'])
-    launcher {
-        name = 'spellsource_server'
-        jvmArgs = ['--add-opens', 'java.base/java.util.concurrent.atomic=kryo', '--add-opens', 'java.base/java.lang=co.paralleluniverse.quasar.core']
-    }
-}
-
 
 shadowJar {
     mergeServiceFiles()
@@ -159,10 +143,7 @@ dependencies {
     testImplementation group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.6'
 }
 
-run {
-    moduleOptions {
-        addOpens = ['java.base/java.util.concurrent.atomic': 'kryo', 'java.base/java.lang': 'co.paralleluniverse.quasar.core']
-    }
+run {90
     setSystemProperties(debugSystemProperties)
 }
 
@@ -177,10 +158,6 @@ test {
     useJUnitPlatform()
     maxParallelForks = 1
     enableAssertions = false
-
-    moduleOptions {
-        addOpens = ['java.base/java.util.concurrent.atomic': 'kryo', 'java.base/java.lang': 'co.paralleluniverse.quasar.core']
-    }
 
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
