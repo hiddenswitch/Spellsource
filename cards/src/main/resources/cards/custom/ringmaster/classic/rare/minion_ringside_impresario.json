@@ -14,7 +14,13 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "target": "FRIENDLY_SIGNATURE"
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "FRIENDLY_SIGNATURE"
+      }
     }
   },
   "collectible": true,

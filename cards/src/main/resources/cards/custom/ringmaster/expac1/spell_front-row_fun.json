@@ -31,10 +31,37 @@
             }
           },
           "spell": {
-            "class": "BuffSpell",
-            "target": "LEFTMOST_FRIENDLY_MINION",
-            "attackBonus": 1,
-            "hpBonus": 4
+            "class": "ConditionalSpell",
+            "spell": {
+              "class": "CastCardsSpell",
+              "target": "LEFTMOST_FRIENDLY_MINION",
+              "secondaryTarget": "EVENT_TARGET"
+            },
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "EVENT_TARGET",
+              "filter": {
+                "class": "OrFilter",
+                "filters": [
+                  {
+                    "class": "TargetSelectionFilter",
+                    "targetSelection": "MINIONS"
+                  },
+                  {
+                    "class": "TargetSelectionFilter",
+                    "targetSelection": "FRIENDLY_MINIONS"
+                  },
+                  {
+                    "class": "TargetSelectionFilter",
+                    "targetSelection": "ANY"
+                  },
+                  {
+                    "class": "TargetSelectionFilter",
+                    "targetSelection": "FRIENDLY_CHARACTERS"
+                  }
+                ]
+              }
+            }
           },
           "maxFires": 1
         }

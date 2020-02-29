@@ -31,7 +31,15 @@
           {
             "class": "custom.ChooseSignatureSpell",
             "spell": {
-              "class": "RevealCardSpell"
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "RevealCardSpell"
+                },
+                {
+                  "class": "ChangeSignatureSpell"
+                }
+              ]
             }
           },
           {
