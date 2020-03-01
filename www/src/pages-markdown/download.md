@@ -1,7 +1,8 @@
 ---
-layout: page
-title: Play
-permalink: /download/
+title: "Play Now"
+date: "2020-02-01"
+path: "/download"
+header: true
 ---
  - [Play Now (Firefox and Chrome)](/game)
 

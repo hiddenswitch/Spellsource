@@ -1,7 +1,8 @@
 ---
-layout: page
-title: Contribute
-permalink: /contribute/
+title: "Contribute"
+date: "2020-02-01"
+path: /contribute
+header: false
 ---
 ### Table of Contents
 
@@ -18,18 +19,14 @@ permalink: /contribute/
 
 If you're making a contribution to Spellsource, please skim this document for what you need to know. Use its categories and quote it to help yourself, the maintainers and others keep up to standards for contributions and ensure everything goes smoothly.
 
-To read more about engineering, visit [Getting Started with Windows Development](/windows-development/).
-
 ### 2. Basic Engineering Rules
 
  - Do not rename already existing card files, even if the `"name"` changes.
  - Do not delete existing card files. Instead, set `"collectible": false`.
  - Make sure each file ends in a `.json` extension.
  - Card file names should be all lowercase and alphanumerics with their type first and separated by underscores. For example, `spell_card_name.json`.
- - Use Spellsource keywords. See the [Whats New: Keywords](/whats-new#keywords) section for a complete list of keywords.
+ - Use Spellsource keywords. See the [Keywords](/keywords) section for a complete list of keywords.
  - Store cards in the `cards/src/main/java/resources/cards/custom/` directories in this repository.
- 
-See the [Windows Development Guide](/windows-development/) for more information on authoring cards.
 
 ### 3. Contribution Guidelines
 

@@ -1,7 +1,8 @@
 ---
-layout: page
-title: History
-permalink: /history/
+title: "History"
+date: "2020-02-01"
+path: "/history"
+header: false
 ---
 
 ### 0.8.34-2.0.31 (June 30th, 2019)
