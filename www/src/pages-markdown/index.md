@@ -1,8 +1,11 @@
 ---
-layout: home
-title: Home
+title: "Home"
+date: "2020-02-01"
+path: "/"
+header: false
 ---
-![In-Game Screenshot](assets/spellsource.png)
+
+![In-Game Screenshot](../assets/spellsource.png)
 
  - **[Play Now](game)**
  - **[Discord](https://discord.gg/HmbESh2)**
@@ -14,7 +17,7 @@ Support us by [authoring your own cards](/contribute) and [contact us](mailto:be
 
 This is alpha-quality software. You can learn more on our [GitHub](https://github.com/hiddenswitch/Spellsource-Server).
  
-![Champions](assets/champions.png)
+![Champions](../assets/champions.png)
 
 #### The Heroes
 

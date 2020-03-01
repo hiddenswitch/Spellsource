@@ -14,7 +14,7 @@ Please see the Issues tab to report bugs or request functionality.
 
 ### Contents
 
- 1. [Changelist](www/whatsnew.md)
+ 1. [Changelist](www/src/pages-markdown/whatsnew.md)
  2. [Description](#description)
  3. [AI Research FAQ](#ai-research-faq)
  4. [Quick Start Python](#quick-start-python)
@@ -25,7 +25,7 @@ Please see the Issues tab to report bugs or request functionality.
 
 ### Changelist
 
-Read [the latest changes here](www/whatsnew.md) or the deployed changes on the [website](https://playspellsource.com/whats-new).
+Read [the latest changes here](www/src/pages-markdown/whatsnew.md) or the deployed changes on the [website](https://playspellsource.com/whats-new).
 
 ### Description
 

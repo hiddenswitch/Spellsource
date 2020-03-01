@@ -1,7 +1,8 @@
 ---
-layout: page
-title: Updates
-permalink: /whats-new/
+title: "Whats New"
+date: "2020-02-01"
+path: "/whats-new"
+header: true
 ---
 
 ### Upcoming Changes

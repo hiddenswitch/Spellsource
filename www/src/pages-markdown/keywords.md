@@ -1,7 +1,8 @@
 ---
-layout: page
-title: Keywords
-permalink: /keywords/
+title: "Keywords"
+date: "2020-02-01"
+path: "/keywords"
+header: false
 ---
 #### Keywords:
 

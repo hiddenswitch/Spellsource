@@ -1,7 +1,8 @@
 ---
-layout: page
-title: Windows Development
-permalink: /windows-development/
+title: "Windows Development"
+date: "2020-02-01"
+path: "/windows-development"
+header: false
 ---
 
 Developing for Spellsource on Windows starts with installing dependencies, a good code editor, and familiarizing yourself with some common Java code practices.
