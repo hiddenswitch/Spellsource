@@ -202,24 +202,24 @@ public final class GetCollectionResponse implements Serializable {
 				continue;
 			}
 			record.create();
-			boolean isActor = record.type == CardType.MINION || record.type == CardType.WEAPON;
+			boolean isActor = record.getType() == CardType.MINION || record.getType() == CardType.WEAPON;
 			// Send significantly less data
 			// TODO: Just look it up by the card ID in the client
 			records.add(new CardRecord()
 					.userId(cr.getUserId())
 					.collectionIds(cr.getCollectionIds())
 					.entity(new Entity()
-							.cardId(record.id)
-							.description(record.description)
+							.cardId(record.getId())
+							.description(record.getDescription())
 							.entityType(Entity.EntityTypeEnum.CARD)
-							.name(record.name)
+							.name(record.getName())
 							.baseAttack(isActor ? record.getBaseAttack() + record.getDamage() : null)
 							.baseHp(isActor ? record.getBaseHp() + record.getDurability() : null)
 							.tribe(record.getRace())
-							.cardType(Entity.CardTypeEnum.valueOf(record.type.toString()))
+							.cardType(Entity.CardTypeEnum.valueOf(record.getType().toString()))
 							.rarity(record.getRarity().getClientRarity())
-							.manaCost(record.baseManaCost)
-							.baseManaCost(record.baseManaCost)
+							.manaCost(record.getBaseManaCost())
+							.baseManaCost(record.getBaseManaCost())
 							.heroClass(record.getHeroClass()))
 					.id(cr.getId())
 					.allianceId(cr.getAllianceId())

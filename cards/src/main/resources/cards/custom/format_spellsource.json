@@ -4,6 +4,7 @@
   "type": "FORMAT",
   "collectible": true,
   "sets": [
+    "SPELLSOURCE",
     "SPELLSOURCE_BASIC",
     "VERDANT_DREAMS",
     "SANDS_OF_TIME",

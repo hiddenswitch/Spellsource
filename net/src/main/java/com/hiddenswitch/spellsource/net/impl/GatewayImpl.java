@@ -144,6 +144,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Handle realtime notification of invitations
 		Invites.handleConnections();
 
+		// Enable editing in a live game
+		Editor.handleConnections();
+
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {

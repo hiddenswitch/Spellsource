@@ -1302,11 +1302,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	public ConditionDesc getTargetSelectionCondition() {
-		return getDesc().targetSelectionCondition;
+		return getDesc().getTargetSelectionCondition();
 	}
 
 	public TargetSelection getTargetSelectionOverride() {
-		return getDesc().targetSelectionOverride;
+		return getDesc().getTargetSelectionOverride();
 	}
 
 	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {

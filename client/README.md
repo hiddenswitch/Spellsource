@@ -28,7 +28,7 @@ Add this dependency to your project's POM:
 <dependency>
     <groupId>com.hiddenswitch</groupId>
     <artifactId>client</artifactId>
-    <version>0.8.66</version>
+    <version>0.8.67</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:client:0.8.66"
+compile "com.hiddenswitch:client:0.8.67"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/client-0.8.66.jar
+* target/client-0.8.67.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -168,11 +168,13 @@ Class | Method | HTTP request | Description
  - [EnvelopeGame](docs/EnvelopeGame.md)
  - [EnvelopeMethod](docs/EnvelopeMethod.md)
  - [EnvelopeMethodDequeue](docs/EnvelopeMethodDequeue.md)
+ - [EnvelopeMethodPutCard](docs/EnvelopeMethodPutCard.md)
  - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
  - [EnvelopeRemoved](docs/EnvelopeRemoved.md)
  - [EnvelopeRequest](docs/EnvelopeRequest.md)
  - [EnvelopeResponse](docs/EnvelopeResponse.md)
  - [EnvelopeResult](docs/EnvelopeResult.md)
+ - [EnvelopeResultPutCard](docs/EnvelopeResultPutCard.md)
  - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
  - [EnvelopeSub](docs/EnvelopeSub.md)
  - [EnvelopeSubConversation](docs/EnvelopeSubConversation.md)

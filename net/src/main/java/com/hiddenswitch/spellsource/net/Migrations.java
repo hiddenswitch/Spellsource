@@ -581,7 +581,16 @@ public interface Migrations extends Verticle {
 							// Fix all the busted decks players have made
 							Decks.validateAllDecks();
 						}))
-				.migrateTo(41, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(42)
+						.withUp(thisVertx -> {
+							// Remove unused formats
+							CardCatalogue.loadCardsFromPackage();
+							mongo().updateCollectionWithOptions(COLLECTIONS, json(CollectionRecord.FORMAT,
+									json("$nin", array("Spellsource", "All", "Pauper"))),
+									json("$set", json(CollectionRecord.FORMAT, "All")), new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(42, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 	}
 
@@ -618,7 +627,7 @@ public interface Migrations extends Verticle {
 	 *
 	 * @param request A version to migrate up or down to, or a request to migrate to the latest version.
 	 * @return {@link MigrationToResponse#succeededMigration()} if the migration succeeded, otherwise {@link
-	 *    MigrationToResponse#failedMigration()} if it failed.
+	 * MigrationToResponse#failedMigration()} if it failed.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */

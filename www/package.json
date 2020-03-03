@@ -11,6 +11,8 @@
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "blockly": "^3.20200123.1",
+    "enumify": "^2.0.0",
     "gatsby": "^2.19.23",
     "gatsby-image": "^2.2.41",
     "gatsby-plugin-s3": "^0.3.2",
@@ -23,6 +25,7 @@
     "gatsby-transformer-sharp": "^2.3.16",
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
+    "react-blockly": "^5.0.0",
     "react-dom": "^16.13.0"
   },
   "devDependencies": {

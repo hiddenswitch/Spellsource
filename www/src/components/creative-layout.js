@@ -1,10 +1,9 @@
 import React from 'react'
 import Header from './header'
-import '../styles/base.scss'
-import '../styles/_dark.scss'
+import styles from './creative-layout.module.scss'
 
 export default ({ children }) => {
-  return <div className="container">
+  return <div className={styles.container}>
     <Header/>
     <main>
       {children}

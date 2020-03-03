@@ -11,7 +11,10 @@ import com.hiddenswitch.spellsource.net.impl.util.DeckType;
 import com.hiddenswitch.spellsource.net.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.net.models.*;
+import com.hiddenswitch.spellsource.net.models.ConfigurationRequest;
+import com.hiddenswitch.spellsource.net.models.CreateGameSessionResponse;
+import com.hiddenswitch.spellsource.net.models.GetCollectionRequest;
+import com.hiddenswitch.spellsource.net.models.GetCollectionResponse;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -19,11 +22,11 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.ext.sync.SyncVerticle;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -113,7 +116,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					}
 
 					// Deal with ending the game
-					context.handleEndGame(session -> {
+					context.addEndGameHandler(session -> {
 						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
 						GameId gameOverId = new GameId(session.getGameId());
 						// The players should not accidentally wind back up in games
@@ -226,8 +229,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
 				List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
 				List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(toList());
-				// No longer defer since we're no longer storing a huge record.
-//				defer(v -> {
+
 				Span saveSpan = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay/saveReplay")
 						.asChildOf(span)
 						.start();
@@ -240,9 +242,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 							.setPlayerUserIds(userIds)
 							.setDeckIds(deckIds)
 							.setPlayerNames(playerNames);
-					// No longer record the replay because it is too large (5 MBs of data for a 1 kB trace)
-//						Replay replay = Games.replayFromGameContext(gameContext);
-//						gameRecord.setReplay(replay);
 					mongo().insert(Games.GAMES, mapFrom(gameRecord));
 				} catch (Throwable any) {
 					Tracing.error(any);
@@ -250,7 +249,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					saveSpan.finish();
 					scope2.close();
 				}
-//				});
 			} catch (Throwable ex) {
 				Tracing.error(ex);
 			}

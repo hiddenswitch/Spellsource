@@ -67,6 +67,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
 import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
@@ -183,12 +184,14 @@ public class ServerGameContext extends GameContext implements Server {
 
 				Closeable closeableBehaviour = null;
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
+				var isEditable = false;
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
 					BotsServiceBehaviour behaviour = new BotsServiceBehaviour(gameId);
 					setBehaviour(configuration.getPlayerId(), behaviour);
 					closeableBehaviour = behaviour;
 					// Does not have a client representing it
+					isEditable = true;
 				} else {
 					// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
 					EventBus bus = Vertx.currentContext().owner().eventBus();
@@ -249,6 +252,10 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 
 				closeables.add(closeableBehaviour);
+
+				if (isEditable) {
+					closeables.add(Editor.enableEditing(this));
+				}
 			}
 		} finally {
 			span.finish();
@@ -969,7 +976,12 @@ public class ServerGameContext extends GameContext implements Server {
 		return getPlayerConfigurations().stream().map(Configuration::getUserId).collect(toList());
 	}
 
-	public void handleEndGame(SuspendableAction1<ServerGameContext> handler) {
+	/**
+	 * Adds a handler for when the game ends, for any reason.
+	 *
+	 * @param handler
+	 */
+	public void addEndGameHandler(SuspendableAction1<ServerGameContext> handler) {
 		onGameEndHandlers.add(handler);
 	}
 
@@ -1180,5 +1192,14 @@ public class ServerGameContext extends GameContext implements Server {
 				Stream.of(initialization.future())
 		).collect(toList()));
 		CompositeFuture res = awaitResult(join::setHandler, REGISTRATION_TIMEOUT);
+	}
+
+	/**
+	 * The lock to prevent simultaneous editing of the game context from external sources.
+	 *
+	 * @return
+	 */
+	public Lock getLock() {
+		return lock;
 	}
 }
