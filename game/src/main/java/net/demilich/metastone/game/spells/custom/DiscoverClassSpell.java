@@ -5,6 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
@@ -23,7 +24,7 @@ public class DiscoverClassSpell extends Spell {
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
         boolean cantReceiveOwned = desc.getBool(SpellArg.CANNOT_RECEIVE_OWNED);
 
-        CardList classCards = HeroClass.getClassCards(DeckFormat.all());
+        CardList classCards = new CardArrayList(HeroClass.getClassCards(DeckFormat.all()));
         classCards.removeIf(card -> !context.getDeckFormat().isInFormat(card));
         classCards.removeIf(card -> !card.isCollectible());
         if (cantReceiveOwned) {
