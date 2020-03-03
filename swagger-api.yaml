@@ -150,6 +150,19 @@ definitions:
                 description: |
                   The contents of the message to send to the conversation.
                 type: 'string'
+          putCard:
+            description: |
+              Creates and draws a card with the specified JSON representation.
+
+              Only available in bot games.
+            type: 'object'
+            properties:
+              cardScript:
+                description: |
+                  A JSON-formatted specification for the card.
+
+                  The ID is auto-generated and ignored, which means drawing tokens at the moment is not supported.
+                type: 'string'
       result:
         description: |
           When populated on the server and sent to the client, indicates that a method call had a specific result.
@@ -168,6 +181,21 @@ definitions:
                 description: |
                   The new message ID.
                 type: 'string'
+          putCard:
+            description: |
+              The result of creating and drawing a card.
+            type: 'object'
+            properties:
+              cardId:
+                description: |
+                  The card ID that was put into the game.
+                type: 'string'
+              cardScriptErrors:
+                description: |
+                  An array of errors with the card, if applicable.
+                type: 'array'
+                items:
+                  type: 'string'
           enqueue:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
           dequeue:

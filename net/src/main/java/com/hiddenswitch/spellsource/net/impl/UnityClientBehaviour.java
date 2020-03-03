@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.hiddenswitch.spellsource.net.impl.Sync.get;
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
@@ -362,6 +363,28 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		return awaitEvent(fut -> requestActionAsync(context, player, validActions, fut));
 	}
 
+	/**
+	 * If there is an existing action request, update the available actions the player can take.
+	 *
+	 * @param context the game context
+	 * @param player  the player who's taking the action, i.e. the one related to this client behaviour
+	 * @param actions the new actions
+	 */
+	@Suspendable
+	public void updateActions(GameContext context, Player player, List<GameAction> actions) {
+		requestsLock.lock();
+		try {
+			for (var request : getRequests()) {
+				if (request.getType() == GameplayRequestType.ACTION) {
+					request.setActions(actions);
+					onRequestAction(request.getCallbackId(), context.getGameStateCopy(), actions);
+				}
+			}
+		} finally {
+			requestsLock.unlock();
+		}
+	}
+
 	@Override
 	@Suspendable
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, Handler<GameAction> callback) {
@@ -378,7 +401,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			if (isElapsed()) {
 				processActionForElapsedTurn(actions, callback::handle);
 			} else {
-				// Send a state update for the other player too
+				// If there is an existing action, it's almost definitely an error, because we should only be requesting actions
+				// inside a resume() loop
+				if (!getRequests().isEmpty()) {
+					throw new RuntimeException("requesting action outside resume() loop");
+				}
 				com.hiddenswitch.spellsource.common.GameState state = context.getGameStateCopy();
 				getRequests().add(request);
 				onRequestAction(id, state, actions);

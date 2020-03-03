@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **enqueue** | [**MatchmakingQueuePutRequest**](MatchmakingQueuePutRequest.md) |  |  [optional]
 **dequeue** | [**EnvelopeMethodDequeue**](EnvelopeMethodDequeue.md) |  |  [optional]
 **sendMessage** | [**EnvelopeMethodSendMessage**](EnvelopeMethodSendMessage.md) |  |  [optional]
+**putCard** | [**EnvelopeMethodPutCard**](EnvelopeMethodPutCard.md) |  |  [optional]
 
 
 

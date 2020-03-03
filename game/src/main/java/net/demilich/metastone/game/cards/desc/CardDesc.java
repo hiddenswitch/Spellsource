@@ -2,9 +2,7 @@ package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
-import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
@@ -16,7 +14,6 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ComboSpell;
 import net.demilich.metastone.game.spells.RevealCardSpell;
@@ -107,65 +104,64 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
-	public String id;
-	public String name;
-	public String heroPower;
-	public int baseManaCost;
-	public CardType type;
-	public String heroClass;
-	public String[] heroClasses;
-	public int baseAttack;
-	public int baseHp;
-	public int damage;
-	public int durability;
-	public Rarity rarity;
-	public String race;
-	public String description;
-	public TargetSelection targetSelection;
-	public EventTriggerDesc secret;
-	public EventTriggerDesc quest;
-	public int countUntilCast;
-	public boolean countByValue;
-	public BattlecryDesc battlecry;
-	public SpellDesc deathrattle;
-	public EnchantmentDesc trigger;
-	public EnchantmentDesc[] triggers;
-	public AuraDesc aura;
-	public AuraDesc[] auras;
-	public AuraDesc[] passiveAuras;
-	public CardCostModifierDesc cardCostModifier;
-	public BattlecryDesc[] chooseOneBattlecries;
-	public BattlecryDesc chooseBothBattlecry;
-	public String[] chooseOneCardIds;
-	public String chooseBothCardId;
-	public SpellDesc onEquip;
-	public SpellDesc onUnequip;
-	public SpellDesc spell;
-	public ConditionDesc condition;
-	public SpellDesc[] group;
-	public EnchantmentDesc passiveTrigger;
-	public EnchantmentDesc[] passiveTriggers;
-	public EnchantmentDesc deckTrigger;
-	public EnchantmentDesc[] deckTriggers;
-	public EnchantmentDesc[] gameTriggers;
-	public ValueProviderDesc manaCostModifier;
-	public AttributeMap attributes;
-	public String author;
-	public String flavor;
-	public String wiki;
-	public boolean collectible = true;
-	@JsonProperty
-	public String set;
-	public String[] sets;
-	public int fileFormatVersion = 1;
-	public DynamicDescriptionDesc[] dynamicDescription;
-	public Boolean legacy;
-	public String hero;
-	public int[] color;
-	public boolean blackText;
-	public String[] secondPlayerBonusCards;
-	public TargetSelection targetSelectionOverride;
-	public ConditionDesc targetSelectionCondition;
+	private String id;
+	private String name;
+	private String heroPower;
+	private int baseManaCost;
+	private CardType type;
+	private String heroClass;
+	private String[] heroClasses;
+	private int baseAttack;
+	private int baseHp;
+	private int damage;
+	private int durability;
+	private Rarity rarity;
+	private String race;
+	private String description;
+	private TargetSelection targetSelection;
+	private EventTriggerDesc secret;
+	private EventTriggerDesc quest;
+	private int countUntilCast;
+	private boolean countByValue;
+	private BattlecryDesc battlecry;
+	private SpellDesc deathrattle;
+	private EnchantmentDesc trigger;
+	private EnchantmentDesc[] triggers;
+	private AuraDesc aura;
+	private AuraDesc[] auras;
+	private AuraDesc[] passiveAuras;
+	private CardCostModifierDesc cardCostModifier;
+	private BattlecryDesc[] chooseOneBattlecries;
+	private BattlecryDesc chooseBothBattlecry;
+	private String[] chooseOneCardIds;
+	private String chooseBothCardId;
+	private SpellDesc onEquip;
+	private SpellDesc onUnequip;
+	private SpellDesc spell;
+	private ConditionDesc condition;
+	private SpellDesc[] group;
+	private EnchantmentDesc passiveTrigger;
+	private EnchantmentDesc[] passiveTriggers;
+	private EnchantmentDesc deckTrigger;
+	private EnchantmentDesc[] deckTriggers;
+	private EnchantmentDesc[] gameTriggers;
+	private ValueProviderDesc manaCostModifier;
+	private AttributeMap attributes;
+	private String author;
+	private String flavor;
+	private String wiki;
+	private boolean collectible = true;
+	private String set;
+	private String[] sets;
+	private int fileFormatVersion = 1;
+	private DynamicDescriptionDesc[] dynamicDescription;
+	private Boolean legacy;
+	private String hero;
+	private int[] color;
+	private boolean blackText;
+	private String[] secondPlayerBonusCards;
+	private TargetSelection targetSelectionOverride;
+	private ConditionDesc targetSelectionCondition;
 
 	public CardDesc() {
 		super();
@@ -183,29 +179,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public boolean getCollectible() {
 		return isCollectible();
-	}
-
-	/**
-	 * Retrieves a battlecry action specified on this card.
-	 *
-	 * @return A battlecry action.
-	 */
-	@JsonIgnore
-	public BattlecryAction getBattlecryAction() {
-		if (getBattlecry() == null) {
-			return null;
-		}
-		BattlecryAction battlecryAction = BattlecryAction.createBattlecry(getBattlecry().getSpell(), getBattlecry().getTargetSelection());
-		if (getBattlecry().getCondition() != null) {
-			battlecryAction.setCondition(getBattlecry().getCondition().create());
-		}
-		if (getBattlecry().getTargetSelectionOverride() != null) {
-			battlecryAction.setTargetSelectionOverride(getBattlecry().getTargetSelectionOverride());
-		}
-		if (getBattlecry().getTargetSelectionCondition() != null) {
-			battlecryAction.setTargetSelectionCondition(getBattlecry().getTargetSelectionCondition().create());
-		}
-		return battlecryAction;
 	}
 
 	@Override
@@ -337,10 +310,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * Eventually, a set will be immutable and represent a particular release or expansion, while a {@link
 	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
-	@JsonIgnore
 	public String getSet() {
-		if (sets != null && sets.length > 0) {
-			return sets[0];
+		if (getSets() != null && getSets().length > 0) {
+			return getSets()[0];
 		}
 		return set;
 	}
@@ -993,49 +965,48 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
 		Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
-				immutableEntry(CardDescArg.ID, id),
-				immutableEntry(CardDescArg.NAME, name),
-				immutableEntry(CardDescArg.DESCRIPTION, description),
-				immutableEntry(CardDescArg.LEGACY, legacy),
-				immutableEntry(CardDescArg.TYPE, type),
-				immutableEntry(CardDescArg.HERO_CLASS, heroClass),
-				immutableEntry(CardDescArg.HERO_CLASSES, heroClasses),
-				immutableEntry(CardDescArg.RARITY, rarity),
-				immutableEntry(CardDescArg.SET, set),
-				immutableEntry(CardDescArg.BASE_MANA_COST, baseManaCost),
-				immutableEntry(CardDescArg.COLLECTIBLE, collectible),
-				immutableEntry(CardDescArg.ATTRIBUTES, attributes),
-				immutableEntry(CardDescArg.MANA_COST_MODIFIER, manaCostModifier),
-				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, HasEntrySet.link(passiveTrigger, passiveTriggers, EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.DECK_TRIGGERS, HasEntrySet.link(deckTrigger, deckTriggers, EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.GAME_TRIGGERS, HasEntrySet.link(null, gameTriggers, EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.BATTLECRY, battlecry),
-				immutableEntry(CardDescArg.DEATHRATTLE, deathrattle),
-				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(trigger, triggers, EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.AURAS, auras),
-				immutableEntry(CardDescArg.PASSIVE_AURAS, passiveAuras),
-				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
-				immutableEntry(CardDescArg.BASE_HP, baseHp),
-				immutableEntry(CardDescArg.DAMAGE, damage),
-				immutableEntry(CardDescArg.DURABILITY, durability),
-				immutableEntry(CardDescArg.TARGET_SELECTION, targetSelection),
-				immutableEntry(CardDescArg.GROUP, group),
-				immutableEntry(CardDescArg.SPELL, spell),
-				immutableEntry(CardDescArg.CONDITION, condition),
-				immutableEntry(CardDescArg.SECRET, secret),
-				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
-				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
-				immutableEntry(CardDescArg.QUEST, quest),
-				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription),
-				immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, targetSelectionOverride),
-				immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, targetSelectionCondition)
+				immutableEntry(CardDescArg.ID, getId()),
+				immutableEntry(CardDescArg.NAME, getName()),
+				immutableEntry(CardDescArg.DESCRIPTION, getDescription()),
+				immutableEntry(CardDescArg.LEGACY, getLegacy()),
+				immutableEntry(CardDescArg.TYPE, getType()),
+				immutableEntry(CardDescArg.HERO_CLASS, getHeroClass()),
+				immutableEntry(CardDescArg.HERO_CLASSES, getHeroClasses()),
+				immutableEntry(CardDescArg.RARITY, getRarity()),
+				immutableEntry(CardDescArg.SET, getSet()),
+				immutableEntry(CardDescArg.BASE_MANA_COST, getBaseManaCost()),
+				immutableEntry(CardDescArg.COLLECTIBLE, isCollectible()),
+				immutableEntry(CardDescArg.ATTRIBUTES, getAttributes()),
+				immutableEntry(CardDescArg.MANA_COST_MODIFIER, getManaCostModifier()),
+				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, HasEntrySet.link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.DECK_TRIGGERS, HasEntrySet.link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.GAME_TRIGGERS, HasEntrySet.link(null, getGameTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.BATTLECRY, getBattlecry()),
+				immutableEntry(CardDescArg.DEATHRATTLE, getDeathrattle()),
+				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(getTrigger(), getTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.AURAS, getAuras()),
+				immutableEntry(CardDescArg.PASSIVE_AURAS, getPassiveAuras()),
+				immutableEntry(CardDescArg.BASE_ATTACK, getBaseAttack()),
+				immutableEntry(CardDescArg.BASE_HP, getBaseHp()),
+				immutableEntry(CardDescArg.DAMAGE, getDamage()),
+				immutableEntry(CardDescArg.DURABILITY, getDurability()),
+				immutableEntry(CardDescArg.TARGET_SELECTION, getTargetSelection()),
+				immutableEntry(CardDescArg.GROUP, getGroup()),
+				immutableEntry(CardDescArg.SPELL, getSpell()),
+				immutableEntry(CardDescArg.CONDITION, getCondition()),
+				immutableEntry(CardDescArg.SECRET, getSecret()),
+				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, getCountUntilCast()),
+				immutableEntry(CardDescArg.COUNT_BY_VALUE, isCountByValue()),
+				immutableEntry(CardDescArg.QUEST, getQuest()),
+				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, getDynamicDescription()),
+				immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, getTargetSelectionOverride()),
+				immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, getTargetSelectionCondition())
 		);
 		return entries;
 	}
 
-	@JsonIgnore
 	public EnchantmentDesc[] getDeckTriggers() {
-		return deckTrigger != null ? new EnchantmentDesc[]{deckTrigger} : deckTriggers;
+		return getDeckTrigger() != null ? new EnchantmentDesc[]{getDeckTrigger()} : deckTriggers;
 	}
 
 	/**
@@ -1050,23 +1021,23 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public Stream<ConditionDesc> getConditions() {
 		Stream<ConditionDesc> stream = Stream.empty();
 		// Case 1: Spell condition
-		if (condition != null) {
-			stream = Stream.concat(stream, Stream.of(condition));
+		if (getCondition() != null) {
+			stream = Stream.concat(stream, Stream.of(getCondition()));
 		}
 		// Case 2: Condition on battlecry
-		if (battlecry != null
-				&& battlecry.condition != null) {
-			stream = Stream.concat(stream, Stream.of(battlecry.condition));
+		if (getBattlecry() != null
+				&& getBattlecry().condition != null) {
+			stream = Stream.concat(stream, Stream.of(getBattlecry().condition));
 		}
 
 		// Case 3: ComboSpell, conditions in subspells
 		Stream<SpellDesc> spells = Stream.empty();
-		if (spell != null) {
-			spells = Stream.concat(spells, spell.spellStream(20));
+		if (getSpell() != null) {
+			spells = Stream.concat(spells, getSpell().spellStream(20));
 		}
 
-		if (battlecry.spell != null) {
-			spells = Stream.concat(spells, battlecry.spell.spellStream(20));
+		if (getBattlecry().spell != null) {
+			spells = Stream.concat(spells, getBattlecry().spell.spellStream(20));
 		}
 
 		stream = Stream.concat(stream, spells.flatMap(spellDesc -> {
@@ -1120,9 +1091,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return secondPlayerBonusCards;
 	}
 
-	public CardDesc setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
+	public void setSecondPlayerBonusCards(String[] secondPlayerBonusCards) {
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
-		return this;
 	}
 
 	public AuraDesc[] getPassiveAuras() {
@@ -1147,5 +1117,33 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
 		this.targetSelectionOverride = targetSelectionOverride;
+	}
+
+	public void setCountByValue(boolean countByValue) {
+		this.countByValue = countByValue;
+	}
+
+	public void setDeckTriggers(EnchantmentDesc[] deckTriggers) {
+		this.deckTriggers = deckTriggers;
+	}
+
+	public void setSets(String[] sets) {
+		this.sets = sets;
+	}
+
+	public void setDynamicDescription(DynamicDescriptionDesc[] dynamicDescription) {
+		this.dynamicDescription = dynamicDescription;
+	}
+
+	public void setHero(String hero) {
+		this.hero = hero;
+	}
+
+	public void setColor(int[] color) {
+		this.color = color;
+	}
+
+	public void setBlackText(boolean blackText) {
+		this.blackText = blackText;
 	}
 }

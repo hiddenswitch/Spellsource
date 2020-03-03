@@ -33,34 +33,7 @@ import static java.util.stream.Collectors.toList;
  * Manages the real time data connection users get when they connect to the Spellsource server.
  * <p>
  * To set up a behaviour that uses the real time connect, use {@link Connection#connected(SetupHandler)}, which passes
- * you a new connection to a unique user. For <b>example</b>, this code from the {@link Presence} package notifies users
- * of their presence.
- * <pre>
- *   {@code
- *     Connection.connected(Sync.suspendableHandler(connection -> {
- * 	  		final UserId key = new UserId(connection.userId());
- * 	  		connection.endHandler(Sync.suspendableHandler(ignored -> {
- * 	  			setPresence(key, PresenceEnum.OFFLINE);
- *        }));
- *
- * 	  		// Once the user is connected, set their status to online
- * 	  		setPresence(key, PresenceEnum.ONLINE);
- *     }));
- * 	   ...
- * 	   static void setPresence(String userId) {
- * 	   	final UserId key = new UserId(userId);
- * 	   	Connection.writeStream(userId, res -> {
- * 	   		if (res.failed() || res.result() == null) {
- * 	   			setPresence(key, PresenceEnum.OFFLINE);
- *        } else {
- * 	   			setPresence(key, PresenceEnum.ONLINE);
- *        }
- *      });
- *     }
- *   }
- * </pre>
- * Observe the use of the {@link Connection#writeStream(String)}}, which allows any code anywhere to send a message to a
- * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
+ * you a new connection to a unique user.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Map<String, Boolean> CODECS_REGISTERED = new ConcurrentHashMap<>();
@@ -108,6 +81,26 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return suspendableHandler(Connection::connected);
 	}
 
+	/**
+	 * Configures a handler for methods and notifications for the client.
+	 * <p>
+	 * A common pattern is to do things to the connection object. Once you are done setting up, make sure to call
+	 * {@code fut.handle(Future.succeededFuture());}.
+	 * <pre>
+	 *   {@code
+	 *   		Connection.connected((connection, fut) -> {
+	 * 			  connection.handler(suspendableHandler(env -> {
+	 * 			  	// Check the contents of env.getMethod() for methods
+	 *        }));
+	 * 			  fut.handle(Future.succeededFuture());
+	 *      });
+	 *   }
+	 * </pre>
+	 * You can use {@link Connection#writeStream(String)}}, which allows any code anywhere to send a message to a
+	 * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
+	 *
+	 * @param handler a setup handler
+	 */
 	static void connected(SetupHandler handler) {
 		getHandlers().add(handler);
 	}

@@ -38,8 +38,8 @@ public class CardParser {
 		}
 
 		// Remove tags in description
-		if (desc.description != null) {
-			desc.description = desc.description.replaceAll("(</?[bi]>)|\\[x\\]", "");
+		if (desc.getDescription() != null) {
+			desc.setDescription(desc.getDescription().replaceAll("(</?[bi]>)|\\[x\\]", ""));
 		}
 
 		return new CardCatalogueRecord(id, desc);

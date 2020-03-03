@@ -733,7 +733,7 @@ public class TycheBehaviour extends IntelligentBehaviour {
 					minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT),
 					minion.hasAttribute(Attribute.POISONOUS) || minion.hasAttribute(Attribute.AURA_POISONOUS),
 					minion.hasAttribute(Attribute.DEATHRATTLES) || (minion.getDeathrattles() != null && minion.getDeathrattles().size() > 0),
-					minion.getSourceCard() != null && minion.getSourceCard().getDesc().trigger != null && minion.getSourceCard().getDesc().trigger.eventTrigger.getDescClass() == InspireTrigger.class,
+					minion.getSourceCard() != null && minion.getSourceCard().getDesc().getTrigger() != null && minion.getSourceCard().getDesc().getTrigger().eventTrigger.getDescClass() == InspireTrigger.class,
 					minion.hasAttribute(Attribute.DIVINE_SHIELD),
 					minion.hasAttribute(Attribute.LIFESTEAL) || minion.hasAttribute(Attribute.AURA_LIFESTEAL),
 					minion.hasAttribute(Attribute.CHARGE) || minion.hasAttribute(Attribute.AURA_CHARGE),
