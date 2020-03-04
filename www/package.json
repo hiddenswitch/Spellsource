@@ -1,0 +1,35 @@
+{
+  "name": "spellsource-www",
+  "version": "0.9.0",
+  "description": "Spellsource Internet presence, including documentation, wiki and editor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gatsby": "gatsby",
+    "deploy": "gatsby-plugin-s3 deploy"
+  },
+  "author": "Benjamin Berman",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "blockly": "^3.20200123.1",
+    "enumify": "^2.0.0",
+    "gatsby": "^2.19.23",
+    "gatsby-image": "^2.2.41",
+    "gatsby-plugin-s3": "^0.3.2",
+    "gatsby-plugin-sass": "^2.1.29",
+    "gatsby-plugin-sharp": "^2.4.5",
+    "gatsby-remark-copy-linked-files": "^2.1.37",
+    "gatsby-remark-images": "^3.1.44",
+    "gatsby-source-filesystem": "^2.1.48",
+    "gatsby-transformer-remark": "^2.6.53",
+    "gatsby-transformer-sharp": "^2.3.16",
+    "node-sass": "^4.13.1",
+    "react": "^16.13.0",
+    "react-blockly": "^5.0.0",
+    "react-dom": "^16.13.0"
+  },
+  "devDependencies": {
+    "gatsby-cli": "^2.9.0",
+    "standard": "^14.3.1"
+  }
+}

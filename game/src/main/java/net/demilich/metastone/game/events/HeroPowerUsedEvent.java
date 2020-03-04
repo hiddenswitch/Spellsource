@@ -3,8 +3,9 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
-public class HeroPowerUsedEvent extends GameEvent {
+public class HeroPowerUsedEvent extends GameEvent implements HasCard {
 
 	private final Card heroPower;
 
@@ -19,8 +20,8 @@ public class HeroPowerUsedEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.HERO_POWER_USED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HERO_POWER_USED;
 	}
 
 	public Card getHeroPower() {
@@ -30,5 +31,10 @@ public class HeroPowerUsedEvent extends GameEvent {
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	@Override
+	public Card getSourceCard() {
+		return heroPower;
 	}
 }

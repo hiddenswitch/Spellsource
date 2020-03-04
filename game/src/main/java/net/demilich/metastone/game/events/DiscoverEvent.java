@@ -24,8 +24,8 @@ public class DiscoverEvent extends GameEvent {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.DISCOVER;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DISCOVER;
 	}
 
 	public Actor getTarget() {

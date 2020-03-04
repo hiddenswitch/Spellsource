@@ -8,7 +8,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**

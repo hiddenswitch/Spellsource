@@ -1,12 +1,10 @@
 plugins {
     id 'application'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
-apply plugin: 'org.javamodularity.moduleplugin'
 apply from: '../gradle/instrument.gradle'
 
 mainClassName = 'com.hiddenswitch.cluster.application.Simulate'
@@ -22,7 +20,6 @@ repositories {
 dependencies {
     implementation project(':game')
     implementation project(':cards')
-    implementation project(':hearthstone')
 
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.7'

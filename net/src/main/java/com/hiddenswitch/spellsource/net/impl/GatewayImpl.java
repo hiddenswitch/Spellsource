@@ -144,6 +144,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Handle realtime notification of invitations
 		Invites.handleConnections();
 
+		// Enable editing in a live game
+		Editor.handleConnections();
+
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {
@@ -806,7 +809,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.id(record.getId())
 				.friends(friends)
 				.decks((responses != null && responses.size() > 0) ? responses.stream()
-						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
+						.filter(response -> !response.getTrashed())
+						.map(GetCollectionResponse::asInventoryCollection)
+						.collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
 				.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))

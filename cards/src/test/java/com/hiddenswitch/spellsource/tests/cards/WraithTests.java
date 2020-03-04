@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,26 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WraithTests extends TestBase {
+
+	@Test
+	public void testBackForMore() {
+		runGym((context, player, opponent) -> {
+			var cardCount = GameLogic.MAX_HAND_CARDS - 1;
+			for (var i = 0; i < cardCount; i++) {
+				receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			}
+			Card selection = player.getHand().get(0);
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(cardCount, discoverActions.size(), "should be whole hand");
+				// should be ordered
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_back_for_more");
+			assertTrue(selection.hasAttribute(Attribute.DISCARDED));
+			assertEquals(player.getHand().size(), cardCount - 1);
+		});
+	}
+
 	@Test
 	public void testPlagueOfFlesh() {
 		int ATTACK_DEBUFF = 2;

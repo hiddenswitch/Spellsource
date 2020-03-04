@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.DefaultMethodResponse;
+import com.hiddenswitch.spellsource.client.models.EnvelopeResultPutCard;
 import com.hiddenswitch.spellsource.client.models.EnvelopeResultSendMessage;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import io.swagger.annotations.ApiModel;
@@ -39,6 +40,9 @@ public class EnvelopeResult implements Serializable {
 
   @JsonProperty("sendMessage")
   private EnvelopeResultSendMessage sendMessage = null;
+
+  @JsonProperty("putCard")
+  private EnvelopeResultPutCard putCard = null;
 
   @JsonProperty("enqueue")
   private MatchmakingQueuePutResponse enqueue = null;
@@ -80,6 +84,24 @@ public class EnvelopeResult implements Serializable {
 
   public void setSendMessage(EnvelopeResultSendMessage sendMessage) {
     this.sendMessage = sendMessage;
+  }
+
+  public EnvelopeResult putCard(EnvelopeResultPutCard putCard) {
+    this.putCard = putCard;
+    return this;
+  }
+
+   /**
+   * Get putCard
+   * @return putCard
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeResultPutCard getPutCard() {
+    return putCard;
+  }
+
+  public void setPutCard(EnvelopeResultPutCard putCard) {
+    this.putCard = putCard;
   }
 
   public EnvelopeResult enqueue(MatchmakingQueuePutResponse enqueue) {
@@ -130,13 +152,14 @@ public class EnvelopeResult implements Serializable {
     EnvelopeResult envelopeResult = (EnvelopeResult) o;
     return Objects.equals(this.methodId, envelopeResult.methodId) &&
         Objects.equals(this.sendMessage, envelopeResult.sendMessage) &&
+        Objects.equals(this.putCard, envelopeResult.putCard) &&
         Objects.equals(this.enqueue, envelopeResult.enqueue) &&
         Objects.equals(this.dequeue, envelopeResult.dequeue);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(methodId, sendMessage, enqueue, dequeue);
+    return Objects.hash(methodId, sendMessage, putCard, enqueue, dequeue);
   }
 
 
@@ -147,6 +170,7 @@ public class EnvelopeResult implements Serializable {
     
     sb.append("    methodId: ").append(toIndentedString(methodId)).append("\n");
     sb.append("    sendMessage: ").append(toIndentedString(sendMessage)).append("\n");
+    sb.append("    putCard: ").append(toIndentedString(putCard)).append("\n");
     sb.append("    enqueue: ").append(toIndentedString(enqueue)).append("\n");
     sb.append("    dequeue: ").append(toIndentedString(dequeue)).append("\n");
     sb.append("}");

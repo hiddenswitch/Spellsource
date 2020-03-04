@@ -1,12 +1,10 @@
 plugins {
     id 'java-library'
     id 'com.github.johnrengelman.shadow' version "5.2.0"
-    id 'org.javamodularity.moduleplugin' version '1.6.0'
 }
 
 apply plugin: 'java-library'
 apply plugin: "com.github.johnrengelman.shadow"
-apply plugin: 'org.javamodularity.moduleplugin'
 
 group 'com.hiddenswitch'
 
@@ -139,11 +137,6 @@ dependencies {
     // The exclusions are needed to get asm 5.0.4 whilst Kryo still depends on 5.0.3
     compile "org.objenesis:objenesis:2.6"
 
-    // this happens after we've filtered the dependency on ASM from core's module-info
-    compileTestJava {
-        options.compilerArgs += ["--add-modules", "org.objectweb.asm", "--add-reads", "co.paralleluniverse.quasar.core=org.objectweb.asm"]
-    }
-
     provided('junit:junit:4.12') {
         exclude group: 'org.hamcrest', module: '*'
     }
@@ -199,9 +192,6 @@ task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
 test.dependsOn shadowJar
 test {
     useJUnit()
-    moduleOptions {
-        runOnClasspath = true
-    }
 
     systemProperty 'co.paralleluniverse.monitoring.flightRecorderLevel', '5'
     systemProperty 'co.paralleluniverse.globalFlightRecorder', 'true'
@@ -319,8 +309,6 @@ tasks.withType(JavaExec) {
 configure(javadoc) {
     classpath += configurations.provided
 
-    exclude 'module-info.java' // Temporary, as module path is not added
-
     options {
         addStringOption('Xdoclint:none', '-quiet')
     }
@@ -362,6 +350,7 @@ def scanAndInstrument(SourceSet sset, configs) {
     }
 
     // Filter out the 'requires org.objectweb.asm' from quasar-core's module-info, as it will be shadowed into the jar
+    /*
     ant.taskdef(name: 'filterModules', classname: 'co.paralleluniverse.fibers.instrument.ModuleFilterTask', classpath: cp)
     ant.filterModules(module: 'org.objectweb.asm') {
         fileset(dir: sset.output.classesDirs.asPath)
@@ -371,5 +360,5 @@ def scanAndInstrument(SourceSet sset, configs) {
     }
     ant.filterModules(module: 'org.objectweb.asm.commons') {
         fileset(dir: sset.output.classesDirs.asPath)
-    }
+    }*/
 }

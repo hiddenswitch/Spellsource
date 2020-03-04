@@ -5,7 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayMinionCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
@@ -733,7 +733,7 @@ public class TycheBehaviour extends IntelligentBehaviour {
 					minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT),
 					minion.hasAttribute(Attribute.POISONOUS) || minion.hasAttribute(Attribute.AURA_POISONOUS),
 					minion.hasAttribute(Attribute.DEATHRATTLES) || (minion.getDeathrattles() != null && minion.getDeathrattles().size() > 0),
-					minion.getSourceCard() != null && minion.getSourceCard().getDesc().trigger != null && minion.getSourceCard().getDesc().trigger.eventTrigger.getDescClass() == InspireTrigger.class,
+					minion.getSourceCard() != null && minion.getSourceCard().getDesc().getTrigger() != null && minion.getSourceCard().getDesc().getTrigger().eventTrigger.getDescClass() == InspireTrigger.class,
 					minion.hasAttribute(Attribute.DIVINE_SHIELD),
 					minion.hasAttribute(Attribute.LIFESTEAL) || minion.hasAttribute(Attribute.AURA_LIFESTEAL),
 					minion.hasAttribute(Attribute.CHARGE) || minion.hasAttribute(Attribute.AURA_CHARGE),

@@ -11,7 +11,7 @@ import com.hiddenswitch.spellsource.net.impl.QuickJson;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.junit.Ignore;
@@ -29,7 +29,7 @@ public class PersistenceTest extends SpellsourceTestBase {
 	public void testMinionatePersistenceApi(TestContext context) {
 		ConcurrentLinkedQueue<Long> queue = new ConcurrentLinkedQueue<Long>();
 		Vertx vertx = contextRule.vertx();
-		Spellsource.spellsource().persistAttribute("reserved-attribute-1", GameEventType.TURN_END, Attribute.RESERVED_INTEGER_4, persistenceContext -> {
+		Spellsource.spellsource().persistAttribute("reserved-attribute-1", com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END, Attribute.RESERVED_INTEGER_4, persistenceContext -> {
 			// Save the turn number to this yogg attribute
 			long updated = persistenceContext.update(EntityReference.ALL_MINIONS, persistenceContext.event().getGameContext().getTurn());
 			queue.add(updated);

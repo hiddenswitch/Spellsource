@@ -4,7 +4,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.PreDamageEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.DamageType;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 
 /**
  * Triggers as damage caused only if the damage is not fatigue damage.
@@ -22,7 +22,7 @@ public class PreDeflectDamageTrigger extends PreDamageTrigger {
 		}
 
 		PreDamageEvent preDamageEvent = (PreDamageEvent) event;
-		if (preDamageEvent.getDamageType() == DamageType.DEFLECT) {
+		if (preDamageEvent.getDamageType() == DamageTypeEnum.DEFLECT) {
 			return true;
 		}
 

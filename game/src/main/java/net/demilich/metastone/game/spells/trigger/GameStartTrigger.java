@@ -2,7 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -30,8 +30,8 @@ public class GameStartTrigger extends EventTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.GAME_START;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.GAME_START;
 	}
 
 }

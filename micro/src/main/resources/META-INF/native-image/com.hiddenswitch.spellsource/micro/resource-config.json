@@ -1,0 +1,6 @@
+{
+  "resources":[
+    {"pattern":"application.yml"}, 
+    {"pattern":"logback.xml"}
+  ]
+}

@@ -122,10 +122,10 @@ public interface Cards {
 			return CardCatalogue.getRecords().values()
 					.stream()
 					.map(CardCatalogueRecord::getDesc)
-					.filter(cd -> DeckFormat.getFormat("Greater Custom").isInFormat(cd.getSet())
-							&& cd.type != CardType.GROUP
-							&& cd.type != CardType.HERO_POWER
-							&& cd.type != CardType.ENCHANTMENT)
+					.filter(cd -> DeckFormat.spellsource().isInFormat(cd.getSet())
+							&& cd.getType() != CardType.GROUP
+							&& cd.getType() != CardType.HERO_POWER
+							&& cd.getType() != CardType.ENCHANTMENT)
 					.map(CardDesc::create)
 					.map(card -> Games.getEntity(workingContext, card, 0))
 					.map(entity -> {

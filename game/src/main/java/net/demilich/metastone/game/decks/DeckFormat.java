@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.decks;
 
-import com.google.common.base.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
@@ -160,14 +159,14 @@ public class DeckFormat implements Serializable, Cloneable {
 		if (this == o) return true;
 		if (!(o instanceof DeckFormat)) return false;
 		DeckFormat that = (DeckFormat) o;
-		return Objects.equal(name, that.name) &&
-				Objects.equal(sets, that.sets) &&
-				Objects.equal(secondPlayerBonusCards, that.secondPlayerBonusCards);
+		return Objects.equals(name, that.name) &&
+				Objects.equals(sets, that.sets) &&
+				Objects.equals(secondPlayerBonusCards, that.secondPlayerBonusCards);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(name, sets, secondPlayerBonusCards);
+		return Objects.hash(name, sets, secondPlayerBonusCards);
 	}
 
 	@Override

@@ -6,10 +6,12 @@ import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
 import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.impl.util.MongoRecord;
+import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.models.*;
@@ -322,6 +324,18 @@ public interface Decks {
 	@Suspendable
 	static void validateAllDecks() {
 		CardCatalogue.loadCardsFromPackage();
+		// Fix invalid class cards
+		var classCards = CardCatalogue.getClassCards(DeckFormat.spellsource());
+		var validClasses = classCards.stream().map(Card::getDesc).map(CardDesc::getHeroClass).collect(toList());
+		mongo().updateCollectionWithOptions(COLLECTIONS,
+				json(CollectionRecord.HERO_CARD_ID, json("$exists", true)),
+				json("$unset", json(CollectionRecord.HERO_CARD_ID, null)),
+				new UpdateOptions().setMulti(true));
+		mongo().updateCollectionWithOptions(COLLECTIONS,
+				json(CollectionRecord.HERO_CLASS, json("$nin", validClasses)),
+				json("$set", json(CollectionRecord.HERO_CLASS, validClasses.get(0))),
+				new UpdateOptions().setMulti(true));
+
 		// Set a validation record for every deck (actually validate it)
 		var decks = mongo().findWithOptions(COLLECTIONS,
 				json(CollectionRecord.TYPE, CollectionTypes.DECK.toString()),
@@ -330,9 +344,13 @@ public interface Decks {
 			var deckId = collectionRecord.getString(MongoRecord.ID);
 			var userId = collectionRecord.getString(CollectionRecord.USER_ID);
 			var format = collectionRecord.getString(CollectionRecord.FORMAT);
-			var gameDeck = Inventory.getCollection(GetCollectionRequest.deck(deckId)).asDeck(userId);
-			var validationRecord = validateDeck(gameDeck, format);
-			mongo().updateCollection(COLLECTIONS, json(MongoRecord.ID, deckId), json("$set", json(CollectionRecord.VALIDATION_REPORT, json(validationRecord))));
+			try {
+				var gameDeck = Inventory.getCollection(GetCollectionRequest.deck(deckId)).asDeck(userId);
+				var validationRecord = validateDeck(gameDeck, format);
+				mongo().updateCollection(COLLECTIONS, json(MongoRecord.ID, deckId), json("$set", json(CollectionRecord.VALIDATION_REPORT, json(validationRecord))));
+			} catch (RuntimeException ex) {
+				LOGGER.error("validateAllDecks: Failed to validate {} due to {}", deckId, ex.getMessage(), ex);
+			}
 		}
 	}
 }

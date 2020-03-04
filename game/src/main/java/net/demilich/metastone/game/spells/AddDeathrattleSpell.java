@@ -97,11 +97,11 @@ public class AddDeathrattleSpell extends Spell {
 		Card[] cards = SpellUtils.getCards(context, desc);
 		if (cards.length != 0) {
 			for (Card card : cards) {
-				if (card.getDesc().deathrattle == null) {
+				if (card.getDesc().getDeathrattle() == null) {
 					logger.warn("onCast {} {}: Trying to add a deathrattle from a card that doesn't contain a deathrattle {}", context.getGameId(), source, card);
 					continue;
 				}
-				deathrattles.add(card.getDesc().deathrattle);
+				deathrattles.add(card.getDesc().getDeathrattle());
 			}
 		}
 		if (target instanceof Actor) {
