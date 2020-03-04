@@ -21,6 +21,9 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceArg;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
+import net.demilich.metastone.game.spells.desc.source.TopCardsOfDeckSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -4873,6 +4876,28 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_food_critic");
 			assertEquals(player.getDeck().size(), 9); //doesn't cause a loop that would destroy your whole deck
 			assertEquals(opponent.getHero().getHp(), 29); //overdrawing does still counts as roasting for other purposes
+		});
+	}
+
+	@Test
+	public void testTopCardsOfDeckSource() {
+		runGym((context, player, opponent) -> {
+			CardDesc cardDesc = context.getCardById("spell_otherwordly_truth").getDesc().clone();
+			CardSourceDesc sourceDesc = new CardSourceDesc(TopCardsOfDeckSource.class);
+			sourceDesc.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.OPPONENT);
+			sourceDesc.put(CardSourceArg.VALUE, 5);
+			cardDesc.getSpell().put(SpellArg.CARD_SOURCE, sourceDesc.create());
+			cardDesc.getSpell().put(SpellArg.VALUE, 5);
+			Card card = cardDesc.create();
+			context.addTempCard(card);
+
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, opponent, "spell_otherwordly_truth");
+			}
+
+			playCard(context, player, card);
+			assertEquals(30, opponent.getDeck().size());
+			assertEquals(5, player.getDeck().size());
 		});
 	}
 }
