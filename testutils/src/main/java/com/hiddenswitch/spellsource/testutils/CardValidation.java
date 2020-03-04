@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.testutils;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import net.demilich.metastone.game.cards.*;
@@ -22,6 +21,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CardValidation {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
 	private static final CardParser CARD_PARSER = new CardParser();
 
 	public static Object[][] getCardFiles(String path) {
@@ -42,11 +45,11 @@ public class CardValidation {
 	}
 
 	public static void validateCard(File cardFile) throws IOException {
-		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
+		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
-			if (record.getDesc().type != CardType.FORMAT) {
+			if (record.getDesc().getType() != CardType.FORMAT) {
 				assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
 			}
 			String description = record.getDesc().getDescription();
@@ -65,13 +68,13 @@ public class CardValidation {
 							"An Aftermath card is missing the DEATHRATTLES attribute.");
 				}
 
-				if (record.getDesc().deathrattle != null) {
-					assertNotEquals(record.getDesc().deathrattle.getTarget(), EntityReference.ADJACENT_MINIONS,
+				if (record.getDesc().getDeathrattle() != null) {
+					assertNotEquals(record.getDesc().getDeathrattle().getTarget(), EntityReference.ADJACENT_MINIONS,
 							"Deathrattles trigger from the graveyard, so they cannot contain a reference to ADJACENT_MINIONS. Use a custom.AdjacentDeathrattleSpell instead.");
 				}
 			}
 		} catch (DecodeException ex) {
-			JsonProcessingException innerEx = (JsonProcessingException) ex.getCause();// Decode again to throw the inner exception
+			JsonProcessingException innerEx = (JsonProcessingException) ex.getCause();
 			if (innerEx != null) {
 				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile, 0, 0, 0);
 				fail(String.format("%s\n%s",
@@ -85,7 +88,7 @@ public class CardValidation {
 
 	public static void validateCardReferences(File cardFile) throws IOException {
 		CardCatalogue.loadCardsFromPackage();
-		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true);
+		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);

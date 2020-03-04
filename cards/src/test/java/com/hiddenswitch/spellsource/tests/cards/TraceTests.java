@@ -13,6 +13,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.logic.Trace;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -74,13 +75,27 @@ public class TraceTests {
 		CardCatalogue.loadCardsFromPackage();
 	}
 
+	/**
+	 * Tests that traces are recorded correctly, i.e., that the game is executed deterministically.
+	 * <p>
+	 * Some common issues to diagnose new code that breaks on this test:
+	 * <ul>
+	 *   <li><b>Appropriate methods should be marked as {@code @Suspendable}</b>. Commonly this issue crops up in
+	 *   authoring new {@link net.demilich.metastone.game.spells.Spell} classes, because those
+	 *   {@code onCast(GameContext, Player, SpellDesc, Entity, Entity)} implementations must be suspendable.</li>
+	 *   <li><b>Using {@link java.util.Random}</b>. You should only use the random methods from
+	 *   {@link net.demilich.metastone.game.logic.GameLogic}, like {@link net.demilich.metastone.game.logic.GameLogic#getRandom(List)}</li>.
+	 *   <li><b>Using state that is not deterministic.</b> For example, you should not use non-deterministic objects or
+	 *   fields in {@link net.demilich.metastone.game.spells.Spell} classes.</li>
+	 * </ul>
+	 */
 	@Test
-	public void testTraceRecordedCorrectly() {
+	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
 		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
 			Player player1 = new Player(Deck.randomDeck(), "Player 1");
 			Player player2 = new Player(Deck.randomDeck(), "Player 2");
 			GameContext context1 = new GameContext();
-			context1.setDeckFormat(DeckFormat.getFormat("Custom"));
+			context1.setDeckFormat(DeckFormat.spellsource());
 			context1.setPlayer(0, player1);
 			context1.setPlayer(1, player2);
 			context1.play();

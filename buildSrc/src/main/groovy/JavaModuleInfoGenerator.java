@@ -5,6 +5,6 @@ class JavaModuleInfoGenerator extends JavaClientCodegen {
 	@Override
 	public void processOpts() {
 		super.processOpts();
-		supportingFiles.add(new SupportingFile("module-info.java.mustache", sourceFolder, "module-info.java"));
+//		supportingFiles.add(new SupportingFile("module-info.java.mustache", sourceFolder, "module-info.java"));
 	}
 }

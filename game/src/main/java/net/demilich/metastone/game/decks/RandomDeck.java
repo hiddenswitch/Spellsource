@@ -27,32 +27,6 @@ final class RandomDeck extends GameDeck {
 		populate(deckFormat);
 	}
 
-	/**
-	 * Creates a random deck with a random hero class in the specified deck format and a balance of 50% Class cards and
-	 * Neutral cards.
-	 *
-	 * @param deckFormat
-	 */
-	RandomDeck(DeckFormat deckFormat) {
-		this(HeroClass.random(deckFormat), deckFormat);
-	}
-
-	/**
-	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the {@link
-	 * DeckFormat#CUSTOM} format.
-	 */
-	RandomDeck() {
-		this(HeroClass.random(DeckFormat.getFormat("Custom")), DeckFormat.getFormat("Custom"));
-	}
-
-	/**
-	 * Creates a random deck with the specified hero class and a balance of 50% Class cards and Neutral cards in the
-	 * {@link DeckFormat#CUSTOM} format.
-	 */
-	public RandomDeck(String heroClass) {
-		this(heroClass, DeckFormat.getFormat("Custom"));
-	}
-
 	private void populate(DeckFormat deckFormat) {
 		DeckValidator deckValidator = new DefaultDeckValidator();
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()

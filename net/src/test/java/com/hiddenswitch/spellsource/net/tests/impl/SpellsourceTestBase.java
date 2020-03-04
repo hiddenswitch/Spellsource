@@ -50,7 +50,7 @@ public abstract class SpellsourceTestBase {
 		vertx.exceptionHandler(testContext::fail);
 		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 
-		Spellsource.spellsource().migrate(vertx, testContext.asyncAssertSuccess(v1 -> {
+		Migrations.migrate(vertx, testContext.asyncAssertSuccess(v1 -> {
 			Spellsource.spellsource().deployAll(vertx, getConcurrency(), testContext.asyncAssertSuccess());
 		}));
 	}

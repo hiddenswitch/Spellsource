@@ -17,7 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.Entity;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -31,67 +31,25 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class GameEventPerformedGameAction implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("source")
-  private Entity source = null;
+  @JsonProperty("actionType")
+  private ActionType actionType = null;
 
-  @JsonProperty("target")
-  private Entity target = null;
-
-  @JsonProperty("description")
-  private String description = null;
-
-  public GameEventPerformedGameAction source(Entity source) {
-    this.source = source;
+  public GameEventPerformedGameAction actionType(ActionType actionType) {
+    this.actionType = actionType;
     return this;
   }
 
    /**
-   * Get source
-   * @return source
+   * Get actionType
+   * @return actionType
   **/
   @ApiModelProperty(value = "")
-  public Entity getSource() {
-    return source;
+  public ActionType getActionType() {
+    return actionType;
   }
 
-  public void setSource(Entity source) {
-    this.source = source;
-  }
-
-  public GameEventPerformedGameAction target(Entity target) {
-    this.target = target;
-    return this;
-  }
-
-   /**
-   * Get target
-   * @return target
-  **/
-  @ApiModelProperty(value = "")
-  public Entity getTarget() {
-    return target;
-  }
-
-  public void setTarget(Entity target) {
-    this.target = target;
-  }
-
-  public GameEventPerformedGameAction description(String description) {
-    this.description = description;
-    return this;
-  }
-
-   /**
-   * A plain-text description of the game action that should be rendered on the client. 
-   * @return description
-  **/
-  @ApiModelProperty(value = "A plain-text description of the game action that should be rendered on the client. ")
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
+  public void setActionType(ActionType actionType) {
+    this.actionType = actionType;
   }
 
 
@@ -104,14 +62,12 @@ public class GameEventPerformedGameAction implements Serializable {
       return false;
     }
     GameEventPerformedGameAction gameEventPerformedGameAction = (GameEventPerformedGameAction) o;
-    return Objects.equals(this.source, gameEventPerformedGameAction.source) &&
-        Objects.equals(this.target, gameEventPerformedGameAction.target) &&
-        Objects.equals(this.description, gameEventPerformedGameAction.description);
+    return Objects.equals(this.actionType, gameEventPerformedGameAction.actionType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(source, target, description);
+    return Objects.hash(actionType);
   }
 
 
@@ -120,9 +76,7 @@ public class GameEventPerformedGameAction implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GameEventPerformedGameAction {\n");
     
-    sb.append("    source: ").append(toIndentedString(source)).append("\n");
-    sb.append("    target: ").append(toIndentedString(target)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    actionType: ").append(toIndentedString(actionType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

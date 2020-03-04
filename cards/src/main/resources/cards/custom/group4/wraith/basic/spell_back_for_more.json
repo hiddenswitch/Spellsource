@@ -4,13 +4,29 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Summon two 2/2 Captives.",
+  "description": "Choose and discard a card. Summon two 2/2 Captives.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_captive_overlord",
-      "token_captive_overlord"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "cardSource": {
+          "class": "HandSource"
+        },
+        "exclusive": true,
+        "howMany": 10,
+        "spell": {
+          "class": "DiscardSpell"
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_captive_overlord",
+          "token_captive_overlord"
+        ]
+      }
     ]
   },
   "collectible": true,

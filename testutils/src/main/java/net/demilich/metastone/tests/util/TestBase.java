@@ -44,6 +44,9 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBase {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
 		return playChooseOneCard(context, player, baseCardId, chosenCardId, null);
@@ -550,7 +553,7 @@ public class TestBase {
 		CardDesc damageSpell = new CardDesc();
 		damageSpell.setId(context.getLogic().generateCardId());
 		damageSpell.setTargetSelection(TargetSelection.ANY);
-		damageSpell.spell = DamageSpell.create(damage);
+		damageSpell.setSpell(DamageSpell.create(damage));
 		damageSpell.setSet(TestCardResources.TEST);
 		damageSpell.setType(CardType.SPELL);
 		Card card = new Card(damageSpell);

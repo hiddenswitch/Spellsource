@@ -54,7 +54,7 @@ public class Encode {
 		ListMultimap<String, JsonObject> records = LinkedListMultimap.create();
 
 		for (Card card : CardCatalogue.getAll()) {
-			if (!DeckFormat.getFormat("Custom").isInFormat(card.getCardSet())) {
+			if (!DeckFormat.spellsource().isInFormat(card.getCardSet())) {
 				continue;
 			}
 
@@ -75,19 +75,19 @@ public class Encode {
 			final CardDesc desc = card.getDesc();
 
 			JsonObject cardRecord = new JsonObject();
-			cardRecord.put("class", desc.type)
+			cardRecord.put("class", desc.getType())
 					.put("depth", 0)
-					.put("rarity", desc.rarity)
-					.put("type", desc.type)
-					.put("heroClass", desc.heroClass == null ? desc.heroClasses[0] : desc.heroClass)
-					.put("baseManaCost", desc.baseManaCost);
+					.put("rarity", desc.getRarity())
+					.put("type", desc.getType())
+					.put("heroClass", desc.getHeroClass() == null ? desc.getHeroClasses()[0] : desc.getHeroClass())
+					.put("baseManaCost", desc.getBaseManaCost());
 
-			if (desc.type == CardType.MINION) {
-				cardRecord.put("baseAttack", desc.baseAttack)
-						.put("baseHp", desc.baseHp);
+			if (desc.getType() == CardType.MINION) {
+				cardRecord.put("baseAttack", desc.getBaseAttack())
+						.put("baseHp", desc.getBaseHp());
 			}
 
-			AttributeMap attributes = new AttributeMap(desc.attributes);
+			AttributeMap attributes = new AttributeMap(desc.getAttributes());
 
 			Stream.of(
 					Attribute.STEALTH,
@@ -112,16 +112,16 @@ public class Encode {
 
 			// Sub components
 			Map<String, ProcessResults> subComponents = new LinkedHashMap<>();
-			subComponents.put("spell", process(desc.spell, null, 0, "CardDesc"));
-			subComponents.put("battlecry", process(desc.battlecry, null, 0, "CardDesc"));
-			subComponents.put("deathrattle", process(desc.deathrattle, null, 0, "CardDesc"));
-			subComponents.put("triggers", process(desc.trigger, desc.triggers, 0, "CardDesc"));
-			subComponents.put("manaCostModifiers", process(desc.manaCostModifier, null, 0, "CardDesc"));
-			subComponents.put("auras", process(desc.aura, desc.auras, 0, "CardDesc"));
-			subComponents.put("passiveAuras", process(null, desc.passiveAuras, 0, "CardDesc"));
-			subComponents.put("passiveTriggers", process(desc.passiveTrigger, desc.passiveTriggers, 0, "CardDesc"));
-			subComponents.put("deckTriggers", process(desc.deckTrigger, desc.deckTriggers, 0, "CardDesc"));
-			subComponents.put("gameTriggers", process(null, desc.gameTriggers, 0, "CardDesc"));
+			subComponents.put("spell", process(desc.getSpell(), null, 0, "CardDesc"));
+			subComponents.put("battlecry", process(desc.getBattlecry(), null, 0, "CardDesc"));
+			subComponents.put("deathrattle", process(desc.getDeathrattle(), null, 0, "CardDesc"));
+			subComponents.put("triggers", process(desc.getTrigger(), desc.getTriggers(), 0, "CardDesc"));
+			subComponents.put("manaCostModifiers", process(desc.getManaCostModifier(), null, 0, "CardDesc"));
+			subComponents.put("auras", process(desc.getAura(), desc.getAuras(), 0, "CardDesc"));
+			subComponents.put("passiveAuras", process(null, desc.getPassiveAuras(), 0, "CardDesc"));
+			subComponents.put("passiveTriggers", process(desc.getPassiveTrigger(), desc.getPassiveTriggers(), 0, "CardDesc"));
+			subComponents.put("deckTriggers", process(desc.getDeckTrigger(), desc.getDeckTriggers(), 0, "CardDesc"));
+			subComponents.put("gameTriggers", process(null, desc.getGameTriggers(), 0, "CardDesc"));
 
 			// Process fields for sub components
 			for (Map.Entry<String, ProcessResults> res : subComponents.entrySet()) {
@@ -165,11 +165,11 @@ public class Encode {
 
 			// All the components that were emitted by this card should inherit some important values
 			for (Map.Entry<String, JsonObject> component : components.entries()) {
-				component.getValue().put("baseManaCost", desc.baseManaCost);
-				if (desc.type == CardType.MINION) {
+				component.getValue().put("baseManaCost", desc.getBaseManaCost());
+				if (desc.getType() == CardType.MINION) {
 					component.getValue()
-							.put("baseHp", desc.baseHp)
-							.put("baseAttack", desc.baseAttack);
+							.put("baseHp", desc.getBaseHp())
+							.put("baseAttack", desc.getBaseAttack());
 				}
 			}
 

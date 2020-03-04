@@ -65,13 +65,13 @@ public final class CopyCardEnchantmentsSpell extends Spell {
 
 				if (applyingTo instanceof Card) {
 					Card applyingToCard = (Card) applyingTo;
-					if (applyingToCard.getDesc().triggers != null) {
-						applyingToCard.getDesc().triggers = (EnchantmentDesc[]) ArrayUtils.addAll(applyingToCard.getDesc().triggers, triggers);
-					} else applyingToCard.getDesc().triggers = (EnchantmentDesc[]) triggers.toArray();
+					if (applyingToCard.getDesc().getTriggers() != null) {
+						applyingToCard.getDesc().setTriggers((EnchantmentDesc[]) ArrayUtils.addAll(applyingToCard.getDesc().getTriggers(), triggers));
+					} else applyingToCard.getDesc().setTriggers((EnchantmentDesc[]) triggers.toArray());
 
-					if (applyingToCard.getDesc().auras != null) {
-						applyingToCard.getDesc().auras = (AuraDesc[]) ArrayUtils.addAll(applyingToCard.getDesc().auras, auras);
-					} else applyingToCard.getDesc().auras = (AuraDesc[]) auras.toArray();
+					if (applyingToCard.getDesc().getAuras() != null) {
+						applyingToCard.getDesc().setAuras((AuraDesc[]) ArrayUtils.addAll(applyingToCard.getDesc().getAuras(), auras));
+					} else applyingToCard.getDesc().setAuras((AuraDesc[]) auras.toArray());
 
 				} else if (applyingTo instanceof Actor) {
 					Actor applyingToActor = (Actor) applyingTo;

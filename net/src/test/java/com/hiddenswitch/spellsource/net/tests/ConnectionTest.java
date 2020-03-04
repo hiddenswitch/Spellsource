@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
+import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.net.Configuration;
 import com.hiddenswitch.spellsource.net.Connection;
@@ -14,7 +15,10 @@ import io.vertx.core.http.WebSocket;
 import io.vertx.core.http.WebsocketRejectedException;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.Test;
+
+import java.util.concurrent.TimeoutException;
 
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -38,6 +42,14 @@ public class ConnectionTest extends SpellsourceTestBase {
 		}, testContext);
 	}
 
+	/**
+	 * Tests the connection handlers too.
+	 * <p>
+	 * If you see a {@link TimeoutException}, did you make sure to call {@code fut.handle(Future.succeededFuture());} in
+	 * your connection handler?
+	 *
+	 * @param testContext
+	 */
 	@Test(timeout = 15000)
 	public void testConnectionWithAuthSuceeds(TestContext testContext) {
 		sync(() -> {

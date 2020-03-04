@@ -35,7 +35,7 @@ public interface GameEventListener {
 	 * @param activePlayer
 	 */
 	@Suspendable
-	void onActivePlayer(Player activePlayer);
+	void onConnectionStarted(Player activePlayer);
 
 	/**
 	 * Notifies the turn has ended and the given player is now active

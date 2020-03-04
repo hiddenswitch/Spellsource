@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.net.Bots;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
-import com.hiddenswitch.spellsource.net.models.MulliganRequest;
+import com.hiddenswitch.spellsource.net.models.BotMulliganRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionResponse;
 import io.opentracing.SpanContext;
@@ -14,7 +14,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
@@ -39,7 +39,7 @@ public class BotsServiceBehaviour extends UtilityBehaviour implements Closeable 
 	@Override
 	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		return Bots.mulligan(new MulliganRequest(cards)).discardedCards;
+		return Bots.mulligan(new BotMulliganRequest(cards)).discardedCards;
 	}
 
 	@Override
