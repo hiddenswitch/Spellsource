@@ -1,10 +1,8 @@
 plugins {
     id 'java-library'
-    id 'org.javamodularity.moduleplugin' version '1.6.0' version '1.6.0'
 }
 
 apply plugin: 'java-library'
-apply plugin: 'org.javamodularity.moduleplugin'
 apply from: '../gradle/instrument.gradle'
 
 dependencies {
@@ -25,8 +23,5 @@ compileJava {
 
 test {
     useJUnitPlatform();
-    moduleOptions {
-        runOnClasspath = true
-    }
     enableAssertions = false
 }

@@ -27,8 +27,8 @@ public final class FatigueEvent extends GameEvent implements HasValue {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.FATIGUE;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.FATIGUE;
 	}
 
 	@Override

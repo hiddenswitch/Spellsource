@@ -326,11 +326,9 @@ public interface Decks {
 		CardCatalogue.loadCardsFromPackage();
 		// Fix invalid class cards
 		var classCards = CardCatalogue.getClassCards(DeckFormat.spellsource());
-		var validHeroCards = classCards.stream().map(Card::getDesc).map(CardDesc::getHero).collect(toList());
 		var validClasses = classCards.stream().map(Card::getDesc).map(CardDesc::getHeroClass).collect(toList());
-		var replacementHeroCard = validHeroCards.get(0);
 		mongo().updateCollectionWithOptions(COLLECTIONS,
-				json(CollectionRecord.HERO_CARD_ID, json("$exists", true, "$nin", validHeroCards)),
+				json(CollectionRecord.HERO_CARD_ID, json("$exists", true)),
 				json("$unset", json(CollectionRecord.HERO_CARD_ID, null)),
 				new UpdateOptions().setMulti(true));
 		mongo().updateCollectionWithOptions(COLLECTIONS,

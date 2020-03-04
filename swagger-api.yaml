@@ -150,6 +150,19 @@ definitions:
                 description: |
                   The contents of the message to send to the conversation.
                 type: 'string'
+          putCard:
+            description: |
+              Creates and draws a card with the specified JSON representation.
+
+              Only available in bot games.
+            type: 'object'
+            properties:
+              cardScript:
+                description: |
+                  A JSON-formatted specification for the card.
+
+                  The ID is auto-generated and ignored, which means drawing tokens at the moment is not supported.
+                type: 'string'
       result:
         description: |
           When populated on the server and sent to the client, indicates that a method call had a specific result.
@@ -168,6 +181,21 @@ definitions:
                 description: |
                   The new message ID.
                 type: 'string'
+          putCard:
+            description: |
+              The result of creating and drawing a card.
+            type: 'object'
+            properties:
+              cardId:
+                description: |
+                  The card ID that was put into the game.
+                type: 'string'
+              cardScriptErrors:
+                description: |
+                  An array of errors with the card, if applicable.
+                type: 'array'
+                items:
+                  type: 'string'
           enqueue:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
           dequeue:
@@ -852,10 +880,26 @@ definitions:
       card:
         $ref: '#/definitions/Entity'
   DamageTypeEnum:
+    description: |
+      Types of damage.
+
+       - PHYSICAL: Physical damage is caused by physical attacks by actors.
+       - FATIGUE: Fatigue damage is caused by drawing from an empty deck.
+       - MAGICAL: Magical damage is caused by spells and effects. It is typically rendered by missiles in the client.
+       - DECAY: Decay damage is specific to the DECAY keyword. It deals one damage to the entity at the end of every one
+         of its owner's turns
+       - DEFLECT: Damage dealt from the Deflect ability to the hero.
+       - DRAIN: Damage dealt by a Drain ability.
+       - IGNORES_ARMOR: Damage that ignores armor when it is dealt to the hero.
     type: 'string'
     enum:
       - 'PHYSICAL'
+      - 'FATIGUE'
       - 'MAGICAL'
+      - 'DECAY'
+      - 'DEFLECT'
+      - 'DRAIN'
+      - 'IGNORES_ARMOR'
   GameEvent:
     type: 'object'
     properties:
@@ -863,9 +907,36 @@ definitions:
         description: |
           An integer ID corresponding to the order of this event from the client's point of view.
         type: 'integer'
+      isSourcePlayerLocal:
+        type: 'boolean'
+        x-nullable: false
+        description: |
+          Stores the source player according to the game event data. Typically this is the player who is casting the
+          card or otherwise the source of an event.
+      isTargetPlayerLocal:
+        type: 'boolean'
+        x-nullable: false
+        description: |
+          Stores the target player according to the game event data.
+      entityTouched:
+        description: The ID of the entity that has starting being touched by the opponent.
+        type: 'integer'
+      entityUntouched:
+        description: The ID of the entity that is no longer being touched by the opponent.
+        type: 'integer'
+      source:
+        $ref: '#/definitions/Entity'
+      target:
+        $ref: '#/definitions/Entity'
+      value:
+        type: 'integer'
+        format: 'int32'
+        description: |
+          When not null, indicates this game event comes with a value. This is typically the damage dealt, the amount of
+          healing, etc.
       description:
         description: |
-          A plaintext description of this event.
+          A plain text description of this event that should be shown to the user.
         type: 'string'
       isPowerHistory:
         description: |
@@ -934,54 +1005,13 @@ definitions:
           - 'WEAPON_DESTROYED'
           - 'WEAPON_EQUIPPED'
           - 'WILL_END_SEQUENCE'
-      afterPhysicalAttack:
-        $ref: '#/definitions/PhysicalAttackEvent'
-      drawCard:
+      cardEvent:
         $ref: '#/definitions/CardEvent'
-      entityTouched:
-        type: 'integer'
-      entityUntouched:
-        type: 'integer'
-      preDamage:
+      performedGameAction:
         type: 'object'
         properties:
-          victim:
-            $ref: '#/definitions/Entity'
-          source:
-            $ref: '#/definitions/Entity'
-      silence:
-        type: 'object'
-        properties:
-          target:
-            $ref: '#/definitions/Entity'
-      secretPlayed:
-        type: 'object'
-        properties:
-          secretCard:
-            $ref: '#/definitions/Entity'
-      beforeSummon:
-        type: 'object'
-        properties:
-          minion:
-            $ref: '#/definitions/Entity'
-          source:
-            $ref: '#/definitions/Entity'
-      cardPlayed:
-        $ref: '#/definitions/CardEvent'
-      armorGained:
-        type: 'object'
-        properties:
-          hero:
-            $ref: '#/definitions/Entity'
-      afterSummon:
-        type: 'object'
-        properties:
-          minion:
-            $ref: '#/definitions/Entity'
-          source:
-            $ref: '#/definitions/Entity'
-      spellCasted:
-        $ref: '#/definitions/CardEvent'
+          actionType:
+            $ref: '#/definitions/ActionType'
       joust:
         type: 'object'
         properties:
@@ -991,127 +1021,26 @@ definitions:
             $ref: '#/definitions/Entity'
           opponentCard:
             $ref: '#/definitions/Entity'
-      weaponDestroyed:
-        type: 'object'
-        properties:
-          weapon:
-            $ref: '#/definitions/Entity'
-      heroPowerUsed:
-        type: 'object'
-        properties:
-          heroPower:
-            $ref: '#/definitions/Entity'
-      enrageChanged:
-        type: 'object'
-        properties:
-          target:
-            $ref: '#/definitions/Entity'
-      targetAcquisition:
-        type: 'object'
-        properties:
-          target:
-            $ref: '#/definitions/Entity'
-          source:
-            $ref: '#/definitions/Entity'
       damage:
         type: 'object'
         properties:
-          victim:
-            $ref: '#/definitions/Entity'
-          damage:
-            type: 'integer'
-          source:
-            $ref: '#/definitions/Entity'
           damageType:
             $ref: '#/definitions/DamageTypeEnum'
-      weaponEquipped:
-        type: 'object'
-        properties:
-          weapon:
-            $ref: '#/definitions/Entity'
-      performedGameAction:
-        type: 'object'
-        properties:
-          source:
-            $ref: '#/definitions/Entity'
-          target:
-            $ref: '#/definitions/Entity'
-          description:
-            description: |
-              A plain-text description of the game action that should be rendered on the client.
-            type: 'string'
-      physicalAttack:
-        $ref: '#/definitions/PhysicalAttackEvent'
-      overload:
-        type: 'object'
-        properties:
-          card:
-            $ref: '#/definitions/Entity'
-      heal:
-        type: 'object'
-        properties:
-          target:
-            $ref: '#/definitions/Entity'
-          healing:
-            type: 'integer'
-      secretRevealed:
-        type: 'object'
-        properties:
-          secret:
-            $ref: '#/definitions/Entity'
-      questSuccessful:
-        type: 'object'
-        properties:
-          quest:
-            $ref: '#/definitions/Entity'
-      questPlayed:
-        type: 'object'
-        properties:
-          quest:
-            $ref: '#/definitions/Entity'
-      summon:
-        type: 'object'
-        properties:
-          minion:
-            $ref: '#/definitions/Entity'
-          source:
-            $ref: '#/definitions/Entity'
-      afterSpellCasted:
-        type: 'object'
-        properties:
-          sourceCard:
-            $ref: '#/definitions/Entity'
-          spellTarget:
-            $ref: '#/definitions/Entity'
-      discard:
-        $ref: '#/definitions/CardEvent'
-      roasted:
-        $ref: '#/definitions/CardEvent'
-      kill:
-        type: 'object'
-        properties:
-          victim:
-            $ref: '#/definitions/Entity'
-      fatigue:
-        type: 'object'
-        properties:
-          playerId:
-            type: 'integer'
-          damage:
-            type: 'integer'
       triggerFired:
         type: 'object'
         properties:
-          description:
-            description: |
-              A plain text description of an explanation of this trigger firing.
-            type: 'string'
           triggerSourceId:
             description: |
               The entity ID corresponding to the source of the trigger that got fired.
             type: 'integer'
-          triggerSource:
-            $ref: '#/definitions/Entity'
+            x-nullable: false
+          triggerTargetIds:
+            description: |
+              The targets of the trigger's effect.
+            type: 'array'
+            items:
+              type: 'integer'
+              x-nullable: false
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:
@@ -1281,6 +1210,19 @@ definitions:
         default: -1
         x-nullable: false
   ActionType:
+    description: |
+      Action types correspond to things the player can do.
+
+       - SYSTEM: Indicates the action isn't player-initiated and is of a special system type. Currently unused.
+       - END_TURN: Indicates the action ends the turn.
+       - PHYSICAL_ATTACK: Indicates the action is an attack of one entity against another.
+       - SPELL: Indicates the action is casting a spell, possibly with a target.
+       - SUMMON: Indicates the action is summoning a minion, possibly with a minion targeted to summon it "next to."
+       - HERO_POWER: Indicates the action is to use a hero power, possibly with a target.
+       - BATTLECRY: Indicates the action is an opener. When not targeted, the opener action is executed automatically.
+       - EQUIP_WEAPON: Indicates the action resulted in equipping a weapon.
+       - DISCOVER: Indicates the action is to discover among choices.
+       - HERO: Indicates the action is playing a hero card, replacing the current hero.
     type: 'string'
     x-nullable: false
     enum:

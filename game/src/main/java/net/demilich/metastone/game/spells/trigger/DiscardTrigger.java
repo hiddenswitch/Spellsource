@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells.trigger;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DiscardEvent;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -34,15 +34,15 @@ public class DiscardTrigger extends EventTrigger {
 
 		if (target != null) {
 			List<Entity> resolvedTargets = event.getGameContext().resolveTarget(event.getGameContext().getPlayer(owner), host, target);
-			targetSatisfied = resolvedTargets != null && resolvedTargets.stream().anyMatch(e -> e.getId() == discardEvent.getCard().getId());
+			targetSatisfied = resolvedTargets != null && resolvedTargets.stream().anyMatch(e -> e.getId() == discardEvent.getSourceCard().getId());
 		}
 
 		return targetPlayerSatisfied && targetSatisfied;
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.DISCARD;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DISCARD;
 	}
 
 }

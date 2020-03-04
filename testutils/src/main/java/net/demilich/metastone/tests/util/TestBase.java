@@ -553,7 +553,7 @@ public class TestBase {
 		CardDesc damageSpell = new CardDesc();
 		damageSpell.setId(context.getLogic().generateCardId());
 		damageSpell.setTargetSelection(TargetSelection.ANY);
-		damageSpell.spell = DamageSpell.create(damage);
+		damageSpell.setSpell(DamageSpell.create(damage));
 		damageSpell.setSet(TestCardResources.TEST);
 		damageSpell.setType(CardType.SPELL);
 		Card card = new Card(damageSpell);

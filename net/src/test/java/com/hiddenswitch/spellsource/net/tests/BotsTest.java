@@ -6,13 +6,13 @@ import com.hiddenswitch.spellsource.net.Bots;
 import com.hiddenswitch.spellsource.net.Games;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.*;
-import com.hiddenswitch.spellsource.net.models.MulliganRequest;
+import com.hiddenswitch.spellsource.net.models.BotMulliganRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionResponse;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
@@ -32,7 +32,7 @@ public class BotsTest extends SpellsourceTestBase {
 	@Test
 	public void testMulligan(TestContext context) {
 		sync(() -> {
-			MulliganRequest request = new MulliganRequest(
+			BotMulliganRequest request = new BotMulliganRequest(
 					Arrays.asList(
 							CardCatalogue.getCardById("spell_test_deal_6"),
 							CardCatalogue.getCardById("minion_test_3_2"),

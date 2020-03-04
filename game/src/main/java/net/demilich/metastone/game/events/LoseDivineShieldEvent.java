@@ -17,8 +17,8 @@ public final class LoseDivineShieldEvent extends GameEvent implements HasVictim 
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.LOSE_DIVINE_SHIELD;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.LOSE_DIVINE_SHIELD;
 	}
 
 	@Override

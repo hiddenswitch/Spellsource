@@ -3,15 +3,15 @@ package com.hiddenswitch.spellsource.net.impl.util;
 import co.paralleluniverse.strands.SuspendableAction1;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 
 public class PersistenceHandler<T extends GameEvent> {
 	private SuspendableAction1<PersistenceContext<T>> handler;
 	private String id;
-	private GameEventType type;
+	private EventTypeEnum type;
 	private Attribute attribute;
 
-	public PersistenceHandler(SuspendableAction1<PersistenceContext<T>> handler, String id, GameEventType type, Attribute attribute) {
+	public PersistenceHandler(SuspendableAction1<PersistenceContext<T>> handler, String id, EventTypeEnum type, Attribute attribute) {
 		this.setHandler(handler);
 		this.setId(id);
 		this.setType(type);
@@ -34,11 +34,11 @@ public class PersistenceHandler<T extends GameEvent> {
 		this.id = id;
 	}
 
-	public GameEventType getType() {
+	public EventTypeEnum getType() {
 		return type;
 	}
 
-	public void setType(GameEventType type) {
+	public void setType(EventTypeEnum type) {
 		this.type = type;
 	}
 
