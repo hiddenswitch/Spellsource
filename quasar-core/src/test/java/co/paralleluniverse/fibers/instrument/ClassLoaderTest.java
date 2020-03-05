@@ -17,7 +17,6 @@ public class ClassLoaderTest {
      * Test instrumentation of @Suspendable classes loaded dynamically in a custom classloader
      */
     @Test
-    @Ignore("not supported in modules")
     public void testSuspendableMethodsLoadedDynamically() {
         final ArrayList<String> results = new ArrayList<>();
         try {
@@ -59,7 +58,6 @@ public class ClassLoaderTest {
      * Test instrumentation of @Suspendable class loaded twice in distinct classloaders to ensure it is instrumented properly each time
      */
     @Test
-    @Ignore("not supported in modules")
     public void testSuspendableClassLoadedTwice() {
         final ArrayList<String> results1 = new ArrayList<>();
         final ArrayList<String> results2 = new ArrayList<>();
@@ -122,7 +120,6 @@ public class ClassLoaderTest {
      * Test instrumentation of a fiber implementation class that is loaded dynamically.
      */
     @Test
-    @Ignore("not supported in modules")
     public void testDynamicallyLoadedFiber() {
         ArrayList<String> results = null;
         try {

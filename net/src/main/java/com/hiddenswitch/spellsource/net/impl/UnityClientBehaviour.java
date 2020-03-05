@@ -39,7 +39,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.get;
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
@@ -365,20 +364,28 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	/**
 	 * If there is an existing action request, update the available actions the player can take.
+	 * <p>
+	 * Because actions are requested in a blocking {@code resume()} loop on the {@link
+	 * com.hiddenswitch.spellsource.net.impl.util.ServerGameContext#play(boolean)} strand, changing the actions that are
+	 * requested requires (1) notifying the client of new actions and (2) replacing the existing valid game actions. The
+	 * request callback ID is not changed, because the player is still responding to the same request for actions, just
+	 * for different actions.
 	 *
 	 * @param context the game context
-	 * @param player  the player who's taking the action, i.e. the one related to this client behaviour
 	 * @param actions the new actions
 	 */
 	@Suspendable
-	public void updateActions(GameContext context, Player player, List<GameAction> actions) {
+	public void updateActions(GameContext context, List<GameAction> actions) {
 		requestsLock.lock();
 		try {
-			for (var request : getRequests()) {
-				if (request.getType() == GameplayRequestType.ACTION) {
-					request.setActions(actions);
-					onRequestAction(request.getCallbackId(), context.getGameStateCopy(), actions);
-				}
+			if (requests.isEmpty()) {
+				throw new RuntimeException("no existing requests");
+			}
+
+			var request = getRequests().getLast();
+			if (request.getType() == GameplayRequestType.ACTION) {
+				request.setActions(actions);
+				onRequestAction(request.getCallbackId(), context.getGameStateCopy(), actions);
 			}
 		} finally {
 			requestsLock.unlock();
