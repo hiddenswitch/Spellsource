@@ -1,13 +1,13 @@
 /*
  * Quasar: lightweight threads and actors for the JVM.
  * Copyright (c) 2013-2014, Parallel Universe Software Co. All rights reserved.
- * 
+ *
  * This program and the accompanying materials are dual-licensed under
  * either the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation
- *  
+ *
  *   or (per the licensee's choosing)
- *  
+ *
  * under the terms of the GNU Lesser General Public License version 3.0
  * as published by the Free Software Foundation.
  */
@@ -17,7 +17,7 @@
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright
@@ -96,7 +96,7 @@ public class CheckInstrumentationVisitor extends ClassVisitor {
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         this.className = name;
         this.isInterface = (access & Opcodes.ACC_INTERFACE) != 0;
-        this.classEntry = new ClassEntry(superName);
+        this.classEntry = new ClassEntry(name ,superName);
         classEntry.setInterfaces(interfaces);
         classEntry.setIsInterface(isInterface);
     }
@@ -137,7 +137,7 @@ public class CheckInstrumentationVisitor extends ClassVisitor {
             }
         }
         suspendable = InstrumentClass.suspendableToSuperIfAbstract(access, suspendable);
-        classEntry.set(name, desc, suspendable);
+        classEntry.set(name, desc, suspendable, (access & Opcodes.ACC_BRIDGE) != 0);
 
         if (suspendable == null) // look for @Suspendable annotation
             return new MethodVisitor(ASMAPI) {
@@ -153,7 +153,8 @@ public class CheckInstrumentationVisitor extends ClassVisitor {
                 @Override
                 public void visitEnd() {
                     super.visitEnd();
-                    classEntry.set(name, desc, InstrumentClass.suspendableToSuperIfAbstract(access, susp ? SuspendableType.SUSPENDABLE : SuspendableType.NON_SUSPENDABLE));
+                    classEntry.set(name, desc, InstrumentClass.suspendableToSuperIfAbstract(access, susp ? SuspendableType.SUSPENDABLE : SuspendableType.NON_SUSPENDABLE),
+                        (access & Opcodes.ACC_BRIDGE) != 0);
                     hasSuspendable = hasSuspendable | susp;
                 }
             };

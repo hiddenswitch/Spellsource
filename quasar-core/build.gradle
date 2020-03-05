@@ -189,8 +189,8 @@ task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
     archiveClassifier = 'uninstrumented'
 }
 
-test.dependsOn shadowJar
 test {
+    dependsOn = [shadowJar, compileClassloadertestJava]
     useJUnit()
 
     systemProperty 'co.paralleluniverse.monitoring.flightRecorderLevel', '5'
@@ -273,7 +273,6 @@ javadoc {
 
 assemble.dependsOn shadowJar
 build.dependsOn shadowJar
-//jar.finalizedBy(shadowJar)
 
 shadowJar {
     classifier = '' // overwrite jar
