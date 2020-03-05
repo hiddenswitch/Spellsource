@@ -8,7 +8,6 @@ import com.hiddenswitch.spellsource.client.models.EnvelopeResultPutCard;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
-import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -31,7 +30,10 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public interface Editor {
 	/**
-	 * Enables the editor.
+	 * Enables the editor commands for connected, authorized users.
+	 * <p>
+	 * In the current version of the editor, players can put in Card Script and it will appear as a drawn card in the
+	 * game.
 	 */
 	@Suspendable
 	static void handleConnections() {
@@ -76,34 +78,45 @@ public interface Editor {
 
 		String gameId = gameContext.getGameId();
 		var registration = eventBus.<JsonObject>consumer(getPutCardAddress(gameId), suspendableHandler(msg -> {
+			var userId = msg.body().getString("userId");
 			var putCard = fromJson(msg.body().getJsonObject("putCard"), EnvelopeMethodPutCard.class);
 
 			var result = new EnvelopeResultPutCard();
-			var userId = msg.body().getString("userId");
 
+			// Whenever we mutate the game context this way, we're doing something like a "transaction," it needs to be locked
+			// so that simultaneous edits do not occur (e.g., by performing a game action while we are mutating the hand)
 			gameContext.getLock().lock();
 			try {
+				// You can't do this stuff on a game that isn't running
 				if (!gameContext.isRunning()) {
 					throw new RuntimeException("Game is not yet running.");
 				}
 
+				// This JSON decoding step raises decode exceptions
+				// Eventually it will need to evolve into all sorts of validation and helpful error messages
 				var cardDesc = Json.decodeValue(putCard.getCardScript(), CardDesc.class);
 				if (cardDesc.getId() == null || cardDesc.getId().isEmpty()) {
 					cardDesc.setId(gameContext.getLogic().generateCardId());
 				}
 				var card = cardDesc.create();
+				// Add the card to the game context
 				if (gameContext.getTempCards().containsCard(cardDesc.getId())) {
 					gameContext.getTempCards().removeIf(c -> Objects.equals(cardDesc.getId(), c.getCardId()));
 				}
 				gameContext.addTempCard(card);
-				var player = gameContext.getPlayers().stream().filter(p -> Objects.equals(userId, p.getUserId())).findFirst().orElseThrow(() -> new NullPointerException(userId));
+				// Find the player with the specified user ID
+				var player = gameContext.getPlayers()
+						.stream()
+						.filter(p -> Objects.equals(userId, p.getUserId()))
+						.findFirst()
+						.orElseThrow(() -> new NullPointerException(userId));
 				var behaviour = gameContext.getBehaviours().get(player.getId());
 				// May raise events
 				gameContext.getLogic().receiveCard(player.getId(), card.clone());
 				// The actions the player can take have changed so send a new request
 				// This replaces existing requests
 				if (gameContext.getActivePlayerId() == player.getId() && behaviour instanceof UnityClientBehaviour) {
-					((UnityClientBehaviour) behaviour).updateActions(gameContext, player, gameContext.getValidActions());
+					((UnityClientBehaviour) behaviour).updateActions(gameContext, gameContext.getValidActions());
 				}
 				// Tell the client what the card ID was
 				result.cardId(cardDesc.getId());
@@ -115,7 +128,7 @@ public interface Editor {
 			msg.reply(json(result));
 		}));
 
-
+		// The game context is responsible for unregistering this event bus handler.
 		return registration::unregister;
 	}
 
