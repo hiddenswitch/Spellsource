@@ -7,8 +7,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 apply from: '../gradle/instrument.gradle'
 
-mainClassName = 'com.hiddenswitch.cluster.application.Simulate'
-
 shadowJar {
     zip64 true
 }

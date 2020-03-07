@@ -17,61 +17,81 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.EnvelopeSubConversation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * When populated by the client and sent to the server, subscribes to data of the specified kind. 
+ * Stores data about a card currently being edited.  For now, the text-editable view of the card is just stored as a string. 
  */
-@ApiModel(description = "When populated by the client and sent to the server, subscribes to data of the specified kind. ")
+@ApiModel(description = "Stores data about a card currently being edited.  For now, the text-editable view of the card is just stored as a string. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
-public class EnvelopeSub implements Serializable {
+public class EditableCard implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("editableCards")
-  private Object editableCards = null;
+  @JsonProperty("_id")
+  private String id = null;
 
-  @JsonProperty("conversation")
-  private EnvelopeSubConversation conversation = null;
+  @JsonProperty("source")
+  private String source = null;
 
-  public EnvelopeSub editableCards(Object editableCards) {
-    this.editableCards = editableCards;
+  @JsonProperty("ownerUserId")
+  private String ownerUserId = null;
+
+  public EditableCard id(String id) {
+    this.id = id;
     return this;
   }
 
    /**
-   * Subscribes to the user&#39;s editable card collection. 
-   * @return editableCards
+   * The ID of the card in the database. 
+   * @return id
   **/
-  @ApiModelProperty(value = "Subscribes to the user's editable card collection. ")
-  public Object getEditableCards() {
-    return editableCards;
+  @ApiModelProperty(value = "The ID of the card in the database. ")
+  public String getId() {
+    return id;
   }
 
-  public void setEditableCards(Object editableCards) {
-    this.editableCards = editableCards;
+  public void setId(String id) {
+    this.id = id;
   }
 
-  public EnvelopeSub conversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public EditableCard source(String source) {
+    this.source = source;
     return this;
   }
 
    /**
-   * Get conversation
-   * @return conversation
+   * The CardScript source code of the card. 
+   * @return source
   **/
-  @ApiModelProperty(value = "")
-  public EnvelopeSubConversation getConversation() {
-    return conversation;
+  @ApiModelProperty(value = "The CardScript source code of the card. ")
+  public String getSource() {
+    return source;
   }
 
-  public void setConversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public void setSource(String source) {
+    this.source = source;
+  }
+
+  public EditableCard ownerUserId(String ownerUserId) {
+    this.ownerUserId = ownerUserId;
+    return this;
+  }
+
+   /**
+   * The user ID of the owner of this card, i.e. its creator. 
+   * @return ownerUserId
+  **/
+  @ApiModelProperty(value = "The user ID of the owner of this card, i.e. its creator. ")
+  public String getOwnerUserId() {
+    return ownerUserId;
+  }
+
+  public void setOwnerUserId(String ownerUserId) {
+    this.ownerUserId = ownerUserId;
   }
 
 
@@ -83,24 +103,26 @@ public class EnvelopeSub implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeSub envelopeSub = (EnvelopeSub) o;
-    return Objects.equals(this.editableCards, envelopeSub.editableCards) &&
-        Objects.equals(this.conversation, envelopeSub.conversation);
+    EditableCard editableCard = (EditableCard) o;
+    return Objects.equals(this.id, editableCard.id) &&
+        Objects.equals(this.source, editableCard.source) &&
+        Objects.equals(this.ownerUserId, editableCard.ownerUserId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(editableCards, conversation);
+    return Objects.hash(id, source, ownerUserId);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeSub {\n");
+    sb.append("class EditableCard {\n");
     
-    sb.append("    editableCards: ").append(toIndentedString(editableCards)).append("\n");
-    sb.append("    conversation: ").append(toIndentedString(conversation)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
+    sb.append("    ownerUserId: ").append(toIndentedString(ownerUserId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

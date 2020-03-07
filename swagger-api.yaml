@@ -58,6 +58,8 @@ definitions:
             $ref: '#/definitions/Invite'
           match:
             $ref: '#/definitions/Match'
+          editableCard:
+            $ref: '#/definitions/EditableCard'
           spanContext:
             $ref: '#/definitions/SpanContext'
       changed:
@@ -69,6 +71,8 @@ definitions:
             $ref: '#/definitions/Friend'
           invite:
             $ref: '#/definitions/Invite'
+          editableCard:
+            $ref: '#/definitions/EditableCard'
       removed:
         description: |
           Indicates that a record has been removed from the client's ephemeral collections.
@@ -86,11 +90,19 @@ definitions:
             description: |
               The unique ID of the friend that should be removed,
             type: 'string'
+          editableCardId:
+            description: |
+              The unique ID of the editable card.
+            type: 'string'
       sub:
         description: |
           When populated by the client and sent to the server, subscribes to data of the specified kind.
         type: 'object'
         properties:
+          editableCards:
+            description: |
+              Subscribes to the user's editable card collection.
+            type: 'object'
           conversation:
             description: |
               Subscribe to messages in a specific conversation. Receives all past messages, followed by any new ones.
@@ -152,17 +164,35 @@ definitions:
                 type: 'string'
           putCard:
             description: |
-              Creates and draws a card with the specified JSON representation.
+              Upserts and draws a card with the specified JSON representation.
 
               Only available in bot games.
             type: 'object'
             properties:
-              cardScript:
+              editableCardId:
+                type: 'string'
+                description: |
+                  The editable card record ID, or null if one should be created.
+              draw:
+                type: 'boolean'
+                x-nullable: false
+                description: |
+                  When true, indicates that the editor should draw the card in a live game, if there is one.
+              source:
                 description: |
                   A JSON-formatted specification for the card.
 
                   The ID is auto-generated and ignored, which means drawing tokens at the moment is not supported.
                 type: 'string'
+          deleteCard:
+            description: |
+              Removes the card with the specified record ID from the editable cards list.
+            type: 'object'
+            properties:
+              editableCardId:
+                type: 'string'
+                description: |
+                  The editable card record ID, or null if one should be created.
       result:
         description: |
           When populated on the server and sent to the client, indicates that a method call had a specific result.
@@ -186,6 +216,10 @@ definitions:
               The result of creating and drawing a card.
             type: 'object'
             properties:
+              editableCardId:
+                description: |
+                  When not null, contains the editable card ID that was created by putting a record
+                type: 'string'
               cardId:
                 description: |
                   The card ID that was put into the game.
@@ -319,6 +353,25 @@ definitions:
       - 'OFFLINE'
       - 'IN_GAME'
       - 'ONLINE'
+  EditableCard:
+    type: 'object'
+    description: |
+      Stores data about a card currently being edited.
+
+      For now, the text-editable view of the card is just stored as a string.
+    properties:
+      _id:
+        type: 'string'
+        description: |
+          The ID of the card in the database.
+      source:
+        description: |
+          The CardScript source code of the card.
+        type: 'string'
+      ownerUserId:
+        description: |
+          The user ID of the owner of this card, i.e. its creator.
+        type: 'string'
   Friend:
     type: 'object'
     properties:

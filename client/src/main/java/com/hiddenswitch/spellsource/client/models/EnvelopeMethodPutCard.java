@@ -23,33 +23,75 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Creates and draws a card with the specified JSON representation.  Only available in bot games. 
+ * Upserts and draws a card with the specified JSON representation.  Only available in bot games. 
  */
-@ApiModel(description = "Creates and draws a card with the specified JSON representation.  Only available in bot games. ")
+@ApiModel(description = "Upserts and draws a card with the specified JSON representation.  Only available in bot games. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeMethodPutCard implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("cardScript")
-  private String cardScript = null;
+  @JsonProperty("editableCardId")
+  private String editableCardId = null;
 
-  public EnvelopeMethodPutCard cardScript(String cardScript) {
-    this.cardScript = cardScript;
+  @JsonProperty("draw")
+  private Boolean draw = null;
+
+  @JsonProperty("source")
+  private String source = null;
+
+  public EnvelopeMethodPutCard editableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
+    return this;
+  }
+
+   /**
+   * The editable card record ID, or null if one should be created. 
+   * @return editableCardId
+  **/
+  @ApiModelProperty(value = "The editable card record ID, or null if one should be created. ")
+  public String getEditableCardId() {
+    return editableCardId;
+  }
+
+  public void setEditableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
+  }
+
+  public EnvelopeMethodPutCard draw(Boolean draw) {
+    this.draw = draw;
+    return this;
+  }
+
+   /**
+   * When true, indicates that the editor should draw the card in a live game, if there is one. 
+   * @return draw
+  **/
+  @ApiModelProperty(value = "When true, indicates that the editor should draw the card in a live game, if there is one. ")
+  public Boolean isDraw() {
+    return draw;
+  }
+
+  public void setDraw(Boolean draw) {
+    this.draw = draw;
+  }
+
+  public EnvelopeMethodPutCard source(String source) {
+    this.source = source;
     return this;
   }
 
    /**
    * A JSON-formatted specification for the card.  The ID is auto-generated and ignored, which means drawing tokens at the moment is not supported. 
-   * @return cardScript
+   * @return source
   **/
   @ApiModelProperty(value = "A JSON-formatted specification for the card.  The ID is auto-generated and ignored, which means drawing tokens at the moment is not supported. ")
-  public String getCardScript() {
-    return cardScript;
+  public String getSource() {
+    return source;
   }
 
-  public void setCardScript(String cardScript) {
-    this.cardScript = cardScript;
+  public void setSource(String source) {
+    this.source = source;
   }
 
 
@@ -62,12 +104,14 @@ public class EnvelopeMethodPutCard implements Serializable {
       return false;
     }
     EnvelopeMethodPutCard envelopeMethodPutCard = (EnvelopeMethodPutCard) o;
-    return Objects.equals(this.cardScript, envelopeMethodPutCard.cardScript);
+    return Objects.equals(this.editableCardId, envelopeMethodPutCard.editableCardId) &&
+        Objects.equals(this.draw, envelopeMethodPutCard.draw) &&
+        Objects.equals(this.source, envelopeMethodPutCard.source);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cardScript);
+    return Objects.hash(editableCardId, draw, source);
   }
 
 
@@ -76,7 +120,9 @@ public class EnvelopeMethodPutCard implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class EnvelopeMethodPutCard {\n");
     
-    sb.append("    cardScript: ").append(toIndentedString(cardScript)).append("\n");
+    sb.append("    editableCardId: ").append(toIndentedString(editableCardId)).append("\n");
+    sb.append("    draw: ").append(toIndentedString(draw)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("}");
     return sb.toString();
   }

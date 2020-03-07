@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **dequeue** | [**EnvelopeMethodDequeue**](EnvelopeMethodDequeue.md) |  |  [optional]
 **sendMessage** | [**EnvelopeMethodSendMessage**](EnvelopeMethodSendMessage.md) |  |  [optional]
 **putCard** | [**EnvelopeMethodPutCard**](EnvelopeMethodPutCard.md) |  |  [optional]
+**deleteCard** | [**EnvelopeMethodDeleteCard**](EnvelopeMethodDeleteCard.md) |  |  [optional]
 
 
 

@@ -17,61 +17,39 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.EnvelopeSubConversation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * When populated by the client and sent to the server, subscribes to data of the specified kind. 
+ * Removes the card with the specified record ID from the editable cards list. 
  */
-@ApiModel(description = "When populated by the client and sent to the server, subscribes to data of the specified kind. ")
+@ApiModel(description = "Removes the card with the specified record ID from the editable cards list. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
-public class EnvelopeSub implements Serializable {
+public class EnvelopeMethodDeleteCard implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("editableCards")
-  private Object editableCards = null;
+  @JsonProperty("editableCardId")
+  private String editableCardId = null;
 
-  @JsonProperty("conversation")
-  private EnvelopeSubConversation conversation = null;
-
-  public EnvelopeSub editableCards(Object editableCards) {
-    this.editableCards = editableCards;
+  public EnvelopeMethodDeleteCard editableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
     return this;
   }
 
    /**
-   * Subscribes to the user&#39;s editable card collection. 
-   * @return editableCards
+   * The editable card record ID, or null if one should be created. 
+   * @return editableCardId
   **/
-  @ApiModelProperty(value = "Subscribes to the user's editable card collection. ")
-  public Object getEditableCards() {
-    return editableCards;
+  @ApiModelProperty(value = "The editable card record ID, or null if one should be created. ")
+  public String getEditableCardId() {
+    return editableCardId;
   }
 
-  public void setEditableCards(Object editableCards) {
-    this.editableCards = editableCards;
-  }
-
-  public EnvelopeSub conversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
-    return this;
-  }
-
-   /**
-   * Get conversation
-   * @return conversation
-  **/
-  @ApiModelProperty(value = "")
-  public EnvelopeSubConversation getConversation() {
-    return conversation;
-  }
-
-  public void setConversation(EnvelopeSubConversation conversation) {
-    this.conversation = conversation;
+  public void setEditableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
   }
 
 
@@ -83,24 +61,22 @@ public class EnvelopeSub implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeSub envelopeSub = (EnvelopeSub) o;
-    return Objects.equals(this.editableCards, envelopeSub.editableCards) &&
-        Objects.equals(this.conversation, envelopeSub.conversation);
+    EnvelopeMethodDeleteCard envelopeMethodDeleteCard = (EnvelopeMethodDeleteCard) o;
+    return Objects.equals(this.editableCardId, envelopeMethodDeleteCard.editableCardId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(editableCards, conversation);
+    return Objects.hash(editableCardId);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeSub {\n");
+    sb.append("class EnvelopeMethodDeleteCard {\n");
     
-    sb.append("    editableCards: ").append(toIndentedString(editableCards)).append("\n");
-    sb.append("    conversation: ").append(toIndentedString(conversation)).append("\n");
+    sb.append("    editableCardId: ").append(toIndentedString(editableCardId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -40,6 +40,9 @@ public class EnvelopeRemoved implements Serializable {
   @JsonProperty("friendId")
   private String friendId = null;
 
+  @JsonProperty("editableCardId")
+  private String editableCardId = null;
+
   public EnvelopeRemoved inviteId(String inviteId) {
     this.inviteId = inviteId;
     return this;
@@ -94,6 +97,24 @@ public class EnvelopeRemoved implements Serializable {
     this.friendId = friendId;
   }
 
+  public EnvelopeRemoved editableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
+    return this;
+  }
+
+   /**
+   * The unique ID of the editable card. 
+   * @return editableCardId
+  **/
+  @ApiModelProperty(value = "The unique ID of the editable card. ")
+  public String getEditableCardId() {
+    return editableCardId;
+  }
+
+  public void setEditableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -106,12 +127,13 @@ public class EnvelopeRemoved implements Serializable {
     EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
     return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
         Objects.equals(this.matchId, envelopeRemoved.matchId) &&
-        Objects.equals(this.friendId, envelopeRemoved.friendId);
+        Objects.equals(this.friendId, envelopeRemoved.friendId) &&
+        Objects.equals(this.editableCardId, envelopeRemoved.editableCardId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId, matchId, friendId);
+    return Objects.hash(inviteId, matchId, friendId, editableCardId);
   }
 
 
@@ -123,6 +145,7 @@ public class EnvelopeRemoved implements Serializable {
     sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
     sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
     sb.append("    friendId: ").append(toIndentedString(friendId)).append("\n");
+    sb.append("    editableCardId: ").append(toIndentedString(editableCardId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

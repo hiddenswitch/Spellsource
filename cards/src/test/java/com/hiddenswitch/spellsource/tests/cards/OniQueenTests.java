@@ -106,6 +106,7 @@ public class OniQueenTests extends TestBase {
 		});
 	}
 
+	@Test
 	public void testRuffianShiroTargetSelection() {
 		runGym((context, player, opponent) -> {
 			Card handDemon = receiveCard(context, player, "minion_demon_test");
