@@ -33,11 +33,32 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class EnvelopeResultPutCard implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("editableCardId")
+  private String editableCardId = null;
+
   @JsonProperty("cardId")
   private String cardId = null;
 
   @JsonProperty("cardScriptErrors")
   private List<String> cardScriptErrors = null;
+
+  public EnvelopeResultPutCard editableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
+    return this;
+  }
+
+   /**
+   * When not null, contains the editable card ID that was created by putting a record 
+   * @return editableCardId
+  **/
+  @ApiModelProperty(value = "When not null, contains the editable card ID that was created by putting a record ")
+  public String getEditableCardId() {
+    return editableCardId;
+  }
+
+  public void setEditableCardId(String editableCardId) {
+    this.editableCardId = editableCardId;
+  }
 
   public EnvelopeResultPutCard cardId(String cardId) {
     this.cardId = cardId;
@@ -93,13 +114,14 @@ public class EnvelopeResultPutCard implements Serializable {
       return false;
     }
     EnvelopeResultPutCard envelopeResultPutCard = (EnvelopeResultPutCard) o;
-    return Objects.equals(this.cardId, envelopeResultPutCard.cardId) &&
+    return Objects.equals(this.editableCardId, envelopeResultPutCard.editableCardId) &&
+        Objects.equals(this.cardId, envelopeResultPutCard.cardId) &&
         Objects.equals(this.cardScriptErrors, envelopeResultPutCard.cardScriptErrors);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(cardId, cardScriptErrors);
+    return Objects.hash(editableCardId, cardId, cardScriptErrors);
   }
 
 
@@ -108,6 +130,7 @@ public class EnvelopeResultPutCard implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class EnvelopeResultPutCard {\n");
     
+    sb.append("    editableCardId: ").append(toIndentedString(editableCardId)).append("\n");
     sb.append("    cardId: ").append(toIndentedString(cardId)).append("\n");
     sb.append("    cardScriptErrors: ").append(toIndentedString(cardScriptErrors)).append("\n");
     sb.append("}");

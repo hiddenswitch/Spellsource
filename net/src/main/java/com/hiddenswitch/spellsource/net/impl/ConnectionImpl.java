@@ -28,7 +28,6 @@ public class ConnectionImpl implements Connection {
 	}
 
 	private ServerWebSocket socket;
-	private SpanContext parentSpan;
 	private final String userId;
 	private final List<Handler<Throwable>> exceptionHandlers = new ArrayList<>();
 	private final List<Handler<Void>> drainHandlers = new ArrayList<>();
@@ -44,7 +43,6 @@ public class ConnectionImpl implements Connection {
 	@Override
 	public void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler, SpanContext parentSpan) {
 		this.socket = socket;
-		this.parentSpan = parentSpan;
 		String eventBusAddress = getEventBusAddress();
 		EventBus eventBus = Vertx.currentContext().owner().eventBus();
 		MessageConsumer<Envelope> consumer = eventBus.consumer(eventBusAddress);

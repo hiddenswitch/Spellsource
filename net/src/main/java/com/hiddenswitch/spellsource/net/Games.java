@@ -546,7 +546,7 @@ public interface Games extends Verticle {
 		entity.owner(actor.getOwner());
 		entity.l(Games.toClientLocation(actor.getEntityLocation()));
 		entity.manaCost(card.getBaseManaCost());
-		entity.heroClass(card.getHeroClass().toString());
+		entity.heroClass(card.getHeroClass());
 		entity.cardSet(Objects.toString(card.getCardSet()));
 		entity.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
 		entity.baseManaCost(card.getBaseManaCost());
@@ -562,7 +562,7 @@ public interface Games extends Verticle {
 		entity.baseHp(actor.getBaseHp());
 		entity.hp(actor.getHp());
 		entity.maxHp(actor.getMaxHp());
-		entity.heroClass(actor.getHeroClass().toString());
+		entity.heroClass(actor.getHeroClass());
 		entity.underAura(actor.hasAttribute(Attribute.AURA_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.AURA_HP_BONUS)
 				|| actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)

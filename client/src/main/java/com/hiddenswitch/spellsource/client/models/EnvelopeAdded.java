@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.ChatMessage;
+import com.hiddenswitch.spellsource.client.models.EditableCard;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.Invite;
 import com.hiddenswitch.spellsource.client.models.Match;
@@ -47,6 +48,9 @@ public class EnvelopeAdded implements Serializable {
 
   @JsonProperty("match")
   private Match match = null;
+
+  @JsonProperty("editableCard")
+  private EditableCard editableCard = null;
 
   @JsonProperty("spanContext")
   private SpanContext spanContext = null;
@@ -123,6 +127,24 @@ public class EnvelopeAdded implements Serializable {
     this.match = match;
   }
 
+  public EnvelopeAdded editableCard(EditableCard editableCard) {
+    this.editableCard = editableCard;
+    return this;
+  }
+
+   /**
+   * Get editableCard
+   * @return editableCard
+  **/
+  @ApiModelProperty(value = "")
+  public EditableCard getEditableCard() {
+    return editableCard;
+  }
+
+  public void setEditableCard(EditableCard editableCard) {
+    this.editableCard = editableCard;
+  }
+
   public EnvelopeAdded spanContext(SpanContext spanContext) {
     this.spanContext = spanContext;
     return this;
@@ -155,12 +177,13 @@ public class EnvelopeAdded implements Serializable {
         Objects.equals(this.friend, envelopeAdded.friend) &&
         Objects.equals(this.invite, envelopeAdded.invite) &&
         Objects.equals(this.match, envelopeAdded.match) &&
+        Objects.equals(this.editableCard, envelopeAdded.editableCard) &&
         Objects.equals(this.spanContext, envelopeAdded.spanContext);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatMessage, friend, invite, match, spanContext);
+    return Objects.hash(chatMessage, friend, invite, match, editableCard, spanContext);
   }
 
 
@@ -173,6 +196,7 @@ public class EnvelopeAdded implements Serializable {
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
     sb.append("    match: ").append(toIndentedString(match)).append("\n");
+    sb.append("    editableCard: ").append(toIndentedString(editableCard)).append("\n");
     sb.append("    spanContext: ").append(toIndentedString(spanContext)).append("\n");
     sb.append("}");
     return sb.toString();

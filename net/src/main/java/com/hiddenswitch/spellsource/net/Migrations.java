@@ -590,7 +590,12 @@ public interface Migrations extends Verticle {
 									json("$nin", array("Spellsource", "All", "Pauper"))),
 									json("$set", json(CollectionRecord.FORMAT, "All")), new UpdateOptions().setMulti(true));
 						}))
-				.migrateTo(42, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(43)
+						.withUp(thisVertx -> {
+							mongo().createCollection(Editor.EDITABLE_CARDS);
+						}))
+				.migrateTo(43, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 	}
 

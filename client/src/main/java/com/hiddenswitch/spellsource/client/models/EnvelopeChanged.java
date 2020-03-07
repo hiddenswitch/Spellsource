@@ -17,6 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.EditableCard;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.Invite;
 import io.swagger.annotations.ApiModel;
@@ -38,6 +39,9 @@ public class EnvelopeChanged implements Serializable {
 
   @JsonProperty("invite")
   private Invite invite = null;
+
+  @JsonProperty("editableCard")
+  private EditableCard editableCard = null;
 
   public EnvelopeChanged friend(Friend friend) {
     this.friend = friend;
@@ -75,6 +79,24 @@ public class EnvelopeChanged implements Serializable {
     this.invite = invite;
   }
 
+  public EnvelopeChanged editableCard(EditableCard editableCard) {
+    this.editableCard = editableCard;
+    return this;
+  }
+
+   /**
+   * Get editableCard
+   * @return editableCard
+  **/
+  @ApiModelProperty(value = "")
+  public EditableCard getEditableCard() {
+    return editableCard;
+  }
+
+  public void setEditableCard(EditableCard editableCard) {
+    this.editableCard = editableCard;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -86,12 +108,13 @@ public class EnvelopeChanged implements Serializable {
     }
     EnvelopeChanged envelopeChanged = (EnvelopeChanged) o;
     return Objects.equals(this.friend, envelopeChanged.friend) &&
-        Objects.equals(this.invite, envelopeChanged.invite);
+        Objects.equals(this.invite, envelopeChanged.invite) &&
+        Objects.equals(this.editableCard, envelopeChanged.editableCard);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(friend, invite);
+    return Objects.hash(friend, invite, editableCard);
   }
 
 
@@ -102,6 +125,7 @@ public class EnvelopeChanged implements Serializable {
     
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
+    sb.append("    editableCard: ").append(toIndentedString(editableCard)).append("\n");
     sb.append("}");
     return sb.toString();
   }
