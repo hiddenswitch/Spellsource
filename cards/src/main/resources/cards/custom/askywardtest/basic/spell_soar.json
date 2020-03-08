@@ -18,7 +18,7 @@
     "collectible": true,
     "sets": [
       "CUSTOM",
-      "CLASSIC"
+      "BASIC"
     ],
     "fileFormatVersion": 1
   }
