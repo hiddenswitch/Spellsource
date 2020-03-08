@@ -1,0 +1,19 @@
+{
+    "name": "Sky Sovereign",
+    "baseManaCost": 9,
+    "type": "AZURE",
+    "heroClass": "LIGHTBROWN",
+    "baseAttack": 4,
+    "baseHp": 12,
+    "rarity": "FREE",
+    "description": "Guard",
+    "attributes": {
+        "TAUNT": true
+      },
+    "collectible": true,
+    "sets": [
+      "CUSTOM",
+      "CLASSIC"
+    ],
+    "fileFormatVersion": 1
+  }
