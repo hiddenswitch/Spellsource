@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
@@ -121,15 +122,17 @@ public interface Editor {
 										), h));
 								putResult = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
 							}
-						} else {
+						} else if (putCard.getSource() != null && !putCard.getSource().isEmpty()) {
 							// Try parsing here for errors
 							try {
 								var cardDesc = Json.decodeValue(putCard.getSource(), CardDesc.class);
 								// TODO: Get more errors
 							} catch (DecodeException decodeException) {
-								var jsonParseException = (JsonParseException) decodeException.getCause();
-								if (jsonParseException != null && jsonParseException.getLocation() != null) {
-									putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
+								if (decodeException.getCause() instanceof JsonParseException) {
+									var jsonParseException = (JsonParseException) decodeException.getCause();
+									if (jsonParseException != null && jsonParseException.getLocation() != null) {
+										putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
+									}
 								} else {
 									putResult.addCardScriptErrorsItem(decodeException.getMessage());
 								}
