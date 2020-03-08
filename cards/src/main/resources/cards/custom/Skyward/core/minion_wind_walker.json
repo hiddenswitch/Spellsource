@@ -5,7 +5,7 @@
     "heroClass": "AZURE",
     "baseAttack": 4,
     "baseHp": 1,
-    "rarity": "FREE",
+    "rarity": "COMMON",
     "race": "ELEMENTAL",
     "description": "Dodge. Opener: Give a minion Dodge.",
     "battlecry": {
@@ -27,7 +27,7 @@
     "collectible": true,
     "sets": [
         "CUSTOM",
-        "BASIC"
+        "CLASSIC"
     ],
     "fileFormatVersion": 1
 }

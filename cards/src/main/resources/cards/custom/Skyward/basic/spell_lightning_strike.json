@@ -4,7 +4,7 @@
     "type": "SPELL",
     "heroClass": "AZURE",
     "rarity": "FREE",
-    "description": "Deal 3 damage to an enemy.",
+    "description": "Deal $3 damage to an enemy.",
     "targetSelection": "ENEMY_CHARACTERS",
     "spell": {
         "class": "MetaSpell",
