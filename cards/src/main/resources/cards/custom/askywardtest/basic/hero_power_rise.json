@@ -15,7 +15,10 @@
       }
     },
     "collectible": false,
-    "set": "CUSTOM",
+    "sets": [
+        "CUSTOM",
+        "BASIC"
+      ],
     "fileFormatVersion": 1
   }
   
