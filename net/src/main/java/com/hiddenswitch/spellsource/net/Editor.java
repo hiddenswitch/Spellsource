@@ -2,15 +2,18 @@ package com.hiddenswitch.spellsource.net;
 
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.UpdateOptions;
@@ -117,6 +120,21 @@ public interface Editor {
 												"putCard", json(putCard)
 										), h));
 								putResult = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
+							}
+						} else {
+							// Try parsing here for errors
+							try {
+								var cardDesc = Json.decodeValue(putCard.getSource(), CardDesc.class);
+								// TODO: Get more errors
+							} catch (DecodeException decodeException) {
+								var jsonParseException = (JsonParseException) decodeException.getCause();
+								if (jsonParseException != null && jsonParseException.getLocation() != null) {
+									putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
+								} else {
+									putResult.addCardScriptErrorsItem(decodeException.getMessage());
+								}
+							} catch (Throwable throwable) {
+								putResult.addCardScriptErrorsItem(throwable.getMessage());
 							}
 						}
 
