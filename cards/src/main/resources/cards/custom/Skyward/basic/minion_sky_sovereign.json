@@ -6,6 +6,7 @@
     "baseAttack": 4,
     "baseHp": 12,
     "rarity": "FREE",
+    "race": "DRAGON",
     "description": "Guard",
     "attributes": {
         "TAUNT": true
@@ -13,7 +14,7 @@
     "collectible": true,
     "sets": [
       "CUSTOM",
-      "CLASSIC"
+      "BASIC"
     ],
     "fileFormatVersion": 1
   }
