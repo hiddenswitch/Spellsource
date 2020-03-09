@@ -1,6 +1,6 @@
 {
   "name": "Frost Bee",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,
