@@ -1,6 +1,6 @@
 {
     "name": "Thunder",
-    "baseManaCost": 4,
+    "baseManaCost": 3,
     "type": "SPELL",
     "heroClass": "AZURE",
     "rarity": "FREE",
