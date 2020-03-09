@@ -3,7 +3,7 @@
     "baseManaCost": 3,
     "type": "MINION",
     "heroClass": "AZURE",
-    "baseAttack": 2,
+    "baseAttack": 3,
     "baseHp": 4,
     "rarity": "COMMON",
     "race": "BEAST",
