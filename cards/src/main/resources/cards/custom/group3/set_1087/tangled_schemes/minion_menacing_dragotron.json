@@ -1,0 +1,37 @@
+{
+  "name": "Exploblaze",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Opener: If you played another Elemental this turn, deal 3 damage to all minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "PlayedThisTurnValueProvider",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "ELEMENTAL"
+        }
+      },
+      "value2": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

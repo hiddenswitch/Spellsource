@@ -1,0 +1,23 @@
+{
+  "name": "Lush Restoration",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Restore #20 Health to allies. Reward: Zaevanicus.",
+  "quest": {
+    "class": "HealingTrigger",
+    "sourcePlayer": "SELF",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 20,
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_zaevanicus"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "countByValue": true
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Chained Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Starts dormant. Breaks free and gains Guard once you've played 3 cards.",
+  
+	### Not really sure here. I checked The Darkness' effect to try to figure it out, but it seems like that uses some under-the-hood stuff.
+	### To be clear, this starts off as a permanent that tracks the cards you play, and once you've played 3 it becomes a 5/8/8 Dragon with Guard called "Unleashed Guardian".
+  
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

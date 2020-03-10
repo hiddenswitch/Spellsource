@@ -1,0 +1,19 @@
+{
+  "name": "Plunderers Abound",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Summon three 1/1 Plunderers for your opponent that draw you a card when they die.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 3,
+    "card": "token_plunderer",
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,45 @@
+{
+  "name": "Vera's Ascendancy",
+  "type": "ENCHANTMENT",
+  "heroClass": "RUST",
+  "rarity": "LEGENDARY",
+  "description": "The first card you play each turn costs (4).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "targetPlayer": "SELF",
+    "value": 4,
+    "operation": "EQUALS",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "CardCountValueProvider",
+            "cardFilter": {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
+            }
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        }
+      },
+      "value2": 0
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

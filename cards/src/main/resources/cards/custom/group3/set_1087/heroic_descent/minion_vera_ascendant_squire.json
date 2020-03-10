@@ -1,0 +1,27 @@
+{
+  "name": "Vera, Ascendant Squire",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If your deck has no duplicates, the first card you play each turn costs (4) this game.",
+  "battlecry": {
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_veras_ascendancy"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
