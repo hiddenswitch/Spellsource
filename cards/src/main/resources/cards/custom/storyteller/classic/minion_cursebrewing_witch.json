@@ -1,10 +1,10 @@
 {
   "name": "Cursebrewing Witch",
-  "baseManaCost": 6,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "OLIVE",
-  "baseAttack": 6,
-  "baseHp": 7,
+  "baseAttack": 3,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Opener: This turn, your healing effects deal damage instead.",
   "battlecry": {
