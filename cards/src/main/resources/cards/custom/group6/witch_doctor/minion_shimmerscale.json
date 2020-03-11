@@ -7,11 +7,12 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Hidden, Dodge. Elusive.",
+  "description": "Dodge, Hidden for 1 turn, Elusive to enemy spells.",
   "attributes": {
     "DIVINE_SHIELD": true,
     "STEALTH": true,
-    "UNTARGETABLE_BY_SPELLS": true
+    "STEALTH_FOR_TURNS": 1,
+    "UNTARGETABLE_BY_OPPONENT_SPELLS": true
   },
   "collectible": true,
   "set": "CUSTOM",
