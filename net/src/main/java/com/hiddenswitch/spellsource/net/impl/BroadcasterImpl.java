@@ -36,8 +36,6 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 	}
 
 	private DatagramSocket createDatagramSocket(final NetworkInterface networkInterface, Promise<Void> isListening) throws SocketException {
-		String host = Gateway.getHostIpAddress();
-
 		return vertx.createDatagramSocket(new DatagramSocketOptions()
 				.setReuseAddress(true)
 				.setReusePort(true))
@@ -55,6 +53,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 
 							LOGGER.info("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
+							String host = Gateway.getHostIpAddress();
 							socket.send(getResponsePrefix() + "http://" + host + ":" + Configuration.apiGatewayPort() + "/", getMulticastPort(), getMulticastAddress(), Promise.promise());
 						});
 
