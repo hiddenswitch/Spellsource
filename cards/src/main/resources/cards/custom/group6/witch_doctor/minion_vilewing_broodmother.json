@@ -1,10 +1,10 @@
 {
   "name": "Vilewing Broodmother",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 1,
-  "baseHp": 4,
+  "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "Toxic. Aftermath: Summon two 1/1 Hatchlings with Toxic.",
