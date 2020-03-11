@@ -1,15 +1,15 @@
 {
-  "name": "Healing Honey",
+  "name": "Small Shield",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Restore #6 Health to your champion.",
+  "description": "Gain 5 Armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "HealSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
-    "value": 6
+    "armorBonus": 5
   },
   "collectible": true,
   "set": "CUSTOM",
