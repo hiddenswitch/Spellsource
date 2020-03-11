@@ -7,6 +7,9 @@
   "baseHp": 1,
   "rarity": "FREE",
   "description": "",
+  "attributes": {
+  "RUSH": true
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
