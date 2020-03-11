@@ -6,11 +6,10 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Aftermath: Change an random enemy minion's Attack to 1 until the start of your next turn.",
+  "description": "Aftermath: Change all enemy minion's Attack to 1 until the start of your next turn.",
   "deathrattle": {
     "class": "ModifyAttributeSpell",
     "target": "ENEMY_MINIONS",
-    "randomTarget": true,
     "value": {
       "class": "AttributeValueProvider",
       "attribute": "ATTACK",
