@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "RARE",
-  "description": "Draw a minion. Restore #3 Health to your champion.",
+  "description": "Draw a minion. Restore #4 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -20,7 +20,7 @@
       {
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
-        "value": 3
+        "value": 4
       }
     ]
   },
