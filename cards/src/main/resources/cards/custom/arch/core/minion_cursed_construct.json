@@ -6,11 +6,11 @@
   "baseAttack": 4,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "<b>Opener:<b> If you have 7 or more cards in hand, gain +4 Health.",
+  "description": "<b>Opener:<b> If you have 6 or more cards in hand, gain +4 Health.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",
-      "value": 7,
+      "value": 6,
       "operation": "GREATER_OR_EQUAL",
       "targetPlayer": "SELF"
     },
