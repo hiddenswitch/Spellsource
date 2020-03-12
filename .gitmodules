@@ -4,3 +4,6 @@
 [submodule "secrets"]
 	path = secrets
 	url = git@github.com:doctorpangloss/HiddenSwitch-Secrets.git
+[submodule "unityclient"]
+	path = unityclient
+	url = git@bitbucket.org:ben_berman/spellsource-client.git
