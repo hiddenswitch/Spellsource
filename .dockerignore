@@ -1,4 +1,3 @@
-# Elastic Beanstalk Files
 *
 !net/build/libs/*
 !game/src/main/resources/*
