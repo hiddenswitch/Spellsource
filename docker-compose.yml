@@ -1,7 +1,7 @@
-version: '3'
+version: '3.7'
 services:
   loadbalancer:
-    image: traefik:alpine
+    image: "traefik:v1.7-alpine"
     networks:
       - web
     command: |
@@ -51,9 +51,9 @@ services:
       - backend
     deploy:
       labels:
-        - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
+        - "traefik.versionedhost.frontend.rule=${GAME_VERSIONED_HOST_RULE}"
         - "traefik.versionedhost.frontend.entryPoints=http,https"
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefixStrip:/api/v3/"
+        - "traefik.versionedurl.frontend.rule=${GAME_VERSIONED_URL_RULE}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.backend.loadbalancer.stickiness=true"
@@ -77,7 +77,7 @@ services:
         condition: on-failure
         window: 30s
       labels:
-        - "traefik.frontend.rule=Host:launcher.hiddenswitch.com"
+        - "traefik.frontend.rule=${LAUNCHER_RULE}"
         - "traefik.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.backend.loadbalancer.stickiness=true"
@@ -148,7 +148,7 @@ services:
       - mediawikidata:/var/www/html/images
     deploy:
       labels:
-        - "traefik.frontend.rule=Host:wiki.hiddenswitch.com"
+        - "traefik.frontend.rule=${MEDIAWIKI_RULE}"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.frontend.entryPoints=http,https"
         - "traefik.port=80"
@@ -210,7 +210,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/api/traces"
+        - "traefik.versionedurl.frontend.rule=${JAEGER_COLLECTOR_RULE}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.port=14268"
@@ -253,7 +253,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/jaeger"
+        - "traefik.versionedurl.frontend.rule=${JAEGER_QUERY_RULE}"
         - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
@@ -286,8 +286,8 @@ services:
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - DDNSROUTE53_UPDATE_IN_DOMAINS=*.hiddenswitch.com
-      - DDNSROUTE53_UPDATE_IP_ADDRESS=PUBLIC
+      - DDNSROUTE53_UPDATE_IN_DOMAINS=${DDNSROUTE53_UPDATE_IN_DOMAINS}
+      - DDNSROUTE53_UPDATE_IP_ADDRESS=${DDNSROUTE53_UPDATE_IP_ADDRESS}
     deploy:
       placement:
         constraints:
@@ -303,7 +303,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=Host:skyhook.hiddenswitch.com"
+        - "traefik.versionedurl.frontend.rule=${SKYHOOK_RULE}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.port=8080"
