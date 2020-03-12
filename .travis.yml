@@ -1,5 +1,7 @@
 language: java
 sudo: false
+git:
+  submodules: false
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -8,7 +10,7 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 jdk:
-  - openjdk12
+  - openjdk11
 services:
   - mongodb
 script:
