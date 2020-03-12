@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
   "baseAttack": 2,
-  "baseHp": 2,
+  "baseHp": 3,
   "rarity": "EPIC",
   "description": "Opener: Give all enemy minions <b>Decay<b>.",
   "battlecry": {
