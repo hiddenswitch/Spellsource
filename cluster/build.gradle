@@ -11,6 +11,10 @@ shadowJar {
     zip64 true
 }
 
+application {
+    mainClassName = 'com.hiddenswitch.cluster.applications.Weights'
+}
+
 repositories {
     jcenter()
 }
