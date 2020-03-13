@@ -25,6 +25,8 @@ where:
         binaries for your platform necessary for deployment
     -A  visits the AWS console for Hidden Switch
     -o  deploys docs to github.io
+    -s  deploys the stack to the specified SSH_HOST, a docker swarm manager
+    -S  deploys build macOS and Windows binaries to Steam
 
 Invoking this script always rebuilds Spellsource-Server.
 
@@ -44,11 +46,13 @@ deploy_python=false
 deploy_launcher=false
 deploy_wiki=false
 deploy_docs=false
+deploy_steam=false
+deploy_stack=false
 bump_version=false
 install_dependencies=false
 deploy_java=false
 build_client=false
-while getopts "hcedwpjvlWDAo" opt; do
+while getopts "hcedwpjvlWDAosS" opt; do
   case "$opt" in
   h*)
     echo "$usage"
@@ -97,6 +101,14 @@ while getopts "hcedwpjvlWDAo" opt; do
   o)
     deploy_docs=true
     echo "Deploying docs"
+    ;;
+  s)
+    deploy_stack=true
+    echo "Deploying stack"
+    ;;
+  S)
+    deploy_steam=true
+    echo "Deploying to Steam"
     ;;
   A)
     open https://786922801148.signin.aws.amazon.com/console
@@ -243,11 +255,11 @@ fi
 if [[ "$build_client" == true ]]; then
   rm -rf "./client/"
   ${GRADLE_CMD} swagger
-
-  if [[ -d "../Spellsource-Client" ]]; then
+  UNITY_CLIENT_PATH="./unityclient"
+  if [[ -d ${UNITY_CLIENT_PATH} ]]; then
     mkdir -pv "clientcsharp"
     INPUT_DIR="clientcsharp"
-    OUTPUT_DIR="../Spellsource-Client/Assets/Plugins/Client"
+    OUTPUT_DIR="../${UNITY_CLIENT_PATH}/Assets/Plugins/Client"
     ${GRADLE_CMD} swaggerClient
     # Remove a lot of unnecessary files from the Unity project
     rm -rf ${OUTPUT_DIR}
@@ -480,29 +492,22 @@ if [[ "$deploy_python" == true ]]; then
   cd ..
 fi
 
-if [[ "$deploy_elastic_beanstalk" == true ]]; then
-  if ! command -v eb >/dev/null && test -f ${VIRTUALENV_PATH}/bin/activate; then
-    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}"
-    source ${VIRTUALENV_PATH}/bin/activate
-  fi
-
-  if ! command -v eb >/dev/null; then
-    echo "Failed to deploy ELB python: Missing eb binary. Install with pip3 install awsebcli"
-    exit 1
-  fi
-
-  # Package the two necessary files into the right places into a zip file
-  rm artifact.zip || true
-  zip artifact.zip \
-    ./Dockerfile \
-    ./Dockerrun.aws.json \
-    ./net/build/libs/net-0.8.67-all.jar \
-    ./server.sh >/dev/null
-
-  eb use metastone-dev >/dev/null
-  eb deploy --staged
-fi
-
 if [[ "$deploy_docs" == true ]]; then
   git subtree push --prefix docs origin gh-pages
+fi
+
+if [[ "$deploy_stack" == true ]]; then
+  source "secrets/common-deployment.env"
+  env "$(cat secrets/production.env)" docker-compose config |
+    ssh -i secrets/deployment.rsa doctorpangloss@"${SSH_HOST}" docker stack deploy --compose-file - spellsource
+fi
+
+if [[ "$deploy_steam" == true ]]; then
+  docker build -t steamguardcli -f steamguardcli/Dockerfile ./steamguardcli
+  source "secrets/spellsource/unityclient-build.env"
+  STEAMCMD_GUARD_CODE="$(docker run --rm -it -v="$(pwd)"/secrets/spellsource/maFiles:/data steamguardcli mono /build/steamguard --mafiles-path /data generate-code)"
+  docker run -v="$(pwd):/home/steam/workdir" -w="/home/steam/workdir" -it cm2network/steamcmd /home/steam/steamcmd/steamcmd.sh \
+    +login "${STEAMCMD_ACCOUNT}" "${STEAMCMD_PASSWORD}" "${STEAMCMD_GUARD_CODE}" \
+    +run_app_build_http "/home/steam/workdir/secrets/spellsource/steam-app-build.vdf" \
+    +quit
 fi
