@@ -7,3 +7,6 @@
 [submodule "unityclient"]
 	path = unityclient
 	url = git@bitbucket.org:ben_berman/spellsource-client.git
+[submodule "steamguardcli"]
+	path = steamguardcli
+	url = git@github.com:hiddenswitch/steamguard-cli.git
