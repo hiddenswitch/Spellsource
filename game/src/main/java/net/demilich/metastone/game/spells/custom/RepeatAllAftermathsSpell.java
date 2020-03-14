@@ -52,7 +52,8 @@ public final class RepeatAllAftermathsSpell extends Spell {
 				if (item.getPlayerId() != player.getId()) {
 					return false;
 				}
-				cards.add(context.resolveSingleTarget(item.getSource()).getSourceCard());
+				// We are only interested in source cards, so it's okay if we're accepting removed from play entities
+				cards.add(context.resolveSingleTarget(item.getSource(), false).getSourceCard());
 				return true;
 			}).map(EnvironmentDeathrattleTriggeredList.EnvironmentDeathrattleTriggeredItem::getSpell)
 					.collect(Collectors.toList());
