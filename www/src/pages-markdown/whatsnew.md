@@ -5,8 +5,12 @@ path: "/whats-new"
 header: true
 ---
 
-### Upcoming Changes
+### 0.8.68-3.1.0 (March 13, 2020)
 
+ - A text-based card editor is now active during Quick Play. Access it by clicking the pencil icon in the top tray of the battlefield. You will not be able to draw cards during a multiplayer game.
+ - Moon Gladiator now has the correct effect. (1563)
+ - Freezing Over is now On Play. (1561)
+ - Skills are now shown in the client when played.
  - Sunken Terror's text now reflects how it plays a copy of shuffled cards, not the originals. (1547)
  - Otherwordly Truth now correctly shuffles all 3 cards and not 1 at random. (1547)
  - Crate of Dynamite can now only be cast on friendly minions for simplicity's sake (1356)

@@ -40,5 +40,6 @@ public class CardsTest extends SpellsourceTestBase {
 		for (Card classCard : HeroClass.getClassCards(DeckFormat.all())) {
 			assertNotNull(CardCatalogue.getCardById(classCard.getHero()));
 		}
+		assertNotNull(CardCatalogue.getCardById("hero_neutral"));
 	}
 }

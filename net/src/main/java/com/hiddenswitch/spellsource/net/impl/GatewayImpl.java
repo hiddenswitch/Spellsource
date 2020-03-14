@@ -35,7 +35,9 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerFormat;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +45,7 @@ import org.slf4j.LoggerFactory;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
@@ -811,7 +810,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.id(record.getId())
 				.friends(friends)
 				.decks((responses != null && responses.size() > 0) ? responses.stream()
-						.filter(response -> !response.getTrashed())
+						.filter(response -> !response.getTrashed()
+								&& !Objects.equals(response.getHeroClass(), HeroClass.ANY)
+								&& (response.getHeroCardId() == null || CardCatalogue.getRecords().containsKey(response.getHeroCardId())))
 						.map(GetCollectionResponse::asInventoryCollection)
 						.collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())

@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.67
+SPELLSOURCE_VERSION=0.8.68
 SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
-    -c  build the client libraries in swagger. If a Spellsource-Client folder
-        is a sibling of the current working directory, the client there is
-        updated too
+    -c  build the client libraries in swagger
     -e  deploy for Elastic Beanstalk
     -d  deploy for Docker (requires logged-in docker hub account, optionally
         PORTAINER_URL, PORTAINER_USERNAME, and PORTAINER_PASSWORD)
@@ -25,6 +23,7 @@ where:
         binaries for your platform necessary for deployment
     -A  visits the AWS console for Hidden Switch
     -o  deploys docs to github.io
+    -C  builds the stack
     -s  deploys the stack to the specified SSH_HOST, a docker swarm manager
     -S  deploys build macOS and Windows binaries to Steam
 
@@ -48,11 +47,12 @@ deploy_wiki=false
 deploy_docs=false
 deploy_steam=false
 deploy_stack=false
+build_stack=false
 bump_version=false
 install_dependencies=false
 deploy_java=false
 build_client=false
-while getopts "hcedwpjvlWDAosS" opt; do
+while getopts "hcedwpjvlWDAosSC" opt; do
   case "$opt" in
   h*)
     echo "$usage"
@@ -109,6 +109,10 @@ while getopts "hcedwpjvlWDAosS" opt; do
   S)
     deploy_steam=true
     echo "Deploying to Steam"
+    ;;
+  C)
+    build_stack=true
+    echo "Building and pushing stack"
     ;;
   A)
     open https://786922801148.signin.aws.amazon.com/console
@@ -496,10 +500,22 @@ if [[ "$deploy_docs" == true ]]; then
   git subtree push --prefix docs origin gh-pages
 fi
 
+if [[ "$build_stack" == true ]]; then
+  # Explicitly delete secrets here
+  # shellcheck disable=SC2046
+  unset $(grep -v '^#' "secrets/spellsource/stack-application-production.env" | sed -E 's/(.*)=.*/\1/' | xargs)
+  export COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1
+  docker-compose build
+  docker-compose push
+fi
+
 if [[ "$deploy_stack" == true ]]; then
+  # Only used in this script
   source "secrets/common-deployment.env"
-  env "$(cat secrets/production.env)" docker-compose config |
-    ssh -i secrets/deployment.rsa doctorpangloss@"${SSH_HOST}" docker stack deploy --compose-file - spellsource
+  # Send secrets to the manager via an ssh pipe
+  # shellcheck disable=SC2046
+  env $(cat "secrets/spellsource/stack-application-production.env") docker-compose config |
+    ssh -i "secrets/deployment.rsa" doctorpangloss@"${SSH_HOST}" docker stack deploy --resolve-image always --compose-file - spellsource
 fi
 
 if [[ "$deploy_steam" == true ]]; then
