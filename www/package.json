@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gatsby": "gatsby",
-    "deploy": "gatsby-plugin-s3 deploy"
+    "gatsby": "gatsby"
   },
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",

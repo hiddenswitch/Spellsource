@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
@@ -56,105 +57,135 @@ public interface Editor {
 				connection.write(new Envelope().added(new EnvelopeAdded().editableCard(existingCard)));
 			}
 			connection.handler(suspendableHandler(env -> {
+				var tracer = GlobalTracer.get();
 				// Process a delete card request
 				if (env.getMethod() != null && env.getMethod().getDeleteCard() != null) {
-					var deleteCard = env.getMethod().getDeleteCard();
-					var editableCardId = deleteCard.getEditableCardId();
-					var res = mongo().removeDocument(EDITABLE_CARDS,
-							json("_id", editableCardId, "ownerUserId", connection.userId()));
-					if (res.getRemovedCount() > 0L) {
-						connection.write(new Envelope().removed(new EnvelopeRemoved().editableCardId(editableCardId)));
+					var span = tracer.buildSpan("Editor/deleteCard")
+							.withTag("userId", connection.userId())
+							.withTag("editableCardId", env.getMethod().getDeleteCard().getEditableCardId())
+							.start();
+					var scope = tracer.activateSpan(span);
+					try {
+						var deleteCard = env.getMethod().getDeleteCard();
+						var editableCardId = deleteCard.getEditableCardId();
+						var res = mongo().removeDocument(EDITABLE_CARDS,
+								json("_id", editableCardId, "ownerUserId", connection.userId()));
+						if (res.getRemovedCount() > 0L) {
+							connection.write(new Envelope().removed(new EnvelopeRemoved().editableCardId(editableCardId)));
+						}
+					} catch (RuntimeException runtimeException) {
+						Tracing.error(runtimeException, span, true);
+						throw runtimeException;
+					} finally {
+						span.finish();
+						scope.close();
 					}
 				}
 
 				// Upserts a card and optionally draws it into a live game, if the player has one
 				if (env.getMethod() != null && env.getMethod().getPutCard() != null) {
-					var putResult = new EnvelopeResultPutCard();
-					var putCard = env.getMethod().getPutCard();
-					var recordId = putCard.getEditableCardId();
-					// We have to find the game context somewhere on the event bus
-					// We will communicate with it via messages on the vus, not through a proxy object or anything like that
-					// When the ClusteredGames verticle that has the game context is hosted by the same vertx instance that is
-					// running the connections handler, we'll find the address in the "local" event bus map
-					var eventBus = Vertx.currentContext().owner().eventBus();
+					var span = tracer.buildSpan("Editor/putCard")
+							.withTag("userId", connection.userId())
+							.withTag("editableCardId", env.getMethod().getPutCard().getEditableCardId())
+							.withTag("source", env.getMethod().getPutCard().getSource())
+							.withTag("draw", env.getMethod().getPutCard().isDraw())
+							.start();
+					var scope = tracer.activateSpan(span);
 					try {
-						// generate a record id (null means create a new one and return it to me)
-						if (recordId == null) {
-							recordId = mongo().createId();
-							putResult.editableCardId(recordId);
-						}
-
-						var source = putCard.getSource();
-						if (source == null) {
-							// No source specified, cannot continue
-							writeErrorForPut(connection, "No source code specified.");
-							return;
-						}
-						if (source.length() > 3200) {
-							// Too long
-							writeErrorForPut(connection, "You attempted to save a source that was too long.");
-							return;
-						}
-						if (mongo().count(EDITABLE_CARDS, json("ownerUserId", connection.userId())) > 1000L) {
-							writeErrorForPut(connection, "You've exceeded your card limit.");
-							return;
-						}
-						var updateResult = mongo().updateCollectionWithOptions(EDITABLE_CARDS,
-								json("_id", recordId),
-								json("$set",
-										json("source", source, "ownerUserId", connection.userId())),
-								new UpdateOptions().setUpsert(true));
-						var editableCard = new EditableCard()
-								.id(recordId)
-								.source(source)
-								.ownerUserId(connection.userId());
-
-						var envelope = new Envelope();
-
-						if (putCard.isDraw() != null && putCard.isDraw()) {
-							// Get the game context the player is currently in.
-							var gameId = Games.getUsersInGames().get(new UserId(connection.userId()));
-							if (gameId != null) {
-								Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
-										json(
-												"userId", connection.userId(),
-												"putCard", json(putCard)
-										), h));
-								putResult = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
+						var putResult = new EnvelopeResultPutCard();
+						var putCard = env.getMethod().getPutCard();
+						var recordId = putCard.getEditableCardId();
+						// We have to find the game context somewhere on the event bus
+						// We will communicate with it via messages on the vus, not through a proxy object or anything like that
+						// When the ClusteredGames verticle that has the game context is hosted by the same vertx instance that is
+						// running the connections handler, we'll find the address in the "local" event bus map
+						var eventBus = Vertx.currentContext().owner().eventBus();
+						try {
+							// generate a record id (null means create a new one and return it to me)
+							if (recordId == null) {
+								recordId = mongo().createId();
+								putResult.editableCardId(recordId);
 							}
-						} else if (putCard.getSource() != null && !putCard.getSource().isEmpty()) {
-							// Try parsing here for errors
-							try {
-								var cardDesc = Json.decodeValue(putCard.getSource(), CardDesc.class);
-								// TODO: Get more errors
-							} catch (DecodeException decodeException) {
-								if (decodeException.getCause() instanceof JsonParseException) {
-									var jsonParseException = (JsonParseException) decodeException.getCause();
-									if (jsonParseException != null && jsonParseException.getLocation() != null) {
-										putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
-									}
-								} else {
-									putResult.addCardScriptErrorsItem(decodeException.getMessage());
+
+							var source = putCard.getSource();
+							if (source == null) {
+								// No source specified, cannot continue
+								writeErrorForPut(connection, "No source code specified.");
+								return;
+							}
+							if (source.length() > 3200) {
+								// Too long
+								writeErrorForPut(connection, "You attempted to save a source that was too long.");
+								return;
+							}
+							if (mongo().count(EDITABLE_CARDS, json("ownerUserId", connection.userId())) > 1000L) {
+								writeErrorForPut(connection, "You've exceeded your card limit.");
+								return;
+							}
+							var updateResult = mongo().updateCollectionWithOptions(EDITABLE_CARDS,
+									json("_id", recordId),
+									json("$set",
+											json("source", source, "ownerUserId", connection.userId())),
+									new UpdateOptions().setUpsert(true));
+							var editableCard = new EditableCard()
+									.id(recordId)
+									.source(source)
+									.ownerUserId(connection.userId());
+
+							var envelope = new Envelope();
+
+							if (putCard.isDraw() != null && putCard.isDraw()) {
+								// Get the game context the player is currently in.
+								var gameId = Games.getUsersInGames().get(new UserId(connection.userId()));
+								if (gameId != null) {
+									Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
+											json(
+													"userId", connection.userId(),
+													"putCard", json(putCard)
+											), h));
+									putResult = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
 								}
-							} catch (Throwable throwable) {
-								putResult.addCardScriptErrorsItem(throwable.getMessage());
+							} else if (putCard.getSource() != null && !putCard.getSource().isEmpty()) {
+								// Try parsing here for errors
+								try {
+									var cardDesc = Json.decodeValue(putCard.getSource(), CardDesc.class);
+									// TODO: Get more errors
+								} catch (DecodeException decodeException) {
+									if (decodeException.getCause() instanceof JsonParseException) {
+										var jsonParseException = (JsonParseException) decodeException.getCause();
+										if (jsonParseException != null && jsonParseException.getLocation() != null) {
+											putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
+										}
+									} else {
+										putResult.addCardScriptErrorsItem(decodeException.getMessage());
+									}
+								} catch (Throwable throwable) {
+									putResult.addCardScriptErrorsItem(throwable.getMessage());
+								}
 							}
+
+							envelope
+									.result(new EnvelopeResult()
+											.putCard(putResult));
+
+							if (updateResult.getDocUpsertedId() != null) {
+								envelope.added(new EnvelopeAdded().editableCard(editableCard));
+								putCard.editableCardId(recordId);
+							} else if (updateResult.getDocModified() > 0L) {
+								envelope.changed(new EnvelopeChanged().editableCard(editableCard));
+							}
+
+							connection.write(envelope);
+						} catch (VertxException exception) {
+							// TODO: Special errors here
+							throw Throwables.getRootCause(exception);
 						}
-
-						envelope
-								.result(new EnvelopeResult()
-										.putCard(putResult));
-
-						if (updateResult.getDocUpsertedId() != null) {
-							envelope.added(new EnvelopeAdded().editableCard(editableCard));
-							putCard.editableCardId(recordId);
-						} else if (updateResult.getDocModified() > 0L) {
-							envelope.changed(new EnvelopeChanged().editableCard(editableCard));
-						}
-
-						connection.write(envelope);
-					} catch (VertxException exception) {
-						// TODO: Special errors here
+					} catch (Throwable throwable) {
+						Tracing.error(throwable, span, true);
+						throw new RuntimeException(throwable);
+					} finally {
+						span.finish();
+						scope.close();
 					}
 				}
 			}));
@@ -188,6 +219,16 @@ public interface Editor {
 			var userId = msg.body().getString("userId");
 			var putCard = fromJson(msg.body().getJsonObject("putCard"), EnvelopeMethodPutCard.class);
 
+			var tracer = GlobalTracer.get();
+			var span = tracer.buildSpan("Editor/putCard")
+					.withTag("gameId", gameId)
+					.withTag("userId", userId)
+					.withTag("editableCardId", putCard.getEditableCardId())
+					.withTag("source", putCard.getSource())
+					.withTag("draw", putCard.isDraw())
+					.asChildOf(gameContext.getSpanContext())
+					.start();
+			var scope = tracer.activateSpan(span);
 			var result = new EnvelopeResultPutCard();
 
 			// Whenever we mutate the game context this way, we're doing something like a "transaction," it needs to be locked
@@ -233,8 +274,11 @@ public interface Editor {
 				result.cardId(cardDesc.getId());
 			} catch (RuntimeException ex) {
 				result.addCardScriptErrorsItem(ex.getMessage());
+				Tracing.error(ex, span, true);
 			} finally {
 				gameContext.getLock().unlock();
+				span.finish();
+				scope.close();
 			}
 			msg.reply(json(result));
 		}));
