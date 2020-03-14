@@ -1,11 +1,13 @@
 import React from 'react'
 import Layout from '../components/creative-layout'
+/*
 import styles from './card-editor.module.css'
-
 import ReactBlocklyComponent from 'react-blockly'
-
+*/
 export default () => (
   <Layout>
+      <p>Under construction</p>
+      {/*
     <ReactBlocklyComponent.BlocklyEditor
       workspaceConfiguration={{
         grid: {
@@ -31,6 +33,6 @@ export default () => (
             }
           }
         }
-      ]}/>
+      ]}/>*/}
   </Layout>
 )
