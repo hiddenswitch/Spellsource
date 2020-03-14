@@ -189,9 +189,6 @@ public final class GetCollectionResponse implements Serializable {
 			displayName = getName();
 		}
 
-		final String fakeHeroClass = getHeroClass() == null ? "RED" : getHeroClass();
-		GameContext emptyContext = new GameContext(fakeHeroClass, fakeHeroClass);
-
 		List<InventoryRecord> inventoryRecords = getInventoryRecords();
 		List<CardRecord> records = new ArrayList<>();
 
@@ -201,7 +198,6 @@ public final class GetCollectionResponse implements Serializable {
 			if (record == null) {
 				continue;
 			}
-			record.create();
 			boolean isActor = record.getType() == CardType.MINION || record.getType() == CardType.WEAPON;
 			// Send significantly less data
 			// TODO: Just look it up by the card ID in the client
@@ -237,7 +233,7 @@ public final class GetCollectionResponse implements Serializable {
 				.inventory(records);
 
 		if (getHeroClass() != null) {
-			collection.heroClass(getHeroClass().toString());
+			collection.heroClass(getHeroClass());
 		}
 
 		return collection;

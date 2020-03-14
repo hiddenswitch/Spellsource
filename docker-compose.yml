@@ -36,6 +36,9 @@ services:
           - node.labels.disk == ssd
   game:
     image: doctorpangloss/spellsource:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - MONGO_URL=mongodb://mongo:27017/metastone
       - SPELLSOURCE_APPLICATION=Clustered
@@ -64,35 +67,6 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
-  launcher:
-    image: doctorpangloss/launcher:latest
-    networks:
-      - web
-      - backend
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/launcher
-      - ROOT_URL=https://launcher.hiddenswitch.com
-    deploy:
-      restart_policy:
-        condition: on-failure
-        window: 30s
-      labels:
-        - "traefik.frontend.rule=${LAUNCHER_RULE}"
-        - "traefik.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.backend.loadbalancer.stickiness=true"
-        - "traefik.port=3000"
-        - "traefik.enable=true"
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
-    healthcheck:
-      test: curl --fail -s http://localhost:3000/ || exit 1
-      interval: 8s
-      timeout: 4s
-      retries: 3
   mongo:
     image: "mongo:3.6"
     networks:
@@ -117,6 +91,9 @@ services:
       retries: 3
   mediawiki:
     image: "doctorpangloss/wiki:latest"
+    build:
+      context: mediawiki
+      dockerfile: Dockerfile
     networks:
       - web
       - backend
@@ -281,6 +258,9 @@ services:
           - node.labels.disk == ssd
   ddnsroute53:
     image: doctorpangloss/ddnsroute53:latest
+    build:
+      context: ddnsroute53
+      dockerfile: Dockerfile
     networks:
       - web
     environment:
@@ -295,7 +275,9 @@ services:
           - node.labels.cpu == high
           - node.labels.disk == ssd
   skyhook:
-    image: doctorpangloss/skyhook
+    image: doctorpangloss/skyhook:latest
+    build:
+      context: https://github.com/Commit451/skyhook.git
     networks:
       - web
     deploy:
