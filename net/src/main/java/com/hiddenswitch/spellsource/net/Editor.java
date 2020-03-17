@@ -106,6 +106,13 @@ public interface Editor {
 		return new Envelope().result(new EnvelopeResult().putCard(new EnvelopeResultPutCard().cardScriptErrors(Collections.singletonList(message))));
 	}
 
+	/**
+	 * Saves and optionally draws a card in a live game.
+	 *
+	 * @param putCard
+	 * @param userId
+	 * @return
+	 */
 	@Suspendable
 	static Envelope putCard(EnvelopeMethodPutCard putCard, String userId) {
 		var tracer = GlobalTracer.get();
@@ -123,90 +130,86 @@ public interface Editor {
 			// When the ClusteredGames verticle that has the game context is hosted by the same vertx instance that is
 			// running the connections handler, we'll find the address in the "local" event bus map
 			var eventBus = Vertx.currentContext().owner().eventBus();
-			try {
-				// generate a record id (null means create a new one and return it to me)
-				if (recordId == null) {
-					recordId = mongo().createId();
-				}
 
-				var source = putCard.getSource();
-				if (source == null) {
-					// No source specified, cannot continue
-					return errorResult("No source code specified.");
-				}
-				if (source.length() > 3200) {
-					// Too long
-					return errorResult("You attempted to save a source that was too long.");
-				}
-				if (mongo().count(EDITABLE_CARDS, json("ownerUserId", userId)) > 1000L) {
-					return errorResult("You've exceeded your card limit.");
-				}
-				var updateResult = mongo().updateCollectionWithOptions(EDITABLE_CARDS,
-						json("_id", recordId),
-						json("$set",
-								json("source", source, "ownerUserId", userId)),
-						new UpdateOptions().setUpsert(true));
-				var editableCard = new EditableCard()
-						.id(recordId)
-						.source(source)
-						.ownerUserId(userId);
-
-				var envelope = new Envelope();
-
-				var hasSource = putCard.getSource() != null && !putCard.getSource().isEmpty();
-				if (hasSource) {
-					// Try parsing here for errors
-					try {
-						var cardDesc = Json.decodeValue(putCard.getSource(), CardDesc.class);
-						// TODO: Get more errors
-					} catch (DecodeException decodeException) {
-						if (decodeException.getCause() instanceof JsonParseException) {
-							var jsonParseException = (JsonParseException) decodeException.getCause();
-							if (jsonParseException != null && jsonParseException.getLocation() != null) {
-								putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
-							}
-						} else {
-							putResult.addCardScriptErrorsItem(decodeException.getMessage());
-						}
-					} catch (Throwable throwable) {
-						putResult.addCardScriptErrorsItem(throwable.getMessage());
-					}
-				}
-
-				if (hasSource && putCard.isDraw() != null && putCard.isDraw()) {
-					// Get the game context the player is currently in.
-					var gameId = Games.getUsersInGames().get(new UserId(userId));
-					if (gameId != null) {
-						Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
-								json(
-										"userId", userId,
-										"putCard", json(putCard)
-								), h));
-						var drawJson = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
-						putResult.cardId(drawJson.getCardId());
-						if (drawJson.getCardScriptErrors() != null) {
-							for (var error : drawJson.getCardScriptErrors()) {
-								putResult.addCardScriptErrorsItem(error);
-							}
-						}
-					}
-				}
-
-				envelope
-						.result(new EnvelopeResult()
-								.putCard(putResult));
-
-				if (updateResult.getDocUpsertedId() != null) {
-					envelope.added(new EnvelopeAdded().editableCard(editableCard));
-					putResult.editableCardId(recordId);
-				} else if (updateResult.getDocModified() > 0L) {
-					envelope.changed(new EnvelopeChanged().editableCard(editableCard));
-				}
-				return envelope;
-			} catch (VertxException exception) {
-				// TODO: Special errors here
-				throw Throwables.getRootCause(exception);
+			// generate a record id (null means create a new one and return it to me)
+			if (recordId == null) {
+				recordId = mongo().createId();
 			}
+
+			var source = putCard.getSource();
+			if (source == null) {
+				// No source specified, cannot continue
+				return errorResult("No source code specified.");
+			}
+			if (source.length() > 3200) {
+				// Too long
+				return errorResult("You attempted to save a source that was too long.");
+			}
+			if (mongo().count(EDITABLE_CARDS, json("ownerUserId", userId)) > 1000L) {
+				return errorResult("You've exceeded your card limit.");
+			}
+			var updateResult = mongo().updateCollectionWithOptions(EDITABLE_CARDS,
+					json("_id", recordId),
+					json("$set",
+							json("source", source, "ownerUserId", userId)),
+					new UpdateOptions().setUpsert(true));
+			var editableCard = new EditableCard()
+					.id(recordId)
+					.source(source)
+					.ownerUserId(userId);
+
+			var envelope = new Envelope();
+
+			var hasSource = putCard.getSource() != null && !putCard.getSource().isEmpty();
+			if (hasSource) {
+				// Try parsing here for errors
+				try {
+					var cardDesc = Json.decodeValue(putCard.getSource(), CardDesc.class);
+					// TODO: Get more errors
+				} catch (DecodeException decodeException) {
+					if (decodeException.getCause() instanceof JsonParseException) {
+						var jsonParseException = (JsonParseException) decodeException.getCause();
+						if (jsonParseException != null && jsonParseException.getLocation() != null) {
+							putResult.addCardScriptErrorsItem(String.format("Line %d: %s", jsonParseException.getLocation().getLineNr(), jsonParseException.getMessage()));
+						}
+					} else {
+						putResult.addCardScriptErrorsItem(decodeException.getMessage());
+					}
+				} catch (Throwable throwable) {
+					putResult.addCardScriptErrorsItem(throwable.getMessage());
+				}
+			}
+
+			if (hasSource && putCard.isDraw() != null && putCard.isDraw()) {
+				// Get the game context the player is currently in.
+				var gameId = Games.getUsersInGames().get(new UserId(userId));
+				if (gameId != null) {
+					Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
+							json(
+									"userId", userId,
+									"putCard", json(putCard)
+							), h));
+					var drawJson = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
+					putResult.cardId(drawJson.getCardId());
+					if (drawJson.getCardScriptErrors() != null) {
+						for (var error : drawJson.getCardScriptErrors()) {
+							putResult.addCardScriptErrorsItem(error);
+						}
+					}
+				}
+			}
+
+			envelope
+					.result(new EnvelopeResult()
+							.putCard(putResult));
+
+			if (updateResult.getDocUpsertedId() != null) {
+				envelope.added(new EnvelopeAdded().editableCard(editableCard));
+				putResult.editableCardId(recordId);
+			} else if (updateResult.getDocModified() > 0L) {
+				envelope.changed(new EnvelopeChanged().editableCard(editableCard));
+			}
+			return envelope;
 		} catch (Throwable throwable) {
 			// Passes along the issue
 			Tracing.error(throwable, span, true);

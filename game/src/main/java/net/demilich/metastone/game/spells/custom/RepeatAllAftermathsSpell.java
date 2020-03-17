@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableSet;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
@@ -32,6 +33,11 @@ public final class RepeatAllAftermathsSpell extends Spell {
 			return;
 		}
 
+		var executedOn = EnvironmentEntityList.getList(context);
+		if (!executedOn.getReferences(context, source).isEmpty()) {
+			return;
+		}
+
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
 		List<EnvironmentDeathrattleTriggeredList.EnvironmentDeathrattleTriggeredItem> deathrattles = new ArrayList<>(context.getDeathrattles().getDeathrattles());
 		boolean isItselfDeathrattle = desc.containsKey(SpellArg.DEATHRATTLE_ID);
@@ -53,7 +59,9 @@ public final class RepeatAllAftermathsSpell extends Spell {
 					return false;
 				}
 				// We are only interested in source cards, so it's okay if we're accepting removed from play entities
-				cards.add(context.resolveSingleTarget(item.getSource(), false).getSourceCard());
+				var sourceCard = context.resolveSingleTarget(item.getSource(), false).getSourceCard();
+				cards.add(sourceCard);
+				executedOn.add(source, sourceCard);
 				return true;
 			}).map(EnvironmentDeathrattleTriggeredList.EnvironmentDeathrattleTriggeredItem::getSpell)
 					.collect(Collectors.toList());
@@ -76,10 +84,13 @@ public final class RepeatAllAftermathsSpell extends Spell {
 					break;
 				}
 				Player castingPlayer = determineCastingPlayer.getCastingPlayer();
+				var sourceCard = context.resolveSingleTarget(item.getSource()).getSourceCard();
+				executedOn.add(source, sourceCard);
 				SpellUtils.castChildSpell(context, castingPlayer, item.getSpell(), source, null);
-				context.getLogic().revealCard(player, context.resolveSingleTarget(item.getSource()).getSourceCard());
+				context.getLogic().revealCard(player, sourceCard);
 			}
 		}
 
+		executedOn.clear(source);
 	}
 }

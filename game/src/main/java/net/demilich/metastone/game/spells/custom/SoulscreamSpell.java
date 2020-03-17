@@ -16,6 +16,7 @@ import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.GraveyardDiedMinionsSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
@@ -33,12 +34,14 @@ public final class SoulscreamSpell extends TriggerDeathrattleSpell {
 				.getGraveyard()
 				.stream()
 				.filter(Entity::diedOnBattlefield)
-				.filter(distinctByKey(e -> e.getSourceCard() != null ? e.getSourceCard().getCardId() : ""))
 				.collect(toList());
 		if (minions.isEmpty()) {
 			return;
 		}
-		var choices = minions.stream().collect(toMap(kv -> kv.getSourceCard().getCardId(), kv -> kv));
+		var choices = new HashMap<String, Entity>();
+		for (var minion : minions) {
+			choices.putIfAbsent(minion.getSourceCard().getCardId(), minion);
+		}
 		// These will be copied by the discover action
 		var cards = minions.stream().map(Entity::getSourceCard).collect(toCollection(CardArrayList::new));
 		var chosenAction = SpellUtils.discoverCard(context, player, source, NullSpell.create().addArg(SpellArg.SPELL, NullSpell.create()), cards);

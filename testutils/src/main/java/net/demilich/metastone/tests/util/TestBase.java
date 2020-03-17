@@ -301,16 +301,18 @@ public class TestBase {
 
 	@Suspendable
 	public void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
-		DeckFormat defaultFormat = getDefaultFormat();
-		defaultFormat = defaultFormat.clone();
+		var defaultFormat = getDefaultFormat();
+		var format = new DeckFormat()
+				.withName(defaultFormat.getName())
+				.withCardSets(defaultFormat.getCardSets());
 		// Remove the starting card
-		defaultFormat.setSecondPlayerBonusCards(new String[0]);
+		format.setSecondPlayerBonusCards(new String[0]);
 		GameContext context = new DebugContext(new Player(heroClass1), new Player(heroClass2), new GameLogic() {
 			@Override
 			public int determineBeginner(int... playerIds) {
 				return GameContext.PLAYER_1;
 			}
-		}, defaultFormat);
+		}, format);
 		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
 		// Disable fatigue
 		context.getPlayers().forEach(p -> p.setAttribute(Attribute.DISABLE_FATIGUE));

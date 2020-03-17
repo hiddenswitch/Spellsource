@@ -53,9 +53,8 @@ public class RandomCardTargetSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = SpellUtils.getCard(context, desc);
 		// If the spell is not exclusive, it will copy the target card. Otherwise, it will cast the card.
-		final boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false);
+		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false);
 		if (card == null
-				&& target != null
 				&& target instanceof Card) {
 			card = (Card) target;
 			if (!exclusive) {

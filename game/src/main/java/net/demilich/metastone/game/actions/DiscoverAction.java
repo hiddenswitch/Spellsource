@@ -76,20 +76,9 @@ public class DiscoverAction extends GameAction implements HasCard {
 		return false;
 	}
 
-	/*
-	@Override
-	public DiscoverAction clone() {
-		DiscoverAction clone = DiscoverAction.createDiscover(getSpell().clone());
-		clone.setSourceReference(getSourceReference());
-		clone.setCard(card);
-		return clone;
-	}
-	*/
-
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		// Resume the appropriate fiber
 	}
 
 	/**
@@ -120,9 +109,9 @@ public class DiscoverAction extends GameAction implements HasCard {
 	 */
 	public String getDescription(GameContext context, int playerId) {
 		if (playerId == context.getActivePlayerId()) {
-			return String.format("%s %s %s.", context.getPlayer(playerId).getName(), DISCOVERED_NAME, getCard().getName());
+			return String.format("With %s, %s %s %s.", getSource(context).getName(), context.getPlayer(playerId).getName(), DISCOVERED_NAME, getCard().getName());
 		} else {
-			return String.format("%s %s a card.", context.getPlayer(context.getActivePlayerId()).getName(), DISCOVERED_NAME, getCard().getName());
+			return String.format("With %s, %s %s a card.", getSource(context).getName(), context.getPlayer(context.getActivePlayerId()).getName(), DISCOVERED_NAME, getCard().getName());
 		}
 	}
 
