@@ -176,6 +176,7 @@ definitions:
               draw:
                 type: 'boolean'
                 x-nullable: false
+                default: false
                 description: |
                   When true, indicates that the editor should draw the card in a live game, if there is one.
               source:

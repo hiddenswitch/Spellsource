@@ -81,7 +81,7 @@ public class RandomCardTargetSpell extends Spell {
 		}
 
 		// Makes random discover choices
-		player.setAttribute(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 
 		Zones destination = Zones.REMOVED_FROM_PLAY;
 		if (spellCard.getZone() == Zones.DECK
@@ -105,7 +105,7 @@ public class RandomCardTargetSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
-			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+			player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 			return;
 		}
 		spellCard.processTargetSelectionOverride(context, player);
@@ -125,7 +125,7 @@ public class RandomCardTargetSpell extends Spell {
 			context.getLogic().removeCard(spellCard);
 		}
 
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 	}
 
 }

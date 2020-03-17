@@ -30,10 +30,7 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -52,6 +49,10 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 		registration = Rpc.register(this, Games.class);
 		LOGGER.info("start: Consumers={}", registration.getMessageConsumers().stream().map(MessageConsumer::address).collect(toList()));
+	}
+
+	public Map<GameId, ServerGameContext> getContexts() {
+		return Collections.unmodifiableMap(contexts);
 	}
 
 	@Override
@@ -108,6 +109,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 						new VertxScheduler(Vertx.currentContext().owner()),
 						request.getConfigurations());
 
+				// Enable tracing
 				context.setSpanContext(span.context());
 
 				try {
