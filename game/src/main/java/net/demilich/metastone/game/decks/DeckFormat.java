@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.decks;
 
+import com.google.common.base.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @see GameContext#getDeckFormat() for the property on the game context where the deck format is set
  * @see #getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
- * 		decks
+ * decks
  */
 public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
@@ -92,7 +93,7 @@ public class DeckFormat implements Serializable, Cloneable {
 	 * The current {@code Spellsource} format containing all Spellsource sets.
 	 *
 	 * @return A format, or {@code null} if either Spellsource cards are not on your classpath or {@link
-	 *    CardCatalogue#loadCardsFromPackage()} has not been called. OSGi-friendly.
+	 * CardCatalogue#loadCardsFromPackage()} has not been called. OSGi-friendly.
 	 */
 	public static DeckFormat spellsource() {
 		return getFormat("Spellsource");
@@ -159,14 +160,12 @@ public class DeckFormat implements Serializable, Cloneable {
 		if (this == o) return true;
 		if (!(o instanceof DeckFormat)) return false;
 		DeckFormat that = (DeckFormat) o;
-		return Objects.equals(name, that.name) &&
-				Objects.equals(sets, that.sets) &&
-				Objects.equals(secondPlayerBonusCards, that.secondPlayerBonusCards);
+		return Objects.equal(name, that.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, sets, secondPlayerBonusCards);
+		return Objects.hashCode(name);
 	}
 
 	@Override

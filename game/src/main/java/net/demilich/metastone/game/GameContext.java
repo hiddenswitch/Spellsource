@@ -1216,8 +1216,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		logic.setContext(this);
 	}
 
-	public void setDeckFormat(DeckFormat deckFormat) {
+	public GameContext setDeckFormat(DeckFormat deckFormat) {
 		this.deckFormat = deckFormat;
+		return this;
 	}
 
 	public void setEnvironment(Map<Environment, Object> environment) {
@@ -1791,7 +1792,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @return
 	 */
 	public static GameContext fromTwoRandomDecks(DeckFormat format) {
-		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)));
+		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)))
+				.setDeckFormat(format);
 	}
 
 	/**

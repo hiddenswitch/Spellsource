@@ -2976,6 +2976,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				}
 			}
 
+			logger.debug("performGameAction {} {}: {}", context.getGameId(), playerId, action.getDescription(context, playerId));
 			action.execute(context, playerId);
 
 			context.getEnvironment().remove(Environment.TARGET);

@@ -1,26 +1,26 @@
 {
   "name": "The Prophet",
-  "baseManaCost": 7,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 9,
+  "baseAttack": 8,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discover and summon two minions that died this game.",
+  "description": "Opener: Discover two minions that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "CastRepeatedlySpell",
-      "howMany": 2,
-      "spell": {
-        "class": "DiscoverSpell",
-        "cardSource": {
-          "class": "GraveyardDiedMinionsSource",
-          "targetPlayer": "BOTH",
-          "distinct": true
-        }
+      "class": "DiscoverSpell",
+      "cardFilter": {
+        "class": "CardFilter"
+      },
+      "value": 2,
+      "cardSource": {
+        "class": "GraveyardDiedMinionsSource",
+        "targetPlayer": "BOTH",
+        "distinct": true
       }
-    }
+	} 
   },
   "attributes": {
     "BATTLECRY": true,

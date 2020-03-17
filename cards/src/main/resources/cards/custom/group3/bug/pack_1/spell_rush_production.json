@@ -1,6 +1,6 @@
 {
   "name": "Rush Production",
-  "baseManaCost": 2,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",

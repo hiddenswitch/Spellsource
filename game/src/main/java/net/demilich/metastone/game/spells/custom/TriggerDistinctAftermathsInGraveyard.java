@@ -46,7 +46,7 @@ public final class TriggerDistinctAftermathsInGraveyard extends TriggerDeathratt
 		}
 	}
 
-	private static <T> Predicate<T> distinctByKey(
+	public static <T> Predicate<T> distinctByKey(
 			Function<? super T, ?> keyExtractor) {
 
 		Map<Object, Boolean> seen = new ConcurrentHashMap<>();

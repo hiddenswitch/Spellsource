@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Your Larva have Lifesteal.",
   "aura": {
     "class": "AttributeAura",

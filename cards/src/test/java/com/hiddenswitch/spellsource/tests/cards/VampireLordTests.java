@@ -20,6 +20,25 @@ public class VampireLordTests extends TestBase {
 	}
 
 	@Test
+	public void testSoulscream() {
+		runGym((context, player, opponent) -> {
+			Card drawn = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, player, "minion_test_deathrattle");
+			destroy(context, target);
+			assertEquals(Zones.GRAVEYARD, target.getZone());
+			assertEquals(1, player.getHand().size());
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals("minion_test_deathrattle", discoverActions.get(0).getCard().getCardId());
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_soulscream");
+			assertEquals(3, player.getHand().size(), "receive Soulscream AND the aftermath result");
+			assertEquals(Zones.HAND, drawn.getZone());
+		});
+	}
+
+	@Test
 	public void testBloodlordGoa() {
 		runGym((context, player, opponent) -> {
 			Minion drawsCard = playMinionCard(context, player, "minion_test_deathrattle");
