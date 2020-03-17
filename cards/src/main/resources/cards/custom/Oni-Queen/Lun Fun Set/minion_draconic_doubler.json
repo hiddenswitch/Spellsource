@@ -1,0 +1,26 @@
+{
+  "name": "Draconic Doubler",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Dash. Opener: Summon a copy of this minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
