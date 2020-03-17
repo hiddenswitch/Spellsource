@@ -88,7 +88,7 @@ public class AttributeValueProvider extends ValueProvider {
 			if (entity instanceof Actor) {
 				Actor source = (Actor) entity;
 				if (attribute == Attribute.ATTACK) {
-					value += source.getAttack();
+					value += Math.max(0, source.getAttack());
 				} else if (attribute == Attribute.MAX_HP) {
 					value += source.getMaxHp();
 				} else if (attribute == Attribute.HP) {

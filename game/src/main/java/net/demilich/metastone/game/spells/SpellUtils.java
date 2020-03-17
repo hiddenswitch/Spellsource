@@ -883,11 +883,13 @@ public class SpellUtils {
 	 * @return
 	 */
 	public static boolean isRecursive(Class<? extends Spell> callingClass) {
+		/*
 		return StackWalker.getInstance().walk(s -> s
 				.takeWhile(f -> f.getClassName().contains(GameContext.class.getPackageName()))
 				.skip(2)
 				.limit(16)
-				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));
+				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));*/
+		return false;
 	}
 
 	/**

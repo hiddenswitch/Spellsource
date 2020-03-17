@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.Repeat;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditorTest extends SpellsourceTestBase {
 
-	private void drawCardHardness(TestContext testContext, String code, SuspendableAction2<ServerGameContext, Envelope> handler) {
+	private void drawCardHarness(TestContext testContext, String code, SuspendableAction2<ServerGameContext, Envelope> handler) {
 		sync(() -> {
 			var keepPlaying = new AtomicBoolean(false);
 			try (var client = new UnityClient(testContext) {
@@ -48,7 +49,7 @@ public class EditorTest extends SpellsourceTestBase {
 	@Test
 	public void testBasicEditing(TestContext testContext) {
 		var code = Json.encode(CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()).getDesc());
-		drawCardHardness(testContext, code, (serverGameContext, envelope) -> {
+		drawCardHarness(testContext, code, (serverGameContext, envelope) -> {
 			testContext.assertNotNull(envelope.getResult().getPutCard().getEditableCardId());
 			testContext.assertTrue(serverGameContext.getPlayers().stream().anyMatch(p -> p.getHand().containsCard(CardCatalogue.getOneOneNeutralMinionCardId())), "the player should have drawn the card");
 			testContext.assertTrue(serverGameContext.isRunning());
@@ -58,7 +59,7 @@ public class EditorTest extends SpellsourceTestBase {
 	@Test
 	public void testDecodeExceptionAppearsAsError(TestContext testContext) {
 		var code = "{\"name\": \"Test\",,}";
-		drawCardHardness(testContext, code, (serverGameContext, envelope) -> {
+		drawCardHarness(testContext, code, (serverGameContext, envelope) -> {
 			testContext.assertNotNull(envelope.getResult().getPutCard().getEditableCardId(), "should still save card");
 			testContext.assertEquals(envelope.getResult().getPutCard().getCardScriptErrors().size(), 1);
 			testContext.assertFalse(serverGameContext.getPlayers().stream().anyMatch(p -> p.getHand().containsCard(CardCatalogue.getOneOneNeutralMinionCardId())), "the player should NOT have drawn the card");

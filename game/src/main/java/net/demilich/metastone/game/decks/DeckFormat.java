@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @see #getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
  * decks
  */
-public class DeckFormat implements Serializable, Cloneable {
+public class DeckFormat implements Serializable {
 	private String name = "";
 	private Set<String> sets;
 	private String[] secondPlayerBonusCards = new String[0];
@@ -166,17 +166,6 @@ public class DeckFormat implements Serializable, Cloneable {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(name);
-	}
-
-	@Override
-	public DeckFormat clone() {
-		try {
-			DeckFormat clone = (DeckFormat) super.clone();
-			clone.sets = new HashSet<>(this.sets);
-			return clone;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public String[] getSecondPlayerBonusCards() {

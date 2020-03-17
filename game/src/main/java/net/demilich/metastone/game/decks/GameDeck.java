@@ -169,7 +169,6 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 			GameDeck clone = (GameDeck) super.clone();
 			clone.cards = cards.getCopy();
 			clone.heroCard = heroCard == null ? null : heroCard.clone();
-			clone.format = format == null ? null : format.clone();
 			return clone;
 		} catch (CloneNotSupportedException ignored) {
 			return null;

@@ -2976,7 +2976,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				}
 			}
 
-			logger.debug("performGameAction {} {}: {}", context.getGameId(), playerId, action.getDescription(context, playerId));
+			if (logger.isTraceEnabled()) {
+				logger.trace("performGameAction {} {}: {}", context.getGameId(), playerId, action.getDescription(context, playerId));
+			}
+
 			action.execute(context, playerId);
 
 			context.getEnvironment().remove(Environment.TARGET);
@@ -3747,12 +3750,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			action = getRandom(actions);
 		} else {
 			action = context.getBehaviours().get(player.getId()).requestAction(context, player, actions);
+			// Only add the action to the trace if it represents a real choice by the user
+			context.getTrace().addAction(action);
 		}
 
 		if (action == null) {
 			throw new NullPointerException("Behaviour did not return action");
 		}
-		context.getTrace().addAction(action.getId());
 		return action;
 	}
 

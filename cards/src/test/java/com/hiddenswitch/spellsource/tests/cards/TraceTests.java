@@ -6,6 +6,8 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
@@ -13,23 +15,27 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.logic.Trace;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TraceTests {
 	private static Logger LOGGER = LoggerFactory.getLogger(TraceTests.class);
@@ -91,15 +97,10 @@ public class TraceTests {
 	 */
 	@Test
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
-		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
-			Player player1 = new Player(Deck.randomDeck(), "Player 1");
-			Player player2 = new Player(Deck.randomDeck(), "Player 2");
-			GameContext context1 = new GameContext();
-			context1.setDeckFormat(DeckFormat.spellsource());
-			context1.setPlayer(0, player1);
-			context1.setPlayer(1, player2);
+		IntStream.range(0, 1000).parallel().unordered().forEach(ignored -> {
+			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 			context1.play();
-			Trace trace = context1.getTrace();
+			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
 			assertEquals(context1.getTurn(), context2.getTurn());
 		});
@@ -119,25 +120,38 @@ public class TraceTests {
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {
-			Player player1 = new Player(Deck.randomDeck());
-			Player player2 = new Player(Deck.randomDeck());
-			GameContext context1 = new GameContext();
-			context1.setPlayer(0, player1);
-			context1.setPlayer(1, player2);
-			context1.setDeckFormat(DeckFormat.getFormat("Standard"));
+			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 			context1.play();
-			Trace trace = context1.getTrace();
-			try {
-				GameContext context2 = trace.replayContext(false, null);
-				assertEquals(context1.getTurn(), context2.getTurn());
-			} catch (Throwable ex) {
-				// Inspect the trace and observe which cards were played that could have caused the error
-				cards.addAll(context1.getEntities().filter(e -> e.getEntityType().equals(EntityType.CARD)).map(Entity::getSourceCard).map(Card::getCardId).collect(toList()));
+			Trace trace = context1.getTrace().clone();
+			GameContext context2 = trace.replayContext(false, null);
+			if (context1.getTurn() != context2.getTurn()) {
+				LOGGER.info("trace failed");
+				cards.addAll(context1.getEntities().filter(e -> e.getEntityType().equals(EntityType.CARD) && e.hasAttribute(Attribute.STARTED_IN_DECK)
+						|| e.hasAttribute(Attribute.STARTED_IN_HAND)).map(Entity::getSourceCard).map(Card::getCardId).collect(toList()));
+
+				for (var j = 1; j < Math.min(context1.getTrace().getActions().size(), context2.getTrace().getActions().size()); j++) {
+					if (!context1.getTrace().getActions().get(j).equals(context2.getTrace().getActions().get(j))) {
+						var gameAction1 = context1.getTrace().getRawActions().get(j - 1);
+						var gameAction2 = context1.getTrace().getRawActions().get(j);
+						var gameAction3 = context2.getTrace().getRawActions().get(j - 1);
+						var gameAction4 = context2.getTrace().getRawActions().get(j);
+						LOGGER.info("diverging action: \n'{}' to '{}'\n'{}' to '{}'",
+								gameAction1.getDescription(context1, 0),
+								gameAction2.getDescription(context1, 0),
+								gameAction3.getDescription(context2, 0),
+								gameAction4.getDescription(context2, 0));
+						break;
+					}
+				}
 			}
+
 		});
 		// Find the card which most frequently appear in the bad set
 		List<String> res = cards.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getCount(), e1.getCount())).map(Multiset.Entry::toString).collect(toList());
 		LOGGER.info("{}", res);
+		if (!cards.isEmpty()) {
+			fail("Invalid trace");
+		}
 	}
 
 }

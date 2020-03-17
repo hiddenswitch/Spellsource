@@ -252,7 +252,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
 		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
-		setDeckFormat(fromContext.getDeckFormat().clone());
+		setDeckFormat(fromContext.getDeckFormat());
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
 
@@ -383,12 +383,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	protected void calculateStatistics() {
 		if (getWinner() != null) {
-			LOGGER.debug("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
+			LOGGER.trace("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
 			getWinner().getStatistics().gameWon();
 			Player loser = getOpponent(getWinner());
 			loser.getStatistics().gameLost();
 		} else {
-			LOGGER.debug("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
+			LOGGER.trace("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
 			getPlayer1().getStatistics().gameLost();
 			getPlayer2().getStatistics().gameLost();
 		}
@@ -399,7 +399,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void endTurn() {
-		LOGGER.debug("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
+		LOGGER.trace("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		setTurnState(TurnState.TURN_ENDED);
@@ -874,7 +874,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void init(int startingPlayerId) {
 		setActivePlayerId(startingPlayerId);
 		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
-		LOGGER.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
+		LOGGER.trace("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
@@ -1016,7 +1016,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				throw new NullPointerException("nextAction");
 			}
 
-			trace.addAction(nextAction.getId());
+			trace.addAction(nextAction);
 			getLogic().performGameAction(getActivePlayerId(), nextAction);
 			return nextAction.getActionType() != ActionType.END_TURN;
 		} finally {
@@ -1171,7 +1171,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void startTurn(int playerId) {
-		LOGGER.debug("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
+		LOGGER.trace("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
 		setActionsThisTurn(0);
