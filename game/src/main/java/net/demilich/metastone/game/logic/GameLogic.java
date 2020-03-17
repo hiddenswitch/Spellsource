@@ -1287,6 +1287,28 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 			}
 
+			if (damageDealt > 0 &&
+					(source.hasAttribute(Attribute.WITHER))
+					// Lifesteal now does not apply if the source shares an owner with the target and the target is a hero.
+					&& !(source.getOwner() == target.getOwner() && target.getEntityType() == EntityType.HERO && source.getSourceCard().getCardType().isCardType(CardType.SPELL))
+					|| (source instanceof Hero && ((Hero) source).getWeapon() != null
+					&& (((Hero) source).getWeapon().hasAttribute(Attribute.WITHER)))
+					|| (source instanceof Secret
+					&& (source.getSourceCard().hasAttribute(Attribute.WITHER)))) {
+
+				int amount;
+				if (source.hasAttribute(Attribute.WITHER)) {
+					amount = source.getAttributeValue(Attribute.WITHER);
+				} else if ((source instanceof Hero && ((Hero) source).getWeapon() != null
+						&& (((Hero) source).getWeapon().hasAttribute(Attribute.WITHER)))) {
+					amount = ((Hero) source).getWeapon().getAttributeValue(Attribute.WITHER);
+				} else {
+					amount = source.getSourceCard().getAttributeValue(Attribute.WITHER);
+				}
+
+				target.modifyAttribute(Attribute.WITHERED, amount);
+			}
+
 			// Implement Doomlord
 			target.modifyAttribute(Attribute.DAMAGE_THIS_TURN, damageDealt);
 			if (target.getEntityType() == EntityType.HERO) {
@@ -1697,9 +1719,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			hero.getWeapon().getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
 		handleFrozen(hero);
+		handleWithered(hero);
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 			handleFrozen(minion);
+			handleWithered(minion);
 		}
 		player.getAttributes().remove(Attribute.COMBO);
 		hero.activateWeapon(false);
@@ -2312,6 +2336,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks() && !actor.hasAttribute(Attribute.FREEZES_PERMANENTLY)) {
 			removeAttribute(actor, null, Attribute.FROZEN);
+		}
+	}
+
+	@Suspendable
+	private void handleWithered(Actor actor) {
+		if (!actor.hasAttribute(Attribute.WITHERED)) {
+			return;
+		}
+		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks()) {
+			removeAttribute(actor, null, Attribute.WITHERED);
 		}
 	}
 

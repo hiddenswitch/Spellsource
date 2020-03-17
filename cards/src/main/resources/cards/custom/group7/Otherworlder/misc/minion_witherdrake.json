@@ -8,29 +8,11 @@
   "rarity": "COMMON",
   "race": "DRAGON",
   "description": "<b>Wither (1).</b> <b>Opener:</b> Deal 1 damage.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "DamageCausedTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES"
-    },
-    "spell": {
-      "class": "WitherSpell",
-      "target": "EVENT_TARGET"
-    }
-  },
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "WitherSpell"
-        },
-        {
-          "class": "DamageSpell",
-          "value": 1
-        }
-      ]
+      "class": "DamageSpell",
+      "value": 1
     }
   },
   "attributes": {
