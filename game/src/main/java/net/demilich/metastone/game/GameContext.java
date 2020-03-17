@@ -188,12 +188,12 @@ import static java.util.stream.Collectors.toList;
  *
  * @see #play() for more about how a game is "played."
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
- * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
- * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- *    {@link Behaviour#requestAction(GameContext, Player, List)}.
+ * both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
+ * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
+ * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- *    GameContext} because it manipulates the state stored in it.
+ * GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -451,7 +451,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
 	 *
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
-	 * 		destroyed.
+	 * destroyed.
 	 */
 	@Suspendable
 	public boolean updateAndGetGameOver() {
@@ -657,7 +657,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param minionReference The minion from whose perspective we will consider "opposite."
 	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced
-	 * 		by {@code minionReference}.
+	 * by {@code minionReference}.
 	 */
 	public List<Actor> getOppositeMinions(EntityReference minionReference) {
 		List<Actor> oppositeMinions = new ArrayList<>();
@@ -975,7 +975,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * GameAction}.
 	 *
 	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end
-	 * 		their turn.
+	 * their turn.
 	 */
 	@Suspendable
 	public boolean takeActionInTurn() {
@@ -1009,6 +1009,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				return false;
 			}
 
+			// TODO: Does this need to respect random actions?
 			GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
 
 			if (nextAction == null) {
@@ -1049,7 +1050,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param targetKey The reference to find.
 	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
-	 * 		reference was {@code null} or {@link EntityReference#NONE}
+	 * reference was {@code null} or {@link EntityReference#NONE}
 	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
 	 *                              that cannot be found.
 	 */
@@ -1081,7 +1082,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param targetKey The {@link EntityReference}.
 	 * @return A potentially empty list of entities.
 	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target
-	 * 		resolution works.
+	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
 		final List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);

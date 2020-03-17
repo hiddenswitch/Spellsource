@@ -24,7 +24,7 @@ task swagger {
     inputs.file(input)
     outputs.dir(output)
     doLast {
-        def config = new JavaModuleInfoGenerator();
+        def config = new SpellsourceJavaCodegen();
         config.setInputSpec(input)
         config.setOutputDir(output.path)
         config.setTemplateDir(templateDir.absolutePath)

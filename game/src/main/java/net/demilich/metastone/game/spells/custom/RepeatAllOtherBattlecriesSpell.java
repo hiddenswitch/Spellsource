@@ -46,8 +46,8 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 
 		logger.debug("onCast {} {}: {} battlecries were selected.", context.getGameId(), source, cards.size());
 
-		player.setAttribute(Attribute.RANDOM_CHOICES);
-		context.getOpponent(player).setAttribute(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
+		context.getOpponent(player).modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 		// Replay the battlecries with targets chosen randomly
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
@@ -73,8 +73,8 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 			context.getLogic().endOfSequence();
 		}
 
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
-		context.getOpponent(player).getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
+		context.getOpponent(player).modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 	}
 
 	/**

@@ -81,7 +81,7 @@ public class PlayCardsRandomlySpell extends Spell {
 		}
 
 		// TODO: While invoking play cards randomly, should not play a play cards randomly. Use an environment stack.
-		player.setAttribute(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 
 		// Replay
 		for (int i = 0; i < cards.size(); i++) {
@@ -118,7 +118,7 @@ public class PlayCardsRandomlySpell extends Spell {
 		}
 
 		EnvironmentEntityList.getList(context).clear(source);
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 	}
 
 	protected CardList getCards(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

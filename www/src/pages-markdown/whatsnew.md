@@ -5,6 +5,12 @@ path: "/whats-new"
 header: true
 ---
 
+### 0.8.69-3.1.0 (In Progress)
+
+ - Effects which cause random cards to be played should be more reliable.
+ - Improve the reliability of editing and make it harder to accidentally orphan a game.
+ - Automatic reconnecting on mobile devices after backgrounding the application now works.
+
 ### 0.8.68-3.1.0 (March 13, 2020)
 
  - A text-based card editor is now active during Quick Play. Access it by clicking the pencil icon in the top tray of the battlefield. You will not be able to draw cards during a multiplayer game.
