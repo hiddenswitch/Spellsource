@@ -30,8 +30,12 @@ public class ArchaeologistTests extends TestBase {
 			assertEquals(3, player.getGraveyard().size(), "should contain two cards and the minion");
 			context.endTurn();
 			context.endTurn();
-			assertEquals(1, player.getGraveyard().size(), "should have drawn the 1/1 neutral out of the graveyard - both it and its source card");
+			assertEquals(2, player.getGraveyard().size(), "should have drawn the 1/1 neutral out of the graveyard, but now the neutral will not be eligible to draw again");
 			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId(), "should have drawn 1/1 neutral");
+			assertEquals(1, player.getHand().size(), "contains the one card");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(1, player.getHand().size(), "no cards left to draw");
 		});
 	}
 

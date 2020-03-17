@@ -1,0 +1,26 @@
+{
+  "seed" : -6728028564075893550,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "AMBER", "BLOOD" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_nanny", "minion_inspiring_hero", "minion_backwater_wise", "minion_sp1der", "spell_beetle_bash", "minion_gasbelly_oni", "minion_magedrainer", "spell_spawning_pool", "minion_timewalker_necrolyte", "minion_nursery_guard", "spell_forest_calling", "spell_impale", "minion_bait", "spell_hive_mind", "minion_primalist_kirra", "minion_quest_giver", "minion_queen_beetrice", "minion_chromatic_vohlok", "spell_beetle_bash", "minion_crystal_giant", "minion_tribemaster", "minion_vohkrovanis", "minion_big_ol_beetle", "minion_defender_of_tomorrow", "minion_blackboar", "minion_tiger_ant", "minion_the_glutton", "minion_storm_giant", "minion_dea", "minion_faerie_nightmare" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_hulking_chiroptid", "spell_take_flight", "minion_brawler_bushi", "minion_divine_cleric", "minion_lady_uki", "minion_gustbreaker", "minion_yokai_bonder", "minion_deft_familiar", "minion_timewalker_necrolyte", "weapon_wicked_moonblade", "minion_boar_brawler", "weapon_sanguine_shiv", "minion_bloodsoaked_construct", "spell_hemoshape_murk", "spell_mass_feeding", "spell_mass_feeding", "minion_glass_memory_golem", "minion_jack_in_the_box", "spell_indoctrination", "spell_drink_deep", "minion_bloodfuser", "minion_flashbulb_spider", "spell_ichor_blast", "minion_lord_cookie", "minion_defender_of_tomorrow", "minion_vampiric_savage", "spell_hemoshape_blade", "minion_bloodfuser", "minion_immortal_witness", "weapon_consuming_blade" ]
+  } ],
+  "deckFormatName" : "Pauper",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 23, 29, 26 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 53, 39 ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 0, 3, 0, 0, 7, 1, 4, 0, 6, 1, 4, 0, 12, 4, 7, 7, 0, 0, 35, 3, 8, 4, 2, 3, 1, 3, 5, 12, 11, 1, 0, 0, 3, 5, 1, 0, 19, 13, 4, 11, 2, 0, 0, 9, 1, 1, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

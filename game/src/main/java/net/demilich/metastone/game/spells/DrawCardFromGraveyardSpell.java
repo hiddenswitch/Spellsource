@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
@@ -44,11 +45,11 @@ public class DrawCardFromGraveyardSpell extends Spell {
 			Zones originalZone = card.getZone();
 			boolean drawn = context.getLogic().drawCard(player.getId(), card, source) != null;
 			if (drawn) {
-				// Successfully drawn. Remove the entity backed by the card if necessary
+				// Successfully drawn. This minion has now no longer died on the battlefield
 				if (originalZone == Zones.GRAVEYARD) {
 					player.getGraveyard().stream().filter(e -> Objects.equals(e.getSourceCard(), card))
 							.findFirst()
-							.ifPresent(entity -> entity.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY));
+							.ifPresent(entity -> entity.getAttributes().remove(Attribute.DIED_ON_TURN));
 				}
 			}
 		}

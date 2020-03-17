@@ -10,6 +10,9 @@ header: true
  - Effects which cause random cards to be played should be more reliable.
  - Improve the reliability of editing and make it harder to accidentally orphan a game.
  - Automatic reconnecting on mobile devices after backgrounding the application now works.
+ - Improve the reliability of Spirit from Long Past and other interactions with the graveyard as a source of cards.
+ - Soulscream no longer concedes a match and now has correct behaviour. (1584)
+ - Various Hive Queen balance changes. (1568)
 
 ### 0.8.68-3.1.0 (March 13, 2020)
 

@@ -24,13 +24,16 @@ public class GraveyardCardAndActorSourceCardSource extends CardSource {
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		Set<Card> inPlay = context.getEntities().filter(Entity::isInPlay).map(Entity::getSourceCard).collect(Collectors.toUnmodifiableSet());
+		Set<Card> inPlay = context.getEntities()
+				.filter(Entity::isInPlay)
+				.map(Entity::getSourceCard)
+				.collect(Collectors.toUnmodifiableSet());
 		return player.getGraveyard().stream()
 				.map(entity -> {
 					Card card;
 					if (entity instanceof Card) {
 						card = (Card) entity;
-					} else {
+					} else if (entity.diedOnBattlefield()) {
 						if (entity.getSourceCard() == null) {
 							card = null;
 						} else if (entity.getSourceCard().getZone() != Zones.GRAVEYARD) {
@@ -41,6 +44,8 @@ public class GraveyardCardAndActorSourceCardSource extends CardSource {
 						} else {
 							card = null;
 						}
+					} else {
+						card = null;
 					}
 					return card;
 				})

@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
+  "race": "BEAST",
   "description": "Aftermath: Transform the top card of your deck into a 0/2 Spidey Egg.",
   "deathrattle": {
     "class": "ReplaceCardsSpell",
