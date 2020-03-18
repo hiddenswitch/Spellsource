@@ -1,0 +1,36 @@
+{
+  "name": "Glimmer Dancer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "FAE",
+  "description": "Opener: If you played another card this turn, give your other Fae +2 Health.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayedThisTurnValueProvider"
+      },
+      "value2": 1
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "FAE"
+      },
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
