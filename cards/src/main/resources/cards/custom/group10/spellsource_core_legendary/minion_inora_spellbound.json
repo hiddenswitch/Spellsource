@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 8,
   "rarity": "LEGENDARY",
+  "race": "FAE",
   "description": "Whenever a player targets a character with a spell, restore 5 Health to it.",
   "trigger": {
     "eventTrigger": {
