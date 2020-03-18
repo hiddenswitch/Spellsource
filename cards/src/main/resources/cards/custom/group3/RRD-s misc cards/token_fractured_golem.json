@@ -6,7 +6,10 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "",
+  "description": "Elusive",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
