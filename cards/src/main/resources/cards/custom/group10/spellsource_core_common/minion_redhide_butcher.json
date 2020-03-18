@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "DEMON",
   "description": "Hidden. Aftermath: Discard the leftmost card in your hand.",
   "deathrattle": {
     "class": "DiscardSpell",
