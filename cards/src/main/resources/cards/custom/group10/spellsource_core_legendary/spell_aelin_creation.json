@@ -4,13 +4,22 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Look at 10 random cards and add one to your hand. Choose another after playing it.",
+  "description": "Copy 3 random cards from your deck. They cost (0).",
   "targetSelection": "NONE",
   "spell": {
-    "class": "custom.CreationSpell",
-    "value": 10,
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_DECK",
+    "randomTarget": true,
+    "value": 3,
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      }
     }
   },
   "collectible": false,
