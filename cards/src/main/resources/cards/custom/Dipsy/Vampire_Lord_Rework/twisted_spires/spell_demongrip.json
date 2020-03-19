@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Deal $4 damage to the left and rightmost enemy minions.",
+  "description": "Deal $[4] damage to the left and rightmost enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -20,7 +20,10 @@
         "spell": {
           "class": "DamageSpell",
           "target": "LEFTMOST_ENEMY_MINION",
-		  "value": 4
+		  "value": {
+            "class": "GatekeeperShaValueProvider",
+            "offset": 4
+          }
         }
       },
       {
@@ -34,11 +37,20 @@
         "spell": {
           "class": "DamageSpell",
           "target": "RIGHTMOST_ENEMY_MINION",
-		  "value": 4
+		  "value": {
+            "class": "GatekeeperShaValueProvider",
+            "offset": 4
+          }
         }
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 4
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

@@ -10,6 +10,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.BoardChangedEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
+import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -101,25 +102,30 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		setDesc(desc);
 	}
 
-	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter, Condition condition) {
-		super(new BoardChangedTrigger(), secondaryTrigger, applyAuraEffect, false);
-		this.applyAuraEffect = applyAuraEffect;
-		this.removeAuraEffect = removeAuraEffect;
-		this.targets = targetSelection;
-		this.entityFilter = entityFilter;
-		this.condition = condition;
+	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {
+		this(secondaryTrigger, applyAuraEffect, removeAuraEffect, targetSelection, null);
 	}
 
 	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter) {
 		this(secondaryTrigger, applyAuraEffect, removeAuraEffect, targetSelection, entityFilter, null);
 	}
 
-	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {
-		this(secondaryTrigger, applyAuraEffect, removeAuraEffect, targetSelection, null);
-	}
-
-	public Aura(SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {
-		this(null, applyAuraEffect, removeAuraEffect, targetSelection);
+	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter, Condition condition) {
+		super(new BoardChangedTrigger(), secondaryTrigger, applyAuraEffect, false);
+		if (applyAuraEffect == null) {
+			applyAuraEffect = NullSpell.create();
+		}
+		if (removeAuraEffect == null) {
+			removeAuraEffect = NullSpell.create();
+		}
+		if (targetSelection == null) {
+			targetSelection = EntityReference.SELF;
+		}
+		this.applyAuraEffect = applyAuraEffect;
+		this.removeAuraEffect = removeAuraEffect;
+		this.targets = targetSelection;
+		this.entityFilter = entityFilter;
+		this.condition = condition;
 	}
 
 	protected Aura(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell) {

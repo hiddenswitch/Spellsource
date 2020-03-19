@@ -4,11 +4,14 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Deal $2 damage. This has Lifedrain if you have less Health remaining than your opponent.",
+  "description": "Deal $[2] damage. This has Lifedrain if you have less Health remaining than your opponent.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
-    "value": 2
+    "value": {
+      "class": "GatekeeperShaValueProvider",
+      "offset": 2
+    }
   },
   "passiveAuras": [
     {

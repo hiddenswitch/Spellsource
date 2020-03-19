@@ -807,6 +807,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
+		// Implements incorruptibility (removes the target if it is affected by an incorruptibility aura)
+		if (targets != null) {
+			var incorruptibilityAuras = SpellUtils.getAuras(context, playerId, IncorruptibilityAura.class);
+			for (var aura : incorruptibilityAuras) {
+				targets.removeIf(e -> aura.getAffectedEntities().contains(e.getId()));
+			}
+		}
+
 		Spell spell = spellDesc.create();
 		spell.cast(context, player, spellDesc, source, targets);
 

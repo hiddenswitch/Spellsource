@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Take 3 damage. Summon 1 copy of a minion.",
+  "description": "Take [3] damage. Summon [1] copy of a minion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -12,14 +12,31 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 3,
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        },
         "ignoreSpellDamage": true
       },
       {
-        "class": "SummonSpell"
+        "class": "SummonSpell",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 1
+        }
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 1
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

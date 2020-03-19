@@ -1,0 +1,27 @@
+{
+  "name": "Bomber Whelp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Aftermath: Deal damage randomly split among enemy minions equal to this minion's Attack.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 1,
+    "howMany": {
+      "class": "AttributeValueProvider",
+      "target": "SELF",
+      "attribute": "ATTACK"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

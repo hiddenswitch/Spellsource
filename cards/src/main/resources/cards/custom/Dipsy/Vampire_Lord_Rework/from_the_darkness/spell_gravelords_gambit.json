@@ -4,12 +4,21 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Repeat the last 3 Aftermaths you triggered this game.",
+  "description": "Repeat the last [3] Aftermaths you triggered this game.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.RepeatLastAftermathsSpell",
-    "value": 3
+    "value": {
+      "class": "GatekeeperShaValueProvider",
+      "offset": 3
+    }
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

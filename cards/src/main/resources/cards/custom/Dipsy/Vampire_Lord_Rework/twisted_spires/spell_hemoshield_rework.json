@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Take 3 damage. Gain 12 Armor.",
+  "description": "Take [3] damage. Gain [12] Armor.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -12,16 +12,32 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 3,
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        },
         "ignoreSpellDamage": true
       },
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-		"armorBonus": 12
+		"armorBonus": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 12
+        }
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 12
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

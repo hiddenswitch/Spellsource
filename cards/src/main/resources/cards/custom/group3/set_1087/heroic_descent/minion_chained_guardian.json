@@ -1,0 +1,40 @@
+{
+  "name": "Chained Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Starts dormant. Breaks free and gains Guard once you've played [3 cards].",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_chained_guardian"
+    },
+    "countUntilCast": 3
+  },
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF"
+      },
+      "description1": " more card",
+      "description2": " more cards"
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Draw a spell. It costs (3) less. When you cast it, take 3 damage.",
+  "description": "Draw a spell. It costs ([3]) less. When you cast it, take [3] damage.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
@@ -22,7 +22,10 @@
           "cardCostModifier": {
             "class": "CardCostModifier",
             "target": "SELF",
-            "value": 3,
+            "value": {
+              "class": "GatekeeperShaValueProvider",
+              "offset": 3
+            },
             "operation": "SUBTRACT"
           }
         },
@@ -37,13 +40,26 @@
               "class": "DamageSpell",
               "target": "FRIENDLY_HERO",
               "ignoreSpellDamage": true,
-              "value": 3
+              "value": {
+                "class": "GatekeeperShaValueProvider",
+                "offset": 3
+              }
             }
           }
         }
       ]
     }
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

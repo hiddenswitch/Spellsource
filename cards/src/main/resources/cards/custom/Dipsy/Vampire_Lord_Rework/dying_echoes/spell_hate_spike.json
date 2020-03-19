@@ -4,20 +4,29 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Deal $1 damage to a minion. If it has an Aftermath, trigger it.",
+  "description": "Deal $[1] damage to a minion. If it has an Aftermath, trigger it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 1
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 1
+        }
       },
       {
         "class": "TriggerDeathrattleSpell"
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 1
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

@@ -27,3 +27,4 @@ public final class CaptnCookishAura extends NoggenfoggerAura {
 		return Collections.emptyList();
 	}
 }
+

@@ -4,11 +4,14 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Restore #10 Health to an ally. If that overheals it, give it that much Health.",
+  "description": "Restore #[10] Health to an ally. If that overheals it, give it that much Health.",
   "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
     "class": "ExcessHealSpell",
-    "value": 10,
+    "value": {
+      "class": "GatekeeperShaValueProvider",
+      "offset": 10
+    },
     "spell": {
       "class": "BuffSpell",
       "hpBonus": {
@@ -16,6 +19,12 @@
       }
     }
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 10
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

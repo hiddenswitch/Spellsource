@@ -4,11 +4,14 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Restore #5 Health. If you target a minion, give it +5 Health. Otherwise, draw 1 card.",
+  "description": "Restore #[5] Health. If you target a minion, give it +[5] Health. Otherwise, draw [1] card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",
-	"value": 5,
+    "value": {
+      "class": "GatekeeperShaValueProvider",
+      "offset": 5
+    },
     "spell": {
       "class": "EitherOrSpell",
       "condition": {
@@ -17,14 +20,34 @@
       },
       "spell1": {
         "class": "BuffSpell",
-		"hpBonus": 5
+        "hpBonus": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 5
+        }
       },
-	  "spell2": {
-	    "class": "DrawCardSpell",
-		"value": 1
-	  }
+      "spell2": {
+        "class": "DrawCardSpell",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 1
+        }
+      }
     }
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 5
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 5
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 1
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

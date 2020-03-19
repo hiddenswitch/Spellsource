@@ -4,17 +4,23 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Lifedrain. Deal $2 damage to a minion and the minions next to it.",
+  "description": "Lifedrain. Deal $[2] damage to a minion and the minions next to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",
     "spell1": {
       "class": "DamageSpell",
-      "value": 2
+      "value": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 2
+      }
     },
     "spell2": {
       "class": "DamageSpell",
-      "value": 2
+      "value": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 2
+      }
     }
   },
   "attributes": {

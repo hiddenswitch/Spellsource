@@ -1,0 +1,17 @@
+{
+  "name": "Commander Rixxia",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Your Supremacy effects trigger twice.",
+  "aura": {
+    "class": "SupremaciesTriggerTwiceAura",
+    "target": "FRIENDLY_CARDS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

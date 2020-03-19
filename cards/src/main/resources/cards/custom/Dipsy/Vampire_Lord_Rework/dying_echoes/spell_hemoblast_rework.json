@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Take 3 damage. Deal $4 damage.",
+  "description": "Take [3] damage. Deal $[4] damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -12,15 +12,31 @@
       {
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
-        "value": 3,
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        },
         "ignoreSpellDamage": true
       },
       {
         "class": "DamageSpell",
-        "value": 4
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 4
+        }
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 4
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

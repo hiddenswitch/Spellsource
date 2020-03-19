@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Deal $3 damage to all enemies. Restore #3 Health to all allies.",
+  "description": "Deal $[3] damage to all enemies. Restore #[3] Health to all allies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -12,15 +12,31 @@
       {
         "class": "DamageSpell",
         "target": "ENEMY_CHARACTERS",
-        "value": 3
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        }
       },
       {
         "class": "HealSpell",
         "target": "FRIENDLY_CHARACTERS",
-        "value": 3
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        }
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",

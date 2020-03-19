@@ -4,19 +4,35 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Deal [0] damage. (Increases by 1 for each Aftermath you've triggered this game)",
+  "description": "Deal [0] damage. (Increases by [1] for each Aftermath you've triggered this game)",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
     "value": {
-      "class": "AftermathsCountValueProvider"
+      "class": "AftermathsCountValueProvider",
+      "offset": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 0
+      },
+      "multiplier": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 1
+      }
     }
   },
   "dynamicDescription": [
     {
       "class": "ValueDescription",
       "value": {
-        "class": "AftermathsCountValueProvider"
+        "class": "AftermathsCountValueProvider",
+        "offset": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 0
+        },
+        "multiplier": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 1
+        }
       }
     }
   ],

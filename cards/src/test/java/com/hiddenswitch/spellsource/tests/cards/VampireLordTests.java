@@ -22,6 +22,11 @@ public class VampireLordTests extends TestBase {
 	}
 
 	@Test
+	public void testGatekeeperSha() {
+
+	}
+
+	@Test
 	public void testSiphon() {
 
 	}

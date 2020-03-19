@@ -6,8 +6,12 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "All the numbers on your spells are (1) higher.",
-  "collectible": false,
+  "description": "All the numbers on your Vampire Lord spells are (1) higher.",
+  "aura": {
+    "class": "GatekeeperShaAura",
+    "value": 1
+  },
+  "collectible": true,
   "sets": [
     "CUSTOM",
     "CORE"

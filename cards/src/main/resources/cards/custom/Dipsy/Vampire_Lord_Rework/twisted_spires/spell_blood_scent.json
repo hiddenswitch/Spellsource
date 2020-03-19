@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Give your champion +1 Attack this turn for each damaged character.",
+  "description": "Give your champion +[1] Attack this turn for each damaged character.",
   "targetSelection": "NONE",
   "spell": {
     "class": "TemporaryAttackSpell",
@@ -14,9 +14,19 @@
       "target": "ALL_CHARACTERS",
       "filter": {
         "class": "DamagedFilter"
+      },
+      "multiplier": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 1
       }
 	}
   },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 1
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",
