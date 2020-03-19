@@ -413,7 +413,7 @@ Name | Type | Description  | Notes
 
 
 
-Updates the deck by adding or removing cards, changing the hero class, or renaming the deck. 
+Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.  Also gives players the ability to set special gameplay attributes (like the Signature) for the deck. 
 
 ### Example
 ```java

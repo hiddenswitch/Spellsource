@@ -605,6 +605,28 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+      setPlayerEntityAttribute:
+        description: |
+          Sets a player entity attribute in CAMEL_CASE, like SIGNATURE.
+        type: 'object'
+        properties:
+          attribute:
+            $ref: '#/definitions/PlayerEntityAttributes'
+          stringValue:
+            type: 'string'
+            description: The string value of the attribute.
+      unsetPlayerEntityAttribute:
+        description: |
+          Unsets (clears) the player entity attribute specified here.
+        type: 'string'
+  PlayerEntityAttributes:
+    description: |
+      The CAMEL_CASE name of the attribute that can be set.
+
+       - SIGNATURE: A string value of a card ID that corresponds to the Signature of the Ringmaster deck.
+    type: 'string'
+    enum:
+      - 'SIGNATURE'
   DecksGetResponse:
     type: 'object'
     properties:
@@ -2229,6 +2251,8 @@ paths:
     post:
       description: |
         Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
+
+        Also gives players the ability to set special gameplay attributes (like the Signature) for the deck.
       operationId: decksUpdate
       security:
         - TokenSecurity: []

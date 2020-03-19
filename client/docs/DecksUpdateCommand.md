@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **pushCardIds** | [**DecksUpdateCommandPushCardIds**](DecksUpdateCommandPushCardIds.md) |  |  [optional]
 **pullAllInventoryIds** | **List&lt;String&gt;** | Removes all the specified inventory IDs from the user&#39;s deck. Does nothing if the deck does not contain any of the specified inventory IDs. This method will still succeed for inventory IDs that are found.  |  [optional]
 **pullAllCardIds** | **List&lt;String&gt;** | Removes all the specified card IDs from the user&#39;s deck. Does nothing if the deck does not contain any of the specified card IDs. This method will still succeed for deck IDs that are found.  |  [optional]
+**setPlayerEntityAttribute** | [**DecksUpdateCommandSetPlayerEntityAttribute**](DecksUpdateCommandSetPlayerEntityAttribute.md) |  |  [optional]
+**unsetPlayerEntityAttribute** | **String** | Unsets (clears) the player entity attribute specified here.  |  [optional]
 
 
 
