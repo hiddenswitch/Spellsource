@@ -1,0 +1,23 @@
+{
+  "name": "Helpless Fodder",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Aftermath: Summon a 5/5 Lesser Vampire.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_lesser_vampire"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

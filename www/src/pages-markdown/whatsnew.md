@@ -7,6 +7,9 @@ header: true
 
 ### 0.8.69-3.1.0 (In Progress)
 
+ - Vampire Lord has been reworked.
+ - Dragoon has been reworked.
+ - Trader has had a few of its multi-discover cards improved.
  - Effects which cause random cards to be played should be more reliable.
  - Improve the reliability of editing and make it harder to accidentally orphan a game.
  - Automatic reconnecting on mobile devices after backgrounding the application now works.

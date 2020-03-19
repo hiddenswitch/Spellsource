@@ -1,0 +1,24 @@
+{
+  "name": "Fireguard Bulwark",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Guard. Costs (1) less for each Dragon you control.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCountValueProvider",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DRAGON"
+    }
+  }
+}

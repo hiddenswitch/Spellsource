@@ -38,3 +38,4 @@ public final class HealEvent extends GameEvent implements HasValue {
 		return true;
 	}
 }
+

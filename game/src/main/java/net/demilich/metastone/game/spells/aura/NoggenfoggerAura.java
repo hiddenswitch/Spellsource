@@ -11,6 +11,8 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.TargetAcquisitionTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,8 +24,8 @@ import java.util.List;
 public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
-		super(new TargetAcquisitionTrigger(), null, NullSpell.create());
-		setDesc(desc);
+		super(desc);
+		triggers = Collections.singletonList(new TargetAcquisitionTrigger());
 	}
 
 	@Override

@@ -95,7 +95,7 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 		for (int i = 0; i < deathrattles.size(); i++) {
 			// Skip this deathrattle.
 			SpellDesc deathrattle = deathrattles.get(i);
-			if ((int) deathrattle.getOrDefault(SpellArg.DEATHRATTLE_ID, i) == (int) desc.getOrDefault(SpellArg.DEATHRATTLE_ID, -1)) {
+			if ((int) deathrattle.getOrDefault(SpellArg.AFTERMATH_ID, i) == (int) desc.getOrDefault(SpellArg.AFTERMATH_ID, -1)) {
 				continue;
 			}
 			SpellUtils.castChildSpell(context, player, AddDeathrattleSpell.create(card.getReference(), deathrattle), source, card);

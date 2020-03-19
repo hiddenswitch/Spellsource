@@ -1,0 +1,38 @@
+{
+  "name": "Rising Flame",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+2. If it's an Elemental, also give it Dash and Guard.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "RaceCondition",
+      "race": "ELEMENTAL"
+    },
+    "spell1": {
+      "class": "BuffSpell",
+      "attackBonus": 2,
+      "hpBonus": 2
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "spells": [
+	    {
+          "class": "AddAttributeSpell",
+          "attribute": "RUSH"
+		},
+		{
+		  "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+		}
+	  ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

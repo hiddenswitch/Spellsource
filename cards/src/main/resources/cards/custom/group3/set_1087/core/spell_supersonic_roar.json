@@ -1,0 +1,30 @@
+{
+  "name": "Supersonic Roar",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Give all enemy minions -3 Attack this turn only. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "target": "ENEMY_MINIONS",
+        "value": -3
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

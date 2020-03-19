@@ -1,0 +1,28 @@
+{
+  "name": "Vermillion Glider",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Opener: Give adjacent minions +2 Attack.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "ADJACENT_MINIONS",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

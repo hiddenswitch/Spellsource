@@ -45,6 +45,8 @@ import java.util.Map;
  */
 public class DrawCardSpell extends Spell {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(DrawCardSpell.class);
+
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(DrawCardSpell.class);
 		return new SpellDesc(arguments);
@@ -61,8 +63,15 @@ public class DrawCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.VALUE);
+		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER);
 		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+
+		// If there is a card filter written on this effect, use a FromDeckToHandSpell instead
+		if (desc.containsKey(SpellArg.CARD_FILTER)) {
+			LOGGER.debug("{} {}: CARD_FILTER specified, doing a FromDeckToHandSpell instead", context.getGameId(), source);
+			FromDeckToHandSpell.drawFromDeck(context, player, source, target, cardCount, false, desc.getCardFilter(), desc.getSpell(), null);
+			return;
+		}
 		for (int i = 0; i < cardCount; i++) {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 

@@ -59,6 +59,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 					enchantment.onRemove(context);
 					// TODO: What about targeting effects?
 					context.getTriggerManager().removeTrigger(enchantment);
+					context.getPlayer(enchantment.getOwner()).getRemovedFromPlay().add(enchantment);
 				}
 			}
 		}

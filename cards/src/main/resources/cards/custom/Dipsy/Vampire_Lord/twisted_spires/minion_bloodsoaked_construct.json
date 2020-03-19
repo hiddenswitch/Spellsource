@@ -25,7 +25,7 @@
   "attributes": {
 	"DEATHRATTLES": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_TWISTEDSPIRES"
