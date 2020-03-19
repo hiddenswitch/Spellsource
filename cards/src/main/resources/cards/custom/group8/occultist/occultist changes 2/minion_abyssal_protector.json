@@ -1,0 +1,35 @@
+{
+  "name": "Abyssal Protector",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Opener: Summon two 1/1 Tentacles with <b>Guard</b>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_tauntentacle"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_tauntentacle"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
