@@ -31,6 +31,7 @@ public class CollectionRecord extends MongoRecord {
 	private int totalGames;
 	private ValidationReport validationReport;
 	private Map<String, AttributeMap> inventoryAttributes;
+	private AttributeMap playerEntityAttributes;
 
 	/**
 	 * Hero class for deck collection records.
@@ -219,6 +220,20 @@ public class CollectionRecord extends MongoRecord {
 
 	public ValidationReport getValidationReport() {
 		return validationReport;
+	}
+
+	/**
+	 * Attributes that should be put on the player entity before the start of the game.
+	 *
+	 * @return
+	 */
+	public AttributeMap getPlayerEntityAttributes() {
+		return playerEntityAttributes;
+	}
+
+	public CollectionRecord setPlayerEntityAttributes(AttributeMap playerEntityAttributes) {
+		this.playerEntityAttributes = playerEntityAttributes;
+		return this;
 	}
 }
 

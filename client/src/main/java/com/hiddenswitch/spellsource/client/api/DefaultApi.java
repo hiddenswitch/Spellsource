@@ -376,7 +376,7 @@ public class DefaultApi {
       }
   /**
    * 
-   * Updates the deck by adding or removing cards, changing the hero class, or renaming the deck. 
+   * Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.  Also gives players the ability to set special gameplay attributes (like the Signature) for the deck. 
    * @param deckId The Deck ID to update. (required)
    * @param updateCommand An update command modifying specified properties of the deck.  (required)
    * @return DecksGetResponse

@@ -1,10 +1,7 @@
 package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -31,8 +28,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 	private Card heroCard;
 	private DeckFormat format;
 	private String description;
-	private String filename;
-	private boolean arbitrary;
+	private AttributeMap playerAttributes;
 
 	static {
 		EMPTY = new GameDeck(HeroClass.ANY);
@@ -47,7 +43,6 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 
 	public GameDeck(String heroClass, boolean arbitrary) {
 		this.heroClass = heroClass;
-		this.arbitrary = arbitrary;
 	}
 
 	public GameDeck(String heroClass1, List<String> cardIds1) {
@@ -87,10 +82,6 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return name;
 	}
 
-	public boolean isArbitrary() {
-		return arbitrary;
-	}
-
 	public boolean isComplete() {
 		return cards.getCount() == GameLogic.DECK_SIZE;
 	}
@@ -99,24 +90,12 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return cards.getCount() == GameLogic.MAX_DECK_SIZE;
 	}
 
-	public boolean isTooBig() {
-		return cards.getCount() > GameLogic.DECK_SIZE;
-	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
 	}
 
 	public void setHeroClass(String heroClass) {
@@ -190,8 +169,12 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return this;
 	}
 
-	public Deck setArbitrary(boolean arbitrary) {
-		this.arbitrary = arbitrary;
+	public AttributeMap getPlayerAttributes() {
+		return playerAttributes;
+	}
+
+	public GameDeck setPlayerAttributes(AttributeMap playerAttributes) {
+		this.playerAttributes = playerAttributes;
 		return this;
 	}
 }

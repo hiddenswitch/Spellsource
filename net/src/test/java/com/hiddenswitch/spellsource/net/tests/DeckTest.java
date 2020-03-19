@@ -1,15 +1,13 @@
 package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.SuspendExecution;
-import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
-import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
-import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.impl.QuickJson;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
+import com.hiddenswitch.spellsource.net.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
-import com.hiddenswitch.spellsource.util.Serialization;
-import io.vertx.core.json.JsonObject;
+import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
+import io.vertx.core.Vertx;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -20,13 +18,14 @@ import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Test;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
+import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
 /**
@@ -149,7 +148,7 @@ public class DeckTest extends SpellsourceTestBase {
 			var deckCreateResponse = Decks.createDeck(
 					DeckCreateRequest.fromCardIds(HeroClass.NAVY, CardCatalogue.getOneOneNeutralMinionCardId()).withUserId(car.getUserId()));
 			var inventoryItemId = deckCreateResponse.getInventoryIds().get(0);
-			var record = mongo().findOne(Inventory.COLLECTIONS, json("_id", deckCreateResponse.getCollection().getCollectionId()), CollectionRecord.class);
+			var record = mongo().findOne(Inventory.COLLECTIONS, json("_id", deckCreateResponse.getCollection().getCollectionRecord().getId()), CollectionRecord.class);
 			var attributes = new AttributeMap();
 			attributes.put(Attribute.ARMOR, 1);
 			record.setInventoryAttributes(Map.of(
@@ -163,6 +162,32 @@ public class DeckTest extends SpellsourceTestBase {
 
 			var deserialized = jsonObject.mapTo(CollectionRecord.class);
 			context.assertEquals(1, (int) deserialized.getInventoryAttributes().get(inventoryItemId).get(Attribute.ARMOR), "deserializes correctly");
+		}, context);
+	}
+
+	@Test
+	public void testPlayerEntityAttributeUpdate(TestContext context) {
+		sync(() -> {
+			try (UnityClient client = new UnityClient(context)) {
+				client.createUserAccount();
+				var createDeckResult = createDeckForUserId(client.getUserId().toString());
+				var gameDeck = createDeckResult.getCollection().asDeck(client.getUserId().toString());
+				var signatureCardId = gameDeck.getCards().get(0).getCardId();
+
+				// Send a command to update the deck
+				invoke(client.getApi()::decksUpdate, createDeckResult.getDeckId(), new DecksUpdateCommand()
+						.setPlayerEntityAttribute(new DecksUpdateCommandSetPlayerEntityAttribute()
+								.attribute(PlayerEntityAttributes.SIGNATURE)
+								.stringValue(signatureCardId)));
+
+				client.matchmakeQuickPlay(createDeckResult.getDeckId());
+				client.play();
+				var serverGameContext = getServerGameContext(client.getUserId());
+				// In AI games, the player is always player zero.
+				var player = serverGameContext.orElseThrow().getPlayers().stream().filter(p -> p.getUserId().equals(client.getUserId().toString())).findFirst().orElseThrow();
+				context.assertEquals(signatureCardId, player.getAttribute(Attribute.SIGNATURE));
+				client.waitUntilDone();
+			}
 		}, context);
 	}
 }

@@ -106,9 +106,9 @@ public class UnityClient implements AutoCloseable {
 		try {
 			CreateAccountResponse car = api.createAccount(
 					new CreateAccountRequest()
-					.email(username + "@hiddenswitch.com")
-					.name(username)
-					.password("testpass"));
+							.email(username + "@hiddenswitch.com")
+							.name(username)
+							.password("testpass"));
 			loginToken = car.getLoginToken();
 			api.getApiClient().setApiKey(loginToken);
 			account = car.getAccount();
@@ -273,7 +273,7 @@ public class UnityClient implements AutoCloseable {
 		switch (message.getMessageType()) {
 			case ON_UPDATE:
 				Integer turnNumber = message.getGameState().getTurnNumber();
-				if (turnNumber!=null && lastTurnPlayed!=turnNumber) {
+				if (turnNumber != null && lastTurnPlayed != turnNumber) {
 					turnsPlayed.incrementAndGet();
 				}
 				if (turnNumber != null && turnNumber >= turnsToPlay.get() && shouldDisconnect) {
@@ -347,6 +347,13 @@ public class UnityClient implements AutoCloseable {
 		matchmakeAndPlay(deckId, queueId);
 	}
 
+	/**
+	 * Blocks until the client is matched. Use {@link #play()} to start playing, and use {@link #waitUntilDone()} to
+	 * wait until the player is actually done with the game.
+	 *
+	 * @param deckId
+	 * @param queueId
+	 */
 	@Suspendable
 	public void matchmakeAndPlay(String deckId, String queueId) {
 		CompletableFuture<Void> matchmaking = matchmake(deckId, queueId);
@@ -373,7 +380,7 @@ public class UnityClient implements AutoCloseable {
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
 		this.turnsPlayed = new AtomicInteger();
-		this.lastTurnPlayed=0;
+		this.lastTurnPlayed = 0;
 		LOGGER.debug("play {} {}: Playing", id, getUserId());
 
 		ensureConnected();

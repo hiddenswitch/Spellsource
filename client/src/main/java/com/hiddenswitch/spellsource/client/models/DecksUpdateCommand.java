@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
+import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandSetPlayerEntityAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -55,6 +56,12 @@ public class DecksUpdateCommand implements Serializable {
 
   @JsonProperty("pullAllCardIds")
   private List<String> pullAllCardIds = null;
+
+  @JsonProperty("setPlayerEntityAttribute")
+  private DecksUpdateCommandSetPlayerEntityAttribute setPlayerEntityAttribute = null;
+
+  @JsonProperty("unsetPlayerEntityAttribute")
+  private String unsetPlayerEntityAttribute = null;
 
   public DecksUpdateCommand setHeroClass(String setHeroClass) {
     this.setHeroClass = setHeroClass;
@@ -206,6 +213,42 @@ public class DecksUpdateCommand implements Serializable {
     this.pullAllCardIds = pullAllCardIds;
   }
 
+  public DecksUpdateCommand setPlayerEntityAttribute(DecksUpdateCommandSetPlayerEntityAttribute setPlayerEntityAttribute) {
+    this.setPlayerEntityAttribute = setPlayerEntityAttribute;
+    return this;
+  }
+
+   /**
+   * Get setPlayerEntityAttribute
+   * @return setPlayerEntityAttribute
+  **/
+  @ApiModelProperty(value = "")
+  public DecksUpdateCommandSetPlayerEntityAttribute getSetPlayerEntityAttribute() {
+    return setPlayerEntityAttribute;
+  }
+
+  public void setSetPlayerEntityAttribute(DecksUpdateCommandSetPlayerEntityAttribute setPlayerEntityAttribute) {
+    this.setPlayerEntityAttribute = setPlayerEntityAttribute;
+  }
+
+  public DecksUpdateCommand unsetPlayerEntityAttribute(String unsetPlayerEntityAttribute) {
+    this.unsetPlayerEntityAttribute = unsetPlayerEntityAttribute;
+    return this;
+  }
+
+   /**
+   * Unsets (clears) the player entity attribute specified here. 
+   * @return unsetPlayerEntityAttribute
+  **/
+  @ApiModelProperty(value = "Unsets (clears) the player entity attribute specified here. ")
+  public String getUnsetPlayerEntityAttribute() {
+    return unsetPlayerEntityAttribute;
+  }
+
+  public void setUnsetPlayerEntityAttribute(String unsetPlayerEntityAttribute) {
+    this.unsetPlayerEntityAttribute = unsetPlayerEntityAttribute;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -222,12 +265,14 @@ public class DecksUpdateCommand implements Serializable {
         Objects.equals(this.pushInventoryIds, decksUpdateCommand.pushInventoryIds) &&
         Objects.equals(this.pushCardIds, decksUpdateCommand.pushCardIds) &&
         Objects.equals(this.pullAllInventoryIds, decksUpdateCommand.pullAllInventoryIds) &&
-        Objects.equals(this.pullAllCardIds, decksUpdateCommand.pullAllCardIds);
+        Objects.equals(this.pullAllCardIds, decksUpdateCommand.pullAllCardIds) &&
+        Objects.equals(this.setPlayerEntityAttribute, decksUpdateCommand.setPlayerEntityAttribute) &&
+        Objects.equals(this.unsetPlayerEntityAttribute, decksUpdateCommand.unsetPlayerEntityAttribute);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(setHeroClass, setName, setInventoryIds, pushInventoryIds, pushCardIds, pullAllInventoryIds, pullAllCardIds);
+    return Objects.hash(setHeroClass, setName, setInventoryIds, pushInventoryIds, pushCardIds, pullAllInventoryIds, pullAllCardIds, setPlayerEntityAttribute, unsetPlayerEntityAttribute);
   }
 
 
@@ -243,6 +288,8 @@ public class DecksUpdateCommand implements Serializable {
     sb.append("    pushCardIds: ").append(toIndentedString(pushCardIds)).append("\n");
     sb.append("    pullAllInventoryIds: ").append(toIndentedString(pullAllInventoryIds)).append("\n");
     sb.append("    pullAllCardIds: ").append(toIndentedString(pullAllCardIds)).append("\n");
+    sb.append("    setPlayerEntityAttribute: ").append(toIndentedString(setPlayerEntityAttribute)).append("\n");
+    sb.append("    unsetPlayerEntityAttribute: ").append(toIndentedString(unsetPlayerEntityAttribute)).append("\n");
     sb.append("}");
     return sb.toString();
   }
