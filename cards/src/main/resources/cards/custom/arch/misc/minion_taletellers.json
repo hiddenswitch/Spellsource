@@ -12,7 +12,6 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 10,
-      "exclusive": true,
       "cardFilter": {
         "class": "CardFilter",
         "attribute": "PLAYED_FROM_HAND_OR_DECK",

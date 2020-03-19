@@ -90,7 +90,9 @@ public class StorytellerTests extends TestBase {
 	@Test
 	public void testDramaticPlaywright() {
 		runGym(((context, player, opponent) -> {
+			context.endTurn();
 			Minion minion = playMinionCard(context, opponent, "minion_test_3_2");
+			context.endTurn();
 			Minion playwright = playMinionCard(context, player, "minion_dramatic_playwright");
 			destroy(context, playwright);
 			assertEquals(minion.getAttack(), 1);
@@ -108,10 +110,12 @@ public class StorytellerTests extends TestBase {
 		}));
 
 		runGym(((context, player, opponent) -> {
+			context.endTurn();
 			List<Minion> minions = new ArrayList<>();
 			for (int i = 0; i < 7; i++) {
 				minions.add(playMinionCard(context, opponent, "minion_test_3_2"));
 			}
+			context.endTurn();
 			Minion playwright = playMinionCard(context, player, "minion_dramatic_playwright");
 			destroy(context, playwright);
 			int count = 0;
