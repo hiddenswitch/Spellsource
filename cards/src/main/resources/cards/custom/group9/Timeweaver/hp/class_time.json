@@ -5,7 +5,7 @@
   "heroClass": "TIME",
   "color": [212, 212, 227],
   "blackText": true,
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
