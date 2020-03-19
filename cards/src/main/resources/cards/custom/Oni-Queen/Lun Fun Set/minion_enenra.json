@@ -1,0 +1,25 @@
+{
+  "name": "Enenra",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "After an allied minion loses Hidden, gain Hidden.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseStealthTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "STEALTH"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
