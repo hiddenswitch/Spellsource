@@ -52,13 +52,19 @@ public class OutlawTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card shootOut = receiveCard(context, player, "spell_shootout");
 
+			context.endTurn();
 			playMinionCard(context, opponent, "minion_neutral_test_1");
 			playMinionCard(context, opponent, "minion_neutral_test_1");
+			context.endTurn();
 
+			player.setMana(3);
 			assertFalse(shootOut.canBeCast(context, player));
 
+			context.endTurn();
 			playMinionCard(context, opponent, "minion_neutral_test_1");
+			context.endTurn();
 
+			player.setMana(3);
 			assertTrue(shootOut.canBeCast(context, player));
 
 			playCard(context, player, shootOut);
@@ -141,12 +147,16 @@ public class OutlawTests extends TestBase {
 	@Test
 	public void testCrateOfDynamite() {
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			for (var i = 0; i < 5; i++) {
+				playCard(context, opponent, "minion_neutral_test_1");
+			}
+			context.endTurn();
 			Minion testMinion = playMinionCard(context, player, "minion_neutral_test_1");
 			playCard(context, player, "spell_crate_of_dynamite", testMinion);
 
 			for (int i = 0; i < 5; i++) {
 				shuffleToDeck(context, player, "minion_neutral_test_1");
-				playCard(context, opponent, "minion_neutral_test_1");
 			}
 			assertEquals(opponent.getMinions().size(), 5);
 
@@ -161,10 +171,12 @@ public class OutlawTests extends TestBase {
 	@Test
 	public void testDeathBlow() {
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion testMinion = playMinionCard(context, opponent, "minion_neutral_test_1");
+			context.endTurn();
 			for (int i = 0; i < 10; i++) {
 				shuffleToDeck(context, player, "minion_neutral_test_1");
 			}
-			Minion testMinion = playMinionCard(context, opponent, "minion_neutral_test_1");
 
 			playCard(context, player, "spell_death_blow");
 			assertTrue(testMinion.isDestroyed());
@@ -176,11 +188,16 @@ public class OutlawTests extends TestBase {
 	@Test
 	public void testSixShooter() {
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			for (var i = 0; i < 7; i++) {
+				playCard(context, opponent, "minion_neutral_test_1");
+			}
+
+			context.endTurn();
 			playCard(context, player, "weapon_six_shooter");
 
 			for (int i = 0; i < 7; i++) {
 				shuffleToDeck(context, player, "minion_neutral_test_1");
-				playCard(context, opponent, "minion_neutral_test_1");
 			}
 
 			for (int i = 1; i < 6; i++) {
@@ -263,9 +280,13 @@ public class OutlawTests extends TestBase {
 	@Test
 	public void testMechanicalGolem() {
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			for (var i = 0; i < 5; i++) {
+				playCard(context, opponent, "minion_neutral_test_1");
+			}
+			context.endTurn();
 			for (int i = 0; i < 5; i++) {
 				shuffleToDeck(context, player, "minion_neutral_test_1");
-				playCard(context, opponent, "minion_neutral_test_1");
 			}
 			Minion mechGolem = playMinionCard(context, player, "minion_mechanical_golem");
 			for (int i = 1; i < 6; i++) {
@@ -281,14 +302,14 @@ public class OutlawTests extends TestBase {
 	@Test
 	public void testMassBetrayal() {
 		runGym((context, player, opponent) -> {
-			//This is so random that I'm not exactly sure how else we should test it?
 
+			context.endTurn();
 			for (int i = 0; i < 6; i++) {
 				shuffleToDeck(context, opponent, "minion_neutral_test_1");
 				Minion testMinion = playMinionCard(context, opponent, "minion_neutral_test_1");
 				playCard(context, opponent, "spell_trigger_happy", testMinion);
 			}
-
+			context.endTurn();
 			playCard(context, player, "spell_mass_betrayal");
 			assertEquals(opponent.getMinions().size(), 0);
 			assertEquals(opponent.getHand().size(), 3);

@@ -3072,7 +3072,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		try (Scope s1 = tracer.activateSpan(span)) {
 			context.onWillPerformGameAction(playerId, action);
 			if (playerId != context.getActivePlayerId()) {
-				logger.warn("Player {} tries to perform an action, but it is not his turn!", context.getPlayer(playerId).getName());
+				logger.info("Player {} tries to perform an action, but it is not his turn!", context.getPlayer(playerId).getName());
 			}
 			if (action.getTargetRequirement() != TargetSelection.NONE) {
 				Entity target = context.resolveSingleTarget(action.getTargetReference());

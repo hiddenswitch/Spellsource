@@ -30,13 +30,16 @@ public class DrawCardFromGraveyardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE);
+		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE, SpellArg.CARD_SOURCE, SpellArg.CARD_FILTER);
 		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		CardSourceDesc desc1 = new CardSourceDesc();
 		desc1.put(CardSourceArg.CLASS, GraveyardCardAndActorSourceCardSource.class);
 		desc1.put(CardSourceArg.DISTINCT, true);
 		CardSource cardSource = desc1.create();
 		CardList cards = cardSource.getCards(context, source, player);
+		if (desc.getCardFilter() != null) {
+			cards = cards.filtered(desc.getCardFilter().matcher(context, player, source));
+		}
 		for (int i = 0; i < cardCount; i++) {
 			if (cards.isEmpty()) {
 				return;

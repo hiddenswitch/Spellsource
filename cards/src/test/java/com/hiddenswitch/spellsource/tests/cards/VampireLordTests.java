@@ -370,7 +370,7 @@ public class VampireLordTests extends TestBase {
 			Minion shouldBeBuffed = playMinionCard(context, player, "minion_vampiric_savage");
 			useHeroPower(context, player);
 			assertEquals(shouldBeBuffed.getMaxHp(), shouldBeBuffed.getBaseHp() + 2);
-		});
+		}, HeroClass.BLOOD, HeroClass.BLOOD);
 	}
 
 	@Test
