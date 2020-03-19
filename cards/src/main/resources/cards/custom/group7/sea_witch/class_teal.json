@@ -5,7 +5,7 @@
   "color": [77, 214, 148],
   "blackText": false,
   "heroClass": "TEAL",
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
