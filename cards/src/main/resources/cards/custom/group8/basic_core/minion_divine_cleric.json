@@ -1,11 +1,12 @@
 {
-  "name": "Divine Cleric",
+  "name": "Royal Healer",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
+  "race": "DRAGON",
   "description": "Opener: Restore #4 Health.",
   "battlecry": {
     "targetSelection": "ANY",
