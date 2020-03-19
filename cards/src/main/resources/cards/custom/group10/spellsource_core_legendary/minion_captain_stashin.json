@@ -1,20 +1,20 @@
 {
-  "name": "Captain Stashin",
+  "name": "Tiolan the Restless",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,
-  "baseHp": 4,
+  "baseHp": 6,
   "rarity": "LEGENDARY",
-  "race": "PIRATE",
-  "description": "Whenever a friendly Pirate attacks, add a random card to your hand.",
+  "race": "SPIRIT",
+  "description": "Whenever a friendly Spirit attacks, add a random card to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
       "fireCondition": {
         "class": "RaceCondition",
         "target": "EVENT_SOURCE",
-        "race": "PIRATE"
+        "race": "SPIRIT"
       },
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"
