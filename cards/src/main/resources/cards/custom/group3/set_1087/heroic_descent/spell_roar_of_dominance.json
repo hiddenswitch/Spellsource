@@ -1,0 +1,37 @@
+{
+  "name": "Roar of Dominance",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Your Dragons are Immune this turn. Add a random Dragoon spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "DRAGON"
+        },
+        "attribute": "IMMUNE",
+        "revertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "heroClass": "RUST",
+          "cardType": "SPELL"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

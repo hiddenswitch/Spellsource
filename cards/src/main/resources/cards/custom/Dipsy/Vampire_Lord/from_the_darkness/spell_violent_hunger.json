@@ -11,7 +11,7 @@
     "value": 10,
     "secondaryTarget": "FRIENDLY_HERO"
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_FROMTHEDARKNESS"

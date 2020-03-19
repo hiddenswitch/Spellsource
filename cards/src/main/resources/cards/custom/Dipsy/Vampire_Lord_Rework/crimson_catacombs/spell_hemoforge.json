@@ -1,0 +1,40 @@
+{
+  "name": "Hemoforge",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Take [3] damage. Draw [2] weapons.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        },
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "FromDeckToHandSpell",
+		"value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 2
+        },
+		"cardFilter": {
+		  "class": "CardFilter",
+		  "cardType": "WEAPON"
+		}
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

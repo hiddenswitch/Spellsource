@@ -5,7 +5,7 @@
   "heroClass": "BLOOD",
   "color": [102, 23, 21],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

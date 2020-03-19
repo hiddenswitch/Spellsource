@@ -7,42 +7,61 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Whenever you summon another Beast, Fae or Dragon, add a Gold Coin to your hand.",
-  "triggers": [
-    {
-      "eventTrigger": {
-        "class": "MinionSummonedTrigger",
-        "race": "BEAST",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "ReceiveCardSpell",
-        "card": "spell_gold_coin"
-      }
-    },
-    {
-      "eventTrigger": {
-        "class": "MinionSummonedTrigger",
-        "race": "FAE",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "ReceiveCardSpell",
-        "card": "spell_gold_coin"
-      }
-    },
-	{
-      "eventTrigger": {
-        "class": "MinionSummonedTrigger",
-        "race": "DRAGON",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "ReceiveCardSpell",
-        "card": "spell_gold_coin"
-      }
+  "description": "Opener: If you control another Fae, add a Gold Coin to your hand. Repeat for Beasts and Dragons.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "OTHER_FRIENDLY_MINIONS",
+            "filter": {
+              "class": "RaceFilter",
+              "race": "FAE"
+            }
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "card": "spell_gold_coin"
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "RaceFilter",
+              "race": "BEAST"
+            }
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "card": "spell_gold_coin"
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "RaceFilter",
+              "race": "DRAGON"
+            }
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "card": "spell_gold_coin"
+          }
+        }
+      ]
     }
-  ],
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "sets": [
     "CUSTOM",

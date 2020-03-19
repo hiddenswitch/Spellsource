@@ -14,7 +14,7 @@
       "multiplier": 2
     }
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_CRIMSONCATACOMBS"

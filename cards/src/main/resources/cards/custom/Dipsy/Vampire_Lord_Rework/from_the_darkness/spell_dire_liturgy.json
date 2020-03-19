@@ -1,0 +1,51 @@
+{
+  "name": "Dire Liturgy",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Summon a Fiend with stats equal to the total Health your champion is missing.",
+  "targetSelection": "NONE",
+  "spell": {
+     "class": "CreateSummonSpell",
+     "name": "Fiend",
+     "spell": {
+       "class": "NullSpell"
+     },
+     "attackBonus": {
+       "class": "AlgebraicValueProvider",
+       "operation": "SUBTRACT",
+       "value1": {
+         "class": "AttributeValueProvider",
+         "target": "FRIENDLY_HERO",
+         "attribute": "MAX_HP"
+       },
+       "value2": {
+         "class": "AttributeValueProvider",
+         "target": "FRIENDLY_HERO",
+         "attribute": "HP"
+       }
+     },
+     "hpBonus": {
+       "class": "AlgebraicValueProvider",
+       "operation": "SUBTRACT",
+       "value1": {
+         "class": "AttributeValueProvider",
+         "target": "FRIENDLY_HERO",
+         "attribute": "MAX_HP"
+       },
+       "value2": {
+         "class": "AttributeValueProvider",
+         "target": "FRIENDLY_HERO",
+         "attribute": "HP"
+       }
+     },
+     "mana": 5
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

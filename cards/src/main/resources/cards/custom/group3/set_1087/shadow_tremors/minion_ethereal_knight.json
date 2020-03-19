@@ -1,0 +1,23 @@
+{
+  "name": "Ethereal Knight",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Has +1 Attack for each friendly minion.",
+  "aura": {
+    "class": "StatefulAttributeValueAura",
+    "target": "SELF",
+    "value": {
+      "class": "EntityCountValueProvider",
+      "target": "FRIENDLY_MINIONS"
+    },
+    "attribute": "AURA_ATTACK_BONUS"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

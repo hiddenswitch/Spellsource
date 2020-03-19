@@ -2225,10 +2225,10 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testMenacingDragotron() {
 		runGym((context, player, opponent) -> {
-			Minion toDestroy = playMinionCard(context, player, "minion_menacing_dragotron");
+			playMinionCard(context, player, "minion_test_3_2_elemental");
 			Minion shouldBeDestroyed = playMinionCard(context, player, "minion_neutral_test_1");
-			Minion shouldNotBeDestroyed = playMinionCard(context, player, "minion_test_3_2");
-			destroy(context, toDestroy);
+			Minion shouldNotBeDestroyed = playMinionCard(context, player, 1, 4);
+			playMinionCard(context, player, "minion_menacing_dragotron");
 			assertTrue(shouldBeDestroyed.isDestroyed());
 			assertFalse(shouldNotBeDestroyed.isDestroyed());
 		});

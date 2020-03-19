@@ -42,6 +42,7 @@ public class HeroClass {
 	public static final String BLUEGREY = "BLUEGREY";
 	public static final String CRIMSON = "CRIMSON";
 	public static final String MAGENTA = "MAGENTA";
+	public static final String TWILIGHT = "TWILIGHT";
 
 
 	/**

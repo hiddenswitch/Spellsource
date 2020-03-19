@@ -1,0 +1,29 @@
+{
+  "name": "Crush Their Will",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "All their cards cost (10) more next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": 10,
+      "expirationTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "OPPONENT"
+      },
+      "operation": "ADD",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

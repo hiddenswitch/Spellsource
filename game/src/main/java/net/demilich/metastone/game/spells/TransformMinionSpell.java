@@ -63,6 +63,5 @@ public class TransformMinionSpell extends Spell {
 		}
 		context.getLogic().transformMinion(desc, (Minion) target, card.summon());
 	}
-
 }
 

@@ -74,7 +74,6 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 		if (!context.getOutputStack().isEmpty()) {
 			desc = desc.clone();
 			desc.spellStream(1, false)
-
 					.forEach(subSpellDesc -> {
 						if (subSpellDesc.getTarget() != null && subSpellDesc.getTarget().equals(EntityReference.OUTPUT)) {
 							subSpellDesc.put(SpellArg.TARGET, context.resolveSingleTarget(player, source, EntityReference.OUTPUT).getReference());

@@ -7,6 +7,9 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 
 /**
  * Returns the number of fires left in the first enchantment attached to the {@code target}.
+ * <p>
+ * {@link net.demilich.metastone.game.spells.desc.SpellArg#VALUE} is used as the default value when the card is in the
+ * hand.
  */
 public class FiresLeftValueProvider extends ValueProvider {
 
