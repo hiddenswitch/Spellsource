@@ -5,16 +5,28 @@ import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushCardIds;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandPushInventoryIds;
 import com.hiddenswitch.spellsource.net.*;
+import com.hiddenswitch.spellsource.net.impl.QuickJson;
+import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.util.Serialization;
+import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.models.*;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Test;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
+import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
 /**
@@ -128,5 +140,29 @@ public class DeckTest extends SpellsourceTestBase {
 	public void testGetStandardDecks(TestContext context) {
 		context.assertTrue(Spellsource.spellsource().getStandardDecks().size() > 0);
 		Spellsource.spellsource().getStandardDecks().forEach(d -> context.assertEquals(30, d.getCardIds().size()));
+	}
+
+	@Test
+	public void testInventoryAttributesSerializeDeserializeCorrectly(TestContext context) {
+		sync(() -> {
+			var car = createRandomAccount();
+			var deckCreateResponse = Decks.createDeck(
+					DeckCreateRequest.fromCardIds(HeroClass.NAVY, CardCatalogue.getOneOneNeutralMinionCardId()).withUserId(car.getUserId()));
+			var inventoryItemId = deckCreateResponse.getInventoryIds().get(0);
+			var record = mongo().findOne(Inventory.COLLECTIONS, json("_id", deckCreateResponse.getCollection().getCollectionId()), CollectionRecord.class);
+			var attributes = new AttributeMap();
+			attributes.put(Attribute.ARMOR, 1);
+			record.setInventoryAttributes(Map.of(
+					inventoryItemId, attributes
+			));
+			var jsonObject = json(record);
+			context.assertEquals(1,
+					jsonObject.getJsonObject("inventoryAttributes")
+							.getJsonObject(inventoryItemId)
+							.getInteger(Attribute.ARMOR.name()), "serialize correctly");
+
+			var deserialized = jsonObject.mapTo(CollectionRecord.class);
+			context.assertEquals(1, (int) deserialized.getInventoryAttributes().get(inventoryItemId).get(Attribute.ARMOR), "deserializes correctly");
+		}, context);
 	}
 }
