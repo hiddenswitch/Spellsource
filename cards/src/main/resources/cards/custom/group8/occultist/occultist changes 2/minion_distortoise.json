@@ -1,0 +1,26 @@
+{
+  "name": "Distortoise",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "description": "Guard Opener: Deal 3 damage to your champion.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM"
+   ],
+  "fileFormatVersion": 1
+}

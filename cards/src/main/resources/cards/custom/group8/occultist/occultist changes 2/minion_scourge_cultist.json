@@ -1,0 +1,55 @@
+{
+  "name": "Hastur's Acolyte",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: If a friendly minion died this turn, summon two 1/1 Tentacles with Guard.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_GRAVEYARD",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "DIED_ON_TURN",
+            "operation": "EQUAL"
+          }
+        ]
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_tauntentacle"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_tauntentacle"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

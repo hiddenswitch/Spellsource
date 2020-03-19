@@ -1,0 +1,59 @@
+{
+  "name": "Tentacolossus",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Guard. Opener: Destroy your Tentacles. Gain +2/+2 for each.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "value": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+            "token_tauntentacle",
+            "token_tentacle"
+          ]
+        },
+        "multiplier": 2
+      },
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cards": [
+              "token_tauntentacle",
+              "token_tentacle"
+            ]
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
+  "fileFormatVersion": 1
+}
