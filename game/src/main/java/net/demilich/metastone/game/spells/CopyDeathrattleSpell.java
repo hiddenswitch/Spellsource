@@ -52,7 +52,9 @@ public class CopyDeathrattleSpell extends Spell {
 		int max = (int) desc.getOrDefault(SpellArg.HOW_MANY, 16);
 		List<SpellDesc> deathrattles = new ArrayList<>();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, max);
-		if (!impliedCards.isEmpty()) {
+		if (target instanceof Actor) {
+			deathrattles.addAll(((Actor) target).getDeathrattles());
+		} else if (!impliedCards.isEmpty()) {
 			if (desc.containsKey(SpellArg.RANDOM_TARGET)) {
 				impliedCards.shuffle(context.getLogic().getRandom());
 			}
@@ -66,8 +68,6 @@ public class CopyDeathrattleSpell extends Spell {
 			if (actorCardDesc.getDeathrattle() != null) {
 				deathrattles.add(actorCardDesc.getDeathrattle());
 			}
-		} else if (target instanceof Actor) {
-			deathrattles.addAll(((Actor) target).getDeathrattles());
 		}
 		for (SpellDesc deathrattle : deathrattles) {
 			copyTo.addDeathrattle(deathrattle.clone());
