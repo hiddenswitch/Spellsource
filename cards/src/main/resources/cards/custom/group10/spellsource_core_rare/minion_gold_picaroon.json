@@ -1,12 +1,12 @@
 {
-  "name": "Gold Picaroon",
+  "name": "Spectral Thug",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "race": "PIRATE",
+  "race": "SPIRIT",
   "description": "After this minion attacks, add a Lunstone to your hand.",
   "trigger": {
     "eventTrigger": {
