@@ -35,7 +35,7 @@ public final class StealHealthSpell extends BuffSpell {
 		var actor = (Actor) target;
 		var targetHpBeforeBuff = actor.getHp();
 		super.onCast(context, player, desc, source, target);
-		var stolen = -(actor.getHp() - targetHpBeforeBuff);
+		var stolen = Math.min(-hpBonus, targetHpBeforeBuff);
 		desc = desc.addArg(SpellArg.VALUE, stolen);
 		super.onCast(context, player, desc, source, source);
 	}

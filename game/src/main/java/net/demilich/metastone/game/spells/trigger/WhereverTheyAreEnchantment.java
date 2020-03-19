@@ -25,7 +25,7 @@ public class WhereverTheyAreEnchantment extends Enchantment {
 
 	public WhereverTheyAreEnchantment(String cardId, SpellDesc desc, Card sourceCard) {
 		super();
-		usesSpellTrigger=true;
+		usesSpellTrigger = true;
 		setSourceCard(sourceCard);
 		if (!desc.getDescClass().equals(WhereverTheyAreSpell.class)) {
 			LOGGER.warn("constructor: This (sourceCard {}) was not created with a WhereverTheyAreSpell", sourceCard);

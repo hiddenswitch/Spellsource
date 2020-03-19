@@ -18,57 +18,187 @@ public class VampireLordTests extends TestBase {
 	@NotNull
 	@Override
 	public String getDefaultHeroClass() {
-		return HeroClass.BLOOD;
+		return HeroClass.TWILIGHT;
 	}
 
 	@Test
 	public void testGatekeeperSha() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_gatekeeper_sha_rework");
+			// "Take [3] damage. Summon [1] [3]/[2] Shadow."
+			playCard(context, player, "spell_hemoshade");
+			assertEquals(3, player.getMinions().size(), "Summoned 2 shadows + Gatekeeper Sha");
+			for (var minion : new Minion[]{player.getMinions().get(1), player.getMinions().get(2)}) {
+				assertEquals(4, minion.getAttack(), "Buffed attack by Sha");
+				assertEquals(3, minion.getHp(), "Buffed hp by Sha");
+			}
+		});
 
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_gatekeeper_sha_rework");
+			context.endTurn();
+			playCard(context, opponent, "spell_hemoshade");
+			assertEquals(1, opponent.getMinions().size(), "Summoned 1 shadow not affected by player's Sha");
+			for (var minion : new Minion[]{opponent.getMinions().get(0)}) {
+				assertEquals(3, minion.getAttack(), "No effect");
+				assertEquals(2, minion.getHp(), "No effect");
+			}
+		});
 	}
 
 	@Test
 	public void testSiphon() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(28);
+			Minion target = playMinionCard(context, player, 1, 1);
+			playCard(context, player, "spell_siphon", target);
+			assertEquals(30, player.getHero().getHp(), "less health than opponent + 2 lifedrain");
+		});
 
+		runGym((context, player, opponent) -> {
+			opponent.getHero().setHp(28);
+			player.getHero().setHp(28);
+			Minion target = playMinionCard(context, player, 1, 1);
+			playCard(context, player, "spell_siphon", target);
+			assertEquals(28, player.getHero().getHp(), "not less health than opponent, no lifedrain");
+		});
+
+		runGym((context, player, opponent) -> {
+			opponent.getHero().setHp(29);
+			playCard(context, player, "spell_siphon", player.getHero());
+			assertEquals(28, player.getHero().getHp(), "not less health than opponent, evaluated at time of playing the card, no lifedrain");
+		});
+
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(28);
+			playCard(context, player, "spell_siphon", opponent.getHero());
+			assertEquals(30, player.getHero().getHp(), "at the start of the card, less health than opponent, but after damage, not anymore, should lifedrain");
+		});
 	}
 
 	@Test
 	public void testGatekeeperAcolyte() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_gatekeeper_acolyte");
+			player.getHero().setHp(28);
+			playCard(context, player, "spell_test_heal_1", player.getHero());
+			assertEquals(30, player.getHero().getHp(), "should buff healing by 1");
+		});
 
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_gatekeeper_acolyte");
+			opponent.getHero().setHp(28);
+			context.endTurn();
+			playCard(context, opponent, "spell_test_heal_1", opponent.getHero());
+			assertEquals(30, opponent.getHero().getHp(), "should buff opponent healing by 1");
+		});
 	}
 
 	@Test
 	public void testFleshshaper() {
-
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(28);
+			Minion target = playMinionCard(context, player, 1, 1);
+			playCard(context, player, "minion_fleshshaper");
+			playCard(context, player, "spell_siphon", target);
+			assertEquals(28, player.getHero().getHp(), "less health than opponent + 2 lifedrain, BUT fleshshaper turns it into armor");
+			assertEquals(2, player.getHero().getArmor(), "less health than opponent + 2 lifedrain, BUT fleshshaper turns it into armor");
+		});
 	}
 
 	@Test
 	public void testPsychoticServant() {
-
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, 1, 3);
+			var servant = playMinionCard(context, player, "minion_psychotic_servant", target);
+			assertEquals(servant.getBaseHp() + 3, servant.getHp(), "stole 3 hp");
+			assertTrue(target.isDestroyed());
+		});
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, 1, 1);
+			var servant = playMinionCard(context, player, "minion_psychotic_servant", target);
+			assertEquals(servant.getBaseHp() + 1, servant.getHp(), "stole 1 hp");
+			assertTrue(target.isDestroyed());
+		});
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, 1, 4);
+			var servant = playMinionCard(context, player, "minion_psychotic_servant", target);
+			assertEquals(servant.getBaseHp() + 3, servant.getHp(), "stole 3 hp");
+			assertFalse(target.isDestroyed());
+		});
 	}
 
 	@Test
 	public void testCalamityBeckonsSpell() {
-
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			shuffleToDeck(context, player, "spell_lunstone");
+			playCard(context, player, "spell_calamity_beckons");
+			assertEquals(2, player.getMinions().size(), "summoned both destroyed things");
+			assertEquals(0, player.getDeck().size(), "deck is destroyed");
+		});
 	}
 
 	@Test
 	public void testSeekerAshi() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_seeker_ashi");
+			var card = shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			player.getHero().setAttack(1);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(Zones.HAND, card.getZone(), "drawn");
+		});
 
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_seeker_ashi");
+			var card = shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			card.getAttributes().put(Attribute.BASE_MANA_COST, 2);
+			player.getHero().setAttack(1);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(Zones.DECK, card.getZone(), "not drawn, wrong cost");
+		});
 	}
 
 	@Test
 	public void testStemTheFlow() {
-
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, 1, 2);
+			target.setHp(1);
+			playCard(context, player, "spell_stem_the_flow", target);
+			assertEquals(11, target.getMaxHp(), "9 extra healing, base hp 2, total is 11");
+		});
 	}
 
 	@Test
 	public void testXueTheEternal() {
-
+		runGym((context, player, opponent) -> {
+			var xue = playMinionCard(context, player, "minion_xue_the_eternal");
+			var target = playMinionCard(context, player, 1, 2);
+			target.setHp(1);
+			playCard(context, player, "spell_stem_the_flow", target);
+			assertEquals("permanent_xue_the_eternal", xue.transformResolved(context).getSourceCard().getCardId(), "still needs 1 more excess healing to convert");
+			target = playMinionCard(context, player, 1, 2);
+			target.setHp(1);
+			playCard(context, player, "spell_stem_the_flow", target);
+			assertEquals("minion_xue_the_eternal", xue.transformResolved(context).getSourceCard().getCardId(), "revived");
+		});
 	}
 
 	@Test
 	public void testGravelordsGambit() {
+		runGym((context, player, opponent) -> {
+			for (var i = 0; i < 4; i++) {
+				destroy(context, playMinionCard(context, player, "minion_test_deathrattle"));
+			}
 
+			for (var i = 0; i < 4; i++) {
+				putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			}
+
+			playCard(context, player, "spell_gravelords_gambit");
+			assertEquals(player.getHand().size(), 3, "only repeated last 3 aftermaths");
+		});
 	}
 
 	@Test
@@ -88,11 +218,6 @@ public class VampireLordTests extends TestBase {
 			assertEquals(3, player.getHand().size(), "receive Soulscream AND the aftermath result");
 			assertEquals(Zones.HAND, drawn.getZone());
 		});
-	}
-
-	@Test
-	public void testGrimAwakeningRework() {
-
 	}
 
 	@ParameterizedTest

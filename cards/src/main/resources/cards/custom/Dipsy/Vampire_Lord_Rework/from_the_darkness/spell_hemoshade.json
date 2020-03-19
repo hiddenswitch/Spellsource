@@ -22,7 +22,7 @@
         "class": "SummonSpell",
         "value": {
           "class": "GatekeeperShaValueProvider",
-          "offset": 3
+          "offset": 1
         },
         "card": "token_vampire_shadow",
         "spell": {

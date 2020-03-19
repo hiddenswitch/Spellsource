@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Restore #[10] Health to an ally. If that overheals it, give it that much Health.",
+  "description": "Restore #[10] Health to an ally. Excess healing is turned into health instead.",
   "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
     "class": "ExcessHealSpell",

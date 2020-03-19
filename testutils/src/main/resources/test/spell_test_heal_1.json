@@ -1,0 +1,16 @@
+{
+  "name": "Test Heal 1",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Heal 1",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
