@@ -5,7 +5,7 @@
   "heroClass": "ICE",
   "color": [185, 247, 247],
   "blackText": true,
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
