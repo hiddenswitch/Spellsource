@@ -1,13 +1,13 @@
 {
-  "name": "Doomed Diver",
+  "name": "Yadokai",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "race": "PIRATE",
-  "description": "Opener: If a Pirate attacked this turn, draw a card.",
+  "race": "SPIRIT",
+  "description": "Opener: If a Spirit attacked this turn, draw a card.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {
@@ -15,7 +15,7 @@
       "target": "ALL_MINIONS",
       "filter": {
         "class": "CardFilter",
-        "race": "PIRATE"
+        "race": "SPIRIT"
       }
     },
     "spell": {
