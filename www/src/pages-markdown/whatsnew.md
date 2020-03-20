@@ -5,8 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
-### 0.8.69-3.1.0 (In Progress)
+### 0.8.69-3.1.1 (In Progress)
 
+ - Screen layout on the client has been improved.
  - Vampire Lord has been reworked.
  - Dragoon has been reworked.
  - Trader has had a few of its multi-discover cards improved.
