@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'com.hiddenswitch'
-version = '0.8.67'
+version = '0.8.68'
 
 repositories {
     jcenter()

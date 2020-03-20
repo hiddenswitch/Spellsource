@@ -35,7 +35,7 @@ public class EnvelopeMethodPutCard implements Serializable {
   private String editableCardId = null;
 
   @JsonProperty("draw")
-  private Boolean draw = null;
+  private Boolean draw = false;
 
   @JsonProperty("source")
   private String source = null;

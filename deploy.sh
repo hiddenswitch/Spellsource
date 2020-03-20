@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.68
+SPELLSOURCE_VERSION=0.8.69
 SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
@@ -263,7 +263,7 @@ if [[ "$build_client" == true ]]; then
   if [[ -d ${UNITY_CLIENT_PATH} ]]; then
     mkdir -pv "clientcsharp"
     INPUT_DIR="clientcsharp"
-    OUTPUT_DIR="../${UNITY_CLIENT_PATH}/Assets/Plugins/Client"
+    OUTPUT_DIR="${UNITY_CLIENT_PATH}/Assets/Plugins/Client"
     ${GRADLE_CMD} swaggerClient
     # Remove a lot of unnecessary files from the Unity project
     rm -rf ${OUTPUT_DIR}
