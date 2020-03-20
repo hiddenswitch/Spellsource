@@ -28,7 +28,6 @@ task swagger {
         config.setInputSpec(input)
         config.setOutputDir(output.path)
         config.setTemplateDir(templateDir.absolutePath)
-//        config.setLang('java')
         config.additionalProperties().putAll([
                 'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
                 'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
