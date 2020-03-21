@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.69-3.1.1 (In Progress)
 
+ - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
  - Screen layout on the client has been improved.
  - Vampire Lord has been reworked.
  - Dragoon has been reworked.

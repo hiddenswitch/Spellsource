@@ -17,6 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.AttributeValueTuple;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import io.swagger.annotations.ApiModel;
@@ -136,6 +137,9 @@ public class InventoryCollection implements Serializable {
 
   @JsonProperty("validationReport")
   private ValidationReport validationReport = null;
+
+  @JsonProperty("playerEntityAttributes")
+  private List<AttributeValueTuple> playerEntityAttributes = null;
 
   public InventoryCollection id(String id) {
     this.id = id;
@@ -325,6 +329,32 @@ public class InventoryCollection implements Serializable {
     this.validationReport = validationReport;
   }
 
+  public InventoryCollection playerEntityAttributes(List<AttributeValueTuple> playerEntityAttributes) {
+    this.playerEntityAttributes = playerEntityAttributes;
+    return this;
+  }
+
+  public InventoryCollection addPlayerEntityAttributesItem(AttributeValueTuple playerEntityAttributesItem) {
+    if (this.playerEntityAttributes == null) {
+      this.playerEntityAttributes = new ArrayList<>();
+    }
+    this.playerEntityAttributes.add(playerEntityAttributesItem);
+    return this;
+  }
+
+   /**
+   * A list of player entity attributes associated with this deck.  A player entity attribute is an attribute that comes into play before the game starts. It is used to implement the Signature spell of the Ringmaster class. 
+   * @return playerEntityAttributes
+  **/
+  @ApiModelProperty(value = "A list of player entity attributes associated with this deck.  A player entity attribute is an attribute that comes into play before the game starts. It is used to implement the Signature spell of the Ringmaster class. ")
+  public List<AttributeValueTuple> getPlayerEntityAttributes() {
+    return playerEntityAttributes;
+  }
+
+  public void setPlayerEntityAttributes(List<AttributeValueTuple> playerEntityAttributes) {
+    this.playerEntityAttributes = playerEntityAttributes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -344,12 +374,13 @@ public class InventoryCollection implements Serializable {
         Objects.equals(this.deckType, inventoryCollection.deckType) &&
         Objects.equals(this.isStandardDeck, inventoryCollection.isStandardDeck) &&
         Objects.equals(this.inventory, inventoryCollection.inventory) &&
-        Objects.equals(this.validationReport, inventoryCollection.validationReport);
+        Objects.equals(this.validationReport, inventoryCollection.validationReport) &&
+        Objects.equals(this.playerEntityAttributes, inventoryCollection.playerEntityAttributes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userId, name, heroClass, format, type, deckType, isStandardDeck, inventory, validationReport);
+    return Objects.hash(id, userId, name, heroClass, format, type, deckType, isStandardDeck, inventory, validationReport, playerEntityAttributes);
   }
 
 
@@ -368,6 +399,7 @@ public class InventoryCollection implements Serializable {
     sb.append("    isStandardDeck: ").append(toIndentedString(isStandardDeck)).append("\n");
     sb.append("    inventory: ").append(toIndentedString(inventory)).append("\n");
     sb.append("    validationReport: ").append(toIndentedString(validationReport)).append("\n");
+    sb.append("    playerEntityAttributes: ").append(toIndentedString(playerEntityAttributes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

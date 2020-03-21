@@ -706,6 +706,24 @@ definitions:
           $ref: '#/definitions/CardRecord'
       validationReport:
         $ref: '#/definitions/ValidationReport'
+      playerEntityAttributes:
+        description: |
+          A list of player entity attributes associated with this deck.
+
+          A player entity attribute is an attribute that comes into play before the game starts. It is used to implement
+          the Signature spell of the Ringmaster class.
+        type: 'array'
+        items:
+          $ref: '#/definitions/AttributeValueTuple'
+  AttributeValueTuple:
+    description: |
+      A tuple of attribute, attribute-value.
+    type: 'object'
+    properties:
+      attribute:
+        $ref: '#/definitions/PlayerEntityAttributes'
+      stringValue:
+        type: 'string'
   ValidationReport:
     type: 'object'
     properties:

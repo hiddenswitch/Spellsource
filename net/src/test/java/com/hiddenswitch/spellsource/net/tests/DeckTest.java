@@ -187,6 +187,10 @@ public class DeckTest extends SpellsourceTestBase {
 				var player = serverGameContext.orElseThrow().getPlayers().stream().filter(p -> p.getUserId().equals(client.getUserId().toString())).findFirst().orElseThrow();
 				context.assertEquals(signatureCardId, player.getAttribute(Attribute.SIGNATURE));
 				client.waitUntilDone();
+
+				var deck = invoke(client.getApi()::decksGet, createDeckResult.getDeckId());
+				context.assertEquals(PlayerEntityAttributes.SIGNATURE, deck.getCollection().getPlayerEntityAttributes().get(0).getAttribute());
+				context.assertEquals(signatureCardId, deck.getCollection().getPlayerEntityAttributes().get(0).getStringValue());
 			}
 		}, context);
 	}
