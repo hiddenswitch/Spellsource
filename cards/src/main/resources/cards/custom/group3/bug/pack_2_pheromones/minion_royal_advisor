@@ -1,0 +1,30 @@
+{
+  "name": "Royal Advisor",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Gaurd. Opener: Discover a Pheromone.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
+      "cards": [
+        "spell_pheromone_attack",
+        "spell_pheromone_defend"
+      ],
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
