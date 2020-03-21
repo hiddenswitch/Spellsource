@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Your minions have +1 Attack for 3 turns. Draw a card.",
+  "description": "Your minions have Dash for 3 turns. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -17,9 +17,9 @@
 	    "class": "TurnEndTrigger",
 	    "targetPlayer": "SELF"
 	   },
-	  "class": "BuffSpell",
-	  "target": "FRIENDLY_MINIONS",
-          "attackBonus": 3
+	    "class": "AddAttributeSpell",
+            "target": "FRIENDLY_MINIONS",
+            "attribute": "RUSH"
         },
         "maxFires": 3
       },
