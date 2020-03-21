@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **isStandardDeck** | **Boolean** | When true, indicates this is a standard deck provided by the server.  |  [optional]
 **inventory** | [**List&lt;CardRecord&gt;**](CardRecord.md) |  |  [optional]
 **validationReport** | [**ValidationReport**](ValidationReport.md) |  |  [optional]
+**playerEntityAttributes** | [**List&lt;AttributeValueTuple&gt;**](AttributeValueTuple.md) | A list of player entity attributes associated with this deck.  A player entity attribute is an attribute that comes into play before the game starts. It is used to implement the Signature spell of the Ringmaster class.  |  [optional]
 
 
 <a name="TypeEnum"></a>

@@ -65,6 +65,8 @@ public class UnityClient implements AutoCloseable {
 	private boolean receivedGameOverMessage;
 	private AtomicInteger turnsPlayed = new AtomicInteger();
 	private int lastTurnPlayed = 0;
+	private ServerToClientMessage lastRequest;
+	private CountDownLatch turnsPlayedLatch = new CountDownLatch(9999);
 
 	private UnityClient() {
 		id = ids.getAndIncrement();
@@ -275,6 +277,7 @@ public class UnityClient implements AutoCloseable {
 				Integer turnNumber = message.getGameState().getTurnNumber();
 				if (turnNumber != null && lastTurnPlayed != turnNumber) {
 					turnsPlayed.incrementAndGet();
+					turnsPlayedLatch.countDown();
 				}
 				if (turnNumber != null && turnNumber >= turnsToPlay.get() && shouldDisconnect) {
 					disconnect();
@@ -302,6 +305,7 @@ public class UnityClient implements AutoCloseable {
 						.discardedCardIndices(Collections.singletonList(0))))));
 				break;
 			case ON_REQUEST_ACTION:
+				lastRequest = message;
 				if (!onRequestAction(message)) {
 					break;
 				}
@@ -388,6 +392,18 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Suspendable
+	public void play(int untilTurns) {
+		play();
+		this.turnsPlayedLatch = new CountDownLatch(untilTurns);
+
+		try {
+			turnsPlayedLatch.await(untilTurns, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			return;
+		}
+	}
+
+	@Suspendable
 	private void sendStartGameMessage() {
 		sendMessage(new Envelope().game(new EnvelopeGame().clientToServer(Matchmaking.gameReadyMessage().getResult().getEnqueue().getUnityConnection().getFirstMessage())));
 		LOGGER.debug("sendStartGameMessage {} {}: sent first message.", id, getUserId());
@@ -395,6 +411,9 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	public void respondRandomAction(ServerToClientMessage message) {
+		if (message == null) {
+			throw new NullPointerException("no last request found");
+		}
 		if (realtime == null) {
 			LOGGER.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
 			return;
@@ -589,5 +608,9 @@ public class UnityClient implements AutoCloseable {
 
 	public int getTurnsPlayed() {
 		return turnsPlayed.get();
+	}
+
+	public void respondRandomAction() {
+		respondRandomAction(lastRequest);
 	}
 }

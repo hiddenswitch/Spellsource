@@ -1,9 +1,7 @@
 package com.hiddenswitch.spellsource.net.models;
 
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
-import com.hiddenswitch.spellsource.client.models.CardRecord;
-import com.hiddenswitch.spellsource.client.models.Entity;
-import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
@@ -14,8 +12,11 @@ import net.demilich.metastone.game.decks.GameDeck;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.stream.Collectors.toList;
 
 public final class GetCollectionResponse implements Serializable {
 	private List<GetCollectionResponse> responses;
@@ -135,6 +136,14 @@ public final class GetCollectionResponse implements Serializable {
 				.deckType(getCollectionRecord().getType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getCollectionRecord().getDeckType().toString()) : null)
 				.isStandardDeck(getCollectionRecord().isStandardDeck())
 				.validationReport(getCollectionRecord().getValidationReport() == null ? new com.hiddenswitch.spellsource.client.models.ValidationReport() : getCollectionRecord().getValidationReport())
+				.playerEntityAttributes(getCollectionRecord().getPlayerEntityAttributes() != null ? getCollectionRecord().getPlayerEntityAttributes()
+						.entrySet()
+						.stream()
+						.map(kv -> {
+							// TODO: Correctly check the type of the value when we support more than just string values for an attribute value tuple.
+							return new AttributeValueTuple().attribute(PlayerEntityAttributes.valueOf(kv.getKey().name())).stringValue((String) kv.getValue());
+						})
+						.collect(toList()) : Collections.emptyList())
 				.inventory(records);
 
 		if (getCollectionRecord().getHeroClass() != null) {
