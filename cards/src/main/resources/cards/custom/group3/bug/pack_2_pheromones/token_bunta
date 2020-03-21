@@ -1,0 +1,29 @@
+{
+  "name": "Bunta, One-Woman Army",
+  "baseManaCost": 10  ,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Guard. Dash. Dodge. At the end of your turn, gain Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "attributes": {
+    "RUSH": true,
+    "TAUNT": true,
+    "DIVINE_SHIELD": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
