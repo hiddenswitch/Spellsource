@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Lifesteal. Aftermath: Deal 1 damage to all minions.",
+  "description": "Lifedrain. Aftermath: Deal 1 damage to all minions.",
   "deathrattle": {
     "class": "DamageSpell",
     "target": "ALL_MINIONS",
