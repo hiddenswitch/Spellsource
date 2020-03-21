@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Add a random Beast to your hand. Draw a Beast from your deck.",
+  "description": "Add a random Beast to your hand. Draw a Beast.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
