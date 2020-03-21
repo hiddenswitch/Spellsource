@@ -4,10 +4,10 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 0,
-  "baseHp": 5,
+  "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Whenever this minion takes damage, add a random Pheromone to your hand.",
+  "description": "Whenever this minion takes damage, cast a random Pheromone.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -15,6 +15,9 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
       "cards": [
         "spell_pheromone_attack",
         "spell_pheromone_defend",
