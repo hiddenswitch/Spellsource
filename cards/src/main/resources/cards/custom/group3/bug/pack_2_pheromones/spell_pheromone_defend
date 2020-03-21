@@ -1,0 +1,35 @@
+{
+  "name": "Defense Pheromones",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Your minions have +1 Health and Taunt for 3 turns. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "class": "AddEnchantmentSpell",
+	    "target": "FRIENDLY_PLAYER",
+	    "trigger": {
+	      "eventTrigger": {
+	        "class": "TurnEndTrigger",
+	        "targetPlayer": "SELF"
+	      },
+	      "class": "BuffSpell",
+	  "target": "FRIENDLY_MINIONS",
+          "attackBonus": 3
+        },
+        "maxFires": 3
+      },
+      {
+        "class": "DrawCardSpell",
+		"value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
