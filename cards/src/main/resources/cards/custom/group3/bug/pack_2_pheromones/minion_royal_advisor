@@ -5,9 +5,9 @@
   "heroClass": "AMBER",
   "baseAttack": 4,
   "baseHp": 6,
-  "rarity": "COMMON",
+  "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Gaurd. Opener: Discover a Pheromone.",
+  "description": "Guard. Opener: Discover a Pheromone.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",
