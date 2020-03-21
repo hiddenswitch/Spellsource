@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Guard. Opener: Discover a Pheromone.",
+  "description": "Guard. Opener: Discover and cast a Pheromone.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",
