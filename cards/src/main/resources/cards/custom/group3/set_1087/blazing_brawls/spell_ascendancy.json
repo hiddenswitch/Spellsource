@@ -1,29 +1,15 @@
 {
   "name": "Ascendancy",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Summon a 4/4 Dragon, or two if you already control a Dragon.",
+  "description": "Summon two 4/4 Dragons.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "EitherOrSpell",
-    "condition": {
-      "class": "MinionOnBoardCondition",
-      "cardFilter": {
-        "class": "RaceFilter",
-        "race": "DRAGON"
-      }
-    },
-    "spell1": {
-      "class": "SummonSpell",
-      "value": 2,
-      "card": "token_44dragon"
-    },
-    "spell2": {
-      "class": "SummonSpell",
-      "card": "token_44dragon"
-    }
+    "class": "SummonSpell",
+    "value": 2,
+    "card": "token_44dragon"
   },
   "attributes": {},
   "collectible": true,
