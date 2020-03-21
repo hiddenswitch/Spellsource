@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Supremacy: Draw a spell from your deck.",
+  "description": "Supremacy: Draw a spell.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"
