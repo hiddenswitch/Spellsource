@@ -1,0 +1,29 @@
+{
+  "name": "Nervous Worker",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Whenever this minion takes damage, add a random Pheromone to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_pheromone_attack",
+        "spell_pheromone_defend",
+        "spell_pheromone_hide"
+      ],
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
