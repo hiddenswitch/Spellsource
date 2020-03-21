@@ -5,7 +5,7 @@ path: "/whats-new"
 header: true
 ---
 
-### 0.8.69-3.1.1 (In Progress)
+### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
  - Screen layout on the client has been improved.

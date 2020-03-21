@@ -2,8 +2,10 @@ package com.hiddenswitch.spellsource.net.models;
 
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
+import com.hiddenswitch.spellsource.net.Tracing;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
+import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
@@ -87,6 +89,11 @@ public final class GetCollectionResponse implements Serializable {
 		if (getResponses() != null
 				&& getResponses().size() > 0) {
 			throw new RuntimeException();
+		}
+
+		if (getCollectionRecord() == null) {
+			Tracing.error(new NullPointerException("collectionRecord"), GlobalTracer.get().activeSpan(), false);
+			return null;
 		}
 
 		String displayName = getCollectionRecord().getId();
