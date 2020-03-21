@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Opener: If you control another Fae, draw a Fae from your deck.",
+  "description": "Opener: If you control another Fae, draw a Fae.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
