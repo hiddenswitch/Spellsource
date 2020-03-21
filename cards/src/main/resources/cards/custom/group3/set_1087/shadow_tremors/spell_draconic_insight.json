@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "This turn, each time you play a card, draw a spell from your deck.",
+  "description": "This turn, each time you play a card, draw a spell.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
