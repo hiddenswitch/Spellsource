@@ -10,16 +10,17 @@
     "class": "MetaSpell",
     "spells": [
       {
-	  "class": "AddEnchantmentSpell",
-	  "target": "FRIENDLY_PLAYER",
-	  "trigger": {
-	    "eventTrigger": {
-	      "class": "TurnEndTrigger",
-		  "targetPlayer": "SELF"
-	    },
-        "class": "BuffSpell",
-        "attackBonus": 3
-      },
+        "class": "AddEnchantmentSpell",
+	"target": "FRIENDLY_PLAYER",
+	"trigger": {
+	  "eventTrigger": {
+	    "class": "TurnEndTrigger",
+	    "targetPlayer": "SELF"
+	   },
+	  "class": "BuffSpell",
+	  "target": "FRIENDLY_MINIONS",
+          "attackBonus": 3
+        },
         "maxFires": 3
       },
       {
