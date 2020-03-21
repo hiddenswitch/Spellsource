@@ -19,7 +19,7 @@
     "class": "ReceiveCardSpell",
     "card": "minion_king_archibald"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
