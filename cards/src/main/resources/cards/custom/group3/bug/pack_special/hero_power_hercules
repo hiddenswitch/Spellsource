@@ -1,0 +1,12 @@
+{
+  "name": "Pride and Power",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "I don't need any Skill to beat you.",
+  "targetSelection": "NONE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
