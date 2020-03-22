@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "FREE",
-  "description": "Destroy a friendly minion. Draw 2 cards.",
+  "description": "Destroy an allied minion. Draw 2 cards.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
