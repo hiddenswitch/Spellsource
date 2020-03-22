@@ -5,7 +5,17 @@
   "type": "HERO",
   "heroClass": "AMBER",
   "rarity": "LEGENDARY",
-  "description": "Guard"
+  "description": "Guard. You have +1 Attack this game."
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "spell": {
+        "class": "BuffSpell",
+        "attackBonus": 1
+      }
+  },
   "attributes": {
     "TAUNT": true,
     "ARMOR": 30,
