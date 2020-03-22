@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 0,
   "baseHp": 2,
-  "rarity": "EPIC",
+  "rarity": "COMMON",
   "race": "BEAST",
   "description": "Whenever this minion takes damage, cast a random Pheromone.",
   "trigger": {
