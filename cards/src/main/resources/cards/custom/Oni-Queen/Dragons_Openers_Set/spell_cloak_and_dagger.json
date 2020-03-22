@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Give a friendly Hidden minion Toxic.",
+  "description": "Give an allied Hidden minion Toxic.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "AddAttributeSpell",
