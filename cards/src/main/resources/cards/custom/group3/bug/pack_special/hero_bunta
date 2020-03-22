@@ -15,7 +15,7 @@
     }
   },
   "attributes": {
-    "ARMOR": 0,
+    "ARMOR": 5,
     "BATTLECRY": true,
     "MAX_HP": 30
   },
