@@ -1,0 +1,23 @@
+{
+  "name": "Narvina",
+  "heroPower": "hero_power_narvina",
+  "baseManaCost": 6,
+  "type": "HERO",
+  "heroClass": "AMBER",
+  "rarity": "LEGENDARY",
+  "description": "Opener: Return an enemy minion to your opponent's hand.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "ReturnTargetToHandSpell"
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
