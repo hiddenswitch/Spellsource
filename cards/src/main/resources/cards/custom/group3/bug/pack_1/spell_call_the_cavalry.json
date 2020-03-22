@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Destroy a friendly minion. Summon a 3/3 Worm",
+  "description": "Destroy an allied minion. Summon a 3/3 Worm.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
