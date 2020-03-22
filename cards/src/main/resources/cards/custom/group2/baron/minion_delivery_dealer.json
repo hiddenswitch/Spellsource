@@ -14,27 +14,15 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "SummonSpell",
-          "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "MINION",
-            "manaCost": 2
-          },
-          "targetPlayer": "OPPONENT"
-        },
-        {
-          "class": "SummonSpell",
-          "boardPositionRelative": "RIGHT",
-          "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "MINION",
-            "manaCost": 2
-          }
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 2
         }
-      ]
+      }
     }
   },
   "collectible": true,

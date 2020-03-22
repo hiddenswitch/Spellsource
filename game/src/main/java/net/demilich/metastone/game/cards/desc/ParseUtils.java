@@ -6,13 +6,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
-import io.vertx.core.json.Json;
-import net.demilich.metastone.game.actions.ActionType;
+import io.vertx.core.json.jackson.DatabindCodec;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.dynamicdescription.*;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
@@ -120,6 +118,8 @@ public class ParseUtils {
 				return EntityReference.ALL_ENTITIES;
 			case "opposite_minions":
 				return EntityReference.OPPOSITE_MINIONS;
+			case "opposite_characters":
+				return EntityReference.OPPOSITE_CHARACTERS;
 			case "friendly_hero":
 				return EntityReference.FRIENDLY_HERO;
 			case "friendly_weapon":
@@ -208,6 +208,10 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_LAST_MINION_PLAYED;
 			case "other_friendly_characters":
 				return EntityReference.OTHER_FRIENDLY_CHARACTERS;
+			case "friendly_signature":
+				return EntityReference.FRIENDLY_SIGNATURE;
+			case "enemy_signature":
+				return EntityReference.ENEMY_SIGNATURE;
 			default:
 				throw new NullPointerException(str);
 		}
@@ -252,8 +256,6 @@ public class ParseUtils {
 				return parseEntityReference(jsonData.asText());
 			case TARGET_PLAYER:
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
-			case RACE:
-				return Enum.valueOf(Race.class, jsonData.asText());
 			case SPELL:
 				return spellParser.innerDeserialize(ctxt, jsonData);
 			case SPELL_ARRAY: {
@@ -337,7 +339,7 @@ public class ParseUtils {
 			}
 			case BATTLECRY:
 				try {
-					return Json.mapper.readerFor(BattlecryDesc.class).readValue(jsonData);
+					return DatabindCodec.mapper().readerFor(BattlecryDesc.class).readValue(jsonData);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
@@ -406,7 +408,7 @@ public class ParseUtils {
 
 	private static EnchantmentDesc getTriggerDesc(JsonNode jsonData) {
 		try {
-			return Json.mapper.readerFor(EnchantmentDesc.class).readValue(jsonData);
+			return DatabindCodec.mapper().readerFor(EnchantmentDesc.class).readValue(jsonData);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

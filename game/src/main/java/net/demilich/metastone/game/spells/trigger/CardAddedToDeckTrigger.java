@@ -1,8 +1,9 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 /**
@@ -16,7 +17,7 @@ public class CardAddedToDeckTrigger extends AbstractCardTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.CARD_ADDED_TO_DECK;
+	public GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.CARD_ADDED_TO_DECK;
 	}
 }

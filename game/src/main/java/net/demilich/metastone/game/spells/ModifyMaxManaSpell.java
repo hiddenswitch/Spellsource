@@ -31,7 +31,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  *         "operation": "SUBTRACT",
  *         "value1": 7,
  *         "value2": {
- *           "class": "EntityCounter",
+ *           "class": "EntityCountValueProvider",
  *           "target": "FRIENDLY_MINIONS"
  *         }
  *       }

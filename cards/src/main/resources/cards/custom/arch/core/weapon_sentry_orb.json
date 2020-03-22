@@ -1,0 +1,36 @@
+{
+  "name": "Sentry Orb",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 0,
+  "durability": 4,
+  "rarity": "RARE",
+  "description": "<b>Decay<b>. At the end of your turn, deal 4 damage randomly split among all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DecaySpell"
+        },
+        {
+          "class": "MissilesSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1,
+          "howMany": 4
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

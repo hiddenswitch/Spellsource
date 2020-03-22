@@ -1,0 +1,16 @@
+{
+  "name": "Power of the People",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "EPIC",
+  "description": "Trigger the Openers of your minions with random targets.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TriggerOpenerSpell",
+    "target": "FRIENDLY_MINIONS"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

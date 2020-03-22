@@ -38,6 +38,10 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.CHOOSE_ONE_OVERRIDE, ParseValueType.CHOOSE_ONE_OVERRIDE);
 		ctx.add(AuraArg.PERSISTENT_OWNER, ParseValueType.BOOLEAN);
 		ctx.add(AuraArg.VALUE, ParseValueType.VALUE);
+		ctx.add(AuraArg.RACES, ParseValueType.STRING_ARRAY);
+		ctx.add(AuraArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);
+		ctx.add(AuraArg.SECONDARY_FILTER, ParseValueType.ENTITY_FILTER);
+		ctx.add(AuraArg.SPELL, ParseValueType.SPELL);
 	}
 
 	@Override

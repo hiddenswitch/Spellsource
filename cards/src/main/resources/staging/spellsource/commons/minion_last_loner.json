@@ -17,7 +17,7 @@
     "spell": {
       "class": "DrawCardSpell",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ENEMY_MINIONS"
       }
     }

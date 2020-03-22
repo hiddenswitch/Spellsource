@@ -45,9 +45,12 @@ public final class ReviveMinionSpell extends Spell {
 		if (hpAdjustment != 0) {
 			minion.setHp(hpAdjustment);
 		}
-		context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
-		if (desc.containsKey(SpellArg.SPELL)) {
-			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, minion);
+		if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
+			// The minion may have been transformed during summon
+			Entity resultingMinion = minion.transformResolved(context);
+			if (resultingMinion.isInPlay() && desc.containsKey(SpellArg.SPELL)) {
+				SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, resultingMinion);
+			}
 		}
 	}
 }

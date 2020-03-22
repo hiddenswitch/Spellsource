@@ -7,26 +7,23 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.spells.aura.DiscoverNotSelectedSpellBonusAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.*;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -46,15 +43,19 @@ import static java.util.stream.Collectors.toList;
  * of cards to discover from is greater than {@code count}, cards are chosen at random from the possible options without
  * replacement (i.e., duplicates will not appear).
  * <p>
+ * If {@link SpellArg#CARD_FILTER} is specified <b>without</b> a {@link SpellArg#CARD_SOURCE}, it is assumed that the
+ * <b>weighted</b> (i.e., class-specific) catalogue source {@link CatalogueSource} should be used. However, if the
+ * casting player is the {@link HeroClass#ANY} or {@link HeroClass#TEST} class, an {@link UnweightedCatalogueSource}
+ * will be used instead.
+ * <p>
  * When {@link SpellArg#CANNOT_RECEIVE_OWNED} is specified, the possible options exclude cards that are already in the
  * player's {@link Zones#HAND} or {@link Zones#HERO_POWER}.
  * <p>
  * Some card sources generate new cards; these card sources implement the {@link HasCardCreationSideEffects} interface.
  * Other card sources, like {@link DeckSource}, will reference the actual cards in the player's deck. Discovers
  * <b>always</b> present copies of cards to users, regardless of their origin. To perform the spell on the
- * <b>actual</b>
- * card, set {@link SpellArg#EXCLUSIVE} to {@code true}. Trying to use an "exclusive" discover on cards that are always
- * generated will throw an exception.
+ * <b>actual</b> card, set {@link SpellArg#EXCLUSIVE} to {@code true}. Trying to use an "exclusive" discover on cards
+ * that are always generated will throw an exception.
  * <p>
  * When the user makes a discover choice, the spell arguments are interpreted to determine what spell is "cast" with the
  * chosen and unchosen cards:
@@ -207,8 +208,8 @@ import static java.util.stream.Collectors.toList;
  * </pre>
  * If instead you want to <b>steal</b> a card from the opponent's deck, use a {@link StealCardSpell} and set {@link
  * SpellArg#EXCLUSIVE} to {@code true}. The {@link SpellArg#EXCLUSIVE} argument will cast {@link StealCardSpell} with
- * the chosen card's {@link Entity#id} as the {@code target}. You must use {@link SpellArg#EXCLUSIVE} whenever you use
- * spells that only accept {@code target} and not {@link SpellArg#CARD}.
+ * the chosen card's {@link Entity#getId()} as the {@code target}. You must use {@link SpellArg#EXCLUSIVE} whenever you
+ * use spells that only accept {@code target} and not {@link SpellArg#CARD}.
  * <pre>
  *     {
  *         "class": "DiscoverSpell",
@@ -261,12 +262,29 @@ public class DiscoverSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Card> specificCards = Arrays.asList(SpellUtils.getCards(context, desc));
-		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER) || desc.containsKey(SpellArg.CARD_SOURCE);
+		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER);
+		boolean hasSource = desc.containsKey(SpellArg.CARD_SOURCE);
 		CardList filteredCards;
-		CardSource cardSource = desc.getCardSource();
-		if (hasFilter) {
-			filteredCards = desc.getFilteredCards(context, player, source);
-		} else if (specificCards.size() != 0) {
+		CardSource cardSource;
+		if (hasFilter || hasSource) {
+			if (hasFilter && hasSource) {
+				cardSource = desc.getCardSource();
+				filteredCards = desc.getFilteredCards(context, player, source);
+			} else if (hasFilter /*&& !hasSource*/) {
+				if (player.getHero().getSourceCard().hasHeroClass(HeroClass.ANY)
+						|| player.getHero().getSourceCard().hasHeroClass(HeroClass.TEST)) {
+					cardSource = UnweightedCatalogueSource.create();
+				} else {
+					cardSource = CatalogueSource.create();
+				}
+				filteredCards = cardSource.getCards(context, source, player).filtered(desc.getCardFilter().matcher(context, player, source));
+			} else /*only has source*/ {
+				cardSource = desc.getCardSource();
+				// Unfiltered
+				filteredCards = cardSource.getCards(context, source, player);
+			}
+		} else if (!specificCards.isEmpty()) {
+			cardSource = UnweightedCatalogueSource.create();
 			filteredCards = new CardArrayList();
 		} else {
 			cardSource = CatalogueSource.create();
@@ -281,7 +299,6 @@ public class DiscoverSpell extends Spell {
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 
 		if (exclusive
-				&& cardSource != null
 				&& (cardSource instanceof HasCardCreationSideEffects)) {
 			throw new UnsupportedOperationException("Cannot specify exclusive (use original copies) with cards that have" +
 					" card creation side effects. The original copies came from the catalogue, and thus have entity " +
@@ -290,15 +307,29 @@ public class DiscoverSpell extends Spell {
 
 		// SPELL and SPELL_1 are cast on the chosen cards
 		SpellDesc chosenSpellTemplate = SpellDesc.join((SpellDesc) desc.get(SpellArg.SPELL), (SpellDesc) desc.get(SpellArg.SPELL1));
-		if (chosenSpellTemplate == null) {
+		if (Objects.equals(chosenSpellTemplate.getDescClass(), NullSpell.class)) {
 			chosenSpellTemplate = ReceiveCardSpell.create();
 		}
 
 		// SPELL_2 is cast on the cards that aren't chosen
-		SpellDesc otherSpell = (SpellDesc) desc.getOrDefault(SpellArg.SPELL2, NullSpell.create());
+		SpellDesc otherSpellDesc = (SpellDesc) desc.getOrDefault(SpellArg.SPELL2, NullSpell.create());
 		CardList allCards = new CardArrayList();
 		allCards.addAll(specificCards);
 		allCards.addAll(filteredCards);
+
+		SpellDesc otherSpell;
+		// Implements Rohei the Bold
+		if (ReceiveCardSpell.class.isAssignableFrom(chosenSpellTemplate.getDescClass())) {
+			if (Objects.equals(otherSpellDesc.getDescClass(), NullSpell.class)
+					|| AbstractRemoveCardSpell.class.isAssignableFrom(otherSpellDesc.getDescClass())) {
+				;
+				otherSpell = SpellDesc.join(null, SpellUtils.getBonusesFromAura(context, player.getId(), DiscoverNotSelectedSpellBonusAura.class, source, target));
+			} else {
+				otherSpell = SpellDesc.join(otherSpellDesc, ReceiveCardSpell.create());
+			}
+		} else {
+			otherSpell = otherSpellDesc;
+		}
 
 		if (cannotReceiveOwned) {
 			allCards = allCards.stream().filter(c -> !context.getLogic().hasCard(player, c)).collect(java.util.stream.Collectors.toCollection(CardArrayList::new));
@@ -306,14 +337,9 @@ public class DiscoverSpell extends Spell {
 
 		CardList choices = new CardArrayList();
 		// Apply the weights
-		final boolean isWeighted = (cardSource instanceof HasWeights)
-				|| (specificCards.size() == 0 && cardSource == null && hasFilter);
+		final boolean isWeighted = cardSource instanceof HasWeights;
 		// Compute weights if weighting is implied
 		if (isWeighted) {
-			if (cardSource == null) {
-				cardSource = CatalogueSource.create();
-			}
-
 			final HasWeights weightedSource = (HasWeights) cardSource;
 			final Multiset<Card> weightedOptions = LinkedHashMultiset.create();
 
@@ -421,7 +447,7 @@ public class DiscoverSpell extends Spell {
 		}
 
 		// Execute the discovery (the target is the both the output and the discovery)
-		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, Arrays.asList(cardsInDiscover), discoverActions);
+		DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, Arrays.asList(cardsInDiscover), discoverActions);
 		SpellUtils.castChildSpell(context, player, chosenAction.getSpell(), source, target);
 		// Remove the attribute that was set on all the cards
 		if (attribute != null) {
@@ -429,5 +455,6 @@ public class DiscoverSpell extends Spell {
 				choice.getAttributes().remove(attribute);
 			}
 		}
+		context.getLogic().discoverCard(player.getId());
 	}
 }

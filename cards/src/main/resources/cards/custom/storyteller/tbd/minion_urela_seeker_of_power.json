@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: This game, your fatigue damage also damages random enemies",
+  "description": "Opener: This game, your fatigue damage also damages random enemies",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -19,10 +19,11 @@
         },
         "spell": {
           "class": "DamageSpell",
-          "target": "ENEMY_HERO",
+          "target": "ENEMY_CHARACTERS",
+          "randomTarget": true,
           "value": {
             "class": "AttributeValueProvider",
-            "target": "SELF",
+            "target": "FRIENDLY_PLAYER",
             "attribute": "FATIGUE"
           }
         }

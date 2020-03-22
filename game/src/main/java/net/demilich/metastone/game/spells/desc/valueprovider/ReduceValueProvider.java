@@ -18,6 +18,9 @@ import java.util.Map;
  * Performs {@link ValueProviderArg#OPERATION} on the values returned by {@link ValueProviderArg#VALUE1} applied to each
  * entity resolved by {@link ValueProviderArg#TARGET}.
  * <p>
+ * If a filter is specified in {@link ValueProviderArg#FILTER}, apply it to the list of entities resolved by the {@link
+ * ValueProviderArg#TARGET}.
+ * <p>
  * Specifying an attribute {@link ValueProviderArg#ATTRIBUTE} is a shorthand for a {@code "value1"} set to an {@link
  * AttributeValueProvider} with the specified attribute.
  */

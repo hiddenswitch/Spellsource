@@ -1,0 +1,26 @@
+{
+  "name": "Light Show",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+4 and draw 2 cards.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 4
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

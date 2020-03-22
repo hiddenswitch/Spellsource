@@ -1,0 +1,17 @@
+{
+  "name": "Conjure Club",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Give your champion +3 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TemporaryAttackSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 3
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

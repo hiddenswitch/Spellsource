@@ -1,24 +1,24 @@
 package net.demilich.metastone.game.spells.aura;
 
-import net.demilich.metastone.game.spells.NullSpell;
-import net.demilich.metastone.game.spells.desc.aura.AuraArg;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.desc.condition.Condition;
+
+import java.util.Objects;
 
 /**
- * Actors affected by this aura will get spells cast on them twice if the {@link AuraArg#SPELL_CONDITION} is met on the
- * casting spell.
+ * Implements Thelia Silentdreamer's effect, which is a {@link SpellsCastTwiceAura} as long as the target is itself.
  */
-public final class TheliaSilentdreamerAura extends Aura {
+public final class TheliaSilentdreamerAura extends SpellsCastTwiceAura {
 
 	public TheliaSilentdreamerAura(AuraDesc desc) {
 		super(desc);
-		setDesc(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 
-	public Condition getSpellCondition() {
-		return (Condition) getDesc().get(AuraArg.SPELL_CONDITION);
+	@Override
+	public boolean isFulfilled(GameContext context, Player player, Entity card, Entity target) {
+		Entity self = context.resolveSingleTarget(getHostReference());
+		return super.isFulfilled(context, player, card, target) && Objects.equals(self, target);
 	}
 }

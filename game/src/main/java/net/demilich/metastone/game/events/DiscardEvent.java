@@ -3,6 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
 public class DiscardEvent extends GameEvent implements HasCard {
 	private final Card card;
@@ -12,18 +13,18 @@ public class DiscardEvent extends GameEvent implements HasCard {
 		this.card = card;
 	}
 
-	public Card getCard() {
+	public Card getSourceCard() {
 		return card;
 	}
 
 	@Override
 	public Entity getEventTarget() {
-		return getCard();
+		return getSourceCard();
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.DISCARD;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DISCARD;
 	}
 
 	@Override
@@ -38,6 +39,6 @@ public class DiscardEvent extends GameEvent implements HasCard {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		return String.format("%s discarded %s", context.getPlayer(playerId).getName(), getCard().getName());
+		return String.format("%s discarded %s", context.getPlayer(playerId).getName(), getSourceCard().getName());
 	}
 }

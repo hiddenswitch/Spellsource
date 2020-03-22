@@ -1,0 +1,17 @@
+{
+  "name": "Skirmish",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "FREE",
+  "description": "Deal $2 damage to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

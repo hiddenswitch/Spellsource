@@ -10,7 +10,7 @@
     "class": "AddDeathrattleSpell",
     "card": "enchantment_rending_curse"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

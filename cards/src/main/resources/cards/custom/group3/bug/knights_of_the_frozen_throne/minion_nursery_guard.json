@@ -7,11 +7,11 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Aftermath: Transform the top card of your deck into a 0/2 Nerubian Egg.",
+  "description": "Aftermath: Transform the top card of your deck into a 0/2 Spidey Egg.",
   "deathrattle": {
     "class": "ReplaceCardsSpell",
     "target": "FRIENDLY_TOP_CARD",
-    "card": "minion_nerubian_egg"
+    "card": "token_spidey_egg"
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -1,10 +1,10 @@
 # Spellsource-Server
 
-[![Build Status](https://travis-ci.org/hiddenswitch/Spellsource-Server.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource-Server)
+[![Build Status](https://travis-ci.org/hiddenswitch/Spellsource.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource)
 [![Discord](https://img.shields.io/badge/chat-join%20us%20on%20discord-blue.svg?longCache=true&style=flat&icon=discord)](https://discord.gg/HmbESh2)
 [![Documentation](https://img.shields.io/badge/docs-java-yellow.svg?longCache=true&style=flat)](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html)
 
-This is a simulator and game server for community and official Hearthstone cards.
+This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
 
 **Play Now**: Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
 
@@ -14,27 +14,24 @@ Please see the Issues tab to report bugs or request functionality.
 
 ### Contents
 
- 1. [Changelist](www/whatsnew.md)
+ 1. [Changelist](www/src/pages-markdown/whatsnew.md)
  2. [Description](#description)
  3. [AI Research FAQ](#ai-research-faq)
  4. [Quick Start Python](#quick-start-python)
  5. [Quick Start Multiplayer](#quick-start-multiplayer)
  6. [Quick Start Contributing Cards](#quick-start-contributing-cards)
  7. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
- 8. [Troubleshooting](#troubleshooting)
- 9. [Contributing Cards](#contributing-cards)
+ 8. [Contributing Cards](#contributing-cards)
 
 ### Changelist
 
-Read [the latest changes here](www/whatsnew.md) or the deployed changes on the [website](https://playspellsource.com/whats-new).
+Read [the latest changes here](www/src/pages-markdown/whatsnew.md) or the deployed changes on the [website](https://playspellsource.com/whats-new).
 
 ### Description
 
-The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained Hearthstone simulator, to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, plus hundreds of community cards.
+The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
-The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
-
-See the complete reference [here](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html).
+See the complete code reference [here](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html).
 
 ### AI Research FAQ
 
@@ -56,13 +53,16 @@ Options:
 
 Commands:
   change-password       Changes a Spellsource user's password.
+  create-cards-db       Saves a cards.json database for the client.
   create-user           Creates an AWS user named USERNAME.
+  fix-merge             Fixes card catalogue merge issues.
   format-cards          Formats JSON card files.
   hearthcards-stubs     Creates stubs from the Hearthcards.
   hs-replay-matchups    Prints a table of HSReplay matchups in TSV format.
   image-stubs           Converts images to card stubs.
   markdown-to-textmesh  Renders a Markdown file to TextMesh markup.
   replicate-database    Replicates mongo databases.
+  run                   Runs the server.
   simulate              Run a simulation using AIs of a given deck matchup.
   update-dbf            Updates Hearthstone IDs.
   update-decklists      Updates the deck lists from Tempostorm.
@@ -106,12 +106,18 @@ If you'd like to **contribute or edit cards**, **write new game mechanics** or *
 
 Visit the [Windows Development Guide](http://playspellsource.com/windows-development) for more about Windows development.
 
-### Troubleshooting
-
-**My download got interrupted in the launcher and it won't restart.**
-
-On Windows, delete the `%APPDATA%\Hidden Switch Launcher` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Hidden Switch Launcher`)*.
 
 ### Contributing Cards
 
 Visit our [website](http://playspellsource.com/contribute) for more about contributions, including guidelines.
+
+
+### Special Thanks
+
+![YourKit](https://www.yourkit.com/images/yklogo.png)
+
+YourKit supports open source projects with its full-featured Java Profiler.
+
+YourKit, LLC is the creator of <a href="https://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a>
+and <a href="https://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>,
+innovative and intelligent tools for profiling Java and .NET applications.

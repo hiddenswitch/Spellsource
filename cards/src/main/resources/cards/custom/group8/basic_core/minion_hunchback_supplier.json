@@ -6,14 +6,15 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "FREE",
-  "description": "Opener: Draw a card.",
+  "description": "Lifedrain. Opener: Draw a card.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell"
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "LIFESTEAL": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

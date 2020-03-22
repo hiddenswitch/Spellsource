@@ -1,0 +1,32 @@
+{
+  "name": "Line Breaker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Dash. Opener: If an enemy minion attacked last turn, gain Blitz.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "ENEMY_CHARACTERS",
+      "filter": {
+        "class": "HasAttackedLastTurnFilter"
+      }
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "CHARGE"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

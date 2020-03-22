@@ -1,0 +1,17 @@
+{
+  "name": "Massive Ore",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Gain 10 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 10
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

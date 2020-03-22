@@ -6,9 +6,7 @@
   "rarity": "FREE",
   "description": "Discover a 3-Cost minion. Summon it with Guard.",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {
@@ -26,6 +24,9 @@
       "cardType": "MINION",
       "manaCost": 3
     }
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": false,
   "set": "CUSTOM",

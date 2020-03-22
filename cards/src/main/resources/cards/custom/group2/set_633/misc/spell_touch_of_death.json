@@ -1,0 +1,44 @@
+{
+  "name": "Touch of Death",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Shoot [0] missiles that deal $[0] damage each. (Increases for each attack your Champion has).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HERO",
+      "attribute": "ATTACK"
+    },
+    "howMany": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HERO",
+      "attribute": "ATTACK"
+    }
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "ATTACK"
+      }
+    },
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "ATTACK"
+      }
+    }
+  ]
+}

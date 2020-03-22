@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Skill: Deal 4 damage. Swap to restore 4 health.",
+  "description": "Skill: Deal 2 damage. Swap to restore 4 health.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
@@ -14,11 +14,15 @@
       "spells": [
         {
           "class": "DamageSpell",
-          "value": 4
+          "value": 2
         },
         {
           "class": "ChangeHeroPowerSpell",
           "card": "hero_power_unnatural_restoration"
+        },
+        {
+          "class": "RefreshHeroPowerSpell",
+          "targetPlayer": "SELF"
         }
       ]
     }

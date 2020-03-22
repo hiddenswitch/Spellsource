@@ -1,0 +1,28 @@
+{
+  "name": "Yakha Reiri",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 13,
+  "baseHp": 13,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Whenever an enemy takes damage, destroy it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "TRIGGER_HOST"
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

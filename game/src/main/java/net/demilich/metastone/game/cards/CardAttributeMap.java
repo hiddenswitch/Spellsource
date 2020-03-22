@@ -114,9 +114,9 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 				case MANA_COST_MODIFIER:
 					return desc.getManaCostModifier() == null ? null : desc.getManaCostModifier().create();
 				case PASSIVE_TRIGGERS:
-					return HasEntrySet.link(desc.passiveTrigger, desc.passiveTriggers, EnchantmentDesc.class);
+					return HasEntrySet.link(desc.getPassiveTrigger(), desc.getPassiveTriggers(), EnchantmentDesc.class);
 				case DECK_TRIGGERS:
-					return HasEntrySet.link(desc.deckTrigger, desc.deckTriggers, EnchantmentDesc.class);
+					return HasEntrySet.link(desc.getDeckTrigger(), desc.getDeckTriggers(), EnchantmentDesc.class);
 				case GAME_TRIGGERS:
 					return desc.getGameTriggers();
 				case PASSIVE_AURAS:
@@ -176,11 +176,11 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 			case MANA_COST_MODIFIER:
 				return desc.getManaCostModifier() != null;
 			case PASSIVE_TRIGGERS:
-				return desc.passiveTrigger != null || (desc.passiveTriggers != null && desc.passiveTriggers.length > 0);
+				return desc.getPassiveTrigger() != null || (desc.getPassiveTriggers() != null && desc.getPassiveTriggers().length > 0);
 			case PASSIVE_AURAS:
-				return desc.passiveAuras != null && desc.passiveAuras.length > 0;
+				return desc.getPassiveAuras() != null && desc.getPassiveAuras().length > 0;
 			case DECK_TRIGGERS:
-				return desc.deckTrigger != null || (desc.deckTriggers != null && desc.deckTriggers.length > 0);
+				return desc.getDeckTrigger() != null || (desc.getDeckTriggers() != null && desc.getDeckTriggers().length > 0);
 			case GAME_TRIGGERS:
 				return desc.getGameTriggers() != null;
 			case RACE:

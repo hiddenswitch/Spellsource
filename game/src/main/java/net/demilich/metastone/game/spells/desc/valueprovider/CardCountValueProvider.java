@@ -19,7 +19,7 @@ import net.demilich.metastone.game.cards.Attribute;
  * If an {@link ValueProviderArg#ATTRIBUTE} is specified, sums the values stored in the attribute or returns the count
  * of cards with that attribute.
  */
-public class CardCountValueProvider extends ValueProvider {
+public class CardCountValueProvider extends EntityCountValueProvider {
 
 	public CardCountValueProvider(ValueProviderDesc desc) {
 		super(desc);

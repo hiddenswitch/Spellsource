@@ -1,6 +1,6 @@
 {
-  "name": "Hastur, King in Yellow",
-  "baseManaCost": 8,
+  "name": "King in Yellow",
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 6,

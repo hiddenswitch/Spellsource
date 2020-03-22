@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.desc.filter;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.Entity;
@@ -21,9 +20,9 @@ import java.util.List;
  * <ul>
  * <li>{@link EntityFilterArg#CARD_TYPE}.</li>
  * <li>{@link EntityFilterArg#RACE}.</li>
- * <li>{@link EntityFilterArg#HERO_CLASS}</li>, including the special hero classes {@link HeroClass#OPPONENT} and {@link
- * HeroClass#SELF}.
- * <li>{@link EntityFilterArg#HERO_CLASSES}</li> to check if the entity's hero class matches any in the list.
+ * <li>{@link EntityFilterArg#HERO_CLASS}, including the special hero classes {@link HeroClass#OPPONENT} and {@link
+ * HeroClass#SELF}.</li>
+ * <li>{@link EntityFilterArg#HERO_CLASSES} to check if the entity's hero class matches any in the list.</li>
  * <li>{@link EntityFilterArg#MANA_COST} for the entity's base mana cost. Use {@link ManaCostFilter} for its current
  * cost instead.</li>
  * <li>{@link EntityFilterArg#RARITY}.</li>
@@ -66,8 +65,8 @@ public final class CardFilter extends EntityFilter {
 		if (cardType != null && !card.getCardType().isCardType(cardType)) {
 			return false;
 		}
-		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
-		if (race != null && !card.getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EntityFilterArg.RACE);
+		if (race != null && !Race.hasRace(context, card, race)) {
 			return false;
 		}
 
@@ -141,7 +140,7 @@ public final class CardFilter extends EntityFilter {
 		return create(cardType, null);
 	}
 
-	public static CardFilter create(CardType cardType, Race race) {
+	public static CardFilter create(CardType cardType, String race) {
 		EntityFilterDesc arguments = new EntityFilterDesc(CardFilter.class);
 		if (cardType != null) {
 			arguments.put(EntityFilterArg.CARD_TYPE, cardType);

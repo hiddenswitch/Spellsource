@@ -1,0 +1,39 @@
+{
+  "name": "Portable Flytrap",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 0,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "<b>Decay<b>. After a minion attacks your hero, destroy the attacker.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "AfterPhysicalAttackTrigger",
+        "sourcePlayer": "BOTH",
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "EVENT_SOURCE"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DecaySpell"
+      }
+    }
+  ],
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

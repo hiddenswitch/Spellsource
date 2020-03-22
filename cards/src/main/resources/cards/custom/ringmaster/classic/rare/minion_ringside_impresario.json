@@ -1,0 +1,29 @@
+{
+  "name": "Ringside Impresario",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "After you play a minion, add a copy of your Signature to your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "FRIENDLY_SIGNATURE"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

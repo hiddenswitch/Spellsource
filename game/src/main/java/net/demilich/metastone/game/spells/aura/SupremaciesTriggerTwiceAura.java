@@ -9,10 +9,10 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 /**
  * When this aura is active, subspells of {@link net.demilich.metastone.game.spells.SupremacySpell} will be cast twice.
  */
-public final class SupremaciesTriggerTwiceAura extends Aura {
+public final class SupremaciesTriggerTwiceAura extends AbstractFriendlyCardAura {
 
 	public SupremaciesTriggerTwiceAura(AuraDesc desc) {
-		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
+		super(desc);
 	}
 
 	@Override

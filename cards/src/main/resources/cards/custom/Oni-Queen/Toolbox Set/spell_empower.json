@@ -1,0 +1,16 @@
+{
+  "name": "Empower",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "COMMON",
+  "description": "Give a character +2 Attack this turn.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "TemporaryAttackSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

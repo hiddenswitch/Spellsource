@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "<b>Echo</b> <b>Discover</b> an <b>Echo</b> card from any class.",
+  "description": "<b>Repeatable this turn.</b> <b>Discover</b> an <b>Repeatable this turn</b> card from any class.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
@@ -22,9 +22,10 @@
     }
   },
   "attributes": {
-    "ECHO": true
+    "ECHO": true,
+	"DISCOVER": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

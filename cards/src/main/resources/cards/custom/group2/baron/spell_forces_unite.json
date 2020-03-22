@@ -1,6 +1,6 @@
 {
   "name": "Forces Unite!",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",

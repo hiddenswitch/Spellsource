@@ -32,6 +32,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -149,15 +150,15 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	/**
 	 * Creates a hero entity from the text on the card. Works similarly to {@link #summon()}, except for heroes.
 	 *
+	 * @param player
 	 * @return A new hero instance.
 	 */
-	public Hero createHero() {
+	public Hero createHero(Player player) {
 		if (getCardType() != CardType.HERO) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an hero", this, getCardType());
 		}
 
-		Card heroPower = CardCatalogue.getCardById(getDesc().getHeroPower());
-		Hero hero = new Hero(this, heroPower);
+		Hero hero = new Hero(this, player);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (HERO_ATTRIBUTES.contains(gameTag)) {
 				hero.getAttributes().put(gameTag, getAttributes().get(gameTag));
@@ -291,6 +292,20 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 	}
 
+	/**
+	 * Gets the card ID of the {@link CardDesc} that was originally used to create this instance.
+	 *
+	 * @return
+	 */
+	public String getOriginalCardId() {
+		return desc.getId();
+	}
+
+	/**
+	 * For a {@link CardType#CLASS}, specifies the default hero (champion).
+	 *
+	 * @return
+	 */
 	public String getHero() {
 		return getDesc().getHero();
 	}
@@ -399,7 +414,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		if (description == null || description.isEmpty()) {
 			return "";
 		}
-		return description.replaceAll("(</?[bi]>)|\\[x\\]", "");
+		return description;
 	}
 
 	@Override
@@ -423,11 +438,23 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
-		int actualManaCost = getBaseManaCost();
+		return getBaseManaCost() - getManaCostModification(context, player);
+	}
+
+	/**
+	 * Computes the modificatation of this card's built in mana cost modifier for a given context / player.
+	 * Positive numbers are a reduction in cost, while negative numbers are an increase,
+	 * so the result of this method should usually be subtracted.
+	 * @param context The {@link GameContext} to compute the cost modification against.
+	 * @param player The {@link Player} whose point of view should be considered, i.e. the owner.
+	 * @return The cost modfication
+	 */
+	@Suspendable
+	public int getManaCostModification(GameContext context, Player player) {
 		if (getManaCostModifier() != null) {
-			actualManaCost -= getManaCostModifier().getValue(context, player, null, this);
+			return getManaCostModifier().getValue(context, player, null, this);
 		}
-		return actualManaCost;
+		return 0;
 	}
 
 	protected ValueProvider getManaCostModifier() {
@@ -454,8 +481,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	@NotNull
 	@Override
-	public Race getRace() {
-		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
+	public String getRace() {
+		return (String) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
 	}
 
 	/**
@@ -533,7 +560,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	@Override
 	public String toString() {
-		return String.format("[%s '%s' %s Manacost:%d]", getCardType(), getName(), getReference(), getBaseManaCost());
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.append("name", getName())
+				.append("description", getDescription())
+				.append("cardId", getCardId())
+				.toString();
 	}
 
 	/**
@@ -632,30 +664,26 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
+	 * Determines if the card's target selection ought to be overrided, and does so via applying or removing {@link
+	 * Attribute#TARGET_SELECTION} on the card.
+	 */
+	public void processTargetSelectionOverride(GameContext context, Player player) {
+		if (getTargetSelectionCondition() != null && getTargetSelectionOverride() != null) {
+			if (getTargetSelectionCondition().create().isFulfilled(context, player, player, this)) {
+				getAttributes().put(Attribute.TARGET_SELECTION, getTargetSelectionOverride());
+			} else if (Objects.equals(getAttributes().get(Attribute.TARGET_SELECTION), getTargetSelectionOverride())) {
+				getAttributes().remove(Attribute.TARGET_SELECTION);
+			}
+		}
+	}
+
+	/**
 	 * Indicates this card plays an actor, like a minion, weapon or hero, from the hand.
 	 *
 	 * @return {@code true} if this is an actor card
 	 */
 	public boolean isActor() {
 		return getCardType() == CardType.MINION || getCardType() == CardType.WEAPON || getCardType() == CardType.HERO;
-	}
-
-	/**
-	 * Creates an instance of the appropriate actor from this card.
-	 *
-	 * @return The {@link Actor} entity or {@code null} if the card could not have produced an actor.
-	 */
-	public Actor actor() {
-		switch (getCardType()) {
-			case MINION:
-				return summon();
-			case WEAPON:
-				return createWeapon();
-			case HERO:
-				return createHero();
-		}
-
-		return null;
 	}
 
 	/**
@@ -894,6 +922,14 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 
 		Player opponent = context.getOpponent(player);
+
+		if (getCondition() != null) {
+			if (!getCondition().create().isFulfilled(context, player, this, null)) {
+				return false;
+			}
+		}
+
+		processTargetSelectionOverride(context, player);
 		TargetSelection selection = hasChoices() || isHeroPower() ?
 				getTargetSelection() :
 				context.getLogic().processTargetModifiers(play()).getTargetRequirement();
@@ -907,9 +943,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			default:
 				break;
 		}
-		if (getCondition() != null) {
-			return getCondition().create().isFulfilled(context, player, null, null);
-		}
+
 		return true;
 	}
 
@@ -980,7 +1014,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public Actor applyText(Actor instance) {
 		instance.setBattlecry(getDesc().getBattlecry());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
-				(Race) getAttribute(Attribute.RACE) :
+				(String) getAttribute(Attribute.RACE) :
 				getDesc().getRace());
 
 		if (getDesc().getDeathrattle() != null) {
@@ -1026,6 +1060,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				instance.addEnchantment(storedEnchantment.create());
 			}
 		}
+
+		instance.freezeDeathrattles();
 
 		return instance;
 	}
@@ -1263,5 +1299,26 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	public int[] getColor() {
 		return getDesc().getColor();
+	}
+
+	public ConditionDesc getTargetSelectionCondition() {
+		return getDesc().getTargetSelectionCondition();
+	}
+
+	public TargetSelection getTargetSelectionOverride() {
+		return getDesc().getTargetSelectionOverride();
+	}
+
+	public void setTargetSelectionCondition(ConditionDesc targetSelectionCondition) {
+		getDesc().setTargetSelectionCondition(targetSelectionCondition);
+	}
+
+	public void setTargetSelectionOverride(TargetSelection targetSelectionOverride) {
+		getDesc().setTargetSelectionOverride(targetSelectionOverride);
+	}
+
+	@Override
+	public void clearAddedDeathrattles() {
+		getDeathrattleEnchantments().clear();
 	}
 }

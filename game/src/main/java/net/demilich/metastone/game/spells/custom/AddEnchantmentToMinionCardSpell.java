@@ -21,6 +21,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Puts the enchantment written in this spell into play as soon as the minion is summoned from the {@code target} minion
  * card.
+ * <p>
+ * This is a way to have minion cards carry enchantments into the battlefield when they are summoned.
+ * <p>
+ * Enchantments written this way <b>do</b> get copied with the card.
+ *
+ * @see net.demilich.metastone.game.spells.AddBattlecrySpell for putting spell-like text onto cards.
  */
 public final class AddEnchantmentToMinionCardSpell extends AddEnchantmentSpell {
 	private static Logger LOGGER = LoggerFactory.getLogger(AddEnchantmentToMinionCardSpell.class);

@@ -9,7 +9,7 @@
     "class": "ComparisonCondition",
     "operation": "GREATER",
     "value1": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ENEMY_MINIONS"
     },
     "value2": 0
@@ -30,7 +30,7 @@
     },
     "randomTarget": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

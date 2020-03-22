@@ -1,0 +1,29 @@
+{
+  "name": "Heavy Duty Dragoon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Your Skill gives 1 more Attack.",
+  "auras": [
+    {
+      "class": "ModifyBuffSpellAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "attackBonus": 1
+    },
+    {
+      "class": "ModifyTemporaryAttackSpellAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "value": 1
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

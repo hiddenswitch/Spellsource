@@ -29,5 +29,4 @@ public class ManaCostCondition extends Condition {
 		ComparisonOperation operation = (ComparisonOperation) desc.getOrDefault(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
 		return SpellUtils.evaluateOperation(operation, context.getLogic().getModifiedManaCost(player, card), value);
 	}
-
 }

@@ -1,0 +1,39 @@
+{
+  "name": "Ebon Marshmage",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Supremacy: Add a copy of a random spell you cast this game to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+		"class": "ReceiveCardSpell",
+		"targetPlayer": "SELF",
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "operation": "HAS",
+		  "cardType": "SPELL"
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        }		
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

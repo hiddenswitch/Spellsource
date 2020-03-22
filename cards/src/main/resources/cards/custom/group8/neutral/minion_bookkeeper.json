@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: Refresh a Mana Crystal for every spell in your hand.",
+  "description": "Opener: Refresh a Lun for every spell in your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -1,0 +1,30 @@
+{
+  "name": "Gravelord Goa",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Opener: Gain the aftermath, \"Repeat all other friendly aftermaths.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "custom.RepeatAllAftermathsSpell"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

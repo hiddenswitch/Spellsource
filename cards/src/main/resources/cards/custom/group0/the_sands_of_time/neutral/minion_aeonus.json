@@ -1,5 +1,5 @@
 {
-  "name": "Aeonus",
+  "name": "Aeternus",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
@@ -29,7 +29,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": "true"
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",

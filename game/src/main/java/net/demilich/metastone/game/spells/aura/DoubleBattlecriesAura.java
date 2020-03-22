@@ -9,12 +9,9 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 /**
  * When this aura is in play, battlecries trigger twice.
  */
-public final class DoubleBattlecriesAura extends Aura {
+public final class DoubleBattlecriesAura extends AbstractFriendlyCardAura {
 
 	public DoubleBattlecriesAura(AuraDesc desc) {
 		super(desc);
-		setDesc(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 }

@@ -7,7 +7,6 @@ import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,21 +17,23 @@ import java.util.stream.Collectors;
 
 class TraceBehaviour extends UtilityBehaviour {
 	private final int playerId;
-	private final int[][] mulligans;
+	private final List<MulliganTrace> mulligans;
 	private final AtomicInteger nextAction;
 	private final List<Integer> actions;
 	private final Consumer<GameContext> recorder;
 
 	/**
-	 * @param playerId   The player that this behaviour is "playing" for.
-	 * @param mulligans  The list of mulligans from the traced game.
-	 * @param nextAction The index of the next action to take (shared between two {@link TraceBehaviour}s).
-	 * @param actions    The list of action (indices) from the traced game.
-	 * @param beforeRequestActionHandler   [Optional] consumer to be called on every {@link GameContext} before each action is taken.
+	 * @param playerId                   The player that this behaviour is "playing" for.
+	 * @param mulligans                  The list of mulligans from the traced game.
+	 * @param nextAction                 The index of the next action to take (shared between two {@link
+	 *                                   TraceBehaviour}s).
+	 * @param actions                    The list of action (indices) from the traced game.
+	 * @param beforeRequestActionHandler [Optional] consumer to be called on every {@link GameContext} before each action
+	 *                                   is taken.
 	 */
 	TraceBehaviour(
 			int playerId,
-			int[][] mulligans,
+			@Nullable List<MulliganTrace> mulligans,
 			AtomicInteger nextAction,
 			List<Integer> actions,
 			@Nullable Consumer<GameContext> beforeRequestActionHandler) {
@@ -54,14 +55,20 @@ class TraceBehaviour extends UtilityBehaviour {
 		if (recorder != null) {
 			recorder.accept(context);
 		}
-		if (playerId != player.getId()) {
-			return Collections.emptyList();
-		}
-		if (mulligans == null) {
+		if (mulligans == null || mulligans.isEmpty()) {
 			throw new CancellationException();
 		}
-		return Arrays.stream(mulligans[player.getId()])
-				.boxed()
+		int id = player.getId();
+		int index = 0;
+		if (mulligans.get(1).getPlayerId() == id) {
+			index = 1;
+		}
+		if (playerId != id) {
+			return Collections.emptyList();
+		}
+		return mulligans.get(index)
+				.getEntityIds()
+				.stream()
 				.map(i -> {
 					Optional<Card> card = cards
 							.stream()
@@ -92,6 +99,8 @@ class TraceBehaviour extends UtilityBehaviour {
 			throw new CancellationException();
 		}
 		Integer j = actions.get(i);
-		return validActions.stream().filter(f -> f.getId() == j).findFirst().orElseThrow(CancellationException::new);
+		return validActions.stream().filter(f -> f.getId() == j).findFirst().orElseThrow(() -> {
+			return new CancellationException();
+		});
 	}
 }

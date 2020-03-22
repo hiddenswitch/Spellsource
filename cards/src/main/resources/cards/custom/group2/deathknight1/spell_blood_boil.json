@@ -13,7 +13,7 @@
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
         "value": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "ENEMY_CHARACTERS"
         }
       },

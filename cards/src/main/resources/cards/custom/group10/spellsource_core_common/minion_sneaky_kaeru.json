@@ -14,7 +14,7 @@
       "hostTargetType": "IGNORE_OTHER_TARGETS",
       "fireCondition": {
         "class": "AttributeCondition",
-        "target": "SELF",
+        "target": "TRIGGER_HOST",
         "value": 1,
         "attribute": "HP",
         "operation": "EQUAL"
@@ -22,7 +22,7 @@
     },
     "spell": {
       "class": "ReturnTargetToHandSpell",
-      "target": "SELF"
+      "target": "TRIGGER_HOST"
     }
   },
   "collectible": true,

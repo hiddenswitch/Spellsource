@@ -63,7 +63,7 @@ import java.util.Map;
  *   }
  * </pre>
  */
-public class DiscardSpell extends Spell {
+public class DiscardSpell extends AbstractRemoveCardSpell {
 
 	public static final int ALL_CARDS = -1;
 	public static SpellDesc create() {
@@ -104,3 +104,4 @@ public class DiscardSpell extends Spell {
 		}
 	}
 }
+

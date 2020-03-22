@@ -9,5 +9,6 @@ public enum CardSourceArg {
 	DISTINCT,
 	FORMAT,
 	COLLECTION_NAME,
-	CARD_SOURCES
+	CARD_SOURCES,
+	VALUE
 }

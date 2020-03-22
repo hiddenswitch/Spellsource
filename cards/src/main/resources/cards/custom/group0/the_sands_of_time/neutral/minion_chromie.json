@@ -1,5 +1,5 @@
 {
-  "name": "Chromie",
+  "name": "Firefoxie",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
@@ -48,7 +48,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1
 }

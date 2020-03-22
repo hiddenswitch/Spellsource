@@ -1,0 +1,22 @@
+### The Imperial Ritual
+# Class: DARKGREEN
+# Format: Spellsource
+#
+# 2x (0) Bloody Blow
+# 2x (0) Corrupting Tome
+# 2x (1) Ancient Readings
+# 2x (1) Commence Cult
+# 2x (1) Doom Project
+# 2x (1) Madman's Knowledge
+# 1x (2) Forgotten Science
+# 1x (2) Forest Familiar
+# 2x (2) Grasp of God
+# 1x (2) Hoffis the Dunewalker
+# 2x (2) Mean Beam
+# 2x (2) Spawn of Evil
+# 2x (3) Daring Duelist
+# 2x (3) Merciless Corruptor
+# 2x (4) Ancient Waygate
+# 2x (5) Spellquaker
+# 1x (5) The Imperial Soul
+#

@@ -4,8 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**p** | **Integer** |  | 
-**i** | **Integer** |  | 
+**i** | **Integer** | The index of the entity inside its zone.  | 
 **z** | [**ZEnum**](#ZEnum) |  | 
 
 

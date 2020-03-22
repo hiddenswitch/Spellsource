@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 public final class Weapon extends Actor {
 
@@ -76,14 +77,14 @@ public final class Weapon extends Actor {
 	@Suspendable
 	public void onEquip(GameContext context, Player player) {
 		if (onEquip != null) {
-			context.getLogic().castSpell(player.getId(), onEquip, getReference(), EntityReference.NONE, false);
+			context.getLogic().castSpell(player.getId(), onEquip, getReference(), EntityReference.NONE, TargetSelection.NONE, false, null);
 		}
 	}
 
 	@Suspendable
 	public void onUnequip(GameContext context, Player player) {
 		if (onUnequip != null) {
-			context.getLogic().castSpell(player.getId(), onUnequip, getReference(), EntityReference.NONE, false);
+			context.getLogic().castSpell(player.getId(), onUnequip, getReference(), EntityReference.NONE, TargetSelection.NONE, false, null);
 		}
 	}
 
@@ -98,21 +99,4 @@ public final class Weapon extends Actor {
 	public void setOnUnequip(SpellDesc onUnequip) {
 		this.onUnequip = onUnequip;
 	}
-
-	@Override
-	public String toString() {
-		String result = "[" + getEntityType() + " '" + getName() + "'id:" + getId() + " ";
-		result += getWeaponDamage() + "/" + getDurability();
-		String prefix = " ";
-		for (Attribute tag : getAttributes().keySet()) {
-			if (false) {
-				result += prefix + tag;
-				prefix = ", ";
-			}
-		}
-		result += " hashCode: " + hashCode();
-		result += "]";
-		return result;
-	}
-
 }

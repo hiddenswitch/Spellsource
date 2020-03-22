@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 12,
   "rarity": "FREE",
-  "description": "Whenever this minion takes damage, restore #2 Health to your champion.",
+  "description": "Whenever this minion takes damage, restore #4 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -15,7 +15,7 @@
     "spell": {
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "value": 2
+      "value": 4
     }
   },
   "collectible": true,

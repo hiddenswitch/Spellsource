@@ -1,0 +1,53 @@
+{
+  "name": "Elena Dreamhaze",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "FAE",
+  "description": "Opener: Discover a class and a spell for it. It becomes your Signature.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.DiscoverClassSpell",
+      "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ChangeSignatureSpell"
+            },
+            {
+              "class": "ReceiveCardSpell"
+            }
+          ]
+        },
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "SameHeroClassFilter",
+              "target": "OUTPUT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

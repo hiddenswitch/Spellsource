@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Your Beasts can attack again after they attack and kill a minion.",
+  "description": "Your Beasts gain an extra attack after attacking and killing minions.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

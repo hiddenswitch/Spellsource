@@ -1,0 +1,33 @@
+{
+  "name": "Tainted Grasp",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Draw your highest-Health minion (or minions).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 60,
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "HighestAttributeFilter",
+          "target": "FRIENDLY_DECK",
+          "attribute": "HP"
+        },
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

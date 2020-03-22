@@ -23,10 +23,6 @@
         },
         {
           "class": "RaceCondition",
-          "race": "MURLOC"
-        },
-        {
-          "class": "RaceCondition",
           "race": "BEAST"
         },
         {
@@ -63,10 +59,6 @@
         "filters": [
           {
             "class": "AmalgamRaceFilter"
-          },
-          {
-            "class": "RaceFilter",
-            "race": "MURLOC"
           },
           {
             "class": "RaceFilter",
@@ -116,24 +108,6 @@
                 "class": "RaceFilter",
                 "race": "NONE",
                 "invert": true
-              }
-            },
-            "attackBonus": 1,
-            "hpBonus": 1
-          }
-        },
-        {
-          "class": "AddEnchantmentSpell",
-          "target": "FRIENDLY_PLAYER",
-          "aura": {
-            "class": "BuffAura",
-            "target": "FRIENDLY_MINIONS",
-            "condition": {
-              "class": "AnyMatchFilterCondition",
-              "target": "FRIENDLY_MINIONS",
-              "filter": {
-                "class": "RaceFilter",
-                "race": "MURLOC"
               }
             },
             "attackBonus": 1,
@@ -290,7 +264,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

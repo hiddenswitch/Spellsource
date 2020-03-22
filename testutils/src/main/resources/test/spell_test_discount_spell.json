@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "The next spell you cast this turn costs (3) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
+    "cardCostModifier": {
+      "class": "OneTurnCostModifier",
+      "value": 3,
+      "cardType": "SPELL",
+      "expirationTrigger": {
+        "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF"
+      },
+      "operation": "SUBTRACT"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

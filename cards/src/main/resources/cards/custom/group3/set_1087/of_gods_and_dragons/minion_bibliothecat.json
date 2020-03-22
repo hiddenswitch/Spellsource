@@ -1,0 +1,48 @@
+{
+  "name": "Bibliothecat",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Discover a Beast, Dragon or Fae.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "race": "FAE",
+          "cardType": "MINION"
+        }
+      ],
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

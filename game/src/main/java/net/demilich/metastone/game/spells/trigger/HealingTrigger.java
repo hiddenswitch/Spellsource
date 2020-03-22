@@ -3,11 +3,16 @@ package net.demilich.metastone.game.spells.trigger;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.HealEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires whenever a {@code target} is healed.
+ * <p>
+ * Obeys the {@link EventTriggerArg#TARGET_ENTITY_TYPE} constraint.
+ */
 public class HealingTrigger extends EventTrigger {
 
 	public HealingTrigger(EventTriggerDesc desc) {
@@ -29,8 +34,8 @@ public class HealingTrigger extends EventTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.HEAL;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HEAL;
 	}
 
 }

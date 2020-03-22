@@ -12,12 +12,12 @@
     "class": "BuffAura",
     "target": "SELF",
     "attackBonus": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ALL_MINIONS",
       "offset": -1
     },
     "hpBonus": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ALL_MINIONS",
       "offset": -1
     }
@@ -26,7 +26,7 @@
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "EntityCounter",
+    "class": "EntityCountValueProvider",
     "multiplier": -1,
     "target": "ALL_MINIONS"
   }

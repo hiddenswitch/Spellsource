@@ -21,3 +21,4 @@ public class SpellOverrideAura extends Aura {
 		setDesc(desc);
 	}
 }
+

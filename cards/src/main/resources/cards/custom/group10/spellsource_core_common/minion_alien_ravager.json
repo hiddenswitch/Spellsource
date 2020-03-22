@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Can attack twice per turn.",
+  "description": "Extra Strike",
   "attributes": {
     "WINDFURY": true
   },

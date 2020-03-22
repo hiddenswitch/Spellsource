@@ -1,0 +1,31 @@
+{
+  "name": "Firegate Vigilante",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Supremacy: Give a random minion in your hand +4 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HAND",
+        "attackBonus": 4,
+        "hpBonus": 0,
+        "randomTarget": true
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

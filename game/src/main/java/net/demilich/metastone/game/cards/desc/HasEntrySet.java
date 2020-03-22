@@ -24,7 +24,7 @@ public interface HasEntrySet<T extends Enum<T>, V> {
 		while (!queue.isEmpty()) {
 			BfsNode<Enum, Object> node = queue.poll();
 
-			Set<Map.Entry<? extends Enum, ?>> entrySet;
+			Set entrySet;
 			if (node.value instanceof HasDesc) {
 				entrySet = ((HasDesc) node.value).getDesc().entrySet();
 			} else if (node.value instanceof HasEntrySet) {
@@ -51,7 +51,9 @@ public interface HasEntrySet<T extends Enum<T>, V> {
 			}
 
 			if (entrySet != null) {
-				for (Map.Entry<? extends Enum, ?> entry : entrySet) {
+				for (Object entryUntyped : entrySet) {
+					@SuppressWarnings("unchecked")
+					Map.Entry<? extends Enum, ?> entry = (Map.Entry<? extends Enum, ?>) entryUntyped;
 					queue.add(new BfsNode<>(entry.getKey(), entry.getValue(), node, node.depth + 1));
 				}
 			}
@@ -73,7 +75,7 @@ public interface HasEntrySet<T extends Enum<T>, V> {
 			return value != null && (value.getClass().isArray() || value instanceof List);
 		}
 
-		public BfsNode(T key, V value, BfsNode<T, V> parent, int depth) {
+		BfsNode(T key, V value, BfsNode<T, V> parent, int depth) {
 			this.key = key;
 			this.value = value;
 			this.parent = parent;

@@ -139,5 +139,9 @@ public enum Environment {
 	 * Stores the next target of an {@link net.demilich.metastone.game.logic.GameLogic#castSpell(int, SpellDesc,
 	 * EntityReference, EntityReference, TargetSelection, boolean, GameAction)} invocation to allow it to be modified.
 	 */
-	TARGET_OVERRIDE_STACK;
+	TARGET_OVERRIDE_STACK,
+	/**
+	 * Stores the deathrattles triggered throughout the game.
+	 */
+	DEATHRATTLES_TRIGGERED
 }

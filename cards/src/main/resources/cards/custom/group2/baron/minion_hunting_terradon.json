@@ -7,13 +7,15 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Discover a minion. Summon it for both players",
+  "description": "Opener: Discover a minion. Summon it for both players.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
-        "class": "SummonSpell",
-        "targetPlayer": "BOTH"
+        "class": "BothPlayersSpell",
+        "spell": {
+          "class": "SummonSpell"
+        }
       },
       "cardFilter": {
         "class": "CardFilter",
@@ -22,7 +24,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

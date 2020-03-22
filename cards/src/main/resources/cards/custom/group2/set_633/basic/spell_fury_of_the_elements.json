@@ -6,9 +6,7 @@
   "rarity": "FREE",
   "description": "Summon two different Elemental Spirits",
   "condition": {
-    "class": "MinionCountCondition",
-    "value": 7,
-    "operation": "LESS"
+    "class": "CanSummonCondition"
   },
   "targetSelection": "NONE",
   "spell": {
@@ -19,7 +17,10 @@
       "token_unearthed_spirit",
       "token_burning_spirit"
     ],
-    "randomTarget": true
+    "randomTarget": true,
+    "cardSource": {
+      "class": "SummonWithoutReplacementCardSource"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

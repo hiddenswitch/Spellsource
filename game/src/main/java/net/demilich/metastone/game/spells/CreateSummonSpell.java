@@ -36,7 +36,7 @@ public class CreateSummonSpell extends Spell {
 		cardDesc.setId(context.getLogic().generateCardId());
 		cardDesc.setName(desc.getString(SpellArg.NAME));
 		if (desc.containsKey(SpellArg.RACE)) {
-			cardDesc.setRace((Race) desc.get(SpellArg.RACE));
+			cardDesc.setRace((String) desc.get(SpellArg.RACE));
 		}
 		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
 		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
@@ -62,7 +62,10 @@ public class CreateSummonSpell extends Spell {
 			Card card = newCard.clone();
 			Minion minion = card.summon();
 			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
-				SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, minion, minion);
+				Entity newMinion = minion.transformResolved(context);
+				if (minion.isInPlay()) {
+					SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, newMinion, newMinion);
+				}
 			}
 			if (spell != null) {
 				SpellUtils.castChildSpell(context, player, spell, source, target, minion);

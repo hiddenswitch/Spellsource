@@ -30,7 +30,7 @@ import java.util.Map;
 public class SetRaceSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SetRaceSpell.class);
 
-	public static SpellDesc create(Race race) {
+	public static SpellDesc create(String race) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetRaceSpell.class);
 		arguments.put(SpellArg.RACE, race);
 		return new SpellDesc(arguments);
@@ -39,7 +39,7 @@ public class SetRaceSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		final Race race = (Race) desc.getOrDefault(SpellArg.RACE, Race.NONE);
+		final String race = (String) desc.getOrDefault(SpellArg.RACE, Race.NONE);
 		if (target instanceof Actor) {
 			Actor actor = (Actor) target;
 			actor.setRace(race);

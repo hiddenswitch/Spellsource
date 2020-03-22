@@ -32,6 +32,7 @@ Method | HTTP request | Description
 [**matchmakingDelete**](DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
 [**matchmakingGet**](DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 [**postInvite**](DefaultApi.md#postInvite) | **POST** /invites | 
+[**postPasswordReset**](DefaultApi.md#postPasswordReset) | **POST** /reset/passwords/with-token | 
 
 
 <a name="acceptInvite"></a>
@@ -412,7 +413,7 @@ Name | Type | Description  | Notes
 
 
 
-Updates the deck by adding or removing cards, changing the hero class, or renaming the deck. 
+Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.  Also gives players the ability to set special gameplay attributes (like the Signature) for the deck. 
 
 ### Example
 ```java
@@ -1254,7 +1255,7 @@ No authorization required
 
 <a name="healthCheck"></a>
 # **healthCheck**
-> healthCheck()
+> String healthCheck()
 
 
 
@@ -1269,7 +1270,8 @@ Returns an empty body if the server is available.
 
 DefaultApi apiInstance = new DefaultApi();
 try {
-    apiInstance.healthCheck();
+    String result = apiInstance.healthCheck();
+    System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#healthCheck");
     e.printStackTrace();
@@ -1281,7 +1283,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-null (empty response body)
+**String**
 
 ### Authorization
 
@@ -1492,5 +1494,53 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="postPasswordReset"></a>
+# **postPasswordReset**
+> postPasswordReset(token, password1, password2)
+
+
+
+Provided a valid reset token, resets a user&#39;s password. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+
+DefaultApi apiInstance = new DefaultApi();
+String token = "token_example"; // String | 
+String password1 = "password1_example"; // String | 
+String password2 = "password2_example"; // String | 
+try {
+    apiInstance.postPasswordReset(token, password1, password2);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#postPasswordReset");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **token** | **String**|  |
+ **password1** | **String**|  |
+ **password2** | **String**|  |
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/x-www-form-urlencoded
  - **Accept**: application/json
 

@@ -1,0 +1,16 @@
+{
+  "name": "Dodge Test",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Dodge",
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

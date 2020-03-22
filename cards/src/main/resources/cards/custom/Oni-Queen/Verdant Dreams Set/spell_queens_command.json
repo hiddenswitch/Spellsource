@@ -1,0 +1,17 @@
+{
+  "name": "Queen's Command",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Your next Opener this turn triggers twice.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_double_next_battlecry"
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

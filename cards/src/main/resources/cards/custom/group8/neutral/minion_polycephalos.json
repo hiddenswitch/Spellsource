@@ -14,7 +14,7 @@
       "class": "BuffSpell",
       "target": "SELF",
       "attackBonus": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ENEMY_MINIONS"
       }
     }
