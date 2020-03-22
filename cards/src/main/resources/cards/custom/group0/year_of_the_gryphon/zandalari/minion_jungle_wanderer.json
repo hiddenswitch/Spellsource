@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Give a friendly minion \"Aftermath: Resummon this minon with Dash.\"",
+  "description": "Opener: Give an allied minion \"Aftermath: Resummon this minon with Dash\".",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
