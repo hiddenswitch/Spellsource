@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Destroy a friendly Mech to deal its combined stats as damage randomly split among all enemies.",
+  "description": "Opener: Destroy an allied Mech to deal its stats as damage randomly split among all enemies.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
