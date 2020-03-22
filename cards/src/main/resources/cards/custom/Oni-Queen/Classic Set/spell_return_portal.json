@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Return a friendly minion to your hand. Give it Dash.",
+  "description": "Return an allied minion to your hand. Give it Dash.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",
