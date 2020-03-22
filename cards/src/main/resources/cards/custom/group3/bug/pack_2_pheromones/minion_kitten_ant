@@ -5,7 +5,7 @@
   "heroClass": "AMBER",
   "baseAttack": 5,
   "baseHp": 2,
-  "rarity": "EPIC",
+  "rarity": "COMMON",
   "race": "BEAST",
   "description": "Dash. Costs (1) less for each other card in your hand.",
   "attributes": {
