@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Destroy a friendly minion. Add a copy of your other minions to your hand.",
+  "description": "Destroy an allied minion. Add a copy of your other minions to your hand.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
