@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Summon a copy of a friendly minion. It has Guard and can't attack.",
+  "description": "Opener: Summon a copy of an allied minion. It has Guard and can't attack.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
