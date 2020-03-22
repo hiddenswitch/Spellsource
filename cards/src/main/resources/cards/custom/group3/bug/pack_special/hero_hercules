@@ -4,6 +4,7 @@
   "baseManaCost": 7,
   "type": "HERO",
   "heroClass": "AMBER",
+  "baseAttack": 1,
   "rarity": "LEGENDARY",
   "description": "Guard."
   "attributes": {
