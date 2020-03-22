@@ -1,0 +1,39 @@
+{
+  "name": "Mind Melter",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Deal 1 damage to all other minions. Swap the Attack and Health of the survivors.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 1
+        },
+        {
+          "class": "SwapAttackAndHpSpell",
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

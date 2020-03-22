@@ -1,11 +1,12 @@
 {
-  "name": "G'huun",
+  "name": "Vrykolaka",
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
+  "race": "DEMON",
   "description": "Lifesteal. Damaged minions have +8/+8 and can't attack champions.",
   "attributes": {
     "LIFESTEAL": true

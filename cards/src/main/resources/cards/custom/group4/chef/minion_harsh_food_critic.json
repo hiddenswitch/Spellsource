@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Roast a card. Add its Cost to your C'Thun's stats. (wherever it is).",
+  "description": "Opener: Roast a card. Add its Cost to your Big Guy's stats. (wherever it is).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -27,7 +27,7 @@
             },
             "filter": {
               "class": "SpecificCardFilter",
-              "card": "minion_cthun"
+              "card": "minion_removed_card"
             }
           },
           {
@@ -39,7 +39,7 @@
             },
             "filter": {
               "class": "SpecificCardFilter",
-              "card": "minion_cthun"
+              "card": "minion_removed_card"
             }
           },
           {
@@ -67,7 +67,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

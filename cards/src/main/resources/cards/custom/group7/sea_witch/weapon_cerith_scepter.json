@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 4,
   "rarity": "COMMON",
-  "description": "Opener: Freeze a random enemy minion.",
+  "description": "Opener: Stun a random enemy minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

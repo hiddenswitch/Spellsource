@@ -14,17 +14,17 @@
     },
     "attackBonus": {
       "class": "AttributeValueProvider",
-      "target": "EVENT_TARGET",
+      "target": "TARGET",
       "attribute": "BASE_MANA_COST"
     },
     "hpBonus": {
       "class": "AttributeValueProvider",
-      "target": "EVENT_TARGET",
+      "target": "TARGET",
       "attribute": "BASE_MANA_COST"
     },
     "mana": {
       "class": "AttributeValueProvider",
-      "target": "EVENT_TARGET",
+      "target": "TARGET",
       "attribute": "BASE_MANA_COST"
     }
   },

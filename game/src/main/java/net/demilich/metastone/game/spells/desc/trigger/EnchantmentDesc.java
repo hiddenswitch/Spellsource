@@ -12,7 +12,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -93,7 +92,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	public boolean persistentOwner;
 	/**
 	 * When {@code true}, this {@link Enchantment} should not be removed by a {@link
-	 * net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion)} or {@link
+	 * net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion)} or {@link
 	 * net.demilich.metastone.game.logic.GameLogic#replaceCard(int, Card, Card)} effect.
 	 * <p>
 	 * Implements Shifter Zerus, Molten Blade and other in-hand every-turn-replacement effects.

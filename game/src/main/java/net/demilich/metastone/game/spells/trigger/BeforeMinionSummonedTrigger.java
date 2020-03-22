@@ -1,10 +1,8 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.TargetType;
 
 public class BeforeMinionSummonedTrigger extends AbstractSummonTrigger {
 
@@ -17,8 +15,8 @@ public class BeforeMinionSummonedTrigger extends AbstractSummonTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.BEFORE_SUMMON;
+	public GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BEFORE_SUMMON;
 	}
 
 }

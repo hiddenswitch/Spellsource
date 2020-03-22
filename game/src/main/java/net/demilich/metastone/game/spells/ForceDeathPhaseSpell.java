@@ -23,7 +23,7 @@ import java.util.Map;
  *   {
  *     "class": "MetaSpell",
  *     "value": {
- *       "class": "EntityCounter",
+ *       "class": "EntityCountValueProvider",
  *       "target": "ENEMY_MINIONS"
  *     },
  *     "spells": [

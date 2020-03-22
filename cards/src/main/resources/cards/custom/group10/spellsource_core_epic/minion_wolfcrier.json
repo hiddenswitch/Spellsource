@@ -1,12 +1,12 @@
 {
   "name": "Wolfcrier",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "Guard. Opener: Summon a 2/3 Wolf for your opponent.",
+  "description": "Guard. Opener: Summon a 3/3 Wolf for your opponent.",
   "targetSelection": "NONE",
   "battlecry": {
     "spell": {

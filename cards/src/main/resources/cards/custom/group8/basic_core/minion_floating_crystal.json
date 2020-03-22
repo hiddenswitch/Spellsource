@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 0,
-  "baseHp": 4,
+  "baseHp": 6,
   "rarity": "FREE",
   "description": "<b>Spellpower +1</b>",
   "attributes": {

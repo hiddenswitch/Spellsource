@@ -11,13 +11,11 @@ import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.custom.AddEnchantmentToMinionCardSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -97,7 +95,7 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 		for (int i = 0; i < deathrattles.size(); i++) {
 			// Skip this deathrattle.
 			SpellDesc deathrattle = deathrattles.get(i);
-			if ((int) deathrattle.getOrDefault(SpellArg.DEATHRATTLE_ID, i) == (int) desc.getOrDefault(SpellArg.DEATHRATTLE_ID, -1)) {
+			if ((int) deathrattle.getOrDefault(SpellArg.AFTERMATH_ID, i) == (int) desc.getOrDefault(SpellArg.AFTERMATH_ID, -1)) {
 				continue;
 			}
 			SpellUtils.castChildSpell(context, player, AddDeathrattleSpell.create(card.getReference(), deathrattle), source, card);

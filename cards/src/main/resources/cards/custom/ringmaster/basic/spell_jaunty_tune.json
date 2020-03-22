@@ -1,0 +1,20 @@
+{
+  "name": "Jaunty Tune",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Summon three 2/2 Cats with Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_captivated_cat",
+      "token_captivated_cat",
+      "token_captivated_cat"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

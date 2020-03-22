@@ -7,12 +7,12 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Opener: Restore #3 Health to all characters.",
+  "description": "Opener: Restore #3 Health to all other characters.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "HealSpell",
-      "target": "ALL_CHARACTERS",
+      "target": "ALL_OTHER_CHARACTERS",
       "value": 3
     }
   },

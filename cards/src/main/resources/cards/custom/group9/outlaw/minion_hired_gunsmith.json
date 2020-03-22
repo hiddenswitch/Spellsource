@@ -28,6 +28,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "sets": [
+    "CUSTOM",
+    "MEAN_STREETS_OF_GADGETZAN"
+  ],
   "fileFormatVersion": 1
 }

@@ -1,0 +1,33 @@
+{
+  "name": "Dominant Will",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "EPIC",
+  "description": "Destroy a friendly minion. Add a copy of your other minions to your hand.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "PutCopyInHandSpell",
+        "target": "FRIENDLY_MINIONS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

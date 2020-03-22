@@ -1,0 +1,28 @@
+{
+  "name": "Fireball Atlas",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "After you cast a spell, deal damage equal to its Cost to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "LAST_MANA_COST"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

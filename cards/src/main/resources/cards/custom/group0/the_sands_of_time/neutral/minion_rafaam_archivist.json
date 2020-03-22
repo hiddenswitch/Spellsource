@@ -1,18 +1,13 @@
 {
-  "name": "Rafaam, Archivist",
+  "name": "Archivist Jerrard",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discover a card from a valid deck named 'The Supreme Archive' in your collection.",
+  "description": "Opener: Discover a card from a valid deck named 'The Archive' in your collection.",
   "battlecry": {
-    "condition": {
-      "class": "AttributeCondition",
-      "target": "FRIENDLY_PLAYER",
-      "attribute": "HAS_SUPREME_ARCHIVE_DECK"
-    },
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
@@ -22,14 +17,15 @@
       },
       "cardSource": {
         "class": "DeckCollectionSource",
-        "collectionName": "The Supreme Archive",
+        "collectionName": "The Archive",
         "distinct": true,
         "targetPlayer": "SELF"
       }
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",

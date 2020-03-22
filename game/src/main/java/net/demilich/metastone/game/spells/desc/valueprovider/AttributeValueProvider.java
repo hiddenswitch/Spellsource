@@ -6,12 +6,14 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Reduces the sum of all values of attribute {@link ValueProviderArg#ATTRIBUTE} on target entities for {@link
@@ -48,6 +50,11 @@ public class AttributeValueProvider extends ValueProvider {
 			entities.add(target);
 		}
 
+		if (getDesc().containsKey(ValueProviderArg.FILTER)) {
+			EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
+			entities = entities.stream().filter(filter.matcher(context, player, host)).collect(Collectors.toList());
+		}
+
 		if (entities == null) {
 			return 0;
 		}
@@ -71,21 +78,25 @@ public class AttributeValueProvider extends ValueProvider {
 		if (entity instanceof Card) {
 			Card card = (Card) entity;
 			if (attribute == Attribute.ATTACK && card.getCardType() == CardType.MINION) {
-				value += card.getDesc().baseAttack + card.getBonusAttack();
+				value += card.getDesc().getBaseAttack() + card.getBonusAttack();
 			} else if (attribute == Attribute.HP && card.getCardType() == CardType.MINION) {
-				value += card.getDesc().baseHp + card.getBonusHp();
-			} else value += card.getAttributeValue(attribute);
+				value += card.getDesc().getBaseHp() + card.getBonusHp();
+			} else {
+				value += card.getAttributeValue(attribute);
+			}
 		} else {
 			if (entity instanceof Actor) {
 				Actor source = (Actor) entity;
 				if (attribute == Attribute.ATTACK) {
-					value += source.getAttack();
+					value += Math.max(0, source.getAttack());
 				} else if (attribute == Attribute.MAX_HP) {
 					value += source.getMaxHp();
 				} else if (attribute == Attribute.HP) {
 					value += source.getHp();
 				} else if (attribute == Attribute.BASE_MANA_COST) {
 					value += source.getSourceCard().getBaseManaCost();
+				} else if (attribute == Attribute.MAX_ATTACKS) {
+					value += source.getMaxNumberOfAttacks();
 				} else {
 					value += source.getAttributeValue(attribute);
 				}

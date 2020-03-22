@@ -3,9 +3,14 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.util.GlobalTracer;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
@@ -22,10 +27,7 @@ import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.EntityZoneTable;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.environment.EnvironmentDeque;
-import net.demilich.metastone.game.environment.EnvironmentMap;
-import net.demilich.metastone.game.environment.EnvironmentValue;
+import net.demilich.metastone.game.environment.*;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.logic.*;
@@ -53,10 +55,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -185,12 +188,12 @@ import static java.util.stream.Collectors.toList;
  *
  * @see #play() for more about how a game is "played."
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
- * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
- * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- *    {@link Behaviour#requestAction(GameContext, Player, List)}.
+ * both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
+ * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
+ * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- *    GameContext} because it manipulates the state stored in it.
+ * GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -201,6 +204,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
+	protected transient SpanContext spanContext;
 	private Player[] players = new Player[2];
 	private Behaviour[] behaviours = new Behaviour[2];
 	private GameLogic logic;
@@ -227,13 +231,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
 	 * <p>
 	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use {@link
-	 * #GameContext(HeroClass...)} with hero classes of your choosing to create a game context with enough initial state
-	 * to actually start playing immediately.
+	 * #GameContext(String...)} to create a game initialized with the specified hero classes.
 	 */
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.getFormat("Standard"));
+		setDeckFormat(DeckFormat.all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -249,7 +252,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
 		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
-		setDeckFormat(fromContext.getDeckFormat().clone());
+		setDeckFormat(fromContext.getDeckFormat());
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
 
@@ -261,7 +264,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		setStatus(fromContext.getStatus());
 		setTurnState(fromContext.getTurnState());
 		setWinner(fromContext.getWinner());
-		setTrace(fromContext.getTrace().clone());
+		if (fromContext.getTrace() != null) {
+			setTrace(fromContext.getTrace().clone());
+		}
 
 		for (Map.Entry<Environment, Object> entry : fromContext.getEnvironment().entrySet()) {
 			Object value1 = entry.getValue();
@@ -286,8 +291,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
-			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
+			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero(getPlayer(i)));
 		}
+	}
+
+	/**
+	 * Creates a game context from a trace.
+	 *
+	 * @param trace
+	 * @return
+	 */
+	public static GameContext fromTrace(Trace trace) {
+		return trace.replayContext();
 	}
 
 	/**
@@ -368,12 +383,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	protected void calculateStatistics() {
 		if (getWinner() != null) {
-			LOGGER.debug("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
+			LOGGER.trace("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
 			getWinner().getStatistics().gameWon();
 			Player loser = getOpponent(getWinner());
 			loser.getStatistics().gameLost();
 		} else {
-			LOGGER.debug("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
+			LOGGER.trace("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
 			getPlayer1().getStatistics().gameLost();
 			getPlayer2().getStatistics().gameLost();
 		}
@@ -384,11 +399,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void endTurn() {
-		LOGGER.debug("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
+		LOGGER.trace("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		setTurnState(TurnState.TURN_ENDED);
-		onGameStateChanged();
 	}
 
 
@@ -437,7 +451,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
 	 *
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
-	 * 		destroyed.
+	 * destroyed.
 	 */
 	@Suspendable
 	public boolean updateAndGetGameOver() {
@@ -643,7 +657,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param minionReference The minion from whose perspective we will consider "opposite."
 	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced
-	 * 		by {@code minionReference}.
+	 * by {@code minionReference}.
 	 */
 	public List<Actor> getOppositeMinions(EntityReference minionReference) {
 		List<Actor> oppositeMinions = new ArrayList<>();
@@ -860,7 +874,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void init(int startingPlayerId) {
 		setActivePlayerId(startingPlayerId);
 		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
-		LOGGER.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
+		LOGGER.trace("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
@@ -879,10 +893,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	protected void traceMulligans(List<Card> mulligansActive, List<Card> mulligansNonActive) {
-		int[][] tracedMulligans = new int[2][];
-		tracedMulligans[getActivePlayerId()] = mulligansActive.stream().mapToInt(Card::getId).toArray();
-		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligansNonActive.stream().mapToInt(Card::getId).toArray();
-		trace.setMulligans(tracedMulligans);
+		trace.setMulligans(Arrays.asList(
+				new MulliganTrace()
+						.setPlayerId(getActivePlayerId())
+						.setEntityIds(mulligansActive.stream().mapToInt(Card::getId).boxed().collect(Collectors.toUnmodifiableList())),
+				new MulliganTrace()
+						.setPlayerId(getNonActivePlayerId())
+						.setEntityIds(mulligansNonActive.stream().mapToInt(Card::getId).boxed().collect(Collectors.toUnmodifiableList()))
+		));
 	}
 
 	/**
@@ -894,11 +912,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
 
-	@Suspendable
-	protected void onGameStateChanged() {
-	}
-
-
 	/**
 	 * Executes the specified game action, typically by calling {@link GameLogic#performGameAction(int, GameAction)}.
 	 *
@@ -909,7 +922,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	public void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
-		onGameStateChanged();
 	}
 
 	/**
@@ -945,8 +957,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 			getFiber().start();
 		} else {
-			init();
-			resume();
+			try {
+				init();
+				resume();
+			} catch (Throwable throwable) {
+				getTrace().setTraceErrors(true);
+				throw throwable;
+			}
 		}
 	}
 
@@ -958,44 +975,53 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * GameAction}.
 	 *
 	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end
-	 * 		their turn.
+	 * their turn.
 	 */
 	@Suspendable
 	public boolean takeActionInTurn() {
+		Tracer tracer = GlobalTracer.get();
+		Span span = tracer.buildSpan("GameContext/takeActionInTurn")
+				.withTag("gameId", getGameId())
+				.withTag("turn", getTurn())
+				.withTag("actionsThisTurn", getActionsThisTurn())
+				.asChildOf(getSpanContext())
+				.start();
 		setActionsThisTurn(getActionsThisTurn() + 1);
-		if (getActionsThisTurn() > 99) {
-			LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
-			endTurn();
-			return false;
+		try (Scope s1 = tracer.activateSpan(span)) {
+			if (getActionsThisTurn() > 99) {
+				LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
+				endTurn();
+				return false;
+			}
+			if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
+				performAction(getActivePlayerId(), getAutoHeroPowerAction());
+				return true;
+			}
+
+			boolean gameOver = updateAndGetGameOver();
+			if (gameOver) {
+				return false;
+			}
+
+			List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
+
+			if (validActions.size() == 0) {
+				return false;
+			}
+
+			// TODO: Does this need to respect random actions?
+			GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
+
+			if (nextAction == null) {
+				throw new NullPointerException("nextAction");
+			}
+
+			trace.addAction(nextAction);
+			getLogic().performGameAction(getActivePlayerId(), nextAction);
+			return nextAction.getActionType() != ActionType.END_TURN;
+		} finally {
+			span.finish();
 		}
-		if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
-			performAction(getActivePlayerId(), getAutoHeroPowerAction());
-			return true;
-		}
-
-		boolean gameOver = updateAndGetGameOver();
-		if (gameOver) {
-			return false;
-		}
-
-		List<GameAction> validActions = getLogic().getValidActions(getActivePlayerId());
-
-		if (validActions.size() == 0) {
-			return false;
-		}
-
-		GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
-
-		if (nextAction == null) {
-			throw new NullPointerException("nextAction");
-		}
-
-		trace.addAction(nextAction.getId(), nextAction, this);
-
-		getLogic().performGameAction(getActivePlayerId(), nextAction);
-		onGameStateChanged();
-
-		return nextAction.getActionType() != ActionType.END_TURN;
 	}
 
 	/**
@@ -1025,14 +1051,23 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param targetKey The reference to find.
 	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
 	 * 		reference was {@code null} or {@link EntityReference#NONE}
-	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
+	 * @throws TargetNotFoundException if the reference could not be found. Game rules shouldn't be looking for references
 	 *                              that cannot be found.
 	 */
-	public Entity resolveSingleTarget(EntityReference targetKey) throws NullPointerException {
+	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
 		return resolveSingleTarget(targetKey, true);
 	}
 
-	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) {
+	/**
+	 * Resolves a single target given the specification, even if the specification is a {@link
+	 * EntityReference#isTargetGroup()}
+	 *
+	 * @param targetKey
+	 * @param rejectRemovedFromPlay
+	 * @return
+	 * @throws TargetNotFoundException
+	 */
+	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) throws TargetNotFoundException {
 		if (targetKey == null) {
 			return null;
 		}
@@ -1056,10 +1091,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param targetKey The {@link EntityReference}.
 	 * @return A potentially empty list of entities.
 	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target
-	 * 		resolution works.
+	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
-		final List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
+		List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
 		if (entities == null) {
 			return null;
 		}
@@ -1145,12 +1180,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void startTurn(int playerId) {
-		LOGGER.debug("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
+		LOGGER.trace("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
 		setActionsThisTurn(0);
 		setTurnState(TurnState.TURN_IN_PROGRESS);
-		onGameStateChanged();
 	}
 
 	@Override
@@ -1191,8 +1225,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		logic.setContext(this);
 	}
 
-	public void setDeckFormat(DeckFormat deckFormat) {
+	public GameContext setDeckFormat(DeckFormat deckFormat) {
 		this.deckFormat = deckFormat;
+		return this;
 	}
 
 	public void setEnvironment(Map<Environment, Object> environment) {
@@ -1240,20 +1275,20 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setGameState(GameState state) {
-		this.setPlayer(GameContext.PLAYER_1, state.player1);
-		this.setPlayer(GameContext.PLAYER_2, state.player2);
-		this.setTempCards(state.tempCards);
-		this.setEnvironment(state.environment);
-		this.setTriggerManager(state.triggerManager);
+		this.setPlayer(GameContext.PLAYER_1, state.getPlayer1());
+		this.setPlayer(GameContext.PLAYER_2, state.getPlayer2());
+		this.setTempCards(state.getTempCards());
+		this.setEnvironment(state.getEnvironment());
+		this.setTriggerManager(state.getTriggerManager());
 		if (getLogic() == null) {
 			setLogic(new GameLogic());
 		}
-		this.getLogic().setIdFactory(new IdFactoryImpl(state.currentId));
+		this.getLogic().setIdFactory(new IdFactoryImpl(state.getCurrentId()));
 		this.getLogic().setContext(this);
-		this.setTurnState(state.turnState);
-		this.setTurn(state.turnNumber);
-		this.setActivePlayerId(state.activePlayerId);
-		this.setDeckFormat(state.deckFormat);
+		this.setTurnState(state.getTurnState());
+		this.setTurn(state.getTurnNumber());
+		this.setActivePlayerId(state.getActivePlayerId());
+		this.setDeckFormat(state.getDeckFormat());
 	}
 
 	public GameContext setPlayer(int index, Player player) {
@@ -1307,9 +1342,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@SuppressWarnings("unchecked")
 	public Stream<Entity> getEntities() {
-		return getPlayers().stream()
-				.flatMap(p -> Stream.of(Zones.values())
-						.flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
+		return Stream.concat(
+				getPlayer1().getLookup().values().stream(),
+				getPlayer2().getLookup().values().stream());
 	}
 
 	@Suspendable
@@ -1454,6 +1489,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence(int playerId) {
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(playerId);
+	}
+
+	public EnvironmentAftermathTriggeredList getAftermaths() {
+		return (EnvironmentAftermathTriggeredList) getEnvironment().computeIfAbsent(Environment.DEATHRATTLES_TRIGGERED, environment1 -> new EnvironmentAftermathTriggeredList());
 	}
 
 	protected Player getNonActivePlayer() {
@@ -1756,6 +1795,17 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
+	 * Creates a game with two random decks in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
+	public static GameContext fromTwoRandomDecks(DeckFormat format) {
+		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)))
+				.setDeckFormat(format);
+	}
+
+	/**
 	 * Creates a game context from the given state.
 	 *
 	 * @param state A {@link GameState} object.
@@ -1932,11 +1982,16 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return this;
 	}
 
+	/**
+	 * Sets the specified player's deck and hero (by implication)
+	 *
+	 * @param playerId
+	 * @param deck
+	 */
 	public void setDeck(int playerId, GameDeck deck) {
 		getPlayer(playerId).getDeck().clear();
 		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
-		getPlayer(playerId).setHero(deck.getHeroCard().createHero());
-		getTrace().getDeckCardIds();
+		getPlayer(playerId).setHero(deck.getHeroCard().createHero(getPlayer(playerId)));
 	}
 
 	/**
@@ -1953,5 +2008,20 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	protected void setTrace(Trace trace) {
 		this.trace = trace;
+	}
+
+	/**
+	 * Provides context for tracing in this context. This is the OpenTracing span context, typically assigned by the
+	 * matchmaker or whatever created this instance.
+	 *
+	 * @return
+	 */
+	public SpanContext getSpanContext() {
+		return spanContext;
+	}
+
+	public GameContext setSpanContext(SpanContext spanContext) {
+		this.spanContext = spanContext;
+		return this;
 	}
 }

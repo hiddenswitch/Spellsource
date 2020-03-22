@@ -24,10 +24,7 @@
             "race": "DRAGON"
           },
           {
-            "class": "MinionCountCondition",
-            "value": 7,
-            "operation": "LESS",
-            "targetPlayer": "SELF"
+            "class": "CanSummonCondition"
           }
         ]
       },

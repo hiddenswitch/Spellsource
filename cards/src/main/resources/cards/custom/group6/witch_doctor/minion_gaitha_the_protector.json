@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 4,
-  "baseHp": 6,
+  "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Opener: Your minions can't be reduced below 1 Health until your next turn.",

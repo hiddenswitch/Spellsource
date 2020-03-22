@@ -28,6 +28,9 @@ import java.util.List;
  * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, this effect does not use up one of the attacker's attack
  * counts.
  * <p>
+ * When {@link SpellArg#RANDOM_TARGET} is set to {@code true} and a {@link SpellArg#SECONDARY_TARGET} (i.e. source) is
+ * specified, the resolved sources are removed from the list of target entities before the random choice is made.
+ * <p>
  * For example, consider the text from Birb's You from the Future, "Summon a copy of a friendly minion. Then, it attacks
  * the original":
  * <pre>
@@ -50,8 +53,20 @@ public class FightSpell extends Spell {
 
 	@Override
 	@Suspendable
+	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		if (desc.getDescClass().equals(FightSpell.class) && targets != null && desc.getBool(SpellArg.RANDOM_TARGET) && desc.getSecondaryTarget() != null) {
+			// Resolve the source. Remove the sources from the target
+			List<Entity> sources = context.resolveTarget(player, source, desc.getSecondaryTarget());
+			targets.removeAll(sources);
+		}
+
+		super.cast(context, player, desc, source, targets);
+	}
+
+	@Override
+	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET);
+		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET, SpellArg.EXCLUSIVE);
 		EntityReference secondaryTarget = (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, source == null ? EntityReference.NONE : source.getReference());
 		List<Entity> resolvedSources = context.resolveTarget(player, source, secondaryTarget);
 		if (resolvedSources == null) {
@@ -63,13 +78,13 @@ public class FightSpell extends Spell {
 			return;
 		}
 
-		// Only attack sources that aren't destroyed
-		if (!target.isInPlay() || target.isDestroyed()) {
-			logger.debug("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
-			return;
-		}
-
 		for (Entity resolvedSource : resolvedSources) {
+			// Only attack sources that aren't destroyed
+			if (!target.isInPlay() || target.isDestroyed()) {
+				logger.debug("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
+				return;
+			}
+
 			if (!(resolvedSource instanceof Actor)) {
 				logger.error("onCast {} {}: Source entity {} targeting {} is not an Actor", context.getGameId(), source, resolvedSource, target);
 				continue;

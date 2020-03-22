@@ -10,14 +10,14 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
     "attackBonus": {
-      "class": "EntityCounter",
+      "class": "EntityCountValueProvider",
       "target": "ALL_CHARACTERS",
       "filter": {
         "class": "DamagedFilter"
       }
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

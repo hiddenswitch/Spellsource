@@ -9,7 +9,7 @@
   "spell": {
     "class": "ReceiveCardSpell",
     "value": 2,
-    "card": "spell_the_coin",
+    "card": "spell_lunstone",
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "OPPONENT"

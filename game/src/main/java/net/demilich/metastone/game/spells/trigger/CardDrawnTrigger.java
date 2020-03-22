@@ -1,14 +1,12 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DrawCardEvent;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class CardDrawnTrigger extends EventTrigger {
+public class CardDrawnTrigger extends AbstractCardTrigger {
 
 	public CardDrawnTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -18,21 +16,16 @@ public class CardDrawnTrigger extends EventTrigger {
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		DrawCardEvent drawEvent = (DrawCardEvent) event;
 
-		CardType sourceType = (CardType) getDesc().get(EventTriggerArg.SOURCE_TYPE);
-		if (sourceType != null && drawEvent.getSourceType() != sourceType) {
-			return false;
-		}
-
 		if (!drawEvent.isDrawn()) {
 			return false;
 		}
 
-		return true;
+		return super.innerQueues(event, host);
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.DRAW_CARD;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DRAW_CARD;
 	}
 
 }

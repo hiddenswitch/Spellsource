@@ -6,11 +6,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.Zones;
 
 public abstract class AbstractSummonTrigger extends EventTrigger {
 
@@ -22,8 +21,8 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
 
-		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !summonEvent.getMinion().getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !Race.hasRace(event.getGameContext(), summonEvent.getMinion(), race)) {
 			return false;
 		}
 
@@ -65,5 +64,5 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 		return false;
 	}
 
-	public abstract GameEventType interestedIn();
+	public abstract com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn();
 }

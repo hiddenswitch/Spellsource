@@ -18,6 +18,8 @@ import java.util.Map;
  * target}. Currently only tested with spell cards.
  * <p>
  * To cast a choose one spell card, cast the choice card.
+ *
+ * Only casts on {@code target} if it is still valid.
  * <p>
  * For example, to cast Inner Fire on every minion in your deck:
  * <pre>
@@ -55,8 +57,10 @@ public final class CastCardsSpell extends Spell {
 			return;
 		}
 
+		var validTarget = target == null || target.isInPlay();
 		if (card.isSpell()
-				&& card.getSpell() != null) {
+				&& card.getSpell() != null
+				&& validTarget) {
 			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER),
 					card.getId() == IdFactory.UNASSIGNED ? source : card,
 					card.getTargetSelection().equals(TargetSelection.NONE) ? null : target);

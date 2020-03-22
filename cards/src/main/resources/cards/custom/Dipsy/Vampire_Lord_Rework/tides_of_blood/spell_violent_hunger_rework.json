@@ -1,0 +1,29 @@
+{
+  "name": "Violent Hunger",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Deal $[10] damage to a minion and any excess to your champion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ExcessDamageSpell",
+    "value": {
+      "class": "GatekeeperShaValueProvider",
+      "offset": 10
+    },
+    "secondaryTarget": "FRIENDLY_HERO"
+  },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 10
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

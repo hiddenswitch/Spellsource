@@ -1,5 +1,5 @@
 {
-  "name": "Greater Amber Spellstone",
+  "name": "Greater Amber Lunstone",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "AMBER",
@@ -16,6 +16,9 @@
       "cardType": "MINION",
       "manaCost": 8
     }
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": false,
   "set": "CUSTOM",

@@ -1,0 +1,17 @@
+{
+  "name": "Igneous Hatchery",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Your Skill becomes \"Summon a 1/1 Crater Hatchling with Blitz\".",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ChangeHeroPowerSpell",
+    "card": "hero_power_raise_hatchling"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -7,16 +7,8 @@
   "description": "<b>Wither (1).</b> Deal $1 damage.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "WitherSpell"
-      },
-      {
-        "class": "DamageSpell",
-        "value": 1
-      }
-    ]
+    "class": "DamageSpell",
+    "value": 1
   },
   "attributes": {
     "WITHER": 1

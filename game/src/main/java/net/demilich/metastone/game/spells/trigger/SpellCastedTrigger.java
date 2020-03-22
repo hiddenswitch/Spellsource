@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells.trigger;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
@@ -22,8 +22,8 @@ public final class SpellCastedTrigger extends AbstractCardTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.SPELL_CASTED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SPELL_CASTED;
 	}
 
 }

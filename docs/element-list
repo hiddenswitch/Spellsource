@@ -1,4 +1,14 @@
 com.hiddenswitch.spellsource
+com.hiddenswitch.spellsource.applications
+com.hiddenswitch.spellsource.common
+com.hiddenswitch.spellsource.concurrent
+com.hiddenswitch.spellsource.concurrent.impl
+com.hiddenswitch.spellsource.draft
+com.hiddenswitch.spellsource.impl
+com.hiddenswitch.spellsource.impl.server
+com.hiddenswitch.spellsource.impl.util
+com.hiddenswitch.spellsource.models
+com.hiddenswitch.spellsource.util
 net.demilich.metastone.game
 net.demilich.metastone.game.actions
 net.demilich.metastone.game.behaviour

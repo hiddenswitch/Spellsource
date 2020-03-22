@@ -8,6 +8,8 @@ bin
 .mongo*
 test-output
 report.log
+.gradletasknamecache
+.java-version
 /~$card_checklist.xlsx
 build/
 classes/

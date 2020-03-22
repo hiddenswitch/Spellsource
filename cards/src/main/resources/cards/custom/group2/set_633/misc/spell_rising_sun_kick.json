@@ -11,14 +11,14 @@
     "spell1": {
       "class": "DamageSpell",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ENEMY_MINIONS"
       }
     },
     "spell2": {
       "class": "DamageSpell",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ENEMY_MINIONS"
       }
     }

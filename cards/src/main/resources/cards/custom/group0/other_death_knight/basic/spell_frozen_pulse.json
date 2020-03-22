@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Freeze a minion and adjacent ones.",
+  "description": "Stun a minion and adjacent ones.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

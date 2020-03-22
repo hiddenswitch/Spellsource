@@ -4,23 +4,20 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Destroy a friendly minion. Draw 2 cards.",
-  "condition": {
-    "class": "MinionCountCondition",
-    "value": 0,
-    "operation": "GREATER",
-    "targetPlayer": "SELF"
-  },
-  "targetSelection": "FRIENDLY_MINIONS",
+  "description": "Take 2 damage. Draw a card",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "DestroySpell"
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2,
+        "ignoreSpellDamage": true
       },
       {
         "class": "DrawCardSpell",
-        "value": 2
+        "value": 1
       }
     ]
   },

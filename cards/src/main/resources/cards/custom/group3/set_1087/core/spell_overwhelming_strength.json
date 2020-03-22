@@ -1,0 +1,43 @@
+{
+  "name": "Overwhelming Strength",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Give a minion +2/+2 and 'Supremacy: Gain +2/+2'",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 2
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "SupremacyTrigger"
+          },
+          "spell": {
+            "class": "SupremacySpell",
+            "spell": {
+              "class": "BuffSpell",
+              "target": "TRIGGER_HOST",
+              "attackBonus": 2,
+              "hpBonus": 2
+            }
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

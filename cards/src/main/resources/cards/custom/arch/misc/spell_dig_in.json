@@ -1,0 +1,20 @@
+{
+  "name": "Dig In!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Both players shuffle a copy of their hand into their opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "FRIENDLY_HAND",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

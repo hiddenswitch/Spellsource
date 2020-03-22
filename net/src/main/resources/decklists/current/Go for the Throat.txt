@@ -9,13 +9,13 @@
 # 2x (1) Touch of Karma
 # 2x (2) Cacodemon
 # 2x (2) Ravenous Lookout
-# 2x (2) Terrified Tanooki
-# 2x (3) Fortifying Prayer
+# 2x (2) Terrified Tanuki
+# 2x (3) Inner Peace
 # 2x (3) Shigaraki Elder
 # 2x (3) Sly Brawler
 # 2x (3) Windswept Strike
 # 2x (4) Stance Change
-# 2x (5) Fiery Kitsune Punch
+# 2x (5) Lunging Jab
 # 2x (6) Fury of the Elements
 # 1x (8) Master Jigen
 #

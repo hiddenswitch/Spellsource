@@ -108,7 +108,7 @@ public enum SpellArg {
 	 */
 	AURA,
 	/**
-	 * This argument is added by the resolution of {@link net.demilich.metastone.game.logic.GameLogic#resolveDeathrattles(Player,
+	 * This argument is added by the resolution of {@link net.demilich.metastone.game.logic.GameLogic#resolveAftermaths(Player,
 	 * Actor)}. It stores the position of the minion before it died. This then gets used by spells like {@link
 	 * SummonSpell} to summon a minion where the minion died.
 	 * <p>
@@ -150,7 +150,6 @@ public enum SpellArg {
 	 * Describes the kind of card created in a {@link net.demilich.metastone.game.spells.CreateCardSpell}. Considered
 	 * obsolete.
 	 */
-	@Deprecated
 	CARD_DESC_TYPE,
 	/**
 	 * An {@link net.demilich.metastone.game.spells.desc.filter.EntityFilter} that typically operates on cards. These
@@ -284,7 +283,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to indicate how much the card it creates should cost. Considered obsolete.
 	 */
-	@Deprecated
 	MANA,
 	/**
 	 * Used by various spells to put a name on a card or to change the name of a target card.
@@ -299,6 +297,10 @@ public enum SpellArg {
 	 * Currently only used by {@link ModifyDamageSpell}.
 	 */
 	OPERATION,
+	/**
+	 * Like a {@link SpellArg#QUEST} but a player can have multiple of these active at once.
+	 */
+	PACT,
 	/**
 	 * Used by the {@link SetRaceSpell} to change a target minion's race.
 	 */
@@ -341,7 +343,6 @@ public enum SpellArg {
 	/**
 	 * Used by the {@link CreateCardSpell} to name the card is creates. Considered obsolete.
 	 */
-	@Deprecated
 	SECONDARY_NAME,
 	/**
 	 * Typically interpreted as a second target for effects that have a {@code source}, a {@code target}, and another
@@ -498,7 +499,7 @@ public enum SpellArg {
 	 * Specifies a unique integer ID for a {@link SpellDesc} that is also a deathrattle, to allow deathrattles to identify
 	 * themselves inside iterators for {@link HasDeathrattleEnchantments#getDeathrattleEnchantments()}.
 	 */
-	DEATHRATTLE_ID,
+	AFTERMATH_ID,
 	/**
 	 * Specifies which zones the spell's effects apply to. The interpretation may depend on the spell.
 	 */

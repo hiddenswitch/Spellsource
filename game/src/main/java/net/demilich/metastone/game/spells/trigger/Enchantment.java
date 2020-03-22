@@ -8,10 +8,10 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.DoubleTurnEndTriggersAura;
 import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -20,10 +20,9 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,7 +76,6 @@ public class Enchantment extends Entity implements Trigger {
 	protected boolean usesSpellTrigger = true;
 	protected Integer maxFiresPerSequence;
 	protected int firesThisSequence;
-
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		usesSpellTrigger = true;
@@ -148,12 +146,12 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	public boolean interestedIn(GameEventType eventType) {
+	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
 		if (!usesSpellTrigger) {
 			return false;
 		}
 		for (EventTrigger trigger : triggers) {
-			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
+			if (trigger.interestedIn() == eventType || trigger.interestedIn() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL) {
 				return true;
 			}
 		}
@@ -183,6 +181,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (!usesSpellTrigger) {
 			return false;
 		}
+		// Maybe have to add a thing to prevent the maxfires from counting twice because of TURN_END_TRIGGERS_TWICE
 		if (countByValue && event instanceof HasValue) {
 			int value = ((HasValue) event).getValue();
 			fires += value;
@@ -214,9 +213,12 @@ public class Enchantment extends Entity implements Trigger {
 				expire();
 			}
 			if (this instanceof Secret && SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
-				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 			}
-			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+			if (event.getEventType().equals(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0) {
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+			}
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
 		}
 		if (maxFires != null
 				&& fires >= maxFires) {
@@ -240,15 +242,15 @@ public class Enchantment extends Entity implements Trigger {
 		// longer matter.
 		// But let's check to make sure we don't accidentally expire something
 		// that's still using it.
-		if (oneTurn && (event.getEventType() == GameEventType.TURN_END || event.getEventType() == GameEventType.TURN_START)) {
+		if (oneTurn && (event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END || event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START)) {
 			expire();
 		}
 
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
-		if (event.getEventType() != GameEventType.BOARD_CHANGED
-				&& event.getEventType() != GameEventType.WILL_END_SEQUENCE
-				&& triggers.stream().noneMatch(trigger -> trigger.interestedIn() == GameEventType.ALL)
+		if (event.getEventType() != com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BOARD_CHANGED
+				&& event.getEventType() != com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.WILL_END_SEQUENCE
+				&& triggers.stream().noneMatch(trigger -> trigger.interestedIn() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL)
 				&& hostReference != null
 				&& !(hostReference.equals(new EntityReference(PLAYER_1))
 				|| hostReference.equals(new EntityReference(PLAYER_2)))) {
@@ -297,7 +299,7 @@ public class Enchantment extends Entity implements Trigger {
 			if (trigger == null) {
 				continue;
 			}
-			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != GameEventType.ALL) {
+			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL) {
 				continue;
 			}
 			if (trigger.queues(event, host)) {

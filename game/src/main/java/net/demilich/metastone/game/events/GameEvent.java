@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
@@ -55,7 +56,7 @@ public abstract class GameEvent implements Notification {
 		return null;
 	}
 
-	public abstract GameEventType getEventType();
+	public abstract EventTypeEnum getEventType();
 
 	public GameContext getGameContext() {
 		return context;

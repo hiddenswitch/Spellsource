@@ -67,6 +67,10 @@ public class AuraDesc extends Desc<AuraArg, Aura> {
 		return (Condition) get(AuraArg.CONDITION);
 	}
 
+	public SpellDesc getSpell() {
+		return (SpellDesc) get(AuraArg.SPELL);
+	}
+
 	public EventTriggerDesc getSecondaryTrigger() {
 		return ((EventTriggerDesc) getOrDefault(AuraArg.SECONDARY_TRIGGER, null));
 	}
@@ -77,5 +81,9 @@ public class AuraDesc extends Desc<AuraArg, Aura> {
 
 	public int getValue() {
 		return (int) get(AuraArg.VALUE);
+	}
+
+	public EntityReference getSecondaryTarget() {
+		return (EntityReference) get(AuraArg.SECONDARY_TARGET);
 	}
 }

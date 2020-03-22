@@ -8,8 +8,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.CardCostModifierSpell;
 import net.demilich.metastone.game.spells.SetHpSpell;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
  * Swaps the HP and the cost of the {@code target}.
@@ -24,7 +26,7 @@ public class SwapHpAndCostSpell extends Spell {
 
 		SpellDesc changeCost = CardCostModifierSpell.create(target.getReference(), AlgebraicOperation.SET, hp);
 		SpellDesc changeHp = SetHpSpell.create(cost);
-		context.getLogic().castSpell(player.getId(), changeCost, source.getReference(), target.getReference(), true);
-		context.getLogic().castSpell(player.getId(), changeHp, source.getReference(), target.getReference(), true);
+		SpellUtils.castChildSpell(context,player,changeCost,source,target);
+		SpellUtils.castChildSpell(context,player,changeHp,source,target);
 	}
 }

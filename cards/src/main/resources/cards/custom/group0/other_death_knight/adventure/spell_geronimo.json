@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Choose a minion. Freeze all other minions.",
+  "description": "Choose a minion. Stun all other minions.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",

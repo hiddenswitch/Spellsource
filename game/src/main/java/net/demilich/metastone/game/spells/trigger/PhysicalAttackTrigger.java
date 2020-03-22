@@ -1,10 +1,9 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -19,8 +18,8 @@ public class PhysicalAttackTrigger extends EventTrigger {
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		PhysicalAttackEvent physicalAttackEvent = (PhysicalAttackEvent) event;
 
-		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !physicalAttackEvent.getDefender().getRace().hasRace(race)) {
+		String race = (String) getDesc().get(EventTriggerArg.RACE);
+		if (race != null && !Race.hasRace(event.getGameContext(), physicalAttackEvent.getDefender(), race)) {
 			return false;
 		}
 
@@ -28,7 +27,7 @@ public class PhysicalAttackTrigger extends EventTrigger {
 	}
 
 	@Override
-	public GameEventType interestedIn() {
-		return GameEventType.PHYSICAL_ATTACK;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.PHYSICAL_ATTACK;
 	}
 }

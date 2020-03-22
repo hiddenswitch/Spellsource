@@ -34,7 +34,7 @@ import java.util.List;
  * target.
  *
  * @see net.demilich.metastone.game.spells.SpellUtils#playCardRandomly(GameContext, Player, Card, Entity, boolean,
- * boolean, boolean, boolean, boolean) to see how a card's actions can be manipulated with a spell.
+ *    boolean, boolean, boolean, boolean) to see how a card's actions can be manipulated with a spell.
  */
 public abstract class PlayCardAction extends GameAction {
 

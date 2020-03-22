@@ -5,14 +5,13 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.util.List;
 
@@ -33,12 +32,10 @@ public class ActivateTriggeredEffectSpell extends Spell {
 						context.getTriggerHostStack().push(target.getReference());
 						if (context.getLogic().hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS) &&
 								triggerClass.equals(TurnEndTrigger.class)) {
-							context.getLogic().castSpell(target.getOwner(), enchantment.getSpell(),
-									target.getReference(), EntityReference.NONE, true);
+							SpellUtils.castChildSpell(context, context.getPlayer(target.getOwner()), enchantment.getSpell(), target, null);
 						}
 
-						context.getLogic().castSpell(target.getOwner(), enchantment.getSpell(),
-								target.getReference(), EntityReference.NONE, true);
+						SpellUtils.castChildSpell(context, context.getPlayer(target.getOwner()), enchantment.getSpell(), target, null);
 						context.getTriggerHostStack().pop();
 					}
 				}

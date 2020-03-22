@@ -7,12 +7,12 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Your other Fae have Elusive and +1/+1.",
+  "description": "Your other Fae have Elusive and +2/+1.",
   "auras": [
     {
       "class": "BuffAura",
       "target": "OTHER_FRIENDLY_MINIONS",
-      "attackBonus": 1,
+      "attackBonus": 2,
       "hpBonus": 1,
       "filter": {
         "class": "RaceFilter",

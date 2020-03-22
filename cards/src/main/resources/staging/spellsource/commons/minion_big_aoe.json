@@ -12,7 +12,7 @@
       "class": "DamageSpell",
       "target": "ALL_OTHER_MINIONS",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ALL_OTHER_MINIONS"
       }
     }

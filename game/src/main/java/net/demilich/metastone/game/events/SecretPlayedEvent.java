@@ -3,6 +3,7 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.HasCard;
 
 public class SecretPlayedEvent extends GameEvent implements HasCard {
 
@@ -19,12 +20,12 @@ public class SecretPlayedEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public GameEventType getEventType() {
-		return GameEventType.SECRET_PLAYED;
+	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
+		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SECRET_PLAYED;
 	}
 
 	@Override
-	public Card getCard() {
+	public Card getSourceCard() {
 		return secretCard;
 	}
 }

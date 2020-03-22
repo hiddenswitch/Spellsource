@@ -1,5 +1,5 @@
 {
-  "name": "Kairozdormu",
+  "name": "Kairovanis",
   "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
@@ -34,7 +34,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": "true"
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",

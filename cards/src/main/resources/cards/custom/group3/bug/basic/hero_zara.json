@@ -5,11 +5,7 @@
   "type": "HERO",
   "heroClass": "AMBER",
   "rarity": "FREE",
-master
   "description": "Skill: Add two 1/1 Larva to your hand.",
-
-  "description": "Skill: Add two 1/1 Larva to your hand.",
-master
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

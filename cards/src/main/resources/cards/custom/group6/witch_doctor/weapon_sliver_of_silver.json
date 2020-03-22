@@ -1,6 +1,6 @@
 {
   "name": "Sliver of Silver",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "WEAPON",
   "heroClass": "ROSE",
   "damage": 1,

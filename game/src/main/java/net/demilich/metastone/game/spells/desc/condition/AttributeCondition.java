@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
+import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 
@@ -38,21 +39,7 @@ public class AttributeCondition extends Condition {
 		}
 
 		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, entity, source, 0);
-
-		int actualValue;
-		if (attribute == Attribute.ATTACK) {
-			if (entity instanceof Actor) {
-				actualValue = ((Actor) entity).getAttack();
-			} else {
-				actualValue = entity.getAttributeValue(attribute);
-			}
-		} else if (attribute == Attribute.INDEX) {
-			actualValue = entity.getEntityLocation().getIndex();
-		} else if (attribute == Attribute.INDEX_FROM_END) {
-			actualValue = entity.getEntityLocation().getIndex() - context.getPlayer(entity.getOwner()).getZone(entity.getZone()).size();
-		} else {
-			actualValue = entity.getAttributeValue(attribute);
-		}
+		int actualValue = AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
 
 		return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 	}

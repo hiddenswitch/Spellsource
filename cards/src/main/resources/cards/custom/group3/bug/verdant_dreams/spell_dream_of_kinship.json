@@ -1,0 +1,50 @@
+{
+  "name": "Dream of Kinship",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "LEGENDARY",
+  "description": "Discover a Beast, a Dragon, and a Fae. Summon them all.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "SummonSpell"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST"
+        }
+      },
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "SummonSpell"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DRAGON"
+        }
+      },
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "SummonSpell"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "FAE"
+        }
+      }
+    ]
+  },
+  "attributes": {
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

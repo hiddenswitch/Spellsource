@@ -1,0 +1,54 @@
+{
+  "name": "Ryun, Mad Prophet",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If your opponent has 15 or more Health remaining than you, choose how to break them.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "AlgebraicValueProvider",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "ENEMY_HERO",
+          "attribute": "HP"
+        },
+        "value2": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "HP"
+        },
+        "operation": "SUBTRACT"
+      },
+      "value2": 15,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
+      "cards": [
+        "token_spell_snap_their_bones",
+        "token_spell_crush_their_will",
+        "token_spell_drive_them_insane",
+        "token_spell_warp_their_soul"
+      ],
+      "howMany": 4
+    }
+  },
+  "collectible": true,
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

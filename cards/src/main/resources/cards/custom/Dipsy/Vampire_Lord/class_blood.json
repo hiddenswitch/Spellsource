@@ -1,0 +1,11 @@
+{
+  "name": "Vampire Lord",
+  "type": "CLASS",
+  "hero": "hero_koltira",
+  "heroClass": "BLOOD",
+  "color": [102, 23, 21],
+  "blackText": false,
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

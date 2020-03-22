@@ -2,13 +2,14 @@ package net.demilich.metastone.game.behaviour;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,15 +61,10 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 	@Override
 	public Behaviour clone() {
 		try {
-			return new GreedyOptimizeTurn(heuristic.getClass().newInstance());
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return new GreedyOptimizeTurn(heuristic.getClass().getConstructor().newInstance());
+		} catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+			return null;
 		}
-		return null;
 	}
 
 	@Override

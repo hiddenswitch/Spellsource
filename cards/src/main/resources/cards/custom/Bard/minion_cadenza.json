@@ -1,0 +1,26 @@
+{
+  "name": "Cadenza",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "FAE",
+  "description": "Dash. Has +1 Attack for each other friendly minion.",
+  "aura": {
+    "class": "StatefulAttributeValueAura",
+    "target": "SELF",
+    "value": {
+      "class": "EntityCountValueProvider",
+      "target": "OTHER_FRIENDLY_MINIONS"
+    },
+    "attribute": "AURA_ATTACK_BONUS"
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

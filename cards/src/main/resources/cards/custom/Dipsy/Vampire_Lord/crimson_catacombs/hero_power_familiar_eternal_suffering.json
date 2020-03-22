@@ -1,0 +1,19 @@
+{
+  "name": "Eternal Suffering",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Give a minion or your champion +4 Health.",
+  "targetSelection": "FRIENDLY_HERO_AND_MINIONS",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": 4
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

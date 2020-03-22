@@ -1,4 +1,4 @@
-# spellsource-client
+# client
 
 ## Requirements
 
@@ -27,8 +27,8 @@ Add this dependency to your project's POM:
 ```xml
 <dependency>
     <groupId>com.hiddenswitch</groupId>
-    <artifactId>spellsource-client</artifactId>
-    <version>0.8.7</version>
+    <artifactId>client</artifactId>
+    <version>0.8.69</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:spellsource-client:0.8.7"
+compile "com.hiddenswitch:client:0.8.69"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/spellsource-client-0.8.7.jar
+* target/client-0.8.69.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -126,6 +126,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 *DefaultApi* | [**postInvite**](docs/DefaultApi.md#postInvite) | **POST** /invites | 
+*DefaultApi* | [**postPasswordReset**](docs/DefaultApi.md#postPasswordReset) | **POST** /reset/passwords/with-token | 
 
 
 ## Documentation for Models
@@ -133,12 +134,13 @@ Class | Method | HTTP request | Description
  - [AcceptInviteRequest](docs/AcceptInviteRequest.md)
  - [AcceptInviteResponse](docs/AcceptInviteResponse.md)
  - [Account](docs/Account.md)
+ - [ActionType](docs/ActionType.md)
+ - [AttributeValueTuple](docs/AttributeValueTuple.md)
  - [CardEvent](docs/CardEvent.md)
  - [CardRecord](docs/CardRecord.md)
  - [ChangePasswordRequest](docs/ChangePasswordRequest.md)
  - [ChangePasswordResponse](docs/ChangePasswordResponse.md)
  - [ChatMessage](docs/ChatMessage.md)
- - [ChooseOneOptions](docs/ChooseOneOptions.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
@@ -151,29 +153,32 @@ Class | Method | HTTP request | Description
  - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
  - [DecksUpdateCommandPushCardIds](docs/DecksUpdateCommandPushCardIds.md)
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
+ - [DecksUpdateCommandSetPlayerEntityAttribute](docs/DecksUpdateCommandSetPlayerEntityAttribute.md)
  - [DefaultMethodResponse](docs/DefaultMethodResponse.md)
  - [DraftState](docs/DraftState.md)
  - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
  - [DraftsChooseHeroRequest](docs/DraftsChooseHeroRequest.md)
  - [DraftsPostRequest](docs/DraftsPostRequest.md)
+ - [EditableCard](docs/EditableCard.md)
  - [Emote](docs/Emote.md)
  - [Enchantment](docs/Enchantment.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
- - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
  - [EntityLocation](docs/EntityLocation.md)
- - [EntityState](docs/EntityState.md)
  - [Envelope](docs/Envelope.md)
  - [EnvelopeAdded](docs/EnvelopeAdded.md)
  - [EnvelopeChanged](docs/EnvelopeChanged.md)
  - [EnvelopeGame](docs/EnvelopeGame.md)
  - [EnvelopeMethod](docs/EnvelopeMethod.md)
+ - [EnvelopeMethodDeleteCard](docs/EnvelopeMethodDeleteCard.md)
  - [EnvelopeMethodDequeue](docs/EnvelopeMethodDequeue.md)
+ - [EnvelopeMethodPutCard](docs/EnvelopeMethodPutCard.md)
  - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
  - [EnvelopeRemoved](docs/EnvelopeRemoved.md)
  - [EnvelopeRequest](docs/EnvelopeRequest.md)
  - [EnvelopeResponse](docs/EnvelopeResponse.md)
  - [EnvelopeResult](docs/EnvelopeResult.md)
+ - [EnvelopeResultPutCard](docs/EnvelopeResultPutCard.md)
  - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
  - [EnvelopeSub](docs/EnvelopeSub.md)
  - [EnvelopeSubConversation](docs/EnvelopeSubConversation.md)
@@ -181,28 +186,11 @@ Class | Method | HTTP request | Description
  - [FriendPutRequest](docs/FriendPutRequest.md)
  - [FriendPutResponse](docs/FriendPutResponse.md)
  - [GameActions](docs/GameActions.md)
- - [GameActionsDiscoveries](docs/GameActionsDiscoveries.md)
- - [GameActionsPhysicalAttacks](docs/GameActionsPhysicalAttacks.md)
  - [GameEvent](docs/GameEvent.md)
- - [GameEventAfterSpellCasted](docs/GameEventAfterSpellCasted.md)
- - [GameEventArmorGained](docs/GameEventArmorGained.md)
- - [GameEventBeforeSummon](docs/GameEventBeforeSummon.md)
  - [GameEventDamage](docs/GameEventDamage.md)
- - [GameEventFatigue](docs/GameEventFatigue.md)
- - [GameEventHeal](docs/GameEventHeal.md)
- - [GameEventHeroPowerUsed](docs/GameEventHeroPowerUsed.md)
  - [GameEventJoust](docs/GameEventJoust.md)
- - [GameEventKill](docs/GameEventKill.md)
- - [GameEventOverload](docs/GameEventOverload.md)
  - [GameEventPerformedGameAction](docs/GameEventPerformedGameAction.md)
- - [GameEventPreDamage](docs/GameEventPreDamage.md)
- - [GameEventQuestSuccessful](docs/GameEventQuestSuccessful.md)
- - [GameEventSecretPlayed](docs/GameEventSecretPlayed.md)
- - [GameEventSecretRevealed](docs/GameEventSecretRevealed.md)
- - [GameEventSilence](docs/GameEventSilence.md)
- - [GameEventTargetAcquisition](docs/GameEventTargetAcquisition.md)
  - [GameEventTriggerFired](docs/GameEventTriggerFired.md)
- - [GameEventWeaponDestroyed](docs/GameEventWeaponDestroyed.md)
  - [GameOver](docs/GameOver.md)
  - [GameState](docs/GameState.md)
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
@@ -228,6 +216,7 @@ Class | Method | HTTP request | Description
  - [MatchmakingQueuesResponse](docs/MatchmakingQueuesResponse.md)
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
+ - [PlayerEntityAttributes](docs/PlayerEntityAttributes.md)
  - [PresenceEnum](docs/PresenceEnum.md)
  - [Replay](docs/Replay.md)
  - [ReplayDeltas](docs/ReplayDeltas.md)
@@ -236,11 +225,10 @@ Class | Method | HTTP request | Description
  - [SpanContext](docs/SpanContext.md)
  - [SpellAction](docs/SpellAction.md)
  - [SpellsourceException](docs/SpellsourceException.md)
- - [SummonAction](docs/SummonAction.md)
- - [SummonActionIndexToActions](docs/SummonActionIndexToActions.md)
  - [TargetActionPair](docs/TargetActionPair.md)
  - [Timers](docs/Timers.md)
  - [UnfriendResponse](docs/UnfriendResponse.md)
+ - [ValidationReport](docs/ValidationReport.md)
 
 
 ## Documentation for Authorization

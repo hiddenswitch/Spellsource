@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Opener: Fill your hand with Coins.",
+  "description": "Opener: Fill your hand with Lunstones.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -22,7 +22,7 @@
           "targetPlayer": "SELF"
         }
       },
-      "card": "spell_the_coin"
+      "card": "spell_lunstone"
     }
   },
   "attributes": {

@@ -13,7 +13,7 @@
       "class": "ComparisonCondition",
       "operation": "GREATER",
       "value1": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "ALL_OTHER_MINIONS"
       },
       "value2": 0

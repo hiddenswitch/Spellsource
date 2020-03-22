@@ -12,19 +12,19 @@
     "spell": {
       "class": "DiscoverSpell",
       "cardFilter": {
-        "class": "CardFilter",
-        "attribute": "PLAYED_FROM_HAND_OR_DECK",
-        "operation": "HAS"
+        "class": "CardFilter"
       },
       "value": 2,
       "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "BOTH"
+        "class": "GraveyardDiedMinionsSource",
+        "targetPlayer": "BOTH",
+        "distinct": true
       }
 	} 
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -1,0 +1,28 @@
+{
+  "name": "Sluggish Brute",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Dash. Has +2 Attack while damaged.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {
+    "ENRAGABLE": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

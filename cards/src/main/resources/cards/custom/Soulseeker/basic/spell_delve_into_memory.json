@@ -1,0 +1,25 @@
+{
+  "name": "Delve Into Memory",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Look at the top three cards of your deck. Discard one and draw the others.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "cardSource": {
+      "class": "TopThreeCardsOfDeckSource"
+    },
+    "exclusive": true,
+    "spell1": {
+      "class": "RemoveCardSpell"
+    },
+    "spell2": {
+      "class": "FromDeckToHandSpell"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

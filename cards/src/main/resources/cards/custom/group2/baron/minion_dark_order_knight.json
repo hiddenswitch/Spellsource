@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Give your C'Thun +1/+1 for each Knight in your hand.",
+  "description": "Opener: Give your Big Guy +1/+1 for each Knight in your hand.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
@@ -27,7 +27,7 @@
           },
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -39,7 +39,7 @@
           },
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "card": "minion_removed_card"
           }
         },
         {
@@ -66,7 +66,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

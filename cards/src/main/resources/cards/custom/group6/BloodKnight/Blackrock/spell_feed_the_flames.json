@@ -11,7 +11,7 @@
     "target": "LEFTMOST_ENEMY_MINION",
     "card": "token_smoldering_husk"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

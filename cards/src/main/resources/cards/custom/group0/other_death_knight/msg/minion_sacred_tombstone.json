@@ -6,12 +6,20 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Aftermath: Summon a Sacred Tombstone.",
+  "description": "Aftermath: At the end of your turn, summon a Sacred Tombstone.",
   "deathrattle": {
-    "class": "CastAfterSequenceSpell",
-    "spell": {
-      "class": "SummonSpell",
-      "card": "minion_sacred_tombstone"
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_sacred_tombstone"
+      },
+      "maxFires": 1
     }
   },
   "attributes": {

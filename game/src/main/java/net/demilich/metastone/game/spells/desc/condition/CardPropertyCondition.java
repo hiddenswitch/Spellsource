@@ -4,15 +4,21 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Returns {@code true} if the {@link ConditionArg#TARGET} or {@code target} is not {@code null} and meets the
  * requirements specified by {@link ConditionArg#CARD_TYPE}, {@link ConditionArg#HERO_CLASS}, {@link ConditionArg#RACE}
  * and the card ID in {@link ConditionArg#CARD}.
+ * <p>
+ * If {@link ConditionArg#CARDS} is specified, that line's requirement is satisfied if any of the cards in the array of
+ * {@link ConditionArg#CARDS} matches the target's card ID.
  */
 public final class CardPropertyCondition extends Condition {
 
@@ -57,13 +63,33 @@ public final class CardPropertyCondition extends Condition {
 			return false;
 		}
 
+		String[] cardIds = (String[]) desc.get(ConditionArg.CARDS);
+		if (cardIds != null && cardIds.length > 0) {
+			boolean found = false;
+			for (int i = 0; i < cardIds.length; i++) {
+				if (Objects.equals(card.getCardId(), cardIds[i])) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				return false;
+			}
+		}
+
 		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
 		if (heroClass != null && !card.hasHeroClass(heroClass)) {
 			return false;
 		}
 
-		Race race = (Race) desc.get(ConditionArg.RACE);
-		if (race != null && !card.getRace().hasRace(race)) {
+
+		String race = (String) desc.get(ConditionArg.RACE);
+		if (race != null && !Race.hasRace(context, card, race)) {
+			return false;
+		}
+
+		Rarity rarity = (Rarity) desc.get(ConditionArg.RARITY);
+		if (rarity!=null&&!card.getRarity().isRarity(rarity)) {
 			return false;
 		}
 

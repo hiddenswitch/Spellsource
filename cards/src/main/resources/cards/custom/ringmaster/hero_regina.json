@@ -1,0 +1,16 @@
+{
+  "name": "Regina",
+  "heroPower": "hero_power_announce",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Hero Power: Add a 1/3 Performer to your hand.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

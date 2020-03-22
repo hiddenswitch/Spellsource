@@ -17,11 +17,6 @@ public class PlayedLastTurnCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		if (desc.containsKey(ConditionArg.TARGET_PLAYER)) {
-			if (desc.get(ConditionArg.TARGET_PLAYER) == TargetPlayer.OPPONENT) {
-				player = context.getOpponent(player);
-			}
-		}
 		Map<String, Map<Integer, Integer>> cardIds = player.getStatistics().getCardsPlayed();
 		int count = 0;
 		int turn = context.getTurn();
