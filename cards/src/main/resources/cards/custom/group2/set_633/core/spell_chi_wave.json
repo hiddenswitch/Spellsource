@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "COMMON",
-  "description": "Restore #8 Health randomly split among all friendly characters.",
+  "description": "Restore #8 Health randomly split among all allies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealingMissilesSpell",
