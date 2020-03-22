@@ -1,6 +1,6 @@
 {
   "name": "Sunken Terror",
-  "baseManaCost": 7,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 5,
