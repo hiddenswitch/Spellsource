@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: The next weapon you play this turn costs (2) less.",
+  "description": "Opener: The next Gear card you play this turn costs (2) less.",
   "battlecry": {
     "spell": {
       "class": "CardCostModifierSpell",
