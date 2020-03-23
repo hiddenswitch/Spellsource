@@ -6,7 +6,6 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "race": "ELEMENTAL",
   "description": "Opener: Gain the Aftermath \"Repeat every other Aftermath you triggered this game\".",
   "battlecry": {
     "targetSelection": "NONE",
