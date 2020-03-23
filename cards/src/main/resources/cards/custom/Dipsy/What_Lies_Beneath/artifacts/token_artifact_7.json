@@ -1,0 +1,40 @@
+{
+  "name": "Celestial Conduit",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Discover spells until their combined Cost equals 15 or more.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecastWhileSpell",
+    "condition": {
+      "class": "",						### I don't even know where to start with this, sorry
+      "value": 15,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+	  "cardSource": {
+        "class": "CatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+	"DISCOVER": true
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}
