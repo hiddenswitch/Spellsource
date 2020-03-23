@@ -1,0 +1,30 @@
+{
+  "name": "Ruler's Talisman",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give your minions +1/+1 and Dash.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "RUSH"
+      }
+    ]
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}

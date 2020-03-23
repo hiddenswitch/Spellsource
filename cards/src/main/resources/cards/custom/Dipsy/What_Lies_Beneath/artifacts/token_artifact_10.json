@@ -1,0 +1,20 @@
+{
+  "name": "The Tempest Stone",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Fill your board with 3/3 Cyclones with Dash.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 7,
+    "card": "token_tempest_stone_cyclone"
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}
