@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
-  "description": "Whenever a friendly Pirate attacks, add a random card to your hand.",
+  "description": "Whenever an allied Pirate attacks, add a random card to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
