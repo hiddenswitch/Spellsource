@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 6,
   "rarity": "COMMON",
-  "description": "Give any minions damaged by this weapon Decay.",
+  "description": "Give any minions damaged by this Decay.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",
