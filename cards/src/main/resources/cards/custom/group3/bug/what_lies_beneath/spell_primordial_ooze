@@ -1,0 +1,13 @@
+{
+  "name": "Primordial Ooze",
+  "baseManaCost": 5,
+  "type": "Spell",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Transform your minions into different random minions from your Graveyard.",
+  "spell": {
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}
