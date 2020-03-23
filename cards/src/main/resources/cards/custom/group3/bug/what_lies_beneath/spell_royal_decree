@@ -1,6 +1,6 @@
 {
   "name": "Royal Decree",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "Spell",
   "heroClass": "AMBER",
   "rarity": "RARE",
