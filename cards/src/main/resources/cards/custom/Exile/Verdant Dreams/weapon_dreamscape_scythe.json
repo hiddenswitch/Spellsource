@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "After your champion attacks, give a random friendly Demon, Dragon, and Pirate +2 Attack.",
+  "description": "After your champion attacks, give a random allied Demon, Dragon, and Pirate +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
