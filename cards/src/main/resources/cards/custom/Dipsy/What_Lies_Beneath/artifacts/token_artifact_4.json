@@ -1,0 +1,26 @@
+{
+  "name": "Obliteration Orb",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Silence and destroy a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}
