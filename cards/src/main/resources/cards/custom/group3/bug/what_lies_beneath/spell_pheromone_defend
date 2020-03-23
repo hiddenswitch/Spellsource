@@ -1,6 +1,6 @@
 {
   "name": "Defense Pheromone",
-  "baseManaCost": 3,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
