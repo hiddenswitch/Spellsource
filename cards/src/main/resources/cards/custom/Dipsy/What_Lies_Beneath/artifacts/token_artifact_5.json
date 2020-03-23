@@ -12,6 +12,9 @@
     "value": 1,
     "howMany": 10
   },
+  "attributes": {
+    "ARTIFACT": true
+  },
   "collectible": false,
   "sets": [
     "CUSTOM",
