@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+###Upcoming Changes
+ - Primordial Pebble now correctly only discovers Elementals. (1580)
+
 ### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
