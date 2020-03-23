@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 8,
   "rarity": "EPIC",
-  "description": "Your spells cost this weapon's Durability instead of Lun.",
+  "description": "Your spells cost this card's Durability instead of Lun.",
   "aura": {
     "class": "CardCostInsteadAura",
     "target": "FRIENDLY_HAND",
