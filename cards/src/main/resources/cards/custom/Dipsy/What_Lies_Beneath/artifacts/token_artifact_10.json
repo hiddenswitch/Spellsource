@@ -11,6 +11,9 @@
     "value": 7,
     "card": "token_tempest_stone_cyclone"
   },
+  "attributes": {
+    "ARTIFACT": true
+  },
   "collectible": false,
   "sets": [
     "CUSTOM",
