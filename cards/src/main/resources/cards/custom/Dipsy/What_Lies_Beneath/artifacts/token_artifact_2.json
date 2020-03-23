@@ -11,6 +11,9 @@
     "target": "ENEMY_MINIONS",
 	"value": 2
   },
+  "attributes": {
+    "ARTIFACT": true
+  },
   "collectible": false,
   "sets": [
     "CUSTOM",
