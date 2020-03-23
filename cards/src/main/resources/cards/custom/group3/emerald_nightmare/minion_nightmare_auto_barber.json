@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Opener: Give your weapon +1 Durability.",
+  "description": "Opener: Give your Gear +1 Durability.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",
