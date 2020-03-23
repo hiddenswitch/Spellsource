@@ -10,6 +10,9 @@
     "class": "SummonSpell",
     "card": "token_aegis_horn_sentinel"
   },
+  "attributes": {
+    "ARTIFACT": true
+  },
   "collectible": false,
   "sets": [
     "CUSTOM",
