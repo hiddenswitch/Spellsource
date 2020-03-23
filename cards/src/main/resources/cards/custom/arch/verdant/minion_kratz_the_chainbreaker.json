@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Hidden. Your Gear cards cost (0) while you have a weapon equipped.",
+  "description": "Hidden. Your Gear cards cost (0) while you have Gear equipped.",
   "cardCostModifier": {
     "condition": {
       "class": "HasWeaponCondition"
