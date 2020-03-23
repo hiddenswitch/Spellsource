@@ -1,6 +1,6 @@
 {
-  "name": "Bunta",
-  "heroPower": "hero_power_bunta",
+  "name": "Arido",
+  "heroPower": "hero_power_arido",
   "baseManaCost": 10,
   "type": "HERO",
   "heroClass": "AMBER",
