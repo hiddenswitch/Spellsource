@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Opener: Destroy your opponent's weapon.",
+  "description": "Opener: Destroy your opponent's Gear.",
   "battlecry": {
     "spell": {
       "class": "DestroySpell",
