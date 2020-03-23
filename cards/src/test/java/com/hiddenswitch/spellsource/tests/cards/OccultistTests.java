@@ -152,4 +152,25 @@ public class OccultistTests extends TestBase {
 			assertEquals(5 + 2 + 1 + 20, totalAttack);
 		});
 	}
+
+	@Test
+	public void testCrazedCultlordPaven() {
+		runGym((context, player, opponent) -> {
+			Minion paven = playMinionCard(context, player, "minion_paven_elemental_of_surprise");
+			playMinionCard(context, player, "minion_crazed_cultlord", paven);
+			assertEquals(3, player.getMinions().size());
+			int pavens = 0;
+			int capturedPavens = 0;
+			for (Minion minion : player.getMinions()) {
+				if (minion.getSourceCard().getCardId().equals("permanent_paven_captured")) {
+					capturedPavens++;
+				}
+				if (minion.getSourceCard().getCardId().equals("minion_paven_elemental_of_surprise")) {
+					pavens++;
+				}
+			}
+			assertEquals(1, pavens);
+			assertEquals(1, capturedPavens);
+		});
+	}
 }

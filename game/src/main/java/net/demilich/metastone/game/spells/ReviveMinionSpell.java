@@ -19,6 +19,10 @@ import java.util.Map;
  * set to. The minion is summoned from the base card.
  * <p>
  * If a {@link SpellArg#SPELL} is specified, cast it on the newly revived minion as {@link EntityReference#OUTPUT}.
+ * <p>
+ * If a {@link SpellArg#SPELL1} is specified, it will be cast BEFORE THE REVIVAL, with the original targeted minion as {@link EntityReference#OUTPUT}.
+ * This can be useful for the case of ensuring that the exact original minion is revived, not something that it might transform into by killing it.
+ * (Interaction between Crazed Cultist and Pavel, Elemental of Surprise)
  */
 public final class ReviveMinionSpell extends Spell {
 
@@ -42,6 +46,9 @@ public final class ReviveMinionSpell extends Spell {
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		Card card = targetActor.getSourceCard();
 		Minion minion = card.summon();
+		if (desc.containsKey(SpellArg.SPELL1)) {
+			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL1), source, target, targetActor);
+		}
 		if (hpAdjustment != 0) {
 			minion.setHp(hpAdjustment);
 		}
