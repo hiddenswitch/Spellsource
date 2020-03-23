@@ -1162,6 +1162,11 @@ public enum Attribute {
 	 */
 	DISCOVER,
 	/**
+	 * Signifies that this card is an Artifact, a type of token card added by What Lies Beneath. Used to easily identify
+	 * them for synergy purposes.
+	 */
+	ARTIFACT,
+	/**
 	 * Keeps track of damage dealt by this {@code source} minion <b>this game</b>.
 	 */
 	TOTAL_DAMAGE_DEALT_THIS_GAME,
