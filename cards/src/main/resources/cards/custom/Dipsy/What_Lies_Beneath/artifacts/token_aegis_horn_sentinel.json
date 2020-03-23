@@ -10,7 +10,7 @@
   "collectible": false,
   "attributes": {
     "TAUNT": true,
-	"UNTARGETABLE_BY_SPELLS": true
+    "UNTARGETABLE_BY_SPELLS": true
   },
   "sets": [
     "CUSTOM",
