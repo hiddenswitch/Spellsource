@@ -1,0 +1,32 @@
+{
+  "name": "Urgent Recycling",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Replace your hand with random Beasts that cost (6) or more.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells" : [
+    {
+      "class": "DiscardSpell",
+      "value": -1
+    },
+    {
+      "spell": "RecieveCardSpell"
+      "value": 10
+    },
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+      "value": 6,
+      "attribute": "BASE_MANA_COST",
+      "cardType": "MINION",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}
