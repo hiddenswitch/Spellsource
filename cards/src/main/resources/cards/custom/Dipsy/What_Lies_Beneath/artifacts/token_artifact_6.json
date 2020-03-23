@@ -19,6 +19,9 @@
       }
     }
   },
+  "attributes": {
+    "ARTIFACT": true
+  },
   "collectible": false,
   "sets": [
     "CUSTOM",
