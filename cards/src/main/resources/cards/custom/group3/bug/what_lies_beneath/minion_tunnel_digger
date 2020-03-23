@@ -5,7 +5,7 @@
   "heroClass": "AMBER",
   "baseAttack": 1,
   "baseHp": 6,
-  "rarity": "COMMON",
+  "rarity": "COMMO",
   "race": "BEAST",
   "description": "At the end of your turn, add a random Artifact to your hand.",
   "trigger": {
