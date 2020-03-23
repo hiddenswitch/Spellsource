@@ -29,7 +29,8 @@
     }
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true,
+    "ARTIFACT": true  
   },
   "collectible": false,
   "sets": [
