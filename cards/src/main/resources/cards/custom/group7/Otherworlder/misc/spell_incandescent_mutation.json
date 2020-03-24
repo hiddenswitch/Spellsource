@@ -1,6 +1,6 @@
 {
   "name": "Incandescent Mutation",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
