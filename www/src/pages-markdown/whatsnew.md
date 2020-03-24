@@ -4,6 +4,8 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### Upcoming Changes
+ - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
 
 ### 0.8.69-3.1.1 (March 21, 2020)
 

@@ -4900,4 +4900,13 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(5, player.getDeck().size());
 		});
 	}
+
+	@Test
+	public void testKliveIcetoothSolo() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(1);
+			playCard(context, player, "minion_klive_icetooth");
+			assertEquals(6, player.getHero().getHp());
+		});
+	}
 }
