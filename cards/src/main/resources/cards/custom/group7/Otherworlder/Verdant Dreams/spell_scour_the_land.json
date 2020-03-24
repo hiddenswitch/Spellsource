@@ -23,7 +23,7 @@
           "secret_secret_of_twilight"
         ],
         "randomTarget": true
-        "value": {
+        "howMany": {
           "class": "EntityCounter",
           "target": "FRIENDLY_MINIONS",
           "filter": {
