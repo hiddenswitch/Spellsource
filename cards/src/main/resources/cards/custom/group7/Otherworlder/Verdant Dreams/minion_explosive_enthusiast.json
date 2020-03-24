@@ -1,0 +1,25 @@
+{
+  "name": "Explosive Enthusiast",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Whenever you discard a card, deal 3 damage randomly split among all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DiscardTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 3
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
