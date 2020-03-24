@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "NEONGREEN",
   "baseAttack": 5,
-  "baseHp": 5,
+  "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MECH",
   "description": "Aftermath: Give this minion <b>Guard</b>, <b>Dodge</b>, <b>Hidden</b>, or <b>Extra Strike</b> at random and shuffle it into your deck.",
