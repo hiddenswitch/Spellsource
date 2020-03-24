@@ -7,13 +7,6 @@
   "description": "Choose a minion. Whenever you play a minion this turn, give that minion +3/+3.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddAttributeSpell",
-        "attribute": "FROZEN"
-      },
-      {
         "class": "AddEnchantmentSpell",
         "trigger": {
           "eventTrigger": {
@@ -28,7 +21,6 @@
           }
         }
       }
-    ]
   },
   "sets": [
     "CUSTOM",
