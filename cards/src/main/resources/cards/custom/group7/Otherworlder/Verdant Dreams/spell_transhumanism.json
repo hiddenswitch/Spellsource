@@ -23,6 +23,7 @@
       {
         "class": "DiscardSpell",
         "target": "FRIENDLY_HAND",
+        "value": -1,
         "filter": {
           "class": "CardFilter",
           "manaCost": 1,
