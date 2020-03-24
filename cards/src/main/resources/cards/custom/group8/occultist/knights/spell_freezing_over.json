@@ -1,10 +1,10 @@
 {
-  "name": "Freezing Over",
+  "name": "For Science!",
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Stun a minion. Whenever you play a minion this turn, give that minion +3/+3.",
+  "description": "Choose a minion. Whenever you play a minion this turn, give that minion +3/+3.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
