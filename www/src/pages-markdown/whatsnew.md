@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Fixed a few miscellaneous card descriptions to properly say "Opener". (1590)
+
 ### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
