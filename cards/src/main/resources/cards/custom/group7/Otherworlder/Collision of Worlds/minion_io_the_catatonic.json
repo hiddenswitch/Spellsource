@@ -1,0 +1,30 @@
+{
+  "name": "Io, the Catatonic",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 20,
+  "rarity": "LEGENDARY",
+  "race": "TITAN",
+  "description": "At the end of your turn, deal damage equal to this minion's health randomly split among all minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ALL_MINIONS",
+      "value": 1,
+      "howMany": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
