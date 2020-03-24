@@ -1,0 +1,37 @@
+{
+  "name": "Transhumanism",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Discard all 1-cost spells in your hand. Give a minion +2/+2 for each spell discarded.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2,
+        "howMany": {
+          "filter": {
+            "class": "CardFilter",
+            "manaCost": 1,
+            "cardType": "SPELL"
+          }
+        }
+      },
+      {
+        "class": "DiscardSpell",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "manaCost": 1,
+          "cardType": "SPELL"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
