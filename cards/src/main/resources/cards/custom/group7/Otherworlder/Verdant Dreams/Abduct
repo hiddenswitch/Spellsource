@@ -1,0 +1,18 @@
+{
+  "name": "Abduct",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Choose an enemy minion. Put it into your hand.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "StealCardSpell",
+    "target": "ENEMY_MINIONS",
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
