@@ -1,0 +1,34 @@
+{
+  "name": "M. A. D.",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "EPIC",
+  "description": "Gain Spell Power +3 this turn. Whenever you cast a spell this turn, discard a random card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ModifyAttributeSpell",
+    "target": "FRIENDLY_PLAYER",
+    "value": 3,
+    "attribute": "SPELL_DAMAGE",
+    "revertTrigger": {
+      "class": "TurnEndTrigger"
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    },
+    "spell": {
+      "class": "DiscardSpell",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
