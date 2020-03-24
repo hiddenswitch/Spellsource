@@ -34,7 +34,7 @@
       },
       "spell": {
         "class": "MetaSpell",
-        "spells: [
+        "spells": [
           {
             "class": "DestroySpell",
             "target": "SELF"
@@ -44,6 +44,7 @@
             "card": "token_titan_8_8"
           }
         ]
+      }  
     }
   ],
   "attributes": {
