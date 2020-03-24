@@ -22,8 +22,8 @@
           "secret_secret_of_autumn",
           "secret_secret_of_twilight"
         ],
-        "randomTarget": true
-        "howMany": {
+        "randomTarget": true,
+        "value": {
           "class": "EntityCounter",
           "target": "FRIENDLY_MINIONS",
           "filter": {
