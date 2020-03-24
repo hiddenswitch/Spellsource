@@ -24,6 +24,7 @@
             {
               "class": "SpecificCardFilter",
               "cards": [
+                "token_xenodrone_16",
                 "token_xenodrone_07",
                 "token_xenodrone_02",
                 "token_xenodrone_01"
