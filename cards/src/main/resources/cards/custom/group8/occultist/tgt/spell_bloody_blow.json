@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Take $2 damage. Deal $1 damage to all minions.",
+  "description": "Take 2 damage. Deal $1 damage to all minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -18,7 +18,7 @@
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
         "value": 2,
-        "ignoreSpellDamage": true
+        "IgnoresSpellDamage ": true
       }
     ]
   },
