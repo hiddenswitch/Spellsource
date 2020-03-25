@@ -283,6 +283,15 @@ public class RingmasterTests extends TestBase {
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(opponent.getMinions().size(), 0);
 		});
+
+		runGym((context, player, opponent) -> {
+			Card hook = receiveCard(context, player, "spell_vaudeville_hook");
+			assertEquals(12, costOf(context, player, hook));
+			for (int i = 0; i < 5; i++) {
+				receiveCard(context, player, "spell_lunstone");
+				assertEquals(11 - i, costOf(context, player, hook));
+			}
+		});
 	}
 
 	@Test
