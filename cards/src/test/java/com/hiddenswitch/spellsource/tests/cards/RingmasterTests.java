@@ -361,4 +361,15 @@ public class RingmasterTests extends TestBase {
 			playMinionCard(context, player, "minion_assistant_tumbler");
 		});
 	}
+
+	@Test
+	public void testRingsideImpresario() {
+		runGym((context, player, opponent) -> {
+			player.setAttribute(Attribute.SIGNATURE, "spell_chain_dance");
+			playCard(context, player, "minion_ringside_impresario");
+			assertEquals(0, player.getHand().size());
+			playCard(context, player, "minion_ringside_impresario");
+			assertEquals(1, player.getDeck().size());
+		});
+	}
 }
