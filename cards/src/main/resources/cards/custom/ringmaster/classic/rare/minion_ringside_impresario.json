@@ -10,10 +10,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "ReceiveCardSpell",
+      "class": "ShuffleToDeckSpell",
       "cardSource": {
         "class": "UnweightedCatalogueSource"
       },
