@@ -1166,7 +1166,7 @@ public enum Attribute {
 	 */
 	TOTAL_DAMAGE_DEALT_THIS_GAME,
 	/**
-	 * Temporary attribute used for testing Signature effects
+	 * Attribute determining which card is the "Signature" for Ringmaster cards.
 	 */
 	SIGNATURE;
 

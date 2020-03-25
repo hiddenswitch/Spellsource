@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,15 @@ public class RingmasterTests extends TestBase {
 	@Override
 	public String getDefaultHeroClass() {
 		return HeroClass.CANDY;
+	}
+
+	@Test
+	public void testDefaultSignature() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_circus_supplier");
+			assertEquals(1, player.getHand().size());
+			assertEquals(GameLogic.DEFAULT_SIGNATURE, player.getHand().get(0).getCardId());
+		});
 	}
 
 	@Test
