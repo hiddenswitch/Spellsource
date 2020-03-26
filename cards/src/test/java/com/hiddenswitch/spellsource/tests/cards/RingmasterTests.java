@@ -391,4 +391,33 @@ public class RingmasterTests extends TestBase {
 			assertEquals(1, player.getDeck().size());
 		});
 	}
+
+	@Test
+	public void testFinaleArchitect() {
+		runGym((context, player, opponent) -> {
+			Minion arc = playMinionCard(context, player, "minion_finale_architect");
+			Card dance = receiveCard(context, player, "spell_chain_dance");
+			assertEquals(2, costOf(context, player, dance));
+			playCard(context, player, dance, arc);
+			assertFalse(arc.isDestroyed());
+			context.endTurn();
+			assertFalse(arc.isDestroyed());
+			context.endTurn();
+			assertTrue(arc.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion arc = playMinionCard(context, player, "minion_finale_architect");
+			Card star = receiveCard(context, player, "spell_star_performance");
+			assertEquals(1, costOf(context, player, star));
+			playCard(context, player, star, arc);
+			assertEquals(arc.getBaseAttack(), arc.getAttack());
+			context.endTurn();
+			destroy(context, arc);
+			Minion surprise = playMinionCard(context, opponent, "minion_assistant_tumbler");
+			context.endTurn();
+			assertEquals(surprise.getBaseAttack() + 3, surprise.getAttack());
+		});
+	}
+
 }
