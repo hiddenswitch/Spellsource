@@ -11,6 +11,8 @@ Ringmaster Fixes
  - Ringside Impresario no longer triggers itself, and now correctly shuffles to deck, not adding to hand. (1594)
  - Vaudeville Hook now correctly reduces in cost, not increases. (1595)
  - The "Berry" token (1 Lun restore 3 Health) is now the default Signature spell if one wasn't chosen for a deck. (1596)
+ - Made some Ringmaster cards collectible that were mistakenly uncollectible. (1597)
+ - Added Ringmaster card Finale Architect. (1597)
 
 ### 0.8.69-3.1.1 (March 21, 2020)
 
