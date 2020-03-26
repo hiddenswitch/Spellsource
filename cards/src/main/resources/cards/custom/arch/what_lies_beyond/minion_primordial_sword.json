@@ -1,0 +1,33 @@
+{
+  "name": "Frisky Fiddle",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "After your champion attacks, return a weapon from the graveyard to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DrawCardFromGraveyardSpell"
+      "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+      }
+      "cardSource": {
+      "class": "GraveyardCardAndActorSourceCardSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
