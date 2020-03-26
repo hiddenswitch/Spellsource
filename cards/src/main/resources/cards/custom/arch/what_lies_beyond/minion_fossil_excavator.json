@@ -1,0 +1,28 @@
+{
+  "name": "Fossil Excavator",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "At the end of each turn, shuffle a Fossil into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "BOTH"
+    },
+"spell": {
+      "class": "ShuffleToDeckSpell",
+      "cards": [
+        "token_bone_bouncer",
+        "token_bone_bruiser",
+        "token_bone_bowman"
+      ],
+      "randomTarget": true,
+      "howMany": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
