@@ -1,0 +1,26 @@
+{
+  "name": "Lava Pebble",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Whenever you draw a card, deal 1 damage to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_MINIONS",
+      "howMany": 1,
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
