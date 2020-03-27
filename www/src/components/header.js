@@ -39,6 +39,7 @@ const Header = () => {
     <div className={styles.menu}>
       <ul>
         <li key={data.headerImage.id}><Link to='/'><Img fixed={data.headerImage.childImageSharp.fixed}/></Link></li>
+        <li key={'javadocs'}><a href='/javadoc'>Docs</a></li>
         {pages}</ul>
     </div>
   </header>
