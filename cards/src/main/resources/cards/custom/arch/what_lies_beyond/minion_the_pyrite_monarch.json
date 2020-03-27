@@ -1,0 +1,90 @@
+{
+  "name": "The Pyrite Monarch",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Opener: If you played 10 Elementals this game, fill your hand with Artifacts.[]",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACKS_THIS_GAME",
+        "target": "FRIENDLY_HERO"
+      },
+      "value2": 4
+    },
+    "spell": {
+      "spell": {
+      "class": "ReceiveCardSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": 10,
+        "value2": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
+        }
+      },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "ARTIFACT"
+    },
+    "cardSource": {
+    "class": "UncollecibleCatalogueSource"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "CardsPlayedValueProvider",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "ELEMENTAL"
+        },
+        },
+        "value2": 10
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 10,
+              "value2": {
+                "class": "CardsPlayedValueProvider",
+                "filter": {
+                "class": "RaceFilter",
+                "race": "ELEMENTAL"
+               },
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
+}
