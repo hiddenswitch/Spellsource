@@ -16,7 +16,6 @@
       },
       {
         "class": "AddAttributeSpell",
-        "target": "ALL_MINIONS",
         "attribute": "TAUNT"
       }
     ]
