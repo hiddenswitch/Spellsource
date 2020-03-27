@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "<b>Aftermath:<b> Give a random Weapon in your hand 'Aftermath: Summon Grallows.'",
+  "description": "Aftermath: Give a random gear in your hand \"Aftermath: Summon Grallows\".",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_HAND",
