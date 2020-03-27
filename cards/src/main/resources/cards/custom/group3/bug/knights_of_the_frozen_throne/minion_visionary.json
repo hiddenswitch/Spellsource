@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Health restored to your champion is also restored to all friendly minions.",
+  "description": "Health restored to your champion is also restored to allied minions.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",
