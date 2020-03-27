@@ -74,6 +74,9 @@ static def gitIgnore(File f) {
 }
 
 static def dotEnv(Exec task, File f) {
+    if (!f.exists()) {
+        return
+    }
     f.readLines().each() {
         def (key, value) = it.tokenize('=')
         task.environment(key, value)
