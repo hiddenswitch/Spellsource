@@ -1,6 +1,6 @@
 {
   "name": "Spawning Scepter",
-  "baseManaCost": 8,
+  "baseManaCost": 7,
   "type": "WEAPON",
   "heroClass": "AMBER",
   "damage": 2,
