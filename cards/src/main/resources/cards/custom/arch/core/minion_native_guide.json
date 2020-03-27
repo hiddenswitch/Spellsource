@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Has +1/+1 while you have a Weapon.",
+  "description": "Has +1/+1 while you have gear equipped.",
   "aura": {
     "class": "BuffAura",
     "target": "SELF",
