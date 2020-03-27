@@ -1,6 +1,6 @@
 {
   "name": "Fill the Stands!",
-  "baseManaCost": 7,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
