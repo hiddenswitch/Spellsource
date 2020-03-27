@@ -122,7 +122,7 @@ task distSwarm(type: Exec, group: 'Spellsource') { t ->
     description("Deploys to a Docker Swarm")
     dependsOn buildSwarm, secretSources
     inputs.file('docker-compose.yml')
-    dotEnv(t, file('secrets/common-deployment.env'))
+    dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
     commandLine './deploy.sh', '-s'
 }
 
@@ -139,7 +139,7 @@ task distIOS(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads to Testflight the iOS project")
     dependsOn buildIOS, secretSources
     workingDir "${unityClientPath}"
-    dotEnv(t, file('secrets/spellsource/unityclient-build.env'))
+    dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     commandLine './deploy.sh', '-t'
 }
 
@@ -155,7 +155,7 @@ task buildAndroid(type: Exec) {
 task distAndroid(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads the Android project to Google Play")
     dependsOn buildAndroid, secretSources
-    dotEnv(t, file('secrets/spellsource/unityclient-build.env'))
+    dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     environment('KEYSTORE_PATH', '../secrets/spellsource/android-keystore.keystore')
     workingDir "${unityClientPath}"
     commandLine './deploy.sh', '-d'
@@ -172,8 +172,8 @@ task buildWebGL(type: Exec) {
 task distWebGL(type: Exec, group: 'Spellsource') { t ->
     description("Uploads the WebGL build to playspellsource.com")
     dependsOn buildWebGL, secretSources
-    dotEnv(t, file('secrets/spellsource/unityclient-build.env'))
-    dotEnv(t, file('secrets/common-deployment.env'))
+    dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
+    dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
     workingDir "${unityClientPath}"
     commandLine './deploy.sh', '-G'
 }
