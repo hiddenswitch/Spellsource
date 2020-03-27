@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Take [3] damage. Draw [2] weapons.",
+  "description": "Take [3] damage. Draw [2] gear.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
