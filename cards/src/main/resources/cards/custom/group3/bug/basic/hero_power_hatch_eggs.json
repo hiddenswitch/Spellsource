@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Skill: Add two 1/1 Larva to your hand.",
+  "description": "Skill: Receive two 1/1 Larva.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
