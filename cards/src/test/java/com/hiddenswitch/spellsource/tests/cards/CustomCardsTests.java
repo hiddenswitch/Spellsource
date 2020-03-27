@@ -4900,4 +4900,12 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(5, player.getDeck().size());
 		});
 	}
+
+	@Test
+	public void testNilfheimNeedlegunner() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_nilfheim_needlegunner");
+			assertEquals(opponent.getHero().getMaxHp(), opponent.getHero().getHp());
+		});
+	}
 }

@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Nilfheim Needlegunner no longer triggers off of itself. (1610)
+
 ### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
