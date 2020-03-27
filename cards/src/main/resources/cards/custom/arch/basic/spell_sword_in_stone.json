@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-  "description": "Draw a weapon from your deck.",
+  "description": "Draw a gear from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
