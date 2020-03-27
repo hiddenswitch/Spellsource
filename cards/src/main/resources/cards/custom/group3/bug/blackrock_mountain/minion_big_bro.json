@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: Add a 1/1 Whelp to your hand.",
+  "description": "Opener: Receive a 1/1 Whelp.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",
