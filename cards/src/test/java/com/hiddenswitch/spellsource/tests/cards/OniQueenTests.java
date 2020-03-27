@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -8,6 +9,8 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -120,6 +123,19 @@ public class OniQueenTests extends TestBase {
 			playCard(context, player, "minion_ruffian_shiro");
 			assertEquals(4, boardDemon.getAttack());
 			assertEquals(2, handDemon.getBonusAttack());
+		});
+	}
+
+	@Test
+	public void testBanishment() {
+		runGym((context, player, opponent) -> {
+			Card banishment = receiveCard(context, player, "spell_banishment");
+			Minion demon = playMinionCard(context, player, "minion_demon_test");
+			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test");
+			player.setMana(1);
+			assertTrue(context.getLogic().canPlayCard(player, banishment));
+			List<GameAction> validActions = context.getLogic().getValidActions(player.getId());
+			assertEquals(2, validActions.size()); //2 because end turn and banishment
 		});
 	}
 }

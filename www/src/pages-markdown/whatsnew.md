@@ -4,6 +4,8 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### Upcoming Changes
+ - Oni Queen's Banishment can actually be played, and now costs (0) down from (1). (159)
 
 ### 0.8.69-3.1.1 (March 21, 2020)
 
