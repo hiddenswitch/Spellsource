@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Whenever your weapon is destroyed, return it to your hand instead.",
+  "description": "Whenever your gear is destroyed, return it to your hand instead.",
   "trigger": {
     "eventTrigger": {
       "class": "WeaponDestroyedTrigger",
