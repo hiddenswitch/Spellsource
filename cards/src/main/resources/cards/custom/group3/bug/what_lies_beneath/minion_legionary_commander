@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Whenever you receive a Larva, transform it into a Serv-Ant and play it.",
   "trigger": {
     "eventTrigger": {
