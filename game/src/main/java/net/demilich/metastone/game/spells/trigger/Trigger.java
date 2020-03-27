@@ -51,7 +51,7 @@ public interface Trigger extends Serializable {
 	int getOwner();
 
 	/**
-	 * Returns true if this trigger is a listener for the given {@link GameEventType}.
+	 * Returns true if this trigger is a listener for the given {@link EventTypeEnum}.
 	 *
 	 * @param eventType The event type.
 	 * @return {@code true} if this trigger wants its {@link #onGameEvent(GameEvent)} method called whenever it {@link
