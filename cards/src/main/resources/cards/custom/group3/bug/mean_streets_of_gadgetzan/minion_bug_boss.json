@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Choose a minion. All friendly minions attack it.",
+  "description": "Opener: Choose a minion. Allied minions attack it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
