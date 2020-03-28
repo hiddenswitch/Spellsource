@@ -10,24 +10,24 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DestroySpell"
-        },
-        {
-          "class": "ForceDeathPhaseSpell"
-        },
-        {
-          "class": "ReviveMinionSpell",
-          "targetPlayer": "OWNER",
-          "spell": {
-            "class": "AddAttributeSpell",
-            "target": "OUTPUT",
-            "attribute": "RUSH"
+      "class": "ReviveMinionSpell",
+      "targetPlayer": "OWNER",
+      "spell1": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell"
+          },
+          {
+            "class": "ForceDeathPhaseSpell"
           }
-        }
-      ]
+        ]
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "OUTPUT",
+        "attribute": "RUSH"
+      }
     }
   },
   "attributes": {
