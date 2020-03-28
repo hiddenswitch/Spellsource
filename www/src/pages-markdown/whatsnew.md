@@ -7,6 +7,11 @@ header: true
 
 ### Upcoming Changes
 
+ - Ringside Impresario no longer triggers itself, and now correctly shuffles to deck, not adding to hand. (1594)
+ - Vaudeville Hook now correctly reduces in cost, not increases. (1595)
+ - The "Berry" token (1 Lun restore 3 Health) is now the default Signature spell if one wasn't chosen for a deck. (1596)
+ - Made some Ringmaster cards collectible that were mistakenly uncollectible. (1597)
+ - Added Ringmaster card Finale Architect. (1597)
  - Oni Queen's Banishment can actually be played, and now costs (0) down from (1). (159)
  - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
  - Crazed Cultist now interacts more intuitively with Paven, Elemental of Surprise. (1578) 
