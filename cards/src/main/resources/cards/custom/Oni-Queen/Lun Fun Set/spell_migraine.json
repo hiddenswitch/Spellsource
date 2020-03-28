@@ -1,0 +1,32 @@
+{
+  "name": "Migraine",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Take 2 damage. Your champion gains Hidden until your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2,
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_HERO",
+        "attribute": "STEALTH",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

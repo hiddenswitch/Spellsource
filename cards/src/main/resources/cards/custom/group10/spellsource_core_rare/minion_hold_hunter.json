@@ -1,12 +1,12 @@
 {
-  "name": "Hold Hunter",
+  "name": "Vengeful Spirit",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "race": "PIRATE",
+  "race": "SPIRIT",
   "description": "After this attacks and kills a minion, gain Dodge.",
   "trigger": {
     "eventTrigger": {

@@ -1,0 +1,35 @@
+{
+  "name": "Lunstone Rumbler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Destroy your gear to gain a Lun.",
+  "battlecry": {
+    "condition": {
+      "class": "HasWeaponCondition"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ModifyMaxManaSpell",
+          "value": 1
+        },
+        {
+          "class": "DestroySpell",
+          "target": "FRIENDLY_WEAPON"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
