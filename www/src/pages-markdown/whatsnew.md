@@ -8,6 +8,7 @@ header: true
 ### Upcoming Changes
 
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
+ - Herald of Fate no longer just gives you double openers forever. (1577)
 
 ### 0.8.70-3.1.1 (Marcy 27, 2020)
 
