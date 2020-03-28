@@ -4906,7 +4906,28 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testOkanakaMidsummerGravtisk() {
+	public void testCopyDeathrattleSpellSelfInteration() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_owlbear_mother"));
+			Minion fassnu = playMinionCard(context, player, "minion_fassnu_avenger");
+			Minion blood = playMinionCard(context, player, "minion_blood_cultist");
+			destroy(context, blood);
+			destroy(context, fassnu);
+			assertEquals(player.getMinions().size(), 4); // two aftermath triggers
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion neut = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_ritual_of_undeath");
+			Minion fassnu = playMinionCard(context, player, "minion_fassnu_avenger");
+			destroy(context, neut);
+			destroy(context, fassnu);
+			assertEquals(player.getMinions().size(), 2); // two aftermath triggers
+		});
+	}	
+  
+	@Test
+  public void testOkanakaMidsummerGravtisk() {
 		runGym((context, player, opponent) -> {
 			Card test = receiveCard(context, player, "minion_neutral_test");
 			playCard(context, player, "minion_whizbang_the_plunderful");
