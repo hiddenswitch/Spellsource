@@ -22,7 +22,7 @@
   "attributes": {
     "SPELL_DAMAGE": 2
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
