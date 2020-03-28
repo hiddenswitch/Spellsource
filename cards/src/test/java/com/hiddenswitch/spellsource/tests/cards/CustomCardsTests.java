@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
@@ -296,7 +297,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testHoffisTheDunewalker() {
+	public void testHoffisTheDunewalkerV0() {
 		// This has to test two effects:
 		//   1. The QueryTargetSpell effect
 		//   2. The AddBattlecrySpell effect
@@ -308,7 +309,7 @@ public class CustomCardsTests extends TestBase {
 			Card shouldSpawnSandpile2 = putOnTopOfDeck(context, player, "minion_test_untargeted_battlecry");
 			Card shouldSpawnSandpile3 = putOnTopOfDeck(context, player, "minion_neutral_test");
 			Card shouldSpawnSandpile4 = putOnTopOfDeck(context, player, "minion_neutral_test");
-			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker");
+			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker_v0");
 			for (int i = 0; i < 6; i++) {
 				context.getLogic().drawCard(player.getId(), player.getHero());
 			}
@@ -369,7 +370,7 @@ public class CustomCardsTests extends TestBase {
 	public void testDoomerDiver() {
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "minion_neutral_test");
-			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			Minion pirate = playMinionCard(context, player, "minion_charge_spirit");
 			attack(context, player, pirate, opponent.getHero());
 			playMinionCard(context, player, "minion_doomed_diver");
 			assertEquals(shouldDraw.getZone(), Zones.HAND);
@@ -377,7 +378,7 @@ public class CustomCardsTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "minion_neutral_test");
-			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			Minion pirate = playMinionCard(context, player, "minion_charge_spirit");
 			playMinionCard(context, player, "minion_doomed_diver");
 			assertEquals(shouldDraw.getZone(), Zones.DECK);
 		});
@@ -2951,12 +2952,15 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testPrinceTenris() {
 		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_test_1_1");
 			playCard(context, player, "minion_prince_tenris");
-			assertEquals(player.getHero().getAttack(), 1);
+			assertEquals(2, player.getHero().getAttack());
 			context.endTurn();
-			assertEquals(player.getHero().getAttack(), 0);
+			assertEquals(0, player.getHero().getAttack());
 			context.endTurn();
-			assertEquals(player.getHero().getAttack(), 1);
+			assertEquals(2, player.getHero().getAttack());
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(0, player.getHero().getAttack());
 		});
 	}
 
@@ -4919,6 +4923,94 @@ public class CustomCardsTests extends TestBase {
 			destroy(context, neut);
 			destroy(context, fassnu);
 			assertEquals(player.getMinions().size(), 2); // two aftermath triggers
+		});
+	}	
+  
+	@Test
+  public void testOkanakaMidsummerGravtisk() {
+		runGym((context, player, opponent) -> {
+			Card test = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_whizbang_the_plunderful");
+			playCard(context, player, "minion_gravtisk_the_ancient");
+			playCard(context, player, "spell_midsummer_mirage");
+			assertEquals(0, costOf(context, player, test));
+			playCard(context, player, test);
+			assertEquals(0, costOf(context, player, player.getHand().get(0)));
+		});
+	}
+  
+  @Test
+  public void testKliveIcetoothSolo() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(1);
+			playCard(context, player, "minion_klive_icetooth");
+			assertEquals(6, player.getHero().getHp());
+		});
+	}
+
+  @Test
+  public void testNilfheimNeedlegunner() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_nilfheim_needlegunner");
+			assertEquals(opponent.getHero().getMaxHp(), opponent.getHero().getHp());
+		});
+	}
+
+	@Test
+	public void testPrimordialPebble() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "spell_lunstone");
+			playCard(context, player, "minion_test_3_2_elemental");
+			playCard(context, player, "token_ember_elemental");
+			playCard(context, player, "weapon_test_3_2");
+			context.endTurn();
+			context.endTurn();
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(2, discoverActions.size());
+				boolean elemental1 = false;
+				boolean elemental2 = false;
+				for (DiscoverAction discoverAction : discoverActions) {
+					if (discoverAction.getCard().getCardId().equals("minion_test_3_2_elemental")) elemental1 = true;
+					if (discoverAction.getCard().getCardId().equals("token_ember_elemental")) elemental2 = true;
+				}
+				assertTrue(elemental1);
+				assertTrue(elemental2);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_primordial_pebble");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_primordial_pebble");
+			playCard(context, player, "weapon_test_3_2");
+			context.endTurn();
+			context.endTurn();
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(1, discoverActions.size());
+				boolean elemental1 = false;
+				for (DiscoverAction discoverAction : discoverActions) {
+					if (discoverAction.getCard().getCardId().equals("minion_primordial_pebble")) elemental1 = true;
+				}
+				assertTrue(elemental1);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_primordial_pebble");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "spell_lunstone");
+			playCard(context, player, "weapon_test_3_2");
+			context.endTurn();
+			context.endTurn();
+			overrideDiscover(context, player, discoverActions -> {
+				fail();
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_primordial_pebble");
 		});
 	}
 }

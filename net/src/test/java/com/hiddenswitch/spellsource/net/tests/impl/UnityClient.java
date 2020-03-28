@@ -65,6 +65,8 @@ public class UnityClient implements AutoCloseable {
 	private boolean receivedGameOverMessage;
 	private AtomicInteger turnsPlayed = new AtomicInteger();
 	private int lastTurnPlayed = 0;
+	private ServerToClientMessage lastRequest;
+	private CountDownLatch turnsPlayedLatch = new CountDownLatch(9999);
 
 	private UnityClient() {
 		id = ids.getAndIncrement();
@@ -106,9 +108,9 @@ public class UnityClient implements AutoCloseable {
 		try {
 			CreateAccountResponse car = api.createAccount(
 					new CreateAccountRequest()
-					.email(username + "@hiddenswitch.com")
-					.name(username)
-					.password("testpass"));
+							.email(username + "@hiddenswitch.com")
+							.name(username)
+							.password("testpass"));
 			loginToken = car.getLoginToken();
 			api.getApiClient().setApiKey(loginToken);
 			account = car.getAccount();
@@ -273,8 +275,9 @@ public class UnityClient implements AutoCloseable {
 		switch (message.getMessageType()) {
 			case ON_UPDATE:
 				Integer turnNumber = message.getGameState().getTurnNumber();
-				if (turnNumber!=null && lastTurnPlayed!=turnNumber) {
+				if (turnNumber != null && lastTurnPlayed != turnNumber) {
 					turnsPlayed.incrementAndGet();
+					turnsPlayedLatch.countDown();
 				}
 				if (turnNumber != null && turnNumber >= turnsToPlay.get() && shouldDisconnect) {
 					disconnect();
@@ -302,6 +305,7 @@ public class UnityClient implements AutoCloseable {
 						.discardedCardIndices(Collections.singletonList(0))))));
 				break;
 			case ON_REQUEST_ACTION:
+				lastRequest = message;
 				if (!onRequestAction(message)) {
 					break;
 				}
@@ -347,6 +351,13 @@ public class UnityClient implements AutoCloseable {
 		matchmakeAndPlay(deckId, queueId);
 	}
 
+	/**
+	 * Blocks until the client is matched. Use {@link #play()} to start playing, and use {@link #waitUntilDone()} to
+	 * wait until the player is actually done with the game.
+	 *
+	 * @param deckId
+	 * @param queueId
+	 */
 	@Suspendable
 	public void matchmakeAndPlay(String deckId, String queueId) {
 		CompletableFuture<Void> matchmaking = matchmake(deckId, queueId);
@@ -373,11 +384,23 @@ public class UnityClient implements AutoCloseable {
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
 		this.turnsPlayed = new AtomicInteger();
-		this.lastTurnPlayed=0;
+		this.lastTurnPlayed = 0;
 		LOGGER.debug("play {} {}: Playing", id, getUserId());
 
 		ensureConnected();
 		sendStartGameMessage();
+	}
+
+	@Suspendable
+	public void play(int untilTurns) {
+		play();
+		this.turnsPlayedLatch = new CountDownLatch(untilTurns);
+
+		try {
+			turnsPlayedLatch.await(untilTurns, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			return;
+		}
 	}
 
 	@Suspendable
@@ -388,6 +411,9 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	public void respondRandomAction(ServerToClientMessage message) {
+		if (message == null) {
+			throw new NullPointerException("no last request found");
+		}
 		if (realtime == null) {
 			LOGGER.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
 			return;
@@ -582,5 +608,9 @@ public class UnityClient implements AutoCloseable {
 
 	public int getTurnsPlayed() {
 		return turnsPlayed.get();
+	}
+
+	public void respondRandomAction() {
+		respondRandomAction(lastRequest);
 	}
 }

@@ -551,6 +551,18 @@ public class TargetLogic implements Serializable {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
 			targets.remove(source);
 			return targets;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_SIGNATURE)) {
+			if (player.getAttribute(Attribute.SIGNATURE) instanceof String) {
+				return singleTargetAsList(context.getCardById((String)player.getAttribute(Attribute.SIGNATURE)));
+			} else {
+				return singleTargetAsList(context.getCardById(GameLogic.DEFAULT_SIGNATURE));
+			}
+		} else if (targetKey.equals(EntityReference.ENEMY_SIGNATURE)) {
+			if (context.getOpponent(player).getAttribute(Attribute.SIGNATURE) instanceof String) {
+				return singleTargetAsList(context.getCardById((String)player.getAttribute(Attribute.SIGNATURE)));
+			}  else {
+				return singleTargetAsList(context.getCardById(GameLogic.DEFAULT_SIGNATURE));
+			}
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

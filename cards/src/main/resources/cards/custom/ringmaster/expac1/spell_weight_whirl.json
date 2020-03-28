@@ -1,0 +1,23 @@
+{
+  "name": "Weight Whirl",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage to a minion and the minions next to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

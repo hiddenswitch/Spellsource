@@ -10,7 +10,6 @@ import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.Repeat;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.Test;
 
@@ -20,7 +19,7 @@ public class EditorTest extends SpellsourceTestBase {
 
 	private void drawCardHarness(TestContext testContext, String code, SuspendableAction2<ServerGameContext, Envelope> handler) {
 		sync(() -> {
-			var keepPlaying = new AtomicBoolean(false);
+			var keepPlaying = new AtomicBoolean(true);
 			try (var client = new UnityClient(testContext) {
 				@Override
 				protected boolean onRequestAction(ServerToClientMessage message) {
@@ -29,7 +28,8 @@ public class EditorTest extends SpellsourceTestBase {
 			}) {
 				client.createUserAccount();
 				client.matchmakeQuickPlay(null);
-
+				client.play(1);
+				keepPlaying.set(false);
 				// Check that the server game context gets edited properly
 				var serverGameContext = getServerGameContext(client.getUserId()).orElseThrow();
 				var envelope = Editor.putCard(new EnvelopeMethodPutCard()
@@ -40,7 +40,7 @@ public class EditorTest extends SpellsourceTestBase {
 
 				handler.call(serverGameContext, envelope);
 				keepPlaying.set(true);
-				serverGameContext.onPlayerReconnected(serverGameContext.getClient(0));
+				client.respondRandomAction();
 				client.waitUntilDone();
 			}
 		}, testContext);

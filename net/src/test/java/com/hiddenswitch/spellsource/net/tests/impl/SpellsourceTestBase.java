@@ -70,6 +70,14 @@ public abstract class SpellsourceTestBase {
 	public void tearDown(TestContext testContext) {
 	}
 
+	/**
+	 * Creates a random deck for the user.
+	 *
+	 * @param userId
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	public static DeckCreateResponse createDeckForUserId(String userId) throws SuspendExecution, InterruptedException {
 		GetCollectionResponse collection = Inventory.getCollection(GetCollectionRequest.user(userId));
 		Collections.shuffle(collection.getInventoryRecords());

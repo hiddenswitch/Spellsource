@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
+import com.hiddenswitch.spellsource.client.models.DecksUpdateCommandSetPlayerEntityAttribute;
 import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.impl.util.MongoRecord;
@@ -171,6 +172,13 @@ public interface Decks {
 			List<String> added = new ArrayList<>();
 			List<String> removed = new ArrayList<>();
 
+			/*
+			 * {
+			 *   "$set": {
+			 *     "heroClass": updateCommand.getSetHeroClass()...
+			 *   }
+			 *  }
+			 * */
 			if (updateCommand.getSetHeroClass() != null) {
 				jsonPut(collectionUpdate, "$set", json("heroClass", updateCommand.getSetHeroClass()));
 			}
@@ -178,6 +186,24 @@ public interface Decks {
 			if (updateCommand.getSetName() != null) {
 				jsonPut(collectionUpdate, "$set", json("name", updateCommand.getSetName()));
 			}
+
+			if (updateCommand.getSetPlayerEntityAttribute() != null) {
+				// Set the player entity attribute as requested
+				var command = updateCommand.getSetPlayerEntityAttribute();
+				Object value;
+
+				switch (command.getAttribute()) {
+					case SIGNATURE:
+						// Use the string value;
+						value = updateCommand.getSetPlayerEntityAttribute().getStringValue();
+						break;
+					default:
+						throw new IllegalArgumentException("invalid attribute");
+				}
+
+				jsonPut(collectionUpdate, "$set", json("playerEntityAttributes." + command.getAttribute().getValue(), value));
+			}
+
 
 			if (!collectionUpdate.isEmpty()) {
 				MongoClientUpdateResult result = mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckId), collectionUpdate);
@@ -218,7 +244,7 @@ public interface Decks {
 			}
 
 			GetCollectionResponse getCollectionResponse = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-			ValidationReport validationReport = validateDeck(getCollectionResponse.asDeck(userId), getCollectionResponse.getFormat());
+			ValidationReport validationReport = validateDeck(getCollectionResponse.asDeck(userId), getCollectionResponse.getCollectionRecord().getFormat());
 
 			collectionUpdate = new JsonObject();
 

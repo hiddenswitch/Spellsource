@@ -152,4 +152,71 @@ public class OccultistTests extends TestBase {
 			assertEquals(5 + 2 + 1 + 20, totalAttack);
 		});
 	}
+
+	@Test
+	public void testCrazedCultlordPaven() {
+		runGym((context, player, opponent) -> {
+			Minion paven = playMinionCard(context, player, "minion_paven_elemental_of_surprise");
+			playMinionCard(context, player, "minion_crazed_cultlord", paven);
+			assertEquals(3, player.getMinions().size());
+			int pavens = 0;
+			int capturedPavens = 0;
+			for (Minion minion : player.getMinions()) {
+				if (minion.getSourceCard().getCardId().equals("permanent_paven_captured")) {
+					capturedPavens++;
+				}
+				if (minion.getSourceCard().getCardId().equals("minion_paven_elemental_of_surprise")) {
+					pavens++;
+				}
+			}
+			assertEquals(1, pavens);
+			assertEquals(1, capturedPavens);
+		});
+	}
+  
+	@Test
+	public void testHeraldOfFate() {
+		runGym((context, player, opponent) -> {
+			Minion herald = playMinionCard(context, player, "minion_herald_of_fate");
+			destroy(context, herald);
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			assertEquals(28, player.getHero().getHp());
+			assertEquals(28, opponent.getHero().getHp());
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			assertEquals(27, player.getHero().getHp());
+			assertEquals(27, opponent.getHero().getHp());
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			assertEquals(26, player.getHero().getHp());
+			assertEquals(26, opponent.getHero().getHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion herald = playMinionCard(context, player, "minion_herald_of_fate");
+			destroy(context, herald);
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			assertEquals(26, player.getHero().getHp());
+			assertEquals(30, opponent.getHero().getHp());
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			assertEquals(25, player.getHero().getHp());
+			assertEquals(29, opponent.getHero().getHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion herald = playMinionCard(context, player, "minion_herald_of_fate");
+			destroy(context, herald);
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			assertEquals(26, opponent.getHero().getHp());
+			assertEquals(30, player.getHero().getHp());
+			playCard(context, opponent, "minion_test_untargeted_battlecry");
+			playCard(context, player, "minion_test_untargeted_battlecry");
+			assertEquals(25, opponent.getHero().getHp());
+			assertEquals(29, player.getHero().getHp());
+		});
+	}
 }

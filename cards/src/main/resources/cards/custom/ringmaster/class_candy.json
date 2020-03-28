@@ -1,0 +1,11 @@
+{
+  "name": "Ringmaster",
+  "type": "CLASS",
+  "hero": "hero_regina",
+  "heroClass": "CANDY",
+  "color": [200, 40, 40],
+  "blackText": false,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon 1/1 copies of your Spirits that died this turn.",
+  "description": "Opener: Summon 1/1 copies of your Spirits that died this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

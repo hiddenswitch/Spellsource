@@ -1,0 +1,31 @@
+{
+  "name": "Electric Hellkite",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "After this takes damage, deal 3 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 3,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

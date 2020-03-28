@@ -75,6 +75,8 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			Logic.triggers();
 			// Get the collection data from the configurations that are not yet populated with valid cards
 			for (Configuration configuration : request.getConfigurations()) {
+				AttributeMap playerAttributes = new AttributeMap();
+
 				if (configuration.getDeck() instanceof CollectionDeck) {
 					GetCollectionResponse deckCollection = Inventory.getCollection(new GetCollectionRequest()
 							.withUserId(configuration.getUserId().toString())
@@ -85,12 +87,17 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 					// TODO: Add player information as attached to the hero entity
 					configuration.setDeck(deck);
+
+					// Add all the attributes that were specified in the deck collection
+					// Implements Signature
+					if (deckCollection.getCollectionRecord().getPlayerEntityAttributes() != null) {
+						playerAttributes.putAll(deckCollection.getCollectionRecord().getPlayerEntityAttributes());
+					}
 				}
 
 				String username = mongo().findOne(Accounts.USERS, json("_id", configuration.getUserId().toString()), UserRecord.class).getUsername();
 				configuration.setName(username);
 				// TODO: Get more attributes from database
-				AttributeMap playerAttributes = new AttributeMap();
 				playerAttributes.put(Attribute.NAME, username);
 				playerAttributes.put(Attribute.USER_ID, configuration.getUserId().toString());
 				playerAttributes.put(Attribute.DECK_ID, configuration.getDeck().getDeckId());

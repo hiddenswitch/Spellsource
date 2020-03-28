@@ -517,6 +517,10 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference OPPOSITE_CHARACTERS = new EntityReference(-77);
 
+	public static final EntityReference FRIENDLY_SIGNATURE = new EntityReference(-78);
+
+	public static final EntityReference ENEMY_SIGNATURE = new EntityReference(-78);
+
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;

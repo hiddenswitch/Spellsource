@@ -1,94 +1,30 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.68
-SPELLSOURCE_SHADOWJAR_CLASSIFIER=all
+SPELLSOURCE_VERSION=0.8.70
 
-usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
 where:
     -h  show this help text
-    -c  build the client libraries in swagger
-    -e  deploy for Elastic Beanstalk
-    -d  deploy for Docker (requires logged-in docker hub account, optionally
-        PORTAINER_URL, PORTAINER_USERNAME, and PORTAINER_PASSWORD)
-    -l  builds and deploys the launcher
-    -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
-    -w  deploy playspellsource.com (requires spellsource on the command line)
-    -W  deploy wiki.hiddenswitch.com
-    -j  deploy JARs to Maven Central (requires signing assets)
-    -v  bump the version (requires SPELLSOURCE_VERSION indicating
-        the current version)
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
         binaries for your platform necessary for deployment
-    -A  visits the AWS console for Hidden Switch
-    -o  deploys docs to github.io
+    -v  bump the version (requires SPELLSOURCE_VERSION indicating
+        the current version)
     -C  builds the stack
     -s  deploys the stack to the specified SSH_HOST, a docker swarm manager
     -S  deploys build macOS and Windows binaries to Steam
-
-Invoking this script always rebuilds Spellsource-Server.
-
-Notes for successful deployment:
- - Requires jq, curl and docker on the PATH for Docker deployment
- - Requires eb on the path for Elastic Beanstalk deployment
-
-For example, to build the client library, bump the version and deploy to docker,
-python and playspellsource.com:
-
-  ./deploy.sh -cpdwv
 "
-deploy_elastic_beanstalk=false
-deploy_docker=false
-deploy_www=false
-deploy_python=false
-deploy_launcher=false
-deploy_wiki=false
-deploy_docs=false
 deploy_steam=false
 deploy_stack=false
 build_stack=false
 bump_version=false
 install_dependencies=false
-deploy_java=false
-build_client=false
-while getopts "hcedwpjvlWDAosSC" opt; do
+while getopts "hvCsSD" opt; do
   case "$opt" in
   h*)
     echo "$usage"
     exit
-    ;;
-  e)
-    deploy_elastic_beanstalk=true
-    echo "Deploying for Elastic Beanstalk"
-    ;;
-  c)
-    build_client=true
-    echo "Building swagger client libraries"
-    ;;
-  d)
-    deploy_docker=true
-    echo "Deploying for Docker"
-    ;;
-  W)
-    deploy_wiki=true
-    echo "Deploying mediawiki"
-    ;;
-  j)
-    deploy_java=true
-    echo "Deploying to Maven"
-    ;;
-  l)
-    deploy_launcher=true
-    echo "Deploying launcher"
-    ;;
-  p)
-    deploy_python=true
-    echo "Deploying for Python"
-    ;;
-  w)
-    deploy_www=true
-    echo "Deploying playspellsource.com"
     ;;
   v)
     bump_version=true
@@ -97,10 +33,6 @@ while getopts "hcedwpjvlWDAosSC" opt; do
   D)
     install_dependencies=true
     echo "Installing dependencies"
-    ;;
-  o)
-    deploy_docs=true
-    echo "Deploying docs"
     ;;
   s)
     deploy_stack=true
@@ -114,35 +46,10 @@ while getopts "hcedwpjvlWDAosSC" opt; do
     build_stack=true
     echo "Building and pushing stack"
     ;;
-  A)
-    open https://786922801148.signin.aws.amazon.com/console
-    exit
-    ;;
   esac
 done
 shift $((OPTIND - 1))
 [ "${1:-}" = "--" ] && shift
-
-function update_portainer() {
-  service_name=$1
-  portainer_image_name=$2
-  # It takes a while for docker hub to process all the metadata for an image, unfortunately.
-  sleep 20
-  service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
-  service_id=$(echo $service | jq -r .ID)
-  service_specification=$(echo $service | jq .Spec)
-  service_version=$(echo $service | jq .Version.Index)
-  service_update_command=$(echo $service_specification | jq ".TaskTemplate.ContainerSpec.Image |= \"${portainer_image_name}\" " | jq ".TaskTemplate.ForceUpdate |= 1 ")
-
-  # Update the container image
-  curl --fail -H "Content-Type: application/json" \
-    -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" \
-    -X POST \
-    -d "${service_update_command}" \
-    "${PORTAINER_URL}api/endpoints/1/docker/services/${service_id}/update?version=${service_version}"
-
-  echo "Deployed image"
-}
 
 # Configure virtualenv path
 if [[ -z ${VIRTUALENV_PATH+x} ]]; then
@@ -151,46 +58,32 @@ fi
 
 if [[ "$install_dependencies" == true ]]; then
   if test "Darwin" = $(uname); then
-    # Install brew, java, jq, python3, docker, python packages
+    # Install brew, python3, docker, python packages
     if ! command -v brew >/dev/null; then
       echo "Installing brew..."
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" >/dev/null
     fi
 
-    if ! command -v java -version >/dev/null; then
-      echo "Installing java..."
-      brew cask install java
-    fi
-
-    if ! command -v asdf >/dev/null; then
-      echo "Installing asdf for version management..."
-      brew install asdf
-    fi
-
     if ! command -v python3 --version >/dev/null; then
       echo "Installing python3..."
-      brew install python3 >/dev/null
-    fi
-
-    if ! command -v jq --version >/dev/null; then
-      echo "Installing jq..."
-      brew install jq >/dev/null
+      brew install python >/dev/null
     fi
 
     if ! command -v docker --version >/dev/null; then
       echo "Installing docker..."
-      brew cask install docker
+      brew cask install docker >/dev/null
     fi
 
-    if ! command -v meteor --version >/dev/null; then
-      echo "Installing meteor..."
-      curl https://install.meteor.com/ | sh
+    if ! command -v node --version >/dev/null; then
+      echo "Installing node..."
+      brew install node >/dev/null
     fi
 
     if ! command -v mongod >/dev/null; then
       echo "Installing mongod version 3.6"
-      brew install mongodb@3.6
-      brew link --force mongodb@3.6
+      brew tap mongodb/brew
+      brew install mongodb-community@3.6
+      brew link --force mongodb-community@3.6
     fi
 
     if [[ ! -f ${VIRTUALENV_PATH}/bin/activate ]]; then
@@ -213,7 +106,7 @@ if [[ "$install_dependencies" == true ]]; then
       pip3 install spellsource >/dev/null
     fi
 
-    pip3 install awscli awsebcli bump2version twine >/dev/null
+    pip3 install awscli awsebcli bump2version >/dev/null
   else
     echo "Cannot install dependencies on this platform yet"
     exit 1
@@ -256,250 +149,6 @@ if [[ -z ${GRADLE_CMD+x} ]]; then
   fi
 fi
 
-if [[ "$build_client" == true ]]; then
-  rm -rf "./client/"
-  ${GRADLE_CMD} swagger
-  UNITY_CLIENT_PATH="./unityclient"
-  if [[ -d ${UNITY_CLIENT_PATH} ]]; then
-    mkdir -pv "clientcsharp"
-    INPUT_DIR="clientcsharp"
-    OUTPUT_DIR="../${UNITY_CLIENT_PATH}/Assets/Plugins/Client"
-    ${GRADLE_CMD} swaggerClient
-    # Remove a lot of unnecessary files from the Unity project
-    rm -rf ${OUTPUT_DIR}
-    mv ${INPUT_DIR} ${OUTPUT_DIR}
-    rm -rf ${INPUT_DIR}
-    rm -rf ${OUTPUT_DIR}/src/
-    rm -rf ${OUTPUT_DIR}/docs/
-    rm -f ${OUTPUT_DIR}/build.bat
-    rm -f ${OUTPUT_DIR}/build.sh
-    rm -f ${OUTPUT_DIR}/git_push.sh
-    rm -f ${OUTPUT_DIR}/Spellsource.Client.sln
-    rm -f ${OUTPUT_DIR}/mono_nunit_test.sh
-    rm -f ${OUTPUT_DIR}/README.md
-    rm -rf ${OUTPUT_DIR}/Scripts/Spellsource.Client/Properties
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/packages.config
-    rm -rf ${OUTPUT_DIR}/Scripts/Spellsource.Client/Api
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ApiClient.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ApiException.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ApiResponse.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/Configuration.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ExceptionFactory.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/GlobalConfiguration.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IApiAccessor.cs
-    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IReadableConfiguration.cs
-  fi
-fi
-
-if [[ "$deploy_java" == true ]]; then
-  ${GRADLE_CMD} uploadArchives --no-daemon --no-parallel >/dev/null &&
-    echo "Successfully uploaded to maven. Navigating you to Sonatype if your platform supports it..."
-  if [[ -x "$(command -v open)" ]]; then
-    open "https://oss.sonatype.org/#stagingRepositories"
-  fi
-fi
-
-# Before building, retrieve the portainer password if it's not specified immediately
-
-if [[ "$deploy_docker" == true || "$deploy_launcher" == true || "$deploy_wiki" == true ]]; then
-  if [[ -z ${PORTAINER_PASSWORD+x} ]]; then
-    echo "docker deployment: Requesting PORTAINER_PASSWORD"
-    stty -echo
-    printf "Password: "
-    read PORTAINER_PASSWORD
-    stty echo
-    printf "\n"
-  fi
-
-  if [[ -z ${PORTAINER_URL+x} ]]; then
-    PORTAINER_URL="http://hs-1.i.hiddenswitch.com:9000/"
-  fi
-
-  if [[ -z ${PORTAINER_USERNAME+x} ]]; then
-    PORTAINER_USERNAME="doctorpangloss"
-  fi
-
-  # Authenticate with portainer
-  if [[ -z ${PORTAINER_BEARER_TOKEN+x} ]]; then
-    { # try
-      PORTAINER_BEARER_TOKEN=$(curl -s --fail -H "Content-Type: application/json" -X POST \
-        -d "{\"Username\":\"${PORTAINER_USERNAME}\", \"Password\": \"${PORTAINER_PASSWORD}\"}" \
-        "${PORTAINER_URL}api/auth" |
-        jq --raw-output '.jwt')
-    } || { # catch
-      echo "Invalid portainer URL, username or password"
-      exit 1
-    }
-  fi
-fi
-
-# Before building for python, check that we have the twine username and password
-if [[ "$deploy_python" == true && -z ${TWINE_USERNAME+x} ]]; then
-  echo "docker deployment: Requesting TWINE_USERNAME"
-  printf "Twine Username: "
-  read TWINE_USERNAME
-  printf "\n"
-fi
-
-if [[ "$deploy_python" == true && -z ${TWINE_PASSWORD+x} ]]; then
-  echo "docker deployment: Requesting TWINE_PASSWORD"
-  stty -echo
-  printf "Password: "
-  read TWINE_PASSWORD
-  stty echo
-  printf "\n"
-fi
-
-if [[ "$deploy_launcher" == true ]]; then
-  cd launcher
-
-  meteor npm install --save localforage
-  meteor build --server-only --architecture os.linux.x86_64 --directory ./
-
-  # Build image and upload to docker
-  { # try
-    echo "Building and uploading launcher Docker image"
-    docker build -t launcher . >/dev/null &&
-      rm -rf bundle &&
-      docker tag launcher doctorpangloss/launcher >/dev/null &&
-      docker push doctorpangloss/launcher:latest >/dev/null
-  } || { # catch
-    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
-    exit 1
-  }
-
-  cd ..
-
-  { # try
-    # Figure out the service ID
-    service_name=spellsource_launcher
-    portainer_image_name="doctorpangloss/launcher:latest"
-    update_portainer ${service_name} ${portainer_image_name}
-  } || { # catch
-    echo "Failed to update launcher service"
-    exit 1
-  }
-fi
-
-if [[ "$deploy_wiki" == true ]]; then
-  cd mediawiki
-
-  # Build image and upload to docker
-  { # try
-    echo "Building and uploading wiki Docker image"
-    docker build -t doctorpangloss/wiki . >/dev/null &&
-      docker push doctorpangloss/wiki:latest >/dev/null
-  } || { # catch
-    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
-    exit 1
-  }
-
-  cd ..
-
-  { # try
-    # Figure out the service ID
-    service_name=spellsource_mediawiki
-    portainer_image_name="doctorpangloss/wiki:latest"
-    update_portainer ${service_name} ${portainer_image_name}
-  } || { # catch
-    echo "Failed to update wiki service"
-    exit 1
-  }
-fi
-
-if [[ "$deploy_elastic_beanstalk" == true || "$deploy_docker" == true || "$deploy_python" == true ]]; then
-  echo "Building Spellsource JAR file"
-  { # try
-    # Build the server
-    ${GRADLE_CMD} net:clean 2>&1 >/dev/null &&
-      ${GRADLE_CMD} net:shadowJar 2>&1 >/dev/null
-  } || { # catch
-    echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
-    exit 1
-  }
-
-  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar" ]]; then
-    echo "Failed to build. jar not found!"
-    exit 1
-  fi
-fi
-
-if [[ "$deploy_docker" == true ]]; then
-
-  # Build image and upload to docker
-  echo "Building and uploading Docker image"
-  docker build -t doctorpangloss/spellsource . &&
-    docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} &&
-    docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest &&
-    docker push doctorpangloss/spellsource:latest
-  docker push doctorpangloss/spellsource:${SPELLSOURCE_VERSION}
-
-  # Update specific service for now instead of stack
-  { # try
-    # Figure out the service ID
-    service_name=spellsource_game
-    portainer_image_name="doctorpangloss/spellsource:${SPELLSOURCE_VERSION}"
-    update_portainer ${service_name} ${portainer_image_name}
-  } || { # catch
-    echo "Failed to update service"
-    exit 1
-  }
-fi
-
-if [[ "$deploy_www" == true ]]; then
-  if ! command -v spellsource && test -f ${VIRTUALENV_PATH}/bin/activate; then
-    echo "Using virtualenv for spellsource package located at ${VIRTUALENV_PATH}"
-    source ${VIRTUALENV_PATH}/bin/activate
-  fi
-
-  if ! command -v spellsource; then
-    echo "Failed to deploy playspellsource.com: Missing spellsource binary. Install with pip3 install -e ."
-    exit 1
-  fi
-
-  { # try
-    cd www
-    ./deploy.sh
-    cd ..
-  } || { # catch
-    echo "Failed to publish the website, try using java 8 with sdkman"
-    exit 1
-  }
-
-  echo "Deployed web"
-fi
-
-if [[ "$deploy_python" == true ]]; then
-  if ! command -v twine >/dev/null && test -f ${VIRTUALENV_PATH}/bin/activate; then
-    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}"
-    source ${VIRTUALENV_PATH}/bin/activate
-  fi
-
-  if ! command -v twine >/dev/null; then
-    echo "Failed to deploy python: Missing twine binary. Install with pip3 install twine"
-    exit 1
-  fi
-
-  cd python
-  {
-    rm -rf dist/
-    mkdir -pv dist
-    pip3 install wheel twine >/dev/null
-    python3 setup.py sdist bdist_wheel >/dev/null
-    echo Deploying
-    TWINE_USERNAME=${TWINE_USERNAME} TWINE_PASSWORD=${TWINE_PASSWORD} twine upload dist/*
-  } || {
-    echo "Failed to build python"
-  }
-
-  rm -rf dist/
-  cd ..
-fi
-
-if [[ "$deploy_docs" == true ]]; then
-  git subtree push --prefix docs origin gh-pages
-fi
-
 if [[ "$build_stack" == true ]]; then
   # Explicitly delete secrets here
   # shellcheck disable=SC2046
@@ -521,8 +170,8 @@ fi
 if [[ "$deploy_steam" == true ]]; then
   docker build -t steamguardcli -f steamguardcli/Dockerfile ./steamguardcli
   source "secrets/spellsource/unityclient-build.env"
-  STEAMCMD_GUARD_CODE="$(docker run --rm -it -v="$(pwd)"/secrets/spellsource/maFiles:/data steamguardcli mono /build/steamguard --mafiles-path /data generate-code)"
-  docker run -v="$(pwd):/home/steam/workdir" -w="/home/steam/workdir" -it cm2network/steamcmd /home/steam/steamcmd/steamcmd.sh \
+  STEAMCMD_GUARD_CODE="$(docker run --rm -v="$(pwd)"/secrets/spellsource/maFiles:/data steamguardcli mono /build/steamguard --mafiles-path /data generate-code)"
+  docker run -v="$(pwd):/home/steam/workdir" -w="/home/steam/workdir" cm2network/steamcmd /home/steam/steamcmd/steamcmd.sh \
     +login "${STEAMCMD_ACCOUNT}" "${STEAMCMD_PASSWORD}" "${STEAMCMD_GUARD_CODE}" \
     +run_app_build_http "/home/steam/workdir/secrets/spellsource/steam-app-build.vdf" \
     +quit
