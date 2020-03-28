@@ -3,11 +3,11 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "race": "BEAST",
-  "baseAttack": 1,
-  "baseHp": 1,
+  "baseAttack": 3,
+  "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your champion has +1 Attack for the rest of the game.",
+  "race": "BEAST",
+  "description": "Opener: Your champion has +1 Attack while it has a weapon this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -17,8 +17,16 @@
         "class": "BuffAura",
         "target": "FRIENDLY_HERO",
         "condition": {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "ACTIVE"
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "OwnedByPlayerCondition",
+              "targetPlayer": "ACTIVE"
+            },
+            {
+              "class": "HasWeaponCondition"
+            }
+          ]
         },
         "attackBonus": 1,
         "hpBonus": 0,

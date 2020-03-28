@@ -5,7 +5,7 @@
   "heroClass": "OBSIDIAN",
   "color": [70, 80, 90],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -1,0 +1,52 @@
+{
+  "name": "Doodles",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Your Skill becomes \"Draw a Card\" until you play a minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_draw_card_skill"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "MinionPlayedTrigger",
+              "targetPlayer": "SELF"
+            },
+            "maxFires": 1,
+            "spell": {
+              "class": "RemoveEnchantmentSpell",
+              "target": "FRIENDLY_PLAYER",
+              "card": "enchantment_draw_card_skill",
+              "howMany": 1
+            }
+          }
+        },
+        {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RefreshHeroPowerSpell"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
