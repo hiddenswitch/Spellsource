@@ -1,0 +1,29 @@
+
+{
+  "name": "Coordinated Assault",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "COMMON",
+  "description": "Discover a spell in your deck. Draw it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "attribute": "RESERVED_BOOLEAN_5",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
+    "exclusive": true,
+    "spell1": {
+      "class": "FromDeckToHandSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

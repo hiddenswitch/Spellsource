@@ -1,0 +1,27 @@
+{
+  "name": "Rally",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Add a copy of an allied minion to your hand and battlefield. Destroy two of your Lun.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "CopyCardSpell"
+      },
+      {
+        "class": "CloneMinionSpell"
+      },
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": -2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -50,9 +50,7 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 
 	@Override
 	public CardList addAll(CardList cardList) {
-		for (Card card : cardList) {
-			cards.add(card.clone());
-		}
+		cards.addAll(cardList);
 		return this;
 	}
 

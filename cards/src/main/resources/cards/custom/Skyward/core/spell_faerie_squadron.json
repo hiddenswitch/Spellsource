@@ -1,0 +1,27 @@
+{
+  "name": "Faerie Squadron",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "RARE",
+  "description": "Summon 3 random Fae.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cardSource": {
+      "class": "CatalogueSource"
+    },
+    "value": 3,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "FAE"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

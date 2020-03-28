@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Gives the {@code target} a stats boost of either *+ {@link SpellArg#VALUE} / + {@link SpellArg#VALUE}) or (+ {@link
@@ -149,6 +150,7 @@ public class BuffSpell extends RevertableSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		super.onCast(context, player, desc, source, target);
+		Objects.requireNonNull(target, source.getSourceCard().getCardId());
 		checkArguments(LOGGER, context, source, desc, SpellArg.ATTACK_BONUS, SpellArg.HP_BONUS, SpellArg.ARMOR_BONUS, SpellArg.VALUE, SpellArg.REVERT_TRIGGER);
 
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);

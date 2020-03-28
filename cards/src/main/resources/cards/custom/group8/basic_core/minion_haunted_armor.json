@@ -6,7 +6,20 @@
   "baseAttack": 6,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "<b>Dodge</b>",
+  "race": "SPIRIT",
+  "description": "<b>Dodge</b>. After an allied minion loses Dodge, gain Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseDivineShieldTrigger",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
   "attributes": {
     "DIVINE_SHIELD": true
   },
