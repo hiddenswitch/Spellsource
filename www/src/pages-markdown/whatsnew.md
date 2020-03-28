@@ -112,6 +112,9 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
 ### Upcoming Changes
  - Development card "Signature Chooser" is now correctly uncollectible. (1592)
 
+### Upcoming Changes
+ - Fixed old Vampire Lord stuff still being collectible. (1593)
+
 ### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
