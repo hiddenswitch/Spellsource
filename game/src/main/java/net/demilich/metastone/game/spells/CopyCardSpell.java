@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -57,6 +58,9 @@ public class CopyCardSpell extends Spell {
 		int numberOfCardsToCopy = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		if (target != null) {
 			Card targetCard = target.getSourceCard();
+			if (target instanceof Minion) {
+				targetCard = context.getCardById(target.getSourceCard().getCardId());
+			}
 			for (int i = 0; i < numberOfCardsToCopy; i++) {
 				final Card clone = copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
 				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);

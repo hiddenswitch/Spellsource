@@ -103,6 +103,9 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
 *New Cards*
 - Draconic Doubler, Shortrun Stockpiler, Valiant Medic, Coordinated Assault, Migraine, Rally, Enenra
 
+### Upcoming Changes
+ - Fixed a complex interation with Okanaka the Lifebender, Midsummer Mirage and Gravtisk the Ancient. (1606)
+
 ### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
