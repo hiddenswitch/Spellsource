@@ -9,7 +9,7 @@
   "spell": {
     "class": "custom.SoulscreamSpell"
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VERDANT_DREAMS"
