@@ -1,10 +1,10 @@
 {
     "name": "Fae Harbinger",
-    "baseManaCost": 3,
+    "baseManaCost": 4,
     "type": "MINION",
     "heroClass": "AZURE",
     "baseAttack": 3,
-    "baseHp": 1,
+    "baseHp": 2,
     "rarity": "EPIC",
     "race": "FAE",
     "description": "Aftermath: Reduce the Cost of cards in your hand by (1).",
