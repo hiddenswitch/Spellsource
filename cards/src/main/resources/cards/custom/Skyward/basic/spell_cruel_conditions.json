@@ -1,0 +1,25 @@
+{
+  "name": "Cruel Conditions",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Destroy a random enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

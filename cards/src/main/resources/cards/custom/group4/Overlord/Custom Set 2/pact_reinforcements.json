@@ -1,0 +1,41 @@
+{
+  "name": "Reinforcements",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "RARE",
+  "description": "<b>Pact:</b> After 2 friendly Underlings die, summon 2/2 Captives with Guard",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "MinionDeathTrigger",
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "CardPropertyCondition",
+          "card": "token_underling_overlord"
+        }
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_captiveGuard_overlord",
+          "token_captiveGuard_overlord"
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM"
+  ],
+  "fileFormatVersion": 1
+}

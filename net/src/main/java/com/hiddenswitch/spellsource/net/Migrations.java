@@ -47,7 +47,6 @@ public interface Migrations extends Verticle {
 	 *
 	 * @param vertx The vertx instance.
 	 * @param then  A handler when the migration that tells you if it was or was not successful.
-	 * @return
 	 */
 	static void migrate(Vertx vertx, Handler<AsyncResult<Void>> then) {
 		migrate(vertx)

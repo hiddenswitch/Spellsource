@@ -1,0 +1,52 @@
+{
+  "name": "Frontline Coward",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Opener: Choose and discard a card. Give adjacent minions +1/+1 and Guard.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscoverSpell",
+          "howMany": 10,
+          "spell": {
+            "class": "DiscardSpell"
+          },
+          "cardSource": {
+            "class": "HandSource",
+            "distinct": true,
+            "targetPlayer": "SELF"
+          },
+          "exclusive": true
+        },
+        {
+          "class": "MetaSpell",
+          "target": "ADJACENT_MINIONS",
+          "spells": [
+            {
+              "class": "BuffSpell",
+              "attackBonus": 1,
+              "hpBonus": 1
+            },
+            {
+              "class": "AddAttributeSpell",
+              "attribute": "TAUNT"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

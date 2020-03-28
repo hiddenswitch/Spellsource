@@ -3,7 +3,7 @@
   "type": "CLASS",
   "hero": "hero_quarnassio",
   "heroClass": "LEATHER",
-  "color": [223, 129, 0],
+  "color": [223, 128, 0],
   "blackText": false,
   "collectible": false,
   "set": "CUSTOM",
