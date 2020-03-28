@@ -6,6 +6,8 @@ header: true
 ---
 
 ### Upcoming Changes
+
+- Collectible Permanents should no longer be found by minion-generating effects. (1591)
  - Primordial Pebble now correctly only discovers Elementals. (1580)
  - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
