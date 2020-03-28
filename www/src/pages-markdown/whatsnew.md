@@ -8,6 +8,7 @@ header: true
 ### 0.8.70-3.1.1 (In Progress)
 
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
+ - Storyteller has been buffed, thanks @skurleton! (1571)
 
 ### 0.8.69-3.1.1 (March 21, 2020)
 
