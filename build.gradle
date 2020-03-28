@@ -1,4 +1,5 @@
-apply from: 'gradle/swagger.gradle'
+apply from: 'gradle/deployment.gradle'
+apply from: 'gradle/development.gradle'
 
 dependencies {
     gradleApi()
@@ -6,7 +7,7 @@ dependencies {
 }
 
 allprojects {
-    project.version = '0.8.69'
+    project.version = '0.8.70'
 }
 
 def jacksonVersion = '2.10.2'

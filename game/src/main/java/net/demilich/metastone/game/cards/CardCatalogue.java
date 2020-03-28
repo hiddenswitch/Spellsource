@@ -185,6 +185,9 @@ public class CardCatalogue {
 			if (!card.isCollectible()) {
 				continue;
 			}
+			if (card.hasAttribute(Attribute.PERMANENT)) {
+				continue;
+			}
 			if (cardType != null && !card.getCardType().isCardType(cardType)) {
 				continue;
 			}

@@ -6,13 +6,15 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Aftermath: Summon two 2/2 Golems.",
+  "race": "ELEMENTAL",
+  "description": "Elusive. Aftermath: Summon two 2/2 Golems with Elusive.",
   "deathrattle": {
     "class": "SummonSpell",
     "value": 2,
     "card": "token_fractured_golem"
   },
   "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true,
     "DEATHRATTLES": true
   },
   "collectible": true,

@@ -65,7 +65,7 @@ public class CardValidation {
 				if (description.startsWith("Deathrattle:")
 						|| description.startsWith("Aftermath:")) {
 					assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES),
-							"An Aftermath card is missing the DEATHRATTLES attribute.");
+							"An Aftermath card" + cardFile.getAbsolutePath() + " is missing the DEATHRATTLES attribute.");
 				}
 
 				if (record.getDesc().getDeathrattle() != null) {

@@ -144,16 +144,20 @@ dependencies {
 }
 
 run {
+    description("Starts the Spellsource server")
     setSystemProperties(debugSystemProperties)
 }
 
-task(runDebug, dependsOn: 'classes', type: JavaExec) {
+task(runDebug, type: JavaExec) {
+    dependsOn classes
+    description("Starts the Spellsource server attachable as a Remote debug target from IntelliJ")
     setSystemProperties(debugSystemProperties)
     setJvmArgs(["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
     main = localMainClassName
 }
 
 test {
+    description('Tests the server. Make sure mongod is running.')
     setSystemProperties(debugSystemProperties)
     useJUnitPlatform()
     maxParallelForks = 1

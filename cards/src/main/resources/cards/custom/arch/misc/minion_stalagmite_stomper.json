@@ -1,6 +1,6 @@
 {
   "name": "Stalagmite Stomper",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
   "baseAttack": 1,

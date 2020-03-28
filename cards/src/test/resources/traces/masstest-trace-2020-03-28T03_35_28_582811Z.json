@@ -1,0 +1,26 @@
+{
+  "seed" : 2247092267935212931,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CORAL", "AZURE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_inora_spellbound", "minion_mind_controlled_mech", "minion_songbird", "minion_bittertide_crab", "spell_power_chord", "minion_nezumi_master", "minion_corrupt_sentinel", "minion_eyeweaver", "weapon_crowd_pleaser", "spell_power_chord", "minion_ghuun", "minion_dreamwing_scout", "minion_holdover_lich", "minion_the_grudge", "minion_forest_magistrate", "spell_song_of_strength", "minion_nightmare_dragonflight", "spell_magical_secrets", "spell_mystical_song", "minion_alemental", "minion_fae_trickster", "minion_mollusk_meister", "minion_sonorous_spectre", "minion_gemstone_giant", "weapon_soundhorn", "minion_draconic_doubler", "minion_zilch_god_of_nothing", "minion_spirited_announcer_v2", "spell_sheet_music", "spell_enchanting_tune" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_quest_giver", "spell_explore_the_endless_skies", "minion_candied_canary", "minion_skywalker", "minion_emerald_cleanser", "minion_candied_canary", "minion_mother_matron", "minion_skywalker", "minion_mossy_giant", "minion_wild_pyrodancer", "spell_thunder", "minion_evasive_cirrus", "minion_gold_picaroon", "minion_rumbling_stormfront", "minion_fae_trickster_skyward", "minion_pumpkin_abomination", "minion_eyeweaver", "minion_sonorous_spectre", "minion_holdout_soldier", "minion_feral_child", "minion_electric_hellkite", "spell_drop_from_the_sky", "minion_esoteric_aeronaut", "minion_lounge_brownie", "spell_blow_away", "minion_fae_trickster_skyward", "spell_cruel_conditions", "minion_oni_entrapper", "minion_festivity_golem", "minion_magic_muffler" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 29 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 59 ]
+  } ],
+  "actions" : [ 0, 1, 1, 0, 0, 0, 0, 0, 4, 0, 0, 1, 4, 1, 0, 6, 0, 11, 5, 5, 6, 0, 0, 2, 8, 2, 0, 5, 2, 2, 2, 4, 2, 6, 1, 16, 1, 2, 2, 2, 0, 0, 0, 6, 6, 6, 0, 0, 15 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

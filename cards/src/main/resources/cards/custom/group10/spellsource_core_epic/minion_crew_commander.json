@@ -1,13 +1,13 @@
 {
-  "name": "Crew Commander",
+  "name": "Three Faced Spook",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "race": "PIRATE",
-  "description": "Opener: Choose an enemy minion. Summon three 1/1 Pirates to attack it.",
+  "race": "SPIRIT",
+  "description": "Lifedrain. Opener: Choose an enemy minion. Summon three 1/1 Spirits to attack it.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
@@ -28,7 +28,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "LIFESTEAL": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
