@@ -4906,7 +4906,20 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testKliveIcetoothSolo() {
+	public void testOkanakaMidsummerGravtisk() {
+		runGym((context, player, opponent) -> {
+			Card test = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_whizbang_the_plunderful");
+			playCard(context, player, "minion_gravtisk_the_ancient");
+			playCard(context, player, "spell_midsummer_mirage");
+			assertEquals(0, costOf(context, player, test));
+			playCard(context, player, test);
+			assertEquals(0, costOf(context, player, player.getHand().get(0)));
+		});
+	}
+  
+  @Test
+  public void testKliveIcetoothSolo() {
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(1);
 			playCard(context, player, "minion_klive_icetooth");
