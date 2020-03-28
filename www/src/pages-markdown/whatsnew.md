@@ -5,6 +5,10 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+
+ - Nilfheim Needlegunner no longer triggers off of itself. (1610)
+
 ### 0.8.70-3.1.1 (Marcy 27, 2020)
 
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
