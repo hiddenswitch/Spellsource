@@ -1,10 +1,10 @@
 {
-  "name": "Brutish Counterattack",
+  "name": "Reinforcements",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "<b>Pact:</b> After two friendly minions have died, deal 2 damage to all enemies.",
+  "description": "<b>Pact:</b> After 2 friendly Underlings die, summon 2/2 Captives with Guard",
   "condition": {
     "class": "CanPlayPactCondition"
   },
@@ -15,13 +15,18 @@
       "countUntilCast": 2,
       "eventTrigger": {
         "class": "MinionDeathTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "CardPropertyCondition",
+          "card": "token_underling_overlord"
+        }
       },
       "spell": {
-        "class": "DamageSpell",
-        "target": "ENEMY_CHARACTERS",
-        "value": 2,
-        "ignoreSpellDamage": true
+        "class": "SummonSpell",
+        "cards": [
+          "token_captiveGuard_overlord",
+          "token_captiveGuard_overlord"
+        ]
       }
     }
   },
@@ -30,8 +35,7 @@
   },
   "collectible": true,
   "sets": [
-    "CUSTOM",
-    "CLASSIC"
+    "CUSTOM"
   ],
   "fileFormatVersion": 1
 }

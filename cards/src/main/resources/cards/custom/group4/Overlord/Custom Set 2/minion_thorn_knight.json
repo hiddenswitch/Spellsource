@@ -1,0 +1,31 @@
+{
+  "name": "Thorn Knight",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "Guard. Aftermath: If your champion has 15 or less Health, summon a 4/5 Thorn Captain with Guard.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_thorn_captain"
+    },
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_HERO",
+      "value": 15,
+      "attribute": "HP",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "attributes": {
+    "TAUNT": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
