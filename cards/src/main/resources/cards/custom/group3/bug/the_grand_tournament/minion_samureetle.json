@@ -6,6 +6,7 @@
   "baseAttack": 7,
   "baseHp": 9,
   "rarity": "RARE",
+  "race": "BEAST",
   "description": "Guard. Whenever you use your Skill, gain 4 Armor.",
   "trigger": {
     "eventTrigger": {

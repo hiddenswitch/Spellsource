@@ -1,0 +1,14 @@
+{
+  "name": "Minion 3/2",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "race": "ELEMENTAL",
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

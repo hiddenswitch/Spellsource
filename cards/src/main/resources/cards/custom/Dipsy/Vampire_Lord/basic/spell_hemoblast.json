@@ -10,7 +10,7 @@
     "class": "HealSpell",
     "value": 15
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

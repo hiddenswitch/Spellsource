@@ -1,0 +1,34 @@
+{
+  "name": "Grim Awakening",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Give all minions in your board and graveyard Lifedrain.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "LIFESTEAL"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_GRAVEYARD",
+        "filter": {
+          "class": "EntityTypeFilter",
+          "entityType": "MINION"
+        },
+        "attribute": "LIFESTEAL"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ],
+  "fileFormatVersion": 1
+}

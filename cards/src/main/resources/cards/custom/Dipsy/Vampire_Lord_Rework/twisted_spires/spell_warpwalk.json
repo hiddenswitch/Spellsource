@@ -1,0 +1,31 @@
+{
+  "name": "Warpwalk",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Give a minion Elusive and \"Aftermath: Return this to your hand\".",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "UNTARGETABLE_BY_SPELLS"
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "ReturnTargetToHandSpell",
+          "target": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

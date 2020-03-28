@@ -21,7 +21,6 @@ public class OniQueenTests extends TestBase {
 			player.getWeaponZone().get(0).setHp(4);
 			attack(context, player, player.getHero(), opponent.getHero());
 			attack(context, player, player.getHero(), opponent.getHero());
-			attack(context, player, player.getHero(), opponent.getHero());
 			assertFalse(target.hasAttribute(Attribute.AURA_RUSH));
 			playCard(context, player, "minion_insurgency_captain_krika");
 			assertFalse(target.hasAttribute(Attribute.AURA_RUSH));
@@ -106,6 +105,7 @@ public class OniQueenTests extends TestBase {
 		});
 	}
 
+	@Test
 	public void testRuffianShiroTargetSelection() {
 		runGym((context, player, opponent) -> {
 			Card handDemon = receiveCard(context, player, "minion_demon_test");

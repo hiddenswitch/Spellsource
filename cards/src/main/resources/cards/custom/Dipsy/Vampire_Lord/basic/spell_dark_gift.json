@@ -10,7 +10,7 @@
     "class": "BuffSpell",
     "hpBonus": 3
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

@@ -1,0 +1,30 @@
+{
+  "name": "Skywalker",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Opener: Add a random Skyward spell to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "AZURE",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

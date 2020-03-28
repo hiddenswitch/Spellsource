@@ -6,6 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",
+  "race": "BEAST",
   "description": "Aftermath: Summon four 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",

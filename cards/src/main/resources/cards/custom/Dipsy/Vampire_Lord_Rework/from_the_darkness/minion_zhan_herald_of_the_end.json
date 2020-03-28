@@ -1,0 +1,56 @@
+{
+  "name": "Zhan, Herald of the End",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If your deck is empty, you have 15 or less Health remaining and you have no other minions, unleash the end.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "EntityCountValueProvider",
+            "target": "FRIENDLY_DECK"
+          },
+          "value2": 0
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "LESS_OR_EQUAL",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_HERO",
+			"attribute": "HP"
+          },
+          "value2": 15
+        },
+		{
+		  "class": "MinionCountCondition",
+		  "value": 1,
+		  "operation": "EQUAL",
+		  "targetPlayer": "SELF"
+		}
+      ]
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_yakha_reiri"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

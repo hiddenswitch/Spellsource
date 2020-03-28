@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitFiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -84,8 +85,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	/**
 	 * Configures a handler for methods and notifications for the client.
 	 * <p>
-	 * A common pattern is to do things to the connection object. Once you are done setting up, make sure to call
-	 * {@code fut.handle(Future.succeededFuture());}.
+	 * A common pattern is to do things to the connection object. Once you are done setting up, make sure to call {@code
+	 * fut.handle(Future.succeededFuture());}.
 	 * <pre>
 	 *   {@code
 	 *   		Connection.connected((connection, fut) -> {
@@ -177,10 +178,10 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			// All handlers should run simultaneously but we'll wait until the handlers have run
 			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
 				Promise<Void> fut = Promise.promise();
-				Vertx.currentContext().runOnContext(v -> {
+				Vertx.currentContext().runOnContext(suspendableHandler(v -> {
 					span.log("setupHandler");
 					setupHandler.handle(connection, fut);
-				});
+				}));
 				return fut.future();
 			}).collect(toList())).setHandler(h));
 			// Send an envelope to indicate that the connection is ready.

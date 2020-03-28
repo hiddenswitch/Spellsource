@@ -32,13 +32,11 @@ public interface Tracing {
 	}
 
 	static void error(Throwable throwable, Span span, boolean finish) {
-		if (span instanceof NoopSpan) {
-			LOGGER.error("", throwable);
+		if (span instanceof NoopSpan || span == null) {
+			LOGGER.error(throwable.getMessage(), throwable);
 			return;
 		}
-		if (span == null) {
-			return;
-		}
+
 		Tags.ERROR.set(span, true);
 		Tags.SAMPLING_PRIORITY.set(span, 1);
 		span.log(ImmutableMap.of(

@@ -308,8 +308,7 @@ public interface Inventory {
 
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
-				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed())
-						.setStandard(record.isStandardDeck()));
+				responses.add(GetCollectionResponse.collection(record, deckInventories.get(deckId)));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -337,16 +336,9 @@ public interface Inventory {
 		List<JsonObject> results = mongo().find(INVENTORY, json("collectionIds", collectionId));
 		final List<InventoryRecord> inventoryRecords = results.stream().map(r -> QuickJson.fromJson(r, InventoryRecord.class)).collect(toList());
 
-		if (type == CollectionTypes.DECK) {
-			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed())
-					.setStandard(deck.isStandardDeck()).setValidationReport(deck.getValidationReport());
-		} else /* if (type == CollectionTypes.USER) */ {
-			return GetCollectionResponse.user(userId, inventoryRecords);
-		} /*  else {
-			return new GetCollectionResponse()
-					.withCardRecords(cardRecords);
-		} */
+		CollectionRecord collection = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
+
+		return GetCollectionResponse.collection(collection, inventoryRecords);
 	}
 
 	static TrashCollectionResponse trashCollection(TrashCollectionRequest request) throws SuspendExecution, InterruptedException {

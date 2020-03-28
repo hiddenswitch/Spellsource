@@ -2,7 +2,6 @@ package net.demilich.metastone.game.spells;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -15,8 +14,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * Triggers the {@code target} entity's aftermaths.
@@ -42,17 +39,17 @@ public class TriggerDeathrattleSpell extends Spell {
 		if (target instanceof Actor) {
 			Actor actor = (Actor) target;
 			for (int i = 0; i < value; i++) {
-				context.getLogic().resolveDeathrattles(player, actor);
+				context.getLogic().resolveAftermaths(player, actor);
 			}
 		} else if (target instanceof Card) {
 			Card card = (Card) target;
 			if (card.getDesc().getDeathrattle() != null) {
 				SpellUtils.castChildSpell(context, player, card.getDesc().getDeathrattle(), source, target);
-				context.getDeathrattles().addDeathrattle(player.getId(), source.getReference(), card.getDesc().getDeathrattle());
+				context.getAftermaths().addAftermath(player.getId(), source.getReference(), card.getDesc().getDeathrattle());
 			}
 			for (SpellDesc deathrattle : new ArrayList<>(card.getDeathrattleEnchantments())) {
 				SpellUtils.castChildSpell(context, player, deathrattle, source, target);
-				context.getDeathrattles().addDeathrattle(player.getId(), source.getReference(), deathrattle);
+				context.getAftermaths().addAftermath(player.getId(), source.getReference(), deathrattle);
 			}
 
 			if (card.getDesc().getDeathrattle() == null && card.getDeathrattleEnchantments().isEmpty()) {

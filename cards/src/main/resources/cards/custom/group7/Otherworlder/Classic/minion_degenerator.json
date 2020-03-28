@@ -8,16 +8,6 @@
   "rarity": "EPIC",
   "race": "TITAN",
   "description": "<b>Wither (5).</b>",
-  "trigger": {
-    "eventTrigger": {
-      "class": "DamageCausedTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES"
-    },
-    "spell": {
-      "class": "WitherSpell",
-      "target": "EVENT_TARGET"
-    }
-  },
   "attributes": {
     "WITHER": 5
   },

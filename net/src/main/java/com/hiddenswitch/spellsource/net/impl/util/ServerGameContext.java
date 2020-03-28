@@ -11,15 +11,8 @@ import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.impl.Client;
-import com.hiddenswitch.spellsource.net.impl.HasElapsableTurns;
-import com.hiddenswitch.spellsource.net.impl.Server;
-import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
+import com.hiddenswitch.spellsource.net.impl.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.net.impl.BinaryCarrier;
-import com.hiddenswitch.spellsource.net.impl.GameId;
-import com.hiddenswitch.spellsource.net.impl.TimerId;
-import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.server.BotsServiceBehaviour;
 import com.hiddenswitch.spellsource.net.impl.server.Configuration;
 import com.hiddenswitch.spellsource.net.impl.server.VertxScheduler;
@@ -32,6 +25,7 @@ import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
+import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
@@ -62,10 +56,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Stream;
@@ -107,7 +98,6 @@ public class ServerGameContext extends GameContext implements Server {
 	private final AtomicInteger eventCounter = new AtomicInteger(0);
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
-	private boolean didExpire;
 
 	/**
 	 * {@inheritDoc}
@@ -154,6 +144,9 @@ public class ServerGameContext extends GameContext implements Server {
 
 			List<Integer> usedPlayerIds = new ArrayList<>(2);
 
+			// Check if we should later enable editing
+			var isEditable = Editor.isEditable(this);
+
 			// Each configuration corresponds to a human or bot player
 			// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
 			for (Configuration configuration : getPlayerConfigurations()) {
@@ -184,14 +177,12 @@ public class ServerGameContext extends GameContext implements Server {
 
 				Closeable closeableBehaviour = null;
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
-				var isEditable = false;
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
 					BotsServiceBehaviour behaviour = new BotsServiceBehaviour(gameId);
 					setBehaviour(configuration.getPlayerId(), behaviour);
 					closeableBehaviour = behaviour;
 					// Does not have a client representing it
-					isEditable = true;
 				} else {
 					// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
 					EventBus bus = Vertx.currentContext().owner().eventBus();
@@ -252,10 +243,11 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 
 				closeables.add(closeableBehaviour);
+			}
 
-				if (isEditable) {
-					closeables.add(Editor.enableEditing(this));
-				}
+			// Only enable editing if we actually got this far
+			if (isEditable) {
+				closeables.add(Editor.enableEditing(this));
 			}
 		} finally {
 			span.finish();
@@ -1161,6 +1153,14 @@ public class ServerGameContext extends GameContext implements Server {
 		return false;
 	}
 
+	/**
+	 * Causes both players to lose the game. <b>Never deadlocks.</b>
+	 * <p>
+	 * This method is appropriate to call as a bail-out error procedure when the game context is being modified externally
+	 * by editing or otherwise.
+	 * <p>
+	 * Ending the game requires the lock.
+	 */
 	@Suspendable
 	public void loseBothPlayers() {
 		try {
@@ -1169,14 +1169,6 @@ public class ServerGameContext extends GameContext implements Server {
 		} finally {
 			releaseUsers();
 		}
-	}
-
-	public void setDidExpire(boolean didExpire) {
-		this.didExpire = didExpire;
-	}
-
-	public boolean getDidExpire() {
-		return didExpire;
 	}
 
 	/**

@@ -60,8 +60,12 @@ public class HealSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int healing = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		int healing = getHealing(context, player, desc, source, target);
 		context.getLogic().heal(player, (Actor) target, Math.max(0, healing), source);
+	}
+
+	protected int getHealing(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		return desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 	}
 }
 

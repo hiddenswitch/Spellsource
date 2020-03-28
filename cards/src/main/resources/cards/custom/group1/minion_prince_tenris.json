@@ -3,7 +3,6 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "race": "BEAST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
@@ -17,7 +16,7 @@
       "aura": {
         "class": "BuffAura",
         "target": "FRIENDLY_HERO",
-        "conditions": {
+        "condition": {
           "class": "AndCondition",
           "conditions": [
             {

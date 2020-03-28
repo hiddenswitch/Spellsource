@@ -15,7 +15,7 @@
       "targetPlayer": "SELF"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "CLASSIC"

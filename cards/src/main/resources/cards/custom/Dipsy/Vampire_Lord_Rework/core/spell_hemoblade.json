@@ -1,0 +1,55 @@
+{
+  "name": "Hemoblade",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Take [3] damage. Equip a [2]/[3] weapon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        },
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "EquipWeaponSpell",
+        "card": "token_weapon_hemoblade"
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_WEAPON",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 0
+        }
+      }
+    ]
+  },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 2
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

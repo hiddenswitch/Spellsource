@@ -1,0 +1,29 @@
+{
+  "name": "Sanguiphage",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Gain +2 Attack and Lifedrain this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+	"target": "FRIENDLY_HERO",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "LIFESTEAL",
+        "revertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

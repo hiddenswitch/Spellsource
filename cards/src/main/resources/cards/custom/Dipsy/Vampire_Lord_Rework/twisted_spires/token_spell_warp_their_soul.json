@@ -1,0 +1,41 @@
+{
+  "name": "Warp Their Soul",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Any spells they cast from now on are recast by you with the same targets.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "AfterSpellCastedTrigger",
+        "sourcePlayer": "OPPONENT"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "token_spell_warp_their_soul",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "CastCardsSpell",
+            "targetPlayer": "SELF",
+            "secondaryTarget": "EVENT_SOURCE",
+            "target": "EVENT_TARGET"
+          }
+        ]
+      }
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

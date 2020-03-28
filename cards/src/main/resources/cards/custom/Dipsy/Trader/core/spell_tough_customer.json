@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "EPIC",
-  "description": "Give a minion +3/+3 and Guard. Whenever it takes damage, add a Gold Coin to your hand.",
+  "description": "Give a minion +3/+3 and Guard. Whenenver it takes damage, add a Gold Coin to your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -20,20 +20,16 @@
       },
       {
         "class": "AddEnchantmentSpell",
-        "spell": {
-          "class": "AddEnchantmentSpell",
-          "target": "EVENT_TARGET",
-          "trigger": {
-            "eventTrigger": {
-              "class": "DamageReceivedTrigger",
-              "hostTargetType": "IGNORE_OTHER_TARGETS"
-            },
-            "spell": {
-              "class": "ReceiveCardSpell",
-              "card": "spell_gold_coin"
-            },
-            "persistentOwner": true
-          }
+        "trigger": {
+          "eventTrigger": {
+            "class": "DamageReceivedTrigger",
+            "hostTargetType": "IGNORE_OTHER_TARGETS"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "card": "spell_gold_coin"
+          },
+          "persistentOwner": true
         }
       }
     ]

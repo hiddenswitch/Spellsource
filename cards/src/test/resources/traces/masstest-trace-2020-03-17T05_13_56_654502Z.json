@@ -1,0 +1,26 @@
+{
+  "seed" : 103022580126027046,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "OLIVE", "BLOOD" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_writers_block", "minion_sleepy_sprite", "minion_fae_flyrider", "spell_engaging_story", "minion_disco_inferno", "minion_dragon_librarian", "minion_big_bad_coyote", "minion_rapier_rodent", "minion_worrisome_scribe", "minion_swift_stinger", "minion_wild_pyrodancer", "minion_novice_time_traveler", "minion_cursebrewing_witch", "minion_queen_cinderella", "minion_corona_fae_defender", "secret_urgent_experiment", "spell_magic_word_mishap", "minion_flare_fireworker", "minion_wild_pyrodancer", "spell_tome_of_power", "minion_beauty_and_the_beast", "minion_boar_brawler", "spell_bored_to_death", "minion_chained_chimera", "minion_yokai_bonder", "secret_urgent_experiment", "minion_wolfcrier", "minion_undead_trickster", "minion_enhancing_shaman", "minion_snappy_author" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_bloodburn", "minion_yakha_reiri", "minion_stalwart_sculptor", "spell_vampire_red_lightning", "minion_starving_vampire", "spell_mass_feeding", "weapon_the_souldrinker", "minion_tiny_persecutor", "minion_highmountain_primalist", "spell_soulscream", "spell_sudden_conversion", "minion_fiendish_giant", "minion_hulking_chiroptid", "minion_knight_eternal", "spell_indoctrination", "minion_petal_knight", "spell_devouring_vortex", "minion_sanguisiren", "minion_deathless_protector", "spell_take_flight", "minion_yaungol_guardian", "minion_sleepy_scarecrow", "spell_devouring_vortex", "minion_malicious_mirage", "spell_vampire_red_lightning", "minion_matriarch_aiiran", "minion_faerie_nightmare", "minion_amathyst_panther", "minion_lady_uki", "minion_dimensional_courier" ]
+  } ],
+  "deckFormatName" : "Pauper",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 8 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 51, 47 ]
+  } ],
+  "actions" : [ 0, 0, 3, 1, 1, 4, 3, 2, 0, 3, 1, 0, 3, 3, 2, 7, 5, 0, 1, 3, 2, 16, 0, 6, 1, 0, 2, 1, 0, 2, 4, 17, 7, 0, 0, 0, 8, 5, 23, 4, 3, 8, 0, 2, 1, 11, 0, 1, 1, 0, 5, 12, 15, 12, 11, 27, 20, 4, 0, 2, 7, 0, 2, 0, 6, 26, 11, 5, 4, 0, 7, 5, 14, 20, 14, 6, 5, 5, 9, 20, 11, 0, 7, 3, 2, 0, 2, 1, 3, 5, 8, 5, 3, 3, 2, 3, 0, 0, 1, 2, 3, 1, 1, 0, 2, 0, 3, 2, 2, 3, 8, 3, 2, 0, 0, 3 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

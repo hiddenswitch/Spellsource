@@ -208,6 +208,10 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_LAST_MINION_PLAYED;
 			case "other_friendly_characters":
 				return EntityReference.OTHER_FRIENDLY_CHARACTERS;
+			case "friendly_signature":
+				return EntityReference.FRIENDLY_SIGNATURE;
+			case "enemy_signature":
+				return EntityReference.ENEMY_SIGNATURE;
 			default:
 				throw new NullPointerException(str);
 		}

@@ -1,0 +1,33 @@
+{
+  "name": "Spirit Saber",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "TWILIGHT",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Discover an Aftermath you triggered this game. Give it to this weapon.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "cardSource": {
+        "class": "AftermathsCardSource",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddDeathrattleSpell",
+        "target": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

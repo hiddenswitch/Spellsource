@@ -63,7 +63,7 @@ public class HealingMissilesSpell extends HealSpell {
 			}
 
 			Entity randomTarget = context.getLogic().getRandom(validTargets);
-			context.getLogic().heal(player, (Actor) randomTarget, healing, source, false);
+			context.getLogic().heal(player, (Actor) randomTarget, healing, source, false).getHealing();
 		}
 	}
 

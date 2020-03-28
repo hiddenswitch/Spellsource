@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hiddenswitch.spellsource.client.models.ValidationReport;
 import com.hiddenswitch.spellsource.net.models.CollectionTypes;
+import net.demilich.metastone.game.cards.AttributeMap;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A mongodb record of the user's collection metadata. Does not contain the inventory IDs themselves.
@@ -28,6 +30,8 @@ public class CollectionRecord extends MongoRecord {
 	private int wins;
 	private int totalGames;
 	private ValidationReport validationReport;
+	private Map<String, AttributeMap> inventoryAttributes;
+	private AttributeMap playerEntityAttributes;
 
 	/**
 	 * Hero class for deck collection records.
@@ -200,12 +204,36 @@ public class CollectionRecord extends MongoRecord {
 		return this;
 	}
 
-	public void setValidationReport(ValidationReport validationReport) {
+	public Map<String, AttributeMap> getInventoryAttributes() {
+		return inventoryAttributes;
+	}
+
+	public CollectionRecord setInventoryAttributes(Map<String, AttributeMap> inventoryAttributes) {
+		this.inventoryAttributes = inventoryAttributes;
+		return this;
+	}
+
+	public CollectionRecord setValidationReport(ValidationReport validationReport) {
 		this.validationReport = validationReport;
+		return this;
 	}
 
 	public ValidationReport getValidationReport() {
 		return validationReport;
+	}
+
+	/**
+	 * Attributes that should be put on the player entity before the start of the game.
+	 *
+	 * @return
+	 */
+	public AttributeMap getPlayerEntityAttributes() {
+		return playerEntityAttributes;
+	}
+
+	public CollectionRecord setPlayerEntityAttributes(AttributeMap playerEntityAttributes) {
+		this.playerEntityAttributes = playerEntityAttributes;
+		return this;
 	}
 }
 

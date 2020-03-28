@@ -25,6 +25,7 @@ public class CardSourceDescDeserializer extends DescDeserializer<CardSourceDesc,
 		ctx.add(CardSourceArg.FORMAT, ParseValueType.STRING);
 		ctx.add(CardSourceArg.HERO_CLASS, ParseValueType.STRING);
 		ctx.add(CardSourceArg.CARD_SOURCES, ParseValueType.CARD_SOURCE_ARRAY);
+		ctx.add(CardSourceArg.VALUE, ParseValueType.VALUE);
 	}
 
 	@Override

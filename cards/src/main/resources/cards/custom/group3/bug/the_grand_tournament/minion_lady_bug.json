@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
+  "race": "BEAST",
   "description": "After a friendly minion dies, give your other minions +1 Health.",
   "trigger": {
     "eventTrigger": {

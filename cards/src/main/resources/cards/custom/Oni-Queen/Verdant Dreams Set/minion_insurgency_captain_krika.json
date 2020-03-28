@@ -59,7 +59,7 @@
             "value": {
               "class": "AlgebraicValueProvider",
               "operation": "SUBTRACT",
-              "value1": 3
+              "value1": 3,
               "value2": {
                 "class": "AttributeValueProvider",
                 "attribute": "ATTACKS_THIS_GAME",

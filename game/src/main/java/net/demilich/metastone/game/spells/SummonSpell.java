@@ -397,3 +397,4 @@ public class SummonSpell extends Spell {
 	}
 
 }
+

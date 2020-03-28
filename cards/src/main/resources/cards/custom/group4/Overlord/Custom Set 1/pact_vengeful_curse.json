@@ -1,0 +1,35 @@
+{
+  "name": "Vengeful Curse",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "RARE",
+  "description": "<b>Pact:</b> After a friendly minion dies, destroy a random enemy minion.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 1,
+      "eventTrigger": {
+        "class": "MinionDeathTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true
+      }
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM"
+  ],
+  "fileFormatVersion": 1
+}

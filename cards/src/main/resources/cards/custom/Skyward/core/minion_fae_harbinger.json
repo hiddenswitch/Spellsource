@@ -1,0 +1,30 @@
+{
+  "name": "Fae Harbinger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "FAE",
+  "description": "Aftermath: Reduce the Cost of cards in your hand by (1).",
+  "deathrattle": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_HAND",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "target": "SELF",
+      "value": 1,
+      "operation": "SUBTRACT"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.ReturnTargetToHandSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +35,6 @@ public final class SleightOfHandSpell extends ReturnTargetToHandSpell {
 
 		List<SpellDesc> deathrattles = new ArrayList<>(minion.getDeathrattles());
 		super.onCast(context, player, desc, source, target);
-		context.getLogic().resolveDeathrattles(player.getId(), target.getReference(), deathrattles, target.getOwner(), boardPosition);
+		context.getLogic().resolveAftermaths(player.getId(), target.getReference(), deathrattles, target.getOwner(), boardPosition);
 	}
 }

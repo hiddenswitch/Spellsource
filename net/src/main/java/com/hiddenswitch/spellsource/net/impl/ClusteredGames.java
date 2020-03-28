@@ -30,10 +30,7 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -52,6 +49,10 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 		registration = Rpc.register(this, Games.class);
 		LOGGER.info("start: Consumers={}", registration.getMessageConsumers().stream().map(MessageConsumer::address).collect(toList()));
+	}
+
+	public Map<GameId, ServerGameContext> getContexts() {
+		return Collections.unmodifiableMap(contexts);
 	}
 
 	@Override
@@ -74,6 +75,8 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			Logic.triggers();
 			// Get the collection data from the configurations that are not yet populated with valid cards
 			for (Configuration configuration : request.getConfigurations()) {
+				AttributeMap playerAttributes = new AttributeMap();
+
 				if (configuration.getDeck() instanceof CollectionDeck) {
 					GetCollectionResponse deckCollection = Inventory.getCollection(new GetCollectionRequest()
 							.withUserId(configuration.getUserId().toString())
@@ -84,12 +87,17 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 					// TODO: Add player information as attached to the hero entity
 					configuration.setDeck(deck);
+
+					// Add all the attributes that were specified in the deck collection
+					// Implements Signature
+					if (deckCollection.getCollectionRecord().getPlayerEntityAttributes() != null) {
+						playerAttributes.putAll(deckCollection.getCollectionRecord().getPlayerEntityAttributes());
+					}
 				}
 
 				String username = mongo().findOne(Accounts.USERS, json("_id", configuration.getUserId().toString()), UserRecord.class).getUsername();
 				configuration.setName(username);
 				// TODO: Get more attributes from database
-				AttributeMap playerAttributes = new AttributeMap();
 				playerAttributes.put(Attribute.NAME, username);
 				playerAttributes.put(Attribute.USER_ID, configuration.getUserId().toString());
 				playerAttributes.put(Attribute.DECK_ID, configuration.getDeck().getDeckId());
@@ -108,6 +116,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 						new VertxScheduler(Vertx.currentContext().owner()),
 						request.getConfigurations());
 
+				// Enable tracing
 				context.setSpanContext(span.context());
 
 				try {

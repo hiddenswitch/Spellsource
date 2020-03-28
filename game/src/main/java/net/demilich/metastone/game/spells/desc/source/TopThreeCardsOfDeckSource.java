@@ -11,15 +11,14 @@ import net.demilich.metastone.game.entities.Entity;
  * <p>
  * Implements Tracking.
  */
-public final class TopThreeCardsOfDeckSource extends DeckSource {
+public final class TopThreeCardsOfDeckSource extends TopCardsOfDeckSource {
 
 	public TopThreeCardsOfDeckSource(CardSourceDesc desc) {
 		super(desc);
 	}
 
 	@Override
-	protected CardList match(GameContext context, Entity source, Player player) {
-		CardList deck = super.match(context, source, player);
-		return new CardArrayList(deck.subList(Math.max(0, deck.size() - 3), deck.size()));
+	protected int howMany(GameContext context, Entity source, Player player) {
+		return 3;
 	}
 }

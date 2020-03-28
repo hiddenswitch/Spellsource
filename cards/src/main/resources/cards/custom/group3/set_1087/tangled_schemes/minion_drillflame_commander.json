@@ -1,0 +1,30 @@
+{
+  "name": "Drillflame Commander",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Supremacy: Give another random friendly Elemental +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "hpBonus": 2,
+	  "filter": {
+        "class": "CardFilter",
+        "race": "ELEMENTAL"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

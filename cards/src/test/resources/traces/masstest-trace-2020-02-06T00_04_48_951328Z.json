@@ -1,0 +1,26 @@
+{
+  "seed" : 9112330299834462696,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "CORAL", "TWILIGHT" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_dawn_drake", "spell_encore_v2", "spell_soundwave", "minion_mountain_nightmare", "minion_matriarch_aiiran", "minion_songbird", "spell_enchanting_tune", "minion_songbird", "minion_warclub_ruffian", "minion_stone_sentinel_basic", "minion_lounge_brownie", "minion_shadowveiler", "spell_crescendo", "minion_giant_serpent", "minion_holdout_soldier", "minion_dragon_pod", "spell_enchanting_tune", "minion_magma_hound", "weapon_stick", "minion_demonic_frontrunner", "spell_mute", "minion_commander_gareth", "spell_crescendo", "minion_forest_magistrate", "minion_passionate_piper", "minion_spirited_announcer_v2", "minion_nilfheim_needlegunner", "minion_hoffis_the_dunewalker", "minion_towering_treant", "spell_sheet_music" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_shadowbite", "spell_dark_skies", "minion_gatekeeper_acolyte", "minion_doctosaur", "spell_grim_awakening_rework", "minion_pixie_knight", "minion_bone_guard", "minion_ursol_the_wise", "minion_tainted_skulker", "minion_skeletal_warrior", "minion_end_reveler", "minion_hold_hunter", "minion_gemstone_giant", "minion_gravelord_goa", "spell_blood_moon_rising_rework", "minion_aegwynn", "spell_ichor_blast_rework", "minion_zhan_herald_of_the_end", "spell_hemoshade", "minion_gatekeeper_acolyte", "minion_vein_wyrm", "minion_bookkeeper", "minion_sly_conquistador", "minion_lord_of_the_sea", "spell_voracity", "minion_soulsmith_yuki", "minion_plunderogue", "minion_ankylo_devotee", "minion_fassnu_avenger", "spell_voracity" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 5, 24 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 59, 41 ]
+  } ],
+  "actions" : [ 0, 1, 2, 2, 1, 2, 2, 3, 2, 3, 0, 7, 2, 3, 4, 2, 1, 1, 0, 4, 0, 1, 13, 4, 2, 3, 8, 5, 0, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

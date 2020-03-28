@@ -19,7 +19,7 @@
         "class": "ModifyMaxManaSpell",
         "value": -2
       }
-    }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

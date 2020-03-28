@@ -24,8 +24,6 @@ public abstract class AbstractFriendlyCardAura extends Aura {
 		if (getDesc().getTarget() == null) {
 			targets = EntityReference.FRIENDLY_CARDS;
 		}
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 		EventTriggerDesc cardPlayedTrigger = CardPlayedTrigger.create();
 		cardPlayedTrigger.put(EventTriggerArg.TARGET_PLAYER, TargetPlayer.SELF);
 		triggers.add(cardPlayedTrigger.create());

@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConnectionImpl implements Connection {
 	static {
@@ -28,7 +29,6 @@ public class ConnectionImpl implements Connection {
 	}
 
 	private ServerWebSocket socket;
-	private SpanContext parentSpan;
 	private final String userId;
 	private final List<Handler<Throwable>> exceptionHandlers = new ArrayList<>();
 	private final List<Handler<Void>> drainHandlers = new ArrayList<>();
@@ -44,7 +44,6 @@ public class ConnectionImpl implements Connection {
 	@Override
 	public void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler, SpanContext parentSpan) {
 		this.socket = socket;
-		this.parentSpan = parentSpan;
 		String eventBusAddress = getEventBusAddress();
 		EventBus eventBus = Vertx.currentContext().owner().eventBus();
 		MessageConsumer<Envelope> consumer = eventBus.consumer(eventBusAddress);
@@ -102,23 +101,28 @@ public class ConnectionImpl implements Connection {
 			}
 		});
 
+		var endOnce = new AtomicBoolean(false);
 		socket.endHandler(v1 -> {
-			try {
-				span.log("ending");
-				for (Handler<Void> handler : endHandlers) {
-					handler.handle(v1);
+			if (endOnce.compareAndSet(false, true)) {
+				try {
+					span.log("ending");
+					for (Handler<Void> handler : endHandlers) {
+						handler.handle(v1);
+					}
+					exceptionHandlers.clear();
+					drainHandlers.clear();
+					handlers.clear();
+					endHandlers.clear();
+					consumer.unregister();
+					closeConsumer.unregister();
+					span.log("ended");
+				} catch (Throwable any) {
+					Tracing.error(any, span, true);
+				} finally {
+					span.finish();
 				}
-				exceptionHandlers.clear();
-				drainHandlers.clear();
-				handlers.clear();
-				endHandlers.clear();
-				consumer.unregister();
-				closeConsumer.unregister();
-				span.log("ended");
-			} catch (Throwable any) {
-				Tracing.error(any, span, true);
-			} finally {
-				span.finish();
+			} else {
+				Tracing.error(new RuntimeException("endHandler: Ending the same socket twice, for some mysterious reason"), span, true);
 			}
 		});
 

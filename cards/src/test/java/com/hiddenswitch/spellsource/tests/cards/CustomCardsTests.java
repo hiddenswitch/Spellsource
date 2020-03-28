@@ -21,6 +21,9 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSourceArg;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
+import net.demilich.metastone.game.spells.desc.source.TopCardsOfDeckSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -293,7 +296,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testHoffisTheDunewalker() {
+	public void testHoffisTheDunewalkerV0() {
 		// This has to test two effects:
 		//   1. The QueryTargetSpell effect
 		//   2. The AddBattlecrySpell effect
@@ -305,7 +308,7 @@ public class CustomCardsTests extends TestBase {
 			Card shouldSpawnSandpile2 = putOnTopOfDeck(context, player, "minion_test_untargeted_battlecry");
 			Card shouldSpawnSandpile3 = putOnTopOfDeck(context, player, "minion_neutral_test");
 			Card shouldSpawnSandpile4 = putOnTopOfDeck(context, player, "minion_neutral_test");
-			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker");
+			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker_v0");
 			for (int i = 0; i < 6; i++) {
 				context.getLogic().drawCard(player.getId(), player.getHero());
 			}
@@ -366,7 +369,7 @@ public class CustomCardsTests extends TestBase {
 	public void testDoomerDiver() {
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "minion_neutral_test");
-			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			Minion pirate = playMinionCard(context, player, "minion_charge_spirit");
 			attack(context, player, pirate, opponent.getHero());
 			playMinionCard(context, player, "minion_doomed_diver");
 			assertEquals(shouldDraw.getZone(), Zones.HAND);
@@ -374,7 +377,7 @@ public class CustomCardsTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "minion_neutral_test");
-			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			Minion pirate = playMinionCard(context, player, "minion_charge_spirit");
 			playMinionCard(context, player, "minion_doomed_diver");
 			assertEquals(shouldDraw.getZone(), Zones.DECK);
 		});
@@ -2222,10 +2225,10 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testMenacingDragotron() {
 		runGym((context, player, opponent) -> {
-			Minion toDestroy = playMinionCard(context, player, "minion_menacing_dragotron");
+			playMinionCard(context, player, "minion_test_3_2_elemental");
 			Minion shouldBeDestroyed = playMinionCard(context, player, "minion_neutral_test_1");
-			Minion shouldNotBeDestroyed = playMinionCard(context, player, "minion_test_3_2");
-			destroy(context, toDestroy);
+			Minion shouldNotBeDestroyed = playMinionCard(context, player, 1, 4);
+			playMinionCard(context, player, "minion_menacing_dragotron");
 			assertTrue(shouldBeDestroyed.isDestroyed());
 			assertFalse(shouldNotBeDestroyed.isDestroyed());
 		});
@@ -2948,12 +2951,15 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testPrinceTenris() {
 		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_test_1_1");
 			playCard(context, player, "minion_prince_tenris");
-			assertEquals(player.getHero().getAttack(), 1);
+			assertEquals(2, player.getHero().getAttack());
 			context.endTurn();
-			assertEquals(player.getHero().getAttack(), 0);
+			assertEquals(0, player.getHero().getAttack());
 			context.endTurn();
-			assertEquals(player.getHero().getAttack(), 1);
+			assertEquals(2, player.getHero().getAttack());
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(0, player.getHero().getAttack());
 		});
 	}
 
@@ -4873,6 +4879,28 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_food_critic");
 			assertEquals(player.getDeck().size(), 9); //doesn't cause a loop that would destroy your whole deck
 			assertEquals(opponent.getHero().getHp(), 29); //overdrawing does still counts as roasting for other purposes
+		});
+	}
+
+	@Test
+	public void testTopCardsOfDeckSource() {
+		runGym((context, player, opponent) -> {
+			CardDesc cardDesc = context.getCardById("spell_otherwordly_truth").getDesc().clone();
+			CardSourceDesc sourceDesc = new CardSourceDesc(TopCardsOfDeckSource.class);
+			sourceDesc.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.OPPONENT);
+			sourceDesc.put(CardSourceArg.VALUE, 5);
+			cardDesc.getSpell().put(SpellArg.CARD_SOURCE, sourceDesc.create());
+			cardDesc.getSpell().put(SpellArg.VALUE, 5);
+			Card card = cardDesc.create();
+			context.addTempCard(card);
+
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, opponent, "spell_otherwordly_truth");
+			}
+
+			playCard(context, player, card);
+			assertEquals(30, opponent.getDeck().size());
+			assertEquals(5, player.getDeck().size());
 		});
 	}
 }

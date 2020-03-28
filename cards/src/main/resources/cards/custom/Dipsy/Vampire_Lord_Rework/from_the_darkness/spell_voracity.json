@@ -1,0 +1,41 @@
+{
+  "name": "Voracity",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Give a minion and your champion +[2] Attack this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 2
+        }
+      },
+      {
+        "class": "TemporaryAttackSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 2
+        }
+      }
+    ]
+  },
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 2
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ],
+  "fileFormatVersion": 1
+}

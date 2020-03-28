@@ -1,0 +1,26 @@
+{
+  "name": "Rending Claws",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Deal 1 damage to all enemies. Add one more copy of this to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "card": "twinspell_rending_claws"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

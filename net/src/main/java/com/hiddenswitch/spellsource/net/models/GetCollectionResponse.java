@@ -1,42 +1,29 @@
 package com.hiddenswitch.spellsource.net.models;
 
-import com.hiddenswitch.spellsource.client.models.ValidationReport;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
-import com.hiddenswitch.spellsource.client.models.CardRecord;
-import com.hiddenswitch.spellsource.client.models.Entity;
-import com.hiddenswitch.spellsource.client.models.InventoryCollection;
-import com.hiddenswitch.spellsource.net.impl.util.DeckType;
+import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
+import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Created by bberman on 1/22/17.
- */
+import static java.util.stream.Collectors.toList;
+
 public final class GetCollectionResponse implements Serializable {
 	private List<GetCollectionResponse> responses;
 	private List<InventoryRecord> inventoryRecords;
-	private CollectionTypes collectionType;
-	private String heroClass;
-	private String name;
-	private String collectionId;
-	private String userId;
-	private boolean trashed;
-	private DeckType deckType;
-	private String heroCardId;
-	private String format;
-	private boolean standard;
-	private ValidationReport validationReport;
+	private CollectionRecord collectionRecord;
 
 	private GetCollectionResponse() {
 	}
@@ -46,42 +33,35 @@ public final class GetCollectionResponse implements Serializable {
 				.withResponses(responses);
 	}
 
-	public static GetCollectionResponse user(String collectionId, List<InventoryRecord> inventoryRecords) {
+	public static GetCollectionResponse collection(CollectionRecord collectionRecord, List<InventoryRecord> inventoryRecords) {
 		return new GetCollectionResponse()
-				.withCollectionId(collectionId)
-				.withCardRecords(inventoryRecords)
-				.withUserId(collectionId)
-				.withCollectionType(CollectionTypes.USER);
+				.setCardRecords(inventoryRecords)
+				.setCollectionRecord(collectionRecord);
 	}
 
-	public static GetCollectionResponse deck(String userId, String deckId, String name, String heroClass, String heroCardId, String format, DeckType deckType, List<InventoryRecord> inventoryRecords, boolean trashed) {
-		return new GetCollectionResponse()
-				.withTrashed(trashed)
-				.withCollectionType(CollectionTypes.DECK)
-				.withCollectionId(deckId)
-				.withCardRecords(inventoryRecords)
-				.withHeroClass(heroClass)
-				.withHeroCardId(heroCardId)
-				.withUserId(userId)
-				.withDeckType(deckType)
-				.withFormat(format)
-				.withName(name);
-	}
-
+	/**
+	 * Turns this response into a {@link net.demilich.metastone.game.decks.Deck} that can actually be used in a
+	 * {@link GameContext}.
+	 *
+	 * @param userId
+	 * @return
+	 */
 	public GameDeck asDeck(String userId) {
 		GameDeck deck = new GameDeck();
-		deck.setDeckId(getCollectionId());
-		deck.setHeroClass(getHeroClass());
-		deck.setName(getName());
-		String heroCardId = getHeroCardId();
+		deck.setDeckId(getCollectionRecord().getId());
+		deck.setHeroClass(getCollectionRecord().getHeroClass());
+		deck.setName(getCollectionRecord().getName());
+		String heroCardId = getCollectionRecord().getHeroCardId();
 		if (heroCardId != null) {
-			deck.setHeroCard((Card) CardCatalogue.getCardById(heroCardId));
+			deck.setHeroCard(CardCatalogue.getCardById(heroCardId));
 		}
 
-		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, getCollectionId()))
+		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, getCollectionRecord().getId()))
 				.filter(Objects::nonNull)
 				.map(CardDesc::create)
 				.forEach(deck.getCards()::addCard);
+
+		deck.setPlayerAttributes(getCollectionRecord().getPlayerEntityAttributes());
 
 		return deck;
 	}
@@ -90,86 +70,14 @@ public final class GetCollectionResponse implements Serializable {
 		return inventoryRecords;
 	}
 
-	public void setInventoryRecords(List<InventoryRecord> inventoryRecords) {
-		this.inventoryRecords = inventoryRecords;
-	}
-
-	public String getHeroClass() {
-		return heroClass;
-	}
-
-	public void setHeroClass(String heroClass) {
-		this.heroClass = heroClass;
-	}
-
-	public GetCollectionResponse withCardRecords(List<InventoryRecord> inventoryRecords) {
+	public GetCollectionResponse setCardRecords(List<InventoryRecord> inventoryRecords) {
 		this.inventoryRecords = inventoryRecords;
 		return this;
 	}
 
-	public GetCollectionResponse withHeroClass(final String heroClass) {
-		this.heroClass = heroClass;
-		return this;
-	}
-
-	public CollectionTypes getCollectionType() {
-		return collectionType;
-	}
-
-	public void setCollectionType(CollectionTypes collectionType) {
-		this.collectionType = collectionType;
-	}
-
-	public GetCollectionResponse withCollectionType(final CollectionTypes collectionType) {
-		this.collectionType = collectionType;
-		return this;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public GetCollectionResponse withName(final String name) {
-		this.name = name;
-		return this;
-	}
-
-	public String getCollectionId() {
-		return collectionId;
-	}
-
-	public void setCollectionId(String collectionId) {
-		this.collectionId = collectionId;
-	}
-
-	private GetCollectionResponse withCollectionId(String collectionId) {
-		this.collectionId = collectionId;
-		return this;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public GetCollectionResponse withUserId(String userId) {
-		this.userId = userId;
-		return this;
-	}
 
 	public List<GetCollectionResponse> getResponses() {
 		return responses;
-	}
-
-	public void setResponses(List<GetCollectionResponse> responses) {
-		this.responses = responses;
 	}
 
 	public GetCollectionResponse withResponses(final List<GetCollectionResponse> responses) {
@@ -183,25 +91,26 @@ public final class GetCollectionResponse implements Serializable {
 			throw new RuntimeException();
 		}
 
-		String displayName = getCollectionId();
-
-		if (getName() != null) {
-			displayName = getName();
+		if (getCollectionRecord() == null) {
+			Tracing.error(new NullPointerException("collectionRecord"), GlobalTracer.get().activeSpan(), false);
+			return null;
 		}
 
-		final String fakeHeroClass = getHeroClass() == null ? "RED" : getHeroClass();
-		GameContext emptyContext = new GameContext(fakeHeroClass, fakeHeroClass);
+		String displayName = getCollectionRecord().getId();
+
+		if (getCollectionRecord().getName() != null) {
+			displayName = getCollectionRecord().getName();
+		}
 
 		List<InventoryRecord> inventoryRecords = getInventoryRecords();
 		List<CardRecord> records = new ArrayList<>();
 
 		for (InventoryRecord cr : inventoryRecords) {
-			final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId());
+			final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionRecord().getId());
 
 			if (record == null) {
 				continue;
 			}
-			record.create();
 			boolean isActor = record.getType() == CardType.MINION || record.getType() == CardType.WEAPON;
 			// Send significantly less data
 			// TODO: Just look it up by the card ID in the client
@@ -228,120 +137,56 @@ public final class GetCollectionResponse implements Serializable {
 
 		InventoryCollection collection = new InventoryCollection()
 				.name(displayName)
-				.id(getCollectionId())
-				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
-				.format(getFormat())
-				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
-				.isStandardDeck(isStandard())
-				.validationReport(validationReport == null ? new com.hiddenswitch.spellsource.client.models.ValidationReport() : validationReport)
+				.id(getCollectionRecord().getId())
+				.type(InventoryCollection.TypeEnum.valueOf(getCollectionRecord().getType().toString()))
+				.format(getCollectionRecord().getFormat())
+				.deckType(getCollectionRecord().getType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getCollectionRecord().getDeckType().toString()) : null)
+				.isStandardDeck(getCollectionRecord().isStandardDeck())
+				.validationReport(getCollectionRecord().getValidationReport() == null ? new com.hiddenswitch.spellsource.client.models.ValidationReport() : getCollectionRecord().getValidationReport())
+				.playerEntityAttributes(getCollectionRecord().getPlayerEntityAttributes() != null ? getCollectionRecord().getPlayerEntityAttributes()
+						.entrySet()
+						.stream()
+						.map(kv -> {
+							// TODO: Correctly check the type of the value when we support more than just string values for an attribute value tuple.
+							return new AttributeValueTuple().attribute(PlayerEntityAttributes.valueOf(kv.getKey().name())).stringValue((String) kv.getValue());
+						})
+						.collect(toList()) : Collections.emptyList())
 				.inventory(records);
 
-		if (getHeroClass() != null) {
-			collection.heroClass(getHeroClass().toString());
+		if (getCollectionRecord().getHeroClass() != null) {
+			collection.heroClass(getCollectionRecord().getHeroClass());
 		}
 
 		return collection;
 	}
 
-	public boolean getTrashed() {
-		return trashed;
-	}
-
-	public boolean isTrashed() {
-		return trashed;
-	}
-
-	public void setTrashed(boolean trashed) {
-		this.trashed = trashed;
-	}
-
-	public GetCollectionResponse withTrashed(final boolean trashed) {
-		this.trashed = trashed;
-		return this;
-	}
-
-	public DeckType getDeckType() {
-		return deckType;
-	}
-
-	public void setDeckType(DeckType deckType) {
-		this.deckType = deckType;
-	}
-
-	public GetCollectionResponse withDeckType(final DeckType deckType) {
-		this.deckType = deckType;
-		return this;
-	}
-
-	public String getHeroCardId() {
-		return heroCardId;
-	}
-
-	public void setHeroCardId(String heroCardId) {
-		this.heroCardId = heroCardId;
-	}
-
-	public GetCollectionResponse withHeroCardId(String heroCardId) {
-		this.heroCardId = heroCardId;
-		return this;
-	}
 
 	public static GetCollectionResponse empty() {
 		return new GetCollectionResponse();
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof GetCollectionResponse)) {
-			return false;
-		}
-
-		GetCollectionResponse rhs = (GetCollectionResponse) obj;
-
-		final boolean idEquals = new EqualsBuilder()
-				.append(collectionId, rhs.collectionId)
-				.isEquals();
-
-		return idEquals
-				|| new EqualsBuilder()
-				.append(collectionType, rhs.collectionType)
-				.append(heroClass, rhs.heroClass)
-				.append(deckType, rhs.deckType)
-				.append(heroCardId, rhs.heroCardId)
-				.append(inventoryRecords == null ? null : inventoryRecords.stream().map(InventoryRecord::getCardId).toArray(),
-						rhs.inventoryRecords == null ? null : rhs.inventoryRecords.stream().map(InventoryRecord::getCardId).toArray()).isEquals();
-
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof GetCollectionResponse)) return false;
+		GetCollectionResponse that = (GetCollectionResponse) o;
+		return com.google.common.base.Objects.equal(responses, that.responses) &&
+				com.google.common.base.Objects.equal(inventoryRecords, that.inventoryRecords) &&
+				com.google.common.base.Objects.equal(getCollectionRecord(), that.getCollectionRecord());
 	}
 
-	public String getFormat() {
-		return format;
+	@Override
+	public int hashCode() {
+		return com.google.common.base.Objects.hashCode(responses, inventoryRecords, getCollectionRecord());
 	}
 
-	public void setFormat(String format) {
-		this.format = format;
+	public CollectionRecord getCollectionRecord() {
+		return collectionRecord;
 	}
 
-	public GetCollectionResponse withFormat(String format) {
-		this.format = format;
+	public GetCollectionResponse setCollectionRecord(CollectionRecord collectionRecord) {
+		this.collectionRecord = collectionRecord;
 		return this;
-	}
-
-	public boolean isStandard() {
-		return standard;
-	}
-
-	public GetCollectionResponse setStandard(boolean standard) {
-		this.standard = standard;
-		return this;
-	}
-
-	public GetCollectionResponse setValidationReport(ValidationReport validationReport) {
-		this.validationReport = validationReport;
-		return this;
-	}
-
-	public ValidationReport getValidationReport() {
-		return validationReport;
 	}
 }
 

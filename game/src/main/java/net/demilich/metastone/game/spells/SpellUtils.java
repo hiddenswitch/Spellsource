@@ -116,7 +116,7 @@ public class SpellUtils {
 		}
 
 		player = determineCastingPlayer.getCastingPlayer();
-		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 
 		PlayCardAction action = null;
 		if (card.isChooseOne()) {
@@ -154,7 +154,7 @@ public class SpellUtils {
 
 		if (action == null) {
 			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
-			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+			player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 			return false;
 		}
 
@@ -172,15 +172,9 @@ public class SpellUtils {
 				}
 			}
 
-			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
 			// Do we resolve battlecries?
-			if (resolveBattlecry) {
-				// TODO: Doesn't quite do what it's supposed to
-				if (RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, card, (Actor) source)) {
-					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
-					return true;
-				}
-			} else {
+			if (!resolveBattlecry && action instanceof HasBattlecry) {
+				HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
 				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
 				// true but this method's parameter to not resolve battlecries will be respected
 				BattlecryDesc nullBattlecry = new BattlecryDesc();
@@ -202,7 +196,7 @@ public class SpellUtils {
 				} else {
 					// Card should be revealed, but there were no valid targets so the spell isn't cast
 					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
-					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+					player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 					return true;
 				}
 			}
@@ -210,7 +204,7 @@ public class SpellUtils {
 			// Target requirement may have been none, but the action is still valid.
 		} else {
 			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
-			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+			player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 			return false;
 		}
 
@@ -234,7 +228,7 @@ public class SpellUtils {
 			}
 		}
 
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 		return true;
 	}
 
@@ -324,7 +318,7 @@ public class SpellUtils {
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.
 	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an {@code
-	 * 		"OUTPUT_CARD"} value corresponds to.
+	 * "OUTPUT_CARD"} value corresponds to.
 	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
@@ -383,7 +377,7 @@ public class SpellUtils {
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
-	 *    DiscoverCardSpell}.
+	 * DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, Entity source, SpellDesc desc, CardList cards) {
@@ -423,14 +417,8 @@ public class SpellUtils {
 		if (discoverActions.size() == 0) {
 			return null;
 		}
-		final DiscoverAction discoverAction;
 
-		if (context.getLogic().attributeExists(Attribute.RANDOM_CHOICES)) {
-			discoverAction = (DiscoverAction) context.getLogic().getRandom(discoverActions);
-		} else {
-			discoverAction = (DiscoverAction) context.getLogic().requestAction(player, discoverActions);
-		}
-
+		DiscoverAction discoverAction = (DiscoverAction) context.getLogic().requestAction(player, discoverActions);
 		// We do not perform the game action here
 
 		// Move the cards back
@@ -459,7 +447,7 @@ public class SpellUtils {
 	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecries()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
-	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
+	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -721,7 +709,7 @@ public class SpellUtils {
 	 * @param desc    The {@link SpellDesc} typically of the calling spell.
 	 * @return A list of cards.
 	 * @see #getCards(GameContext, Player, Entity, Entity, SpellDesc, int) for a complete description of the rules of how
-	 * 		cards are generated or retrieved in this method.
+	 * cards are generated or retrieved in this method.
 	 */
 	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc) {
 		return getCards(context, player, target, source, desc, desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
@@ -735,7 +723,7 @@ public class SpellUtils {
 	 * <p>
 	 * The {@link SpellDesc} given in {@code desc} is inspected for a variety of arguments. If there is a {@link
 	 * SpellArg#CARD_SOURCE} or {@link SpellArg#CARD_FILTER} specified, the card source generates a list of cards using
-	 * {@link net.demilich.metastone.game.spells.desc.source.CardSource#match(GameContext, Entity, Player)}, and that list
+	 * {@link net.demilich.metastone.game.spells.desc.source.CardSource#getCards(GameContext, Entity, Player)}, and that list
 	 * is filtered using {@link EntityFilter#matches(GameContext, Player, Entity, Entity)}.
 	 * <p>
 	 * Anytime {@link SpellArg#CARD} or {@link SpellArg#CARDS} is specified, the card IDs in those args are added to the
@@ -882,7 +870,7 @@ public class SpellUtils {
 	 *                            TargetPlayer#OPPONENT} is chosen here, then the opponent of the owner of the {@code
 	 *                            source} will be used.
 	 * @return An object containing information related to who is the casting player and whether or not the source has
-	 * 		been destroyed.
+	 * been destroyed.
 	 */
 	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
 		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
@@ -895,11 +883,13 @@ public class SpellUtils {
 	 * @return
 	 */
 	public static boolean isRecursive(Class<? extends Spell> callingClass) {
+		/*
 		return StackWalker.getInstance().walk(s -> s
 				.takeWhile(f -> f.getClassName().contains(GameContext.class.getPackageName()))
 				.skip(2)
 				.limit(16)
-				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));
+				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));*/
+		return false;
 	}
 
 	/**

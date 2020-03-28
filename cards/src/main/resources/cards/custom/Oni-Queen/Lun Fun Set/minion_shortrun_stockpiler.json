@@ -16,13 +16,15 @@
       "targetPlayer": "SELF"
     },
     "targetSelection": "NONE",
-    "class": "CardCostModifierSpell",
-    "target": "FRIENDLY_HAND",
-    "cardCostModifier": {
-      "class": "CardCostModifier",
-      "target": "SELF",
-      "value": 1,
-      "operation": "SUBTRACT"
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      }
     }
   },
   "attributes": {

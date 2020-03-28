@@ -1,0 +1,18 @@
+{
+  "name": "Tian Lon, Incorruptible",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Can't be affected or destroyed by spells or Skills.",
+  "aura": {
+    "class": "IncorruptibilityAura",
+    "target": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
