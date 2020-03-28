@@ -3,29 +3,24 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8,
-  "baseHp": 8,
+  "baseAttack": 10,
+  "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, add a random Source spell to your hand.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-    },
+  "description": "Opener: Add a random Source spell to your hand.",
+  "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",
-      "target": "FRIENDLY_CHARACTERS",
       "cards": [
         "spell_aelin_apotheosis",
-        "spell_aelin_awakening",
         "spell_aelin_creation",
-        "spell_aelin_dominate",
         "spell_aelin_worldsculpt"
       ],
       "randomTarget": true
     }
   },
-  "attributes": {},
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1

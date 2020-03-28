@@ -296,7 +296,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testHoffisTheDunewalker() {
+	public void testHoffisTheDunewalkerV0() {
 		// This has to test two effects:
 		//   1. The QueryTargetSpell effect
 		//   2. The AddBattlecrySpell effect
@@ -308,7 +308,7 @@ public class CustomCardsTests extends TestBase {
 			Card shouldSpawnSandpile2 = putOnTopOfDeck(context, player, "minion_test_untargeted_battlecry");
 			Card shouldSpawnSandpile3 = putOnTopOfDeck(context, player, "minion_neutral_test");
 			Card shouldSpawnSandpile4 = putOnTopOfDeck(context, player, "minion_neutral_test");
-			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker");
+			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker_v0");
 			for (int i = 0; i < 6; i++) {
 				context.getLogic().drawCard(player.getId(), player.getHero());
 			}
@@ -369,7 +369,7 @@ public class CustomCardsTests extends TestBase {
 	public void testDoomerDiver() {
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "minion_neutral_test");
-			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			Minion pirate = playMinionCard(context, player, "minion_charge_spirit");
 			attack(context, player, pirate, opponent.getHero());
 			playMinionCard(context, player, "minion_doomed_diver");
 			assertEquals(shouldDraw.getZone(), Zones.HAND);
@@ -377,7 +377,7 @@ public class CustomCardsTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "minion_neutral_test");
-			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			Minion pirate = playMinionCard(context, player, "minion_charge_spirit");
 			playMinionCard(context, player, "minion_doomed_diver");
 			assertEquals(shouldDraw.getZone(), Zones.DECK);
 		});
@@ -2951,12 +2951,15 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testPrinceTenris() {
 		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_test_1_1");
 			playCard(context, player, "minion_prince_tenris");
-			assertEquals(player.getHero().getAttack(), 1);
+			assertEquals(2, player.getHero().getAttack());
 			context.endTurn();
-			assertEquals(player.getHero().getAttack(), 0);
+			assertEquals(0, player.getHero().getAttack());
 			context.endTurn();
-			assertEquals(player.getHero().getAttack(), 1);
+			assertEquals(2, player.getHero().getAttack());
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(0, player.getHero().getAttack());
 		});
 	}
 
@@ -4898,6 +4901,14 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, card);
 			assertEquals(30, opponent.getDeck().size());
 			assertEquals(5, player.getDeck().size());
+		});
+	}
+
+	@Test
+	public void testNilfheimNeedlegunner() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_nilfheim_needlegunner");
+			assertEquals(opponent.getHero().getMaxHp(), opponent.getHero().getHp());
 		});
 	}
 }

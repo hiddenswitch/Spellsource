@@ -1,0 +1,17 @@
+{
+  "name": "Charge Spirit Test",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

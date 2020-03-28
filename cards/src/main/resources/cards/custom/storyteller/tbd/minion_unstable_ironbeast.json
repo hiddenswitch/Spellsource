@@ -7,7 +7,7 @@
   "baseHp": 5,
   "race": "MECH",
   "rarity": "COMMON",
-  "description": "Dash. Aftermath: Give a random friendly minion +1/+1 and Guard.",
+  "description": "Dash. Aftermath: Give a random friendly minion +3/+3 and Guard.",
   "deathrattle": {
     "target": "FRIENDLY_MINIONS",
     "randomTarget": true,
@@ -15,7 +15,7 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 1
+        "value": 3
       },
       {
         "class": "AddAttributeSpell",

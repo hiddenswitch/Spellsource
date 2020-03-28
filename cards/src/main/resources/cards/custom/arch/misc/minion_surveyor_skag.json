@@ -1,6 +1,6 @@
 {
   "name": "Surveyor Skag",
-  "baseManaCost": 9,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
   "baseAttack": 5,

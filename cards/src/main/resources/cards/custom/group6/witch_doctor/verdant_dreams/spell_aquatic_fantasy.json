@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Restore #14 Health. Shuffle two random cards from your hand into your deck.",
+  "description": "Restore #14 Health. Reshuffle two cards.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -14,14 +14,8 @@
         "value": 14
       },
       {
-        "class": "ShuffleOriginalToDeckSpell",
-        "target": "FRIENDLY_HAND",
-        "randomTarget": true
-      },
-      {
-        "class": "ShuffleOriginalToDeckSpell",
-        "target": "FRIENDLY_HAND",
-        "randomTarget": true
+        "class": "ChooseAndReshuffleSpell",
+        "value": 2
       }
     ]
   },
