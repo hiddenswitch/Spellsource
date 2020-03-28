@@ -1,0 +1,36 @@
+{
+  "name": "Lord's Guard",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Opener: Gain 3 Armor for each Captive and Underling you control.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": {
+        "class": "EntityCountValueProvider",
+        "target": "OTHER_FRIENDLY_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+            "token_captive_overlord",
+            "token_captiveGuard_overlord",
+            "token_underling_overlord"
+          ]
+        },
+        "multiplier": 3
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

@@ -23,6 +23,9 @@
       }
     }
   },
+  "attributes": {
+    "PACT": true
+  },
   "collectible": true,
   "sets": [
     "CUSTOM",

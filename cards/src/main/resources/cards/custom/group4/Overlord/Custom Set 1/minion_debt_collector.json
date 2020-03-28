@@ -1,0 +1,51 @@
+{
+  "name": "Debt Collector",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "<b>Opener:</b> <b>Discover</b> and play a <b>Pact</b>. <b>Aftermath:</b> If it's your turn, <b>Discover</b> and play a <b>Pact</b>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "AttributeFilter",
+        "attribute": "PACT",
+        "operation": "HAS"
+      }
+    }
+  },
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    },
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "AttributeFilter",
+        "attribute": "PACT",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

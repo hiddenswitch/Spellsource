@@ -1,0 +1,31 @@
+{
+  "name": "Moonlit Dragon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: Gain +1 Health for each card in your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

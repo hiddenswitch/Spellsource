@@ -1,0 +1,48 @@
+{
+  "name": "Hoffis the Dunewalker",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Give the top 5 minions in your deck, \"Opener: Summon a 0/2 Sandpile with Guard.\"",
+  "race": "ELEMENTAL",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "QueryTargetSpell",
+      "howMany": 5,
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "INDEX",
+        "multiplier": -1
+      },
+      "spell": {
+        "class": "AddBattlecrySpell",
+        "battlecry": {
+          "targetSelection": "NONE",
+          "spell": {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_sandpile"
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

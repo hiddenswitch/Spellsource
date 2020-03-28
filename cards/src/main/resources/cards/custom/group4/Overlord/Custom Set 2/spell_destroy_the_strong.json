@@ -1,0 +1,25 @@
+{
+  "name": "Destroy the Strong",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage to all minions except Captives and Underlings.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 3,
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cards": [
+        "token_captive_overlord",
+        "token_captiveGuard_overlord"
+      ],
+      "invert": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

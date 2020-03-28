@@ -3,7 +3,7 @@
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3,
+  "baseAttack": 5,
   "baseHp": 3,
   "rarity": "COMMON",
   "description": "Dodge. After this loses Dodge, your champion gains 6 Armor.",

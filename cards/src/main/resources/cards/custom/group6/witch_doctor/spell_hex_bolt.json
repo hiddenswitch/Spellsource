@@ -4,14 +4,8 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Deal $1 damage to an enemy minion and the enemy champion.",
-  "condition": {
-    "class": "MinionCountCondition",
-    "value": 0,
-    "operation": "GREATER",
-    "targetPlayer": "OPPONENT"
-  },
-  "targetSelection": "ENEMY_MINIONS",
+  "description": "Deal $1 damage to a minion and the enemy champion.",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
