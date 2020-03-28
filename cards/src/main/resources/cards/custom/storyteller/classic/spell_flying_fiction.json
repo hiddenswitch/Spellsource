@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "COMMON",
-  "description": "Summon two 1/1 Pagelings. Give them Dash.",
+  "description": "Summon two 1/1 Pagelings with Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -14,12 +14,7 @@
         "cards": [
           "token_pageling",
           "token_pageling"
-        ],
-        "spell": {
-          "class": "AddAttributeSpell",
-          "target": "OUTPUT",
-          "attribute": "RUSH"
-        }
+        ]
       }
     ]
   },

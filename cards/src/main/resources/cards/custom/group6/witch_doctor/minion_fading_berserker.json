@@ -3,16 +3,16 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ROSE",
-  "baseAttack": 4,
-  "baseHp": 1,
+  "baseAttack": 1,
+  "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Opener: Gain +3 Health until your next turn.",
+  "description": "Opener: Gain +3 Attack until your next turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-      "hpBonus": 3,
+      "attackBonus": 3,
       "revertTrigger": {
         "class": "TurnStartTrigger",
         "targetPlayer": "SELF"

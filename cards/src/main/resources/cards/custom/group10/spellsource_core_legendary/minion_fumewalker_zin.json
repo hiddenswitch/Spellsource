@@ -2,7 +2,7 @@
   "name": "Fumewalker Zin",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "BLUEGREY",
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "LEGENDARY",

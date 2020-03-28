@@ -1,12 +1,12 @@
 {
-  "name": "Chainwrecker Corsair",
+  "name": "Fallen Warrior",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4,
+  "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "PIRATE",
+  "race": "SPIRIT",
   "description": "Your champion also damages adjacent minions.",
   "trigger": {
     "eventTrigger": {
