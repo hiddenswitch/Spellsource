@@ -134,6 +134,7 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
  - Improve the reliability of Spirit from Long Past and other interactions with the graveyard as a source of cards.
  - Soulscream no longer concedes a match and now has correct behaviour. (1584)
  - Various Hive Queen balance changes. (1568)
+ - Fassnu Avenger now properly copies copied Aftermaths. (1569)
 
 ### 0.8.68-3.1.0 (March 13, 2020)
 
