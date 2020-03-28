@@ -22,6 +22,9 @@ public class MassTest extends TestBase {
 		root.setLevel(Level.ERROR);
 	}
 
+	/**
+	 * Fuzzes the game by randomly playing random decks 1,000-10000}
+	 */
 	@Test
 	public void testRandomMassPlay() {
 		loggerSetup();
@@ -35,7 +38,7 @@ public class MassTest extends TestBase {
 			context.play();
 		} catch (RuntimeException any) {
 			try {
-				Files.write(FileSystems.getDefault().getPath("src", "test", "resources", "traces", "masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump().getBytes());
+				Files.write(FileSystems.getDefault().getPath("src/test/resources/traces", "masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump().getBytes());
 			} catch (IOException e) {
 				return;
 			}

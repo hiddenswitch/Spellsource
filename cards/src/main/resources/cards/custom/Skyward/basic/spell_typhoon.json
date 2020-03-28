@@ -1,0 +1,20 @@
+{
+  "name": "Typhoon",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Deal $3 damage to all enemy characters.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 3
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

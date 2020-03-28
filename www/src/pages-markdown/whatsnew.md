@@ -10,6 +10,7 @@ header: true
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
  - Storyteller has been buffed, thanks @skurleton! (1571)
  - Archaelogist has been buffed and has one rework, thanks @Pircival! (1574)
+ - Introducing the first 30 cards of the Skyward class, thanks @Nixolium! (1575)
 
 ### 0.8.69-3.1.1 (March 21, 2020)
 

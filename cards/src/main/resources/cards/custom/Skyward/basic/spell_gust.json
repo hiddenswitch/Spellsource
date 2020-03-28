@@ -1,0 +1,23 @@
+{
+  "name": "Gust",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to two random enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 2
+    }
+  },
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}
