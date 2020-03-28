@@ -1,0 +1,38 @@
+{
+    "name": "Skyfall",
+    "baseManaCost": 8,
+    "type": "SPELL",
+    "heroClass": "AZURE",
+    "rarity": "EPIC",
+    "description": "Destroy a minion. Whenever you cast a spell, reduce this spell's Cost by (1).",
+    "targetSelection": "MINIONS",
+    "passiveTrigger": {
+        "eventTrigger": {
+            "class": "SpellCastedTrigger",
+            "targetPlayer": "SELF"
+        },
+        "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "SELF",
+            "cardCostModifier": {
+                "class": "CardCostModifier",
+                "target": "SELF",
+                "value": 1,
+                "operation": "SUBTRACT"
+            }
+        }
+    },
+    "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell"
+          }
+        ]
+      },
+    "collectible": true,
+    "sets": [
+        "CUSTOM"
+    ],
+    "fileFormatVersion": 1
+}
