@@ -264,20 +264,31 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testDoodlesV2() {
+		runGym((context, player, opponent) -> {
+			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			playCard(context, player, "minion_doodles_v2");
+			assertEquals("hero_power_draw_a_card", player.getHeroPowerZone().get(0).getCardId());
+			playMinionCard(context, player, 1, 1);
+			assertEquals(originalHeroPower, player.getHeroPowerZone().get(0).getCardId());
+		});
+	}
+
+	@Test
 	public void testDoodles() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_doodles");
 			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			playCard(context, player, "minion_doodles");
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
 			playCard(context, player, "spell_test_deal_6", player.getHero());
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
 			playCard(context, player, "spell_test_deal_6", player.getHero());
-			assertEquals(player.getHeroPowerZone().get(0).getCardId(), originalHeroPower);
+			assertEquals(originalHeroPower, player.getHeroPowerZone().get(0).getCardId());
 		});
 
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_doodles");
 			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			playCard(context, player, "minion_doodles");
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
 			context.endTurn();
 			playCard(context, opponent, "spell_test_deal_6", player.getHero());
@@ -287,8 +298,8 @@ public class CustomCardsTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_doodles");
 			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			playCard(context, player, "minion_doodles");
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
 			context.endTurn();
 			playCard(context, opponent, "spell_test_deal_11", player.getHero());
@@ -4924,10 +4935,10 @@ public class CustomCardsTests extends TestBase {
 			destroy(context, fassnu);
 			assertEquals(player.getMinions().size(), 2); // two aftermath triggers
 		});
-	}	
-  
+	}
+
 	@Test
-  public void testOkanakaMidsummerGravtisk() {
+	public void testOkanakaMidsummerGravtisk() {
 		runGym((context, player, opponent) -> {
 			Card test = receiveCard(context, player, "minion_neutral_test");
 			playCard(context, player, "minion_whizbang_the_plunderful");
@@ -4938,9 +4949,9 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(0, costOf(context, player, player.getHand().get(0)));
 		});
 	}
-  
-  @Test
-  public void testKliveIcetoothSolo() {
+
+	@Test
+	public void testKliveIcetoothSolo() {
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(1);
 			playCard(context, player, "minion_klive_icetooth");
@@ -4948,8 +4959,8 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-  @Test
-  public void testNilfheimNeedlegunner() {
+	@Test
+	public void testNilfheimNeedlegunner() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_nilfheim_needlegunner");
 			assertEquals(opponent.getHero().getMaxHp(), opponent.getHero().getHp());

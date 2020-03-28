@@ -22,15 +22,14 @@
           "target": "FRIENDLY_PLAYER",
           "trigger": {
             "eventTrigger": {
-              "class": "MinionPlayedTrigger",
+              "class": "BeforeMinionPlayedTrigger",
               "targetPlayer": "SELF"
             },
             "maxFires": 1,
             "spell": {
               "class": "RemoveEnchantmentSpell",
               "target": "FRIENDLY_PLAYER",
-              "card": "enchantment_draw_card_skill",
-              "howMany": 1
+              "card": "enchantment_draw_card_skill"
             }
           }
         },

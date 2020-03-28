@@ -7,6 +7,7 @@ header: true
 
 ### Upcoming Changes
 
+ - Both versions of Doodles now work. (1632)
  - Cards will not be played randomly more than once per reading of the text "play cards randomly." Concretely, a card is marked as being played randomly and is not eligible to be played randomly again, until all the cards in the selected list of cards are done being played randomly. Fixes issues related to Titan Feast playing Titan Feast in the deck.
  - Fixed a complex interation with Okanaka the Lifebender, Midsummer Mirage and Gravtisk the Ancient. (1606)
  - Fassnu Avenger now properly copies copied Aftermaths. (1569)
