@@ -1,0 +1,26 @@
+{
+  "seed" : -7363049351149273455,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "AZURE", "OBSIDIAN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_drop_from_the_sky", "minion_unnerving_spectre", "minion_esoteric_aeronaut", "spell_blow_away", "minion_solis_caster", "spell_gust", "minion_magic_muffler", "minion_fumewalker_zin", "minion_anarking", "minion_solis_caster", "minion_bighand_brute", "minion_esoteric_aeronaut", "minion_rafaam_philanthropist", "minion_mrs_merria", "minion_empyrean_eagle", "minion_ursol_the_wise", "minion_infinite_futurist", "minion_clash_flamecore", "minion_timewalker_initiate", "spell_favorable_winds", "minion_nimbus_strider", "minion_festivity_golem", "minion_nimbus_strider", "minion_holdout_soldier", "minion_spellquaker", "spell_soar", "minion_windbreaker", "minion_grassroot_mossling", "minion_spirited_sprite", "minion_skywalker" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_collectible_death_and_decay", "spell_six_feet_under", "minion_frosty_miner", "minion_little_helper", "minion_whiptail_gatherer", "spell_pay_respects", "weapon_collectible_frostmourne", "minion_saronite_drake", "minion_frosty_miner", "minion_savage_sprite", "spell_brain_freeze", "minion_spectral_warrior", "minion_throat_cutter", "minion_reckless_giant", "minion_trigger_happy_survivor", "minion_archerus_deathcharger", "minion_teron_gorefiend", "spell_bloody_boil", "minion_lundurr_the_reborn", "minion_southsea_giant", "spell_bat_swarm", "spell_lesser_obsidian_spellstone", "minion_tetradimensionalist", "minion_hypothermic_outcast", "minion_akarador", "minion_mad_icicler", "minion_daring_duelist", "minion_graveguard", "minion_void_reaper", "minion_hardened_initiate" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 29 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 57 ]
+  } ],
+  "actions" : [ 0, 0, 1, 1, 1, 3, 0, 0, 2, 1, 3, 2, 5, 2, 6, 3, 1, 2, 2, 1, 1, 15, 7, 1, 3, 0, 0, 2, 1, 0, 0, 7, 2, 9, 8, 1, 4, 4, 10, 4, 5, 9, 3, 0, 6, 2, 1, 2, 0, 3, 1, 2, 1, 21, 0, 2, 0, 1, 3, 5, 0, 1, 0, 1, 12, 11, 3, 3, 1, 0, 3, 4, 9, 7, 2, 0, 0, 12, 7, 0, 0, 11, 9, 1, 7, 2, 0, 0, 5, 2, 2, 2, 6, 2, 12, 13, 16, 0, 4, 17, 1, 9, 7, 11, 23, 7, 4, 20, 4, 0, 10, 27, 27, 0, 16, 5, 3, 1, 0, 0, 0, 7, 12, 11, 1, 4, 1, 1, 0, 15, 10, 11, 9, 6, 1, 2, 0, 4, 2, 0, 7, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

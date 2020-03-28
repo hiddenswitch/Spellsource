@@ -1,0 +1,32 @@
+{
+  "name": "Rumbling Stormfront",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "damage": 4,
+  "durability": 9,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Dash, Decay, Dodge, Guard",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "attributes": {
+    "DECAY": true,
+    "RUSH": true,
+    "DIVINE_SHIELD": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
