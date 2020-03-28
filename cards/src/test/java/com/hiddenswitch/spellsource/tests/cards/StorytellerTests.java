@@ -124,7 +124,7 @@ public class StorytellerTests extends TestBase {
 					count++;
 				}
 			}
-			assertEquals(count, 1);
+			assertEquals(count, minions.size());
 		}
 		));
 	}
@@ -466,8 +466,8 @@ public class StorytellerTests extends TestBase {
 			Minion ironbeast = playMinionCard(context, player, "minion_unstable_ironbeast");
 			destroy(context, ironbeast);
 			assertNotEquals(minion1.hasAttribute(Attribute.TAUNT), minion2.hasAttribute(Attribute.TAUNT));
-			assertEquals(Math.abs(minion1.getAttack() - minion2.getAttack()), 1);
-			assertEquals(Math.abs(minion1.getHp() - minion2.getHp()), 1);
+			assertEquals(3, Math.abs(minion1.getAttack() - minion2.getAttack()), "at least 1 minion given +3 attack");
+			assertEquals(3, Math.abs(minion1.getHp() - minion2.getHp()), "at least 1 minion given +3 hp");
 		});
 	}
 }

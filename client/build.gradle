@@ -1,39 +1,36 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'io.swagger:swagger-models:1.5.17'
+        classpath 'io.swagger:swagger-codegen:2.3.0'
+    }
+}
+
 plugins {
     id 'maven-publish'
+    id 'idea'
 }
+
+import io.swagger.codegen.ClientOptInput
+import io.swagger.codegen.ClientOpts
+import io.swagger.codegen.DefaultGenerator
+import io.swagger.codegen.config.CodegenConfigurator
+import io.swagger.models.Swagger
+import io.swagger.parser.SwaggerParser
 
 apply plugin: 'java-library'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'idea'
 
 group = 'com.hiddenswitch'
 version = '0.8.69'
 
 repositories {
     jcenter()
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'com.hiddenswitch'
-            artifactId = 'client'
-            version = version
-
-            from components.java
-        }
-    }
-}
-
-install {
-    repositories.mavenInstaller {
-        pom.artifactId = 'client'
-    }
-}
-
-task execute(type:JavaExec) {
-   main = System.getProperty('mainClass')
-   classpath = sourceSets.main.runtimeClasspath
 }
 
 ext {
@@ -48,7 +45,7 @@ dependencies {
     implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
     implementation "io.swagger:swagger-annotations:$swagger_annotations_version"
-    implementation ("com.sun.jersey:jersey-client:$jersey_version") {
+    implementation("com.sun.jersey:jersey-client:$jersey_version") {
         exclude group: 'javax.ws.rs', module: 'jsr311-api'
     }
     implementation("com.sun.jersey.contribs:jersey-multipart:$jersey_version") {
@@ -74,5 +71,63 @@ dependencies {
     implementation "com.fasterxml.jackson.module:jackson-module-parameter-names:$jackson_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jackson_version"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
-    testImplementation "junit:junit:$junit_version"
+}
+
+def generatedSourcesPath = "${project.projectDir.path}/src/swagger/java"
+
+sourceSets {
+    main {
+        java {
+            srcDir file(generatedSourcesPath)
+        }
+    }
+}
+
+task generateSwaggerJava {
+    def inputPath = "./swagger-api.yaml"
+    def absoluteInputPath = file(inputPath).absolutePath
+    def templatePath = "./swagger-templates/java"
+    def templateDir = file(templatePath)
+
+    inputs.file(inputPath)
+    inputs.dir(templatePath)
+    outputs.dir(generatedSourcesPath)
+
+    doLast {
+        def config = new SpellsourceJavaCodegen();
+        config.setInputSpec(absoluteInputPath)
+        config.setOutputDir(project.projectDir.absolutePath)
+        config.setTemplateDir(templateDir.absolutePath)
+        config.additionalProperties().putAll([
+                'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
+                'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
+                'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
+                'library'                : 'jersey1',
+                'serializableModel'      : 'true',
+                'dateLibrary'            : 'java8',
+                'artifactId'             : 'client',
+                'artifactVersion'        : project.version,
+                'hideGenerationTimestamp': 'true'
+        ])
+        config.setGroupId('com.hiddenswitch')
+        config.setArtifactId('spellsource-client')
+        def optInput = new ClientOptInput();
+        Swagger swagger = new SwaggerParser().read(absoluteInputPath, [], true);
+        optInput.config(config)
+                .opts(new ClientOpts())
+                .swagger(swagger)
+        new DefaultGenerator().opts(optInput).generate()
+    }
+}
+
+compileJava {
+    dependsOn generateSwaggerJava
+}
+
+ideaModule.dependsOn generateSwaggerJava
+idea {
+    module {
+        sourceDirs += file(generatedSourcesPath)
+        generatedSourceDirs += file(generatedSourcesPath)
+    }
 }

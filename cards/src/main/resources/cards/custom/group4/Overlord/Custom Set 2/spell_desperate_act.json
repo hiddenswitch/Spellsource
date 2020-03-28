@@ -1,0 +1,27 @@
+{
+  "name": "Desperate Act",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "Draw a card. If your champion has 15 Health or less, draw 3 instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_HERO",
+        "value": 15,
+        "attribute": "HP",
+        "operation": "LESS_OR_EQUAL"
+      },
+      "ifFalse": 1,
+      "ifTrue": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -10,7 +10,7 @@
     "class": "AddEnchantmentSpell",
     "card": "enchantment_unending_nightmare"
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VERDANT_DREAMS"

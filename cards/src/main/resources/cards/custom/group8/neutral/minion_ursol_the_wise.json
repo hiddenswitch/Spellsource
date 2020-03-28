@@ -1,13 +1,12 @@
 {
-  "name": "Urson the Smort",
+  "name": "Caster Illiura",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "race": "BEAST",
-  "description": "Whenever you cast a spell, add a random spell that Costs (3) or more to your hand.",
+  "description": "After you cast a spell, add a random spell that costs (3) or more to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

@@ -7,28 +7,19 @@
   "triggers": [
     {
       "eventTrigger": {
-        "class": "BattlecryResolvedTrigger",
-        "targetPlayer": "BOTH"
+        "class": "BattlecryResolvedTrigger"
       },
       "spell": {
         "class": "RemoveEnchantmentSpell",
         "target": "TRIGGER_HOST",
         "card": "enchantment_double_next_battlecry_twice"
       },
-      "countUntilCast": 2,
-      "maxFires": 1
+      "countUntilCast": 2
     }
   ],
-  "auras": [
-    {
-      "class": "DoubleBattlecriesAura",
-      "target": "FRIENDLY_CARDS"
-    },
-    {
-      "class": "DoubleBattlecriesAura",
-      "target": "ENEMY_CARDS"
-    }
-  ],
+  "aura": {
+    "class": "DoubleBattlecriesAura"
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

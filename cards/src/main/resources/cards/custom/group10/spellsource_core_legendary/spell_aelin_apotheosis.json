@@ -4,14 +4,13 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Refresh 8 Mana and draw 2 cards",
+  "description": "Refresh your Lun and draw 2 cards",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "RefreshManaSpell",
-        "value": 8
+        "class": "RefreshManaSpell"
       },
       {
         "class": "DrawCardSpell",

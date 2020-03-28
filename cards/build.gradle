@@ -15,9 +15,9 @@ dependencies {
 }
 
 test {
+    description('Tests all custom cards. Failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.')
     useJUnitPlatform()
     testLogging {
-//        events "standardError"
         showStandardStreams true
         exceptionFormat 'full'
     }
