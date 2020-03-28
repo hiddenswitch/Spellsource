@@ -33,12 +33,10 @@
             }
           },
           "condition": {
-            "class": {
-              "class": "AttributeCondition",
-              "target": "EVENT_SOURCE",
-              "attribute": "COUNTERED",
-              "invert": true
-            }
+            "class": "AttributeCondition",
+            "target": "EVENT_SOURCE",
+            "attribute": "COUNTERED",
+            "invert": true
           }
         },
         {
