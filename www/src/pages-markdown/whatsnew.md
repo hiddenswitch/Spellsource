@@ -5,7 +5,7 @@ path: "/whats-new"
 header: true
 ---
 
-### 0.8.70-3.1.1 (In Progress)
+### 0.8.70-3.1.1 (Marcy 27, 2020)
 
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
  - Storyteller has been buffed, thanks @skurleton! (1571)
