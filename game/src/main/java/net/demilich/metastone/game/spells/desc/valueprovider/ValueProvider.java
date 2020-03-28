@@ -30,7 +30,7 @@ import java.io.Serializable;
  * Observe that {@link ValueProviderArg#TARGET} is not available to all value providers. The {@code target} that the
  * value provider is evaluated against depends on the context and the {@link ValueProviderArg#TARGET} is ignored unless
  * the underlying class (like e.g. {@link AttributeValueProvider}) specifically handles the {@link
- * ValueProviderArg#TARGET} argument. but is almost always the {@link net.demilich.metastone.game.spells.desc.SpellArg#TARGET}.
+ * ValueProviderArg#TARGET} argument. It is almost always the {@link net.demilich.metastone.game.spells.desc.SpellArg#TARGET}.
  * <p>
  * The {@code target} is interpreted as: <ul> <li>The {@link net.demilich.metastone.game.spells.desc.SpellArg#TARGET} of
  * the spell calling this value provider.</li> <li>The {@link GameEvent#getTarget()} when a value provider is used in a

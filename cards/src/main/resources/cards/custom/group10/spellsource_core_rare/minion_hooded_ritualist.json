@@ -1,32 +1,43 @@
 {
   "name": "Hooded Ritualist",
-  "baseManaCost": 3,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "After you cast a spell, summon a 2/1 Demon during the end of your turn.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "AfterSpellCastedTrigger",
-      "sourcePlayer": "SELF"
+  "description": "Opener: If you cast a spell this turn, summon two 2/1 Demons.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayedThisTurnValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      },
+      "value2": 1
     },
     "spell": {
-      "class": "AddEnchantmentSpell",
-      "target": "FRIENDLY_PLAYER",
-      "trigger": {
-        "eventTrigger": {
-          "class": "TurnEndTrigger",
-          "targetPlayer": "SELF"
-        },
-        "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
           "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
           "card": "token_blackflame_imp"
         },
-        "maxFires": 1
-      }
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_blackflame_imp"
+        }
+      ]
     }
+  },
+  "attributes": {
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

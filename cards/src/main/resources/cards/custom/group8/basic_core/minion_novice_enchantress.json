@@ -6,12 +6,23 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Opener: Give a friendly minion +4 Health.",
+  "race": "FAE",
+  "description": "Opener: Give a friendly minion +4 Health and Elusive.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "BuffSpell",
-      "hpBonus": 4
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 0,
+          "hpBonus": 4
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "UNTARGETABLE_BY_SPELLS"
+        }
+      ]
     }
   },
   "attributes": {

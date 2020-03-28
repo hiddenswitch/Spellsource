@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Adds the specified {@link SpellArg#ATTRIBUTE} ({@link Attribute}) to the {@code target}.
@@ -106,6 +107,7 @@ public class AddAttributeSpell extends RevertableSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
+		Objects.requireNonNull(target, source.getSourceCard().getCardId());
 		if (desc.containsKey(SpellArg.VALUE)) {
 			LOGGER.error("onCast {} {}: Cannot use an integer value in an AddAttributeSpell. Use ModifyAttributeSpell instead.", context.getGameId(), source);
 			throw new IllegalArgumentException("VALUE");

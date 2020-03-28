@@ -21,7 +21,7 @@
   "attributes": {
     "DRAIN": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VERDANT_DREAMS"

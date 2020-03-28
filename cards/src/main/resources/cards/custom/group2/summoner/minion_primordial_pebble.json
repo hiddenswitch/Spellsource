@@ -13,12 +13,21 @@
     "spell": {
       "class": "DiscoverSpell",
       "cardFilter": {
-        "class": "AttributeFilter",
-        "value": {
-          "class": "LastTurnValueProvider"
-        },
-        "attribute": "PLAYED_FROM_HAND_OR_DECK",
-        "operation": "EQUAL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "LastTurnValueProvider"
+            },
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "operation": "EQUAL"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          }
+        ]
       },
       "cardSource": {
         "class": "GraveyardCardsSource",
