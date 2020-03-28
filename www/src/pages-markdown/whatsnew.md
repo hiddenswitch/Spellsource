@@ -7,6 +7,7 @@ header: true
 
 ### Upcoming Changes
 
+ - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
 
 ### 0.8.70-3.1.1 (Marcy 27, 2020)

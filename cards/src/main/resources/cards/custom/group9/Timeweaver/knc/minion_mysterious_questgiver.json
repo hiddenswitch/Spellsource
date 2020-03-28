@@ -10,17 +10,45 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DiscoverSpell",
-      "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 1,
-        "heroClass": "TIME",
-        "cardType": "MINION"
-      },
-      "howMany": 3,
-      "spell": {
-        "class": "ReceiveCardSpell"
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscoverSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "manaCost": 1,
+            "heroClass": "TIME",
+            "cardType": "MINION"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell"
+          }
+        },
+        {
+          "class": "DiscoverSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "manaCost": 1,
+            "heroClass": "TIME",
+            "cardType": "MINION"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell"
+          }
+        },
+        {
+          "class": "DiscoverSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "manaCost": 1,
+            "heroClass": "TIME",
+            "cardType": "MINION"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell"
+          }
+        }
+      ]
     }
   },
   "attributes": {
