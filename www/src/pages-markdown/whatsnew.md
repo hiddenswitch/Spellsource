@@ -4,12 +4,20 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+
 ### Upcoming Changes
 
  - Fixed a complex interation with Okanaka the Lifebender, Midsummer Mirage and Gravtisk the Ancient. (1606)
+ - Fassnu Avenger now properly copies copied Aftermaths. (1569)
  - Fixed a few miscellaneous card descriptions to properly say "Opener". (1590)
  - Development card "Signature Chooser" is now correctly uncollectible. (1592)
  - Fixed old Vampire Lord stuff still being collectible. (1593)
+ - Ringside Impresario no longer triggers itself, and now correctly shuffles to deck, not adding to hand. (1594)
+ - Vaudeville Hook now correctly reduces in cost, not increases. (1595)
+ - The "Berry" token (1 Lun restore 3 Health) is now the default Signature spell if one wasn't chosen for a deck. (1596)
+ - Made some Ringmaster cards collectible that were mistakenly uncollectible. (1597)
+ - Added Ringmaster card Finale Architect. (1597)
+ - Oni Queen's Banishment can actually be played, and now costs (0) down from (1). (159)
  - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
  - Crazed Cultist now interacts more intuitively with Paven, Elemental of Surprise. (1578) 
  - Collectible Permanents should no longer be found by minion-generating effects. (1591)
@@ -80,7 +88,9 @@ Plenty of changes this time around. It's been a long time coming for the classes
  - Urson the Smort is now Caster Illiura and lost Beast Tag
 
 *Pirates Reflavoring*
+
 Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent different races. So, neutral Pirates have become Spirits and Spirit Related.
+
  - Chaotic Cutthroat is now Manifested Tantrum
  - Hold Hunter is now Vengeful Spirit
  - Doomed Diver is now Yadokai
@@ -216,7 +226,6 @@ In addition, extensive edits by @Logovaz summarized here:
  - Witching Traveler now sets cost of card to 0 from 1.
  
 ### Soulseeker Changes
-
 
  - Major changes to Soulseeker: “Obvious nerfs," card deletions, reflavoring and set changes, new cards, in particular Secrets archetype.
  - Reverse Volition: 1 mana common spell "Secret: When your opponent plays a minion, return it to their hand." (Replaces Dormant Spirits)

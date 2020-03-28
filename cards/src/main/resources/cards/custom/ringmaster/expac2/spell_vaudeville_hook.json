@@ -15,7 +15,7 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "PlayerAttributeValueProvider",
-    "multiplier": -1,
+    "offset": -1,
     "playerAttribute": "HAND_COUNT",
     "targetPlayer": "SELF"
  }
