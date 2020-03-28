@@ -6,7 +6,7 @@ header: true
 ---
 
 ### Upcoming Changes
-
+ - Primordial Pebble now correctly only discovers Elementals. (1580)
  - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
  - Herald of Fate no longer just gives you double openers forever. (1577)

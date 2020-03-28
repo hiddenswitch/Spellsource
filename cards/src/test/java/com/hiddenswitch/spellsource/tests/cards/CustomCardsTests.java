@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
@@ -4909,6 +4910,64 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_nilfheim_needlegunner");
 			assertEquals(opponent.getHero().getMaxHp(), opponent.getHero().getHp());
+		});
+	}
+
+	@Test
+	public void testPrimordialPebble() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "spell_lunstone");
+			playCard(context, player, "minion_test_3_2_elemental");
+			playCard(context, player, "token_ember_elemental");
+			playCard(context, player, "weapon_test_3_2");
+			context.endTurn();
+			context.endTurn();
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(2, discoverActions.size());
+				boolean elemental1 = false;
+				boolean elemental2 = false;
+				for (DiscoverAction discoverAction : discoverActions) {
+					if (discoverAction.getCard().getCardId().equals("minion_test_3_2_elemental")) elemental1 = true;
+					if (discoverAction.getCard().getCardId().equals("token_ember_elemental")) elemental2 = true;
+				}
+				assertTrue(elemental1);
+				assertTrue(elemental2);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_primordial_pebble");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_primordial_pebble");
+			playCard(context, player, "weapon_test_3_2");
+			context.endTurn();
+			context.endTurn();
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(1, discoverActions.size());
+				boolean elemental1 = false;
+				for (DiscoverAction discoverAction : discoverActions) {
+					if (discoverAction.getCard().getCardId().equals("minion_primordial_pebble")) elemental1 = true;
+				}
+				assertTrue(elemental1);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_primordial_pebble");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_neutral_test_1");
+			playCard(context, player, "spell_lunstone");
+			playCard(context, player, "weapon_test_3_2");
+			context.endTurn();
+			context.endTurn();
+			overrideDiscover(context, player, discoverActions -> {
+				fail();
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_primordial_pebble");
 		});
 	}
 }
