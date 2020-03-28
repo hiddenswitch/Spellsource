@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -17,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,11 +97,17 @@ public class CardValidation {
 			record.getDesc().bfs().build().forEach(node -> {
 				if (node.getKey().equals(SpellArg.CARD) || node.getKey().equals(EntityFilterArg.CARD)) {
 					String card = (String) node.getValue();
+					if (SpellUtils.getSpecialCards().contains(card)) {
+						return;
+					}
 					CardCatalogue.getCardById(card);
 				} else if (node.getKey().equals(SpellArg.CARDS) || node.getKey().equals(EntityFilterArg.CARDS)) {
 					if (node.getValue() instanceof String[]) {
 						String[] cards = (String[]) node.getValue();
 						for (String card : cards) {
+							if (SpellUtils.getSpecialCards().contains(card)) {
+								continue;
+							}
 							CardCatalogue.getCardById(card);
 						}
 					}

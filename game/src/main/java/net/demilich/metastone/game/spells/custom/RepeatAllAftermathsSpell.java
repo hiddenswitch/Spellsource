@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.custom;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
@@ -36,7 +35,7 @@ public class RepeatAllAftermathsSpell extends Spell {
 		}
 
 		var executedOn = EnvironmentEntityList.getList(context);
-		if (!executedOn.getReferences(context, source).isEmpty()) {
+		if (!executedOn.getReferences(source).isEmpty()) {
 			return;
 		}
 
