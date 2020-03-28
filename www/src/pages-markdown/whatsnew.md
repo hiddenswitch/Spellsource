@@ -106,6 +106,9 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
 ### Upcoming Changes
  - Fixed a complex interation with Okanaka the Lifebender, Midsummer Mirage and Gravtisk the Ancient. (1606)
 
+### Upcoming Changes
+ - Fixed a few miscellaneous card descriptions to properly say "Opener". (1590)
+
 ### 0.8.69-3.1.1 (March 21, 2020)
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
