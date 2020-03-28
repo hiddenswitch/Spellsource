@@ -4,6 +4,8 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### Upcoming Changes
+ - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
 
 ### Upcoming Changes
  - Crazed Cultist now interacts more intuitively with Paven, Elemental of Surprise. (1578) 

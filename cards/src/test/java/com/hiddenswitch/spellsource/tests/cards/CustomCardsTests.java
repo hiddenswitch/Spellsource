@@ -4906,7 +4906,16 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testNilfheimNeedlegunner() {
+	public void testKliveIcetoothSolo() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(1);
+			playCard(context, player, "minion_klive_icetooth");
+			assertEquals(6, player.getHero().getHp());
+		});
+	}
+
+  @Test
+  public void testNilfheimNeedlegunner() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_nilfheim_needlegunner");
 			assertEquals(opponent.getHero().getMaxHp(), opponent.getHero().getHp());
