@@ -3,15 +3,11 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.PlayCardAction;
-import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,55 +24,51 @@ import java.util.List;
  */
 
 public class CastSpellWithTargetOrElseSpell extends Spell {
+	private static Logger LOGGER = LoggerFactory.getLogger(CastSpellWithTargetOrElseSpell.class);
 
+	@Suspendable
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(LOGGER, context, source, desc, SpellArg.TARGET, SpellArg.SECONDARY_TARGET, SpellArg.CARD, SpellArg.TRIGGER, SpellArg.SPELL);
 
-    private static Logger logger = LoggerFactory.getLogger(CastSpellWithTargetOrElseSpell.class);
+		Card card;
+		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
+			card = (Card) context.resolveSingleTarget(desc.getSecondaryTarget());
+		} else {
+			card = SpellUtils.getCard(context, desc);
+		}
 
-    @Suspendable
-    @Override
-    protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-        checkArguments(logger, context, source, desc, SpellArg.TARGET, SpellArg.SECONDARY_TARGET, SpellArg.CARD, SpellArg.TRIGGER, SpellArg.SPELL);
-        target = desc.getTarget() != null ? context.resolveSingleTarget(desc.getTarget()) : null;
+		if (!card.isSpell()) {
+			LOGGER.error("Needs to be a spell");
+		}
 
-        Card card;
-        if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
-            card = (Card) context.resolveSingleTarget(desc.getSecondaryTarget());
-        } else {
-            card = SpellUtils.getCard(context, desc);
-        }
+		SpellDesc orElse = desc.getSpell();
 
-        if (!card.isSpell()) {
-            logger.error("Needs to be a spell");
-        }
+		EnchantmentDesc trigger = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 
-        SpellDesc orElse = desc.getSpell();
-
-        EnchantmentDesc trigger = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
-
-        if (trigger != null) {
-            SpellDesc thisButLater = desc.removeArg(SpellArg.TRIGGER);
-            if (target != null) {
-                thisButLater.put(SpellArg.TARGET, target.getReference());
-            }
-            thisButLater.put(SpellArg.SECONDARY_TARGET, card.getReference());
-            trigger.spell = thisButLater;
-            SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(trigger);
-            SpellUtils.castChildSpell(context, player, addEnchantmentSpellDesc, source, player);
-        } else {
-            if (target == null) {
-                SpellUtils.castChildSpell(context, player, card.getSpell(), source, null);
-                context.getLogic().revealCard(player, card);
-            } else {
-                List<Entity> targets = context.getTargetLogic().getValidTargets(context, player, card.play());
-                if (targets.contains(target)) {
-                    SpellUtils.castChildSpell(context, player, card.getSpell(), source, target);
-                    context.getLogic().revealCard(player, card);
-                } else {
-                    orElse.put(SpellArg.CARD, card.getCardId());
-                    SpellUtils.castChildSpell(context, player, orElse, source, null);
-                }
-            }
-        }
-
-    }
+		if (trigger != null) {
+			SpellDesc thisButLater = desc.removeArg(SpellArg.TRIGGER);
+			if (target != null) {
+				thisButLater.put(SpellArg.TARGET, target.getReference());
+			}
+			thisButLater.put(SpellArg.SECONDARY_TARGET, card.getReference());
+			trigger.spell = thisButLater;
+			SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(trigger);
+			SpellUtils.castChildSpell(context, player, addEnchantmentSpellDesc, source, player);
+		} else {
+			if (target == null) {
+				SpellUtils.castChildSpell(context, player, card.getSpell(), source, null);
+				context.getLogic().revealCard(player, card);
+			} else {
+				List<Entity> targets = context.getTargetLogic().getValidTargets(context, player, card.play());
+				if (targets.contains(target)) {
+					SpellUtils.castChildSpell(context, player, card.getSpell(), source, target);
+					context.getLogic().revealCard(player, card);
+				} else {
+					orElse.put(SpellArg.CARD, card.getCardId());
+					SpellUtils.castChildSpell(context, player, orElse, source, null);
+				}
+			}
+		}
+	}
 }

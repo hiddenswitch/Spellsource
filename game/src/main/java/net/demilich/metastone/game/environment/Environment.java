@@ -143,5 +143,10 @@ public enum Environment {
 	/**
 	 * Stores the deathrattles triggered throughout the game.
 	 */
-	DEATHRATTLES_TRIGGERED
+	DEATHRATTLES_TRIGGERED,
+	/**
+	 * Stores the cards that are currently selected to be randomly played, preventing them from being randomly played
+	 * more than once per sequence.
+	 */
+	RANDOMLY_PLAYED_QUEUE
 }

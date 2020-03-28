@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
@@ -38,7 +39,8 @@ public final class CastOnCardsInStorageSpell extends Spell {
 			storageSource = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
 
-		CardList cards = EnvironmentEntityList.getList(context).getCards(context, storageSource).shuffle(context.getLogic().getRandom());
+		CardList cards = new CardArrayList(EnvironmentEntityList.getList(context).getCards(context, storageSource))
+				.shuffle(context.getLogic().getRandom());
 
 		SpellDesc spell = desc.getSpell();
 		for (int i = 0; i < count; i++) {

@@ -13,15 +13,18 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * Resurrects and clears the entities stored on the {@code source}.
  * <p>
  * Implements Frostmourne. However, Frostmourne's effect should really be adding deathrattles to it.
  *
  * @see CastOnCardsInStorageSpell for a more general way of performing actions on stored cards, including the base cards
- * 		of targeted minions.
+ * of targeted minions.
  * @see CastOnEntitiesInStorageSpell for a more general way of performing actions on stored entities, which may be cards
- * 		or minions in the graveyard.
+ * or minions in the graveyard.
  */
 public class ResurrectFromEntityStorageSpell extends Spell {
 
@@ -30,11 +33,13 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList resurrect = EnvironmentEntityList.getList(context).getCards(context, source).shuffle(context.getLogic().getRandom());
+		// Snapshot the entity storage, do not use the transform
+		var resurrect = new ArrayList<>(EnvironmentEntityList.getList(context).getCards(context, source));
+		Collections.shuffle(resurrect, context.getLogic().getRandom());
 		int i = 0;
 
 		while (context.getLogic().canSummonMoreMinions(player)
-				&& i < resurrect.getCount()) {
+				&& i < resurrect.size()) {
 			Card card = resurrect.get(i).getCopy();
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
