@@ -139,6 +139,7 @@ public class RecruitSpell extends Spell {
 			player.getSetAsideZone().move(card, player.getDeck());
 		}
 
+		// put the card into the graveyard when we're done with it
 		if (summonSuccess) {
 			context.getLogic().removeCard(card);
 			return summon;

@@ -1,0 +1,42 @@
+{
+  "name": "Snap Their Bones",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Deal 10 damage to them and give them Decay.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ENEMY_HERO",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": "10",
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "OWNER"
+          },
+          "spell": {
+            "class": "DecaySpell"
+          }
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DECAY"
+      }
+    ]
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ],
+  "fileFormatVersion": 1
+}

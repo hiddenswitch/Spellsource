@@ -20,9 +20,9 @@
         "class": "CardFilter",
         "cardType": "MINION"
       },
+      "randomTarget": true,
       "attackBonus": 1,
-      "hpBonus": 1,
-      "randomTarget": true
+      "hpBonus": 1
     }
   },
   "collectible": true,

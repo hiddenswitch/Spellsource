@@ -36,8 +36,7 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 
 	public static EnvironmentEntityList getList(GameContext context, Environment environmentVariable) {
 		context.getEnvironment().putIfAbsent(environmentVariable, new EnvironmentEntityList());
-		EnvironmentEntityList list = (EnvironmentEntityList) context.getEnvironment().get(environmentVariable);
-		return list;
+		return (EnvironmentEntityList) context.getEnvironment().get(environmentVariable);
 	}
 
 	Map<EntityReference, List<EntityReference>> data = new HashMap<>();

@@ -1,0 +1,28 @@
+{
+  "name": "Frangiblesaur",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "At the end of your turn, if this minion is damaged, destroy this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "fireCondition": {
+        "class": "IsDamagedCondition",
+        "target": "TRIGGER_HOST"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "TRIGGER_HOST"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

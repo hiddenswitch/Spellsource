@@ -1,0 +1,49 @@
+{
+  "name": "Blazing Dreadnought",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Supremacy: Gain the destroyed minion's stats and card text.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "attackBonus": {
+              "class": "AttributeValueProvider",
+              "target": "EVENT_TARGET",
+              "attribute": "ATTACK"
+            },
+            "hpBonus": {
+              "class": "AttributeValueProvider",
+              "target": "EVENT_TARGET",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "custom.AddActorEffectsToTargetActorSpell",
+            "target": "SELF",
+            "secondaryTarget": "EVENT_TARGET"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

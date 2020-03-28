@@ -1,0 +1,15 @@
+{
+  "name": "Skyward",
+  "type": "CLASS",
+  "hero": "hero_ascella_aeon",
+  "heroClass": "AZURE",
+  "color": [
+    240,
+    255,
+    255
+  ],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

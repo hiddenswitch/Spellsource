@@ -1,0 +1,35 @@
+{
+  "name": "Mary DeMasque",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If you're holding 4 copies of your Signature, take control of a minion.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "value2": 4
+    },
+    "spell": {
+      "class": "MindControlSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

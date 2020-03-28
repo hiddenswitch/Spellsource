@@ -1,0 +1,27 @@
+{
+  "name": "Ember",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Deal 1 damage to two random enemy minions.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 1,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

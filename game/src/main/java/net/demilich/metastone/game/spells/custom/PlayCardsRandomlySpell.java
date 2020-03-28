@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.List;
@@ -80,20 +81,26 @@ public class PlayCardsRandomlySpell extends Spell {
 		}
 
 		// TODO: While invoking play cards randomly, should not play a play cards randomly. Use an environment stack.
-		player.setAttribute(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 
 		// Replay
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
-			// TODO: Move the card temporarily to the set aside zone, so that effects apply to it correctly?
-
 			if (card.equals(source)) {
 				continue;
 			}
 
+			// This is used to see if we are currently invoking a random play on this specific card by this specific source
 			EnvironmentEntityList.getList(context).add(source, card);
 			// The card may have been transformed!
 			card = (Card) card.transformResolved(context);
+			if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)
+					&& card.getId() == IdFactory.UNASSIGNED) {
+				// temporarily put into set aside
+				card.setId(context.getLogic().generateId());
+				card.setOwner(player.getId());
+				card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			}
 			if (SpellUtils.playCardRandomly(context, player, card, source, true, false, source.getEntityType()
 					== EntityType.MINION, false, false)) {
 				context.getLogic().revealCard(player, card);
@@ -103,11 +110,15 @@ public class PlayCardsRandomlySpell extends Spell {
 						&& !card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
 					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, card);
 				}
+				if (card.getZone() == Zones.SET_ASIDE_ZONE) {
+					// Might be referenced by another card, so this gets put into the graveyard.
+					context.getLogic().removeCard(card);
+				}
 			}
 		}
 
 		EnvironmentEntityList.getList(context).clear(source);
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 	}
 
 	protected CardList getCards(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

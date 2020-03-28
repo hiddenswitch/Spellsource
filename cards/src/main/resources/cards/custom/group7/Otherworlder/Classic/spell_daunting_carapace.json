@@ -22,19 +22,6 @@
         "class": "ModifyAttributeSpell",
         "value": 1,
         "attribute": "WITHER"
-      },
-      {
-        "class": "AddEnchantmentSpell",
-        "trigger": {
-          "eventTrigger": {
-            "class": "DamageCausedTrigger",
-            "hostTargetType": "IGNORE_OTHER_SOURCES"
-          },
-          "spell": {
-            "class": "WitherSpell",
-            "target": "EVENT_TARGET"
-          }
-        }
       }
     ]
   },

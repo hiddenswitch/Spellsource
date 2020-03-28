@@ -1,8 +1,30 @@
-# Elastic Beanstalk Files
+# WARNING: Do not remove wildcard dockerignore here.
+# The secrets directory should not be copied to the context because it may accidentally wild up in images.
 *
-!net/build/libs/*
-!game/src/main/resources/*
-!cards/src/main/resources/*
-!micro/
-!Docker*
-!docker*
+# Gradle support code
+!**/*.gradle
+!**/*.properties
+!gradlew
+!buildSrc/*
+!gradle/*
+!swagger-templates/*
+swagger-api.yaml
+setup.cfg
+# Image support code
+!docker/*
+# Java source code
+!quasar-core/*
+!game/*
+!cards/*
+!net/*
+!cluster/*
+!client/*
+!vertx-sync/*
+!testutils/*
+!core/*
+!micro/*
+!internalcontent/*
+# Omit intermediate build data
+**/build/
+**/classes/
+**/out/

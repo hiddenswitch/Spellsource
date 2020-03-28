@@ -1,0 +1,32 @@
+{
+  "name": "Loyal Knight",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "<b>Blitz</b>, <b>Opener:</b> If your champion has 15 Health or less, gain +2/+3",
+  "battlecry": {
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_HERO",
+      "value": 15,
+      "attribute": "HP",
+      "operation": "LESS_OR_EQUAL"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 2,
+      "hpBonus": 3
+    }
+  },
+  "attributes": {
+    "CHARGE": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

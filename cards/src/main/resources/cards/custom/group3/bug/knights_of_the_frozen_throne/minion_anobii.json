@@ -6,6 +6,7 @@
   "baseAttack": 8,
   "baseHp": 4,
   "rarity": "LEGENDARY",
+  "race": "BEAST",
   "description": "Opener: Wrap a minion in webbing. Aftermath: It escapes.",
   "battlecry": {
     "targetSelection": "MINIONS",

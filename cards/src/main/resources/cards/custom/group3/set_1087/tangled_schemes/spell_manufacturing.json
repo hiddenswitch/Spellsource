@@ -1,0 +1,25 @@
+{
+  "name": "Fabricating",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Summon a copy of a friendly minion. If it's an Elemental, summon two copies instead.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "RaceCondition",
+        "race": "ELEMENTAL"
+      },
+      "ifFalse": 1,
+      "ifTrue": 2
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

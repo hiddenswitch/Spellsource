@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Destroy your weapon to gain a Lun.",
+  "description": "Battlecry: Destroy your gear to gain a Lun.",
   "battlecry": {
     "condition": {
       "class": "HasWeaponCondition"

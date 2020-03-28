@@ -65,14 +65,6 @@ logger("io.jaegertracing", ERROR)
 
 // Production group
 logger("com.hiddenswitch", INFO)
-logger("com.hiddenswitch.spellsource.util", ERROR)
-logger("com.hiddenswitch.spellsource.concurrent", ERROR)
-logger("com.hiddenswitch.spellsource.Connection", defaultLevel)
-logger("com.hiddenswitch.spellsource.Matchmaking", defaultLevel)
-logger("com.hiddenswitch.spellsource.Games", defaultLevel)
-logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", defaultLevel)
-logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
-logger("com.hiddenswitch.spellsource.Gateway", INFO)
 logger("io.atomix.cluster.messaging.impl", ERROR)
 logger("io.atomix.cluster.discovery", DEBUG)
 

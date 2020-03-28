@@ -15,7 +15,7 @@
       "gameValue": "SPELL_VALUE"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "CLASSIC"

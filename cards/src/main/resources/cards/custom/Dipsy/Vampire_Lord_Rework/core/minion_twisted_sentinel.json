@@ -1,0 +1,30 @@
+{
+  "name": "Twisted Sentinel",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Lifedrain. Decay.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "attributes": {
+    "LIFESTEAL": true,
+	"DECAY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

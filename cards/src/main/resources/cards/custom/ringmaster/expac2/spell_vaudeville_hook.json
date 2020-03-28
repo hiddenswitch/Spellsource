@@ -1,0 +1,22 @@
+{
+  "name": "Vaudeville Hook",
+  "baseManaCost": 12,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "EPIC",
+  "description": "Put an enemy minion into your hand. Costs (1) less for each other card in your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "multiplier": -1,
+    "playerAttribute": "HAND_COUNT",
+    "targetPlayer": "SELF"
+ }
+}

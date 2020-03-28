@@ -4,14 +4,15 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Give a minion <b>Decay<b> and +2/+2.",
+  "description": "Give a minion <b>Decay<b> and +2/+3.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 2
+          "attackBonus": 2,
+          "hpBonus": 3
       },
       {
         "class": "AddAttributeSpell",

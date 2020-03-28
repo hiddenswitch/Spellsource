@@ -37,6 +37,9 @@ import java.util.Map;
  * Deathrattles resolve from the {@link Zones#GRAVEYARD}. However, the {@link SpellArg#BOARD_POSITION_ABSOLUTE} argument
  * is set to where the minion used to be.
  * <p>
+ * If a {@link SpellArg#VALUE} is specified on this spell, it will be computed at the time the effect is applied and
+ * copied onto the sub-spell.
+ * <p>
  * For example, to give a minion a the deathrattle, "Resummon this minion,":
  * <pre>
  *     {
@@ -92,27 +95,43 @@ public class AddDeathrattleSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.CARD);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.CARD, SpellArg.VALUE);
 		List<SpellDesc> deathrattles = desc.subSpells(0);
 		Card[] cards = SpellUtils.getCards(context, desc);
+		Integer value = null;
+		if (desc.containsKey(SpellArg.VALUE)) {
+			value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		}
 		if (cards.length != 0) {
 			for (Card card : cards) {
-				if (card.getDesc().getDeathrattle() == null) {
+				var deathrattle = card.getDesc().getDeathrattle();
+				if (deathrattle == null) {
 					logger.warn("onCast {} {}: Trying to add a deathrattle from a card that doesn't contain a deathrattle {}", context.getGameId(), source, card);
 					continue;
 				}
-				deathrattles.add(card.getDesc().getDeathrattle());
+				if (value != null) {
+					deathrattle = deathrattle.addArg(SpellArg.VALUE, value);
+				}
+				deathrattles.add(deathrattle);
 			}
 		}
 		if (target instanceof Actor) {
 			Actor actor = (Actor) target;
 			for (SpellDesc deathrattle : deathrattles) {
-				actor.addDeathrattle(deathrattle.clone());
+				var clone = deathrattle.clone();
+				if (value != null) {
+					clone.put(SpellArg.VALUE, value);
+				}
+				actor.addDeathrattle(clone);
 			}
 		} else if (target instanceof Card) {
 			Card card = (Card) target;
 			for (SpellDesc deathrattle : deathrattles) {
-				card.addDeathrattle(deathrattle.clone());
+				var clone = deathrattle.clone();
+				if (value != null) {
+					clone.put(SpellArg.VALUE, value);
+				}
+				card.addDeathrattle(clone);
 			}
 		}
 	}

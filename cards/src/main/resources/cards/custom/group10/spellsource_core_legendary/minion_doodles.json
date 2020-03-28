@@ -6,34 +6,45 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your Skill becomes \"Draw a Card\" until you play a minion.",
+  "description": "Opener: Your Skill becomes \"Draw a Card\" until your Champion takes 10 damage. []",
   "battlecry": {
     "targetSelection": "NONE",
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "card": "enchantment_draw_card_skill"
-      },
-      {
-        "revertTrigger": {
-          "class": "CardPlayedTrigger",
-          "cardType": "MINION",
-          "targetPlayer": "SELF",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_draw_card_skill"
         },
-        "class": "RemoveEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "card": "enchantment_draw_card_skill",
-        "howMany": 1
-      },
-      {
-        "class": "CastAfterSequenceSpell",
-        "spell": {
-          "class": "RefreshHeroPowerSpell"
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "DamageReceivedTrigger",
+              "targetEntityType": "HERO",
+              "targetPlayer": "SELF"
+            },
+            "countByValue": true,
+            "countUntilCast": 10,
+            "maxFires": 10,
+            "spell": {
+              "class": "RemoveEnchantmentSpell",
+              "target": "FRIENDLY_PLAYER",
+              "card": "enchantment_draw_card_skill",
+              "howMany": 1
+            }
+          }
+        },
+        {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RefreshHeroPowerSpell"
+          }
         }
-      }
-    ]
+      ]
+    }
   },
   "attributes": {
     "BATTLECRY": true

@@ -1,10 +1,10 @@
 {
   "name": "Taletellers",
-  "baseManaCost": 7,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
-  "baseAttack": 7,
-  "baseHp": 7,
+  "baseAttack": 5,
+  "baseHp": 5,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
   "description": "Opener: Add copies of all Elementals you played this turn to your hand.",
@@ -12,7 +12,6 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 10,
-      "exclusive": true,
       "cardFilter": {
         "class": "CardFilter",
         "attribute": "PLAYED_FROM_HAND_OR_DECK",

@@ -53,9 +53,8 @@ public class RandomCardTargetSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = SpellUtils.getCard(context, desc);
 		// If the spell is not exclusive, it will copy the target card. Otherwise, it will cast the card.
-		final boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false);
+		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false);
 		if (card == null
-				&& target != null
 				&& target instanceof Card) {
 			card = (Card) target;
 			if (!exclusive) {
@@ -81,7 +80,7 @@ public class RandomCardTargetSpell extends Spell {
 		}
 
 		// Makes random discover choices
-		player.setAttribute(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 
 		Zones destination = Zones.REMOVED_FROM_PLAY;
 		if (spellCard.getZone() == Zones.DECK
@@ -105,7 +104,7 @@ public class RandomCardTargetSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
-			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+			player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 			return;
 		}
 		spellCard.processTargetSelectionOverride(context, player);
@@ -125,7 +124,7 @@ public class RandomCardTargetSpell extends Spell {
 			context.getLogic().removeCard(spellCard);
 		}
 
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 	}
 
 }

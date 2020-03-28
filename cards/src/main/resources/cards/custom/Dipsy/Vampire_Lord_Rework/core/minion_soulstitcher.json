@@ -1,0 +1,37 @@
+{
+  "name": "Soulbinder",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Opener: Deal 1 damage to a minion. If it survives, restore #5 Health to it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      "spell2": {
+        "class": "HealSpell",
+        "value": 5
+      }
+    }
+  },
+  "attributes": {
+	"BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

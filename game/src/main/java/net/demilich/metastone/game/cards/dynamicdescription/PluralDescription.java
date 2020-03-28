@@ -34,6 +34,10 @@ public class PluralDescription extends ValueDescription {
 
 	@Override
 	public String resolveFinalString(GameContext context, Player player, Entity entity) {
+		if (!getDesc().containsKey(DynamicDescriptionArg.DESCRIPTION1)
+				&& !getDesc().containsKey(DynamicDescriptionArg.DESCRIPTION2)) {
+			return super.resolveFinalString(context, player, entity);
+		}
 		int value = getValue(context, player, entity);
 		String valueString = super.resolveFinalString(context, player, entity);
 

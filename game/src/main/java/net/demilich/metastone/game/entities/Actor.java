@@ -131,7 +131,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 			bonuses *= getAttributeValue(Attribute.AURA_ATTACK_BONUS_MULTIPLIER);
 		}
 
-		int attack = getAttributeValue(Attribute.ATTACK) + bonuses;
+		int attack = getAttributeValue(Attribute.ATTACK) + bonuses - getAttributeValue(Attribute.WITHERED);
 
 		if (hasAttribute(Attribute.ATTACK_MULTIPLIER) && getAttributeValue(Attribute.ATTACK_MULTIPLIER) != 0) {
 			attack *= getAttributeValue(Attribute.ATTACK_MULTIPLIER);

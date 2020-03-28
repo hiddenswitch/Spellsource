@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
+  "race": "BEAST",
   "description": "Guard. Aftermath: Give your minions +1/+1.",
   "deathrattle": {
     "class": "BuffSpell",

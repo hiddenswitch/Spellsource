@@ -1,11 +1,12 @@
 {
-  "name": "Swarmlord",
+  "name": "Swarmlady",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "RARE",
+  "race": "BEAST",
   "description": "Opener: Summon all Larva from your hand.",
   "battlecry": {
     "targetSelection": "NONE",

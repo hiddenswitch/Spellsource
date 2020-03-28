@@ -33,7 +33,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

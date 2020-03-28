@@ -1,0 +1,68 @@
+{
+  "name": "Glaxius",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Opener: Damage all enemy minions until they have 1 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecastWhileSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "AttributeFilter",
+          "value": 1,
+          "attribute": "HP",
+          "operation": "GREATER"
+        }
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1,
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "value": 1,
+              "attribute": "HP",
+              "operation": "GREATER"
+            },
+            {
+              "class": "IsDestroyedFilter",
+              "invert": true
+            },
+            {
+              "class": "OrFilter",
+              "filters": [
+                {
+                  "class": "AttributeFilter",
+                  "attribute": "IMMUNE"
+                },
+                {
+                  "class": "AttributeFilter",
+                  "attribute": "AURA_IMMUNE"
+                }
+              ],
+              "invert": true
+            }
+          ]
+        },
+        "ignoreSpellDamage": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

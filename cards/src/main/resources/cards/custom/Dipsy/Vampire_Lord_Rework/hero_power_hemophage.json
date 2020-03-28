@@ -1,0 +1,30 @@
+{
+  "name": "Hemophage",
+  "heroPower": "hero_power_sanguiphage",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Gain +1 Attack and Lifedrain this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+	"target": "FRIENDLY_HERO",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "LIFESTEAL",
+        "revertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

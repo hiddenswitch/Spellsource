@@ -1,0 +1,31 @@
+{
+  "name": "Ethereal Maker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Opener: Summon a copy of a friendly minion that costs (7) or more.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "ManaCostFilter",
+        "value": 7,
+        "operation": "GREATER_OR_EQUAL"
+      }
+    },
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "CloneMinionSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

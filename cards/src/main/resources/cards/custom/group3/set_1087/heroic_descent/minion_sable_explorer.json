@@ -1,0 +1,34 @@
+{
+  "name": "Sable Explorer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Dash. Opener: Discover a Dragon.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "RUSH": true,
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

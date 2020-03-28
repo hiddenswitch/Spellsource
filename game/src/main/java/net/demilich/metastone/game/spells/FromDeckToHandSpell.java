@@ -11,12 +11,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,27 +55,44 @@ public class FromDeckToHandSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER, SpellArg.CARD, SpellArg.EXCLUSIVE);
-		if (target != null && target.getEntityType() == EntityType.CARD) {
+		drawFromDeck(context, player, source, target, desc.getValue(SpellArg.VALUE, context, player, target, source, 1), desc.getBool(SpellArg.EXCLUSIVE), (EntityFilter) desc.get(SpellArg.CARD_FILTER), desc.getSpell(), (String) desc.get(SpellArg.CARD));
+	}
+
+	/**
+	 * Draws a filtered card from the deck.
+	 *
+	 * @param context          the game context
+	 * @param player           the player whose card should be drawn
+	 * @param source           the source entity
+	 * @param target           the card to draw; or, if it is null or not a card in the player's deck, the target that
+	 *                         will be passed to the spell specified to be cast on the drawn card (the spell itself will
+	 *                         receive the drawn card as the {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT})
+	 * @param cardsToDraw      the number of cards to draw
+	 * @param removeDuplicates when {@code true}, removes duplicates from the pool of cards to draw
+	 * @param cardFilter       the filter to apply to the cards, or {@code null} for no filter
+	 * @param spellOnCard      the spell to cast on the drawn card, if one was successfully drawn and put into the hand
+	 * @param replacementCard  when not {@code null}, receive this card instead if the deck does not contain any cards
+	 *                         that satisfies the {@code cardFilter}
+	 */
+	@Suspendable
+	public static void drawFromDeck(GameContext context, Player player, Entity source, Entity target, int cardsToDraw, boolean removeDuplicates, @Nullable EntityFilter cardFilter, @Nullable SpellDesc spellOnCard, @Nullable String replacementCard) {
+		if (target != null && target.getEntityType() == EntityType.CARD && target.getZone() == Zones.DECK && target.getOwner() == player.getId()) {
 			Card card = (Card) target;
 			if (player.getDeck().contains(card)) {
 				context.getLogic().receiveCard(player.getId(), card, source, true);
-				if (desc.getSpell() != null) {
-					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, card);
+				if (spellOnCard != null) {
+					SpellUtils.castChildSpell(context, player, spellOnCard, source, target, card);
 				}
+				return;
 			}
-			return;
 		}
 
-		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-		String replacementCard = (String) desc.get(SpellArg.CARD);
-
-		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		Set<String> drawnCardIds = new HashSet<>();
-		for (int i = 0; i < value; i++) {
+		for (int i = 0; i < cardsToDraw; i++) {
 			CardList relevantCards = getCards(context, player, source, cardFilter);
 			Card card = null;
 
-			if (desc.getBool(SpellArg.EXCLUSIVE)) {
+			if (removeDuplicates) {
 				relevantCards.removeIf(c -> drawnCardIds.contains(c.getCardId()));
 			}
 
@@ -92,14 +108,14 @@ public class FromDeckToHandSpell extends Spell {
 					continue;
 				}
 				drawnCardIds.add(card.getCardId());
-				if (desc.getSpell() != null) {
-					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, card);
+				if (spellOnCard != null) {
+					SpellUtils.castChildSpell(context, player, spellOnCard, source, target, card);
 				}
 			}
 		}
 	}
 
-	private CardList getCards(GameContext context, Player player, Entity source, EntityFilter cardFilter) {
+	private static CardList getCards(GameContext context, Player player, Entity source, EntityFilter cardFilter) {
 		CardList relevantCards = null;
 		if (cardFilter != null) {
 			relevantCards = SpellUtils.getCards(player.getDeck(), card -> cardFilter.matches(context, player, card, source));

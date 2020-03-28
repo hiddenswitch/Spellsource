@@ -195,7 +195,7 @@ public enum Attribute {
 	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
-	 * 		complete targeting logic.
+	 * complete targeting logic.
 	 */
 	TAUNT,
 	/**
@@ -218,6 +218,22 @@ public enum Attribute {
 	 */
 	AURA_SPELL_DAMAGE,
 	/**
+	 * The additional amount of healing an {@link Entity} contributes.
+	 */
+	HEALING_BONUS,
+	/**
+	 * The additional amount of healing an {@link Entity} contributes to this owner's enemy.
+	 */
+	ENEMY_HEALING_BONUS,
+	/**
+	 * The aura version of {@link #HEALING_BONUS}.
+	 */
+	AURA_HEALING_BONUS,
+	/**
+	 * The aura version of {@link #ENEMY_HEALING_BONUS}.
+	 */
+	AURA_ENEMY_HEALING_BONUS,
+	/**
 	 * Some cards give the opponent spell damage. This attribute stores how much.
 	 */
 	OPPONENT_SPELL_DAMAGE,
@@ -225,7 +241,7 @@ public enum Attribute {
 	 * A {@link Minion} with {@link #CHARGE} can attack the same turn it enters play.
 	 *
 	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking the
-	 * 		same turn it is summoned.
+	 * same turn it is summoned.
 	 */
 	CHARGE,
 	/**
@@ -283,8 +299,8 @@ public enum Attribute {
 	 * <p>
 	 * This implements Baron Rivendare's text.
 	 *
-	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
-	 * 		complete rules for deathrattles.
+	 * @see GameLogic#resolveAftermaths(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
+	 * complete rules for deathrattles.
 	 */
 	@Deprecated
 	DOUBLE_DEATHRATTLES,
@@ -317,11 +333,11 @@ public enum Attribute {
 	 * as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
 	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the
-	 * 		situation where physical attacks cause a minion to lose stealth.
+	 * situation where physical attacks cause a minion to lose stealth.
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
-	 * 		from a minion causes it to lose stealth.
+	 * from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * 		logic behind selecting valid targets.
+	 * logic behind selecting valid targets.
 	 */
 	STEALTH,
 	/**
@@ -383,9 +399,9 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
-	 * 		the battlefield.
+	 * the battlefield.
 	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual
-	 * 		situation where minions enter the battlefield.
+	 * situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**
@@ -393,14 +409,14 @@ public enum Attribute {
 	 * powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * 		complete target selection logic.
+	 * complete target selection logic.
 	 */
 	UNTARGETABLE_BY_SPELLS,
 	/**
 	 * Marks an {@link Actor} to be untargetable by an <b>opponent's</b> spells or hero powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * 		complete target selection logic.
+	 * complete target selection logic.
 	 */
 	UNTARGETABLE_BY_OPPONENT_SPELLS,
 	/**
@@ -520,7 +536,7 @@ public enum Attribute {
 	 * Marks that this {@link Card} has a trigger that should be active while it is in the deck.
 	 *
 	 * @see #PASSIVE_TRIGGERS for an attribute that marks the entity has a trigger that is only active in the player's
-	 * 		battlefield or hand.
+	 * battlefield or hand.
 	 */
 	DECK_TRIGGERS,
 	/**
@@ -532,7 +548,7 @@ public enum Attribute {
 	 * number of times a hero power can be used will be the max value found among in-play entities owned by the player.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
-	 * 		a hero power card, can be played.
+	 * a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
 	/**
@@ -554,7 +570,7 @@ public enum Attribute {
 	 * Implements the C'Thun mechanic.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
-	 * 		attributes like these and provides values to various spells.
+	 * attributes like these and provides values to various spells.
 	 */
 	CTHUN_ATTACK_BUFF,
 	/**
@@ -563,7 +579,7 @@ public enum Attribute {
 	 * Implements the C'Thun mechanic.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
-	 * 		attributes like these and provides values to various spells.
+	 * attributes like these and provides values to various spells.
 	 */
 	CTHUN_HEALTH_BUFF,
 	/**
@@ -603,7 +619,7 @@ public enum Attribute {
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.
 	 *
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
-	 * 		attack.
+	 * attack.
 	 */
 	RUSH,
 	/**
@@ -615,19 +631,25 @@ public enum Attribute {
 	 */
 	JADE_BUFF,
 	/**
-	 * When any {@link Entity} has this attribute, spells are cast with random targets, random discover choices are made,
-	 * physical attacks target randomly, and battlecries target randomly.
+	 * When any {@link Entity} has a non-zero value for this attribute, spells are cast with random targets, random
+	 * discover choices are made, physical attacks target randomly, and battlecries target randomly.
 	 * <p>
 	 * Implements Yogg-Saron, Hope's End; Servant of Yogg-Saron; Mayor Noggenfogger
 	 */
 	RANDOM_CHOICES,
 	/**
-	 * A {@link #QUEST} {@link Entity} is an untargetable permanent that lives in the {@link Zones#SECRET} zone but is
+	 * A {@link #QUEST} {@link Entity} is an untargetable permanent that lives in the {@link Zones#QUEST} zone but is
 	 * visible to the opponent.
 	 * <p>
 	 * Implements quest cards.
 	 */
 	QUEST,
+	/**
+	 * A {@link #PACT} {@link Entity} is an untargetable permanent that lives in the {@link Zones#QUEST} zone, is visible
+	 * to the opponent, and can be triggered by actions that either the opponent or player performs (activated during both
+	 * turns).
+	 */
+	PACT,
 	/**
 	 * An attribute given to {@link Card} entities that started in the player's deck, as opposed to being generated by
 	 * other cards.
@@ -720,6 +742,11 @@ public enum Attribute {
 	 * end of the turn.
 	 */
 	HEALING_THIS_TURN,
+	/**
+	 * Every time an {@link Actor} is healed, increment this attribute with the amount of healing and set to zero at the
+	 * end of the turn.
+	 */
+	EXCESS_HEALING_THIS_TURN,
 	/**
 	 * Every time an {@link Actor} has its max HP increased, this value increases.
 	 */
@@ -1077,8 +1104,16 @@ public enum Attribute {
 	/**
 	 * Indicates the decay keyword, which causes the entity to lose one health/armor/durability at the end of every
 	 * owner's turn
+	 * <p>
+	 * Requires an appropriate trigger to actually implement the effect.
 	 */
 	DECAY,
+	/**
+	 * The {@link net.demilich.metastone.game.spells.aura.Aura} version of the {@link #DECAY} keyword.
+	 * <p>
+	 * Requires an appropriate trigger to actually implement the effect.
+	 */
+	AURA_DECAY,
 	/**
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
@@ -1131,7 +1166,15 @@ public enum Attribute {
 	 * This is only really used for one Trader card right now, but it seemed like a useful one to add for future cards and
 	 * their effects.
 	 */
-	DISCOVER;
+	DISCOVER,
+	/**
+	 * Keeps track of damage dealt by this {@code source} minion <b>this game</b>.
+	 */
+	TOTAL_DAMAGE_DEALT_THIS_GAME,
+	/**
+	 * Temporary attribute used for testing Signature effects
+	 */
+	SIGNATURE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

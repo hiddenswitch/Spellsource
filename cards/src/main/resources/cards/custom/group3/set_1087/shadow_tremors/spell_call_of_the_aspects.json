@@ -1,0 +1,19 @@
+{
+  "name": "Call of the Aspects",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Add all three Familiar Aspects to your hand.",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_alniaxtrasza",
+      "token_rylvagos",
+      "token_zavathion"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,7 +1,9 @@
-version: '3'
+# Defines the Spellsource server deployment
+# This uses environment variables and authorization keys that you do not have.
+version: '3.7'
 services:
   loadbalancer:
-    image: traefik:alpine
+    image: "traefik:v1.7-alpine"
     networks:
       - web
     command: |
@@ -36,6 +38,9 @@ services:
           - node.labels.disk == ssd
   game:
     image: doctorpangloss/spellsource:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - MONGO_URL=mongodb://mongo:27017/metastone
       - SPELLSOURCE_APPLICATION=Clustered
@@ -51,9 +56,9 @@ services:
       - backend
     deploy:
       labels:
-        - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
+        - "traefik.versionedhost.frontend.rule=${GAME_VERSIONED_HOST_RULE}"
         - "traefik.versionedhost.frontend.entryPoints=http,https"
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefixStrip:/api/v3/"
+        - "traefik.versionedurl.frontend.rule=${GAME_VERSIONED_URL_RULE}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.backend.loadbalancer.stickiness=true"
@@ -64,35 +69,6 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
-  launcher:
-    image: doctorpangloss/launcher:latest
-    networks:
-      - web
-      - backend
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/launcher
-      - ROOT_URL=https://launcher.hiddenswitch.com
-    deploy:
-      restart_policy:
-        condition: on-failure
-        window: 30s
-      labels:
-        - "traefik.frontend.rule=Host:launcher.hiddenswitch.com"
-        - "traefik.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.backend.loadbalancer.stickiness=true"
-        - "traefik.port=3000"
-        - "traefik.enable=true"
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
-    healthcheck:
-      test: curl --fail -s http://localhost:3000/ || exit 1
-      interval: 8s
-      timeout: 4s
-      retries: 3
   mongo:
     image: "mongo:3.6"
     networks:
@@ -117,6 +93,9 @@ services:
       retries: 3
   mediawiki:
     image: "doctorpangloss/wiki:latest"
+    build:
+      context: mediawiki
+      dockerfile: Dockerfile
     networks:
       - web
       - backend
@@ -148,7 +127,7 @@ services:
       - mediawikidata:/var/www/html/images
     deploy:
       labels:
-        - "traefik.frontend.rule=Host:wiki.hiddenswitch.com"
+        - "traefik.frontend.rule=${MEDIAWIKI_RULE}"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.frontend.entryPoints=http,https"
         - "traefik.port=80"
@@ -210,7 +189,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/api/traces"
+        - "traefik.versionedurl.frontend.rule=${JAEGER_COLLECTOR_RULE}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.port=14268"
@@ -253,7 +232,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/jaeger"
+        - "traefik.versionedurl.frontend.rule=${JAEGER_QUERY_RULE}"
         - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
@@ -281,13 +260,16 @@ services:
           - node.labels.disk == ssd
   ddnsroute53:
     image: doctorpangloss/ddnsroute53:latest
+    build:
+      context: ddnsroute53
+      dockerfile: Dockerfile
     networks:
       - web
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - DDNSROUTE53_UPDATE_IN_DOMAINS=*.hiddenswitch.com
-      - DDNSROUTE53_UPDATE_IP_ADDRESS=PUBLIC
+      - DDNSROUTE53_UPDATE_IN_DOMAINS=${DDNSROUTE53_UPDATE_IN_DOMAINS}
+      - DDNSROUTE53_UPDATE_IP_ADDRESS=${DDNSROUTE53_UPDATE_IP_ADDRESS}
     deploy:
       placement:
         constraints:
@@ -295,7 +277,9 @@ services:
           - node.labels.cpu == high
           - node.labels.disk == ssd
   skyhook:
-    image: doctorpangloss/skyhook
+    image: doctorpangloss/skyhook:latest
+    build:
+      context: https://github.com/Commit451/skyhook.git
     networks:
       - web
     deploy:
@@ -303,7 +287,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=Host:skyhook.hiddenswitch.com"
+        - "traefik.versionedurl.frontend.rule=${SKYHOOK_RULE}"
         - "traefik.versionedurl.frontend.entryPoints=http,https"
         - "traefik.backend.loadbalancer.swarm=true"
         - "traefik.port=8080"

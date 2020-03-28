@@ -18,7 +18,7 @@
       "hpBonus": 1
     }
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"

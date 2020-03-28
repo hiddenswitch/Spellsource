@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Guard. Opener: Summon a 1/1 Pageling.",
+  "description": "Guard. Opener: Summon a 1/1 Pageling with Dash.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

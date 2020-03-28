@@ -1,0 +1,29 @@
+{
+  "name": "Storyteller Dobo",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Take control of all enemy minions with 1 or less Attack.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MindControlSpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
