@@ -4,10 +4,11 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
-### Upcoming Changes
- - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
 
 ### Upcoming Changes
+
+ - Oni Queen's Banishment can actually be played, and now costs (0) down from (1). (159)
+ - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
  - Crazed Cultist now interacts more intuitively with Paven, Elemental of Surprise. (1578) 
  - Collectible Permanents should no longer be found by minion-generating effects. (1591)
  - Primordial Pebble now correctly only discovers Elementals. (1580)
