@@ -4807,7 +4807,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		quest.moveOrAddTo(context, Zones.QUEST);
 		addGameEventListener(player, quest, quest);
 		if (fromHand) {
-			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), quest.getSourceCard()));
+			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), quest.getSourceCard(), quest));
 		}
 	}
 

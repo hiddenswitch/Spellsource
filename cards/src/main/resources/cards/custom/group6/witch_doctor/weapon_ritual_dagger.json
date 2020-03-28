@@ -6,8 +6,14 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Opener: Add a random Voodoo spell to your hand.",
-  "battlecry": {
+  "description": "After your champion attacks, add a random Voodoo spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
     "spell": {
       "class": "ReceiveCardSpell",
       "cards": [
@@ -19,10 +25,7 @@
       "randomTarget": true
     }
   },
-  "attributes": {
-    "BATTLECRY": true
-  },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

@@ -39,7 +39,7 @@ import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 /**
  * A Logic service that handles complex game logic.
  * <p>
- * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
+ * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, EventTypeEnum, Attribute,
  * SuspendableAction1)}.
  */
 public interface Logic {
