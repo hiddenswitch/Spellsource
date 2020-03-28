@@ -5,7 +5,7 @@ path: "/whats-new"
 header: true
 ---
 
-### Upcoming Changes
+### 0.8.71-3.1.1 (March 28, 2020)
 
  - Both versions of Doodles now work. (1632)
  - Cards will not be played randomly more than once per reading of the text "play cards randomly." Concretely, a card is marked as being played randomly and is not eligible to be played randomly again, until all the cards in the selected list of cards are done being played randomly. Fixes issues related to Titan Feast playing Titan Feast in the deck.
@@ -28,7 +28,7 @@ header: true
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
  - Herald of Fate no longer just gives you double openers forever. (1577)
 
-### 0.8.70-3.1.1 (Marcy 27, 2020)
+### 0.8.70-3.1.1 (March 27, 2020)
 
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
  - Storyteller has been buffed, thanks @skurleton! (1571)
