@@ -1,10 +1,10 @@
 {
-  "name": "Brutish Counterattack",
+  "name": "Vengeful Curse",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "<b>Pact:</b> After two friendly minions have died, deal 2 damage to all enemies.",
+  "description": "<b>Pact:</b> After a friendly minion dies, destroy a random enemy minion.",
   "condition": {
     "class": "CanPlayPactCondition"
   },
@@ -12,16 +12,15 @@
   "spell": {
     "class": "AddPactSpell",
     "pact": {
-      "countUntilCast": 2,
+      "countUntilCast": 1,
       "eventTrigger": {
         "class": "MinionDeathTrigger",
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "DamageSpell",
-        "target": "ENEMY_CHARACTERS",
-        "value": 2,
-        "ignoreSpellDamage": true
+        "class": "DestroySpell",
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true
       }
     }
   },
@@ -30,8 +29,7 @@
   },
   "collectible": true,
   "sets": [
-    "CUSTOM",
-    "CLASSIC"
+    "CUSTOM"
   ],
   "fileFormatVersion": 1
 }
