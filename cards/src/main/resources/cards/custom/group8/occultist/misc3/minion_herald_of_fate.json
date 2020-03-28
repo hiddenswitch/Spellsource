@@ -8,14 +8,25 @@
   "rarity": "RARE",
   "description": "Aftermath: The next two Openers trigger twice.",
   "deathrattle": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "card": "enchantment_double_next_battlecry_twice"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_double_next_battlecry_twice"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "targetPlayer": "OPPONENT",
+        "target": "ENEMY_PLAYER",
+        "card": "enchantment_double_next_battlecry_twice"
+      }
+    ]
   },
   "attributes": {
     "DEATHRATTLES": true
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "set": "CUSTOM"
 }
