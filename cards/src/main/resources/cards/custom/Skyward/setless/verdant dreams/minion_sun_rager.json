@@ -1,5 +1,5 @@
 {
-    "name": "Giggling Elfin",
+    "name": "Sun Rager",
     "baseManaCost": 3,
     "type": "MINION",
     "heroClass": "AZURE",
@@ -18,7 +18,6 @@
                 "operation": "EQUAL"    
             }
         },
-        "targetSelection": "FRIENDLY_MINIONS",
         "spell": {
             "class": "AddAttributeSpell",
             "target": "SELF",
