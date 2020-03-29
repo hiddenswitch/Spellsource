@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "SPIRIT",
-  "description": "After this minion attacks, receive a Lunstone.",
+  "description": "After this attacks, receive a Lunstone.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
