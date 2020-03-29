@@ -1,0 +1,15 @@
+{
+  "name": "Rebel",
+  "type": "CLASS",
+  "hero": "hero_hanlao",
+  "heroClass": "CAMO",
+  "color": [
+    68,
+    73,
+    66
+  ],
+  "blackText": false,
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
