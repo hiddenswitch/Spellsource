@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Add a random Voodoo spell to your hand.",
+  "description": "Receive a random Voodoo spell.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
