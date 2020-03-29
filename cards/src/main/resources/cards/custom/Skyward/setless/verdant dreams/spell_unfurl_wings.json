@@ -1,0 +1,43 @@
+    {
+        "name": "Unfurl Wings",
+        "baseManaCost": 1,
+        "type": "SPELL",
+        "heroClass": "AZURE",
+        "rarity": "EPIC",
+        "description": "Cast every Soar spell in your hand. If there are none, add one to it.",
+        "spell": {
+            "class": "MetaSpell",
+            "spell": {
+                "class": "EitherOrSpell",
+                "condition": {
+                    "class": "HoldsCardCondition",
+                    "cardFilter": {
+                        "class": "SpecificCardFilter",
+                        "card": "spell_soar"
+                    }
+                },
+                "spell1": {
+                    "class": "CastRepeatedlySpell",
+                    "howMany": 15,
+                    "spell": {
+                        "class": "RandomCardTargetSpell",
+                        "target": "FRIENDLY_HAND",
+                        "exclusive": true,
+                        "cardFilter": {
+                            "class": "SpecificCardFilter",
+                            "card": "spell_soar"
+                        },
+                        "randomTarget": true
+                    }
+                },
+                "spell2": {
+                    "class": "ReceiveCardSpell",
+                    "card": "spell_soar",
+                    "targetPlayer": "SELF"
+                }
+            }
+        },
+        "collectible": true,
+        "set": "Verdant Dreams",
+        "fileFormatVersion": 1
+    }

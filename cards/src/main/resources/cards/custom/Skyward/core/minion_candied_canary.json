@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: If your holding 6 or more cards, gain +2/+2.",
+  "description": "Opener: If you're holding 6 or more cards, gain +2/+2.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",
