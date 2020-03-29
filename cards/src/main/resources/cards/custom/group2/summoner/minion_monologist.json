@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Add a random Summoner Secret to your hand.",
+  "description": "Opener: Receive a random Summoner Secret.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
