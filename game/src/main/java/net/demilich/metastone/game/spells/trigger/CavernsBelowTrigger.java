@@ -44,7 +44,7 @@ public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 				.filter(entity -> !entity.getSourceCard().getCardType().isCardType(CardType.CHOOSE_ONE)
 						&& entity.getEntityType() != EntityType.ENCHANTMENT)
 				.collect(toMap(Entity::getReference, Function.identity()));
-		Map<String, Long> counts = list.getReferences(context, host)
+		Map<String, Long> counts = list.getReferences(host)
 				.stream()
 				.map(entities::get)
 				.map(Entity::getSourceCard)

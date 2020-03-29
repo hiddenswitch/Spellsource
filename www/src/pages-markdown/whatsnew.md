@@ -5,7 +5,30 @@ path: "/whats-new"
 header: true
 ---
 
-### 0.8.70-3.1.1 (Marcy 27, 2020)
+### 0.8.71-3.1.1 (March 28, 2020)
+
+ - Both versions of Doodles now work. (1632)
+ - Cards will not be played randomly more than once per reading of the text "play cards randomly." Concretely, a card is marked as being played randomly and is not eligible to be played randomly again, until all the cards in the selected list of cards are done being played randomly. Fixes issues related to Titan Feast playing Titan Feast in the deck.
+ - Fixed a complex interation with Okanaka the Lifebender, Midsummer Mirage and Gravtisk the Ancient. (1606)
+ - Fassnu Avenger now properly copies copied Aftermaths. (1569)
+ - Fixed a few miscellaneous card descriptions to properly say "Opener". (1590)
+ - Development card "Signature Chooser" is now correctly uncollectible. (1592)
+ - Fixed old Vampire Lord stuff still being collectible. (1593)
+ - Ringside Impresario no longer triggers itself, and now correctly shuffles to deck, not adding to hand. (1594)
+ - Vaudeville Hook now correctly reduces in cost, not increases. (1595)
+ - The "Berry" token (1 Lun restore 3 Health) is now the default Signature spell if one wasn't chosen for a deck. (1596)
+ - Made some Ringmaster cards collectible that were mistakenly uncollectible. (1597)
+ - Added Ringmaster card Finale Architect. (1597)
+ - Oni Queen's Banishment can actually be played, and now costs (0) down from (1). (159)
+ - Klive Icetooth will now still heal you even if there are no other minions to Stun. (1588)
+ - Crazed Cultist now interacts more intuitively with Paven, Elemental of Surprise. (1578) 
+ - Collectible Permanents should no longer be found by minion-generating effects. (1591)
+ - Primordial Pebble now correctly only discovers Elementals. (1580)
+ - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
+ - Nilfheim Needlegunner no longer triggers off of itself. (1610)
+ - Herald of Fate no longer just gives you double openers forever. (1577)
+
+### 0.8.70-3.1.1 (March 27, 2020)
 
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
  - Storyteller has been buffed, thanks @skurleton! (1571)
@@ -20,78 +43,80 @@ A huge thanks to @Logovazz for coding up a variety of contributed nerfs and buff
 Plenty of changes this time around. It's been a long time coming for the classes that are being removed. Two of them needed to be removed due to theming, Ice Knight was requested to be deleted ages ago, and Mercenary and Timeweaver have both become defunct. Mercenary has a successor in the form of Outlaw and Timeweaver is just a mess. Big neutral changes as well, with 7 cards being removed, 2 being added, and whooole lotta reworks. Some changes to Witch Doctor and new cards for Oni Queen. Enjoy.
 
 #### Removed Classes
-- Sea Witch, Ice Knight, Mercenary, Deathknight, and Timeweaver
+ - Sea Witch, Ice Knight, Mercenary, Deathknight, and Timeweaver
 
 #### Neutral
 
 *New Minions for Core*
-- Glimmer Dancer - 4/3/3 rare fae "Opener: If you played another card this turn, give your other Fae +2 Health."
-- Lunstone Rumbler - 3/3/4 rare elemental "Opener: Destroy your weapon to gain a Lun."
+ - Glimmer Dancer - 4/3/3 rare fae "Opener: If you played another card this turn, give your other Fae +2 Health."
+ - Lunstone Rumbler - 3/3/4 rare elemental "Opener: Destroy your weapon to gain a Lun."
 
 *Cards removed from Collection*
-- Redundant cards: Gustbreaker, Throat Cutter, Lightning Elemental
-- Unused cards: Hypnotic Beetle, Zealous Deckhand, Stowaway Scoundrel, Faefellow Crumble
-- Problematic cards: Stick
+ - Redundant cards: Gustbreaker, Throat Cutter, Lightning Elemental
+ - Unused cards: Hypnotic Beetle, Zealous Deckhand, Stowaway Scoundrel, Faefellow Crumble
+ - Problematic cards: Stick
 
 *Rebalance / Rework*
-- Novice Enchantress is now 4/2/2 Fae "Opener: Give a friendly minion +4 Health and Elusive."
-- Jungle Wanderer is now 4/2/2 from 4/1/1.
-- Hooded Ritualist is now 4/2/4 "Opener: If you cast a spell this turn, summon two 2/1 Demons."
-- Hoffis the Dunewalker now reads "Opener: Give all minions in your hand 'Opener: Summon a 0/2 Sandpile with Guard.'"
-- Rektan, Warrior of the Wild is now 4/3/3 Beast "Opener: Your champion has +1 Attack while it has a weapon this game."
-- Unnerving Spectre is now 4/4/2 Spirit "Dodge. At the start of your turn, gain Dodge."
-- Ironplate Samurai is now 5/5/3 from 5/3/3.
-- Haunted Armor is now 6/6/4 Spirit "Dodge. After an allied minion loses Dodge, gain Dodge."
-- Holdover Lich is now 5/5/6 from 6/5/6
-- Inora, Spellbound is now a Fae.
-- Oppressor Defender is now 6/3/3/ from 6/2/2.
-- Crystal Golem is now 7/7/7 Elemental "Elusive. Aftermath: Summon two 2/2 Golems with Elusive."
-- Blue Nestwatcher now has Guard.
-- Sourceborn Aelin is now 10/10/10 "Opener: Add a random Source spell to your hand."
-	- Only 3 Source Spells: Apotheosis, Creation, and Worldsculpt
-	- Apotheosis is now "Refresh your Lun, draw 2 cards."
-	- Creation is now "Copy 3 random cards from your deck. They cost (0)."
-- Redhide Butcher is now 2/4/3 Demon "Hidden. Aftermath: Discard the leftmost card in your hand."
-- Doodles now reads "Opener: Your skill becomes 'Draw a card' until you play a minion."
+ - Novice Enchantress is now 4/2/2 Fae "Opener: Give a friendly minion +4 Health and Elusive."
+ - Jungle Wanderer is now 4/2/2 from 4/1/1.
+ - Hooded Ritualist is now 4/2/4 "Opener: If you cast a spell this turn, summon two 2/1 Demons."
+ - Hoffis the Dunewalker now reads "Opener: Give all minions in your hand 'Opener: Summon a 0/2 Sandpile with Guard.'"
+ - Rektan, Warrior of the Wild is now 4/3/3 Beast "Opener: Your champion has +1 Attack while it has a weapon this game."
+ - Unnerving Spectre is now 4/4/2 Spirit "Dodge. At the start of your turn, gain Dodge."
+ - Ironplate Samurai is now 5/5/3 from 5/3/3.
+ - Haunted Armor is now 6/6/4 Spirit "Dodge. After an allied minion loses Dodge, gain Dodge."
+ - Holdover Lich is now 5/5/6 from 6/5/6
+ - Inora, Spellbound is now a Fae.
+ - Oppressor Defender is now 6/3/3/ from 6/2/2.
+ - Crystal Golem is now 7/7/7 Elemental "Elusive. Aftermath: Summon two 2/2 Golems with Elusive."
+ - Blue Nestwatcher now has Guard.
+ - Sourceborn Aelin is now 10/10/10 "Opener: Add a random Source spell to your hand."
+ - Only 3 Source Spells: Apotheosis, Creation, and Worldsculpt
+ - Apotheosis is now "Refresh your Lun, draw 2 cards."
+ - Creation is now "Copy 3 random cards from your deck. They cost (0)."
+ - Redhide Butcher is now 2/4/3 Demon "Hidden. Aftermath: Discard the leftmost card in your hand."
+ - Doodles now reads "Opener: Your skill becomes 'Draw a card' until you play a minion."
 
 *Renaming / Reflavoring*
-- Alemental is now Doro the Rebuilder
-- Skeletower is now Gashadokuro
-- Holy Bulwark is now Miasma Warder
-- Nice Cream is now Seafoam Cleanser
-- Jabberwocky is now Socialite Fox
-- Dante the Outlaw is now Kidnapper Dante
-- Streetwise Specialist is now Gramlot Enforcer
-- Roadblock Pufferfish is now Vilewing Patriarch
-- Divine Cleric is now Royal Healer and is a Dragon
-- Urson the Smort is now Caster Illiura and lost Beast Tag
+ - Alemental is now Doro the Rebuilder
+ - Skeletower is now Gashadokuro
+ - Holy Bulwark is now Miasma Warder
+ - Nice Cream is now Seafoam Cleanser
+ - Jabberwocky is now Socialite Fox
+ - Dante the Outlaw is now Kidnapper Dante
+ - Streetwise Specialist is now Gramlot Enforcer
+ - Roadblock Pufferfish is now Vilewing Patriarch
+ - Divine Cleric is now Royal Healer and is a Dragon
+ - Urson the Smort is now Caster Illiura and lost Beast Tag
 
 *Pirates Reflavoring*
+
 Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent different races. So, neutral Pirates have become Spirits and Spirit Related.
-- Chaotic Cutthroat is now Manifested Tantrum
-- Hold Hunter is now Vengeful Spirit
-- Doomed Diver is now Yadokai
-- Gold Picaroon is now Spectral Thug
-- Crew Commander is now Three Faced Spook and gained Lifedrain
-- Treasure Hunter is now Offering Coveter
-- Captain Stashin is now Tiolan the Restless and a 5/4/6
-- Chainwrecker Corsair is now Fallen Warrior and a 5/5/4
+
+ - Chaotic Cutthroat is now Manifested Tantrum
+ - Hold Hunter is now Vengeful Spirit
+ - Doomed Diver is now Yadokai
+ - Gold Picaroon is now Spectral Thug
+ - Crew Commander is now Three Faced Spook and gained Lifedrain
+ - Treasure Hunter is now Offering Coveter
+ - Captain Stashin is now Tiolan the Restless and a 5/4/6
+ - Chainwrecker Corsair is now Fallen Warrior and a 5/5/4
 
 #### Witch Doctor Updates
-- Spirit Bind and Hex Bolt can target any minion now.
-- Removed Subject to Sacrifice, Undergrowth Spirit, Underbrush Protector from Collection
-- Bottled Spirit is now 2 Lun "Give a minion +2/+2. Restore 4 Health to your Champion."
-- Ritual Dagger had its nerf reverted. It is now 2/2/2 "After your champion attacks, add a random Voodoo Spell to your hand."
-- Crone's Attendant is now (3/4/2) from (3/5/1).
-- Fading Berserker is now 2/1/4 (Opener: Gain +3 Attack until your next turn.)
-- Shimmerscale now reads ("Dodge. Hidden for 1 Turn. Elusive to enemy spells.")
-- Vilewing Broodmother is now (3/1/3) from (4/1/4).
-- Prolific Tamer is now (3/3/3) from (3/3/2).
+ - Spirit Bind and Hex Bolt can target any minion now.
+ - Removed Subject to Sacrifice, Undergrowth Spirit, Underbrush Protector from Collection
+ - Bottled Spirit is now 2 Lun "Give a minion +2/+2. Restore 4 Health to your Champion."
+ - Ritual Dagger had its nerf reverted. It is now 2/2/2 "After your champion attacks, add a random Voodoo Spell to your hand."
+ - Crone's Attendant is now (3/4/2) from (3/5/1).
+ - Fading Berserker is now 2/1/4 (Opener: Gain +3 Attack until your next turn.)
+ - Shimmerscale now reads ("Dodge. Hidden for 1 Turn. Elusive to enemy spells.")
+ - Vilewing Broodmother is now (3/1/3) from (4/1/4).
+ - Prolific Tamer is now (3/3/3) from (3/3/2).
 
 #### Oni Queen Updates
 
 *New Cards*
-- Draconic Doubler, Shortrun Stockpiler, Valiant Medic, Coordinated Assault, Migraine, Rally, Enenra
+ - Draconic Doubler, Shortrun Stockpiler, Valiant Medic, Coordinated Assault, Migraine, Rally, Enenra
 
 ### 0.8.69-3.1.1 (March 21, 2020)
 
@@ -203,7 +228,6 @@ In addition, extensive edits by @Logovaz summarized here:
  - Witching Traveler now sets cost of card to 0 from 1.
  
 ### Soulseeker Changes
-
 
  - Major changes to Soulseeker: “Obvious nerfs," card deletions, reflavoring and set changes, new cards, in particular Secrets archetype.
  - Reverse Volition: 1 mana common spell "Secret: When your opponent plays a minion, return it to their hand." (Replaces Dormant Spirits)

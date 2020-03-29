@@ -155,4 +155,12 @@ public class TimeweaverTests extends TestBase {
 
 		});
 	}
+
+	@Test
+	public void testMysteriousQuestgiver() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_mysterious_questgiver");
+			assertEquals(3, player.getHand().size());
+		}, "TIME", "TIME");
+	}
 }

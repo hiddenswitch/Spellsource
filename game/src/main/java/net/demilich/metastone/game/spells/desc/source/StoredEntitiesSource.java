@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Retrieves the cards stored in the {@code source} {@link Entity} or {@link CardSourceArg#SOURCE} {@link
+ * Retrieves a snapshot of the cards stored in the {@code source} {@link Entity} or {@link CardSourceArg#SOURCE} {@link
  * EntityReference} by a {@link net.demilich.metastone.game.spells.custom.StoreEntitySpell}.
  * <p>
  * Example:
@@ -44,6 +44,6 @@ public class StoredEntitiesSource extends CardSource {
 		if (sourceOverride != null) {
 			source = context.resolveTarget(player, source, sourceOverride).get(0);
 		}
-		return EnvironmentEntityList.getList(context).getCards(context, source);
+		return new CardArrayList(EnvironmentEntityList.getList(context).getCards(context, source));
 	}
 }

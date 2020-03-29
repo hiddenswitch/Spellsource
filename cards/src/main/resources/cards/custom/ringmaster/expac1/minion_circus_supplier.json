@@ -13,7 +13,7 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "cardSource": {
-        "class": "UnweightedCatalogueSource"
+        "class": "UncollectibleCatalogueSource"
       },
       "cardFilter": {
         "class": "SpecificCardFilter",

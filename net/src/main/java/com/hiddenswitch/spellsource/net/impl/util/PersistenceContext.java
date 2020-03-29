@@ -18,8 +18,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * net.demilich.metastone.game.GameContext} where the event was fired; and, to update inventory items corresponding to
  * an entity on the board (i.e., the card).
  *
- * @param <T> The {@link GameEvent} class that this {@link Spellsource#persistAttribute(String, GameEventType,
- *            Attribute, SuspendableAction1)} handler argument is handling.
+ * @param <T> The {@link GameEvent} class that this {@link Spellsource#persistAttribute(String, EventTypeEnum,
+ *            Attribute, SuspendableAction1)}  handler argument is handling.
  */
 public interface PersistenceContext<T extends GameEvent> {
 	/**

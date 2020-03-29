@@ -14,7 +14,7 @@ public class StorageContainsCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		CardList storage = EnvironmentEntityList.getList(context).getCards(context, source);
+		var storage = EnvironmentEntityList.getList(context).getCards(context, source);
 		for (Card card : storage) {
 			if (target.getSourceCard().getCardId().equals(card.getCardId())) {
 				return true;
