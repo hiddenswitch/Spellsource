@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever your opponent draws a card, add a copy to your hand.",
+  "description": "Whenever your opponent draws a card, receive a copy of it.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
