@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "Opener: If your deck has no Dragons, summon a 4/4 Dragon at the start of your turn for the rest of the game.",
+  "description": "Opener: If your deck has no Dragons, summon a 4/4 Dragon at the start of your turns this game.",
   "battlecry": {
     "condition": {
       "class": "AllMatchFilterCondition",
