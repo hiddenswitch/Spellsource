@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "After this takes damage, deal 3 damage to a random enemy.",
+  "description": "Whenever this takes damage, deal 3 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
