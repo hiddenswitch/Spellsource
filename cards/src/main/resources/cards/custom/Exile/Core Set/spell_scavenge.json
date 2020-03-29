@@ -1,6 +1,6 @@
 {
   "name": "Scavenge",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
@@ -12,9 +12,9 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "value": {
+        "armorBonus": {
           "class": "DiedThisTurnValueProvider",
-          "targetPlayer": "BOTH"
+          "targetPlayer": "BOTH",
         }
       },
       {
