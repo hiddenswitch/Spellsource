@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever you add a card to your hand, deal 3 damage to a random enemy.",
+  "description": "Whenever you receive a card, deal 3 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
