@@ -4,7 +4,7 @@
   "type": "WEAPON",
   "heroClass": "LIGHTBROWN",
   "damage": 0,
-  "durability": 3,
+  "durability": 6,
   "rarity": "RARE",
   "description": "<b>Decay<b>. At the end of your turn, summon two 1/1 Spirits.",
   "trigger": {
