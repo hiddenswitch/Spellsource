@@ -4,10 +4,10 @@
   "type": "MINION",
   "heroClass": "AZURE",
   "baseAttack": 3,
-  "baseHp": 5,
+  "baseHp": 4,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Guard. Opener: If you have 8 or more cards in hand, summon 2 copies of this minion.",
+  "description": "Guard. Opener: If you're holding 9 or more cards, summon 2 copies of this minion.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",
