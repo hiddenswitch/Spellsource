@@ -1,0 +1,34 @@
+{
+    "name": "Giggling Elfin",
+    "baseManaCost": 3,
+    "type": "MINION",
+    "heroClass": "AZURE",
+    "baseAttack": 5,
+    "baseHp": 1,
+    "rarity": "COMMON",
+    "race": "ELEMENTAL",
+    "description": "Opener: If you're holding a 1-Cost spell, gain Dash.",
+    "battlecry": {
+        "condition": {
+            "class": "HoldsCardCondition",
+            "cardFilter": {
+                "class": "CardFilter",
+                "value": 1,
+                "attribute": "BASE_MANA_COST",
+                "operation": "EQUAL"    
+            }
+        },
+        "targetSelection": "FRIENDLY_MINIONS",
+        "spell": {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "RUSH"
+        }
+    },
+    "attributes": {
+        "BATTLECRY": true
+    },
+    "collectible": true,
+    "set": "Verdant Dreams",
+    "fileFormatVersion": 1
+}
