@@ -28,12 +28,10 @@
             },
             "countByValue": true,
             "countUntilCast": 10,
-            "maxFires": 10,
             "spell": {
               "class": "RemoveEnchantmentSpell",
               "target": "FRIENDLY_PLAYER",
-              "card": "enchantment_draw_card_skill",
-              "howMany": 1
+              "card": "enchantment_draw_card_skill"
             }
           }
         },

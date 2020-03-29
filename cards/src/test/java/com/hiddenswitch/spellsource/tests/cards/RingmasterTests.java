@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,15 @@ public class RingmasterTests extends TestBase {
 	@Override
 	public String getDefaultHeroClass() {
 		return HeroClass.CANDY;
+	}
+
+	@Test
+	public void testDefaultSignature() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_circus_supplier");
+			assertEquals(1, player.getHand().size());
+			assertEquals(GameLogic.DEFAULT_SIGNATURE, player.getHand().get(0).getCardId());
+		});
 	}
 
 	@Test
@@ -284,6 +294,15 @@ public class RingmasterTests extends TestBase {
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(opponent.getMinions().size(), 0);
 		});
+
+		runGym((context, player, opponent) -> {
+			Card hook = receiveCard(context, player, "spell_vaudeville_hook");
+			assertEquals(12, costOf(context, player, hook));
+			for (int i = 0; i < 5; i++) {
+				receiveCard(context, player, "spell_lunstone");
+				assertEquals(11 - i, costOf(context, player, hook));
+			}
+		});
 	}
 
 	@Test
@@ -363,4 +382,44 @@ public class RingmasterTests extends TestBase {
 			playMinionCard(context, player, "minion_assistant_tumbler");
 		});
 	}
+
+	@Test
+	public void testRingsideImpresario() {
+		runGym((context, player, opponent) -> {
+			player.setAttribute(Attribute.SIGNATURE, "spell_chain_dance");
+			playCard(context, player, "minion_ringside_impresario");
+			assertEquals(0, player.getHand().size());
+			playCard(context, player, "minion_ringside_impresario");
+			assertEquals(1, player.getDeck().size());
+		});
+	}
+
+	@Test
+	public void testFinaleArchitect() {
+		runGym((context, player, opponent) -> {
+			Minion arc = playMinionCard(context, player, "minion_finale_architect");
+			Card dance = receiveCard(context, player, "spell_chain_dance");
+			assertEquals(2, costOf(context, player, dance));
+			playCard(context, player, dance, arc);
+			assertFalse(arc.isDestroyed());
+			context.endTurn();
+			assertFalse(arc.isDestroyed());
+			context.endTurn();
+			assertTrue(arc.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion arc = playMinionCard(context, player, "minion_finale_architect");
+			Card star = receiveCard(context, player, "spell_star_performance");
+			assertEquals(1, costOf(context, player, star));
+			playCard(context, player, star, arc);
+			assertEquals(arc.getBaseAttack(), arc.getAttack());
+			context.endTurn();
+			destroy(context, arc);
+			Minion surprise = playMinionCard(context, opponent, "minion_assistant_tumbler");
+			context.endTurn();
+			assertEquals(surprise.getBaseAttack() + 3, surprise.getAttack());
+		});
+	}
+
 }

@@ -21,8 +21,13 @@ import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraArg;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects;
+import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -45,6 +50,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class SpellUtils {
 	private static Logger logger = LoggerFactory.getLogger(SpellUtils.class);
+	private static Set<String> specialCards = Set.of("EVENT_SOURCE", "OUTPUT");
 
 	/**
 	 * Sets up the source and target references for casting a child spell, typically an "effect" of a spell defined on a
@@ -577,6 +583,13 @@ public class SpellUtils {
 		}
 	}
 
+	/**
+	 * Retrieves the group (deprecated) spells printed on the specified {@code spell}
+	 *
+	 * @param context
+	 * @param spell
+	 * @return
+	 */
 	static SpellDesc[] getGroup(GameContext context, SpellDesc spell) {
 		Card card = null;
 		String cardName = (String) spell.get(SpellArg.GROUP);
@@ -651,7 +664,7 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Casts a subspell on a card that was returned by {@link net.demilich.metastone.game.logic.GameLogic#receiveCard(int,
+	 * Casts a subspell on a card that was returned by {@link GameLogic#receiveCard(int,
 	 * Card)}. Will not execute if the output is null or in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param context The {@link GameContext} to operate on.
@@ -695,8 +708,8 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
-	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
-	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
+	 * SpellArg#CARDS} properties or as specified by a {@link CardSource}
+	 * and {@link CardFilter}. If neither of those are specified, uses the
 	 * target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
@@ -717,13 +730,13 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
-	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
-	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
+	 * SpellArg#CARDS} properties or as specified by a {@link CardSource}
+	 * and {@link CardFilter}. If neither of those are specified, uses the
 	 * target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The {@link SpellDesc} given in {@code desc} is inspected for a variety of arguments. If there is a {@link
 	 * SpellArg#CARD_SOURCE} or {@link SpellArg#CARD_FILTER} specified, the card source generates a list of cards using
-	 * {@link net.demilich.metastone.game.spells.desc.source.CardSource#getCards(GameContext, Entity, Player)}, and that list
+	 * {@link CardSource#getCards(GameContext, Entity, Player)}, and that list
 	 * is filtered using {@link EntityFilter#matches(GameContext, Player, Entity, Entity)}.
 	 * <p>
 	 * Anytime {@link SpellArg#CARD} or {@link SpellArg#CARDS} is specified, the card IDs in those args are added to the
@@ -734,12 +747,12 @@ public class SpellUtils {
 	 * SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_SOURCE} nor {@link SpellArg#CARD_FILTER} will be
 	 * interpreted as trying to retrieve the target's base card.
 	 * <p>
-	 * Cards are not generated as copies unless the {@link net.demilich.metastone.game.spells.desc.source.CardSource} has
-	 * the {@link net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects} trait and is used as an arg
+	 * Cards are not generated as copies unless the {@link CardSource} has
+	 * the {@link HasCardCreationSideEffects} trait and is used as an arg
 	 * in the {@code desc}.
 	 * <p>
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
-	 * card source used is {@link net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource}.
+	 * card source used is {@link UnweightedCatalogueSource}.
 	 * <p>
 	 * The cards are chosen randomly <b>without replacement</b>.
 	 *
@@ -833,11 +846,11 @@ public class SpellUtils {
 				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired())
 				.map(auraClass::cast)
 				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
-				.collect(Collectors.toList());
+				.collect(toList());
 	}
 
 	/**
-	 * Retrieves an array of spells corresponding to the {@link net.demilich.metastone.game.spells.desc.aura.AuraArg#APPLY_EFFECT}
+	 * Retrieves an array of spells corresponding to the {@link AuraArg#APPLY_EFFECT}
 	 * field on an aura whose condition is null or fulfilled for the given {@code source} and {@code target}.
 	 *
 	 * @param context
@@ -880,7 +893,6 @@ public class SpellUtils {
 	 * Returns {@code true} if the caller is in a recursive stack
 	 *
 	 * @param callingClass
-	 * @return
 	 */
 	public static boolean isRecursive(Class<? extends Spell> callingClass) {
 		/*
@@ -890,6 +902,15 @@ public class SpellUtils {
 				.limit(16)
 				.anyMatch(f -> f.getClassName().contains(callingClass.getName())));*/
 		return false;
+	}
+
+	/**
+	 * Gets a list of special card IDs.
+	 *
+	 * @return
+	 */
+	public static Set<String> getSpecialCards() {
+		return specialCards;
 	}
 
 	/**

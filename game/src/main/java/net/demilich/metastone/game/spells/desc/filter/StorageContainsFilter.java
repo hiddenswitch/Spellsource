@@ -15,7 +15,7 @@ public class StorageContainsFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		CardList storage = EnvironmentEntityList.getList(context).getCards(context, host);
+		var storage = EnvironmentEntityList.getList(context).getCards(context, host);
 		for (Card card : storage) {
 			if (entity.getSourceCard().getCardId().equals(card.getCardId())) {
 				return true;
