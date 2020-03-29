@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "At the end of your turn, receive a Berry that restores 3 Health.",
+  "description": "At the end of your turns, receive a Berry that restores 3 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
