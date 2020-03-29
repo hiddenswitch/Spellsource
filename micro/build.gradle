@@ -1,9 +1,10 @@
 plugins {
-    id "application"
+    id "java-library"
     id "com.github.johnrengelman.shadow" version "5.2.0"
     id "net.ltgt.apt-eclipse" version "0.21"
 }
 
+apply plugin: "java-library"
 group 'com.hiddenswitch'
 
 repositories {
@@ -58,7 +59,6 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "com.hiddenswitch.spellsource.micro.Application"
 // use JUnit 5 platform
 test {
     useJUnitPlatform()
@@ -68,8 +68,6 @@ shadowJar {
     mergeServiceFiles()
 }
 
-run.classpath += configurations.developmentOnly
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.add('-parameters')

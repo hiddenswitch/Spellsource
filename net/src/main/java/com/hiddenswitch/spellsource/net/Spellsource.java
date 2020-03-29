@@ -50,9 +50,6 @@ import static java.util.stream.Collectors.toList;
 /**
  * The Spellsource Server API. Access it with {@link Spellsource#spellsource()}.
  * <p>
- * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(String,
- * GameEventType, Attribute, SuspendableAction1)}.
- * <p>
  * It will provide more APIs for features in the future.
  * <p>
  * When adding new collections, this class stores the migrations where index creation is appropriate.

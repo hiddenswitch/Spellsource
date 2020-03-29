@@ -12,10 +12,7 @@ import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.*;
-import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.targeting.IdFactoryImpl;
-import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import org.jetbrains.annotations.NotNull;
@@ -428,14 +425,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			throw new ArrayStoreException("No owner for entity.");
 		}
 
-		final Player player = context.getPlayer(getOwner());
+		Player player = context.getPlayer(getOwner());
 		if (getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
 			player.getZone(destination).add(index, this);
 		} else if (getEntityLocation().getZone() == destination) {
 			// Already in the destination.
 			throw new ArrayStoreException("Already in destination.");
 		} else {
-			final Zones currentZone = getEntityLocation().getZone();
+			Zones currentZone = getEntityLocation().getZone();
 			player.getZone(currentZone).move(getEntityLocation().getIndex(), player.getZone(destination), index);
 		}
 	}
@@ -464,7 +461,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	protected Entity transformResolved(GameContext context, int depth) {
 		if (depth < 0) {
-			throw new RuntimeException("Cycle likely in transformation references.");
+			throw new TransformCycleException(this);
 		}
 		if (!getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)
 				|| getAttributes().get(Attribute.TRANSFORM_REFERENCE) == null) {
@@ -472,7 +469,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		EntityReference reference = (EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE);
-		Entity entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(RuntimeException::new);
+		Entity entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(() -> new TargetNotFoundException("transform ref", reference));
 		entity = entity.transformResolved(context, depth - 1);
 
 		return entity;
@@ -649,13 +646,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			int healing = Integer.parseInt(matcher.group(1));
 			int modifiedHealing = healing;
 			if (card.getId() != GameLogic.UNASSIGNED) {
-				modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-				if (card.isSpell()) {
-					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
-				}
-				if (card.isHeroPower()) {
-					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
-				}
+				modifiedHealing = context.getLogic().getModifiedHealing(player, healing, this, true);
 			}
 			modifyDescription(matcher, newDescription, healing, modifiedHealing);
 			matchedAtLeastOnce = true;

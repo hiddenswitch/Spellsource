@@ -1,28 +1,28 @@
 {
-    "name": "Wind's Grace",
-    "baseManaCost": 3,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "FREE",
-    "description": "Give a minion +2/+2 and Dodge.",
-    "targetSelection": "MINIONS",
-    "spell": {
-        "class": "MetaSpell",
-        "spells": [
-            {
-                "class": "BuffSpell",
-                "value": 2
-            },
-            {
-                "class": "AddAttributeSpell",
-                "attribute": "DIVINE_SHIELD"
-            }
-        ]
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "BASIC"
-    ],
-    "fileFormatVersion": 1
+  "name": "Wind's Grace",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Give a minion +2/+2 and Dodge.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DIVINE_SHIELD"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
 }

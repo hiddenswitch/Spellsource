@@ -10,7 +10,7 @@
   "description": "Aftermath: Go dormant. Discover a card to revive this minion.",
   "deathrattle": {
     "class": "TransformMinionSpell",
-    "target": "SELF",cc
+    "target": "SELF",
     "card": "permanent_paven_captured"
   },
   "attributes": {

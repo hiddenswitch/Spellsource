@@ -1,0 +1,28 @@
+{
+  "name": "Rise from the Dune",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Summon three 1/1 Whelps. Give your minions +1/+1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "value": 3,
+        "card": "token_whelp"
+      },
+      {
+        "class": "BuffSpell",
+		"target": "FRIENDLY_MINIONS",
+        "attackBonus": 1,
+        "hpBonus": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

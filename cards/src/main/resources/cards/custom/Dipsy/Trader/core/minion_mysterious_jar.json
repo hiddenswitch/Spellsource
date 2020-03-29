@@ -14,12 +14,12 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "boardPositionRelative": "RIGHT",
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION",
-        "manaCost": 1
-      }
+	  "boardPositionRelative": "RIGHT",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 1
+        }
     }
   },
   "collectible": true,

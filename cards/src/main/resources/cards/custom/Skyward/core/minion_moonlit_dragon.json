@@ -18,14 +18,15 @@
           "targetPlayer": "SELF"
         }
       }
-    },
-    "attributes": {
-      "BATTLECRY": true
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "CLASSIC"
-      ],
-    "fileFormatVersion": 1
-  }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.json.Json;
@@ -48,6 +49,8 @@ public class Trace implements Serializable, Cloneable {
 	private String id;
 	private boolean traceErrors;
 	private int version = 4;
+	@JsonIgnore
+	private transient List<GameAction> rawActions = new ArrayList<>();
 
 	public Trace() {
 	}
@@ -87,8 +90,9 @@ public class Trace implements Serializable, Cloneable {
 	}
 
 	@JsonIgnore
-	public void addAction(int actionId) {
-		actions.add(actionId);
+	public void addAction(GameAction action) {
+		actions.add(action.getId());
+		rawActions.add(action);
 	}
 
 	@JsonIgnore
@@ -113,7 +117,7 @@ public class Trace implements Serializable, Cloneable {
 	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler) {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
-		CardCatalogue.setVersion(1);
+		CardCatalogue.setVersion(getVersion());
 		GameContext gameContext = new GameContext();
 		restoreStartingStateTo(gameContext);
 
@@ -258,6 +262,17 @@ public class Trace implements Serializable, Cloneable {
 
 	public Trace setTraceErrors(boolean traceErrors) {
 		this.traceErrors = traceErrors;
+		return this;
+	}
+
+	@JsonIgnore
+	public List<GameAction> getRawActions() {
+		return rawActions;
+	}
+
+	@JsonIgnore
+	public Trace setRawActions(List<GameAction> rawActions) {
+		this.rawActions = rawActions;
 		return this;
 	}
 

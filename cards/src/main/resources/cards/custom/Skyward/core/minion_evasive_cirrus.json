@@ -1,33 +1,33 @@
 {
-    "name": "Evasive Cirrus",
-    "baseManaCost": 4,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 4,
-    "baseHp": 1,
-    "rarity": "COMMON",
-    "race": "ELEMENTAL",
-    "description": "Dodge. Opener: Give a minion Dodge.",
-    "battlecry": {
-        "targetSelection": "MINIONS",
-        "spell": {
-            "class": "MetaSpell",
-            "spells": [
-                {
-                    "class": "AddAttributeSpell",
-                    "attribute": "DIVINE_SHIELD"
-                }
-            ]
+  "name": "Evasive Cirrus",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Dodge. Opener: Give a minion Dodge.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DIVINE_SHIELD"
         }
-    },
-    "attributes": {
-        "BATTLECRY": true,
-        "DIVINE_SHIELD": true
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "CLASSIC"
-    ],
-    "fileFormatVersion": 1
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
 }

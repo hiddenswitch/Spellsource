@@ -1,0 +1,17 @@
+{
+  "name": "The Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Guard.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,26 +1,15 @@
 {
-    "name": "Meteoric Devastation",
-    "baseManaCost": 12,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "EPIC",
-    "description": "Destroy all minions. Whenever you cast a spell, reduce this spell's Cost by (1).",
-    "targetSelection": "NONE",
-    "passiveTrigger": {
-        "eventTrigger": {
-            "class": "SpellCastedTrigger",
-            "targetPlayer": "SELF"
-        },
-        "spell": {
-            "class": "CardCostModifierSpell",
-            "target": "SELF",
-            "cardCostModifier": {
-                "class": "CardCostModifier",
-                "target": "SELF",
-                "value": 1,
-                "operation": "SUBTRACT"
-            }
-        }
+  "name": "Meteoric Devastation",
+  "baseManaCost": 12,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "EPIC",
+  "description": "Destroy all minions. Whenever you cast a spell, reduce this spell's Cost by (1).",
+  "targetSelection": "NONE",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "targetPlayer": "SELF"
     },
     "spell": {
         "class": "MetaSpell",

@@ -1,12 +1,12 @@
 {
-  "name": "Chaotic Cutthroat",
+  "name": "Manifested Tantrum",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "race": "PIRATE",
+  "race": "SPIRIT",
   "description": "Opener and Aftermath: Deal 1 damage to a random enemy.",
   "battlecry": {
     "targetSelection": "NONE",

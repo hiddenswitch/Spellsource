@@ -6,7 +6,10 @@ import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.net.*;
+import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
+import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
+import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.net.models.*;
 import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
@@ -14,6 +17,8 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.Deployment;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -28,6 +33,8 @@ import org.junit.runner.RunWith;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
@@ -63,6 +70,14 @@ public abstract class SpellsourceTestBase {
 	public void tearDown(TestContext testContext) {
 	}
 
+	/**
+	 * Creates a random deck for the user.
+	 *
+	 * @param userId
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	public static DeckCreateResponse createDeckForUserId(String userId) throws SuspendExecution, InterruptedException {
 		GetCollectionResponse collection = Inventory.getCollection(GetCollectionRequest.user(userId));
 		Collections.shuffle(collection.getInventoryRecords());
@@ -103,5 +118,26 @@ public abstract class SpellsourceTestBase {
 				handler.handle(Future.failedFuture(throwable));
 			}
 		}));
+	}
+
+	/**
+	 * Brute force finds the server game context containing this user ID hosted in the current vertx instance
+	 *
+	 * @param eitherUserId
+	 * @return
+	 */
+	@Suspendable
+	protected Optional<ServerGameContext> getServerGameContext(UserId eitherUserId) {
+		var vertx = (VertxInternal) contextRule.vertx();
+
+		return vertx.deploymentIDs()
+				.stream()
+				.map(vertx::getDeployment)
+				.flatMap(dep -> dep.getVerticles().stream())
+				.filter(v -> v instanceof ClusteredGames)
+				.map(v -> (ClusteredGames) v)
+				.flatMap(cg -> cg.getContexts().values().stream())
+				.filter(context -> context.getPlayerConfigurations().stream().anyMatch(c -> Objects.equals(c.getUserId(), eitherUserId)))
+				.findFirst();
 	}
 }

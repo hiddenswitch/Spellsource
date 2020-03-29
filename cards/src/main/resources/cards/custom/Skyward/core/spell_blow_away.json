@@ -1,18 +1,18 @@
 {
-    "name": "Blow Away",
-    "baseManaCost": 2,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "COMMON",
-    "description": "Return a minion to its owner's hand.",
-    "targetSelection": "MINIONS",
-    "spell": {
-      "class": "ReturnTargetToHandSpell"
-    },
-    "collectible": true,
-    "sets": [
-      "CUSTOM",
-      "CLASSIC"
-    ],
-    "fileFormatVersion": 1
-  }
+  "name": "Blow Away",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Return a minion to its owner's hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell"
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

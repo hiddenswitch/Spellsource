@@ -31,7 +31,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_FROMTHEDARKNESS"

@@ -13,7 +13,7 @@ public class CoreTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion source = playMinionCard(context, player, 3, 4);
 			context.endTurn();
-			Minion target = playMinionCard(context, player, 0, 4);
+			Minion target = playMinionCard(context, opponent, 0, 4);
 			context.endTurn();
 			playCard(context, player, "minion_brawler_bushi");
 			attack(context, player, source, target);

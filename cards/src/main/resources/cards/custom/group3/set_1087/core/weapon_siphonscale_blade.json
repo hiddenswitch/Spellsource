@@ -1,0 +1,35 @@
+{
+  "name": "Siphonscale Blade",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 6,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Can attack again after a friendly minion attacks and kills a minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

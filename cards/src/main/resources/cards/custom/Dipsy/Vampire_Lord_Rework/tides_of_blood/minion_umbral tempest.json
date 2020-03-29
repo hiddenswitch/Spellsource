@@ -1,0 +1,32 @@
+{
+  "name": "Umbral Tempest",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Dash. Guard. Whenever your turn ends, swap this minion's Attack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+	  "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "RUSH": true,
+	"TAUNT": true,
+	"LIFESTEAL": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

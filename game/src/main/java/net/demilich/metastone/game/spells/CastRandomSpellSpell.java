@@ -78,7 +78,7 @@ public class CastRandomSpellSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_SOURCE, SpellArg.CARD_FILTER);
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
-		player.setAttribute(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		CardList spells = SpellUtils.getCards(context, player, target, source, desc, numberOfSpellsToCast);
 		for (int i = 0; i < numberOfSpellsToCast; i++) {
@@ -100,6 +100,6 @@ public class CastRandomSpellSpell extends Spell {
 			context.getLogic().endOfSequence();
 		}
 
-		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 	}
 }

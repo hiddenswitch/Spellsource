@@ -1,0 +1,53 @@
+{
+  "name": "Signature Chooser",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "LEGENDARY",
+  "description": "Start of Game: Choose a Signature for your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF"
+          },
+          {
+            "class": "custom.ChooseSignatureSpell",
+            "spell": {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "RevealCardSpell"
+                },
+                {
+                  "class": "ChangeSignatureSpell"
+                }
+              ]
+            }
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ]
+}

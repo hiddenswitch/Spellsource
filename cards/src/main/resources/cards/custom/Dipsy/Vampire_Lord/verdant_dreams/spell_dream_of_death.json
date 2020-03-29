@@ -24,7 +24,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VERDANT_DREAMS"

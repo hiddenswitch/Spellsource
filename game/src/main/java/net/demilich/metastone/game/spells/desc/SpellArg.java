@@ -108,7 +108,7 @@ public enum SpellArg {
 	 */
 	AURA,
 	/**
-	 * This argument is added by the resolution of {@link net.demilich.metastone.game.logic.GameLogic#resolveDeathrattles(Player,
+	 * This argument is added by the resolution of {@link net.demilich.metastone.game.logic.GameLogic#resolveAftermaths(Player,
 	 * Actor)}. It stores the position of the minion before it died. This then gets used by spells like {@link
 	 * SummonSpell} to summon a minion where the minion died.
 	 * <p>
@@ -499,7 +499,7 @@ public enum SpellArg {
 	 * Specifies a unique integer ID for a {@link SpellDesc} that is also a deathrattle, to allow deathrattles to identify
 	 * themselves inside iterators for {@link HasDeathrattleEnchantments#getDeathrattleEnchantments()}.
 	 */
-	DEATHRATTLE_ID,
+	AFTERMATH_ID,
 	/**
 	 * Specifies which zones the spell's effects apply to. The interpretation may depend on the spell.
 	 */

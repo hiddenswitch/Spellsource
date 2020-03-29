@@ -1,0 +1,38 @@
+{
+  "name": "Absysoma",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Whenever you summon a minion, double its Attack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "EVENT_TARGET",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 0,
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "DoubleAttackSpell"
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

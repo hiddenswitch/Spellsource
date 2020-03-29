@@ -1,27 +1,27 @@
 {
-    "name": "Spirited Sprite",
-    "baseManaCost": 3,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 2,
-    "baseHp": 4,
-    "rarity": "COMMON",
-    "race": "FAE",
-    "description": "Opener: Give a minion +2 Attack.",
-    "battlecry": {
-      "targetSelection": "MINIONS",
-      "spell": {
-        "class": "BuffSpell",
-        "attackBonus": 2
-      }
-    },
-    "attributes": {
-      "BATTLECRY": true
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "CLASSIC"
-      ],
-    "fileFormatVersion": 1
-  }
+  "name": "Spirited Sprite",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "FAE",
+  "description": "Opener: Give a minion +2 Attack.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

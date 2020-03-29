@@ -1,32 +1,28 @@
 {
-    "name": "Nephomancy",
-    "baseManaCost": 4,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "COMMON",
-    "description": "Draw 2 cards. They cost (1) less.",
+  "name": "Nephomancy",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Draw 2 cards. They cost (1) less.",
+  "spell": {
+    "class": "MetaSpell",
     "spell": {
-        "class": "MetaSpell",
-        "spell": {
-            "class": "DrawCardSpell",
-            "value": {
-                "class": "AttributeValueProvider",
-                "attribute": "2",
-                "target": "SELF"
-            },
-            "spell": {
-                "class": "CardCostModifierSpell",
-                "target": "OUTPUT",
-                "cardCostModifier": {
-                    "class": "CardCostModifier",
-                    "target": "SELF",
-                    "value": 1,
-                    "operation": "SUBTRACT"
-                }
-            }
+      "class": "DrawCardSpell",
+      "value": 2,
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 1,
+          "operation": "SUBTRACT"
         }
-    },
-    "collectible": false,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

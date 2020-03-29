@@ -1,20 +1,20 @@
 {
-    "name": "Nimbus Strider",
-    "baseManaCost": 2,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 3,
-    "baseHp": 2,
-    "rarity": "COMMON",
-    "race": "ELEMENTAL",
-    "description": "Dash",
-    "attributes": {
-        "RUSH": true
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "CLASSIC"
-    ],
-    "fileFormatVersion": 1
+  "name": "Nimbus Strider",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Dash",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
 }

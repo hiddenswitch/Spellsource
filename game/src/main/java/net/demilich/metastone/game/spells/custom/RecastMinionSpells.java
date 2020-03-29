@@ -37,11 +37,9 @@ public class RecastMinionSpells extends Spell {
 			}
 
 			context.getLogic().revealCard(player, card);
-			player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
+			player.modifyAttribute(Attribute.RANDOM_CHOICES, 1);
 			SpellUtils.castChildSpell(context, player, card.getSpell(), card, target);
-			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+			player.modifyAttribute(Attribute.RANDOM_CHOICES, -1);
 		}
-
-
 	}
 }

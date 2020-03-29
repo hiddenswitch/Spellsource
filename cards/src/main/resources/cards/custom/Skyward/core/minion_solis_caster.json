@@ -1,37 +1,37 @@
 {
-    "name": "Solis Caster",
-    "baseManaCost": 1,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 1,
-    "baseHp": 3,
-    "rarity": "RARE",
-    "description": "Opener: If you have 6 or more cards in hand, Discover a spell.",
-    "battlecry": {
-        "condition": {
-            "class": "CardCountCondition",
-            "value": 6,
-            "operation": "GREATER_OR_EQUAL",
-            "targetPlayer": "SELF"
-        },
-        "targetSelection": "NONE",
-        "spell": {
-            "class": "DiscoverSpell",
-            "cardFilter": {
-                "class": "CardFilter",
-                "cardType": "SPELL",
-                "heroClass": "AZURE"
-            }
-        }
+  "name": "Solis Caster",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Opener: If you have 6 or more cards in hand, Discover a spell.",
+  "battlecry": {
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 6,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "SELF"
     },
-    "attributes": {
-        "BATTLECRY": true,
-        "DISCOVER": true
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "CLASSIC"
-    ],
-    "fileFormatVersion": 1
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "heroClass": "AZURE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
 }

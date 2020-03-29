@@ -1,9 +1,8 @@
 package net.demilich.metastone.game.spells.custom;
 
+import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentValue;
@@ -11,10 +10,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Stores a list of entities in the environment, instead of on an attribute on an entity.
@@ -36,8 +32,7 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 
 	public static EnvironmentEntityList getList(GameContext context, Environment environmentVariable) {
 		context.getEnvironment().putIfAbsent(environmentVariable, new EnvironmentEntityList());
-		EnvironmentEntityList list = (EnvironmentEntityList) context.getEnvironment().get(environmentVariable);
-		return list;
+		return (EnvironmentEntityList) context.getEnvironment().get(environmentVariable);
 	}
 
 	Map<EntityReference, List<EntityReference>> data = new HashMap<>();
@@ -62,28 +57,37 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 		data.remove(source.getReference());
 	}
 
-	public List<EntityReference> getReferences(GameContext context, Entity source) {
-		return new ArrayList<>(data.getOrDefault(source.getReference(), new ArrayList<>()));
+	/**
+	 * Gets a list of referenced cards. This reference will always reflect the underlying list as it gets changed, but
+	 * is not mutable
+	 *
+	 * @param source
+	 * @return
+	 * @see #add(Entity, Entity) to mutate this list.
+	 */
+	public List<EntityReference> getReferences(Entity source) {
+		return Collections.unmodifiableList(data.computeIfAbsent(source.getReference(), (k) -> new ArrayList<>()));
 	}
 
-	public CardList getCards(GameContext context, Entity source) {
-		CardArrayList cards = new CardArrayList();
-		if (!data.containsKey(source.getReference())) {
-			return cards;
-		}
-		data.get(source.getReference())
-				.stream()
-				.map(ref -> context.resolveSingleTarget(ref, false))
-				.map(e -> {
-					if (e.hasAttribute(Attribute.CHOICE_SOURCE)) {
-						return context.resolveSingleTarget((EntityReference) e.getAttribute(Attribute.CHOICE_SOURCE));
-					}
-					return e;
-				})
-				.map(Entity::getSourceCard)
-				.map(e -> (Card) e.transformResolved(context))
-				.forEach(cards::addCard);
-		return cards;
+	/**
+	 * Retrieves a read-only view of a list of cards from this list.
+	 *
+	 * @param context
+	 * @param source
+	 * @return
+	 */
+	public List<Card> getCards(GameContext context, Entity source) {
+		return Lists.transform(data.computeIfAbsent(source.getReference(), k -> new ArrayList<>()), ref -> {
+			var e = context.resolveSingleTarget(ref, false);
+			Entity e1;
+			if (e.hasAttribute(Attribute.CHOICE_SOURCE)) {
+				e1 = context.resolveSingleTarget((EntityReference) e.getAttribute(Attribute.CHOICE_SOURCE));
+			} else {
+				e1 = e;
+			}
+			var sourceCard = e1.getSourceCard();
+			return (Card) sourceCard.transformResolved(context);
+		});
 	}
 }
 

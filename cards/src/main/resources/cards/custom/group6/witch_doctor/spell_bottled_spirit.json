@@ -1,10 +1,10 @@
 {
   "name": "Bottled Spirit",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Give a minion +2/+2. Then, give it +4 Health until your next turn.",
+  "description": "Give a minion +2/+2. Restore 4 Health to your champion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -15,16 +15,13 @@
         "hpBonus": 2
       },
       {
-        "class": "BuffSpell",
-        "hpBonus": 4,
-        "revertTrigger": {
-          "class": "TurnStartTrigger",
-          "targetPlayer": "SELF"
-        }
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 4
       }
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

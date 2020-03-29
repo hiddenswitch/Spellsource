@@ -15,6 +15,7 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetNotFoundException;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -92,10 +93,10 @@ public class TargetLogic implements Serializable {
 	 * @param context   The current game context
 	 * @param targetKey A {@link EntityReference}
 	 * @return The found entity.
-	 * @throws NullPointerException If the entity isn't found.
+	 * @throws TargetNotFoundException If the entity isn't found.
 	 */
-	public Entity findEntity(GameContext context, EntityReference targetKey) throws NullPointerException {
-		final int targetId = targetKey.getId();
+	public Entity findEntity(GameContext context, EntityReference targetKey) throws TargetNotFoundException {
+		int targetId = targetKey.getId();
 		Entity environmentResult = findInEnvironment(context, targetKey);
 
 		if (environmentResult != null) {
@@ -114,7 +115,7 @@ public class TargetLogic implements Serializable {
 					return (Entity) trigger;
 				}
 			}
-			throw new NullPointerException("Target not found exception: " + targetKey);
+			throw new TargetNotFoundException("not found", targetKey);
 		}
 	}
 
@@ -550,6 +551,18 @@ public class TargetLogic implements Serializable {
 			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
 			targets.remove(source);
 			return targets;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_SIGNATURE)) {
+			if (player.getAttribute(Attribute.SIGNATURE) instanceof String) {
+				return singleTargetAsList(context.getCardById((String)player.getAttribute(Attribute.SIGNATURE)));
+			} else {
+				return singleTargetAsList(context.getCardById(GameLogic.DEFAULT_SIGNATURE));
+			}
+		} else if (targetKey.equals(EntityReference.ENEMY_SIGNATURE)) {
+			if (context.getOpponent(player).getAttribute(Attribute.SIGNATURE) instanceof String) {
+				return singleTargetAsList(context.getCardById((String)player.getAttribute(Attribute.SIGNATURE)));
+			}  else {
+				return singleTargetAsList(context.getCardById(GameLogic.DEFAULT_SIGNATURE));
+			}
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

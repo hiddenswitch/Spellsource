@@ -1,0 +1,45 @@
+{
+  "name": "Soulscream",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Deal [0] damage. (Increases by [1] for each Aftermath you've triggered this game)",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      "class": "AftermathsCountValueProvider",
+      "offset": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 0
+      },
+      "multiplier": {
+        "class": "GatekeeperShaValueProvider",
+        "offset": 1
+      }
+    }
+  },
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AftermathsCountValueProvider",
+        "offset": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 0
+        },
+        "multiplier": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 1
+        }
+      }
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

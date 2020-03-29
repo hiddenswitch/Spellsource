@@ -12,6 +12,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ import java.util.List;
 public final class CastOnEntitiesInStorageSpell extends Spell {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CastOnEntitiesInStorageSpell.class);
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -37,7 +39,7 @@ public final class CastOnEntitiesInStorageSpell extends Spell {
 			storageSource = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
 
-		List<EntityReference> entities = EnvironmentEntityList.getList(context).getReferences(context, storageSource);
+		List<EntityReference> entities = new ArrayList<>(EnvironmentEntityList.getList(context).getReferences(storageSource));
 
 		SpellDesc spell = desc.getSpell();
 		for (int i = 0; i < count; i++) {
@@ -45,7 +47,6 @@ public final class CastOnEntitiesInStorageSpell extends Spell {
 				return;
 			}
 			EntityReference entity = context.getLogic().removeRandom(entities);
-			// TODO: This should really use cast child spell, but the output entities are almost always in the graveyard
 			if (entity.isTargetGroup()) {
 				LOGGER.warn("onCast {} {}: Invalid target {}", context.getGameId(), source, entity);
 				continue;

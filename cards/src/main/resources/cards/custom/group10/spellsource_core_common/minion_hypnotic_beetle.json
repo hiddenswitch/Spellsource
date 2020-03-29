@@ -12,7 +12,7 @@
     "DIVINE_SHIELD": true,
     "TAUNT": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

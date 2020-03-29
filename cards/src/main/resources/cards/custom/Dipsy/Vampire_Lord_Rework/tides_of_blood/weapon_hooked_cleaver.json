@@ -1,0 +1,34 @@
+{
+  "name": "Hooked Cleaver",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "TWILIGHT",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Your champion also damages the minions adjacent to whomever they attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "SplashDamageSpell",
+        "value": {
+          "class": "EventValueProvider"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ],
+  "fileFormatVersion": 1
+}

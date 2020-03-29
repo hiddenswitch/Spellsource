@@ -1,0 +1,31 @@
+{
+  "name": "Trek Overseer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "After you play a minion, give the minions next to it +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell1": {
+        "class": "NullSpell"
+      },
+      "spell2": {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

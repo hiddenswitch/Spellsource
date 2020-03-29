@@ -27,11 +27,11 @@ import java.io.Serializable;
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
  * objects where some analytics events have side effects on gameplay.
  * <p>
- * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
- * SuspendableAction1)}.
+ * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, EventTypeEnum, Attribute,
+ * SuspendableAction1)}
  * <p>
  * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
- * are just always running throughout a game. In Spellsource, this trigger is added by a {@link
+ * are just always running throughout a game. In Spellsource, this trigger is added by a {@code
  * ServerGameContext#enablePersistenceEffects()} when it is created. This trigger should not be added to non-networked
  * game contexts, like a regular {@link GameContext}, because other code (like the AI) may use a game context for a
  * purpose other than hosting a two-player multiplayer networked match.

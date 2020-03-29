@@ -1,0 +1,44 @@
+{
+  "name": "Armageddon Wyvern",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Supremacy: Destroy all other minions and deal 10 damage to the enemy champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "ALL_MINIONS",
+          "filter": {
+            "class": "EntityEqualsFilter",
+            "invert": true,
+            "secondaryTarget": "TRIGGER_HOST"
+          }
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_HERO",
+          "value": 10
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+ "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

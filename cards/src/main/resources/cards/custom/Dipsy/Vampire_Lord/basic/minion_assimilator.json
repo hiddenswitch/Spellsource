@@ -5,24 +5,27 @@
   "heroClass": "BLOOD",
   "baseAttack": 5,
   "baseHp": 2,
-  "rarity": "FREE",
-  "description": "After a minion dies, deal 2 damage to a random enemy.",
+  "rarity": "COMMON",
+  "description": "After a minion dies, Drain 2 Health from a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "DamageSpell",
+      "class": "DrainSpell",
       "target": "ENEMY_CHARACTERS",
       "value": 2,
       "randomTarget": true
     }
   },
-  "collectible": true,
+  "attributes": {
+    "DRAIN": true
+  },
+  "collectible": false,
   "sets": [
     "CUSTOM",
-    "BASIC"
+    "CLASSIC"
   ],
   "fileFormatVersion": 1
 }

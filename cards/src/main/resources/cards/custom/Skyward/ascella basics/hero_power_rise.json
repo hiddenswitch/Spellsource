@@ -1,24 +1,24 @@
 {
-    "name": "Rise",
-    "heroPower": "hero_power_rise",
-    "baseManaCost": 2,
-    "type": "HERO_POWER",
-    "heroClass": "AZURE",
-    "rarity": "FREE",
-    "description": "Skill: Add a Soar spell to your hand.",
-    "targetSelection": "NONE",
+  "name": "Rise",
+  "heroPower": "hero_power_rise",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Skill: Add a Soar spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "HeroPowerSpell",
-      "spell": {
-        "class": "ReceiveCardSpell",
-        "card": "spell_soar"
-      }
-    },
-    "collectible": false,
-    "sets": [
-        "CUSTOM",
-        "BASIC"
-      ],
-    "fileFormatVersion": 1
-  }
+      "class": "ReceiveCardSpell",
+      "card": "spell_soar"
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}
   

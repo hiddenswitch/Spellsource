@@ -20,14 +20,3 @@
         "class": "BuffSpell",
         "value": 2
       }
-    },
-    "attributes": {
-      "BATTLECRY": true
-    },
-    "collectible": true,
-    "sets": [
-      "CUSTOM",
-      "CLASSIC"
-    ],
-    "fileFormatVersion": 1
-  }

@@ -34,7 +34,19 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
 	private static final Set<SpellArg> COMMON_ARGS = EnumSet.of(
-			SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE, SpellArg.DEATHRATTLE_ID);
+			SpellArg.CLASS,
+			SpellArg.FILTER,
+			SpellArg.TARGET,
+			SpellArg.NAME,
+			SpellArg.DESCRIPTION,
+			SpellArg.RANDOM_TARGET,
+			SpellArg.TARGET_PLAYER,
+			SpellArg.SPELL,
+			SpellArg.BOARD_POSITION_RELATIVE,
+			SpellArg.BOARD_POSITION_ABSOLUTE,
+			SpellArg.AFTERMATH_ID,
+			// Included because the DiscoverSpell adds it to the spell that is cast for the chosen card
+			SpellArg.CARD);
 
 	/**
 	 * Casts a spell for the given arguments.

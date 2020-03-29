@@ -19,6 +19,9 @@ import com.hiddenswitch.spellsource.net.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.net.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.util.Serialization;
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -35,7 +38,9 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerFormat;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +48,7 @@ import org.slf4j.LoggerFactory;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
@@ -792,33 +794,48 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
-		// Get the personal collection
-		UserRecord record = Accounts.get(userId);
-		GetCollectionResponse personalCollection = Inventory.getCollection(GetCollectionRequest.user(record.getId()));
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("Gateway/getAccount")
+				.withTag("userId", userId)
+				.start();
+		try (Scope scope = tracer.activateSpan(span)) {
+			// Get the personal collection
+			UserRecord record = Accounts.get(userId);
+			GetCollectionResponse personalCollection = Inventory.getCollection(GetCollectionRequest.user(record.getId()));
 
-		// Get the decks
-		GetCollectionResponse deckCollections = Inventory.getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
+			// Get the decks
+			GetCollectionResponse deckCollections = Inventory.getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
 
-		final String displayName = record.getUsername();
-		final List<GetCollectionResponse> responses = deckCollections.getResponses();
-		List<Friend> friends = record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList());
+			final String displayName = record.getUsername();
+			final List<GetCollectionResponse> responses = deckCollections.getResponses();
+			List<Friend> friends = record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList());
 
-		for (Friend friend : friends) {
-			friend.presence(Presence.getPresence(friend.getFriendId()));
+			for (Friend friend : friends) {
+				friend.presence(Presence.getPresence(friend.getFriendId()));
+			}
+
+			return new Account()
+					.id(record.getId())
+					.friends(friends)
+					.decks((responses != null && responses.size() > 0) ? responses.stream()
+							.filter(response -> !response.getCollectionRecord().isTrashed()
+									&& !Objects.equals(response.getCollectionRecord().getHeroClass(), HeroClass.ANY)
+									&& (response.getCollectionRecord().getHeroCardId() == null || CardCatalogue.getRecords().containsKey(response.getCollectionRecord().getHeroCardId())))
+							.filter(res -> Objects.nonNull(res.getCollectionRecord()))
+							.map(GetCollectionResponse::asInventoryCollection)
+							.filter(Objects::nonNull)
+							.collect(toList()) : Collections.emptyList())
+					.personalCollection(personalCollection.asInventoryCollection())
+					.email(record.getEmails().get(0).getAddress())
+					.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))
+					.name(displayName + "#" + record.getPrivacyToken())
+					.privacyToken(record.getPrivacyToken());
+		} catch (RuntimeException runtimeException) {
+			Tracing.error(runtimeException, span, true);
+			return new Account().id(userId);
+		} finally {
+			span.finish();
 		}
-
-		return new Account()
-				.id(record.getId())
-				.friends(friends)
-				.decks((responses != null && responses.size() > 0) ? responses.stream()
-						.filter(response -> !response.getTrashed())
-						.map(GetCollectionResponse::asInventoryCollection)
-						.collect(toList()) : Collections.emptyList())
-				.personalCollection(personalCollection.asInventoryCollection())
-				.email(record.getEmails().get(0).getAddress())
-				.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))
-				.name(displayName + "#" + record.getPrivacyToken())
-				.privacyToken(record.getPrivacyToken());
 	}
 
 

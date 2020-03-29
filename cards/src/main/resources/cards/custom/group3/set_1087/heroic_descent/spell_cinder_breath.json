@@ -1,0 +1,30 @@
+{
+  "name": "Cinder Breath",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Deal 4 damage. If you control a Dragon, summon a 4/4 Dragon.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "DRAGON"
+      }
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 4
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "card": "token_44dragon"
+	}
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

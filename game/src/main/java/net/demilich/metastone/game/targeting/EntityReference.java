@@ -517,6 +517,10 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference OPPOSITE_CHARACTERS = new EntityReference(-77);
 
+	public static final EntityReference FRIENDLY_SIGNATURE = new EntityReference(-78);
+
+	public static final EntityReference ENEMY_SIGNATURE = new EntityReference(-78);
+
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;
@@ -555,6 +559,13 @@ public final class EntityReference implements Serializable {
 		return id;
 	}
 
+	/**
+	 * When {@code true}, indicates that this entity reference references <b>not</b> to a specific {@link Entity} but to a
+	 * pointer to an entity, like {@link EntityReference#SELF}.
+	 *
+	 * @return {@code true} if the {@link #id} is negative, which all the special {@link EntityReference} static elements
+	 * 		are.
+	 */
 	public boolean isTargetGroup() {
 		return id < 0;
 	}

@@ -7,24 +7,9 @@
   "description": "Discover a minion in your graveyard. If it has an Aftermath, trigger it.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
-    "cardSource": {
-      "class": "GraveyardActorsSource",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "spell": {
-        "class": "TriggerDeathrattleSpell",
-        "target": "OUTPUT"
-      }
-    }
+    "class": "custom.SoulscreamSpell"
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VERDANT_DREAMS"

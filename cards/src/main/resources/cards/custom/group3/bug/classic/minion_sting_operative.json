@@ -6,6 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Opener: Deal 3 damage.",
   "battlecry": {
     "targetSelection": "ANY",

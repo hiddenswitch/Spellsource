@@ -1,0 +1,58 @@
+{
+  "name": "Siphon",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Deal $[2] damage. This has Lifedrain if you have less Health remaining than your opponent.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      "class": "GatekeeperShaValueProvider",
+      "offset": 2
+    }
+  },
+  "passiveAuras": [
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "attribute": "AURA_LIFESTEAL",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "HP"
+        },
+        "value2": {
+          "class": "AttributeValueProvider",
+          "target": "ENEMY_HERO",
+          "attribute": "HP"
+        },
+        "operation": "LESS"
+      },
+      "triggers": [
+        {
+          "class": "CardPlayedTrigger"
+        },
+        {
+          "class": "DamageReceivedTrigger",
+          "targetEntityType": "HERO",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "HealingTrigger",
+          "targetEntityType": "HERO",
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ],
+  "fileFormatVersion": 1
+}

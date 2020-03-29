@@ -1,0 +1,40 @@
+{
+  "name": "Come Hither",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Discover a minion in your deck that costs (7) or more. Summon it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {   
+		  "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+     	  "value": 7,
+		  "attribute": "BASE_MANA_COST",
+		  "cardType": "MINION",
+		  "operation": "GREATER_OR_EQUAL"
+		}
+      ]
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -678,7 +678,7 @@ public class AdvancedMechanicTests extends TestBase {
 	@Test
 	public void testEndTurnInteractions() {
 		runGym(((context, player, opponent) -> {
-			playCard(context, player, "minion_hooded_ritualist");
+			playCard(context, player, "minion_hooded_ritualist_v0");
 			playCard(context, player, "spell_lackey_break");
 			context.endTurn();
 			assertEquals(player.getMinions().size(), 2);

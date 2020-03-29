@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 9,
   "rarity": "LEGENDARY",
+  "race": "BEAST",
   "description": "Whenever you use your Skill, add a 1/1 Wasp with Blitz and Toxic to your hand.",
   "trigger": {
     "eventTrigger": {

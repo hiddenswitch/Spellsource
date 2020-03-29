@@ -19,7 +19,7 @@
         }
       }
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "VL_FROMTHEDARKNESS"

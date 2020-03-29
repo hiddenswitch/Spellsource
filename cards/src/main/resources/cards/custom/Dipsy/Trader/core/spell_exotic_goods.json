@@ -7,8 +7,11 @@
   "description": "Discover three cards from other classes.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
-    "cardFilter": {
+    "class": "CastRepeatedlySpell",
+    "howMany": 3,
+    "spell": {
+      "class": "DiscoverSpell",
+      "cardFilter": {
         "class": "AndFilter",
         "filters": [
           {
@@ -22,17 +25,17 @@
             "invert": true
           }
         ]
-    },
-	"cardSource": {
-      "class": "UnweightedCatalogueSource"
-    },
-    "howMany": 3,
-	"spell": {
-      "class": "ReceiveCardSpell"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell"
+      }
     }
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "sets": [
