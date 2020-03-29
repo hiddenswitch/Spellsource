@@ -4,7 +4,7 @@
   "type": "WEAPON",
   "heroClass": "LIGHTBROWN",
   "damage": 0,
-  "durability": 2,
+  "durability": 3,
   "rarity": "COMMON",
   "description": "<b>Decay<b>. After a minion attacks your hero, destroy the attacker.",
   "triggers": [
