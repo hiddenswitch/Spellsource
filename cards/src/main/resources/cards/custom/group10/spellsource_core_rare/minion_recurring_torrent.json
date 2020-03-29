@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Opener: Receive a copy of the last spell you played this turn.",
+  "description": "Opener: Receive a copy of the last spell you cast this turn.",
   "battlecry": {
     "spell": {
       "class": "CopyCardSpell",
