@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-  "description": "Add a random Fossil to your hand.",
+  "description": "Receive a random Fossil.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
