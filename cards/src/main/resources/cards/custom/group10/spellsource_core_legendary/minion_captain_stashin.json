@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "SPIRIT",
-  "description": "Whenever a friendly Spirit attacks, add a random card to your hand.",
+  "description": "Whenever a friendly Spirit attacks, receive a random card.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
