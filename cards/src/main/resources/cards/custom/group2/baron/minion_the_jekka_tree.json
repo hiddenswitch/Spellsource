@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Whenever you play a 1-Cost card, add a random Emerald Secret to your hand.",
+  "description": "Whenever you play a 1-Cost card, receive a random Emerald Secret.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
