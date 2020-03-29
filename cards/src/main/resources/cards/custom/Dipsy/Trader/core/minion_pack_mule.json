@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Whenever this minion attacks, add a Gold Coin to your hand.",
+  "description": "Whenever this attacks, receive a Gold Coin.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
