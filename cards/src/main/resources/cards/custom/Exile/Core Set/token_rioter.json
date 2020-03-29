@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "",
+  "description": "Dash",
   "attributes": {
     "RUSH": true
   },
