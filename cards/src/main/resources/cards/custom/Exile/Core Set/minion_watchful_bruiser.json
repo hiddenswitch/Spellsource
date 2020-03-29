@@ -6,16 +6,13 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Can't attack unless an enemy attacked last turn.",
+  "description": "Can only attack if another minion attacked this turn.",
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",
     "condition": {
-      "class": "AnyMatchFilterCondition",
-      "target": "ENEMY_CHARACTERS",
-      "filter": {
-        "class": "HasAttackedLastTurnFilter"
-      }
+      "class": "AnyAttackedCondition",
+      "target": "ALL_MINIONS"
     },
     "attribute": "AURA_CANNOT_ATTACK"
   },
