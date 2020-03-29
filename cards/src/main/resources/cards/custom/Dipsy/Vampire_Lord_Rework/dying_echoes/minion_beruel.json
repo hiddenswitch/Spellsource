@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Add an \"Endless Hunger\" to your hand.",
+  "description": "Aftermath: Receive \"Endless Hunger\".",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "card": "token_spell_endless_hunger"
