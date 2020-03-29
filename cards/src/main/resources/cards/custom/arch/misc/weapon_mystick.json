@@ -3,8 +3,8 @@
   "baseManaCost": 4,
   "type": "WEAPON",
   "heroClass": "LIGHTBROWN",
-  "damage": 1,
-  "durability": 3,
+  "damage": 2,
+  "durability": 4,
   "rarity": "RARE",
   "description": "<b>Decay</b>. Your champion has +2 Attack.",
   "aura": {
