@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Resurrect a friendly Aftermath minion. Add a copy of it to your hand.",
+  "description": "Resurrect a friendly Aftermath minion. Receive a copy of it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ResurrectSpell",
