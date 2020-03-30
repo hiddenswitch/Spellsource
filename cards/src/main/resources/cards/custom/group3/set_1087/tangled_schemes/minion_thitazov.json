@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "After your minions destroy a minion, give your other minions +1/+1.",
+  "description": "After an allied minion attacks and destroys a minion, give your other minions +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
