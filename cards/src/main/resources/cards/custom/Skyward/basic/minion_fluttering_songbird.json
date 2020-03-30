@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "After you cast a spell, gain +1 Health.",
+  "description": "Whenever you cast a spell, gain +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
