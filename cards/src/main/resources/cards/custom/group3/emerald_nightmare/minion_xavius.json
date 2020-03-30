@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "At the end of your turn, summon a Nightmare Tentacle.",
+  "description": "At the end of your turns, summon a Nightmare Tentacle.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
