@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Dodge. After this loses Dodge, gain +6 Attack.",
+  "description": "Dodge. Whenever this loses Dodge, gain +6 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDivineShieldTrigger",
