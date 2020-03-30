@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Aftermath: Give this minion <b>Guard</b>, <b>Dodge</b>, <b>Hidden</b>, or <b>Extra Strike</b> at random and shuffle it into your deck.",
+  "description": "Aftermath: Give this Guard, Dodge, Hidden, or Extra Strike at random and shuffle it into your deck.",
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
     "target": "SELF",
