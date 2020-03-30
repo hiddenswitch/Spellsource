@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "<b>Pact:</b> After a friendly minion dies, give a random enemy minion \"<b>Aftermath:</b> Deal 3 damage to all friendly minions.\"",
+  "description": "<b>Pact:</b> After a friendly minion dies, give a random enemy minion \"Aftermath: Deal 3 damage to all friendly minions\".",
   "condition": {
     "class": "CanPlayPactCondition"
   },
