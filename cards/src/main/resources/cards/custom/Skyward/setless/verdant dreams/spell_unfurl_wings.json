@@ -17,17 +17,17 @@
                     }
                 },
                 "spell1": {
-                    "class": "CastRepeatedlySpell",
-                    "howMany": 15,
+                    "class": "PlayCardsRandomlySpell",
+                    "cardSource": {
+                        "class": "HandSource"
+                    },
+                    "cardFilter": {
+                        "class": "SpecificCardFilter",
+                        "card": "spell_soar"
+                    },
                     "spell": {
-                        "class": "RandomCardTargetSpell",
-                        "target": "FRIENDLY_HAND",
-                        "exclusive": true,
-                        "cardFilter": {
-                            "class": "SpecificCardFilter",
-                            "card": "spell_soar"
-                        },
-                        "randomTarget": true
+                        "class": "RemoveCardSpell",
+                        "target": "OUTPUT"
                     }
                 },
                 "spell2": {
