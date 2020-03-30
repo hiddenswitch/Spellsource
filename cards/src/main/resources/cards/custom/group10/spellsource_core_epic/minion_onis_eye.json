@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Hidden. Whenever this attacks, deal 2 damage to all minions.",
+  "description": "Hidden. After this attacks, deal 2 damage to all minions.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
