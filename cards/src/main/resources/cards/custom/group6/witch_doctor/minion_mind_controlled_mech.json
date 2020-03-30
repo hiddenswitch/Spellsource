@@ -2,11 +2,11 @@
   "name": "Blind Acolyte",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "ROSE",
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "Can't attack. Your Skill is 'Choose a target. Your Blind Acolytes attack it'.",
+  "description": "Can't attack. Your Skill is \"Choose a target. Your Blind Acolytes attack it\".",
   "aura": {
     "class": "CardAura",
     "target": "FRIENDLY_HERO_POWER",
