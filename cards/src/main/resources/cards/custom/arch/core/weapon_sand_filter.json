@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 4,
   "rarity": "EPIC",
-  "description": "Decay. During your turn, Source cards from your deck instead of drawing.",
+  "description": "Decay. During your turns, Source cards from your deck instead of drawing.",
   "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
