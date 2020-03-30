@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Opener: Discover three 1-Cost Timeweaver minions.",
+  "description": "Opener: Source three 1-Cost Timeweaver minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

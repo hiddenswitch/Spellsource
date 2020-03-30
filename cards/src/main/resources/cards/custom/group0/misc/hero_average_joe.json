@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Opener: Discover your Adventure Boss.",
+  "description": "Opener: Source your Adventure Boss.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

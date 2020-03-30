@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Opener: Discover a minion that costs (1) and transform this into it.",
+  "description": "Opener: Source a minion that costs (1) and transform this into it.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

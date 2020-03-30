@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Discover a Dragon.",
+  "description": "Source a Dragon.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

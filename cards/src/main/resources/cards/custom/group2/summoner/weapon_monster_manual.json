@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "After you cast a spell, Discover a Beast, Dragon or Fae.",
+  "description": "After you cast a spell, Source a Beast, Dragon or Fae.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
