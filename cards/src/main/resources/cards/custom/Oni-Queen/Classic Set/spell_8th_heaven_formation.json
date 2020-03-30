@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
-  "description": "Deal $8 damage randomly among all enemies. If a Demon died this turn, deal $8 damage instead.",
+  "description": "Deal $8 damage randomly split among all enemies. If a Demon died this turn, deal $8 damage instead.",
   "targetSelection": "NONE",
   "targetSelectionOverride": "ANY",
   "targetSelectionCondition": {
