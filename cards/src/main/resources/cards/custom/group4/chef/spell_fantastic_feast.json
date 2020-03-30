@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Fully heal your champion. Put 2 'Hangover' cards that do nothing on top of your deck.",
+  "description": "Fully heal your champion. Put 2 Hangovers that do nothing on top of your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
