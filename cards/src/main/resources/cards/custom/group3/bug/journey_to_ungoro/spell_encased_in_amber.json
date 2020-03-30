@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Give a minion Immune until the start of your next turn. Draw a card.",
+  "description": "Give a minion Immune for a round. Draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
