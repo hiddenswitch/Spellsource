@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Put a Sourcestone under the top card of your opponent's deck. It destroys all minions.",
+  "description": "Opener: Put a Sourcestone under the top card of your opponent's deck. It destroys all minions when drawn.",
   "race": "DRAGON",
   "battlecry": {
     "targetSelection": "NONE",
