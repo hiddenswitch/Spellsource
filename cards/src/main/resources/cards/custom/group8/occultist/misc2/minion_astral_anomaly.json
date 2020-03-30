@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "After you target this with a spell, also cast it on all other minions.",
+  "description": "After you cast a spell on this, cast it on all other minions.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
