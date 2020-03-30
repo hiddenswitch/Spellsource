@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discard your lowest-cost card as many times as you want. Restore #5 Health to your Champion for each.",
+  "description": "Opener: Discard your lowest-Cost card as many times as you want. Restore #5 Health to your Champion for each.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",
