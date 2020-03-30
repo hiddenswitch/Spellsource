@@ -7,7 +7,7 @@
   "heroClass": "DARKBLUE",
   "rarity": "LEGENDARY",
   "race": "SPIRIT",
-  "description": "Aftermath: Go Dormant. Trigger two friendly Secrets to revive this minion.",
+  "description": "Aftermath: Go Dormant. Trigger two friendly Secrets to revive this.",
   "deathrattle": {
     "class": "TransformMinionSpell",
     "target": "SELF",
