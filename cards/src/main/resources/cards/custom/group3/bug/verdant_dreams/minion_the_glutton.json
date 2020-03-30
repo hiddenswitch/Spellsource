@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "At the end of your turn, destroy a random minion with less Attack and gain +1/+1.",
+  "description": "At the end of your turns, destroy a random minion with less Attack than this and gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
