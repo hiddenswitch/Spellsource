@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Your minions can't be reduced below 1 Health until your next turn.",
+  "description": "Opener: Your minions can't be reduced below 1 Health this round.",
   "targetSelection": "NONE",
   "battlecry": {
     "targetSelection": "NONE",
