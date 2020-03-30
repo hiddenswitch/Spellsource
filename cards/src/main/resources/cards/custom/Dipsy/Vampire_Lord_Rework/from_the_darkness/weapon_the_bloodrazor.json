@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever your champion attacks, draw a Lifedrain card.",
+  "description": "After your champion attacks, draw a Lifedrain card.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
