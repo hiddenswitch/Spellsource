@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Guard. Opener: Change the cost of a random spell in your hand to (5).",
+  "description": "Guard. Opener: Change the Cost of a random spell in your hand to (5).",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",
