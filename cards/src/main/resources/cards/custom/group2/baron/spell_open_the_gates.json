@@ -10,7 +10,8 @@
     "class": "AddEnchantmentSpell",
     "trigger": {
       "eventTrigger": {
-        "class": "PhysicalAttackTrigger",
+        "class": "TargetAcquisitionTrigger",
+        "actionType": "PHYSICAL_ATTACK",
         "hostTargetType": "IGNORE_OTHER_SOURCES"
       },
       "spell": {
