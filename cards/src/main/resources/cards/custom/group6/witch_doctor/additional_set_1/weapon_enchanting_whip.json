@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Opener: Discard a Voodoo spell to give a friendly Beast +2/+2.",
+  "description": "Opener: Discard a random Voodoo spell to give a friendly Beast +2/+2.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "condition": {
