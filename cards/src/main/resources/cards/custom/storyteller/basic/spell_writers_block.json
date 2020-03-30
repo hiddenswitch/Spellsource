@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "FREE",
-  "description": "Enemy spells cost (3) more next turn.",
+  "description": "Enemy spells cost (3) more this round.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CardCostModifierSpell",
