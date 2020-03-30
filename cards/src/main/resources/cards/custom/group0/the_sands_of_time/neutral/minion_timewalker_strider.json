@@ -9,7 +9,7 @@
   "description": "After this attacks, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "AfterPhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
