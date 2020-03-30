@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "At the end of your turn, deal 2 damage to both champions.",
+  "description": "At the end of your turns, deal 2 damage to both champions.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
