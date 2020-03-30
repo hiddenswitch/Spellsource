@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever you Discover a card, shuffle copies of the options you didn't choose into your deck.",
+  "description": "After you Discover a card, shuffle copies of the options you didn't choose into your deck.",
   "aura": {
     "class": "DiscoverNotSelectedSpellBonusAura",
     "target": "FRIENDLY_CARDS",
