@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "After you cast a spell on this, receive a random Witch Doctor spell.",
+  "description": "Whenever you cast a spell on this, receive a random Witch Doctor spell.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
