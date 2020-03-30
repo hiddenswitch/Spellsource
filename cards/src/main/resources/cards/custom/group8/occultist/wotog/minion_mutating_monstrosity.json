@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "After this minion survives damage, summon copy of it with 1 Health remaining.",
+  "description": "After this survives damage, summon a copy of it with 1 Health remaining.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
