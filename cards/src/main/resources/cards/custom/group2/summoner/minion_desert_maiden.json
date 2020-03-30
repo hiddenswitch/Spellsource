@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "During your turn, Source cards from your deck instead of drawing.",
+  "description": "During your turns, Source cards from your deck instead of drawing.",
   "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
