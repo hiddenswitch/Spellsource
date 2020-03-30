@@ -1,16 +1,15 @@
 {
-  "name": "Hatch Eggs",
+  "name": "Hatch Egg",
   "heroPower": "hero_power_overhatch",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "HERO_POWER",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Skill: Receive two 1/1 Larva.",
+  "description": "Skill: Receive a 1/1 Larva.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "cards": [
-      "token_spiderling",
       "token_spiderling"
     ]
   },
