@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "Destroy a friendly minion. Your champion is Immune until your next turn.",
+  "description": "Destroy a friendly minion. Give your champion Immune for a round.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
