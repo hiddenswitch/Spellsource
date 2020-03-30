@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Dash. After this attacks a minion and survives, draw a card.",
+  "description": "Dash. After this attacks a minion, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
