@@ -1,0 +1,28 @@
+{
+  "name": "Vasz the Sellsword",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "CAMO",
+  "race": "DRAGON",
+  "description": "Opener: Deal 1 damage to all other minions. Repeat until a minion dies.",
+  "battlecry": {
+    "targetSelection": "NONE
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": 1,
+      "spell": {
+      #  "class": "RecastUntilMinionsDestroyedSpell"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
