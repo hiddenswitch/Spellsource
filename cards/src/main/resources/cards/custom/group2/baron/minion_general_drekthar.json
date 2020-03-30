@@ -6,10 +6,10 @@
   "baseAttack": 2,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "After you summon a minion for your opponent, take control of it.",
+  "description": "Whenever you summon a minion for your opponent, take control of it.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterMinionSummonedTrigger",
+      "class": "MinionSummonedTrigger",
       "sourcePlayer": "SELF",
       "targetPlayer": "OPPONENT"
     },
