@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Destroy a minion with less Attack than this minion.",
+  "description": "Opener: Destroy a minion with less Attack than this.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
