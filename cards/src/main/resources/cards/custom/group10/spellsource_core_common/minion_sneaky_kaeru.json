@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Whenever this minion's Health is 1, return this to your hand.",
+  "description": "If this has 1 Health, return it to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
