@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Opener: If you played another Elemental this turn, gain +5 Attack and Blitz",
+  "description": "Opener: If you played another Elemental this turn, gain +5 Attack and Blitz.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {
