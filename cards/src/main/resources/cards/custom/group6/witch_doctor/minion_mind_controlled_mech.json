@@ -2,7 +2,7 @@
   "name": "Blind Acolyte",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "ROSE",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "EPIC",
