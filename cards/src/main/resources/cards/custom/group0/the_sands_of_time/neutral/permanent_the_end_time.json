@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, summon a 2/2 Infinite Warden. Lasts [40 turns].",
+  "description": "At the end of your turns, summon a 2/2 Infinite Warden. Lasts [40 turns].",
   "triggers": [
     {
       "eventTrigger": {
