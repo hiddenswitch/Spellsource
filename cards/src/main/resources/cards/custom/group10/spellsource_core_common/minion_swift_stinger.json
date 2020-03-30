@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Toxic during your turn.",
+  "description": "Toxic during your turns.",
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",
