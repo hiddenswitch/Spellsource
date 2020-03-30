@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Opener: Give your weapon 'Aftermath: Resummon Captain Karver'.",
+  "description": "Opener: Give your weapon \"Aftermath: Resummon Captain Karver\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
