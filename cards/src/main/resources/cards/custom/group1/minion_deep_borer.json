@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "At the end of each turn this is in your hand, swap it with a random card in your deck.",
+  "description": "If this is in your hand at the end of your turns, swap it with a random card in your deck.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
