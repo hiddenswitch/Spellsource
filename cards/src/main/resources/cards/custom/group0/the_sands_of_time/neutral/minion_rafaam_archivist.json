@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discover a card from a valid deck named 'The Archive' in your collection.",
+  "description": "Opener: Discover a card from a valid deck named \"The Archive\" in your collection.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
