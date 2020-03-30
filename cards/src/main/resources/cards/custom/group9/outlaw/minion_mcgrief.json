@@ -6,10 +6,10 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "After you play a Quick Draw card, draw a card.",
+  "description": "Whenever you play a Quick Draw card, draw a card.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterCardPlayedTrigger",
+      "class": "CardPlayedTrigger",
       "requiredAttribute": "QUICK_DRAW",
       "sourcePlayer": "SELF"
     },
