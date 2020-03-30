@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "When you Discover a card, revive this.",
+  "description": "When you Source a card, revive this.",
   "trigger": {
     "eventTrigger": {
       "class": "DiscoverTrigger",

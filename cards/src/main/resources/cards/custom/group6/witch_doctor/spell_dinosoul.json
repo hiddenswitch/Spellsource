@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Discover a Beast in your graveyard.",
+  "description": "Source a Beast in your graveyard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

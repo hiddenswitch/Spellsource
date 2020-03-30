@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 4,
   "rarity": "COMMON",
-  "description": "<b>Decay<b>. Whenever you Discover a card, gain 4 Armor.",
+  "description": "<b>Decay<b>. Whenever you Source a card, gain 4 Armor.",
   "triggers": [
     {
       "eventTrigger": {

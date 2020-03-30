@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Discover a copy of a card in your deck.",
+  "description": "Opener: Source a copy of a card in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
