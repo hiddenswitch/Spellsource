@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 9,
   "rarity": "EPIC",
-  "description": "At the start of your turns, if this is in your hand, transform it into a random minion that costs (1) less.",
+  "description": "At the start of each round this is in your hand, transform it into a random minion that costs (1) less.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
