@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you cast a spell, reduce the Cost of this card by (1).",
+  "description": "Whenever you cast a spell, reduce this minion's Cost by (1).",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
