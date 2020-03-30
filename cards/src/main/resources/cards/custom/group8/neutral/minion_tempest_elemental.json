@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Opener: Give a friendly Elemental \"Can't be targeted by spells or Skills.\"",
+  "description": "Opener: Give a friendly Elemental \"Can't be targeted by spells or Skills\".",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
