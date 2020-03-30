@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: Reduce the cost of the leftmost card in your hand by (2).",
+  "description": "Opener: Reduce the Cost of the leftmost card in your hand by (2).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
