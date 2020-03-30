@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Discover an Aftermath minion. Gain its Aftermath effect.",
+  "description": "Opener: Discover an Aftermath minion. Gain its Aftermath.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",
