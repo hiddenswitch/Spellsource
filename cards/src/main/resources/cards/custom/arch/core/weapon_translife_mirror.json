@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "RARE",
-  "description": "<b>Decay<b>. At the end of your turn, summon two 1/1 Spirits.",
+  "description": "<b>Decay<b>. At the end of your turns, summon two 1/1 Spirits.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
