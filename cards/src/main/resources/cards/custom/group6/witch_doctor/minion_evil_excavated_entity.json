@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "EPIC",
   "race": "NONE",
-  "description": "Opener: Put an 'Excavated Curse' on top of your deck. It deals 7 damage to your champion when drawn.",
+  "description": "Opener: Put an Excavated Curse on top of your deck that deals 7 damage to your champion when drawn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
