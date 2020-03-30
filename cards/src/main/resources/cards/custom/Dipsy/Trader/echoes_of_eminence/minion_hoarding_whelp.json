@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Your \"Both players\" effects only affect you.",
+  "description": "Your \"both players\" effects only affect you.",
   "aura": {
     "class": "HoardingWhelpAura",
     "target": "FRIENDLY_CARDS"
