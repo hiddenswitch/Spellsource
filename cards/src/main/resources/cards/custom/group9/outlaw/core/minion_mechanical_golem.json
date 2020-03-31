@@ -3,14 +3,14 @@
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "COPPER",
-  "baseAttack": 3,
+  "baseAttack": 4,
   "baseHp": 6,
   "rarity": "RARE",
   "race": "MECH",
   "description": "Dash. Quick Draw: Attack a random enemy minion.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "QuickDrawTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {

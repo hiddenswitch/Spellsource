@@ -1,22 +1,21 @@
 {
-  "name": "Trigger Happy Rebel",
+  "name": "Cheating Wrangler",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "COPPER",
-  "baseAttack": 2,
+  "baseAttack": 4,
   "baseHp": 3,
-  "rarity": "RARE",
-  "description": "Quick Draw: Deal 2 damage randomly split among all enemies",
+  "rarity": "COMMON",
+  "description": "Quick Draw: Deal 1 damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "QuickDrawTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 2
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 1
     }
   },
   "attributes": {
