@@ -1,5 +1,5 @@
 {
-  "name": "Obsigon, Bounty Sorcerer",
+  "name": , "Warmage Zhou",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "CAMO",
@@ -7,18 +7,15 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Dash. Opener: Deal 2 damage to a random enemy. Repeat [0 times]. (Increases each character that attacked last turn)",
+  "description": "Dash. Opener: Deal 2 damage to a random enemy. Repeat [0 times]. (Increases for each ally that died this turn)",
   "battlecry": {
     "spell": {
       "class": "MissilesSpell",
       "target": "ENEMY_CHARACTERS",
       "value": 2,
       "howMany": {
-        "class": "EntityCountValueProvider",
-        "target": "ALL_CHARACTERS",
-        "filter": {
-          "class": "HasAttackedLastTurnFilter"
-        },
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "SELF",
         "offset": 1
       }
     }
@@ -31,11 +28,8 @@
     {
       "class": "PluralDescription",
       "value": {
-        "class": "EntityCountValueProvider",
-        "target": "ALL_CHARACTERS",
-        "filter": {
-          "class": "HasAttackedLastTurnFilter"
-        }
+        "class": "DiedThisTurnValueProvider",
+        "target": "SELF"
       },
       "description1": " time",
       "description2": " times"
