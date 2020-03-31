@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
+
 ### 0.8.71-3.1.1 (March 28, 2020)
 
  - Both versions of Doodles now work. (1632)
