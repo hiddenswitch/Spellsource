@@ -17,7 +17,7 @@
           "class": "BuffSpell",
           "value": {
             "class": "DiedThisTurnValueProvider",
-            "targetPlayer":" SELF"
+            "targetPlayer": "SELF"
           }
         },
         {
