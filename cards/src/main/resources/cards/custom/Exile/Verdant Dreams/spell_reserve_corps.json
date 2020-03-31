@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Draw a Demon and Dragon.",
+  "description": "Draw a Demon and a Dragon.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
