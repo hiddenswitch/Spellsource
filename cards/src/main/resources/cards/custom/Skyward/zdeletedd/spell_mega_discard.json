@@ -7,26 +7,28 @@
     "description": "Choose and discard a card.",
     "targetSelection": "NONE",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DiscoverSpell",
-          "cardSource": {
-            "class": "HandSource"
-          },
-          "exclusive": true,
-          "howMany": 10,
-          "spell": {
-            "class": "DiscardSpell"
-          }
-        }
-      ]
+        "class": "MetaSpell",
+        "spells": [
+            {
+                "class": "DiscoverSpell",
+                "cardSource": {
+                    "class": "HandSource"
+                },
+                "exclusive": true,
+                "howMany": 10,
+                "spell": {
+                    "class": "DiscardSpell"
+                }
+            }
+        ]
+    },
+    "attributes": {
+        "ECHO": true
     },
     "collectible": false,
     "sets": [
-      "CUSTOM",
-      "BASIC"
+        "CUSTOM",
+        "BASIC"
     ],
     "fileFormatVersion": 1
-  }
-  
+}

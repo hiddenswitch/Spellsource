@@ -1,0 +1,14 @@
+{
+    "name": "Spark",
+    "baseManaCost": 0,
+    "type": "MINION",
+    "heroClass": "AZURE",
+    "baseAttack": 1,
+    "baseHp": 1,
+    "rarity": "FREE",
+    "race": "ELEMENTAL",
+    "description": "",
+    "collectible": false,
+    "set": "Sourcestorm",
+    "fileFormatVersion": 1
+  }
