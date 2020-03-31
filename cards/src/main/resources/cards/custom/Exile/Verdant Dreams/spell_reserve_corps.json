@@ -1,10 +1,10 @@
 {
   "name": "Reserve Corps",
-  "baseManaCost": 6,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Draw a Demon, Dragon, and Pirate from your deck.",
+  "description": "Draw a Demon and Dragon.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -23,14 +23,6 @@
         "cardFilter": {
           "class": "CardFilter",
           "race": "DRAGON"
-        }
-      },
-      {
-        "class": "FromDeckToHandSpell",
-        "value": 1,
-        "cardFilter": {
-          "class": "CardFilter",
-          "race": "PIRATE"
         }
       }
     ]
