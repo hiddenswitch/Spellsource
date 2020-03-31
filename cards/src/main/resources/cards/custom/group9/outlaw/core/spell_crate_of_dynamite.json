@@ -10,7 +10,7 @@
     "class": "AddEnchantmentSpell",
     "trigger": {
       "eventTrigger": {
-        "class": "CardDrawnTrigger",
+        "class": "QuickDrawTrigger",
         "targetPlayer": "SELF"
       },
       "spell": {

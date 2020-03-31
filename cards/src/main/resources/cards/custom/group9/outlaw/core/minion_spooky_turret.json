@@ -6,10 +6,10 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Quick Draw: Destroy this. Then, draw 2 cards.",
+  "description": "Quick Draw: Destroy this and draw 2 cards.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "QuickDrawTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {

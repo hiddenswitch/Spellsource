@@ -9,7 +9,7 @@
   "description": "Quick Draw: Deal 2 damage to the left-most enemy minion.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "QuickDrawTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
