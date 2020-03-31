@@ -14,22 +14,9 @@
     "pact": {
       "countUntilCast": 1,
       "eventTrigger": {
-        "class": "SpellCastedTrigger",
+        "class": "CardPlayedTrigger",
         "targetPlayer": "SELF",
-        "fireCondition": {
-          "class": "AllMatchFilterCondition",
-          "target": "EVENT_SOURCE",
-          "filter": {
-            "class": "SpecificCardFilter",
-            "cards": [
-              "pact_brutish_counterattack",
-              "pact_extraction",
-              "pact_nothing_to_waste",
-              "pact_voids_bargain",
-              "pact_a_covens_debt"
-            ]
-          }
-        }
+        "requiredAttribute": "PACT"
       },
       "spell": {
         "class": "DrawCardSpell",
