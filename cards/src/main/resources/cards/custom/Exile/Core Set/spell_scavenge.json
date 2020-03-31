@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Gain 1 Armor for each minion that died this turn. Draw a card",
+  "description": "Gain [0] Armor. Draw a card. (Increases for each minion that died this turn)",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -23,6 +23,15 @@
       }
     ]
   },
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH"
+      }
+    }
+  ],
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
