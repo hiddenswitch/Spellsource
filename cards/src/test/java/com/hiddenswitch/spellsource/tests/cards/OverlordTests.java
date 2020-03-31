@@ -30,4 +30,17 @@ public class OverlordTests extends TestBase {
 			assertEquals(player.getHero().getHp(), player.getHero().getBaseHp() - 2);
 		}, HeroClass.CRIMSON, HeroClass.CRIMSON);
 	}
+
+	@Test
+	public void testDestroyTheStrong() {
+		runGym((context, player, opponent) -> {
+			Minion captive = playMinionCard(context, player, "token_captiveguard_overlord");
+			playCard(context, player, "spell_destroy_the_strong");
+			assertFalse(captive.isDestroyed());
+			destroy(context, captive);
+			assertEquals(1, player.getMinions().size());
+			playCard(context, player, "spell_destroy_the_strong");
+			assertEquals(1, player.getMinions().size());
+		});
+	}
 }
