@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Remove all Keywords without text from all minions.",
+  "description": "Opener: Remove all keywords without additional text from all minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
