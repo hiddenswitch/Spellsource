@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "SPIRIT",
   "description": "Opener: Add a random Secret to each player's hand.",
   "battlecry": {
     "targetSelection": "NONE",
