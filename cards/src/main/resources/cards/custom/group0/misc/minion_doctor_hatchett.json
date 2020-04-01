@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Put a minion from your deck into a 0/3 Egg.",
+  "description": "Opener: Put a random minion from your deck into a 0/3 Egg.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
