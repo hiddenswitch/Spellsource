@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Restore #4 Health to your Champion. Draw a card. Cast this when drawn.",
+  "description": "Restore #4 Health to your champion. Draw a card. Cast this when drawn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
