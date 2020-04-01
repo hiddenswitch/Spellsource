@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "After you play a card, deal 2 damage split among all enemies.",
+  "description": "After you play a card, deal 2 damage randomly split among all enemies.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
