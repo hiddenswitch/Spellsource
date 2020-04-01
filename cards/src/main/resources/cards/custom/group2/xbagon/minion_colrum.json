@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Opener: Transform ALL Fae to random non-Fae minions (wherever they are).",
+  "description": "Opener: Transform all Fae (wherever they are) into random non-Fae minions.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
