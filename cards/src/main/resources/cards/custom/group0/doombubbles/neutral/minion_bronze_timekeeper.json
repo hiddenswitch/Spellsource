@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: Activate a minion's start- and end-of-turn effects.",
+  "description": "Opener: Activate a minion's start and end of turn effects.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
