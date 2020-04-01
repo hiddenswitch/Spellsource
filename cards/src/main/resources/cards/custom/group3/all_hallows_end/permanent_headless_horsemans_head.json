@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, deal 3 damage randomly split across all enemies",
+  "description": "At the end of your turn, deal 3 damage randomly split across all enemies.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
