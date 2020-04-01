@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Opener: Destroy 5 Armor from a player and gain +1/+1.",
+  "description": "Opener: Destroy 5 Armor from a player to gain +1/+1.",
   "battlecry": {
     "targetSelection": "HEROES",
     "spell": {
