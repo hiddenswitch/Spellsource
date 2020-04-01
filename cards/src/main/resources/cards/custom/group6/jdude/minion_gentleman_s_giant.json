@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "Costs (1) for each of your turns you didn't play a card this game.",
+  "description": "Costs (1) less for each of your turns you didn't play a card this game.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
