@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Guard. Opener: Your opponent takes two turns.",
+  "description": "Guard. Opener: This round, your opponent can take two turns.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
