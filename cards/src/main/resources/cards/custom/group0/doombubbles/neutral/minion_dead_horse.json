@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Has +7 Attack while damaged",
+  "description": "Has +7 Attack while damaged.",
   "trigger": {
     "eventTrigger": {
       "class": "EnrageChangedTrigger"
