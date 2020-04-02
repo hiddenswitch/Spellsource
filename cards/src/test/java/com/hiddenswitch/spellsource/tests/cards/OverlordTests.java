@@ -7,6 +7,8 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.Zones;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +35,15 @@ public class OverlordTests extends TestBase {
 		}, HeroClass.CRIMSON, HeroClass.CRIMSON);
 	}
 
+	@Test
+	public void testDebtCollector() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_debt_collector");
+			Quest pact = (Quest) context.getTriggerManager().getTriggers().get(0);
+			assertNotEquals("minion_debt_collector", pact.getSourceCard().getCardId());
+    });
+	}
+  
 	@Test
 	public void testDestroyTheStrong() {
 		runGym((context, player, opponent) -> {
