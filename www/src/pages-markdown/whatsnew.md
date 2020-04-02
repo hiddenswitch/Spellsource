@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Storyteller's Overflowing Energy now correctly only targets one instance of the lowest-cost card in your hand. (1642)
+
 ### 0.8.71-3.1.1 (March 28, 2020)
 
  - Both versions of Doodles now work. (1632)

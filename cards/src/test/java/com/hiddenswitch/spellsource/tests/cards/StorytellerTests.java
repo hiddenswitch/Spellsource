@@ -316,6 +316,14 @@ public class StorytellerTests extends TestBase {
 			}
 			assertTrue(false);
 		});
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_overflowing_energy");
+			receiveCard(context, player, "spell_overflowing_energy");
+			receiveCard(context, player, "spell_overflowing_energy");
+			playCard(context, player, "spell_overflowing_energy");
+			assertEquals(5, player.getHand().size());
+		});
 	}
 
 	@Test

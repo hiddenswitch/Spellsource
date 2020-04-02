@@ -37,7 +37,8 @@
         }
       ]
     },
-    "value": 2
+    "value": 2,
+    "randomTarget": true
   },
   "collectible": true,
   "set": "CUSTOM",
