@@ -6,7 +6,7 @@ header: true
 ---
 
 ### Upcoming Changes
- - Pacts played by Debt Collector are now correctly displayed. ()
+ - Pacts played by Debt Collector are now correctly displayed. (1615)
 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
