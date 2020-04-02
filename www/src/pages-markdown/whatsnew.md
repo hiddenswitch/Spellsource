@@ -4,6 +4,8 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### Upcoming Changes
+ - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
