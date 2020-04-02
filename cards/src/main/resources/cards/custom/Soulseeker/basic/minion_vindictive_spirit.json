@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "SPIRIT",
-  "description": "Opener: Destroy a minion.",
+  "description": "Opener: Destroy a unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

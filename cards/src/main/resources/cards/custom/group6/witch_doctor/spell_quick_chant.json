@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Restore a friendly minion to full Health. Give it +3 Health.",
+  "description": "Restore a friendly unit to full Health. Give it +3 Health.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

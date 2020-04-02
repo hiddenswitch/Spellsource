@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Opener: Give the next minion your opponent summons +2/+2.",
+  "description": "Opener: Give the next unit your opponent summons +2/+2.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

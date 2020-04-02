@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Choose a minion. Summon a copy of it for both players.",
+  "description": "Choose a unit. Summon a copy of it for both players.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BothPlayersSpell",

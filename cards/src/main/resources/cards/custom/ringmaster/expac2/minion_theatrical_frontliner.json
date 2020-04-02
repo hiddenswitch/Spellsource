@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Give a minion Guard and +1 Health for each card in your hand.",
+  "description": "Opener: Give a unit Guard and +1 Health for each card in your hand.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

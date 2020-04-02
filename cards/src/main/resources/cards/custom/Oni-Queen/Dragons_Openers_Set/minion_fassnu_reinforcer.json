@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Opener: Choose a friendly minion. Shuffle a copy of it into your deck.",
+  "description": "Opener: Choose a friendly unit. Shuffle a copy of it into your deck.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

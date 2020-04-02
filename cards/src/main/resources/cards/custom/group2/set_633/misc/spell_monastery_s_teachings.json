@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Whenever you summon a minion this turn, add a 'Tiger Palm Strike' spell to your hand.",
+  "description": "Whenever you summon a unit this turn, add a 'Tiger Palm Strike' spell to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

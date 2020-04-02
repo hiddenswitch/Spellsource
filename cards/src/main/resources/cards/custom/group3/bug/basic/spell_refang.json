@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Give a minion +1/+1. (+1 Attack/+1 Health)",
+  "description": "Give a unit +1/+1. (+1 Attack/+1 Health)",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

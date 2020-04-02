@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Opener: Destroy your other minions and choose a Ritual. (Each minion destroyed empowers the ritual.)",
+  "description": "Opener: Destroy your other units and choose a Ritual. (Each unit destroyed empowers the ritual.)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

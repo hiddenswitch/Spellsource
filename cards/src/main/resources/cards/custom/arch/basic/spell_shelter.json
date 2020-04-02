@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-  "description": "Give a minion +6 Health. Draw a card.",
+  "description": "Give a unit +6 Health. Draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

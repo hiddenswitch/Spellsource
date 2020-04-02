@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "AMBER",
   "rarity": "LEGENDARY",
-  "description": "Opener: This game, your minions can only take 1 damage at a time on your turn.",
+  "description": "Opener: This game, your units can only take 1 damage at a time on your turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "After this minion survives damage, summon 2 copies of it.",
+  "description": "After this unit survives damage, summon 2 copies of it.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

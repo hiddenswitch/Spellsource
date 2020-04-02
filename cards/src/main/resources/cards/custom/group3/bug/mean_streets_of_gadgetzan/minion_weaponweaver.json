@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Give a random minion in your hand Toxic.",
+  "description": "Opener: Give a random unit in your hand Toxic.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
-  "description": "Set a minion's Health to 1 and give it Immune until your next turn.",
+  "description": "Set a unit's Health to 1 and give it Immune until your next turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

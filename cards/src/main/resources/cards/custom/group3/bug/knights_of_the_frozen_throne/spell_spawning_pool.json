@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Discover a minion. Replace your hand with copies of it.",
+  "description": "Discover a unit. Replace your hand with copies of it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Swap the Attack and Health of your minions, then restore #1 Health to your champion for each one.",
+  "description": "Swap the Attack and Health of your units, then restore #1 Health to your champion for each one.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

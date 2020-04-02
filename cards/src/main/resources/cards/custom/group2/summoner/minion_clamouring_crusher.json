@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Blitz, Guard. Opener: Gain +2 Health for each friendly minion.",
+  "description": "Blitz, Guard. Opener: Gain +2 Health for each friendly unit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

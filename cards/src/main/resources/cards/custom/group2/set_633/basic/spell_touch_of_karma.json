@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Choose a minion. Whenever it attacks, deal 2 damage to the enemy champion.",
+  "description": "Choose a unit. Whenever it attacks, deal 2 damage to the enemy champion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

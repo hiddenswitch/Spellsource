@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "After you play a card, return this minion to your hand.",
+  "description": "After you play a card, return this unit to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",

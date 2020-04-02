@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Can only attack champions and minions with Guard.",
+  "description": "Can only attack champions and units with Guard.",
   "aura": {
     "class": "PhysicalAttackTargetOverrideAura",
     "target": "PHYSICAL_ATTACK_TARGETS",

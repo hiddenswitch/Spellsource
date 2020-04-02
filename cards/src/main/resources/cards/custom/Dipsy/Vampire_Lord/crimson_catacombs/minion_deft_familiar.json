@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Your Vampire Lord Skill can target minions.",
+  "description": "Your Vampire Lord Skill can target units.",
   "auras": [
     {
       "class": "CardAura",

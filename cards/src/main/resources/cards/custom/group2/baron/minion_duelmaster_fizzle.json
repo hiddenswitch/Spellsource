@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Opener: Force all minions to attack random minions.",
+  "description": "Opener: Force all units to attack random units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

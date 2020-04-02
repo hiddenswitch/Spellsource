@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Passive Skill. Whenever a friendly minion returns to your hand, set its cost to 0.",
+  "description": "Passive Skill. Whenever a friendly unit returns to your hand, set its cost to 0.",
   "passiveTriggers": [
     {
       "eventTrigger": {

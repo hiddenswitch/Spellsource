@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Give an enemy minion in your opponent's hand +2/+2. Give a minion in your hand -2/-2. Draw a card. Cast this when drawn.",
+  "description": "Give an enemy unit in your opponent's hand +2/+2. Give a unit in your hand -2/-2. Draw a card. Cast this when drawn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

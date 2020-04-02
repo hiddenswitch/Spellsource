@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Drain 2 Health from a minion.",
+  "description": "Opener: Drain 2 Health from a unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

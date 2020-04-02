@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 12,
   "rarity": "LEGENDARY",
-  "description": "Guard. Whenever a minion attacks, gain +2 Attack.",
+  "description": "Guard. Whenever a unit attacks, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

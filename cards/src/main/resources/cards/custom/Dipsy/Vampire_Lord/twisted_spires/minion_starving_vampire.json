@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "After a minion is summoned, Drain 1 Health from it.",
+  "description": "After a unit is summoned, Drain 1 Health from it.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger"

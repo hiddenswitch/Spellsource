@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Soulbind, then trigger the Aftermath effect of each friendly minion.",
+  "description": "Soulbind, then trigger the Aftermath effect of each friendly unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

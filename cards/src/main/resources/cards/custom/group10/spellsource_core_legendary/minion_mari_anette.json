@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Opener: Transform all other minions into 2/2 Puppets that transform back at the end of your next turn.",
+  "description": "Opener: Transform all other units into 2/2 Puppets that transform back at the end of your next turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

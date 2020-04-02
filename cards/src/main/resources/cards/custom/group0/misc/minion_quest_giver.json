@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Opener: Shuffle a friendly minion into your deck and give it +3/+3.",
+  "description": "Opener: Shuffle a friendly unit into your deck and give it +3/+3.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

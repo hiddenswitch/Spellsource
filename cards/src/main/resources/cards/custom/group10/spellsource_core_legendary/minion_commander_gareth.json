@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "After this minion attacks, your other minions attack the same target. (At most once more)",
+  "description": "After this unit attacks, your other units attack the same target. (At most once more)",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

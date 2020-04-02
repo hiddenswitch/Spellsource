@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Whenever this takes damage, deal 1 damage to all other minions.",
+  "description": "Whenever this takes damage, deal 1 damage to all other units.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

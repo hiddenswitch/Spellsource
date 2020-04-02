@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Transforms the minions in your hand into random Dragons.",
+  "description": "Opener: Transforms the units in your hand into random Dragons.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

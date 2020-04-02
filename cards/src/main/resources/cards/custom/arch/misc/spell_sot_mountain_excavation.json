@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "LEGENDARY",
-  "description": "Summon a random Legendary minion. Lose 4 of your Armor and cast this again.",
+  "description": "Summon a random Legendary unit. Lose 4 of your Armor and cast this again.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

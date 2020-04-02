@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "RARE",
-  "description": "Deal 3 damage to a friendly minion. If it survives, give it +4/+6.",
+  "description": "Deal 3 damage to a friendly unit. If it survives, give it +4/+6.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

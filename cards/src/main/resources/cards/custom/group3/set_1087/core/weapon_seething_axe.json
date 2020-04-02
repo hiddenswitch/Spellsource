@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Supremacy: Give a random friendly minion +1 Attack.",
+  "description": "Supremacy: Give a random friendly unit +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -6,7 +6,7 @@
   "baseHp": 4,
   "heroClass": "CORAL",
   "rarity": "EPIC",
-  "description": "Aftermath: If this minion has at least 4 Attack, resummon it.",
+  "description": "Aftermath: If this unit has at least 4 Attack, resummon it.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

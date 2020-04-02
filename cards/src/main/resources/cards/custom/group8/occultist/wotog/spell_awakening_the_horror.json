@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Destroy the next minion played, and give +6/+6 to the one played after.",
+  "description": "Destroy the next unit played, and give +6/+6 to the one played after.",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",

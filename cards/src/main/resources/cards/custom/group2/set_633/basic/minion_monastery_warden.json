@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "Guard. Your other minions have +2 Health.",
+  "description": "Guard. Your other units have +2 Health.",
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",

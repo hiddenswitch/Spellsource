@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Give a minion 'After this attacks, gain +2/+2'.",
+  "description": "Give a unit 'After this attacks, gain +2/+2'.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

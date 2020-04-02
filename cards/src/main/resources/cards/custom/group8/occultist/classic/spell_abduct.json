@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Choose an enemy minion. Add a copy of it to your hand. Then, destroy it.",
+  "description": "Choose an enemy unit. Add a copy of it to your hand. Then, destroy it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",

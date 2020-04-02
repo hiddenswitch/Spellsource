@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Opener: Damage all enemy minions until they have 1 Health.",
+  "description": "Opener: Damage all enemy units until they have 1 Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

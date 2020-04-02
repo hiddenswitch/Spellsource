@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Opener: Give a minion and adjacent minions Dodge.",
+  "description": "Opener: Give a unit and adjacent units Dodge.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

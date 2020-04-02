@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Opener: Choose a minion. Fill both players' boards with copies of it.",
+  "description": "Opener: Choose a unit. Fill both players' boards with copies of it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

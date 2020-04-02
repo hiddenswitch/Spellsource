@@ -7,7 +7,7 @@
   "baseHp": 5,
   "race": "MECH",
   "rarity": "COMMON",
-  "description": "Dash. Aftermath: Give a random friendly minion +3/+3 and Guard.",
+  "description": "Dash. Aftermath: Give a random friendly unit +3/+3 and Guard.",
   "deathrattle": {
     "target": "FRIENDLY_MINIONS",
     "randomTarget": true,

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "LEGENDARY",
-  "description": "Quest: Play two minions with the same name. Reward: Bestify It!",
+  "description": "Quest: Play two units with the same name. Reward: Bestify It!",
   "quest": {
     "class": "CavernsBelowTrigger"
   },

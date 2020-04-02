@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Costs (1) less for each minion that attacked this turn.",
+  "description": "Costs (1) less for each unit that attacked this turn.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

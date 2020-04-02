@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Give an enemy minion +5/+5. Deal $5 damage to all other minions.",
+  "description": "Give an enemy unit +5/+5. Deal $5 damage to all other units.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",

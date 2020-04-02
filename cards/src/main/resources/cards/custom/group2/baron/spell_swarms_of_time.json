@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Draw a minion. If it's a Fae, summon it.",
+  "description": "Draw a unit. If it's a Fae, summon it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",

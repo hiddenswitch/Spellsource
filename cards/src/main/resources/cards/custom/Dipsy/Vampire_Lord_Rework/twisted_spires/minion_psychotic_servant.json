@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Steal 3 Health from a friendly minion.",
+  "description": "Opener: Steal 3 Health from a friendly unit.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

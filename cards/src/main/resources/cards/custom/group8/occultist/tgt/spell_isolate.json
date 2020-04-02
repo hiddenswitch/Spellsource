@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Choose a minion. Destroy the minions next to it.",
+  "description": "Choose a unit. Destroy the units next to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

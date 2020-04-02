@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Choose a minion. Draw 2 minions of the same Cost from your deck.",
+  "description": "Opener: Choose a unit. Draw 2 units of the same Cost from your deck.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

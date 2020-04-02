@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Shuffle a friendly minion into your deck. When you draw it, draw 3 cards.",
+  "description": "Shuffle a friendly unit into your deck. When you draw it, draw 3 cards.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",

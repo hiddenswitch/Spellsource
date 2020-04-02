@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Opener: Return your other minions to your hand.",
+  "description": "Opener: Return your other units to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

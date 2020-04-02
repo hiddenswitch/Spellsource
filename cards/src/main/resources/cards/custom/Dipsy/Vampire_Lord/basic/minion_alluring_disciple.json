@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Opener: Copy an enemy minion's Attack.",
+  "description": "Opener: Copy an enemy unit's Attack.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

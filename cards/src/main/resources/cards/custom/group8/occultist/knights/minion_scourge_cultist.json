@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: If a friendly minion died this turn, summon two 1/1 Tentacles with Guard.",
+  "description": "Opener: If a friendly unit died this turn, summon two 1/1 Tentacles with Guard.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

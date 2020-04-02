@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Aftermath: If you increased this minion's Health, draw a card.",
+  "description": "Aftermath: If you increased this unit's Health, draw a card.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

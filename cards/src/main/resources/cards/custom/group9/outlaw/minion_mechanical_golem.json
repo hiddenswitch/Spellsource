@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Dash. Quick Draw: Attack a random enemy minion.",
+  "description": "Dash. Quick Draw: Attack a random enemy unit.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Destroy a minion and the minions opposite it.",
+  "description": "Destroy a unit and the units opposite it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "OppositeEffectSpell",

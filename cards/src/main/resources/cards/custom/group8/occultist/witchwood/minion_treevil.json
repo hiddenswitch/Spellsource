@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Guard. Aftermath: Deal [0] damage to all minions. (Increases whenever a minion dies)",
+  "description": "Guard. Aftermath: Deal [0] damage to all units. (Increases whenever a unit dies)",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

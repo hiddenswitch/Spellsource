@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Your spells have Toxic. Your healing is doubled. Your other minions have Elusive and Guard.",
+  "description": "Your spells have Toxic. Your healing is doubled. Your other units have Elusive and Guard.",
   "auras": [
     {
       "class": "AttributeAura",

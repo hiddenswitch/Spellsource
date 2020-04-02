@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Discover a minion in your graveyard. Resurrect it with Decay.",
+  "description": "Discover a unit in your graveyard. Resurrect it with Decay.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

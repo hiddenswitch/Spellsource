@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "LEGENDARY",
-  "description": "Quest: Summon 5 minions for your opponent. Reward: The Lynchpin.",
+  "description": "Quest: Summon 5 units for your opponent. Reward: The Lynchpin.",
   "quest": {
     "class": "MinionSummonedTrigger",
     "fireCondition": {

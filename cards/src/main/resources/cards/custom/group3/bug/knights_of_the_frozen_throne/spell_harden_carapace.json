@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Gain 5 Armor. Give a minion +5 Health.",
+  "description": "Gain 5 Armor. Give a unit +5 Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

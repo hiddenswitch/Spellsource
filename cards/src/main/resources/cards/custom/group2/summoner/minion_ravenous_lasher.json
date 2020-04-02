@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "At the end of your turn, destroy a random minion that costs (3) or less.",
+  "description": "At the end of your turn, destroy a random unit that costs (3) or less.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

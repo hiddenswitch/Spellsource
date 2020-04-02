@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Deal $4 damage to a minion. Destroy one of your Lun.",
+  "description": "Deal $4 damage to a unit. Destroy one of your Lun.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

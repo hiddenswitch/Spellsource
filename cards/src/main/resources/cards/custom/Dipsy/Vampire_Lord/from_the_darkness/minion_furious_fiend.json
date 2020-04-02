@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Opener: Deal 3 damage to each player's leftmost minion.",
+  "description": "Opener: Deal 3 damage to each player's leftmost unit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

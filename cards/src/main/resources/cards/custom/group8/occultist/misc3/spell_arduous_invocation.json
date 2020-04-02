@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Summon [1 random 5-Cost minions]. (Increases for each 10-Cost minion you played this game).",
+  "description": "Summon [1 random 5-Cost units]. (Increases for each 10-Cost unit you played this game).",
   "spell": {
     "class": "SummonSpell",
     "value": {
@@ -61,8 +61,8 @@
             },
             "offset": 5
           },
-          "description1": "-Cost minion",
-          "description2": "-Cost minions"
+          "description1": "-Cost unit",
+          "description2": "-Cost units"
         }
       ]
     }

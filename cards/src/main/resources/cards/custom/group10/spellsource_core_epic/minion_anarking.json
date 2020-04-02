@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Aftermath: Destroy the minion with the highest Health.",
+  "description": "Aftermath: Destroy the unit with the highest Health.",
   "targetSelection": "NONE",
   "deathrattle": {
     "class": "DestroySpell",

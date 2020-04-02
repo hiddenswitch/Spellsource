@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Summon a 2-Cost minion. Reveal a minion in each deck. If yours costs more, summon two instead.",
+  "description": "Summon a 2-Cost unit. Reveal a unit in each deck. If yours costs more, summon two instead.",
   "targetSelection": "NONE",
   "spell": {
     "class": "JoustSpell",

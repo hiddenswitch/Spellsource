@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Discover a 3-Cost minion. Summon it with Guard.",
+  "description": "Discover a 3-Cost unit. Summon it with Guard.",
   "condition": {
     "class": "CanSummonCondition"
   },

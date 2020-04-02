@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Guard, <b>Opener:</b> Give all enemy minions -3 Attack. <b>Aftermath:</b> Silence all enemy minions.",
+  "description": "Guard, <b>Opener:</b> Give all enemy units -3 Attack. <b>Aftermath:</b> Silence all enemy units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

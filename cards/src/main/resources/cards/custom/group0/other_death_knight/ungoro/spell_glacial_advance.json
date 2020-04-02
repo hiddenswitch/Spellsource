@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Destroy all minions. Stun any minions summoned next turn.",
+  "description": "Destroy all units. Stun any units summoned next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

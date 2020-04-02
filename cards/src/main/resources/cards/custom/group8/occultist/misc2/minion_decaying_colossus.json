@@ -7,7 +7,7 @@
   "baseAttack": 2,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "At the end of each turn, deal 1 damage to this minion.",
+  "description": "At the end of each turn, deal 1 damage to this unit.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

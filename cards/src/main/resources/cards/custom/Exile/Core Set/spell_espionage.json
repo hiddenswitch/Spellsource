@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "EPIC",
-  "description": "Put a copy of your minions into your hand. Then, give your minions Hidden for a turn.",
+  "description": "Put a copy of your units into your hand. Then, give your units Hidden for a turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

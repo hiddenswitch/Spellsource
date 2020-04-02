@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "If you control 3 or more minions, destroy all minions.",
+  "description": "If you control 3 or more units, destroy all units.",
   "targetSelection": "MINIONS",
   "condition": {
     "class": "MinionOnBoardCondition",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Silence a minion.",
+  "description": "Opener: Silence a unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

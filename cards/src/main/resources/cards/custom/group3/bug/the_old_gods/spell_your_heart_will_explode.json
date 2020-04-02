@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Destroy a minion. Add its Attack and Health to your Big Guy's (wherever it is).",
+  "description": "Destroy a unit. Add its Attack and Health to your Big Guy's (wherever it is).",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

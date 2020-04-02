@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Give a friendly Guard minion +4/+4.",
+  "description": "Opener: Give a friendly Guard unit +4/+4.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

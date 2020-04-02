@@ -6,7 +6,7 @@
   "rarity": "EPIC",
   "baseAttack": 8,
   "baseHp": 8,
-  "description": "Opener: Give a friendly minion +8 Health. Gain Armor equal to its Health.",
+  "description": "Opener: Give a friendly unit +8 Health. Gain Armor equal to its Health.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

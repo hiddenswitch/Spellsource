@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "EPIC",
-  "description": "The next minion you summon gains, \"Summon a minion from your deck whenever this takes damage.\"",
+  "description": "The next unit you summon gains, \"Summon a unit from your deck whenever this takes damage.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

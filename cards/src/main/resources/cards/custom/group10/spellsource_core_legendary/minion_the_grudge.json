@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Aftermath: Destroy three random minions.",
+  "description": "Aftermath: Destroy three random units.",
   "deathrattle": {
     "class": "MultiTargetSpell",
     "target": "ALL_MINIONS",

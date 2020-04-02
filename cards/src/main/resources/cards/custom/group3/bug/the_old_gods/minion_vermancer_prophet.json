@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discover two minions that died this game.",
+  "description": "Opener: Discover two units that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

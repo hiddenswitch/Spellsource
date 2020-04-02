@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Transform the left-most enemy minion into a Smoldering Husk.",
+  "description": "Transform the left-most enemy unit into a Smoldering Husk.",
   "targetSelection": "NONE",
   "spell": {
     "class": "TransformMinionSpell",

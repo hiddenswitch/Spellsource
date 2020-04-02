@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Restore all characters to full Health. Give all minions +3/+3.",
+  "description": "Restore all characters to full Health. Give all units +3/+3.",
   "spell": {
     "class": "MetaSpell",
     "spells": [

@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Invoke (6): Destroy a minion and summon a 1/1 Hatchling.",
+  "description": "Invoke (6): Destroy a unit and summon a 1/1 Hatchling.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Repeatable this turn. Give your champion and a random friendly minion +2 Attack this turn.",
+  "description": "Repeatable this turn. Give your champion and a random friendly unit +2 Attack this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

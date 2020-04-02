@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Deal 1 damage to a minion. If it survives, restore #5 Health to it.",
+  "description": "Opener: Deal 1 damage to a unit. If it survives, restore #5 Health to it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

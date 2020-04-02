@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "After you play a minion, Discover one of the same Tribe.",
+  "description": "After you play a unit, Discover one of the same Tribe.",
   "trigger": {
     "eventTrigger": {
       "class": "BeforeMinionPlayedTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Choose a minion. Summon a Golem with stats equal to its Cost.",
+  "description": "Choose a unit. Summon a Golem with stats equal to its Cost.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "CreateSummonSpell",

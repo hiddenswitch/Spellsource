@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BRASS",
   "rarity": "FREE",
-  "description": "Destroy a random undamaged minion. If it's friendly, draw a card.",
+  "description": "Destroy a random undamaged unit. If it's friendly, draw a card.",
   "condition": {
     "class": "AnyMatchFilterCondition",
     "target": "ALL_MINIONS",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
-  "description": "Shuffle all minions into their owner's deck. They are summoned when drawn.",
+  "description": "Shuffle all units into their owner's deck. They are summoned when drawn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

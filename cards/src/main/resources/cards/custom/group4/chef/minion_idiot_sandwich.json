@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Aftermath: Give adjacent minions +2/+2.",
+  "description": "Aftermath: Give adjacent units +2/+2.",
   "deathrattle": {
     "class": "custom.AdjacentDeathrattleSpell",
     "target": "SELF",

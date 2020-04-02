@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, give a friendly minion +3/+3.",
+  "description": "Opener: If you're holding a Dragon, give a friendly unit +3/+3.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

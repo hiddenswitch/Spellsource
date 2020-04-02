@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Deal $3 damage to all enemy minions and your champion.",
+  "description": "Deal $3 damage to all enemy units and your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

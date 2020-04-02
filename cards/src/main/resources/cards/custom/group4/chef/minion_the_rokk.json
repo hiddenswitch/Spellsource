@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "After you cast a spell on a minion, cast copies on adjacent minions.",
+  "description": "After you cast a spell on a unit, cast copies on adjacent units.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",

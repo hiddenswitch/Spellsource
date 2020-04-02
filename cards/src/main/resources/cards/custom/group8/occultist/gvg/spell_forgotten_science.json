@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "The next spell you cast on a minion this turn also targets adjacent minions.",
+  "description": "The next spell you cast on a unit this turn also targets adjacent units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

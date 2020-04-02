@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Discover a 6-Cost minion. Summon it. (Summon 3 Beasts to upgrade.)",
+  "description": "Discover a 6-Cost unit. Summon it. (Summon 3 Beasts to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 3,
     "eventTrigger": {

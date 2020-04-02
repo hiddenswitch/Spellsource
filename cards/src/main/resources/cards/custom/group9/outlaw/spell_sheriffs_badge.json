@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "EPIC",
-  "description": "Choose a minion. Destroy all other minions.",
+  "description": "Choose a unit. Destroy all other units.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "TargetToSourceSecondaryToTargetSpell",

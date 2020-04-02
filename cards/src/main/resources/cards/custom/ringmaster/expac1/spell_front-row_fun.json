@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "RARE",
-  "description": "Give a minion +1/+4. Your next Signature also targets your left-most minion.",
+  "description": "Give a unit +1/+4. Your next Signature also targets your left-most unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

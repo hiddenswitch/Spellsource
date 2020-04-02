@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Draw two minions from your deck.",
+  "description": "Draw two units from your deck.",
   "spell": {
     "class": "FromDeckToHandSpell",
     "value": 2,

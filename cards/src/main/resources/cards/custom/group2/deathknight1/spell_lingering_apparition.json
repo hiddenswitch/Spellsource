@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "EPIC",
-  "description": "Choose an enemy minion. As long as it lives, your minions are Immune during your opponent's turn.",
+  "description": "Choose an enemy unit. As long as it lives, your units are Immune during your opponent's turn.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

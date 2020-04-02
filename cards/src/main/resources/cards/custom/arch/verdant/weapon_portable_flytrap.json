@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "<b>Decay<b>. After a minion attacks your hero, destroy the attacker.",
+  "description": "<b>Decay<b>. After a unit attacks your hero, destroy the attacker.",
   "triggers": [
     {
       "eventTrigger": {

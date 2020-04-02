@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Give a minion \"Aftermath: Summon a random minion from your deck.\"",
+  "description": "Give a unit \"Aftermath: Summon a random unit from your deck.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

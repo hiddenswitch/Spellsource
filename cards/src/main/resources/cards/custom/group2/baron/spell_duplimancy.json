@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Choose a minion. Put 2 copies of it into your hand.",
+  "description": "Choose a unit. Put 2 copies of it into your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "CopyCardSpell",

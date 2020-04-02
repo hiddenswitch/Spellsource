@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "<b>Opener:</b> If a friendly minion died this turn, gain +2 Attack.",
+  "description": "<b>Opener:</b> If a friendly unit died this turn, gain +2 Attack.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

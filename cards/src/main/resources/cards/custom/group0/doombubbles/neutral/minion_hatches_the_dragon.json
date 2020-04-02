@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Guard. After you play a dragon, summon this minion from your deck.",
+  "description": "Guard. After you play a dragon, summon this unit from your deck.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

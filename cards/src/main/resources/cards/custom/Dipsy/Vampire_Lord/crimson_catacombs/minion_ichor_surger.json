@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Opener: Double the Health of a friendly minion.",
+  "description": "Opener: Double the Health of a friendly unit.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 9,
   "rarity": "EPIC",
-  "description": "Opener: Attack three random enemy minions.",
+  "description": "Opener: Attack three random enemy units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

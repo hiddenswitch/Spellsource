@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If your deck has no duplicates, promote your other minions and those in hand to Legendary status.",
+  "description": "Opener: If your deck has no duplicates, promote your other units and those in hand to Legendary status.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {

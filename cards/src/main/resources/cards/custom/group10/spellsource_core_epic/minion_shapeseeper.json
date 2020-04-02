@@ -7,7 +7,7 @@
   "baseHp": 1,
   "race": "TITAN",
   "rarity": "EPIC",
-  "description": "Costs (1) more and has +1/+1 for each other minion on the battlefield.",
+  "description": "Costs (1) more and has +1/+1 for each other unit on the battlefield.",
   "aura": {
     "class": "BuffAura",
     "target": "SELF",

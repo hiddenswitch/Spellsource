@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Whenever you summon an Aftermath minion, summon a Death Moth.",
+  "description": "Whenever you summon an Aftermath unit, summon a Death Moth.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "At the end of your turn, deal 2 damage to a random enemy minion.",
+  "description": "At the end of your turn, deal 2 damage to a random enemy unit.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

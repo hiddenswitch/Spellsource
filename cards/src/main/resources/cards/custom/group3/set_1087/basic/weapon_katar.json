@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "After you play a minion, gain +1 Attack this turn.",
+  "description": "After you play a unit, gain +1 Attack this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

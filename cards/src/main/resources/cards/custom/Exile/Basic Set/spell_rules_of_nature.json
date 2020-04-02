@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "FREE",
-  "description": "Destroy a minion that attacked and killed another minion.",
+  "description": "Destroy a unit that attacked and killed another unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DestroySpell",

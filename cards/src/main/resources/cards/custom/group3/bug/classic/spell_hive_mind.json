@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Choose a minion. All friendly minions attack that minion.",
+  "description": "Choose a unit. All friendly units attack that unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "FightSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Opener: Destroy a friendly minion to restore 8 health to your champion.",
+  "description": "Opener: Destroy a friendly unit to restore 8 health to your champion.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

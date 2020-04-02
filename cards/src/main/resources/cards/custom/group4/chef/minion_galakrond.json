@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "At the end of your turn, destroy your other minions and gain their stats.",
+  "description": "At the end of your turn, destroy your other units and gain their stats.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

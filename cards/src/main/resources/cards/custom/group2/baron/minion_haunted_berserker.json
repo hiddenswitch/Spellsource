@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Dash. After this attacks a minion, it also hits all minions.",
+  "description": "Dash. After this attacks a unit, it also hits all units.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

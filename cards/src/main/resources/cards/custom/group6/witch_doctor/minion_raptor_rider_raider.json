@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Reveal a minion in each deck. If yours costs more, summon a copy of this minion.",
+  "description": "Opener: Reveal a unit in each deck. If yours costs more, summon a copy of this unit.",
   "battlecry": {
     "spell": {
       "class": "JoustSpell",

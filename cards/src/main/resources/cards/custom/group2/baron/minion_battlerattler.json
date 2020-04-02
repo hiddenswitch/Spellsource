@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "After a friendly minion attacks, gain +1/+1.",
+  "description": "After a friendly unit attacks, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

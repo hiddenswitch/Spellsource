@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "EPIC",
-  "description": "Trigger the Openers of your minions with random targets.",
+  "description": "Trigger the Openers of your units with random targets.",
   "targetSelection": "NONE",
   "spell": {
     "class": "TriggerOpenerSpell",

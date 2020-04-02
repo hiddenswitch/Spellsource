@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Summon a copy of your weapon as a minion with Guard. Draw a card.",
+  "description": "Summon a copy of your weapon as a unit with Guard. Draw a card.",
   "condition": {
     "class": "HasWeaponCondition",
     "targetPlayer": "SELF"

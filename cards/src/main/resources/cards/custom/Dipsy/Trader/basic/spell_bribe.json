@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "FREE",
-  "description": "Add a copy of a minion to your hand.",
+  "description": "Add a copy of a unit to your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "CopyCardSpell"

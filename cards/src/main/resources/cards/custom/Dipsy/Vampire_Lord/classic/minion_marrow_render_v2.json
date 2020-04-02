@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Guard. Opener: Drain 1 Health from all other minions.",
+  "description": "Guard. Opener: Drain 1 Health from all other units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Give a random friendly minion +4/+4. (Shuffle a card to upgrade)",
+  "description": "Give a random friendly unit +4/+4. (Shuffle a card to upgrade)",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "EPIC",
-  "description": "Whenever a friendly minion dies, gain its card text.",
+  "description": "Whenever a friendly unit dies, gain its card text.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

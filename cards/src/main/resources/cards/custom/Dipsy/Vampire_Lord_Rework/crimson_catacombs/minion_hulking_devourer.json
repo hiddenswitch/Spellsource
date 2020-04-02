@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Destroy a minion and gain its Health.",
+  "description": "Opener: Destroy a unit and gain its Health.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

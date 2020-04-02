@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Costs (1) less for each minion that died this turn.",
+  "description": "Costs (1) less for each unit that died this turn.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

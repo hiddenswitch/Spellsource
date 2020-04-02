@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "EPIC",
-  "description": "Lifesteal. Deal double your weapon's damage to an enemy minion.",
+  "description": "Lifesteal. Deal double your weapon's damage to an enemy unit.",
   "condition": {
     "class": "HasWeaponCondition"
   },

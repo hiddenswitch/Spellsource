@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "After your hero attacks, give your minions +2 Attack.",
+  "description": "After your hero attacks, give your units +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

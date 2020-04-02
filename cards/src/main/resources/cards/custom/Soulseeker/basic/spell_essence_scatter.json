@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Destroy a minion. Restore #8 health to its owner.",
+  "description": "Destroy a unit. Restore #8 health to its owner.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

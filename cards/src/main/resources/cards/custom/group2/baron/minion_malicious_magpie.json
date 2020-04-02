@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Whenever another friendly minion attacks, deal 1 damage to the target.",
+  "description": "Whenever another friendly unit attacks, deal 1 damage to the target.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

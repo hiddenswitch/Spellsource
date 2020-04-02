@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Also damages the minions next to whomever it attacks.",
+  "description": "Also damages the units next to whomever it attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Shuffle two random minions on the board into your deck.",
+  "description": "Shuffle two random units on the board into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MultiTargetSpell",

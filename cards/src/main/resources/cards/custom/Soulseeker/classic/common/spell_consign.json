@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "COMMON",
-  "description": "Return a minion to its owner's hand, then Soulbind.",
+  "description": "Return a unit to its owner's hand, then Soulbind.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

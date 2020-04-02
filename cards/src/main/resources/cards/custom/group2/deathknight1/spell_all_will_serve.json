@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "RARE",
-  "description": "Discover an enemy minion that died this game. Add 2 copies of it to your hand.",
+  "description": "Discover an enemy unit that died this game. Add 2 copies of it to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

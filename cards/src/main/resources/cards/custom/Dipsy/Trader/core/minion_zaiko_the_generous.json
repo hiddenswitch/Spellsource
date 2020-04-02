@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever you cast a spell, give your other minions +1 Attack.",
+  "description": "Whenever you cast a spell, give your other units +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

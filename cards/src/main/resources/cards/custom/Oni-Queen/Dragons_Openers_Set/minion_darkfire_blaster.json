@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: Deal damage equal to this minion's Attack.",
+  "description": "Opener: Deal damage equal to this unit's Attack.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

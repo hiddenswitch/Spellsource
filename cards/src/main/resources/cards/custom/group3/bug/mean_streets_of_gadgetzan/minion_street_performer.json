@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Aftermath: Give two random minions in your hand +2/+2.",
+  "description": "Aftermath: Give two random units in your hand +2/+2.",
   "deathrattle": {
     "class": "MultiTargetSpell",
     "target": "FRIENDLY_HAND",

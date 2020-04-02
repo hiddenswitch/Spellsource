@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Swap Health with the minion(s) opposite this one (splits its Health if there are two).",
+  "description": "Opener: Swap Health with the unit(s) opposite this one (splits its Health if there are two).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

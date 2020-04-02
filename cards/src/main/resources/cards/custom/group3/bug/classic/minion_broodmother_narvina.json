@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Whenever a minion dies, summon two 1/1 Spiderlings. (Up to 14)",
+  "description": "Whenever a unit dies, summon two 1/1 Spiderlings. (Up to 14)",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

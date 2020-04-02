@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Draw a card. Draw an additional card for each friendly Deflect minion.",
+  "description": "Draw a card. Draw an additional card for each friendly Deflect unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

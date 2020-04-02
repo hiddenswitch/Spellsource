@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Minions adjacent to this one have +1 Health.",
+  "description": "Units adjacent to this one have +1 Health.",
   "auras": [
     {
       "class": "BuffAura",

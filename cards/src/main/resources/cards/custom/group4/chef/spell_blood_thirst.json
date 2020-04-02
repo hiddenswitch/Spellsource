@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Give a minion +2/+2 and Lifesteal. At the end of its owner's turn, it attacks an adjacent minion.",
+  "description": "Give a unit +2/+2 and Lifesteal. At the end of its owner's turn, it attacks an adjacent unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Your other minions have +1/+1 and Spellpower +1.",
+  "description": "Your other units have +1/+1 and Spellpower +1.",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

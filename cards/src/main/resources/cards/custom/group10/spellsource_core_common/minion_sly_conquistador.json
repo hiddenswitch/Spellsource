@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Dodge. Your minions with Dodge have +2 Attack.",
+  "description": "Dodge. Your units with Dodge have +2 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_MINIONS",

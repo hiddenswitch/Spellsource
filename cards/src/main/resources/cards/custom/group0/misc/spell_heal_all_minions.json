@@ -1,10 +1,10 @@
 {
-  "name": "Heal All Minions",
+  "name": "Heal All units",
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "COMMON",
-  "description": "Restore #4 Health to ALL minions.",
+  "description": "Restore #4 Health to ALL units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

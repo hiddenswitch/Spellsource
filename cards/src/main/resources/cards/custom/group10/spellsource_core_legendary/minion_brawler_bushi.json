@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Whenever a minion attacks, swap its Attack and Health.",
+  "description": "Whenever a unit attacks, swap its Attack and Health.",
   "race": "BEAST",
   "trigger": {
     "eventTrigger": {

@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "TITAN",
-  "description": "Enemy minions have -1 Attack.",
+  "description": "Enemy units have -1 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "ENEMY_MINIONS",

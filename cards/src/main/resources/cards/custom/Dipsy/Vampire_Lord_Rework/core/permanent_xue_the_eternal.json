@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Restore [10] more excess Health to allies to revive this minion.",
+  "description": "Restore [10] more excess Health to allies to revive this unit.",
   "trigger": {
     "countByValue": true,
     "countUntilCast": 10,

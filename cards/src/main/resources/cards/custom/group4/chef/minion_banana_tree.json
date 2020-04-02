@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": " Guard. After this minion takes damage, add an Apple to your hand.",
+  "description": " Guard. After this unit takes damage, add an Apple to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

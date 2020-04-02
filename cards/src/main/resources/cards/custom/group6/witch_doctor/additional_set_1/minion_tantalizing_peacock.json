@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Aftermath: Shuffle a random enemy minion into your opponent's deck.",
+  "description": "Aftermath: Shuffle a random enemy unit into your opponent's deck.",
   "deathrattle": {
     "class": "ShuffleMinionToDeckSpell",
     "target": "ENEMY_MINIONS",

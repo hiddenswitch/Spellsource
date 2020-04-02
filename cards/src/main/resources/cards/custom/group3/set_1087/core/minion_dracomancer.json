@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "After this minion attacks, it transforms into a 4/4 Dragon.",
+  "description": "After this unit attacks, it transforms into a 4/4 Dragon.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

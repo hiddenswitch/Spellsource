@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "EPIC",
-  "description": "Choose a minion. Destroy minions adjacent to it.",
+  "description": "Choose a unit. Destroy units adjacent to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

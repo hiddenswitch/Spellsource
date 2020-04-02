@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Whenever a friendly minion survives damage, deal 3 damage to a random enemy.",
+  "description": "Whenever a friendly unit survives damage, deal 3 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

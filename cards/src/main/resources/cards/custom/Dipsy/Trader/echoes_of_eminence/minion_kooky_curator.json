@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Draw two odd-Cost minions.",
+  "description": "Opener: Draw two odd-Cost units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Choose a minion with 1 or less Attack. Summon a copy of it.",
+  "description": "Opener: Choose a unit with 1 or less Attack. Summon a copy of it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

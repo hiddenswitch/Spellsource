@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Choose a minion. Whenever your turn ends, it Drains 2 Health from all other minions.",
+  "description": "Choose a unit. Whenever your turn ends, it Drains 2 Health from all other units.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

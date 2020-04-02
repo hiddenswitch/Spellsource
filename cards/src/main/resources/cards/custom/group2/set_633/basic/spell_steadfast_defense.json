@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Your minions can only take 1 damage at a time until your next turn.",
+  "description": "Your units can only take 1 damage at a time until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

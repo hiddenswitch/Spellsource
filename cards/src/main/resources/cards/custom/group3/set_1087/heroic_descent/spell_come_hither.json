@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Discover a minion in your deck that costs (7) or more. Summon it.",
+  "description": "Discover a unit in your deck that costs (7) or more. Summon it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Give your minions \"Aftermath: Summon a random minion from your deck.\"",
+  "description": "Give your units \"Aftermath: Summon a random unit from your deck.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",

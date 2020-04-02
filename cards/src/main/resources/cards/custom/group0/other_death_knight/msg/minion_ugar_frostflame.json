@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Opener: Equip a weapon with stats equal to this minion's.",
+  "description": "Opener: Equip a weapon with stats equal to this unit's.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

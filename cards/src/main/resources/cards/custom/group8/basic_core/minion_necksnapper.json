@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "FAE",
-  "description": "Opener: Destroy an enemy minion.",
+  "description": "Opener: Destroy an enemy unit.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

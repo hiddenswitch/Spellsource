@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Your minions have Spellpower +1.",
+  "description": "Your units have Spellpower +1.",
   "aura": {
     "class": "AttributeValueAura",
     "attribute": "AURA_SPELL_DAMAGE",

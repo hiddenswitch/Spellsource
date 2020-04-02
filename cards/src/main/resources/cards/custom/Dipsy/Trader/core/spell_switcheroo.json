@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "RARE",
-  "description": "Swap an allied minion with a random enemy one.",
+  "description": "Swap an allied unit with a random enemy one.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

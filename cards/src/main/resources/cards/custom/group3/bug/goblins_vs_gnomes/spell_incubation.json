@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Add 3 copies of a minion to your hand.",
+  "description": "Add 3 copies of a unit to your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "PutCopyInHandSpell",

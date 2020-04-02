@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "At the start of your turn, gain Armor equal to this minion's Health.",
+  "description": "At the start of your turn, gain Armor equal to this unit's Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "At the end of your turn, give adjacent minions +2 Attack.",
+  "description": "At the end of your turn, give adjacent units +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

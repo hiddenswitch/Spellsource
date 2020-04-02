@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Return any minion to your hand. Summon a 10/10 copy of it.",
+  "description": "Return any unit to your hand. Summon a 10/10 copy of it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Take control of an enemy minion. Destroy it.",
+  "description": "Take control of an enemy unit. Destroy it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",

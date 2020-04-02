@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give a minion +5/+5 and Dash.",
+  "description": "Give a unit +5/+5 and Dash.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

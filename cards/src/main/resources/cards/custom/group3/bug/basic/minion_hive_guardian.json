@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Your other minions have +1/+1 (+1 Attack/+1 Health).",
+  "description": "Your other units have +1/+1 (+1 Attack/+1 Health).",
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",

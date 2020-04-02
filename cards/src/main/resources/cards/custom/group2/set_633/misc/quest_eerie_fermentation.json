@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "LEGENDARY",
-  "description": "Quest: Trigger 5 friendly minions' Deflect. Reward: Eerie Brew.",
+  "description": "Quest: Trigger 5 friendly units' Deflect. Reward: Eerie Brew.",
   "quest": {
     "class": "LoseDeflectTrigger",
     "fireCondition": {

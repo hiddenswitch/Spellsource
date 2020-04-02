@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Aftermath: Transform a random friendly minion into an Infectious Zombie.",
+  "description": "Aftermath: Transform a random friendly unit into an Infectious Zombie.",
   "deathrattle": {
     "class": "TransformMinionSpell",
     "target": "OTHER_FRIENDLY_MINIONS",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Draw your highest-Health minion (or minions).",
+  "description": "Draw your highest-Health unit (or units).",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",

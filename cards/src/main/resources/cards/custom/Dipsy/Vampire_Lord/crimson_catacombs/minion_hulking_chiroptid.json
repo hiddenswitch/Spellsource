@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Dash. Whenever this minion attacks, Drain 1 Health from the target.",
+  "description": "Dash. Whenever this unit attacks, Drain 1 Health from the target.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

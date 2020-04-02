@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "After you summon a Knight, transform it into a random minion.",
+  "description": "After you summon a Knight, transform it into a random unit.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionSummonedTrigger",

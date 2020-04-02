@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "FREE",
-  "description": "At the end of your turn, fill your board with random minions.",
+  "description": "At the end of your turn, fill your board with random units.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

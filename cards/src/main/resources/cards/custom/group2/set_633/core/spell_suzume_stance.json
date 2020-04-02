@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Give your minions +1/+1 and Dodge.",
+  "description": "Give your units +1/+1 and Dodge.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

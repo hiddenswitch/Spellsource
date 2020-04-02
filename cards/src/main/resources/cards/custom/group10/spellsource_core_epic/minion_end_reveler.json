@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "FAE",
-  "description": "At the start of your turn, destroy ALL minions.",
+  "description": "At the start of your turn, destroy ALL units.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

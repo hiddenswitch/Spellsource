@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Guard. Aftermath: Summon a random 1, 2, and 3-Cost minion.",
+  "description": "Guard. Aftermath: Summon a random 1, 2, and 3-Cost unit.",
   "race": "FAE",
   "deathrattle": {
     "class": "MetaSpell",

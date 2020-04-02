@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Aftermath: Destroy a random enemy minion.",
+  "description": "Aftermath: Destroy a random enemy unit.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "ENEMY_MINIONS",

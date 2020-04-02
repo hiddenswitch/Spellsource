@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Give your minions +2 Health.",
+  "description": "Give your units +2 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

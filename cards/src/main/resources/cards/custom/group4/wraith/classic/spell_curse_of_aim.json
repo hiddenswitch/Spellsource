@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "Choose a minion. After it attacks, it also attacks its champion.",
+  "description": "Choose a unit. After it attacks, it also attacks its champion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

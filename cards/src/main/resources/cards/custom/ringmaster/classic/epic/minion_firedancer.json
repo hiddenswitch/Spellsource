@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Your next Signature also targets adjacent minions.",
+  "description": "Opener: Your next Signature also targets adjacent units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

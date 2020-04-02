@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "After you draw a card, deal 1 damage to all other minions.",
+  "description": "After you draw a card, deal 1 damage to all other units.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

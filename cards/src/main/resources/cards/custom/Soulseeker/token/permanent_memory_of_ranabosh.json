@@ -6,7 +6,7 @@
   "baseHp": 1,
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "When you trigger 2 friendly Secrets, awaken this minion. []",
+  "description": "When you trigger 2 friendly Secrets, awaken this unit. []",
   "trigger": {
     "countUntilCast": 2,
     "eventTrigger": {

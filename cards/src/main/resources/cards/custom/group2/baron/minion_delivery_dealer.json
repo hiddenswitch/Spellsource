@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "At the end of your turn, summon a random 2-Cost minion for both players.",
+  "description": "At the end of your turn, summon a random 2-Cost unit for both players.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

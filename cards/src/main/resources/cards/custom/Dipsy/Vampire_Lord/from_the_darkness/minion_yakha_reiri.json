@@ -7,7 +7,7 @@
   "baseHp": 15,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If you've dealt 50 damage to minions this game, replace your champion with Yakha Reiri. ([50] damage left)",
+  "description": "Opener: If you've dealt 50 damage to units this game, replace your champion with Yakha Reiri. ([50] damage left)",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {

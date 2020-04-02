@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "After a minion attacks another, they fight repeatedly until one dies.",
+  "description": "After a unit attacks another, they fight repeatedly until one dies.",
   "triggers": [
     {
       "eventTrigger": {

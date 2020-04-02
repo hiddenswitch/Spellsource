@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Swap each 1-Cost spell in your hand with a minion from your deck.",
+  "description": "Opener: Swap each 1-Cost spell in your hand with a unit from your deck.",
   "battlecry": {
     "spell": {
       "class": "custom.SwapCardsInHandAndDeckSpell",

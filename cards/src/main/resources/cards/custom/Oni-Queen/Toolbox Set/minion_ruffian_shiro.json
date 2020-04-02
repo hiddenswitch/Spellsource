@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: Give a friendly Demon in your hand and one on board this minion's stats.",
+  "description": "Opener: Give a friendly Demon in your hand and one on board this unit's stats.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "targetSelectionOverride": "NONE",

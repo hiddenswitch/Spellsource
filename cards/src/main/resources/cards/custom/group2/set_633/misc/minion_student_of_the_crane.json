@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "At the end of each turn, swap this minion's Attack and Health.",
+  "description": "At the end of each turn, swap this unit's Attack and Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger"

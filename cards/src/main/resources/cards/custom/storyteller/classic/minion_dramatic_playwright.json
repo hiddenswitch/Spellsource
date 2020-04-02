@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Aftermath: Change all enemy minion's Attack to 1 until the start of your next turn.",
+  "description": "Aftermath: Change all enemy unit's Attack to 1 until the start of your next turn.",
   "deathrattle": {
     "class": "ModifyAttributeSpell",
     "target": "ENEMY_MINIONS",

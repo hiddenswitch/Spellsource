@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Your next Signature deals 2 damage to the enemy champion for each minion that dies.",
+  "description": "Opener: Your next Signature deals 2 damage to the enemy champion for each unit that dies.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

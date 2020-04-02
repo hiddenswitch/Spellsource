@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
-  "description": "Give a minion \"Aftermath: Summon a random minion from its owner's hand.\"",
+  "description": "Give a unit \"Aftermath: Summon a random unit from its owner's hand.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

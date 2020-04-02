@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Give a minion <b>Decay<b> and +2/+3.",
+  "description": "Give a unit <b>Decay<b> and +2/+3.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

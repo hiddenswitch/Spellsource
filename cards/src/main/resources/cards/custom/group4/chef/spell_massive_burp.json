@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Roast a card. Deal damage equal to its Cost to a minion.",
+  "description": "Roast a card. Deal damage equal to its Cost to a unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "RoastSpell",

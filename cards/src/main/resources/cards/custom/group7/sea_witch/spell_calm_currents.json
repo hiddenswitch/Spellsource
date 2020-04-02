@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Shuffle 2 copies of the last friendly minion that died into your deck.",
+  "description": "Shuffle 2 copies of the last friendly unit that died into your deck.",
   "condition": {
     "class": "ComparisonCondition",
     "operation": "GREATER",

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Deflect. Opener: Give adjacent minions +3/+3 and Deflect.",
+  "description": "Deflect. Opener: Give adjacent units +3/+3 and Deflect.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

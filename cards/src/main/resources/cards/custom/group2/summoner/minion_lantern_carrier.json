@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Give the next minion you summon this turn +1/+1.",
+  "description": "Opener: Give the next unit you summon this turn +1/+1.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

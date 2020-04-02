@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Opener: Give the top 5 minions in your deck, \"Opener: Summon a 0/2 Sandpile with Guard.\"",
+  "description": "Opener: Give the top 5 units in your deck, \"Opener: Summon a 0/2 Sandpile with Guard.\"",
   "race": "ELEMENTAL",
   "battlecry": {
     "targetSelection": "NONE",

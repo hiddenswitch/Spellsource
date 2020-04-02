@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Has +1 Attack for each other minion you control.",
+  "description": "Has +1 Attack for each other unit you control.",
   "trigger": {
     "eventTrigger": {
       "class": "BoardChangedTrigger"

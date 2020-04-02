@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "RARE",
-  "description": "Silence a minion. Then, Stun it.",
+  "description": "Silence a unit. Then, Stun it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

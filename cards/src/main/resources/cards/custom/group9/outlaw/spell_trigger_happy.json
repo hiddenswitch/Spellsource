@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "COMMON",
-  "description": "Choose a minion. Whenever it attacks, draw a card.",
+  "description": "Choose a unit. Whenever it attacks, draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

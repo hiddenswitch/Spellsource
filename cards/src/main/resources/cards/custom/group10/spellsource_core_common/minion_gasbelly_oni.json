@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Aftermath: Deal 3 damage to a random enemy minion and your champion.",
+  "description": "Aftermath: Deal 3 damage to a random enemy unit and your champion.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

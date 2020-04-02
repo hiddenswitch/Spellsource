@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "FREE",
-  "description": "Deal $2 damage to three random enemy minions.",
+  "description": "Deal $2 damage to three random enemy units.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 2,

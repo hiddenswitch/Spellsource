@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "After this kills a minion, draw a card.",
+  "description": "After this kills a unit, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Gain +2 Health for each minion that died this turn.",
+  "description": "Opener: Gain +2 Health for each unit that died this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

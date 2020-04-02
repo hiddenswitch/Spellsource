@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Opener: If you played another Elemental this turn, deal 3 damage to all minions.",
+  "description": "Opener: If you played another Elemental this turn, deal 3 damage to all units.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {

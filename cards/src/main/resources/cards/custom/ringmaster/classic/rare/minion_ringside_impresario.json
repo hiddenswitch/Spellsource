@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "After you play a minion, add a copy of your Signature to your deck.",
+  "description": "After you play a unit, add a copy of your Signature to your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

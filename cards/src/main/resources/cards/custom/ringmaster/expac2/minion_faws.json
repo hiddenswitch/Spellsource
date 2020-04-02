@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "After you play a minion, transform it into a 4/4 Shark with Blitz and Lifedrain.",
+  "description": "After you play a unit, transform it into a 4/4 Shark with Blitz and Lifedrain.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

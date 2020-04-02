@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "Whenever this minion survives damage, summon a 1/1 Skeleton.",
+  "description": "Whenever this unit survives damage, summon a 1/1 Skeleton.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

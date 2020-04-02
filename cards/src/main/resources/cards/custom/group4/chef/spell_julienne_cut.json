@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Destroy a minion. Summon two 1/1 copies of it to replace it.",
+  "description": "Destroy a unit. Summon two 1/1 copies of it to replace it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.DestroyAndSummonInPlaceSpell",

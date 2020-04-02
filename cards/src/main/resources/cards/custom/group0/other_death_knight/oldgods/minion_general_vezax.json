@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Guard. Whenever this minion takes damage, switch between Extra Strike, Lifesteal, and Guard.",
+  "description": "Guard. Whenever this unit takes damage, switch between Extra Strike, Lifesteal, and Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

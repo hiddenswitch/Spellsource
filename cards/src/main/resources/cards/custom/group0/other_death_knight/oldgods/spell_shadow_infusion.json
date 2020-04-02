@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Give a minion \"Aftermath: Summon 2 copies of this.\"",
+  "description": "Give a unit \"Aftermath: Summon 2 copies of this.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

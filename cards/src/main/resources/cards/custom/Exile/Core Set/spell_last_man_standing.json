@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "EPIC",
-  "description": "Destroy all minions. Set your remaining Health to 15.",
+  "description": "Destroy all units. Set your remaining Health to 15.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

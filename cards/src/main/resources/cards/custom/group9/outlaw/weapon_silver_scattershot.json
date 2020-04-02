@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Opener: Deal 1 damage to all enemy minions.",
+  "description": "Opener: Deal 1 damage to all enemy units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

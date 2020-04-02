@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If your deck has no duplicates, minions you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
+  "description": "Opener: If your deck has no duplicates, units you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "RARE",
-  "description": "Silence all enemy minions. Give them -2 Attack until your next turn.",
+  "description": "Silence all enemy units. Give them -2 Attack until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

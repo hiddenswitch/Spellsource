@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLUEGREY",
   "rarity": "FREE",
-  "description": "Minions you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
+  "description": "Units you play have \"Aftermath: Summon as 2/2 Lesser Oni\" this game.",
   "triggers": [
     {
       "eventTrigger": {

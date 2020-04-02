@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Give a Hidden minion +2 Attack and Dodge.",
+  "description": "Opener: Give a Hidden unit +2 Attack and Dodge.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

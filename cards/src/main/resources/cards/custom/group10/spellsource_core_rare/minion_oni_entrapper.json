@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "After an enemy minion attacks a Guard minion, destroy the attacker.",
+  "description": "After an enemy unit attacks a Guard unit, destroy the attacker.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "RARE",
-  "description": "Choose an enemy minion. It attacks another random minion.",
+  "description": "Choose an enemy unit. It attacks another random unit.",
   "targetSelection": "ENEMY_MINIONS",
   "condition": {
     "class": "MinionCountCondition",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Give a minion +1/+1. Deal $1 damage to ALL other minions.",
+  "description": "Give a unit +1/+1. Deal $1 damage to ALL other units.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

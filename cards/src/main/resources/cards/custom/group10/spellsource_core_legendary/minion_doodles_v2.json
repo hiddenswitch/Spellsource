@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your Skill becomes \"Draw a Card\" until you play a minion.",
+  "description": "Opener: Your Skill becomes \"Draw a Card\" until you play a unit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

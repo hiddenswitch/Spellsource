@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Shuffle a minion into its owner's deck. At the end of their turn, they draw it.",
+  "description": "Shuffle a unit into its owner's deck. At the end of their turn, they draw it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",

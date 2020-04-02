@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Stun any character damaged by this minion.",
+  "description": "Stun any character damaged by this unit.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

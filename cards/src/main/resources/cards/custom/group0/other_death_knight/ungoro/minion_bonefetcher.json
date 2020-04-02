@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Gain the text of a random minion that was shuffled into your deck.",
+  "description": "Opener: Gain the text of a random unit that was shuffled into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

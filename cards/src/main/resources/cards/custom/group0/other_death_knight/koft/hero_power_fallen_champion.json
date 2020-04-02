@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Summon an enemy minion that died this turn.",
+  "description": "Summon an enemy unit that died this turn.",
   "condition": {
     "class": "ComparisonCondition",
     "operation": "GREATER",

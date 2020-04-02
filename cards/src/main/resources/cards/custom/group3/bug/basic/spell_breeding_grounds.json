@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Summon two copies of a minion.",
+  "description": "Summon two copies of a unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

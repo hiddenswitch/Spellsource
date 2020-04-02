@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Guard. Opener: Force an enemy minion to attack this.",
+  "description": "Guard. Opener: Force an enemy unit to attack this.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

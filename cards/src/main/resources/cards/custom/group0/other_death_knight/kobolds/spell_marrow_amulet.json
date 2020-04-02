@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Give your minions +1 Health. Draw a card.",
+  "description": "Give your units +1 Health. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

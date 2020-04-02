@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Deal $3 damage to a minion. If that kills it, Soulbind.",
+  "description": "Deal $3 damage to a unit. If that kills it, Soulbind.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

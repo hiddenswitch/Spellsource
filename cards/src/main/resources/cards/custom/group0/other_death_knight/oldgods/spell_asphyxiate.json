@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Silence a minion. At the start of your turn, destroy it.",
+  "description": "Silence a unit. At the start of your turn, destroy it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Deal $[5] damage. Give your minions +[2] Health.",
+  "description": "Deal $[5] damage. Give your units +[2] Health.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

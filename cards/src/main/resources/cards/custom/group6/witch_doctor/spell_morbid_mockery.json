@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Draw an Aftermath minion from your deck. Give it Guard.",
+  "description": "Draw an Aftermath unit from your deck. Give it Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",

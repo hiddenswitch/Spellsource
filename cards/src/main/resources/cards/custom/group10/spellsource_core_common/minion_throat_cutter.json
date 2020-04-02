@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Silence a minion and deal 1 damage to it.",
+  "description": "Opener: Silence a unit and deal 1 damage to it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

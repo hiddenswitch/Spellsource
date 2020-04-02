@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "At the end of your turn, draw a card for each enemy minion that died this turn.",
+  "description": "At the end of your turn, draw a card for each enemy unit that died this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

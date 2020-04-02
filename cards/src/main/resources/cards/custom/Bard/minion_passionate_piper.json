@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Deal 1 damage to a minion for every other friendly minion.",
+  "description": "Opener: Deal 1 damage to a unit for every other friendly unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

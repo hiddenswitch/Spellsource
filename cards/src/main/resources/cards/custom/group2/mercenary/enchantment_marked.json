@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Marked minions will always be the target of Scatter Shot",
+  "description": "Marked units will always be the target of Scatter Shot",
   "attributes": {},
   "collectible": false,
   "set": "CUSTOM",

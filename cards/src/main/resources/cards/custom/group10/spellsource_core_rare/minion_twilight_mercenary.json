@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Hidden. Opener: Choose a minion. At the start of your turn, destroy it.",
+  "description": "Hidden. Opener: Choose a unit. At the start of your turn, destroy it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

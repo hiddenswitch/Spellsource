@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Give a minion +2 Health for each card in your hand.",
+  "description": "Give a unit +2 Health for each card in your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Give a random friendly and random enemy minion +3/+3.",
+  "description": "Give a random friendly and random enemy unit +3/+3.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

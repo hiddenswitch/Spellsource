@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Aftermath: If you control another Dragon, return this minion to your hand.",
+  "description": "Aftermath: If you control another Dragon, return this unit to your hand.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

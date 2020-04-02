@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
-  "description": "Give a minion +10 Health. Swap its Health with your champion's health.",
+  "description": "Give a unit +10 Health. Swap its Health with your champion's health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

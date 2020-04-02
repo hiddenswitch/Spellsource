@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Whenever you use your Skill, Transform a random friendly minion into a Bogtoe Challenger.",
+  "description": "Whenever you use your Skill, Transform a random friendly unit into a Bogtoe Challenger.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "PIRATE",
-  "description": "Whenever an enemy minion dies, summon a 1/1 Pirate.",
+  "description": "Whenever an enemy unit dies, summon a 1/1 Pirate.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

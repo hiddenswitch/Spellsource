@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Choose a minion. Force a random enemy minion to attack it.",
+  "description": "Choose a unit. Force a random enemy unit to attack it.",
   "condition": {
     "class": "AndCondition",
     "conditions": [

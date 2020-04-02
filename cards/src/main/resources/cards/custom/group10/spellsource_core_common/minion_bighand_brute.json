@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Deal [0] damage to a minion. (Increases for each other card in your hand)",
+  "description": "Opener: Deal [0] damage to a unit. (Increases for each other card in your hand)",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

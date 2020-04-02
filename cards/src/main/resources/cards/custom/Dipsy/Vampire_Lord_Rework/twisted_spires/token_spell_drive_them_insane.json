@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "FREE",
-  "description": "All their minions attack other random enemies.",
+  "description": "All their units attack other random enemies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DuelSpell",

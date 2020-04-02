@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "SPIRIT",
-  "description": "Guard. Opener: Summon 2 copies of this minion.",
+  "description": "Guard. Opener: Summon 2 copies of this unit.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

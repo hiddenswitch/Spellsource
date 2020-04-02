@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, destroy a minion with 5 or more Attack.",
+  "description": "Opener: If you're holding a Dragon, destroy a unit with 5 or more Attack.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

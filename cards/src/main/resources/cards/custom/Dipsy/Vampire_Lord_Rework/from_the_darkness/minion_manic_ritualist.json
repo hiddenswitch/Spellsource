@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Resurrect the last friendly minion that died this game. Set its remaining Health to 1.",
+  "description": "Opener: Resurrect the last friendly unit that died this game. Set its remaining Health to 1.",
   "battlecry": {
 	"condition": {
 	  "class": "ComparisonCondition",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Destroy an enemy minion. Add a Lunstone to your hand.",
+  "description": "Destroy an enemy unit. Add a Lunstone to your hand.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",

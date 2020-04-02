@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give a random minion in your hand +1/+1.",
+  "description": "Give a random unit in your hand +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

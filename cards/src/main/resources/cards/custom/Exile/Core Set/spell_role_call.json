@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "RARE",
-  "description": "Add 2 random Opener minions to your hand.",
+  "description": "Add 2 random Opener units to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",

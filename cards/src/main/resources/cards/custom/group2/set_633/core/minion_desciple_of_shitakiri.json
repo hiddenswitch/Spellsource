@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Whenever a friendly minion Deflects, gain +2 Attack.",
+  "description": "Whenever a friendly unit Deflects, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDeflectTrigger",

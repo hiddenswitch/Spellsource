@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Summon three 1/1 Whelps. Give your minions +1/+1.",
+  "description": "Summon three 1/1 Whelps. Give your units +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

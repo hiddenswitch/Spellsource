@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Choose a friendly minion. Deal its Attack to all enemy minions.",
+  "description": "Choose a friendly unit. Deal its Attack to all enemy units.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "DamageSpell",

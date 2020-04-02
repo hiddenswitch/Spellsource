@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Aftermath: Give your other minions +1 Health and this Aftermath.",
+  "description": "Aftermath: Give your other units +1 Health and this Aftermath.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

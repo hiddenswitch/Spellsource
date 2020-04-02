@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Aftermath: Add a random minion that died this game to your hand.",
+  "description": "Aftermath: Add a random unit that died this game to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cardFilter": {

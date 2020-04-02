@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Silence all minions that cost (3) or less.",
+  "description": "Opener: Silence all units that cost (3) or less.",
   "battlecry": {
     "spell": {
       "class": "SilenceSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "After this kills a minion, attack a random enemy.",
+  "description": "After this kills a unit, attack a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

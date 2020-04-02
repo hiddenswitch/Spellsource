@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "FREE",
-  "description": "Destroy a minion. Gain 6 Armor.",
+  "description": "Destroy a unit. Gain 6 Armor.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

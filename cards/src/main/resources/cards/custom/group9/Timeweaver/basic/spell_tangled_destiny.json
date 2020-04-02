@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Add a random friendly minion that died this game to your hand.",
+  "description": "Add a random friendly unit that died this game to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "After another minion takes non-Drain damage, Drain 2 Health from it.",
+  "description": "After another unit takes non-Drain damage, Drain 2 Health from it.",
   "trigger": {
     "eventTrigger": {
       "class": "NonDrainDamageReceivedTrigger",

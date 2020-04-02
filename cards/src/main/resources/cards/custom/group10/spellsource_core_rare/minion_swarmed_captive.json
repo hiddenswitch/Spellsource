@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Whenever you play a 1-Cost minion, gain 2 Armor.",
+  "description": "Whenever you play a 1-Cost unit, gain 2 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "BeforeMinionPlayedTrigger",

@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "+2/+2 and \"<b>Aftermath:</b> Give your Infection to another random friendly minion.\"",
+  "description": "+2/+2 and \"<b>Aftermath:</b> Give your Infection to another random friendly unit.\"",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",

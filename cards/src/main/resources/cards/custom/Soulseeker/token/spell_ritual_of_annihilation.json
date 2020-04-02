@@ -4,12 +4,12 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Destroy an enemy minion and [X random enemy minions].",
+  "description": "Destroy an enemy unit and [X random enemy units].",
   "dynamicDescription": [
     {
       "class": "PluralDescription",
-      "description1": " random enemy minion",
-      "description2": " random enemy minions",
+      "description1": " random enemy unit",
+      "description2": " random enemy units",
       "value": {
         "class": "AttributeValueProvider",
         "attribute": "RESERVED_INTEGER_1",

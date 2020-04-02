@@ -6,7 +6,7 @@
   "baseHp": 6,
   "heroClass": "CRIMSON",
   "rarity": "LEGENDARY",
-  "description": "Dash. Opener: Shuffle 3 Drains into your deck. Whenever this minion deals damage, gain that much Armor.",
+  "description": "Dash. Opener: Shuffle 3 Drains into your deck. Whenever this unit deals damage, gain that much Armor.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

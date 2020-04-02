@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
-  "description": "Choose a minion. Summon seven 2/1 Bats to attack it.",
+  "description": "Choose a unit. Summon seven 2/1 Bats to attack it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "SummonSpell",

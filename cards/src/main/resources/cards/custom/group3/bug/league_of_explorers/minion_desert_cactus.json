@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Damage dealt to this minion is also dealt to attackers.",
+  "description": "Damage dealt to this unit is also dealt to attackers.",
   "triggers": [
     {
       "eventTrigger": {

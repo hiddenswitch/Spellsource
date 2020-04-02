@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "RARE",
-  "description": "Return a friendly minion to your hand. If it's a Spirit, it costs (3) less.",
+  "description": "Return a friendly unit to your hand. If it's a Spirit, it costs (3) less.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",

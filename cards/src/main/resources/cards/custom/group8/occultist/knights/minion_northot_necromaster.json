@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever a friendly minion dies, summon a Tentacle with its Attack and Health. (Up to 7)",
+  "description": "Whenever a friendly unit dies, summon a Tentacle with its Attack and Health. (Up to 7)",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

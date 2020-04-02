@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Spellpower +3. Aftermath: Give a random friendly minion +7/+7 and Spellpower +3.",
+  "description": "Spellpower +3. Aftermath: Give a random friendly unit +7/+7 and Spellpower +3.",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",

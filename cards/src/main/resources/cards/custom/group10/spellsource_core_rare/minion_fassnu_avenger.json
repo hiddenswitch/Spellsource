@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Whenever a minion dies, gain its Aftermath.",
+  "description": "Whenever a unit dies, gain its Aftermath.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

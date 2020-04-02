@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "After you target another friendly minion with a spell, summon a copy of it with Guard.",
+  "description": "After you target another friendly unit with a spell, summon a copy of it with Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

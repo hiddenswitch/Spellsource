@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Choose a minion. Summon a 1/1 Larva to attack it.",
+  "description": "Choose a unit. Summon a 1/1 Larva to attack it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SummonSpell",

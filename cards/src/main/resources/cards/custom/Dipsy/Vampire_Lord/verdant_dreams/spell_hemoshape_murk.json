@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Take 3 damage. Give your minions Hidden for a turn.",
+  "description": "Take 3 damage. Give your units Hidden for a turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

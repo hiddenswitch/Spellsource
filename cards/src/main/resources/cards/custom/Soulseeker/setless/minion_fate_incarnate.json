@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "SPIRIT",
-  "description": "Opener and Aftermath: Destroy two random enemy minions.",
+  "description": "Opener and Aftermath: Destroy two random enemy units.",
   "battlecry": {
     "spell": {
       "class": "MultiTargetSpell",

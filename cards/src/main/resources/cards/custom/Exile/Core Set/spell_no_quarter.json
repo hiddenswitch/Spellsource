@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "EPIC",
-  "description": "Destroy a minion. Costs (1) less for each minion that died this turn.",
+  "description": "Destroy a unit. Costs (1) less for each unit that died this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DestroySpell"

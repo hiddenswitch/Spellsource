@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Destroy a minion that costs (5) or more.",
+  "description": "Destroy a unit that costs (5) or more.",
   "condition": {
     "class": "AnyMatchFilterCondition",
     "target": "ALL_MINIONS",

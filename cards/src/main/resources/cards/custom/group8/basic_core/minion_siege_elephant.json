@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Whenever this minion takes damage, gain 2 Armor.",
+  "description": "Whenever this unit takes damage, gain 2 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "This turn, each time a friendly minion attacks, summon a random minion from your hand and give it Dash.",
+  "description": "This turn, each time a friendly unit attacks, summon a random unit from your hand and give it Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

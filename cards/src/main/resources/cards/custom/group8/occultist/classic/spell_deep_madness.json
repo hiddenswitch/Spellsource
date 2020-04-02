@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Give an enemy minion +10/+10. Draw 10 cards.",
+  "description": "Give an enemy unit +10/+10. Draw 10 cards.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

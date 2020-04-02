@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "RARE",
-  "description": "Give a minion \"Aftermath: Resummon this minion for your opponent.\"",
+  "description": "Give a unit \"Aftermath: Resummon this unit for your opponent.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

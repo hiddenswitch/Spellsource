@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "FREE",
-  "description": "Change a minion's Attack to 1. Draw a card.",
+  "description": "Change a unit's Attack to 1. Draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

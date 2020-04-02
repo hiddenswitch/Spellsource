@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Supremacy: Restore this minion to full Health.",
+  "description": "Supremacy: Restore this unit to full Health.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

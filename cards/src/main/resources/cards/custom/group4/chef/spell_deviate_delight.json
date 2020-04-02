@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Transform a minion into a 3/2 minion with either Blitz or Hidden (at random).",
+  "description": "Transform a unit into a 3/2 unit with either Blitz or Hidden (at random).",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "TransformToRandomMinionSpell",

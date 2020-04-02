@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "FREE",
-  "description": "Give all enemy minions -4 Attack until your next turn.",
+  "description": "Give all enemy units -4 Attack until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ModifyAttributeSpell",

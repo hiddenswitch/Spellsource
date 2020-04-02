@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Destroy all minions.",
+  "description": "Destroy all units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",

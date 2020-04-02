@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Give a minion +1/+7.",
+  "description": "Give a unit +1/+7.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

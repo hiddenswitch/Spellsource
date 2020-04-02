@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal $3 damage to a minion. Take $3 damage.",
+  "description": "Deal $3 damage to a unit. Take $3 damage.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

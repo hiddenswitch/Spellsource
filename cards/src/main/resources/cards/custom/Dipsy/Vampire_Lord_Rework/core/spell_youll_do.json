@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Restroy a friendly minion. Restore its Health to your champion and gain that much Attack this turn.",
+  "description": "Restroy a friendly unit. Restore its Health to your champion and gain that much Attack this turn.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

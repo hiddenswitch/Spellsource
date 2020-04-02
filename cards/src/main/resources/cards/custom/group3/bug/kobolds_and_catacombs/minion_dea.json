@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Add a copy of a minion to your hand. Set its stats and Cost to 0.",
+  "description": "Opener: Add a copy of a unit to your hand. Set its stats and Cost to 0.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

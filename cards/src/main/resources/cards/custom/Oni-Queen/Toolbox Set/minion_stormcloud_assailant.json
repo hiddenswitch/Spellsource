@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Hidden. Opener: If you have another Hidden minion, summon a copy of this.",
+  "description": "Hidden. Opener: If you have another Hidden unit, summon a copy of this.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

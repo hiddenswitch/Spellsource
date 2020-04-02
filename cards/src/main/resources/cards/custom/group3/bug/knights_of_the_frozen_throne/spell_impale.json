@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Choose a minion. It deals its damage to the minions opposite it.",
+  "description": "Choose a unit. It deals its damage to the units opposite it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.DamageOppositeMinionsSpell"

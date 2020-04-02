@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "race": "DEMON",
-  "description": "Dash. Guard. Whenever your turn ends, swap this minion's Attack and Health.",
+  "description": "Dash. Guard. Whenever your turn ends, swap this unit's Attack and Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
