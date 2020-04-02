@@ -24,8 +24,8 @@
       "spell": {
         "class": "SummonSpell",
         "cards": [
-          "token_captiveGuard_overlord",
-          "token_captiveGuard_overlord"
+          "token_captiveguard_overlord",
+          "token_captiveguard_overlord"
         ]
       }
     }

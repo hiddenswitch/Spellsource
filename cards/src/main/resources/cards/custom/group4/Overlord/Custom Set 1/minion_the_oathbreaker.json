@@ -29,7 +29,9 @@
             "value": 0,
             "cardType": "SPELL",
             "expirationTrigger": {
-              "class": "PactPlayedTrigger"
+              "class": "CardPlayedTrigger",
+              "targetPlayer": "SELF",
+              "requiredAttribute": "PACT"
             },
             "operation": "SET",
             "requiredAttribute": "PACT"

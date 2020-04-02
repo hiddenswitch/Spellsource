@@ -3,6 +3,8 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -39,6 +41,47 @@ public class OverlordTests extends TestBase {
 			playCard(context, player, "minion_debt_collector");
 			Quest pact = (Quest) context.getTriggerManager().getTriggers().get(0);
 			assertNotEquals("minion_debt_collector", pact.getSourceCard().getCardId());
+    });
+	}
+  
+	@Test
+	public void testDestroyTheStrong() {
+		runGym((context, player, opponent) -> {
+			Minion captive = playMinionCard(context, player, "token_captiveguard_overlord");
+			playCard(context, player, "spell_destroy_the_strong");
+			assertFalse(captive.isDestroyed());
+			destroy(context, captive);
+			assertEquals(1, player.getMinions().size());
+			playCard(context, player, "spell_destroy_the_strong");
+			assertEquals(1, player.getMinions().size());
+		});
+	}
+  
+	@Test
+	public void testTheOathbreaker() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_the_oathbreaker");
+			player.setMana(4);
+			playCard(context, player, "pact_extraction");
+			playCard(context, player, "pact_nothing_to_waste");
+			assertEquals(2, player.getMana());
+		});
+	}
+
+	@Test
+	public void testCovensDebt() {
+		CardList crimsonCards = CardCatalogue.query(DeckFormat.spellsource(), "CRIMSON");
+		crimsonCards.stream()
+				.filter(card -> card.getCardId().startsWith("pact_"))
+				.filter(card -> !card.getCardId().equals("pact_binding_nightmare")).forEach(pact -> {
+			runGym((context, player, opponent) -> {
+				for (int i = 0; i < 3; i++) {
+					shuffleToDeck(context, player, "minion_neutral_test");
+				}
+				playCard(context, player, "pact_binding_nightmare");
+				playCard(context, player, pact);
+				assertEquals(player.getDeck().size(), 0);
+			});
 		});
 	}
 }
