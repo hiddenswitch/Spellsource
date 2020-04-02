@@ -4,6 +4,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.minions.Minion;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,6 +66,15 @@ public class ArchaeologistTests extends TestBase {
 				return discoverActions.get(0);
 			});
 			playCard(context, opponent, "minion_shady_stranger");
+		});
+	}
+
+	@Test
+	public void testDynoblow() {
+		runGym((context, player, opponent) -> {
+			Minion testMinion = playMinionCard(context, opponent, "minion_neutral_test");
+			playCard(context, player, "spell_dynoblow");
+			assertEquals(testMinion.getBaseHp() - 8, testMinion.getHp()); //only was damaged the first time
 		});
 	}
 }
