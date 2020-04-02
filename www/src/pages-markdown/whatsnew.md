@@ -6,7 +6,7 @@ header: true
 ---
 
 ### Upcoming Changes
- - Draconic Doubler is now correctly an Oni-Queen card.
+ - Draconic Doubler is now correctly an Oni-Queen card. (1638)
 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
