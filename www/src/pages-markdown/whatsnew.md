@@ -6,7 +6,7 @@ header: true
 ---
 
 ### Upcoming Changes
- - Obsigon, Bounty Sorcerer has been renamed to Battlemage Zhou
+ - Obsigon, Bounty Sorcerer has been renamed to Battlemage Zhou (1634)
 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
