@@ -1,0 +1,22 @@
+ 
+{
+  "name": "Shovel Skoppu",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Deathrattle: Summon Skoppu.",
+  "deathrattle": {
+  "class": "SummonSpell",
+      "card": "minion_skoppu_the_shovelbot"
+    },
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
