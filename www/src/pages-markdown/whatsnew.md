@@ -7,6 +7,7 @@ header: true
 
 ### Upcoming Changes
 
+ - Draconic Doubler is now correctly an Oni-Queen card. (1638)
  - Obsigon, Bounty Sorcerer has been renamed to Battlemage Zhou (1634)
  - Pacts played by Debt Collector are now correctly displayed. (1615)
  - Overlord's Destroy the Strong now properly doesn't damage Underlings, and multiple cards should now better recognize Captives with Guard. (1614)

@@ -2,7 +2,7 @@
   "name": "Draconic Doubler",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "BLUEGREY",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
