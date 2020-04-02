@@ -13,7 +13,8 @@
       "class": "DiscoverSpell",
       "spell": {
         "class": "CastCardsSpell",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "exclusive": true
       },
       "cardFilter": {
         "class": "AttributeFilter",

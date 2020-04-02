@@ -6,7 +6,12 @@ header: true
 ---
 
 ### Upcoming Changes
+
  - Obsigon, Bounty Sorcerer has been renamed to Battlemage Zhou (1634)
+ - Pacts played by Debt Collector are now correctly displayed. (1615)
+ - Overlord's Destroy the Strong now properly doesn't damage Underlings, and multiple cards should now better recognize Captives with Guard. (1614)
+ - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
+ - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
