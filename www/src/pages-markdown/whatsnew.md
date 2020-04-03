@@ -97,6 +97,7 @@ Exile has been renamed to Rebel.
  - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
  - Herald of Fate no longer just gives you double openers forever. (1577)
+ - Spirit Saber now always shows you the exact card that had the aftermath when it triggered, even if it was transformed later. (1657)
 
 ### 0.8.70-3.1.1 (March 27, 2020)
 

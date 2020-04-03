@@ -20,13 +20,20 @@ public class AftermathsCardSource extends CardSource {
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		return context.getAftermaths().getAftermaths()
+		/*context.getAftermaths().getAftermaths()
 				.stream()
 				.filter(aftermath -> aftermath.getPlayerId() == player.getId())
 				.map(aftermath -> context.resolveSingleTarget(aftermath.getSource(), false))
 				.filter(Objects::nonNull)
 				.map(Entity::getSourceCard)
 				.filter(Objects::nonNull)
+				.collect(Collectors.toCollection(CardArrayList::new));*/
+		return context.getAftermaths().getAftermaths()
+				.stream()
+				.filter(aftermath -> aftermath.getPlayerId() == player.getId())
+				.map(aftermath -> aftermath.getCardId())
+				.filter(Objects::nonNull)
+				.map(context::getCardById)
 				.collect(Collectors.toCollection(CardArrayList::new));
 	}
 }
