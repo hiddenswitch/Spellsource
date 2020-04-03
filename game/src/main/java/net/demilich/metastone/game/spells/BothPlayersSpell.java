@@ -35,7 +35,7 @@ public final class BothPlayersSpell extends MetaSpell {
 			// We're going to use a null source action because the opposing player is not actually performing an action. This
 			// prevents the opponent's target override effects from affecting how their point of view is cast.
 			targets = context.getLogic().resolveTarget(player, source, spellTarget, desc, null).getTargets();
-			super.cast(context, context.getOpponent(player), desc, source, targets);
+			super.cast(context, player, desc, source, targets);
 		}
 	}
 }

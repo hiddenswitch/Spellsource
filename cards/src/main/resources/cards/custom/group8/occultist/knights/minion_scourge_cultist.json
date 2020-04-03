@@ -1,10 +1,10 @@
 {
-  "name": "Scourge Cultist",
+  "name": "Hastur's Acolyte",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 2,
-  "baseHp": 3,
+  "baseHp": 2,
   "rarity": "COMMON",
   "description": "Opener: If a friendly minion died this turn, summon two 1/1 Tentacles with Guard.",
   "battlecry": {
@@ -50,9 +50,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "KNIGHTS_OF_THE_FROZEN_THRONE"
-  ],
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -783,7 +783,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
-		var targetResolution = resolveTarget(player,source,spellTarget,spellDesc,sourceAction);
+		var targetResolution = resolveTarget(player, source, spellTarget, spellDesc, sourceAction);
 		if (targetResolution.isOverridden()) {
 			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 		}
@@ -4943,6 +4943,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));
 	}
 
+	/**
+	 * Indicates that the specified played discovered a card.
+	 *
+	 * @param playerId
+	 */
 	@Suspendable
 	public void discoverCard(int playerId) {
 		// Similar to above, we will just fire an event for now.

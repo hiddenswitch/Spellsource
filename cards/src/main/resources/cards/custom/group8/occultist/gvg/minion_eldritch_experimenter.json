@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 1,
-  "baseHp": 4,
+  "baseHp": 3,
   "rarity": "RARE",
   "description": "Whenever this minion takes damage, give another random friendly minion +1/+1",
   "trigger": {
@@ -22,8 +22,5 @@
   },
   "collectible": true,
   "fileFormatVersion": 1,
-  "sets": [
-    "CUSTOM",
-    "GOBLINS_VS_GNOMES"
-  ]
+  "set": "CUSTOM"
 }

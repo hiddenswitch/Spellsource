@@ -37,7 +37,6 @@ import java.util.Map;
  *     }
  *   }
  * </pre>
- *
  */
 public final class CastCardsSpell extends Spell {
 

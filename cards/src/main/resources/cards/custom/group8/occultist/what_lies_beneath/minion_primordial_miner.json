@@ -29,6 +29,9 @@
       "attribute": "ARTIFACT"
     }
   },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
   "sets": [
     "CUSTOM",
     "WHAT_LIES_BENEATH"

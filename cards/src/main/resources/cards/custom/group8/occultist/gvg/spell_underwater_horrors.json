@@ -1,6 +1,6 @@
 {
   "name": "Underwater Horrors",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
