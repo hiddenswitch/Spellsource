@@ -13,6 +13,7 @@ header: true
  - Overlord's Destroy the Strong now properly doesn't damage Underlings, and multiple cards should now better recognize Captives with Guard. (1614)
  - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
  - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
+ - Archaeologist's Taletellers now correctly looks for minions played this turn, not minions that were played and killed this turn. (1652)
 
 ### 0.8.71-3.1.1 (March 28, 2020)
 

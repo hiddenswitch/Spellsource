@@ -23,7 +23,7 @@
         "operation": "EQUAL"
       },
       "cardSource": {
-        "class": "GraveyardActorsSource",
+        "class": "GraveyardCardsSource",
         "targetPlayer": "SELF"
       }
     }
