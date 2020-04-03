@@ -1,6 +1,6 @@
 {
   "name": "Kahl of the Deep",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 3,
@@ -32,8 +32,5 @@
   },
   "collectible": true,
   "fileFormatVersion": 1,
-  "sets": [
-    "CUSTOM",
-    "GOBLINS_VS_GNOMES"
-  ]
+  "set": "CUSTOM"
 }

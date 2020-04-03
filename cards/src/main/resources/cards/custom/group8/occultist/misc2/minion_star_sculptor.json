@@ -1,6 +1,6 @@
 {
-  "name": "Star Sculptor",
-  "baseManaCost": 4,
+  "name": "Idol Sculptor",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 3,
@@ -8,7 +8,7 @@
   "rarity": "COMMON",
   "description": "Opener: Summon a copy of a friendly minion. It has Guard and can't attack.",
   "battlecry": {
-    "targetSelection": "MINIONS",
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",

@@ -212,6 +212,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private TargetLogic targetLogic = new TargetLogic();
 	private TriggerManager triggerManager = new TriggerManager();
 	private Map<Environment, Object> environment = new HashMap<>();
+	private Map<String, AtomicInteger> variables = new HashMap<>();
 	private int activePlayerId = -1;
 	private Player winner;
 	private GameStatus result;
@@ -277,6 +278,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				EnvironmentValue value = (EnvironmentValue) value1;
 				getEnvironment().put(entry.getKey(), value.getCopy());
 			}
+		}
+
+		variables = new HashMap<>();
+		for (var kv : fromContext.variables.entrySet()) {
+			variables.put(kv.getKey(), new AtomicInteger(kv.getValue().intValue()));
 		}
 	}
 
@@ -1050,9 +1056,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param targetKey The reference to find.
 	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
-	 * 		reference was {@code null} or {@link EntityReference#NONE}
+	 * reference was {@code null} or {@link EntityReference#NONE}
 	 * @throws TargetNotFoundException if the reference could not be found. Game rules shouldn't be looking for references
-	 *                              that cannot be found.
+	 *                                 that cannot be found.
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
 		return resolveSingleTarget(targetKey, true);
@@ -2023,5 +2029,56 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext setSpanContext(SpanContext spanContext) {
 		this.spanContext = spanContext;
 		return this;
+	}
+
+	/**
+	 * Returns a reference to the variables stored in the game context, used by spells to maintain correct space when a
+	 * strand currently being executed is cloned.
+	 *
+	 * @return
+	 */
+	public Map<String, AtomicInteger> getVariables() {
+		return variables;
+	}
+
+	/**
+	 * Creates an integer value in the context's cloneable storage.
+	 *
+	 * @param name
+	 * @param initialValue
+	 */
+	public void createInt(String name, int initialValue) {
+		variables.put(name, new AtomicInteger(initialValue));
+	}
+
+	/**
+	 * Adds the delta value and returns the new value of the named integer from the context's cloneable storage.
+	 *
+	 * @param name
+	 * @param delta
+	 * @return
+	 */
+	public int addAndGetInt(String name, int delta) {
+		return variables.get(name).addAndGet(delta);
+	}
+
+	/**
+	 * Gets the value of the named integer in the context's cloneable storage.
+	 *
+	 * @param name
+	 * @return
+	 */
+	public int getInt(String name) {
+		return variables.get(name).get();
+	}
+
+	/**
+	 * Removes the specified integer from the context's cloneable storage.
+	 *
+	 * @param name
+	 * @return
+	 */
+	public int removeInt(String name) {
+		return variables.remove(name).get();
 	}
 }
