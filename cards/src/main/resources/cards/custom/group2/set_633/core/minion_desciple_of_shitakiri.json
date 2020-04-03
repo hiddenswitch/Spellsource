@@ -22,7 +22,7 @@
       "attackBonus": 2
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

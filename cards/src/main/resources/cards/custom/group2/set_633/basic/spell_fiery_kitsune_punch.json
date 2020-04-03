@@ -11,7 +11,7 @@
     "target": "ENEMY_HERO",
     "value": 7
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
