@@ -101,13 +101,14 @@ public class TraceTests extends TestBase {
 	 */
 	@RepeatedTest(1000)
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
-		assertTimeoutPreemptively(Duration.ofMillis(4200), () -> {
+		assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
 			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
 			assertEquals(context1.getTurn(), context2.getTurn());
-		});
+			return null;
+		}, "timeout");
 	}
 
 	@ParameterizedTest
@@ -116,9 +117,16 @@ public class TraceTests extends TestBase {
 		if ("ignore".equals(trace.getId())) {
 			return;
 		}
-		GameContext context = trace.replayContext(false, null);
+
+		TestBase.assertTimeoutPreemptively(Duration.ofMillis(3200), () -> {
+			trace.replayContext(false, null);
+			return null;
+		}, "timeout");
 	}
 
+	/**
+	 * This test can be used to find source cards that cause issues in game reproducibility.
+	 */
 	@Test
 	@Disabled("diagnostic only")
 	public void testDiagnoseTraces() {
@@ -129,7 +137,7 @@ public class TraceTests extends TestBase {
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
 			if (context1.getTurn() != context2.getTurn()) {
-				LOGGER.info("trace failed");
+				LOGGER.info("A failed trace was observed, its cards will be added to a list of possibility problematic cards.");
 				cards.addAll(context1.getEntities().filter(e -> e.getEntityType().equals(EntityType.CARD) && e.hasAttribute(Attribute.STARTED_IN_DECK)
 						|| e.hasAttribute(Attribute.STARTED_IN_HAND)).map(Entity::getSourceCard).map(Card::getCardId).collect(toList()));
 
@@ -139,7 +147,7 @@ public class TraceTests extends TestBase {
 						var gameAction2 = context1.getTrace().getRawActions().get(j);
 						var gameAction3 = context2.getTrace().getRawActions().get(j - 1);
 						var gameAction4 = context2.getTrace().getRawActions().get(j);
-						LOGGER.info("diverging action: \n'{}' to '{}'\n'{}' to '{}'",
+						LOGGER.info("A diverging was observed between a game context and its trace:\nContext: \n'{}' to '{}'\nTrace:\n'{}' to '{}'",
 								gameAction1.getDescription(context1, 0),
 								gameAction2.getDescription(context1, 0),
 								gameAction3.getDescription(context2, 0),
@@ -152,6 +160,7 @@ public class TraceTests extends TestBase {
 		});
 		// Find the card which most frequently appear in the bad set
 		List<String> res = cards.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getCount(), e1.getCount())).map(Multiset.Entry::toString).collect(toList());
+		LOGGER.info("Cards which appeared in decks with reproducibility issues:");
 		LOGGER.info("{}", res);
 		if (!cards.isEmpty()) {
 			fail("Invalid trace");

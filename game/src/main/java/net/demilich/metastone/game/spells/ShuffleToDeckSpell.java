@@ -6,13 +6,14 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.ShuffledEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.ShuffledOnlyOriginalCopiesTrigger;
 import net.demilich.metastone.game.spells.trigger.ShuffledTrigger;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.AttributeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,8 @@ import java.util.Map;
  */
 public class ShuffleToDeckSpell extends Spell {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(ShuffleToDeckSpell.class);
+
 	public static SpellDesc create(String card) {
 		SpellDesc desc = new SpellDesc(ShuffleToDeckSpell.class);
 		desc.put(SpellArg.CARD, card);
@@ -61,7 +64,11 @@ public class ShuffleToDeckSpell extends Spell {
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
 			for (int i = 0; i < copies; i++) {
-				Card copy = shuffle(context, player, null, target.getSourceCard(), extraCopy, source.getOwner());
+				Card copy = shuffle(context, player, source, null, target.getSourceCard(), extraCopy, source.getOwner());
+				if (copy == null) {
+					LOGGER.warn("onCast {} {}: Failed to shuffle {}, deck size was {}", context.getGameId(), source, target, player.getDeck().size());
+					continue;
+				}
 				copy.getAttributes().putAll(map);
 				if (copy.getZone() == Zones.DECK) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
@@ -76,7 +83,7 @@ public class ShuffleToDeckSpell extends Spell {
 		Map<Card, Boolean> didShuffle = new HashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
-				Card copy = shuffle(context, player, null, original, extraCopy, source.getOwner());
+				Card copy = shuffle(context, player, source, null, original, extraCopy, source.getOwner());
 				didShuffle.put(copy, copy.getZone() == Zones.DECK);
 			}
 		}
@@ -89,8 +96,8 @@ public class ShuffleToDeckSpell extends Spell {
 	}
 
 	@Suspendable
-	protected Card shuffle(GameContext context, Player player, Entity targetEntity, Card targetCard, boolean extraCopy, int sourcePlayerId) {
-		return CopyCardSpell.copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, extraCopy, sourcePlayerId));
+	protected Card shuffle(GameContext context, Player player, Entity source, Entity targetEntity, Card targetCard, boolean extraCopy, int sourcePlayerId) {
+		return CopyCardSpell.copyCard(context, player, source, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, extraCopy, sourcePlayerId));
 	}
 }
 

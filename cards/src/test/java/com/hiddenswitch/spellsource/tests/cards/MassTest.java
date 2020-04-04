@@ -18,6 +18,9 @@ import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
+/**
+ * Performs fuzzing of game contexts for Spellsource.
+ */
 @Execution(ExecutionMode.CONCURRENT)
 public class MassTest extends TestBase {
 
@@ -27,13 +30,21 @@ public class MassTest extends TestBase {
 	private static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MassTest.class);
 
 	/**
-	 * Fuzzes the game by randomly playing random decks 1,000-10000}
+	 * Fuzzes the game by randomly playing decks 3,000 times.
+	 * <p>
+	 * The game is given a maximum of 4,200 milliseconds to execute.
 	 */
 	@RepeatedTest(value = 3000)
 	public void testRandomMassPlay() {
 		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {
-			assertTimeoutPreemptively(Duration.ofMillis(4200), (Executable) context::play);
+			assertTimeoutPreemptively(Duration.ofMillis(4200), () -> {
+						context.play();
+						return null;
+					},
+					"To diagnose this issue, the trace will be played back with a lower timeout and will throw again. In" +
+							" a debugger, examine the future.task object in the call stack of the test executor, and get its stack" +
+							" trace using getStackTrace(). This will show you where the game context is stuck.");
 		} catch (Throwable any) {
 			var trace = context.getTrace();
 			saveTraceWithException(trace, path1, path2);
@@ -41,6 +52,12 @@ public class MassTest extends TestBase {
 		}
 	}
 
+	/**
+	 * Saves a trace to a path, trying to find a path to a directory that exists before attempting to save there.
+	 *
+	 * @param trace
+	 * @param paths
+	 */
 	public static void saveTraceWithException(Trace trace, Path... paths) {
 		try {
 			if (paths.length == 0) {
