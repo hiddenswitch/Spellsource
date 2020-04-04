@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Choose a friendly minion. Add two copies of it to your hand with +3/+3.",
+  "description": "Choose an allied minion. Add two copies of it to your hand with +3/+3.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "CopyCardSpell",

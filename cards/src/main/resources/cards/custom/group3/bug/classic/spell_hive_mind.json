@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Choose a minion. Allied minions attack it.",
+  "description": "Choose a minion. All allied minions attack it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "FightSpell",

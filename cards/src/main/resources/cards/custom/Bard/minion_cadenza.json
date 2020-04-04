@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Dash. Has +1 Attack for each other friendly minion.",
+  "description": "Dash. Has +1 Attack for each other allied minion.",
   "aura": {
     "class": "StatefulAttributeValueAura",
     "target": "SELF",

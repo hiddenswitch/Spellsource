@@ -1,12 +1,12 @@
 {
-  "name": "Avolanche Acolyte",
+  "name": "Avalanche Acolyte",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "OBSIDIAN",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Freezes the minions next to whomever this attacks.",
+  "description": "Stuns the minions next to whomever this attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

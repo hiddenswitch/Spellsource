@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you use your Skill, Give your characters +1 Attack this turn.",
+  "description": "Whenever you use your Skill, Give all allies +1 Attack this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

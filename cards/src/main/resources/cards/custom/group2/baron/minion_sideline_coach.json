@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Whenever a friendly minion attacks, give it +1/+1.",
+  "description": "Whenever an allied minion attacks, give it +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.LoggerFactory;
@@ -13,8 +13,10 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class MassTest extends TestBase {
@@ -28,11 +30,10 @@ public class MassTest extends TestBase {
 	 * Fuzzes the game by randomly playing random decks 1,000-10000}
 	 */
 	@RepeatedTest(value = 3000)
-	@Timeout(value = 4200, unit = TimeUnit.MILLISECONDS)
 	public void testRandomMassPlay() {
 		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {
-			context.play();
+			assertTimeoutPreemptively(Duration.ofMillis(4200), (Executable) context::play);
 		} catch (Throwable any) {
 			var trace = context.getTrace();
 			saveTraceWithException(trace, path1, path2);

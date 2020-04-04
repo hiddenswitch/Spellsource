@@ -17,7 +17,10 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
@@ -26,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
@@ -34,10 +38,10 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TraceTests {
+@Execution(ExecutionMode.CONCURRENT)
+public class TraceTests extends TestBase {
 	private static Logger LOGGER = LoggerFactory.getLogger(TraceTests.class);
 
 	public static Object[][] getTraces() {
@@ -95,9 +99,9 @@ public class TraceTests {
 	 *   fields in {@link net.demilich.metastone.game.spells.Spell} classes.</li>
 	 * </ul>
 	 */
-	@Test
+	@RepeatedTest(1000)
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
-		IntStream.range(0, 1000).parallel().unordered().forEach(ignored -> {
+		assertTimeoutPreemptively(Duration.ofMillis(4200), () -> {
 			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
