@@ -1,0 +1,17 @@
+{
+  "name": "Eternal Tomb",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "EPIC",
+  "description": "Shuffle all minions into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleMinionToDeckSpell",
+    "target": "ALL_MINIONS",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

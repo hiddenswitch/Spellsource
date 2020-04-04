@@ -4,14 +4,33 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "RARE",
-  "description": "Summon two 4/6 Elementals with <b>Guard<b>.",
+  "description": "Summon two 4/6 Elementals with <b>Guard<b>. If your deck is empty, summon four.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "EQUAL",
+      "value1": 0,
+      "value2": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_DECK"
+      }
+    },
+    "spell1": {
+     "class": "SummonSpell",
     "cards": [
       "minion_shielding_smasher",
       "minion_shielding_smasher"
     ]
+    },
+    "spell2": {
+      "class": "SummonSpell",
+    "cards": [
+      "minion_shielding_smasher",
+      "minion_shielding_smasher"
+    ]
+    }
   },
   "sets": [
     "CUSTOM",

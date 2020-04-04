@@ -1,0 +1,27 @@
+{
+  "name": "Blast Apart",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "EPIC",
+  "description": "Destroy an enemy minion. Deal its Health to the minions next to it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP",
+        "target": "TARGET"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
