@@ -1,0 +1,32 @@
+{
+  "name": "Dronefreak",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "<b>Opener:</b> Give a friendly Xenodrone +2 Attack.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 2,
+      "filter": {
+        "class": "SpecificCardFilter",
+        "cards": [
+          "token_xenodrone_16",
+          "token_xenodrone_07",
+          "token_xenodrone_02",
+          "token_xenodrone_01"
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

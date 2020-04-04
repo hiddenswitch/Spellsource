@@ -7,6 +7,8 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Xii'da the Curious now only affects cards whose base cost is odd (previously in-hand or modified cost was used).
+ - New updates to Otherworlder, thanks @AnterogradeNil!
  - Allied indicates your friendly targetable actors like the minions and Champion.
  - New updates to Hive Queen, thanks @Phyley!
  - Updates to Occultist, thanks @Muhframos!

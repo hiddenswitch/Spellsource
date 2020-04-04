@@ -1,19 +1,19 @@
 {
-  "name": "Warp",
-  "baseManaCost": 1,
+  "name": "Tranquilizer Shot",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "<b>Wither (2).</b> Deal $2 damage.",
+  "description": "<b>Wither (10).</b> Deal $1 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
-    "value": 2
+    "value": 1
   },
   "attributes": {
-    "WITHER": 2
+    "WITHER": 10
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
