@@ -9,9 +9,12 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class OccultistTests extends TestBase {
 
 	@Test

@@ -3,9 +3,12 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class ManaTests extends TestBase {
 
 	@Test

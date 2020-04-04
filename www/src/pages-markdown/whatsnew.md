@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - New updates to Hive Queen, thanks @Phyley!
  - Updates to Occultist, thanks @Muhframos!
  - Effects that read "Both players" and interact with targets now correctly resolve those targets from the correct point of view.
  - Draconic Doubler is now correctly an Oni-Queen card. (1638)

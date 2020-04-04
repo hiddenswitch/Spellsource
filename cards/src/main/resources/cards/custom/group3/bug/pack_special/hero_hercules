@@ -1,0 +1,18 @@
+{
+  "name": "Hercules",
+  "heroPower": "hero_power_hercules",
+  "baseManaCost": 7,
+  "type": "HERO",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "rarity": "LEGENDARY",
+  "description": "Guard."
+  "attributes": {
+    "TAUNT": true,
+    "ARMOR": 30,
+    "MAX_HP": 30
+  },
+  "collectible": true
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

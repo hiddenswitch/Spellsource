@@ -9,11 +9,14 @@ import net.demilich.metastone.game.entities.minions.Minion;
 
 import net.demilich.metastone.game.targeting.Zones;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class WitchDoctorTests extends TestBase {
 
 	@Test

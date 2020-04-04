@@ -5,12 +5,14 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.minions.Minion;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@Execution(ExecutionMode.CONCURRENT)
 public class ExileTests extends TestBase {
 
 	@Test
