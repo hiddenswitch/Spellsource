@@ -1,10 +1,10 @@
 {
-  "name": "Soar",
-  "baseManaCost": 1,
+  "name": "Mega Soar",
+  "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "AZURE",
+  "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Draw a card.",
+  "description": "Draw a card. Repeatable this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -15,10 +15,10 @@
       }
     ]
   },
-  "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "BASIC"
-  ],
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }
