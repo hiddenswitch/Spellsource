@@ -9,7 +9,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonSpell"
+      "class": "SummonSpell",
       "card": "token_serv-ant_guard",
       "value": 7
     }

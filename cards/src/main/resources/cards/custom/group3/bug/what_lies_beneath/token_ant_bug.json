@@ -1,0 +1,14 @@
+{
+  "name": "Ant",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "(Your graveyard was empty!)",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

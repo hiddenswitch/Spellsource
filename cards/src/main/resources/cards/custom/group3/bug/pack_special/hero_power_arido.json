@@ -5,22 +5,19 @@
   "heroClass": "AMBER",
   "rarity": "FREE",
   "description": "Give an ally +1 Attack and Toxic.",
-  "targetSelection": "FRIENDLY_CHARACTER",
+  "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
     "class": "HeroPowerSpell",
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "attackBonus": 1
-        },
-        {
-          "class": "AddAttributeSpell",
-          "attribute": "POISONOUS"
-        }
-      ]
-    }
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "POISONOUS"
+      }
+    ]
   },
   "collectible": false,
   "set": "CUSTOM",

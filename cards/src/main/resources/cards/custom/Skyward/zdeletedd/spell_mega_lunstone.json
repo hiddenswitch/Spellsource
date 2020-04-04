@@ -1,0 +1,31 @@
+{
+    "name": "Mega Lunstone",
+    "baseManaCost": 0,
+    "type": "SPELL",
+    "heroClass": "ANY",
+    "rarity": "FREE",
+    "description": "Gain a lot of Lun this turn.",
+    "targetSelection": "NONE",
+    "spell": {
+        "class": "MetaSpell",
+        "spells": [
+            {
+                "class": "GainManaSpell",
+                "value": 100
+            },
+            {
+                "class": "CardCostModifierSpell",
+                "target": "FRIENDLY_HAND",
+                "cardCostModifier": {
+                    "class": "CardCostModifier",
+                    "target": "SELF",
+                    "value": 100,
+                    "operation": "SUBTRACT"
+                }
+            }
+        ]
+    },
+    "collectible": false,
+    "set": "SPELLSOURCE_BASIC",
+    "fileFormatVersion": 1
+}

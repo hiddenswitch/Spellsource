@@ -6,24 +6,28 @@
   "rarity": "FREE",
   "description": "Passive Skill. Whenever a non-Larva minion dies, summon two 1/1 Larva.",
   "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
   "passiveTrigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "BOTH"
-      "cardFilter": {
-        "class": "SpecificCardFilter",
+      "targetPlayer": "BOTH",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
         "card": "token_spiderling",
-        invert: true
-      },
+        "invert": true
+      }
     },
     "spell": {
       "class": "HeroPowerSpell",
       "spell": {
         "class": "SummonSpell",
+        "targetPlayer": "SELF",
         "cards": [
           "token_spiderling",
           "token_spiderling"
-        ] 
+        ]
       }
     }
   },

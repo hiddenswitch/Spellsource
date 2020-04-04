@@ -5,7 +5,7 @@
   "heroClass": "AZURE",
   "baseAttack": 2,
   "baseHp": 3,
-  "rarity": "COMMON",
+  "rarity": "FREE",
   "race": "BEAST",
   "description": "After you cast a spell, gain +1 Health.",
   "trigger": {

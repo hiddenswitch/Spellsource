@@ -6,13 +6,13 @@
   "heroClass": "AMBER",
   "baseAttack": 1,
   "rarity": "LEGENDARY",
-  "description": "Guard."
+  "description": "Guard.",
   "attributes": {
     "TAUNT": true,
     "ARMOR": 30,
     "MAX_HP": 30
   },
-  "collectible": true
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

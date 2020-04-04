@@ -1,6 +1,6 @@
 {
   "name": "Arido, One-Woman Army",
-  "baseManaCost": 10  ,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 8,
@@ -15,7 +15,8 @@
     },
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "DIVINE_SHIELD"
+      "attribute": "DIVINE_SHIELD",
+      "target": "TRIGGER_HOST"
     }
   },
   "attributes": {

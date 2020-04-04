@@ -6,6 +6,9 @@
   "rarity": "FREE",
   "description": "I don't need any Skill to beat you.",
   "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
   "aura": {
     "class": "BuffAura",
     "target": "SELF",

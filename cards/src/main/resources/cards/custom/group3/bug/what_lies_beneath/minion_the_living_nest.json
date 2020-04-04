@@ -9,14 +9,16 @@
   "description": "Guard. Aftermath: Summon Arido and 4 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_bunta",
-    "card": "token_spiderling",
-    "card": "token_spiderling",
-    "card": "token_spiderling",
-    "card": "token_spiderling"
+    "cards": [
+      "token_bunta",
+      "token_spiderling",
+      "token_spiderling",
+      "token_spiderling",
+      "token_spiderling"
+    ]
   },
   "attributes": {
-    "TAUNT": true
+    "TAUNT": true,
     "DEATHRATTLES": true
   },
   "collectible": true,

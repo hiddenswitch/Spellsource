@@ -7,22 +7,14 @@
   "description": "Replace your hand with random Beasts that cost (6) or more.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells" : [
-    {
-      "class": "DiscardSpell",
-      "value": -1
-    },
-    {
-      "spell": "RecieveCardSpell"
-      "value": 10
-    },
+    "class": "ReplaceCardsSpell",
+    "target": "FRIENDLY_HAND",
     "cardFilter": {
-      "class": "RaceFilter",
-      "race": "BEAST"
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "BEAST",
       "value": 6,
       "attribute": "BASE_MANA_COST",
-      "cardType": "MINION",
       "operation": "GREATER_OR_EQUAL"
     }
   },

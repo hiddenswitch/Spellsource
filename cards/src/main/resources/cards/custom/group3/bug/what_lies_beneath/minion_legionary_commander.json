@@ -1,0 +1,36 @@
+{
+  "name": "Legionary Commander",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Whenever you receive a Larva, transform it into a Serv-Ant and play it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "card": "token_spiderling"
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "SummonSpell",
+          "card": "token_serv-ant_guard"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}

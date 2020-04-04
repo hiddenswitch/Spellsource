@@ -1,37 +1,27 @@
 {
-  "name": "Drop From the Sky",
+  "name": "Eye of the Storm",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "COMMON",
-  "description": "Source a minion. It has Dash this turn.",
+  "description": "Source an Elemental",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
-      "spell": {
-        "class": "AddAttributeSpell",
-        "attribute": "RUSH",
-        "target": "OUTPUT",
-        "revertTrigger": {
-          "class": "TurnEndTrigger"
-        }
-      },
       "targetPlayer": "SELF"
     },
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION"
+      "cardType": "MINION",
+      "race": "ELEMENTAL"
     }
   },
   "attributes": {
     "DISCOVER": true
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "CLASSIC"
-  ],
+  "set": "SOURCESTORM",
   "fileFormatVersion": 1
 }
