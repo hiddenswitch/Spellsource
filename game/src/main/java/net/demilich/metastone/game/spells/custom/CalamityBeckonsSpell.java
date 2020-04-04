@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -25,6 +26,9 @@ public final class CalamityBeckonsSpell extends Spell {
 		var max = player.getDeck().size();
 		var i = 0;
 		while (!player.getDeck().isEmpty() && i < max) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
 			var card = context.getLogic().getRandom(player.getDeck());
 			var previousLocation = card.getEntityLocation();
 			if (card.getCardType() == CardType.MINION) {

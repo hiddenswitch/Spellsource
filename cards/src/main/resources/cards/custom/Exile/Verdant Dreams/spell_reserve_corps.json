@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Draw a Demon, Dragon, and Pirate from your deck.",
+  "description": "Draw a Demon, Dragon, and Pirate.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

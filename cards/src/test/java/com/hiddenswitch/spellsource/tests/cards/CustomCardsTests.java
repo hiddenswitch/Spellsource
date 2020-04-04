@@ -4318,7 +4318,7 @@ public class CustomCardsTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov_v0");
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_1");
 			context.endTurn();
@@ -4333,7 +4333,7 @@ public class CustomCardsTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov_v0");
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_1");
 			context.endTurn();

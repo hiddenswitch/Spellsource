@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Start of Game: If your deck only contains Dragons, draw this card from your deck.",
+  "description": "Start of Game: If your deck only contains Dragons, draw this.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "GameStartTrigger",
