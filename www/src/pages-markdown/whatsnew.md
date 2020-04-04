@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Allied indicates your friendly targetable actors like the minions and Champion.
  - New updates to Hive Queen, thanks @Phyley!
  - Updates to Occultist, thanks @Muhframos!
  - Effects that read "Both players" and interact with targets now correctly resolve those targets from the correct point of view.

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Dash. Costs (1) less for each friendly minion that has died this game.",
+  "description": "Dash. Costs (1) less for each allied minion that died this game.",
   "attributes": {
     "RUSH": true
   },

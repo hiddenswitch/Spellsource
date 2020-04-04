@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "PIRATE",
-  "description": "Whenever a friendly Pirate dies, add two Pirates to your hand.",
+  "description": "Whenever an allied Pirate dies, add two Pirates to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

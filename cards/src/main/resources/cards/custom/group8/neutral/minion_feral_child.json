@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Whenever you cast a spell, give another friendly minion +1/+1.",
+  "description": "Whenever you cast a spell, give another allied minion +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

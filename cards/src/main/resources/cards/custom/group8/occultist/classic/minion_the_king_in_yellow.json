@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "After another friendly minion survives damage, transform it into a 6/6 Aberration.",
+  "description": "After another allied minion survives damage, transform it into a 6/6 Aberration.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
