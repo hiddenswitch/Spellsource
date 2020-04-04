@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Draw a card. Add two 1/1 Larva to your hand.",
+  "description": "Draw a card. Receive two 1/1 Larva.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

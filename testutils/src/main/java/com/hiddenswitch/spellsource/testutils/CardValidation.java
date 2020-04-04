@@ -17,6 +17,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,9 +34,25 @@ public class CardValidation {
 
 	private static final CardParser CARD_PARSER = new CardParser();
 
-	public static Object[][] getCardFiles(String path) {
+	public static Object[][] getCardFiles(String... paths) {
+		return getCardFiles(Arrays.stream(paths).map(Path::of).toArray(Path[]::new));
+	}
+
+	public static Object[][] getCardFiles(Path... paths) {
+		if (paths.length == 0) {
+			return new Object[0][0];
+		}
+		var path = paths[0];
+		var j = 0;
+		while (!Files.exists(path) && j + 1 < paths.length) {
+			j++;
+			path = paths[j];
+		}
+		if (!Files.exists(path)) {
+			return new Object[0][0];
+		}
 		List<File> ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
-				new File(path),
+				path.toFile(),
 				new RegexFileFilter("^(.*json)"),
 				DirectoryFileFilter.DIRECTORY);
 

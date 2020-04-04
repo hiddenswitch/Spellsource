@@ -1,0 +1,33 @@
+{
+  "name": "Narvina's Brood",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Passive Skill. Whenever a non-Larva minion dies, summon two 1/1 Larva.",
+  "targetSelection": "NONE",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling",
+        invert: true
+      },
+    },
+    "spell": {
+      "class": "HeroPowerSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_spiderling",
+          "token_spiderling"
+        ] 
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

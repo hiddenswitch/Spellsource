@@ -1,20 +1,21 @@
 {
   "name": "Nursery Guard",
-  "baseManaCost": 4,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 5,
-  "baseHp": 5,
+  "baseAttack": 4,
+  "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Aftermath: Transform the top card of your deck into a 0/2 Spidey Egg.",
+  "description": "Guard. Aftermath: Transform the top card of your deck into a 0/2 Spidey Egg.",
   "deathrattle": {
     "class": "ReplaceCardsSpell",
     "target": "FRIENDLY_TOP_CARD",
     "card": "token_spidey_egg"
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

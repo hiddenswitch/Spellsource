@@ -1,6 +1,8 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import com.hiddenswitch.spellsource.testutils.CardValidation;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -18,6 +20,7 @@ public class CardValidationTests {
 		return CardValidation.getCardFiles(CARDS_DIR);
 	}
 
+	@Execution(ExecutionMode.CONCURRENT)
 	@ParameterizedTest
 	@MethodSource("getCardFiles")
 	public void validateCard(File cardFile) throws IOException {
