@@ -118,7 +118,7 @@ public class TraceTests extends TestBase {
 			return;
 		}
 
-		TestBase.assertTimeoutPreemptively(Duration.ofMillis(3200), () -> {
+		TestBase.assertTimeoutPreemptively(Duration.ofMillis(4200), () -> {
 			trace.replayContext(false, null);
 			return null;
 		}, "timeout");
