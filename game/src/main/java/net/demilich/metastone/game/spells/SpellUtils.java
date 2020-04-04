@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -782,6 +783,9 @@ public class SpellUtils {
 			int i = count;
 			while (cards.size() > 0
 					&& i > 0) {
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
 				result.add(context.getLogic().removeRandom(cards));
 				i--;
 			}

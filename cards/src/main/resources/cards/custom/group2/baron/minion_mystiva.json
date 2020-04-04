@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever you cast a spell, draw all copies of it from your deck.",
+  "description": "Whenever you cast a spell, draw all your other copies of it.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

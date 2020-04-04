@@ -3,6 +3,7 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -450,6 +451,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			return;
 		}
 
+		if (Strand.currentStrand().isInterrupted()) {
+			return;
+		}
 		getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
 	}
 
@@ -1515,6 +1519,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
 			}
 			if (getTurn() > GameLogic.TURN_LIMIT) {
 				break;

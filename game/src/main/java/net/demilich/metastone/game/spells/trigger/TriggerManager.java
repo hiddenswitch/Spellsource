@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.events.GameEvent;
@@ -67,6 +68,9 @@ public class TriggerManager implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
+		if (Strand.currentStrand().isInterrupted()) {
+			return;
+		}
 		depth++;
 		if (depth > 96) {
 			throw new IllegalStateException("infinite recursion");
