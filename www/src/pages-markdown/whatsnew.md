@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Spirit Saber now always shows you the exact card that had the aftermath when it triggered, even if it was transformed later. (1657)
  - Archaeologist's Taletellers now correctly looks for minions played this turn, not minions that were played and killed this turn. (1652)
  - The Monk class has been retired. Its class and cards have been made uncollectible by default. "So long and thanks for all deflect." (1635, 1636)
  - Storyteller's Overflowing Energy now correctly only targets one instance of the lowest-cost card in your hand. (1642)
@@ -97,7 +98,6 @@ Exile has been renamed to Rebel.
  - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
  - Herald of Fate no longer just gives you double openers forever. (1577)
- - Spirit Saber now always shows you the exact card that had the aftermath when it triggered, even if it was transformed later. (1657)
 
 ### 0.8.70-3.1.1 (March 27, 2020)
 
