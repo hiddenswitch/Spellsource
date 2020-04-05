@@ -59,9 +59,9 @@ public class CardCatalogue {
 	private static final Set<String> bannedCardIds = new HashSet<>();
 	private static AtomicBoolean loaded = new AtomicBoolean();
 	private static final Set<String> hardRemovalCardIds = new HashSet<>();
-	private final static Map<String, Card> cards = new LinkedHashMap<>();
-	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>();
-	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>();
+	private final static Map<String, Card> cards = new LinkedHashMap<>(8196);
+	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
+	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>(8196);
 
 	@NotNull
 	public static CardList getAll() {
@@ -70,6 +70,19 @@ public class CardCatalogue {
 			result.addCard(card.clone());
 		}
 		return result;
+	}
+
+	/**
+	 * Returns a mutable reference to the cards loaded into this catalogue.
+	 * <p>
+	 * Changing the cards here changes all their references in all games. However, {@link #getCardById(String)} returns
+	 * clones.
+	 *
+	 * @return
+	 */
+	public @NotNull
+	static Map<String, Card> getCards() {
+		return cards;
 	}
 
 	/**

@@ -4,19 +4,22 @@
   "type": "MINION",
   "heroClass": "COPPER",
   "baseAttack": 2,
-  "baseHp": 3,
+  "baseHp": 4,
   "rarity": "RARE",
-  "description": "Quick Draw: Deal 2 damage randomly split among all enemies",
+  "description": "Quick Draw: Deal 2 damage randomly split among all enemy minions.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "QuickDrawTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 2
+      "class": "QuickDrawSpell",
+      "spell": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1,
+        "howMany": 2
+      }
     }
   },
   "attributes": {

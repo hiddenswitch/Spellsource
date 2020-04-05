@@ -9,22 +9,26 @@
   "description": "Quick Draw: Deal 3 damage to a random enemy minion and lose 1 Durability.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardDrawnTrigger",
+      "class": "QuickDrawTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "DamageSpell",
-          "value": 3,
-          "target": "ENEMY_MINIONS",
-          "randomTarget": true
+          "class": "QuickDrawSpell",
+          "spell": {
+            "class": "DamageSpell",
+            "value": 3,
+            "target": "ENEMY_MINIONS",
+            "randomTarget": true
+          }
         },
         {
-          "class": "BuffSpell",
-          "target": "FRIENDLY_WEAPON",
-          "hpBonus": -1
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "attribute": "HP",
+          "value": -1
         }
       ]
     }

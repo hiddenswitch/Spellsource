@@ -3,15 +3,12 @@ package net.demilich.metastone.game.spells.custom;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * Receives a copy of all the cards stored on {@code source} by {@link StoreEntitySpell}.
