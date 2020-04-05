@@ -1,0 +1,41 @@
+{
+  "name": "Inept Investigator",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Opener: Draw a spell. Transform it into a random Artifact.",
+  "battlecry": {
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "spell": {
+        "class": "ReplaceCardsSpell",
+        "target": "OUTPUT",
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "ARTIFACT",
+          "operation": "HAS"
+        },
+        "cardSource": {
+          "class": "UncollectibleCatalogueSource"
+        }
+      },
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}
