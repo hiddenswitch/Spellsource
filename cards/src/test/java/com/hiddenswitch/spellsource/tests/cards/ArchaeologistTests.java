@@ -80,4 +80,16 @@ public class ArchaeologistTests extends TestBase {
 			assertEquals(testMinion.getBaseHp() - 8, testMinion.getHp()); //only was damaged the first time
 		});
 	}
+
+	@Test
+	public void testTaletellers() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "token_ember_elemental");
+			playCard(context, player, "token_ember_elemental");
+			Minion poorGuy = playMinionCard(context, player, "token_ember_elemental");
+			destroy(context, poorGuy);
+			playCard(context, player, "minion_taletellers");
+			assertEquals(3, player.getHand().size());
+		});
+	}
 }

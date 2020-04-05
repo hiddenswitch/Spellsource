@@ -28,7 +28,7 @@
       ]
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

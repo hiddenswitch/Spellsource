@@ -7,6 +7,9 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Archaeologist's Taletellers now correctly looks for minions played this turn, not minions that were played and killed this turn. (1652)
+ - The Monk class has been retired. Its class and cards have been made uncollectible by default. "So long and thanks for all deflect." (1635, 1636)
+ - Storyteller's Overflowing Energy now correctly only targets one instance of the lowest-cost card in your hand. (1642)
  - Welcome Skoppu, the Shovelbot.
  - New Outlaw cards, thanks @DeepKhaos!
  - Quick Draw (X): Whenever your cards draw a card...
