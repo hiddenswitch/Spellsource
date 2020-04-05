@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Exile has been renamed Rebel, and more changes, thanks @Logovazz!
  - Improvements to language, thanks @DeepKhaos!
  - New updates to Skyward, thanks @Nix!
  - New updates to Archaeologist, thanks @Pircival!
@@ -23,6 +24,36 @@ header: true
  - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
  - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
  
+#### Notes from Logovazz about Rebel
+
+**Rebel Update**
+Exile has been renamed to Rebel.
+
+**Card Changes**
+ - Back Fist is now 4 Lun "Deal 8 damage to a minion."
+ - Intimidate is now 2 Lun from 3 Lun.
+ - Rules of Nature is no longer collectible.
+ - Armored Scoundrel is now a 4/4/5 from 4/4/4.
+ - Watchful Bruisner now reads "Can only attack if another minion attacked this turn."
+ - Scavenge is now 2 Lun from 3 Lun.
+ - Jeering Bodyguard is now 5/5/8 from 5/6/6. Gained Dragon tag.
+ - Frontline Cutthroat is now a Demon.
+ - Fassnu Oathbreaker is now 4 Lun from 5 Lun.
+ - Ragged Phalanx now reads "Give your minions +1/+2 and Guard. They can't attack."
+ - Dreamscape Scythe is now 5/3/3 "After your champion attacks, give a random allied Dragon and Demon +3 Attack."
+ - Warmage Zhou now reads "Dash. Opener: Deal 2 damage to a random enemy. Repeat for each ally that died this turn. (0 Times!)"
+ - Reserve Corps is now 3 Lun "Draw a Demon and Dragon."
+ - Amalgam of War now reads "Dash. Opener: Gain +2 Attack if you have a Demon. Repeat with +2 Health for Dragons."
+
+**New Cards**
+ - Warrior's Death: 1 Lun "Destroy a damaged minion."
+ - From the Burrows: 4 Lun "Summon four 1/1 Rioters with Dash."
+ - Vasz the Sellsword: 7/5/5 Legendary Dragon "Opener: Deal 1 damage to all other minions. Repeat until one dies."
+ - General Yokura: 7/3/6 Legendary Demon "Guard. Opener: Gain +1/+1 for each ally that died this turn. Then, attack the enemy champion."
+
+**Skyward**
+ - Updated Class Color to be less similar to Neutral's color. 
+
 #### Notes from DeepKhaos about Language Improvements
 
  - Discover has been renamed to Source.
