@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.entities.heroes;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
@@ -89,5 +91,29 @@ public class HeroClass {
 	public static String random(DeckFormat deckFormat) {
 		List<String> baseHeroes = getBaseClasses(deckFormat);
 		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+	}
+
+	/**
+	 * Checks if the specified card has the specified hero class, respecting a {@link HeroClass#SELF} and a {@link
+	 * HeroClass#OPPONENT} specs.
+	 *
+	 * @param context
+	 * @param player
+	 * @param card
+	 * @param heroClass
+	 * @return
+	 */
+	public static boolean hasHeroClass(GameContext context, Player player, Card card, String heroClass) {
+		if (heroClass.equals(OPPONENT)) {
+			heroClass = context.getOpponent(player).getHero().getHeroClass();
+		} else if (heroClass.equals(SELF)) {
+			heroClass = player.getHero().getHeroClass();
+		}
+
+		if (heroClass != null && card.hasHeroClass(heroClass)) {
+			return false;
+		}
+
+		return true;
 	}
 }

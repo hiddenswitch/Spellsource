@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
-  "description": "Your Skill becomes 'Your Dragons have +3 Attack.'",
+  "description": "Your Skill becomes \"Your Dragons have +3 Attack\".",
   "targetSelection": "NONE",
   "spell": {
     "class": "ChangeHeroPowerSpell",

@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Battlecry: Destroy a random enemy minion with 2 or less Attack.",
+  "description": "Opener: Destroy a random enemy minion with 2 or less Attack.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

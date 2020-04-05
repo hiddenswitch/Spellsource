@@ -137,27 +137,19 @@ public class CardCatalogue {
 	}
 
 	public static CardList query(DeckFormat deckFormat) {
-		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null);
+		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null, true);
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType) {
-		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null);
+		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null, true);
 	}
 
 	public static CardList query(DeckFormat deckFormat, String heroClass) {
-		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null);
+		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, true);
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass) {
-		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null);
-	}
-
-	public static CardList query(DeckFormat deckFormat, String heroClass, String actualHeroClass) {
-		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, actualHeroClass);
-	}
-
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag) {
-		return query(deckFormat, cardType, rarity, heroClass, tag, null);
+		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null, true);
 	}
 
 	/**
@@ -168,11 +160,11 @@ public class CardCatalogue {
 	 * @param rarity
 	 * @param heroClass
 	 * @param tag
-	 * @param actualHeroClass
+	 * @param clone
 	 * @return
 	 */
 	@NotNull
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, String actualHeroClass) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, boolean clone) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			if (card.getDesc().getFileFormatVersion() > version) {
@@ -206,7 +198,10 @@ public class CardCatalogue {
 			if (tag != null && !card.hasAttribute(tag)) {
 				continue;
 			}
-			result.addCard(card.clone());
+			if (clone) {
+				card = card.clone();
+			}
+			result.addCard(card);
 		}
 
 		return result;

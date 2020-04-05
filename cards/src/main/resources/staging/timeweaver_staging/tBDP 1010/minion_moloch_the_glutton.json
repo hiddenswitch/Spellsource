@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Battlecry: If next to the Left and Right claws, fill your board and hand with copies of them.",
+  "description": "Opener: If next to the Left and Right claws, fill your board and hand with copies of them.",
   "battlecry": {
     "condition": {
       "class": "AndCondition",

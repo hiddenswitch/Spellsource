@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Skill: Deal $1 damage to a friendly character. Restore #3 Health to your champion.",
+  "description": "Skill: Deal $1 damage to an allied character. Restore #3 Health to your champion.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

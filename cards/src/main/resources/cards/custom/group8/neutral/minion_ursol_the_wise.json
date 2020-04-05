@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "After you cast a spell, add a random spell that costs (3) or more to your hand.",
+  "description": "Whenever you cast a spell, receive a random spell that costs (3) or more.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

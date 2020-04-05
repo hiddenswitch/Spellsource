@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "CANDY",
   "rarity": "FREE",
-  "description": "Add two 1/3 Performers to your hand.",
+  "description": "Receive two 1/3 Performers.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

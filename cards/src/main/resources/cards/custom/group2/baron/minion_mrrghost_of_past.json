@@ -10,7 +10,8 @@
   "description": "Whenever an allied Fae attacks, draw a card.",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "fireCondition": {
         "class": "RaceCondition",
         "target": "EVENT_SOURCE",

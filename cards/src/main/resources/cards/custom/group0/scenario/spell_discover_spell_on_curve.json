@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "RARE",
-  "description": "Discover a spell on curve.",
+  "description": "Source a spell on curve.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

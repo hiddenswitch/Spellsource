@@ -6,12 +6,12 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "PIRATE",
-  "description": "Whenever an allied Pirate dies, add two Pirates to your hand.",
+  "race": "SPIRIT",
+  "description": "Whenever an allied Spirit dies, receive two random Spirits.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "race": "PIRATE",
+      "race": "SPIRIT",
       "targetPlayer": "SELF"
     },
     "spell": {
@@ -19,7 +19,7 @@
       "value": 2,
       "cardFilter": {
         "class": "RaceFilter",
-        "race": "PIRATE"
+        "race": "SPIRIT"
       },
       "cardSource": {
         "class": "UnweightedCatalogueSource"

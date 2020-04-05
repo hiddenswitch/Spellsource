@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Opener: Summon the last friendly minion that died this game.",
+  "description": "Opener: Summon the last allied minion that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

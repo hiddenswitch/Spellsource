@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Aftermath: Summon a minion from your deck.",
+  "description": "Aftermath: Summon a random minion from your deck.",
   "deathrattle": {
     "class": "RecruitSpell",
     "cardFilter": {

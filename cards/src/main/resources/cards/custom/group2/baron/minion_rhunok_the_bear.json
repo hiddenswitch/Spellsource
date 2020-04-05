@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "After you target another allied minion with a spell, summon a copy of it with Guard.",
+  "description": "After you cast a spell on an allied minion, summon a copy of it with Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

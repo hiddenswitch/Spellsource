@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "<b>Dash</b>. Whenever this attacks and kills a minion, summon a Doomwalker.",
+  "description": "<b>Dash</b>. After this attacks and kills a minion, summon a Doomwalker.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

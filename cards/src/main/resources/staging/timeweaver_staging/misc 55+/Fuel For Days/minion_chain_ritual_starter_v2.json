@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Add a random minion that costs (1) less than this to your hand. Give it this Deathrattle.",
+  "description": "Aftermath: Add a random minion that costs (1) less than this to your hand. Give it this Deathrattle.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

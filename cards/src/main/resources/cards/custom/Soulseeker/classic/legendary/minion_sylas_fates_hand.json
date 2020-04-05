@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Whenever a friendly Spirit dies, Soulbind. Opener: Summon two 2/1 Spirit Hands with Dash.",
+  "description": "Whenever an allied Spirit dies, Soulbind. Opener: Summon two 2/1 Spirit Hands with Dash.",
   "battlecry" : {
     "spell": {
       "class": "SummonSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Reshuffle a card, then draw it.",
+  "description": "Opener: Reshuffle a card, then draw it.",
 "battlecry": {
   "targetSelection": "NONE",
   "spell": {

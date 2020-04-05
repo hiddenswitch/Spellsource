@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Discover and summon a Familiar Aspect.",
+  "description": "Source and summon a Familiar Aspect.",
   "spell": {
     "class": "DiscoverSpell",
     "spell": {

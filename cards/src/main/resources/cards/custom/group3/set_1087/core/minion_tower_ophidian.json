@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Supremacy: Summon a copy of this minion.",
+  "description": "Supremacy: Summon a copy of this.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

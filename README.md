@@ -50,9 +50,10 @@ Use `./gradlew tasks --group spellsource` to see all deployment related tasks. Y
 On macOS, issue the following commands to increase your per-process limits:
 
 ```shell script
-sudo launchctl limit maxfiles 524288 5242880
 sudo sysctl -w kern.maxfiles=5242880
 sudo sysctl -w kern.maxfilesperproc=524288
+ulimit -n 200000
+sudo launchctl limit maxfiles 524288 5242880
 ```
 
 > All the tests in `net:test` fail or take too long to complete.

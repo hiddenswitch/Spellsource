@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Add an Apple to your hand.",
+  "description": "Opener: Receive an Apple that gives a minion +1/+1.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

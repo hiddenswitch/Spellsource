@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discover an enemy minion that died this game. Summon two copies of it.",
+  "description": "Opener: Source an enemy minion that died this game. Summon two copies of it.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

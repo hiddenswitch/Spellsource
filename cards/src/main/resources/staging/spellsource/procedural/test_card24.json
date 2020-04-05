@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Give both players a Power Chord card)",
+  "description": "Opener: Give both players a Power Chord card)",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

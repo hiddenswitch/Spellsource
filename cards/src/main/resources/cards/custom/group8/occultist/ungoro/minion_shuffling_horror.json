@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "When you shuffle this into your deck, add two copies of it to your hand.",
+  "description": "Whenever you shuffle this into your deck, receive two copies of it.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",

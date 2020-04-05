@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Whenever this minion takes damage, gain +2 Attack.",
+  "description": "Whenever this takes damage, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

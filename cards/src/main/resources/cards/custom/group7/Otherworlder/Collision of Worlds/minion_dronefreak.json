@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "<b>Opener:</b> Give a friendly Xenodrone +2 Attack.",
+  "description": "<b>Opener:</b> Give an allied Xenodrone +2 Attack.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

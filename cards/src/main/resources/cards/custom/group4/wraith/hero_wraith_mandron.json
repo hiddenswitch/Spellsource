@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Skill: Take 2 damage. Discover a follower.",
+  "description": "Skill: Take 2 damage. Source a follower.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

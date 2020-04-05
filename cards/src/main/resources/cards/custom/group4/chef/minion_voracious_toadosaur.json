@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: If you played an Elemental last turn, shuffle 3 copies of this into your deck.",
+  "description": "Opener: If you played an Elemental last round, shuffle 3 copies of this into your deck.",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition",

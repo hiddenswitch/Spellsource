@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Whenever you shuffle a card into your deck, remove the card and give this minion +1/+1.",
+  "description": "Whenever you shuffle a card into your deck, remove the card and gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",

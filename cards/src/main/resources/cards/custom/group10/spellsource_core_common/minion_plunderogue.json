@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Add a random card to your hand from your opponent's class.",
+  "description": "Opener: Receive a random card from your opponent's class.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

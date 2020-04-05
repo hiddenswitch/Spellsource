@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "NONE",
-  "description": "Opener: Summon two 2-Cost minions from your deck.",
+  "description": "Opener: Summon two random 2-Cost minions from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

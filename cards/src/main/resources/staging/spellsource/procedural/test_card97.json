@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Give a random friendly minion +3/+3.",
+  "description": "Aftermath: Give a random allied minion +3/+3.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

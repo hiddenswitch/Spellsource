@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: Receive a 1/1 Whelp.",
+  "description": "Opener: Receive a 1/1 Lil Bro.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

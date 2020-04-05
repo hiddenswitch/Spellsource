@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "EPIC",
   "race": "DEMON",
-  "description": "Battlecry: Deal 5 damage to your hero.",
+  "description": "Opener: Deal 5 damage to your hero.",
   "battlecry": {
     "spell": {
       "class": "DamageSpell",

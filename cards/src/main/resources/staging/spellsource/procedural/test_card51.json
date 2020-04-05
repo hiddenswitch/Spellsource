@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Gain +1/+1 for each friendly Totem.",
+  "description": "Opener: Gain +1/+1 for each allied Totem.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

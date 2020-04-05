@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Improvements to language, thanks @DeepKhaos!
  - New updates to Skyward, thanks @Nix!
  - New updates to Archaeologist, thanks @Pircival!
  - Xii'da the Curious now only affects cards whose base cost is odd (previously in-hand or modified cost was used).

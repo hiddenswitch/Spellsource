@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Whenever you use your Skill, Summon a 1-Cost minion from your hand.",
+  "description": "Whenever you use your Skill, Summon a random 1-Cost minion from your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

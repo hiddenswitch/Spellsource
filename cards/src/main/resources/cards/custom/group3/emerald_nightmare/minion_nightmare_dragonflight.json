@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, add 'Nightmare' to your hand.",
+  "description": "Opener: If you're holding a Dragon, receive \"Nightmare\".",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

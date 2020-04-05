@@ -6,7 +6,7 @@
   "baseHp": 10,
   "rarity": "FREE",
   "race": "MECH",
-  "description": "Whenever a friendly Deathrattle minion dies this game, subtract their Cost from this minion's and give it their Deathrattle.",
+  "description": "Whenever an allied Deathrattle minion dies this game, subtract their Cost from this minion's and give it their Deathrattle.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

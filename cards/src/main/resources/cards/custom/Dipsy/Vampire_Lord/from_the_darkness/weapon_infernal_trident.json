@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "Opener: Give 3 random friendly minions +3 Health, then swap their Attack and Health.",
+  "description": "Opener: Give 3 random allied minions +3 Health, then swap their Attack and Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

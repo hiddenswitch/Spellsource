@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "After you cast a spell on a minion, your opponent can't target it with spells and Skills.",
+  "description": "After you cast a spell on a minion, give it \"Elusive to your opponent\".",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",

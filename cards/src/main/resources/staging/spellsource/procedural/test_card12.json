@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: Gain +1 Health for each card in your hand.",
+  "description": "Opener: Gain +1 Health for each card in your hand.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

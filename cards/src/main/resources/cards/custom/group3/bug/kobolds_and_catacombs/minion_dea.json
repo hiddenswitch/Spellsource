@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Receive a copy of a minion. Set its stats and Cost to 0.",
+  "description": "Opener: Choose a minion. Receive a copy of it. Set its stats and Cost to 0.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

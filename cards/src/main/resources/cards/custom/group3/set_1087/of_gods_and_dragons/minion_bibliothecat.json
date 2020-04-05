@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Discover a Beast, Dragon or Fae.",
+  "description": "Opener: Source a Beast, Dragon or Fae.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

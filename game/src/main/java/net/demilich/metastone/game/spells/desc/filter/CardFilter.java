@@ -37,20 +37,6 @@ public final class CardFilter extends EntityFilter {
 		super(desc);
 	}
 
-	private boolean heroClassTest(GameContext context, Player player, Card card, String heroClass) {
-		if (heroClass.equals(HeroClass.OPPONENT)) {
-			heroClass = context.getOpponent(player).getHero().getHeroClass();
-		} else if (heroClass.equals(HeroClass.SELF)) {
-			heroClass = player.getHero().getHeroClass();
-		}
-
-		if (heroClass != null && card.hasHeroClass(heroClass)) {
-			return false;
-		}
-
-		return true;
-	}
-
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
@@ -74,7 +60,7 @@ public final class CardFilter extends EntityFilter {
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
 			for (String heroClass : heroClasses) {
-				test |= !heroClassTest(context, player, card, heroClass);
+				test |= !HeroClass.hasHeroClass(context, player, card, heroClass);
 			}
 			if (!test) {
 				return false;
@@ -82,7 +68,7 @@ public final class CardFilter extends EntityFilter {
 		}
 
 		String heroClass = (String) getDesc().get(EntityFilterArg.HERO_CLASS);
-		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
+		if (heroClass != null && HeroClass.hasHeroClass(context, player, card, heroClass)) {
 			return false;
 		}
 
