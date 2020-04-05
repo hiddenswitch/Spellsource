@@ -15,7 +15,7 @@
       "multiplier": 3
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
