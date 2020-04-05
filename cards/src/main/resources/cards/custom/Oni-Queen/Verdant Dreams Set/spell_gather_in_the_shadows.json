@@ -1,6 +1,6 @@
 {
   "name": "Gather in the Shadows",
-  "baseManaCost": 3,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
