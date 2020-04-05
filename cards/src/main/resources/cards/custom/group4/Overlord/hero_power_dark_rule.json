@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Take 2 damage. Discover a follower.",
+  "description": "Take 2 damage. Source a follower.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

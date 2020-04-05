@@ -1,0 +1,36 @@
+{
+  "name": "The Amber Guardian",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 9,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Guard. Opener: If your hand contains 9 cards, destroy all other minions.",
+  "battlecry": {
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 9,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "SELF"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ALL_MINIONS",
+      "filter": {
+        "class": "EntityEqualsFilter",
+        "invert": true,
+        "secondaryTarget": "TRIGGER_HOST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}

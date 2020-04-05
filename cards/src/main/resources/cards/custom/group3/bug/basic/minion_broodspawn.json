@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "At the end of your turn, summon a 1/1 Larva.",
+  "description": "At the end of your turns, summon a 1/1 Larva.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

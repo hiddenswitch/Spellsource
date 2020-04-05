@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "Give your characters +1 Attack this turn.",
+  "description": "Give all allies +1 Attack this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "TemporaryAttackSpell",

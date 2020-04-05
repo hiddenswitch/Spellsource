@@ -7,7 +7,7 @@
   "baseHp": null,
   "rarity": "FREE",
   "race": "2",
-  "description": "Battlecry: Discover a Harbinger, Illusionist, or Sea Witch card.",
+  "description": "Opener: Discover a Harbinger, Illusionist, or Sea Witch card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

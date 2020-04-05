@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Aftermath: Draw a card and add a Spyder to your opponent's hand.",
+  "description": "Aftermath: Draw a card. Your opponent receives a Spyder.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

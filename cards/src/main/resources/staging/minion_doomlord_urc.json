@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Gain your minions' enchantments (WIP).",
+  "description": "Opener: Gain your minions' enchantments (WIP).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

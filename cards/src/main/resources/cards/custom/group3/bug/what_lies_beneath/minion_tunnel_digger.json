@@ -1,0 +1,36 @@
+{
+  "name": "Tunnel Digger",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "At the end of your turn, add a random Artifact to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_artifact_1",
+        "token_artifact_2",
+        "token_artifact_3",
+        "token_artifact_4",
+        "token_artifact_5",
+        "token_artifact_6",
+        "token_artifact_7",
+        "token_artifact_8",
+        "token_artifact_9",
+        "token_artifact_10"
+      ],
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}

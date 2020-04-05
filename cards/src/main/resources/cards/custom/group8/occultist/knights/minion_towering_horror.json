@@ -1,9 +1,9 @@
 {
   "name": "Towering Horror",
-  "baseManaCost": 4,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 6,
+  "baseAttack": 4,
   "baseHp": 2,
   "rarity": "RARE",
   "description": "Opener: Gain +2 Health for each minion that died this turn.",
@@ -23,9 +23,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "KNIGHTS_OF_THE_FROZEN_THRONE"
-  ],
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

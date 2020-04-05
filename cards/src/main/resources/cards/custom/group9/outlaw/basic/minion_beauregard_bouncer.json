@@ -1,0 +1,16 @@
+{
+  "name": "Beauregard Bouncer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Guard.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

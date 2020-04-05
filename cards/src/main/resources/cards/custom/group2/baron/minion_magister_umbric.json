@@ -9,7 +9,8 @@
   "description": "Whenever a minion attacks, reduce the Cost of a random card in your hand by (1).",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "sourceEntityType": "MINION"
     },
     "spell": {

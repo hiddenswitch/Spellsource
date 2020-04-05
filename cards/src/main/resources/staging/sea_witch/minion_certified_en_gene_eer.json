@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "MECH",
-  "description": "Battlecry: Draw a 1, 2, and a 3-Cost minion from your deck.",
+  "description": "Opener: Draw a 1, 2, and a 3-Cost minion from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

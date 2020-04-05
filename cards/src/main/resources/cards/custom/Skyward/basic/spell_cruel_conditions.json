@@ -1,18 +1,21 @@
 {
-  "name": "Cruel Conditions",
+  "name": "Updraft",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Destroy a random enemy minion.",
+  "description": "Add 3 Soar spells to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-    "target": "ENEMY_MINIONS",
-    "randomTarget": true,
     "spells": [
       {
-        "class": "DestroySpell"
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_soar",
+          "spell_soar",
+          "spell_soar"
+        ]
       }
     ]
   },

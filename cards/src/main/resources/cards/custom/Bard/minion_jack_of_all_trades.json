@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Hidden. Whenever you cast a spell, add a random spell from your opponent's class to your hand.",
+  "description": "Hidden. Whenever you cast a spell, receive a random spell from your opponent's class.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

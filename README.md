@@ -43,6 +43,27 @@ Visit the [Contribution Guide](www/src/pages-markdown/contribute.md) for more ab
 
 Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative user for these.
 
+### Troubleshooting
+
+> I am seeing issues with too many files open.
+
+On macOS, issue the following commands to increase your per-process limits:
+
+```shell script
+sudo sysctl -w kern.maxfiles=5242880
+sudo sysctl -w kern.maxfilesperproc=524288
+ulimit -n 200000
+sudo launchctl limit maxfiles 524288 5242880
+```
+
+> All the tests in `net:test` fail or take too long to complete.
+
+Make sure you are running `mongo`.
+
+> `testTraces` is failing.
+
+You had failures in `testRandomMassPlay`, the fuzzer for Spellsource. These are real issues.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)

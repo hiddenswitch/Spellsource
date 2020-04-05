@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Resummon all friendly minions that died this turn.",
+  "description": "Resummon all allied minions that died this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.SummonFriendlyMinionsThatDiedSpell"

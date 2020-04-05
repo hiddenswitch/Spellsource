@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Battlecry: Deal 6 damage randomly split between all other characters.",
+  "description": "Opener: Deal 6 damage randomly split between all other characters.",
   "battlecry": {
     "spell": {
       "class": "MissilesSpell",

@@ -9,7 +9,8 @@
   "description": "Guard. Whenever a minion attacks, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "sourceEntityType": "MINION"
     },
     "spell": {

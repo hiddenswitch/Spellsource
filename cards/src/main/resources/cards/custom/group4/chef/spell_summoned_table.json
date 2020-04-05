@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Add all cards Roasted this turn to your hand.",
+  "description": "Receive a copy of every card you Roasted this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",

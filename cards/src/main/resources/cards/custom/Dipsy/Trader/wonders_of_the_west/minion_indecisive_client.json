@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Discover a Discover card.",
+  "description": "Opener: Source a Source card.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

@@ -1,0 +1,33 @@
+{
+  "name": "Mechanical Golem",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Dash. Quick Draw: Attack a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "QuickDrawTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "QuickDrawSpell",
+      "spell": {
+        "class": "FightSpell",
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true,
+        "secondaryTarget": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "QUICK_DRAW": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

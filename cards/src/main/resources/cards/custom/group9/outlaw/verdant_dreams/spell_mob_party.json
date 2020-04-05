@@ -1,0 +1,28 @@
+{
+  "name": "Mob Party",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "COMMON",
+  "description": "Summon three 2/4 Trigger Happy Rebels. Give them Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "minion_trigger_happy_rebel",
+      "minion_trigger_happy_rebel",
+      "minion_trigger_happy_rebel"
+    ],
+	"spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "TAUNT"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

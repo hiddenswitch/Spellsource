@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Supremacy: Summon a minion from your deck that costs (3) or less.",
+  "description": "Supremacy: Summon a random minion from your deck that costs (3) or less.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

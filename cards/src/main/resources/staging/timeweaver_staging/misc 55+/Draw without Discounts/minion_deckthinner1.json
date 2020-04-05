@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Battlecry: Shuffle a Deckthinner1 into your deck and draw a card.",
+  "description": "Opener: Shuffle a Deckthinner1 into your deck and draw a card.",
   "battlecry": {
   "targetSelection": "NONE",
   "spell": {

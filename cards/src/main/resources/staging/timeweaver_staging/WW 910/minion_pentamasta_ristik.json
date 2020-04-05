@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: This game, your 5-Cost cards have Echo.",
+  "description": "Opener: This game, your 5-Cost cards have Echo.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

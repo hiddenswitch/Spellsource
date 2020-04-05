@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Deathrattle: Summon two 1/. 1 Murlocs with Lifesteal.",
+  "description": "Aftermath: Summon two 1/. 1 Murlocs with Lifedrain.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "minion_bloodfen_raptor"

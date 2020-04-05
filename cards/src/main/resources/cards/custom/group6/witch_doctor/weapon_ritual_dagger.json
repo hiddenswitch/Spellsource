@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "After your champion attacks, add a random Voodoo spell to your hand.",
+  "description": "After your champion attacks, receive a random Voodoo spell.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

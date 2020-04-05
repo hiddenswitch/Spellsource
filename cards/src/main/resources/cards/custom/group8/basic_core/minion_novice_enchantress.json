@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "FAE",
-  "description": "Opener: Give a friendly minion +4 Health and Elusive.",
+  "description": "Opener: Give an allied minion +4 Health and Elusive.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

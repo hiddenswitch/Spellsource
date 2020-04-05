@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Freeze this minion.",
+  "description": "Opener: Freeze this minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

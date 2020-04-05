@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Discover a Beast, Dragon or Fae.",
+  "description": "Opener: Source a Beast, Dragon or Fae.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

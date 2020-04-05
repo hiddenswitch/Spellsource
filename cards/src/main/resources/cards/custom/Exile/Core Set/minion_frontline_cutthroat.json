@@ -6,8 +6,8 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "PIRATE",
-  "description": "Dash. Whenever this attacks, gain 3 Armor.",
+  "race": "DEMON",
+  "description": "Dash. After this attacks, gain 3 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

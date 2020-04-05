@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "The next time you use your Skill, it deals 2 more damage and has Lifesteal.",
+  "description": "The next time you use your Skill, it deals 2 more damage and has Lifedrain.",
   "trigger": {
     "eventTrigger": {
       "class": "HeroPowerUsedTrigger",

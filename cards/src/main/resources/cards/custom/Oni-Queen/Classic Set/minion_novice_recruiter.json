@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Opener: Refresh your skill. Its next use this turn costs (0).",
+  "description": "Opener: Refresh your Skill. Its next use this turn costs (0).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

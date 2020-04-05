@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Add five Soulstones to your hand. Play them all to summon Magoria.",
+  "description": "Opener: Receive five Soulstones. Play them all to summon Magoria.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

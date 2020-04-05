@@ -1,0 +1,24 @@
+{
+  "name": "Rise",
+  "heroPower": "hero_power_rise",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Skill: Receive a Soar that draws a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_soar"
+    }
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}
+  

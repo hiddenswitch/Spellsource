@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "FREE",
-  "description": "Whenever this minion takes damage, restore #3 Health to your champion.",
+  "description": "Whenever this takes damage, restore #3 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

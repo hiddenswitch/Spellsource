@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Give all friendly characters +2 Health.",
+  "description": "Give all allied characters +2 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

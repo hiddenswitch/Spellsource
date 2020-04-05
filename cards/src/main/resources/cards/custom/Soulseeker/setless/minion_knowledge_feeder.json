@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "SPIRIT",
-  "description": "Opener: Destroy a friendly minion to put 3 random Secrets from your deck into the battlefield.",
+  "description": "Opener: Destroy an allied minion to put 3 random Secrets from your deck into the battlefield.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

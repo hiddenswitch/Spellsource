@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Discover an Emerald Secret.",
+  "description": "Opener: Source an Emerald Secret.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

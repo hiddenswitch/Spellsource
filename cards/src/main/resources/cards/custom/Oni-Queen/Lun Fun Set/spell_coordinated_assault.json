@@ -5,7 +5,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Discover a spell in your deck. Draw it.",
+  "description": "Source a spell in your deck. Draw it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
@@ -22,6 +22,9 @@
     "spell1": {
       "class": "FromDeckToHandSpell"
     }
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, summon two random [1]-Cost minions, increasing each time. Lasts [8 turns].",
+  "description": "At the end of your turns, summon two random [1]-Cost minions, increasing each time. Lasts [8 turns].",
   "triggers": [
     {
       "countUntilCast": 8,

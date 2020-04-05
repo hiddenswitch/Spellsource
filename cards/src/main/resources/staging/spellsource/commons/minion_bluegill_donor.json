@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Give your opponent a 2/1 Charge Fanatic.",
+  "description": "Opener: Give your opponent a 2/1 Charge Fanatic.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

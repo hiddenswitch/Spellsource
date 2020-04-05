@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "RARE",
-  "description": "Hire a random friendly minion that has died this game.",
+  "description": "Hire a random allied minion that has died this game.",
   "condition": {
     "class": "GraveyardCountCondition",
     "value": 0,

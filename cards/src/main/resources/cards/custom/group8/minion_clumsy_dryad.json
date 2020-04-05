@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Lifesteal. Aftermath: Restore #2 Health to ALL characters.",
+  "description": "Lifedrain. Aftermath: Restore #2 Health to ALL characters.",
   "deathrattle": {
     "class": "HealSpell",
     "target": "ALL_CHARACTERS",

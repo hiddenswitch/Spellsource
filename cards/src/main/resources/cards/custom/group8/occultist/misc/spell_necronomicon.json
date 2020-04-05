@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Take 3 damage, Discover a card. Repeatable this turn.",
+  "description": "Take 3 damage, Source a card. Repeatable this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

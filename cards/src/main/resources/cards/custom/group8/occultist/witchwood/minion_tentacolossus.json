@@ -1,6 +1,6 @@
 {
   "name": "Tentacolossus",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 4,

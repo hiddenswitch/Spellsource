@@ -7,7 +7,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "EPIC",
-  "description": "Opener: Draw [0 cards]. (Increases for each unspent lun after this is played).",
+  "description": "Opener: Draw [0 cards]. (Increases for each unspent Lun after this is played).",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell",

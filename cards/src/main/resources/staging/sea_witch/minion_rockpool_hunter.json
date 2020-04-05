@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Battlecry: Give a friendly Murloc +1/+1. 1.",
+  "description": "Opener: Give an allied Murloc +1/+1. 1.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

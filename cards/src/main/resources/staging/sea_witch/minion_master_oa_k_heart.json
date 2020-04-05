@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "Battlecry: Recruit a 1, 2. and 3-Attack minion.",
+  "description": "Opener: Recruit a 1, 2. and 3-Attack minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
