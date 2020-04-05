@@ -11,7 +11,7 @@
     "DEFLECT": true,
     "TAKE_DOUBLE_DAMAGE": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

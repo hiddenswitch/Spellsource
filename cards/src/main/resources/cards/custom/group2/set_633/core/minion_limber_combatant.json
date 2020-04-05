@@ -21,7 +21,7 @@
   "attributes": {
     "DEFLECT": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
