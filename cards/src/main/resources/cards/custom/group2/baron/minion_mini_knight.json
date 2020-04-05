@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Whenever you add a card to your hand, gain +1 Attack.",
+  "description": "Whenever you receive a card, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",

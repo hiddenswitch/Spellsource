@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Give your minions \"Aftermath: Receive an Emerald Secret.\"",
+  "description": "Give your minions \"Aftermath: Receive a random Emerald Secret\".",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",

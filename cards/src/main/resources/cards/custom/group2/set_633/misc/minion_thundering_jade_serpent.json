@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, gain \"Whenever you restore Health, give +2 Health to all friendly characters.\"",
+  "description": "Opener: If you're holding a Dragon, gain \"Whenever you restore Health, give +2 Health to all allied characters.\"",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

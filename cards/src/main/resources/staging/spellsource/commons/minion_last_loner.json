@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Battlecry: If your hand is empty, draw a card for each enemy minion.",
+  "description": "Opener: If your hand is empty, draw a card for each enemy minion.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

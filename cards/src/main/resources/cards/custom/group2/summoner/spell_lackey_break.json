@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "COMMON",
-  "description": "Give each minion you summon until the start of next turn +1/+1.",
+  "description": "Give each minion you summon this round +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

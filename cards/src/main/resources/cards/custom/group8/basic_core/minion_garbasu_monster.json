@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "After this minion survives damage, gain +1/+1.",
+  "description": "Whenever this survives damage, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

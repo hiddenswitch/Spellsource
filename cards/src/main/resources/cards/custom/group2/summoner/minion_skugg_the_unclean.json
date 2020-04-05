@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Opener: For the rest of the game, summon a 2/2 Rat with Lifedrain whenever you Invoke.",
+  "description": "Opener: This game, your Invoke effects also summon a 2/2 Rat with Lifedrain.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

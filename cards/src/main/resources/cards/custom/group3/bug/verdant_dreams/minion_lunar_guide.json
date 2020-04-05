@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Receive an Emerald Secret.",
+  "description": "Opener: Receive a random Emerald Secret.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "After you play a Drain card, Discover a Drain card.",
+  "description": "After you play a Drain card, Source a Drain card.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",

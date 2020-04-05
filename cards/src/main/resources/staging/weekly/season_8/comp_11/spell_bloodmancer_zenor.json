@@ -3,7 +3,7 @@
   "baseManaCost": 15,
   "type": "SPELL",
   "rarity": "FREE",
-  "description": "Lifesteal Costs (1) less each time your hero takes damage this on your turns game. 5",
+  "description": "Lifedrain Costs (1) less each time your hero takes damage this on your turns game. 5",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

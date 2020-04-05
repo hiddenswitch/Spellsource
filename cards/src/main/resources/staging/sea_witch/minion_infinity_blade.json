@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Lifesteal After your hero attacks, give it extra Health equal to the damage dealt.",
+  "description": "Lifedrain After your hero attacks, give it extra Health equal to the damage dealt.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

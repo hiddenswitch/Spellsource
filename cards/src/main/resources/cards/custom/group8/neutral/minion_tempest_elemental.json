@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Opener: Give an allied Elemental Elusive.",
+  "description": "Opener: Give an allied Elemental \"Can't be targeted by spells or Skills\".",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

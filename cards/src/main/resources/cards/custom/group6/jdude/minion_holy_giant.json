@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Lifesteal. Costs (1) less for each time an ally was healed this game.",
+  "description": "Lifedrain. Costs (1) less for each time an ally was healed this game.",
   "attributes": {
     "LIFESTEAL": true
   },

@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Battlecry: Deal 4 damage to HIMSELF.",
+  "description": "Opener: Deal 4 damage to HIMSELF.",
   "battlecry": {
     "spell": {
       "class": "DamageSpell",

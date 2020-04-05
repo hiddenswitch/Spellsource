@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Costs (2) less for each Elemental you played last turn.",
+  "description": "Costs (2) less for each Elemental you played during your last turn.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

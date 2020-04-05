@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Add 3 Metronome spells to your hand that draw a card when cast or drawn.",
+  "description": "Opener: Add 3 Metronome spells to your hand that draw a card when cast or drawn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

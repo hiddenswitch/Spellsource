@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: Give this minion's stats to a random allied Demon and a random Demon in your hand.",
+  "description": "Opener: Give an allied Demon and a random Demon in your hand this minion's stats.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "targetSelectionOverride": "NONE",

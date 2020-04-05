@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Draw 2 cards. Give any minions drawn 'Aftermath: Summon a 2/2 Spirit'.",
+  "description": "Draw 2 cards. Give any minions drawn \"Aftermath: Summon a 2/2 Spirit\".",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

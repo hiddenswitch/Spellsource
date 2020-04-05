@@ -7,7 +7,7 @@
   "baseHp": 12,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Guard. Opener: Add [0] 1/1 Whelps to your hand. (Increases for each other card in your hand)",
+  "description": "Guard. Opener: Receive [0] 1/1 Dragons. (Increases for each card in your hand)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

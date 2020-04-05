@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: If you're holding a Dragon, deal 3 damage.",
+  "description": "Opener: If you're holding a Dragon, deal 3 damage.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

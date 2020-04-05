@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "OLIVE",
   "rarity": "FREE",
-  "description": "Skill: Add a spell to your hand that restores #5 Health.",
+  "description": "Skill: Receive a Restorative Passage that restores #5 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

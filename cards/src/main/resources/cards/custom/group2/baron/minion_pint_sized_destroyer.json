@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Destroy the second minion summoned during your turn.",
+  "description": "Destroy the second minion summoned during your turns.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionSummonedTrigger",

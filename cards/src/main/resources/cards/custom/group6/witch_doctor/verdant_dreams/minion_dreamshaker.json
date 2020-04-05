@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Both players discard a card that they've played this game.",
+  "description": "Opener: Both players discard a random card they played a copy of this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

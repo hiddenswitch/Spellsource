@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "Guard. Whenever this minion takes damage, summon a 1/1 Tentacle with Guard.",
+  "description": "Guard. Whenever this takes damage, summon a 1/1 Tentacle with Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

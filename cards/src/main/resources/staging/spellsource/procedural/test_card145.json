@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Deal 2 damage. Give your C'Thun +2/+2 (wherever it is).",
+  "description": "Opener: Deal 2 damage. Give your C'Thun +2/+2 (wherever it is).",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

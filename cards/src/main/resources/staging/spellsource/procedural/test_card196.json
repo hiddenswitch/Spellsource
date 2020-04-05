@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Summon a 4/5 Baine Bloodhoof.",
+  "description": "Aftermath: Summon a 4/5 Baine Bloodhoof.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_baine_bloodhoof"

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Deathrattle: Gain 3 Armor.",
+  "description": "Aftermath: Gain 3 Armor.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "SELF",

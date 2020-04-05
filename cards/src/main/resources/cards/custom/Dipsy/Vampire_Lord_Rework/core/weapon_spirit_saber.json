@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "Opener: Discover an Aftermath you triggered this game. Give it to this weapon.",
+  "description": "Opener: Source an Aftermath you triggered this game. Give it to this.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

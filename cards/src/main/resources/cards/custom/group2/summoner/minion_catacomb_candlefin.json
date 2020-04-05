@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Opener: Add a copy of the last allied Fae that died to your hand.",
+  "description": "Opener: Receive a copy of the last allied Fae that died.",
   "battlecry": {
     "spell": {
       "class": "ReceiveLastCardSpell",

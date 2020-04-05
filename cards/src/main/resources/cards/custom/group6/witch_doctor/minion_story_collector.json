@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: If you cast a spell this turn, add two random Witch Doctor spells to your hand.",
+  "description": "Opener: If you cast a spell this turn, receive two random Witch Doctor spells.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

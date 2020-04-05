@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Guard. Supremacy: Restore #2 Health to all other friendly characters.",
+  "description": "Guard. Supremacy: Restore #2 Health to all other allied characters.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

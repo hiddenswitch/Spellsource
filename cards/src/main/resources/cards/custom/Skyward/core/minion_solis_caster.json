@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: If you're holding 6 or more cards, Source a spell.",
+  "description": "Opener: If you have 6 or more cards in hand, Source a spell.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

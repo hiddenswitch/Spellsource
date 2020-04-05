@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Battlecry: For each Frozen character, Adapt.",
+  "description": "Opener: For each Frozen character, Adapt.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

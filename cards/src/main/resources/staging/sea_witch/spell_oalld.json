@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Shiwva's Hrpothesis Give all minions in hand and deck your \"Deathrattle: Summon a random 2-Cost minion.\"",
+  "description": "Shiwva's Hrpothesis Give all minions in hand and deck your \"Aftermath: Summon a random 2-Cost minion.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

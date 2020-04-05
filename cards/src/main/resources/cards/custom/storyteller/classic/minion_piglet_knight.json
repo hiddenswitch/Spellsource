@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: If you control a Fae, summon a copy of this minion.",
+  "description": "Opener: If you control a Fae, summon a copy of this.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

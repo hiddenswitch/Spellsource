@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "When you Roast this, add a Meal to your hand that restores 7 Health.",
+  "description": "When you Roast this, receive a Meal that restores 7 Health.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "RoastTrigger",

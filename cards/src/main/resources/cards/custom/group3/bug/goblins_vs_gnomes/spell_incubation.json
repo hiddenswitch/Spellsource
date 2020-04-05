@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Receive 3 copies of a minion.",
+  "description": "Choose a minion. Receive 3 copies of it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "PutCopyInHandSpell",

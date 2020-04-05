@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Lifesteal",
+  "description": "Lifedrain",
   "attributes": {
     "LIFESTEAL": true
   },

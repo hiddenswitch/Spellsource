@@ -16,7 +16,9 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -103,6 +105,28 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 	 */
 	@Suspendable
 	protected abstract CardList match(GameContext context, Entity source, Player player);
+
+	/**
+	 * Provides cards performantly, on demand, without having to iterate through the entire card catalogue for many kinds
+	 * of sources.
+	 * <p>
+	 * The implementations are responsible for providing an efficient answer.
+	 *
+	 * @param context
+	 * @param source
+	 * @param player
+	 * @param limit
+	 * @param shuffled
+	 * @return
+	 */
+	@Suspendable
+	protected Stream<Card> match(GameContext context, Entity source, Player player, Predicate<Card> filter, int limit, boolean shuffled) {
+		var match = match(context, source, player);
+		if (shuffled) {
+			match.shuffle(context.getLogic().getRandom());
+		}
+		return match.stream().filter(filter).limit(limit);
+	}
 
 	public TargetPlayer getTargetPlayer() {
 		return (TargetPlayer) getDesc().getOrDefault(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);

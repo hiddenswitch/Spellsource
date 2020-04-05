@@ -4,7 +4,7 @@
     "type": "SPELL",
     "heroClass": "AZURE",
     "rarity": "RARE",
-    "description": "Return a friendly minion to your hand. It costs (0) this turn.",
+    "description": "Return an allied minion to your hand. It costs (0) this turn.",
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
         "class": "ReturnTargetToHandSpell",

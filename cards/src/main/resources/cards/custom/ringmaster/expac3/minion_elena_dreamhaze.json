@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Opener: Discover a class and a spell for it. It becomes your Signature.",
+  "description": "Opener: Source a class and a spell for it. It becomes your Signature.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Aftermath: Summon a 4/4 Spidy.",
+  "description": "Aftermath: Summon a 4/4 Spidey.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_spidey"
