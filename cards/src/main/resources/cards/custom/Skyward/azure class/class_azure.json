@@ -4,9 +4,9 @@
   "hero": "hero_ascella_aeon",
   "heroClass": "AZURE",
   "color": [
-    240,
+    40,
     255,
-    255
+    230
   ],
   "blackText": true,
   "collectible": true,

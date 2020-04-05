@@ -1,0 +1,39 @@
+{
+  "name": "General Yokura",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Guard. Opener: Gain +1/+1 for each ally that died this turn, then attack the enemy champion.",
+  "targetSelection": "NONE",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "value": {
+            "class": "DiedThisTurnValueProvider",
+            "targetPlayer": "SELF"
+          }
+        },
+        {
+          "class": "FightSpell",
+          "target": "ENEMY_HERO",
+          "secondaryTarget": "SELF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

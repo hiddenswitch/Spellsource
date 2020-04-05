@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "PIRATE",
+  "race": "DEMON",
   "description": "Dash. After this attacks, gain 3 Armor.",
   "trigger": {
     "eventTrigger": {
