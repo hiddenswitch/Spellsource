@@ -23,6 +23,21 @@ header: true
  - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
  - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
  
+#### Notes from DeepKhaos about Language Improvements
+
+ - Discover has been renamed to Source.
+ - Effects that state "Add X to your hand" are now reworded as "Receive X".
+ - Unnecessary words have been culled from "this" on certain cards ("Whenever this minion", etc). Cards that still need the clarification, eg "Deal damage to X equal to this minion's Attack", have kept it.
+ - Some cards that talk about turns have been given more clarity. "Turn" now specifies one player's time to act until they hit the End Turn button, and "round" specifies one cycle of this. For example: "Give a minion +2 attack this turn" provides Attack until you hit End Turn, but "Give a minion +2 attack for a round" will last until your opponent does.
+ - A few cards and effects that are random, but don't say so, have had their randomness specified. As a result, since (hopefully) all the random effects in the game are now actually labelled as random, a few cards have had their wording changed so that choice is implied when randomness isn't. "Discard a card" now means choosing a card from hand and discarding it, for example.
+ - "At the start/end of your turn" has been changed to "at the start/end of your turns" because current wording suggests a singular occurrence.
+ - Cards that provide an aura effect for a turn that activates each time the player does something now all read "each time you do X this turn" for consistency (some used to say "whenever").
+ - Cleared up some wording confusions with "whenever" and "after". Very few actual mechanical changes here
+ - Just making sure that, based on their code, effects that are intended to activate whenever or before something happens correctly read "whenever", and cards that are intended to activate after the event has concluded correctly read "after". Also swapped some `PhysicalAttackTriggers` to `TargetAcquisitionTriggers` to make sure "whenever" triggers for minions attacking all actually go off before the attack.
+ - Cards now all consistently use ", instead of some using quotation marks and some using apostrophes.
+ - Skill, Cost and Lun are now correctly capitalised across all cards. Champion is now correctly not capitalised across all cards.
+ - Also fixed some general grammatical issues I stumbled across, like missing full stops.
+ 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
  - Both versions of Doodles now work. (1632)
