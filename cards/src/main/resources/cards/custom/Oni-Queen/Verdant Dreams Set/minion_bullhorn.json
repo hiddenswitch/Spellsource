@@ -1,6 +1,6 @@
 {
   "name": "Bullhorn",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BLUEGREY",
   "baseAttack": 3,
