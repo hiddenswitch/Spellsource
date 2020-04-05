@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Guard. Opener: Discover an Elemental you played last turn.",
+  "description": "Guard. Opener: Source an Elemental you played last turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

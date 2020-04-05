@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Supremacy: Add a copy of a random spell you cast this game to your hand.",
+  "description": "Supremacy: Receive a copy of a random spell you cast this game.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

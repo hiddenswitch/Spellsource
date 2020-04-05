@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Whenever a player targets a character with a spell, restore 5 Health to it.",
+  "description": "Whenever a player casts a targeted spell, restore 5 Health to the target.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

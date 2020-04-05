@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "(1) Overload. At the end of your turn, restore #5 Health to a damaged friendly character.",
+  "description": "(1) Overload. At the end of your turn, restore #5 Health to a damaged allied character.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

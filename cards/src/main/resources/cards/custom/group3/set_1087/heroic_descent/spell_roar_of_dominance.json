@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Your Dragons are Immune this turn. Add a random Dragoon spell to your hand.",
+  "description": "Your Dragons are Immune this turn. Receive a random Dragoon spell.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

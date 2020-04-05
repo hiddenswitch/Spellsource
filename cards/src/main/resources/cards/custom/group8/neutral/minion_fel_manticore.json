@@ -7,7 +7,7 @@
   "baseHp": 12,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Guard. Lifesteal.",
+  "description": "Guard. Lifedrain.",
   "attributes": {
     "LIFESTEAL": true,
     "TAUNT": true

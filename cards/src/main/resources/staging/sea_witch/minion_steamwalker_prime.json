@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "FREE",
   "race": "MECH",
-  "description": "Battlecry: For the rest of the Freeze effects game, your last an extra turn.",
+  "description": "Opener: For the rest of the Freeze effects game, your last an extra turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "Lifesteal. Whenever your hero is healed, restore that much Health to this minion.",
+  "description": "Lifedrain. Whenever your hero is healed, restore that much Health to this minion.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

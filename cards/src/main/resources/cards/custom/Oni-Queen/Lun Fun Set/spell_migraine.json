@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Take 2 damage. Your champion gains Hidden until your next turn.",
+  "description": "Take 2 damage. Give your champion Hidden until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -10,6 +10,8 @@ import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class SoulseekerTests extends TestBase {
 
 	@NotNull

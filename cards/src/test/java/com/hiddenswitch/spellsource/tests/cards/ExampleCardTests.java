@@ -2,9 +2,12 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class ExampleCardTests extends TestBase {
 	@Test
 	public void testExampler() {

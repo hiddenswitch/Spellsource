@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Restore #6 Health split among all friendly minions.",
+  "description": "Opener: Restore #6 Health randomly split among all allied minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "At the end of your turn, give adjacent minions +2 Health.",
+  "description": "At the end of your turns, give adjacent minions +2 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

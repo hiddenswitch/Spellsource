@@ -1,0 +1,25 @@
+{
+  "name": "Chaos Incarnate",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, deal 2 damage randomly split among all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

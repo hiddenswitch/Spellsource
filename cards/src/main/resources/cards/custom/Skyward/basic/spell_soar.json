@@ -1,6 +1,6 @@
 {
   "name": "Soar",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "FREE",

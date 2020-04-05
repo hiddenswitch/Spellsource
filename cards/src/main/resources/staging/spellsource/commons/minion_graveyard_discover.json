@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Discover a minion that has died this game.",
+  "description": "Opener: Discover a minion that has died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

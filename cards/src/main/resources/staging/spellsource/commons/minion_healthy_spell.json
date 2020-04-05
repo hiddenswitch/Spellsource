@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "Battlecry: If you have 15 or less Health, discover a spell.",
+  "description": "Opener: If you have 15 or less Health, discover a spell.",
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",

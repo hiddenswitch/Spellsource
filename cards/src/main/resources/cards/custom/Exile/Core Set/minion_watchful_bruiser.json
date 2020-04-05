@@ -11,10 +11,15 @@
     "class": "AttributeAura",
     "target": "SELF",
     "condition": {
-      "class": "AnyAttackedCondition",
-      "target": "ALL_MINIONS"
+      "class": "HasAttackedCondition",
+      "target": "ALL_OTHER_MINIONS"
     },
-    "attribute": "AURA_CANNOT_ATTACK"
+    "attribute": "AURA_CANNOT_ATTACK",
+    "triggers": [
+      {
+        "class": "AfterPhysicalAttackTrigger"
+      }
+    ]
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

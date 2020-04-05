@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Opener: Add a random Skyward spell to your hand.",
+  "description": "Opener: Receive a random Skyward spell.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

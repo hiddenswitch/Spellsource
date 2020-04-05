@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "Opener: Add a random Source spell to your hand.",
+  "description": "Opener: Receive a random Source spell.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

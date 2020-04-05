@@ -1168,13 +1168,22 @@ public enum Attribute {
 	 */
 	DISCOVER,
 	/**
+	 * Signifies that this card is an Artifact, a type of token card added by What Lies Beneath. Used to easily identify
+	 * them for synergy purposes.
+	 */
+	ARTIFACT,
+	/**
 	 * Keeps track of damage dealt by this {@code source} minion <b>this game</b>.
 	 */
 	TOTAL_DAMAGE_DEALT_THIS_GAME,
 	/**
 	 * Attribute determining which card is the "Signature" for Ringmaster cards.
 	 */
-	SIGNATURE;
+	SIGNATURE,
+	/**
+	 * When set on a player entity, indicates the player is currently in the starting turn phase.
+	 */
+	STARTING_TURN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

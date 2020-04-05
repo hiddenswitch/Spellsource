@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Equip a random weapon.",
+  "description": "Opener: Equip a random weapon.",
   "battlecry": {
     "spell": {
       "class": "EquipRandomWeaponSpell",

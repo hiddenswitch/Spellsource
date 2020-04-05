@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Until the end of your turn, your Supremacy effects also summon a 4/4 Dragon.",
+  "description": "This turn, your Supremacy effects also summon a 4/4 Dragon.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

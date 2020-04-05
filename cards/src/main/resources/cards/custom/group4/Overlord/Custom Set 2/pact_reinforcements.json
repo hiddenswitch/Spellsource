@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "<b>Pact:</b> After 2 friendly Underlings die, summon 2/2 Captives with Guard",
+  "description": "<b>Pact:</b> After 2 allied Underlings die, summon 2/2 Captives with Guard",
   "condition": {
     "class": "CanPlayPactCondition"
   },
@@ -24,8 +24,8 @@
       "spell": {
         "class": "SummonSpell",
         "cards": [
-          "token_captiveGuard_overlord",
-          "token_captiveGuard_overlord"
+          "token_captiveguard_overlord",
+          "token_captiveguard_overlord"
         ]
       }
     }

@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Opener: Discover a 1-Cost spell for your opponent.",
+  "description": "Opener: Source a 1-Cost spell for your opponent.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

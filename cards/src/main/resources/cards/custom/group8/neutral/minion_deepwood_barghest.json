@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: If your deck has no Secrets, add two Emerald Secrets to your hand.",
+  "description": "Opener: If your deck has no Secrets, receive two random Emerald Secrets.",
   "battlecry": {
     "condition": {
       "class": "DeckContainsCondition",

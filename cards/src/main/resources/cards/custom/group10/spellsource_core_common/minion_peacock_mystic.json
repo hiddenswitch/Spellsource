@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Give a friendly Beast +2 Attack and Dash.",
+  "description": "Opener: Give an allied Beast +2 Attack and Dash.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

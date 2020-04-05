@@ -2,6 +2,7 @@ package net.demilich.metastone.game.behaviour;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -519,6 +520,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 					}
 				}
 
+				// If we've been interrupted, peacefully exit this intense part of the code
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
+
 				// Prune after we've scored, so that we don't accidentally prune a lethal node
 				pruneContextStack(contextStack, playerId);
 
@@ -683,6 +689,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return node.predecessor != null && (
 				node.depth >= getMaxDepth()
 						|| node.context.updateAndGetGameOver()
+						|| Strand.currentStrand().isInterrupted()
 						|| (System.currentTimeMillis() - startTime > getTimeout())
 						// Technically allows the bot to play through its extra turns
 						|| node.context.getActivePlayerId() != playerId);
@@ -754,6 +761,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// Perform action
 		try {
+			if (Strand.currentStrand().isInterrupted()) {
+				// Bail out here if possible, does not queue new nodes.
+				return;
+			}
 			mutateContext.performAction(playerId, action);
 		} catch (UnsupportedOperationException cannotRollout) {
 			LOGGER.error("requestAction (unknown) {}: Action {} cannot be simulated!", playerId, action);

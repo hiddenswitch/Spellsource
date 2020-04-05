@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Windfury. Taunt. Battlecry: Give a friendly Mech +4 Health.",
+  "description": "Windfury. Taunt. Battlecry: Give an allied Mech +4 Health.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

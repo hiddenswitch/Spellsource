@@ -1,0 +1,45 @@
+{
+  "name": "Geode Giant",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Guard. Opener: Discover a minion that costs (5) or more.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": 5,
+            "operation": "GREATER_OR_EQUAL"
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

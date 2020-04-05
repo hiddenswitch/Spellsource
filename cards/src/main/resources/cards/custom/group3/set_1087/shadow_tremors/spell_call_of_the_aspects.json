@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Add all three Familiar Aspects to your hand.",
+  "description": "Receive all three Familiar Aspects.",
   "spell": {
     "class": "ReceiveCardSpell",
     "cards": [

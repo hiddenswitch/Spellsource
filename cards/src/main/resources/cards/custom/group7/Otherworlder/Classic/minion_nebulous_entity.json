@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Opener: Deal 2 damage to an enemy minion and give it -2 Attack until your next turn. ",
+  "description": "Opener: Deal 2 damage to an enemy minion and give it -2 Attack for a round. ",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

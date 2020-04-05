@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Battlecry: Give your other Mechs +2 Attack.",
+  "description": "Opener: Give your other Mechs +2 Attack.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

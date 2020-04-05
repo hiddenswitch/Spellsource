@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Deathrattle: Summon a 1/2 Slime with Taunt.",
+  "description": "Aftermath: Summon a 1/2 Slime with Taunt.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_slime"

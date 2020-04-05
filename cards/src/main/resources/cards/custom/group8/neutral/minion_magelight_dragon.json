@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: Add three random 1-Cost spells to your hand.",
+  "description": "Opener: Receive three random 1-Cost spells.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

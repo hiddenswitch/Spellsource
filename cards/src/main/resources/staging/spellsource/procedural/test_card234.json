@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "Windfury. Battlecry: Give a friendly minion Windfury.",
+  "description": "Windfury. Battlecry: Give an allied minion Windfury.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

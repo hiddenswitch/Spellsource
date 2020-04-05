@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Dodge",
+  "description": "Dodge.",
   "attributes": {
     "BATTLECRY": true,
     "DIVINE_SHIELD": true

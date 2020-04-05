@@ -1,0 +1,39 @@
+{
+  "name": "Dream of Anarchy",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "LEGENDARY",
+  "description": "Summon every minion in both players' hands, then force them all to attack other random minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RecruitSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 7,
+          "value2": {
+            "class": "EntityCountValueProvider",
+            "target": "FRIENDLY_MINIONS"
+          }
+		}
+      },
+      {
+        "class": "FightSpell",
+        "target": "ALL_MINIONS",
+        "exclusive": true,
+        "randomTarget": true,
+        "secondaryTarget": "OUTPUT"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "Battlecry: If your C'Thun has at least 10 Attack, gain +5 Health.",
+  "description": "Opener: If your C'Thun has at least 10 Attack, gain +5 Health.",
   "battlecry": {
     "condition": {
       "class": "OrCondition",

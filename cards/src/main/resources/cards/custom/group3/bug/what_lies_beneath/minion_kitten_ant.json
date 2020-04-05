@@ -1,0 +1,23 @@
+{
+  "name": "Kitten Ant",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Dash. Costs (1) less for each other card in your hand.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "offset": -1,
+    "playerAttribute": "HAND_COUNT",
+    "targetPlayer": "SELF"
+  }
+}

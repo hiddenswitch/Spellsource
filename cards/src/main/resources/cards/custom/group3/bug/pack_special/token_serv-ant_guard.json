@@ -1,0 +1,39 @@
+{
+  "name": "Serv-Ant",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Guard. Has +2 Attack while you control another Common minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "ConditionalValueProvider",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "value": 2,
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "COMMON"
+          }
+        },
+        "ifFalse": 0,
+        "ifTrue": 2
+      }
+    }
+  },
+  "attributes": {
+	"TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

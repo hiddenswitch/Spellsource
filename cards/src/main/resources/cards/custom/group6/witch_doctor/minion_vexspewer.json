@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "<b>Opener and Aftermath</b>: Add a Voodoo spell to your hand.",
+  "description": "Opener and Aftermath: Receive a random Voodoo spell.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Enemy spells cost (1) more next turn.",
+  "description": "Opener: Enemy spells cost (1) more this round.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Add two random Voodoo spells to your hand.",
+  "description": "Receive two random Voodoo spells.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

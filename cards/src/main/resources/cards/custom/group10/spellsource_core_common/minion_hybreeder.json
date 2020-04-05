@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "At the end of your turn, summon a 1/1 Mutt with Guard.",
+  "description": "At the end of your turns, summon a 1/1 Mutt with Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

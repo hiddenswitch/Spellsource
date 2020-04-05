@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Sort the cards in your deck by cost. (Lowest goes on top)",
+  "description": "Opener: Sort the cards in your deck by Cost. (Lowest goes on top)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

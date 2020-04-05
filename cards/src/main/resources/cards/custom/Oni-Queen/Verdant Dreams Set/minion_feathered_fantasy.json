@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Choose a friendly minion. Add a copy of it to your hand.",
+  "description": "Opener: Choose an allied minion. Receive a copy of it.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

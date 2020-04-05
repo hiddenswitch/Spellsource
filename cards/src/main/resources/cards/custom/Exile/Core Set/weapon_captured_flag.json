@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 2,
   "rarity": "RARE",
-  "description": "Opener: Draw two minions.",
+  "description": "Opener: Draw 2 minions.",
   "battlecry": {
     "spell": {
       "class": "FromDeckToHandSpell",

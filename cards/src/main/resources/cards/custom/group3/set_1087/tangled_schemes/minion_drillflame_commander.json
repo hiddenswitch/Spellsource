@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Supremacy: Give another random friendly Elemental +2/+2.",
+  "description": "Supremacy: Give another random allied Elemental +2/+2.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

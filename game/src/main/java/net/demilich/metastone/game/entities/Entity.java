@@ -157,7 +157,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @see IdFactoryImpl for the class that generates IDs.
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the place where minion IDs are set.
 	 * @see GameLogic#assignEntityIds(Iterable, int) for the place where IDs are set for all the cards that start in the
-	 * 		game.
+	 * game.
 	 * @see EntityReference for a class used to store the notion of a "target."
 	 */
 	public int getId() {
@@ -200,7 +200,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 *
 	 * @return An {@link EntityReference}.
 	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some notion
-	 * 		of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
+	 * of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
 	 */
 	public EntityReference getReference() {
 		return EntityReference.pointTo(this);
@@ -332,7 +332,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 *
 	 * @return {@code true} if the entity needs to have its persistent effects persisted.
 	 * @see Attribute#LAST_MINION_DESTROYED_CARD_ID for an example of a persistent attribute that needs to be stored
-	 * 		between matches.
+	 * between matches.
 	 */
 	public boolean hasPersistentEffects() {
 		// TODO: look through the card description to see if it uses any network attributes or effects.
@@ -370,8 +370,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * <p>
 	 *
 	 * @return The entity's location in the match encoded as a {@link EntityLocation}, or {@link
-	 *    EntityLocation#UNASSIGNED} if the entity has not yet been assigned a location or placed into an {@link
-	 *    EntityZone}.
+	 * EntityLocation#UNASSIGNED} if the entity has not yet been assigned a location or placed into an {@link
+	 * EntityZone}.
 	 * @see EntityLocation for a complete description of how to use {@link EntityLocation} objects.
 	 */
 	public EntityLocation getEntityLocation() {
@@ -449,14 +449,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Follows {@link Attribute#TRANSFORM_REFERENCE} until the resolved entity is found.
 	 * <p>
-	 * Limits the number of transformations to follow to 89.
+	 * Limits the number of transformations to follow to 14.
 	 *
 	 * @param context A {@link GameContext} to perform lookups in.
 	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no transformed
-	 * 		entity is found.
+	 * entity is found.
 	 */
 	public Entity transformResolved(GameContext context) {
-		return transformResolved(context, 89);
+		return transformResolved(context, 14);
 	}
 
 	protected Entity transformResolved(GameContext context, int depth) {
@@ -469,7 +469,10 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		EntityReference reference = (EntityReference) getAttributes().get(Attribute.TRANSFORM_REFERENCE);
-		Entity entity = context.getEntities().filter(e -> e.getId() == reference.getId()).findFirst().orElseThrow(() -> new TargetNotFoundException("transform ref", reference));
+		Entity entity = context.tryFind(reference, false);
+		if (entity == null) {
+			throw new TargetNotFoundException("transform ref", reference);
+		}
 		entity = entity.transformResolved(context, depth - 1);
 
 		return entity;
@@ -479,7 +482,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets the possibly modified description of the entity to render to the end user.
 	 *
 	 * @return The {@link #getSourceCard()}'s {@link Card#getDescription()} field, or the value specified in {@link
-	 *    Attribute#DESCRIPTION}.
+	 * Attribute#DESCRIPTION}.
 	 */
 	public String getDescription() {
 		return (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) != null) ?
@@ -493,7 +496,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets a reference to the entity that this entity was potentially copied from.
 	 *
 	 * @return {@code null} if this entity was not copied from another entity in the game, or an {@link EntityReference}
-	 * 		of another entity.
+	 * of another entity.
 	 */
 	public EntityReference getCopySource() {
 		return (EntityReference) getAttributes().get(Attribute.COPIED_FROM);
@@ -560,7 +563,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * The entity's index in its zone.
 	 *
 	 * @return {@link EntityLocation#UNASSIGNED} 's index if it isn't yet in a zone (typically {@code -1}), or the index
-	 * 		in the {@link #getZone()} this entity is in.
+	 * in the {@link #getZone()} this entity is in.
 	 */
 	public int getIndex() {
 		return getEntityLocation().getIndex();
@@ -672,7 +675,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * on the battlefield.
 	 *
 	 * @return {@code true} if this minion died a natural death on the battlefield, is not a permanent, is in the
-	 * 		graveyard and is definitely a minion.
+	 * graveyard and is definitely a minion.
 	 */
 	public boolean diedOnBattlefield() {
 		return getEntityType() == EntityType.MINION

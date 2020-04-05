@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Choose a Beast. Summon one from your deck of the same Cost from your deck.",
+  "description": "Opener: Choose a Beast. Summon a random Beast from your deck with the same Cost.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

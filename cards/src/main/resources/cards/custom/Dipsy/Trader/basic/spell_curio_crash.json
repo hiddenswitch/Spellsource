@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "FREE",
-  "description": "Deal 3 damage. Add a random spell to your hand.",
+  "description": "Deal 3 damage. Receive a random spell.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

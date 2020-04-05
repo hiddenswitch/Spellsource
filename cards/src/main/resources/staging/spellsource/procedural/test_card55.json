@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "Battlecry: Deal 1 damage to ALL other characters.",
+  "description": "Opener: Deal 1 damage to ALL other characters.",
   "battlecry": {
     "spell": {
       "class": "DamageSpell",

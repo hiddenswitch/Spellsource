@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Choose and discard a card. Summon two 2/2 Captives.",
+  "description": "Discard a card. Summon two 2/2 Captives.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

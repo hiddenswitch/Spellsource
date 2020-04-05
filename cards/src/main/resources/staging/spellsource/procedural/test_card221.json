@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Destroy a Beast.",
+  "description": "Opener: Destroy a Beast.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

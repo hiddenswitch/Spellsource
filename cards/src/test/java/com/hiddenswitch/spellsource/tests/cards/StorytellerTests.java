@@ -9,6 +9,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class StorytellerTests extends TestBase {
 
 	@NotNull
@@ -315,6 +318,14 @@ public class StorytellerTests extends TestBase {
 				}
 			}
 			assertTrue(false);
+		});
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_overflowing_energy");
+			receiveCard(context, player, "spell_overflowing_energy");
+			receiveCard(context, player, "spell_overflowing_energy");
+			playCard(context, player, "spell_overflowing_energy");
+			assertEquals(5, player.getHand().size());
 		});
 	}
 
