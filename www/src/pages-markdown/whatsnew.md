@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Storyteller's Overflowing Energy now correctly only targets one instance of the lowest-cost card in your hand. (1642)
  - Welcome Skoppu, the Shovelbot.
  - New Outlaw cards, thanks @DeepKhaos!
  - Quick Draw (X): Whenever your cards draw a card...
