@@ -1,0 +1,26 @@
+{
+  "seed" : -8844658102573477923,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CAMO", "DARKGREEN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_ragtag_rescuer", "minion_mosshorn", "minion_aegwynn", "minion_pumpkin_abomination", "minion_rapier_rodent", "minion_nervous_worker", "minion_shouting_soldier", "minion_holy_bulwark", "minion_frigid_bones", "spell_power_of_the_people", "minion_general_yokura", "spell_back_fist", "minion_prince_tenris", "minion_primalist_kirra", "minion_vasz_the_sellsword", "minion_tempest_elemental", "minion_timewalker_stormlord", "minion_acolyte_of_peroth'arn", "weapon_pilfered_dagger", "minion_fassnu_avenger", "weapon_pilfered_dagger", "minion_jabberwocky", "minion_sparkly_messenger", "minion_lunstone_rumbler", "spell_ragged_phalanx", "spell_scavenge", "spell_skirmish", "spell_power_of_the_people", "spell_intimidate", "minion_rogue_opportunist" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_grape_merchant", "minion_little_purrsuer", "minion_owlbear_mother", "minion_ironplate_samurai", "spell_call_of_the_deep_occultist", "minion_holdout_soldier", "spell_volatile_wisdom", "minion_distortoise", "spell_spawn_of_evil", "spell_foul_manifest", "spell_six_feet_under", "minion_expert_explorer", "minion_servant_of_twilight", "minion_jack_in_the_box", "spell_bloody_blow", "minion_pixie_knight", "minion_augmented_pixie", "minion_captain_of_the_guard", "minion_abyssal_protector", "minion_ominous_obliterator", "spell_rite_of_worship", "minion_the_king_in_yellow", "minion_alien_invader", "minion_thuggish_fae", "minion_whiptail_gatherer", "minion_mighty_mufunga", "minion_sparkly_messenger", "minion_gemstone_giant", "minion_swarmed_captive", "minion_bronze_warden" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 58, 64 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 24, 20, 18 ]
+  } ],
+  "actions" : [ 0, 1, 0, 2, 1, 0, 2, 0, 1, 3, 0, 2, 1, 0, 3, 0, 3, 0, 0, 8, 0, 3, 0, 0, 15, 5, 0, 2, 1, 2, 1, 5, 0, 2, 6, 2, 1, 10, 6, 0, 0, 0, 6 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

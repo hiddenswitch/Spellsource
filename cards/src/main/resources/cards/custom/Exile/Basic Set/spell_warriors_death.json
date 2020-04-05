@@ -1,14 +1,16 @@
 {
-  "name": "Back Fist",
-  "baseManaCost": 4,
+  "name": "Warrior's Death",
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "FREE",
-  "description": "Deal $8 damage to a minion.",
+  "description": "Destroy a damaged minion.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "value": 8
+    "class": "DestroySpell",
+    "filter": {
+      "class": "DamagedFilter"
+    }
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

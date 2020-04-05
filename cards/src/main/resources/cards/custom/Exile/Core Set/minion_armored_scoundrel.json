@@ -4,9 +4,8 @@
   "type": "MINION",
   "heroClass": "CAMO",
   "baseAttack": 4,
-  "baseHp": 4,
+  "baseHp": 5,
   "rarity": "COMMON",
-  "race": "PIRATE",
   "description": "Whenever you lose Armor, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
