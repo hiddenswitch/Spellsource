@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Welcome Skoppu, the Shovelbot.
  - New Outlaw cards, thanks @DeepKhaos!
  - Quick Draw (X): Whenever your cards draw a card...
  - Exile has been renamed Rebel, and more changes, thanks @Logovazz!
