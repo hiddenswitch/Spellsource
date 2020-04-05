@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "MECH",
-  "description": "At the start of your turn, deal 1 damage to all friendly minions.",
+  "description": "At the start of your turn, deal 1 damage to all allied minions.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

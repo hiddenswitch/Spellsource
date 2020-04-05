@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Deathrattle: Summon a random 1-Cost minion.",
+  "description": "Aftermath: Summon a random 1-Cost minion.",
   "deathrattle": {
     "class": "SummonSpell",
     "cardFilter": {

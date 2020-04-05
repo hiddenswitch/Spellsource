@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Draw the highest-Cost card from your deck.",
+  "description": "Draw your highest-Cost card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",

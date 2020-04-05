@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "EPIC",
-  "description": "Discover a spell from other classes. Give it to both players.",
+  "description": "Source a spell from other classes. Give it to both players.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

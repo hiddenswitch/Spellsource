@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Give a friendly minion +2/+2, then Stun your other minions.",
+  "description": "Give an allied minion +2/+2, then Stun your other minions.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

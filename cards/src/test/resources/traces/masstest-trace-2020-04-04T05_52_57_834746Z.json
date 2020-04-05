@@ -1,0 +1,26 @@
+{
+  "seed" : -676185951402508378,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "AMBER", "NEONGREEN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_shadowveiler", "minion_samureetle", "minion_disco_inferno", "spell_boss_fight", "minion_chronocaller", "spell_moonlight_dancers", "minion_springer", "minion_hive_guardian", "minion_crouching_tiger", "minion_frontline_coward", "minion_hands_on_historian", "minion_clash_flamecore", "minion_serv-ant", "minion_colossal_spider", "minion_tribemaster", "minion_aegwynn", "spell_into_the_parlor", "minion_tetradimensionalist", "minion_timelost_sarcophagus", "minion_colossal_spider", "spell_spider_surveillance", "minion_gold_picaroon", "minion_tribemaster", "minion_forest_fairy", "minion_stubborn_stegodon", "minion_desert_cactus", "spell_teamwork", "minion_guardian_kirin", "minion_daring_duelist", "minion_mollusk_meister" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_observer", "minion_witherdrake", "spell_cellular_overdrive", "minion_costume_seller", "minion_ankylo_devotee", "minion_nanomite_cloud", "minion_chaos_incarnate", "minion_organ_donor", "minion_smug_theorist", "minion_brawler_bushi", "minion_mind_controlled_mech", "minion_channeled_spirit", "permanent_formless_celerity", "minion_gekra_the_machine", "minion_chaos_incarnate", "minion_rapier_rodent", "spell_bioweaponize", "minion_test_start_turns", "minion_oppressor_defender", "spell_chaos_bolts", "minion_infinite_futurist", "minion_quest_giver", "minion_ankylo_devotee", "minion_bookkeeper", "permanent_formless_celerity", "minion_miniature_gunner", "minion_tree_giant", "minion_wolfcrier", "minion_treeleach", "permanent_formless_agony" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 50, 51 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 26, 15, 25 ]
+  } ],
+  "actions" : [ 1, 4, 1, 0, 0, 3, 1, 2, 2, 0, 0, 1, 2, 0, 3, 1, 3, 2, 14, 2, 0, 0, 0, 2, 1, 2, 0, 0, 20, 2, 0, 0, 4, 4, 10, 9, 8, 0, 9, 0, 1, 1, 15, 27, 16, 1, 0, 4, 16, 15, 5 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

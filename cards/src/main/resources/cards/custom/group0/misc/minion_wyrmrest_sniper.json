@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Hidden. Whenever a friendly Dragon survives damage, deal 3 damage to the enemy champion.",
+  "description": "Hidden. After an allied Dragon survives damage, deal 3 damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

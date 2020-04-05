@@ -1,0 +1,28 @@
+{
+  "name": "Rancorous Grunt",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "<b>Dash</b>. <b>Wither (2)</b>. Whenever this attacks, deal 1 damage to this minion's target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "EVENT_TARGET",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "RUSH": true,
+    "WITHER": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

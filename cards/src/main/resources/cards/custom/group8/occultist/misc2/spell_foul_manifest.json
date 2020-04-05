@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Give a minion +2/+2. Add a copy of it to your hand.",
+  "description": "Give a minion +2/+2. Receive a copy of it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

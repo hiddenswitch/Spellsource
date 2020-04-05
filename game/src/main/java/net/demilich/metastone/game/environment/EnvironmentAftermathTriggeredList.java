@@ -23,11 +23,13 @@ public final class EnvironmentAftermathTriggeredList implements EnvironmentValue
 		private SpellDesc spell;
 		private int playerId;
 		private EntityReference source;
+		private String cardId;
 
-		public EnvironmentAftermathTriggeredItem(int playerId, EntityReference source, SpellDesc spell) {
+		public EnvironmentAftermathTriggeredItem(int playerId, EntityReference source, SpellDesc spell, String cardId) {
 			this.spell = spell;
 			this.playerId = playerId;
 			this.source = source;
+			this.cardId = cardId;
 		}
 
 		/**
@@ -42,6 +44,14 @@ public final class EnvironmentAftermathTriggeredList implements EnvironmentValue
 		public EnvironmentAftermathTriggeredItem setSpell(SpellDesc spell) {
 			this.spell = spell;
 			return this;
+		}
+
+		/**
+		 * The exact card id of the source at the time the aftermath was triggered
+		 * @return
+		 */
+		public String getCardId() {
+			return cardId;
 		}
 
 		/**
@@ -97,8 +107,8 @@ public final class EnvironmentAftermathTriggeredList implements EnvironmentValue
 	 * @param source
 	 * @param spell
 	 */
-	public void addAftermath(int playerId, EntityReference source, SpellDesc spell) {
-		aftermaths.add(new EnvironmentAftermathTriggeredItem(playerId, source, spell));
+	public void addAftermath(int playerId, EntityReference source, SpellDesc spell, String cardId) {
+		aftermaths.add(new EnvironmentAftermathTriggeredItem(playerId, source, spell, cardId));
 	}
 
 	/**

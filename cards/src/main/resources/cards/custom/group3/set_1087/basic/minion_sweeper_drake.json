@@ -1,19 +1,18 @@
 {
-  "name": "Sweeper Drake",
-  "baseManaCost": 3,
+  "name": "Molten Whelp",
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Opener: Summon two 1/1 Whelps.",
+  "description": "Opener: Deal 1 damage.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "ANY",
     "spell": {
-      "class": "SummonSpell",
-      "value": 2,
-      "card": "token_whelp"
+      "class": "DamageSpell",
+      "value": 1
     }
   },
   "attributes": {

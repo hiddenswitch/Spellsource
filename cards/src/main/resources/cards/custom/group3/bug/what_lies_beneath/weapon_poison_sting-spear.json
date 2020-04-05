@@ -1,0 +1,16 @@
+{
+  "name": "Poison Sting-Spear",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "AMBER",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Toxic",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}

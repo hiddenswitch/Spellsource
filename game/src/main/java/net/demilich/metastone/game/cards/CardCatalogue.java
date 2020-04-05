@@ -59,9 +59,9 @@ public class CardCatalogue {
 	private static final Set<String> bannedCardIds = new HashSet<>();
 	private static AtomicBoolean loaded = new AtomicBoolean();
 	private static final Set<String> hardRemovalCardIds = new HashSet<>();
-	private final static Map<String, Card> cards = new LinkedHashMap<>();
-	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>();
-	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>();
+	private final static Map<String, Card> cards = new LinkedHashMap<>(8196);
+	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
+	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>(8196);
 
 	@NotNull
 	public static CardList getAll() {
@@ -70,6 +70,19 @@ public class CardCatalogue {
 			result.addCard(card.clone());
 		}
 		return result;
+	}
+
+	/**
+	 * Returns a mutable reference to the cards loaded into this catalogue.
+	 * <p>
+	 * Changing the cards here changes all their references in all games. However, {@link #getCardById(String)} returns
+	 * clones.
+	 *
+	 * @return
+	 */
+	public @NotNull
+	static Map<String, Card> getCards() {
+		return cards;
 	}
 
 	/**
@@ -137,27 +150,19 @@ public class CardCatalogue {
 	}
 
 	public static CardList query(DeckFormat deckFormat) {
-		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null);
+		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null, true);
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType) {
-		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null);
+		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null, true);
 	}
 
 	public static CardList query(DeckFormat deckFormat, String heroClass) {
-		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null);
+		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, true);
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass) {
-		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null);
-	}
-
-	public static CardList query(DeckFormat deckFormat, String heroClass, String actualHeroClass) {
-		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, actualHeroClass);
-	}
-
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag) {
-		return query(deckFormat, cardType, rarity, heroClass, tag, null);
+		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null, true);
 	}
 
 	/**
@@ -168,11 +173,11 @@ public class CardCatalogue {
 	 * @param rarity
 	 * @param heroClass
 	 * @param tag
-	 * @param actualHeroClass
+	 * @param clone
 	 * @return
 	 */
 	@NotNull
-	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, String actualHeroClass) {
+	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, boolean clone) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			if (card.getDesc().getFileFormatVersion() > version) {
@@ -206,7 +211,10 @@ public class CardCatalogue {
 			if (tag != null && !card.hasAttribute(tag)) {
 				continue;
 			}
-			result.addCard(card.clone());
+			if (clone) {
+				card = card.clone();
+			}
+			result.addCard(card);
 		}
 
 		return result;
@@ -407,12 +415,11 @@ public class CardCatalogue {
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
-	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
+	public synchronized static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
 		if (!firstLoad()) {
 			return;
 		}
 		List<CardResources> cardResources = null;
-//		workaroundClassGraphCreatingDirectBuffers();
 
 		try (ScanResult scanResult =
 				     new ClassGraph()

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Add a copy of your Signature to your hand.",
+  "description": "Opener: Receive a copy of your Signature.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

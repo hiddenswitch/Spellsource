@@ -15,6 +15,7 @@
       "spells": [
         {
           "class": "BuffSpell",
+          "target": "SELF",
           "value": {
             "class": "DiedThisTurnValueProvider",
             "targetPlayer": "SELF"
@@ -23,7 +24,7 @@
         {
           "class": "FightSpell",
           "target": "ENEMY_HERO",
-          "secondaryTarget": "TARGET"
+          "secondaryTarget": "SELF"
         }
       ]
     }

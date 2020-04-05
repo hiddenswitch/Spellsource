@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "At the end of your turn, if you restored Health this turn, summon a 2/2 Elemental.",
+  "description": "At the end of your turns, if you restored Health this turn, summon a 2/2 Elemental.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

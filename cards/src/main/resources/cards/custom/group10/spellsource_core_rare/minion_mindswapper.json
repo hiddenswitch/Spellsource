@@ -7,7 +7,7 @@
   "baseHp": 2,
   "race": "FAE",
   "rarity": "RARE",
-  "description": "Opener: Swap your leftmost card with your opponent's.",
+  "description": "Opener: Swap the leftmost card in your hand with your opponent's.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {

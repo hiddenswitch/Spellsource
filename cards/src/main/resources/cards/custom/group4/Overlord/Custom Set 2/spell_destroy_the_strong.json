@@ -14,7 +14,8 @@
       "class": "SpecificCardFilter",
       "cards": [
         "token_captive_overlord",
-        "token_captiveGuard_overlord"
+        "token_captiveguard_overlord",
+        "token_underling_overlord"
       ],
       "invert": true
     }

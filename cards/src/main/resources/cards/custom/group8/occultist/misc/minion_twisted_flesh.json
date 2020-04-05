@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever this minion takes damage from your cards or your skill, restore it to full Health.",
+  "description": "Whenever this takes damage from your cards or Skill, restore it to full Health.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

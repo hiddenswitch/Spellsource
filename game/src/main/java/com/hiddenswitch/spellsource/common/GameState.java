@@ -20,6 +20,7 @@ import net.demilich.metastone.game.logic.TurnState;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,6 +46,7 @@ public class GameState implements Serializable, Cloneable {
 	private final Player player2;
 	private final CardList tempCards;
 	private final Map<Environment, Object> environment;
+	private final Map<String, AtomicInteger> variables;
 	private final TriggerManager triggerManager;
 	private final int currentId;
 	private final int activePlayerId;
@@ -78,8 +80,9 @@ public class GameState implements Serializable, Cloneable {
 		activePlayerId = clone.getActivePlayerId();
 		turnNumber = clone.getTurn();
 		this.turnState = turnState;
-		this.deckFormat = fromContext.getDeckFormat();
-		this.millisRemaining = fromContext.getMillisRemaining();
+		deckFormat = fromContext.getDeckFormat();
+		millisRemaining = fromContext.getMillisRemaining();
+		variables = fromContext.getVariables();
 	}
 
 	private GameState(Player player1,
@@ -92,7 +95,8 @@ public class GameState implements Serializable, Cloneable {
 	                  long timestamp,
 	                  int turnNumber,
 	                  DeckFormat deckFormat,
-	                  Long millisRemaining) {
+	                  Long millisRemaining,
+	                  Map<String, AtomicInteger> variables) {
 		this.player1 = player1;
 		this.player2 = player2;
 		this.tempCards = tempCards;
@@ -105,6 +109,7 @@ public class GameState implements Serializable, Cloneable {
 		this.turnNumber = turnNumber;
 		this.deckFormat = deckFormat;
 		this.millisRemaining = millisRemaining;
+		this.variables = variables;
 	}
 
 	public static long getSerialVersionUID() {
@@ -140,7 +145,7 @@ public class GameState implements Serializable, Cloneable {
 	 * Gets a {@link MapDifference} that corresponds to this state being the first state.
 	 *
 	 * @return A {@link Maps#difference(Map, Map)} call where an empty map is the left argument and this game state is the
-	 * 		right argument.
+	 * right argument.
 	 */
 	public MapDifference<Integer, EntityLocation> start() {
 		return Maps.difference(Collections.emptyMap(), getMap());
@@ -160,7 +165,8 @@ public class GameState implements Serializable, Cloneable {
 				getTimestamp(),
 				getTurnNumber(),
 				getDeckFormat(),
-				getMillisRemaining());
+				getMillisRemaining(),
+				getVariables());
 	}
 
 
@@ -259,5 +265,12 @@ public class GameState implements Serializable, Cloneable {
 	 */
 	public Long getMillisRemaining() {
 		return millisRemaining;
+	}
+
+	/**
+	 * Gets the variables in the game. Spells are responsible for managing their own state here.
+	 */
+	public Map<String, AtomicInteger> getVariables() {
+		return variables;
 	}
 }

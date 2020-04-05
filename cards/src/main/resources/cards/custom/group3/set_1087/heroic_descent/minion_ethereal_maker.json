@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: Summon a copy of a friendly minion that costs (7) or more.",
+  "description": "Opener: Summon a copy of an allied minion that costs (7) or more.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

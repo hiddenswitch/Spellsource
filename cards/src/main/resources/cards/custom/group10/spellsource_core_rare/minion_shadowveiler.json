@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Opener: Give a friendly minion Hidden until a minion attacks.",
+  "description": "Opener: Give an allied minion Hidden until a minion attacks.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -6,10 +6,10 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "After you play a minion, gain +1 Attack this turn.",
+  "description": "Whenever you play a minion, gain +1 Attack this turn.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterMinionPlayedTrigger",
+      "class": "MinionPlayedTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {

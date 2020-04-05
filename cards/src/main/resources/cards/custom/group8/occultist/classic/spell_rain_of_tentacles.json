@@ -1,6 +1,6 @@
 {
   "name": "Rain of Tentacles",
-  "baseManaCost": 6,
+  "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",

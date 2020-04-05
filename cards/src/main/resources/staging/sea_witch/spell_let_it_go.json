@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Your cards and effects have Lifesteal this turn.",
+  "description": "Your cards and effects have Lifedrain this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

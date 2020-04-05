@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If you have at least 4 other minions, deal 4 damage.",
+  "description": "Opener: If you have at least 4 other minions, deal 4 damage.",
   "battlecry": {
     "condition": {
       "class": "MinionCountCondition",

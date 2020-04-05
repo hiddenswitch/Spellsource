@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Deathrattle: Add a Spare Part card to your hand.",
+  "description": "Aftermath: Add a Spare Part card to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [

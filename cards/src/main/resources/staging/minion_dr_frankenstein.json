@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Discover 2 friendly minions that died this game and combine them into Frankenstein's Monster.",
+  "description": "Opener: Discover 2 allied minions that died this game and combine them into Frankenstein's Monster.",
   "battlecry": {
     "condition": {
       "class": "GraveyardCountCondition",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Battlecry: Each player draws 2 cards.",
+  "description": "Opener: Each player draws 2 cards.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Destroy a friendly minion. Add two 1/1 copies of it to your hand that cost (1).",
+  "description": "Destroy an allied minion. Receive two 1/1 copies of it that cost (1).",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

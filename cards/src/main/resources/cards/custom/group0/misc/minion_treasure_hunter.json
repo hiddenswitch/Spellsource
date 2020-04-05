@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Opener: Draw a 0-Cost card from your deck.",
+  "description": "Opener: Draw a 0-Cost card.",
   "battlecry": {
     "spell": {
       "class": "FromDeckToHandSpell",

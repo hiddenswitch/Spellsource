@@ -12,7 +12,7 @@
     "target": "FRIENDLY_HERO",
     "attribute": "AURA_WINDFURY"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

@@ -1,0 +1,40 @@
+{
+  "name": "Rite of Worhip",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Draw a spell. It Costs (3) less if you're holding a 10-Cost minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+       "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": 10
+        }
+    },
+    "spell1": {
+      "class": "DrawCardSpell",
+      "value": 1,
+	  "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+     }
+    },
+    "spell2": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 3,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

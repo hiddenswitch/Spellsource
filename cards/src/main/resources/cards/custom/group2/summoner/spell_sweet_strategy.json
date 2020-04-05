@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Shuffle two copies of the highest Cost card in your hand into your deck.",
+  "description": "Shuffle two copies of the highest-Cost card in your hand into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ShuffleToDeckSpell",

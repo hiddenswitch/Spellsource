@@ -1,10 +1,10 @@
 {
   "name": "Incandescent Mutation",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Draw a card, then give all minions in your hand \"<b>Opener</b>: Deal 1 damage to a random enemy minion.\"",
+  "description": "Draw a card, then give all minions in your hand \"Opener: Deal 1 damage to a random enemy minion\".",
   "spell": {
     "class": "MetaSpell",
     "spells": [

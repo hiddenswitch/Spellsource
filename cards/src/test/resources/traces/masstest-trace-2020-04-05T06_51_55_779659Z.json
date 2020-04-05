@@ -1,0 +1,26 @@
+{
+  "seed" : -4276074174903301623,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "TWILIGHT", "CAMO" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_glyph_carver", "minion_mother_matron", "minion_klive_icetooth", "minion_gatekeeper_acolyte", "minion_yokai_shapeshifter", "minion_faldoran_the_ninja", "minion_end", "minion_gatekeeper_acolyte", "minion_magedrainer", "spell_blood_moon_rising_rework", "minion_augmented_pixie", "weapon_reservoir_blade", "minion_ichor_spewer", "minion_timewalker_stormlord", "spell_scarlet_thirst_rework", "minion_yokai_bonder", "minion_flutterer", "weapon_warp_scythe", "minion_dante_the_outlaw", "minion_emissary_of_the_end", "minion_manic_ritualist", "minion_lundurr_the_reborn", "minion_colrum", "spell_dark_skies", "minion_twisted_sentinel", "minion_spirited_bomber", "spell_siphon", "minion_shacklebreaker", "spell_hemoshade", "spell_hemoblade" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_kairozdormu", "minion_ninja_aspirants", "minion_frontline_cutthroat", "minion_obsigon_bounty_sorcerer", "minion_freedom_fighter", "spell_chokehold", "weapon_splintered_spear", "spell_power_of_the_people", "minion_doomed_diver", "minion_shapeseeper", "minion_burrows_sniper", "weapon_captured_flag", "minion_bogovanis", "minion_dawnrisen_harpy", "minion_burrows_sniper", "spell_warriors_death", "weapon_captured_flag", "minion_molten_cauterizer", "minion_nightmare_whelp", "spell_intimidate", "minion_bullet_bull", "spell_marked_for_death", "minion_freedom_fighter", "spell_scavenge", "minion_general_yokura", "minion_vasz_the_sellsword", "minion_nightmare_warden", "minion_wyrmrest_sniper", "minion_nightmare_dragonflight", "minion_purifying_ooze" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 39, 36, 42 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 18, 26 ]
+  } ],
+  "actions" : [ 0, 0, 2, 1, 1, 0, 2, 4, 2, 0, 3, 2, 2, 2, 2, 0, 3, 0, 4, 0, 3, 1, 3, 0, 0, 5, 1, 3, 0, 0, 5, 3, 5, 0, 4, 1, 1, 0, 16, 6, 0, 1, 0, 11, 10, 1, 0, 0, 15, 5, 9, 2, 0, 0, 10, 2, 4, 2, 3, 1, 0, 0, 2, 10, 12, 9, 3, 18, 4, 0, 0, 0, 3, 8, 0, 3, 0, 0, 0, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

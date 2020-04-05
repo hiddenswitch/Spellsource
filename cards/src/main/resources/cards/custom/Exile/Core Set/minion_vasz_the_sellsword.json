@@ -5,17 +5,18 @@
   "heroClass": "CAMO",
   "baseAttack": 5,
   "baseHp": 5,
-  "rarity": "CAMO",
+  "rarity": "LEGENDARY",
   "race": "DRAGON",
   "description": "Opener: Deal 1 damage to all other minions. Repeat until a minion dies.",
   "battlecry": {
-    "targetSelection": "NONE
+    "targetSelection": "NONE",
     "spell": {
-      "class": "DamageSpell",
-      "target": "ALL_OTHER_MINIONS",
-      "value": 1,
+      "class": "RecastUntilMinionsDestroyedSpell",
+      "howMany": 30,
       "spell": {
-      #  "class": "RecastUntilMinionsDestroyedSpell"
+        "class": "DamageSpell",
+        "target": "ALL_OTHER_MINIONS",
+        "value": 1
       }
     }
   },

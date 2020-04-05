@@ -14,7 +14,7 @@
         "target": "FRIENDLY_HERO",
         "armorBonus": {
           "class": "DiedThisTurnValueProvider",
-          "targetPlayer": "BOTH",
+          "targetPlayer": "BOTH"
         }
       },
       {

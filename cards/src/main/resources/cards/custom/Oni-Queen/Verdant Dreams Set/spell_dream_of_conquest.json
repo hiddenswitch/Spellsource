@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "LEGENDARY",
-  "description": "Deal $2 damage to all enemy minions. Upgrade your skill.",
+  "description": "Deal $2 damage to all enemy minions. Upgrade your Skill.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -1,6 +1,6 @@
 {
   "name": "Degenerator",
-  "baseManaCost": 7,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "NEONGREEN",
   "baseAttack": 2,

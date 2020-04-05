@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a 2/2 Squire.",
+  "description": "Opener: Summon a 2/2 Squire.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

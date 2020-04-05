@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "Guard. Opener: Roast 10 cards that aren't 10-Cost",
+  "description": "Guard. Opener: Roast 10 cards that aren't 10-Cost.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

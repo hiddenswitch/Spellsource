@@ -11,7 +11,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Choose a friendly minion. Draw a card with the same tribe.",
+  "description": "Opener: Choose an allied minion. Draw a card with the same Tribe.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

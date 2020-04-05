@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Destroy all minions with more attack than this.",
+  "description": "Aftermath: Destroy all minions with more attack than this.",
   "deathrattle": {
     "spell": {
       "class": "DestroySpell",

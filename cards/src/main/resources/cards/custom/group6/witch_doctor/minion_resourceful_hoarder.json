@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Add a copy of your hand to your hand.",
+  "description": "Opener: Receive a copy of your hand.",
   "battlecry": {
     "spell": {
       "class": "CopyCardSpell",

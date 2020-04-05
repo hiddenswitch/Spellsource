@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Give a random friendly minion +6/+6.",
+  "description": "Give a random allied minion +6/+6.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

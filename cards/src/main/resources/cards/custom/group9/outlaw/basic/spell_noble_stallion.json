@@ -1,0 +1,26 @@
+{
+  "name": "Noble Stallion",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "description": "Give a minion Dash and +1/+3.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "RUSH"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

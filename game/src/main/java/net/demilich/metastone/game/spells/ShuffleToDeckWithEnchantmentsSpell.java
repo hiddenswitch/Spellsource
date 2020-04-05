@@ -78,7 +78,7 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 		sourceCard.getAttributes().remove(Attribute.ATTACK_BONUS);
 		sourceCard.getAttributes().remove(Attribute.HP_BONUS);
 		// Shuffles a copy of Immortal Prelate back into the deck
-		Card card = CopyCardSpell.copyCard(context, player, sourceCard, (playerId, copiedCard) -> {
+		Card card = CopyCardSpell.copyCard(context, player, source, sourceCard, (playerId, copiedCard) -> {
 			moveCopyToDestination(context, player, target, copiedCard);
 		});
 

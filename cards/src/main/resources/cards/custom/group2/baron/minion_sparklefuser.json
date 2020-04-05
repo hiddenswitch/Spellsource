@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "Adjacent minions have Lifesteal and Toxic.",
+  "description": "Adjacent minions have Lifedrain and Toxic.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

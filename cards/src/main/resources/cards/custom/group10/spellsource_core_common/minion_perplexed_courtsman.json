@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Whenever you summon a minion, gain +1 Health",
+  "description": "Whenever you summon a minion, gain +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

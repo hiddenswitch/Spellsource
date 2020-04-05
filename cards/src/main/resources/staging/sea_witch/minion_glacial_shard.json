@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Freeze an enemy.",
+  "description": "Opener: Freeze an enemy.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
