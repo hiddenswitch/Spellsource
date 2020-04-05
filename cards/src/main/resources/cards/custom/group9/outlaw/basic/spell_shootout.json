@@ -4,13 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "FREE",
-  "description": "Deal $2 damage to three random enemy minions.",
-  "condition": {
-    "class": "MinionCountCondition",
-    "value": 2,
-    "operation": "GREATER",
-    "targetPlayer": "OPPONENT"
-  },
+  "description": "Deal $2 damage to up to three random enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MultiTargetSpell",
