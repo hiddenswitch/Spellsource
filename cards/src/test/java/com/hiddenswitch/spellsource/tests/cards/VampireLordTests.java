@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -593,6 +596,29 @@ public class VampireLordTests extends TestBase {
 			playCard(context, player, "spell_dream_of_death");
 
 			assertEquals(player.getHero().getHp(), 11);
+		});
+	}
+
+	@Test
+	public void testSpiritSaber() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, player, "spell_lunstone");
+			}
+			Minion testD = playMinionCard(context, player, "minion_test_deathrattle");
+			playCard(context, player, "spell_hate_spike", testD);
+			playCard(context, player, "spell_hex_behemoth", testD);
+			AtomicBoolean b = new AtomicBoolean(false);
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(1, discoverActions.size());
+				assertEquals("minion_test_deathrattle", discoverActions.get(0).getCard().getCardId());
+				b.set(true);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "weapon_spirit_saber");
+			if (!b.get()) {
+				fail();
+			}
 		});
 	}
 }

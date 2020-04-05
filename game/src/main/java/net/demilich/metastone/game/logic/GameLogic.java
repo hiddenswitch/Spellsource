@@ -4079,9 +4079,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (doubleDeathrattles) {
 				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
 				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, true, null);
+				if (shouldAddToDeathrattlesTriggered) {
+					context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle, context.resolveSingleTarget(sourceReference).getSourceCard().getCardId());
+				}
 			}
 			if (shouldAddToDeathrattlesTriggered) {
-				context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle);
+				context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle, context.resolveSingleTarget(sourceReference).getSourceCard().getCardId());
 			}
 		}
 	}
