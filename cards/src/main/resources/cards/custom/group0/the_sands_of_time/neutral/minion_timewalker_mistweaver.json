@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Whenever you play a card, restore #2 Health to your champion",
+  "description": "Whenever you play a card, restore #2 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",

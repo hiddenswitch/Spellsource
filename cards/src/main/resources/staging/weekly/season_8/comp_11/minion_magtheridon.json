@@ -6,7 +6,7 @@
   "baseHp": 9,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "Taunt. Lifesteal. At the end of your turn while this is in your hand, swap Cost with your hero's health.",
+  "description": "Taunt. Lifedrain. At the end of your turn while this is in your hand, swap Cost with your hero's health.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

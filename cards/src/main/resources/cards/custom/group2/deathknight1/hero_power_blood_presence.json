@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Passive Skill. Your minions have Lifesteal this turn.",
+  "description": "Passive Skill. Your minions have Lifedrain this turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -30,7 +30,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
-    "description": "Your minions have Lifesteal this turn.",
+    "description": "Your minions have Lifedrain this turn.",
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Whenever you summon a minion this turn, add a copy of it to your hand.",
+  "description": "Each time you summon a minion this turn, receive a copy of it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

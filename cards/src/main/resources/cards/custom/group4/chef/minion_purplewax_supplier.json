@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Discover a Spell. Shuffle it into your deck. It costs (5) less.",
+  "description": "Opener: Source a Spell. Shuffle it into your deck. It costs (5) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

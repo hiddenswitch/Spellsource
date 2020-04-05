@@ -11,7 +11,7 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "Opener: Discover a Baron, Dragoon, or Witch Doctor card.",
+  "description": "Opener: Source a Baron, Dragoon, or Witch Doctor card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "<b>Opener</b>: Give a friendly Beast +3 Attack or +3 Health (at random).",
+  "description": "<b>Opener</b>: Give an allied Beast +3 Attack or +3 Health (at random).",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

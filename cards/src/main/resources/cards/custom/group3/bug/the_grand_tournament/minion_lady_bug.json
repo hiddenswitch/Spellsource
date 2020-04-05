@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "After a friendly minion dies, give your other minions +1 Health.",
+  "description": "Whenever an allied minion dies, give your other minions +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever a player casts a spell, add a random neutral card to their hand.",
+  "description": "Whenever a player casts a spell, they receive a random Neutral card.",
   "race": "FAE",
   "trigger": {
     "eventTrigger": {

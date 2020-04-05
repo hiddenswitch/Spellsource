@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Draw a spell from your deck.",
+  "description": "Draw a spell.",
   "spell": {
     "class": "FromDeckToHandSpell",
     "value": 1,

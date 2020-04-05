@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Deathrattle: Add a random Murloc to hand. your",
+  "description": "Aftermath: Add a random Murloc to hand. your",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "target": "FRIENDLY_CHARACTERS",

@@ -1,0 +1,31 @@
+{
+  "name": "Dual Daggers",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "COPPER",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "EPIC",
+  "description": "After your champion attacks and kills a minion, swap Attack and Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Restore #8 Health to your Champion. Roast 3 cards.",
+  "description": "Restore #8 Health to your champion. Roast 3 cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

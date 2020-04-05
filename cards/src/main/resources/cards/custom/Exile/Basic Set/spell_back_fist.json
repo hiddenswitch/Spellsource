@@ -4,11 +4,11 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "FREE",
-  "description": "Deal $6 damage to a minion.",
+  "description": "Deal $8 damage to a minion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DamageSpell",
-    "value": 6
+    "value": 8
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

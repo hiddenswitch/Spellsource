@@ -6,10 +6,11 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Hidden. After this attacks a champion, draw a card.",
+  "description": "Hidden. Whenever this attacks a champion, draw a card.",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "hostTargetType": "IGNORE_OTHER_SOURCES",
       "targetEntityType": "HERO"
     },

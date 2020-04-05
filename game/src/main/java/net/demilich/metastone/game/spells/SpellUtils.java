@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -664,8 +665,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Casts a subspell on a card that was returned by {@link GameLogic#receiveCard(int,
-	 * Card)}. Will not execute if the output is null or in the {@link Zones#GRAVEYARD}.
+	 * Casts a subspell on a card that was returned by {@link GameLogic#receiveCard(int, Card)}. Will not execute if the
+	 * output is null or in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param context The {@link GameContext} to operate on.
 	 * @param player  The player from whose point of view we are casting this sub spell. This should be passed down from
@@ -708,9 +709,8 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
-	 * SpellArg#CARDS} properties or as specified by a {@link CardSource}
-	 * and {@link CardFilter}. If neither of those are specified, uses the
-	 * target's {@link Entity#getSourceCard()} as the targeted card.
+	 * SpellArg#CARDS} properties or as specified by a {@link CardSource} and {@link CardFilter}. If neither of those are
+	 * specified, uses the target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
 	 * argument, defaulting to 1.
@@ -730,14 +730,13 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
-	 * SpellArg#CARDS} properties or as specified by a {@link CardSource}
-	 * and {@link CardFilter}. If neither of those are specified, uses the
-	 * target's {@link Entity#getSourceCard()} as the targeted card.
+	 * SpellArg#CARDS} properties or as specified by a {@link CardSource} and {@link CardFilter}. If neither of those are
+	 * specified, uses the target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The {@link SpellDesc} given in {@code desc} is inspected for a variety of arguments. If there is a {@link
 	 * SpellArg#CARD_SOURCE} or {@link SpellArg#CARD_FILTER} specified, the card source generates a list of cards using
-	 * {@link CardSource#getCards(GameContext, Entity, Player)}, and that list
-	 * is filtered using {@link EntityFilter#matches(GameContext, Player, Entity, Entity)}.
+	 * {@link CardSource#getCards(GameContext, Entity, Player)}, and that list is filtered using {@link
+	 * EntityFilter#matches(GameContext, Player, Entity, Entity)}.
 	 * <p>
 	 * Anytime {@link SpellArg#CARD} or {@link SpellArg#CARDS} is specified, the card IDs in those args are added to the
 	 * list of cards returned by this method.
@@ -747,9 +746,8 @@ public class SpellUtils {
 	 * SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_SOURCE} nor {@link SpellArg#CARD_FILTER} will be
 	 * interpreted as trying to retrieve the target's base card.
 	 * <p>
-	 * Cards are not generated as copies unless the {@link CardSource} has
-	 * the {@link HasCardCreationSideEffects} trait and is used as an arg
-	 * in the {@code desc}.
+	 * Cards are not generated as copies unless the {@link CardSource} has the {@link HasCardCreationSideEffects} trait
+	 * and is used as an arg in the {@code desc}.
 	 * <p>
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
 	 * card source used is {@link UnweightedCatalogueSource}.
@@ -782,6 +780,9 @@ public class SpellUtils {
 			int i = count;
 			while (cards.size() > 0
 					&& i > 0) {
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
 				result.add(context.getLogic().removeRandom(cards));
 				i--;
 			}
@@ -850,8 +851,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Retrieves an array of spells corresponding to the {@link AuraArg#APPLY_EFFECT}
-	 * field on an aura whose condition is null or fulfilled for the given {@code source} and {@code target}.
+	 * Retrieves an array of spells corresponding to the {@link AuraArg#APPLY_EFFECT} field on an aura whose condition is
+	 * null or fulfilled for the given {@code source} and {@code target}.
 	 *
 	 * @param context
 	 * @param playerId

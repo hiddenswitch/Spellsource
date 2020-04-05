@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Grant a friendly minion +4/+4 until the end of the turn. Then it is destroyed.",
+  "description": "Grant an allied minion +4/+4 until the end of the turn. Then it is destroyed.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

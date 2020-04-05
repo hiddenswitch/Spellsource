@@ -93,9 +93,9 @@ public class PythonBridgeTest {
 			"# 2x (3) Dragonhorn\n" +
 			"# 1x (3) Irena, Dragon Knight\n" +
 			"# 2x (3) Supersonic Roar\n" +
-			"# 2x (3) Sweeper Drake\n" +
+			"# 2x (3) Molten Whelp\n" +
 			"# 2x (4) Guild Guard\n" +
-			"# 2x (4) The Little Swarm\n" +
+			"# 2x (4) Sweeping Swarm\n" +
 			"# 1x (5) Conflagration\n" +
 			"# 2x (5) Drakonid Bruiser\n" +
 			"# 2x (5) Vermillion Glider\n" +

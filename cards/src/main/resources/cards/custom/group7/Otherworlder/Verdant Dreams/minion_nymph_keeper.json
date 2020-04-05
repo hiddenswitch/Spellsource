@@ -1,0 +1,49 @@
+{
+  "name": "Nymph Keeper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "TITAN",
+  "description": "<b>Opener:</b> Draw 3 of your lowest Cost minions from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 3,
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": {
+              "class": "ReduceValueProvider",
+              "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              },
+              "operation": "MINIMUM",
+              "value1": {
+                "class": "ManaCostProvider"
+              }
+            },
+            "operation": "EQUAL"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Transform a minion and adjacent minions into minions of the same Cost.",
+  "description": "Opener: Transform a minion and adjacent minions into random minions of the same Cost.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

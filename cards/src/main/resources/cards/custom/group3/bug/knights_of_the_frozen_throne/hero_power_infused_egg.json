@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Discover a Runeforged Bee.",
+  "description": "Source a Runeforged Bee.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

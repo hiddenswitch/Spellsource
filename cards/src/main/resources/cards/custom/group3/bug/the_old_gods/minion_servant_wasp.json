@@ -1,5 +1,5 @@
 {
-  "name": "Ordinary Wasp",
+  "name": "Typical Wasp",
   "baseManaCost": 0,
   "type": "MINION",
   "heroClass": "AMBER",
@@ -7,9 +7,9 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Blitz",
+  "description": "Dash",
   "attributes": {
-    "CHARGE": true
+    "RUSH": true
   },
   "collectible": true,
   "set": "CUSTOM",

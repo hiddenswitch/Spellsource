@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Battlecry: Your next Hero Power also summons a Cult Novitiate.",
+  "description": "Opener: Your next Hero Power also summons a Cult Novitiate.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Hidden, Toxic. Aftermath: Add an Emerald Secret to your hand.",
+  "description": "Hidden. Toxic. Aftermath: Receive a random Emerald Secret.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [

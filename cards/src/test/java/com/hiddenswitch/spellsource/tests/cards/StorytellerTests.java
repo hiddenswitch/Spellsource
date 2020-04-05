@@ -9,6 +9,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class StorytellerTests extends TestBase {
 
 	@NotNull

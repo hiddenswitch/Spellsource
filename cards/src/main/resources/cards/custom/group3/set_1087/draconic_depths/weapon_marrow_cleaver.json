@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 1,
   "rarity": "RARE",
-  "description": "Supremacy: Add a copy of this weapon to your hand.",
+  "description": "Supremacy: Receive a copy of this.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

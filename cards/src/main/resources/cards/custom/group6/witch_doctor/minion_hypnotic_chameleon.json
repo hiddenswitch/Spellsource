@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Aftermath: Add a random Voodoo spell to your hand.",
+  "description": "Aftermath: Receive a random Voodoo spell.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [

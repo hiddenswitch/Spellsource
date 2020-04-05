@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Battlecry: Ocean Depths in your deck give your C'Thun +2 Attack instead of restoring 2 Health.",
+  "description": "Opener: Ocean Depths in your deck give your C'Thun +2 Attack instead of restoring 2 Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

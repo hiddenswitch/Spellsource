@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -124,6 +125,8 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			highValueTarget.setAttack(1000);
 			highValueTarget.setAttribute(Attribute.SPELL_DAMAGE, 1000);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTimeout(behaviour.getTimeout() * 2);
+			behaviour.setLethalTimeout(behaviour.getLethalTimeout() * 2);
 			behaviour.setExpandDepthForLethal(true);
 			behaviour.setParallel(false);
 			behaviour.setPruneContextStack(true);

@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "During your turn, draw from your graveyard instead. (Alters history!)",
+  "description": "During your turns, draw from your graveyard instead. (Alters history!)",
   "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",

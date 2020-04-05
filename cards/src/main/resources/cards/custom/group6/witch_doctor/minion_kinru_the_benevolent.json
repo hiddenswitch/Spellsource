@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Whenever you cast a spell on a friendly minion, give it +3/+3 instead.",
+  "description": "Whenever you cast a spell on an allied minion, give it +3/+3 instead.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

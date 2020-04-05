@@ -3,16 +3,15 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 3,
-  "baseHp": 7,
+  "baseAttack": 2,
+  "baseHp": 8,
   "rarity": "COMMON",
-  "description": "Guard. Opener: Deal 3 damage to your champion.",
+  "description": "Guard Opener: Deal 3 damage to your champion.",
   "battlecry": {
-    "targetSelection": "NONE",
     "spell": {
       "class": "DamageSpell",
       "target": "FRIENDLY_HERO",
-      "value": 3
+      "value": 2
     }
   },
   "attributes": {
@@ -21,8 +20,7 @@
   },
   "collectible": true,
   "sets": [
-    "CUSTOM",
-    "JOURNEY_TO_UNGORO"
-  ],
+    "CUSTOM"
+   ],
   "fileFormatVersion": 1
 }

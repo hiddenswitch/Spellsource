@@ -6,12 +6,12 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Attribute;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Created by bberman on 3/17/17.
- */
+@Execution(ExecutionMode.CONCURRENT)
 public class AllianceSpellTests extends TestBase {
 	@Test
 	public void testLastMinionDestroyedBattlecrySummon() {

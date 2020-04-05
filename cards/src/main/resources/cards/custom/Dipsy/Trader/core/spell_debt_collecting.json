@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "COMMON",
-  "description": "Deal 5 damage. Add two Gold Coins to your hand.",
+  "description": "Deal 5 damage. Receive two Gold Coins.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

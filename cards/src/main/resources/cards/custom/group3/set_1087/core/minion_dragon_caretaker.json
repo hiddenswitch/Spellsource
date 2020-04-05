@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Opener: Give a friendly Dragon +2 Health.",
+  "description": "Opener: Give an allied Dragon +2 Health.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

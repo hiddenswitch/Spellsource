@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "RARE",
-  "description": "Discover a card. Reduce the cost of all cards you're holding that didn't start in your deck by (2).",
+  "description": "Source a card. Reduce the Cost of all cards you're holding that didn't start in your deck by (2).",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -33,6 +33,9 @@
         }
       }
     ]
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

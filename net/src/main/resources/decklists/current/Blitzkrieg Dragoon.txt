@@ -11,9 +11,9 @@
 # 2x (3) Dragonhorn
 # 1x (3) Irena, Dragon Knight
 # 2x (3) Supersonic Roar
-# 2x (3) Sweeper Drake
+# 2x (3) Molten Whelp
 # 2x (4) Guild Guard
-# 2x (4) The Little Swarm
+# 2x (4) Sweeping Swarm
 # 1x (5) Conflagration
 # 2x (5) Drakonid Bruiser
 # 2x (5) Vermillion Glider
