@@ -1,22 +1,37 @@
 {
   "name": "Nurse Wounds",
-  "baseManaCost": 2,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Give your damaged minions Hidden for a turn.",
+  "description": "Give all damaged allies Hidden. Draw a card for each.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddAttributeSpell",
-    "target": "FRIENDLY_MINIONS",
-    "attribute": "STEALTH",
-    "revertTrigger": {
-      "class": "TurnStartTrigger",
-      "targetPlayer": "SELF"
-    },
-    "filter": {
-      "class": "DamagedFilter"
-    }
+	"class": "MetaSpell",
+	"spells": [
+	  {
+	    "class": "AddAttributeSpell",
+        "target": "FRIENDLY_CHARACTERS",
+        "attribute": "STEALTH",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        },
+        "filter": {
+          "class": "DamagedFilter"
+        }
+	  },
+	  {
+	    "class": "DrawCardSpell",
+        "value": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_CHARACTERS",
+          "filter": {
+            "class": "DamagedFilter"
+		  }
+		}
+      }
+	]
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
