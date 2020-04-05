@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Your Larva have Lifesteal.",
+  "description": "Your Larva have Lifedrain.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",

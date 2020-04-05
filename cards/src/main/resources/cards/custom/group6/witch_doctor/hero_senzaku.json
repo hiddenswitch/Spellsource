@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Skill: Add a random Voodoo spell to your hand.",
+  "description": "Skill: Receive a random Voodoo spell.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

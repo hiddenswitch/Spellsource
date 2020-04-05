@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "At the end of each turn, summon all friendly minions that died this turn.",
+  "description": "At the end of each turn, summon all allied minions that died this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -1,6 +1,8 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import com.hiddenswitch.spellsource.testutils.CardValidation;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -12,12 +14,13 @@ import java.io.IOException;
  * method to ensure that each card is well formed and can be parsed.
  */
 public class CardValidationTests {
-	private static final String CARDS_DIR = "src/main/resources/cards/custom/"; // relative path from module root
+	private static final String CARDS_DIR = "src/main/resources/cards/custom/";
 
 	public static Object[][] getCardFiles() {
 		return CardValidation.getCardFiles(CARDS_DIR);
 	}
 
+	@Execution(ExecutionMode.CONCURRENT)
 	@ParameterizedTest
 	@MethodSource("getCardFiles")
 	public void validateCard(File cardFile) throws IOException {

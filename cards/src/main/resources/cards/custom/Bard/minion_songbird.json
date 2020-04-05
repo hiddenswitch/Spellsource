@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Add a random Bard spell to your hand.",
+  "description": "Opener: Receive a random Bard spell.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

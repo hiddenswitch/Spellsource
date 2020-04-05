@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "rarity": "FREE",
-  "description": "Lifesteal Deal 6 damage randomly split among enemy minions.",
+  "description": "Lifedrain Deal 6 damage randomly split among enemy minions.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

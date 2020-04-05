@@ -1,0 +1,20 @@
+{
+  "name": "Awoken Nurikabe",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Guard",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}

@@ -33,6 +33,8 @@ import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -43,6 +45,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class CustomCardsTests extends TestBase {
 
 	@Test
@@ -749,7 +752,7 @@ public class CustomCardsTests extends TestBase {
 			Card card2 = receiveCard(context, player, "minion_cost_three_test");
 			Card card3 = receiveCard(context, player, "minion_neutral_test");
 			Card roten = receiveCard(context, player, "minion_soulcaller_roten");
-			assertEquals(roten.getDescription(context, player), "Opener: Summon all (3)-Cost minions from your hand. (Equals the cost of the last minion you played)");
+			assertEquals(roten.getDescription(context, player), "Opener: Summon all (3)-Cost minions from your hand. (Equals the Cost of the last minion you played)");
 			playCard(context, player, roten);
 			assertEquals(card1.getZone(), Zones.GRAVEYARD);
 			assertEquals(card2.getZone(), Zones.GRAVEYARD);
@@ -4318,7 +4321,7 @@ public class CustomCardsTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov_v0");
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_1");
 			context.endTurn();
@@ -4333,7 +4336,7 @@ public class CustomCardsTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov_v0");
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_1");
 			context.endTurn();
@@ -4490,7 +4493,7 @@ public class CustomCardsTests extends TestBase {
 			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
 			Card weapon = receiveCard(context, player, "weapon_dig_up_shovel");
 			destroy(context, grallows);
-			assertEquals(weapon.getDescription(), "Decay. At the end of your turn, draw a card. Aftermath: Summon Grallows.");
+			assertEquals(weapon.getDescription(), "Decay. At the end of your turns, draw a card. Aftermath: Summon Grallows.");
 		}));
 	}
 

@@ -4,14 +4,13 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "Give a minion -1/+4, <b>Guard</b>, and <b>Wither (1)</b>.",
+  "description": "Give a minion +4 Health, <b>Guard</b>, and <b>Wither (1)</b>.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
-        "attackBonus": -1,
         "hpBonus": 4
       },
       {

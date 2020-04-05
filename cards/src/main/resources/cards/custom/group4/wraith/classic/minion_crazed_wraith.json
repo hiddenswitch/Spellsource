@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "<b>Blitz</b>, <b>Opener:</b> Deal 3 damage to your champion",
+  "description": "Blitz. Opener: Deal 3 damage to your champion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

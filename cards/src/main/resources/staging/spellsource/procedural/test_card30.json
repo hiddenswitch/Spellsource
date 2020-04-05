@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 9,
   "rarity": "COMMON",
-  "description": "Deathrattle: Return a random friendly minion to your hand.",
+  "description": "Aftermath: Return a random allied minion to your hand.",
   "deathrattle": {
     "class": "ReturnTargetToHandSpell",
     "target": "FRIENDLY_MINIONS",

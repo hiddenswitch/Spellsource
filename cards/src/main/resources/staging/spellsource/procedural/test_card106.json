@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Restore #4 Health to your hero.",
+  "description": "Opener: Restore #4 Health to your hero.",
   "battlecry": {
     "spell": {
       "class": "HealSpell",

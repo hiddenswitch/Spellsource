@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Both players Discover which cards they draw during their turn.",
+  "description": "Both players Source which cards they draw during their turns.",
   "auras": [
     {
       "class": "SpellOverrideAura",

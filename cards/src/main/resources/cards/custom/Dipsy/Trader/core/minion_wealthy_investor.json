@@ -1,20 +1,22 @@
 {
   "name": "Wealthy Investor",
-  "baseManaCost": 8,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "MAGENTA",
-  "baseAttack": 5,
+  "baseAttack": 6,
   "baseHp": 8,
   "rarity": "COMMON",
-  "description": "Whenever you add a card to your hand, add another copy.",
+  "description": "Whenever you receive a card, shuffle 2 copies of it into your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "CopyCardSpell",
-      "target": "EVENT_TARGET"
+      "class": "ShuffleToDeckSpell",
+      "target": "EVENT_TARGET",
+      "howMany": 2,
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

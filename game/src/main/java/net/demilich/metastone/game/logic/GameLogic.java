@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
@@ -213,8 +214,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		IMMUNE_TO_SILENCE.add(Attribute.TREANT);
 		IMMUNE_TO_SILENCE.add(Attribute.LACKEY);
 	}
-
-	private int getId;
 
 	/**
 	 * Creates a new game logic instance whose next ID generated for an {@link Entity#setId(int)} argument will be zero.
@@ -709,6 +708,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
+		if (Strand.currentStrand().isInterrupted()) {
+			return;
+		}
+
 		programCounter++;
 		if (programCounter > MAX_PROGRAM_COUNTER) {
 			throw new IllegalStateException("program counter");
@@ -785,39 +788,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
-		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
-		// target can only be changed when there is one target
-		// note: this code block is basically exclusively for the SpellBender
-		// Secret, but it can easily be expanded if targets of area of effect
-		// spell should be changeable as well
-		Card sourceCard = source != null ? source.getSourceCard() : null;
-
-		Entity override = targetAcquisition(player, source, sourceAction);
-		if (override != null && !spellDesc.hasPredefinedTarget()) {
-			targets = new ArrayList<>();
-			targets.add(override);
+		var targetResolution = resolveTarget(player, source, spellTarget, spellDesc, sourceAction);
+		if (targetResolution.isOverridden()) {
 			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 		}
-
-		// Spell effects should never be cast on the old reference to a transform.
-		if (targets != null && !targets.isEmpty()) {
-			for (int i = 0; i < targets.size(); i++) {
-				if (targets.get(i).getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
-					targets.set(i, targets.get(i).transformResolved(context));
-				}
-			}
-		}
-
-		// Implements incorruptibility (removes the target if it is affected by an incorruptibility aura)
-		if (targets != null) {
-			var incorruptibilityAuras = SpellUtils.getAuras(context, playerId, IncorruptibilityAura.class);
-			for (var aura : incorruptibilityAuras) {
-				targets.removeIf(e -> aura.getAffectedEntities().contains(e.getId()));
-			}
-		}
+		var targets = targetResolution.getTargets();
 
 		Spell spell = spellDesc.create();
 		spell.cast(context, player, spellDesc, source, targets);
+
+		Card sourceCard = source != null ? source.getSourceCard() : null;
 
 		// This implements Lynessa Sunsorrow
 		if (sourceCard != null
@@ -888,11 +868,84 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Processes an action for its appropriate target overriding effects, if any, and triggers target acquisiton.
+	 * Stores the result of a targeting resolution.
+	 */
+	public class TargetResolution {
+		private final boolean overridden;
+		private final List<Entity> targets;
+
+		public TargetResolution(boolean overridden, List<Entity> targets) {
+			this.overridden = overridden;
+			this.targets = targets;
+		}
+
+		/**
+		 * Was the target overriden by an effect?
+		 *
+		 * @return
+		 */
+		public boolean isOverridden() {
+			return overridden;
+		}
+
+		/**
+		 * The actual targets.
+		 *
+		 * @return
+		 */
+		public List<Entity> getTargets() {
+			return targets;
+		}
+	}
+
+	/**
+	 * Resolves a targeting {@link EntityReference}, triggering a target acquisition event on the board.
 	 *
 	 * @param player
 	 * @param source
+	 * @param spellTarget
+	 * @param spellDesc
 	 * @param sourceAction
+	 * @return
+	 */
+	@Suspendable
+	public TargetResolution resolveTarget(Player player, Entity source, EntityReference spellTarget, SpellDesc spellDesc, GameAction sourceAction) {
+		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
+
+		var overridden = false;
+		Entity override = targetAcquisition(player, source, sourceAction);
+		if (override != null && !spellDesc.hasPredefinedTarget()) {
+			targets = new ArrayList<>();
+			targets.add(override);
+			overridden = true;
+		}
+
+		// Spell effects should never be cast on the old reference to a transform.
+		if (targets != null && !targets.isEmpty()) {
+			for (int i = 0; i < targets.size(); i++) {
+				if (targets.get(i).getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
+					targets.set(i, targets.get(i).transformResolved(context));
+				}
+			}
+		}
+
+		// Implements incorruptibility (removes the target if it is affected by an incorruptibility aura)
+		if (targets != null) {
+			var incorruptibilityAuras = SpellUtils.getAuras(context, player.getId(), IncorruptibilityAura.class);
+			for (var aura : incorruptibilityAuras) {
+				targets.removeIf(e -> aura.getAffectedEntities().contains(e.getId()));
+			}
+		}
+
+		return new TargetResolution(overridden, targets);
+	}
+
+	/**
+	 * Processes an action for its appropriate target overriding effects, if any, and triggers target acquisition.
+	 *
+	 * @param player       The player.
+	 * @param source       The source entity.
+	 * @param sourceAction When {@code null}, no overrides can occur.
 	 * @return {@code null} if this is not an overridable form of target acquisition; or, the intended target if the
 	 * target was not overridden, or the new target.
 	 */
@@ -3373,6 +3426,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int index = getRandom().nextInt(weightedOptions.size());
 		Iterator<T> iterator = weightedOptions.iterator();
 		while (index > 0) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
 			iterator.next();
 			index--;
 		}
@@ -4895,6 +4951,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));
 	}
 
+	/**
+	 * Indicates that the specified played discovered a card.
+	 *
+	 * @param playerId
+	 */
 	@Suspendable
 	public void discoverCard(int playerId) {
 		// Similar to above, we will just fire an event for now.
@@ -4956,6 +5017,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	protected void repeatedlyDestroyHero(int playerId) {
 		while (context.getPlayer(playerId).getHero() != null && context.getPlayer(playerId).getHero().getZone() != Zones.GRAVEYARD) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
+
 			Hero hero = context.getPlayer(playerId).getHero();
 			if (hero.getOwner() == UNASSIGNED) {
 				hero.setOwner(playerId);

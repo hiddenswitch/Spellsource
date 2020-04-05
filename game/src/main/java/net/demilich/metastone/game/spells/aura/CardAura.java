@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.aura;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.SetCardSpell;
@@ -50,7 +51,12 @@ public class CardAura extends AbstractFriendlyCardAura {
 
 		Entity source = context.resolveSingleTarget(getHostReference());
 
-		Card originalCard = context.getCardById(((Card) target).getOriginalCardId());
+		var originalCardId = ((Card) target).getOriginalCardId();
+		// Reduce performance costs due to cloning
+		var originalCard = context.getTempCards().stream().filter(c -> c.getCardId().equals(originalCardId))
+				.findFirst().orElse(CardCatalogue.getCards().get(originalCardId));
+
+		// Testing with an entity filter or condition should not mutate the card, but it's not guaranteed.
 		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, originalCard, source)) {
 			return false;
 		}

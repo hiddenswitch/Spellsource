@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "FAE",
-  "description": "Opener: Add all spells your opponent cast last turn to your hand.",
+  "description": "Opener: Receive a copy of every spell your opponent cast last turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

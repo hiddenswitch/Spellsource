@@ -258,6 +258,16 @@ import static java.util.stream.Collectors.toList;
  */
 public class DiscoverSpell extends Spell {
 
+	public static SpellDesc create() {
+		return new SpellDesc(DiscoverSpell.class);
+	}
+
+	public static SpellDesc create(SpellDesc spellToCastOnSelectedCards) {
+		var spell = new SpellDesc(DiscoverSpell.class);
+		spell.put(SpellArg.SPELL, spellToCastOnSelectedCards);
+		return spell;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -458,3 +468,4 @@ public class DiscoverSpell extends Spell {
 		context.getLogic().discoverCard(player.getId());
 	}
 }
+

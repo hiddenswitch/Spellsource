@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Whenever your opponent draws a card, the opponent also draws a Fatigue card.",
+  "description": "Whenever your opponent draws a card, they also draw a Fatigue card.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

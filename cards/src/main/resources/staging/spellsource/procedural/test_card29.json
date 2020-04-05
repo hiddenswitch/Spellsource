@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Deathrattle: Summon two 2/2 Hyenas.",
+  "description": "Aftermath: Summon two 2/2 Hyenas.",
   "deathrattle": {
     "class": "SummonSpell",
     "cards": [

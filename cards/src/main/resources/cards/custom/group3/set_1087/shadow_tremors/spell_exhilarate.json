@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Give a friendly minion +1 Attack for each card in your hand.",
+  "description": "Give an allied minion +1 Attack for each card in your hand.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "BuffSpell",

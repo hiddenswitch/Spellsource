@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "When 4 friendly minions have died this game, summon this minion from your deck.",
+  "description": "When 4 allied minions have died this game, summon this minion from your deck.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

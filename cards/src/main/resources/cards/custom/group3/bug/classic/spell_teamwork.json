@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Give all friendly minions +3/+3.",
+  "description": "Give all allied minions +3/+3.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

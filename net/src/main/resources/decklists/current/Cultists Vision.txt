@@ -13,7 +13,7 @@
 # 2x (4) Distortoise
 # 2x (4) Gargoyle Warden
 # 1x (4) Gobogeg
-# 2x (4) Star Sculptor
+# 2x (4) Idol Sculptor
 # 2x (5) Blood Cultist
 # 2x (5) Eldritch Scholar
 # 2x (6) Occult's Wrath

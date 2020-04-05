@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 12,
   "rarity": "LEGENDARY",
-  "description": "Whenever a friendly minion takes damage, this minion takes it instead.",
+  "description": "Whenever an allied minion takes damage, this minion takes it instead.",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",

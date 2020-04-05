@@ -1,0 +1,18 @@
+{
+  "name": "Warrior's Death",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "FREE",
+  "description": "Destroy a damaged minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "DamagedFilter"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

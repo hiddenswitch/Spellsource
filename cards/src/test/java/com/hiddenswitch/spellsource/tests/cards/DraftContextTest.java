@@ -1,13 +1,17 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.draft.*;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,8 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DraftContextTest {
 	@Test
-	public void testDraftComplete() throws SuspendExecution, CardParseException, IOException, URISyntaxException {
+	@Suspendable
+	public void testDraftComplete() throws CardParseException {
 		CardCatalogue.loadCardsFromPackage();
+
 		DraftContext context = new DraftContext()
 				.withBehaviour(new DraftBehaviour() {
 					@Override

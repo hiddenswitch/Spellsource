@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Add a 2/2 Knight to your hand.",
+  "description": "Receive a 2/2 Knight.",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {

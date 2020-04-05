@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "Battlecry: Choose an enemy minion. This minion cannot attack it.",
+  "description": "Opener: Choose an enemy minion. This minion cannot attack it.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "MURLOE",
-  "description": "Battlecry: If you control another Murloc, Discover a Murloc.",
+  "description": "Opener: If you control another Murloc, Discover a Murloc.",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition"

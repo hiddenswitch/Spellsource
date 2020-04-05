@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Guard. Opener: Your Elementals cost (1) on your next turn.",
+  "description": "Guard. Opener: Your Elementals cost (1) during your next turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

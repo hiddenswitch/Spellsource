@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Whenever you use your Skill, Shuffle 15 random cards into your deck. Draw 15 cards.",
+  "description": "Whenever you use your Skill, shuffle 15 random cards into your deck and draw 15 cards.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

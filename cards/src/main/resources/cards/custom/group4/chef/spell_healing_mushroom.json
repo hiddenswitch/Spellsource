@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "The next time you use your Skill, it deals 2 more damage and has Lifesteal.",
+  "description": "The next time you use your Skill, it deals 2 more damage and has Lifedrain.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

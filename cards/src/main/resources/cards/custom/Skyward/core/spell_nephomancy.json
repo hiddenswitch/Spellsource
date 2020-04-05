@@ -22,7 +22,10 @@
       }
     }
   },
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }

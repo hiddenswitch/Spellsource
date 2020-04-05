@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Battlecry: For each Surge card in your deck, put a spell atop your deck that Discovers one.",
+  "description": "Opener: For each Surge card in your deck, put a spell atop your deck that Discovers one.",
 "battlecry": {
     "targetSelection": "NONE",
     "spell": {

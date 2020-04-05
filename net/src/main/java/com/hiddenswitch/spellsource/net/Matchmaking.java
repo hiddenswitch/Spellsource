@@ -213,7 +213,7 @@ public interface Matchmaking extends Verticle {
 
 					// Dequeue requests
 					do {
-						if (Strand.interrupted()) {
+						if (Strand.currentStrand().isInterrupted()) {
 							return null;
 						}
 						Span span = tracer.buildSpan("Matchmaking/startMatchmaker/loop").start();

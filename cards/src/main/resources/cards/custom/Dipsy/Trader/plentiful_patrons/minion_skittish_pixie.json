@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Opener: Add a Gold Coin to your hand. Aftermath: Add one to your opponent's.",
+  "description": "Opener: Receive a Gold Coin. Aftermath: Your opponent receives one.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -1,11 +1,11 @@
 {
-  "name": "Scepter of Larva",
-  "baseManaCost": 8,
+  "name": "Spawning Scepter",
+  "baseManaCost": 7,
   "type": "WEAPON",
   "heroClass": "AMBER",
   "damage": 2,
   "durability": 2,
-  "rarity": "LEGENDARY",
+  "rarity": "EPIC",
   "description": "After your champion attacks, summon a 1/1 Larva for each card in your hand.",
   "trigger": {
     "eventTrigger": {

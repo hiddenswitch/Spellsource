@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "LEGENDARY",
-  "description": "Discover a Beast, a Dragon, and a Fae. Summon them all.",
+  "description": "Source a Beast, a Dragon, and a Fae. Summon them all.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

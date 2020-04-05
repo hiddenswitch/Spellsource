@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "<b>Decay<b>. At the end of your turn, draw a card.",
+  "description": "<b>Decay<b>. At the end of your turns, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

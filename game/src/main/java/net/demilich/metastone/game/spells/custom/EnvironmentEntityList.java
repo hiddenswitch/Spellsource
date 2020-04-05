@@ -8,6 +8,8 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -22,6 +24,8 @@ import java.util.*;
  * Use {@link #getCards(GameContext, Entity)} to get a list of cards associated with a specific {@code source} entity.
  */
 public final class EnvironmentEntityList implements EnvironmentValue, Serializable {
+	private static Logger LOGGER = LoggerFactory.getLogger(EnvironmentEntityList.class);
+
 	/**
 	 * @param context
 	 * @return
@@ -49,6 +53,10 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 	}
 
 	public void add(Entity source, Entity target) {
+		if (Objects.equals(target.getReference(), EntityReference.NONE)) {
+			throw new NullPointerException(String.format("%s tried to store %s which has a NONE reference!", source, target));
+		}
+
 		data.putIfAbsent(source.getReference(), new ArrayList<>());
 		data.get(source.getReference()).add(target.getReference());
 	}
@@ -58,8 +66,8 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 	}
 
 	/**
-	 * Gets a list of referenced cards. This reference will always reflect the underlying list as it gets changed, but
-	 * is not mutable
+	 * Gets a list of referenced cards. This reference will always reflect the underlying list as it gets changed, but is
+	 * not mutable
 	 *
 	 * @param source
 	 * @return
@@ -78,6 +86,10 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 	 */
 	public List<Card> getCards(GameContext context, Entity source) {
 		return Lists.transform(data.computeIfAbsent(source.getReference(), k -> new ArrayList<>()), ref -> {
+			if (Objects.equals(ref, EntityReference.NONE) || ref.isTargetGroup()) {
+				var message = String.format("%s %s: stored a NONE or target group reference: %s", context.getGameId(), source, ref);
+				throw new NullPointerException(message);
+			}
 			var e = context.resolveSingleTarget(ref, false);
 			Entity e1;
 			if (e.hasAttribute(Attribute.CHOICE_SOURCE)) {

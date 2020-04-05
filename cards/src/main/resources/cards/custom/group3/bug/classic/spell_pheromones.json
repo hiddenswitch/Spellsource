@@ -1,10 +1,10 @@
 {
-  "name": "Pheromones",
+  "name": "Come Little Ones",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Draw two 1-Cost cards from your deck.",
+  "description": "Draw two 1-Cost cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",

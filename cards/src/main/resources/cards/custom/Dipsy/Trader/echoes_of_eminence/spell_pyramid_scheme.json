@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "RARE",
-  "description": "Summon a 1/1 Customer and add a Gold Coin to your hand. Shuffle two copies of this card into your deck.",
+  "description": "Summon a 1/1 Customer and receive a Gold Coin. Shuffle two copies of this into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

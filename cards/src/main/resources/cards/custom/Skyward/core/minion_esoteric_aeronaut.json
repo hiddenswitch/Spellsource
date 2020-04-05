@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Your next Skill costs (0) this turn.",
+  "description": "Opener: Your next Skill this turn costs (0).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

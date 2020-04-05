@@ -5,7 +5,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "COMMON",
-  "description": "Destroy a random minion. If it's friendly, cast this again.",
+  "description": "Destroy a random minion. If it's allied, cast this again.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

@@ -6,10 +6,10 @@
   "damage": 0,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "After you summon a Pirate, give it +1 Health.",
+  "description": "Whenever you summon a Pirate, give it +1 Health.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterMinionSummonedTrigger",
+      "class": "MinionSummonedTrigger",
       "race": "PIRATE",
       "targetPlayer": "SELF"
     },

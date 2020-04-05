@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Discover cards until your hand is full.",
+  "description": "Source cards until your hand is full.",
   "targetSelection": "NONE",
   "spell": {
     "class": "RecastWhileSpell",

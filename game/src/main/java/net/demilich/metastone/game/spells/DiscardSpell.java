@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
@@ -66,6 +67,7 @@ import java.util.Map;
 public class DiscardSpell extends AbstractRemoveCardSpell {
 
 	public static final int ALL_CARDS = -1;
+
 	public static SpellDesc create() {
 		return create(1);
 	}
@@ -99,6 +101,9 @@ public class DiscardSpell extends AbstractRemoveCardSpell {
 					return;
 				}
 				context.getLogic().discardCard(player, randomCard);
+				if (randomCard.hasAttribute(Attribute.DISCARDED)) {
+					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, randomCard);
+				}
 				discardableCards.remove(randomCard);
 			}
 		}

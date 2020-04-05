@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "Dash. Guard. Opener and Aftermath: Go dormant. Restore 10 excess Health to allies to revive this minion.",
+  "description": "Dash. Guard. Opener and Aftermath: Go dormant. Restore 10 excess Health to allies to revive this.",
   "battlecry": {
 	"targetSelection": "NONE",
 	"spell": {

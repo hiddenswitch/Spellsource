@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: The next Dragon you play costs (2) less.",
+  "description": "Opener: The next Dragon you play costs (2) less.",
   "battlecry": {
     "spell": {
       "class": "CardCostModifierSpell",

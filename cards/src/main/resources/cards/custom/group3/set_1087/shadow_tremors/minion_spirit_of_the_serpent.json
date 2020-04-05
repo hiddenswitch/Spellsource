@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Hidden for 1 turn. After an enemy minion dies, draw a minion from your deck.",
+  "description": "Hidden for 1 turn. Whenever an enemy minion dies, draw a minion from your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

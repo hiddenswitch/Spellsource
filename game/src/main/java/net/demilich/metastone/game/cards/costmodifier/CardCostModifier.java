@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A card cost modifier.
@@ -49,7 +50,7 @@ import java.io.Serializable;
  * EntityReference#BOTH_HANDS}.
  *
  * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
- * 		effects into play.
+ * effects into play.
  * @see CardCostModifierArg for a list of arguments for card cost modification.
  */
 public class CardCostModifier extends CustomCloneable implements Trigger, Serializable, HasDesc<CardCostModifierDesc> {
@@ -108,26 +109,37 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	 * @return {@code true} if the modifier applies to this card.
 	 */
 	public boolean appliesTo(GameContext context, Card card, Player player) {
-		boolean applies = true;
+		boolean applies;
 
 		// Is it expired?
-		applies &= !expired;
+		applies = !expired;
 
 		// If it's expired, don't continue evaluating
 		if (!applies) {
 			return false;
 		}
+
 		if (condition != null && !condition.isFulfilled(context, player, context.resolveSingleTarget(this.getHostReference()), card)) {
 			return false;
 		}
 
+		if (Objects.equals(hostReference, EntityReference.NONE)) {
+			logger.error(String.format("appliesTo: The card cost modified from %s had no host reference.", getSourceCardId()));
+			expire();
+			return false;
+		}
+
 		// If a target reference is specified, does the target match?
-		applies &= !(targetReference != null
+		applies = !(targetReference != null
 				&& !targetReference.isTargetGroup()
 				&& !targetReference.equals(card.transformResolved(context).getReference()));
 
+		if (!applies) {
+			return false;
+		}
+
 		// If a target reference is a group reference, is the target in the valid list?
-		final Entity host;
+		Entity host;
 		try {
 			host = context.resolveSingleTarget(hostReference);
 		} catch (NullPointerException notFound) {
@@ -136,7 +148,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 			return false;
 		}
 
-		applies &= !(targetReference != null
+		applies = !(targetReference != null
 				&& targetReference.isTargetGroup()
 				&& context.resolveTarget(player, host, targetReference)
 				.stream().map(Entity::getId).noneMatch(eid -> eid == card.getId()));
@@ -318,6 +330,10 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 	@Override
 	public void setHost(Entity host) {
+		if (host.getReference().equals(EntityReference.NONE)) {
+			logger.error("setHost: Tried to set a host {} reference of NONE on a card cost modifier from card {}", getSourceCardId(), host, new RuntimeException());
+		}
+
 		hostReference = host.getReference();
 	}
 

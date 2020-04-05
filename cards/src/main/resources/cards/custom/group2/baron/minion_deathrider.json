@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Blitz. At the end of your turn, destroy this minion.",
+  "description": "Blitz. At the end of your turn, destroy this.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

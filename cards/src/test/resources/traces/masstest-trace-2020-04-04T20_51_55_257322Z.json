@@ -1,0 +1,26 @@
+{
+  "seed" : -4532355395125630797,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CRIMSON", "OLIVE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_blighted_ent", "minion_rafaam_philanthropist", "minion_terrified_tanooki", "minion_fae_embalmer", "minion_mosshorn", "spell_destroy_the_strong", "minion_abandoned_geneticist", "spell_wraith_ancient_curse", "minion_kawarimi_headbasher", "minion_barnacled_dweller", "minion_fiendish_giant", "minion_nezumi_master", "minion_enthralled_knight", "spell_back_for_more", "spell_blight_hosts", "pact_punish_resistance", "minion_captain_stashin", "minion_the_oathbreaker", "spell_destroy_the_strong", "spell_curse_on_strength", "minion_reckless_giant", "minion_sneaky_kaeru", "minion_cinderslinger", "spell_blood_boil_wraith", "minion_blackflame_bomber", "minion_kodama_bulwark", "minion_sourceborn_aelin", "minion_bone_man", "minion_timewalker_stormlord", "spell_curse_of_aim" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "secret_urgent_experiment", "minion_cinderslinger", "minion_experiment_recorder", "spell_terrible_strength", "minion_big_bad_coyote", "minion_fae_horncaster", "spell_mind_meld", "minion_champion_of_death", "spell_engaging_story", "spell_tome_of_secrets", "minion_manly_mountaineer", "minion_vohkrovanis", "minion_alien_ravager", "minion_owlbear_mother", "minion_infinite_behemoth", "minion_discarded_creation", "minion_nightmare_dragon", "spell_miserable_conclusion", "spell_bored_to_death", "minion_timewalker_mistweaver", "minion_dead_horse", "minion_bullet_bull", "minion_sneaky_kaeru", "minion_plunderogue", "minion_fiendish_giant", "minion_streetwise_specialist", "spell_terrible_strength", "minion_gentleman_s_giant", "minion_little_purrsuer", "minion_kiljaeden_deceiver" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 50 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 13 ]
+  } ],
+  "actions" : [ 0, 1, 0, 0, 2, 1, 1, 0, 0, 4, 4, 0, 2, 4, 2, 0, 6, 3, 0, 6, 2, 0, 0, 0, 0, 1, 10, 5, 2, 1, 7, 4, 0, 23, 2, 9, 4, 2, 1, 11, 9, 1, 1, 2, 3, 1, 4, 2, 3, 1, 5, 4, 0, 0, 0, 11, 8, 3, 2, 1, 1, 3, 0, 7, 3, 0, 0, 0, 6, 2, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

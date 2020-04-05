@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Shuffle a copy of your opponent's hand into your deck. Those cards cost (1) less.",
+  "description": "Opener: Shuffle a copy of your opponent's hand into your deck. Those cards cost (1) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

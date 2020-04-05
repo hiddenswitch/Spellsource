@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Grant a friendly character +3 Attack this turn only.",
+  "description": "Grant an allied character +3 Attack this turn only.",
   "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
     "class": "TemporaryAttackSpell",

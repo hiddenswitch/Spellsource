@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "TOTEM",
-  "description": "At the end of your turn, restore #1 Health to all friendly minions.",
+  "description": "At the end of your turn, restore #1 Health to all allied minions.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

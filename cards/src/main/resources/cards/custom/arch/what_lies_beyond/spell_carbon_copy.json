@@ -1,0 +1,32 @@
+{
+  "name": "Carbon Copy",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "RARE",
+  "description": "Give a minion +3 Health. Shuffle 2 copies of it into your deck with +3 Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 3
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "target": "TARGET",
+        "spell": {
+          "class": "BuffSpell",
+          "target": "OUTPUT",
+          "hpBonus": 3
+        },
+        "howMany": 2
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,10 +6,10 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "After this minion attacks, it gains +2 Attack",
+  "description": "After this attacks, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
+      "class": "AfterPhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
