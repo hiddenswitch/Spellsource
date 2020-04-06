@@ -7,6 +7,7 @@ header: true
 
 ### 0.8.72-3.1.1 (In Progress)
 
+ - Sourceborn Aelin's Creation spell had an unintended bug where it would copy 1 card three times when intended behavior is copy 3 cards 1 time. Thanks @Logovazz!
  - Artifact generator cards, thanks @DeepKhaos!
  - Spirit Saber now always shows you the exact card that had the aftermath when it triggered, even if it was transformed later. (1657)
  - Archaeologist's Taletellers now correctly looks for minions played this turn, not minions that were played and killed this turn. (1652)
@@ -34,7 +35,13 @@ header: true
  - Frontline Coward is now correctly an Overlord card. (1671)
  - Oni Queen's Enenra now actually gains its Stealth. (1670)
  
-#### Notes from Logovazz about Rebel
+#### Notes from Logovazz about Rebel and Oni Queen
+
+**Oni Queen Update**
+ - Cloak and Dagger now reads "Give your Hidden minions Toxic."
+ - Gather in the Shadows is now 1 Lun.
+ - Bullhorn is now 3 Lun.
+ - Nurse Wounds is now 5 Lun "Give all damaged allies Hidden. Draw a card for each."
 
 **Rebel Update**
 Exile has been renamed to Rebel.

@@ -8,8 +8,10 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",
-    "target": "FRIENDLY_DECK",
-    "randomTarget": true,
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
     "value": 3,
     "spell": {
       "class": "CardCostModifierSpell",
