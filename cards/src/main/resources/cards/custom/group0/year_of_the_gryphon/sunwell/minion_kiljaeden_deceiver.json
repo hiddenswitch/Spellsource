@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Aftermath: Summon a random minion as a 0/2 and give it, \"Aftermath: Summon Boudas.\"",
+  "description": "Aftermath: Summon a random minion as a 0/2 and give it \"Aftermath: Summon Boudas\".",
   "deathrattle": {
     "class": "SummonSpell",
     "spell": {

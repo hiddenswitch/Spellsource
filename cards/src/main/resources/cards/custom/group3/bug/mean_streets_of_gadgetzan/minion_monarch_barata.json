@@ -1,6 +1,6 @@
 {
   "name": "Monarch Barata",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,

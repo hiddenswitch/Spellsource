@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Dash. Has double attack during your turn.",
+  "description": "Dash. Has double Attack during your turn.",
   "aura": {
     "class": "AttributeValueAura",
     "value": 2,

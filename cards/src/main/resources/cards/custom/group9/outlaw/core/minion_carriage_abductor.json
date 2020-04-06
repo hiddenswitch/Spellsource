@@ -1,0 +1,30 @@
+{
+  "name": "Carriage Abductor",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Quick Draw: Deal 2 damage to the left-most enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "QuickDrawTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "QuickDrawSpell",
+      "spell": {
+        "class": "DamageSpell",
+        "target": "LEFTMOST_ENEMY_MINION",
+        "value": 2
+      }
+    }
+  },
+  "attributes": {
+    "QUICK_DRAW": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

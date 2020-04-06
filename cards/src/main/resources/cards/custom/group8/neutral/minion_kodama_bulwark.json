@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Guard. Has +1 Attack for each other friendly minion on the battlefield.",
+  "description": "Guard. Has +1 Attack for each other allied minion.",
   "aura": {
     "class": "StatefulAttributeValueAura",
     "target": "SELF",

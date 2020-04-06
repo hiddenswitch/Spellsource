@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Battlecry: If you're holding a Dragon, gain +1 Attack and Taunt.",
+  "description": "Opener: If you're holding a Dragon, gain +1 Attack and Taunt.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

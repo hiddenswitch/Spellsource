@@ -5,7 +5,7 @@
   "heroClass": "JADE",
   "color": [0, 168, 107],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

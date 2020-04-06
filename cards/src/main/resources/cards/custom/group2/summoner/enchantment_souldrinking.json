@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "EGGPLANT",
   "rarity": "LEGENDARY",
-  "description": "The next card you play has Lifesteal.",
+  "description": "The next card you play has Lifedrain.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",

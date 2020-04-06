@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If you're holding a Dragon, destroy a Legendary minion.",
+  "description": "Opener: If you're holding a Dragon, destroy a Legendary minion.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

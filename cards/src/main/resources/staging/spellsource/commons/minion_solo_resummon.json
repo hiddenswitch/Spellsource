@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Deathrattle: Resummon this minion if it was your only one.",
+  "description": "Aftermath: Resummon this minion if it was your only one.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

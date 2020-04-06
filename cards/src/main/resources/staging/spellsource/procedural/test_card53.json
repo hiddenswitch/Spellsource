@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "(2) Overload. Charge. Deathrattle: Give a random friendly minion +3 Health.",
+  "description": "(2) Overload. Charge. Deathrattle: Give a random allied minion +3 Health.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

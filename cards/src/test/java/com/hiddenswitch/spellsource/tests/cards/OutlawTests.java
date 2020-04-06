@@ -6,17 +6,31 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class OutlawTests extends TestBase {
 
 	@NotNull
 	@Override
 	public String getDefaultHeroClass() {
 		return HeroClass.COPPER;
+	}
+
+	@Test
+	public void testFireAtWill() {
+		runGym((context, player, opponent) -> {
+			// Deal 1 damage to the enemy champion
+			putOnTopOfDeck(context, player, "minion_cheating_wrangler");
+			var hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_fire_at_will");
+			assertEquals(hp - 1, opponent.getHero().getHp(), "should have dealt 1 damage by triggering effect on drawn card");
+		});
 	}
 
 	@Test
@@ -46,7 +60,7 @@ public class OutlawTests extends TestBase {
 		});
 	}
 
-	// Shootout - 3 Mana Spell Free "Deal $2 damage to three random enemy minions."
+	// Shootout - 3 Mana Spell Free "Deal $2 damage to up to three random enemy minions."
 	@Test
 	public void testShootout() {
 		runGym((context, player, opponent) -> {
@@ -58,7 +72,7 @@ public class OutlawTests extends TestBase {
 			context.endTurn();
 
 			player.setMana(3);
-			assertFalse(shootOut.canBeCast(context, player));
+			assertTrue(shootOut.canBeCast(context, player));
 
 			context.endTurn();
 			playMinionCard(context, opponent, "minion_neutral_test_1");

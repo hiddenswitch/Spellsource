@@ -1,0 +1,33 @@
+{
+  "name": "Realmhopper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "<b>Dash</b>. Whenever this attacks, add a random <b>Emerald Secret</b> to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+      "secret_secret_of_winter",
+      "secret_secret_of_spring",
+      "secret_secret_of_summer",
+      "secret_secret_of_autumn",
+      "secret_secret_of_twilight"
+    ],
+    "randomTarget": true
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

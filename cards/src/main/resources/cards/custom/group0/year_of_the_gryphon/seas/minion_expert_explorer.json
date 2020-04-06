@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "At the start of your turn, shuffle a copy of your hand into your deck.",
+  "description": "At the start of your turns, shuffle a copy of your hand into your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

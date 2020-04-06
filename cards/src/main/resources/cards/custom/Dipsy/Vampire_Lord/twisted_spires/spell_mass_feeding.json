@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Give all friendly characters +5 Health.",
+  "description": "Give all allied characters +5 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

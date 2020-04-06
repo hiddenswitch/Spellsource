@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Battlecry: Freeze all enemies. Add a spell that destroys the enemy hero to your hand. 5",
+  "description": "Opener: Freeze all enemies. Add a spell that destroys the enemy hero to your hand. 5",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

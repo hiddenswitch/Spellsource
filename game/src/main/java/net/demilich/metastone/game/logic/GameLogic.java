@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
@@ -707,6 +708,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
+		if (Strand.currentStrand().isInterrupted()) {
+			return;
+		}
+
 		programCounter++;
 		if (programCounter > MAX_PROGRAM_COUNTER) {
 			throw new IllegalStateException("program counter");
@@ -3421,6 +3426,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int index = getRandom().nextInt(weightedOptions.size());
 		Iterator<T> iterator = weightedOptions.iterator();
 		while (index > 0) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
 			iterator.next();
 			index--;
 		}
@@ -4071,9 +4079,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (doubleDeathrattles) {
 				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
 				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, true, null);
+				if (shouldAddToDeathrattlesTriggered) {
+					context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle, context.resolveSingleTarget(sourceReference).getSourceCard().getCardId());
+				}
 			}
 			if (shouldAddToDeathrattlesTriggered) {
-				context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle);
+				context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle, context.resolveSingleTarget(sourceReference).getSourceCard().getCardId());
 			}
 		}
 	}
@@ -5009,6 +5020,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	protected void repeatedlyDestroyHero(int playerId) {
 		while (context.getPlayer(playerId).getHero() != null && context.getPlayer(playerId).getHero().getZone() != Zones.GRAVEYARD) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
+
 			Hero hero = context.getPlayer(playerId).getHero();
 			if (hero.getOwner() == UNASSIGNED) {
 				hero.setOwner(playerId);

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Has +1 Attack for each damage your champion has taken this turn.",
+  "description": "Has +1 Attack for each point of damage your champion has taken this turn.",
   "aura": {
     "class": "StatefulAttributeValueAura",
     "target": "SELF",

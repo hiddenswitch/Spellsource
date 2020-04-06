@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Shuffle two 4/3 Pirahnas with Charge into deck. your",
+  "description": "Opener: Shuffle two 4/3 Pirahnas with Charge into deck. your",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

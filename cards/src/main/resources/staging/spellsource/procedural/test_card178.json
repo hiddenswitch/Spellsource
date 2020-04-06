@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "Battlecry: Put one of each Secret from your deck into the battlefield.",
+  "description": "Opener: Put one of each Secret from your deck into the battlefield.",
   "battlecry": {
     "spell": {
       "class": "PutRandomSecretIntoPlaySpell",

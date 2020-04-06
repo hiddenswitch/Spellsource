@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "COMMON",
-  "description": "Deal 2 damage. Add a Gold Coin to both players' hands.",
+  "description": "Deal 2 damage. Both players receive a Gold Coin.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

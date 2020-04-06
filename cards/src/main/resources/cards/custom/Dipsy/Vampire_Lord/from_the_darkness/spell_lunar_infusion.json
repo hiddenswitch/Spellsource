@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Draw a spell. Give a friendly character Health equal to its cost.",
+  "description": "Draw a spell. Give an allied character Health equal to its cost.",
   "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
     "class": "FromDeckToHandSpell",

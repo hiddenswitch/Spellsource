@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "COMMON",
-  "description": "Destroy a friendly minion. Summon a minion of the same Cost to replace it.",
+  "description": "Destroy an allied minion. Summon a random minion of the same Cost to replace it.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

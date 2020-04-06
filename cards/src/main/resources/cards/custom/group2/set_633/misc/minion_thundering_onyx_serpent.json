@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, gain \"Whenever an enemy minion dies, restore #4 Health to a random friendly character.\"",
+  "description": "Opener: If you're holding a Dragon, gain \"Whenever an enemy minion dies, restore #4 Health to a random allied character.\"",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

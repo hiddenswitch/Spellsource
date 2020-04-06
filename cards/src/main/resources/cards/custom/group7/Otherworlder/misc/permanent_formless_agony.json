@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Permanent. At the end of your turn, deal 3 damage randomly split among all characters. When they all hit a champion, destroy this.",
+  "description": "Permanent. At the end of your turns, deal 3 damage randomly split among all characters. When they all hit a champion, destroy this.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -1,6 +1,6 @@
 {
   "name": "Breeding Grounds",
-  "baseManaCost": 9,
+  "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Add a random spell to each player's hand.",
+  "description": "Opener: Add a random spell to each player's hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

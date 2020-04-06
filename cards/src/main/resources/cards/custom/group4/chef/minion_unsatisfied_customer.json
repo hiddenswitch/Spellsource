@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Add the last card you Roasted this turn to your hand.",
+  "description": "Opener: Receive a copy of the last card you Roasted this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

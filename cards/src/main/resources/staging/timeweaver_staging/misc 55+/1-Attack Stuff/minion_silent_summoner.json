@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Discover a 1-Cost Timeweaver minion for each Secret you control.",
+  "description": "Opener: Discover a 1-Cost Timeweaver minion for each Secret you control.",
 "battlecry": {
   "targetSelection": "NONE",
   "spell": {

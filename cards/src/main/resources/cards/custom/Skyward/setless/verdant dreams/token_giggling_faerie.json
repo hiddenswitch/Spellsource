@@ -1,0 +1,14 @@
+{
+    "name": "Fae",
+    "baseManaCost": 1,
+    "type": "MINION",
+    "heroClass": "AZURE",
+    "baseAttack": 1,
+    "baseHp": 1,
+    "rarity": "FREE",
+    "race": "FAE",
+    "description": "",
+    "collectible": false,
+    "set": "Verdant Dreams",
+    "fileFormatVersion": 1
+  }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Restore #4 Health to all friendly characters.",
+  "description": "Restore #4 Health to all allied characters.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "HealSpell",

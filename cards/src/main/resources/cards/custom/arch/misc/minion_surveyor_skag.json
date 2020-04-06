@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Add 10 random cards to your hand. Shuffle any that don't fit into your deck",
+  "description": "Opener: Receive 10 random cards. Shuffle any that don't fit into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

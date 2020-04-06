@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Your spells cost (1) less but don't cast until the start of your next turn.",
+  "description": "Your spells cost (1) less, but don't cast until the start of your next turn.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

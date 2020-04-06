@@ -468,3 +468,4 @@ public class DiscoverSpell extends Spell {
 		context.getLogic().discoverCard(player.getId());
 	}
 }
+

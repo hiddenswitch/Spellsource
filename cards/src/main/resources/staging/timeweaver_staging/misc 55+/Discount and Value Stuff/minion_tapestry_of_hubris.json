@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "TIME",
   "rarity": "EPIC",
-  "description": "Battlecry: Gain a Mana Crystal. Deathrattle: Destroy 2 of your Mana Crystals. Lasts [3 turns].",
+  "description": "Opener: Gain a Mana Crystal. Deathrattle: Destroy 2 of your Mana Crystals. Lasts [3 turns].",
   "trigger": {
     "countUntilCast": 3,
     "eventTrigger": {

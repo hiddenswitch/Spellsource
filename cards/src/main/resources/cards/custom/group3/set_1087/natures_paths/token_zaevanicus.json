@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Opener: After a friendly minion dies, add a copy to your hand that costs (1) less. (For the rest of the game).",
+  "description": "Opener: After an allied minion dies, add a copy to your hand that costs (1) less. (For the rest of the game).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

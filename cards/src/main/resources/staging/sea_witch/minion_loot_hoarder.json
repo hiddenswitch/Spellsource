@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Deathrattle: Draw a card.",
+  "description": "Aftermath: Draw a card.",
   "deathrattle": {
     "class": "DrawCardSpell",
     "value": 1

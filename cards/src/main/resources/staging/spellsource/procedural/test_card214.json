@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Restore #2 Health to all friendly characters.",
+  "description": "Opener: Restore #2 Health to all allied characters.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

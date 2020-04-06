@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Shuffle a 'Rude Stare' into your opponent's deck",
+  "description": "Opener: Shuffle a \"Rude Stare\" into your opponent's deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

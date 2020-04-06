@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -30,6 +31,9 @@ public class RecastWhileSpell extends Spell {
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		do {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
 			if (limit == 0) {
 				break;
 			}

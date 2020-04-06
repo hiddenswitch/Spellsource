@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Discover a spell.",
+  "description": "Opener: Source a spell.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

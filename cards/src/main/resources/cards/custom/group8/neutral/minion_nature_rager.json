@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Opener: Gain +1 Health for each other friendly minion on the battlefield.",
+  "description": "Opener: Gain +1 Health for each other allied minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,15 +7,16 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "After an allied minion loses Hidden, gain Hidden.",
+  "description": "Whenever an allied minion loses Hidden, gain Hidden.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseStealthTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "AddAttributeSpell",
-      "target": "SELF",
+      "target": "TRIGGER_HOST",
       "attribute": "STEALTH"
     }
   },

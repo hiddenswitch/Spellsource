@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Opener: The next spell you cast has \"Invoke (10): Summon Yoth'al.\"",
+  "description": "Opener: The next spell you cast has \"Invoke (10): Summon Yoth'al\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Whenever you add a Knight to your hand, give it +2/+2.",
+  "description": "Whenever you receive a Knight, give it +2/+2.",
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",

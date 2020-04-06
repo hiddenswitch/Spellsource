@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Dash. Whenever this attacks, draw a Beast from your deck.",
+  "description": "Dash. Whenever this attacks, draw a Beast.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

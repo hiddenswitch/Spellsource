@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Add a random card to your hand",
+  "description": "Opener: Receive a random card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
