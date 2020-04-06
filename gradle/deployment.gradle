@@ -101,7 +101,7 @@ task dockerSources(type: SourceTask) {
 
 task buildStandalone(type: Exec) {
     description("Builds the macOS and Windows versions of the game using the ${unityClientPath}/deploy.sh file and your local Unity version.")
-    dependsOn generateSwaggerCsharp, unitySources
+    dependsOn += [generateSwaggerCsharp, unitySources]
     inputs.file("${unityClientPath}/deploy.sh")
     outputs.dir("${unityClientPath}/obj/win")
     outputs.dir("${unityClientPath}/obj/osx")
@@ -117,13 +117,13 @@ task distSteam(type: Exec, group: 'Spellsource') {
 
 task buildSwarm(type: Exec) {
     description("Builds all the images in the docker-compose.yml file")
-    dependsOn ':net:classes', secretSources, dockerSources
+    dependsOn += [':net:classes', secretSources, dockerSources]
     commandLine './deploy.sh', '-C'
 }
 
 task distSwarm(type: Exec, group: 'Spellsource') { t ->
     description("Deploys to a Docker Swarm")
-    dependsOn buildSwarm, secretSources
+    dependsOn += [buildSwarm, secretSources]
     inputs.file('docker-compose.yml')
     dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
     commandLine './deploy.sh', '-s'
@@ -131,7 +131,7 @@ task distSwarm(type: Exec, group: 'Spellsource') { t ->
 
 task buildIOS(type: Exec) {
     description("Builds the iOS target of the Unity project")
-    dependsOn unitySources, secretSources
+    dependsOn += [unitySources, secretSources]
     inputs.file("${unityClientPath}/deploy.sh")
     outputs.dir("${unityClientPath}/obj/ios")
     workingDir "${unityClientPath}"
@@ -140,7 +140,7 @@ task buildIOS(type: Exec) {
 
 task distIOS(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads to Testflight the iOS project")
-    dependsOn buildIOS, secretSources
+    dependsOn += [buildIOS, secretSources]
     workingDir "${unityClientPath}"
     dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     commandLine './deploy.sh', '-t'
@@ -157,7 +157,7 @@ task buildAndroid(type: Exec) {
 
 task distAndroid(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads the Android project to Google Play")
-    dependsOn buildAndroid, secretSources
+    dependsOn += [buildAndroid, secretSources]
     dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     environment('KEYSTORE_PATH', '../secrets/spellsource/android-keystore.keystore')
     workingDir "${unityClientPath}"
@@ -207,12 +207,12 @@ task buildWWW(type: ExecSourceTask) {
 
 task distWWW(type: Exec, group: 'Spellsource') {
     description("Builds and deploys the website (requires npm, python, the .venv virtualenv installed)")
-    dependsOn buildWWW, copyGameJavadoc, copyNetJavadoc
+    dependsOn += [buildWWW, copyGameJavadoc, copyNetJavadoc]
     workingDir './www/'
     commandLine './deploy.sh'
 }
 
 task deployAll(type: Exec, group: 'Spellsource') {
     description("Deploys the server, the client and the website")
-    dependsOn distSteam, distIOS, distAndroid, distWebGL, distSwarm, distWWW
+    dependsOn += [distSteam, distIOS, distAndroid, distWebGL, distSwarm, distWWW]
 }
