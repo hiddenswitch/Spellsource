@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: Give your opponent a Gold Coin, then Discover a copy of a card in their deck.",
+  "description": "Opener: Give your opponent a Gold Coin, then Source a copy of a card in their deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

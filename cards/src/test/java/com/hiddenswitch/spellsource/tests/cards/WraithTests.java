@@ -8,9 +8,12 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class WraithTests extends TestBase {
 
 	@Test

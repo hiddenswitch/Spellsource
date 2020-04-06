@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Guard. Aftermath: Add three 2/2 Knights to your hand.",
+  "description": "Guard. Aftermath: Receive three 2/2 Knights.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [

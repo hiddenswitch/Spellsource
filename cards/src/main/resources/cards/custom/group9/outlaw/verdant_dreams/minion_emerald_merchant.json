@@ -1,0 +1,33 @@
+{
+  "name": "Emerald Merchant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Receive a random Emerald Secret.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

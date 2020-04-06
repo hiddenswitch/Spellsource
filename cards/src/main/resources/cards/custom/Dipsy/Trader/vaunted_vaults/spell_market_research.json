@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "EPIC",
-  "description": "Shuffle your hand into your deck, then Discover copies of four cards in your opponent's deck.",
+  "description": "Shuffle your hand into your deck, then Source copies of four cards in your opponent's deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

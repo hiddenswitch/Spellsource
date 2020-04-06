@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Choose a minion. Draw a card from your deck with the same cost as it.",
+  "description": "Opener: Choose a minion. Draw a card from your deck with the same Cost as it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

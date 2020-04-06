@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
@@ -71,6 +72,9 @@ public final class CelestialConduitSpell extends Spell {
 		var discoverSpell = DiscoverSpell.create(receiveCardSpell);
 		var invocations = 0;
 		while (sum.get() <= max && invocations < GameLogic.MAX_HAND_CARDS) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
 			var cards = SpellUtils.getCards(context, player, target, source, desc, Integer.MAX_VALUE);
 			Collections.shuffle(cards, context.getLogic().getRandom());
 			SpellUtils.discoverCard(context, player, source, discoverSpell, new CardArrayList(cards.subList(0, howMany)));

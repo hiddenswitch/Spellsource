@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Deathrattle: Summon a random 3-Cost minion.",
+  "description": "Aftermath: Summon a random 3-Cost minion.",
   "deathrattle": {
     "class": "SummonSpell",
     "cardFilter": {

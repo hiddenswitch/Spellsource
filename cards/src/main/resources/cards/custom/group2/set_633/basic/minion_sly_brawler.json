@@ -10,7 +10,7 @@
   "attributes": {
     "UNTARGETABLE_BY_SPELLS": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -1,10 +1,10 @@
 {
-  "name": "At Others Expense",
+  "name": "At Others' Expense",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Deal $1 damage to a friendly minion. Gain 6 Armor.",
+  "description": "Deal $1 damage to an allied minion. Gain 6 Armor.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

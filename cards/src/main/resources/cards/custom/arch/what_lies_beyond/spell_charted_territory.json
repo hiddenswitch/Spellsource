@@ -1,0 +1,16 @@
+{
+  "name": "Charted Territory",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "EPIC",
+  "description": "Shuffle a copy of your hand into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "target": "FRIENDLY_HAND"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

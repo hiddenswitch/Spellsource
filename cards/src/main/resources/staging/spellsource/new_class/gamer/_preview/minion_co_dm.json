@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Gain 1 Armor whenever a friendly minion takes damage.",
+  "description": "Gain 1 Armor whenever an allied minion takes damage.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

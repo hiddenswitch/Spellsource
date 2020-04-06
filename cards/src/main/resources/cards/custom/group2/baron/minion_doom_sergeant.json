@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Opener: Add a 2/2 Knight to your hand.",
+  "description": "Opener: Receive a 2/2 Knight.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -3,6 +3,7 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -56,7 +57,6 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -450,6 +450,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			return;
 		}
 
+		if (Strand.currentStrand().isInterrupted()) {
+			return;
+		}
 		getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
 	}
 
@@ -1078,7 +1081,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			return null;
 		}
 
-		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
+		Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
 		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
 		if (rejectRemovedFromPlay && entity.getZone() == Zones.REMOVED_FROM_PLAY) {
@@ -1204,7 +1207,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param targetKey The reference to the entity.
 	 * @return The found {@link Entity}, or {@code null} if no entity was found.
 	 */
-	public Entity tryFind(EntityReference targetKey) {
+	public @Nullable Entity tryFind(EntityReference targetKey) {
+		return tryFind(targetKey, true);
+	}
+
+	/**
+	 * Tries to find an entity given the reference.
+	 *
+	 * @param targetKey             The reference to the entity.
+	 * @param rejectRemovedFromPlay
+	 * @return The found {@link Entity}, or {@code null} if no entity was found.
+	 */
+	public @Nullable Entity tryFind(EntityReference targetKey, boolean rejectRemovedFromPlay) {
 		if (targetKey == null) {
 			return null;
 		}
@@ -1213,10 +1227,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		if (entity == null) {
 			return null;
 		}
+
 		entity = entity.transformResolved(this);
 
 		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
-		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
+		if (rejectRemovedFromPlay && entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			return null;
 		}
 
@@ -1515,6 +1530,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
 			}
 			if (getTurn() > GameLogic.TURN_LIMIT) {
 				break;

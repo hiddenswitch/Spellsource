@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Permanent. At the end of your turn, both players draw a card. When a player has 9 cards in hand, destroy this.",
+  "description": "Permanent. At the end of your turns, both players draw a card. When a player has 9+ cards in hand, destroy this.",
   "triggers": [
     {
       "eventTrigger": {

@@ -2,11 +2,11 @@
   "name": "Frontline Coward",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "CRIMSON",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Choose and discard a card. Give adjacent minions +1/+1 and Guard.",
+  "description": "Opener: Discard a card. Give adjacent minions +1/+1 and Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

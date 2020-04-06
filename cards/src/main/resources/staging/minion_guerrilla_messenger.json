@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Battlecry: Discover a Berserker, Chef, or Scribbler card.",
+  "description": "Opener: Discover a Berserker, Chef, or Scribbler card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

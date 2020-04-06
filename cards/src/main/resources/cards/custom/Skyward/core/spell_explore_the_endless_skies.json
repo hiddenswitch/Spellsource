@@ -22,7 +22,6 @@
         "target": "FRIENDLY_HAND",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "SELF",
           "value": 1,
           "operation": "SUBTRACT"
         }
@@ -40,7 +39,6 @@
         "target": "FRIENDLY_DECK",
         "cardCostModifier": {
           "class": "CardCostModifier",
-          "target": "SELF",
           "value": 1,
           "operation": "SUBTRACT"
         }

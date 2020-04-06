@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 1,
   "rarity": "EPIC",
-  "description": "Echo. Mega-Windfury. Lifesteal. Can't attack heroes.",
+  "description": "Echo. Mega-Windfury. Lifedrain. Can't attack heroes.",
   "auras": {
       "class": "AttributeAura",
       "target": "FRIENDLY_HERO",

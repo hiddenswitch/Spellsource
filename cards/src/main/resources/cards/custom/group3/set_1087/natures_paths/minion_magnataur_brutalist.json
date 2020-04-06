@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: Deal 10 damage to a minion and any excess to this minion.",
+  "description": "Opener: Deal 10 damage to a minion and any excess to this.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

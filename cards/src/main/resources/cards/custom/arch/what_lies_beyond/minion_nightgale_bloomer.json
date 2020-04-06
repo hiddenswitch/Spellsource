@@ -1,0 +1,29 @@
+{
+  "name": "Nightgale Bloomer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Opener: Give another Elemental +2/+6.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "ELEMENTAL"
+      },
+      "attackBonus": 2,
+      "hpBonus": 6
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

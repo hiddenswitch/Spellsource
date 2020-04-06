@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Dash. Whenever this minion attacks, Soulbind.",
+  "description": "Dash. Whenever this attacks, Soulbind.",
   "attributes": {
     "RUSH": true
   },

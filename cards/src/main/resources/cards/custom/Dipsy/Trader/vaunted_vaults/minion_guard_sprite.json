@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Opener: If you control another Fae, add a Gold Coin to your hand. Repeat for Beasts and Dragons.",
+  "description": "Opener: If you control another Fae, receive a Gold Coin. Repeat for Beasts and Dragons.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

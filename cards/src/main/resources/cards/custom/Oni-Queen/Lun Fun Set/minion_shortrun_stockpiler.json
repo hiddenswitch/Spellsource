@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "<b>Opener:<b> If you have less than 6 cards in hand, reduce their cost by (1).",
+  "description": "Opener: If you have less than 6 cards in hand, reduce their Costs by (1).",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

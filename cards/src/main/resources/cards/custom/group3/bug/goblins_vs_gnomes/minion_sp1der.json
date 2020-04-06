@@ -1,20 +1,21 @@
 {
-  "name": "Sp1der",
+  "name": "Armored Centipede",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "COMMON",
-  "race": "MECH",
-  "description": "Aftermath: Gain 8 Armor.",
+  "race": "BEAST",
+  "description": "Guard. Aftermath: Gain 8 Armor.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",
     "armorBonus": 8
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

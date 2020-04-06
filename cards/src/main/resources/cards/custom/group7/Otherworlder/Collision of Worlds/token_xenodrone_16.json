@@ -1,0 +1,13 @@
+{
+  "name": "Xenodrone",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 16,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

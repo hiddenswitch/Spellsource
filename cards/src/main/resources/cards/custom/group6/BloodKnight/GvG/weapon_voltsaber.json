@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "After a friendly Mech attacks, deal 2 damage to a random enemy.",
+  "description": "After an allied Mech attacks, deal 2 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

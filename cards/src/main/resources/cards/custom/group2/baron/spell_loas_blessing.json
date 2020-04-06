@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Give a minion Guard, Toxic, Extra Strike, Dash, Lifesteal, and Dodge.",
+  "description": "Give a minion Guard, Toxic, Extra Strike, Dash, Lifedrain, and Dodge.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

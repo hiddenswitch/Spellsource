@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "MURLOC",
-  "description": "Battlecry: Summon a 1/1 Ooze with Taunt.",
+  "description": "Opener: Summon a 1/1 Ooze with Taunt.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

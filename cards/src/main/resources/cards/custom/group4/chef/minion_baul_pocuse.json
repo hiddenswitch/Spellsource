@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Opener: Add the last 3 cards you Roasted this game to your hand. Shuffle the rest into your deck.",
+  "description": "Opener: Receive copies of the last 3 cards you Roasted this game. Shuffle the rest into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

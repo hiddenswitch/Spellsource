@@ -1,0 +1,27 @@
+{
+  "name": "Fire at Will",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "COMMON",
+  "description": "Draw a Quick Draw card. Trigger its Quick Draw.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "QUICK_DRAW"
+    },
+    "spell": {
+      "class": "TriggerQuickDrawSpell",
+      "target": "OUTPUT"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ],
+  "fileFormatVersion": 1
+}

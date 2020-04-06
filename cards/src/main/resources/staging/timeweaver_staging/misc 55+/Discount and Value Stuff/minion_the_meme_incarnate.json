@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Reduce the cost of a random card in your hand by (1). Repeat this 6 times.",
+  "description": "Opener: Reduce the cost of a random card in your hand by (1). Repeat this 6 times.",
 "battlecry": {
     "targetSelection": "NONE",
     "spell": {

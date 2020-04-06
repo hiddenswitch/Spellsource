@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 20,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Deal all damage dealt to this minion to all characters. (Deals [0] damage",
+  "description": "Aftermath: Deal all damage dealt to this to all characters. (Deals [0] damage)",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

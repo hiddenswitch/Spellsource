@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Battlecry: If you added 5 cards to your deck this turn, gain +5/- 5 and Taunt.",
+  "description": "Opener: If you added 5 cards to your deck this turn, gain +5/- 5 and Taunt.",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition"

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "MURLOC",
-  "description": "Battlecry: Give your other Murlocs +2 Health.",
+  "description": "Opener: Give your other Murlocs +2 Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

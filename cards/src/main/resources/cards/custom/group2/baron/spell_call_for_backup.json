@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Add four 2/2 Knights to your hand.",
+  "description": "Receive four 2/2 Knights.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",

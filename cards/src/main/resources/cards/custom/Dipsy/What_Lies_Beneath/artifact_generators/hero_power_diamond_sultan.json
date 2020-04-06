@@ -1,0 +1,30 @@
+{
+  "name": "The Ruler's Reliquary",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Source an Artifact.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "ARTIFACT",
+        "operation": "HAS"
+      },
+	  "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

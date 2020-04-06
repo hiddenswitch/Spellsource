@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Randomly either deal $1 damage to all enemies or restore #1 Health to all friendly characters. Recast this twice.",
+  "description": "Randomly either deal $1 damage to all enemies or restore #1 Health to all allied characters. Recast this twice.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

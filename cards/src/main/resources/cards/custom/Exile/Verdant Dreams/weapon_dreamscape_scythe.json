@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "After your champion attacks, give a random friendly Demon, Dragon, and Pirate +2 Attack.",
+  "description": "After your champion attacks, give a random allied Demon and Dragon +3 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -20,7 +20,7 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
-          "attackBonus": 2,
+          "attackBonus": 3,
           "filter": {
             "class": "CardFilter",
             "race": "DEMON"
@@ -30,20 +30,10 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
-          "attackBonus": 2,
+          "attackBonus": 3,
           "filter": {
             "class": "CardFilter",
             "race": "DRAGON"
-          },
-          "randomTarget": true
-        },
-        {
-          "class": "BuffSpell",
-          "target": "FRIENDLY_MINIONS",
-          "attackBonus": 2,
-          "filter": {
-            "class": "CardFilter",
-            "race": "PIRATE"
           },
           "randomTarget": true
         }
