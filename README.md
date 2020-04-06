@@ -19,7 +19,24 @@ Read [the latest changes here](www/src/pages-markdown/whatsnew.md) or the deploy
 The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
 See the complete code reference [here](https://www.playspellsource.com/javadoc).
- 
+
+### Tasks
+
+```shell script
+$ ./gradlew tasks --group contributors
+------------------------------------------------------------
+Tasks runnable from root project
+------------------------------------------------------------
+
+Contributors tasks
+------------------
+netRun - Starts the Spellsource server
+netRunDebug - Starts the Spellsource server attachable as a Remote debug target from IntelliJ
+testAll - Runs all tests. Make sure mongod is running. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.
+
+To see all tasks and more detail, run gradle tasks --all
+```
+
 ### Getting started with Development on macOS
 
 Requirements: Java 11 or later, Mongo Community Edition 3.6, Python 3.7 or later, Node 10 or later.
