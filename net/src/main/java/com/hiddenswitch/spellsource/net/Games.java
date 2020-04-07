@@ -400,6 +400,7 @@ public interface Games extends Verticle {
 					.maxMana(player.getMaxMana())
 					.mana(player.getMana())
 					.l(Games.toClientLocation(player.getEntityLocation()))
+					.isStartingTurn(player.hasAttribute(Attribute.STARTING_TURN))
 					.gameStarted(player.hasAttribute(Attribute.GAME_STARTED));
 			playerEntities.add(playerEntity);
 			// The heroes may have wound up in the graveyard
