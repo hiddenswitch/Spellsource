@@ -5,7 +5,7 @@ path: "/whats-new"
 header: true
 ---
 
-### 0.8.72-3.1.2 (In Progress)
+### 0.8.72-3.1.2 (April 7, 2020)
 
  - The full screen resolution is set to the display's desktop resolution, fixing odd rendering issues on Windows devices. (1644)
  - Your playable cards and units no longer flicker a green outline at the end of your turn in Quick Play and other situations where your opponent completes their turn very quickly. (1557)
