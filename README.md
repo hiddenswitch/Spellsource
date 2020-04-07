@@ -8,7 +8,7 @@ This is a simulator and game server for Spellsource, a community-authored card g
 
 **[Play now in your browser, or download for your platform here.](www/src/pages-markdown/download.md)**
 
-Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality.
+Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
 
 ### Changelist
 
@@ -21,6 +21,8 @@ The `Spellsource-Server` project is a 2-player card battler that supports hosted
 See the complete code reference [here](https://www.playspellsource.com/javadoc).
 
 ### Tasks
+
+Make sure to be running **Mongo** when you start the server.
 
 ```shell script
 $ ./gradlew tasks --group contributors
@@ -36,6 +38,20 @@ testAll - Runs all tests. Make sure mongod is running. When testing custom cards
 
 To see all tasks and more detail, run gradle tasks --all
 ```
+
+### Cloning this repository
+
+This repository uses **Git Submodules**. This means, if you have the proper authorization, you'll be able to access all the source code using:
+
+```shell script
+git clone https://github.com/hiddenswitch/Spellsource.git
+cd Spellsource
+git submodule update --init --recursive
+```
+
+Failures are normal if you do not have permissions to the repositories.
+
+If you have the permissions, you will need to add your SSH key to the private repositories, for both BitBucket and GitHub, to access all of them. Contact us on the Discord at the start of this document if you'd like to contribute to private work like the game client.
 
 ### Getting started with Development on macOS
 
@@ -61,6 +77,10 @@ Visit the [Contribution Guide](www/src/pages-markdown/contribute.md) for more ab
 Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative user for these.
 
 ### Troubleshooting
+
+> I am having issues with Git Submodules, like failures to download
+
+Public users do not have access to the private repositories that fail to download. You can safely ignore those errors. If you'd like to contribute to the private repositories, like the game client, please use the Discord invite link above and discuss with the team there.
 
 > I am seeing issues with too many files open.
 

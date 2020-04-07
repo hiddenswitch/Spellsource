@@ -1760,6 +1760,11 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+      isStartingTurn:
+        description: |
+          When set on the player entity, indicates the effects occuring now are during the player's turn start phase.
+        type: 'boolean'
+        default: false
   DraftsChooseCardRequest:
     type: 'object'
     required:

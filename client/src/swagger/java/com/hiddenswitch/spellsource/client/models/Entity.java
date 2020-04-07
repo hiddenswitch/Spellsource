@@ -377,6 +377,9 @@ public class Entity implements Serializable {
   @JsonProperty("cardSets")
   private List<String> cardSets = null;
 
+  @JsonProperty("isStartingTurn")
+  private Boolean isStartingTurn = false;
+
   public Entity id(Integer id) {
     this.id = id;
     return this;
@@ -1635,6 +1638,24 @@ public class Entity implements Serializable {
     this.cardSets = cardSets;
   }
 
+  public Entity isStartingTurn(Boolean isStartingTurn) {
+    this.isStartingTurn = isStartingTurn;
+    return this;
+  }
+
+   /**
+   * When set on the player entity, indicates the effects occuring now are during the player&#39;s turn start phase. 
+   * @return isStartingTurn
+  **/
+  @ApiModelProperty(value = "When set on the player entity, indicates the effects occuring now are during the player's turn start phase. ")
+  public Boolean isIsStartingTurn() {
+    return isStartingTurn;
+  }
+
+  public void setIsStartingTurn(Boolean isStartingTurn) {
+    this.isStartingTurn = isStartingTurn;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1713,12 +1734,13 @@ public class Entity implements Serializable {
         Objects.equals(this.gameStarted, entity.gameStarted) &&
         Objects.equals(this.color, entity.color) &&
         Objects.equals(this.blackText, entity.blackText) &&
-        Objects.equals(this.cardSets, entity.cardSets);
+        Objects.equals(this.cardSets, entity.cardSets) &&
+        Objects.equals(this.isStartingTurn, entity.isStartingTurn);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, l, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText, cardSets);
+    return Objects.hash(id, cardId, entityType, name, description, l, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText, cardSets, isStartingTurn);
   }
 
 
@@ -1796,6 +1818,7 @@ public class Entity implements Serializable {
     sb.append("    color: ").append(toIndentedString(color)).append("\n");
     sb.append("    blackText: ").append(toIndentedString(blackText)).append("\n");
     sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
+    sb.append("    isStartingTurn: ").append(toIndentedString(isStartingTurn)).append("\n");
     sb.append("}");
     return sb.toString();
   }
