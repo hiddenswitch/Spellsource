@@ -39,6 +39,9 @@
       }
     }
   ],
+  "attributes": {
+    "RUSH": true
+  },
   "collectible": true,
   "sets": [
     "CUSTOM",

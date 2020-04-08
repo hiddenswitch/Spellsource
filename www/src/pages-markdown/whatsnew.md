@@ -6,7 +6,8 @@ header: true
 ---
 
 ### Upcoming Changes
- - Cards shuffled by Gold Rush now properly cost (0) lun. (1683) 
+ - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
+ - Knowledge Hoarder now actually has Dash. (1684)
 
 ### 0.8.72-3.1.2 (April 7, 2020)
 
