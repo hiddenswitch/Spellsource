@@ -6,13 +6,10 @@
     "rarity": "COMMON",
     "description": "Both players draw a card.",
     "spell": {
-        "class": "MetaSpell",
+        "class": "BothPlayersSpell",
         "spell": {
-            "class": "BothPlayersSpell",
-            "spell": {
-                "class": "DrawCardSpell",
-                "value": 1
-            }
+            "class": "DrawCardSpell",
+            "value": 1
         }
     },
     "collectible": true,
