@@ -12,7 +12,7 @@
         "CHARGE": true
     },
     "collectible": true,
-    "set": "Sourcestorm",
+    "set": "SOURCESTORM",
     "fileFormatVersion": 1,
     "manaCostModifier": {
         "class": "PlayerAttributeValueProvider",
