@@ -101,6 +101,18 @@ Make sure you are running `mongo`.
 
 You had failures in `testRandomMassPlay`, the fuzzer for Spellsource. These are real issues.
 
+> I receive an error from `fastlane` for the `gradle distIOS` command: `(<unknown>): found unexpected end of stream while scanning a quoted scalar at line 1 column 1`
+
+Log into Apple using `fastlane spaceauth` and paste the new session into [unityclient-build.env](secrets/spellsource/unityclient-build.env).
+
+> I uploaded to Steam, but I do not see the build.
+
+Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/987160) and promote the build.
+
+> I uploaded to TestFlight but the build isn't public yet.
+
+Make sure the Public group is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)
