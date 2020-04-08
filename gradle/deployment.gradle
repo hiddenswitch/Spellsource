@@ -9,6 +9,12 @@ buildscript {
     }
 }
 
+// Limit the number of times we can run Unity3D on the same project directory
+// See https://github.com/gradle/gradle/pull/9914 for more about how this works
+def unity3d = gradle.sharedServices.registerIfAbsent("unity3d", BuildService) {
+    maxParallelUsages = 1
+}
+
 import io.swagger.codegen.ClientOptInput
 import io.swagger.codegen.ClientOpts
 import io.swagger.codegen.DefaultGenerator
@@ -102,6 +108,7 @@ task dockerSources(type: SourceTask) {
 task buildStandalone(type: Exec) {
     description("Builds the macOS and Windows versions of the game using the ${unityClientPath}/deploy.sh file and your local Unity version.")
     dependsOn += [generateSwaggerCsharp, unitySources]
+    usesService(unity3d)
     inputs.file("${unityClientPath}/deploy.sh")
     outputs.dir("${unityClientPath}/obj/win")
     outputs.dir("${unityClientPath}/obj/osx")
@@ -132,6 +139,7 @@ task distSwarm(type: Exec, group: 'Spellsource') { t ->
 task buildIOS(type: Exec) {
     description("Builds the iOS target of the Unity project")
     dependsOn += [unitySources, secretSources]
+    usesService(unity3d)
     inputs.file("${unityClientPath}/deploy.sh")
     outputs.dir("${unityClientPath}/obj/ios")
     workingDir "${unityClientPath}"
@@ -149,6 +157,7 @@ task distIOS(type: Exec, group: 'Spellsource') { t ->
 task buildAndroid(type: Exec) {
     description("Builds the Android target of the Unity project")
     dependsOn unitySources
+    usesService(unity3d)
     workingDir "${unityClientPath}"
     outputs.dir("${unityClientPath}/obj/android")
 
@@ -167,6 +176,7 @@ task distAndroid(type: Exec, group: 'Spellsource') { t ->
 task buildWebGL(type: Exec) {
     description("Builds the WebGL Unity3D project")
     dependsOn unitySources
+    usesService(unity3d)
     workingDir "${unityClientPath}"
     outputs.dir("${unityClientPath}/obj/webgl")
     commandLine './deploy.sh', '-W'
