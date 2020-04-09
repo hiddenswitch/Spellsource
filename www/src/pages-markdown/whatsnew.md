@@ -10,6 +10,7 @@ header: true
  - Knowledge Hoarder now actually has Dash. (1684)
  - Fixed name "Right of Worhip" -> "Right of Worship" (1685)
  - The "Celestial Conduit" artifact now actually does its effect. (1686)
+ - Vitium Surger now correctly gives you artifacts. (1688)
 
 ### 0.8.72-3.1.2 (April 7, 2020)
 
