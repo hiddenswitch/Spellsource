@@ -6,22 +6,17 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.condition.AttributeCondition;
 import net.demilich.metastone.game.spells.desc.condition.ComparisonCondition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
-import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
-import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
 import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
-import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**

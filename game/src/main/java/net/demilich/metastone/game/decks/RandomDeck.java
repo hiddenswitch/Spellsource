@@ -3,10 +3,11 @@ package net.demilich.metastone.game.decks;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.decks.validation.DeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.GameLogic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -30,16 +31,16 @@ final class RandomDeck extends GameDeck {
 	private void populate(DeckFormat deckFormat) {
 		DeckValidator deckValidator = new DefaultDeckValidator();
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
-				&& !card.getCardType().isCardType(CardType.HERO)
-				&& !card.getCardType().isCardType(CardType.HERO_POWER)
-				&& !card.getCardType().isCardType(CardType.CLASS)
-				&& !card.getCardType().isCardType(CardType.FORMAT)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.FORMAT)
 				&& card.hasHeroClass(getHeroClass()));
 		CardList neutralCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
-				&& !card.getCardType().isCardType(CardType.HERO)
-				&& !card.getCardType().isCardType(CardType.HERO_POWER)
-				&& !card.getCardType().isCardType(CardType.CLASS)
-				&& !card.getCardType().isCardType(CardType.FORMAT)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)
+				&& !GameLogic.isCardType(card.getCardType(), CardType.FORMAT)
 				&& card.hasHeroClass(HeroClass.ANY));
 
 		while (!this.isComplete()) {

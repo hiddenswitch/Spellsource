@@ -2,13 +2,13 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -106,7 +106,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		}
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if ((event.getTarget() != null && targetEntityType != null && !event.getTarget().getEntityType().hasEntityType(targetEntityType))
+		if ((event.getTarget() != null && targetEntityType != null && !Entity.hasEntityType(event.getTarget().getEntityType(), targetEntityType))
 				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}

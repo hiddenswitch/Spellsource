@@ -1,10 +1,11 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.entities.HasCard;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.cards.Attribute;
@@ -24,7 +25,7 @@ public abstract class AbstractCardTrigger extends EventTrigger {
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		HasCard cardPlayedEvent = (HasCard) event;
 		CardType cardType = (CardType) getDesc().get(EventTriggerArg.CARD_TYPE);
-		if (cardType != null && !cardPlayedEvent.getSourceCard().getCardType().isCardType(cardType)) {
+		if (cardType != null && !GameLogic.isCardType(cardPlayedEvent.getSourceCard().getCardType(), cardType)) {
 			return false;
 		}
 

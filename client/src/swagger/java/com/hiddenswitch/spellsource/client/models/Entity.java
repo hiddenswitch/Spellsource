@@ -17,7 +17,10 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.EntityLocation;
+import com.hiddenswitch.spellsource.client.models.EntityType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -39,55 +42,8 @@ public class Entity implements Serializable {
   @JsonProperty("cardId")
   private String cardId = null;
 
-  /**
-   * Broad categories describing this entity and how it should be rendered. 
-   */
-  public enum EntityTypeEnum {
-    PLAYER("PLAYER"),
-    
-    HERO("HERO"),
-    
-    CARD("CARD"),
-    
-    MINION("MINION"),
-    
-    WEAPON("WEAPON"),
-    
-    SECRET("SECRET"),
-    
-    QUEST("QUEST"),
-    
-    ENCHANTMENT("ENCHANTMENT");
-
-    private String value;
-
-    EntityTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static EntityTypeEnum fromValue(String text) {
-      for (EntityTypeEnum b : EntityTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("entityType")
-  private EntityTypeEnum entityType = null;
+  private EntityType entityType = null;
 
   @JsonProperty("name")
   private String name = null;
@@ -257,55 +213,8 @@ public class Entity implements Serializable {
   @JsonProperty("note")
   private String note = null;
 
-  /**
-   * When not null, indicates this card entity has a specified type.
-   */
-  public enum CardTypeEnum {
-    HERO("HERO"),
-    
-    MINION("MINION"),
-    
-    SPELL("SPELL"),
-    
-    WEAPON("WEAPON"),
-    
-    HERO_POWER("HERO_POWER"),
-    
-    CHOOSE_ONE("CHOOSE_ONE"),
-    
-    CLASS("CLASS"),
-    
-    FORMAT("FORMAT");
-
-    private String value;
-
-    CardTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static CardTypeEnum fromValue(String text) {
-      for (CardTypeEnum b : CardTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("cardType")
-  private CardTypeEnum cardType = null;
+  private CardType cardType = null;
 
   @JsonProperty("tribe")
   private String tribe = null;
@@ -319,51 +228,8 @@ public class Entity implements Serializable {
   @JsonProperty("cardSet")
   private String cardSet = null;
 
-  /**
-   * The rarity of the card 
-   */
-  public enum RarityEnum {
-    FREE("FREE"),
-    
-    COMMON("COMMON"),
-    
-    RARE("RARE"),
-    
-    EPIC("EPIC"),
-    
-    LEGENDARY("LEGENDARY"),
-    
-    ALLIANCE("ALLIANCE");
-
-    private String value;
-
-    RarityEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static RarityEnum fromValue(String text) {
-      for (RarityEnum b : RarityEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("rarity")
-  private RarityEnum rarity = null;
+  private Rarity rarity = null;
 
   @JsonProperty("gameStarted")
   private Boolean gameStarted = false;
@@ -416,21 +282,21 @@ public class Entity implements Serializable {
     this.cardId = cardId;
   }
 
-  public Entity entityType(EntityTypeEnum entityType) {
+  public Entity entityType(EntityType entityType) {
     this.entityType = entityType;
     return this;
   }
 
    /**
-   * Broad categories describing this entity and how it should be rendered. 
+   * Get entityType
    * @return entityType
   **/
-  @ApiModelProperty(value = "Broad categories describing this entity and how it should be rendered. ")
-  public EntityTypeEnum getEntityType() {
+  @ApiModelProperty(value = "")
+  public EntityType getEntityType() {
     return entityType;
   }
 
-  public void setEntityType(EntityTypeEnum entityType) {
+  public void setEntityType(EntityType entityType) {
     this.entityType = entityType;
   }
 
@@ -1442,21 +1308,21 @@ public class Entity implements Serializable {
     this.note = note;
   }
 
-  public Entity cardType(CardTypeEnum cardType) {
+  public Entity cardType(CardType cardType) {
     this.cardType = cardType;
     return this;
   }
 
    /**
-   * When not null, indicates this card entity has a specified type.
+   * Get cardType
    * @return cardType
   **/
-  @ApiModelProperty(value = "When not null, indicates this card entity has a specified type.")
-  public CardTypeEnum getCardType() {
+  @ApiModelProperty(value = "")
+  public CardType getCardType() {
     return cardType;
   }
 
-  public void setCardType(CardTypeEnum cardType) {
+  public void setCardType(CardType cardType) {
     this.cardType = cardType;
   }
 
@@ -1532,21 +1398,21 @@ public class Entity implements Serializable {
     this.cardSet = cardSet;
   }
 
-  public Entity rarity(RarityEnum rarity) {
+  public Entity rarity(Rarity rarity) {
     this.rarity = rarity;
     return this;
   }
 
    /**
-   * The rarity of the card 
+   * Get rarity
    * @return rarity
   **/
-  @ApiModelProperty(value = "The rarity of the card ")
-  public RarityEnum getRarity() {
+  @ApiModelProperty(value = "")
+  public Rarity getRarity() {
     return rarity;
   }
 
-  public void setRarity(RarityEnum rarity) {
+  public void setRarity(Rarity rarity) {
     this.rarity = rarity;
   }
 

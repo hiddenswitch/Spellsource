@@ -1,10 +1,7 @@
 package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.client.models.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityLocation;
-import com.hiddenswitch.spellsource.client.models.GameActions;
-import com.hiddenswitch.spellsource.client.models.GameState;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Games;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -92,7 +89,7 @@ public class ModelsTest {
 			context.performAction(0, freeze.play());
 			assertEquals(2, player.getQuests().get(0).getFires());
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
-			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getFires() == 2));
+			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == EntityType.QUEST && e.getFires() == 2));
 			JsonObject jsonObject = JsonObject.mapFrom(state);
 			Assert.assertTrue(jsonObject.getJsonArray("entities").stream().anyMatch(obj -> {
 				JsonObject jo = (JsonObject) obj;

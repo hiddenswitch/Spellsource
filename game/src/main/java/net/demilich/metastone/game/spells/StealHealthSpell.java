@@ -5,7 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public final class StealHealthSpell extends BuffSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		if (!target.getEntityType().hasEntityType(EntityType.ACTOR)) {
+		if (!Entity.hasEntityType(target.getEntityType(), EntityType.ACTOR)) {
 			return;
 		}
 		var hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);

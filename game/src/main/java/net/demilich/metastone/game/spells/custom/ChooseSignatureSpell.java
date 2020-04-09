@@ -1,16 +1,14 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.spells.NullSpell;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.*;

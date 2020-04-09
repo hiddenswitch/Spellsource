@@ -3,11 +3,12 @@ package net.demilich.metastone.game.spells.desc.filter;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Rarity;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.cards.Attribute;
 
@@ -48,7 +49,7 @@ public final class CardFilter extends EntityFilter {
 		Card card = entity.getSourceCard();
 
 		CardType cardType = (CardType) getDesc().get(EntityFilterArg.CARD_TYPE);
-		if (cardType != null && !card.getCardType().isCardType(cardType)) {
+		if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
 			return false;
 		}
 		String race = (String) getDesc().get(EntityFilterArg.RACE);
@@ -80,7 +81,7 @@ public final class CardFilter extends EntityFilter {
 			}
 		}
 		Rarity rarity = (Rarity) getDesc().get(EntityFilterArg.RARITY);
-		if (rarity != null && !card.getRarity().isRarity(rarity)) {
+		if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
 			return false;
 		}
 

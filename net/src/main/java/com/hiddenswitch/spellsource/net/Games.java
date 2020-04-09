@@ -8,17 +8,15 @@ import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.UserId;
-import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.net.impl.Rpc;
 import io.vertx.core.Verticle;
-import io.vertx.core.Vertx;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -41,7 +39,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +49,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.hiddenswitch.spellsource.client.models.EntityType.*;
 import static java.util.stream.Collectors.toList;
 
 
@@ -90,12 +88,12 @@ public interface Games extends Verticle {
 	static com.hiddenswitch.spellsource.client.models.Entity getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String heroClass) {
 		return new com.hiddenswitch.spellsource.client.models.Entity()
 				.cardId("hidden")
-				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.CARD)
+				.entityType(CARD)
 				.description("A secret! This card will be revealed when a certain action occurs.")
 				.name("Secret")
 				.id(id)
 				.owner(owner)
-				.cardType(Entity.CardTypeEnum.SPELL)
+				.cardType(CardType.SPELL)
 				.heroClass(heroClass)
 				.l(toClientLocation(location));
 	}
@@ -372,7 +370,7 @@ public interface Games extends Verticle {
 		for (Secret secret : opponent.getSecrets()) {
 			com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(secret.getId())
-					.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.SECRET)
+					.entityType(SECRET)
 					.owner(secret.getOwner())
 					.heroClass(secret.getSourceCard().getHeroClass())
 					.l(Games.toClientLocation(secret.getEntityLocation()));
@@ -394,7 +392,7 @@ public interface Games extends Verticle {
 			com.hiddenswitch.spellsource.client.models.Entity playerEntity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(player.getId())
 					.name(player.getName())
-					.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.PLAYER)
+					.entityType(PLAYER)
 					.owner(player.getId())
 					.lockedMana(player.getLockedMana())
 					.maxMana(player.getMaxMana())
@@ -441,7 +439,7 @@ public interface Games extends Verticle {
 
 		// Get the heroes that may have wound up in the graveyard
 		List<Entity> graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
-				.filter(e -> e.getEntityType() == EntityType.HERO)
+				.filter(e -> e.getEntityType() == HERO)
 				.map(h -> {
 					Entity e = getEntity(workingContext, h, localPlayerId);
 					Player owner = h.getOwner() == local.getId() ? local : opponent;
@@ -467,7 +465,7 @@ public interface Games extends Verticle {
 				.id(e.getId())
 				.owner(e.getOwner())
 				.l(toClientLocation(e.getEntityLocation()))
-				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.valueOf(e.getEntityType().toString()))).collect(toList()));
+				.entityType(valueOf(e.getEntityType().toString()))).collect(toList()));
 
 		// Sort the entities by ID
 		entities.sort(Comparator.comparingInt(Entity::getId));
@@ -532,16 +530,13 @@ public interface Games extends Verticle {
 				.description(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
 				.name(actor.getName())
 				.id(actor.getId())
+				.entityType(actor.getEntityType())
 				.cardId(card.getCardId());
 
 		if (actor instanceof Minion) {
-			entity.setEntityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.MINION);
 			entity.boardPosition(actor.getEntityLocation().getIndex());
 		} else if (actor instanceof Hero) {
-			entity.setEntityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.HERO);
 			entity.armor(actor.getArmor());
-		} else if (actor instanceof Weapon) {
-			entity.setEntityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.WEAPON);
 		}
 
 		entity.owner(actor.getOwner());
@@ -549,7 +544,7 @@ public interface Games extends Verticle {
 		entity.manaCost(card.getBaseManaCost());
 		entity.heroClass(card.getHeroClass());
 		entity.cardSet(Objects.toString(card.getCardSet()));
-		entity.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
+		entity.rarity(card.getRarity());
 		entity.baseManaCost(card.getBaseManaCost());
 		entity.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entity.deathrattles(!actor.getDeathrattles().isEmpty());
@@ -619,13 +614,13 @@ public interface Games extends Verticle {
 					.description("Secret")
 					.cardId("hidden");
 		}
-		Entity.EntityTypeEnum entityType;
+		EntityType entityType;
 		if (enchantment instanceof Secret) {
-			entityType = Entity.EntityTypeEnum.SECRET;
+			entityType = EntityType.SECRET;
 		} else if (enchantment instanceof Quest) {
-			entityType = Entity.EntityTypeEnum.QUEST;
+			entityType = EntityType.QUEST;
 		} else {
-			entityType = Entity.EntityTypeEnum.ENCHANTMENT;
+			entityType = EntityType.ENCHANTMENT;
 		}
 
 		entity
@@ -656,7 +651,7 @@ public interface Games extends Verticle {
 		}
 
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.CARD)
+				.entityType(CARD)
 				.name(card.getName())
 				.id(card.getId())
 				.cardId(card.getCardId());
@@ -692,7 +687,7 @@ public interface Games extends Verticle {
 
 		entity.owner(card.getOwner());
 		entity.cardSet(Objects.toString(card.getCardSet()));
-		entity.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
+		entity.rarity(card.getRarity());
 		entity.l(Games.toClientLocation(card.getEntityLocation()));
 		entity.baseManaCost(card.getBaseManaCost());
 		entity.uncensored(card.hasAttribute(Attribute.UNCENSORED));
@@ -712,7 +707,7 @@ public interface Games extends Verticle {
 		}
 
 		entity.heroClass(heroClass);
-		entity.cardType(Entity.CardTypeEnum.valueOf(card.getCardType().toString()));
+		entity.cardType(card.getCardType());
 		boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file -doombubbles

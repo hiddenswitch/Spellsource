@@ -2,11 +2,12 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.AfterSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -41,7 +42,7 @@ public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 		// on our enchantment
 		int max = (int) host.getAttributes().getOrDefault(Attribute.RESERVED_INTEGER_1, 0);
 		Map<EntityReference, Entity> entities = context.getEntities()
-				.filter(entity -> !entity.getSourceCard().getCardType().isCardType(CardType.CHOOSE_ONE)
+				.filter(entity -> !GameLogic.isCardType(entity.getSourceCard().getCardType(), CardType.CHOOSE_ONE)
 						&& entity.getEntityType() != EntityType.ENCHANTMENT)
 				.collect(toMap(Entity::getReference, Function.identity()));
 		Map<String, Long> counts = list.getReferences(host)

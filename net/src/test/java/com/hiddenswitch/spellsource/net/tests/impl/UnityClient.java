@@ -484,16 +484,16 @@ public class UnityClient implements AutoCloseable {
 		context.assertNotNull(message.getChanges());
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.PLAYER).count() == 2);
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() >= 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.PLAYER).count() == 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).count() >= 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
-				e.getEntityType() == Entity.EntityTypeEnum.HERO
+				e.getEntityType() == EntityType.HERO
 						&& e.getL().getZ() == EntityLocation.ZEnum.E
 		).allMatch(h ->
 				null != h.getMaxMana()));
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		if (message.getGameState().getTurnNumber() > 0) {
-			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).anyMatch(h ->
+			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).anyMatch(h ->
 					h.getMaxMana() >= 1));
 		}
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
