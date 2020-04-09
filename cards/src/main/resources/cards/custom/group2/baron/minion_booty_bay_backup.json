@@ -1,13 +1,13 @@
 {
-  "name": "Pearl Bay Backup",
+  "name": "Pearl Bay Spook",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "race": "PIRATE",
-  "description": "Opener: Give your other Pirates +1 Attack.",
+  "race": "SPIRIT",
+  "description": "Opener: Give your other Spirits +1 Attack.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -16,7 +16,7 @@
       "attackBonus": 1,
       "filter": {
         "class": "RaceFilter",
-        "race": "PIRATE"
+        "race": "SPIRIT"
       },
       "hpBonus": 0
     }
