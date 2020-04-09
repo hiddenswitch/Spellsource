@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDescArg;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;

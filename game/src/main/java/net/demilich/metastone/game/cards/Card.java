@@ -1,18 +1,21 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
@@ -1235,7 +1238,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	public boolean isSpell() {
-		return getCardType().isCardType(CardType.SPELL);
+		return GameLogic.isCardType(getCardType(), CardType.SPELL);
 	}
 
 	public boolean hasDeathrattle() {
@@ -1263,7 +1266,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	public boolean isHeroPower() {
-		return getCardType().isCardType(CardType.HERO_POWER);
+		return GameLogic.isCardType(getCardType(), CardType.HERO_POWER);
 	}
 
 	@Override

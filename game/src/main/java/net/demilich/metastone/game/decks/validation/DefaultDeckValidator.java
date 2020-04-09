@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.decks.validation;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.Rarity;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.logic.GameLogic;
 

@@ -1,9 +1,10 @@
 package net.demilich.metastone.game.statistics;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -141,7 +142,7 @@ public class GameStatistics implements Cloneable, Serializable {
 	}
 
 	private void increaseCardCount(Card card, int turn) {
-		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
+		if (GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)) {
 			return;
 		}
 		String cardId = card.getCardId();

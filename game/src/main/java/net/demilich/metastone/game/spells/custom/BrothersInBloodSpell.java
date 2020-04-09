@@ -3,16 +3,13 @@ package net.demilich.metastone.game.spells.custom;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
 import net.demilich.metastone.game.spells.trigger.MinionPlayedTrigger;
-import net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**

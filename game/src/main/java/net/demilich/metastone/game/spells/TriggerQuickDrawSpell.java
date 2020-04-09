@@ -5,7 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
@@ -38,7 +38,7 @@ public final class TriggerQuickDrawSpell extends Spell {
 
 		for (var quickDrawSpell : quickDrawSpells) {
 			// Skip fight spells if the source is a card
-			if (source.getEntityType().hasEntityType(EntityType.CARD)
+			if (Entity.hasEntityType(source.getEntityType(), EntityType.CARD)
 					&& FightSpell.class.isAssignableFrom(quickDrawSpell.getSpell().getDescClass())) {
 				continue;
 			}

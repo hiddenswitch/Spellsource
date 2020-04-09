@@ -5,7 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.SetCardSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -45,7 +45,7 @@ public class CardAura extends AbstractFriendlyCardAura {
 			return false;
 		}
 
-		if (!target.getEntityType().hasEntityType(EntityType.CARD)) {
+		if (!Entity.hasEntityType(target.getEntityType(), EntityType.CARD)) {
 			return false;
 		}
 

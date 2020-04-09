@@ -4,11 +4,12 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.DrainEvent;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
@@ -56,8 +57,8 @@ public final class DrainSpell extends Spell {
 		}
 
 		Entity defaultSource;
-		if (source.getSourceCard().getCardType().isCardType(CardType.SPELL)
-				|| source.getSourceCard().getCardType().isCardType(CardType.HERO_POWER)
+		if (GameLogic.isCardType(source.getSourceCard().getCardType(), CardType.SPELL)
+				|| GameLogic.isCardType(source.getSourceCard().getCardType(), CardType.HERO_POWER)
 				|| source.getEntityType() == EntityType.WEAPON) {
 			defaultSource = context.resolveSingleTarget(context.getPlayer(source.getOwner()), source, EntityReference.FRIENDLY_HERO);
 		} else {

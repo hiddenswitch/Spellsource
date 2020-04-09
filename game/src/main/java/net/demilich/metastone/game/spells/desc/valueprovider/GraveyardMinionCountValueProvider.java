@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 import java.util.stream.Stream;

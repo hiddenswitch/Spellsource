@@ -12,10 +12,11 @@ import io.vertx.core.Vertx;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.GameLogic;
 
 import java.util.*;
 
@@ -71,7 +72,7 @@ public interface Cards {
 					passes &= sets.contains(desc.getSet());
 
 					if (request.getRarity() != null) {
-						passes &= desc.getRarity() != null && desc.getRarity().isRarity(request.getRarity());
+						passes &= desc.getRarity() != null && GameLogic.isRarity(desc.getRarity(), request.getRarity());
 					}
 
 					return passes;

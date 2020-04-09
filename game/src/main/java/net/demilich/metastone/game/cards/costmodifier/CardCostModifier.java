@@ -4,14 +4,15 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+;
 import net.demilich.metastone.game.logic.CustomCloneable;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -193,7 +194,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 		// Is this the correct card type
 		applies &= !(getCardType() != null
-				&& !card.getCardType().isCardType(getCardType()));
+				&& !GameLogic.isCardType(card.getCardType(), getCardType()));
 
 		// If a filter is specified, does it satisfy the filter?
 		applies &= !(getFilter() != null

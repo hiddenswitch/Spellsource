@@ -3,8 +3,7 @@ package net.demilich.metastone.game.logic;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Multiset;
-import com.hiddenswitch.spellsource.client.models.ActionType;
-import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
+import com.hiddenswitch.spellsource.client.models.*;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -17,6 +16,8 @@ import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -24,6 +25,8 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
@@ -39,6 +42,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.*;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
@@ -253,6 +257,41 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		this(idFactory);
 		this.seed = seed;
 		random = new XORShiftRandom(seed);
+	}
+
+	/**
+	 * Indicates whether or not the instance is of the specified card type.
+	 * <p>
+	 * Use this instead of direct comparisons to interpret a {@link #CHOOSE_ONE} card as a {@link #SPELL} card.
+	 *
+	 * @param thisType
+	 * @param other    The card type to compare to.
+	 * @return {@code true} if this instance is of the {@code cardType}.
+	 */
+	public static boolean isCardType(CardType thisType, CardType other) {
+		if (thisType == CardType.CHOOSE_ONE && other == CardType.SPELL) {
+			return true;
+		} else if (thisType == other) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Compares two rarities, taking into account that a free and common rarity are the same from a gameplay point of
+	 * view.
+	 *
+	 * @param thisRarity
+	 * @param other
+	 * @return
+	 */
+	public static boolean isRarity(Rarity thisRarity, Rarity other) {
+		if (thisRarity == Rarity.FREE && other == Rarity.COMMON) {
+			return true;
+		} else if (thisRarity == other) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -501,7 +540,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return false;
 		}
 
-		if (card.getCardType().isCardType(CardType.HERO_POWER)) {
+		if (isCardType(card.getCardType(), CardType.HERO_POWER)) {
 			Card power = card;
 			int heroPowerUsages = getGreatestAttributeValue(player, Attribute.HERO_POWER_USAGES);
 			if (heroPowerUsages == 0) {
@@ -517,11 +556,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			return card.canBeCast(context, player);
-		} else if (card.getCardType().isCardType(CardType.MINION)) {
+		} else if (isCardType(card.getCardType(), CardType.MINION)) {
 			return canSummonMoreMinions(player);
 		}
 
-		if (card.getCardType().isCardType(CardType.SPELL)) {
+		if (isCardType(card.getCardType(), CardType.SPELL)) {
 			return card.canBeCast(context, player);
 		}
 		return true;
@@ -751,7 +790,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof Enchantment)
 				.map(t -> (Enchantment) t)
-				.filter(e -> e.getSourceCard() != null && e.getSourceCard().getCardType().isCardType(CardType.ENCHANTMENT))
+				.filter(e -> e.getSourceCard() != null && isCardType(e.getSourceCard().getCardType(), CardType.ENCHANTMENT))
 				.filter(e -> e.getOwner() == playerId)
 				.filter(((Predicate<Enchantment>) Enchantment::isExpired).negate())
 				.forEach(e -> overrideAuras.addAll(e.getSourceCard().createEnchantments().stream()
@@ -837,7 +876,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (sourceAction != null
 				&& sourceCard != null
-				&& sourceCard.getCardType().isCardType(CardType.SPELL)
+				&& isCardType(sourceCard.getCardType(), CardType.SPELL)
 				&& Objects.equals(sourceAction.getSourceReference(), source.getReference())
 				&& !childSpell) {
 			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
@@ -1339,7 +1378,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (!ignoreLifesteal
 					&& (source.hasAttribute(Attribute.LIFESTEAL) || source.hasAttribute(Attribute.AURA_LIFESTEAL))
 					// Lifesteal now does not apply if the source shares an owner with the target and the target is a hero.
-					&& !(source.getOwner() == target.getOwner() && target.getEntityType() == EntityType.HERO && source.getSourceCard().getCardType().isCardType(CardType.SPELL))
+					&& !(source.getOwner() == target.getOwner() && target.getEntityType() == EntityType.HERO && isCardType(source.getSourceCard().getCardType(), CardType.SPELL))
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
 					&& (((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL)
@@ -1360,7 +1399,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 							var secondaries = context.resolveTarget(player, host, aura.getSecondaryTarget());
 							secondaries.remove(source);
 							for (var secondary : secondaries) {
-								if (!secondary.getEntityType().hasEntityType(EntityType.ACTOR)) {
+								if (!Entity.hasEntityType(secondary.getEntityType(), EntityType.ACTOR)) {
 									continue;
 								}
 								heal(sourceOwner, (Actor) secondary, damageDealt, source);
@@ -1373,7 +1412,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (damageDealt > 0 &&
 					(source.hasAttribute(Attribute.WITHER))
 					// Lifesteal now does not apply if the source shares an owner with the target and the target is a hero.
-					&& !(source.getOwner() == target.getOwner() && target.getEntityType() == EntityType.HERO && source.getSourceCard().getCardType().isCardType(CardType.SPELL))
+					&& !(source.getOwner() == target.getOwner() && target.getEntityType() == EntityType.HERO && isCardType(source.getSourceCard().getCardType(), CardType.SPELL))
 					|| (source instanceof Hero && ((Hero) source).getWeapon() != null
 					&& (((Hero) source).getWeapon().hasAttribute(Attribute.WITHER)))
 					|| (source instanceof Secret
@@ -1437,9 +1476,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int damage = baseDamage;
 		Card sourceCard = source.getSourceCard();
 		if (!ignoreSpellDamage && sourceCard != null) {
-			if (sourceCard.getCardType().isCardType(CardType.SPELL)) {
+			if (isCardType(sourceCard.getCardType(), CardType.SPELL)) {
 				damage = applySpellpower(player, source, baseDamage);
-			} else if (sourceCard.getCardType().isCardType(CardType.HERO_POWER)) {
+			} else if (isCardType(sourceCard.getCardType(), CardType.HERO_POWER)) {
 				damage = applyHeroPowerDamage(player, damage);
 			}
 			if (sourceCard.isSpell()) {
@@ -3166,11 +3205,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public boolean doesCardCostHealth(Player player, Card card) {
 		final boolean cardCostsHealthAttribute = card.hasAttribute(Attribute.COSTS_HEALTH_INSTEAD_OF_MANA)
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
-		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
+		final boolean spellsCostHealthCondition = isCardType(card.getCardType(), CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
 		final boolean murlocsCostHealthCondition = Race.hasRace(context, card, Race.MURLOC)
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
-		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
+		final boolean minionsCostHealthCondition = isCardType(card.getCardType(), CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
 		return spellsCostHealthCondition
 				|| murlocsCostHealthCondition
@@ -3268,7 +3307,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 		// Passive triggers are still active here, but it's not clear if it matters (a card may transform this way like a Spellstone)
 
-		if ((card.getCardType().isCardType(CardType.SPELL))) {
+		if ((isCardType(card.getCardType(), CardType.SPELL))) {
 			GameEvent spellCastedEvent = new SpellCastedEvent(context, playerId, card, target);
 			// Silencing a card here means its effects should not be executed
 			context.fireGameEvent(spellCastedEvent);
@@ -4434,13 +4473,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param entity
 	 */
 	protected void startTurnForEntity(Entity entity) {
-		if (entity.getEntityType().hasEntityType(EntityType.ACTOR)) {
+		if (Entity.hasEntityType(entity.getEntityType(), EntityType.ACTOR)) {
 			refreshAttacksPerRound(entity);
 			stealthForTurns(entity);
 			entity.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
 
-		if (entity.getEntityType().hasEntityType(EntityType.MINION)) {
+		if (Entity.hasEntityType(entity.getEntityType(), EntityType.MINION)) {
 			entity.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 		}
 

@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource.net;
 
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.ConditionalSpell;
 import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
