@@ -232,4 +232,14 @@ public class OccultistTests extends TestBase {
 			assertNotEquals("spell_test_deal_10", player.getHand().get(0).getCardId());
 		});
 	}
+
+	@Test
+	public void testPrimordialMiner() {
+		runGym((context, player, opponent) -> {
+			Minion miner = playMinionCard(context, player, "minion_primordial_miner");
+			assertEquals("Aftermath: Add 1 Artifact to your hand. (Increases for each copy of this in your Graveyard)", miner.getDescription(context, player));
+			destroy(context, miner);
+			assertEquals(1, player.getHand().size());
+		});
+	}
 }
