@@ -1662,6 +1662,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player owner = context.getPlayer(weapon.getOwner());
 		weapon.onUnequip(context, owner);
 		removeEnchantments(weapon);
+		weapon.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 		context.fireGameEvent(new WeaponDestroyedEvent(context, weapon));
 	}
 

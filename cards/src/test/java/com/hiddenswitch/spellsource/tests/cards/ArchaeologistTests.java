@@ -102,4 +102,14 @@ public class ArchaeologistTests extends TestBase {
 			}
 		});
 	}
+
+	@Test
+	public void testPrimordialSword() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_dig_up_shovel");
+			playCard(context, player, "weapon_primordial_sword");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(1, player.getHand().size());
+		});
+	}
 }
