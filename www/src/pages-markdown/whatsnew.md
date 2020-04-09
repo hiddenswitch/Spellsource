@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Volatile Wisdom now actually swaps cards. (1697)
+
 ### 0.8.72-3.1.2 (April 7, 2020)
 
  - The full screen resolution is set to the display's desktop resolution, fixing odd rendering issues on Windows devices. (1644)
