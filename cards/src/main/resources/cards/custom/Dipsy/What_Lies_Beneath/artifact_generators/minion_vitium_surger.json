@@ -16,7 +16,7 @@
       "class": "ReceiveCardSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "attribute": "DISCOVER",
+        "attribute": "ARTIFACT",
         "operation": "HAS"
       },
 	  "cardSource": {

@@ -222,4 +222,14 @@ public class OccultistTests extends TestBase {
 			assertEquals(29, player.getHero().getHp());
 		});
 	}
+
+	@Test
+	public void testRelicsOfDeities() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "spell_test_deal_10");
+			playCard(context, player, "spell_relics_of_deities");
+			assertEquals(1, player.getHand().size());
+			assertNotEquals("spell_test_deal_10", player.getHand().get(0).getCardId());
+		});
+	}
 }
