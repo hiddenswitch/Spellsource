@@ -5027,4 +5027,17 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_primordial_pebble");
 		});
 	}
+
+	@Test
+	public void testCelestialConduit() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "token_artifact_7");
+			int sum = 0;
+			for (Card card : player.getHand()) {
+				assertEquals(card.getCardType(), CardType.SPELL);
+				sum += card.getBaseManaCost();
+			}
+			assertTrue(sum >= 15 || player.getHand().size() == 10, "" + sum);
+		});
+	}
 }
