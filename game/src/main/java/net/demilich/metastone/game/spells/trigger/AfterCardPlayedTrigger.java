@@ -10,6 +10,10 @@ public final class AfterCardPlayedTrigger extends AbstractCardTrigger {
 		super(desc);
 	}
 
+	public static EventTrigger create() {
+		return new EventTriggerDesc(AfterCardPlayedTrigger.class).create();
+	}
+
 	@Override
 	public GameEvent.EventTypeEnum interestedIn() {
 		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_PLAY_CARD;

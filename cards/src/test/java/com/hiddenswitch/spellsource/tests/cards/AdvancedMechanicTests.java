@@ -649,7 +649,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getDeck().size(), 2);
 			assertEquals(player.getHand().size(), 0);
 			context.endTurn();
-			assertEquals(player.getDeck().size(), 0);
+			assertEquals(0, player.getDeck().size(), "should have drawn 2");
 			assertEquals(player.getHand().size(), 2);
 		});
 

@@ -14,9 +14,11 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Maps.immutableEntry;
 
@@ -72,7 +74,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 */
 	public EventTriggerDesc eventTrigger;
 	/**
-	 * The spell that will be cast by an {@link Enchantment#onFire(int, SpellDesc, GameEvent)} invocation.
+	 * The spell that will be cast by an {@link Enchantment#process(int, SpellDesc, GameEvent)} invocation.
 	 *
 	 * @see Enchantment for more about enchantments.
 	 */
@@ -128,6 +130,27 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 */
 	public boolean countByValue;
 
+	/**
+	 * Triggers that activate this enchantment when they fired.
+	 * <p>
+	 * If any triggers are specified, the enchantment will come into play with {@link Enchantment#isActivated()} set to
+	 * {@code false}.
+	 * <p>
+	 * Activation occurs during the queueing phase, and thus you should use a {@link EventTriggerArg#QUEUE_CONDITION} if
+	 * the trigger should have a condition to determine whether or not it activates. Activations are <b>NOT</b> evaluated
+	 * during the firing phase.
+	 */
+	public EventTriggerDesc[] activationTriggers;
+
+	/**
+	 * When set, these triggers will expire this enchantment when fired.
+	 * <p>
+	 * Expiration triggers are evaluated during the queueing phase. If an expiration trigger queues, the trigger is
+	 * expired and will not fired. Thus you should use a {@link EventTriggerArg#QUEUE_CONDITION} if the trigger should
+	 * have a condition to determine whether or not it expires.
+	 */
+	public EventTriggerDesc[] expirationTriggers = new EventTriggerDesc[0];
+
 	public Set<Map.Entry<EnchantmentDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
 		HashSet<Map.Entry<EnchantmentDescArg, Object>> entries = Sets.newHashSet(
@@ -138,7 +161,9 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 				immutableEntry(EnchantmentDescArg.MAX_FIRES, maxFires),
 				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
 				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue),
-				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, maxFiresPerSequence)
+				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, maxFiresPerSequence),
+				immutableEntry(EnchantmentDescArg.EXPIRATION_TRIGGERS, expirationTriggers),
+				immutableEntry(EnchantmentDescArg.ACTIVATION_TRIGGERS, activationTriggers)
 		);
 
 		return entries;
@@ -163,6 +188,12 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 		enchantment.setCountUntilCast(countUntilCast);
 		enchantment.setCountByValue(countByValue);
 		enchantment.setMaxFiresPerSequence(maxFiresPerSequence);
+		if (expirationTriggers != null && expirationTriggers.length > 0) {
+			enchantment.setExpirationTriggers(Arrays.stream(expirationTriggers).map(EventTriggerDesc::create).collect(Collectors.toList()));
+		}
+		if (activationTriggers != null && activationTriggers.length > 0) {
+			enchantment.setActivationTriggers(Arrays.stream(activationTriggers).map(EventTriggerDesc::create).collect(Collectors.toList()));
+		}
 		return enchantment;
 	}
 

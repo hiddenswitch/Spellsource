@@ -22,7 +22,6 @@ import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
@@ -587,7 +586,7 @@ public interface Games extends Verticle {
 		entity.permanent(actor.hasAttribute(Attribute.PERMANENT));
 		entity.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entity.tribe(actor.getRace());
-		List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
+		List<Trigger> triggers = workingContext.getTriggerManager().getUnexpiredTriggers(actor.getReference());
 		entity.hostsTrigger(triggers.size() > 0);
 		return entity;
 	}
@@ -708,7 +707,7 @@ public interface Games extends Verticle {
 
 		entity.heroClass(heroClass);
 		entity.cardType(card.getCardType());
-		boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
+		boolean hostsTrigger = workingContext.getTriggerManager().getUnexpiredTriggers(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file -doombubbles
 		switch (card.getCardType()) {
@@ -892,7 +891,7 @@ public interface Games extends Verticle {
 		hasTaunt |= entity.hasAttribute(Attribute.CARD_TAUNT);
 		for (WhereverTheyAreEnchantment e : context.getTriggerManager().getTriggers()
 				.stream()
-				.filter(e -> e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
+				.filter(e -> !e.isExpired() && e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
 				.map(WhereverTheyAreEnchantment.class::cast)
 				.collect(Collectors.toList())) {
 			List<SpellDesc> spells;

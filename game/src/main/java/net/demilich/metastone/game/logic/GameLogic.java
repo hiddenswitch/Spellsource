@@ -326,8 +326,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
-
-		gameEventListener.setHost(host);
+		if (Objects.equals(host.getReference(), EntityReference.NONE)
+				&& Objects.equals(gameEventListener.getHostReference(), EntityReference.NONE)) {
+			var message = String.format("addGameEventListener %s %s: References are none!", host, gameEventListener);
+			throw new RuntimeException(message);
+		} else if (!Objects.equals(host.getReference(), EntityReference.NONE)) {
+			gameEventListener.setHost(host);
+		}
 		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == Entity.NO_OWNER) {
 			gameEventListener.setOwner(player.getId());
 		}
@@ -347,7 +352,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 
 		gameEventListener.onAdd(context);
-		context.addTrigger(gameEventListener);
+		context.getTriggerManager().addTrigger(gameEventListener);
 	}
 
 	public int generateId() {
@@ -782,17 +787,20 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof SpellOverrideAura)
 				.map(t -> (Aura) t)
-				.filter(((Predicate<Aura>) Aura::isExpired).negate())
-				.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
-				.filter(aura -> aura.getAffectedEntities().contains(playerId))
+				.filter(aura -> !aura.isExpired()
+						&& aura.isActivated()
+						&& aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass)
+						&& aura.getAffectedEntities().contains(playerId))
 				.collect(Collectors.toList());
 
 		context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof Enchantment)
 				.map(t -> (Enchantment) t)
-				.filter(e -> e.getSourceCard() != null && isCardType(e.getSourceCard().getCardType(), CardType.ENCHANTMENT))
-				.filter(e -> e.getOwner() == playerId)
-				.filter(((Predicate<Enchantment>) Enchantment::isExpired).negate())
+				.filter(e -> e.getSourceCard() != null
+						&& isCardType(e.getSourceCard().getCardType(), CardType.ENCHANTMENT)
+						&& e.getOwner() == playerId
+						&& e.isActivated()
+						&& !e.isExpired())
 				.forEach(e -> overrideAuras.addAll(e.getSourceCard().createEnchantments().stream()
 						.filter(t -> t instanceof SpellOverrideAura)
 						.map(t -> (Aura) t)
@@ -1156,6 +1164,21 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private void endOfSequence(int sequenceDepth, List<Actor> cumulativeDestroyList) {
 		if (sequenceDepth == 0) {
 			context.fireGameEvent(new WillEndSequenceEvent(context));
+		}
+
+		// Check if triggers were added that do not have hosts
+		for (var trigger : context.getTriggerManager().getTriggers()) {
+			if (trigger instanceof HasCard && Objects.isNull(((HasCard) trigger).getSourceCard())) {
+				logger.error("endOfSequence: Trigger {} is missing source card", trigger, new RuntimeException());
+			}
+
+			if (Objects.equals(trigger.getHostReference(), EntityReference.NONE) || trigger.getHostReference() == null) {
+				logger.error("endOfSequence: Trigger has host reference of NONE on an enchantment from card {}", trigger, new RuntimeException());
+			}
+
+			if (trigger instanceof Enchantment && ((Enchantment) trigger).getId() == UNASSIGNED) {
+				logger.error("endOfSequence: Trigger {} is missing an ID", trigger);
+			}
 		}
 
 		// Only perform at most END_OF_SEQUENCE_MAX_DEPTH times. This limits the number of deathrattles to evaluate.
@@ -1669,6 +1692,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void corpse(Actor target, EntityLocation actorPreviousLocation, boolean removeEnchantments) {
+		if (target.getId() == UNASSIGNED) {
+			throw new RuntimeException();
+		}
 		if (removeEnchantments) {
 			removeEnchantments(target, false, false, false);
 		}
@@ -1925,6 +1951,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void removePeacefully(Entity entity) {
 		if (!(entity.isInPlay() || entity.getZone() == Zones.HAND)) {
 			return;
+		}
+
+		if (entity instanceof Enchantment) {
+			((Enchantment) entity).expire();
 		}
 
 		entity.setAttribute(Attribute.DESTROYED);
@@ -3619,7 +3649,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (card.getPassiveTriggers() != null
 				&& card.getPassiveTriggers().length > 0) {
 			for (EnchantmentDesc enchantmentDesc : card.getPassiveTriggers()) {
-				processTriggerDesc(player, card, enchantmentDesc);
+				addEnchantmentOnce(player, card, enchantmentDesc);
 			}
 		}
 	}
@@ -3629,20 +3659,30 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (entity.getGameTriggers() != null
 				&& entity.getGameTriggers().length > 0) {
 			for (EnchantmentDesc enchantmentDesc : entity.getGameTriggers()) {
-				processTriggerDesc(player, entity, enchantmentDesc);
+				addEnchantmentOnce(player, entity, enchantmentDesc);
 			}
 		}
 	}
 
+	/**
+	 * Adds an enchantment to the specified host entity only once.
+	 * <p>
+	 * Checks to see if there are existing triggers on this {@code entity} whose source card is the same as the {@code
+	 * entity}'s source card. If there is, that trigger is not added.
+	 *
+	 * @param player
+	 * @param entity
+	 * @param enchantmentDesc
+	 */
 	@Suspendable
-	public void processTriggerDesc(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
+	public void addEnchantmentOnce(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
 		Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(entity.getReference())
 				.stream()
 				.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
 				.map(t -> (Enchantment) t);
 
 		if (existingTriggers.anyMatch(t -> t.getSourceCard().getCardId().equals(entity.getSourceCard() != null ? entity.getSourceCard().getCardId() : null)
-				&& t.getSpell().getDescClass().equals(enchantmentDesc.spell.getDescClass()))) {
+				&& ((t.getSpell() == null || enchantmentDesc.spell == null) || Objects.equals(t.getSpell().getDescClass(), enchantmentDesc.spell.getDescClass())))) {
 			return;
 		}
 
@@ -4355,7 +4395,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (card.getDeckTriggers() != null
 				&& card.getDeckTriggers().length > 0) {
 			for (EnchantmentDesc enchantmentDesc : card.getDeckTriggers()) {
-				processTriggerDesc(player, card, enchantmentDesc);
+				addEnchantmentOnce(player, card, enchantmentDesc);
 			}
 		}
 	}
@@ -4623,8 +4663,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
+	@Suspendable
 	protected void newMinionOnBattlefield(@NotNull Minion minion, Player player) {
-		applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
+		minion.setAttribute(Attribute.SUMMONING_SICKNESS);
 		refreshAttacksPerRound(minion);
 		processBattlefieldEnchantments(player, minion);
 
@@ -4837,6 +4878,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Special case for Sherazin, Seed
 		if (oldZone == Zones.GRAVEYARD) {
+			if (minion.getId() == UNASSIGNED) {
+				throw new RuntimeException();
+			}
 			minion.moveOrAddTo(context, Zones.GRAVEYARD);
 		} else if (minion.transformResolved(context).equals(newMinion)) {
 			// The old minion should always be removed from play, because it has transformed.

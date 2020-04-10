@@ -425,6 +425,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	@SuppressWarnings("unchecked")
 	public void moveOrAddTo(GameContext context, Zones destination) throws ArrayStoreException {
+		if (getId() == IdFactory.UNASSIGNED) {
+			throw new RuntimeException();
+		}
 		moveOrAddTo(context, destination, context.getPlayer(getOwner()).getZone(destination).size());
 	}
 

@@ -68,7 +68,7 @@ public final class AddTriggerToCardSpell extends Spell {
 				|| (targetCard.getZone().equals(Zones.HAND) && triggerAttribute == Attribute.PASSIVE_TRIGGERS)
 				|| (targetCard.getZone().equals(Zones.DECK) && triggerAttribute == Attribute.DECK_TRIGGERS)) {
 			for (EnchantmentDesc enchantmentDescToAdd : enchantmentDescsToAdd) {
-				context.getLogic().processTriggerDesc(player, targetCard, enchantmentDescToAdd);
+				context.getLogic().addEnchantmentOnce(player, targetCard, enchantmentDescToAdd);
 			}
 		} else if (triggerAttribute == Attribute.PASSIVE_TRIGGERS) {
 			if (targetCard.getPassiveTriggers() != null && targetCard.getPassiveTriggers().length > 0) {

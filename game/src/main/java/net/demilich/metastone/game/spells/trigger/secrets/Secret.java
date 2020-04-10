@@ -5,10 +5,14 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class Secret extends Enchantment {
 	public Secret(EventTrigger trigger, SpellDesc spell, Card source) {
@@ -33,8 +37,8 @@ public class Secret extends Enchantment {
 
 	@Override
 	@Suspendable
-	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
-		boolean spellCasts = super.onFire(ownerId, spell, event);
+	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
+		boolean spellCasts = super.process(ownerId, spell, event);
 		if (isInPlay() && spellCasts) {
 			expire();
 			Player owner = event.getGameContext().getPlayer(ownerId);
@@ -64,8 +68,15 @@ public class Secret extends Enchantment {
 
 	@Override
 	public Secret clone() {
-		Secret clone = (Secret) super.clone();
-		clone.setSourceCard(getSourceCard());
-		return clone;
+		return (Secret) super.clone();
+	}
+
+	@Override
+	@Suspendable
+	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
+		if (SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+		}
+		super.cast(ownerId, spell, event);
 	}
 }

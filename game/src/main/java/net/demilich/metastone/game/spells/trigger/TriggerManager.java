@@ -2,28 +2,44 @@ package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
- * The trigger manager contains the code for managing triggers and actually processing events' effects in the game.
+ * The trigger manager processes game events.
+ * <p>
+ * Every time a game event is fired using {@link GameContext#fireGameEvent(GameEvent)}, the trigger manager iterates
+ * through the list of enchantments in the game and determines which ones need to have their spells cast (in the case of
+ * plain {@link Enchantment} objects) or their affected entities and effects processed (in the case of {@link Aura})
+ * auras.
+ * <p>
+ * Triggers are executed on a depth-first basis. This means that as soon as a game event is fired, triggers are checked
+ * to respond to that event. This is as opposed to a breadth-first basis, where an event is processed only when all the
+ * events prior to it have also been processed.
+ * <p>
+ * When a trigger fires, its effects could cause an event which causes it to fire again. This is called a recursive
+ * trigger, and in this situation, the trigger manager "delays" the second firing until the remaining side effects of
+ * the first firing have been processed. Recursion still correctly occurs, it is just delayed.
  */
 public class TriggerManager implements Cloneable, Serializable {
-	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(TriggerManager.class);
 
 	private final List<Trigger> triggers = new ArrayList<Trigger>();
+	private final Deque<QueuedTrigger> deferredTriggersQueue = new ArrayDeque<>();
+	private final Set<Trigger> processingTriggers = new HashSet<>();
 	private int depth = 0;
 
 	public TriggerManager() {
@@ -36,9 +52,16 @@ public class TriggerManager implements Cloneable, Serializable {
 	}
 
 	public void addTrigger(Trigger trigger) {
+		var index = triggers.size();
 		triggers.add(trigger);
+		if (trigger instanceof Enchantment) {
+			var enchantment = (Enchantment) trigger;
+			if (Objects.equals(enchantment.getEntityLocation(), EntityLocation.UNASSIGNED)) {
+				enchantment.setEntityLocation(new EntityLocation(Zones.ENCHANTMENT, trigger.getOwner(), index));
+			}
+		}
 		if (triggers.size() > 100) {
-			logger.warn("addTrigger {}: Warning, many triggers: {}", trigger, triggers.size());
+			LOGGER.warn("addTrigger {}: Warning, many triggers: {}", trigger, triggers.size());
 		}
 	}
 
@@ -60,8 +83,6 @@ public class TriggerManager implements Cloneable, Serializable {
 	 * This method also manages various environment stacks, like the {@link GameContext#getEventValueStack()} if the event
 	 * has a value (like a {@link net.demilich.metastone.game.events.DamageEvent} or the {@link
 	 * GameContext#getEventTargetStack()} that helps the {@link EntityReference#EVENT_TARGET} entity reference to work.
-	 * <p>
-	 * This method will also remove triggers that are expired.
 	 *
 	 * @param event
 	 * @param gameTriggers
@@ -75,6 +96,108 @@ public class TriggerManager implements Cloneable, Serializable {
 		if (depth > 96) {
 			throw new IllegalStateException("infinite recursion");
 		}
+
+		// Push the event data onto the event data stack, used by effects to determine what the EntityReference.EVENT_TARGET
+		// is and the value of EventValueProvider
+		pushEventData(event);
+
+		try {
+			// We take a snapshot of the triggers currently in play at the time of evaluation.
+			var triggers = new ArrayList<>(this.triggers);
+			if (gameTriggers != null
+					&& gameTriggers.size() > 0) {
+				// Game triggers execute first
+				triggers.addAll(0, gameTriggers);
+			}
+
+			// We keep track of which triggers were one turn only in order to expire them after they have fired.
+			var oneTurnExpires = new ArrayList<Trigger>();
+
+			// Here we keep track of the triggers that were queued by this event
+			// Queueing gives a trigger an opportunity to look at the state of the board BEFORE all the other trigger's
+			// effects have been evaluated.
+			// For example, queueing is an appropriate time to check if a minion should be buffed, e.g. during a summon,
+			// because later a different effect may deal damage to and subsequently mark-as-destroyed the minion.
+			var thisQueuedTriggers = new ArrayDeque<Trigger>();
+			for (Trigger trigger : triggers) {
+				if (Strand.currentStrand().isInterrupted()) {
+					return;
+				}
+				pushHostReference(event, trigger);
+				try {
+					// In order to stop premature expiration, check
+					// for a oneTurnOnly tag and that it isn't delayed.
+					if (event.getEventType() == EventTypeEnum.TURN_END
+							&& trigger.oneTurnOnly()) {
+						if (!trigger.interestedIn(EventTypeEnum.TURN_START)
+								&& !trigger.interestedIn(EventTypeEnum.TURN_END)) {
+							trigger.expire();
+						} else {
+							oneTurnExpires.add(trigger);
+						}
+					}
+
+					if (trigger.interestedIn(event.getEventType())
+							&& trigger.queues(event)) {
+						// We're already processing this trigger, recursively, so we will reevaluate it at the end of this sequence
+						if (processingTriggers.contains(trigger)) {
+							deferredTriggersQueue.addLast(new QueuedTrigger(event, trigger));
+						} else {
+							thisQueuedTriggers.addLast(trigger);
+						}
+					}
+				} finally {
+					popHostReference(event);
+				}
+			}
+
+			while (!thisQueuedTriggers.isEmpty()) {
+				if (Strand.currentStrand().isInterrupted()) {
+					return;
+				}
+				var trigger = thisQueuedTriggers.poll();
+				processTrigger(event, trigger);
+			}
+
+			if (processingTriggers.isEmpty()) {
+				while (!deferredTriggersQueue.isEmpty()) {
+					if (Strand.currentStrand().isInterrupted()) {
+						return;
+					}
+
+					var deferred = deferredTriggersQueue.poll();
+					var trigger = deferred.getTrigger();
+					var deferredEvent = deferred.getEvent();
+
+					pushEventData(deferredEvent);
+					pushHostReference(deferredEvent, trigger);
+					try {
+						processTrigger(deferredEvent, trigger);
+					} finally {
+						popEventData(deferredEvent);
+						popHostReference(deferredEvent);
+					}
+				}
+			}
+
+			for (var trigger : oneTurnExpires) {
+				trigger.expire();
+			}
+		} finally {
+			popEventData(event);
+			depth--;
+		}
+	}
+
+	private void pushHostReference(GameEvent event, Trigger trigger) {
+		EntityReference hostReference = trigger.getHostReference();
+		if (hostReference == null) {
+			hostReference = EntityReference.NONE;
+		}
+		event.getGameContext().getTriggerHostStack().push(hostReference);
+	}
+
+	private void pushEventData(GameEvent event) {
 		if (event instanceof HasValue) {
 			event.getGameContext().getEventValueStack().push(((HasValue) event).getValue());
 		} else {
@@ -92,106 +215,79 @@ public class TriggerManager implements Cloneable, Serializable {
 		} else {
 			event.getGameContext().getEventSourceStack().push(EntityReference.NONE);
 		}
+	}
 
-		List<Trigger> triggers = new ArrayList<>(this.triggers);
-		if (gameTriggers != null
-				&& gameTriggers.size() > 0) {
-			// Game triggers execute first and do not serialize
-			triggers.addAll(0, gameTriggers);
-		}
-		List<Trigger> eventTriggers = new ArrayList<Trigger>();
-		List<Trigger> removeTriggers = new ArrayList<Trigger>();
+	private void popEventData(GameEvent event) {
+		event.getGameContext().getEventValueStack().pop();
+		event.getGameContext().getEventSourceStack().pop();
+		event.getGameContext().getEventTargetStack().pop();
+	}
 
-		for (Trigger trigger : triggers) {
-			EntityReference hostReference = trigger.getHostReference();
-			if (hostReference == null) {
-				hostReference = EntityReference.NONE;
-			}
-			event.getGameContext().getTriggerHostStack().push(hostReference);
-			// In order to stop premature expiration, check
-			// for a oneTurnOnly tag and that it isn't delayed.
-			if (event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END) {
-				if (trigger.oneTurnOnly() &&
-						!trigger.interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START) &&
-						!trigger.interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END)) {
-					trigger.expire();
-				}
-			}
-			if (trigger.isExpired()) {
-				removeTriggers.add(trigger);
-			}
-
-			if (trigger.interestedIn(event.getEventType())
-					&& triggers.contains(trigger) && trigger.queues(event)) {
-				eventTriggers.add(trigger);
-			}
-			event.getGameContext().getTriggerHostStack().pop();
+	@Suspendable
+	private void processTrigger(GameEvent event, Trigger trigger) {
+		if (processingTriggers.contains(trigger)) {
+			throw new RuntimeException();
 		}
 
-		for (Trigger trigger : eventTriggers) {
-			EntityReference hostReference = trigger.getHostReference();
-			if (hostReference == null) {
-				hostReference = EntityReference.NONE;
-			}
+		processingTriggers.add(trigger);
+		pushHostReference(event, trigger);
 
-			event.getGameContext().getTriggerHostStack().push(hostReference);
-
-			if (trigger.fires(event) && triggers.contains(trigger)) {
-				trigger.onGameEvent(event);
-			}
-
-			// we need to double check here if the trigger still exists;
-			// after all, a previous trigger may have removed it (i.e. double
-			// corruption)
-			if (trigger.isExpired()) {
-				removeTriggers.add(trigger);
-			}
-
-			try {
-				event.getGameContext().getTriggerHostStack().pop();
-			} catch (NoSuchElementException | IndexOutOfBoundsException noSuchElement) {
-				// If the game is over, don't worry about the host stack not having an item.
-				logger.error("fireGameEvent loop", noSuchElement);
-				continue;
-			}
+		if (trigger.fires(event)) {
+			trigger.onGameEvent(event);
 		}
-
-		triggers.removeAll(removeTriggers);
 
 		try {
-			event.getGameContext().getEventValueStack().pop();
-			event.getGameContext().getEventSourceStack().pop();
-			event.getGameContext().getEventTargetStack().pop();
-		} catch (IndexOutOfBoundsException | NoSuchElementException ex) {
-			logger.error("fireGameEvent", ex);
+			popHostReference(event);
+		} catch (NoSuchElementException | IndexOutOfBoundsException noSuchElement) {
+			// If the game is over, don't worry about the host stack not having an item.
+			LOGGER.error("fireGameEvent loop", noSuchElement);
 		}
-		depth--;
+
+		processingTriggers.remove(trigger);
 	}
 
-	private List<Trigger> getListSnapshot(List<Trigger> triggerList) {
-		return new ArrayList<>(triggerList);
+	private void popHostReference(GameEvent event) {
+		event.getGameContext().getTriggerHostStack().pop();
 	}
 
-	public List<Trigger> getTriggersAssociatedWith(EntityReference entityReference) {
+	/**
+	 * Gets the unexpired triggerrs (i.e. {@link Enchantment}) that are hosted by the specified reference.
+	 *
+	 * @param hostReference
+	 * @return
+	 */
+	public List<Trigger> getUnexpiredTriggers(EntityReference hostReference) {
 		List<Trigger> relevantTriggers = new ArrayList<>();
 		for (Trigger trigger : triggers) {
-			if (trigger.getHostReference().equals(entityReference)) {
+			if (trigger.getHostReference().equals(hostReference) && !trigger.isExpired()) {
 				relevantTriggers.add(trigger);
 			}
 		}
 		return relevantTriggers;
 	}
 
-	public void removeTrigger(Trigger trigger) {
-		if (!triggers.remove(trigger)) {
-			throw new RuntimeException("Trigger unexpectedly was unable to be removed.");
-		}
-
+	/**
+	 * Expires a trigger.
+	 *
+	 * @param trigger
+	 */
+	public void expire(Trigger trigger) {
 		trigger.expire();
 	}
 
-	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers, GameContext context) {
-		for (Trigger trigger : getListSnapshot(triggers)) {
+	/**
+	 * Expires triggers on the specified reference.
+	 *
+	 * @param entityReference
+	 * @param removeAuras
+	 * @param keepSelfCardCostModifiers
+	 * @param context
+	 */
+	public void expire(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers, GameContext context) {
+		for (Trigger trigger : new ArrayList<>(triggers)) {
+			if (trigger.isExpired()) {
+				continue;
+			}
 			if (trigger.getHostReference().equals(entityReference)) {
 				if (!removeAuras && trigger instanceof Aura) {
 					continue;
@@ -201,7 +297,6 @@ public class TriggerManager implements Cloneable, Serializable {
 				}
 				trigger.onRemove(context);
 				trigger.expire();
-				triggers.remove(trigger);
 			}
 		}
 	}
@@ -216,6 +311,29 @@ public class TriggerManager implements Cloneable, Serializable {
 	public void expireAll() {
 		for (Trigger trigger : triggers) {
 			trigger.expire();
+		}
+	}
+
+	/**
+	 * Keeps track of data regarding a queued trigger firing (the tuple of event and trigger that needs to be processed)
+	 */
+	private static final class QueuedTrigger implements Serializable {
+		private final GameEvent event;
+		private final Trigger trigger;
+
+		private QueuedTrigger(@NotNull GameEvent event, @NotNull Trigger trigger) {
+			this.event = event;
+			this.trigger = trigger;
+		}
+
+		@NotNull
+		public GameEvent getEvent() {
+			return event;
+		}
+
+		@NotNull
+		public Trigger getTrigger() {
+			return trigger;
 		}
 	}
 }

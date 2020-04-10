@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.aura;
 
-import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
@@ -26,7 +25,7 @@ public abstract class AbstractFriendlyCardAura extends Aura {
 		}
 		EventTriggerDesc cardPlayedTrigger = CardPlayedTrigger.create();
 		cardPlayedTrigger.put(EventTriggerArg.TARGET_PLAYER, TargetPlayer.SELF);
-		triggers.add(cardPlayedTrigger.create());
-		triggers.add(new WillEndSequenceTrigger());
+		getTriggers().add(cardPlayedTrigger.create());
+		getTriggers().add(new WillEndSequenceTrigger());
 	}
 }

@@ -880,7 +880,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			// Make sure that friendly start turns don't accidentally wind up killing the opponent
 			int opponentHp = opponent.getHero().getHp();
 			for (Trigger trigger : new ArrayList<>(context.getTriggerManager().getTriggers())) {
-				if (trigger instanceof Enchantment && !(trigger instanceof Aura)) {
+				if (trigger instanceof Enchantment && !(trigger instanceof Aura) && !trigger.isExpired()) {
 					Enchantment enchantment = (Enchantment) trigger;
 					if (enchantment.getTriggers().stream().anyMatch(e -> e.getClass().equals(TurnStartTrigger.class)
 							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {
