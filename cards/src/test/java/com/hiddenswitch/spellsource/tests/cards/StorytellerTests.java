@@ -144,7 +144,7 @@ public class StorytellerTests extends TestBase {
 			playCard(context, opponent, "spell_test_deal_5_to_enemy_hero");
 			assertEquals(player.getSecrets().size(), 1);
 			playCard(context, opponent, "spell_frostfire", player.getHero());
-			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(0, player.getSecrets().size());
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_skeptic");
 		}));
@@ -393,16 +393,16 @@ public class StorytellerTests extends TestBase {
 			assertEquals(player.getSecrets().size(), 0);
 			context.endTurn();
 			player.setMana(10);
-			Minion reducedCost = playMinionCard(context, player, "minion_chained_chimera");
-			assertEquals(player.getMana(), 10 - reducedCost.getSourceCard().getBaseManaCost() + 3);
+			var minion = playMinionCard(context, player, "minion_chained_chimera");
+			assertEquals(minion.getSourceCard().getBaseManaCost() - 3, 10 - player.getMana(), "cost should be reduced (4)");
 			player.setMana(10);
-			reducedCost = playMinionCard(context, player, "minion_chained_chimera");
-			assertEquals(player.getMana(), 10 - reducedCost.getSourceCard().getBaseManaCost());
+			minion = playMinionCard(context, player, "minion_chained_chimera");
+			assertEquals(minion.getSourceCard().getBaseManaCost(), 10 - player.getMana(), "cost should be base (7)");
 			context.endTurn();
 			context.endTurn();
 			player.setMana(10);
-			reducedCost = playMinionCard(context, player, "minion_chained_chimera");
-			assertEquals(player.getMana(), 10 - reducedCost.getSourceCard().getBaseManaCost());
+			minion = playMinionCard(context, player, "minion_chained_chimera");
+			assertEquals(minion.getSourceCard().getBaseManaCost(), 10 - player.getMana(), "cost should be base (7)");
 		});
 
 		runGym((context, player, opponent) -> {

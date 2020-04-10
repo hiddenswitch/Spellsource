@@ -34,6 +34,8 @@ public final class CalamityBeckonsSpell extends Spell {
 					minion = minion.getCopy();
 				}
 				// Move the corpse directly to the graveyard
+				minion.setId(context.getLogic().generateId());
+				minion.setOwner(player.getId());
 				context.getLogic().corpse(minion, previousLocation, true);
 			}
 			context.getLogic().removeCard(card);

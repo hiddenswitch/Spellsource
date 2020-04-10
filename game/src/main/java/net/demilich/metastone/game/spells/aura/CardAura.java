@@ -36,7 +36,7 @@ public class CardAura extends AbstractFriendlyCardAura {
 		super(desc);
 		applyAuraEffect = SetCardSpell.create((String) desc.get(AuraArg.CARD), true);
 		removeAuraEffect = SetCardSpell.revert(true);
-		triggers.add(CardReceivedTrigger.create());
+		getTriggers().add(CardReceivedTrigger.create());
 	}
 
 	@Override

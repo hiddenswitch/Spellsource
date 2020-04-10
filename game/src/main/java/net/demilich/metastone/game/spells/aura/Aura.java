@@ -139,7 +139,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		if (desc.containsKey(AuraArg.TRIGGERS)) {
 			EventTriggerDesc[] moreTriggers = (EventTriggerDesc[]) desc.get(AuraArg.TRIGGERS);
 			for (EventTriggerDesc trigger : moreTriggers) {
-				triggers.add(trigger.create());
+				getTriggers().add(trigger.create());
 			}
 		}
 	}

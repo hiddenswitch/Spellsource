@@ -148,7 +148,7 @@ public class Player extends Entity implements Serializable {
 				+ heroZone.size()
 				+ heroPowerZone.size()
 				+ weaponZone.size());
-		for (Zones zone : Zones.values()) {
+		for (Zones zone : Zones.validZones()) {
 			@SuppressWarnings("unchecked")
 			EntityZone<? extends Entity> zone1 = (EntityZone<? extends Entity>) getZone(zone);
 			zone1.setLookup(lookup);
@@ -273,7 +273,7 @@ public class Player extends Entity implements Serializable {
 	 * previous turn.
 	 *
 	 * @return The amount of mana that is unusable this turn due to playing a card with {@link Attribute#OVERLOAD} last
-	 * 		turn.
+	 * turn.
 	 * @see Attribute#OVERLOAD for more about locking mana.
 	 */
 	public int getLockedMana() {
@@ -315,7 +315,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @return The set of secret card IDs.
 	 * @see GameLogic#canPlaySecret(Player, Card) to see how this method plays into rules regarding the ability to play
-	 * 		secrets.
+	 * secrets.
 	 */
 	public Set<String> getSecretCardIds() {
 		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
@@ -465,7 +465,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param zone The key.
 	 * @return An {@link EntityZone} for the corresponding zone. For {@link Zones#PLAYER}, a new zone is created on the
-	 * 		fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
+	 * fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
 	 */
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
@@ -498,6 +498,8 @@ public class Player extends Entity implements Serializable {
 			case QUEST:
 				return getQuests();
 			case NONE:
+				return EntityZone.empty(getId());
+			case ENCHANTMENT:
 				return EntityZone.empty(getId());
 		}
 		return null;

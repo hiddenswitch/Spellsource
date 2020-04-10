@@ -937,6 +937,7 @@ definitions:
           - 'DISCOVER'
           - 'REMOVED_FROM_PLAY'
           - 'PLAYER'
+          - 'ENCHANTMENT'
         enum:
           - 'N' # 'NONE'
           - 'H' # 'HAND'
@@ -953,6 +954,7 @@ definitions:
           - 'V' # 'DISCOVER'
           - 'R' # 'REMOVED_FROM_PLAY'
           - 'P' # 'PLAYER'
+          - 'T' # 'ENCHANTMENT'
   EntityChangeSet:
     description: |
       An array that corresponds to the visible entities in this game state notification. The client is responsible for

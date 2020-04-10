@@ -49,7 +49,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	@Override
 	public void addEnchantment(Enchantment enchantment) {
 		enchantments.add(enchantment);
-		enchantment.setHost(this);
 	}
 
 	public boolean canAttackThisTurn() {

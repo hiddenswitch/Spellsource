@@ -1,18 +1,19 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Iterables;
+import com.hiddenswitch.spellsource.client.models.EntityType;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.DoubleTurnEndTriggersAura;
-import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -25,7 +26,6 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -47,7 +47,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * <p>
  * The lifecycle of an enchantment looks like the following:
  * <ul>
- * <li>{@code onAdd}: Called when the encantment comes into play. At this moment, the number of times the
+ * <li>{@code onAdd}: Called when the enchantment comes into play. At this moment, the number of times the
  * enchantment has been fired is set to zero; it is not {@code expired}, and </li>
  * <li>{@code onGameEvent}: Gives the enchantment a chance to look at a {@link GameEvent}, evaluate a {@link
  * EventTrigger} against it, and determine whether its {@link EnchantmentDesc#spell} should be cast.</li>
@@ -62,9 +62,12 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  */
 public class Enchantment extends Entity implements Trigger {
 	protected List<EventTrigger> triggers = new ArrayList<>();
+	protected List<EventTrigger> expirationTriggers = new ArrayList<>();
+	protected List<EventTrigger> activationTriggers = new ArrayList<>();
 	protected SpellDesc spell;
 	protected EntityReference hostReference;
 	protected boolean oneTurn;
+	protected boolean activated = true;
 	protected boolean expired;
 	protected boolean persistentOwner;
 	protected Integer maxFires;
@@ -80,10 +83,10 @@ public class Enchantment extends Entity implements Trigger {
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
 		usesSpellTrigger = true;
 		if (primaryTrigger != null) {
-			this.triggers.add(primaryTrigger);
+			this.getTriggers().add(primaryTrigger);
 		}
 		if (secondaryTrigger != null) {
-			this.triggers.add(secondaryTrigger);
+			this.getTriggers().add(secondaryTrigger);
 		}
 		this.spell = spell;
 		this.oneTurn = oneTurn;
@@ -91,7 +94,7 @@ public class Enchantment extends Entity implements Trigger {
 
 	public Enchantment(List<EventTrigger> triggers, SpellDesc spell) {
 		usesSpellTrigger = true;
-		this.triggers.addAll(triggers);
+		this.getTriggers().addAll(triggers);
 		this.spell = spell;
 	}
 
@@ -109,9 +112,17 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public Enchantment clone() {
 		Enchantment clone = (Enchantment) super.clone();
-		clone.triggers = new ArrayList<>();
-		for (EventTrigger trigger : this.triggers) {
-			clone.triggers.add(trigger.clone());
+		clone.setTriggers(new ArrayList<>());
+		clone.setExpirationTriggers(new ArrayList<>());
+		clone.setActivationTriggers(new ArrayList<>());
+		for (var trigger : this.getTriggers()) {
+			clone.getTriggers().add(trigger.clone());
+		}
+		for (var trigger : this.getExpirationTriggers()) {
+			clone.getExpirationTriggers().add(trigger.clone());
+		}
+		for (var trigger : this.getActivationTriggers()) {
+			clone.getActivationTriggers().add(trigger.clone());
 		}
 		if (getSpell() != null) {
 			clone.spell = getSpell().clone();
@@ -135,10 +146,10 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public int getOwner() {
-		if (triggers.size() == 0) {
-			return -1;
+		if (getTriggers().size() == 0) {
+			return super.getOwner();
 		}
-		return triggers.get(0).getOwner();
+		return getTriggers().get(0).getOwner();
 	}
 
 	public SpellDesc getSpell() {
@@ -146,12 +157,12 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	public boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType) {
+	public boolean interestedIn(EventTypeEnum eventType) {
 		if (!usesSpellTrigger) {
 			return false;
 		}
-		for (EventTrigger trigger : triggers) {
-			if (trigger.interestedIn() == eventType || trigger.interestedIn() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL) {
+		for (EventTrigger trigger : Iterables.concat(getTriggers(), getExpirationTriggers(), getActivationTriggers())) {
+			if (trigger.interestedIn() == eventType || trigger.interestedIn() == EventTypeEnum.ALL) {
 				return true;
 			}
 		}
@@ -169,21 +180,21 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	/**
-	 * Processes a firing.
+	 * Casts the effects of this enchantment.
 	 *
 	 * @param ownerId
 	 * @param spell
 	 * @param event
-	 * @return
+	 * @return {@code true} if processing succeeded.
 	 */
 	@Suspendable
-	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
+	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
 		if (!usesSpellTrigger) {
 			return false;
 		}
 		// Maybe have to add a thing to prevent the maxfires from counting twice because of TURN_END_TRIGGERS_TWICE
 		if (countByValue && event instanceof HasValue) {
-			int value = ((HasValue) event).getValue();
+			var value = ((HasValue) event).getValue();
 			fires += value;
 			firesThisSequence += value;
 		} else {
@@ -191,35 +202,21 @@ public class Enchantment extends Entity implements Trigger {
 			firesThisSequence++;
 		}
 
-		boolean spellCasts = true;
+		var spellCasts = true;
 
 		// Prevents infinite looping
 		if (maxFiresPerSequence != null && firesThisSequence > maxFiresPerSequence) {
 			spellCasts = false;
 		}
 
-		// Max fires can expire the enchantment, while max fires per sequence does not.
-		if (maxFires != null
-				&& fires > maxFires) {
-			spellCasts = false;
-			expire();
-		}
-
 		if (countUntilCast != null && fires < countUntilCast) {
 			spellCasts = false;
 		}
+
 		if (spellCasts) {
-			if (this instanceof Quest) {
-				expire();
-			}
-			if (this instanceof Secret && SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
-				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
-			}
-			if (event.getEventType().equals(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0) {
-				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
-			}
-			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+			cast(ownerId, spell, event);
 		}
+
 		if (maxFires != null
 				&& fires >= maxFires) {
 			expire();
@@ -227,10 +224,18 @@ public class Enchantment extends Entity implements Trigger {
 		return spellCasts;
 	}
 
+	@Suspendable
+	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
+		if (event.getEventType().equals(EventTypeEnum.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0) {
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+		}
+		event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+	}
+
 	@Override
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
-		if (expired || !usesSpellTrigger) {
+		if (!isActivated() || isExpired() || !usesSpellTrigger) {
 			return;
 		}
 
@@ -242,21 +247,22 @@ public class Enchantment extends Entity implements Trigger {
 		// longer matter.
 		// But let's check to make sure we don't accidentally expire something
 		// that's still using it.
-		if (oneTurn && (event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END || event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START)) {
+		if (oneTurn
+				&& (event.getEventType() == EventTypeEnum.TURN_END || event.getEventType() == EventTypeEnum.TURN_START)) {
 			expire();
 		}
 
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
-		if (event.getEventType() != com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BOARD_CHANGED
-				&& event.getEventType() != com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.WILL_END_SEQUENCE
-				&& triggers.stream().noneMatch(trigger -> trigger.interestedIn() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL)
+		if (event.getEventType() != EventTypeEnum.BOARD_CHANGED
+				&& event.getEventType() != EventTypeEnum.WILL_END_SEQUENCE
+				&& getTriggers().stream().noneMatch(trigger -> trigger.interestedIn() == EventTypeEnum.ALL)
 				&& hostReference != null
 				&& !(hostReference.equals(new EntityReference(PLAYER_1))
 				|| hostReference.equals(new EntityReference(PLAYER_2)))) {
 			event.getGameContext().onEnchantmentFired(this);
 		}
-		onFire(ownerId, getSpell(), event);
+		process(ownerId, getSpell(), event);
 	}
 
 	@Override
@@ -273,7 +279,7 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	public void setOwner(int playerIndex) {
 		super.setOwner(playerIndex);
-		for (EventTrigger trigger : triggers) {
+		for (EventTrigger trigger : Iterables.concat(getTriggers(), getExpirationTriggers(), getActivationTriggers())) {
 			trigger.setOwner(playerIndex);
 		}
 	}
@@ -288,24 +294,72 @@ public class Enchantment extends Entity implements Trigger {
 		return new ToStringBuilder(this)
 				.appendSuper(super.toString())
 				.append("id", getId())
-				.append("sourceCard", getSourceCard() == null ? null : getSourceCard().getCardId())
+				.append("sourceCard", getSourceCard())
 				.toString();
 	}
 
 	@Override
 	public final boolean queues(GameEvent event) {
-		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
-		for (EventTrigger trigger : triggers) {
+		Entity host = event.getGameContext().resolveSingleTarget(hostReference, false);
+
+		// If the host of the enchantment has been removed from play, this enchantment should not queue
+		if (host.getZone() == Zones.REMOVED_FROM_PLAY) {
+			return false;
+		}
+
+		// Expired triggers do not queue
+		if (isExpired()) {
+			return false;
+		}
+
+		if (!isActivated()) {
+			for (EventTrigger trigger : getActivationTriggers()) {
+				if (trigger == null) {
+					continue;
+				}
+				if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != EventTypeEnum.ALL) {
+					continue;
+				}
+				if (trigger.queues(event, host)) {
+					activate();
+					break;
+				}
+			}
+		}
+
+		if (!isActivated()) {
+			return false;
+		}
+
+		// Check for expiration next
+		// Must have activated in order to expire
+		if (!isExpired() && !getExpirationTriggers().isEmpty()) {
+			for (EventTrigger trigger : getExpirationTriggers()) {
+				if (trigger == null) {
+					continue;
+				}
+				if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != EventTypeEnum.ALL) {
+					continue;
+				}
+				if (trigger.queues(event, host)) {
+					expire();
+					return false;
+				}
+			}
+		}
+
+		for (EventTrigger trigger : getTriggers()) {
 			if (trigger == null) {
 				continue;
 			}
-			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ALL) {
+			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != EventTypeEnum.ALL) {
 				continue;
 			}
 			if (trigger.queues(event, host)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -324,15 +378,16 @@ public class Enchantment extends Entity implements Trigger {
 
 	public boolean fires(GameEvent event) {
 		// Expired
-		if (isExpired()) {
+		if (!isActivated() || isExpired()) {
 			return false;
 		}
 
-		for (EventTrigger trigger : triggers) {
+		for (EventTrigger trigger : getTriggers()) {
 			if (trigger.fires(event)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -392,12 +447,12 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	/**
-	 * Get a read-only list of triggers that fire this enchantment.
+	 * Get the triggers that fire this enchantment.
 	 *
-	 * @return An unmodifiable list of triggers.
+	 * @return A list of triggers.
 	 */
 	public List<EventTrigger> getTriggers() {
-		return Collections.unmodifiableList(triggers);
+		return triggers;
 	}
 
 	public void setMaxFiresPerSequence(Integer maxFiresPerSequence) {
@@ -413,5 +468,40 @@ public class Enchantment extends Entity implements Trigger {
 	 */
 	public void endOfSequence() {
 		firesThisSequence = 0;
+	}
+
+	public Enchantment setTriggers(List<EventTrigger> triggers) {
+		this.triggers = triggers;
+		return this;
+	}
+
+	public void setExpirationTriggers(List<EventTrigger> expirationTriggers) {
+		this.expirationTriggers = expirationTriggers;
+	}
+
+	public List<EventTrigger> getExpirationTriggers() {
+		return expirationTriggers;
+	}
+
+	@Override
+	public boolean isActivated() {
+		return activated;
+	}
+
+	public void activate() {
+		activated = true;
+	}
+
+	public List<EventTrigger> getActivationTriggers() {
+		return activationTriggers;
+	}
+
+	public void setActivationTriggers(List<EventTrigger> activationTriggers) {
+		this.activationTriggers = activationTriggers;
+	}
+
+	public Enchantment setActivated(boolean activated) {
+		this.activated = activated;
+		return this;
 	}
 }

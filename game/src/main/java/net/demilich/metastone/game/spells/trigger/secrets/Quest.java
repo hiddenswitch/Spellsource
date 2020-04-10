@@ -86,9 +86,11 @@ public class Quest extends Enchantment {
 
 	@Override
 	@Suspendable
-	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
-		final boolean spellFired = super.onFire(ownerId, spell, event);
+	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
+		// Also casts the spell!
+		boolean spellFired = super.process(ownerId, spell, event);
 		if (isInPlay() && spellFired) {
+			expire();
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().questTriggered(owner, this);
 		}
@@ -97,8 +99,9 @@ public class Quest extends Enchantment {
 
 	@Override
 	@Suspendable
-	public void onGameEvent(GameEvent event) {
-		super.onGameEvent(event);
+	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
+		expire();
+		super.cast(ownerId, spell, event);
 	}
 
 	@Override
@@ -108,8 +111,6 @@ public class Quest extends Enchantment {
 
 	@Override
 	public Quest clone() {
-		Quest clone = (Quest) super.clone();
-		clone.setSourceCard(getSourceCard());
-		return clone;
+		return (Quest) super.clone();
 	}
 }

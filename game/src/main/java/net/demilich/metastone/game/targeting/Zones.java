@@ -12,6 +12,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
@@ -26,12 +27,13 @@ import java.util.Set;
  * {@link #DECK}, opponent's {@link #SECRET} zone and their own {@link #DECK}. While neither player can browse through
  * the {@link #GRAVEYARD} the information inside of it is not considered secret.
  * <p>
- * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Entity, int, boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
+ * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Entity, int,
+ * boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
  * {@link Minion} is created by {@link Card#summon()} and placed into the {@link #BATTLEFIELD}.
  *
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.
  * @see net.demilich.metastone.game.entities.EntityLocation for more about entity locations and how zones are
- * 		manipulated.
+ * manipulated.
  */
 public enum Zones {
 	/**
@@ -51,10 +53,10 @@ public enum Zones {
 	 */
 	DECK("D"),
 	/**
-	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference, EntityReference)} goes;
-	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes. A {@link
-	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link Enchantment} go to
-	 * {@link #REMOVED_FROM_PLAY}.
+	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference,
+	 * EntityReference)} goes; and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)}
+	 * goes. A {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link
+	 * Enchantment} go to {@link #REMOVED_FROM_PLAY}.
 	 *
 	 * @see #REMOVED_FROM_PLAY for the alternative location for "destroyed" entities.
 	 * @see GameLogic#destroy(Actor...) for more about destroying actors.
@@ -105,7 +107,7 @@ public enum Zones {
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
 	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList)
-	 * 		for more about how discover is implemented.
+	 * for more about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */
 	DISCOVER("V"),
@@ -125,7 +127,7 @@ public enum Zones {
 	 * zone.
 	 *
 	 * @see GameLogic#removeActor(Actor, boolean) for an example of usage of a set aside zone (when the method is called
-	 * 		with {@code peacefully = false;}.
+	 * with {@code peacefully = false;}.
 	 */
 	SET_ASIDE_ZONE("A"),
 	/**
@@ -135,7 +137,12 @@ public enum Zones {
 	 *
 	 * @see Player for more about player entities.
 	 */
-	PLAYER("P");
+	PLAYER("P"),
+	/**
+	 * The enchantment zone corresponds to the player's list of {@link Enchantment} entities in the {@link
+	 * TriggerManager#getTriggers()} list.
+	 */
+	ENCHANTMENT("T");
 
 	/**
 	 * These zones are public for notification purposes: both players ought to see their contents.
@@ -146,6 +153,7 @@ public enum Zones {
 	 * from that zone.
 	 */
 	public static final Set<Zones> PRIVATE = EnumSet.of(Zones.DISCOVER, Zones.HAND, Zones.DECK, Zones.SET_ASIDE_ZONE, Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
+	private static final Zones[] VALID_ZONES = new Zones[]{HAND, DECK, GRAVEYARD, BATTLEFIELD, SECRET, QUEST, HERO_POWER, HERO, WEAPON, DISCOVER, REMOVED_FROM_PLAY, SET_ASIDE_ZONE, PLAYER};
 	private String serialized;
 
 
@@ -155,5 +163,9 @@ public enum Zones {
 
 	public String getSerialized() {
 		return serialized;
+	}
+
+	public static Zones[] validZones() {
+		return VALID_ZONES;
 	}
 }

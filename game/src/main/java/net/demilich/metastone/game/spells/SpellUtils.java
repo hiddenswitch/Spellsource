@@ -825,7 +825,7 @@ public class SpellUtils {
 		return context.getTriggerManager()
 				.getTriggers()
 				.stream()
-				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e))
+				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e) && e.isActivated())
 				.map(auraClass::cast)
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
@@ -843,7 +843,7 @@ public class SpellUtils {
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
 		return context.getTriggerManager().getTriggers().stream()
-				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired())
+				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired() && aura.isActivated())
 				.map(auraClass::cast)
 				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(toList());

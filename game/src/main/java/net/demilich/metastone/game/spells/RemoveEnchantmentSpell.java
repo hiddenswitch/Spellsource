@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 				// Remove this target
 				Enchantment enchantment = (Enchantment) target;
 				enchantment.onRemove(context);
-				context.getTriggerManager().removeTrigger(enchantment);
+				context.getTriggerManager().expire(enchantment);
 			}
 			return;
 		}
@@ -57,8 +58,10 @@ public final class RemoveEnchantmentSpell extends Spell {
 					howMany--;
 					enchantment.onRemove(context);
 					// TODO: What about targeting effects?
-					context.getTriggerManager().removeTrigger(enchantment);
-					context.getPlayer(enchantment.getOwner()).getRemovedFromPlay().add(enchantment);
+					context.getTriggerManager().expire(enchantment);
+					if (enchantment.getZone() != Zones.ENCHANTMENT) {
+						context.getPlayer(enchantment.getOwner()).getRemovedFromPlay().add(enchantment);
+					}
 				}
 			}
 		}
