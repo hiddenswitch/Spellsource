@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
+
 ### 0.8.72-3.1.2 (April 7, 2020)
 
  - The full screen resolution is set to the display's desktop resolution, fixing odd rendering issues on Windows devices. (1644)
