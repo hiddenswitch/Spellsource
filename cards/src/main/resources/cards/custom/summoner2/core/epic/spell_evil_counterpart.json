@@ -1,0 +1,27 @@
+{
+  "name": "Chain Summon",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "EPIC",
+  "description": "Gain 1 Lun this turn. Invoke (7): Gain 7.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell1": {
+      "class": "SummonSpell"
+    },
+    "spell2": {
+      "class": "SummonSpell"
+    }
+  },
+  "attributes": {
+    "INVOKE": 8
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

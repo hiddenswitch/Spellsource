@@ -1,0 +1,34 @@
+{
+  "name": "Collective Calling",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "RARE",
+  "description": "Draw a [0] card from your deck. (Cost equal to your hand size).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF",
+        "offset": -1
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Kofko, Crystal Conduit",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Whenever you summon a minion, give it +3/+3.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC"
+  "fileFormatVersion": 1
+}

@@ -10,6 +10,7 @@ import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -212,6 +213,9 @@ public class CardCatalogue {
 				continue;
 			}
 			if (tag != null && !card.hasAttribute(tag)) {
+				continue;
+			}
+			if (!HeroClass.getBaseClasses(deckFormat).contains(card.getHeroClass()) && !card.getHeroClass().equals(HeroClass.ANY)) {
 				continue;
 			}
 			if (clone) {

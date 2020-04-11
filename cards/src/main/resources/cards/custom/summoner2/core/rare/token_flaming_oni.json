@@ -1,0 +1,14 @@
+{
+  "name": "Flaming Oni",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
