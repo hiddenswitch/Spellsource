@@ -18,12 +18,21 @@ public class InvokeCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
+		int invoke = source.getAttributeValue(Attribute.INVOKE);
+		if (source.hasAttribute(Attribute.BEING_PLAYED)) {
+			return player.getMana() >= invoke;
+		} else if (source instanceof Card) {
+			return player.getMana() - context.getLogic().getModifiedManaCost(player, ((Card) source)) >= invoke;
+		}
+		return false;
+
+		/*
 		Card candidate;
 		if (desc.containsKey(ConditionArg.TARGET)) {
 			candidate = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).getSourceCard();
 		} else {
 			candidate = source.getSourceCard();
 		}
-		return candidate.hasAttribute(Attribute.INVOKED);
+		return candidate.hasAttribute(Attribute.INVOKED);*/
 	}
 }

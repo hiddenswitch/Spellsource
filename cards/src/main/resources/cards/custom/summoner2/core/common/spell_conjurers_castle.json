@@ -1,0 +1,33 @@
+{
+  "name": "Conjurer's Castle",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "COMMON",
+  "description": "The next spell you cast this turn gains you twice its Cost as Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST",
+          "multiplier": 2
+        }
+      },
+      "maxFires": 1,
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

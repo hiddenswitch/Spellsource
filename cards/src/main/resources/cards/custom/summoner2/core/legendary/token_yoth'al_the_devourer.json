@@ -1,0 +1,13 @@
+{
+  "name": "Yommoth, Twisted Colossus",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "Guard",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,

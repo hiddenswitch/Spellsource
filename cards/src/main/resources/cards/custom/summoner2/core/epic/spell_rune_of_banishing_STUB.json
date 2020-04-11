@@ -1,0 +1,17 @@
+{
+  "name": "Rune of Banishing",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "EPIC",
+  "description": "Destroy a minion that costs (4) or more. Invoke (8): All minions.",
+  "targetSelection": "NONE",
+  "spell": {
+  },
+  "attributes": {
+    "INVOKE": 8
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

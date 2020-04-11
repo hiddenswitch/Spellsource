@@ -2,10 +2,10 @@
   "name": "Summoner",
   "type": "CLASS",
   "hero": "hero_mephilia",
-  "heroClass": "EGGPLANT",
-  "color": [135, 94, 115],
+  "heroClass": "DARKMAGENTA",
+  "color": [139, 0, 139],
   "blackText": false,
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

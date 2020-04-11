@@ -1,0 +1,91 @@
+{
+  "name": "Broodcaller",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Opener: Summon two 1/1 Whelps. Invoke (1): Give them Blitz.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "InvokeSpell",
+      "spell1": {
+        "class": "InvokeOptionSpell",
+        "mana": 0,
+        "name": "Don't Invoke",
+        "description": "Summon two 1/1 Whelps",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SummonSpell",
+              "card": "token_whelp",
+              "boardPositionRelative": "LEFT"
+            },
+            {
+              "class": "SummonSpell",
+              "card": "token_whelp",
+              "boardPositionRelative": "RIGHT"
+            }
+          ]
+        }
+      },
+      "spell2": {
+        "class": "InvokeOptionSpell",
+        "mana": 1,
+        "name": "Brood Wake-up Call",
+        "description": "Summon two 1/1 Whelps with Blitz.",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SummonSpell",
+              "card": "token_whelp",
+              "boardPositionRelative": "LEFT",
+              "spell": {
+                "class": "AddAttributeSpell",
+                "target": "OUTPUT",
+                "attribute": "CHARGE"
+              }
+            },
+            {
+              "class": "SummonSpell",
+              "card": "token_whelp",
+              "boardPositionRelative": "RIGHT",
+              "spell": {
+                "class": "AddAttributeSpell",
+                "target": "OUTPUT",
+                "attribute": "CHARGE"
+              }
+            }
+          ]
+        }
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SummonSpell",
+            "card": "token_whelp",
+            "boardPositionRelative": "LEFT"
+          },
+          {
+            "class": "SummonSpell",
+            "card": "token_whelp",
+            "boardPositionRelative": "RIGHT"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "INVOKE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Depthcaller Fimo",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "FAE",
+  "description": "Opener: The next spell you cast has Opener: \"Invoke (10): Summon a 10/10 Colossus with Guard.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_mad_prophecy"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC"
+  "fileFormatVersion": 1
+}

@@ -100,12 +100,6 @@ public abstract class PlayCardAction extends GameAction {
 		card.getAttributes().remove(Attribute.BEING_PLAYED);
 		player.modifyAttribute(Attribute.COMBO, 1);
 
-		if (card.hasAttribute(Attribute.INVOKED)) {
-			// Increment the number of invoked cards that were played
-			player.modifyAttribute(Attribute.INVOKED, 1);
-			context.fireGameEvent(new InvokedEvent(context, playerId, card, card.getAttributeValue(Attribute.INVOKED)));
-		}
-
 		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 			card.getDeathrattleEnchantments().clear();
 			card.getBattlecryEnchantments().clear();
