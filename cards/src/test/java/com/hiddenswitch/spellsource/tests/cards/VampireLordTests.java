@@ -234,6 +234,10 @@ public class VampireLordTests extends TestBase {
 			var hp = opponent.getHero().getHp();
 			playCard(context, player, "spell_soulscream_rework", opponent.getHero());
 			assertEquals(hp - deathrattlesTriggered, opponent.getHero().getHp());
+			var card = receiveCard(context, player, "spell_soulscream_rework");
+			assertEquals("Deal 1 damage. (Increases by 1 for each Aftermath you've triggered this game)", card.getDescription(context, player));
+			playCard(context, player, "minion_gatekeeper_sha_rework");
+			assertEquals("Deal 3 damage. (Increases by 2 for each Aftermath you've triggered this game)", card.getDescription(context, player));
 		});
 	}
 
