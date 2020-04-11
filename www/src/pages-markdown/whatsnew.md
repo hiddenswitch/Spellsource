@@ -4,6 +4,9 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### In Progress
+
+ - Soulscream now correctly counts aftermaths. (1704)
 
 ### 0.8.72-3.1.2 (April 7, 2020)
 
