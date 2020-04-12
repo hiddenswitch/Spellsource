@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
@@ -151,6 +153,16 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 */
 	public EventTriggerDesc[] expirationTriggers = new EventTriggerDesc[0];
 
+	/**
+	 * A name field to use when rendering the enchantment on the client
+	 */
+	public String name;
+
+	/**
+	 * A description field to use when rendering the enchantment on the client.
+	 */
+	public String description;
+
 	public Set<Map.Entry<EnchantmentDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
 		HashSet<Map.Entry<EnchantmentDescArg, Object>> entries = Sets.newHashSet(
@@ -163,7 +175,9 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue),
 				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, maxFiresPerSequence),
 				immutableEntry(EnchantmentDescArg.EXPIRATION_TRIGGERS, expirationTriggers),
-				immutableEntry(EnchantmentDescArg.ACTIVATION_TRIGGERS, activationTriggers)
+				immutableEntry(EnchantmentDescArg.ACTIVATION_TRIGGERS, activationTriggers),
+				immutableEntry(EnchantmentDescArg.DESCRIPTION, description),
+				immutableEntry(EnchantmentDescArg.NAME, name)
 		);
 
 		return entries;
@@ -188,6 +202,10 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 		enchantment.setCountUntilCast(countUntilCast);
 		enchantment.setCountByValue(countByValue);
 		enchantment.setMaxFiresPerSequence(maxFiresPerSequence);
+		enchantment.setName(name);
+		if (description != null) {
+			enchantment.setDescription(description);
+		}
 		if (expirationTriggers != null && expirationTriggers.length > 0) {
 			enchantment.setExpirationTriggers(Arrays.stream(expirationTriggers).map(EventTriggerDesc::create).collect(Collectors.toList()));
 		}

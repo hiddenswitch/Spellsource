@@ -510,6 +510,17 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 				: (getSourceCard() != null ? getSourceCard().getDescription() : "");
 	}
 
+	/**
+	 * Sets the description by setting the {@link Attribute#DESCRIPTION} attribute.
+	 *
+	 * @param description
+	 * @return
+	 */
+	public Entity setDescription(String description) {
+		getAttributes().put(Attribute.DESCRIPTION, description);
+		return this;
+	}
+
 	public abstract Entity getCopy();
 
 	/**
