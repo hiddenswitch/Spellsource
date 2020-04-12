@@ -41,6 +41,14 @@ public enum EnchantmentDescArg {
 	 */
 	EXPIRATION_TRIGGERS,
 	/**
+	 * @see EnchantmentDesc#description
+	 */
+	DESCRIPTION,
+	/**
+	 * @see EnchantmentDesc#name
+	 */
+	NAME,
+	/**
 	 * @see EnchantmentDesc#activationTriggers
 	 */
 	ACTIVATION_TRIGGERS

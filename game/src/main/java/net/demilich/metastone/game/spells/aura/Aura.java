@@ -132,6 +132,24 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		super(primaryTrigger, secondaryTrigger, spell, false);
 	}
 
+	@Override
+	public String getName() {
+		var name = getDesc().getString(AuraArg.NAME);
+		if (name != null) {
+			return name;
+		}
+		return super.getName();
+	}
+
+	@Override
+	public String getDescription() {
+		var description = getDesc().getString(AuraArg.DESCRIPTION);
+		if (description != null) {
+			return description;
+		}
+		return super.getDescription();
+	}
+
 	protected void includeExtraTriggers(AuraDesc desc) {
 		if (desc == null) {
 			return;

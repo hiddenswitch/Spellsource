@@ -458,8 +458,16 @@ public interface Games extends Verticle {
 				.map(c -> getEntity(workingContext, c, localPlayerId))
 				.collect(toList()));
 
+		var visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
+
+		// Include enchantments
+		entities.addAll(workingContext.getTriggerManager().getTriggers()
+				.stream()
+				.filter(f -> f instanceof Enchantment && visibleEntityIds.contains(f.getHostReference().getId()))
+				.map(t -> getEntity(workingContext, (Enchantment) t, localPlayerId))
+				.collect(toList()));
+
 		// Any missing entities will get a stand-in entry
-		Set<Integer> visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
 		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId())).map(e -> new com.hiddenswitch.spellsource.client.models.Entity()
 				.id(e.getId())
 				.owner(e.getOwner())
@@ -623,10 +631,8 @@ public interface Games extends Verticle {
 		}
 
 		entity
+				.id(enchantment.getId())
 				.fires(enchantment.getFires())
-				.countUntilCast(enchantment.getCountUntilCast());
-
-		entity.id(enchantment.getId())
 				.entityType(entityType)
 				.l(Games.toClientLocation(enchantment.getEntityLocation()))
 				.owner(enchantment.getOwner())
