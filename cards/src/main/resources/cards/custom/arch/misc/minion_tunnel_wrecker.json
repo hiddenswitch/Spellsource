@@ -1,0 +1,30 @@
+{
+  "name": "Tunnel Wrecker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Whenever you draw a card that didn't start in your deck, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF",
+      "fireCondition": {        
+        "class": "AttributeCondition",
+        "attribute": "STARTED_IN_DECK",
+        "invert": true,
+        "operation": "HAS"
+      }
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+} 
