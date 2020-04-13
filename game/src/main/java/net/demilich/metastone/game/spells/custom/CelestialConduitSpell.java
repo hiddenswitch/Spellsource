@@ -70,14 +70,16 @@ public final class CelestialConduitSpell extends Spell {
 
 		// The discover spell which will cast the receive card spell on the selected card
 		var discoverSpell = DiscoverSpell.create(receiveCardSpell);
+		discoverSpell.put(SpellArg.HOW_MANY, howMany);
+		discoverSpell.put(SpellArg.CARD_SOURCE, desc.getCardSource());
+		discoverSpell.put(SpellArg.CARDS, desc.getCards());
+		discoverSpell.put(SpellArg.CARD_FILTER, desc.getCardFilter());
 		var invocations = 0;
 		while (sum.get() <= max && invocations < GameLogic.MAX_HAND_CARDS) {
 			if (Strand.currentStrand().isInterrupted()) {
 				break;
 			}
-			var cards = SpellUtils.getCards(context, player, target, source, desc, Integer.MAX_VALUE);
-			Collections.shuffle(cards, context.getLogic().getRandom());
-			SpellUtils.discoverCard(context, player, source, discoverSpell, new CardArrayList(cards.subList(0, howMany)));
+			SpellUtils.castChildSpell(context, player, discoverSpell, source, target);
 			invocations++;
 		}
 	}

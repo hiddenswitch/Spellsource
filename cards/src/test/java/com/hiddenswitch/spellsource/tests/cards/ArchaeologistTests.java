@@ -92,4 +92,24 @@ public class ArchaeologistTests extends TestBase {
 			assertEquals(3, player.getHand().size());
 		});
 	}
+
+	@Test
+	public void testGoldRush() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_gold_rush");
+			for (int i = 0; i < 8; i++) {
+				assertEquals(0, costOf(context, player, player.getDeck().get(i)));
+			}
+		});
+	}
+
+	@Test
+	public void testPrimordialSword() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_dig_up_shovel");
+			playCard(context, player, "weapon_primordial_sword");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(1, player.getHand().size());
+		});
+	}
 }
