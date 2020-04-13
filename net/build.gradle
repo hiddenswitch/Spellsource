@@ -49,7 +49,7 @@ dependencies {
     implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
-    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
     implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.10.2') {
         exclude group: 'jakarta.xml.bind', module: '*'
         exclude group: 'jakarta.activation', module: '*'

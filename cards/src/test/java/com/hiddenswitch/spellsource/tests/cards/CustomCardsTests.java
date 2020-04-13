@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -4595,21 +4597,21 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 1L);
+			assertEquals((int) player.getMinions().stream().filter(minion -> GameLogic.isRarity(minion.getSourceCard().getRarity(), Rarity.LEGENDARY)).count(), 1L);
 		});
 
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(8);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 3L);
+			assertEquals((int) player.getMinions().stream().filter(minion -> GameLogic.isRarity(minion.getSourceCard().getRarity(), Rarity.LEGENDARY)).count(), 3L);
 		});
 
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(28);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 7L);
+			assertEquals((int) player.getMinions().stream().filter(minion -> GameLogic.isRarity(minion.getSourceCard().getRarity(), Rarity.LEGENDARY)).count(), 7L);
 			assertEquals(player.getHero().getArmor(), 4);
 		});
 	}

@@ -1,0 +1,26 @@
+{
+  "seed" : 1228506891392109082,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "DARKGREEN", "AZURE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_yokai_bonder", "minion_festivity_golem", "minion_alien_ravager", "minion_dragonling_pet", "minion_timewalker_strider", "minion_sparkly_messenger", "minion_chromatic_vohlok", "minion_molten_cauterizer", "spell_cosmic_apparitions", "minion_shub-rhogog", "spell_otherwordly_truth", "minion_streetwise_specialist", "minion_selfburner", "spell_imperfect_duplicate", "minion_servant_of_twilight", "minion_chaotic_cutthroat", "minion_novice_enchantress", "spell_curse_of_desolation", "minion_shadownest_arachne", "minion_chronocaller", "minion_augmented_pixie", "minion_doctosaur", "spell_mind_flay", "spell_rain_of_tentacles", "minion_chromatic_vohlok", "minion_mutating_monstrosity", "minion_costume_seller", "permanent_the_end_time", "spell_profane_disfiguration", "minion_alien_ravager" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_hard_puncher", "minion_wyrmrest_sniper", "minion_hands_on_historian", "minion_fairytale_tracker", "spell_cruel_conditions", "minion_infinite_behemoth", "minion_stormchaser", "minion_treeleach", "spell_explore_the_endless_skies", "minion_barnacled_dweller", "minion_selfburner", "minion_crystal_shatterer", "spell_chaotic_spellstorm", "spell_wayward_winds", "minion_hoffis_the_dunewalker", "minion_corrupt_sentinel", "spell_skyfall", "spell_nephomancy", "minion_lunstone_rumbler", "minion_bighand_brute", "minion_thunderclap_phoenix", "minion_bookkeeper", "spell_gust", "minion_bittertide_crab", "minion_buffeting_elemental", "spell_typhoon", "minion_thunderclap_phoenix", "minion_fae_harbinger", "minion_grassroot_mossling", "weapon_sourcespear_ignitius" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 4 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 37, 43, 38 ]
+  } ],
+  "actions" : [ 0, 0, 1, 0, 0, 2, 4, 2, 4, 5, 4, 0, 0, 0, 4, 4, 5, 0, 2, 0, 4, 7, 2, 3, 1, 0, 0, 0, 1, 0, 4, 12, 8, 2, 0, 5, 12, 15, 13, 17, 11, 3, 4, 23, 21, 20, 33, 20, 26, 7, 1, 27, 4, 2, 2, 0, 0, 0, 0, 0, 0, 12, 7, 4, 1, 16, 1, 4, 0, 0, 0, 0, 0, 0, 0, 4, 4, 7, 2, 10, 9, 0, 6, 1, 58, 0, 4, 22, 6, 7, 8, 1, 1, 44, 38, 36, 15, 19, 20, 2, 2, 4, 0, 24, 28, 31, 7, 7, 15, 5, 6, 6, 11, 0, 3, 9, 0, 3, 1, 0, 3, 26, 34, 25, 5, 13, 11, 4, 27, 42, 4, 23, 24, 9, 2, 10, 13, 10, 3, 1, 15 ],
+  "id" : null,
+  "traceErrors" : false,
+  "version" : 4
+}

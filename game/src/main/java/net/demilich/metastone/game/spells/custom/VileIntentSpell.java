@@ -4,14 +4,13 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.BuffSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.source.GraveyardCardAndActorSourceCardSource;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,7 +25,7 @@ public final class VileIntentSpell extends BuffSpell {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		var minionsInGraveyard = GraveyardCardAndActorSourceCardSource.graveyardCards(context, player).stream()
-				.filter(c -> c.getCardType().isCardType(CardType.MINION))
+				.filter(c -> GameLogic.isCardType(c.getCardType(), CardType.MINION))
 				.map(Card::getCardId)
 				.collect(toSet());
 		var iterator = Stream.concat(player.getHand().stream(), player.getDeck().stream()).iterator();

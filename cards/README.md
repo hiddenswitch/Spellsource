@@ -2,6 +2,8 @@
 
 This module contains game play definitions for cards.
 
+It also contains test code. For example, [this class](src/test/java/com/hiddenswitch/spellsource/tests/cards/CardValidationTests.java) is responsible for testing whether or not the card JSON is valid.
+
 ### What belongs in this module
 
  - **Functional game content**: This module must contain only functional game content. This means a definition of the behaviour of cards, like what happens when they enter play, their mana costs, triggers, attack and defense values, and other things that represent the minimum the game engine needs to know to correctly execute the rules of the card.

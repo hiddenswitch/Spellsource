@@ -2,7 +2,7 @@
   "name": "Skoppu the Shovelbot",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "LIGHTBROWN",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "LEGENDARY",

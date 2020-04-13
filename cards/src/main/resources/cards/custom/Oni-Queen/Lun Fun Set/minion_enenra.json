@@ -11,11 +11,12 @@
   "trigger": {
     "eventTrigger": {
       "class": "LoseStealthTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "AddAttributeSpell",
-      "target": "SELF",
+      "target": "TRIGGER_HOST",
       "attribute": "STEALTH"
     }
   },

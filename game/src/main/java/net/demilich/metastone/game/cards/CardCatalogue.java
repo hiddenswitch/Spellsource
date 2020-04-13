@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import com.hiddenswitch.spellsource.core.CardResource;
 import com.hiddenswitch.spellsource.core.CardResources;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
@@ -8,6 +10,7 @@ import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -193,16 +196,16 @@ public class CardCatalogue {
 			if (card.hasAttribute(Attribute.PERMANENT)) {
 				continue;
 			}
-			if (cardType != null && !card.getCardType().isCardType(cardType)) {
+			if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
 				continue;
 			}
 			// per default, do not include hero powers, quests, classes, and formats
-			if (card.getCardType().isCardType(CardType.HERO_POWER) || card.isQuest() ||
-					(card.getCardType().isCardType(CardType.CLASS) && cardType != CardType.CLASS) ||
-					(card.getCardType().isCardType(CardType.FORMAT) && cardType != CardType.FORMAT)) {
+			if (GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER) || card.isQuest() ||
+					(GameLogic.isCardType(card.getCardType(), CardType.CLASS) && cardType != CardType.CLASS) ||
+					(GameLogic.isCardType(card.getCardType(), CardType.FORMAT) && cardType != CardType.FORMAT)) {
 				continue;
 			}
-			if (rarity != null && !card.getRarity().isRarity(rarity)) {
+			if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
 				continue;
 			}
 			if (heroClass != null && !card.hasHeroClass(heroClass)) {
@@ -512,7 +515,7 @@ public class CardCatalogue {
 				continue;
 			}
 
-			if (card.getCardType().isCardType(CardType.CLASS) || card.getCardType().isCardType(CardType.FORMAT)) {
+			if (GameLogic.isCardType(card.getCardType(), CardType.CLASS) || GameLogic.isCardType(card.getCardType(), CardType.FORMAT)) {
 				continue;
 			}
 

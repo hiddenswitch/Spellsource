@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -648,7 +649,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getDeck().size(), 2);
 			assertEquals(player.getHand().size(), 0);
 			context.endTurn();
-			assertEquals(player.getDeck().size(), 0);
+			assertEquals(0, player.getDeck().size(), "should have drawn 2");
 			assertEquals(player.getHand().size(), 2);
 		});
 

@@ -7,9 +7,10 @@ import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.Rarity;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.Test;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class CardsTest extends SpellsourceTestBase {
 					.withRarity(Rarity.COMMON)).getRecords();
 
 			int expectedCount = CardCatalogue.query(new DeckFormat()
-					.withCardSets("BASIC", "CLASSIC"), c -> c.isCollectible() && c.getRarity().isRarity(Rarity.COMMON))
+					.withCardSets("BASIC", "CLASSIC"), c -> c.isCollectible() && GameLogic.isRarity(c.getRarity(), Rarity.COMMON))
 					.getCount();
 
 			assertEquals(expectedCount, commons.size());

@@ -130,7 +130,7 @@ public class CardCostInsteadAura extends Aura {
 		super(desc);
 		this.applyAuraEffect = NullSpell.create();
 		this.removeAuraEffect = NullSpell.create();
-		this.triggers.add(CardReceivedTrigger.create());
+		this.getTriggers().add(CardReceivedTrigger.create());
 	}
 
 	public int getAmountOfCurrency(GameContext context, Player player, Entity target, Entity host) {
