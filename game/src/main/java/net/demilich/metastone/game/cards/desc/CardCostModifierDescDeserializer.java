@@ -24,6 +24,7 @@ public class CardCostModifierDescDeserializer extends DescDeserializer<CardCostM
 		ctx.add(CardCostModifierArg.CARD_TYPE, ParseValueType.CARD_TYPE);
 		ctx.add(CardCostModifierArg.REQUIRED_ATTRIBUTE, ParseValueType.ATTRIBUTE);
 		ctx.add(CardCostModifierArg.EXPIRATION_TRIGGER, ParseValueType.EVENT_TRIGGER);
+		ctx.add(CardCostModifierArg.EXPIRATION_TRIGGERS, ParseValueType.EVENT_TRIGGER_ARRAY);
 		ctx.add(CardCostModifierArg.TOGGLE_ON_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(CardCostModifierArg.TOGGLE_OFF_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(CardCostModifierArg.TARGET, ParseValueType.TARGET_REFERENCE);

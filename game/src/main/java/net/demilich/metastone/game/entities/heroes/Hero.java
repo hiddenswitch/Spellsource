@@ -3,15 +3,12 @@ package net.demilich.metastone.game.entities.heroes;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.lang.ref.WeakReference;
-import java.util.EnumMap;
-import java.util.Map;
 
 public final class Hero extends Actor {
 	private String heroClass;

@@ -1,18 +1,22 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
@@ -47,9 +51,9 @@ import java.util.*;
  * created by other cards. Like all entities, they have attributes and are mutable.
  *
  * @see Entity#getSourceCard() for a way to retrieve the card that backs an entity. For a {@link
- *    net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
- *    Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
- * 		casts for {@link net.demilich.metastone.game.entities.Actor} objects.
+ * net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
+ * Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
+ * casts for {@link net.demilich.metastone.game.entities.Actor} objects.
  * @see CardDesc for the class that is the base of the serialized representation of cards.
  */
 public class Card extends Entity implements HasChooseOneActions, HasDeathrattleEnchantments {
@@ -406,7 +410,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
 	 *
 	 * @return The value of the {@link Attribute#DESCRIPTION} on this {@link Card}, if it is not null. Otherwise, the
-	 *    {@link CardDesc#description} field.
+	 * {@link CardDesc#description} field.
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
@@ -434,7 +438,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *                owner.
 	 * @return The cost.
 	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
-	 * 		cost of a card.
+	 * cost of a card.
 	 */
 	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
@@ -442,11 +446,12 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	/**
-	 * Computes the modificatation of this card's built in mana cost modifier for a given context / player.
-	 * Positive numbers are a reduction in cost, while negative numbers are an increase,
-	 * so the result of this method should usually be subtracted.
+	 * Computes the modificatation of this card's built in mana cost modifier for a given context / player. Positive
+	 * numbers are a reduction in cost, while negative numbers are an increase, so the result of this method should
+	 * usually be subtracted.
+	 *
 	 * @param context The {@link GameContext} to compute the cost modification against.
-	 * @param player The {@link Player} whose point of view should be considered, i.e. the owner.
+	 * @param player  The {@link Player} whose point of view should be considered, i.e. the owner.
 	 * @return The cost modfication
 	 */
 	@Suspendable
@@ -523,7 +528,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * Create an action representing playing the card.
 	 *
 	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int,
-	 *    GameAction)}.
+	 * GameAction)}.
 	 */
 	@Suspendable
 	public PlayCardAction play() {
@@ -1031,33 +1036,46 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		}
 
 		if (getDesc().getTrigger() != null) {
-			instance.addEnchantment(getDesc().getTrigger().create());
+			var enchantment = getDesc().getTrigger().create();
+			enchantment.setSourceCard(this);
+			instance.addEnchantment(enchantment);
 		}
 
 		if (getDesc().getTriggers() != null) {
 			for (EnchantmentDesc trigger : getDesc().getTriggers()) {
-				instance.addEnchantment(trigger.create());
+				var enchantment = trigger.create();
+				enchantment.setSourceCard(this);
+				instance.addEnchantment(enchantment);
 			}
 		}
 
 		if (getDesc().getAura() != null) {
-			final Aura enchantment = getDesc().getAura().create();
+			Aura enchantment = getDesc().getAura().create();
+			enchantment.setSourceCard(this);
 			instance.addEnchantment(enchantment);
 		}
 
 		if (getDesc().getAuras() != null) {
 			for (AuraDesc auraDesc : getDesc().getAuras()) {
-				instance.addEnchantment(auraDesc.create());
+				var enchantment = auraDesc.create();
+				enchantment.setSourceCard(this);
+				instance.addEnchantment(enchantment);
 			}
 		}
 
 		if (getDesc().getCardCostModifier() != null) {
-			instance.setCardCostModifier(getDesc().getCardCostModifier().create());
+			var cardCostModifier = getDesc().getCardCostModifier().create();
+			cardCostModifier.setSourceCard(this);
+			instance.setCardCostModifier(cardCostModifier);
 		}
 
 		if (getStoredEnchantments() != null) {
 			for (EnchantmentDesc storedEnchantment : getStoredEnchantments()) {
-				instance.addEnchantment(storedEnchantment.create());
+				var enchantment = storedEnchantment.create();
+				if (enchantment.getSourceCard() == null) {
+					enchantment.setSourceCard(this);
+				}
+				instance.addEnchantment(enchantment);
 			}
 		}
 
@@ -1235,7 +1253,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	public boolean isSpell() {
-		return getCardType().isCardType(CardType.SPELL);
+		return GameLogic.isCardType(getCardType(), CardType.SPELL);
 	}
 
 	public boolean hasDeathrattle() {
@@ -1263,7 +1281,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	public boolean isHeroPower() {
-		return getCardType().isCardType(CardType.HERO_POWER);
+		return GameLogic.isCardType(getCardType(), CardType.HERO_POWER);
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package net.demilich.metastone.game.entities;
 
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -18,6 +18,7 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,6 +73,22 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	protected Entity() {
 		super();
 		attributes = new AttributeMap();
+	}
+
+	public static boolean hasEntityType(EntityType thisEntity, EntityType other) {
+		if (thisEntity == EntityType.ANY || other == EntityType.ANY) {
+			return true;
+		}
+
+		if (thisEntity == EntityType.ACTOR) {
+			return other == EntityType.HERO || other == EntityType.MINION || other == EntityType.WEAPON;
+		}
+
+		if (other == EntityType.ACTOR) {
+			return thisEntity == EntityType.HERO || thisEntity == EntityType.MINION || thisEntity == EntityType.WEAPON;
+		}
+
+		return Objects.equals(thisEntity, other);
 	}
 
 	/**
@@ -408,6 +425,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	@SuppressWarnings("unchecked")
 	public void moveOrAddTo(GameContext context, Zones destination) throws ArrayStoreException {
+		if (getId() == IdFactory.UNASSIGNED) {
+			throw new RuntimeException();
+		}
 		moveOrAddTo(context, destination, context.getPlayer(getOwner()).getZone(destination).size());
 	}
 
@@ -488,6 +508,17 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) != null) ?
 				(String) getAttribute(Attribute.DESCRIPTION)
 				: (getSourceCard() != null ? getSourceCard().getDescription() : "");
+	}
+
+	/**
+	 * Sets the description by setting the {@link Attribute#DESCRIPTION} attribute.
+	 *
+	 * @param description
+	 * @return
+	 */
+	public Entity setDescription(String description) {
+		getAttributes().put(Attribute.DESCRIPTION, description);
+		return this;
 	}
 
 	public abstract Entity getCopy();

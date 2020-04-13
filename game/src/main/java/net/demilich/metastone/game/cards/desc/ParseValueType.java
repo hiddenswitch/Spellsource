@@ -1,6 +1,9 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.hiddenswitch.spellsource.client.models.ActionType;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
@@ -91,11 +94,11 @@ public enum ParseValueType {
 	 */
 	CONDITION_ARRAY,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.cards.CardType} enum.
+	 * A string matching the name of a {@link CardType} enum.
 	 */
 	CARD_TYPE,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.entities.EntityType} enum.
+	 * A string matching the name of a {@link EntityType} enum.
 	 */
 	ENTITY_TYPE,
 	/**
@@ -119,7 +122,7 @@ public enum ParseValueType {
 	 */
 	CARD_COST_MODIFIER,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.cards.Rarity} enum.
+	 * A string matching the name of a {@link Rarity} enum.
 	 */
 	RARITY,
 	/**
@@ -127,7 +130,7 @@ public enum ParseValueType {
 	 */
 	VALUE,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.cards.CardType} enum.
+	 * A string matching the name of a {@link CardType} enum.
 	 */
 	CARD_DESC_TYPE,
 	/**

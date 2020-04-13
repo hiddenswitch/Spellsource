@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -40,7 +41,7 @@ public class ChangeHeroSpell extends Spell {
 	/**
 	 * Changes the casting player's hero to the specified card ID.
 	 *
-	 * @param heroCardId A hero card ({@link net.demilich.metastone.game.cards.CardType#HERO}.
+	 * @param heroCardId A hero card ({@link CardType#HERO}.
 	 * @return The spell
 	 */
 	public static SpellDesc create(String heroCardId) {
@@ -53,7 +54,7 @@ public class ChangeHeroSpell extends Spell {
 	 * Changes the specified player's hero the specified card ID.
 	 *
 	 * @param player     The player whose hero should be changed.
-	 * @param heroCardId A hero card ({@link net.demilich.metastone.game.cards.CardType#HERO}.
+	 * @param heroCardId A hero card ({@link CardType#HERO}.
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer player, String heroCardId) {

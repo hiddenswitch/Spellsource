@@ -8,7 +8,7 @@ This is a simulator and game server for Spellsource, a community-authored card g
 
 **[Play now in your browser, or download for your platform here.](www/src/pages-markdown/download.md)**
 
-Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality.
+Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
 
 ### Changelist
 
@@ -19,7 +19,40 @@ Read [the latest changes here](www/src/pages-markdown/whatsnew.md) or the deploy
 The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
 
 See the complete code reference [here](https://www.playspellsource.com/javadoc).
- 
+
+### Tasks
+
+Make sure to be running **Mongo** when you start the server.
+
+```shell script
+$ ./gradlew tasks --group contributors
+------------------------------------------------------------
+Tasks runnable from root project
+------------------------------------------------------------
+
+Contributors tasks
+------------------
+netRun - Starts the Spellsource server
+netRunDebug - Starts the Spellsource server attachable as a Remote debug target from IntelliJ
+testAll - Runs all tests. Make sure mongod is running. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.
+
+To see all tasks and more detail, run gradle tasks --all
+```
+
+### Cloning this repository
+
+This repository uses **Git Submodules**. This means, if you have the proper authorization, you'll be able to access all the source code using:
+
+```shell script
+git clone https://github.com/hiddenswitch/Spellsource.git
+cd Spellsource
+git submodule update --init --recursive
+```
+
+Failures are normal if you do not have permissions to the repositories.
+
+If you have the permissions, you will need to add your SSH key to the private repositories, for both BitBucket and GitHub, to access all of them. Contact us on the Discord at the start of this document if you'd like to contribute to private work like the game client.
+
 ### Getting started with Development on macOS
 
 Requirements: Java 11 or later, Mongo Community Edition 3.6, Python 3.7 or later, Node 10 or later.
@@ -45,6 +78,10 @@ Use `./gradlew tasks --group spellsource` to see all deployment related tasks. Y
 
 ### Troubleshooting
 
+> I am having issues with Git Submodules, like failures to download
+
+Public users do not have access to the private repositories that fail to download. You can safely ignore those errors. If you'd like to contribute to the private repositories, like the game client, please use the Discord invite link above and discuss with the team there.
+
 > I am seeing issues with too many files open.
 
 On macOS, issue the following commands to increase your per-process limits:
@@ -63,6 +100,18 @@ Make sure you are running `mongo`.
 > `testTraces` is failing.
 
 You had failures in `testRandomMassPlay`, the fuzzer for Spellsource. These are real issues.
+
+> I receive an error from `fastlane` for the `gradle distIOS` command: `(<unknown>): found unexpected end of stream while scanning a quoted scalar at line 1 column 1`
+
+Log into Apple using `fastlane spaceauth` and paste the new session into [unityclient-build.env](secrets/spellsource/unityclient-build.env).
+
+> I uploaded to Steam, but I do not see the build.
+
+Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/987160) and promote the build.
+
+> I uploaded to TestFlight but the build isn't public yet.
+
+Make sure the Public group is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
 
 ### Special Thanks
 

@@ -4,9 +4,10 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -67,7 +68,7 @@ public class TransformMinionSpell extends Spell {
 			LOGGER.warn("onCast {} {}: Target {} is not a minion, skipping transform", context.getGameId(), source, target);
 			return;
 		}
-		if (!card.getCardType().isCardType(CardType.MINION)) {
+		if (!GameLogic.isCardType(card.getCardType(), CardType.MINION)) {
 			LOGGER.warn("onCast {} {}: Card {} is not a minion card, skipping transform", context.getGameId(), source, card);
 			return;
 		}

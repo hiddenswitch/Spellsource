@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.testutils;
 
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import net.demilich.metastone.game.cards.*;
@@ -17,13 +18,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 

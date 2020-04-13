@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.net.models;
 
-import net.demilich.metastone.game.cards.Rarity;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 
 import java.io.Serializable;
 import java.util.Arrays;

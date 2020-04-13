@@ -12,7 +12,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;

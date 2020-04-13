@@ -10,6 +10,10 @@ public class DidEndSequenceTrigger extends EventTrigger {
 		super(desc);
 	}
 
+	public static EventTrigger create() {
+		return new EventTriggerDesc(DidEndSequenceTrigger.class).create();
+	}
+
 	@Override
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		return true;

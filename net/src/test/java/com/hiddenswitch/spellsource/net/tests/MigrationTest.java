@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.unit.TestContext;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
@@ -18,6 +19,7 @@ import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 public class MigrationTest extends SpellsourceTestBase {
 
 	@Test
+	@Ignore("migration completed")
 	public void testMigrateAllDecks(TestContext testContext) {
 		sync(() -> {
 			var account = createRandomAccount();

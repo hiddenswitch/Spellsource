@@ -4,9 +4,15 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### In Progress
 
-### 0.8.72-3.1.1 (In Progress)
+ - Soulscream now correctly counts aftermaths. (1704)
 
+### 0.8.72-3.1.2 (April 7, 2020)
+
+ - The full screen resolution is set to the display's desktop resolution, fixing odd rendering issues on Windows devices. (1644)
+ - Your playable cards and units no longer flicker a green outline at the end of your turn in Quick Play and other situations where your opponent completes their turn very quickly. (1557)
+ - Sourceborn Aelin's Creation spell had an unintended bug where it would copy 1 card three times when intended behavior is copy 3 cards 1 time. Thanks @Logovazz!
  - Artifact generator cards, thanks @DeepKhaos!
  - Spirit Saber now always shows you the exact card that had the aftermath when it triggered, even if it was transformed later. (1657)
  - Archaeologist's Taletellers now correctly looks for minions played this turn, not minions that were played and killed this turn. (1652)
@@ -31,8 +37,16 @@ header: true
  - Overlord's Destroy the Strong now properly doesn't damage Underlings, and multiple cards should now better recognize Captives with Guard. (1614)
  - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
  - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
+ - Frontline Coward is now correctly an Overlord card. (1671)
+ - Oni Queen's Enenra now actually gains its Stealth. (1670)
  
-#### Notes from Logovazz about Rebel
+#### Notes from Logovazz about Rebel and Oni Queen
+
+**Oni Queen Update**
+ - Cloak and Dagger now reads "Give your Hidden minions Toxic."
+ - Gather in the Shadows is now 1 Lun.
+ - Bullhorn is now 3 Lun.
+ - Nurse Wounds is now 5 Lun "Give all damaged allies Hidden. Draw a card for each."
 
 **Rebel Update**
 Exile has been renamed to Rebel.

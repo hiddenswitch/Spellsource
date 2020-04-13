@@ -322,16 +322,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Adds a trigger to the game.
-	 *
-	 * @param trigger An {@link Trigger} that is used as a delegate whenever an event is fired in the game.
-	 * @see #fireGameEvent(GameEvent, List) for more about firing game events.
-	 */
-	public void addTrigger(Trigger trigger) {
-		getTriggerManager().addTrigger(trigger);
-	}
-
-	/**
 	 * Clones the game context, recursively cloning the game state and logic.
 	 * <p>
 	 * Internally, this is used by AI functions to evaluate a game state until a win condition (or just the end of the
@@ -442,7 +432,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                      reports, spectating features, etc.
 	 * @see HealingTrigger for an example of a trigger that listens to a specific event.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
-	 * @see #addTrigger(Trigger) for the place to add triggers that react to game events.
+	 * @see GameLogic#addGameEventListener(Player, Trigger, Entity) for the place to add triggers that react to game
+	 * events.
 	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent, List<Trigger> otherTriggers) {
@@ -814,7 +805,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @see Trigger#getHostReference() for an explanation of what an "associated" trigger would mean.
 	 */
 	public List<Trigger> getTriggersAssociatedWith(EntityReference entityReference) {
-		return getTriggerManager().getTriggersAssociatedWith(entityReference);
+		return getTriggerManager().getUnexpiredTriggers(entityReference);
 	}
 
 	/**
@@ -1039,7 +1030,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param trigger The trigger to remove.
 	 */
 	public void removeTrigger(Trigger trigger) {
-		getTriggerManager().removeTrigger(trigger);
+		getTriggerManager().expire(trigger);
 	}
 
 	/**
@@ -1051,7 +1042,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param keepSelfCardCostModifiers
 	 */
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers) {
-		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras, keepSelfCardCostModifiers, this);
+		triggerManager.expire(entityReference, removeAuras, keepSelfCardCostModifiers, this);
 	}
 
 	/**

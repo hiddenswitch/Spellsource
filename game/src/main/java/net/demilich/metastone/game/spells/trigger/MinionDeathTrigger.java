@@ -2,11 +2,11 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;

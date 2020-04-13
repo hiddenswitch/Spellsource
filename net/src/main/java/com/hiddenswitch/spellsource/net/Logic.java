@@ -18,7 +18,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
 import net.demilich.metastone.game.events.BeforeSummonEvent;

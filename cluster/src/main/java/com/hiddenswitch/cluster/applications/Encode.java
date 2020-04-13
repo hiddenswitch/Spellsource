@@ -7,7 +7,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;

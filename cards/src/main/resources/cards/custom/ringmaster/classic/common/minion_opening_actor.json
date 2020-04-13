@@ -19,7 +19,7 @@
         "expirationTrigger": {
           "class": "CardPlayedTrigger",
           "sourcePlayer": "SELF",
-          "fireCondition": {
+          "queueCondition": {
             "class": "AnyMatchFilterCondition",
             "target": "EVENT_TARGET",
             "filter": {

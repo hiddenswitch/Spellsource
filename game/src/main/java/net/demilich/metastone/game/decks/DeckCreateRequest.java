@@ -2,7 +2,7 @@ package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;

@@ -7,7 +7,7 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;

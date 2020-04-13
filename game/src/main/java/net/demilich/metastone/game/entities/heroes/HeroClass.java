@@ -5,15 +5,11 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.

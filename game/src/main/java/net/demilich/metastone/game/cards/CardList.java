@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
@@ -125,7 +127,7 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 */
 	default boolean hasCardOfType(CardType cardType) {
 		for (Card card : this) {
-			if (card.getCardType().isCardType(cardType)) {
+			if (GameLogic.isCardType(card.getCardType(), cardType)) {
 				return true;
 			}
 		}

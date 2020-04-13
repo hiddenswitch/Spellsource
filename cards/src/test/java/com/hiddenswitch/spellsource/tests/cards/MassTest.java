@@ -34,7 +34,7 @@ public class MassTest extends TestBase {
 	 * <p>
 	 * The game is given a maximum of 4,200 milliseconds to execute.
 	 */
-	@RepeatedTest(value = 3000)
+	@RepeatedTest(value = 10000)
 	public void testRandomMassPlay() {
 		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {

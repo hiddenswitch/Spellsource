@@ -4,12 +4,13 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -336,7 +337,7 @@ public class SummonSpell extends Spell {
 				// Is this a card? Summon it. Is this a non-battlefield minion? If so, summon from the base card too
 				if (target.getEntityType() == EntityType.CARD
 						|| (target.getEntityType() == EntityType.MINION && !target.isInPlay())) {
-					if (!target.getSourceCard().getCardType().isCardType(CardType.MINION)) {
+					if (!GameLogic.isCardType(target.getSourceCard().getCardType(), CardType.MINION)) {
 						logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
 						return;
 					}

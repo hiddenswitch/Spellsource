@@ -12,11 +12,11 @@ import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.behaviour.heuristic.ThreatBasedHeuristic;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -880,7 +880,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			// Make sure that friendly start turns don't accidentally wind up killing the opponent
 			int opponentHp = opponent.getHero().getHp();
 			for (Trigger trigger : new ArrayList<>(context.getTriggerManager().getTriggers())) {
-				if (trigger instanceof Enchantment && !(trigger instanceof Aura)) {
+				if (trigger instanceof Enchantment && !(trigger instanceof Aura) && !trigger.isExpired()) {
 					Enchantment enchantment = (Enchantment) trigger;
 					if (enchantment.getTriggers().stream().anyMatch(e -> e.getClass().equals(TurnStartTrigger.class)
 							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {

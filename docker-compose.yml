@@ -279,7 +279,8 @@ services:
   skyhook:
     image: doctorpangloss/skyhook:latest
     build:
-      context: https://github.com/Commit451/skyhook.git
+      context: skyhook
+      dockerfile: Dockerfile
     networks:
       - web
     deploy:
