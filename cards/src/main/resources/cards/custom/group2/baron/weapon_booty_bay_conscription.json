@@ -1,16 +1,16 @@
 {
-  "name": "Pearl Bay Conscription",
+  "name": "Good Luck Ward",
   "baseManaCost": 2,
   "type": "WEAPON",
   "heroClass": "NAVY",
   "damage": 0,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "Whenever you summon a Pirate, give it +1 Health.",
+  "description": "Whenever you summon a Spirit, give it +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",
-      "race": "PIRATE",
+      "race": "SPIRIT",
       "targetPlayer": "SELF"
     },
     "spell": {

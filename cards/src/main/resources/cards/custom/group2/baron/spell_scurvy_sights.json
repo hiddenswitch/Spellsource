@@ -10,7 +10,7 @@
     "class": "ChangeHeroPowerSpell",
     "card": "hero_power_scurvy_sights"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
