@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "NEONGREEN",
   "baseAttack": 1,
-  "baseHp": 5,
+  "baseHp": 6,
   "rarity": "COMMON",
   "description": "<b>Wither (1).</b>",
   "attributes": {

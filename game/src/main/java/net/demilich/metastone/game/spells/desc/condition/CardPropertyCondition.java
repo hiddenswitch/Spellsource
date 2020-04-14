@@ -3,13 +3,13 @@ package net.demilich.metastone.game.spells.desc.condition;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Rarity;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -54,7 +54,7 @@ public final class CardPropertyCondition extends Condition {
 		}
 
 		CardType cardType = (CardType) desc.get(ConditionArg.CARD_TYPE);
-		if (cardType != null && !card.getCardType().isCardType(cardType)) {
+		if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
 			return false;
 		}
 
@@ -89,7 +89,7 @@ public final class CardPropertyCondition extends Condition {
 		}
 
 		Rarity rarity = (Rarity) desc.get(ConditionArg.RARITY);
-		if (rarity!=null&&!card.getRarity().isRarity(rarity)) {
+		if (rarity!=null&&!GameLogic.isRarity(card.getRarity(), rarity)) {
 			return false;
 		}
 

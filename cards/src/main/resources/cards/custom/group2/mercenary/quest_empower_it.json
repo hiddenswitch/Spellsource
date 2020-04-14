@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "LEGENDARY",
-  "description": "Quest: Cast a spell on a friendly minion. Reward: Accompany It!",
+  "description": "Quest: Cast a spell on an allied minion. Reward: Accompany It!",
   "quest": {
     "class": "TargetAcquisitionTrigger",
     "actionType": "SPELL",

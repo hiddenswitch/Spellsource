@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Battlecry: Shuffle an 'Ancient Curse' into your deck that deals 7 damage to you when drawn.",
+  "description": "Opener: Shuffle an 'Ancient Curse' into your deck that deals 7 damage to you when drawn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

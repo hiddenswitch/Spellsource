@@ -1,10 +1,10 @@
 {
-  "name": "Party Pooper",
-  "baseManaCost": 3,
+  "name": "Abyssal Lurker",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 3,
-  "baseHp": 5,
+  "baseAttack": 8,
+  "baseHp": 8,
   "rarity": "COMMON",
   "description": "Guard. Opener: Shuffle your other minions into your deck.",
   "battlecry": {
@@ -20,9 +20,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "ONE_NIGHT_IN_KARAZHAN"
-  ],
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

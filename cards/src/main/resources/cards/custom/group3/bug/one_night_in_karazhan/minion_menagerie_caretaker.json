@@ -1,5 +1,5 @@
 {
-  "name": "Menagerie Caretaker",
+  "name": "Caregiver",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "AMBER",
@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Add a 1/1 Beast, Dragon, and Fae to your hand.",
+  "description": "Opener: Receive a 1/1 Beast, Dragon, and Fae.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

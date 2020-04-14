@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -20,7 +21,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Shuffles the {@code target} {@link net.demilich.metastone.game.entities.EntityType#MINION} into the player's deck
+ * Shuffles the {@code target} {@link EntityType#MINION} into the player's deck
  * with the enchantments
  */
 public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
@@ -78,7 +79,7 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 		sourceCard.getAttributes().remove(Attribute.ATTACK_BONUS);
 		sourceCard.getAttributes().remove(Attribute.HP_BONUS);
 		// Shuffles a copy of Immortal Prelate back into the deck
-		Card card = CopyCardSpell.copyCard(context, player, sourceCard, (playerId, copiedCard) -> {
+		Card card = CopyCardSpell.copyCard(context, player, source, sourceCard, (playerId, copiedCard) -> {
 			moveCopyToDestination(context, player, target, copiedCard);
 		});
 

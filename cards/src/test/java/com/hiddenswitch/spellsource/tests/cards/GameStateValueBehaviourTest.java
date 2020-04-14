@@ -15,6 +15,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -113,7 +115,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 		});
 	}
 
-	@Test
+	@RepeatedTest(20)
 	public void testAIFindsPhysicalAttackLethal() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 7; i++) {
@@ -124,9 +126,11 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			highValueTarget.setAttack(1000);
 			highValueTarget.setAttribute(Attribute.SPELL_DAMAGE, 1000);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
-			behaviour.setExpandDepthForLethal(true);
-			behaviour.setParallel(false);
-			behaviour.setPruneContextStack(true);
+			behaviour.setTimeout(behaviour.getTimeout() * 3)
+					.setLethalTimeout(behaviour.getLethalTimeout() * 3)
+					.setExpandDepthForLethal(true)
+					.setParallel(false)
+					.setPruneContextStack(true);
 			context.setBehaviour(player.getId(), behaviour);
 
 			while (context.takeActionInTurn()) {
@@ -399,6 +403,38 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testAIWillNotPlayIntoDoomsayer() {
 		runGym((context, player, opponent) -> {
+			var boardClear = playMinionCard(context, player, "minion_test_start_turns");
+			var minion = playMinionCard(context, player, 1, 1);
+			context.endTurn();
+			destroy(context, boardClear);
+			context.endTurn();
+			assertFalse(minion.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			var boardClear = playMinionCard(context, player, "minion_test_start_turns");
+			context.endTurn();
+			var minion = playMinionCard(context, opponent, 1, 1);
+			assertFalse(minion.isDestroyed());
+			assertFalse(boardClear.isDestroyed());
+			context.endTurn();
+			assertTrue(minion.isDestroyed());
+			assertTrue(boardClear.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			var boardClear = playMinionCard(context, player, "minion_test_start_turns");
+			context.endTurn();
+			var card = receiveCard(context, opponent, "minion_rapier_rodent");
+			destroy(context, boardClear);
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			assertEquals(ActionType.SUMMON, action.getActionType(), "should play rapier rodent");
+			assertEquals(card.getReference(), action.getSourceReference(), "should play rapier rodent");
+		});
+
+		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			receiveCard(context, opponent, "minion_rapier_rodent");
@@ -409,7 +445,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion clearsEndTurn = playMinionCard(context, player, "minion_test_start_turns");
+			Minion clearsStartTurns = playMinionCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			for (int i = 0; i < 3; i++) {
 				playMinionCard(context, opponent, "minion_charge_test");
@@ -418,21 +454,25 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			assertEquals(ActionType.PHYSICAL_ATTACK, action.getActionType(), "should attack");
-			assertEquals(clearsEndTurn.getReference(), action.getTargetReference(), "should attack board clear");
+			assertEquals(clearsStartTurns.getReference(), action.getTargetReference(), "should attack board clear");
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion clearsEndTurn = playMinionCard(context, player, "minion_test_start_turns");
+			Minion clearsStartTurns = playMinionCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			playMinionCard(context, opponent, "minion_floating_crystal");
 			Card card = receiveCard(context, opponent, "spell_test_deal_6");
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
-			behaviour.setTriggerStartTurns(true);
-			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			assertEquals(action.getSourceReference(), card.getReference(), "should deal 6 damage");
-			assertEquals(clearsEndTurn.getReference(), action.getTargetReference(), "should target board clear");
+			behaviour
+					.setDisposeNodes(false)
+					.setTriggerStartTurns(true)
+					.setParallel(false);
+			var validActions = context.getValidActions();
+			GameAction action = behaviour.requestAction(context, opponent, validActions);
+			assertEquals(action.getSourceReference(), card.getReference(), "should deal 7 damage");
+			assertEquals(context.resolveSingleTarget(clearsStartTurns.getReference()), context.resolveSingleTarget(action.getTargetReference()), "should target board clear");
 		});
 	}
 

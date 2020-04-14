@@ -1,10 +1,10 @@
 {
   "name": "Gather in the Shadows",
-  "baseManaCost": 3,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
-  "description": "Draw a Hidden minion from your deck. If your hand has duplicates, draw 3 instead.",
+  "description": "Draw a Hidden minion. If your hand has duplicates, draw 3 instead.",
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",

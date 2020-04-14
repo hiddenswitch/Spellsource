@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Hidden. After this loses Hidden, give your champion Hidden until your next turn.",
+  "description": "Hidden. Whenever this loses Hidden, give your champion Hidden until your next turn.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseStealthTrigger",

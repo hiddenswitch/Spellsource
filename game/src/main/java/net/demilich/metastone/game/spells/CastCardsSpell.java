@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.Map;
 
@@ -20,6 +21,9 @@ import java.util.Map;
  * To cast a choose one spell card, cast the choice card.
  *
  * Only casts on {@code target} if it is still valid.
+ * <p>
+ * Uses {@link SpellArg#EXCLUSIVE} to signal that the cards should be created and put into the graveyard as they're
+ * cast, rather than just their effects being enacted.
  * <p>
  * For example, to cast Inner Fire on every minion in your deck:
  * <pre>
@@ -55,6 +59,11 @@ public final class CastCardsSpell extends Spell {
 
 		if (card == null) {
 			return;
+		}
+		if (desc.getBool(SpellArg.EXCLUSIVE)) {
+			card.setId(context.getLogic().generateId());
+			card.setOwner(player.getIndex());
+			card.moveOrAddTo(context, Zones.GRAVEYARD);
 		}
 
 		var validTarget = target == null || target.isInPlay();

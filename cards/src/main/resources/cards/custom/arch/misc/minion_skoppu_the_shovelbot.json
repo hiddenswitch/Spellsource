@@ -1,0 +1,20 @@
+{
+  "name": "Skoppu the Shovelbot",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Equip Skoppu.",
+  "deathrattle": {
+    "class": "EquipWeaponSpell",
+    "card": "weapon_shovel_skoppu"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

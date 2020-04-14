@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Taunt. Battlecry: Give a friendly minion Divine Shield.",
+  "description": "Taunt. Battlecry: Give an allied minion Divine Shield.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -6,18 +6,23 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Add a random Secret to each player's hand.",
+  "race": "SPIRIT",
+  "description": "Opener: Both players receive a random Emerald Secret.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
-      "value": 1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "attribute": "SECRET",
-        "operation": "HAS"
-      },
-      "targetPlayer": "BOTH"
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "secret_secret_of_winter",
+          "secret_secret_of_spring",
+          "secret_secret_of_summer",
+          "secret_secret_of_autumn",
+          "secret_secret_of_twilight"
+        ],
+        "randomTarget": true
+      }
     }
   },
   "attributes": {

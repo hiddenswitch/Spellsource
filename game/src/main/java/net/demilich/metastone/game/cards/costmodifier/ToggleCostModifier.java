@@ -69,5 +69,4 @@ public final class ToggleCostModifier extends CardCostModifier {
 		toggleOnTrigger.setOwner(playerIndex);
 		toggleOffTrigger.setOwner(playerIndex);
 	}
-
 }

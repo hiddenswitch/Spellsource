@@ -30,7 +30,7 @@
         },
         "expirationTrigger": {
           "class": "CardPlayedTrigger",
-          "fireCondition": {
+          "queueCondition": {
             "class": "CardPropertyCondition",
             "cards": [
               "spell_gold_coin",

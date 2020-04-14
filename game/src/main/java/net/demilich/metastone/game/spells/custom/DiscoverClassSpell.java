@@ -17,44 +17,33 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 
+/**
+ * Discovers a class card.
+ */
 public class DiscoverClassSpell extends Spell {
 
-    @Suspendable
-    @Override
-    protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-        boolean cantReceiveOwned = desc.getBool(SpellArg.CANNOT_RECEIVE_OWNED);
+	@Suspendable
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		boolean cantReceiveOwned = desc.getBool(SpellArg.CANNOT_RECEIVE_OWNED);
 
-        CardList classCards = new CardArrayList(HeroClass.getClassCards(DeckFormat.all()));
-        classCards.removeIf(card -> !context.getDeckFormat().isInFormat(card));
-        classCards.removeIf(card -> !card.isCollectible());
-        if (cantReceiveOwned) {
-            classCards.removeIf(card -> card.getHeroClass().equals(player.getHero().getHeroClass()));
-        }
+		CardList classCards = new CardArrayList(HeroClass.getClassCards(DeckFormat.all()));
+		classCards.removeIf(card -> !context.getDeckFormat().isInFormat(card));
+		classCards.removeIf(card -> !card.isCollectible());
+		if (cantReceiveOwned) {
+			classCards.removeIf(card -> card.getHeroClass().equals(player.getHero().getHeroClass()));
+		}
 
-        SpellDesc fakeDesc = NullSpell.create();
-        fakeDesc.put(SpellArg.SPELL, NullSpell.create());
+		SpellDesc fakeDesc = NullSpell.create();
+		fakeDesc.put(SpellArg.SPELL, NullSpell.create());
 
-        classCards.shuffle(context.getLogic().getRandom());
-        while (classCards.size() > desc.getInt(SpellArg.HOW_MANY, 3)) {
-            classCards.removeFirst();
-        }
+		classCards.shuffle(context.getLogic().getRandom());
+		classCards = new CardArrayList(classCards.subList(0, Math.min(classCards.size(), desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3))));
 
-        DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, fakeDesc, classCards);
-        String classCard = discoverAction.getCard().getCardId();
-        SpellDesc subSpell = desc.getSpell();
+		DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, fakeDesc, classCards);
+		String classCard = discoverAction.getCard().getCardId();
+		SpellDesc subSpell = desc.getSpell();
 
-        /*
-        EntityFilterDesc entityFilterDesc = new EntityFilterDesc(CardFilter.class);
-        entityFilterDesc.put(EntityFilterArg.HERO_CLASS, classCard.getHeroClass());
-        EntityFilter heroClassFilter = entityFilterDesc.create();
-        if (subSpell.containsKey(SpellArg.CARD_FILTER)) {
-            EntityFilter filter = subSpell.getCardFilter();
-            subSpell.put(SpellArg.CARD_FILTER, AndFilter.create(filter, heroClassFilter));
-        } else {
-            subSpell.put(SpellArg.CARD_FILTER, heroClassFilter);
-        }
-        */
-
-        SpellUtils.castChildSpell(context, player, subSpell, source, target, context.getCardById(classCard));
-    }
+		SpellUtils.castChildSpell(context, player, subSpell, source, target, context.getCardById(classCard));
+	}
 }

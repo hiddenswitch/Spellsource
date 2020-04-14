@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Whenever you cast a spell, add a random spell to your hand.",
+  "description": "Whenever you cast a spell, receive a random spell.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

@@ -6,13 +6,14 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.environment.EnvironmentAftermathTriggeredList;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetNotFoundException;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,7 @@ public class RepeatAllAftermathsSpell extends Spell {
 			return;
 		}
 
+		// TODO: Use the pattern from PlayCardsRandomlySpell to correctly record which aftermaths have already been executed
 		var executedOn = EnvironmentEntityList.getList(context);
 		if (!executedOn.getReferences(source).isEmpty()) {
 			return;
@@ -59,10 +61,12 @@ public class RepeatAllAftermathsSpell extends Spell {
 				if (!aftermathPredicate(context, player, source, target, item)) {
 					return false;
 				}
+
 				// We are only interested in source cards, so it's okay if we're accepting removed from play entities
-				var sourceCard = context.resolveSingleTarget(item.getSource(), false).getSourceCard();
+				var entity = context.resolveSingleTarget(item.getSource(), false);
+				var sourceCard = entity.getSourceCard();
 				cards.add(sourceCard);
-				executedOn.add(source, sourceCard);
+				executedOn.add(source, sourceCard.getId() == IdFactory.UNASSIGNED ? entity : sourceCard);
 				return true;
 			}).map(EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem::getSpell)
 					.collect(Collectors.toList());
@@ -85,10 +89,11 @@ public class RepeatAllAftermathsSpell extends Spell {
 
 				// if the source is a minion, execute the spells from this point of view
 				// otherwise, use the original source
+				var sourceEntity = context.resolveSingleTarget(item.getSource());
 				if (source.getEntityType() == EntityType.MINION && (source.isInPlay() || source.getZone() == Zones.GRAVEYARD)) {
 					aftermathSource = source;
 				} else {
-					aftermathSource = context.resolveSingleTarget(item.getSource());
+					aftermathSource = sourceEntity;
 				}
 
 				if (aftermathSource.getZone() != Zones.GRAVEYARD && !aftermathSource.isInPlay()) {
@@ -110,8 +115,8 @@ public class RepeatAllAftermathsSpell extends Spell {
 
 				SpellUtils.DetermineCastingPlayer determineCastingPlayer = SpellUtils.determineCastingPlayer(context, player, aftermathSource, castingTargetPlayer);
 				Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-				var sourceCard = context.resolveSingleTarget(item.getSource()).getSourceCard();
-				executedOn.add(source, sourceCard);
+				var sourceCard = sourceEntity.getSourceCard();
+				executedOn.add(source, sourceCard.getId() == IdFactory.UNASSIGNED ? sourceEntity : sourceCard);
 				context.getLogic().resolveAftermaths(castingPlayer.getId(), aftermathSource.getReference(), Collections.singletonList(spell), aftermathSource.getOwner(), index, false);
 				context.getLogic().revealCard(player, sourceCard);
 			}

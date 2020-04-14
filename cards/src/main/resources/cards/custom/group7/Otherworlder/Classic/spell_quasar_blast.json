@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "<b>Wither (3)</b>. Deal $2 damage.",
+  "description": "<b>Wither (4)</b>. Deal $4 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
-    "value": 2
+    "value": 4
   },
   "attributes": {
-    "WITHER": 3
+    "WITHER": 4
   },
   "collectible": true,
   "set": "CUSTOM",

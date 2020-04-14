@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Summon three 3/3 Ghouls. Costs (4) less if at least 3 minions died this turn",
+  "description": "Summon three 3/3 Ghouls. Costs (4) less if at least 3 minions died this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

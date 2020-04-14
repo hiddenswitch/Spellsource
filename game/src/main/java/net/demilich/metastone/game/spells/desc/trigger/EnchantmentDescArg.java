@@ -35,5 +35,21 @@ public enum EnchantmentDescArg {
 	/**
 	 * @see EnchantmentDesc#maxFiresPerSequence
 	 */
-	MAX_FIRES_PER_SEQUENCE
+	MAX_FIRES_PER_SEQUENCE,
+	/**
+	 * @see EnchantmentDesc#expirationTriggers
+	 */
+	EXPIRATION_TRIGGERS,
+	/**
+	 * @see EnchantmentDesc#description
+	 */
+	DESCRIPTION,
+	/**
+	 * @see EnchantmentDesc#name
+	 */
+	NAME,
+	/**
+	 * @see EnchantmentDesc#activationTriggers
+	 */
+	ACTIVATION_TRIGGERS
 }

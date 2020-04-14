@@ -1,0 +1,34 @@
+{
+  "name": "Aeon Channeler",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Opener: If you're holding an Artifact, deal 3 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "ARTIFACT",
+        "operation": "HAS"
+      }
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}

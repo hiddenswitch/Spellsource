@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDescArg;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
@@ -18,6 +20,8 @@ import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +29,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class BfsTests {
 
 	@BeforeAll

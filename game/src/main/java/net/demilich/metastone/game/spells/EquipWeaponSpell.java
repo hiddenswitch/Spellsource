@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.desc.SpellArg;

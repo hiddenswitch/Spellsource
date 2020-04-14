@@ -4,10 +4,14 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.minions.Minion;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class ArchaeologistTests extends TestBase {
 	@Test
 	public void testArchivistKrag() {
@@ -65,6 +69,47 @@ public class ArchaeologistTests extends TestBase {
 				return discoverActions.get(0);
 			});
 			playCard(context, opponent, "minion_shady_stranger");
+		});
+	}
+
+	@Test
+	public void testDynoblow() {
+		runGym((context, player, opponent) -> {
+			Minion testMinion = playMinionCard(context, opponent, "minion_neutral_test");
+			playCard(context, player, "spell_dynoblow");
+			assertEquals(testMinion.getBaseHp() - 8, testMinion.getHp()); //only was damaged the first time
+		});
+	}
+
+	@Test
+	public void testTaletellers() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "token_ember_elemental");
+			playCard(context, player, "token_ember_elemental");
+			Minion poorGuy = playMinionCard(context, player, "token_ember_elemental");
+			destroy(context, poorGuy);
+			playCard(context, player, "minion_taletellers");
+			assertEquals(3, player.getHand().size());
+		});
+	}
+
+	@Test
+	public void testGoldRush() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_gold_rush");
+			for (int i = 0; i < 8; i++) {
+				assertEquals(0, costOf(context, player, player.getDeck().get(i)));
+			}
+		});
+	}
+
+	@Test
+	public void testPrimordialSword() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_dig_up_shovel");
+			playCard(context, player, "weapon_primordial_sword");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(1, player.getHand().size());
 		});
 	}
 }

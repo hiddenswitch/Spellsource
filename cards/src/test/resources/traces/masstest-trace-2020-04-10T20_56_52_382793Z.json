@@ -1,0 +1,26 @@
+{
+  "seed" : 4304999610734245077,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CRIMSON", "NEONGREEN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_lord_henryk", "minion_colrum", "minion_crystal_shatterer", "minion_grape_merchant", "minion_large_spiderling", "spell_recipe_for_power", "spell_destroy_the_strong", "minion_swift_stinger", "minion_crazed_wraith", "minion_magic_glutton", "minion_hard_puncher", "pact_extraction", "spell_rise_and_fall", "minion_barnacled_dweller", "spell_transfer_life", "minion_commander_gareth", "minion_rainbow_runner", "spell_boon_of_the_dead", "pact_reinforcements", "minion_ragtag_rescuer", "minion_blight_harvester", "minion_buffeting_elemental", "minion_grave_carer_yorn", "minion_skoppu_the_shovelbot", "minion_blood_cultist", "spell_blood_boil_wraith", "minion_frontline_coward", "minion_dominus", "spell_auto_cannibalism", "minion_shedding_chameleon" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_fae_horncaster", "minion_nymph_keeper", "minion_magedrainer", "spell_bioweaponize", "minion_dimensional_courier", "permanent_formless_agony", "spell_gigantism", "minion_magishire_wildcat", "minion_nymph_keeper", "permanent_formless_celerity", "spell_incandescent_mutation", "minion_baby_griffin", "permanent_formless_celerity", "minion_rancorous_grunt", "minion_sneaky_kaeru", "minion_the_diamond_sultan", "minion_nervous_worker", "spell_wither_test", "minion_gekra_the_machine", "minion_volcanic_elemental", "minion_yokai_shapeshifter", "minion_sparkly_messenger", "minion_rafaam_philanthropist", "minion_bramblebound_warrior", "minion_test_start_turns", "spell_m_a_d", "minion_rancorous_grunt", "minion_grandmother_vratta", "spell_asteroid_impact", "minion_twilight_annihilator" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 38, 61, 60 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 28, 10, 33 ]
+  } ],
+  "actions" : [ 1, 0, 1, 0, 0, 2, 3, 0, 4, 0, 2, 0, 11, 8, 2, 2, 7, 8, 20, 11, 13, 12, 7, 9, 6, 3, 1, 2, 4, 6, 2, 2, 6, 0, 29, 20, 6, 10, 5, 0, 0, 2, 0, 3, 1, 0, 6, 3, 0, 0, 0, 2, 7, 1, 0, 22, 13, 2, 15, 2, 1, 0, 4, 3, 0, 3, 12, 3, 0, 30, 14, 5, 34, 0, 12, 8, 7, 14, 0, 48, 10, 28, 34, 33, 13, 22, 0, 2, 0, 17, 13, 6, 0, 11, 10, 1, 0, 0, 23, 1, 15, 0, 5, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

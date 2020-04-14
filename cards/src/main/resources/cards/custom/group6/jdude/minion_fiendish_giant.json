@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Costs (1) less for each damage the enemy Champion has taken.",
+  "description": "Costs (1) less for each point of damage the enemy champion has taken.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

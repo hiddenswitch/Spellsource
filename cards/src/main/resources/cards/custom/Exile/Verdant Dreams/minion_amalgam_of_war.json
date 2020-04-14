@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Gain +2 Attack if you have a Demon. Repeat with +2 Health for Dragons, and Dash for Pirates.",
+  "description": "Dash. Opener: Gain +2 Attack if you have a Demon. Repeat with +2 Health for Dragons.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -41,27 +41,13 @@
             "target": "SELF",
             "hpBonus": 2
           }
-        },
-        {
-          "class": "ConditionalSpell",
-          "condition": {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "RaceFilter",
-              "race": "PIRATE"
-            }
-          },
-          "spell": {
-            "class": "AddAttributeSpell",
-            "target": "SELF",
-            "attribute": "RUSH"
-          }
         }
       ]
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

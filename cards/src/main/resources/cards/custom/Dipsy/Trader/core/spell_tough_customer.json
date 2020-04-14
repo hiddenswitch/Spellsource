@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "EPIC",
-  "description": "Give a minion +3/+3 and Guard. Whenenver it takes damage, add a Gold Coin to your hand.",
+  "description": "Give a minion +3/+3 and Guard. Whenenver it takes damage, receive a Gold Coin.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

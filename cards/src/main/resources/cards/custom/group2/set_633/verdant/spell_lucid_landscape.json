@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Draw 2 spells from your deck. Restore #5 Health.",
+  "description": "Draw 2 spells. Restore #5 Health.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -23,7 +23,7 @@
       }
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

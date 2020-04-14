@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "II Questionable Ethics Destroy a friendly minion and draw a card. Add 3 spells to deck that summon your it when drawn.",
+  "description": "II Questionable Ethics Destroy an allied minion and draw a card. Add 3 spells to deck that summon your it when drawn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

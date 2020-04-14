@@ -1,14 +1,15 @@
 package net.demilich.metastone.game.spells.desc.source;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityLocation;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Set;
@@ -25,11 +26,31 @@ public class GraveyardCardAndActorSourceCardSource extends CardSource {
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
+		return graveyardCards(context, player);
+	}
+
+	/**
+	 * Gets the cards that properly belong in the player's {@link Zones#GRAVEYARD}, meaning they were played by the player
+	 * or they are the card representing a token or minion that died (not peacefully) on the battlefield.
+	 * <p>
+	 * This means when a minion is played, this method will not return the card from which the minion was played until the
+	 * minion is destroyed. However, there is still a card with the minion's card ID in the graveyard as soon as it is
+	 * played. This method can be used to tell the difference between a card corresponding to a played minion (which is
+	 * always in the graveyard) versus a card of a minion that has died.
+	 *
+	 * @param context
+	 * @param player
+	 * @return
+	 */
+	@NotNull
+	@Suspendable
+	public static CardList graveyardCards(GameContext context, Player player) {
 		Set<Card> inPlay = context.getEntities()
 				.filter(Entity::isInPlay)
 				.map(Entity::getSourceCard)
 				.collect(Collectors.toUnmodifiableSet());
-		Set<Card> removedPeacefully = context.getEntities().filter(e -> e.getEntityType().hasEntityType(EntityType.ACTOR) && e.isRemovedPeacefully()).map(Entity::getSourceCard).collect(Collectors.toUnmodifiableSet());
+		Set<Card> removedPeacefully = context.getEntities().filter(e -> Entity.hasEntityType(e.getEntityType(), EntityType.ACTOR)
+				&& e.isRemovedPeacefully()).map(Entity::getSourceCard).collect(Collectors.toUnmodifiableSet());
 		return player.getGraveyard().stream()
 				.map(entity -> {
 					Card card;

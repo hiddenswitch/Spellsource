@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,7 +12,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import java.util.Map;
  * specified {@code target} and immediately puts that aura/enchantment into play (i.e., activates it).
  * <p>
  * If a {@link SpellArg#CARD} is specified, the spell will interpret the card as an {@link
- * net.demilich.metastone.game.cards.CardType#ENCHANTMENT}, adding each of its triggers as specified to the {@code
+ * CardType#ENCHANTMENT}, adding each of its triggers as specified to the {@code
  * target }and the deathrattle as a {@link net.demilich.metastone.game.spells.trigger.MinionDeathTrigger} whose {@link
  * net.demilich.metastone.game.targeting.TargetType} is {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}.
  * If no triggers are present on the card, a dummy enchantment is created for later use in the {@link

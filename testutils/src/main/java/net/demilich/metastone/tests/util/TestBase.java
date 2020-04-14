@@ -2,6 +2,7 @@ package net.demilich.metastone.tests.util;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableRunnable;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.cards.test.TestCardResources;
 import net.demilich.metastone.game.GameContext;
@@ -11,7 +12,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -30,14 +31,22 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.ThrowingSupplier;
+import org.junit.platform.commons.util.ExceptionUtils;
+import org.junit.platform.commons.util.StringUtils;
 import org.mockito.ArgumentMatchers;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
+import org.opentest4j.AssertionFailedError;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -571,5 +580,62 @@ public class TestBase {
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
 		context.performAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
+	}
+
+	public static <T> T assertTimeoutPreemptively(Duration timeout, ThrowingSupplier<T> supplier,
+	                                              Object messageOrSupplier) {
+
+		var thread = new AtomicReference<Thread>();
+		var factory = new ThreadFactory() {
+			@Override
+			public Thread newThread(@NotNull Runnable r) {
+				thread.set(new Thread(r));
+				return thread.get();
+			}
+		};
+
+		ExecutorService executorService = Executors.newSingleThreadExecutor(factory);
+
+		try {
+			Future<T> future = executorService.submit(() -> {
+				try {
+					return supplier.get();
+				} catch (Throwable throwable) {
+					throw ExceptionUtils.throwAsUncheckedException(throwable);
+				}
+			});
+
+			long timeoutInMillis = timeout.toMillis();
+			try {
+				return future.get(timeoutInMillis, TimeUnit.MILLISECONDS);
+			} catch (TimeoutException ex) {
+				ex.setStackTrace(thread.get().getStackTrace());
+				throw new AssertionFailedError(buildPrefix(nullSafeGet(messageOrSupplier))
+						+ "execution timed out after " + timeoutInMillis + " ms\ntask stacktrace:\n" + Throwables.getStackTraceAsString(ex));
+			} catch (ExecutionException ex) {
+				throw ExceptionUtils.throwAsUncheckedException(ex.getCause());
+			} catch (Throwable ex) {
+				throw ExceptionUtils.throwAsUncheckedException(ex);
+			}
+		} finally {
+			executorService.shutdownNow();
+		}
+	}
+
+	static String nullSafeGet(Object messageOrSupplier) {
+		if (messageOrSupplier instanceof String) {
+			return (String) messageOrSupplier;
+		}
+		if (messageOrSupplier instanceof Supplier) {
+			Object message = ((Supplier<?>) messageOrSupplier).get();
+			if (message != null) {
+				return message.toString();
+			}
+		}
+		return null;
+	}
+
+	static String buildPrefix(String message) {
+		return (StringUtils.isNotBlank(message) ? message + " ==> " : "");
 	}
 }

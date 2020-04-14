@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Give your minions +1/+1 and Guard. They can't attack.",
+  "description": "Give your minions +1/+2 and Guard. They can't attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -12,7 +12,8 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "value": 1
+        "attackBonus": 1,
+        "hpBonus": 2
       },
       {
         "class": "AddAttributeSpell",

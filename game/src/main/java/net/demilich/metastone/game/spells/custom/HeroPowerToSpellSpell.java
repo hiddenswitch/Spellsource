@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.HeroPowerSpell;
@@ -99,4 +99,5 @@ public final class HeroPowerToSpellSpell extends Spell {
 		context.getLogic().receiveCard(player.getId(), spellCard);
 	}
 }
+
 

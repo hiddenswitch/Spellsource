@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Add a copy of your opponent's hand to your hand.",
+  "description": "Aftermath: Receive a copy of your opponent's hand.",
   "deathrattle": {
     "class": "CopyCardSpell",
     "target": "ENEMY_HAND"

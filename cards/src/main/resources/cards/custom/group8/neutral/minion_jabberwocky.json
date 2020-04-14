@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Aftermath: Add a random Beast to your hand. It Costs (2) less.",
+  "description": "Aftermath: Receive a random Beast. It costs (2) less.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "spell": {

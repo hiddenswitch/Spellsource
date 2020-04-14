@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Destroy a friendly minion to summon another Mindsucker.",
+  "description": "Opener: Destroy an allied minion to summon another Mindsucker Matriarch.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

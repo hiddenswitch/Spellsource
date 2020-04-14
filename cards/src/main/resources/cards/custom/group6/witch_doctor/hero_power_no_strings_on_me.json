@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Discover a minion. It becomes a 1/1 and costs (1).",
+  "description": "Source a minion. It becomes a 1/1 and costs (1).",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

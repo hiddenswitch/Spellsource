@@ -9,11 +9,14 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class OniQueenTests extends TestBase {
 
 	@Test
@@ -135,6 +138,21 @@ public class OniQueenTests extends TestBase {
 			assertTrue(context.getLogic().canPlayCard(player, banishment));
 			List<GameAction> validActions = context.getLogic().getValidActions(player.getId());
 			assertEquals(2, validActions.size()); //2 because end turn and banishment
+		});
+	}
+
+	@Test
+	public void testEnenra() {
+		runGym((context, player, opponent) -> {
+			Minion enenra = playMinionCard(context, player, "minion_enenra");
+			Minion tester = playMinionCard(context, player, "minion_neutral_test");
+			context.getLogic().applyAttribute(tester, Attribute.STEALTH);
+			assertFalse(enenra.hasAttribute(Attribute.STEALTH));
+			attack(context, player, tester, opponent.getHero());
+			assertFalse(tester.hasAttribute(Attribute.STEALTH));
+			assertTrue(enenra.hasAttribute(Attribute.STEALTH));
+			attack(context, player, enenra, opponent.getHero());
+			assertFalse(enenra.hasAttribute(Attribute.STEALTH));
 		});
 	}
 }

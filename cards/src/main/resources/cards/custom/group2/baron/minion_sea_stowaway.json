@@ -1,5 +1,5 @@
 {
-  "name": "Sea Stowaway",
+  "name": "Noble Psychic",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "NAVY",
@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "PIRATE",
-  "description": "Opener: Discover a Pirate.",
+  "description": "Opener: Source a Spirit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -18,7 +18,7 @@
       },
       "cardFilter": {
         "class": "CardFilter",
-        "race": "PIRATE"
+        "race": "SPIRIT"
       }
     }
   },

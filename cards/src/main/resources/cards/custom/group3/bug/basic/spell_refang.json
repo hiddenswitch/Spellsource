@@ -1,15 +1,24 @@
 {
-  "name": "Refang",
-  "baseManaCost": 0,
+  "name": "Enlarge",
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Give a minion +1/+1. (+1 Attack/+1 Health)",
+  "description": "Give a minion +3/+3 and Guard.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "attackBonus": 1,
-    "hpBonus": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 3,
+        "hpBonus": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Discover a minion that costs (1) less than this. Give it this Battlecry.",
+  "description": "Opener: Discover a minion that costs (1) less than this. Give it this Battlecry.",
   "battlecry": {
     "class": "MetaSpell",
     "spells": [

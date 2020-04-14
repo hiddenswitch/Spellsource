@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Summon a random Elemental from your hand and give it Guard. Add one more copy of this to your hand.",
+  "description": "Summon a random Elemental from your hand and give it Guard. Receive one more copy of this.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Inspire: Give a random friendly minion Taunt.",
+  "description": "Inspire: Give a random allied minion Taunt.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

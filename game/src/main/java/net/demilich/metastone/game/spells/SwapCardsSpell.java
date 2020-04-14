@@ -58,11 +58,23 @@ public class SwapCardsSpell extends Spell {
 		Card source = (Card) toSwap;
 		Card target = (Card) spellTarget;
 
-		EntityZone.swap(source, target, context);
-		context.getLogic().removeEnchantments(source);
-		context.getLogic().removeEnchantments(target);
+		swap(context, source, target);
+	}
 
-		for (Entity entity : new Entity[]{source, target}) {
+	/**
+	 * Swaps two cards.
+	 *
+	 * @param context
+	 * @param card1
+	 * @param card2
+	 */
+	@Suspendable
+	public static void swap(GameContext context, Card card1, Card card2) {
+		EntityZone.swap(card1, card2, context);
+		context.getLogic().removeEnchantments(card1);
+		context.getLogic().removeEnchantments(card2);
+
+		for (Entity entity : new Entity[]{card1, card2}) {
 			switch (entity.getZone()) {
 				case HAND:
 					context.getLogic().processPassiveTriggers(context.getPlayer(entity.getOwner()), (Card) entity);

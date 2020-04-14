@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Battlecry: Gain 1-4 Attack. Overload: (1)",
+  "description": "Opener: Gain 1-4 Attack. Overload: (1)",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

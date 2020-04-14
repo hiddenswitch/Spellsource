@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your Skill becomes \"Draw a Card\" until your Champion takes 10 damage. []",
+  "description": "Opener: Your Skill becomes \"Draw a Card\" until your champion takes 10 damage. []",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

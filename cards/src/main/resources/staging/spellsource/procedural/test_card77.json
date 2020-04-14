@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Deal 1 damage.",
+  "description": "Opener: Deal 1 damage.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

@@ -1,0 +1,32 @@
+{
+  "name": "King in Yellow",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Your undamaged minions have Dash. Your damaged minions have Guard.",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_MINIONS",
+      "attribute": "AURA_RUSH",
+      "filter": {
+        "class": "DamagedFilter",
+        "invert": true
+      }
+    },
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_MINIONS",
+      "attribute": "AURA_TAUNT",
+      "filter": {
+        "class": "DamagedFilter"
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

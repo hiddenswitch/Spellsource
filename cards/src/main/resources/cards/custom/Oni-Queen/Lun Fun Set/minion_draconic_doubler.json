@@ -2,12 +2,12 @@
   "name": "Draconic Doubler",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "BLUEGREY",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Dash. Opener: Summon a copy of this minion.",
+  "description": "Dash. Opener: Summon a copy of this.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

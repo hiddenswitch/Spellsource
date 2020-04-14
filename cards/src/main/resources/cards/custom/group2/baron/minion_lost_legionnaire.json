@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "EPIC",
-  "description": "Opener: Replace all Knights in your hand with Emerald Secrets.",
+  "description": "Opener: Replace every Knight in your hand with a random Emerald Secret.",
   "battlecry": {
     "spell": {
       "class": "ReplaceCardsSpell",

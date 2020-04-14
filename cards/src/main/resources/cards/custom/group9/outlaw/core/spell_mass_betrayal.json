@@ -1,0 +1,17 @@
+{
+  "name": "Mass Betrayal",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "EPIC",
+  "description": "Force each enemy minion to attack another random enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DuelSpell",
+    "target": "ENEMY_MINIONS",
+    "secondaryTarget": "ENEMY_MINIONS_LEFT_TO_RIGHT"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

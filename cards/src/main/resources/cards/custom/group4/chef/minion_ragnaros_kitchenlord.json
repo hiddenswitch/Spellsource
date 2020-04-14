@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "At the end of your turn, randomly draw or Roast cards until you have at least 8 in hand.",
+  "description": "At the end of your turns, randomly draw or Roast cards until you have at least 8 in hand.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

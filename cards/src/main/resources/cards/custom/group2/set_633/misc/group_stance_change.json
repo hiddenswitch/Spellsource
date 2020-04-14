@@ -48,7 +48,7 @@
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
       "name": "Koi Stance",
-      "description": "Restore 2 Health to your champion for each friendly minion.",
+      "description": "Restore 2 Health to your champion for each allied minion.",
       "value": {
         "class": "EntityCountValueProvider",
         "target": "FRIENDLY_MINIONS",

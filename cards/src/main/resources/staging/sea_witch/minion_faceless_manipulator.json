@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Choose a minion and become a of it. copy",
+  "description": "Opener: Choose a minion and become a of it. copy",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

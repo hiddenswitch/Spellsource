@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
+  "description": "Opener: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.",
   "battlecry": {
     "spell": {
       "class": "EitherOrSpell",

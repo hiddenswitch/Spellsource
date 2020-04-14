@@ -46,7 +46,7 @@ public class BuffAura extends Aura {
 	public BuffAura(AuraDesc desc) {
 		this(desc.get(AuraArg.ATTACK_BONUS), desc.get(AuraArg.HP_BONUS), desc.getTarget(), desc.getFilter());
 		if (desc.getSecondaryTrigger() != null) {
-			triggers.add(desc.getSecondaryTrigger().create());
+			getTriggers().add(desc.getSecondaryTrigger().create());
 		}
 		includeExtraTriggers(desc);
 		setCondition(desc.getCondition());

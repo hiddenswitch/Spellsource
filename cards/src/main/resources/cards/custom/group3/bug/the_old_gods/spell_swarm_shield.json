@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Gain 3 Armor for each minion you control.",
+  "description": "Gain 3 Armor for each allied minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

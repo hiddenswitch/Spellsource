@@ -2,6 +2,7 @@ package net.demilich.metastone.game.behaviour;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -11,11 +12,11 @@ import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.behaviour.heuristic.ThreatBasedHeuristic;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -519,6 +520,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 					}
 				}
 
+				// If we've been interrupted, peacefully exit this intense part of the code
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
+
 				// Prune after we've scored, so that we don't accidentally prune a lethal node
 				pruneContextStack(contextStack, playerId);
 
@@ -683,6 +689,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return node.predecessor != null && (
 				node.depth >= getMaxDepth()
 						|| node.context.updateAndGetGameOver()
+						|| Strand.currentStrand().isInterrupted()
 						|| (System.currentTimeMillis() - startTime > getTimeout())
 						// Technically allows the bot to play through its extra turns
 						|| node.context.getActivePlayerId() != playerId);
@@ -754,6 +761,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// Perform action
 		try {
+			if (Strand.currentStrand().isInterrupted()) {
+				// Bail out here if possible, does not queue new nodes.
+				return;
+			}
 			mutateContext.performAction(playerId, action);
 		} catch (UnsupportedOperationException cannotRollout) {
 			LOGGER.error("requestAction (unknown) {}: Action {} cannot be simulated!", playerId, action);
@@ -869,7 +880,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			// Make sure that friendly start turns don't accidentally wind up killing the opponent
 			int opponentHp = opponent.getHero().getHp();
 			for (Trigger trigger : new ArrayList<>(context.getTriggerManager().getTriggers())) {
-				if (trigger instanceof Enchantment && !(trigger instanceof Aura)) {
+				if (trigger instanceof Enchantment && !(trigger instanceof Aura) && !trigger.isExpired()) {
 					Enchantment enchantment = (Enchantment) trigger;
 					if (enchantment.getTriggers().stream().anyMatch(e -> e.getClass().equals(TurnStartTrigger.class)
 							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {

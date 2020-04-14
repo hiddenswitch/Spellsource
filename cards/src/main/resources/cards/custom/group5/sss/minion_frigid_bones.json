@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Stun any character damaged by this minion.",
+  "description": "Stun any character damaged by this.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

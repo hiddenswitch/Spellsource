@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
+import com.hiddenswitch.spellsource.net.impl.Mongo;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;

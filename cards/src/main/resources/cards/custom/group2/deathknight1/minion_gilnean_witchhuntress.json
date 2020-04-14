@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "<b>Dash</b>, <b>Lifesteal.</b> Each turn this is in your hand, swap its Attack and Health.",
+  "description": "<b>Dash</b>, <b>Lifedrain.</b> Each turn this is in your hand, swap its Attack and Health.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

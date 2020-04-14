@@ -1,34 +1,26 @@
 {
-  "name": "Freezing Over",
+  "name": "For Science!",
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Stun a minion. Whenever you play a minion this turn, give that minion +3/+3.",
+  "description": "Choose a minion. Each time you play a minion this turn, give that minion +3/+3.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddAttributeSpell",
-        "attribute": "FROZEN"
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionPlayedTrigger",
+        "targetPlayer": "SELF"
       },
-      {
-        "class": "AddEnchantmentSpell",
-        "trigger": {
-          "eventTrigger": {
-            "class": "MinionPlayedTrigger",
-            "targetPlayer": "SELF"
-          },
-          "oneTurn": true,
-          "spell": {
-            "class": "BuffSpell",
-            "target": "SELF",
-            "value": 3
-          }
-        }
+      "oneTurn": true,
+      "spell": {
+        "class": "BuffSpell",
+        "target": "EVENT_TARGET",
+        "value": 3
       }
-    ]
+    }
   },
   "sets": [
     "CUSTOM",

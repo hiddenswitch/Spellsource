@@ -1,0 +1,27 @@
+{
+  "name": "Captain Karver",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Give your weapon \"Aftermath: Resummon Captain Karver\".",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "FRIENDLY_WEAPON",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_captain_karver"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

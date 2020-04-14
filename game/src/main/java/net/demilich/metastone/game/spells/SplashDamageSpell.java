@@ -5,7 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.AfterPhysicalAttackTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
@@ -36,7 +36,7 @@ public final class SplashDamageSpell extends DamageSpell {
 
 	@Override
 	protected DamageTypeEnum getDamageType(GameContext context, Player player, Entity source) {
-		if (source.getEntityType().hasEntityType(EntityType.ACTOR)) {
+		if (Entity.hasEntityType(source.getEntityType(), EntityType.ACTOR)) {
 			return DamageTypeEnum.PHYSICAL;
 		}
 		return super.getDamageType(context, player, source);

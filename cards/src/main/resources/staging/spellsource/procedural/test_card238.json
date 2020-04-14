@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Silence a minion.",
+  "description": "Opener: Silence a minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
