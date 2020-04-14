@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 
 public class InvokeSpell extends Spell {
 
@@ -38,11 +39,32 @@ public class InvokeSpell extends Spell {
         Card card2 = InvokeOptionSpell.getTempCard(context, spell2, source.getSourceCard());
 
         CardList cards = new CardArrayList();
-        cards.add(card1);
-        cards.add(card2);
+        if (spell1.containsKey(SpellArg.CONDITION)) {
+            Condition condition = (Condition) spell1.get(SpellArg.CONDITION);
+            if (condition.isFulfilled(context, player, source, target)) {
+                cards.add(card1);
+            }
+        } else {
+            cards.add(card1);
+        }
+        if (spell2.containsKey(SpellArg.CONDITION)) {
+            Condition condition = (Condition) spell2.get(SpellArg.CONDITION);
+            if (condition.isFulfilled(context, player, source, target)) {
+                cards.add(card2);
+            }
+        } else {
+            cards.add(card2);
+        }
         //add aura invoke cards
 
         cards.removeIf(card -> card.getBaseManaCost() > manaRemaining);
+
+        if (cards.isEmpty()) {
+            if (desc.containsKey(SpellArg.SPELL)) {
+                SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
+            }
+            return;
+        }
 
         desc.put(SpellArg.SPELL, NullSpell.create());
         DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, desc, cards);

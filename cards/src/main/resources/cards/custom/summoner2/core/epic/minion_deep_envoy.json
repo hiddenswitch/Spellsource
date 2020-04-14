@@ -8,6 +8,17 @@
   "rarity": "EPIC",
   "description": "Opener: Choose a minion. Your Skill now summons Eidolons with the same Tribe as it.",
   "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "custom.StoreRaceToAttributeSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "NONE",
+        "invert": true
+      },
+      "secondaryTarget": "FRIENDLY_PLAYER",
+      "attribute": "EIDOLON_RACE"
+    }
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC"

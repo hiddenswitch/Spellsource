@@ -16,7 +16,21 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "SummonSpell",
-      "card": "token_eidolon"
+      "card": "token_eidolon",
+      "spell": {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "EIDOLON_RACE"
+        },
+        "spell": {
+          "class": "custom.SetRaceFromAttributeSpell",
+          "secondaryTarget": "FRIENDLY_PLAYER",
+          "attribute": "EIDOLON_RACE",
+          "target": "OUTPUT"
+        }
+      }
     }
   },
   "collectible": false,

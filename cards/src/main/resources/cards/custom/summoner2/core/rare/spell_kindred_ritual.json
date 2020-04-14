@@ -7,6 +7,16 @@
   "description": "Draw 2 cards. Costs (2) less for each Tribal minion in your hand.",
   "targetSelection": "NONE",
   "spell": {
+    "class": "DrawCardSpell",
+    "value": 2
+  },
+  "manaCostModifier": {
+    "class": "CardCountValueProvider",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "NONE",
+      "invert": true
+    }
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
