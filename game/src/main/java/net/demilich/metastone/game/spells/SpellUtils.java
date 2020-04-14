@@ -1,6 +1,9 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -9,15 +12,13 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.custom.RepeatAllAftermathsSpell;
-import net.demilich.metastone.game.spells.custom.RepeatAllOtherBattlecriesSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -40,7 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -664,8 +664,8 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Casts a subspell on a card that was returned by {@link GameLogic#receiveCard(int,
-	 * Card)}. Will not execute if the output is null or in the {@link Zones#GRAVEYARD}.
+	 * Casts a subspell on a card that was returned by {@link GameLogic#receiveCard(int, Card)}. Will not execute if the
+	 * output is null or in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param context The {@link GameContext} to operate on.
 	 * @param player  The player from whose point of view we are casting this sub spell. This should be passed down from
@@ -708,9 +708,8 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
-	 * SpellArg#CARDS} properties or as specified by a {@link CardSource}
-	 * and {@link CardFilter}. If neither of those are specified, uses the
-	 * target's {@link Entity#getSourceCard()} as the targeted card.
+	 * SpellArg#CARDS} properties or as specified by a {@link CardSource} and {@link CardFilter}. If neither of those are
+	 * specified, uses the target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
 	 * argument, defaulting to 1.
@@ -730,14 +729,13 @@ public class SpellUtils {
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
-	 * SpellArg#CARDS} properties or as specified by a {@link CardSource}
-	 * and {@link CardFilter}. If neither of those are specified, uses the
-	 * target's {@link Entity#getSourceCard()} as the targeted card.
+	 * SpellArg#CARDS} properties or as specified by a {@link CardSource} and {@link CardFilter}. If neither of those are
+	 * specified, uses the target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The {@link SpellDesc} given in {@code desc} is inspected for a variety of arguments. If there is a {@link
 	 * SpellArg#CARD_SOURCE} or {@link SpellArg#CARD_FILTER} specified, the card source generates a list of cards using
-	 * {@link CardSource#getCards(GameContext, Entity, Player)}, and that list
-	 * is filtered using {@link EntityFilter#matches(GameContext, Player, Entity, Entity)}.
+	 * {@link CardSource#getCards(GameContext, Entity, Player)}, and that list is filtered using {@link
+	 * EntityFilter#matches(GameContext, Player, Entity, Entity)}.
 	 * <p>
 	 * Anytime {@link SpellArg#CARD} or {@link SpellArg#CARDS} is specified, the card IDs in those args are added to the
 	 * list of cards returned by this method.
@@ -747,9 +745,8 @@ public class SpellUtils {
 	 * SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_SOURCE} nor {@link SpellArg#CARD_FILTER} will be
 	 * interpreted as trying to retrieve the target's base card.
 	 * <p>
-	 * Cards are not generated as copies unless the {@link CardSource} has
-	 * the {@link HasCardCreationSideEffects} trait and is used as an arg
-	 * in the {@code desc}.
+	 * Cards are not generated as copies unless the {@link CardSource} has the {@link HasCardCreationSideEffects} trait
+	 * and is used as an arg in the {@code desc}.
 	 * <p>
 	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
 	 * card source used is {@link UnweightedCatalogueSource}.
@@ -782,6 +779,9 @@ public class SpellUtils {
 			int i = count;
 			while (cards.size() > 0
 					&& i > 0) {
+				if (Strand.currentStrand().isInterrupted()) {
+					break;
+				}
 				result.add(context.getLogic().removeRandom(cards));
 				i--;
 			}
@@ -825,7 +825,7 @@ public class SpellUtils {
 		return context.getTriggerManager()
 				.getTriggers()
 				.stream()
-				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e))
+				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e) && e.isActivated())
 				.map(auraClass::cast)
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
@@ -843,15 +843,15 @@ public class SpellUtils {
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
 		return context.getTriggerManager().getTriggers().stream()
-				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired())
+				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired() && aura.isActivated())
 				.map(auraClass::cast)
 				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(toList());
 	}
 
 	/**
-	 * Retrieves an array of spells corresponding to the {@link AuraArg#APPLY_EFFECT}
-	 * field on an aura whose condition is null or fulfilled for the given {@code source} and {@code target}.
+	 * Retrieves an array of spells corresponding to the {@link AuraArg#APPLY_EFFECT} field on an aura whose condition is
+	 * null or fulfilled for the given {@code source} and {@code target}.
 	 *
 	 * @param context
 	 * @param playerId

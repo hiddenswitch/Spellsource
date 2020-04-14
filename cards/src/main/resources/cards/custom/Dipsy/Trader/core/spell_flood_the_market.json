@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "LEGENDARY",
-  "description": "Discover five spells from other classes. Cast any that won't fit in your hand with random targets.",
+  "description": "Source five spells from other classes. Cast any that won't fit in your hand with random targets.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Choose a minion. Summon a minion from your deck with less Attack.",
+  "description": "Choose a minion. Summon a random minion from your deck with less Attack.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "RecruitSpell",

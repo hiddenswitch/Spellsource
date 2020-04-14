@@ -8,7 +8,7 @@ import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 
@@ -120,13 +120,13 @@ public final class GetCollectionResponse implements Serializable {
 					.entity(new Entity()
 							.cardId(record.getId())
 							.description(record.getDescription())
-							.entityType(Entity.EntityTypeEnum.CARD)
+							.entityType(EntityType.CARD)
 							.name(record.getName())
 							.baseAttack(isActor ? record.getBaseAttack() + record.getDamage() : null)
 							.baseHp(isActor ? record.getBaseHp() + record.getDurability() : null)
 							.tribe(record.getRace())
-							.cardType(Entity.CardTypeEnum.valueOf(record.getType().toString()))
-							.rarity(record.getRarity().getClientRarity())
+							.cardType(CardType.valueOf(record.getType().toString()))
+							.rarity(record.getRarity())
 							.manaCost(record.getBaseManaCost())
 							.baseManaCost(record.getBaseManaCost())
 							.heroClass(record.getHeroClass()))

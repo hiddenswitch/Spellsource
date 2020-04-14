@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Discover a Dragon that costs (4) or less.",
+  "description": "Opener: Source a Dragon that costs (4) or less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

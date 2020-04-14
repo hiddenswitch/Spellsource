@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Choose a friendly minion. Swap it with a random minion in your hand.",
+  "description": "Opener: Choose an allied minion. Swap it with a random minion in your hand.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

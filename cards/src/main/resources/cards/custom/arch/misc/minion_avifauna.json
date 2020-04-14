@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Discover a spell. It costs (1) more.",
+  "description": "Opener: Source a spell. It costs (1) more.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

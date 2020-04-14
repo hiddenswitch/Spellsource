@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "EPIC",
-  "description": "The next card you play this turn costs Roasted cards instead of lun.",
+  "description": "The next card you play this turn costs Roasted cards instead of Lun.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

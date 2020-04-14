@@ -11,11 +11,12 @@ dependencies {
     testImplementation 'io.github.classgraph:classgraph:4.8.59'
     testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation project(':testutils')
-    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.0-rc-2'
+    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
 
 test {
     description('Tests all custom cards. Failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.')
+    maxParallelForks = 1; //Runtime.getRuntime().availableProcessors();
     useJUnitPlatform()
     testLogging {
         showStandardStreams true

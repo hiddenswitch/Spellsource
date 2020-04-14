@@ -4,7 +4,102 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
+### In Progress
 
+ - Soulscream now correctly counts aftermaths. (1704)
+
+### Upcoming Changes
+ - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
+ - Knowledge Hoarder now actually has Dash. (1684)
+ - Fixed name "Right of Worhip" -> "Right of Worship" (1685)
+ - The "Celestial Conduit" artifact now actually does its effect. (1686)
+ - Vitium Surger now correctly gives you artifacts. (1688)
+ - Fixed issues with Primordial Miner's text and effect. (1689)
+ - Fixed Primordial Sword not returning anything. (1690)
+
+### 0.8.72-3.1.2 (April 7, 2020)
+
+ - The full screen resolution is set to the display's desktop resolution, fixing odd rendering issues on Windows devices. (1644)
+ - Your playable cards and units no longer flicker a green outline at the end of your turn in Quick Play and other situations where your opponent completes their turn very quickly. (1557)
+ - Sourceborn Aelin's Creation spell had an unintended bug where it would copy 1 card three times when intended behavior is copy 3 cards 1 time. Thanks @Logovazz!
+ - Artifact generator cards, thanks @DeepKhaos!
+ - Spirit Saber now always shows you the exact card that had the aftermath when it triggered, even if it was transformed later. (1657)
+ - Archaeologist's Taletellers now correctly looks for minions played this turn, not minions that were played and killed this turn. (1652)
+ - The Monk class has been retired. Its class and cards have been made uncollectible by default. "So long and thanks for all deflect." (1635, 1636)
+ - Storyteller's Overflowing Energy now correctly only targets one instance of the lowest-cost card in your hand. (1642)
+ - Welcome Skoppu, the Shovelbot.
+ - New Outlaw cards, thanks @DeepKhaos!
+ - Quick Draw (X): Whenever your cards draw a card...
+ - Exile has been renamed Rebel, and more changes, thanks @Logovazz!
+ - Improvements to language, thanks @DeepKhaos!
+ - New updates to Skyward, thanks @Nix!
+ - New updates to Archaeologist, thanks @Pircival!
+ - Xii'da the Curious now only affects cards whose base cost is odd (previously in-hand or modified cost was used).
+ - New updates to Otherworlder, thanks @AnterogradeNil!
+ - Allied indicates your friendly targetable actors like the minions and Champion.
+ - New updates to Hive Queen, thanks @Phyley!
+ - Updates to Occultist, thanks @Muhframos!
+ - Effects that read "Both players" and interact with targets now correctly resolve those targets from the correct point of view.
+ - Draconic Doubler is now correctly an Oni-Queen card. (1638)
+ - Obsigon, Bounty Sorcerer has been renamed to Battlemage Zhou (1634)
+ - Pacts played by Debt Collector are now correctly displayed. (1615)
+ - Overlord's Destroy the Strong now properly doesn't damage Underlings, and multiple cards should now better recognize Captives with Guard. (1614)
+ - Overlord's The Oathbreaker now correctly reduces the cost of only the next Pact you play. (1613)
+ - Archaeologist's Dynoblow no longer hits already-dead minions. (1612)
+ - Frontline Coward is now correctly an Overlord card. (1671)
+ - Oni Queen's Enenra now actually gains its Stealth. (1670)
+ 
+#### Notes from Logovazz about Rebel and Oni Queen
+
+**Oni Queen Update**
+ - Cloak and Dagger now reads "Give your Hidden minions Toxic."
+ - Gather in the Shadows is now 1 Lun.
+ - Bullhorn is now 3 Lun.
+ - Nurse Wounds is now 5 Lun "Give all damaged allies Hidden. Draw a card for each."
+
+**Rebel Update**
+Exile has been renamed to Rebel.
+
+**Card Changes**
+ - Back Fist is now 4 Lun "Deal 8 damage to a minion."
+ - Intimidate is now 2 Lun from 3 Lun.
+ - Rules of Nature is no longer collectible.
+ - Armored Scoundrel is now a 4/4/5 from 4/4/4.
+ - Watchful Bruisner now reads "Can only attack if another minion attacked this turn."
+ - Scavenge is now 2 Lun from 3 Lun.
+ - Jeering Bodyguard is now 5/5/8 from 5/6/6. Gained Dragon tag.
+ - Frontline Cutthroat is now a Demon.
+ - Fassnu Oathbreaker is now 4 Lun from 5 Lun.
+ - Ragged Phalanx now reads "Give your minions +1/+2 and Guard. They can't attack."
+ - Dreamscape Scythe is now 5/3/3 "After your champion attacks, give a random allied Dragon and Demon +3 Attack."
+ - Warmage Zhou now reads "Dash. Opener: Deal 2 damage to a random enemy. Repeat for each ally that died this turn. (0 Times!)"
+ - Reserve Corps is now 3 Lun "Draw a Demon and Dragon."
+ - Amalgam of War now reads "Dash. Opener: Gain +2 Attack if you have a Demon. Repeat with +2 Health for Dragons."
+
+**New Cards**
+ - Warrior's Death: 1 Lun "Destroy a damaged minion."
+ - From the Burrows: 4 Lun "Summon four 1/1 Rioters with Dash."
+ - Vasz the Sellsword: 7/5/5 Legendary Dragon "Opener: Deal 1 damage to all other minions. Repeat until one dies."
+ - General Yokura: 7/3/6 Legendary Demon "Guard. Opener: Gain +1/+1 for each ally that died this turn. Then, attack the enemy champion."
+
+**Skyward**
+ - Updated Class Color to be less similar to Neutral's color. 
+
+#### Notes from DeepKhaos about Language Improvements
+
+ - Discover has been renamed to Source.
+ - Effects that state "Add X to your hand" are now reworded as "Receive X".
+ - Unnecessary words have been culled from "this" on certain cards ("Whenever this minion", etc). Cards that still need the clarification, eg "Deal damage to X equal to this minion's Attack", have kept it.
+ - Some cards that talk about turns have been given more clarity. "Turn" now specifies one player's time to act until they hit the End Turn button, and "round" specifies one cycle of this. For example: "Give a minion +2 attack this turn" provides Attack until you hit End Turn, but "Give a minion +2 attack for a round" will last until your opponent does.
+ - A few cards and effects that are random, but don't say so, have had their randomness specified. As a result, since (hopefully) all the random effects in the game are now actually labelled as random, a few cards have had their wording changed so that choice is implied when randomness isn't. "Discard a card" now means choosing a card from hand and discarding it, for example.
+ - "At the start/end of your turn" has been changed to "at the start/end of your turns" because current wording suggests a singular occurrence.
+ - Cards that provide an aura effect for a turn that activates each time the player does something now all read "each time you do X this turn" for consistency (some used to say "whenever").
+ - Cleared up some wording confusions with "whenever" and "after". Very few actual mechanical changes here
+ - Just making sure that, based on their code, effects that are intended to activate whenever or before something happens correctly read "whenever", and cards that are intended to activate after the event has concluded correctly read "after". Also swapped some `PhysicalAttackTriggers` to `TargetAcquisitionTriggers` to make sure "whenever" triggers for minions attacking all actually go off before the attack.
+ - Cards now all consistently use ", instead of some using quotation marks and some using apostrophes.
+ - Skill, Cost and Lun are now correctly capitalised across all cards. Champion is now correctly not capitalised across all cards.
+ - Also fixed some general grammatical issues I stumbled across, like missing full stops.
+ 
 ### 0.8.71-3.1.1 (March 28, 2020)
 
  - Both versions of Doodles now work. (1632)

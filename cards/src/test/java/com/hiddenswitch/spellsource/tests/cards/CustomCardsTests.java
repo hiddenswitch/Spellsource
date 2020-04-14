@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -33,6 +35,8 @@ import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.OverrideHandle;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -43,6 +47,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class CustomCardsTests extends TestBase {
 
 	@Test
@@ -749,7 +754,7 @@ public class CustomCardsTests extends TestBase {
 			Card card2 = receiveCard(context, player, "minion_cost_three_test");
 			Card card3 = receiveCard(context, player, "minion_neutral_test");
 			Card roten = receiveCard(context, player, "minion_soulcaller_roten");
-			assertEquals(roten.getDescription(context, player), "Opener: Summon all (3)-Cost minions from your hand. (Equals the cost of the last minion you played)");
+			assertEquals(roten.getDescription(context, player), "Opener: Summon all (3)-Cost minions from your hand. (Equals the Cost of the last minion you played)");
 			playCard(context, player, roten);
 			assertEquals(card1.getZone(), Zones.GRAVEYARD);
 			assertEquals(card2.getZone(), Zones.GRAVEYARD);
@@ -4318,7 +4323,7 @@ public class CustomCardsTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov_v0");
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_1");
 			context.endTurn();
@@ -4333,7 +4338,7 @@ public class CustomCardsTests extends TestBase {
 		runGym(((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_neutral_test_1");
 			Minion friend1 = playMinionCard(context, player, "minion_neutral_test");
-			Minion thitazov = playMinionCard(context, player, "minion_thitazov");
+			Minion thitazov = playMinionCard(context, player, "minion_thitazov_v0");
 			context.endTurn();
 			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test_1");
 			context.endTurn();
@@ -4490,7 +4495,7 @@ public class CustomCardsTests extends TestBase {
 			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
 			Card weapon = receiveCard(context, player, "weapon_dig_up_shovel");
 			destroy(context, grallows);
-			assertEquals(weapon.getDescription(), "Decay. At the end of your turn, draw a card. Aftermath: Summon Grallows.");
+			assertEquals(weapon.getDescription(), "Decay. At the end of your turns, draw a card. Aftermath: Summon Grallows.");
 		}));
 	}
 
@@ -4592,21 +4597,21 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 1L);
+			assertEquals((int) player.getMinions().stream().filter(minion -> GameLogic.isRarity(minion.getSourceCard().getRarity(), Rarity.LEGENDARY)).count(), 1L);
 		});
 
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(8);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 3L);
+			assertEquals((int) player.getMinions().stream().filter(minion -> GameLogic.isRarity(minion.getSourceCard().getRarity(), Rarity.LEGENDARY)).count(), 3L);
 		});
 
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_legendary_test"));
 			player.getHero().modifyArmor(28);
 			playCard(context, player, "spell_sot_mountain_excavation");
-			assertEquals((int) player.getMinions().stream().filter(minion -> minion.getSourceCard().getRarity().isRarity(Rarity.LEGENDARY)).count(), 7L);
+			assertEquals((int) player.getMinions().stream().filter(minion -> GameLogic.isRarity(minion.getSourceCard().getRarity(), Rarity.LEGENDARY)).count(), 7L);
 			assertEquals(player.getHero().getArmor(), 4);
 		});
 	}
@@ -5022,6 +5027,19 @@ public class CustomCardsTests extends TestBase {
 				return discoverActions.get(0);
 			});
 			playCard(context, player, "minion_primordial_pebble");
+		});
+	}
+
+	@Test
+	public void testCelestialConduit() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "token_artifact_7");
+			int sum = 0;
+			for (Card card : player.getHand()) {
+				assertEquals(card.getCardType(), CardType.SPELL);
+				sum += card.getBaseManaCost();
+			}
+			assertTrue(sum >= 15 || player.getHand().size() == 10, "" + sum);
 		});
 	}
 }

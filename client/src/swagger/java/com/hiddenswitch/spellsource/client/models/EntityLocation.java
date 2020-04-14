@@ -66,7 +66,9 @@ public class EntityLocation implements Serializable {
     
     R("R"),
     
-    P("P");
+    P("P"),
+    
+    T("T");
 
     private String value;
 

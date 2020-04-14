@@ -9,8 +9,7 @@ public class CustomCloneable implements Cloneable, Serializable {
 		try {
 			return (CustomCloneable) super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 }

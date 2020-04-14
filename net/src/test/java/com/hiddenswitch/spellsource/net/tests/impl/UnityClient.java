@@ -67,6 +67,7 @@ public class UnityClient implements AutoCloseable {
 	private int lastTurnPlayed = 0;
 	private ServerToClientMessage lastRequest;
 	private CountDownLatch turnsPlayedLatch = new CountDownLatch(9999);
+	private boolean paused;
 
 	private UnityClient() {
 		id = ids.getAndIncrement();
@@ -306,7 +307,7 @@ public class UnityClient implements AutoCloseable {
 				break;
 			case ON_REQUEST_ACTION:
 				lastRequest = message;
-				if (!onRequestAction(message)) {
+				if (paused || !onRequestAction(message)) {
 					break;
 				}
 				assertValidActions(message);
@@ -352,8 +353,8 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	/**
-	 * Blocks until the client is matched. Use {@link #play()} to start playing, and use {@link #waitUntilDone()} to
-	 * wait until the player is actually done with the game.
+	 * Blocks until the client is matched. Use {@link #play()} to start playing, and use {@link #waitUntilDone()} to wait
+	 * until the player is actually done with the game.
 	 *
 	 * @param deckId
 	 * @param queueId
@@ -380,6 +381,7 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	public void play() {
+		paused = false;
 		this.receivedGameOverMessage = false;
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
@@ -398,6 +400,7 @@ public class UnityClient implements AutoCloseable {
 
 		try {
 			turnsPlayedLatch.await(untilTurns, TimeUnit.SECONDS);
+			paused = true;
 		} catch (InterruptedException e) {
 			return;
 		}
@@ -484,16 +487,16 @@ public class UnityClient implements AutoCloseable {
 		context.assertNotNull(message.getChanges());
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.PLAYER).count() == 2);
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).count() >= 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.PLAYER).count() == 2);
+		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).count() >= 2);
 		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
-				e.getEntityType() == Entity.EntityTypeEnum.HERO
+				e.getEntityType() == EntityType.HERO
 						&& e.getL().getZ() == EntityLocation.ZEnum.E
 		).allMatch(h ->
 				null != h.getMaxMana()));
 		context.assertNotNull(message.getGameState().getTurnNumber());
 		if (message.getGameState().getTurnNumber() > 0) {
-			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == Entity.EntityTypeEnum.HERO).anyMatch(h ->
+			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).anyMatch(h ->
 					h.getMaxMana() >= 1));
 		}
 		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
@@ -611,6 +614,7 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	public void respondRandomAction() {
+		paused = false;
 		respondRandomAction(lastRequest);
 	}
 }

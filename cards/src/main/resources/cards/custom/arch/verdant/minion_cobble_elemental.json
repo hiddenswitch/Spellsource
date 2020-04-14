@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Guard. Aftermath: Draw two Elementals from your deck.",
+  "description": "Guard. Aftermath: Draw 2 Elementals.",
   "deathrattle": {
     "class": "FromDeckToHandSpell",
     "value": 2,

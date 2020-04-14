@@ -1,0 +1,16 @@
+{
+  "name": "Gigantism",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "COMMON",
+  "description": "Summon a 0/16 Xenodrone.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_xenodrone_16"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

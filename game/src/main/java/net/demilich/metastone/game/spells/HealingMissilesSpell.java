@@ -4,10 +4,11 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -32,11 +33,11 @@ public class HealingMissilesSpell extends HealSpell {
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
 		int healing = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 
-		if (healing == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
+		if (healing == 1 && source.getEntityType() == EntityType.CARD && GameLogic.isCardType(((Card) source).getCardType(), CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
+		} else if (source.getEntityType() == EntityType.CARD && GameLogic.isCardType(((Card) source).getCardType(), CardType.SPELL)) {
 			healing = context.getLogic().applySpellpower(player, source, healing);
 			healing = context.getLogic().applyAmplify(player, healing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			healing = context.getLogic().applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);

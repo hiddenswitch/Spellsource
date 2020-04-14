@@ -12,6 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Returns the number of cards matching {@link ValueProviderArg#FILTER} or {@link ValueProviderArg#CARD_FILTER} that
+ * were played this turn by the {@link ValueProviderArg#TARGET_PLAYER}.
+ *
+ * @see CardsPlayedValueProvider for all cards played by the player this game.
+ */
 public class PlayedThisTurnValueProvider extends ValueProvider {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(PlayedThisTurnValueProvider.class);
@@ -42,3 +48,4 @@ public class PlayedThisTurnValueProvider extends ValueProvider {
 		return value;
 	}
 }
+

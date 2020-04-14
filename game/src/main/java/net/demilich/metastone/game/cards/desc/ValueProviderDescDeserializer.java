@@ -20,7 +20,7 @@ public class ValueProviderDescDeserializer extends DescDeserializer<ValueProvide
 		ctx.add(ValueProviderArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(ValueProviderArg.PLAYER_ATTRIBUTE, ParseValueType.PLAYER_ATTRIBUTE);
 		ctx.add(ValueProviderArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);
-		ctx.add(ValueProviderArg.MULTIPLIER, ParseValueType.INTEGER);
+		ctx.add(ValueProviderArg.MULTIPLIER, ParseValueType.VALUE);
 		ctx.add(ValueProviderArg.CARD_SOURCE, ParseValueType.CARD_SOURCE);
 		ctx.add(ValueProviderArg.CARD_FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(ValueProviderArg.VALUE, ParseValueType.INTEGER);

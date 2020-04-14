@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "At the end of your turn, deal 3 damage to a random character.",
+  "description": "At the end of your turns, deal 3 damage to a random character.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

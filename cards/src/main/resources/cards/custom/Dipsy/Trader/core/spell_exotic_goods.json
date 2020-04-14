@@ -4,35 +4,10 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "COMMON",
-  "description": "Discover three cards from other classes.",
+  "description": "Source three cards from other classes.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "CastRepeatedlySpell",
-    "howMany": 3,
-    "spell": {
-      "class": "DiscoverSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "heroClass": "SELF",
-            "invert": true
-          },
-          {
-            "class": "CardFilter",
-            "heroClass": "ANY",
-            "invert": true
-          }
-        ]
-      },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      },
-      "spell": {
-        "class": "ReceiveCardSpell"
-      }
-    }
+    "class": "custom.ExoticGoodsSpell"
   },
   "attributes": {
     "DISCOVER": true

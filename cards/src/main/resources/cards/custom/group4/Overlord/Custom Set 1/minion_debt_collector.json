@@ -6,14 +6,15 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "<b>Opener:</b> <b>Discover</b> and play a <b>Pact</b>. <b>Aftermath:</b> If it's your turn, <b>Discover</b> and play a <b>Pact</b>.",
+  "description": "<b>Opener:</b> <b>Source</b> and play a <b>Pact</b>. <b>Aftermath:</b> If it's your turn, <b>Source</b> and play a <b>Pact</b>.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
         "class": "CastCardsSpell",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "exclusive": true
       },
       "cardFilter": {
         "class": "AttributeFilter",

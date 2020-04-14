@@ -1,57 +1,83 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.DeckFormat;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import net.demilich.metastone.game.logic.Trace;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+
+/**
+ * Performs fuzzing of game contexts for Spellsource.
+ */
+@Execution(ExecutionMode.CONCURRENT)
 public class MassTest extends TestBase {
+
+	private static final Path path1 = FileSystems.getDefault().getPath("src", "test", "resources", "traces");
+	private static final Path path2 = FileSystems.getDefault().getPath("cards", "src", "test", "resources", "traces");
 
 	private static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MassTest.class);
 
-	@BeforeAll
-	public static void loggerSetup() {
-		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
+	/**
+	 * Fuzzes the game by randomly playing decks 3,000 times.
+	 * <p>
+	 * The game is given a maximum of 4,200 milliseconds to execute.
+	 */
+	@RepeatedTest(value = 10000)
+	public void testRandomMassPlay() {
+		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
+		try {
+			assertTimeoutPreemptively(Duration.ofMillis(4200), () -> {
+						context.play();
+						return null;
+					},
+					"To diagnose this issue, the trace will be played back with a lower timeout and will throw again. In" +
+							" a debugger, examine the future.task object in the call stack of the test executor, and get its stack" +
+							" trace using getStackTrace(). This will show you where the game context is stuck.");
+		} catch (Throwable any) {
+			var trace = context.getTrace();
+			saveTraceWithException(trace, path1, path2);
+			throw any;
+		}
 	}
 
 	/**
-	 * Fuzzes the game by randomly playing random decks 1,000-10000}
+	 * Saves a trace to a path, trying to find a path to a directory that exists before attempting to save there.
+	 *
+	 * @param trace
+	 * @param paths
 	 */
-	@Test
-	public void testRandomMassPlay() {
-		loggerSetup();
-		int tests = Boolean.parseBoolean(System.getenv("CI")) ? 1000 : 10000;
-		IntStream.range(0, tests).parallel().forEach(i -> oneGame());
-	}
-
-	private void oneGame() {
-		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
+	public static void saveTraceWithException(Trace trace, Path... paths) {
 		try {
-			context.play();
-		} catch (RuntimeException any) {
-			try {
-				var path = FileSystems.getDefault().getPath("src", "test", "resources", "traces");
-				if (!Files.exists(path)) {
-					path = FileSystems.getDefault().getPath("cards", "src", "test", "resources", "traces");
-				}
-				if (!Files.exists(path)) {
-					LOGGER.error("oneGame: Could not find directory: {}", path);
-				}
-				Files.write(path.resolve("masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump().getBytes());
-			} catch (IOException e) {
-				LOGGER.error("oneGame:", e);
+			if (paths.length == 0) {
+				return;
 			}
-			throw any;
+			var i = 0;
+			var path = paths[0];
+			while (!Files.exists(path) && i + 1 < paths.length) {
+				i++;
+				path = paths[i];
+			}
+
+			if (!Files.exists(path)) {
+				LOGGER.error("saveTrace: Could not find directory: {}", path);
+			}
+
+			var filename = "masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json";
+			Files.write(path.resolve(filename), trace.dump().getBytes());
+		} catch (IOException e) {
+			LOGGER.error("saveTrace:", e);
 		}
 	}
 }

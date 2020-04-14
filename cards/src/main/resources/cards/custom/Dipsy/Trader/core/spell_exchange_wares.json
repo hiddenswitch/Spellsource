@@ -10,7 +10,8 @@
     "class": "BothPlayersSpell",
     "spell": {
       "class": "StealCardSpell",
-      "target": "ENEMY_TOP_CARD",
+      "target": "ENEMY_DECK",
+      "randomTarget": true,
       "cardLocation": "HAND"
     }
   },

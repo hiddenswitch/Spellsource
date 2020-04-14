@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Discover a Beast, a Dragon or a Fae.",
+  "description": "Source a Beast, a Dragon or a Fae.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverFilteredCardSpell",

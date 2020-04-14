@@ -937,6 +937,7 @@ definitions:
           - 'DISCOVER'
           - 'REMOVED_FROM_PLAY'
           - 'PLAYER'
+          - 'ENCHANTMENT'
         enum:
           - 'N' # 'NONE'
           - 'H' # 'HAND'
@@ -953,6 +954,7 @@ definitions:
           - 'V' # 'DISCOVER'
           - 'R' # 'REMOVED_FROM_PLAY'
           - 'P' # 'PLAYER'
+          - 'T' # 'ENCHANTMENT'
   EntityChangeSet:
     description: |
       An array that corresponds to the visible entities in this game state notification. The client is responsible for
@@ -1416,6 +1418,67 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/SpellAction'
+  EntityType:
+    type: 'string'
+    description: |
+      Describes the type of the entity.
+    enum:
+      - 'ANY'
+      - 'ACTOR'
+      - 'HERO'
+      - 'MINION'
+      - 'WEAPON'
+      - 'CARD'
+      - 'PLAYER'
+      - 'ENCHANTMENT'
+      - 'QUEST'
+      - 'SECRET'
+  CardType:
+    description: |
+      The different types of cards.
+
+       - HERO: A hero card can represent both the base heroes that are set at the beginning of the game and a playable hero card
+               from the hand.
+       - MINION: A minion card summons a minion onto the battlefield.
+       - SPELL: A spell card puts the text on the card into play as a one-time effect.
+       - WEAPON: A weapon puts an actor (targetable entity) called a Weapon into play, which gives the Hero that weapon and its
+                 attack.
+       - HERO_POWER: A hero power behaves like a spell card that is permanently in your hand. It can only be used once per turn.
+       - GROUP: A group card represents multiple cards that are referenced together.
+       - CHOOSE_ONE: A choose one card is a spell card that can assume the identity of two others. The base choose one card is put into
+                     your graveyard and returned to your hand by return hand effects. The chosen card is cast, and therefore is the card
+                     that interacts with spell casting effects and triggers.
+       - ENCHANTMENT: An enchantment card stores data used by effects like [AddEnchantmentSpell](https://www.playspellsource.com/javadoc/net/demilich/metastone/game/spells/AddEnchantmentSpell.html)
+         and [AddDeathrattleSpell](https://www.playspellsource.com/javadoc/net/demilich/metastone/game/spells/AddDeathrattleSpell.html), copying the values from it to the target.
+       - CLASS: A class card contains the properties to associate a specific hero-class String with, like it's name, hero, color, etc
+       - FORMAT: A format card lists sets to include as a collection
+    type: 'string'
+    enum:
+      - 'HERO'
+      - 'MINION'
+      - 'SPELL'
+      - 'WEAPON'
+      - 'HERO_POWER'
+      - 'GROUP'
+      - 'CHOOSE_ONE'
+      - 'ENCHANTMENT'
+      - 'CLASS'
+      - 'FORMAT'
+  Rarity:
+    description: |
+      The rarity of the card.
+
+      These rarities affect some effects, like [CardFilter](https://www.playspellsource.com/javadoc/net/demilich/metastone/game/spells/desc/filter/CardFilter.html), which can
+      select cards of a specific rarity; the draft logic; and the gem that appears in the middle
+      of the card.
+    type: 'string'
+    enum:
+      - 'FREE'
+      - 'COMMON'
+      - 'RARE'
+      - 'EPIC'
+      - 'LEGENDARY'
+      - 'ALLIANCE'
   Entity:
     type: 'object'
     properties:
@@ -1430,10 +1493,7 @@ definitions:
         description: The entity's Card ID. When null, it typically should not be rendered.
         type: 'string'
       entityType:
-        description: |
-          Broad categories describing this entity and how it should be rendered.
-        type: 'string'
-        enum: ['PLAYER', 'HERO', 'CARD', 'MINION', 'WEAPON', 'SECRET', 'QUEST', 'ENCHANTMENT']
+        $ref: '#/definitions/EntityType'
       name:
         description: |
           The text that would go into the entity's name field.
@@ -1694,17 +1754,7 @@ definitions:
         description: A renderable note attached to this entity.
         type: 'string'
       cardType:
-        description: When not null, indicates this card entity has a specified type.
-        type: 'string'
-        enum:
-          - 'HERO'
-          - 'MINION'
-          - 'SPELL'
-          - 'WEAPON'
-          - 'HERO_POWER'
-          - 'CHOOSE_ONE'
-          - 'CLASS'
-          - 'FORMAT'
+        $ref: '#/definitions/CardType'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1725,16 +1775,7 @@ definitions:
           The card expansion set this entity belongs to.
         type: 'string'
       rarity:
-        description: |
-          The rarity of the card
-        type: 'string'
-        enum:
-          - 'FREE'
-          - 'COMMON'
-          - 'RARE'
-          - 'EPIC'
-          - 'LEGENDARY'
-          - 'ALLIANCE'
+        $ref: '#/definitions/Rarity'
       gameStarted:
         description: |
           For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the
@@ -1760,6 +1801,11 @@ definitions:
         type: 'array'
         items:
           type: 'string'
+      isStartingTurn:
+        description: |
+          When set on the player entity, indicates the effects occuring now are during the player's turn start phase.
+        type: 'boolean'
+        default: false
   DraftsChooseCardRequest:
     type: 'object'
     required:

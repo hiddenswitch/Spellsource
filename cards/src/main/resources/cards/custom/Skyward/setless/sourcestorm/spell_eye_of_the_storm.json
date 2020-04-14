@@ -1,27 +1,27 @@
 {
-    "name": "Eye of the Storm",
-    "baseManaCost": 1,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "COMMON",
-    "description": "Source an Elemental",
-    "targetSelection": "NONE",
+  "name": "Eye of the Storm",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Source an Elemental",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
     "spell": {
-        "class": "DiscoverSpell",
-        "spell": {
-            "class": "ReceiveCardSpell",
-            "targetPlayer": "SELF"
-        },
-        "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "MINION",
-            "race": "ELEMENTAL"
-        }
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
     },
-    "attributes": {
-        "DISCOVER": true
-    },
-    "collectible": true,
-    "set": "SOURCESTORM",
-    "fileFormatVersion": 1
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "ELEMENTAL"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "SOURCESTORM",
+  "fileFormatVersion": 1
 }

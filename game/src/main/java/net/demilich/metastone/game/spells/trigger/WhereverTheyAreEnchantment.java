@@ -39,7 +39,7 @@ public class WhereverTheyAreEnchantment extends Enchantment {
 		setSpell(enchantmentSpell);
 		EventTriggerDesc eventTrigger = BeforeMinionSummonedTrigger.create();
 		eventTrigger.put(EventTriggerArg.FIRE_CONDITION, CardPropertyCondition.create(cardId));
-		triggers.add(eventTrigger.create());
+		getTriggers().add(eventTrigger.create());
 	}
 
 	public String getCardId() {

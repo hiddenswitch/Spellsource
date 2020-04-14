@@ -4,13 +4,13 @@
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
-  "baseHp": 1,
+  "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Your other minions have +1/+1 (+1 Attack/+1 Health).",
+  "description": "Adjacent minions have +1/+1.",
   "aura": {
     "class": "BuffAura",
-    "target": "OTHER_FRIENDLY_MINIONS",
+    "target": "ADJACENT_MINIONS",
     "attackBonus": 1,
     "hpBonus": 1
   },

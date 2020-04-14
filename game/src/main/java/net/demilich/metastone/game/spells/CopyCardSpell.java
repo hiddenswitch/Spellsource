@@ -13,6 +13,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class CopyCardSpell extends Spell {
 				targetCard = context.getCardById(target.getSourceCard().getCardId());
 			}
 			for (int i = 0; i < numberOfCardsToCopy; i++) {
-				final Card clone = copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
+				final Card clone = copyCard(context, player, source, targetCard, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
 				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, clone);
 			}
@@ -97,7 +98,7 @@ public class CopyCardSpell extends Spell {
 			}
 			Card random = context.getLogic().getRandom(sourceCollection);
 			peek(random, context, player);
-			Card output = copyCard(context, player, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
+			Card output = copyCard(context, player, source, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
 			// Only cast the subspells if they actually made it into the player's hand
 			if (output == null || output.getZone() != Zones.HAND) {
 				continue;
@@ -108,20 +109,39 @@ public class CopyCardSpell extends Spell {
 		}
 	}
 
+	/**
+	 * Copies a card with its enchantments.
+	 *
+	 * @param context
+	 * @param player
+	 * @param source
+	 * @param inCard
+	 * @param handler Specifies how the card
+	 * @return
+	 */
 	@Suspendable
-	public static Card copyCard(GameContext context, Player player, Card inCard, BiConsumer<Integer, Card> handler) {
+	public static Card copyCard(GameContext context, Player player, Entity source, Card inCard, BiConsumer<Integer, Card> handler) {
+		if (inCard.getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
+			logger.warn("copyCard {} {}: Attempting to copy card {} which contains a transform reference! Exiting gracefully.", context.getGameId(), source, inCard);
+			return null;
+		}
 		Card clone = inCard.getCopy();
 		handler.accept(player.getId(), clone);
-		// Add copies of the card cost modifiers that are associated with this card here
-		// TODO: What about Val'anyr buffed cards?
-		context.getTriggersAssociatedWith(inCard.getReference())
-				.stream()
-				.filter(e -> e instanceof CardCostModifier)
-				.map(e -> (CardCostModifier) e)
-				.filter(CardCostModifier::targetsSelf)
-				.map(CardCostModifier::clone)
-				.peek(c -> c.setHost(clone))
-				.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
+		// Add copies of the card cost modifiers that are associated with this card here, ONLY if the card is in a valid
+		// location
+
+		if (clone.getId() != IdFactory.UNASSIGNED
+				&& clone.getZone() != Zones.REMOVED_FROM_PLAY) {
+			context.getTriggersAssociatedWith(inCard.getReference())
+					.stream()
+					.filter(e -> e instanceof CardCostModifier)
+					.map(e -> (CardCostModifier) e)
+					.filter(CardCostModifier::targetsSelf)
+					.map(CardCostModifier::clone)
+					.peek(c -> c.setHost(clone))
+					.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
+		}
+
 		if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
 			clone.modifyAttribute(Attribute.ATTACK_BONUS, (int) inCard.getAttribute(Attribute.ATTACK_BONUS));
 		}

@@ -5,9 +5,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -38,7 +39,7 @@ public class WeaponOnUnEquipEffectSpell extends Spell {
 				}
 			} else if (entity instanceof Card) {
 				Card card = (Card) entity;
-				if (card.getCardType().isCardType(CardType.WEAPON)) {
+				if (GameLogic.isCardType(card.getCardType(), CardType.WEAPON)) {
 					if (card.getDesc().getOnUnequip() != null) {
 						SpellUtils.castChildSpell(context, player, card.getDesc().getOnUnequip(), source, source);
 					}

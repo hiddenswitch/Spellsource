@@ -29,6 +29,10 @@ public enum CardCostModifierArg {
 	 */
 	EXPIRATION_TRIGGER,
 	/**
+	 * When this trigger fires, the {@link CardCostModifier} stops affecting the {@link Card} it applies to.
+	 */
+	EXPIRATION_TRIGGERS,
+	/**
 	 * Specifies the minimum value that the {@link CardCostModifier} can reduce the cost to.
 	 * <p>
 	 * Implements Summoning Portal.

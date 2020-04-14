@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "Hidden. Whenever this minion deals damage, gain that much Armor.",
+  "description": "Hidden. Whenever this deals damage, gain that much Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

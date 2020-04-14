@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Give your opponent (1) mana crystal next turn only.",
+  "description": "Opener: Give your opponent (1) mana crystal next turn only.",
   "battlecry": {
     "spell": {
       "class": "GainManaSpell",

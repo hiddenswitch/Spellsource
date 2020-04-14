@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Deathrattle: Summon a 1/1 Shadowbeast.",
+  "description": "Aftermath: Summon a 1/1 Shadowbeast.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_shadowbeast"

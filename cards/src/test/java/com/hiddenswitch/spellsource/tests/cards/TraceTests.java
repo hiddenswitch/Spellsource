@@ -5,39 +5,36 @@ import com.google.common.collect.Multiset;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TraceTests {
+@Execution(ExecutionMode.CONCURRENT)
+public class TraceTests extends TestBase {
 	private static Logger LOGGER = LoggerFactory.getLogger(TraceTests.class);
 
 	public static Object[][] getTraces() {
@@ -95,15 +92,16 @@ public class TraceTests {
 	 *   fields in {@link net.demilich.metastone.game.spells.Spell} classes.</li>
 	 * </ul>
 	 */
-	@Test
+	@RepeatedTest(1000)
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
-		IntStream.range(0, 1000).parallel().unordered().forEach(ignored -> {
+		assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
 			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
 			assertEquals(context1.getTurn(), context2.getTurn());
-		});
+			return null;
+		}, "timeout");
 	}
 
 	@ParameterizedTest
@@ -112,9 +110,16 @@ public class TraceTests {
 		if ("ignore".equals(trace.getId())) {
 			return;
 		}
-		GameContext context = trace.replayContext(false, null);
+
+		TestBase.assertTimeoutPreemptively(Duration.ofMillis(3700), () -> {
+			trace.replayContext(false, null);
+			return null;
+		}, "timeout");
 	}
 
+	/**
+	 * This test can be used to find source cards that cause issues in game reproducibility.
+	 */
 	@Test
 	@Disabled("diagnostic only")
 	public void testDiagnoseTraces() {
@@ -125,7 +130,7 @@ public class TraceTests {
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
 			if (context1.getTurn() != context2.getTurn()) {
-				LOGGER.info("trace failed");
+				LOGGER.info("A failed trace was observed, its cards will be added to a list of possibility problematic cards.");
 				cards.addAll(context1.getEntities().filter(e -> e.getEntityType().equals(EntityType.CARD) && e.hasAttribute(Attribute.STARTED_IN_DECK)
 						|| e.hasAttribute(Attribute.STARTED_IN_HAND)).map(Entity::getSourceCard).map(Card::getCardId).collect(toList()));
 
@@ -135,7 +140,7 @@ public class TraceTests {
 						var gameAction2 = context1.getTrace().getRawActions().get(j);
 						var gameAction3 = context2.getTrace().getRawActions().get(j - 1);
 						var gameAction4 = context2.getTrace().getRawActions().get(j);
-						LOGGER.info("diverging action: \n'{}' to '{}'\n'{}' to '{}'",
+						LOGGER.info("A diverging was observed between a game context and its trace:\nContext: \n'{}' to '{}'\nTrace:\n'{}' to '{}'",
 								gameAction1.getDescription(context1, 0),
 								gameAction2.getDescription(context1, 0),
 								gameAction3.getDescription(context2, 0),
@@ -148,6 +153,7 @@ public class TraceTests {
 		});
 		// Find the card which most frequently appear in the bad set
 		List<String> res = cards.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getCount(), e1.getCount())).map(Multiset.Entry::toString).collect(toList());
+		LOGGER.info("Cards which appeared in decks with reproducibility issues:");
 		LOGGER.info("{}", res);
 		if (!cards.isEmpty()) {
 			fail("Invalid trace");

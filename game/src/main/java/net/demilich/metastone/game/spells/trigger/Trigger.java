@@ -32,7 +32,7 @@ public interface Trigger extends Serializable {
 	 * Checks if a trigger should queue in response to a specific event.
 	 *
 	 * @param event A game event.
-	 * @return {@code true} if the trigger shoudl queue in response to this event.
+	 * @return {@code true} if the trigger should queue in response to this event.
 	 */
 	boolean queues(GameEvent event);
 
@@ -137,4 +137,6 @@ public interface Trigger extends Serializable {
 	default boolean fires(GameEvent event) {
 		return queues(event);
 	}
+
+	boolean isActivated();
 }

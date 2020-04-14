@@ -1,17 +1,15 @@
 package net.demilich.metastone.game.entities.heroes;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.decks.GameDeck;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.
@@ -89,5 +87,29 @@ public class HeroClass {
 	public static String random(DeckFormat deckFormat) {
 		List<String> baseHeroes = getBaseClasses(deckFormat);
 		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+	}
+
+	/**
+	 * Checks if the specified card has the specified hero class, respecting a {@link HeroClass#SELF} and a {@link
+	 * HeroClass#OPPONENT} specs.
+	 *
+	 * @param context
+	 * @param player
+	 * @param card
+	 * @param heroClass
+	 * @return
+	 */
+	public static boolean hasHeroClass(GameContext context, Player player, Card card, String heroClass) {
+		if (heroClass.equals(OPPONENT)) {
+			heroClass = context.getOpponent(player).getHero().getHeroClass();
+		} else if (heroClass.equals(SELF)) {
+			heroClass = player.getHero().getHeroClass();
+		}
+
+		if (heroClass != null && card.hasHeroClass(heroClass)) {
+			return false;
+		}
+
+		return true;
 	}
 }

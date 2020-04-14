@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Lifesteal. Opener: Give the next card you play this turn Lifesteal.",
+  "description": "Lifedrain. Opener: Give the next card you play this turn Lifedrain.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

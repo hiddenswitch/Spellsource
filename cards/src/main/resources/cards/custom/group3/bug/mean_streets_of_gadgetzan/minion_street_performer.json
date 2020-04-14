@@ -1,6 +1,6 @@
 {
   "name": "Street Performer",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,

@@ -3,9 +3,11 @@ package net.demilich.metastone.game.spells.custom;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -53,9 +55,7 @@ public class CreateAndTeachSpell extends Spell {
 					spells.removeIf(card -> card.getTargetSelection() != TargetSelection.NONE);
 				}
 				spells.shuffle(context.getLogic().getRandom());
-				while (spells.size() > 3) {
-					spells.removeFirst();
-				}
+				spells = new CardArrayList(spells.subList(0, Math.min(spells.size(), 3)));
 
 				SpellDesc nullSpell = NullSpell.create();
 				// Eyeroll emoji.

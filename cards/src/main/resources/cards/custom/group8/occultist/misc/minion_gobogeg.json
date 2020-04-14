@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "After a friendly minion survives damage, give it +1/+1.",
+  "description": "Whenever an allied minion survives damage, give it +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

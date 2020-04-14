@@ -1,0 +1,40 @@
+{
+  "name": "The Diamond Sultan",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If you've played 5 Artifacts this game, replace your Skill with \"Source an Artifact\".",
+  "battlecry": {
+    "targetSelection": "NONE",
+	"condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "CardsPlayedValueProvider",
+        "filter": {
+          "class": "CardFilter",
+          "attribute": "ARTIFACT",
+	     "operation": "HAS"
+        },
+        "targetPlayer": "SELF"
+      },
+      "value2": 5,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "ChangeHeroPowerSpell",
+      "card": "hero_power_diamond_sultan"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}

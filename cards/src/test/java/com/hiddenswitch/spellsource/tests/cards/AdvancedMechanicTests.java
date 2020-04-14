@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -25,6 +26,8 @@ import net.demilich.metastone.tests.util.GymFactory;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
@@ -645,7 +649,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getDeck().size(), 2);
 			assertEquals(player.getHand().size(), 0);
 			context.endTurn();
-			assertEquals(player.getDeck().size(), 0);
+			assertEquals(0, player.getDeck().size(), "should have drawn 2");
 			assertEquals(player.getHand().size(), 2);
 		});
 

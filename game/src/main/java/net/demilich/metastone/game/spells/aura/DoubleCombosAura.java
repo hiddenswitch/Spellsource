@@ -8,7 +8,7 @@ public class DoubleCombosAura extends Aura {
 
 	public DoubleCombosAura(AuraDesc desc) {
 		super(desc);
-		this.triggers.add(new WillEndSequenceTrigger());
+		this.getTriggers().add(new WillEndSequenceTrigger());
 		applyAuraEffect = NullSpell.create();
 		removeAuraEffect = NullSpell.create();
 	}

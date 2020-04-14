@@ -1,13 +1,13 @@
 {
-  "name": "General Lauren",
+  "name": "Ghostleader Xiao",
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "race": "PIRATE",
-  "description": "Opener: Summon two Pirate Captains.",
+  "race": "SPIRIT",
+  "description": "Opener: Summon two Spirit Sergeants.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

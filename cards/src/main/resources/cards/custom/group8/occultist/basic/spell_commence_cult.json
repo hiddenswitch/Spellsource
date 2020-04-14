@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Restore #6 Health. Deal $1 damage to all friendly minions.",
+  "description": "Restore #6 Health. Deal $1 damage to all allied minions.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

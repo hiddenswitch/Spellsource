@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
@@ -19,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Draws a card from the graveyard. Alters history!
@@ -32,10 +30,15 @@ public class DrawCardFromGraveyardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(LOGGER, context, source, desc, SpellArg.VALUE, SpellArg.CARD_SOURCE, SpellArg.CARD_FILTER);
 		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-		CardSourceDesc desc1 = new CardSourceDesc();
-		desc1.put(CardSourceArg.CLASS, GraveyardCardAndActorSourceCardSource.class);
-		desc1.put(CardSourceArg.DISTINCT, true);
-		CardSource cardSource = desc1.create();
+		CardSource cardSource;
+		if (!desc.containsKey(SpellArg.CARD_SOURCE)) {
+			CardSourceDesc desc1 = new CardSourceDesc();
+			desc1.put(CardSourceArg.CLASS, GraveyardCardAndActorSourceCardSource.class);
+			desc1.put(CardSourceArg.DISTINCT, true);
+			cardSource = desc1.create();
+		} else {
+			cardSource = desc.getCardSource();
+		}
 		CardList cards = cardSource.getCards(context, source, player);
 		if (desc.getCardFilter() != null) {
 			cards = cards.filtered(desc.getCardFilter().matcher(context, player, source));

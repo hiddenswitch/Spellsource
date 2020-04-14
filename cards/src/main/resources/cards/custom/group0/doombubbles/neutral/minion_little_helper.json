@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Opener: Add a copy of your Skill as a spell to your hand.",
+  "description": "Opener: Receive a copy of your Skill as a spell.",
   "battlecry": {
     "spell": {
       "class": "custom.HeroPowerToSpellSpell",

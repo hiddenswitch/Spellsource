@@ -1,6 +1,6 @@
 {
   "name": "Timesnipper",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "WEAPON",
   "heroClass": "LIGHTBROWN",
   "damage": 0,

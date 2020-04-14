@@ -9,15 +9,13 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
-    "spells": [
-      {
-        "class": "ReceiveCardSpell",
-        "cards": [
-          "spell_soar",
-          "spell_soar"
-        ]
-      }
-    ]
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_soar",
+        "spell_soar"
+      ]
+    }
   },
   "collectible": false,
   "sets": [

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Double any Attack this minion gains.",
+  "description": "Double any Attack this gains.",
   "attributes": {
     "ATTACK_BONUS_MULTIPLIER": 2
   },

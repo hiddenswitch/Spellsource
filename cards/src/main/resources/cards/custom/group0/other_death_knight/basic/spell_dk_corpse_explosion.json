@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Destroy a friendly minion. Draw a card.",
+  "description": "Destroy an allied minion. Draw a card.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

@@ -144,4 +144,8 @@ public class PersistenceTrigger implements Trigger, Serializable {
 		return true;
 	}
 
+	@Override
+	public boolean isActivated() {
+		return true;
+	}
 }

@@ -1,0 +1,35 @@
+  
+{
+  "name": "Lifeform Assimilation",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Draw a card. Copy your opponent's skill. Yours costs (1) this game.",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "CopyHeroPower",
+        "target": "ENEMY_HERO_POWER"
+      },
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_HERO_POWER",
+        "cardCostModifier": {
+           "class": "CardCostModifier",
+           "target": "SELF",
+           "value": 1,
+           "operation": "SET"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

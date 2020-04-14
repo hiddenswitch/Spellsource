@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 5,
   "rarity": "LEGENDARY",
-  "description": "All enemies have Lifesteal.",
+  "description": "All enemies have Lifedrain.",
   "aura": {
     "class": "AttributeAura",
     "target": "ENEMY_CHARACTERS",

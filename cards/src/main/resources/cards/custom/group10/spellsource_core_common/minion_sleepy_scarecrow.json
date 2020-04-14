@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Guard. After this minion takes damage, gain +2 Attack.",
+  "description": "Guard. Whenever this takes damage, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

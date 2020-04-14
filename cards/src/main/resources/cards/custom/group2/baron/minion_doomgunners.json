@@ -12,28 +12,6 @@
     {
       "eventTrigger": {
         "class": "AfterPhysicalAttackTrigger",
-        "fireCondition": {
-          "class": "AndCondition",
-          "conditions": [
-            {
-              "class": "AttributeCondition",
-              "target": "TRIGGER_HOST",
-              "attribute": "RESERVED_BOOLEAN_1",
-              "invert": true,
-              "operation": "HAS"
-            },
-            {
-              "class": "IsDeadCondition",
-              "target": "EVENT_SOURCE",
-              "invert": true
-            },
-            {
-              "class": "IsDeadCondition",
-              "target": "EVENT_TARGET",
-              "invert": true
-            }
-          ]
-        },
         "hostTargetType": "IGNORE_OTHER_SOURCES",
         "targetEntityType": "MINION"
       },
@@ -41,9 +19,8 @@
         "class": "MetaSpell",
         "spells": [
           {
-            "class": "AddAttributeSpell",
-            "target": "TRIGGER_HOST",
-            "attribute": "RESERVED_BOOLEAN_1"
+            "class": "DeactivateEnchantmentSpell",
+            "target": "TRIGGER_HOST"
           },
           {
             "class": "FightSpell",
@@ -56,9 +33,8 @@
             "secondaryTarget": "TRIGGER_HOST"
           },
           {
-            "class": "RemoveAttributeSpell",
-            "target": "TRIGGER_HOST",
-            "attribute": "RESERVED_BOOLEAN_1"
+            "class": "ActivateEnchantmentSpell",
+            "target": "TRIGGER_HOST"
           }
         ]
       }

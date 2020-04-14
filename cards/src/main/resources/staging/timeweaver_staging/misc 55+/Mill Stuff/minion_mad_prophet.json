@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Battlecry: Your opponent draws 3 cards. Discover a copy of a card they drew.",
+  "description": "Opener: Your opponent draws 3 cards. Discover a copy of a card they drew.",
   "targetSelection": "NONE",
   "battlecry":
   "spell": {

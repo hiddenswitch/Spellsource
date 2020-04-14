@@ -1,17 +1,13 @@
 package net.demilich.metastone.game.spells.custom;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.CardType;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.Zones;
-
-import java.util.ArrayList;
 
 /**
  * Summons all the minions from the player's deck. Destroys the deck. Puts a corpse version of all summoned minions into
@@ -25,6 +21,9 @@ public final class CalamityBeckonsSpell extends Spell {
 		var max = player.getDeck().size();
 		var i = 0;
 		while (!player.getDeck().isEmpty() && i < max) {
+			if (Strand.currentStrand().isInterrupted()) {
+				break;
+			}
 			var card = context.getLogic().getRandom(player.getDeck());
 			var previousLocation = card.getEntityLocation();
 			if (card.getCardType() == CardType.MINION) {
@@ -35,6 +34,8 @@ public final class CalamityBeckonsSpell extends Spell {
 					minion = minion.getCopy();
 				}
 				// Move the corpse directly to the graveyard
+				minion.setId(context.getLogic().generateId());
+				minion.setOwner(player.getId());
 				context.getLogic().corpse(minion, previousLocation, true);
 			}
 			context.getLogic().removeCard(card);

@@ -1,21 +1,21 @@
 {
-    "name": "Ball Lightning",
-    "baseManaCost": 8,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 3,
-    "baseHp": 1,
-    "rarity": "RARE",
-    "race": "ELEMENTAL",
-    "description": "Blitz. Costs (1) less for each card in your hand.",
-    "attributes": {
-        "CHARGE": true
-    },
-    "collectible": true,
-    "set": "SOURCESTORM",
-    "fileFormatVersion": 1,
-    "manaCostModifier": {
-        "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "HAND_COUNT"
-    }
+  "name": "Ball Lightning",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Blitz. Costs (1) less for each card in your hand.",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "SOURCESTORM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
 }

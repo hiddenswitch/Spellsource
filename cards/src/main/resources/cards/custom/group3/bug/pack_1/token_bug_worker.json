@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "At the end of your turn, draw a card.",
+  "description": "At the end of your turns, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

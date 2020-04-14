@@ -3,17 +3,22 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.entities.EntityType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class VampireLordTests extends TestBase {
 	@NotNull
 	@Override
@@ -217,6 +222,22 @@ public class VampireLordTests extends TestBase {
 			playCard(context, player, "spell_soulscream");
 			assertEquals(3, player.getHand().size(), "receive Soulscream AND the aftermath result");
 			assertEquals(Zones.HAND, drawn.getZone());
+		});
+	}
+
+	@Test
+	public void testSoulscreamRework() {
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, "minion_test_deathrattle");
+			destroy(context, target);
+			var deathrattlesTriggered = 1;
+			var hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_soulscream_rework", opponent.getHero());
+			assertEquals(hp - deathrattlesTriggered, opponent.getHero().getHp());
+			var card = receiveCard(context, player, "spell_soulscream_rework");
+			assertEquals("Deal 1 damage. (Increases by 1 for each Aftermath you've triggered this game)", card.getDescription(context, player));
+			playCard(context, player, "minion_gatekeeper_sha_rework");
+			assertEquals("Deal 3 damage. (Increases by 2 for each Aftermath you've triggered this game)", card.getDescription(context, player));
 		});
 	}
 
@@ -590,6 +611,29 @@ public class VampireLordTests extends TestBase {
 			playCard(context, player, "spell_dream_of_death");
 
 			assertEquals(player.getHero().getHp(), 11);
+		});
+	}
+
+	@Test
+	public void testSpiritSaber() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, player, "spell_lunstone");
+			}
+			Minion testD = playMinionCard(context, player, "minion_test_deathrattle");
+			playCard(context, player, "spell_hate_spike", testD);
+			playCard(context, player, "spell_hex_behemoth", testD);
+			AtomicBoolean b = new AtomicBoolean(false);
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(1, discoverActions.size());
+				assertEquals("minion_test_deathrattle", discoverActions.get(0).getCard().getCardId());
+				b.set(true);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "weapon_spirit_saber");
+			if (!b.get()) {
+				fail();
+			}
 		});
 	}
 }

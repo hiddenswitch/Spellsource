@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "COMMON",
-  "description": "Discover a card from your graveyard.",
+  "description": "Source a card from your graveyard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
@@ -17,6 +17,9 @@
       "distinct": true,
       "targetPlayer": "SELF"
     }
+  },
+  "attributes": {
+	"DISCOVER": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

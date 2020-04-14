@@ -1,0 +1,27 @@
+{
+  "name": "The Living Nest",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "Guard. Aftermath: Summon Arido and 4 Larva.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_bunta",
+      "token_spiderling",
+      "token_spiderling",
+      "token_spiderling",
+      "token_spiderling"
+    ]
+  },
+  "attributes": {
+    "TAUNT": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}

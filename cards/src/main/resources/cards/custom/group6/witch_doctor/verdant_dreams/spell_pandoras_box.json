@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Return a minion to its owner's hand. Transform it into this spell.",
+  "description": "Return a minion to its owner's hand. Transform it into a copy of this.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",

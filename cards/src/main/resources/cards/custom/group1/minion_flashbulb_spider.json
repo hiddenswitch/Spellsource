@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Enemies opposite this minion can't attack.",
+  "description": "Enemies opposite this can't attack.",
   "aura": {
     "class": "AttributeAura",
     "target": "OPPOSITE_MINIONS",

@@ -6,12 +6,10 @@ import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
-import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.TargetAcquisitionTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(desc);
-		triggers = Collections.singletonList(new TargetAcquisitionTrigger());
+		setTriggers(Collections.singletonList(new TargetAcquisitionTrigger()));
 	}
 
 	@Override

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Aftermath: Add a random Storyteller spell to your hand.",
+  "description": "Aftermath: Receive a random Storyteller spell.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cardFilter": {

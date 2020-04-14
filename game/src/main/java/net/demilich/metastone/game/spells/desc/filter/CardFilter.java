@@ -3,11 +3,12 @@ package net.demilich.metastone.game.spells.desc.filter;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Rarity;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.cards.Attribute;
 
@@ -37,20 +38,6 @@ public final class CardFilter extends EntityFilter {
 		super(desc);
 	}
 
-	private boolean heroClassTest(GameContext context, Player player, Card card, String heroClass) {
-		if (heroClass.equals(HeroClass.OPPONENT)) {
-			heroClass = context.getOpponent(player).getHero().getHeroClass();
-		} else if (heroClass.equals(HeroClass.SELF)) {
-			heroClass = player.getHero().getHeroClass();
-		}
-
-		if (heroClass != null && card.hasHeroClass(heroClass)) {
-			return false;
-		}
-
-		return true;
-	}
-
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
@@ -62,7 +49,7 @@ public final class CardFilter extends EntityFilter {
 		Card card = entity.getSourceCard();
 
 		CardType cardType = (CardType) getDesc().get(EntityFilterArg.CARD_TYPE);
-		if (cardType != null && !card.getCardType().isCardType(cardType)) {
+		if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
 			return false;
 		}
 		String race = (String) getDesc().get(EntityFilterArg.RACE);
@@ -74,7 +61,7 @@ public final class CardFilter extends EntityFilter {
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
 			for (String heroClass : heroClasses) {
-				test |= !heroClassTest(context, player, card, heroClass);
+				test |= !HeroClass.hasHeroClass(context, player, card, heroClass);
 			}
 			if (!test) {
 				return false;
@@ -82,7 +69,7 @@ public final class CardFilter extends EntityFilter {
 		}
 
 		String heroClass = (String) getDesc().get(EntityFilterArg.HERO_CLASS);
-		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
+		if (heroClass != null && HeroClass.hasHeroClass(context, player, card, heroClass)) {
 			return false;
 		}
 
@@ -94,7 +81,7 @@ public final class CardFilter extends EntityFilter {
 			}
 		}
 		Rarity rarity = (Rarity) getDesc().get(EntityFilterArg.RARITY);
-		if (rarity != null && !card.getRarity().isRarity(rarity)) {
+		if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
 			return false;
 		}
 

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Stealth for 1 turn. At the end of your turn, summon a 2/2 Captive.",
+  "description": "Hidden for 1 turn. At the end of your turns, summon a 2/2 Captive.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

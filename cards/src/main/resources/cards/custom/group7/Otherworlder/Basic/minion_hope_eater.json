@@ -3,15 +3,28 @@
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "NEONGREEN",
-  "baseAttack": 4,
+  "baseAttack": 6,
   "baseHp": 6,
   "rarity": "FREE",
   "race": "TITAN",
-  "description": "Enemy minions have -1 Attack.",
+  "description": "Enemy minions have -2 Attack but not less than 1.",
   "aura": {
     "class": "BuffAura",
     "target": "ENEMY_MINIONS",
-    "attackBonus": -1,
+    "attackBonus": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
+        "value1": -2,
+        "value2": {
+          "class": "AlgebraicValueProvider",
+          "operation": "NEGATE",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "ATTACK"
+          },
+          "offset": 1
+        }
+      },
     "hpBonus": 0
   },
   "collectible": true,

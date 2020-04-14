@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +2/+2.",
+  "description": "Opener: Give a random allied Beast, Dragon, and Murloc +2/+2.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "After this survives damage, transform it into a 5/5 Rage Behemoth.",
+  "description": "When this survives damage, transform it into a 5/5 Rage Behemoth.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "After you cast a spell on this, add a Temple Militia to your hand.",
+  "description": "Whenever you cast a spell on this, receive a Temple Militia.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
