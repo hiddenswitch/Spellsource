@@ -1,6 +1,6 @@
 {
     "name": "Dream of Ascendance",
-    "baseManaCost": 10,
+    "baseManaCost": 8,
     "type": "SPELL",
     "heroClass": "AZURE",
     "rarity": "LEGENDARY",

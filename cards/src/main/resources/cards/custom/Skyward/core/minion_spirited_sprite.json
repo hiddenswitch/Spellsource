@@ -7,16 +7,20 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Opener: Give a minion +2 Attack.",
-  "battlecry": {
-    "targetSelection": "MINIONS",
+  "description": "After you cast a spell, recieve a random Fae.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
     "spell": {
-      "class": "BuffSpell",
-      "attackBonus": 2
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "race": "FAE"
+      }
     }
-  },
-  "attributes": {
-    "BATTLECRY": true
   },
   "collectible": true,
   "sets": [

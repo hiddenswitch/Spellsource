@@ -1,0 +1,42 @@
+{
+    "name": "Mistweaver",
+    "baseManaCost": 3,
+    "type": "MINION",
+    "heroClass": "AZURE",
+    "baseAttack": 4,
+    "baseHp": 4,
+    "rarity": "FREE",
+    "race": "ELEMENTAL",
+    "description": "Dodge. Opener: Discard a spell.",
+    "battlecry": {
+        "spell": {
+            "class": "MetaSpell",
+            "spells": [
+                {
+                    "class": "DiscoverSpell",
+                    "cardSource": {
+                        "class": "HandSource"
+                    },
+                    "cardFilter": {
+                        "class": "CardFilter",
+                        "cardType": "SPELL"
+                    },
+                    "exclusive": true,
+                    "howMany": 10,
+                    "spell": {
+                        "class": "DiscardSpell"
+                    }
+                }
+            ]
+        }
+    },
+    "attributes": {
+        "BATTLECRY": true
+    },
+    "collectible": true,
+    "sets": [
+        "CUSTOM",
+        "CLASSIC"
+    ],
+    "fileFormatVersion": 1
+}

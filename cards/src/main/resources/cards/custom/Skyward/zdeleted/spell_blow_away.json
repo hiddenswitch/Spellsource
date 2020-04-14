@@ -9,7 +9,7 @@
   "spell": {
     "class": "ReturnTargetToHandSpell"
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "CLASSIC"

@@ -7,9 +7,10 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Dash.",
-  "attributes": {
-    "RUSH": true
+  "description": "Can't be affected by Skills or spells.",
+  "aura": {
+    "class": "IncorruptibilityAura",
+    "target": "SELF"
   },
   "collectible": true,
   "sets": [
