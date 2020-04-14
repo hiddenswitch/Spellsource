@@ -1,11 +1,11 @@
 {
-  "name": "Ascella Aeon",
+  "name": "Astella Aeon",
   "heroPower": "hero_power_rise",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Skill: Receive a Soar that draws a card.",
+  "description": "Skill: Recieve a Soar spell that draws a card.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30
