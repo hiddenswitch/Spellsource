@@ -1183,7 +1183,9 @@ public enum Attribute {
 	/**
 	 * When set on a player entity, indicates the player is currently in the starting turn phase.
 	 */
-	STARTING_TURN;
+	STARTING_TURN,
+
+	EIDOLON_RACE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

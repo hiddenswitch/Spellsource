@@ -19,7 +19,9 @@ public class InvokeOptionSpell extends Spell {
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
         int mana = desc.getInt(SpellArg.MANA, 0);
         context.getLogic().modifyCurrentMana(player.getId(), mana, true);
-        SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
+        if (desc.containsKey(SpellArg.SPELL)) {
+            SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
+        }
         context.getLogic().revealCard(player, getTempCard(context, desc, source.getSourceCard()));
         if (mana > 0) {
             player.modifyAttribute(Attribute.INVOKED, 1);
@@ -30,7 +32,7 @@ public class InvokeOptionSpell extends Spell {
 
     public static Card getTempCard(GameContext context, SpellDesc invokeOptionSpellDesc, Card sourceCard) {
         String name = invokeOptionSpellDesc.getString(SpellArg.NAME);
-        String tempCardId = "invoke_" + sourceCard.getCardId() + format(name);
+        String tempCardId = "invoke_" + sourceCard.getCardId() + "_" + format(name);
         if (context.getTempCards().containsCard(tempCardId)) {
             return context.getCardById(tempCardId);
         }
@@ -49,7 +51,7 @@ public class InvokeOptionSpell extends Spell {
         return card;
     }
 
-    private static String format(String str) {
+    public static String format(String str) {
         return str.toLowerCase().replace(" ", "_").replace("-", "_").replace("'", "");
     }
 }

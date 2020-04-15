@@ -36,7 +36,7 @@
       "spell2": {
         "class": "InvokeOptionSpell",
         "mana": 1,
-        "name": "Brood Wake-up Call",
+        "name": "Brood Awakening",
         "description": "Summon two 1/1 Whelps with Blitz.",
         "spell": {
           "class": "MetaSpell",

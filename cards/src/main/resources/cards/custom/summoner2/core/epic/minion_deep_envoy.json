@@ -21,6 +21,6 @@
     }
   },
   "collectible": true,
-  "set": "SPELLSOURCE_BASIC"
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

@@ -16,7 +16,7 @@
       "spell": {
         "class": "DrawCardSpell",
         "value": {
-          "class": "EntityCounter",
+          "class": "EntityCountValueProvider",
           "target": "FRIENDLY_MINIONS"
         }
       }
@@ -29,15 +29,15 @@
       "spell": {
         "class": "DrawCardSpell",
         "value": {
-          "class": "EntityCounter",
-          "target": "MINIONS"
+          "class": "EntityCountValueProvider",
+          "target": "ALL_MINIONS"
         }
       }
     },
     "spell": {
       "class": "DrawCardSpell",
       "value": {
-        "class": "EntityCounter",
+        "class": "EntityCountValueProvider",
         "target": "FRIENDLY_MINIONS"
       }
     }

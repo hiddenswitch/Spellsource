@@ -19,7 +19,10 @@ public class InvokeSpell extends Spell {
     @Override
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
         int manaRemaining = player.getMana();
-        int invoke = Math.min(source.getAttributeValue(Attribute.INVOKE), source.getAttributeValue(Attribute.AURA_INVOKE));
+        int invoke = source.getAttributeValue(Attribute.INVOKE);
+        if (source.hasAttribute(Attribute.AURA_INVOKE)) {
+            invoke = Math.min(invoke, source.getAttributeValue(Attribute.AURA_INVOKE));
+        }
         if (manaRemaining < invoke) {
             if (desc.containsKey(SpellArg.SPELL)) {
                 SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
@@ -66,8 +69,9 @@ public class InvokeSpell extends Spell {
             return;
         }
 
-        desc.put(SpellArg.SPELL, NullSpell.create());
-        DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, desc, cards);
+        SpellDesc clone = desc.clone();
+        clone.put(SpellArg.SPELL, NullSpell.create());
+        DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, clone, cards);
 
         SpellUtils.castChildSpell(context, player, discoverAction.getCard().getSpell(), source, target);
     }
