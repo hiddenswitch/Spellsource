@@ -10,4 +10,5 @@
   "attributes": {
     "TAUNT": true
   },
-  "collectible": false,
+  "collectible": false
+}

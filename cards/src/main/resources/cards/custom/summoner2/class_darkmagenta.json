@@ -1,7 +1,7 @@
 {
   "name": "Summoner",
   "type": "CLASS",
-  "hero": "hero_mephilia",
+  "hero": "hero_sephilia",
   "heroClass": "DARKMAGENTA",
   "color": [139, 0, 139],
   "blackText": false,
