@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "COMMON",
-  "description": "Give each minion you summon this turn +1/+1.",
+  "description": "Minions you summon before the start of your next turn have +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
@@ -19,8 +19,11 @@
         "target": "EVENT_TARGET",
         "attackBonus": 1,
         "hpBonus": 1
-      },
-      "oneTurn": true
+      }
+    },
+    "revertTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

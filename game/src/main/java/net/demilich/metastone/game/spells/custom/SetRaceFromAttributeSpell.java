@@ -8,6 +8,8 @@ import net.demilich.metastone.game.spells.SetRaceSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+import java.util.List;
+
 public class SetRaceFromAttributeSpell extends SetRaceSpell {
 
     @Override
@@ -16,9 +18,10 @@ public class SetRaceFromAttributeSpell extends SetRaceSpell {
         Attribute attribute = desc.getAttribute();
         Entity realTarget = target;
         if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
-            realTarget = context.resolveSingleTarget(desc.getSecondaryTarget());
+            List<Entity> entities = context.resolveTarget(player, source, desc.getSecondaryTarget());
+            realTarget = entities.get(0);
         }
-        newDesc.put(SpellArg.RACE, realTarget.getAttribute(desc.getAttribute()));
-        super.onCast(context, player, desc, source, target);
+        newDesc.put(SpellArg.RACE, realTarget.getAttribute(attribute));
+        super.onCast(context, player, newDesc, source, target);
     }
 }

@@ -22,7 +22,8 @@
         "condition": {
           "class": "AttributeCondition",
           "target": "FRIENDLY_PLAYER",
-          "attribute": "EIDOLON_RACE"
+          "attribute": "EIDOLON_RACE",
+          "operation": "HAS"
         },
         "spell": {
           "class": "custom.SetRaceFromAttributeSpell",

@@ -31,12 +31,6 @@ public class InvokeSpell extends Spell {
         }
         SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
         SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
-        if (spell1.getSpell() == null) {
-            spell1.put(SpellArg.SPELL, NullSpell.create());
-        }
-        if (spell2.getSpell() == null) {
-            spell2.put(SpellArg.SPELL, NullSpell.create());
-        }
 
         Card card1 = InvokeOptionSpell.getTempCard(context, spell1, source.getSourceCard());
         Card card2 = InvokeOptionSpell.getTempCard(context, spell2, source.getSourceCard());

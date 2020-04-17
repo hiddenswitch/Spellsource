@@ -12,7 +12,7 @@
       "class": "InvokeOptionSpell",
       "mana": 0,
       "name": "Come on and Slam",
-      "description": "Deal 2 damage to the target.",
+      "description": "Deal 4 damage to the target.",
       "spell": {
         "class": "DamageSpell",
         "value": 4

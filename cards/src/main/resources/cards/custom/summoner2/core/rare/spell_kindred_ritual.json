@@ -1,6 +1,6 @@
 {
   "name": "Kindred Ritual",
-  "baseManaCost": 7,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "RARE",
@@ -16,7 +16,8 @@
       "class": "RaceFilter",
       "race": "NONE",
       "invert": true
-    }
+    },
+    "multiplier": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

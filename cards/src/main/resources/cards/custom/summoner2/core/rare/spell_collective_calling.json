@@ -1,10 +1,10 @@
 {
   "name": "Collective Calling",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "RARE",
-  "description": "Draw a [0] card from your deck. (Cost equal to your hand size).",
+  "description": "Draw a ([0])-cost card. (Cost equal to current hand size).",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
@@ -13,7 +13,8 @@
       "manaCost": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "HAND_COUNT",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "offset": 1
       }
     }
   },
@@ -26,8 +27,7 @@
       "value": {
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "HAND_COUNT",
-        "targetPlayer": "SELF",
-        "offset": -1
+        "targetPlayer": "SELF"
       }
     }
   ]
