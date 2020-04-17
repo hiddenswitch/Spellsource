@@ -18,7 +18,7 @@ public class InvokeOptionSpell extends Spell {
     @Override
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
         int mana = desc.getInt(SpellArg.MANA, 0);
-        context.getLogic().modifyCurrentMana(player.getId(), mana, true);
+        context.getLogic().modifyCurrentMana(player.getId(), -mana, true);
         if (desc.containsKey(SpellArg.SPELL)) {
             SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
         }

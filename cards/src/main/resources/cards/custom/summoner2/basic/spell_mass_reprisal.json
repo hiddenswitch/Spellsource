@@ -1,6 +1,6 @@
 {
   "name": "Mass Reprisal",
-  "baseManaCost": 2,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "FREE",

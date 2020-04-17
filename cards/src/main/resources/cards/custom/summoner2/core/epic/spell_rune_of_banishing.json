@@ -12,6 +12,7 @@
     "conditions": [
       {
         "class": "MinionOnBoardCondition",
+        "targetPlayer": "BOTH",
         "cardFilter": {
           "class": "ManaCostFilter",
           "operation": "GREATER_OR_EQUAL",
@@ -40,14 +41,15 @@
           "class": "ManaCostFilter",
           "operation": "GREATER_OR_EQUAL",
           "value": 4
-        }
+        },
+        "targetPlayer": "BOTH"
       }
     },
     "spell2": {
       "class": "InvokeOptionSpell",
       "mana": 4,
       "name": "Banishest",
-      "description": "Destroy all minions.",
+      "description": "Destroy ALL minions.",
       "spell": {
         "class": "DestroySpell",
         "target": "ALL_MINIONS"

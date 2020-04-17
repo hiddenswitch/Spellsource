@@ -10,16 +10,19 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+import java.util.List;
+
 public class StoreRaceToAttributeSpell extends Spell {
 
     @Suspendable
     @Override
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-        String race = (String) desc.get(SpellArg.RACE);
+        String race = target.getRace();
         Attribute attribute = desc.getAttribute();
         Entity realTarget = target;
         if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
-            realTarget = context.resolveSingleTarget(desc.getSecondaryTarget());
+            List<Entity> entities = context.resolveTarget(player, source, desc.getSecondaryTarget());
+            realTarget = entities.get(0);
         }
         realTarget.setAttribute(attribute, race);
     }
