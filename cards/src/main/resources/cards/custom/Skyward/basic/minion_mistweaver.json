@@ -3,12 +3,20 @@
     "baseManaCost": 3,
     "type": "MINION",
     "heroClass": "AZURE",
-    "baseAttack": 4,
-    "baseHp": 4,
+    "baseAttack": 2,
+    "baseHp": 2,
     "rarity": "FREE",
     "race": "ELEMENTAL",
-    "description": "Dodge. Opener: Discard a spell.",
+    "description": "Dodge. Opener: Discard a spell to gain +2/+2.",
     "battlecry": {
+        "condition": {
+            "class": "HoldsCardCondition",
+            "cardFilter": {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+            }
+        },
+        "targetSelection": "NONE",
         "spell": {
             "class": "MetaSpell",
             "spells": [
@@ -26,11 +34,18 @@
                     "spell": {
                         "class": "DiscardSpell"
                     }
+                },
+                {
+                    "class": "BuffSpell",
+                    "target": "SELF",
+                    "attackBonus": 2,
+                    "hpBonus": 2
                 }
             ]
         }
     },
     "attributes": {
+        "DIVINE_SHIELD": true,
         "BATTLECRY": true
     },
     "collectible": true,
