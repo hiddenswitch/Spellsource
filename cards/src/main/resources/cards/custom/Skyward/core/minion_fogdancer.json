@@ -4,10 +4,18 @@
     "type": "MINION",
     "heroClass": "AZURE",
     "baseAttack": 4,
-    "baseHp": 5,
+    "baseHp": 4,
     "rarity": "COMMON",
     "description": "Opener: Discard a spell to draw two spells.",
     "battlecry": {
+        "condition": {
+            "class": "HoldsCardCondition",
+            "cardFilter": {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+            }
+        },
+        "targetSelection": "NONE",
         "spell": {
             "class": "MetaSpell",
             "spells": [
