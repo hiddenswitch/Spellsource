@@ -461,12 +461,14 @@ public interface Games extends Verticle {
 
 		var visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
 
-		// Include enchantments
+		// For now, do not send enchantments data
+		/*
 		entities.addAll(workingContext.getTriggerManager().getTriggers()
 				.stream()
 				.filter(f -> f instanceof Enchantment && visibleEntityIds.contains(f.getHostReference().getId()))
 				.map(t -> getEntity(workingContext, (Enchantment) t, localPlayerId))
 				.collect(toList()));
+		*/
 
 		// Any missing entities will get a stand-in entry
 		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId())).map(e -> new com.hiddenswitch.spellsource.client.models.Entity()
