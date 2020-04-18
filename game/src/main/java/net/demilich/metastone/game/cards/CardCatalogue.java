@@ -215,9 +215,6 @@ public class CardCatalogue {
 			if (tag != null && !card.hasAttribute(tag)) {
 				continue;
 			}
-			if (!HeroClass.getBaseClasses(deckFormat).contains(card.getHeroClass()) && !card.getHeroClass().equals(HeroClass.ANY)) {
-				continue;
-			}
 			if (clone) {
 				card = card.clone();
 			}
