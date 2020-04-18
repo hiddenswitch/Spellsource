@@ -262,7 +262,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Indicates whether or not the instance is of the specified card type.
 	 * <p>
-	 * Use this instead of direct comparisons to interpret a {@link #CHOOSE_ONE} card as a {@link #SPELL} card.
+	 * Use this instead of direct comparisons to interpret a choose one card as a spell card.
 	 *
 	 * @param thisType
 	 * @param other    The card type to compare to.
