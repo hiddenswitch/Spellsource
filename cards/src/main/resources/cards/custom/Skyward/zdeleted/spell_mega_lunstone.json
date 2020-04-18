@@ -14,13 +14,31 @@
                 "value": 100
             },
             {
-                "class": "CardCostModifierSpell",
-                "target": "FRIENDLY_HAND",
-                "cardCostModifier": {
-                    "class": "CardCostModifier",
-                    "target": "SELF",
-                    "value": 100,
-                    "operation": "SUBTRACT"
+                "class": "AddEnchantmentSpell",
+                "target": "FRIENDLY_PLAYER",
+                "trigger": {
+                    "eventTrigger": {
+                        "class": "CardPlayedTrigger"
+                    },
+                    "spell": {
+                        "class": "GainManaSpell",
+                        "value": 100
+                    },
+                    "oneTurn": true
+                }
+            },
+            {
+                "class": "AddEnchantmentSpell",
+                "target": "FRIENDLY_PLAYER",
+                "trigger": {
+                    "eventTrigger": {
+                        "class": "BoardChangedTrigger"
+                    },
+                    "spell": {
+                        "class": "GainManaSpell",
+                        "value": 100
+                    },
+                    "oneTurn": true
                 }
             }
         ]
