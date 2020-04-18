@@ -93,7 +93,7 @@ import static java.util.stream.Collectors.toList;
  * GameStateValueBehaviour the best delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
- * 		with the highest score.
+ * with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
 	public static final int DEFAULT_TARGET_CONTEXT_STACK_SIZE = 2 * 7 * 6 - 1;
@@ -111,7 +111,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected int maxDepth = DEFAULT_MAXIMUM_DEPTH;
 	protected long minFreeMemory = Long.MAX_VALUE;
 	protected boolean disposeNodes = true;
-	protected boolean parallel = true;
+	protected boolean parallel = false;
 	protected boolean forceGarbageCollection = false;
 	protected boolean throwOnInvalidPlan = false;
 	protected boolean pruneContextStack = true;
@@ -498,7 +498,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				Node v = contextStack.pop();
 
 				// Is this node terminal?
-				if (isTerminal(v, getRequestActionStartTime(), playerId)) {
+				if (isTerminal(v, playerId)) {
 					postProcess(playerId, v.context);
 					double newScore = heuristic.getScore(v.context, playerId);
 					v.setScore(newScore);
@@ -521,7 +521,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				}
 
 				// If we've been interrupted, peacefully exit this intense part of the code
-				if (Strand.currentStrand().isInterrupted()) {
+				if (isInterrupted()) {
 					break;
 				}
 
@@ -627,6 +627,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	}
 
 	/**
+	 * Checks if the bot has timed out or if the thread it is executing on is interrupted.
+	 *
+	 * @return
+	 */
+	protected boolean isInterrupted() {
+		return Strand.currentStrand().isInterrupted() || (System.currentTimeMillis() - getRequestActionStartTime() > getTimeout());
+	}
+
+	/**
 	 * Prunes the context stack to save memory. Removes terminal nodes that are not worth exploring heuristically.
 	 *
 	 * @param contextStack
@@ -645,7 +654,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			int longestNodeLength = Integer.MIN_VALUE;
 			while (iterator.hasNext()) {
 				Node node = iterator.next();
-				if (isTerminal(node, getRequestActionStartTime(), playerId)) {
+				if (isTerminal(node, playerId)) {
 					if (node.depth > longestNodeLength) {
 						longestNode = node;
 						longestNodeLength = node.getActions().length;
@@ -685,12 +694,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		}
 	}
 
-	private boolean isTerminal(Node node, long startTime, int playerId) {
+	private boolean isTerminal(Node node, int playerId) {
 		return node.predecessor != null && (
 				node.depth >= getMaxDepth()
 						|| node.context.updateAndGetGameOver()
-						|| Strand.currentStrand().isInterrupted()
-						|| (System.currentTimeMillis() - startTime > getTimeout())
+						|| isInterrupted()
 						// Technically allows the bot to play through its extra turns
 						|| node.context.getActivePlayerId() != playerId);
 	}
@@ -744,6 +752,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		AtomicBoolean guard = new AtomicBoolean();
 
 		mutateContext.setBehaviour(playerId, new RequestActionFunction((context1, player1, validActions1) -> {
+			if (isInterrupted()) {
+				intermediateNodes.clear();
+				return validActions1.get(0);
+			}
+
 			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
 			// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
 			// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
@@ -761,7 +774,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// Perform action
 		try {
-			if (Strand.currentStrand().isInterrupted()) {
+			if (isInterrupted()) {
 				// Bail out here if possible, does not queue new nodes.
 				return;
 			}
@@ -793,6 +806,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// The intermediate node processing branch
 		while (intermediateNodes.size() > 0) {
+			if (isInterrupted()) {
+				return;
+			}
+
 			IntermediateNode intermediateNode = intermediateNodes.pollFirst();
 			if (intermediateNode == null) {
 				throw new UnsupportedOperationException("Should not queue null nodes.");
@@ -808,6 +825,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			AtomicInteger counter = new AtomicInteger(0);
 			AtomicBoolean intermediateGuard = new AtomicBoolean();
 			intermediateMutateContext.setBehaviour(playerId, new RequestActionFunction((context, player, validActions) -> {
+				if (isInterrupted()) {
+					intermediateNodes.clear();
+					return validActions.get(0);
+				}
+
 				// Make choices until we've exhausted the actions that were specified by this intermediate node.
 				int choiceIndex = counter.getAndIncrement();
 				if (choiceIndex >= choices.length) {
@@ -828,6 +850,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			}));
 
 			try {
+				if (isInterrupted()) {
+					return;
+				}
+
 				intermediateMutateContext.performAction(playerId, action);
 			} catch (Throwable simulationError) {
 				LOGGER.error("requestAction (unknown) {}: There was a simulation error for action {} when considering intermediates {}: {}", playerId, action, choices, simulationError);
@@ -841,6 +867,9 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			// If it didn't, then the intermediate is the last intermediate on a path from real node to real node. Queue a
 			// real node onto the context stack. Reconstruct the path by following the predecessors of the intermediates until
 			// we reach a real node.
+			if (isInterrupted()) {
+				return;
+			}
 			GameAction[] actions = new GameAction[1 + choices.length];
 			actions[0] = action;
 			for (int i = 0; i < choices.length; i++) {

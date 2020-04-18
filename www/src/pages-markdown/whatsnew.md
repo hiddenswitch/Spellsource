@@ -4,9 +4,11 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
-### In Progress
+
+### 0.8.73-3.1.2 (April 17, 2020)
 
  - Soulscream now correctly counts aftermaths. (1704)
+ - The bot is less likely to take down the server on infinitely-looping Source actions.
 
 ### Upcoming Changes
  - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
