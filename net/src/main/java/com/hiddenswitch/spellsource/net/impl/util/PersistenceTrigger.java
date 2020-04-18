@@ -5,7 +5,7 @@ import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.net.Spellsource;
 import com.hiddenswitch.spellsource.net.Logic;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.RpcClient;
 import io.opentracing.Tracer;

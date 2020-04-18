@@ -135,7 +135,7 @@ if [[ "$bump_version" == true ]]; then
     python/setup.py \
     deploy.sh \
     python/spellsource/context.py \
-    net/src/main/java/com/hiddenswitch/spellsource/net/Version.java \
+    core/src/main/java/com/hiddenswitch/spellsource/core/Version.java \
     gradle.properties
   SPELLSOURCE_VERSION=new_version
 fi

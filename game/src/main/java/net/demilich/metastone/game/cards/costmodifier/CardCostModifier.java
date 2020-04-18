@@ -307,4 +307,9 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 		// Card cost modifiers have no effects
 	}
+
+	@Override
+	protected boolean shouldNotifyEnchantmentFired(GameEvent event) {
+		return false;
+	}
 }

@@ -7,7 +7,7 @@ import co.paralleluniverse.strands.StrandLocalRandom;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.net.impl.util.Scheduler;

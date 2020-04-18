@@ -254,15 +254,20 @@ public class Enchantment extends Entity implements Trigger {
 
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
 		// board changed event.
-		if (event.getEventType() != EventTypeEnum.BOARD_CHANGED
+		if (shouldNotifyEnchantmentFired(event)) {
+			event.getGameContext().onEnchantmentFired(this);
+		}
+		process(ownerId, getSpell(), event);
+	}
+
+	@Suspendable
+	protected boolean shouldNotifyEnchantmentFired(GameEvent event) {
+		return event.getEventType() != EventTypeEnum.BOARD_CHANGED
 				&& event.getEventType() != EventTypeEnum.WILL_END_SEQUENCE
 				&& getTriggers().stream().noneMatch(trigger -> trigger.interestedIn() == EventTypeEnum.ALL)
 				&& hostReference != null
 				&& !(hostReference.equals(new EntityReference(PLAYER_1))
-				|| hostReference.equals(new EntityReference(PLAYER_2)))) {
-			event.getGameContext().onEnchantmentFired(this);
-		}
-		process(ownerId, getSpell(), event);
+				|| hostReference.equals(new EntityReference(PLAYER_2)));
 	}
 
 	@Override

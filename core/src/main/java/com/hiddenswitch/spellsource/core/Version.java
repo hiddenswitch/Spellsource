@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.net;
+package com.hiddenswitch.spellsource.core;
 
 /**
  * Allows the code to easily access version information.
