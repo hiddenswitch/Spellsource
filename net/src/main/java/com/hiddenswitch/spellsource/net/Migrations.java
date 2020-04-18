@@ -594,8 +594,15 @@ public interface Migrations extends Verticle {
 						.withUp(thisVertx -> {
 							mongo().createCollection(Editor.EDITABLE_CARDS);
 						}))
-				.migrateTo(43, then2 ->
-						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
+				.add(new MigrationRequest()
+						.withVersion(44)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(44, then2 ->
+						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())))
+		;
 	}
 
 	@Suspendable

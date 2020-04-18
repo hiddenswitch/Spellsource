@@ -20,6 +20,9 @@
       "attribute": "EIDOLON_RACE"
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
