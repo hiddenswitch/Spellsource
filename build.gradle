@@ -7,7 +7,7 @@ dependencies {
 }
 
 allprojects {
-    project.version = '0.8.72'
+    project.version = '0.8.73'
 }
 
 def jacksonVersion = '2.10.2'
