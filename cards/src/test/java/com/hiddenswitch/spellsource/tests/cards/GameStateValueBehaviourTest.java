@@ -28,6 +28,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test
+	public void testBailsOutInfiniteDiscover() {
+		runGym((context, player, opponent) -> {
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
+			receiveCard(context, player, "spell_test_discover_loop");
+			assertThrows(context::resume);
+		});
+	}
+
+	@Test
 	public void testShouldNotHealEnemyChampion() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 9; i++) {
@@ -83,6 +92,8 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			shuffleToDeck(context, player, "minion_black_test");
 			playMinionCard(context, player, "minion_desert_maiden");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			// Return a valid action
+			behaviour.setThrowsExceptions(false);
 			context.setBehaviour(player.getId(), behaviour);
 			context.endTurn();
 			while (context.takeActionInTurn()) {
@@ -153,8 +164,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
 			context.setBehaviour(player.getId(), checkDepth);
 
-			while (context.takeActionInTurn()) {
-			}
+			assertTrue(context.takeActionInTurn());
 		});
 	}
 

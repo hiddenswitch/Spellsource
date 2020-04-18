@@ -756,19 +756,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
+		// For logging purposes
+		Entity source = null;
+		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
+			source = context.tryFind(sourceReference, false);
+		}
+
 		programCounter++;
 		if (programCounter > MAX_PROGRAM_COUNTER) {
-			throw new IllegalStateException("program counter");
+			throw new IllegalStateException(String.format("%s: program counter", source));
 		}
 		spellDepth++;
 		if (spellDepth > MAX_SPELL_DEPTH) {
-			throw new UnsupportedOperationException("infinite spell depth");
+			throw new UnsupportedOperationException(String.format("%s: infinite spell depth", source));
 		}
+
 		if (sourceAction != null && sourceAction.isOverrideChild()) {
 			childSpell = true;
 		}
 		Player player = context.getPlayer(playerId);
-		Entity source = null;
 		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
 			source = context.resolveSingleTarget(sourceReference);
 		}

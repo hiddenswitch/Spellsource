@@ -1,8 +1,9 @@
-package com.hiddenswitch.spellsource.net;
+package com.hiddenswitch.spellsource.common;
 
 import co.paralleluniverse.fibers.Fiber;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+import com.hiddenswitch.spellsource.core.Version;
 import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.samplers.ConstSampler;
 import io.opentracing.Span;

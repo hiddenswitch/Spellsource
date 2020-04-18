@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.applications;
 
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.RpcClient;
 import io.atomix.cluster.Node;

@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.ClientToServerMessage;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.*;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -26,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitFiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 

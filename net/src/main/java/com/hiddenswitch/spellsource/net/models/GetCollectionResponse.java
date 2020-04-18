@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.net.models;
 
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import io.opentracing.util.GlobalTracer;
