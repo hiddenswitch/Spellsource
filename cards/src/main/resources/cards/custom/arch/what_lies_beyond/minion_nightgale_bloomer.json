@@ -1,6 +1,6 @@
 {
   "name": "Nightgale Bloomer",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "LIGHTBROWN",
   "baseAttack": 2,
