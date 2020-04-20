@@ -18,6 +18,7 @@ header: true
  - Vitium Surger now correctly gives you artifacts. (1688)
  - Fixed issues with Primordial Miner's text and effect. (1689)
  - Fixed Primordial Sword not returning anything. (1690)
+ - The Hercules Skill now properly buffs his (your?) attack. (1713)
 
 ### 0.8.72-3.1.2 (April 7, 2020)
 

@@ -11,7 +11,7 @@
   },
   "aura": {
     "class": "BuffAura",
-    "target": "SELF",
+    "target": "FRIENDLY_HERO",
     "attackBonus": 1
   },
   "collectible": false,
