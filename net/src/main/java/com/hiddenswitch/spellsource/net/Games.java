@@ -252,7 +252,9 @@ public interface Games extends Verticle {
 
 		// Only a handful of special cases need to be dealt with
 		if (event instanceof DamageEvent) {
-			clientEvent.damage(new GameEventDamage().damageType(((DamageEvent) event).getDamageType()));
+			var damageType = ((DamageEvent) event).getDamageType();
+			var firstDamageType = damageType.isEmpty() ? DamageTypeEnum.MAGICAL : damageType.iterator().next();
+			clientEvent.damage(new GameEventDamage().damageType(firstDamageType));
 		}
 
 		if (event instanceof JoustEvent) {

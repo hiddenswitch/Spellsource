@@ -1149,6 +1149,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		this.blackText = blackText;
 	}
 
+	@JsonIgnore
 	public Stream<AbstractEnchantmentDesc<?>> getEnchantmentDescs() {
 		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(
 				Stream.ofNullable(this.getDeathrattle()),
@@ -1169,15 +1170,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return concat;
 	}
 
+	@JsonIgnore
 	@Override
 	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
-		if (enchantmentSource.getCardType() != CardType.ENCHANTMENT) {
-			return Optional.empty();
-		}
-
-		var enchantmentDesc = new EnchantmentDesc()
-				.setName(enchantmentSource.getName())
-				.setDescription(enchantmentSource.getDescription());
-		return enchantmentDesc.tryCreate(context, player, effectSource, enchantmentSource, host, force);
+		return context.getLogic().tryCreateEnchantmentCard(context, player, effectSource, enchantmentSource, host, force);
 	}
 }

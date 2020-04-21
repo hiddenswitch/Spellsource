@@ -64,7 +64,7 @@ public final class OpenerAction extends GameAction {
 	 * @param context The game context
 	 * @param player  The casting player
 	 * @return {@code true} if this battlecry can be executed <b>generally</b> (if it will even prompt the user for
-	 * 		targeting).
+	 * targeting).
 	 */
 	public boolean canBeExecuted(GameContext context, Player player) {
 		if (getCondition() == null) {
@@ -146,7 +146,7 @@ public final class OpenerAction extends GameAction {
 
 	@Override
 	public List<Entity> getTargets(GameContext context, int player) {
-		final List<Entity> entities = context.resolveTarget(context.getPlayer(getSource().getOwner()), getSource(context), getTargetReference());
+		final List<Entity> entities = context.resolveTarget(context.getPlayer(getSource(context).getOwner()), getSource(context), getTargetReference());
 		if (entities == null) {
 			return Collections.emptyList();
 		}

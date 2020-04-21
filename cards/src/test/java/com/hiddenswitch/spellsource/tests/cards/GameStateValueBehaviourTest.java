@@ -29,7 +29,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testBailsOutInfiniteDiscover() {
 		runGym((context, player, opponent) -> {
-			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour().setThrowsExceptions(true));
 			receiveCard(context, player, "spell_test_discover_loop");
 			assertThrows(context::resume);
 		});

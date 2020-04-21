@@ -591,7 +591,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			message.event(clientTriggerEvent);
 		} else if (event instanceof GameAction) {
 			var action = (GameAction) event;
-			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource();
+			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
 			com.hiddenswitch.spellsource.client.models.Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
 
 			if (sourceEntity.getEntityType() == EntityType.CARD) {
