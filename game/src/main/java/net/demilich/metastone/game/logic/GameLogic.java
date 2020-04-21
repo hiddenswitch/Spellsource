@@ -360,9 +360,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			aura.setEffectSource(effectSource)
 					.setSourceCard(enchantmentSource)
 					.setOwner(player.getId());
-			if (force) {
-				setEnchantmentZoneToHostActive(host, aura);
-			}
 			return Optional.of(aura);
 		}
 		return Optional.empty();
@@ -375,17 +372,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			enchantment.setEffectSource(effectSource)
 					.setSourceCard(enchantmentSource)
 					.setOwner(player.getId());
-			// for a variety of mysterious reasons, persisten owner was meant to indicate the enchantment's owner was the
-			// caster's instead of the host's
 			if (force) {
-				setEnchantmentZoneToHostActive(host, enchantment);
+				addEnchantmentZone(host, enchantment);
 			}
 			return Optional.of(enchantment);
 		}
 		return Optional.empty();
 	}
 
-	protected void setEnchantmentZoneToHostActive(Entity host, Enchantment enchantment) {
+	protected void addEnchantmentZone(Entity host, Enchantment enchantment) {
 		switch (host.getZone()) {
 			case HAND:
 				enchantment.setZones(Enchantment.getDefaultPassiveZones());
@@ -1075,6 +1070,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		enchantments
 				.forEach(e -> context.getLogic().addEnchantment(player, e, effectSource, target));
 		return enchantments;
+	}
+
+	@Suspendable
+	public Optional<Enchantment> tryCreateEnchantmentCard(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
+		if (enchantmentSource.getCardType() != CardType.ENCHANTMENT) {
+			return Optional.empty();
+		}
+
+		var enchantmentDesc = new EnchantmentDesc()
+				.setName(enchantmentSource.getName())
+				.setDescription(enchantmentSource.getDescription());
+		return enchantmentDesc.tryCreate(context, player, effectSource, enchantmentSource, host, force);
 	}
 
 	/**
