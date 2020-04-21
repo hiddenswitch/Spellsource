@@ -7,12 +7,15 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.desc.AbstractEnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,16 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Adds an {@link SpellArg#AURA} ({@link Aura}) or a {@link Enchantment} (in the {@link SpellArg#TRIGGER}) to the
  * specified {@code target} and immediately puts that aura/enchantment into play (i.e., activates it).
  * <p>
- * If a {@link SpellArg#CARD} is specified, the spell will interpret the card as an {@link
- * CardType#ENCHANTMENT}, adding each of its triggers as specified to the {@code
- * target }and the deathrattle as a {@link net.demilich.metastone.game.spells.trigger.MinionDeathTrigger} whose {@link
- * net.demilich.metastone.game.targeting.TargetType} is {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}.
- * If no triggers are present on the card, a dummy enchantment is created for later use in the {@link
- * RemoveEnchantmentSpell} and {@link net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter}.
+ * If a {@link SpellArg#CARD} is specified, the spell will interpret the card as an {@link CardType#ENCHANTMENT}, adding
+ * each of its triggers as specified to the {@code target }and the deathrattle as a {@link
+ * net.demilich.metastone.game.spells.trigger.MinionDeathTrigger} whose {@link net.demilich.metastone.game.targeting.TargetType}
+ * is {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}. If no triggers are present on the
+ * card, a dummy enchantment is created for later use in the {@link RemoveEnchantmentSpell} and {@link
+ * net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter}.
  * <p>
  * If a {@link SpellArg#REVERT_TRIGGER} is specified, creates an enchantment on the casting player's {@link Player}
  * entity that triggers with the specified {@link net.demilich.metastone.game.spells.trigger.EventTrigger} and removes
@@ -134,47 +139,41 @@ public class AddEnchantmentSpell extends Spell {
 		}
 		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER, SpellArg.CARD, SpellArg.EXCLUSIVE, SpellArg.REVERT_TRIGGER);
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
-		Aura aura = (Aura) desc.get(SpellArg.AURA);
+		AuraDesc auraDesc = (AuraDesc) desc.get(SpellArg.AURA);
 		Card enchantmentCard = SpellUtils.getCard(context, desc);
 		List<Enchantment> added = new ArrayList<>();
 
 		if (enchantmentDesc != null) {
-			Enchantment enchantment = enchantmentDesc.create();
-			// TODO: This implies persistent owner!
-			enchantment.setOwner(player.getId());
-			enchantment.setSourceCard(source.getSourceCard());
-			context.getLogic().addGameEventListener(player, enchantment, target);
-			added.add(enchantment);
+			var enchantment = context.getLogic().addEnchantment(player, source, source.getSourceCard(), target, enchantmentDesc, true);
+			// For compatibility reasons, if the target (i.e. the enchantment's host) is in the opponent's deck or hand, deck
+			// enchantments will also be active in the hand. It will be the responsibility of the card author to make them
+			// expire when drawn using the RemoveEnchantmentsSpell
+			if (source.getSourceCard().getDesc().getFileFormatVersion() <= 1
+					&& target.getZone() == Zones.HAND || target.getZone() == Zones.DECK) {
+				enchantment.ifPresent(e -> {
+					e.setZones(new Zones[]{Zones.HAND, Zones.DECK});
+				});
+			}
+			enchantment.ifPresent(added::add);
 		}
 
-		if (aura != null) {
-			aura = aura.clone();
-			// TODO: This implies persistent owner!
-			aura.setOwner(player.getId());
-			aura.setSourceCard(source.getSourceCard());
-			// Enchantments added this way don't trigger a board changed event. They come into play immediately if the owning
-			// entity is Entity#isInPlay().
-			context.getLogic().addGameEventListener(player, aura, target);
-			added.add(aura);
+		if (auraDesc != null) {
+			var aura = context.getLogic().addEnchantment(player, source, source.getSourceCard(), target, auraDesc, true);
+			aura.ifPresent(added::add);
 		}
 
 		if (enchantmentCard != null) {
-			List<Enchantment> enchantmentList = enchantmentCard.createEnchantments();
-			for (Enchantment enchantment : enchantmentList) {
-				enchantment.setOwner(player.getId());
-				context.getLogic().addGameEventListener(player, enchantment, target);
-				added.add(enchantment);
-			}
+			context.getLogic().addEnchantments(player, source, enchantmentCard, target, true);
 		}
 
 		for (SpellArg arg : new SpellArg[]{SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER}) {
 			if (desc.containsKey(arg) && added.size() > 0) {
 				// Convenience method for removing the enchantments added this way
 				EnchantmentDesc revertDesc = new EnchantmentDesc();
-				revertDesc.eventTrigger = (EventTriggerDesc) desc.get(arg);
-				revertDesc.spell = MetaSpell.create(added.stream().map(RemoveEnchantmentSpell::create).toArray(SpellDesc[]::new));
-				revertDesc.maxFires = 1;
-				context.getLogic().addGameEventListener(player, revertDesc.create(), player);
+				revertDesc.setEventTrigger((EventTriggerDesc) desc.get(arg));
+				revertDesc.setSpell(MetaSpell.create(added.stream().map(RemoveEnchantmentSpell::create).toArray(SpellDesc[]::new)));
+				revertDesc.setMaxFires(1);
+				context.getLogic().addEnchantment(player, revertDesc.create(), source, player);
 			}
 		}
 	}

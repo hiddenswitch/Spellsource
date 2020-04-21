@@ -23,9 +23,9 @@ public final class ReceiveCardNextTurnSpell extends AddEnchantmentSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
-		enchantmentDesc.spell = ReceiveCardSpell.create((String) desc.get(SpellArg.CARD));
-		enchantmentDesc.maxFires = 1;
-		enchantmentDesc.eventTrigger = TurnStartTrigger.create(TargetPlayer.SELF);
+		enchantmentDesc.setSpell(ReceiveCardSpell.create((String) desc.get(SpellArg.CARD)));
+		enchantmentDesc.setMaxFires(1);
+		enchantmentDesc.setEventTrigger(TurnStartTrigger.create(TargetPlayer.SELF));
 		desc = desc.clone();
 		desc.put(SpellArg.TRIGGER, enchantmentDesc);
 		super.onCast(context, player, desc, source, target);

@@ -17,21 +17,20 @@ public class WeaponTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card weaponCard = CardCatalogue.getCardById("weapon_test_3_2");
 
-			Hero warrior = player.getHero();
 			context.setActivePlayerId(player.getId());
 			context.getLogic().startTurn(player.getId());
-			assertEquals(warrior.getAttack(), 0);
+			assertEquals(player.getHero().getAttack(), 0);
 			context.getLogic().receiveCard(player.getId(), weaponCard);
 			context.performAction(player.getId(), weaponCard.play());
-			assertEquals(warrior.getAttack(), 3);
-			assertEquals(warrior.getWeapon().getDurability(), 2);
+			assertEquals(player.getHero().getAttack() +  player.getWeapon().getAttack(), 3);
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 2);
 
-			attack(context, player, warrior, context.getPlayer2().getHero());
-			assertEquals(warrior.getWeapon().getDurability(), 1);
+			attack(context, player, player.getHero(), context.getPlayer2().getHero());
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 1);
 			context.endTurn();
 			context.endTurn();
-			attack(context, player, warrior, context.getPlayer2().getHero());
-			assertNull(warrior.getWeapon());
+			attack(context, player, player.getHero(), context.getPlayer2().getHero());
+			assertTrue(player.getWeaponZone().isEmpty());
 		}, "RED", "RED");
 	}
 }

@@ -5,19 +5,22 @@ import net.demilich.metastone.game.entities.Actor;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 
 public final class Minion extends Actor {
 
+	private static final Zones[] BATTLEFIELD_ZONE = new Zones[]{Zones.BATTLEFIELD};
+
 	public Minion(Card sourceCard) {
-		super(sourceCard);
+		super();
 		String race = sourceCard.hasAttribute(Attribute.RACE) ? (String) sourceCard.getAttribute(Attribute.RACE) : Race.NONE;
 		setRace(race);
+		setSourceCard(sourceCard);
 	}
 
 	@Override
 	public Minion clone() {
-		Minion clone = (Minion) super.clone();
-		return clone;
+		return (Minion) super.clone();
 	}
 
 	@Override
@@ -59,5 +62,10 @@ public final class Minion extends Actor {
 	@Override
 	public Minion getCopy() {
 		return (Minion) super.getCopy();
+	}
+
+	@Override
+	public Zones[] getDefaultActiveTriggerZones() {
+		return BATTLEFIELD_ZONE;
 	}
 }

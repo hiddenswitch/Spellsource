@@ -35,7 +35,7 @@ public class ModelsTest {
 		runGym((context, player, opponent) -> {
 			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_test_choose_one"));
 			Card card = CardCatalogue.getCardById("minion_test_3_2");
-			context.getLogic().summon(opponent.getId(), card.summon(), card, 0, false);
+			context.getLogic().summon(opponent.getId(), card.minion(), card, 0, false);
 			assertTrue("The player has Choose One Card", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_test_choose_one")));
 			if (context.getActivePlayerId() != player.getId()) {
 				context.endTurn();

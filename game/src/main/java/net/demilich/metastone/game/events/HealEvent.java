@@ -3,39 +3,17 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
-public final class HealEvent extends GameEvent implements HasValue {
-
-	private final Entity target;
-	private final int healing;
+/**
+ * The {@link net.demilich.metastone.game.targeting.EntityReference#EVENT_TARGET} was healed for {@link
+ * net.demilich.metastone.game.spells.desc.valueprovider.EventValueProvider} healing.
+ * <p>
+ * Excess healing can be retrieved using {@link net.demilich.metastone.game.spells.trigger.ExcessHealingTrigger}. This
+ * is the amount requested to heal, not the amount actually healed (which may be zero for a full-health minion, for
+ * example).
+ */
+public final class HealEvent extends ValueEvent {
 
 	public HealEvent(GameContext context, int playerId, Entity target, int healing) {
-		super(context, target.getOwner(), playerId);
-		this.target = target;
-		this.healing = healing;
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return getTarget();
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HEAL;
-	}
-
-	@Override
-	public int getValue() {
-		return healing;
-	}
-
-	public Entity getTarget() {
-		return target;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HEAL, true, context, target.getOwner(), playerId, target, healing);
 	}
 }
-

@@ -1,7 +1,9 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
@@ -9,8 +11,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.HasValue;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.DoubleTurnEndTriggersAura;
@@ -21,11 +25,14 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -34,13 +41,12 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 /**
  * An enchantment is a type of entity that reacts to certain events using a trigger by casting a spell.
  * <p>
- * Enchantments live inside {@link TriggerManager#getTriggers()}; some enchantments, like {@link Secret} and {@link
- * Quest}, live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in
- * Hearthstone, enchantments are generally not targetable and do not "live" on cards or in zones.
+ * Enchantments live inside {@link GameLogic#getActiveTriggers(EntityReference)}; some enchantments, like {@link Secret}
+ * and {@link Quest}, live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}.
  * <p>
  * Enchantments consistent of two important features: a {@link EventTrigger} built from an {@link EventTriggerDesc}, and
  * a {@link SpellDesc} indicating which spell should be cast when the enchantment's {@link EventTrigger} and its
- * conditions {@link EventTrigger#innerQueues(GameEvent, Entity)}.
+ * conditions {@link EventTrigger#innerQueues(GameEvent, Enchantment, Entity)}.
  * <p>
  * Enchantments are specified by a {@link EnchantmentDesc} in the card JSON. They can also be specified as fields in
  * e.g., {@link AddEnchantmentSpell}.
@@ -50,7 +56,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * <li>{@code onAdd}: Called when the enchantment comes into play. At this moment, the number of times the
  * enchantment has been fired is set to zero; it is not {@code expired}, and </li>
  * <li>{@code onGameEvent}: Gives the enchantment a chance to look at a {@link GameEvent}, evaluate a {@link
- * EventTrigger} against it, and determine whether its {@link EnchantmentDesc#spell} should be cast.</li>
+ * EventTrigger} against it, and determine whether its {@link EnchantmentDesc#getSpell()} should be cast.</li>
  * <li>{@code onRemove}: Expires the enchantment, ensuring it will never fire again.</li>
  * </ul>
  * An enchantment's lifecycle matches the entity it is hosted by, like an {@link Actor}, the {@link Player} entity (when
@@ -61,6 +67,12 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * @see EnchantmentDesc for a description of the format of an enchantment.
  */
 public class Enchantment extends Entity implements Trigger {
+	private static final EventTriggerDesc[] DEFAULT_TRIGGERS = new EventTriggerDesc[0];
+	private static final Zones[] DEFAULT_BATTLEFIELD_ZONES = new Zones[]{Zones.BATTLEFIELD, Zones.HERO, Zones.HERO_POWER, Zones.WEAPON, Zones.PLAYER, Zones.QUEST, Zones.SECRET};
+	private static final Zones[] DEFAULT_PASSIVE_ZONES = new Zones[]{Zones.HERO_POWER, Zones.HAND};
+	private static final Zones[] DEFAULT_GAME_ZONES = new Zones[]{Zones.DISCOVER, Zones.SET_ASIDE_ZONE, Zones.DECK, Zones.HAND};
+	private static final Zones[] DEFAULT_DECK_ZONES = new Zones[]{Zones.DECK};
+	private static final ImmutableSet<Zones> DEFAULT_BATTLEFIELD_ZONES_SET = Arrays.stream(Enchantment.getDefaultBattlefieldZones()).collect(Sets.toImmutableEnumSet());
 	protected List<EventTrigger> triggers = new ArrayList<>();
 	protected List<EventTrigger> expirationTriggers = new ArrayList<>();
 	protected List<EventTrigger> activationTriggers = new ArrayList<>();
@@ -70,41 +82,16 @@ public class Enchantment extends Entity implements Trigger {
 	protected boolean activated = true;
 	protected boolean expired;
 	protected boolean persistentOwner;
-	protected Integer maxFires;
-	protected int fires;
+	private Integer maxFires;
+	private int fires;
 	protected boolean keepAfterTransform;
-	protected Card sourceCard;
 	protected Integer countUntilCast;
 	protected boolean countByValue;
 	protected boolean usesSpellTrigger = true;
 	protected Integer maxFiresPerSequence;
 	protected int firesThisSequence;
-
-	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
-		usesSpellTrigger = true;
-		if (primaryTrigger != null) {
-			this.getTriggers().add(primaryTrigger);
-		}
-		if (secondaryTrigger != null) {
-			this.getTriggers().add(secondaryTrigger);
-		}
-		this.spell = spell;
-		this.oneTurn = oneTurn;
-	}
-
-	public Enchantment(List<EventTrigger> triggers, SpellDesc spell) {
-		usesSpellTrigger = true;
-		this.getTriggers().addAll(triggers);
-		this.spell = spell;
-	}
-
-	public Enchantment(EventTrigger trigger, SpellDesc spell) {
-		this(trigger, spell, false);
-	}
-
-	public Enchantment(EventTrigger trigger, SpellDesc spell, boolean oneTime) {
-		this(trigger, null, spell, oneTime);
-	}
+	protected boolean copyToActor;
+	protected Zones[] zones;
 
 	public Enchantment() {
 	}
@@ -130,26 +117,23 @@ public class Enchantment extends Entity implements Trigger {
 		return clone;
 	}
 
+	protected EventTriggerDesc[] getDefaultTriggers() {
+		return DEFAULT_TRIGGERS;
+	}
+
 	@Override
 	public EntityType getEntityType() {
 		return EntityType.ENCHANTMENT;
 	}
 
-	public void expire() {
+	@Suspendable
+	public void expire(GameContext context) {
 		expired = true;
 	}
 
 	@Override
 	public EntityReference getHostReference() {
 		return hostReference;
-	}
-
-	@Override
-	public int getOwner() {
-		if (getTriggers().size() == 0) {
-			return super.getOwner();
-		}
-		return getTriggers().get(0).getOwner();
 	}
 
 	public SpellDesc getSpell() {
@@ -176,7 +160,7 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	@Suspendable
-	public void onAdd(GameContext context) {
+	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 	}
 
 	/**
@@ -195,10 +179,10 @@ public class Enchantment extends Entity implements Trigger {
 		// Maybe have to add a thing to prevent the maxfires from counting twice because of TURN_END_TRIGGERS_TWICE
 		if (countByValue && event instanceof HasValue) {
 			var value = ((HasValue) event).getValue();
-			fires += value;
+			setFires(getFires() + value);
 			firesThisSequence += value;
 		} else {
-			fires++;
+			setFires(getFires() + 1);
 			firesThisSequence++;
 		}
 
@@ -209,7 +193,7 @@ public class Enchantment extends Entity implements Trigger {
 			spellCasts = false;
 		}
 
-		if (countUntilCast != null && fires < countUntilCast) {
+		if (countUntilCast != null && getFires() < countUntilCast) {
 			spellCasts = false;
 		}
 
@@ -217,9 +201,9 @@ public class Enchantment extends Entity implements Trigger {
 			cast(ownerId, spell, event);
 		}
 
-		if (maxFires != null
-				&& fires >= maxFires) {
-			expire();
+		if (getMaxFires() != null
+				&& getFires() >= getMaxFires()) {
+			expire(event.getGameContext());
 		}
 		return spellCasts;
 	}
@@ -249,7 +233,7 @@ public class Enchantment extends Entity implements Trigger {
 		// that's still using it.
 		if (oneTurn
 				&& (event.getEventType() == EventTypeEnum.TURN_END || event.getEventType() == EventTypeEnum.TURN_START)) {
-			expire();
+			expire(event.getGameContext());
 		}
 
 		// Notify the game context that a spell trigger was successfully fired, as long as it wasn't due to a
@@ -271,44 +255,44 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	@Suspendable
-	public void onRemove(GameContext context) {
-		expire();
-	}
-
-	@Override
-	public void setHost(Entity host) {
-		this.hostReference = host.getReference();
-	}
-
-	@Override
-	public void setOwner(int playerIndex) {
-		super.setOwner(playerIndex);
-		for (EventTrigger trigger : Iterables.concat(getTriggers(), getExpirationTriggers(), getActivationTriggers())) {
-			trigger.setOwner(playerIndex);
-		}
+	public void setHostReference(EntityReference reference) {
+		hostReference = reference;
 	}
 
 	@Override
 	public Enchantment getCopy() {
-		return this.clone();
+		var clone = this.clone();
+		clone.setId(IdFactory.UNASSIGNED);
+		clone.setEntityLocation(EntityLocation.UNASSIGNED);
+		clone.hostReference = EntityReference.NONE;
+		clone.expired = false;
+		clone.fires = 0;
+		if (!isPersistentOwner()) {
+			clone.setOwner(NO_OWNER);
+		}
+		return clone;
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this)
-				.appendSuper(super.toString())
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+				.append("host", getHostReference())
 				.append("id", getId())
 				.append("sourceCard", getSourceCard())
 				.toString();
 	}
 
 	@Override
+	@Suspendable
 	public final boolean queues(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference, false);
 
 		// If the host of the enchantment has been removed from play, this enchantment should not queue
 		if (host.getZone() == Zones.REMOVED_FROM_PLAY) {
+			return false;
+		}
+
+		if (!innerQueues(event, host)) {
 			return false;
 		}
 
@@ -325,7 +309,7 @@ public class Enchantment extends Entity implements Trigger {
 				if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != EventTypeEnum.ALL) {
 					continue;
 				}
-				if (trigger.queues(event, host)) {
+				if (trigger.queues(event, this, host, getOwner())) {
 					activate();
 					break;
 				}
@@ -346,8 +330,8 @@ public class Enchantment extends Entity implements Trigger {
 				if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != EventTypeEnum.ALL) {
 					continue;
 				}
-				if (trigger.queues(event, host)) {
-					expire();
+				if (trigger.queues(event, this, host, getOwner())) {
+					expire(event.getGameContext());
 					return false;
 				}
 			}
@@ -360,7 +344,7 @@ public class Enchantment extends Entity implements Trigger {
 			if (trigger.interestedIn() != event.getEventType() && trigger.interestedIn() != EventTypeEnum.ALL) {
 				continue;
 			}
-			if (trigger.queues(event, host)) {
+			if (trigger.queues(event, this, host, getOwner())) {
 				return true;
 			}
 		}
@@ -368,8 +352,12 @@ public class Enchantment extends Entity implements Trigger {
 		return false;
 	}
 
+	@Suspendable
+	protected boolean innerQueues(GameEvent event, Entity host) {
+		return Arrays.stream(getZones()).anyMatch(z -> z == host.getZone());
+	}
 
-	public boolean hasPersistentOwner() {
+	public boolean isPersistentOwner() {
 		return persistentOwner;
 	}
 
@@ -382,13 +370,14 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public boolean fires(GameEvent event) {
+		var host = event.getGameContext().resolveSingleTarget(hostReference, false);
 		// Expired
 		if (!isActivated() || isExpired()) {
 			return false;
 		}
 
 		for (EventTrigger trigger : getTriggers()) {
-			if (trigger.fires(event)) {
+			if (trigger.fires(event, host, getOwner())) {
 				return true;
 			}
 		}
@@ -420,10 +409,6 @@ public class Enchantment extends Entity implements Trigger {
 		return keepAfterTransform;
 	}
 
-	public void setSourceCard(Card sourceCard) {
-		this.sourceCard = sourceCard;
-	}
-
 	public void setCountUntilCast(Integer countUntilCast) {
 		this.countUntilCast = countUntilCast;
 	}
@@ -432,8 +417,9 @@ public class Enchantment extends Entity implements Trigger {
 		return countUntilCast;
 	}
 
-	public void setSpell(SpellDesc spell) {
+	public Enchantment setSpell(SpellDesc spell) {
 		this.spell = spell;
+		return this;
 	}
 
 	public void setCountByValue(boolean countByValue) {
@@ -507,6 +493,71 @@ public class Enchantment extends Entity implements Trigger {
 
 	public Enchantment setActivated(boolean activated) {
 		this.activated = activated;
+		return this;
+	}
+
+	public Zones[] getZones() {
+		return (zones == null || zones.length == 0) ? getDefaultZones() : zones;
+	}
+
+	public Enchantment setZones(Zones[] zones) {
+		this.zones = zones;
+		return this;
+	}
+
+	protected Zones[] getDefaultZones() {
+		return DEFAULT_BATTLEFIELD_ZONES;
+	}
+
+	public Enchantment setOneTurn(boolean oneTurn) {
+		this.oneTurn = oneTurn;
+		return this;
+	}
+
+	public boolean getOneTurn() {
+		return oneTurn;
+	}
+
+	public void setUsesSpellTrigger(boolean usesSpellTrigger) {
+		this.usesSpellTrigger = usesSpellTrigger;
+	}
+
+	public boolean getUsesSpellTrigger() {
+		return usesSpellTrigger;
+	}
+
+	protected Enchantment setFires(int fires) {
+		this.fires = fires;
+		return this;
+	}
+
+
+	public static Zones[] getDefaultBattlefieldZones() {
+		return DEFAULT_BATTLEFIELD_ZONES;
+	}
+
+	public static Zones[] getDefaultPassiveZones() {
+		return DEFAULT_PASSIVE_ZONES;
+	}
+
+	public static Zones[] getDefaultGameZones() {
+		return DEFAULT_GAME_ZONES;
+	}
+
+	public static Zones[] getDefaultDeckZones() {
+		return DEFAULT_DECK_ZONES;
+	}
+
+	public static ImmutableSet<Zones> getDefaultBattlefieldZonesSet() {
+		return DEFAULT_BATTLEFIELD_ZONES_SET;
+	}
+
+	public boolean isCopyToActor() {
+		return copyToActor;
+	}
+
+	public Enchantment setCopyToActor(boolean giveToActor) {
+		this.copyToActor = giveToActor;
 		return this;
 	}
 }

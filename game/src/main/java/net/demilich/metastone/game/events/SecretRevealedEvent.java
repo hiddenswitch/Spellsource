@@ -5,31 +5,17 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.HasCard;
 
-public class SecretRevealedEvent extends GameEvent implements HasCard {
-	private final Card secretCard;
+/**
+ * A secret was revealed.
+ */
+public class SecretRevealedEvent extends CardEvent {
 
 	public SecretRevealedEvent(GameContext context, Card secret, int playerId) {
-		super(context, playerId, secret.getOwner());
-		this.secretCard = secret;
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SECRET_REVEALED, context, playerId, secret.getOwner(), secret);
 	}
 
 	@Override
-	public Entity getEventTarget() {
-		return getSourceCard();
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.SECRET_REVEALED;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return secretCard;
+	public String getDescription(GameContext context, int playerId) {
+		return String.format("%s fired!", getSourceCard().getName());
 	}
 }

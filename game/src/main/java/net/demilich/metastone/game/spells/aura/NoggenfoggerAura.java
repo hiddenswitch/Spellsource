@@ -7,10 +7,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.TargetAcquisitionTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,15 +19,19 @@ import java.util.List;
  * <p>
  * This aura's {@code getValidTargets} method can be overridden to support other kinds of retargeting.
  */
-public class NoggenfoggerAura extends Aura {
+public class NoggenfoggerAura extends EffectlessAura {
+	private static final EventTriggerDesc[] DEFAULT_TRIGGERS = new EventTriggerDesc[]{new EventTriggerDesc(TargetAcquisitionTrigger.class)};
 
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(desc);
-		setTriggers(Collections.singletonList(new TargetAcquisitionTrigger()));
 	}
 
 	@Override
 	public void onGameEvent(GameEvent originalEvent) {
+		if (!(originalEvent instanceof TargetAcquisitionEvent)) {
+			return;
+		}
+
 		TargetAcquisitionEvent event = (TargetAcquisitionEvent) originalEvent;
 		if (event.getAction() == null) {
 			throw new NullPointerException("All target acquisition events now should come in with valid actions.");
@@ -45,15 +49,14 @@ public class NoggenfoggerAura extends Aura {
 		gc.setTargetOverride(gc.getLogic().getRandom(validTargets).getReference());
 	}
 
-
 	/**
 	 * Based on the specified target acquisition event, override the target to a random one from the list returned by this
 	 * method. If the targets are empty, no override occurs.
 	 *
 	 * @param context The context
 	 * @param event   The event
-	 * @return A {@link List} of entities to choose randomly from, or an empty list if there are no valid targets
-	 * 		/ an override should not occur.
+	 * @return A {@link List} of entities to choose randomly from, or an empty list if there are no valid targets / an
+	 * override should not occur.
 	 */
 	protected List<Entity> getValidTargets(GameContext context, TargetAcquisitionEvent event) {
 		List<Entity> validTargets;
@@ -65,6 +68,11 @@ public class NoggenfoggerAura extends Aura {
 			validTargets = context.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
 		}
 		return validTargets;
+	}
+
+	@Override
+	public EventTriggerDesc[] getDefaultTriggers() {
+		return DEFAULT_TRIGGERS;
 	}
 }
 

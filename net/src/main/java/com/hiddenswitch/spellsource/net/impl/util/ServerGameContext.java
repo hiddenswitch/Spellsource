@@ -394,7 +394,9 @@ public class ServerGameContext extends GameContext implements Server {
 			Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
-			Enchantment enchantment = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
+			Enchantment enchantment = new Enchantment();
+			enchantment.getTriggers().add(trigger.getEventTriggerDesc().create());
+			enchantment.setSpell(spell);
 			enchantment.setOwner(0);
 			getGameTriggers().add(enchantment);
 		}
@@ -763,7 +765,6 @@ public class ServerGameContext extends GameContext implements Server {
 		}
 	}
 
-	@Override
 	@Suspendable
 	public void fireGameEvent(GameEvent gameEvent) {
 		eventCounter.incrementAndGet();
@@ -774,7 +775,7 @@ public class ServerGameContext extends GameContext implements Server {
 				client.sendNotification(gameEvent, gameStateCopy);
 			}
 		}
-		super.fireGameEvent(gameEvent, new ArrayList<>(gameTriggers));
+		getLogic().fireGameEvent(gameEvent);
 		if (eventCounter.decrementAndGet() == 0) {
 			for (Client client : getClients()) {
 				client.lastEvent();

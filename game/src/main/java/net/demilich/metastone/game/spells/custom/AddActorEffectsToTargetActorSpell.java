@@ -7,9 +7,9 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -94,18 +94,12 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 						Attribute.DEATHRATTLES), Card.IGNORED_MINION_ATTRIBUTES.stream())).forEach(sourceAttributes::remove);
 		targetActor.getAttributes().putAll(sourceAttributes);
 		// Now apply the actual text
-		// TODO: Add the battlecry instead of replacing it!
-		int newEnchantmentsIndex = targetActor.getEnchantments().size();
-		sourceCard.applyText(targetActor);
-		targetActor.setRace(originalRace);
-		// If we're currently summoning this actor, do not apply the enchantments here. They will be applied by the
-		// summoning procedure itself
-		if (context.getSummonReferenceStack().isEmpty()) {
-			for (int i = newEnchantmentsIndex; i < targetActor.getEnchantments().size(); i++) {
-				context.getLogic().addGameEventListener(player, targetActor.getEnchantments().get(i), targetActor);
-			}
-		}
 
+		sourceCard.applyRace(targetActor);
+		targetActor.setRace(originalRace);
+		context.getLogic().addEnchantments(player, source, sourceCard, targetActor);
+		// Include openers this one time. It's otherwise very strange to include
+		context.getLogic().addEnchantments(player, source, sourceCard, targetActor, true, abstractEnchantmentDesc -> abstractEnchantmentDesc instanceof OpenerDesc);
 
 		for (SpellDesc subSpell : desc.subSpells(0)) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, sourceCard);

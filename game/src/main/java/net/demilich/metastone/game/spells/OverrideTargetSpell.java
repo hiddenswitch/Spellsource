@@ -13,8 +13,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.Map;
 
 /**
- * Overrides the target of the next {@link net.demilich.metastone.game.logic.GameLogic#targetAcquisition(Player, Entity,
- * GameAction)} call.
+ * Overrides the target of the next {@link net.demilich.metastone.game.logic.GameLogic#targetAcquisition(Player, Entity, GameAction)}  call.
  * <p>
  * Overrides are always cleared at the end of evaluating a game action (not necessarily at the end of a sequence).
  * <p>

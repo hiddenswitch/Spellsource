@@ -33,7 +33,7 @@ public class RefreshAttacksSpell extends Spell {
 			logger.error("onCast {} {}: Cannot refresh attacks of {}, which is not an actor.", context.getGameId(), source, target);
 		}
 
-		context.getLogic().refreshAttacksPerRound((Actor) target);
+		((Actor)target).refreshAttacksPerRound();
 	}
 
 	public static SpellDesc create(EntityReference reference) {

@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  * net.demilich.metastone.game.spells.desc.aura.AuraArg#SECONDARY_TARGET} entities (excluding the entity that normally
  * receives the healing).
  */
-public final class LifedrainHealsAdditionalAura extends Aura {
+public final class LifedrainHealsAdditionalAura extends AbstractFriendlyCardAura {
 
 	public LifedrainHealsAdditionalAura(AuraDesc desc) {
 		super(desc);

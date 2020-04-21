@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *
  * @see GameContext#getValidActions() for the entry point into the action logic.
  * @see #rollout(GameAction, GameContext, Player, Collection) for the meat-and-bones of turning a {@link GameAction}
- * 		instance into multiple game actions, one for each target.
+ * instance into multiple game actions, one for each target.
  */
 public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
@@ -37,7 +37,7 @@ public class ActionLogic implements Serializable {
 	private List<GameAction> getHeroAttackActions(GameContext context, Player player) {
 		List<GameAction> heroAttackActions = new ArrayList<GameAction>();
 		Hero hero = player.getHero();
-		if (!hero.canAttackThisTurn()) {
+		if (!hero.canAttackThisTurn(context)) {
 			return heroAttackActions;
 		}
 		rollout(new PhysicalAttackAction(hero.getReference()), context, player, heroAttackActions);
@@ -48,7 +48,7 @@ public class ActionLogic implements Serializable {
 	@Suspendable
 	private List<GameAction> getHeroPowerActions(GameContext context, Player player) {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
-		Card heroPower = player.getHero().getHeroPower();
+		Card heroPower = player.getHeroPowerZone().get(0);
 
 		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
 		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
@@ -69,11 +69,11 @@ public class ActionLogic implements Serializable {
 		physicalAttackActions.addAll(getHeroAttackActions(context, player));
 
 		for (Minion minion : player.getMinions()) {
-			if (!minion.canAttackThisTurn()) {
+			if (!minion.canAttackThisTurn(context)) {
 				continue;
 			}
 
-			List<PhysicalAttackTargetOverrideAura> filters = context.getTriggersAssociatedWith(minion.getReference()).stream()
+			List<PhysicalAttackTargetOverrideAura> filters = context.getLogic().getActiveTriggers(minion.getReference()).stream()
 					.filter(trigger -> trigger instanceof PhysicalAttackTargetOverrideAura)
 					.map(trigger -> (PhysicalAttackTargetOverrideAura) trigger).collect(Collectors.toList());
 			if (!filters.isEmpty()) {
@@ -172,7 +172,7 @@ public class ActionLogic implements Serializable {
 
 	@Suspendable
 	boolean hasAutoHeroPower(GameContext context, Player player) {
-		Card heroPower = player.getHero().getHeroPower();
+		Card heroPower = player.getHeroPowerZone().get(0);
 
 		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
 		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetSelection() == TargetSelection.AUTO);

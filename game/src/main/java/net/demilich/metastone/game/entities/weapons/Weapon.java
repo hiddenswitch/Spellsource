@@ -10,15 +10,18 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.targeting.Zones;
 
 public final class Weapon extends Actor {
 
+	private static final Zones[] WEAPON_ZONE = new Zones[]{Zones.WEAPON};
 	private boolean active;
 	private SpellDesc onEquip;
 	private SpellDesc onUnequip;
 
 	public Weapon(Card sourceCard) {
-		super(sourceCard);
+		super();
+		setSourceCard(sourceCard);
 	}
 
 	@Override
@@ -72,6 +75,11 @@ public final class Weapon extends Actor {
 	@Override
 	public boolean isDestroyed() {
 		return hasAttribute(Attribute.DESTROYED) || isBroken();
+	}
+
+	@Override
+	public Zones[] getDefaultActiveTriggerZones() {
+		return WEAPON_ZONE;
 	}
 
 	@Suspendable

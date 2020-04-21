@@ -17,7 +17,7 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -214,6 +214,12 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_SIGNATURE;
 			case "enemy_signature":
 				return EntityReference.ENEMY_SIGNATURE;
+			case "friendly_secrets":
+				return EntityReference.FRIENDLY_SECRETS;
+			case "PLAYER_1":
+				return EntityReference.PLAYER_1;
+			case "PLAYER_2":
+				return EntityReference.PLAYER_2;
 			default:
 				throw new NullPointerException(str);
 		}
@@ -318,7 +324,7 @@ public class ParseUtils {
 				return array;
 			}
 			case AURA: {
-				return auraParser.innerDeserialize(ctxt, jsonData).create();
+				return auraParser.innerDeserialize(ctxt, jsonData);
 			}
 			case ENTITY_FILTER_ARRAY: {
 				ArrayNode jsonArray = (ArrayNode) jsonData;
@@ -341,7 +347,7 @@ public class ParseUtils {
 			}
 			case BATTLECRY:
 				try {
-					return DatabindCodec.mapper().readerFor(BattlecryDesc.class).readValue(jsonData);
+					return DatabindCodec.mapper().readerFor(OpenerDesc.class).readValue(jsonData);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}

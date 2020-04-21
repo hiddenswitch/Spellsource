@@ -13,11 +13,14 @@
       "offset": 2
     }
   },
-  "passiveAuras": [
+  "auras": [
     {
       "class": "AttributeAura",
       "target": "SELF",
       "attribute": "AURA_LIFESTEAL",
+      "zones": [
+        "HAND"
+      ],
       "condition": {
         "class": "ComparisonCondition",
         "value1": {

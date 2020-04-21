@@ -11,13 +11,13 @@ public class WeaponPlayedTrigger extends WeaponEquippedTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		WeaponEquippedEvent weaponEvent = (WeaponEquippedEvent) event;
 
 		if (weaponEvent.getSource() == null) {
 			return false;
 		}
 
-		return super.innerQueues(event, host);
+		return super.innerQueues(event, enchantment, host);
 	}
 }

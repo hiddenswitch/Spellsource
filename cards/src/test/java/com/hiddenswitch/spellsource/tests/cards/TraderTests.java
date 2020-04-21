@@ -27,7 +27,7 @@ public class TraderTests extends TestBase {
 	public void testUusyaiTheIllustrious() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_uusyai_the_illustrious");
-			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			context.getLogic().fireGameEvent(new GameStartEvent(context, player));
 			Card legendary = receiveCard(context, player, "minion_test_legendary");
 			final int legendaryCost = costOf(context, player, legendary);
 			assertEquals(legendary.getBaseManaCost() - 1, legendaryCost, "cost reduction");

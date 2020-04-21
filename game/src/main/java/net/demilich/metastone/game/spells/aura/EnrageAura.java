@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.aura;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.ObjectArrays;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -9,6 +10,10 @@ import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
+import net.demilich.metastone.game.spells.desc.condition.IsDamagedCondition;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.EnrageChangedTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
@@ -37,35 +42,26 @@ import java.util.List;
  * </pre>
  *
  * @deprecated Use a conventional aura with a {@link net.demilich.metastone.game.spells.desc.condition.IsDamagedCondition}
- * 		whose {@link net.demilich.metastone.game.spells.desc.condition.ConditionArg#TARGET} is the {@link
- * 		EntityReference#TRIGGER_HOST} (i.e. the aura host) instead.
+ * whose {@link net.demilich.metastone.game.spells.desc.condition.ConditionArg#TARGET} is the {@link
+ * EntityReference#TRIGGER_HOST} (i.e. the aura host) instead.
  */
 @Deprecated
-public final class EnrageAura extends Aura {
+public final class EnrageAura extends AttributeValueAura {
 
-	private boolean active;
+	private static final EventTriggerDesc[] DEFAULT_ENRAGE_TRIGGER = ObjectArrays.concat(new EventTriggerDesc(EnrageChangedTrigger.class), DEFAULT_TRIGGERS);
+	private static final Condition ENRAGED_CONDITION = new ConditionDesc(IsDamagedCondition.class).create();
 
 	public EnrageAura(AuraDesc desc) {
-		this(desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
-		setDesc(desc);
-	}
-
-	private EnrageAura(SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {
-		super(new EnrageChangedTrigger(), applyAuraEffect, removeAuraEffect, targetSelection);
+		super(desc);
 	}
 
 	@Override
-	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
-		return active && super.affects(context, player, target, resolvedTargets);
+	protected EventTriggerDesc[] getDefaultTriggers() {
+		return DEFAULT_ENRAGE_TRIGGER;
 	}
 
 	@Override
-	@Suspendable
-	public void onGameEvent(GameEvent event) {
-		if (event.getEventType() == com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ENRAGE_CHANGED) {
-			active = event.getEventTarget().hasAttribute(Attribute.ENRAGED);
-		}
-		super.onGameEvent(event);
+	public Condition getCondition() {
+		return ENRAGED_CONDITION;
 	}
-
 }

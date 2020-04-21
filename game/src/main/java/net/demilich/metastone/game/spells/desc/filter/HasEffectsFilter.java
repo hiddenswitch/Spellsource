@@ -17,11 +17,6 @@ public class HasEffectsFilter extends EntityFilter {
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		Card c = entity.getSourceCard();
-		return c.hasAura()
-				|| c.hasBattlecry()
-				|| c.hasCardCostModifier()
-				|| c.hasDeathrattle()
-				|| c.hasTrigger()
-				|| c.isSpell();
+		return c.getDesc().getEnchantmentDescs().count() > 0L;
 	}
 }

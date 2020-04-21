@@ -5,12 +5,15 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This condition is fulfilled if the {@code target} or the single entity resolved by {@link ConditionArg#TARGET} is
- * damaged.
+ * {@code true} if the {@code target} or the single entity resolved by {@link ConditionArg#TARGET} is damaged.
  */
 public class IsDamagedCondition extends Condition {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(IsDamagedCondition.class);
 
 	public IsDamagedCondition(ConditionDesc desc) {
 		super(desc);
@@ -18,11 +21,16 @@ public class IsDamagedCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		if (getDesc().containsKey(ConditionArg.TARGET)) {
-			target = context.resolveSingleTarget(player, source, (EntityReference) getDesc().get(ConditionArg.TARGET));
+		if (!(target instanceof Actor)) {
+			LOGGER.warn("isFulfilled {} {}: target {} is not actor", context.getGameId(), desc, target);
+			return false;
 		}
 		return ((Actor) target).isWounded();
 	}
 
+	@Override
+	protected boolean usesFilter() {
+		return false;
+	}
 }
 

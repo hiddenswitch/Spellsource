@@ -9,7 +9,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
@@ -17,14 +16,11 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * this aura's {@link AuraArg#TARGET_SELECTION}.
  *
  * @see net.demilich.metastone.game.logic.GameLogic#processTargetModifiers(GameAction) for more about the target
- * 		modification logic.
+ * modification logic.
  */
-public final class TargetSelectionOverrideAura extends Aura {
+public final class TargetSelectionOverrideAura extends EffectlessAura {
 	public TargetSelectionOverrideAura(AuraDesc desc) {
 		super(desc);
-		includeExtraTriggers(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 
 	public TargetSelection getTargetSelection() {

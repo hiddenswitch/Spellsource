@@ -5,6 +5,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 
+/**
+ * {@code true} when the {@code player} has a weapon that is not broken.
+ */
 public class HasWeaponCondition extends Condition {
 
 	public HasWeaponCondition(ConditionDesc desc) {
@@ -13,8 +16,11 @@ public class HasWeaponCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		Weapon weapon = player.getHero().getWeapon();
-		if (weapon == null || weapon.isBroken()) {
+		if (player.getWeaponZone().isEmpty()) {
+			return false;
+		}
+		var weapon = player.getWeaponZone().get(0);
+		if (weapon.isBroken()) {
 			return false;
 		}
 		String cardId = (String) desc.get(ConditionArg.CARD);
@@ -24,4 +30,8 @@ public class HasWeaponCondition extends Condition {
 		return true;
 	}
 
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
 }

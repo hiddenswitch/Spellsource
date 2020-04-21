@@ -14,6 +14,27 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PuppeteerTests extends TestBase {
 
 	@Test
+	public void testBassBoost() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_bass_boost");
+			player.setMana(0);
+			playCard(context, player, "spell_lunstone");
+			assertEquals(2, player.getMana());
+			playCard(context, player, "spell_lunstone");
+			assertEquals(3, player.getMana());
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_bass_boost");
+			context.endTurn();
+			context.endTurn();
+			player.setMana(0);
+			playCard(context, player, "spell_lunstone");
+			assertEquals(1, player.getMana());
+		});
+	}
+
+	@Test
 	public void testBellringerJuriso() {
 		runGym((context, player, opponent) -> {
 			for (String cardId : new String[]{"minion_test_deathrattle", "minion_test_deathrattle_2", "minion_test_deathrattle_3"}) {
@@ -30,10 +51,10 @@ public class PuppeteerTests extends TestBase {
 			playCard(context, player, "minion_test_deathrattle");
 			int opponentHp = opponent.getHero().getHp();
 			playCard(context, player, "minion_bellringer_juriso");
-			assertEquals(shouldBeDrawn.getZone(), Zones.HAND, "Should have triggered a minion_test_deathrattle");
-			assertEquals(opponent.getHero().getHp(), opponentHp - 1, "should have triggered a minion_test_deathrattle_3");
-			assertEquals(player.getMinions().size(), 3);
-			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "minion_neutral_test", "should have triggered a minion_test_deathrattle_2");
+			assertEquals(Zones.HAND, shouldBeDrawn.getZone(), "Should have triggered a minion_test_deathrattle");
+			assertEquals(opponentHp - 1, opponent.getHero().getHp(), "should have triggered a minion_test_deathrattle_3");
+			assertEquals(3, player.getMinions().size());
+			assertEquals("minion_neutral_test", player.getMinions().get(2).getSourceCard().getCardId(), "should have triggered a minion_test_deathrattle_2");
 		});
 	}
 

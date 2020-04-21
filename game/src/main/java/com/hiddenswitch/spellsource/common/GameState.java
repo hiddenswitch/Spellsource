@@ -12,13 +12,13 @@ import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.logic.TurnState;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -47,7 +47,7 @@ public class GameState implements Serializable, Cloneable {
 	private final CardList tempCards;
 	private final Map<Environment, Object> environment;
 	private final Map<String, AtomicInteger> variables;
-	private final TriggerManager triggerManager;
+	private final List<Trigger> triggers;
 	private final int currentId;
 	private final int activePlayerId;
 	private final TurnState turnState;
@@ -76,7 +76,7 @@ public class GameState implements Serializable, Cloneable {
 		tempCards = clone.getTempCards();
 		environment = clone.getEnvironment();
 		currentId = clone.getLogic().getInternalId();
-		triggerManager = clone.getTriggerManager();
+		triggers = clone.getTriggers();
 		activePlayerId = clone.getActivePlayerId();
 		turnNumber = clone.getTurn();
 		this.turnState = turnState;
@@ -89,7 +89,7 @@ public class GameState implements Serializable, Cloneable {
 	                  Player player2,
 	                  CardList tempCards,
 	                  Map<Environment, Object> environment,
-	                  TriggerManager triggerManager,
+	                  List<Trigger> triggers,
 	                  int currentId, int activePlayerId,
 	                  TurnState turnState,
 	                  long timestamp,
@@ -101,7 +101,7 @@ public class GameState implements Serializable, Cloneable {
 		this.player2 = player2;
 		this.tempCards = tempCards;
 		this.environment = environment;
-		this.triggerManager = triggerManager;
+		this.triggers = triggers;
 		this.currentId = currentId;
 		this.activePlayerId = activePlayerId;
 		this.turnState = turnState;
@@ -158,7 +158,7 @@ public class GameState implements Serializable, Cloneable {
 				getPlayer2(),
 				getTempCards(),
 				getEnvironment(),
-				getTriggerManager(),
+				getTriggers(),
 				getCurrentId(),
 				getActivePlayerId(),
 				getTurnState(),
@@ -205,16 +205,6 @@ public class GameState implements Serializable, Cloneable {
 	 */
 	public Map<Environment, Object> getEnvironment() {
 		return environment;
-	}
-
-	/**
-	 * An instance of the class that manages and stores the state for {@link Trigger} objects.
-	 *
-	 * @see Trigger for more about triggers.
-	 * @see GameContext#fireGameEvent(GameEvent) for more about firing triggers and raising events.
-	 */
-	public TriggerManager getTriggerManager() {
-		return triggerManager;
 	}
 
 	/**
@@ -272,5 +262,9 @@ public class GameState implements Serializable, Cloneable {
 	 */
 	public Map<String, AtomicInteger> getVariables() {
 		return variables;
+	}
+
+	public List<Trigger> getTriggers() {
+		return triggers;
 	}
 }

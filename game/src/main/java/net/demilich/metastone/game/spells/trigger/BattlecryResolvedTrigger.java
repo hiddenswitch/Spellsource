@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.actions.OpenerAction;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.SummonEvent;
@@ -15,13 +15,13 @@ public final class BattlecryResolvedTrigger extends MinionPlayedTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
-		if (!summonEvent.isResolvedBattlecry()
-				|| Objects.equals(summonEvent.getBattlecryActions(), BattlecryAction.NONE)) {
+		if (!summonEvent.isResolvedOpener()
+				|| Objects.equals(summonEvent.getOpenerActions(), OpenerAction.NONE)) {
 			return false;
 		}
-		return super.innerQueues(event, host);
+		return super.innerQueues(event, enchantment, host);
 	}
 
 }

@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -24,13 +23,11 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
-import org.jetbrains.annotations.NotNull;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -59,33 +56,33 @@ import java.util.stream.Collectors;
  * @see CardCostModifierArg for a list of arguments for card cost modification.
  */
 public class CardCostModifier extends Enchantment implements HasDesc<CardCostModifierDesc> {
-	private static Logger LOGGER = LoggerFactory.getLogger(CardCostModifier.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CardCostModifier.class);
+	private static final EventTriggerDesc[] DEFAULT_TRIGGERS = new EventTriggerDesc[]{new EventTriggerDesc(CardReceivedTrigger.class), new EventTriggerDesc(AfterCardPlayedTrigger.class), new EventTriggerDesc(DidEndSequenceTrigger.class)};
+
 	/**
 	 * The default target reference is the {@link EntityReference#FRIENDLY_HAND}.
 	 */
-	private EntityReference targetReference = EntityReference.FRIENDLY_HAND;
-	private Condition condition;
+	private final EntityReference targetReference;
+	private final Condition condition;
 	private CardCostModifierDesc desc;
 
 	public CardCostModifier(CardCostModifierDesc desc) {
 		super();
 		// Updates at end of sequence and when cards are added to the hand
-		this.desc = desc;
-		this.getTriggers().addAll(createTriggers());
-		EventTriggerDesc triggerDesc = (EventTriggerDesc) desc.get(CardCostModifierArg.EXPIRATION_TRIGGER);
+		setDesc(desc);
+
+		var triggerDesc = (EventTriggerDesc) desc.get(CardCostModifierArg.EXPIRATION_TRIGGER);
 		if (triggerDesc != null) {
 			this.getExpirationTriggers().add(triggerDesc.create());
 		}
-		EventTriggerDesc[] triggerDescs = (EventTriggerDesc[]) desc.get(CardCostModifierArg.EXPIRATION_TRIGGERS);
+		var triggerDescs = (EventTriggerDesc[]) desc.get(CardCostModifierArg.EXPIRATION_TRIGGERS);
 		if (triggerDescs != null) {
 			this.getExpirationTriggers().addAll(Arrays.stream(triggerDescs).map(EventTriggerDesc::create).collect(Collectors.toList()));
 		}
-		if (desc.containsKey(CardCostModifierArg.TARGET)) {
-			targetReference = (EntityReference) desc.get(CardCostModifierArg.TARGET);
-		}
-		if (desc.containsKey(CardCostModifierArg.CONDITION)) {
-			condition = (Condition) desc.get(CardCostModifierArg.CONDITION);
-		}
+
+		targetReference = (EntityReference) desc.getOrDefault(CardCostModifierArg.TARGET, EntityReference.FRIENDLY_HAND);
+		condition = (Condition) desc.get(CardCostModifierArg.CONDITION);
+		setZones(Enchantment.getDefaultBattlefieldZones());
 	}
 
 	/**
@@ -132,7 +129,7 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 
 		if (Objects.equals(hostReference, EntityReference.NONE)) {
 			LOGGER.error(String.format("appliesTo: The card cost modified from %s had no host reference.", getSourceCard().getCardId()));
-			expire();
+			expire(context);
 			return false;
 		}
 
@@ -151,7 +148,7 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 			host = context.resolveSingleTarget(hostReference);
 		} catch (NullPointerException notFound) {
 			LOGGER.error(String.format("appliesTo: The card cost modifier from %s with desc %s has a host reference %s which could not be found", getSourceCard().getCardId(), getDesc().toString(), hostReference == null ? "(null)" : hostReference.toString()));
-			expire();
+			expire(context);
 			return false;
 		}
 
@@ -258,7 +255,7 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 	}
 
 	@Override
-	public void onAdd(GameContext context) {
+	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 	}
 
 	public int process(GameContext context, Entity host, Card card, int currentManaCost, Player player) {
@@ -268,7 +265,7 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 	}
 
 	@Override
-	public boolean hasPersistentOwner() {
+	public boolean isPersistentOwner() {
 		return false;
 	}
 
@@ -288,12 +285,9 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 		this.desc = (CardCostModifierDesc) desc;
 	}
 
-	@NotNull
-	private static List<EventTrigger> createTriggers() {
-		return Arrays.asList(
-				CardReceivedTrigger.create(),
-				AfterCardPlayedTrigger.create(),
-				DidEndSequenceTrigger.create());
+	@Override
+	protected EventTriggerDesc[] getDefaultTriggers() {
+		return DEFAULT_TRIGGERS;
 	}
 
 	@Override
@@ -309,7 +303,13 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 	}
 
 	@Override
+	protected Zones[] getDefaultZones() {
+		return Enchantment.getDefaultBattlefieldZones();
+	}
+
+	@Override
 	protected boolean shouldNotifyEnchantmentFired(GameEvent event) {
 		return false;
 	}
+
 }

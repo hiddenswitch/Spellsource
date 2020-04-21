@@ -44,6 +44,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.SPELL, ParseValueType.SPELL);
 		ctx.add(AuraArg.NAME, ParseValueType.STRING);
 		ctx.add(AuraArg.DESCRIPTION, ParseValueType.STRING);
+		ctx.add(AuraArg.ZONES, ParseValueType.ZONES);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.cards.Attribute;
 
 /**
- * Evaluates to {@code true} if the player has the specified {@link ConditionArg#ATTRIBUTE} anywhere.
+ * {@code true} if the player has the specified {@link ConditionArg#ATTRIBUTE} anywhere.
  */
 public class AttributeExistsCondition extends Condition {
 
@@ -37,5 +37,15 @@ public class AttributeExistsCondition extends Condition {
 			}
 		}
 		return context.getLogic().attributeExists(attribute);
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
+
+	@Override
+	protected boolean usesFilter() {
+		return false;
 	}
 }

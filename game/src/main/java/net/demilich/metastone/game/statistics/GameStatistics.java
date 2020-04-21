@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.statistics;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -147,7 +148,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		}
 		String cardId = card.getCardId();
 		if (!getCardsPlayed().containsKey(cardId)) {
-			getCardsPlayed().put(cardId, new HashMap<Integer, Integer>());
+			getCardsPlayed().put(cardId, new HashMap<>());
 		}
 		if (!getCardsPlayed().get(cardId).containsKey(turn)) {
 			getCardsPlayed().get(cardId).put(turn, 0);
@@ -209,6 +210,19 @@ public class GameStatistics implements Cloneable, Serializable {
 
 	public void startTurn() {
 		add(Statistic.TURNS_TAKEN, 1);
+	}
+
+	public void endTurn(GameContext context) {
+		set(Statistic.LAST_TURN, (long) context.getTurn());
+	}
+
+	/**
+	 * The last turn the player took, or {@code -1L} if the player has not taken a turn yet.
+	 *
+	 * @return
+	 */
+	public long getLastTurn() {
+		return (long) stats.getOrDefault(Statistic.LAST_TURN, -1L);
 	}
 
 	@Override

@@ -2,19 +2,23 @@ package net.demilich.metastone.game.events;
 
 import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.actions.OpenerAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import org.jetbrains.annotations.NotNull;
 
+import static com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BEFORE_SUMMON;
+
+/**
+ * Fires right after the minion has hit the board. Openers have not been resolved, enchantments have not been put into
+ * play.
+ * <p>
+ * Another effect may have still transformed this minion. Transforming here will ensure the newly transformed minion's
+ * enchantments written on its text come into play.
+ */
 public final class BeforeSummonEvent extends SummonEvent {
 
-	public BeforeSummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean didResolveBattlecry, BattlecryAction battlecryAction) {
-		super(context, minion, source, didResolveBattlecry, battlecryAction);
-	}
-
-	@Override
-	public GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BEFORE_SUMMON;
+	public BeforeSummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean didResolveOpener, OpenerAction[] openerActions) {
+		super(BEFORE_SUMMON, context, minion, source, didResolveOpener, openerActions);
 	}
 }

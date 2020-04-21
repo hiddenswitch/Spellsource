@@ -1,27 +1,15 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.Player;
 
-public class GameStartEvent extends GameEvent {
+/**
+ * The game has started. Fires once for each player.
+ */
+public class GameStartEvent extends BasicGameEvent {
 
-
-	public GameStartEvent(GameContext context, int playerId) {
-		super(context, playerId, -1);
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return null;
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.GAME_START;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
+	public GameStartEvent(GameContext context, Player player) {
+		super(EventTypeEnum.GAME_START, true, context, null, player.getId(), -1);
 	}
 }

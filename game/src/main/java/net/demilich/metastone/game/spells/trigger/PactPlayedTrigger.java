@@ -12,7 +12,7 @@ public final class PactPlayedTrigger extends QuestPlayedTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		var questPlayedEvent = (QuestPlayedEvent) event;
 		return questPlayedEvent.getQuest().isPact();
 	}

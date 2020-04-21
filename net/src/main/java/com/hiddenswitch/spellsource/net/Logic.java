@@ -106,7 +106,7 @@ public interface Logic {
 				com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.KILL,
 				Attribute.WEAKEST_ON_BATTLEFIELD_WHEN_DESTROYED_COUNT,
 				(PersistenceContext<KillEvent> context) -> {
-					Actor victim = (Actor) context.event().getVictim();
+					Actor victim = (Actor) context.event().getTarget();
 
 					GameContext gameContext = context.event().getGameContext();
 					Optional<Minion> lowestAttackMinionStillOnBattlefield = gameContext.getEntities()

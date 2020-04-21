@@ -19,9 +19,11 @@ public final class RaceCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		String race = (String) desc.get(ConditionArg.RACE);
-		if (desc.containsKey(ConditionArg.TARGET)) {
-			target = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET));
-		}
 		return Race.hasRace(context, target, race);
+	}
+
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
 	}
 }

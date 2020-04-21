@@ -84,8 +84,8 @@ class GameStateValueBehaviour(Behaviour):
         elif hc == self._ctx.HeroClass.BLACK:
             hero_damage += 1
         
-        if hero.getWeapon() is not None:
-            hero_damage += hero.getWeapon().getWeaponDamage()
+        if player.getWeaponZone().get(0) is not None:
+            hero_damage += player.getWeaponZone().get(0).getWeaponDamage()
         
         return hero_damage
     
