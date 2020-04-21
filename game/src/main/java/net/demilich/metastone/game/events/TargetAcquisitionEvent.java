@@ -5,46 +5,24 @@ import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Entity;
 
-public class TargetAcquisitionEvent extends GameEvent {
+/**
+ * A target will be acquired for the specified game action.
+ * <p>
+ * Gives an opportunity to override the target or cancel target acquisition.
+ */
+public class TargetAcquisitionEvent extends BasicGameEvent {
 
-	private final Entity target;
-	private final Entity source;
 	private final ActionType actionType;
 	private final GameAction action;
 
 	public TargetAcquisitionEvent(GameContext context, GameAction sourceAction, Entity source, Entity target) {
-		super(context, target.getOwner(), source.getOwner());
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TARGET_ACQUISITION, context, context.getPlayer(source.getOwner()), source, target);
 		this.action = sourceAction;
 		this.actionType = sourceAction == null ? null : sourceAction.getActionType();
-		this.source = source;
-		this.target = target;
 	}
 
 	public ActionType getActionType() {
 		return actionType;
-	}
-
-	@Override
-	public Entity getEventSource() {
-		return getSource();
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return getTarget();
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TARGET_ACQUISITION;
-	}
-
-	public Entity getSource() {
-		return source;
-	}
-
-	public Entity getTarget() {
-		return target;
 	}
 
 	public GameAction getAction() {

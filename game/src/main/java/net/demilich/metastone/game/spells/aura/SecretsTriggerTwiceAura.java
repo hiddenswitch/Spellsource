@@ -5,19 +5,20 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
- * When this aura is active, spells from {@link net.demilich.metastone.game.spells.trigger.secrets.Secret}s will be performed twice
+ * When this aura is active, spells from {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} will be
+ * performed twice
  */
-public class SecretsTriggerTwiceAura extends Aura {
+public class SecretsTriggerTwiceAura extends EffectlessAura {
 
+	public SecretsTriggerTwiceAura(AuraDesc desc) {
+		super(desc);
+	}
 
-    public SecretsTriggerTwiceAura(AuraDesc desc) {
-        super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
-    }
-
-    @Override
-    @Suspendable
-    public void onGameEvent(GameEvent event) {
-    }
+	@Override
+	protected EntityReference getTargets() {
+		return EntityReference.FRIENDLY_SECRETS;
+	}
 }

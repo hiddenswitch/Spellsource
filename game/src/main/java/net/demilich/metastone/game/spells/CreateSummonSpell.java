@@ -58,7 +58,7 @@ public class CreateSummonSpell extends Spell {
 		SpellDesc successfulSummonSpell = (SpellDesc) desc.get(SpellArg.SPELL1);
 		for (int i = 0; i < count; i++) {
 			Card card = newCard.clone();
-			Minion minion = card.summon();
+			Minion minion = card.minion();
 			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
 				Entity newMinion = minion.transformResolved(context);
 				if (minion.isInPlay()) {

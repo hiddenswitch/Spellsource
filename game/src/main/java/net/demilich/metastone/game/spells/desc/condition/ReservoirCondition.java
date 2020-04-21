@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Evaluates to {@code true} when the number of cards in the player's deck is greater or equal to the {@link
- * ConditionArg#VALUE}.
+ * {@code true} when the number of cards in the player's deck is greater or equal to the {@link ConditionArg#VALUE}.
  * <p>
  * If two values are specified, evalutes to {@code true} if the number of cards in the player's deck is equal to or
  * between the two values.
@@ -26,7 +25,7 @@ public class ReservoirCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		Boolean forced = reservoirsForced(context, player, source);
+		var forced = reservoirsForced(context, player, source);
 		if (forced != null) {
 			return forced;
 		}
@@ -40,11 +39,16 @@ public class ReservoirCondition extends Condition {
 	}
 
 	public static Boolean reservoirsForced(GameContext context, Player player, Entity source) {
-		List<ReservoirsAlwaysActiveAura> activeAuras = SpellUtils.getAuras(context, player.getId(), ReservoirsAlwaysActiveAura.class);
-		List<ReservoirsNeverActiveAura> inactiveAuras = SpellUtils.getAuras(context, player.getId(), ReservoirsNeverActiveAura.class);
+		var activeAuras = SpellUtils.getAuras(context, player.getId(), ReservoirsAlwaysActiveAura.class);
+		var inactiveAuras = SpellUtils.getAuras(context, player.getId(), ReservoirsNeverActiveAura.class);
 		return Stream.concat(activeAuras.stream(), inactiveAuras.stream())
 				.min(Comparator.comparingInt(aura -> aura.getHostReference().getId()))
 				.map(aura -> aura instanceof ReservoirsAlwaysActiveAura)
 				.orElse(null);
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }

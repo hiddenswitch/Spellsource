@@ -52,7 +52,7 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 				thisButLater.put(SpellArg.TARGET, target.getReference());
 			}
 			thisButLater.put(SpellArg.SECONDARY_TARGET, card.getReference());
-			trigger.spell = thisButLater;
+			trigger.setSpell(thisButLater);
 			SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(trigger);
 			SpellUtils.castChildSpell(context, player, addEnchantmentSpellDesc, source, player);
 		} else {

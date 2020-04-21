@@ -579,7 +579,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
 					.triggerFired(new GameEventTriggerFired()
 							.triggerSourceId(triggerEvent.getEnchantment().getHostReference().getId()));
-			net.demilich.metastone.game.entities.Entity source = triggerEvent.getSource(workingContext);
+			net.demilich.metastone.game.entities.Entity source = triggerEvent.getSource();
 			var hasSource = source != null && source.getSourceCard() != null;
 			// Send the source entity if there is one. Always send it if the source is owned by the receiving player or if
 			// the source is in play.
@@ -591,7 +591,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			message.event(clientTriggerEvent);
 		} else if (event instanceof GameAction) {
 			var action = (GameAction) event;
-			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
+			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource();
 			com.hiddenswitch.spellsource.client.models.Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
 
 			if (sourceEntity.getEntityType() == EntityType.CARD) {

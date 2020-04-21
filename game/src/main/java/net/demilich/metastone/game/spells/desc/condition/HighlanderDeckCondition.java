@@ -7,6 +7,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Evaluates to {@code true} when there is exactly one copy of each card in the {@link EntityReference#FRIENDLY_DECK}.
+ */
 public class HighlanderDeckCondition extends NumberOfCopiesCondition {
 
 	public HighlanderDeckCondition(ConditionDesc desc) {

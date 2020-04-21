@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -36,7 +35,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		for (Minion minion : opponent.getMinions()) {
 			damageOnBoard += minion.getAttack() * minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
 		}
-		damageOnBoard += getHeroDamage(opponent.getHero());
+		damageOnBoard += getHeroDamage(opponent.getHero(), player);
 
 		int remainingHp = player.getHero().getEffectiveHp() - damageOnBoard;
 		boolean observesLethal = GameStateValueBehaviour.observesLethal(context, opponent.getId(), player.getHero());
@@ -49,7 +48,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		return ThreatLevel.GREEN;
 	}
 
-	private static int getHeroDamage(Hero hero) {
+	private static int getHeroDamage(Hero hero, Player player) {
 		int heroDamage = 0;
 		if (hero.getHeroClass().equals("BLUE")) {
 			heroDamage += 1;
@@ -60,8 +59,8 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		} else if (hero.getHeroClass().equals("BLACK")) {
 			heroDamage += 1;
 		}
-		if (hero.getWeapon() != null) {
-			heroDamage += hero.getWeapon().getWeaponDamage();
+		if (!player.getWeaponZone().isEmpty()) {
+			heroDamage += player.getWeaponZone().get(0).getWeaponDamage();
 		}
 		return heroDamage;
 	}

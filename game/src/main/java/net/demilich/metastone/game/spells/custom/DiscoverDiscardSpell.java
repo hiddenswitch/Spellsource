@@ -80,7 +80,7 @@ public final class DiscoverDiscardSpell extends Spell {
 					}
 					final int index = chosenCard.getAttributeValue(Attribute.HAND_INDEX);
 					Card realCard = discardableCards.stream().filter(card -> card.getAttributeValue(Attribute.HAND_INDEX) == index).findFirst().get();
-					discardableCards.forEach(card -> context.getLogic().removeAttribute(card, null, Attribute.HAND_INDEX));
+					discardableCards.forEach(card -> context.getLogic().removeAttribute(player, null, card, Attribute.HAND_INDEX));
 
 					context.getLogic().discardCard(player, realCard);
 					discardableCards.remove(realCard);

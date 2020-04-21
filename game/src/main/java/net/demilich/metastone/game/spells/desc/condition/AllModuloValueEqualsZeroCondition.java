@@ -78,25 +78,28 @@ public class AllModuloValueEqualsZeroCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		final EntityReference targetKey = (EntityReference) desc.get(ConditionArg.TARGET);
-		List<Entity> targets;
-		if (targetKey == null) {
-			targets = Collections.singletonList(target);
-		} else {
-			targets = context.resolveTarget(player, source, targetKey);
-		}
+		var attributeValue = desc.getValue(ConditionArg.VALUE1, context, player, target, source, 0);
+		var moduloValue = desc.getValue(ConditionArg.VALUE2, context, player, target, source, 2);
+		return attributeValue % moduloValue == 0;
+	}
 
-		if (desc.containsKey(ConditionArg.FILTER)) {
-			EntityFilter filter = (EntityFilter) desc.get(ConditionArg.FILTER);
-			targets = targets.stream().filter(filter.matcher(context, player, source)).collect(toList());
-		}
+	@Override
+	protected boolean singleTargetOnly() {
+		return false;
+	}
 
-		boolean passes = true;
-		for (Entity entity : targets) {
-			final int attributeValue = desc.getValue(ConditionArg.VALUE1, context, player, entity, source, 0);
-			final int moduloValue = desc.getValue(ConditionArg.VALUE, context, player, entity, source, 2);
-			passes &= attributeValue % moduloValue == 0;
-		}
-		return passes;
+	@Override
+	protected boolean multipleTargetsEvaluatedAsOr() {
+		return false;
+	}
+
+	@Override
+	protected boolean multipleTargetsEvaluatedAsAnd() {
+		return true;
+	}
+
+	@Override
+	protected boolean usesFilter() {
+		return true;
 	}
 }

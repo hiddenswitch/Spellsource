@@ -57,6 +57,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	protected String name;
 	protected AttributeMap attributes;
+	protected Card sourceCard;
+	protected Entity effectSource;
+
 	/**
 	 * @see #getId()
 	 */
@@ -188,14 +191,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The name.
 	 */
 	public String getName() {
-		if ((getEntityType() == EntityType.CARD
-				&& getSourceCard() != null
-				&& getSourceCard().getCardSet() == "SPELLSOURCE")
-				|| getEntityType() == EntityType.PLAYER) {
-			return (String) getAttributes().getOrDefault(Attribute.NAME, name);
-		} else {
-			return name;
-		}
+		return (String) getAttributes().getOrDefault(Attribute.NAME, (name == null) ? ((getSourceCard() != null) ? getSourceCard().getName() : name) : name);
 	}
 
 	/**
@@ -219,6 +215,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some notion
 	 * of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
 	 */
+	@NotNull
 	public EntityReference getReference() {
 		return EntityReference.pointTo(this);
 	}
@@ -713,5 +710,24 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 				&& getZone() == Zones.GRAVEYARD
 				&& hasAttribute(Attribute.DIED_ON_TURN)
 				&& !hasAttribute(Attribute.PERMANENT);
+	}
+
+	@Override
+	public Card getSourceCard() {
+		return sourceCard;
+	}
+
+	public Entity setSourceCard(Card sourceCard) {
+		this.sourceCard = sourceCard;
+		return this;
+	}
+
+	public Entity getEffectSource() {
+		return effectSource;
+	}
+
+	public Entity setEffectSource(Entity effectSource) {
+		this.effectSource = effectSource;
+		return this;
 	}
 }

@@ -13,22 +13,22 @@ public final class SupremacyTrigger extends AfterPhysicalAttackTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		return event.getEventTarget() != null && event.getEventTarget().getEntityType() == EntityType.MINION;
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		return event.getTarget() != null && event.getTarget().getEntityType() == EntityType.MINION;
 	}
 
 	@Override
 	protected boolean hostConditionMet(GameEvent event, Entity host) {
 		if (host.getEntityType() == EntityType.WEAPON) {
-			return host.getOwner() == event.getEventSource().getOwner() && event.getEventSource().getEntityType() == EntityType.HERO;
+			return host.getOwner() == event.getSource().getOwner() && event.getSource().getEntityType() == EntityType.HERO;
 		} else {
-			return event.getEventSource() == host;
+			return event.getSource() == host;
 		}
 	}
 
 	@Override
-	public boolean fires(GameEvent event) {
-		return event.getEventTarget() != null && event.getEventTarget().isDestroyed();
+	public boolean fires(GameEvent event, Entity host, int playerId) {
+		return event.getTarget() != null && event.getTarget().isDestroyed();
 	}
 }
 

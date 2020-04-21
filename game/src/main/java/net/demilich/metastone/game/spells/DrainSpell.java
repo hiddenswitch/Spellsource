@@ -17,6 +17,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -74,7 +75,7 @@ public final class DrainSpell extends Spell {
 		}
 
 		for (DrainEvent event : events) {
-			context.fireGameEvent(event);
+			context.getLogic().fireGameEvent(event);
 		}
 	}
 
@@ -101,7 +102,7 @@ public final class DrainSpell extends Spell {
 
 	@Suspendable
 	public static int drainDamage(GameContext context, Player player, Entity source, Entity target, int damage, List<DrainEvent> events) {
-		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, DamageTypeEnum.DRAIN);
+		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, EnumSet.of(DamageTypeEnum.DRAIN));
 		events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
 		return thisDamageDealt;
 	}

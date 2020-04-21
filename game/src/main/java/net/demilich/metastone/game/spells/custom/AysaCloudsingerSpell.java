@@ -105,20 +105,20 @@ public final class AysaCloudsingerSpell extends Spell {
 		});
 
 		// Construct the spell
-		switchingEnchantment.spell = MetaSpell.create(
+		switchingEnchantment.setSpell(MetaSpell.create(
 				// Prevents fatal damage
 				ModifyDamageSpell.create(0, AlgebraicOperation.SET),
 				CastAfterSequenceSpell.create(MetaSpell.create(
 						// Then changes the hero
 						ChangeHeroSpell.create(TargetPlayer.SELF, originalHero.getCardId(), false),
 						// The remove spell is responsible for setting the HP in the event the token is on the battlefield
-						removeSpell)));
+						removeSpell))));
 
-		switchingEnchantment.maxFires = 1;
+		switchingEnchantment.setMaxFires(1);
 
 		// The fatal damage is only prevented if the token is in play, the hand or the deck
-		switchingEnchantment.eventTrigger = FatalDamageTrigger.create(TargetPlayer.BOTH, TargetPlayer.SELF, EntityType.HERO);
-		switchingEnchantment.eventTrigger.put(EventTriggerArg.QUEUE_CONDITION, OrCondition.create(tokenOnBattlefield, tokenInHand, tokenInDeck));
+		switchingEnchantment.setEventTrigger(FatalDamageTrigger.create(TargetPlayer.BOTH, TargetPlayer.SELF, EntityType.HERO));
+		switchingEnchantment.getEventTrigger().put(EventTriggerArg.QUEUE_CONDITION, OrCondition.create(tokenOnBattlefield, tokenInHand, tokenInDeck));
 		SpellDesc addEnchantmentSpell = AddEnchantmentSpell.create(EntityReference.FRIENDLY_PLAYER, switchingEnchantment);
 
 		// Final spell

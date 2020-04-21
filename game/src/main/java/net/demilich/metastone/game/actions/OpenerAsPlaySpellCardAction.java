@@ -11,14 +11,14 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
- * Allows a battlecry to be encapsulated as a spell card.
+ * Allows an opener to be encapsulated as a spell card.
  */
-public class BattlecryAsPlaySpellCardAction extends PlaySpellCardAction {
+public final class OpenerAsPlaySpellCardAction extends PlaySpellCardAction {
 
 	private final EntityReference sourceMinion;
 	private final Condition condition;
 
-	public BattlecryAsPlaySpellCardAction(EntityReference sourceMinion, SpellDesc battlecrySpell, Card card, TargetSelection targetSelection, Condition condition) {
+	public OpenerAsPlaySpellCardAction(EntityReference sourceMinion, SpellDesc battlecrySpell, Card card, TargetSelection targetSelection, Condition condition) {
 		super(battlecrySpell, card, targetSelection);
 		this.sourceMinion = sourceMinion;
 		this.condition = condition;
@@ -39,7 +39,7 @@ public class BattlecryAsPlaySpellCardAction extends PlaySpellCardAction {
 	}
 
 	@Override
-	public BattlecryAsPlaySpellCardAction clone() {
-		return (BattlecryAsPlaySpellCardAction) super.clone();
+	public OpenerAsPlaySpellCardAction clone() {
+		return (OpenerAsPlaySpellCardAction) super.clone();
 	}
 }

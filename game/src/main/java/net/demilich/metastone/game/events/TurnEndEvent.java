@@ -1,26 +1,15 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
-public class TurnEndEvent extends GameEvent {
+/**
+ * The player ended their turn.
+ */
+public class TurnEndEvent extends BasicGameEvent {
 
 	public TurnEndEvent(GameContext context, int playerId) {
-		super(context, playerId, -1);
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return null;
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_END;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
+		super(GameEvent.EventTypeEnum.TURN_END, true, context, context.getPlayer(playerId), playerId, -1);
 	}
 }

@@ -120,7 +120,7 @@ public class ReturnTargetToHandSpell extends Spell {
 			}
 			// It must still be in the hand to be a returned to hand effect
 			if (returnedCard.getZone() == Zones.HAND) {
-				context.fireGameEvent(new ReturnToHandEvent(context, player.getId(), returnedCard, target));
+				context.getLogic().fireGameEvent(new ReturnToHandEvent(context, player.getId(), returnedCard, target));
 			}
 		}
 	}

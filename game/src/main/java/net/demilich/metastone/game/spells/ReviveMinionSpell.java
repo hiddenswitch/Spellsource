@@ -45,7 +45,7 @@ public final class ReviveMinionSpell extends Spell {
 		Actor targetActor = (Actor) target;
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		Card card = targetActor.getSourceCard();
-		Minion minion = card.summon();
+		Minion minion = card.minion();
 		if (desc.containsKey(SpellArg.SPELL1)) {
 			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL1), source, target, targetActor);
 		}

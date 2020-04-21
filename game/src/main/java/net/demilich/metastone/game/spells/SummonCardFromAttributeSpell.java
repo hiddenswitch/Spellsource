@@ -53,7 +53,7 @@ public class SummonCardFromAttributeSpell extends Spell {
 		}
 		for (int i = 0; i < count; i++) {
 			card = count == 1 ? card : card.clone();
-			context.getLogic().summon(player.getId(), card.summon(), source, boardPosition, false);
+			context.getLogic().summon(player.getId(), card.minion(), source, boardPosition, false);
 		}
 	}
 }

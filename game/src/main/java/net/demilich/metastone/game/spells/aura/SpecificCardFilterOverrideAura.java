@@ -9,9 +9,9 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  * This aura tricks {@link SpecificCardFilter} into thinking the affected entities are actually {@link
  * net.demilich.metastone.game.spells.desc.aura.AuraArg#CARD}.
  */
-public class SpecificCardFilterOverrideAura extends Aura {
+public class SpecificCardFilterOverrideAura extends EffectlessAura {
+
 	public SpecificCardFilterOverrideAura(AuraDesc desc) {
-		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
-		setDesc(desc);
+		super(desc);
 	}
 }

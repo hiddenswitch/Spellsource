@@ -5,7 +5,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.SpellDescDeserializer;
 import net.demilich.metastone.game.entities.Entity;
@@ -19,13 +21,13 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
+import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -79,10 +81,12 @@ import static java.util.stream.Collectors.toList;
  * generally at the end of any action besides discovering.
  *
  * @see SpellDescDeserializer for the official interpretation of each of the attributes (how they are converted from
- * 		JSON to a concrete value in the game).
+ * JSON to a concrete value in the game).
  */
 @JsonDeserialize(using = SpellDescDeserializer.class)
-public class SpellDesc extends Desc<SpellArg, Spell> {
+public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantmentDesc<Aftermath> {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(SpellDesc.class);
 
 	public SpellDesc() {
 		super(SpellArg.class);
@@ -237,7 +241,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	 *                    MetaSpell}.
 	 * @param childSpells The spells that will occur after the {@code masterSpell} is casted.
 	 * @return A new {@link SpellDesc}, or a {@link net.demilich.metastone.game.spells.NullSpell} spell desc if all the
-	 * 		inputs were null.
+	 * inputs were null.
 	 */
 	@NotNull
 	public static SpellDesc join(SpellDesc masterSpell, SpellDesc... childSpells) {
@@ -292,8 +296,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	 * When {@link SpellArg#CARD_SOURCE} is not specified, a {@link CatalogueSource} using the current {@link
 	 * net.demilich.metastone.game.decks.DeckFormat} is assumed.
 	 * <p>
-	 * When neither is specified, this method returns all {@link net.demilich.metastone.game.cards.desc.CardDesc#collectible}
-	 * cards in the given format.
+	 * When neither is specified, this method returns all {@link CardDesc#getCollectible()} cards in the given format.
 	 *
 	 * @param context The game context to use for evaluating the card source and filter.
 	 * @param player  The player from whose point of view the card source and filter should be evaluated.
@@ -330,5 +333,10 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 
 	public String[] getCards() {
 		return (String[]) get(SpellArg.CARDS);
+	}
+
+	@Suspendable
+	public Optional<Aftermath> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
+		return context.getLogic().tryCreateAftermath(this, effectSource, enchantmentSource, host, force);
 	}
 }

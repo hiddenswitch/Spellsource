@@ -19,7 +19,11 @@ public interface Notification extends Serializable {
 	 *
 	 * @return A reference to the entity that is the visualizable source of this notification.
 	 */
-	Entity getSource(GameContext context);
+	Entity getSource();
+
+	default Entity getSource(GameContext context) {
+		return getSource();
+	}
 
 	/**
 	 * For visualization purposes, what are the targets of this notification?

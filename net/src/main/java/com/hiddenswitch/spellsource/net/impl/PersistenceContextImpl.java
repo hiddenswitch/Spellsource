@@ -102,7 +102,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 				}
 			}
 
-			List<Entity> entities = gameContext.resolveTarget(activePlayer, event().getEventSource(), reference);
+			List<Entity> entities = gameContext.resolveTarget(activePlayer, event().getSource(), reference);
 			if (entities == null || entities.isEmpty()) {
 				return 0L;
 			}

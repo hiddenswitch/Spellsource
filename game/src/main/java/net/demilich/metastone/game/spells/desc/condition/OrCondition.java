@@ -57,4 +57,13 @@ public class OrCondition extends Condition {
 		return false;
 	}
 
+	@Override
+	protected boolean multipleTargetsEvaluatedAsAnd() {
+		return false;
+	}
+
+	@Override
+	protected boolean multipleTargetsEvaluatedAsOr() {
+		return true;
+	}
 }

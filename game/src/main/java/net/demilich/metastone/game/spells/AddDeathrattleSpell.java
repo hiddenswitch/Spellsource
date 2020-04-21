@@ -1,14 +1,17 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Streams;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.AbstractEnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.spells.trigger.DiscardTrigger;
 import net.demilich.metastone.game.spells.trigger.MinionDeathTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -17,8 +20,9 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Adds the deathrattle specified by the {@link SpellArg#SPELL} to the {@link SpellArg#TARGET} or {@code target}.
@@ -96,43 +100,43 @@ public class AddDeathrattleSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.CARD, SpellArg.VALUE);
-		List<SpellDesc> deathrattles = desc.subSpells(0);
-		Card[] cards = SpellUtils.getCards(context, desc);
 		Integer value = null;
 		if (desc.containsKey(SpellArg.VALUE)) {
 			value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		}
-		if (cards.length != 0) {
-			for (Card card : cards) {
-				var deathrattle = card.getDesc().getDeathrattle();
-				if (deathrattle == null) {
-					logger.warn("onCast {} {}: Trying to add a deathrattle from a card that doesn't contain a deathrattle {}", context.getGameId(), source, card);
-					continue;
-				}
-				if (value != null) {
-					deathrattle = deathrattle.addArg(SpellArg.VALUE, value);
-				}
-				deathrattles.add(deathrattle);
+
+		Integer finalValue = value;
+		Streams.concat(
+				desc.spellStream(0, false).map(as -> new CardAftermathTuple(as, source.getSourceCard())),
+				Arrays.stream(SpellUtils.getCards(context, desc)).filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c))
+		).forEach(a -> {
+			var spell = a.getSpell();
+			if (finalValue != null) {
+				spell = spell.addArg(SpellArg.VALUE, finalValue);
 			}
+			if (desc.containsKey(SpellArg.CARD)) {
+				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+			var aftermath = spell.tryCreate(context, player, source, a.getEnchantmentSource(), target, true);
+			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, target);
+		});
+	}
+
+	public static class CardAftermathTuple {
+		public SpellDesc getSpell() {
+			return spell;
 		}
-		if (target instanceof Actor) {
-			Actor actor = (Actor) target;
-			for (SpellDesc deathrattle : deathrattles) {
-				var clone = deathrattle.clone();
-				if (value != null) {
-					clone.put(SpellArg.VALUE, value);
-				}
-				actor.addDeathrattle(clone);
-			}
-		} else if (target instanceof Card) {
-			Card card = (Card) target;
-			for (SpellDesc deathrattle : deathrattles) {
-				var clone = deathrattle.clone();
-				if (value != null) {
-					clone.put(SpellArg.VALUE, value);
-				}
-				card.addDeathrattle(clone);
-			}
+
+		public Card getEnchantmentSource() {
+			return enchantmentSource;
+		}
+
+		private final SpellDesc spell;
+		private final Card enchantmentSource;
+
+		public CardAftermathTuple(SpellDesc spell, Card enchantmentSource) {
+			this.spell = spell;
+			this.enchantmentSource = enchantmentSource;
 		}
 	}
 }

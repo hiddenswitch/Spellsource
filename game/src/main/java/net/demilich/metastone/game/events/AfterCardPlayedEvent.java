@@ -6,35 +6,14 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Fired after a card is played.
+ * The card's effects have occurred and it has been moved to the graveyard.
  */
-public class AfterCardPlayedEvent extends GameEvent implements HasCard {
-	private Card card;
+public class AfterCardPlayedEvent extends CardEvent implements HasCard {
 
 	public AfterCardPlayedEvent(GameContext context, int playerId, EntityReference cardReference) {
-		super(context, playerId, playerId);
-		card = (Card) context.resolveSingleTarget(cardReference);
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return null;
-	}
-
-	@Override
-	public Entity getEventSource() {
-		return card;
-	}
-
-	@Override
-	public EventTypeEnum getEventType() {
-		return EventTypeEnum.AFTER_PLAY_CARD;
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return card;
+		super(EventTypeEnum.AFTER_PLAY_CARD, context, playerId, context.tryFind(cardReference), null, (Card) context.tryFind(cardReference));
 	}
 }

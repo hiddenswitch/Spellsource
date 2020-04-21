@@ -13,11 +13,11 @@ public final class NonDrainDamageReceivedTrigger extends DamageReceivedTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		DamageEvent damageEvent=(DamageEvent)event;
-		if (damageEvent.getDamageType()== DamageTypeEnum.DRAIN) {
+		if (damageEvent.getDamageType().contains(DamageTypeEnum.DRAIN)) {
 			return false;
 		}
-		return super.innerQueues(event, host);
+		return super.innerQueues(event, enchantment, host);
 	}
 }

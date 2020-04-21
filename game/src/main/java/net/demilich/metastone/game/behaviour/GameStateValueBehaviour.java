@@ -468,13 +468,13 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				for (var i = 0; i < actors.length; i++) {
 					var actor = actors[i];
 					var attacks = actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + actor.getAttributeValue(Attribute.EXTRA_ATTACKS);
-					if (attacks > 0 && actor.canAttackThisTurn()) {
+					if (attacks > 0 && actor.canAttackThisTurn(context)) {
 						newMaxDepth += attacks;
 					}
 				}
 				var cards = new Card[player.getHand().size() + 1];
 				player.getHand().toArray(cards);
-				cards[cards.length - 1] = player.getHero().getHeroPower();
+				cards[cards.length - 1] = player.getHeroPowerZone().get(0);
 				for (var i = 0; i < cards.length; i++) {
 					var card = cards[i];
 					if (context.getLogic().canPlayCard(player, card)) {
@@ -553,7 +553,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				// them around to get their effects.
 				if (isPruneEarlyEndTurn()
 						&& edges.size() > 1
-						&& context.getTriggerManager().getTriggers()
+						&& context.getTriggers()
 						.stream().flatMap(t -> t instanceof Enchantment ? ((Enchantment) t).getTriggers().stream() : Stream.empty()).noneMatch(t -> t instanceof TurnTrigger)) {
 					edges.removeIf(ga -> ga.getActionType() == ActionType.END_TURN);
 				}
@@ -935,11 +935,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 			// Make sure that friendly start turns don't accidentally wind up killing the opponent
 			var opponentHp = opponent.getHero().getHp();
-			for (var trigger : new ArrayList<>(context.getTriggerManager().getTriggers())) {
+			for (var trigger : new ArrayList<>(context.getTriggers())) {
 				if (trigger instanceof Enchantment && !(trigger instanceof Aura) && !trigger.isExpired()) {
 					var enchantment = (Enchantment) trigger;
 					if (enchantment.getTriggers().stream().anyMatch(e -> e.getClass().equals(TurnStartTrigger.class)
-							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {
+							|| (e.getClass().equals(TurnEndTrigger.class) && enchantment.getOwner() == opponent.getId()))) {
 						// Correctly set the trigger stacks
 						context.getTriggerHostStack().push(trigger.getHostReference());
 						context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(), trigger.getHostReference(), EntityReference.NONE, TargetSelection.NONE, true, null);
@@ -1344,14 +1344,14 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 			var damage = 0;
 			for (var minion : player.getMinions()) {
-				damage += minion.canAttackThisTurn() ? (minion.getAttack() * (minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + minion.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
+				damage += minion.canAttackThisTurn(context) ? (minion.getAttack() * (minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + minion.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
 			}
 			var hero = player.getHero();
-			damage += hero.canAttackThisTurn() ? (hero.getAttack() * (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
+			damage += hero.canAttackThisTurn(context) ? (hero.getAttack() * (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
 
 			var cards = new Card[player.getHand().size() + 1];
 			player.getHand().toArray(cards);
-			cards[cards.length - 1] = player.getHero().getHeroPower();
+			cards[cards.length - 1] = player.getHeroPowerZone().get(0);
 
 			var maxWeaponDamage = 0;
 			var cardDamage = 0;
@@ -1388,7 +1388,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 								&& Objects.equals(spell.getTarget(), EntityReference.FRIENDLY_HERO)
 								&& spell.containsKey(SpellArg.ATTACK_BONUS)) {
 							var buff = spell.getValue(SpellArg.ATTACK_BONUS, context, player, player.getHero(), player.getHero(), 0);
-							buff *= hero.canAttackThisTurn() ? (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS)) : 0;
+							buff *= hero.canAttackThisTurn(context) ? (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS)) : 0;
 							cardDamage += buff;
 							totalManaCost += context.getLogic().getModifiedManaCost(player, card);
 						}

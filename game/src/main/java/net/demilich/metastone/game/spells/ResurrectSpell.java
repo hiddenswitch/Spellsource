@@ -70,31 +70,31 @@ public class ResurrectSpell extends Spell {
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
 			Card card = resurrectedMinion.getSourceCard();
-			final Minion summonedMinion;
-			// allow functionality to resurrect cards with certain attributes they died with
-			Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
-			if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
-				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
-					summonedMinion = card.summon();
-					context.getLogic().removeAttribute(summonedMinion, null, Attribute.MAGNETS);
-					String[] magnets = (String[]) resurrectedMinion.getAttribute(Attribute.MAGNETS);
-					for (String magnet : magnets) {
-						Card magnetCard = context.getCardById(magnet);
-						context.getLogic().magnetize(player.getId(), magnetCard, summonedMinion);
-					}
-				} else {
-					card.setAttribute(attribute, resurrectedMinion.getAttributeValue(attribute));
-					summonedMinion = card.summon();
+			var minion = card.minion();
+			boolean summoned = context.getLogic().summon(player.getId(), minion, source, -1, false);
+			if (summoned) {
+				minion = (Minion) minion.transformResolved(context);
+				if (desc.containsKey(SpellArg.SPELL)
+						&& minion.isInPlay()) {
+					SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, minion, minion);
 				}
-			} else summonedMinion = card.summon();
 
-			boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
-			Entity newMinion = summonedMinion.transformResolved(context);
-			if (summoned
-					&& desc.containsKey(SpellArg.SPELL)
-					&& newMinion.isInPlay()) {
-				SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, newMinion, newMinion);
+				var attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
+				if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
+					// special coding to remagnetize the mechs for Kangor's Endless Army
+					if (attribute == Attribute.MAGNETS) {
+						context.getLogic().removeAttribute(player, source, minion, Attribute.MAGNETS);
+						String[] magnets = (String[]) resurrectedMinion.getAttribute(Attribute.MAGNETS);
+						for (String magnet : magnets) {
+							Card magnetCard = context.getCardById(magnet);
+							context.getLogic().magnetize(player.getId(), magnetCard, minion);
+						}
+					} else {
+						card.setAttribute(attribute, resurrectedMinion.getAttributeValue(attribute));
+					}
+				}
 			}
+
 			deadMinions.remove(resurrectedMinion);
 		}
 	}

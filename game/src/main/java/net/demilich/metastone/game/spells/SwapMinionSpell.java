@@ -51,6 +51,6 @@ public class SwapMinionSpell extends Spell {
 			context.getLogic().innerChangeOwner(target, swapLocation.getPlayer());
 			context.getLogic().innerChangeOwner(swap, targetLocation.getPlayer());
 		}
-		context.fireGameEvent(new BoardChangedEvent(context));
+		context.getLogic().fireGameEvent(new BoardChangedEvent(context));
 	}
 }

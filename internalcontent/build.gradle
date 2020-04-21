@@ -14,6 +14,7 @@ dependencies {
     testImplementation project(':quasar-core')
     testImplementation project(':testutils')
     testImplementation project(':cards')
+    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
 
 test {

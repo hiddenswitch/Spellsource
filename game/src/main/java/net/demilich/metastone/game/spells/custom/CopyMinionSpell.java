@@ -12,6 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Transforms the {@code source} (casting entity) of this spell into the {@code target} {@link Minion}.
@@ -41,7 +42,8 @@ import java.util.Map;
  *     }
  * </pre>
  *
- * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion) for more about transformations.
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Entity, Minion, Minion, boolean) for more
+ * about transformations.
  */
 public final class CopyMinionSpell extends Spell {
 
@@ -59,17 +61,15 @@ public final class CopyMinionSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Minion clone = ((Minion) target).getCopy();
-		clone.clearEnchantments();
-		clone.setCardCostModifier(null);
-		context.getLogic().transformMinion(desc, (Minion) source, clone);
 
+		context.getLogic().transformMinion(desc, source, (Minion) source, clone, false);
 		boolean didTransform = context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE);
 
 		if (didTransform) {
-			for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
-				Trigger triggerClone = trigger.clone();
-				context.getLogic().addGameEventListener(player, triggerClone, clone);
-			}
+			var finalSource = source.transformResolved(context);
+			context.getLogic().copyEnchantments(player, finalSource, target, finalSource,
+					 // Do not copy the enchantments written on the card, we already get those from summoning
+					 e -> context.getSummonReferenceStack().isEmpty() || !Objects.equals(e.getSourceCard(), finalSource.getSourceCard()), false);
 		}
 	}
 }

@@ -110,7 +110,7 @@ public class TargetLogic implements Serializable {
 			return entity.get();
 		} else {
 			// Check the triggers
-			for (Trigger trigger : context.getTriggerManager().getTriggers()) {
+			for (Trigger trigger : context.getTriggers()) {
 				if (trigger instanceof Enchantment && ((Enchantment) trigger).getId() == targetId) {
 					return (Entity) trigger;
 				}
@@ -223,13 +223,16 @@ public class TargetLogic implements Serializable {
 	 *                  refer to the right of this argument.
 	 * @param targetKey The {@link EntityReference} to interpet.
 	 * @return {@code null} if no target key is specified or an {@link EntityReference#NONE} was passed; otherwise, a
-	 * 		possibly empty list of entities.
+	 * possibly empty list of entities.
 	 * @see EntityReference for more about the meaning of the specified entitiy references that are groups of entities.
 	 */
 	@SuppressWarnings("deprecation")
 	public List<Entity> resolveTargetKey(GameContext context, Player player, Entity source, EntityReference targetKey) {
 		if (targetKey == null || targetKey.equals(EntityReference.NONE)) {
 			return null;
+		}
+		if (!targetKey.isTargetGroup()) {
+			return singleTargetAsList(findEntity(context, targetKey));
 		}
 		if (targetKey.equals(EntityReference.ALL_CHARACTERS)) {
 			return this.getEntities(context, player, TargetSelection.ANY);
@@ -371,15 +374,15 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.OUTPUT)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getOutputStack().peek()));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_WEAPON)) {
-			if (player.getHero().getWeapon() != null) {
-				return singleTargetAsList(player.getHero().getWeapon());
+			if (!player.getWeaponZone().isEmpty()) {
+				return singleTargetAsList(player.getWeaponZone().get(0));
 			} else {
 				return new ArrayList<>();
 			}
 		} else if (targetKey.equals(EntityReference.ENEMY_WEAPON)) {
 			Player opponent = context.getOpponent(player);
-			if (opponent.getHero().getWeapon() != null) {
-				return singleTargetAsList(opponent.getHero().getWeapon());
+			if (!opponent.getWeaponZone().isEmpty()) {
+				return singleTargetAsList(opponent.getWeaponZone().get(0));
 			} else {
 				return new ArrayList<>();
 			}
@@ -553,18 +556,20 @@ public class TargetLogic implements Serializable {
 			return targets;
 		} else if (targetKey.equals(EntityReference.FRIENDLY_SIGNATURE)) {
 			if (player.getAttribute(Attribute.SIGNATURE) instanceof String) {
-				return singleTargetAsList(context.getCardById((String)player.getAttribute(Attribute.SIGNATURE)));
+				return singleTargetAsList(context.getCardById((String) player.getAttribute(Attribute.SIGNATURE)));
 			} else {
 				return singleTargetAsList(context.getCardById(GameLogic.DEFAULT_SIGNATURE));
 			}
 		} else if (targetKey.equals(EntityReference.ENEMY_SIGNATURE)) {
 			if (context.getOpponent(player).getAttribute(Attribute.SIGNATURE) instanceof String) {
-				return singleTargetAsList(context.getCardById((String)player.getAttribute(Attribute.SIGNATURE)));
-			}  else {
+				return singleTargetAsList(context.getCardById((String) player.getAttribute(Attribute.SIGNATURE)));
+			} else {
 				return singleTargetAsList(context.getCardById(GameLogic.DEFAULT_SIGNATURE));
 			}
+		} else if (targetKey.equals(EntityReference.FRIENDLY_SECRETS)) {
+			return new ArrayList<>(player.getSecrets());
 		}
-		return singleTargetAsList(findEntity(context, targetKey));
+		throw new NullPointerException("invalid spec");
 	}
 
 }

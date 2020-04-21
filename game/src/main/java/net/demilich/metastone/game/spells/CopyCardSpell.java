@@ -132,14 +132,14 @@ public class CopyCardSpell extends Spell {
 
 		if (clone.getId() != IdFactory.UNASSIGNED
 				&& clone.getZone() != Zones.REMOVED_FROM_PLAY) {
-			context.getTriggersAssociatedWith(inCard.getReference())
+			context.getLogic().getActiveTriggers(inCard.getReference())
 					.stream()
 					.filter(e -> e instanceof CardCostModifier)
 					.map(e -> (CardCostModifier) e)
 					.filter(CardCostModifier::targetsSelf)
 					.map(CardCostModifier::clone)
-					.peek(c -> c.setHost(clone))
-					.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
+					.peek(c -> c.setHostReference(clone.getReference()))
+					.forEach(c -> context.getLogic().addEnchantment(player, c, source, clone));
 		}
 
 		if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
