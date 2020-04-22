@@ -2,7 +2,7 @@
   "name": "Nervous Worker",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "AMBER",
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "COMMON",
