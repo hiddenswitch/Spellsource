@@ -4,14 +4,13 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "FREE",
-  "description": "At the end of your turn, draw 2 cards.",
+  "description": "At the end of the turn, draw 2 cards.",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "class": "TurnEndTrigger"
       },
       "spell": {
         "class": "DrawCardSpell",
