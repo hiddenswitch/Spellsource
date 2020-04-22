@@ -1,0 +1,54 @@
+{
+  "name": "Circle of Creation",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "COMMON",
+  "description": "Copy two random cards from your deck. Invoke (4): Copy four instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "mana": 0,
+      "name": "Semicircle",
+      "description": "Only copy two cards.",
+      "spell": {
+        "class": "CopyCardSpell",
+        "cardSource": {
+          "class": "DeckSource",
+          "targetPlayer": "SELF"
+        },
+        "value": 2
+      }
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "mana": 4,
+      "name": "Full circle",
+      "description": "Copy four cards instead.",
+      "spell": {
+        "class": "CopyCardSpell",
+        "cardSource": {
+          "class": "DeckSource",
+          "targetPlayer": "SELF"
+        },
+        "value": 4
+      }
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      },
+      "value": 2
+    }
+  },
+  "attributes": {
+    "INVOKE": 4
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

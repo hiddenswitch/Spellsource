@@ -1,30 +1,29 @@
 {
-  "name": "Take Down",
-  "baseManaCost": 3,
+  "name": "Devour",
+  "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "EGGPLANT",
+  "heroClass": "DARKMAGENTA",
   "rarity": "FREE",
-  "description": "Destroy a minion that costs (5) or more.",
+  "description": "Destroy a minion that costs (3) or less.",
   "condition": {
     "class": "AnyMatchFilterCondition",
     "target": "ALL_MINIONS",
     "filter": {
       "class": "ManaCostFilter",
-      "value": 5,
-      "operation": "GREATER_OR_EQUAL"
+      "value": 3,
+      "operation": "LESS_OR_EQUAL"
     }
   },
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DestroySpell",
     "filter": {
-      "class": "AttributeFilter",
-      "value": 5,
-      "attribute": "BASE_MANA_COST",
-      "operation": "GREATER_OR_EQUAL"
+      "class": "ManaCostFilter",
+      "value": 3,
+      "operation": "LESS_OR_EQUAL"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

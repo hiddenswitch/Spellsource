@@ -1,0 +1,17 @@
+{
+  "name": "Create",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Copy a random card from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_DECK",
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

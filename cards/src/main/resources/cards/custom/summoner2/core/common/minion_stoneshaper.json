@@ -1,0 +1,49 @@
+{
+  "name": "Stoneshaper",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Invoke (3): Summon two copies of this.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "InvokeSpell",
+      "spell1": {
+        "class": "InvokeOptionSpell",
+        "mana": 0,
+        "name": "Don't Invoke",
+        "description": "Do nothing further."
+      },
+      "spell2": {
+        "class": "InvokeOptionSpell",
+        "mana": 3,
+        "name": "Shape Some Stone",
+        "description": "Summon two additional copies of this.",
+        "spell": {
+          "class": "MetaSpell",
+          "target": "SELF",
+          "spells": [
+            {
+              "class": "SummonSpell",
+              "boardPositionRelative": "LEFT"
+            },
+            {
+              "class": "SummonSpell",
+              "boardPositionRelative": "RIGHT"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "INVOKE": 3
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

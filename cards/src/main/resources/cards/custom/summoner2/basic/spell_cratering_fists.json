@@ -1,0 +1,21 @@
+{
+  "name": "Cratering Fists",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Deal $4 damage to two random enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DamageSpell",
+      "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

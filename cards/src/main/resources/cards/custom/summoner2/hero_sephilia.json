@@ -1,0 +1,16 @@
+{
+  "name": "Sephilia",
+  "heroPower": "hero_power_conjuration",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Hero Power: Summon a 0/2 Eidolon with Guard.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

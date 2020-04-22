@@ -2521,18 +2521,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		manaCost -= card.getManaCostModification(context, player);
 		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
-		if (canActivateInvokeKeyword(player, card)) {
-			if (card.hasAttribute(Attribute.AURA_INVOKE)) {
-				manaCost = card.getAttributeValue(Attribute.AURA_INVOKE);
-			} else if (card.hasAttribute(Attribute.INVOKE)) {
-				manaCost = card.getAttributeValue(Attribute.INVOKE);
-			}
-		}
 
-		// A card that was invoked has a different modified mana cost
-		if (card.hasAttribute(Attribute.INVOKED)) {
-			manaCost = card.getAttributeValue(Attribute.INVOKED);
-		}
 		return manaCost;
 	}
 
@@ -3417,10 +3406,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		var costAuras = SpellUtils.getAuras(context, playerId, CardCostInsteadAura.class);
 		var cardCostOverridden = costAuras.size() > 0 && costAuras.stream().anyMatch(aura -> aura.getAffectedEntities().contains(cardReference.getId()));
 
-		// The modified mana cost already reflects the invoke cost
+		/* The modified mana cost already reflects the invoke cost
 		if (canActivateInvokeKeyword(player, card)) {
 			card.setAttribute(Attribute.INVOKED, modifiedManaCost);
-		}
+		}*/
 
 		if (cardCostOverridden) {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);

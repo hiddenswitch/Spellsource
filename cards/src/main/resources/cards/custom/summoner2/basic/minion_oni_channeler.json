@@ -1,0 +1,25 @@
+{
+  "name": "Oni Channeler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "BASIC",
+  "race": "DEMON",
+  "description": "After you summon a minion, give it +2 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

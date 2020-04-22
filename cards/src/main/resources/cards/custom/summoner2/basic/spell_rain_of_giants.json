@@ -1,0 +1,20 @@
+{
+  "name": "Rain of Giants",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Summon three 5/5 Whales.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_mistwhale",
+      "token_mistwhale",
+      "token_mistwhale"
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
