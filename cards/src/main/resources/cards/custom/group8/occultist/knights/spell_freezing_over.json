@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Choose a minion. Each time you play a minion this turn, give that minion +3/+3.",
+  "description": "Choose a minion. Each time you play a minion this turn, give your target +3/+3.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
