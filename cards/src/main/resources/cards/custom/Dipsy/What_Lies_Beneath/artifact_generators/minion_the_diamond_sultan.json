@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: If you've played 5 Artifacts this game, replace your Skill with \"Source an Artifact\".",
+  "description": "Opener: If you've played 5 Artifacts this game, replace your Skill with \"Source an Artifact\".[]",
   "battlecry": {
     "targetSelection": "NONE",
 	"condition": {
@@ -36,5 +36,49 @@
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "CardsPlayedValueProvider",
+          "filter": {
+            "class": "CardFilter",
+            "attribute": "ARTIFACT",
+            "operation": "HAS"
+          },
+          "targetPlayer": "SELF"
+        },
+        "value2": 5
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 5,
+              "value2": {
+                "class": "CardsPlayedValueProvider",
+                "filter": {
+                  "class": "CardFilter",
+                  "attribute": "ARTIFACT",
+                  "operation": "HAS"
+                },
+                "targetPlayer": "SELF"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
 }
