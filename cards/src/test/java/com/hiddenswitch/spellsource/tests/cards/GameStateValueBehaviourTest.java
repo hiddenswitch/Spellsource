@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.common.Tracing;
 import net.demilich.metastone.game.GameContext;
 import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -86,6 +87,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testDesertMaiden() {
 		runGym((context, player, opponent) -> {
+			// Temporarily disable logging
 			shuffleToDeck(context, player, "spell_test_gain_mana");
 			shuffleToDeck(context, player, "minion_neutral_test");
 			shuffleToDeck(context, player, "minion_black_test");
