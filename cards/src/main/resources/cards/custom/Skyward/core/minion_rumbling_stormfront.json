@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Dash, Decay, Dodge, Guard",
+  "description": "Dash. Decay. Dodge. Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
