@@ -1,0 +1,42 @@
+{
+  "name": "Awakening Rite",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "EPIC",
+  "description": "Gain 1 Lun this turn. Invoke (5): Gain 7.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "mana": 0,
+      "name": "Awakening Rite",
+      "description": "Gain 1 Lun this turn.",
+      "spell": {
+        "class": "GainManaSpell",
+        "value": 1
+      }
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "mana": 5,
+      "name": "Awoke Rite",
+      "description": "Gain 7 Lun this turn.",
+      "spell": {
+        "class": "GainManaSpell",
+        "value": 7
+      }
+    },
+    "spell": {
+      "class": "GainManaSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "INVOKE": 5
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

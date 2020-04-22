@@ -1,0 +1,30 @@
+{
+  "name": "Take Down",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Destroy a minion that costs (5) or more.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 5,
+      "attribute": "BASE_MANA_COST",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

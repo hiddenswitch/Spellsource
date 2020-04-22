@@ -100,11 +100,6 @@ public abstract class PlayCardAction extends GameAction {
 		card.getAttributes().remove(Attribute.BEING_PLAYED);
 		player.modifyAttribute(Attribute.COMBO, 1);
 
-		if (card.hasAttribute(Attribute.INVOKED)) {
-			// Increment the number of invoked cards that were played
-			player.modifyAttribute(Attribute.INVOKED, 1);
-			context.getLogic().fireGameEvent(new InvokedEvent(context, playerId, card, card.getAttributeValue(Attribute.INVOKED)));
-		}
 
 		context.getLogic().fireGameEvent(new AfterCardPlayedEvent(context, playerId, card.getReference()));
 		context.setLastCardPlayedBeforeCurrentSequence(playerId, card.getReference());

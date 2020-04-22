@@ -400,8 +400,8 @@ public enum Attribute {
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * the battlefield.
-	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Entity, Minion, Minion, boolean) for an
-	 * unusual situation where minions enter the battlefield.
+	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Entity, Minion, Minion, boolean)
+	 * for an unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**
@@ -904,8 +904,8 @@ public enum Attribute {
 	 */
 	DEFLECT,
 	/**
-	 * Whenever a {@link Card} with this attribute is in your hand, and you have at least the invoke amount of mana, spend
-	 * that much mana instead of its base mana cost and gain the bonus effect written on the card.
+	 * Whenever a {@link Card} with this attribute is in your hand, and you have at least the invoke amount of mana, you
+	 * may gain an extra card with a bonus effect on it to cast with that extra mana.
 	 */
 	INVOKE,
 	/**
@@ -1183,7 +1183,9 @@ public enum Attribute {
 	/**
 	 * When set on a player entity, indicates the player is currently in the starting turn phase.
 	 */
-	STARTING_TURN;
+	STARTING_TURN,
+
+	EIDOLON_RACE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

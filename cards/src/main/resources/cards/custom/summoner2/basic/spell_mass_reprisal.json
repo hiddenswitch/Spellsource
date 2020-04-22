@@ -1,0 +1,20 @@
+{
+  "name": "Mass Reprisal",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Summon a 2/2 Fae with Dash for each enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "EntityCountValueProvider",
+      "target": "ENEMY_MINIONS"
+    },
+    "card": "token_fae_guardian"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

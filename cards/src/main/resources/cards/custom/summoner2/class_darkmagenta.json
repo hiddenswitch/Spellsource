@@ -1,0 +1,11 @@
+{
+  "name": "Summoner",
+  "type": "CLASS",
+  "hero": "hero_sephilia",
+  "heroClass": "DARKMAGENTA",
+  "color": [139, 0, 139],
+  "blackText": false,
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

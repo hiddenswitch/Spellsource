@@ -5,7 +5,7 @@
   "heroClass": "EGGPLANT",
   "color": [135, 94, 115],
   "blackText": false,
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
