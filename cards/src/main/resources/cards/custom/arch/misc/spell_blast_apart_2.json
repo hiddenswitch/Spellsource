@@ -25,7 +25,6 @@
       },
       "spell2": {
         "class": "DamageSpell",
-        "target": "ENEMY_CHARACTERS",
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
