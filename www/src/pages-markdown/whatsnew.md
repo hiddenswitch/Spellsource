@@ -17,6 +17,7 @@ header: true
  - Vitium Surger now correctly gives you artifacts. (1688)
  - Fixed issues with Primordial Miner's text and effect. (1689)
  - Fixed Primordial Sword not returning anything. (1690)
+ - The Hercules Skill now properly buffs his (your?) attack. (1713)
  - Blast Apart no longer damages more things more than it should. (1718)
  - Diamond Sultan now has a dynamic description. (1711)
 
