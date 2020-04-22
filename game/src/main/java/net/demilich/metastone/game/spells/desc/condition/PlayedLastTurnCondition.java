@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.condition;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -9,6 +10,10 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import java.util.Map;
 
 
+/**
+ * {@code true} if cards filtered by {@link ConditionArg#FILTER} were played by the {@link ConditionArg#TARGET_PLAYER}
+ * last turn.
+ */
 public class PlayedLastTurnCondition extends Condition {
 
 	public PlayedLastTurnCondition(ConditionDesc desc) {
@@ -17,17 +22,14 @@ public class PlayedLastTurnCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		Map<String, Map<Integer, Integer>> cardIds = player.getStatistics().getCardsPlayed();
-		int count = 0;
-		int turn = context.getTurn();
-		if (player.getId() == context.getActivePlayerId()) {
-			// TODO: Does not handle previous turns correctly
-			turn -= 2;
-		} else {
-			turn -= 1;
+		var cardIds = player.getStatistics().getCardsPlayed();
+		var count = 0;
+		var turn = player.getAttributeValue(Attribute.LAST_TURN, -1);
+		if (turn == -1) {
+			return false;
 		}
-		EntityFilter filter = (EntityFilter) desc.get(ConditionArg.FILTER);
-		for (String cardId : cardIds.keySet()) {
+		var filter = (EntityFilter) desc.get(ConditionArg.FILTER);
+		for (var cardId : cardIds.keySet()) {
 			Entity entity = context.getCardById(cardId);
 			if (filter == null || filter.matches(context, player, entity, source)) {
 				if (cardIds.get(cardId).containsKey(turn)) {
@@ -38,4 +40,13 @@ public class PlayedLastTurnCondition extends Condition {
 		return count >= 1;
 	}
 
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
+
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
+	}
 }

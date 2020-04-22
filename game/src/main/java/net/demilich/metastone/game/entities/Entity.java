@@ -57,6 +57,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	protected String name;
 	protected AttributeMap attributes;
+	protected Card sourceCard;
+	protected Entity effectSource;
+
 	/**
 	 * @see #getId()
 	 */
@@ -188,14 +191,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The name.
 	 */
 	public String getName() {
-		if ((getEntityType() == EntityType.CARD
-				&& getSourceCard() != null
-				&& getSourceCard().getCardSet() == "SPELLSOURCE")
-				|| getEntityType() == EntityType.PLAYER) {
-			return (String) getAttributes().getOrDefault(Attribute.NAME, name);
-		} else {
-			return name;
-		}
+		return (String) getAttributes().getOrDefault(Attribute.NAME, (name == null) ? ((getSourceCard() != null) ? getSourceCard().getName() : name) : name);
 	}
 
 	/**
@@ -219,6 +215,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some notion
 	 * of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
 	 */
+	@NotNull
 	public EntityReference getReference() {
 		return EntityReference.pointTo(this);
 	}
@@ -425,6 +422,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	@SuppressWarnings("unchecked")
 	public void moveOrAddTo(GameContext context, Zones destination) throws ArrayStoreException {
+		if (getId() == IdFactory.UNASSIGNED) {
+			throw new RuntimeException();
+		}
 		moveOrAddTo(context, destination, context.getPlayer(getOwner()).getZone(destination).size());
 	}
 
@@ -505,6 +505,17 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return (hasAttribute(Attribute.DESCRIPTION) && getAttribute(Attribute.DESCRIPTION) != null) ?
 				(String) getAttribute(Attribute.DESCRIPTION)
 				: (getSourceCard() != null ? getSourceCard().getDescription() : "");
+	}
+
+	/**
+	 * Sets the description by setting the {@link Attribute#DESCRIPTION} attribute.
+	 *
+	 * @param description
+	 * @return
+	 */
+	public Entity setDescription(String description) {
+		getAttributes().put(Attribute.DESCRIPTION, description);
+		return this;
 	}
 
 	public abstract Entity getCopy();
@@ -699,5 +710,24 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 				&& getZone() == Zones.GRAVEYARD
 				&& hasAttribute(Attribute.DIED_ON_TURN)
 				&& !hasAttribute(Attribute.PERMANENT);
+	}
+
+	@Override
+	public Card getSourceCard() {
+		return sourceCard;
+	}
+
+	public Entity setSourceCard(Card sourceCard) {
+		this.sourceCard = sourceCard;
+		return this;
+	}
+
+	public Entity getEffectSource() {
+		return effectSource;
+	}
+
+	public Entity setEffectSource(Entity effectSource) {
+		this.effectSource = effectSource;
+		return this;
 	}
 }

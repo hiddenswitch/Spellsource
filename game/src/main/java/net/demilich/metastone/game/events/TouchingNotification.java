@@ -7,10 +7,13 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * An entity is being "touched" by the client.
+ */
 public class TouchingNotification implements Notification {
-	private EntityReference entityReference;
-	private boolean touched;
-	private int playerId;
+	private final EntityReference entityReference;
+	private final boolean touched;
+	private final int playerId;
 
 	public TouchingNotification(int playerId, int entityId, boolean touched) {
 		this.entityReference = new EntityReference(entityId);
@@ -19,8 +22,13 @@ public class TouchingNotification implements Notification {
 	}
 
 	@Override
+	public Entity getSource() {
+		throw new UnsupportedOperationException("use playerId");
+	}
+
+	@Override
 	public Entity getSource(GameContext context) {
-		return context.getPlayer(playerId);
+		return context.resolveSingleTarget(entityReference);
 	}
 
 	@Override
@@ -35,27 +43,15 @@ public class TouchingNotification implements Notification {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		return "Touching.";
+		return null;
 	}
 
 	public EntityReference getEntityReference() {
 		return entityReference;
 	}
 
-	public void setEntityReference(EntityReference entityReference) {
-		this.entityReference = entityReference;
-	}
-
 	public boolean isTouched() {
 		return touched;
-	}
-
-	public void setTouched(boolean touched) {
-		this.touched = touched;
-	}
-
-	public void setPlayerId(int playerId) {
-		this.playerId = playerId;
 	}
 
 	public int getPlayerId() {

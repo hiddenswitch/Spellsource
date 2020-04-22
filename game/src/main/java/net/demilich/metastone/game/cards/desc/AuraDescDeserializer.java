@@ -42,6 +42,9 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(AuraArg.SECONDARY_FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(AuraArg.SPELL, ParseValueType.SPELL);
+		ctx.add(AuraArg.NAME, ParseValueType.STRING);
+		ctx.add(AuraArg.DESCRIPTION, ParseValueType.STRING);
+		ctx.add(AuraArg.ZONES, ParseValueType.ZONES);
 	}
 
 	@Override

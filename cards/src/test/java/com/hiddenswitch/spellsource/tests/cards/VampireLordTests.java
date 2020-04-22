@@ -225,6 +225,22 @@ public class VampireLordTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testSoulscreamRework() {
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, "minion_test_deathrattle");
+			destroy(context, target);
+			var deathrattlesTriggered = 1;
+			var hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_soulscream_rework", opponent.getHero());
+			assertEquals(hp - deathrattlesTriggered, opponent.getHero().getHp());
+			var card = receiveCard(context, player, "spell_soulscream_rework");
+			assertEquals("Deal 1 damage. (Increases by 1 for each Aftermath you've triggered this game)", card.getDescription(context, player));
+			playCard(context, player, "minion_gatekeeper_sha_rework");
+			assertEquals("Deal 3 damage. (Increases by 2 for each Aftermath you've triggered this game)", card.getDescription(context, player));
+		});
+	}
+
 	@ParameterizedTest
 	@ValueSource(strings = {"minion_gravelord_goa", "minion_bloodlord_goa"})
 	public void testBloodlordGoa(String cardId) {

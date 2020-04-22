@@ -23,7 +23,6 @@ import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.GymFactory;
-import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -35,6 +34,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static net.demilich.metastone.tests.util.TestBase.receive;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
@@ -76,7 +76,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(auraMinion.getAttack(), 4);
 			assertEquals(copy.getAttack(), 4);
-			assertEquals(context.getTriggerManager().getTriggers().size(), 2);
+			assertEquals(context.getTriggers().size(), 2);
 		});
 
 		runGym((context, player, opponent) -> {
@@ -279,7 +279,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Minion opponentMinion = playMinionCard(context, opponent, "minion_black_test");
 			context.endTurn();
 			Minion rushMinion = playMinionCard(context, player, "minion_test_rush");
-			assertTrue(rushMinion.canAttackThisTurn());
+			assertTrue(rushMinion.canAttackThisTurn(context));
 			assertTrue(context.getValidActions().stream().noneMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
 					&& c.getTargetReference().equals(opponent.getHero().getReference())));
 			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
@@ -298,7 +298,7 @@ public class AdvancedMechanicTests extends TestBase {
 			context.endTurn();
 			Minion rushMinion = playMinionCard(context, player, "minion_test_rush");
 			rushMinion.setAttribute(Attribute.CHARGE);
-			assertTrue(rushMinion.canAttackThisTurn());
+			assertTrue(rushMinion.canAttackThisTurn(context));
 			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
 					&& c.getTargetReference().equals(opponent.getHero().getReference())));
 			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
@@ -309,8 +309,8 @@ public class AdvancedMechanicTests extends TestBase {
 	@Test
 	public void testEndTurnEventAppearsOnce() {
 		runGym((context, player, opponent) -> {
-			context = spy(context);
-			context.getLogic().setContext(context);
+			var logic = spy(context.getLogic());
+			context.setLogic(logic);
 			AtomicInteger counter = new AtomicInteger(0);
 			doAnswer(invocation -> {
 				GameEvent event = invocation.getArgument(0);
@@ -318,7 +318,7 @@ public class AdvancedMechanicTests extends TestBase {
 					counter.incrementAndGet();
 				}
 				return invocation.callRealMethod();
-			}).when(context).fireGameEvent(any());
+			}).when(logic).fireGameEvent(any());
 			context.endTurn();
 			assertEquals(counter.get(), 1);
 		});
@@ -385,11 +385,11 @@ public class AdvancedMechanicTests extends TestBase {
 	public void testChooseOne() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			TestMinionCard Card = new TestMinionCard(1, 4);
+			var Card = receive(context, player, 1, 1, 1);
 			playCard(context, opponent, Card);
 			context.endTurn();
 
-			player.getHero().getHeroPower().markUsed();
+			player.getHeroPowerZone().get(0).markUsed();
 			for (Card card : player.getHand().toList()) {
 				context.getLogic().removeCard(card);
 			}
@@ -433,12 +433,10 @@ public class AdvancedMechanicTests extends TestBase {
 			player.setMana(10);
 			opponent.setMana(10);
 
-			Card card1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
-			context.getLogic().receiveCard(player.getId(), card1);
+			Card card1 = receive(context, player, 2, 2, 1, Attribute.DIVINE_SHIELD);
 			context.performAction(player.getId(), card1.play());
 
-			Card card2 = new TestMinionCard(5, 5);
-			context.getLogic().receiveCard(opponent.getId(), card2);
+			Card card2 = receive(context, player, 5, 5, 1);
 			context.performAction(opponent.getId(), card2.play());
 
 			Actor attacker = getSingleMinion(player.getMinions());
@@ -467,7 +465,7 @@ public class AdvancedMechanicTests extends TestBase {
 			final int ENRAGE_ATTACK_BONUS = 3;
 			Minion attacker = playMinionCard(context, opponent, "minion_test_enrage");
 			context.endTurn();
-			Minion defender1 = playMinionCard(context, player, new TestMinionCard(1, 10));
+			Minion defender1 = playMinionCard(context, player, receive(context, player, 1, 10, 1));
 
 			assertEquals(attacker.getAttack(), BASE_ATTACK);
 			assertFalse(attacker.hasAttribute(Attribute.ENRAGED));
@@ -505,9 +503,8 @@ public class AdvancedMechanicTests extends TestBase {
 			context.endTurn();
 			assertEquals(player.getMana(), 2);
 
-			Card overloadCard = new TestMinionCard(1, 1);
+			Card overloadCard = receive(context, player, 1, 1, 1);
 			overloadCard.setAttribute(Attribute.OVERLOAD, 2);
-			context.getLogic().receiveCard(player.getId(), overloadCard);
 			context.performAction(player.getId(), overloadCard.play());
 			context.endTurn();
 			context.endTurn();
@@ -525,7 +522,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 			int baseHp = 5;
 			// summon a minion and check the base hp
-			playCard(context, opponent, new TestMinionCard(4, baseHp));
+			playCard(context, opponent, receive(context, player, 4, baseHp, 1));
 			Actor minion = getSingleMinion(opponent.getMinions());
 			assertEquals(minion.getHp(), baseHp);
 
@@ -581,7 +578,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 			});
 
-			playCard(context, player, new TestMinionCard(baseAttack, 1));
+			playCard(context, player, receive(context, player, 1, 1, 1));
 			Actor testSubject = getSingleMinion(player.getMinions());
 			assertEquals(testSubject.getAttack(), baseAttack);
 
@@ -617,7 +614,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2 * expectedDamage - spellPower);
 
 			int opponentHp = opponent.getHero().getHp();
-			GameAction useHeroPower = player.getHero().getHeroPower().play();
+			GameAction useHeroPower = player.getHeroPowerZone().get(0).play();
 			useHeroPower.setTarget(opponent.getHero());
 			context.performAction(player.getId(), useHeroPower);
 
@@ -649,7 +646,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getDeck().size(), 2);
 			assertEquals(player.getHand().size(), 0);
 			context.endTurn();
-			assertEquals(player.getDeck().size(), 0);
+			assertEquals(0, player.getDeck().size(), "should have drawn 2");
 			assertEquals(player.getHand().size(), 2);
 		});
 

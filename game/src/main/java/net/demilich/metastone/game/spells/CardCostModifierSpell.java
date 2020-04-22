@@ -58,7 +58,7 @@ import java.util.Map;
  */
 public class CardCostModifierSpell extends Spell {
 
-	private static Logger logger = LoggerFactory.getLogger(CardCostModifierSpell.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(CardCostModifierSpell.class);
 
 	/**
 	 * Creates this spell.
@@ -100,22 +100,22 @@ public class CardCostModifierSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD_COST_MODIFIER);
+		checkArguments(LOGGER, context, source, desc, SpellArg.CARD_COST_MODIFIER);
 		CardCostModifierDesc manaModifierDesc = (CardCostModifierDesc) desc.get(SpellArg.CARD_COST_MODIFIER);
 
 		if (manaModifierDesc.containsKey(CardCostModifierArg.TARGET)
 				&& target != null
 				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))
 				&& !manaModifierDesc.get(CardCostModifierArg.TARGET).equals(EntityReference.SELF)) {
-			logger.debug("onCast {} {}: The target of this spell, {}, and the mana cost modifier's target, {}, do not match.",
+			LOGGER.debug("onCast {} {}: The target of this spell, {}, and the mana cost modifier's target, {}, do not match.",
 					context.getGameId(), source, target, manaModifierDesc.get(CardCostModifierArg.TARGET));
 		}
 		// The target is the host of the mana cost modifier.
 		CardCostModifier cardCostModifier = manaModifierDesc.create();
 		if (source != null && source.getSourceCard() != null) {
-			cardCostModifier.setSourceCardId(source.getSourceCard().getCardId());
+			cardCostModifier.setSourceCard(source.getSourceCard());
 		}
-		context.getLogic().addGameEventListener(player, cardCostModifier, target == null ? player : target);
+		context.getLogic().addEnchantment(player, cardCostModifier, source, target == null ? player : target);
 	}
 
 }

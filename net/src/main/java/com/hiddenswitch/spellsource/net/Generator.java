@@ -108,29 +108,29 @@ public class Generator {
 		List<EnchantmentDesc> enchantmentDescs = new ArrayList<>();
 		if (cardDesc.getBattlecry() != null) {
 			EnchantmentDesc battlecryTrigger = new EnchantmentDesc();
-			battlecryTrigger.oneTurn = true;
+			battlecryTrigger.setOneTurn(true);
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, BATTLECRY);
-			battlecryTrigger.eventTrigger = new EventTriggerDesc(args);
+			battlecryTrigger.setEventTrigger(new EventTriggerDesc(args));
 			// TODO: When reconstructing the card, create the appropriate actions.
 			if (cardDesc.getBattlecry().getCondition() != null) {
 				Map<SpellArg, Object> conditionalSpell = new SpellDesc(ConditionalSpell.class);
 				conditionalSpell.put(SpellArg.CONDITION, cardDesc.getBattlecry().getCondition().create());
 				conditionalSpell.put(SpellArg.SPELL, cardDesc.getBattlecry().getSpell());
-				battlecryTrigger.spell = new SpellDesc(conditionalSpell);
+				battlecryTrigger.setSpell(new SpellDesc(conditionalSpell));
 			} else {
-				battlecryTrigger.spell = cardDesc.getBattlecry().getSpell();
+				battlecryTrigger.setSpell(cardDesc.getBattlecry().getSpell());
 			}
-			battlecryTrigger.spell.put(SpellArg.TARGET_SELECTION, cardDesc.getBattlecry().getTargetSelection());
+			battlecryTrigger.getSpell().put(SpellArg.TARGET_SELECTION, cardDesc.getBattlecry().getTargetSelection());
 			enchantmentDescs.add(battlecryTrigger);
 		}
 
 		if (cardDesc.getDeathrattle() != null) {
 			EnchantmentDesc deathrattleTrigger = new EnchantmentDesc();
-			deathrattleTrigger.oneTurn = true;
+			deathrattleTrigger.setOneTurn(true);
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, DEATHRATTLE);
-			deathrattleTrigger.spell = cardDesc.getDeathrattle();
+			deathrattleTrigger.setSpell(cardDesc.getDeathrattle());
 			enchantmentDescs.add(deathrattleTrigger);
 		}
 
@@ -263,6 +263,6 @@ public class Generator {
 
 	private Stream<Record> toRecords(EnchantmentDesc enchantmentDesc, Record record, int rank, boolean terminal) {
 		// TODO: For now, just emit the spells
-		return toRecords(enchantmentDesc.spell, record, rank, terminal);
+		return toRecords(enchantmentDesc.getSpell(), record, rank, terminal);
 	}
 }

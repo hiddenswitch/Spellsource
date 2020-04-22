@@ -24,4 +24,8 @@ public final class ComparisonCondition extends Condition {
 		return SpellUtils.evaluateOperation(operation, value1, value2);
 	}
 
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
+	}
 }

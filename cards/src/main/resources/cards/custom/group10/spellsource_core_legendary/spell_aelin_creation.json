@@ -10,6 +10,7 @@
     "class": "CopyCardSpell",
     "cardSource": {
       "class": "DeckSource",
+      "distinct": true,
       "targetPlayer": "SELF"
     },
     "value": 3,

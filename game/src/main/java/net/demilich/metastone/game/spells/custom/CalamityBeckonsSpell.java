@@ -28,12 +28,14 @@ public final class CalamityBeckonsSpell extends Spell {
 			var previousLocation = card.getEntityLocation();
 			if (card.getCardType() == CardType.MINION) {
 				// summon and put a corpse in
-				var minion = card.summon();
+				var minion = card.minion();
 				var summoned = context.getLogic().summon(player.getId(), minion, source, -1, false);
 				if (summoned) {
 					minion = minion.getCopy();
 				}
 				// Move the corpse directly to the graveyard
+				minion.setId(context.getLogic().generateId());
+				minion.setOwner(player.getId());
 				context.getLogic().corpse(minion, previousLocation, true);
 			}
 			context.getLogic().removeCard(card);

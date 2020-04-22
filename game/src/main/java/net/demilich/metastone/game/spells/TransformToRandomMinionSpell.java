@@ -16,7 +16,7 @@ import java.util.Map;
  * Transforms the {@code target} into a random <b>base</b> minion from {@link SpellUtils#getCards(GameContext, Player,
  * Entity, Entity, SpellDesc, int)}.
  *
- * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion) for the complete rules of
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Entity, Minion, Minion, boolean) for the complete rules of
  * 		transforming minions.
  */
 public class TransformToRandomMinionSpell extends TransformMinionSpell {

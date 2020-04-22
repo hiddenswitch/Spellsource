@@ -44,7 +44,7 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			if (card.getCardType() == CardType.MINION) {
-				context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
+				context.getLogic().summon(player.getId(), card.minion(), source, -1, false);
 			} else {
 				logger.warn("onCast {} {}: Trying to resurrect {} from entity storage, which is not a minion", context.getGameId(), source, card);
 			}

@@ -18,7 +18,6 @@ import net.demilich.metastone.game.spells.DiscoverSpell;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
@@ -125,10 +124,6 @@ public class Player extends Entity implements Serializable {
 		this.graveyard = otherPlayer.getGraveyard().clone();
 		this.setAsideZone = otherPlayer.getSetAsideZone().clone();
 		this.heroZone = otherPlayer.getHeroZone().clone();
-		if (!heroZone.isEmpty()) {
-			heroZone.get(0).setPlayer(this);
-		}
-
 		this.heroPowerZone = otherPlayer.getHeroPowerZone().clone();
 		this.weaponZone = otherPlayer.getWeaponZone().clone();
 		this.mana = otherPlayer.mana;
@@ -148,7 +143,7 @@ public class Player extends Entity implements Serializable {
 				+ heroZone.size()
 				+ heroPowerZone.size()
 				+ weaponZone.size());
-		for (Zones zone : Zones.values()) {
+		for (Zones zone : Zones.validZones()) {
 			@SuppressWarnings("unchecked")
 			EntityZone<? extends Entity> zone1 = (EntityZone<? extends Entity>) getZone(zone);
 			zone1.setLookup(lookup);
@@ -184,7 +179,7 @@ public class Player extends Entity implements Serializable {
 	public Player(GameDeck deck, String name) {
 		this();
 		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy(), lookup);
-		this.setHero(deck.getHeroCard().createHero(this));
+		this.setHero(deck.getHeroCard().hero());
 		this.setName(name);
 	}
 
@@ -195,7 +190,7 @@ public class Player extends Entity implements Serializable {
 	 */
 	public Player(String heroClass) {
 		this();
-		this.setHero(HeroClass.getHeroCard(heroClass).createHero(this));
+		this.setHero(HeroClass.getHeroCard(heroClass).hero());
 	}
 
 	/**
@@ -273,7 +268,7 @@ public class Player extends Entity implements Serializable {
 	 * previous turn.
 	 *
 	 * @return The amount of mana that is unusable this turn due to playing a card with {@link Attribute#OVERLOAD} last
-	 * 		turn.
+	 * turn.
 	 * @see Attribute#OVERLOAD for more about locking mana.
 	 */
 	public int getLockedMana() {
@@ -315,7 +310,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @return The set of secret card IDs.
 	 * @see GameLogic#canPlaySecret(Player, Card) to see how this method plays into rules regarding the ability to play
-	 * 		secrets.
+	 * secrets.
 	 */
 	public Set<String> getSecretCardIds() {
 		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
@@ -353,7 +348,7 @@ public class Player extends Entity implements Serializable {
 	 * Sets the player's current hero. If a {@link Hero} currently exists in the hero zone, it is removed.
 	 *
 	 * @param hero The hero entity.
-	 * @see GameLogic#changeHero(Player, Hero) for the appropriate hero changing method for spells.
+	 * @see GameLogic#changeHero(Player, Entity, Hero) for the appropriate hero changing method for spells.
 	 */
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
@@ -465,7 +460,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param zone The key.
 	 * @return An {@link EntityZone} for the corresponding zone. For {@link Zones#PLAYER}, a new zone is created on the
-	 * 		fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
+	 * fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
 	 */
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
@@ -498,7 +493,9 @@ public class Player extends Entity implements Serializable {
 			case QUEST:
 				return getQuests();
 			case NONE:
-				return EntityZone.empty(getId());
+				return EntityZone.empty(Zones.NONE, getId());
+			case ENCHANTMENT:
+				return EntityZone.empty(Zones.ENCHANTMENT, getId());
 		}
 		return null;
 	}
@@ -516,7 +513,7 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the hero power zone stored inside the hero entity.
 	 *
 	 * @return The hero power stored by this hero.
-	 * @see GameLogic#changeHero(Player, Hero) for the appropriate way to change heroes.
+	 * @see GameLogic#changeHero(Player, Entity, Hero) for the appropriate way to change heroes.
 	 */
 	public EntityZone<Card> getHeroPowerZone() {
 		return heroPowerZone;
@@ -611,5 +608,9 @@ public class Player extends Entity implements Serializable {
 
 	public Map<Integer, Entity> getLookup() {
 		return lookup;
+	}
+
+	public Weapon getWeapon() {
+		return getWeaponZone().isEmpty() ? null : getWeaponZone().get(0);
 	}
 }

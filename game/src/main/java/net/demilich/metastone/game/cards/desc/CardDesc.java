@@ -2,7 +2,10 @@ package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Streams;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
@@ -10,13 +13,15 @@ import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ComboSpell;
 import net.demilich.metastone.game.spells.RevealCardSpell;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.AbstractEnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -40,6 +45,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static net.demilich.metastone.game.cards.desc.HasEntrySet.link;
 
 /**
  * The class that card JSON files deserialize (get decoded) into.
@@ -83,7 +89,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  * field, etc.
  * <p>
  * To figure out the format of the value of complex objects like "battlecry" on line 63 in the example above, look at
- * the <b>type</b> of the field in this class. In the case of battlecry, the type is a {@link BattlecryDesc}, and it
+ * the <b>type</b> of the field in this class. In the case of battlecry, the type is a {@link OpenerDesc}, and it
  * appears to also have fields that exactly correspond to the keys that appear in the JSON object that is the value of
  * "battlecry."
  * <p>
@@ -99,10 +105,10 @@ import static com.google.common.collect.Maps.immutableEntry;
  *
  * @see Card for the gameplay functionality of a card that consults data stored in a {@link CardDesc}.
  * @see DescDeserializer for a walk through on how deserialization of card JSON works on complex types like spells,
- * 		value providers, etc.
+ * value providers, etc.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
+public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object>, AbstractEnchantmentDesc<Enchantment> {
 	private String id;
 	private String name;
 	private String heroPower;
@@ -122,16 +128,15 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	private EventTriggerDesc quest;
 	private int countUntilCast;
 	private boolean countByValue;
-	private BattlecryDesc battlecry;
+	private OpenerDesc battlecry;
 	private SpellDesc deathrattle;
 	private EnchantmentDesc trigger;
-	private EnchantmentDesc[] triggers;
+	private EnchantmentDesc[] triggers = new EnchantmentDesc[0];
 	private AuraDesc aura;
-	private AuraDesc[] auras;
-	private AuraDesc[] passiveAuras;
+	private AuraDesc[] auras = new AuraDesc[0];
 	private CardCostModifierDesc cardCostModifier;
-	private BattlecryDesc[] chooseOneBattlecries;
-	private BattlecryDesc chooseBothBattlecry;
+	private OpenerDesc[] chooseOneBattlecries;
+	private OpenerDesc chooseBothBattlecry;
 	private String[] chooseOneCardIds;
 	private String chooseBothCardId;
 	private SpellDesc onEquip;
@@ -140,10 +145,10 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	private ConditionDesc condition;
 	private SpellDesc[] group;
 	private EnchantmentDesc passiveTrigger;
-	private EnchantmentDesc[] passiveTriggers;
+	private EnchantmentDesc[] passiveTriggers = new EnchantmentDesc[0];
 	private EnchantmentDesc deckTrigger;
-	private EnchantmentDesc[] deckTriggers;
-	private EnchantmentDesc[] gameTriggers;
+	private EnchantmentDesc[] deckTriggers = new EnchantmentDesc[0];
+	private EnchantmentDesc[] gameTriggers = new EnchantmentDesc[0];
 	private ValueProviderDesc manaCostModifier;
 	private AttributeMap attributes;
 	private String author;
@@ -372,8 +377,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * </pre>
 	 *
 	 * @see Attribute for a full description of attributes. Some of them are not appropriate to put on a card, because
-	 * 		they are ephemeral (that is, they are only on a {@link net.demilich.metastone.game.entities.Entity} while it is
-	 * 		in play, not on a card definition like {@link CardDesc}).
+	 * they are ephemeral (that is, they are only on a {@link net.demilich.metastone.game.entities.Entity} while it is in
+	 * play, not on a card definition like {@link CardDesc}).
 	 */
 	public AttributeMap getAttributes() {
 		return attributes;
@@ -449,6 +454,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return passiveTrigger;
 	}
 
+	@JsonDeserialize(converter = PassiveEnchantmentDescConverter.class)
 	public void setPassiveTrigger(EnchantmentDesc passiveTrigger) {
 		this.passiveTrigger = passiveTrigger;
 	}
@@ -473,6 +479,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return passiveTriggers;
 	}
 
+	@JsonDeserialize(contentConverter = PassiveEnchantmentDescConverter.class)
 	public void setPassiveTriggers(EnchantmentDesc[] passiveTriggers) {
 		this.passiveTriggers = passiveTriggers;
 	}
@@ -484,6 +491,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return deckTrigger;
 	}
 
+	@JsonDeserialize(converter = DeckEnchantmentDescConverter.class)
 	public void setDeckTrigger(EnchantmentDesc deckTrigger) {
 		this.deckTrigger = deckTrigger;
 	}
@@ -524,6 +532,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return gameTriggers;
 	}
 
+	@JsonDeserialize(contentConverter = GameEnchantmentDescConverter.class)
 	public void setGameTriggers(EnchantmentDesc[] gameTriggers) {
 		this.gameTriggers = gameTriggers;
 	}
@@ -579,13 +588,13 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * In order to be counted as a "Battlecry" minion, the card's {@link CardDesc#attributes} must contain a {@link
 	 * Attribute#BATTLECRY} key with {@code true}.
 	 *
-	 * @see BattlecryDesc for more about battlecries.
+	 * @see OpenerDesc for more about battlecries.
 	 */
-	public BattlecryDesc getBattlecry() {
+	public OpenerDesc getBattlecry() {
 		return battlecry;
 	}
 
-	public void setBattlecry(BattlecryDesc battlecry) {
+	public void setBattlecry(OpenerDesc battlecry) {
 		this.battlecry = battlecry;
 	}
 
@@ -613,6 +622,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return trigger;
 	}
 
+	@JsonDeserialize(converter = BattlefieldEnchantmentDescConverter.class)
 	public void setTrigger(EnchantmentDesc trigger) {
 		this.trigger = trigger;
 	}
@@ -738,11 +748,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * <p>
 	 * The {@link SpellArg#CARD} specified by the transform spell should not be {@link #collectible}.
 	 */
-	public BattlecryDesc[] getChooseOneBattlecries() {
+	public OpenerDesc[] getChooseOneBattlecries() {
 		return chooseOneBattlecries;
 	}
 
-	public void setChooseOneBattlecries(BattlecryDesc[] chooseOneBattlecries) {
+	public void setChooseOneBattlecries(OpenerDesc[] chooseOneBattlecries) {
 		this.chooseOneBattlecries = chooseOneBattlecries;
 	}
 
@@ -750,11 +760,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * Indicates the battlecry that will be played when Fandral Staghelm is in play, if this {@link CardType#MINION} has
 	 * {@link #chooseOneBattlecries} specified.
 	 */
-	public BattlecryDesc getChooseBothBattlecry() {
+	public OpenerDesc getChooseBothBattlecry() {
 		return chooseBothBattlecry;
 	}
 
-	public void setChooseBothBattlecry(BattlecryDesc chooseBothBattlecry) {
+	public void setChooseBothBattlecry(OpenerDesc chooseBothBattlecry) {
 		this.chooseBothBattlecry = chooseBothBattlecry;
 	}
 
@@ -839,7 +849,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	/**
 	 * Indicates a {@link CardType#HERO_POWER} that this {@link CardType#HERO} should put into play for the player.
 	 *
-	 * @see GameLogic#changeHero(Player, Hero) for more about how heroes come into play.
+	 * @see GameLogic#changeHero(Player, net.demilich.metastone.game.entities.Entity, Hero) for more about how heroes come
+	 * into play.
 	 */
 	public String getHeroPower() {
 		return heroPower;
@@ -972,19 +983,18 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.HERO_CLASS, getHeroClass()),
 				immutableEntry(CardDescArg.HERO_CLASSES, getHeroClasses()),
 				immutableEntry(CardDescArg.RARITY, getRarity()),
-				immutableEntry(CardDescArg.SET, getSet()),
+				immutableEntry(CardDescArg.SETS, link(getSet(), getSets(), String.class)),
 				immutableEntry(CardDescArg.BASE_MANA_COST, getBaseManaCost()),
 				immutableEntry(CardDescArg.COLLECTIBLE, isCollectible()),
 				immutableEntry(CardDescArg.ATTRIBUTES, getAttributes()),
 				immutableEntry(CardDescArg.MANA_COST_MODIFIER, getManaCostModifier()),
-				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, HasEntrySet.link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.DECK_TRIGGERS, HasEntrySet.link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.GAME_TRIGGERS, HasEntrySet.link(null, getGameTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.DECK_TRIGGERS, link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.GAME_TRIGGERS, link(null, getGameTriggers(), EnchantmentDesc.class)),
 				immutableEntry(CardDescArg.BATTLECRY, getBattlecry()),
 				immutableEntry(CardDescArg.DEATHRATTLE, getDeathrattle()),
-				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(getTrigger(), getTriggers(), EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.TRIGGERS, link(getTrigger(), getTriggers(), EnchantmentDesc.class)),
 				immutableEntry(CardDescArg.AURAS, getAuras()),
-				immutableEntry(CardDescArg.PASSIVE_AURAS, getPassiveAuras()),
 				immutableEntry(CardDescArg.BASE_ATTACK, getBaseAttack()),
 				immutableEntry(CardDescArg.BASE_HP, getBaseHp()),
 				immutableEntry(CardDescArg.DAMAGE, getDamage()),
@@ -1005,13 +1015,13 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	}
 
 	public EnchantmentDesc[] getDeckTriggers() {
-		return getDeckTrigger() != null ? new EnchantmentDesc[]{getDeckTrigger()} : deckTriggers;
+		return deckTriggers;
 	}
 
 	/**
 	 * Iterates through all the conditions specified in the card.
 	 * <p>
-	 * This includes spell conditions ({@link #getCondition()}, battlecry conditions {@link BattlecryDesc#getCondition()},
+	 * This includes spell conditions ({@link #getCondition()}, battlecry conditions {@link OpenerDesc#getCondition()},
 	 * {@link ComboSpell} and condition arguments specified on subspells.
 	 *
 	 * @return A stream.
@@ -1059,7 +1069,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * Indicates whether, based on the code written on this card, this card ever reveals itself.
 	 *
 	 * @return {@code true} if any spell written on the card is a {@link net.demilich.metastone.game.spells.RevealCardSpell}
-	 * 		with target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}
+	 * with target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}
 	 */
 	public boolean revealsSelf() {
 		return bfs().build().anyMatch(node -> {
@@ -1094,14 +1104,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		this.secondPlayerBonusCards = secondPlayerBonusCards;
 	}
 
-	public AuraDesc[] getPassiveAuras() {
-		return passiveAuras;
-	}
-
-	public void setPassiveAuras(AuraDesc[] passiveAuras) {
-		this.passiveAuras = passiveAuras;
-	}
-
 	public ConditionDesc getTargetSelectionCondition() {
 		return targetSelectionCondition;
 	}
@@ -1122,6 +1124,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		this.countByValue = countByValue;
 	}
 
+	@JsonDeserialize(contentConverter = DeckEnchantmentDescConverter.class)
 	public void setDeckTriggers(EnchantmentDesc[] deckTriggers) {
 		this.deckTriggers = deckTriggers;
 	}
@@ -1144,5 +1147,32 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setBlackText(boolean blackText) {
 		this.blackText = blackText;
+	}
+
+	@JsonIgnore
+	public Stream<AbstractEnchantmentDesc<?>> getEnchantmentDescs() {
+		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(
+				Stream.ofNullable(this.getDeathrattle()),
+				Stream.ofNullable(this.getBattlecry()),
+				Stream.ofNullable(this.getTrigger()),
+				Stream.ofNullable(this.getDeckTrigger()),
+				Stream.ofNullable(this.getPassiveTrigger()),
+				Stream.ofNullable(this.getAura()),
+				Stream.ofNullable(this.getCardCostModifier()),
+				Stream.of(this.getTriggers()),
+				Stream.of(this.getAuras()),
+				Stream.of(this.getPassiveTriggers()),
+				Stream.of(this.getDeckTriggers()),
+				Stream.of(this.getGameTriggers()));
+		if (getType() == CardType.ENCHANTMENT) {
+			concat = Streams.concat(Stream.ofNullable(this), concat);
+		}
+		return concat;
+	}
+
+	@JsonIgnore
+	@Override
+	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
+		return context.getLogic().tryCreateEnchantmentCard(context, player, effectSource, enchantmentSource, host, force);
 	}
 }

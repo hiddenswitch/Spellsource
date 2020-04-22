@@ -19,7 +19,6 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
@@ -41,7 +40,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -94,7 +92,7 @@ public class SpellUtils {
 	 * @param source
 	 * @param summonRightmost       When {@code true} and {@link Card#isActor()}, summons the card in the rightmost
 	 *                              position. Otherwise, summons it to a random position.
-	 * @param resolveBattlecry      When {@code true}, also resolves the battlecry with a random target. Otherwise, the
+	 * @param resolveOpener         When {@code true}, also resolves the battlecry with a random target. Otherwise, the
 	 *                              battlecry is ignored.
 	 * @param onlyWhileSourceInPlay When {@code true},
 	 * @param randomChooseOnes      When {@code true}, randomly chooses the choose-one effects. Otherwise, checks if the
@@ -110,7 +108,7 @@ public class SpellUtils {
 	                                       Card card,
 	                                       Entity source,
 	                                       boolean summonRightmost,
-	                                       boolean resolveBattlecry,
+	                                       boolean resolveOpener,
 	                                       boolean onlyWhileSourceInPlay,
 	                                       boolean randomChooseOnes,
 	                                       boolean playFromHand) {
@@ -178,14 +176,10 @@ public class SpellUtils {
 				}
 			}
 
-			// Do we resolve battlecries?
-			if (!resolveBattlecry && action instanceof HasBattlecry) {
-				HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
-				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
-				// true but this method's parameter to not resolve battlecries will be respected
-				BattlecryDesc nullBattlecry = new BattlecryDesc();
-				nullBattlecry.spell = NullSpell.create();
-				actionWithBattlecry.setBattlecry(nullBattlecry);
+			// Do we resolve opener?
+			if (!resolveOpener && action instanceof OpenerOverridable) {
+				OpenerOverridable actionWithBattlecry = ((OpenerOverridable) action);
+				actionWithBattlecry.setResolveOpener(false);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
 			// This is some other kind of action that takes a target. Process possible target modification first.
@@ -613,31 +607,8 @@ public class SpellUtils {
 	 */
 	static AttributeMap processKeptEnchantments(Entity target, AttributeMap map) {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			Stream.of(
-					Attribute.POISONOUS,
-					Attribute.DIVINE_SHIELD,
-					Attribute.STEALTH,
-					Attribute.TAUNT,
-					Attribute.CANNOT_ATTACK,
-					Attribute.ATTACK_EQUALS_HP,
-					Attribute.CANNOT_ATTACK_HEROES,
-					Attribute.CHARGE,
-					Attribute.DEFLECT,
-					Attribute.IMMUNE,
-					Attribute.ENRAGABLE,
-					Attribute.IMMUNE_WHILE_ATTACKING,
-					Attribute.FROZEN,
-					Attribute.KEEPS_ENCHANTMENTS,
-					Attribute.MAGNETIC,
-					Attribute.PERMANENT,
-					Attribute.RUSH,
-					Attribute.WITHER,
-					Attribute.INVOKE,
-					Attribute.LIFESTEAL,
-					Attribute.WINDFURY,
-					Attribute.ATTACK_BONUS,
-					Attribute.HP_BONUS
-			)
+			Attribute.getEnchantmentLikeAttributes()
+					.stream()
 					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
 
 			if (target instanceof Minion) {
@@ -691,6 +662,7 @@ public class SpellUtils {
 		// into set aside when that happens
 		boolean needsToBeRemoved = false;
 		if (output.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+			logger.warn("castChildSpell {} {}: output {} had unassigned location", context.getGameId(), source, output);
 			output.setId(context.getLogic().generateId());
 			output.setOwner(player.getId());
 			output.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
@@ -805,7 +777,7 @@ public class SpellUtils {
 	public static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
-				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+				.anyMatch(m -> context.getLogic().getActiveTriggers(m.getReference()).stream()
 						.filter(auraClass::isInstance)
 						.map(t -> (Aura) t)
 						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
@@ -822,10 +794,10 @@ public class SpellUtils {
 	 * @return A list of aura instances.
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, @NotNull Class<T> auraClass) {
-		return context.getTriggerManager()
+		return context
 				.getTriggers()
 				.stream()
-				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e))
+				.filter(e -> e.getOwner() == playerId && !e.isExpired() && auraClass.isInstance(e) && e.isActivated())
 				.map(auraClass::cast)
 				// Should respect order of play
 				.sorted(Comparator.comparingInt(Entity::getId))
@@ -842,8 +814,9 @@ public class SpellUtils {
 	 * @return
 	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
-		return context.getTriggerManager().getTriggers().stream()
-				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired())
+		return context.getTriggers()
+				.stream()
+				.filter(aura -> auraClass.isInstance(aura) && !aura.isExpired() && aura.isActivated())
 				.map(auraClass::cast)
 				.filter(aura -> aura.getAffectedEntities().contains(target.getId()) || aura.getAffectedEntities().contains(target.getSourceCard().getId()))
 				.collect(toList());
@@ -863,7 +836,7 @@ public class SpellUtils {
 	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass, Entity source, Entity target) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
-				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+				.flatMap(m -> context.getLogic().getActiveTriggers(m.getReference()).stream()
 						.filter(auraClass::isInstance)
 						.map(t -> (Aura) t)
 						.filter(((Predicate<Aura>) Aura::isExpired).negate())

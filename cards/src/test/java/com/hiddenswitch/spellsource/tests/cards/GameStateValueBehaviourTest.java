@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.common.Tracing;
 import net.demilich.metastone.game.GameContext;
 import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -15,7 +16,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
-import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -25,6 +26,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
+
+	@Test
+	public void testBailsOutInfiniteDiscover() {
+		runGym((context, player, opponent) -> {
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour().setThrowsExceptions(true));
+			receiveCard(context, player, "spell_test_discover_loop");
+			assertThrows(context::resume);
+		});
+	}
 
 	@Test
 	public void testShouldNotHealEnemyChampion() {
@@ -77,11 +87,14 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testDesertMaiden() {
 		runGym((context, player, opponent) -> {
+			// Temporarily disable logging
 			shuffleToDeck(context, player, "spell_test_gain_mana");
 			shuffleToDeck(context, player, "minion_neutral_test");
 			shuffleToDeck(context, player, "minion_black_test");
 			playMinionCard(context, player, "minion_desert_maiden");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			// Return a valid action
+			behaviour.setThrowsExceptions(false);
 			context.setBehaviour(player.getId(), behaviour);
 			context.endTurn();
 			while (context.takeActionInTurn()) {
@@ -114,7 +127,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 		});
 	}
 
-	@Test
+	@RepeatedTest(20)
 	public void testAIFindsPhysicalAttackLethal() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 7; i++) {
@@ -125,11 +138,11 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			highValueTarget.setAttack(1000);
 			highValueTarget.setAttribute(Attribute.SPELL_DAMAGE, 1000);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
-			behaviour.setTimeout(behaviour.getTimeout() * 2);
-			behaviour.setLethalTimeout(behaviour.getLethalTimeout() * 2);
-			behaviour.setExpandDepthForLethal(true);
-			behaviour.setParallel(false);
-			behaviour.setPruneContextStack(true);
+			behaviour.setTimeout(behaviour.getTimeout() * 3)
+					.setLethalTimeout(behaviour.getLethalTimeout() * 3)
+					.setExpandDepthForLethal(true)
+					.setParallel(false)
+					.setPruneContextStack(true);
 			context.setBehaviour(player.getId(), behaviour);
 
 			while (context.takeActionInTurn()) {
@@ -148,12 +161,11 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 				receiveCard(context, player, "spell_test_discover3");
 			}
 			shuffleToDeck(context, player, "passive_zero_cost");
-			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			context.getLogic().fireGameEvent(new GameStartEvent(context, player));
 			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
 			context.setBehaviour(player.getId(), checkDepth);
 
-			while (context.takeActionInTurn()) {
-			}
+			assertTrue(context.takeActionInTurn());
 		});
 	}
 
@@ -264,77 +276,79 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 
 	@Test
 	public void testSingleMatchBenchmark() {
-		GameContext gameContext = new GameContext();
-		GameDeck deck1 = DeckCreateRequest.fromCardIds(HeroClass.CAMO,
-				"minion_shadowveiler",
-				"minion_swift_stinger",
-				"spell_smokescreen",
-				"minion_natural_convert",
-				"minion_towering_treant",
-				"minion_mother_matron",
-				"minion_lightning_elemental",
-				"minion_blackboar",
-				"minion_sly_conquistador",
-				"minion_oni_entrapper",
-				"minion_peacock_mystic",
-				"minion_smug_theorist",
-				"minion_cinderslinger",
-				"minion_holdout_soldier",
-				"spell_espionage",
-				"minion_bighand_brute",
-				"minion_roadblock_pufferfish",
-				"minion_novice_enchantress",
-				"minion_lounge_brownie",
-				"minion_mutated_brute",
-				"minion_anarking",
-				"minion_captain_stashin",
-				"minion_uccian_hydra",
-				"minion_divine_cleric",
-				"minion_draining_ooze",
-				"minion_holdover_lich",
-				"minion_haunted_armor",
-				"minion_lava_manticore",
-				"minion_twilight_mercenary",
-				"spell_last_man_standing").toGameDeck();
-		GameDeck deck2 = DeckCreateRequest.fromCardIds(HeroClass.NAVY,
-				"minion_little_helper",
-				"spell_gather_strength",
-				"minion_sleepy_sprite",
-				"minion_refracting_golem",
-				"spell_scurvy_sights",
-				"minion_fairytale_tracker",
-				"minion_sea_stowaway",
-				"spell_ensnare",
-				"minion_sly_conquistador",
-				"minion_fae_trickster",
-				"minion_sky_high_surveyor",
-				"minion_gustbreaker",
-				"spell_reinforcements",
-				"minion_wolfcrier",
-				"minion_seven_shot_gunner",
-				"minion_reckless_hero",
-				"minion_jungle_operative",
-				"minion_primal_mother",
-				"spell_alternate_timeline",
-				"minion_holdout_soldier",
-				"minion_nightmare_dragonflight",
-				"minion_yokai_shapeshifter",
-				"minion_polychrome_hydra",
-				"minion_emerald_cleanser",
-				"minion_doctor_hatchett",
-				"minion_crazed_explorer",
-				"minion_magma_hound",
-				"minion_oppressor_defender",
-				"minion_sourceborn_aelin",
-				"spell_clash").toGameDeck();
-		gameContext.setDeck(0, deck1);
-		gameContext.setDeck(1, deck2);
-		gameContext.setDeckFormat(DeckFormat.spellsource());
-		// set a seed
-		gameContext.setLogic(new GameLogic(10101L));
-		gameContext.setBehaviour(1, new GameStateValueBehaviour().setParallel(false));
-		gameContext.setBehaviour(0, new PlayGameLogicRandomBehaviour());
-		gameContext.play();
+		for (var i = 0; i < 10; i++) {
+			GameContext gameContext = new GameContext();
+			GameDeck deck1 = DeckCreateRequest.fromCardIds(HeroClass.CAMO,
+					"minion_shadowveiler",
+					"minion_swift_stinger",
+					"spell_smokescreen",
+					"minion_natural_convert",
+					"minion_towering_treant",
+					"minion_mother_matron",
+					"minion_lightning_elemental",
+					"minion_blackboar",
+					"minion_sly_conquistador",
+					"minion_oni_entrapper",
+					"minion_peacock_mystic",
+					"minion_smug_theorist",
+					"minion_cinderslinger",
+					"minion_holdout_soldier",
+					"spell_espionage",
+					"minion_bighand_brute",
+					"minion_roadblock_pufferfish",
+					"minion_novice_enchantress",
+					"minion_lounge_brownie",
+					"minion_mutated_brute",
+					"minion_anarking",
+					"minion_captain_stashin",
+					"minion_uccian_hydra",
+					"minion_divine_cleric",
+					"minion_draining_ooze",
+					"minion_holdover_lich",
+					"minion_haunted_armor",
+					"minion_lava_manticore",
+					"minion_twilight_mercenary",
+					"spell_last_man_standing").toGameDeck();
+			GameDeck deck2 = DeckCreateRequest.fromCardIds(HeroClass.NAVY,
+					"minion_little_helper",
+					"spell_gather_strength",
+					"minion_sleepy_sprite",
+					"minion_refracting_golem",
+					"spell_scurvy_sights",
+					"minion_fairytale_tracker",
+					"minion_sea_stowaway",
+					"spell_ensnare",
+					"minion_sly_conquistador",
+					"minion_fae_trickster",
+					"minion_sky_high_surveyor",
+					"minion_gustbreaker",
+					"spell_reinforcements",
+					"minion_wolfcrier",
+					"minion_seven_shot_gunner",
+					"minion_reckless_hero",
+					"minion_jungle_operative",
+					"minion_primal_mother",
+					"spell_alternate_timeline",
+					"minion_holdout_soldier",
+					"minion_nightmare_dragonflight",
+					"minion_yokai_shapeshifter",
+					"minion_polychrome_hydra",
+					"minion_emerald_cleanser",
+					"minion_doctor_hatchett",
+					"minion_crazed_explorer",
+					"minion_magma_hound",
+					"minion_oppressor_defender",
+					"minion_sourceborn_aelin",
+					"spell_clash").toGameDeck();
+			gameContext.setDeck(0, deck1);
+			gameContext.setDeck(1, deck2);
+			gameContext.setDeckFormat(DeckFormat.spellsource());
+			// set a seed
+			gameContext.setLogic(new GameLogic(10101L));
+			gameContext.setBehaviour(1, new GameStateValueBehaviour().setParallel(false));
+			gameContext.setBehaviour(0, new PlayGameLogicRandomBehaviour());
+			gameContext.play();
+		}
 	}
 
 	@Test
@@ -347,7 +361,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			List<GameAction> actions = context.getValidActions();
 			assertTrue(actions.stream().anyMatch(ga -> fireball.getReference().equals(ga.getSourceReference())
 					&& opponent.getHero().getReference().equals(ga.getTargetReference())), "The player should be able to cast the Fireball on the opponent's hero");
-			assertTrue(actions.stream().anyMatch(ga -> player.getHero().getHeroPower().getReference().equals(ga.getSourceReference())
+			assertTrue(actions.stream().anyMatch(ga -> player.getHeroPowerZone().get(0).getReference().equals(ga.getSourceReference())
 					&& opponent.getHero().getReference().equals(ga.getTargetReference())), "The player should be able to Fireblast on the opponent's hero");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction chosen = behaviour.requestAction(context, player, actions);
@@ -402,6 +416,38 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testAIWillNotPlayIntoDoomsayer() {
 		runGym((context, player, opponent) -> {
+			var boardClear = playMinionCard(context, player, "minion_test_start_turns");
+			var minion = playMinionCard(context, player, 1, 1);
+			context.endTurn();
+			destroy(context, boardClear);
+			context.endTurn();
+			assertFalse(minion.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			var boardClear = playMinionCard(context, player, "minion_test_start_turns");
+			context.endTurn();
+			var minion = playMinionCard(context, opponent, 1, 1);
+			assertFalse(minion.isDestroyed());
+			assertFalse(boardClear.isDestroyed());
+			context.endTurn();
+			assertTrue(minion.isDestroyed());
+			assertTrue(boardClear.isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			var boardClear = playMinionCard(context, player, "minion_test_start_turns");
+			context.endTurn();
+			var card = receiveCard(context, opponent, "minion_rapier_rodent");
+			destroy(context, boardClear);
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
+			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
+			assertEquals(ActionType.SUMMON, action.getActionType(), "should play rapier rodent");
+			assertEquals(card.getReference(), action.getSourceReference(), "should play rapier rodent");
+		});
+
+		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			receiveCard(context, opponent, "minion_rapier_rodent");
@@ -412,7 +458,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion clearsEndTurn = playMinionCard(context, player, "minion_test_start_turns");
+			Minion clearsStartTurns = playMinionCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			for (int i = 0; i < 3; i++) {
 				playMinionCard(context, opponent, "minion_charge_test");
@@ -421,21 +467,25 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			assertEquals(ActionType.PHYSICAL_ATTACK, action.getActionType(), "should attack");
-			assertEquals(clearsEndTurn.getReference(), action.getTargetReference(), "should attack board clear");
+			assertEquals(clearsStartTurns.getReference(), action.getTargetReference(), "should attack board clear");
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion clearsEndTurn = playMinionCard(context, player, "minion_test_start_turns");
+			Minion clearsStartTurns = playMinionCard(context, player, "minion_test_start_turns");
 			context.endTurn();
 			playMinionCard(context, opponent, "minion_floating_crystal");
 			Card card = receiveCard(context, opponent, "spell_test_deal_6");
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
-			behaviour.setTriggerStartTurns(true);
-			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			assertEquals(action.getSourceReference(), card.getReference(), "should deal 6 damage");
-			assertEquals(clearsEndTurn.getReference(), action.getTargetReference(), "should target board clear");
+			behaviour
+					.setDisposeNodes(false)
+					.setTriggerStartTurns(true)
+					.setParallel(false);
+			var validActions = context.getValidActions();
+			GameAction action = behaviour.requestAction(context, opponent, validActions);
+			assertEquals(action.getSourceReference(), card.getReference(), "should deal 7 damage");
+			assertEquals(context.resolveSingleTarget(clearsStartTurns.getReference()), context.resolveSingleTarget(action.getTargetReference()), "should target board clear");
 		});
 	}
 

@@ -9,9 +9,7 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.*;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class ActivateTriggeredEffectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference());
+		List<Trigger> triggers = context.getLogic().getActiveTriggers(target.getReference());
 		for (Class triggerClass : new Class[]{TurnStartTrigger.class, TurnEndTrigger.class}) {
 			for (Trigger trigger : triggers) {
 

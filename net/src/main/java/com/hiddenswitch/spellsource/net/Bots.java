@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.common.Tracing;
 import io.vertx.core.Promise;
 import io.vertx.core.json.jackson.JacksonCodec;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
@@ -44,7 +45,13 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public interface Bots {
 	// Return a non-parallelized GSVB instance
-	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
+	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(() ->
+			new GameStateValueBehaviour()
+					.setParallel(false)
+					.setMaxDepth(2)
+					.setTimeout(3500L)
+					.setLethalTimeout(11000L)
+					.setThrowsExceptions(false));
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {
 	};
 	String BOTS_INDEX_PLANS = "Bots/indexPlans";

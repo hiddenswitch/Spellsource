@@ -937,6 +937,7 @@ definitions:
           - 'DISCOVER'
           - 'REMOVED_FROM_PLAY'
           - 'PLAYER'
+          - 'ENCHANTMENT'
         enum:
           - 'N' # 'NONE'
           - 'H' # 'HAND'
@@ -953,6 +954,7 @@ definitions:
           - 'V' # 'DISCOVER'
           - 'R' # 'REMOVED_FROM_PLAY'
           - 'P' # 'PLAYER'
+          - 'T' # 'ENCHANTMENT'
   EntityChangeSet:
     description: |
       An array that corresponds to the visible entities in this game state notification. The client is responsible for
@@ -985,6 +987,7 @@ definitions:
        - DEFLECT: Damage dealt from the Deflect ability to the hero.
        - DRAIN: Damage dealt by a Drain ability.
        - IGNORES_ARMOR: Damage that ignores armor when it is dealt to the hero.
+       - SPLASH: Damage dealt by the SplashDamageSpell which is used to change the source of damage
     type: 'string'
     enum:
       - 'PHYSICAL'
@@ -994,6 +997,7 @@ definitions:
       - 'DEFLECT'
       - 'DRAIN'
       - 'IGNORES_ARMOR'
+      - 'SPLASH'
   GameEvent:
     type: 'object'
     properties:

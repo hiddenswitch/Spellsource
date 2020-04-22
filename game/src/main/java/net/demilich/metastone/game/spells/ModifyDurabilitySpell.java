@@ -30,13 +30,12 @@ public class ModifyDurabilitySpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// if there is no weapon, just do nothing
-		if (player.getHero().getWeapon() == null) {
+		if (player.getWeaponZone().isEmpty()) {
 			return;
 		}
+
 		int durabilityChange = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-
-
-		context.getLogic().modifyDurability(player.getHero().getWeapon(), durabilityChange);
+		context.getLogic().modifyDurability(player.getWeaponZone().get(0), durabilityChange);
 	}
 
 }

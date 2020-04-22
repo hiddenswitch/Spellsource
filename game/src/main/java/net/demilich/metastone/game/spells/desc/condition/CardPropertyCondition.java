@@ -27,13 +27,13 @@ public final class CardPropertyCondition extends Condition {
 	}
 
 	public static Condition create(String cardId) {
-		ConditionDesc desc = new ConditionDesc(CardPropertyCondition.class);
+		var desc = new ConditionDesc(CardPropertyCondition.class);
 		desc.put(ConditionArg.CARD, cardId);
 		return desc.create();
 	}
 
 	public static Condition create(EntityReference target, String cardId) {
-		ConditionDesc desc = new ConditionDesc(CardPropertyCondition.class);
+		var desc = new ConditionDesc(CardPropertyCondition.class);
 		desc.put(ConditionArg.TARGET, target);
 		desc.put(ConditionArg.CARD, cardId);
 		return desc.create();
@@ -41,32 +41,26 @@ public final class CardPropertyCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		target = desc.containsKey(ConditionArg.TARGET) ? context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)) : target;
-
-		if (target == null) {
-			return false;
-		}
-
-		Card card = target.getSourceCard();
+		var card = target.getSourceCard();
 
 		if (card == null) {
 			return false;
 		}
 
-		CardType cardType = (CardType) desc.get(ConditionArg.CARD_TYPE);
+		var cardType = (CardType) desc.get(ConditionArg.CARD_TYPE);
 		if (cardType != null && !GameLogic.isCardType(card.getCardType(), cardType)) {
 			return false;
 		}
 
-		String cardId = (String) desc.get(ConditionArg.CARD);
+		var cardId = (String) desc.get(ConditionArg.CARD);
 		if (cardId != null && !card.getCardId().contains(cardId)) {
 			return false;
 		}
 
-		String[] cardIds = (String[]) desc.get(ConditionArg.CARDS);
+		var cardIds = (String[]) desc.get(ConditionArg.CARDS);
 		if (cardIds != null && cardIds.length > 0) {
-			boolean found = false;
-			for (int i = 0; i < cardIds.length; i++) {
+			var found = false;
+			for (var i = 0; i < cardIds.length; i++) {
 				if (Objects.equals(card.getCardId(), cardIds[i])) {
 					found = true;
 					break;
@@ -77,19 +71,19 @@ public final class CardPropertyCondition extends Condition {
 			}
 		}
 
-		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
+		var heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
 		if (heroClass != null && !card.hasHeroClass(heroClass)) {
 			return false;
 		}
 
 
-		String race = (String) desc.get(ConditionArg.RACE);
+		var race = (String) desc.get(ConditionArg.RACE);
 		if (race != null && !Race.hasRace(context, card, race)) {
 			return false;
 		}
 
-		Rarity rarity = (Rarity) desc.get(ConditionArg.RARITY);
-		if (rarity!=null&&!GameLogic.isRarity(card.getRarity(), rarity)) {
+		var rarity = (Rarity) desc.get(ConditionArg.RARITY);
+		if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
 			return false;
 		}
 

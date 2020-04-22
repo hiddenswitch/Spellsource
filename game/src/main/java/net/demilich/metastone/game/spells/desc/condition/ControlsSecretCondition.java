@@ -4,6 +4,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
+/**
+ * {@code true} if the {@code player} or {@link ConditionArg#TARGET_PLAYER} has a {@link
+ * net.demilich.metastone.game.spells.trigger.secrets.Secret}.
+ */
 public class ControlsSecretCondition extends Condition {
 
 	public ControlsSecretCondition(ConditionDesc desc) {
@@ -15,4 +19,8 @@ public class ControlsSecretCondition extends Condition {
 		return !player.getSecrets().isEmpty();
 	}
 
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
 }

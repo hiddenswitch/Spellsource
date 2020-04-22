@@ -14,34 +14,9 @@ import net.demilich.metastone.game.entities.HasCard;
  * sub-spells have already been cast on it.</li>
  * </ul>
  */
-public final class ReturnToHandEvent extends GameEvent implements HasCard {
-
-	private final Card card;
-	private final Entity originalTarget;
+public final class ReturnToHandEvent extends CardEvent {
 
 	public ReturnToHandEvent(GameContext context, int playerId, Card card, Entity originalTarget) {
-		super(context, originalTarget.getOwner(), playerId);
-		this.card = card;
-		this.originalTarget = originalTarget;
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return originalTarget;
-	}
-
-	@Override
-	public Entity getEventSource() {
-		return card;
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.RETURNED_TO_HAND;
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return card;
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.RETURNED_TO_HAND, context, originalTarget.getOwner(), playerId, card, originalTarget);
 	}
 }

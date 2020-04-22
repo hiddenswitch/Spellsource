@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.spells.aura;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.ObjectArrays;
+import com.google.common.collect.Streams;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -17,10 +19,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
-import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
+import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -28,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Auras represent ongoing effects applied to certain entities and is updated whenever (1) the board changes, (2) a
@@ -77,71 +77,66 @@ import java.util.*;
  * <p>
  * The {@link #onGameEvent(GameEvent)} method actually implements the evaluation of the condition, the filter, the
  * target and the add/remove effects. Observe that unlike an {@link Enchantment}, which it inherits, auras do not
- * respect configuration features like {@link #maxFires}. It is unclear how such features should be interpreted.
+ * respect configuration features like {@link #getMaxFires()}. It is unclear how such features should be interpreted.
  *
  * @see BuffAura for an aura that increases stats.
  * @see AttributeAura for an aura that adds an attribute
  * @see CardAura that temporarily makes one card behave like another
  */
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
-
+	protected static EventTriggerDesc[] DEFAULT_TRIGGERS = new EventTriggerDesc[]{new EventTriggerDesc(DidEndSequenceTrigger.class), new EventTriggerDesc(BoardChangedTrigger.class)};
+	protected static EventTriggerDesc[] EMPTY_TRIGGERS = new EventTriggerDesc[0];
 	private static Logger LOGGER = LoggerFactory.getLogger(Aura.class);
-	protected EntityReference targets;
-	protected SpellDesc applyAuraEffect;
-	protected SpellDesc removeAuraEffect;
-	private EntityFilter entityFilter;
-	private Condition condition;
 	private SortedSet<Integer> affectedEntities = new TreeSet<>();
 	private AuraDesc desc;
 
 	public Aura(AuraDesc desc) {
-		this(desc.getSecondaryTrigger() == null ? new WillEndSequenceTrigger() : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
-		setEntityFilter(desc.getFilter());
-		setCondition(desc.getCondition());
-		setPersistentOwner(desc.getBool(AuraArg.PERSISTENT_OWNER));
+		super();
+		constructAura(desc);
+	}
+
+	private void constructAura(AuraDesc desc) {
 		setDesc(desc);
+
+		Streams.concat(
+				Stream.of((EventTriggerDesc[]) getDesc().getOrDefault(AuraArg.TRIGGERS, EMPTY_TRIGGERS)),
+				Stream.ofNullable(getDesc().getSecondaryTrigger()),
+				Stream.of(getDefaultTriggers())
+		).forEach(trigger -> {
+			getTriggers().add(trigger.create());
+		});
+
+		setZones(getDesc().getZones());
 	}
 
-	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {
-		this(secondaryTrigger, applyAuraEffect, removeAuraEffect, targetSelection, null);
+	@Override
+	protected EventTriggerDesc[] getDefaultTriggers() {
+		return DEFAULT_TRIGGERS;
 	}
 
-	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter) {
-		this(secondaryTrigger, applyAuraEffect, removeAuraEffect, targetSelection, entityFilter, null);
+	@Override
+	public String getName() {
+		var name = getDesc().getString(AuraArg.NAME);
+		if (name != null) {
+			return name;
+		}
+		return super.getName();
 	}
 
-	public Aura(EventTrigger secondaryTrigger, SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection, EntityFilter entityFilter, Condition condition) {
-		super(new BoardChangedTrigger(), secondaryTrigger, applyAuraEffect, false);
-		if (applyAuraEffect == null) {
-			applyAuraEffect = NullSpell.create();
-		}
-		if (removeAuraEffect == null) {
-			removeAuraEffect = NullSpell.create();
-		}
-		if (targetSelection == null) {
-			targetSelection = EntityReference.SELF;
-		}
-		this.applyAuraEffect = applyAuraEffect;
-		this.removeAuraEffect = removeAuraEffect;
-		this.targets = targetSelection;
-		this.entityFilter = entityFilter;
-		this.condition = condition;
+	@Override
+	public Aura getCopy() {
+		var copy = (Aura) clone();
+		copy.affectedEntities.clear();
+		return copy;
 	}
 
-	protected Aura(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell) {
-		super(primaryTrigger, secondaryTrigger, spell, false);
-	}
-
-	protected void includeExtraTriggers(AuraDesc desc) {
-		if (desc == null) {
-			return;
+	@Override
+	public String getDescription() {
+		var description = getDesc().getString(AuraArg.DESCRIPTION);
+		if (description != null) {
+			return description;
 		}
-		if (desc.containsKey(AuraArg.TRIGGERS)) {
-			EventTriggerDesc[] moreTriggers = (EventTriggerDesc[]) desc.get(AuraArg.TRIGGERS);
-			for (EventTriggerDesc trigger : moreTriggers) {
-				triggers.add(trigger.create());
-			}
-		}
+		return super.getDescription();
 	}
 
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
@@ -161,13 +156,6 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	@Override
 	public Aura clone() {
 		Aura clone = (Aura) super.clone();
-		clone.targets = this.targets;
-		if (applyAuraEffect != null) {
-			clone.applyAuraEffect = this.applyAuraEffect.clone();
-		}
-		if (removeAuraEffect != null) {
-			clone.removeAuraEffect = this.removeAuraEffect.clone();
-		}
 		if (affectedEntities != null) {
 			clone.affectedEntities = new TreeSet<>(this.affectedEntities);
 		}
@@ -175,8 +163,8 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Override
-	public void onAdd(GameContext context) {
-		super.onAdd(context);
+	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
+		super.onAdd(context, player, source, host);
 		affectedEntities.clear();
 	}
 
@@ -190,7 +178,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		GameContext context = event.getGameContext();
 		Player owner = context.getPlayer(getOwner());
 		Entity source = context.resolveSingleTarget(getHostReference());
-		List<Entity> resolvedTargets = context.resolveTarget(owner, source, targets);
+		List<Entity> resolvedTargets = context.resolveTarget(owner, source, getTargets());
 		List<Entity> relevantTargets = new ArrayList<>(resolvedTargets);
 		for (Iterator<Integer> iterator = affectedEntities.iterator(); iterator.hasNext(); ) {
 			int entityId = iterator.next();
@@ -218,6 +206,10 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		}
 	}
 
+	protected EntityReference getTargets() {
+		return (EntityReference) getDesc().getOrDefault(AuraArg.TARGET, EntityReference.NONE);
+	}
+
 	protected boolean applied(Entity target) {
 		return affectedEntities.contains(target.getId());
 	}
@@ -233,10 +225,10 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 			return;
 		}
-		if (removeAuraEffect == null) {
+		if (getRemoveAuraEffect() == null) {
 			return;
 		}
-		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
+		context.getLogic().castSpell(getOwner(), getRemoveAuraEffect(), getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
 	}
 
 	@Suspendable
@@ -246,15 +238,15 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 			return;
 		}
-		if (applyAuraEffect == null) {
+		if (getApplyAuraEffect() == null) {
 			return;
 		}
-		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
+		context.getLogic().castSpell(getOwner(), getApplyAuraEffect(), getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
 	}
 
 	@Override
 	@Suspendable
-	public void onRemove(GameContext context) {
+	public void expire(GameContext context) {
 		for (int targetId : affectedEntities) {
 			EntityReference targetKey = new EntityReference(targetId);
 			Entity target = context.tryFind(targetKey);
@@ -263,23 +255,15 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			}
 		}
 		affectedEntities.clear();
-		super.onRemove(context);
+		super.expire(context);
 	}
 
 	public EntityFilter getEntityFilter() {
-		return entityFilter;
-	}
-
-	public void setEntityFilter(EntityFilter entityFilter) {
-		this.entityFilter = entityFilter;
+		return getDesc().getFilter();
 	}
 
 	public Condition getCondition() {
-		return condition;
-	}
-
-	protected void setCondition(Condition condition) {
-		this.condition = condition;
+		return getDesc().getCondition();
 	}
 
 	@Override
@@ -296,17 +280,26 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		return affectedEntities;
 	}
 
-	public SpellDesc getApplyEffect() {
-		return applyAuraEffect;
-	}
-
 	@Override
-	public boolean hasPersistentOwner() {
+	public boolean isPersistentOwner() {
 		return getDesc() != null && getDesc().getBool(AuraArg.PERSISTENT_OWNER);
 	}
 
 	public EntityReference getSecondaryTarget() {
 		return getDesc().getSecondaryTarget();
+	}
+
+	public SpellDesc getApplyAuraEffect() {
+		return (SpellDesc) getDesc().get(AuraArg.APPLY_EFFECT);
+	}
+
+	public SpellDesc getRemoveAuraEffect() {
+		return (SpellDesc) getDesc().get(AuraArg.REMOVE_EFFECT);
+	}
+
+	@Override
+	@Suspendable
+	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 	}
 }
 

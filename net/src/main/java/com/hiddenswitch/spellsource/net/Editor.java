@@ -1,12 +1,11 @@
 package com.hiddenswitch.spellsource.net;
 
 import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableFunction;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
@@ -15,7 +14,6 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.VertxException;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
@@ -27,7 +25,6 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.custom.PlayCardsRandomlySpell;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;

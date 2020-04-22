@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
@@ -15,6 +15,8 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.TargetType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
@@ -35,7 +37,6 @@ import java.io.Serializable;
  * </pre>
  */
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
-	private int owner = -1;
 	private EventTriggerDesc desc;
 
 	public EventTrigger(EventTriggerDesc desc) {
@@ -47,7 +48,7 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		return (EventTrigger) super.clone();
 	}
 
-	private boolean determineTargetPlayer(GameEvent event, TargetPlayer targetPlayer, Entity host, int targetPlayerId) {
+	private boolean determineTargetPlayer(GameEvent event, TargetPlayer targetPlayer, Entity host, int targetPlayerId, int enchantmentOwnerId) {
 		if (targetPlayerId == -1 || targetPlayer == null) {
 			return true;
 		}
@@ -59,11 +60,11 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			case BOTH:
 				return true;
 			case OPPONENT:
-				return getOwner() != targetPlayerId;
+				return enchantmentOwnerId != targetPlayerId;
 			case OWNER:
 				return host.getOwner() == targetPlayerId;
 			case SELF:
-				return getOwner() == targetPlayerId;
+				return enchantmentOwnerId == targetPlayerId;
 			case PLAYER_1:
 				return targetPlayerId == GameContext.PLAYER_1;
 			case PLAYER_2:
@@ -79,19 +80,20 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 	 * enter the queue of effects that should be evaluated. This is distinct from whether or not
 	 *
 	 * @param event
+	 * @param enchantment
 	 * @param host
 	 * @return
 	 */
-	protected abstract boolean innerQueues(GameEvent event, Entity host);
+	protected abstract boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host);
 
-	public final boolean queues(GameEvent event, Entity host) {
-		TargetPlayer targetPlayer = getDesc().getTargetPlayer();
-		if (targetPlayer != null && !determineTargetPlayer(event, targetPlayer, host, event.getTargetPlayerId())) {
+	public final boolean queues(GameEvent event, Enchantment enchantment, Entity host, int playerId) {
+		var targetPlayer = getDesc().getTargetPlayer();
+		if (targetPlayer != null && !determineTargetPlayer(event, targetPlayer, host, event.getTargetPlayerId(), playerId)) {
 			return false;
 		}
 
-		TargetPlayer sourcePlayer = getDesc().getSourcePlayer();
-		if (sourcePlayer != null && !determineTargetPlayer(event, sourcePlayer, host, event.getSourcePlayerId())) {
+		var sourcePlayer = getDesc().getSourcePlayer();
+		if (sourcePlayer != null && !determineTargetPlayer(event, sourcePlayer, host, event.getSourcePlayerId(), playerId)) {
 			return false;
 		}
 
@@ -99,73 +101,86 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		}
 
-		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
-		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()
-				|| (event.getSource() == null && sourceEntityType != null)) {
+		var sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
+		var source = event.getSource();
+		if (source != null && sourceEntityType != null && sourceEntityType != source.getEntityType()
+				|| (source == null && sourceEntityType != null)) {
 			return false;
 		}
 
-		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		var targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if ((event.getTarget() != null && targetEntityType != null && !Entity.hasEntityType(event.getTarget().getEntityType(), targetEntityType))
 				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}
 
-		Condition condition = (Condition) getDesc().get(EventTriggerArg.QUEUE_CONDITION);
-		Player owner = event.getGameContext().getPlayer(getOwner());
-		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
+		var condition = (Condition) getDesc().get(EventTriggerArg.QUEUE_CONDITION);
+
+		// For compatibility purposes, the host's owner is used instead of the enchantment's owner when checking the
+		// queue condition, and the source is the host for condition checking when the source is null
+		var ownerId = enchantment.getOwner();
+		if (enchantment.getSourceCard().getDesc().getFileFormatVersion() <= 1) {
+			// playerId is the enchantment's owner
+			ownerId = playerId;
+			if (source == null) {
+				source = host;
+			}
+		}
+		var owner = event.getGameContext().getPlayer(ownerId);
+		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, source, event.getTarget())) {
 			return false;
 		}
 		// Hero power triggers are disabled if a {@link Attribute#HERO_POWERS_DISABLED} is in play.
 		// Implements Death's Shadow interaction with Mindbreaker.
-		if (host != null
-				&& host.getSourceCard() != null
+		if (host.getSourceCard() != null
 				&& host.getSourceCard().getCardType() == CardType.HERO_POWER
 				&& event.getGameContext().getLogic().heroPowersDisabled()) {
 			return false;
 		}
-		return innerQueues(event, host);
+		return innerQueues(event, enchantment, host);
 	}
 
 	protected boolean hostConditionMet(GameEvent event, Entity host) {
-		TargetType hostTargetType = (TargetType) getDesc().get(EventTriggerArg.HOST_TARGET_TYPE);
-		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getEventTarget() == host) {
+		var hostTargetType = (TargetType) getDesc().get(EventTriggerArg.HOST_TARGET_TYPE);
+		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getTarget() == host) {
 			return false;
-		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
+		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getSource() == host) {
 			return false;
-		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE_CARD && event.getEventSource() == host.getSourceCard()) {
+		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE_CARD && event.getSource() == host.getSourceCard()) {
 			return false;
-		} else if (hostTargetType == TargetType.IGNORE_AS_TARGET_CARD && event.getEventTarget() == host.getSourceCard()) {
+		} else if (hostTargetType == TargetType.IGNORE_AS_TARGET_CARD && event.getTarget() == host.getSourceCard()) {
 			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getTarget() != host) {
 			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGET_CARDS && event.getEventTarget() != host.getSourceCard()) {
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGET_CARDS && event.getTarget() != host.getSourceCard()) {
 			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getSource() != host) {
 			return false;
 		}
 		return true;
 	}
 
-	public int getOwner() {
-		return owner;
-	}
-
-	public abstract com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn();
-
-	public void setOwner(int playerIndex) {
-		this.owner = playerIndex;
-	}
+	public abstract EventTypeEnum interestedIn();
 
 	@Override
 	public String toString() {
-		return "[" + getClass().getSimpleName() + " owner:" + owner + "]";
+		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+				.append("targetPlayer", getDesc().getTargetPlayer())
+				.append("sourcePlayer", getDesc().getSourcePlayer())
+				.append("hostTargetType", getDesc().get(EventTriggerArg.HOST_TARGET_TYPE))
+				.append("queueCondition", getDesc().get(EventTriggerArg.QUEUE_CONDITION))
+				.append("fireCondition", getDesc().get(EventTriggerArg.FIRE_CONDITION))
+				.toString();
 	}
 
-	public boolean fires(GameEvent event) {
-		Condition condition = (Condition) getDesc().get(EventTriggerArg.FIRE_CONDITION);
-		Player owner = event.getGameContext().getPlayer(getOwner());
-		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
+	public boolean fires(GameEvent event, Entity host, int playerId) {
+		var condition = (Condition) getDesc().get(EventTriggerArg.FIRE_CONDITION);
+		var player = event.getGameContext().getPlayer(playerId);
+		var source = event.getSource();
+		if (source == null) {
+			source = host;
+		}
+		if (condition != null && !condition.isFulfilled(event.getGameContext(), player, source, event.getTarget())) {
 			return false;
 		}
 		return true;

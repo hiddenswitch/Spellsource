@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.function.Executable;
@@ -34,7 +35,7 @@ public class MassTest extends TestBase {
 	 * <p>
 	 * The game is given a maximum of 4,200 milliseconds to execute.
 	 */
-	@RepeatedTest(value = 3000)
+	@RepeatedTest(value = 10000)
 	public void testRandomMassPlay() {
 		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {

@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -90,6 +91,34 @@ public class ArchaeologistTests extends TestBase {
 			destroy(context, poorGuy);
 			playCard(context, player, "minion_taletellers");
 			assertEquals(3, player.getHand().size());
+		});
+	}
+
+	@Test
+	public void testGoldRush() {
+		for (var j = 0; j < 100; j++) {
+			runGym((context, player, opponent) -> {
+				playCard(context, player, "spell_gold_rush");
+				for (int i = 0; i < 8; i++) {
+					// Ignore cards that can't get enchantments
+					var card = player.getDeck().get(i);
+					if (card.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS)
+							|| card.getDesc().getManaCostModifier() != null) {
+						continue;
+					}
+					assertEquals(0, costOf(context, player, card), card.getCardId());
+				}
+			});
+		}
+	}
+
+	@Test
+	public void testPrimordialSword() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_dig_up_shovel");
+			playCard(context, player, "weapon_primordial_sword");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(1, player.getHand().size());
 		});
 	}
 }

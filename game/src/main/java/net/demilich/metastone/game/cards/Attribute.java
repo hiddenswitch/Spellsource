@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -15,7 +16,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A list of attributes on entities.
@@ -180,13 +180,13 @@ public enum Attribute {
 	/**
 	 * An {@link Actor} with {@link #MEGA_WINDFURY} has four attacks per turn.
 	 *
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
 	MEGA_WINDFURY,
 	/**
 	 * An {@link Actor} with {@link #UNLIMITED_ATTACKS} has unlimited attacks per turn.
 	 *
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
 	UNLIMITED_ATTACKS,
 	/**
@@ -253,13 +253,13 @@ public enum Attribute {
 	 * attack every turn.
 	 *
 	 * @see #WINDFURY for the attribute that sets the number of attacks an actor has to 2 at the start of the owner's
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking. turn.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking. turn.
 	 */
 	NUMBER_OF_ATTACKS,
 	/**
 	 * An attribute used by Giant Sand Worm that refreshes the number of attacks it has.
 	 *
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
 	EXTRA_ATTACKS,
 	/**
@@ -400,8 +400,8 @@ public enum Attribute {
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * the battlefield.
-	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual
-	 * situation where minions enter the battlefield.
+	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Entity, Minion, Minion, boolean) for an
+	 * unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**
@@ -1190,7 +1190,8 @@ public enum Attribute {
 	}
 
 	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
-	private static final Set<Attribute> auraAttributes = EnumSet.copyOf(Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toList()));
+	private static final Set<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Sets.toImmutableEnumSet());
+
 	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
 			Attribute.ROASTED,
 			Attribute.DISCARDED,
@@ -1200,6 +1201,34 @@ public enum Attribute {
 			Attribute.SUMMONED_ON_TURN,
 			Attribute.DIED_ON_TURN
 	);
+
+	private static final Set<Attribute> enchantmentLikeAttributes = Sets.immutableEnumSet(Attribute.POISONOUS,
+			Attribute.DIVINE_SHIELD,
+			COSTS_HEALTH_INSTEAD_OF_MANA,
+			TEMPORARY_ATTACK_BONUS,
+			HEALING_BONUS,
+			SPELL_DAMAGE,
+			Attribute.STEALTH,
+			Attribute.TAUNT,
+			Attribute.CANNOT_ATTACK,
+			Attribute.ATTACK_EQUALS_HP,
+			Attribute.CANNOT_ATTACK_HEROES,
+			Attribute.CHARGE,
+			Attribute.DEFLECT,
+			Attribute.IMMUNE,
+			Attribute.ENRAGABLE,
+			Attribute.IMMUNE_WHILE_ATTACKING,
+			Attribute.FROZEN,
+			Attribute.KEEPS_ENCHANTMENTS,
+			Attribute.MAGNETIC,
+			Attribute.PERMANENT,
+			Attribute.RUSH,
+			Attribute.WITHER,
+			Attribute.INVOKE,
+			Attribute.LIFESTEAL,
+			Attribute.WINDFURY,
+			Attribute.ATTACK_BONUS,
+			Attribute.HP_BONUS);
 
 	/**
 	 * Contains the list of attributes that enchant cards as opposed to actors.
@@ -1230,5 +1259,9 @@ public enum Attribute {
 	 */
 	public static Set<Attribute> getStoresTurnNumberAttributes() {
 		return storesTurnNumberAttributes;
+	}
+
+	public static Set<Attribute> getEnchantmentLikeAttributes() {
+		return enchantmentLikeAttributes;
 	}
 }

@@ -16,13 +16,13 @@ public class NonFatigueDamageCausedTrigger extends DamageCausedTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		if (!super.innerQueues(event, host)) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		if (!super.innerQueues(event, enchantment, host)) {
 			return false;
 		}
 
 		DamageEvent damageEvent = (DamageEvent) event;
-		if (damageEvent.getDamageType() == DamageTypeEnum.FATIGUE) {
+		if (damageEvent.getDamageType().contains(DamageTypeEnum.FATIGUE)) {
 			return false;
 		}
 

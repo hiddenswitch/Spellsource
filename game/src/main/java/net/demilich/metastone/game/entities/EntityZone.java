@@ -229,8 +229,8 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		return player;
 	}
 
-	public static EntityZone<Entity> empty(int player) {
-		return new EntityZone<>(player, Zones.NONE, null);
+	public static EntityZone<Entity> empty(Zones zone, int player) {
+		return new EntityZone<>(player, zone, null);
 	}
 
 	/**

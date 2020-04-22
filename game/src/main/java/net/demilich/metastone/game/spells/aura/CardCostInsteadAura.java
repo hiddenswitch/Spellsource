@@ -124,13 +124,11 @@ import net.demilich.metastone.game.cards.Attribute;
  * Observe that a passive trigger adds an aura to the friendly player. This aura implements the cost substitution. Then,
  * whenever the card is cast, removes just one instance of the aura from the friendly player.
  */
-public class CardCostInsteadAura extends Aura {
+public class CardCostInsteadAura extends EffectlessAura {
 
 	public CardCostInsteadAura(AuraDesc desc) {
 		super(desc);
-		this.applyAuraEffect = NullSpell.create();
-		this.removeAuraEffect = NullSpell.create();
-		this.triggers.add(CardReceivedTrigger.create());
+		this.getTriggers().add(CardReceivedTrigger.create());
 	}
 
 	public int getAmountOfCurrency(GameContext context, Player player, Entity target, Entity host) {
@@ -145,3 +143,4 @@ public class CardCostInsteadAura extends Aura {
 		return (SpellDesc) getDesc().get(AuraArg.PAY_EFFECT);
 	}
 }
+

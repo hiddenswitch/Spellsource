@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,16 +39,14 @@ public final class RemoveEnchantmentSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, null, source, desc);
 		if (cards.isEmpty()) {
 			if (target.getEntityType() == EntityType.ENCHANTMENT) {
-				// Remove this target
-				Enchantment enchantment = (Enchantment) target;
-				enchantment.onRemove(context);
-				context.getTriggerManager().removeTrigger(enchantment);
+				var enchantment = (Enchantment) target;
+				enchantment.expire(context);
 			}
 			return;
 		}
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, Integer.MAX_VALUE);
 		Set<String> cardIds = cards.stream().map(Card::getCardId).collect(Collectors.toSet());
-		for (Trigger e : context.getTriggersAssociatedWith(target.getReference())) {
+		for (Trigger e : context.getLogic().getActiveTriggers(target.getReference())) {
 			if (howMany <= 0) {
 				break;
 			}
@@ -55,10 +54,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 				Enchantment enchantment = (Enchantment) e;
 				if (enchantment.getSourceCard() != null && cardIds.contains(enchantment.getSourceCard().getCardId())) {
 					howMany--;
-					enchantment.onRemove(context);
-					// TODO: What about targeting effects?
-					context.getTriggerManager().removeTrigger(enchantment);
-					context.getPlayer(enchantment.getOwner()).getRemovedFromPlay().add(enchantment);
+					enchantment.expire(context);
 				}
 			}
 		}

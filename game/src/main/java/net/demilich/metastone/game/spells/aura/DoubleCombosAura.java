@@ -1,15 +1,14 @@
 package net.demilich.metastone.game.spells.aura;
 
-import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
-public class DoubleCombosAura extends Aura {
+/**
+ * When this is in play, {@link net.demilich.metastone.game.cards.Attribute#COMBO} cards with {@link
+ * net.demilich.metastone.game.spells.ComboSpell} decorated spells cast twice.
+ */
+public class DoubleCombosAura extends EffectlessAura {
 
 	public DoubleCombosAura(AuraDesc desc) {
 		super(desc);
-		this.triggers.add(new WillEndSequenceTrigger());
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 }

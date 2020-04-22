@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class WhereverTheyAreEnchantment extends Enchantment {
 	private static Logger LOGGER = LoggerFactory.getLogger(WhereverTheyAreEnchantment.class);
 
-	private String cardId;
+	private final String cardId;
 
 	public WhereverTheyAreEnchantment(String cardId, SpellDesc desc, Card sourceCard) {
 		super();
@@ -39,7 +39,7 @@ public class WhereverTheyAreEnchantment extends Enchantment {
 		setSpell(enchantmentSpell);
 		EventTriggerDesc eventTrigger = BeforeMinionSummonedTrigger.create();
 		eventTrigger.put(EventTriggerArg.FIRE_CONDITION, CardPropertyCondition.create(cardId));
-		triggers.add(eventTrigger.create());
+		getTriggers().add(eventTrigger.create());
 	}
 
 	public String getCardId() {

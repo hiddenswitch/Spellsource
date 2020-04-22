@@ -19,8 +19,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * are, which is whenever the board changes or a sequence ends. Updating auras when the sequence ends is almost always a
  * sufficient event to react to in order to implement an effect.
  * <p>
- * The underlying attributes used for this buff are {@link Attribute#AURA_ATTACK_BONUS}
- * and {@link Attribute#AURA_HP_BONUS}.
+ * The underlying attributes used for this buff are {@link Attribute#AURA_ATTACK_BONUS} and {@link
+ * Attribute#AURA_HP_BONUS}.
  * <p>
  * For example, to give all damaged Murlocs +3/+3:
  * <pre>
@@ -41,28 +41,25 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *
  * @see Aura for a description of how the fields in the {@link AuraDesc} are interpreted.
  */
-public class BuffAura extends Aura {
+public class BuffAura extends SpellAura {
 
 	public BuffAura(AuraDesc desc) {
-		this(desc.get(AuraArg.ATTACK_BONUS), desc.get(AuraArg.HP_BONUS), desc.getTarget(), desc.getFilter());
-		if (desc.getSecondaryTrigger() != null) {
-			triggers.add(desc.getSecondaryTrigger().create());
-		}
-		includeExtraTriggers(desc);
-		setCondition(desc.getCondition());
-		setDesc(desc);
+		super(desc);
+		var attackBonus = desc.get(AuraArg.ATTACK_BONUS);
+		var hpBonus = desc.get(AuraArg.HP_BONUS);
+		var buff = AuraBuffSpell.create(attackBonus, hpBonus);
+		var debuff = AuraBuffSpell.create(
+				AlgebraicValueProvider.create(attackBonus, null, AlgebraicOperation.NEGATE),
+				AlgebraicValueProvider.create(hpBonus, null, AlgebraicOperation.NEGATE));
+		setApplyAuraEffect(buff);
+		setRemoveAuraEffect(debuff);
 	}
 
-	public BuffAura(Object attackBonus, Object hpBonus, EntityReference targetSelection, EntityFilter filter) {
-		/*
-		 Rule 4a: After the outermost Phase ends, Hearthstone does an Aura Update (Health/Attack), then does the Death
-		 Creation Step (Looks for all mortally wounded (0 or less Health)/pending destroy (hit with a destroy effect)
-		 Entities and kills them, removing them from play simultaneously), then does an Aura Update (Other). Entities
-		 that have been removed from play cannot trigger, be triggered, or emit auras, and do not take up space.
-		 */
-		super(new WillEndSequenceTrigger(), AuraBuffSpell.create(attackBonus, hpBonus), AuraBuffSpell.create(
-				AlgebraicValueProvider.create(attackBonus, null, AlgebraicOperation.NEGATE),
-				AlgebraicValueProvider.create(hpBonus, null, AlgebraicOperation.NEGATE)), targetSelection);
-		setEntityFilter(filter);
+	public static AuraDesc create(int attackBonus, int hpBonus, EntityReference target) {
+		var desc = new AuraDesc(BuffAura.class);
+		desc.put(AuraArg.ATTACK_BONUS,attackBonus);
+		desc.put(AuraArg.HP_BONUS, hpBonus);
+		desc.put(AuraArg.TARGET,target);
+		return desc;
 	}
 }

@@ -15,7 +15,7 @@
  * <p>
  * Cards are deserialized from {@link net.demilich.metastone.game.cards.desc.CardDesc} objects. The type system for the
  * card JSON is not straight forward. Some types, like {@link net.demilich.metastone.game.cards.desc.CardDesc}, {@link
- * net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} and {@link net.demilich.metastone.game.spells.desc.BattlecryDesc}
+ * net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} and {@link net.demilich.metastone.game.spells.desc.OpenerDesc}
  * deserialize conventionally, where each field in the class corresponds exactly in name and type to a field in a JSON
  * object. However, all other types are modeled as interable maps that subclass {@link
  * net.demilich.metastone.game.cards.desc.Desc}. These have corresponding key enums, like {@link

@@ -24,13 +24,13 @@ public class TurnStartTrigger extends TurnTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		return true;
 	}
 
 	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.TURN_START;
 	}
 
 }

@@ -5,12 +5,13 @@ import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.net.Spellsource;
 import com.hiddenswitch.spellsource.net.Logic;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.RpcClient;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Handler;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
@@ -110,15 +111,11 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public void onAdd(GameContext context) {
+	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 	}
 
 	@Override
-	public void onRemove(GameContext context) {
-	}
-
-	@Override
-	public void setHost(Entity host) {
+	public void setHostReference(EntityReference entityReference) {
 	}
 
 	@Override
@@ -126,7 +123,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public boolean hasPersistentOwner() {
+	public boolean isPersistentOwner() {
 		return true;
 	}
 
@@ -136,7 +133,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
-	public void expire() {
+	public void expire(GameContext context) {
 	}
 
 	@Override
@@ -144,4 +141,8 @@ public class PersistenceTrigger implements Trigger, Serializable {
 		return true;
 	}
 
+	@Override
+	public boolean isActivated() {
+		return true;
+	}
 }

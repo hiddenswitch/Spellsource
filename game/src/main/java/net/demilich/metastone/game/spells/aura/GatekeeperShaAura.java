@@ -6,7 +6,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  * Gives {@link net.demilich.metastone.game.spells.desc.valueprovider.GatekeeperShaValueProvider} the amount to increase
  * the numbers written on spells by.
  */
-public final class GatekeeperShaAura extends Aura {
+public final class GatekeeperShaAura extends AbstractFriendlyCardAura {
 
 	public GatekeeperShaAura(AuraDesc desc) {
 		super(desc);

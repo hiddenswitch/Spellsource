@@ -33,9 +33,9 @@ public final class BrothersInBloodSpell extends Spell {
 		}
 		String cardId = target.getSourceCard().getCardId();
 		EnchantmentDesc enchantment = new EnchantmentDesc();
-		enchantment.eventTrigger = MinionPlayedTrigger.create(TargetPlayer.SELF, cardId);
-		enchantment.spell = SummonSpell.create();
-		enchantment.spell.setTarget(EntityReference.EVENT_TARGET);
+		enchantment.setEventTrigger(MinionPlayedTrigger.create(TargetPlayer.SELF, cardId));
+		enchantment.setSpell(SummonSpell.create());
+		enchantment.getSpell().setTarget(EntityReference.EVENT_TARGET);
 		SpellUtils.castChildSpell(context, player, AddEnchantmentSpell.create(enchantment), source, host);
 	}
 }

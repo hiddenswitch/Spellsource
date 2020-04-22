@@ -1,38 +1,17 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.HasCard;
 
-public class AfterSpellCastedEvent extends GameEvent implements HasCard {
-
-	private final Card sourceCard;
-	private final Entity spellTarget;
+/**
+ * A spell has been casted with {@code source} card and, if the user selected the target, the {@code target}.
+ */
+public class AfterSpellCastedEvent extends CardEvent implements HasCard {
 
 	public AfterSpellCastedEvent(GameContext context, int playerId, Card sourceCard, Entity target) {
-		super(context, target == null ? -1 : target.getOwner(), playerId);
-		this.sourceCard = sourceCard;
-		this.spellTarget = target;
-	}
-
-	@Override
-	public Entity getEventSource() {
-		return getSourceCard();
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return spellTarget;
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.AFTER_SPELL_CASTED;
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return sourceCard;
+		super(GameEvent.EventTypeEnum.AFTER_SPELL_CASTED, context, playerId, sourceCard, target, sourceCard);
 	}
 }

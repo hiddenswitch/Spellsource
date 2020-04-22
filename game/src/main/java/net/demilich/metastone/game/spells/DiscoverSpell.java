@@ -465,7 +465,7 @@ public class DiscoverSpell extends Spell {
 				choice.getAttributes().remove(attribute);
 			}
 		}
-		context.getLogic().discoverCard(player.getId());
+		context.getLogic().discoverCard(player.getId(), chosenAction.getCard());
 	}
 }
 

@@ -3,6 +3,8 @@ package net.demilich.metastone.game.behaviour;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.common.Tracing;
+import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -13,12 +15,9 @@ import net.demilich.metastone.game.behaviour.heuristic.ThreatBasedHeuristic;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.client.models.CardType;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.client.models.EntityType;
-import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.BuffSpell;
@@ -93,7 +92,7 @@ import static java.util.stream.Collectors.toList;
  * GameStateValueBehaviour the best delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
- * 		with the highest score.
+ * with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
 	public static final int DEFAULT_TARGET_CONTEXT_STACK_SIZE = 2 * 7 * 6 - 1;
@@ -111,11 +110,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected int maxDepth = DEFAULT_MAXIMUM_DEPTH;
 	protected long minFreeMemory = Long.MAX_VALUE;
 	protected boolean disposeNodes = true;
-	protected boolean parallel = true;
+	protected boolean parallel = false;
 	protected boolean forceGarbageCollection = false;
 	protected boolean throwOnInvalidPlan = false;
 	protected boolean pruneContextStack = true;
-	protected boolean debug;
+	protected boolean throwsExceptions = true;
 	protected boolean expandDepthForLethal = true;
 	protected boolean triggerStartTurns = true;
 	protected boolean pruneEarlyEndTurn = false;
@@ -146,7 +145,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @return The clone.
 	 */
 	protected GameContext getClone(GameContext original) {
-		GameContext context = original.clone();
+		var context = original.clone();
 		context.setLoggingLevel(Level.ERROR);
 		return context;
 	}
@@ -190,12 +189,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 *
 	 * @return {@code true} if operating in debug mode.
 	 */
-	public boolean isDebug() {
-		return debug;
+	public boolean throwsExceptions() {
+		return throwsExceptions;
 	}
 
-	public GameStateValueBehaviour setDebug(boolean debug) {
-		this.debug = debug;
+	public GameStateValueBehaviour setThrowsExceptions(boolean throwsExceptions) {
+		this.throwsExceptions = throwsExceptions;
 		return this;
 	}
 
@@ -349,158 +348,165 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	@Suspendable
 	public @Nullable
 	GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("GameStateValueBehaviour/requestAction")
+				.withTag("gameId", context.getGameId())
+				.withTag("deckId", (String) player.getAttributes().get(Attribute.DECK_ID))
+				.start();
 		// Isolate this context
 		context = context.clone();
 		player = context.getPlayer(player.getId());
 
-		// Consistency checks
-		String gameId = context.getGameId();
-		if (validActions.size() == 0) {
-			LOGGER.error("requestAction {} {}: Empty valid actions given", gameId, player);
-			return null;
-		}
+		var oldMaxDepth = getMaxDepth();
+		var oldTimeout = getTimeout();
+		Optional<Node> maxScore = Optional.empty();
 
-		// First, check if a plan is already cached and ready to be executed
-		// The actual process of persisting the plan beyond the lifetime of this GameStateValueBehaviour instance is the
-		// responsibility of the caller, and should typically use #getIndexPlan()
-		// A strict plan refers to a collection of GameAction objects. A plan is "strictly" followed if the next action
-		// proposed in the strict plan is exactly present in the list of valid actions. Otherwise, the index plan is used,
-		// where the valid actions are assumed to be in the correct order.
-		if (strictPlan != null) {
-			if (strictPlan.size() == 0) {
-				strictPlan = null;
-			} else {
-				// Check that the plan action is valid considering these valid actions. If it is, choose it
-				GameAction planAction = strictPlan.peekFirst();
-				if (validActions.contains(planAction)) {
-					LOGGER.debug("requestAction {} {}: Used action from plan with {} actions remaining", gameId, player, strictPlan.size() - 1);
-					// Reduce the size of the corresponding index plan too
-					if (!indexPlan.isEmpty()) {
-						indexPlan.pollFirst();
-					}
-
-					final GameAction gameAction = strictPlan.pollFirst();
-					if (gameAction instanceof IntermediateAction) {
-						// Just choose directly from the valid actions
-						return validActions.get(gameAction.getId());
-					}
-					return gameAction;
-				} else {
-					// The plan is invalid, set it to null and continue.
-					if (throwOnInvalidPlan) {
-						throw new IllegalStateException("invalid plan");
-					} else {
-						LOGGER.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
-					}
-					strictPlan = null;
-					indexPlan = null;
-				}
-			}
-		} else if (indexPlan != null) {
-			if (indexPlan.size() == 0) {
-				indexPlan = null;
-			} else {
-				// Check that the plan action is valid considering these valid actions. If it is, choose it
-				int planAction = indexPlan.peekFirst();
-				if (validActions.size() > planAction) {
-					LOGGER.debug("requestAction {} {}: Used action from plan with {} actions remaining", gameId, player, indexPlan.size() - 1);
-					return validActions.get(indexPlan.pollFirst());
-				} else {
-					// The plan is invalid, set it to null and continue.
-					LOGGER.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
-					indexPlan = null;
-				}
-			}
-		}
-
-		if (validActions.size() == 1) {
-			LOGGER.debug("requestAction {} {}: Selecting only action {}", gameId, player, validActions.get(0));
-			return validActions.get(0);
-		}
-
-		// If the game state value behaviour got this far and has all discover actions, that means it is receiving a
-		// discover action it could not have evaluated in the context of intermediate nodes. This typically happens when
-		// gameplay causes a discover on a trigger, like a "Start of Game: Choose a new starting hero power."
-		if (validActions.stream().allMatch(a -> a.getActionType() == ActionType.DISCOVER || a.getActionType() == ActionType.BATTLECRY)) {
-			// We're going to choose an action at random at this point.
-			final GameContext lContext = context;
-			LOGGER.error("requestAction {} {}: Plan did not have answer to actions that were all discovers or battlecries. " +
-							"Sources were: {}", gameId, player,
-					validActions.stream().
-							map(ga -> ga.getSource(lContext))
-							.filter(Objects::nonNull)
-							.map(Entity::getSourceCard)
-							.map(Card::getCardId)
-							.collect(toList()));
-			if (isDebug()) {
-				throw new UnsupportedOperationException();
-			}
-			return validActions.get(0);
-		}
-
-		// Depth-first search for the branch which terminates with the highest score, where the DAG has game states as
-		// nodes and game actions as edges
-
-		// Max depth indicates that we will expand at most MAX_DEPTH non-intermediate (non-Battlecry and non-Discover)
-		// actions away from the game context given to this function. If we have lethal on the board and we're configured
-		// to do so, we should temporarily expand the max depth to accommodate the number of cards we can play and actors
-		// that can attack we have.
-		int oldMaxDepth = getMaxDepth();
-		long oldTimeout = getTimeout();
-		if (isExpandDepthForLethal()
-				&& observesLethal(context, player.getId(), context.getOpponent(player).getHero())) {
-			int newMaxDepth = 0;
-			Actor actors[] = new Actor[player.getMinions().size() + 1];
-			player.getMinions().toArray(actors);
-			actors[actors.length - 1] = player.getHero();
-			for (int i = 0; i < actors.length; i++) {
-				Actor actor = actors[i];
-				int attacks = actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + actor.getAttributeValue(Attribute.EXTRA_ATTACKS);
-				if (attacks > 0 && actor.canAttackThisTurn()) {
-					newMaxDepth += attacks;
-				}
-			}
-			Card[] cards = new Card[player.getHand().size() + 1];
-			player.getHand().toArray(cards);
-			cards[cards.length - 1] = player.getHero().getHeroPower();
-			for (int i = 0; i < cards.length; i++) {
-				Card card = cards[i];
-				if (context.getLogic().canPlayCard(player, card)) {
-					newMaxDepth += 1;
-				}
-			}
-			setMaxDepth(newMaxDepth);
-			setTimeout(lethalTimeout);
-		}
-
-		// Now we will actually start expanding game states
-		int playerId = player.getId();
 		Deque<Node> contextStack;
 		if (isParallel()) {
 			contextStack = new ConcurrentLinkedDeque<>();
 		} else {
 			contextStack = new ArrayDeque<>(getTargetContextStackSize() * getMaxDepth());
 		}
-		// Immediately score terminal nodes to save memory.
-		Optional<Node> maxScore = Optional.empty();
-		double score = Double.NEGATIVE_INFINITY;
 
-		contextStack.push(new Node(context, null, 0));
-		setRequestActionStartTime(System.currentTimeMillis());
+		try (var s1 = tracer.activateSpan(span)) {
+			// Consistency checks
+			var gameId = context.getGameId();
+			if (validActions.size() == 0) {
+				LOGGER.error("requestAction {} {}: Empty valid actions given", gameId, player);
+				return null;
+			}
 
-		// Depth-first search loop with a twist.
-		// We will expand the longest nodes first. However, nodes that are terminal go to the end of the context stack,
-		// instead of the beginning, where they are popped first. Our heuristic is to prune all but the longest terminal
-		// nodes in order to save memory.
-		try {
+			// First, check if a plan is already cached and ready to be executed
+			// The actual process of persisting the plan beyond the lifetime of this GameStateValueBehaviour instance is the
+			// responsibility of the caller, and should typically use #getIndexPlan()
+			// A strict plan refers to a collection of GameAction objects. A plan is "strictly" followed if the next action
+			// proposed in the strict plan is exactly present in the list of valid actions. Otherwise, the index plan is used,
+			// where the valid actions are assumed to be in the correct order.
+			if (strictPlan != null) {
+				if (strictPlan.size() == 0) {
+					strictPlan = null;
+				} else {
+					// Check that the plan action is valid considering these valid actions. If it is, choose it
+					var planAction = strictPlan.peekFirst();
+					if (validActions.contains(planAction)) {
+						LOGGER.debug("requestAction {} {}: Used action from plan with {} actions remaining", gameId, player, strictPlan.size() - 1);
+						// Reduce the size of the corresponding index plan too
+						if (!indexPlan.isEmpty()) {
+							indexPlan.pollFirst();
+						}
+
+						final var gameAction = strictPlan.pollFirst();
+						if (gameAction instanceof IntermediateAction) {
+							// Just choose directly from the valid actions
+							return validActions.get(gameAction.getId());
+						}
+						return gameAction;
+					} else {
+						// The plan is invalid, set it to null and continue.
+						if (throwOnInvalidPlan) {
+							throw new IllegalStateException("invalid plan");
+						} else {
+							LOGGER.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
+						}
+						strictPlan = null;
+						indexPlan = null;
+					}
+				}
+			} else if (indexPlan != null) {
+				if (indexPlan.size() == 0) {
+					indexPlan = null;
+				} else {
+					// Check that the plan action is valid considering these valid actions. If it is, choose it
+					int planAction = indexPlan.peekFirst();
+					if (validActions.size() > planAction) {
+						LOGGER.debug("requestAction {} {}: Used action from plan with {} actions remaining", gameId, player, indexPlan.size() - 1);
+						return validActions.get(indexPlan.pollFirst());
+					} else {
+						// The plan is invalid, set it to null and continue.
+						LOGGER.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
+						indexPlan = null;
+					}
+				}
+			}
+
+			if (validActions.size() == 1) {
+				LOGGER.debug("requestAction {} {}: Selecting only action {}", gameId, player, validActions.get(0));
+				return validActions.get(0);
+			}
+
+			// If the game state value behaviour got this far and has all discover actions, that means it is receiving a
+			// discover action it could not have evaluated in the context of intermediate nodes. This typically happens when
+			// gameplay causes a discover on a trigger, like a "Start of Game: Choose a new starting hero power."
+			if (validActions.stream().allMatch(a -> a.getActionType() == ActionType.DISCOVER || a.getActionType() == ActionType.BATTLECRY)) {
+				// We're going to choose an action at random at this point.
+				final var finalContext = context;
+				LOGGER.error("requestAction {} {}: Plan did not have answer to actions that were all discovers or battlecries. " +
+								"Sources were: {}", gameId, player,
+						validActions.stream().
+								map(ga -> ga.getSource(finalContext))
+								.filter(Objects::nonNull)
+								.map(Entity::getSourceCard)
+								.map(Card::getCardId)
+								.collect(toList()));
+				throw new UnsupportedOperationException();
+			}
+
+			// Depth-first search for the branch which terminates with the highest score, where the DAG has game states as
+			// nodes and game actions as edges
+
+			// Max depth indicates that we will expand at most MAX_DEPTH non-intermediate (non-Battlecry and non-Discover)
+			// actions away from the game context given to this function. If we have lethal on the board and we're configured
+			// to do so, we should temporarily expand the max depth to accommodate the number of cards we can play and actors
+			// that can attack we have.
+
+			if (isExpandDepthForLethal()
+					&& observesLethal(context, player.getId(), context.getOpponent(player).getHero())) {
+				var newMaxDepth = 0;
+				Actor actors[] = new Actor[player.getMinions().size() + 1];
+				player.getMinions().toArray(actors);
+				actors[actors.length - 1] = player.getHero();
+				for (var i = 0; i < actors.length; i++) {
+					var actor = actors[i];
+					var attacks = actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + actor.getAttributeValue(Attribute.EXTRA_ATTACKS);
+					if (attacks > 0 && actor.canAttackThisTurn(context)) {
+						newMaxDepth += attacks;
+					}
+				}
+				var cards = new Card[player.getHand().size() + 1];
+				player.getHand().toArray(cards);
+				cards[cards.length - 1] = player.getHeroPowerZone().get(0);
+				for (var i = 0; i < cards.length; i++) {
+					var card = cards[i];
+					if (context.getLogic().canPlayCard(player, card)) {
+						newMaxDepth += 1;
+					}
+				}
+				setMaxDepth(newMaxDepth);
+				setTimeout(lethalTimeout);
+			}
+
+			// Now we will actually start expanding game states
+			var playerId = player.getId();
+
+			// Immediately score terminal nodes to save memory.
+			var score = Double.NEGATIVE_INFINITY;
+
+			contextStack.push(new Node(context, null, 0));
+			setRequestActionStartTime(System.currentTimeMillis());
+
+			// Depth-first search loop with a twist.
+			// We will expand the longest nodes first. However, nodes that are terminal go to the end of the context stack,
+			// instead of the beginning, where they are popped first. Our heuristic is to prune all but the longest terminal
+			// nodes in order to save memory.
+
 			while (contextStack.size() > 0) {
 				traceMemory("node start");
-				Node v = contextStack.pop();
+				var v = contextStack.pop();
 
 				// Is this node terminal?
-				if (isTerminal(v, getRequestActionStartTime(), playerId)) {
+				if (isTerminal(v, playerId)) {
 					postProcess(playerId, v.context);
-					double newScore = heuristic.getScore(v.context, playerId);
+					var newScore = heuristic.getScore(v.context, playerId);
 					v.setScore(newScore);
 					if (disposeNodes) {
 						v.dispose();
@@ -521,14 +527,14 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				}
 
 				// If we've been interrupted, peacefully exit this intense part of the code
-				if (Strand.currentStrand().isInterrupted()) {
+				if (isInterrupted()) {
 					break;
 				}
 
 				// Prune after we've scored, so that we don't accidentally prune a lethal node
 				pruneContextStack(contextStack, playerId);
 
-				final int depth = v.depth;
+				final var depth = v.depth;
 
 				List<GameAction> edges;
 				if (v.predecessor == null) {
@@ -539,11 +545,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 					edges = v.context.getValidActions();
 				}
 
-				if (edges == null || edges.isEmpty()) {
-					LOGGER.error("requestAction {} {}: Unexpectedly, an expansion of a game state produced no actions.", gameId, playerId);
-					if (isDebug()) {
-						throw new UnsupportedOperationException();
-					}
+				if (edges.isEmpty()) {
 					continue;
 				}
 
@@ -551,7 +553,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				// them around to get their effects.
 				if (isPruneEarlyEndTurn()
 						&& edges.size() > 1
-						&& context.getTriggerManager().getTriggers()
+						&& context.getTriggers()
 						.stream().flatMap(t -> t instanceof Enchantment ? ((Enchantment) t).getTriggers().stream() : Stream.empty()).noneMatch(t -> t instanceof TurnTrigger)) {
 					edges.removeIf(ga -> ga.getActionType() == ActionType.END_TURN);
 				}
@@ -564,7 +566,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 							.forEach(edge -> evaluate(contextStack, playerId, v, edge, depth));
 				} else {
 					// Non-parallel expansion of nodes
-					for (GameAction edge : edges) {
+					for (var edge : edges) {
 						evaluate(contextStack, playerId, v, edge, depth);
 					}
 				}
@@ -581,49 +583,96 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				traceMemory("after node dispose");
 			}
 
-			if (!maxScore.isPresent()) {
-				LOGGER.error("requestAction {} {}: A problem occurred while trying to find the max score in the terminal nodes! Returning first action.", gameId, player);
-				if (isDebug()) {
-					throw new NullPointerException("maxScore");
-				}
-				return validActions.get(0);
+			if (maxScore.isEmpty()) {
+				throw new NullPointerException("maxScore");
 			}
 
 			// Save the action plan, iterating backwards from the highest scoring node.
-			Deque<GameAction> strictPlan = new ArrayDeque<>();
-			Deque<Integer> indexPlan = new ArrayDeque<>();
-			Node node = maxScore.get();
-			traceMemory("before predecessors");
-			while (node != null && node.getPredecessor() != null) {
-				for (int i = node.getActions().length - 1; i >= 0; i--) {
-					strictPlan.addFirst(node.getActions()[i]);
-					indexPlan.addFirst(node.getActionIndices()[i]);
-				}
-				node = node.getPredecessor();
-			}
-			traceMemory("after predecessors");
-
-			this.strictPlan = strictPlan;
-			this.indexPlan = indexPlan;
-			// Pop off the first element of the plan
-			this.indexPlan.pollFirst();
-			GameAction gameAction = strictPlan.pollFirst();
+			GameAction gameAction = savePlan(maxScore);
 			if (gameAction == null) {
 				LOGGER.error("requestAction {} {}: A problem occurred while polling the strict plan, returning the first action.", gameId, player);
-				if (isDebug()) {
-					throw new NullPointerException("gameAction");
-				}
-				return validActions.get(0);
-
+				throw new NullPointerException("strict plan was empty");
 			}
+
 			return gameAction;
+		} catch (Throwable throwable) {
+			if (context.getTrace() != null) {
+				span.setTag("trace", context.getTrace().dump());
+			}
+			span.setTag("contextSizeSize", contextStack.size());
+			Tracing.error(throwable, span, true);
+			if (throwsExceptions()) {
+				throw throwable;
+			}
+			return exceptionActionChoice(maxScore, validActions);
 		} finally {
 			setTimeout(oldTimeout);
 			setMaxDepth(oldMaxDepth);
-			for (Node node : contextStack) {
+			for (var node : contextStack) {
 				node.dispose();
 			}
+			span.finish();
 		}
+	}
+
+	/**
+	 * Saves the plan and retrieves the game action from the max score
+	 *
+	 * @param maxScore
+	 * @return
+	 */
+	@Nullable
+	protected GameAction savePlan(Optional<Node> maxScore) {
+		Deque<GameAction> strictPlan = new ArrayDeque<>();
+		Deque<Integer> indexPlan = new ArrayDeque<>();
+		var node = maxScore.get();
+		traceMemory("before predecessors");
+		while (node != null && node.getPredecessor() != null) {
+			for (var i = node.getActions().length - 1; i >= 0; i--) {
+				strictPlan.addFirst(node.getActions()[i]);
+				indexPlan.addFirst(node.getActionIndices()[i]);
+			}
+			node = node.getPredecessor();
+		}
+		traceMemory("after predecessors");
+
+		this.strictPlan = strictPlan;
+		this.indexPlan = indexPlan;
+		// Pop off the first element of the plan
+		this.indexPlan.pollFirst();
+		return strictPlan.pollFirst();
+	}
+
+	/**
+	 * Checks if the bot has timed out or if the thread it is executing on is interrupted.
+	 *
+	 * @return
+	 */
+	protected boolean isInterrupted() {
+		return Strand.currentStrand().isInterrupted() || (System.currentTimeMillis() - getRequestActionStartTime() > getTimeout());
+	}
+
+	/**
+	 * Gets the best scoring action, the end turn action or the first action in the list.
+	 *
+	 * @param maxScoreSoFar
+	 * @param gameActions
+	 * @return
+	 */
+	protected GameAction exceptionActionChoice(Optional<Node> maxScoreSoFar, @NotNull List<GameAction> gameActions) {
+		Node first = null;
+		if (maxScoreSoFar.isPresent()) {
+			first = maxScoreSoFar.get();
+			while (first.getPredecessor() != null) {
+				first = first.getPredecessor();
+			}
+
+		}
+		if (first == null || first.getActions() == null || first.getActions().length == 0) {
+			return gameActions.stream().filter(ga -> ga != null && ga.getActionType() == ActionType.END_TURN)
+					.findFirst().orElse(gameActions.get(0));
+		}
+		return first.getActions()[0];
 	}
 
 	/**
@@ -640,12 +689,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		if (contextStack.size() > getTargetContextStackSize()) {
 			// Remove all terminating actions except the longest one. Ensures that if we've encountered a terminal node, it
 			// won't get pruned off by accident.
-			Iterator<Node> iterator = contextStack.descendingIterator();
+			var iterator = contextStack.descendingIterator();
 			Node longestNode = null;
-			int longestNodeLength = Integer.MIN_VALUE;
+			var longestNodeLength = Integer.MIN_VALUE;
 			while (iterator.hasNext()) {
-				Node node = iterator.next();
-				if (isTerminal(node, getRequestActionStartTime(), playerId)) {
+				var node = iterator.next();
+				if (isTerminal(node, playerId)) {
 					if (node.depth > longestNodeLength) {
 						longestNode = node;
 						longestNodeLength = node.getActions().length;
@@ -659,7 +708,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			iterator = contextStack.descendingIterator();
 			if (longestNode != null) {
 				while (iterator.hasNext()) {
-					Node node = iterator.next();
+					var node = iterator.next();
 					if (node == longestNode) {
 						break;
 					} else {
@@ -676,7 +725,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				if (contextStack.size() <= getTargetContextStackSize()) {
 					break;
 				}
-				Node node = iterator.next();
+				var node = iterator.next();
 				iterator.remove();
 				if (isDisposeNodes()) {
 					node.dispose();
@@ -685,12 +734,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		}
 	}
 
-	private boolean isTerminal(Node node, long startTime, int playerId) {
+	private boolean isTerminal(Node node, int playerId) {
 		return node.predecessor != null && (
 				node.depth >= getMaxDepth()
 						|| node.context.updateAndGetGameOver()
-						|| Strand.currentStrand().isInterrupted()
-						|| (System.currentTimeMillis() - startTime > getTimeout())
+						|| isInterrupted()
 						// Technically allows the bot to play through its extra turns
 						|| node.context.getActivePlayerId() != playerId);
 	}
@@ -734,23 +782,28 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	@Suspendable
 	protected void evaluate(Deque<Node> contextStack, int playerId, Node node, GameAction action, int depth) {
 		// Clone out the context because we're not going to mutate the node's context.
-		GameContext mutateContext = getClone(node.context);
+		var mutateContext = getClone(node.context);
 
 		preProcess(playerId, mutateContext);
 
 		// Start: Infrastructure to support intermediate called to requestAction that come as a consequence of calling
 		// action.
 		Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
-		AtomicBoolean guard = new AtomicBoolean();
+		var guard = new AtomicBoolean();
 
 		mutateContext.setBehaviour(playerId, new RequestActionFunction((context1, player1, validActions1) -> {
+			if (isInterrupted() || intermediateNodes.size() > getMaxDepth()) {
+				intermediateNodes.clear();
+				throw new RuntimeException("interrupted");
+			}
+
 			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
 			// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
 			// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
 			// of the actual action we choose. We must use the guard, because a single performGameAction could call this
 			// RequestActionFunction multiple times, but we only want to queue up the first intermediate actions.
 			if (guard.compareAndSet(false, true)) {
-				for (int i = 0; i < validActions1.size(); i++) {
+				for (var i = 0; i < validActions1.size(); i++) {
 					intermediateNodes.add(new IntermediateNode(i));
 				}
 			}
@@ -759,28 +812,16 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			return validActions1.get(0);
 		}));
 
-		// Perform action
-		try {
-			if (Strand.currentStrand().isInterrupted()) {
-				// Bail out here if possible, does not queue new nodes.
-				return;
-			}
-			mutateContext.performAction(playerId, action);
-		} catch (UnsupportedOperationException cannotRollout) {
-			LOGGER.error("requestAction (unknown) {}: Action {} cannot be simulated!", playerId, action);
-			if (debug) {
-				throw cannotRollout;
-			}
-			return;
-		} catch (Throwable simulationError) {
-			LOGGER.error("requestAction (unknown) {}: There was a simulation error for action {}: {}", playerId, action, simulationError);
-			// Do not queue a busted node onto the contextStack
+		if (isInterrupted()) {
+			// Bail out here if possible, does not queue new nodes.
 			return;
 		}
 
+		mutateContext.performAction(playerId, action);
+
 		// Check if there are intermediates pending
 		if (intermediateNodes.isEmpty()) {
-			Node computeAction = new Node(mutateContext, node, depth + 1, action);
+			var computeAction = new Node(mutateContext, node, depth + 1, action);
 			// Push the new node
 			if (action.getActionType() == ActionType.END_TURN) {
 				contextStack.addLast(computeAction);
@@ -793,29 +834,38 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// The intermediate node processing branch
 		while (intermediateNodes.size() > 0) {
-			IntermediateNode intermediateNode = intermediateNodes.pollFirst();
+			if (isInterrupted()) {
+				return;
+			}
+
+			var intermediateNode = intermediateNodes.pollFirst();
 			if (intermediateNode == null) {
-				throw new UnsupportedOperationException("Should not queue null nodes.");
+				throw new UnsupportedOperationException("should not queue null nodes.");
 			}
 
 			// Process each intermediate, which may queue more of them. Create a request action function that returns the
 			// specified intermediate game action and also queues more intermediates if they are made.
-			GameContext intermediateMutateContext = getClone(node.context);
+			var intermediateMutateContext = getClone(node.context);
 			preProcess(playerId, intermediateMutateContext);
 
-			int queueSize = intermediateNodes.size();
-			int[] choices = intermediateNode.choices;
-			AtomicInteger counter = new AtomicInteger(0);
-			AtomicBoolean intermediateGuard = new AtomicBoolean();
+			var queueSize = intermediateNodes.size();
+			var choices = intermediateNode.choices;
+			var counter = new AtomicInteger(0);
+			var intermediateGuard = new AtomicBoolean();
 			intermediateMutateContext.setBehaviour(playerId, new RequestActionFunction((context, player, validActions) -> {
+				if (isInterrupted()) {
+					intermediateNodes.clear();
+					throw new RuntimeException("interrupted");
+				}
+
 				// Make choices until we've exhausted the actions that were specified by this intermediate node.
-				int choiceIndex = counter.getAndIncrement();
+				var choiceIndex = counter.getAndIncrement();
 				if (choiceIndex >= choices.length) {
 					// We are queuing more intermediate nodes, mark this intermediate node as having queued more intermediates and
 					// this evaluation as having expanded.
 					if (intermediateGuard.compareAndSet(false, true)) {
-						for (int i = 0; i < validActions.size(); i++) {
-							int[] newChoices = Arrays.copyOf(choices, choices.length + 1);
+						for (var i = 0; i < validActions.size(); i++) {
+							var newChoices = Arrays.copyOf(choices, choices.length + 1);
 							newChoices[newChoices.length - 1] = i;
 							intermediateNodes.add(new IntermediateNode(newChoices));
 						}
@@ -827,12 +877,16 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				}
 			}));
 
-			try {
-				intermediateMutateContext.performAction(playerId, action);
-			} catch (Throwable simulationError) {
-				LOGGER.error("requestAction (unknown) {}: There was a simulation error for action {} when considering intermediates {}: {}", playerId, action, choices, simulationError);
-				continue;
+			if (isInterrupted()) {
+				return;
 			}
+
+			intermediateMutateContext.performAction(playerId, action);
+
+			if (isInterrupted()) {
+				return;
+			}
+
 			// Check if processing this intermediate queued more intermediates.
 			if (intermediateNodes.size() > queueSize) {
 				// We can toss this result away, we'll have to process again.
@@ -841,11 +895,13 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			// If it didn't, then the intermediate is the last intermediate on a path from real node to real node. Queue a
 			// real node onto the context stack. Reconstruct the path by following the predecessors of the intermediates until
 			// we reach a real node.
-			GameAction[] actions = new GameAction[1 + choices.length];
+
+			var actions = new GameAction[1 + choices.length];
 			actions[0] = action;
-			for (int i = 0; i < choices.length; i++) {
+			for (var i = 0; i < choices.length; i++) {
 				actions[i + 1] = new IntermediateAction(choices[i]);
 			}
+
 			contextStack.add(new Node(intermediateMutateContext, node, depth + 1, actions));
 		}
 	}
@@ -858,7 +914,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 */
 	private static void preProcess(int playerId, GameContext thisContext) {
 		// Preprocess: Don't simulate the opposing player's secrets
-		Player opponent = thisContext.getOpponent(thisContext.getPlayer(playerId));
+		var opponent = thisContext.getOpponent(thisContext.getPlayer(playerId));
 		thisContext.getLogic().removeSecrets(opponent);
 	}
 
@@ -874,16 +930,16 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		if (isTriggerStartTurns()
 				&& !context.updateAndGetGameOver()
 				&& context.getTurnState() == TurnState.TURN_ENDED) {
-			Player player = context.getPlayer(playerId);
-			Player opponent = context.getOpponent(player);
+			var player = context.getPlayer(playerId);
+			var opponent = context.getOpponent(player);
 
 			// Make sure that friendly start turns don't accidentally wind up killing the opponent
-			int opponentHp = opponent.getHero().getHp();
-			for (Trigger trigger : new ArrayList<>(context.getTriggerManager().getTriggers())) {
-				if (trigger instanceof Enchantment && !(trigger instanceof Aura)) {
-					Enchantment enchantment = (Enchantment) trigger;
+			var opponentHp = opponent.getHero().getHp();
+			for (var trigger : new ArrayList<>(context.getTriggers())) {
+				if (trigger instanceof Enchantment && !(trigger instanceof Aura) && !trigger.isExpired()) {
+					var enchantment = (Enchantment) trigger;
 					if (enchantment.getTriggers().stream().anyMatch(e -> e.getClass().equals(TurnStartTrigger.class)
-							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {
+							|| (e.getClass().equals(TurnEndTrigger.class) && enchantment.getOwner() == opponent.getId()))) {
 						// Correctly set the trigger stacks
 						context.getTriggerHostStack().push(trigger.getHostReference());
 						context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(), trigger.getHostReference(), EntityReference.NONE, TargetSelection.NONE, true, null);
@@ -1066,7 +1122,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * Traces memory usage by logging whenever the maximum amount of memory has been reached and where
 	 */
 	private void traceMemory(String location) {
-		long currentMemoryUsage = Runtime.getRuntime().freeMemory();
+		var currentMemoryUsage = Runtime.getRuntime().freeMemory();
 		if (currentMemoryUsage < minFreeMemory) {
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("traceMemory {}: Free memory decreased from {} MB to {} MB", location, minFreeMemory / (1024 * 1024), currentMemoryUsage / (1024 * 1024));
@@ -1176,7 +1232,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				return false;
 			}
 
-			GameAction rhs = (GameAction) obj;
+			var rhs = (GameAction) obj;
 			return rhs.getId() == this.getId();
 		}
 
@@ -1266,9 +1322,9 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 */
 	public static boolean observesLethal(GameContext context, int playerId, Actor target) {
 		try {
-			Player player = context.getPlayer(playerId);
+			var player = context.getPlayer(playerId);
 			// If the opponent has a taunt minion, always return false.
-			Player opponent = context.getOpponent(player);
+			var opponent = context.getOpponent(player);
 			if (target == null) {
 				target = opponent.getHero();
 			}
@@ -1276,9 +1332,9 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			if (target == null) {
 				return false;
 			}
-			boolean targetIsMinion = target.getEntityType() == EntityType.MINION;
-			boolean targetIsHero = target.getEntityType() == EntityType.HERO;
-			for (Minion minion : opponent.getMinions()) {
+			var targetIsMinion = target.getEntityType() == EntityType.MINION;
+			var targetIsHero = target.getEntityType() == EntityType.HERO;
+			for (var minion : opponent.getMinions()) {
 				if ((targetIsHero
 						|| (targetIsMinion && !target.hasAttribute(Attribute.TAUNT)))
 						&& (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT))) {
@@ -1286,26 +1342,26 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				}
 			}
 
-			int damage = 0;
-			for (Minion minion : player.getMinions()) {
-				damage += minion.canAttackThisTurn() ? (minion.getAttack() * (minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + minion.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
+			var damage = 0;
+			for (var minion : player.getMinions()) {
+				damage += minion.canAttackThisTurn(context) ? (minion.getAttack() * (minion.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + minion.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
 			}
-			Hero hero = player.getHero();
-			damage += hero.canAttackThisTurn() ? (hero.getAttack() * (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
+			var hero = player.getHero();
+			damage += hero.canAttackThisTurn(context) ? (hero.getAttack() * (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS))) : 0;
 
-			Card[] cards = new Card[player.getHand().size() + 1];
+			var cards = new Card[player.getHand().size() + 1];
 			player.getHand().toArray(cards);
-			cards[cards.length - 1] = player.getHero().getHeroPower();
+			cards[cards.length - 1] = player.getHeroPowerZone().get(0);
 
-			int maxWeaponDamage = 0;
-			int cardDamage = 0;
-			int totalManaCost = 0;
-			for (Card card : cards) {
+			var maxWeaponDamage = 0;
+			var cardDamage = 0;
+			var totalManaCost = 0;
+			for (var card : cards) {
 				if (!context.getLogic().canPlayCard(player, card)) {
 					continue;
 				}
 
-				CardDesc desc = card.getDesc();
+				var desc = card.getDesc();
 
 				// If this is a weapon, account for it, but only if our hero still has attacks
 				if (card.getCardType() == CardType.WEAPON && (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS) > 0)) {
@@ -1318,7 +1374,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 				// Determine if the card deals damage or gives the hero attack, up to a certain point.
 				if ((card.getCardType() == CardType.HERO_POWER || card.getCardType() == CardType.SPELL) && desc.getSpell() != null) {
 					// Check the first level of meta spells and nothing more
-					SpellDesc[] spells = new SpellDesc[]{desc.getSpell()};
+					var spells = new SpellDesc[]{desc.getSpell()};
 					if (spells[0].getDescClass() == MetaSpell.class) {
 						spells = (SpellDesc[]) spells[0].get(SpellArg.SPELLS);
 					}
@@ -1326,20 +1382,20 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 						LOGGER.warn("observeLethal: {} had null spells", card);
 						continue;
 					}
-					for (SpellDesc spell : spells) {
+					for (var spell : spells) {
 						// First check hero attack buff
 						if (spell.getDescClass() == BuffSpell.class
 								&& Objects.equals(spell.getTarget(), EntityReference.FRIENDLY_HERO)
 								&& spell.containsKey(SpellArg.ATTACK_BONUS)) {
-							int buff = spell.getValue(SpellArg.ATTACK_BONUS, context, player, player.getHero(), player.getHero(), 0);
-							buff *= hero.canAttackThisTurn() ? (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS)) : 0;
+							var buff = spell.getValue(SpellArg.ATTACK_BONUS, context, player, player.getHero(), player.getHero(), 0);
+							buff *= hero.canAttackThisTurn(context) ? (hero.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + hero.getAttributeValue(Attribute.EXTRA_ATTACKS)) : 0;
 							cardDamage += buff;
 							totalManaCost += context.getLogic().getModifiedManaCost(player, card);
 						}
 						// Then check DamageSpell
 						if (spell.getDescClass() == DamageSpell.class) {
-							TargetSelection targetSelection = desc.getTargetSelection();
-							EntityReference thisSpellTarget = spell.getTarget();
+							var targetSelection = desc.getTargetSelection();
+							var thisSpellTarget = spell.getTarget();
 							if (Objects.equals(thisSpellTarget, EntityReference.ALL_CHARACTERS)
 									|| Objects.equals(thisSpellTarget, EntityReference.ENEMY_CHARACTERS)
 									|| (Objects.equals(thisSpellTarget, EntityReference.ENEMY_HERO) && targetIsHero)
@@ -1352,7 +1408,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 									|| (targetSelection == TargetSelection.ENEMY_MINIONS && targetIsMinion)
 									|| (targetSelection == TargetSelection.MINIONS && targetIsMinion)
 									|| (targetSelection == TargetSelection.HEROES && targetIsHero)) {
-								int spellDamage = spell.getValue(SpellArg.VALUE, context, player, player.getHero(), player.getHero(), 0);
+								var spellDamage = spell.getValue(SpellArg.VALUE, context, player, player.getHero(), player.getHero(), 0);
 								cardDamage += context.getLogic().applySpellpower(player, card, spellDamage);
 								totalManaCost += context.getLogic().getModifiedManaCost(player, card);
 							}

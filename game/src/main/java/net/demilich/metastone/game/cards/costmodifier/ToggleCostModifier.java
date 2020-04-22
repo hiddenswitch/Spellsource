@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -56,18 +56,14 @@ public final class ToggleCostModifier extends CardCostModifier {
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(getHostReference());
-		if (toggleOnTrigger.interestedIn() == event.getEventType() && toggleOnTrigger.queues(event, host)) {
+		var playerId = host.getOwner();
+		if (isPersistentOwner()) {
+			playerId = getOwner();
+		}
+		if (toggleOnTrigger.interestedIn() == event.getEventType() && toggleOnTrigger.queues(event, this, host, playerId)) {
 			ready = true;
-		} else if (toggleOffTrigger.interestedIn() == event.getEventType() && toggleOffTrigger.queues(event, host)) {
+		} else if (toggleOffTrigger.interestedIn() == event.getEventType() && toggleOffTrigger.queues(event, this, host, playerId)) {
 			ready = false;
 		}
 	}
-
-	@Override
-	public void setOwner(int playerIndex) {
-		super.setOwner(playerIndex);
-		toggleOnTrigger.setOwner(playerIndex);
-		toggleOffTrigger.setOwner(playerIndex);
-	}
-
 }

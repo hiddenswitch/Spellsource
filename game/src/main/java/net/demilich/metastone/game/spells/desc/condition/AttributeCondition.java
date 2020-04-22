@@ -12,6 +12,14 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
 
+/**
+ * {@code true} when the {@code target} or {@link ConditionArg#TARGET} has an attribute {@link ConditionArg#ATTRIBUTE}
+ * that evaluates to {@code true} with the {@link ConditionArg#OPERATION}.
+ * <p>
+ * Only supports single targets.
+ * <p>
+ * Uses the {@link ComparisonOperation#HAS} by default, or compares with the {@link ConditionArg#VALUE}.
+ */
 public class AttributeCondition extends Condition {
 
 	public AttributeCondition(ConditionDesc desc) {
@@ -20,28 +28,20 @@ public class AttributeCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		EntityReference entityReference = (EntityReference) desc.get(ConditionArg.TARGET);
-		Entity entity = null;
-		if (entityReference == null) {
-			entity = target;
-		} else {
-			List<Entity> entities = context.resolveTarget(player, source, entityReference);
-			if (entities == null || entities.isEmpty()) {
-				return false;
-			}
-			entity = entities.get(0);
-		}
-
-		Attribute attribute = (Attribute) desc.get(ConditionArg.ATTRIBUTE);
-		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
+		var attribute = (Attribute) desc.get(ConditionArg.ATTRIBUTE);
+		var operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
 		if (operation == null || operation == ComparisonOperation.HAS) {
-			return entity.hasAttribute(attribute);
+			return target.hasAttribute(attribute);
 		}
 
-		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, entity, source, 0);
-		int actualValue = AttributeValueProvider.provideValueForAttribute(context, attribute, entity);
+		var targetValue = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
+		var actualValue = AttributeValueProvider.provideValueForAttribute(context, attribute, target);
 
 		return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 	}
 
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
+	}
 }

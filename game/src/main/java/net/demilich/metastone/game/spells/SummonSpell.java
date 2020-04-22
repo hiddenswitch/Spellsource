@@ -11,11 +11,10 @@ import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.source.SummonWithoutReplacementCardSource;
-import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
  * <p>
  * If {@link SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_FILTER}, and {@link SpellArg#CARD_SOURCE} are
  * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link Card},
- * it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link Minion}, the
+ * it is used as the card to {@link Card#minion()} from; otherwise, if the {@code target} is a {@link Minion}, the
  * target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then the
  * enchantments are copied.
  * <p>
@@ -56,8 +55,7 @@ import java.util.stream.Collectors;
  * If {@link SpellArg#EXCLUSIVE} is specified, the spell will not summon minions whose card IDs are already on the
  * battlefield.
  * <p>
- * Many minions summon tokens to their side in their {@link net.demilich.metastone.game.spells.desc.BattlecryDesc#spell}
- * argument. For <b>example:</b>
+ * Many minions summon tokens to their side in their {@link OpenerDesc#spell} argument. For <b>example:</b>
  * <pre>
  *     {
  *         "class": "SummonSpell",
@@ -305,7 +303,7 @@ public class SummonSpell extends Spell {
 						}
 					}
 
-					Minion minion = card.summon();
+					Minion minion = card.minion();
 					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
 						// If this is summoning from a filter or card source, as per the rules, the summoning occurs without replacement.
@@ -319,7 +317,7 @@ public class SummonSpell extends Spell {
 				for (Card card : cards) {
 					for (int i = 0; i < count; i++) {
 						card = count == 1 ? card : card.clone();
-						final Minion minion = card.summon();
+						final Minion minion = card.minion();
 
 						if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 							summonedMinions.add(minion);
@@ -342,13 +340,12 @@ public class SummonSpell extends Spell {
 						return;
 					}
 					fromBase = true;
-					minion = target.getSourceCard().summon();
+					minion = target.getSourceCard().minion();
 				} else if (target.getEntityType() != EntityType.MINION) {
 					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
 					return;
 				} else {
 					minion = ((Minion) target).getCopy();
-					minion.clearEnchantments();
 				}
 
 				boolean summoned = context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
@@ -358,19 +355,8 @@ public class SummonSpell extends Spell {
 				}
 				summonedMinions.add(minion);
 				if (!fromBase) {
-					List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference());
-					for (Trigger trigger : triggers) {
-						Trigger triggerClone = trigger.clone();
-						context.getLogic().addGameEventListener(player, triggerClone, minion);
-					}
-
-					// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
-					final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-					for (EntityReference reference : list.getReferences(target)) {
-						if (!reference.equals(EntityReference.NONE)) {
-							list.add(minion, context.resolveSingleTarget(reference));
-						}
-					}
+					// We definitely added enchantments via summoning here, so let's skip the ones that were written on the card
+					context.getLogic().copyEnchantments(player, source, target, minion, e -> !Objects.equals(e.getSourceCard(), minion.getSourceCard()), false);
 				}
 			}
 		}

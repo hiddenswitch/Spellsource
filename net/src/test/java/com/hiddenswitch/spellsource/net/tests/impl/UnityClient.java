@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.net.Matchmaking;
 import com.hiddenswitch.spellsource.net.Configuration;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -67,6 +67,7 @@ public class UnityClient implements AutoCloseable {
 	private int lastTurnPlayed = 0;
 	private ServerToClientMessage lastRequest;
 	private CountDownLatch turnsPlayedLatch = new CountDownLatch(9999);
+	private boolean paused;
 
 	private UnityClient() {
 		id = ids.getAndIncrement();
@@ -306,7 +307,7 @@ public class UnityClient implements AutoCloseable {
 				break;
 			case ON_REQUEST_ACTION:
 				lastRequest = message;
-				if (!onRequestAction(message)) {
+				if (paused || !onRequestAction(message)) {
 					break;
 				}
 				assertValidActions(message);
@@ -352,8 +353,8 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	/**
-	 * Blocks until the client is matched. Use {@link #play()} to start playing, and use {@link #waitUntilDone()} to
-	 * wait until the player is actually done with the game.
+	 * Blocks until the client is matched. Use {@link #play()} to start playing, and use {@link #waitUntilDone()} to wait
+	 * until the player is actually done with the game.
 	 *
 	 * @param deckId
 	 * @param queueId
@@ -380,6 +381,7 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	public void play() {
+		paused = false;
 		this.receivedGameOverMessage = false;
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
@@ -398,6 +400,7 @@ public class UnityClient implements AutoCloseable {
 
 		try {
 			turnsPlayedLatch.await(untilTurns, TimeUnit.SECONDS);
+			paused = true;
 		} catch (InterruptedException e) {
 			return;
 		}
@@ -611,6 +614,7 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	public void respondRandomAction() {
+		paused = false;
 		respondRandomAction(lastRequest);
 	}
 }

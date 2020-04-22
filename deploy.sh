@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.72
+SPELLSOURCE_VERSION=0.8.73
 
 usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
@@ -135,7 +135,7 @@ if [[ "$bump_version" == true ]]; then
     python/setup.py \
     deploy.sh \
     python/spellsource/context.py \
-    net/src/main/java/com/hiddenswitch/spellsource/net/Version.java \
+    core/src/main/java/com/hiddenswitch/spellsource/core/Version.java \
     gradle.properties
   SPELLSOURCE_VERSION=new_version
 fi

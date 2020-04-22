@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.net.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.util.Serialization;
 import io.opentracing.Span;
 import io.opentracing.Tracer;

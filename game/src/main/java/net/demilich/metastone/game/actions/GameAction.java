@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,7 +53,8 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	/**
 	 * The implementation of this method actually represents the game effects of this action.
 	 * <p>
-	 * For example, the {@link PlayMinionCardAction} eventually calls {@link net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Entity, int, boolean)}.
+	 * For example, the {@link PlayMinionCardAction} eventually calls {@link net.demilich.metastone.game.logic.GameLogic#summon(int,
+	 * Minion, Entity, int, boolean)}.
 	 *
 	 * @param context  The game context
 	 * @param playerId The invoking player
@@ -150,8 +152,13 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	}
 
 	@Override
+	public Entity getSource() {
+		throw new UnsupportedOperationException("use sourceReference");
+	}
+
+	@Override
 	public Entity getSource(GameContext context) {
-		return context.resolveSingleTarget(getSourceReference());
+		return context.resolveSingleTarget(sourceReference);
 	}
 
 	@Override
@@ -197,3 +204,4 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		return this;
 	}
 }
+

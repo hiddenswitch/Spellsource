@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
+import net.demilich.metastone.game.targeting.Zones;
 
 /**
  * A quest is an enchantment and entity that goes into the {@link net.demilich.metastone.game.targeting.Zones#QUEST}
@@ -43,26 +44,29 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
  * amount of armor needed to be gained to fulfill the quest, in this case.
  *
  * @see EnchantmentDesc for a full description of all the fields that make a valid quest. Since a quest is just an
- * 		enchantment put into play a special way, the way it should be implemented is exactly the same as any other
- * 		enchantment.
+ * enchantment put into play a special way, the way it should be implemented is exactly the same as any other
+ * enchantment.
  */
 public class Quest extends Enchantment {
 
+	private static final Zones[] ZONES = new Zones[]{Zones.QUEST};
 	private boolean isPact;
 
 	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
-		super(trigger, spell);
-		this.setSourceCard(source);
-		this.setCountUntilCast(countUntilCast);
-		this.setCountByValue(countByValue);
+		super();
+		getTriggers().add(trigger);
+		setSpell(spell);
+		setSourceCard(source);
+		setCountUntilCast(countUntilCast);
+		setCountByValue(countByValue);
 	}
 
 	public Quest(EnchantmentDesc desc, Card source) {
-		this(desc.eventTrigger.create(), desc.spell, source, desc.countUntilCast, desc.countByValue);
-		setMaxFires(desc.maxFires);
-		setKeepAfterTransform(desc.keepAfterTransform);
-		setCountByValue(desc.countByValue);
-		setPersistentOwner(desc.persistentOwner);
+		this(desc.getEventTrigger().create(), desc.getSpell(), source, desc.getCountUntilCast(), desc.isCountByValue());
+		setMaxFires(desc.getMaxFires());
+		setKeepAfterTransform(desc.isKeepAfterTransform());
+		setCountByValue(desc.isCountByValue());
+		setPersistentOwner(desc.isPersistentOwner());
 	}
 
 	/**
@@ -86,9 +90,11 @@ public class Quest extends Enchantment {
 
 	@Override
 	@Suspendable
-	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
-		final boolean spellFired = super.onFire(ownerId, spell, event);
+	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
+		// Also casts the spell!
+		boolean spellFired = super.process(ownerId, spell, event);
 		if (isInPlay() && spellFired) {
+			expire(event.getGameContext());
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().questTriggered(owner, this);
 		}
@@ -97,8 +103,14 @@ public class Quest extends Enchantment {
 
 	@Override
 	@Suspendable
-	public void onGameEvent(GameEvent event) {
-		super.onGameEvent(event);
+	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
+		expire(event.getGameContext());
+		super.cast(ownerId, spell, event);
+	}
+
+	@Override
+	public Zones[] getZones() {
+		return ZONES;
 	}
 
 	@Override
@@ -108,8 +120,6 @@ public class Quest extends Enchantment {
 
 	@Override
 	public Quest clone() {
-		Quest clone = (Quest) super.clone();
-		clone.setSourceCard(getSourceCard());
-		return clone;
+		return (Quest) super.clone();
 	}
 }

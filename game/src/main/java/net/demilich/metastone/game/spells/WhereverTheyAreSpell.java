@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Casts a spell on a target and its copies "wherever they are" in the {@code player} (casting player's) zones.
@@ -87,7 +86,7 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 
 		if (Arrays.stream(zones).anyMatch(Predicate.isEqual(Zones.GRAVEYARD))) {
 			// Cast on minions brought into play, however they are
-			context.getLogic().addGameEventListener(player, new WhereverTheyAreEnchantment(cardId, desc, source.getSourceCard()), player);
+			context.getLogic().addEnchantment(player, new WhereverTheyAreEnchantment(cardId, desc, source.getSourceCard()), source, player);
 		}
 
 		List<Entity> targets = context.getEntities()

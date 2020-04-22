@@ -6,7 +6,22 @@ header: true
 ---
 
 ### Upcoming Changes
+
  - Uncollectiblified Ancient's Aid, Mind Flay, Kind in Yellow (the 6/6), Unholy Tremors and Lash Out. (1698)
+ - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
+ - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
+ - Volatile Wisdom now actually swaps cards. (1697)
+ - Knowledge Hoarder now actually has Dash. (1684)
+ - Fixed name "Right of Worhip" -> "Right of Worship" (1685)
+ - The "Celestial Conduit" artifact now actually does its effect. (1686)
+ - Vitium Surger now correctly gives you artifacts. (1688)
+ - Fixed issues with Primordial Miner's text and effect. (1689)
+ - Fixed Primordial Sword not returning anything. (1690)
+
+### 0.8.73-3.1.2 (April 17, 2020)
+
+ - Soulscream now correctly counts aftermaths. (1704)
+ - The bot is less likely to take down the server on infinitely-looping Source actions.
 
 ### 0.8.72-3.1.2 (April 7, 2020)
 

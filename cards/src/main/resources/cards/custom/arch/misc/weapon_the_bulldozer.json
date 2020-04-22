@@ -1,0 +1,34 @@
+{
+  "name": "The Bulldozer",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "<b>Decay<b>. At the end of your turns, draw 5 cards.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DrawCardSpell",
+          "value": 5
+        },
+        {
+          "class": "DecaySpell"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -70,7 +70,7 @@ public class EnrageSpell extends Spell {
 			if (enraged) {
 				context.getLogic().applyAttribute(target, tag);
 			} else {
-				context.getLogic().removeAttribute(target, null, tag);
+				context.getLogic().removeAttribute(player, null, target, tag);
 			}
 		}
 	}
