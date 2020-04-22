@@ -15,6 +15,7 @@
       "howMany": 2
     }
   },
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "BASIC"
