@@ -32,8 +32,8 @@ public final class VolatileWisdomSpell extends Spell {
 		}
 		// Now actually do the swaps
 		for (var i = 0; i < 2; i++) {
-			var card1 = cards[i][0];
-			var card2 = cards[i][1];
+			var card1 = cards[0][i];
+			var card2 = cards[1][i];
 			if (card1 != null && card2 != null) {
 				SwapCardsSpell.swap(context, card1, card2);
 			}

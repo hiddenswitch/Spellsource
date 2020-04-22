@@ -29,19 +29,20 @@ public class FatalDamageTrigger extends PreDamageTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		if (!super.innerQueues(event, host)) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		if (!super.innerQueues(event, enchantment, host)) {
 			return false;
 		} else {
 			PreDamageEvent preDamageEvent = (PreDamageEvent) event;
-			Entity victim = preDamageEvent.getVictim();
+			Entity victim = preDamageEvent.getTarget();
+			var damage = event.getGameContext().getDamageStack().peek();
 			switch (victim.getEntityType()) {
 				case HERO:
 					Hero hero = (Hero) victim;
-					return hero.getEffectiveHp() <= event.getGameContext().getDamageStack().peek();
+					return hero.getEffectiveHp() <= damage;
 				case MINION:
 					Minion minion = (Minion) victim;
-					return minion.getHp() <= event.getGameContext().getDamageStack().peek();
+					return minion.getHp() <= damage;
 				default:
 					logger.warn("Invalid entity type in FatalDamageTrigger: {}", victim);
 					break;

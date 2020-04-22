@@ -130,7 +130,7 @@ public class RecruitSpell extends Spell {
 			player.getDeck().move(card, player.getSetAsideZone());
 		}
 
-		Minion summon = card.summon();
+		Minion summon = card.minion();
 		boolean summonSuccess = context.getLogic().summon(player.getId(), summon, source, -1, false);
 
 		// re-add the card here if we removed it before

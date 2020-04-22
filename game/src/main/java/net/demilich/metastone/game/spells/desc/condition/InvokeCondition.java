@@ -20,10 +20,15 @@ public class InvokeCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		Card candidate;
 		if (desc.containsKey(ConditionArg.TARGET)) {
-			candidate = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).getSourceCard();
+			candidate = target.getSourceCard();
 		} else {
 			candidate = source.getSourceCard();
 		}
 		return candidate.hasAttribute(Attribute.INVOKED);
+	}
+
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
 	}
 }

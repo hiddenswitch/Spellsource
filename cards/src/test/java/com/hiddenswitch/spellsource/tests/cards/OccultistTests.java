@@ -242,4 +242,21 @@ public class OccultistTests extends TestBase {
 			assertEquals(1, player.getHand().size());
 		});
 	}
+
+	@Test
+	public void testVolatileWisdom() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_neutral_test");
+			shuffleToDeck(context, player, "minion_neutral_test");
+			receiveCard(context, opponent, "spell_lunstone");
+			shuffleToDeck(context, opponent, "spell_lunstone");
+			playCard(context, player, "spell_volatile_wisdom");
+			for (Card card : player.getHand()) {
+				assertEquals("spell_lunstone", card.getCardId());
+			}
+			for (Card card : opponent.getHand()) {
+				assertEquals("minion_neutral_test", card.getCardId());
+			}
+		});
+	}
 }

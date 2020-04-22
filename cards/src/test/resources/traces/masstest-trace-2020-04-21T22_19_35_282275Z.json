@@ -1,0 +1,26 @@
+{
+  "seed" : -7581191834595455236,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "TWILIGHT", "DARKBLUE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_manic_ritualist", "minion_savage_sprite", "minion_kawarimi_headbasher", "minion_dragon_pod", "minion_southsea_giant", "minion_buffeting_elemental", "spell_youll_do", "spell_hate_spike", "minion_fifi_fizzlewarp", "minion_gold_picaroon", "minion_siege_elephant", "minion_hulking_devourer", "minion_mechanical_monstrosity", "spell_hemoshade", "minion_onis_eye", "minion_mind_melter", "spell_dire_liturgy", "minion_anarking", "minion_mighty_mufunga", "minion_frigid_bones", "weapon_spirit_saber", "minion_umbral tempest", "spell_grim_harvest", "minion_lord_cookie", "minion_enhancing_shaman", "minion_hulking_devourer", "spell_hemoblade", "minion_lan_the_forsaken", "minion_sky_high_surveyor", "minion_beruel" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_chainwrecker_corsair", "minion_terrified_tanooki", "spell_dominant_will", "minion_little_helper", "minion_wild_pyrodancer", "minion_covetous_soul", "minion_soultender", "minion_lost_lover", "minion_ragtag_rescuer", "spell_domineer", "minion_purity_keeper", "minion_osiris", "minion_lucid_seer", "minion_jekk_trinity", "minion_purity_keeper", "minion_ethereal_vanguard", "minion_colrum", "spell_dreamstep", "minion_bronze_timekeeper", "minion_pumpkin_abomination", "minion_giants_toad", "spell_bend_will", "minion_magma_hound", "spell_reflect", "minion_lost_lover", "minion_seeker_of_mysteries", "minion_flamerunner", "spell_rite_of_promise", "minion_bone_guard", "minion_doodles" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 58 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 16 ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 0, 1, 1, 2, 0, 0, 0, 4, 0, 4, 4, 1, 0, 1, 5, 1, 0, 35, 7, 1, 0, 1, 2, 2, 0, 3, 24, 3, 6, 4, 3, 2, 9, 9, 26, 22, 0, 6, 2, 6, 21, 19, 3, 2, 31, 16, 0, 14, 7, 2, 0, 9, 9, 0, 1, 1, 1, 10, 11, 4, 2, 2, 46, 10, 28, 18, 41, 20, 30, 1, 1, 4, 18, 2, 10, 4, 40, 6, 2, 25, 19, 16, 2, 1, 4, 18, 43, 3, 39, 13, 24, 10, 2, 5, 2, 0, 3, 7, 3, 2, 47, 4, 4, 2, 37, 5, 2, 0, 1, 3, 0, 2, 7, 4, 2, 2, 1, 13, 31, 11, 2, 3, 1, 0, 0, 22, 13, 31, 4, 3, 14, 1, 0, 0, 21, 16, 5, 29, 18, 10, 23, 17, 31, 6, 26, 2, 12, 2, 3, 1, 5, 17, 5, 11, 15, 12, 1, 10, 0, 1, 1, 2, 1, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Evalutes to true if the {@link Entity#getSourceCard()} of this {@code source} was drawn the same turn it was played.
+ * {@code true} if the {@link Entity#getSourceCard()} of this {@code source} was drawn the same turn it was played.
  */
 public final class SurgeCondition extends Condition {
 
@@ -30,5 +30,10 @@ public final class SurgeCondition extends Condition {
 		}
 		int receivedOnTurn = (int) source.getSourceCard().getAttributes().getOrDefault(Attribute.RECEIVED_ON_TURN, -1);
 		return receivedOnTurn == context.getTurn();
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }

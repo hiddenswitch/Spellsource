@@ -56,9 +56,9 @@ public final class DiluteSoulSpell extends Spell {
 		// By process of elimination, this has led us to the cards that were discarded as a result of this effect
 		for (Card toDiscard : discarded) {
 			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
-			enchantmentDesc.eventTrigger = TurnEndTrigger.create(TargetPlayer.SELF);
-			enchantmentDesc.spell = CopyCardSpell.create(toDiscard, desc.getValue(SpellArg.VALUE, context, player, target, source, 2));
-			enchantmentDesc.maxFires = 1;
+			enchantmentDesc.setEventTrigger(TurnEndTrigger.create(TargetPlayer.SELF));
+			enchantmentDesc.setSpell(CopyCardSpell.create(toDiscard, desc.getValue(SpellArg.VALUE, context, player, target, source, 2)));
+			enchantmentDesc.setMaxFires(1);
 			SpellDesc addEnchantment = AddEnchantmentSpell.create(EntityReference.FRIENDLY_PLAYER, enchantmentDesc);
 			SpellUtils.castChildSpell(context, player, addEnchantment, source, target);
 		}

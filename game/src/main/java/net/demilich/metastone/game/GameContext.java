@@ -30,22 +30,18 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.*;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.logic.*;
 import net.demilich.metastone.game.services.Inventory;
 import net.demilich.metastone.game.spells.DrawCardSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.HealingTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.targeting.*;
 import org.apache.commons.math3.util.Combinations;
@@ -105,7 +101,7 @@ import static java.util.stream.Collectors.toList;
  * statistics fields.</li>
  * <li>The {@link #getEnvironment()} "environment variables," referring to state or memory in the game that does not
  * live on entities.</li>
- * <li>The {@link TriggerManager#getTriggers()} value from the {@link #getTriggerManager()} trigger manager.</li>
+ * <li>The {@link TriggerManager#getTriggers()} value from the {@link #getLogic()} trigger manager.</li>
  * <li>The {@link DeckFormat} living in {@link #getDeckFormat()}.</li>
  * <li>The next entity ID that will be returned by {@link GameLogic#generateId()}, which is stored in {@link
  * GameLogic#getIdFactory()}'s values.</li>
@@ -166,7 +162,7 @@ import static java.util.stream.Collectors.toList;
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
  * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
- * <li>{@link GameLogic#resolveBattlecries(int, Actor)}},
+ * <li>{@link GameLogic#resolveOpeners(int, Actor)}},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
  * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all
@@ -206,11 +202,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public static final int PLAYER_2 = 1;
 	protected transient SpanContext spanContext;
 	private Player[] players = new Player[2];
-	private Behaviour[] behaviours = new Behaviour[2];
+	private Behaviour[] behaviours;
 	private GameLogic logic;
 	private DeckFormat deckFormat;
 	private TargetLogic targetLogic = new TargetLogic();
-	private TriggerManager triggerManager = new TriggerManager();
+	private List<Trigger> triggers = new ArrayList<Trigger>();
+	private Deque<GameLogic.QueuedTrigger> deferredTriggersQueue = new ArrayDeque<>();
+	private Deque<GameAction> actionStack = new ArrayDeque<>();
+	private Set<Trigger> processingTriggers = new HashSet<>();
 	private Map<Environment, Object> environment = new HashMap<>();
 	private Map<String, AtomicInteger> variables = new HashMap<>();
 	private int activePlayerId = -1;
@@ -258,7 +257,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		setPlayer2(player2Clone);
 
 		setTempCards(fromContext.getTempCards().clone());
-		setTriggerManager(fromContext.getTriggerManager().clone());
+		var triggers = fromContext.getTriggers().stream().map(Trigger::clone).collect(toList());
+		setTriggers(triggers);
 		setActivePlayerId(fromContext.getActivePlayerId());
 		setTurn(fromContext.getTurn());
 		setActionsThisTurn(fromContext.getActionsThisTurn());
@@ -286,6 +286,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		}
 	}
 
+	private void setTriggers(List<Trigger> triggers) {
+		this.triggers = triggers;
+	}
+
 	/**
 	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified). A hero
 	 * card is retrieved and given to each player.
@@ -297,7 +301,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
-			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero(getPlayer(i)));
+			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).hero());
 		}
 	}
 
@@ -341,7 +345,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	protected void dispose() {
-		getTriggerManager().dispose();
+		getLogic().dispose();
 	}
 
 	/**
@@ -360,7 +364,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		didCallEndGame = true;
 
 		// Expire the game just once here
-		getTriggerManager().expireAll();
+		getLogic().expireAll();
 		LOGGER.debug("endGame {}: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		notifyPlayersGameOver();
@@ -401,51 +405,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		setTurnState(TurnState.TURN_ENDED);
 	}
 
-
-	/**
-	 * Fires a game event.
-	 *
-	 * @param gameEvent The event to fire.
-	 * @see #fireGameEvent(GameEvent, List) for a complete description of this function.
-	 */
-	@Suspendable
-	public void fireGameEvent(GameEvent gameEvent) {
-		fireGameEvent(gameEvent, null);
-	}
-
-	/**
-	 * Fires a {@link GameEvent}.
-	 * <p>
-	 * Game events two purposes:
-	 *
-	 * <ol><li>They implement trigger-based gameplay like card text that reads, "Whenever a minion is healed, draw a
-	 * card." </li><li>They are changes in game state that are notable for a player to see. They can be interpreted as
-	 * checkpoints that need to be rendered to the client</li><li></ol>
-	 * <p>
-	 * Typically a {@link GameEvent} is instantiated inside a function in {@link GameLogic}, like {@link SummonEvent}
-	 * inside {@link GameLogic#summon(int, Minion, Entity, int, boolean)}, and then fired by the {@link GameLogic} using
-	 * this function.
-	 *
-	 * @param gameEvent     The {@link GameEvent} to fire.
-	 * @param otherTriggers Other triggers to consider besides the ones inside this game context's {@link TriggerManager}.
-	 *                      This may be synthetic triggers that implement analytics, networked game logic, newsfeed
-	 *                      reports, spectating features, etc.
-	 * @see HealingTrigger for an example of a trigger that listens to a specific event.
-	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
-	 * @see GameLogic#addGameEventListener(Player, Trigger, Entity) for the place to add triggers that react to game
-	 * events.
-	 */
-	@Suspendable
-	public void fireGameEvent(GameEvent gameEvent, List<Trigger> otherTriggers) {
-		if (ignoreEvents()) {
-			return;
-		}
-
-		if (Strand.currentStrand().isInterrupted()) {
-			return;
-		}
-		getTriggerManager().fireGameEvent(gameEvent, otherTriggers);
-	}
 
 	/**
 	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
@@ -510,19 +469,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			adjacentMinions.add(minions.get(right));
 		}
 		return TargetLogic.withoutPermanents(adjacentMinions);
-	}
-
-	/**
-	 * Retrieves a hero power action that occurs automatically at the start of the turn, if one is specified for the
-	 * hero.
-	 * <p>
-	 * Implements certain scenarios.
-	 *
-	 * @return The game action that should be performed.
-	 */
-	@Suspendable
-	public GameAction getAutoHeroPowerAction() {
-		return getLogic().getAutoHeroPowerAction(getActivePlayerId());
 	}
 
 	/**
@@ -797,18 +743,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Gets the {@link Trigger} objects for which {@link Trigger#getHostReference()}  matches the specified {@link
-	 * EntityReference}.
-	 *
-	 * @param entityReference An {@link EntityReference}/
-	 * @return A list of triggers, possibly empty.
-	 * @see Trigger#getHostReference() for an explanation of what an "associated" trigger would mean.
-	 */
-	public List<Trigger> getTriggersAssociatedWith(EntityReference entityReference) {
-		return getTriggerManager().getUnexpiredTriggers(entityReference);
-	}
-
-	/**
 	 * Gets the current turn.
 	 *
 	 * @return The turn. 0 is the first turn.
@@ -843,11 +777,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * When true, the {@link TriggerManager} doesn't handle an events being raised.
+	 * When true, the game logic doesn't handle an events being raised.
 	 *
 	 * @return {@code true} if the game context should ignore incoming events.
 	 */
-	public boolean ignoreEvents() {
+	public boolean getIgnoreEvents() {
 		return ignoreEvents;
 	}
 
@@ -993,10 +927,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				endTurn();
 				return false;
 			}
-			if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
-				performAction(getActivePlayerId(), getAutoHeroPowerAction());
-				return true;
-			}
 
 			boolean gameOver = updateAndGetGameOver();
 			if (gameOver) {
@@ -1025,27 +955,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Removes a trigger from the game context.
-	 *
-	 * @param trigger The trigger to remove.
-	 */
-	public void removeTrigger(Trigger trigger) {
-		getTriggerManager().expire(trigger);
-	}
-
-	/**
-	 * Removes all the triggers associated with a particular {@link Entity}, typically because the entity has been
-	 * destroyed,
-	 *
-	 * @param entityReference           The entity whose triggers should be removed.
-	 * @param removeAuras               {@code true} if the entity has {@link Aura} triggers
-	 * @param keepSelfCardCostModifiers
-	 */
-	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers) {
-		triggerManager.expire(entityReference, removeAuras, keepSelfCardCostModifiers, this);
-	}
-
-	/**
 	 * Tries to find the entity references by the {@link EntityReference}.
 	 *
 	 * @param targetKey The reference to find.
@@ -1068,7 +977,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @throws TargetNotFoundException
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) throws TargetNotFoundException {
-		if (targetKey == null) {
+		if (targetKey == null || Objects.equals(targetKey, EntityReference.NONE)) {
 			return null;
 		}
 
@@ -1291,7 +1200,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		this.setPlayer(GameContext.PLAYER_2, state.getPlayer2());
 		this.setTempCards(state.getTempCards());
 		this.setEnvironment(state.getEnvironment());
-		this.setTriggerManager(state.getTriggerManager());
+		this.setTriggers(state.getTriggers());
 		if (getLogic() == null) {
 			setLogic(new GameLogic());
 		}
@@ -1321,14 +1230,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	public void setTargetLogic(TargetLogic targetLogic) {
 		this.targetLogic = targetLogic;
-	}
-
-	public TriggerManager getTriggerManager() {
-		return triggerManager;
-	}
-
-	public void setTriggerManager(TriggerManager triggerManager) {
-		this.triggerManager = triggerManager;
 	}
 
 	public CardList getTempCards() {
@@ -1398,6 +1299,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param enchantment The spell trigger that fired.
 	 */
+	@Suspendable
 	public void onEnchantmentFired(Enchantment enchantment) {
 	}
 
@@ -2006,7 +1908,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void setDeck(int playerId, GameDeck deck) {
 		getPlayer(playerId).getDeck().clear();
 		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
-		getPlayer(playerId).setHero(deck.getHeroCard().createHero(getPlayer(playerId)));
+		getPlayer(playerId).setHero(deck.getHeroCard().hero());
 	}
 
 	/**
@@ -2089,5 +1991,43 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	public int removeInt(String name) {
 		return variables.remove(name).get();
+	}
+
+	public GameContext setOtherTriggers(List<Trigger> otherTriggers) {
+		return this;
+	}
+
+	public List<Trigger> getTriggers() {
+		return triggers;
+	}
+
+	public Deque<GameLogic.QueuedTrigger> getDeferredTriggersQueue() {
+		return deferredTriggersQueue;
+	}
+
+	public Set<Trigger> getProcessingTriggers() {
+		return processingTriggers;
+	}
+
+	public Deque<GameAction> getActionStack() {
+		return actionStack;
+	}
+
+	public GameContext setActionStack(Deque<GameAction> actionStack) {
+		this.actionStack = actionStack;
+		return this;
+	}
+
+	@Nullable
+	public GameAction getCurrentAction() {
+		return actionStack.peekLast();
+	}
+
+	@Suspendable
+	public void onGameEventWillFire(GameEvent event) {
+	}
+
+	@Suspendable
+	public void onGameEventDidFire(GameEvent event) {
 	}
 }

@@ -1,20 +1,29 @@
 package net.demilich.metastone.game.spells.desc.aura;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.AuraDescDeserializer;
 import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.desc.AbstractEnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.Map;
+import java.util.Optional;
 
 @JsonDeserialize(using = AuraDescDeserializer.class)
-public class AuraDesc extends Desc<AuraArg, Aura> {
+public class AuraDesc extends Desc<AuraArg, Aura> implements AbstractEnchantmentDesc<Aura> {
 
 	public AuraDesc() {
 		super(AuraArg.class);
@@ -71,6 +80,7 @@ public class AuraDesc extends Desc<AuraArg, Aura> {
 		return (SpellDesc) get(AuraArg.SPELL);
 	}
 
+	@Deprecated
 	public EventTriggerDesc getSecondaryTrigger() {
 		return ((EventTriggerDesc) getOrDefault(AuraArg.SECONDARY_TRIGGER, null));
 	}
@@ -85,5 +95,15 @@ public class AuraDesc extends Desc<AuraArg, Aura> {
 
 	public EntityReference getSecondaryTarget() {
 		return (EntityReference) get(AuraArg.SECONDARY_TARGET);
+	}
+
+	@Override
+	@Suspendable
+	public Optional<Aura> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
+		return context.getLogic().tryCreateAura(player, this, effectSource, enchantmentSource, host, force);
+	}
+
+	public Zones[] getZones() {
+		return (Zones[]) getOrDefault(AuraArg.ZONES, Enchantment.getDefaultBattlefieldZones());
 	}
 }

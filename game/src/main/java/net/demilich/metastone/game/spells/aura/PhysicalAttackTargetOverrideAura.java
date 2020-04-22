@@ -8,9 +8,9 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  * When an {@link net.demilich.metastone.game.entities.Actor} has this aura, its physical attack targets are the
  * entities that are affected by this aura.
  */
-public final class PhysicalAttackTargetOverrideAura extends Aura {
+public final class PhysicalAttackTargetOverrideAura extends EffectlessAura {
 
 	public PhysicalAttackTargetOverrideAura(AuraDesc desc) {
-		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
+		super(desc);
 	}
 }

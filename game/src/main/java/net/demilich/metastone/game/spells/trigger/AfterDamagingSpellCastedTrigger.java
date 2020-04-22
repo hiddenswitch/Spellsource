@@ -15,8 +15,8 @@ public final class AfterDamagingSpellCastedTrigger extends AfterSpellCastedTrigg
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		if (!super.innerQueues(event, host)) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		if (!super.innerQueues(event, enchantment, host)) {
 			return false;
 		}
 

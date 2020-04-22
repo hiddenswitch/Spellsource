@@ -9,6 +9,10 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 import java.util.List;
 
+/**
+ * {@code true} if the minion count with the specified {@link ConditionArg#FILTER} or {@link ConditionArg#CARD_FILTER}
+ * evaluates to true with the specified {@link ConditionArg#OPERATION} and {@link ConditionArg#VALUE}.
+ */
 public class MinionCountCondition extends CountCondition {
 
 	public MinionCountCondition(ConditionDesc desc) {

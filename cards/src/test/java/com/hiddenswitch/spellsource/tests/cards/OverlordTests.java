@@ -38,7 +38,7 @@ public class OverlordTests extends TestBase {
 	public void testDebtCollector() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_debt_collector");
-			Quest pact = (Quest) context.getTriggerManager().getTriggers().get(0);
+			Quest pact = (Quest) context.getTriggers().get(0);
 			assertNotEquals("minion_debt_collector", pact.getSourceCard().getCardId());
     });
 	}

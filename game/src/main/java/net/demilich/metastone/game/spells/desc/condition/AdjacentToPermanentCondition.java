@@ -8,7 +8,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 /**
- * Evaluates to {@code true} if the {@code source} (or the enchantment host) is adjacent to a {@link
+ * {@code true} if the {@code source} (or the enchantment host) is adjacent to a {@link
  * net.demilich.metastone.game.cards.Attribute#PERMANENT}, which is ordinarily untargetable.
  */
 public final class AdjacentToPermanentCondition extends Condition {
@@ -38,5 +38,15 @@ public final class AdjacentToPermanentCondition extends Condition {
 		}
 
 		return false;
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
+
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
 	}
 }

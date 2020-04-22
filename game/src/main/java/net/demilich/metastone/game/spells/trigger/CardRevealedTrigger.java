@@ -11,6 +11,6 @@ public class CardRevealedTrigger extends AbstractCardTrigger {
 
 	@Override
 	public GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.REVEAL_CARD;
+		return GameEvent.EventTypeEnum.REVEAL_CARD;
 	}
 }

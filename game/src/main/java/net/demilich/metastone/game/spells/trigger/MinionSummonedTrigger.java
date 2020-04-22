@@ -2,11 +2,18 @@ package net.demilich.metastone.game.spells.trigger;
 
 import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.CardPropertyCondition;
+import net.demilich.metastone.game.spells.desc.condition.EntityEqualsCondition;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.List;
+
+import static net.demilich.metastone.game.GameContext.PLAYER_1;
 
 /**
  * Fires whenever a minion is summoned. This occurs after the minion's enchantments have been put into play, but before
@@ -22,6 +29,20 @@ public class MinionSummonedTrigger extends AbstractSummonTrigger {
 		EventTriggerDesc desc = new EventTriggerDesc(MinionSummonedTrigger.class);
 		desc.put(EventTriggerArg.TARGET_PLAYER, player);
 		desc.put(EventTriggerArg.FIRE_CONDITION, CardPropertyCondition.create(EntityReference.EVENT_TARGET, minionCardId));
+		return desc;
+	}
+
+	/**
+	 * Fires when a minion is summoned from this specific card
+	 *
+	 * @param player
+	 * @param card
+	 * @return
+	 */
+	public static EventTriggerDesc create(Player player, Card card) {
+		var desc = new EventTriggerDesc(MinionSummonedTrigger.class);
+		desc.put(EventTriggerArg.TARGET_PLAYER, player.getId() == PLAYER_1 ? TargetPlayer.PLAYER_1 : TargetPlayer.PLAYER_2);
+		desc.put(EventTriggerArg.QUEUE_CONDITION, EntityEqualsCondition.create(EntityReference.EVENT_SOURCE, card.getReference()).create());
 		return desc;
 	}
 

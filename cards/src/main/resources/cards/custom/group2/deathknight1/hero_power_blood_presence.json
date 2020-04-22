@@ -5,7 +5,7 @@
   "heroClass": "ICE",
   "rarity": "FREE",
   "description": "Passive Skill. Your minions have Lifedrain this turn.",
-  "passiveTrigger": {
+  "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
@@ -16,7 +16,7 @@
       "targetPlayer": "SELF"
     }
   },
-  "passiveAuras": [
+  "auras": [
     {
       "class": "AttributeAura",
       "target": "FRIENDLY_MINIONS",

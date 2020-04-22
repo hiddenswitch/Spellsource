@@ -18,20 +18,20 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		SummonEvent summonEvent = (SummonEvent) event;
 
 		String race = (String) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !Race.hasRace(event.getGameContext(), summonEvent.getMinion(), race)) {
+		if (race != null && !Race.hasRace(event.getGameContext(), summonEvent.getTarget(), race)) {
 			return false;
 		}
 
 		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
 		// Special case DEATHRATTLES
 		if (requiredAttribute == Attribute.DEATHRATTLES
-				&& !summonEvent.getMinion().getSourceCard().hasAttribute(requiredAttribute)) {
+				&& !summonEvent.getTarget().getSourceCard().hasAttribute(requiredAttribute)) {
 			return false;
-		} else if (requiredAttribute != null && !summonEvent.getMinion().hasAttribute(requiredAttribute)) {
+		} else if (requiredAttribute != null && !summonEvent.getTarget().hasAttribute(requiredAttribute)) {
 			return false;
 		}
 
@@ -43,7 +43,7 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 		}
 
 		// Don't trigger for permanents EVER
-		if (summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
+		if (summonEvent.getTarget().hasAttribute(Attribute.PERMANENT)) {
 			return false;
 		}
 
@@ -51,13 +51,13 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 	}
 
 	@Override
-	public boolean fires(GameEvent event) {
+	public boolean fires(GameEvent event, Entity host, int playerId) {
 		SummonEvent summonEvent = (SummonEvent) event;
 		// Don't trigger if the minion is no longer on the board
-		if (!summonEvent.getMinion().isInPlay() || summonEvent.getMinion().isRemovedPeacefully()) {
+		if (!summonEvent.getTarget().isInPlay() || summonEvent.getTarget().isRemovedPeacefully()) {
 			return false;
 		}
-		return super.fires(event);
+		return super.fires(event, host, playerId);
 	}
 
 	protected boolean onlyPlayedFromHandOrDeck() {

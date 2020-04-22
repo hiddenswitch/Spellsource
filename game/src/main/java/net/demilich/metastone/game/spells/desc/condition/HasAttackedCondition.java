@@ -12,6 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * {@code true} if any of the {@link ConditionArg#TARGET} or {@code target} has attacked this turn according to {@link
+ * Attribute#ATTACKS_THIS_TURN}.
+ */
 public class HasAttackedCondition extends Condition {
 
 	public HasAttackedCondition(ConditionDesc desc) {
@@ -20,23 +24,16 @@ public class HasAttackedCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		// TODO: This target and filter logic really needs to be hoisted up to the general condition logic
-		List<Entity> targets;
-		if (desc.containsKey(ConditionArg.TARGET)) {
-			targets = context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET));
-		} else {
-			targets = Collections.singletonList(target);
-		}
+		return (int) target.getAttributes().getOrDefault(Attribute.ATTACKS_THIS_TURN, 0) > 0;
+	}
 
-		if (desc.containsKey(ConditionArg.FILTER)) {
-			targets = targets.stream()
-					.filter(((EntityFilter) desc.get(ConditionArg.FILTER)).matcher(context, player, source))
-					.collect(Collectors.toList());
-		}
+	@Override
+	protected boolean multipleTargetsEvaluatedAsOr() {
+		return true;
+	}
 
-		if (!targets.isEmpty()) {
-			return targets.stream().anyMatch(t -> (int) t.getAttributes().getOrDefault(Attribute.ATTACKS_THIS_TURN, 0) > 0);
-		}
+	@Override
+	protected boolean multipleTargetsEvaluatedAsAnd() {
 		return false;
 	}
 }

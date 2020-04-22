@@ -5,39 +5,24 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.HasCard;
 
-public class ShuffledEvent extends GameEvent implements HasCard {
+/**
+ * A card was shuffled.
+ * <p>
+ * When {@link #isExtraCopy()} is {@code true}, this indicates the card being shuffled is itself a copy of a card being
+ * shuffled into the deck, making it possible to not trigger off of shuffled extra cards.
+ */
+public class ShuffledEvent extends CardEvent {
 
-	private final Entity target;
-	private final Card card;
 	private final boolean extraCopy;
 
 	public ShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, boolean extraCopy, Entity target, Card card) {
-		super(context, targetPlayerId, sourcePlayerId);
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.CARD_SHUFFLED, context, targetPlayerId, sourcePlayerId, card, target);
 		this.extraCopy = extraCopy;
-		this.target = target;
-		this.card = card;
 	}
 
 	public ShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, boolean extraCopy, Card card) {
-		super(context, targetPlayerId, sourcePlayerId);
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.CARD_SHUFFLED, context, targetPlayerId, sourcePlayerId, card);
 		this.extraCopy = extraCopy;
-		this.target = card;
-		this.card = card;
-	}
-
-	@Override
-	public Card getSourceCard() {
-		return card == null ? target.getSourceCard() : card;
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return target;
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.CARD_SHUFFLED;
 	}
 
 	public boolean isExtraCopy() {

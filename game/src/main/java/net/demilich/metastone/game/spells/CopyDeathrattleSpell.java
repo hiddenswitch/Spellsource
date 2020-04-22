@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Streams;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,12 +12,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Copies the {@code target} actor's deathrattles onto the {@code source} (i.e., result of {@link EntityReference#SELF})
@@ -35,7 +36,7 @@ import java.util.Map;
  * EntityReference#OUTPUT} whose deathrattle was copied. If cards were generated and their deathrattles added, the
  * {@link SpellArg#CARD} argument will be added to the sub-spell corresponding to each of the generated cards.
  */
-public class CopyDeathrattleSpell extends Spell {
+public class CopyDeathrattleSpell extends AddDeathrattleSpell {
 	public static SpellDesc create(EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(CopyDeathrattleSpell.class);
 		arguments.put(SpellArg.TARGET, target);
@@ -50,35 +51,35 @@ public class CopyDeathrattleSpell extends Spell {
 			copyTo = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
 		int max = (int) desc.getOrDefault(SpellArg.HOW_MANY, 16);
-		List<SpellDesc> deathrattles = new ArrayList<>();
+		var aftermathsStream = Stream.<CardAftermathTuple>empty();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, max);
 		if (target instanceof Actor) {
-			deathrattles.addAll(((Actor) target).getDeathrattles());
+			aftermathsStream = context.getLogic().getAftermaths((Actor) target).map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard()));
 		} else if (!impliedCards.isEmpty()) {
 			if (desc.containsKey(SpellArg.RANDOM_TARGET)) {
 				impliedCards.shuffle(context.getLogic().getRandom());
 			}
-			for (Card impliedCard : impliedCards) {
-				if (impliedCard.getDesc().getDeathrattle() != null) {
-					deathrattles.add(impliedCard.getDesc().getDeathrattle());
-				}
-			}
+			aftermathsStream = impliedCards.stream().filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c));
 		} else if (target instanceof Card) {
-			final CardDesc actorCardDesc = ((Card) target).getDesc();
-			if (actorCardDesc.getDeathrattle() != null) {
-				deathrattles.add(actorCardDesc.getDeathrattle());
+			var card = (Card) target;
+			if (card.getDesc().getDeathrattle() != null) {
+				aftermathsStream = Stream.of(new CardAftermathTuple(card.getDesc().getDeathrattle(), card));
 			}
 		}
-		for (SpellDesc deathrattle : deathrattles) {
-			copyTo.addDeathrattle(deathrattle.clone());
-		}
-		if (impliedCards.isEmpty() && target != null && !deathrattles.isEmpty() && desc.getSpell() != null) {
+		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard()))).collect(toList());
+		Actor finalCopyTo = copyTo;
+		aftermaths.forEach(a -> {
+			var spell = a.getSpell();
+			var aftermath = spell.tryCreate(context, player, source, a.getEnchantmentSource(), finalCopyTo, true);
+			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, finalCopyTo);
+		});
+		if (impliedCards.isEmpty() && target != null && !aftermaths.isEmpty() && desc.getSpell() != null) {
 			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, target);
-		} else if (!impliedCards.isEmpty() && !deathrattles.isEmpty() && desc.getSpell() != null) {
+		} else if (!impliedCards.isEmpty() && !aftermaths.isEmpty() && desc.getSpell() != null) {
 			for (Card card : impliedCards) {
 				SpellDesc spell = desc.getSpell().clone();
 				spell.put(SpellArg.CARD, card.getCardId());
-				SpellUtils.castChildSpell(context, player, spell, source, target, card);
+				SpellUtils.castChildSpell(context, player, spell, source, target);
 			}
 		}
 	}

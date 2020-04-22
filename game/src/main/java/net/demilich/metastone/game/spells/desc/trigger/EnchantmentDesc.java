@@ -1,24 +1,25 @@
 package net.demilich.metastone.game.spells.desc.trigger;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
-import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.spells.desc.AbstractEnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,25 +67,125 @@ import static com.google.common.collect.Maps.immutableEntry;
  * @see net.demilich.metastone.game.cards.desc.CardDesc to see where {@link EnchantmentDesc} can typically go.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object> {
+public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object>, AbstractEnchantmentDesc<Enchantment> {
 
 	public EnchantmentDesc() {
+	}
+
+	protected EventTriggerDesc eventTrigger;
+	protected SpellDesc spell;
+	protected boolean oneTurn;
+	protected boolean persistentOwner;
+	protected boolean keepAfterTransform;
+	protected Integer maxFires;
+	protected Integer maxFiresPerSequence;
+	protected Integer countUntilCast;
+	protected boolean countByValue;
+	protected EventTriggerDesc[] activationTriggers;
+	protected EventTriggerDesc[] expirationTriggers = new EventTriggerDesc[0];
+	protected String name;
+	protected String description;
+	protected Zones[] zones = Enchantment.getDefaultBattlefieldZones();
+
+	public Set<Map.Entry<EnchantmentDescArg, Object>> entrySet() {
+		@SuppressWarnings("unchecked")
+		Set<Map.Entry<EnchantmentDescArg, Object>> entries = Set.of(
+				immutableEntry(EnchantmentDescArg.EVENT_TRIGGER, getEventTrigger()),
+				immutableEntry(EnchantmentDescArg.SPELL, getSpell()),
+				immutableEntry(EnchantmentDescArg.ONE_TURN, isOneTurn()),
+				immutableEntry(EnchantmentDescArg.PERSISTENT_OWNER, isPersistentOwner()),
+				immutableEntry(EnchantmentDescArg.MAX_FIRES, getMaxFires()),
+				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, getCountUntilCast()),
+				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, isCountByValue()),
+				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, getMaxFiresPerSequence()),
+				immutableEntry(EnchantmentDescArg.EXPIRATION_TRIGGERS, getExpirationTriggers()),
+				immutableEntry(EnchantmentDescArg.ACTIVATION_TRIGGERS, getActivationTriggers()),
+				immutableEntry(EnchantmentDescArg.DESCRIPTION, getDescription()),
+				immutableEntry(EnchantmentDescArg.NAME, getName()),
+				immutableEntry(EnchantmentDescArg.ZONES, getZones())
+		);
+		return entries;
+	}
+
+	/**
+	 * Creates an enchantment represented by this configuration.
+	 * <p>
+	 * The enchantment's {@link Trigger#setHostReference(net.demilich.metastone.game.targeting.EntityReference)} call
+	 * should be applied immediately afterwards to specify the host of this enchantment. {@link
+	 * net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link net.demilich.metastone.game.spells.trigger.secrets.Secret}
+	 * enchantments exist in play, and by convention they have unspecified hosts.
+	 *
+	 * @return The enchantment
+	 */
+	@JsonIgnore
+	public Enchantment create() {
+		Enchantment enchantment = new Enchantment();
+		// may be null if a card is being used as an enchantment
+		if (getEventTrigger() != null) {
+			enchantment.getTriggers().add(getEventTrigger().create());
+		}
+		enchantment.setSpell(getSpell());
+		enchantment.setOneTurn(isOneTurn());
+		enchantment.setMaxFires(getMaxFires());
+		enchantment.setPersistentOwner(isPersistentOwner());
+		enchantment.setKeepAfterTransform(isKeepAfterTransform());
+		enchantment.setCountUntilCast(getCountUntilCast());
+		enchantment.setCountByValue(isCountByValue());
+		enchantment.setMaxFiresPerSequence(getMaxFiresPerSequence());
+		enchantment.setName(getName());
+		if (getDescription() != null) {
+			enchantment.setDescription(getDescription());
+		}
+		if (getExpirationTriggers() != null && getExpirationTriggers().length > 0) {
+			enchantment.setExpirationTriggers(Arrays.stream(getExpirationTriggers()).map(EventTriggerDesc::create).collect(Collectors.toList()));
+		}
+		if (getActivationTriggers() != null && getActivationTriggers().length > 0) {
+			enchantment.setActivationTriggers(Arrays.stream(getActivationTriggers()).map(EventTriggerDesc::create).collect(Collectors.toList()));
+		}
+		if (getZones() != null) {
+			enchantment.setZones(getZones());
+		}
+		return enchantment;
 	}
 
 	/**
 	 * The description of which "event trigger" (reacting to which event) this trigger will react to
 	 */
-	public EventTriggerDesc eventTrigger;
+	public EventTriggerDesc getEventTrigger() {
+		return eventTrigger;
+	}
+
+	public EnchantmentDesc setEventTrigger(EventTriggerDesc eventTrigger) {
+		this.eventTrigger = eventTrigger;
+		return this;
+	}
+
 	/**
 	 * The spell that will be cast by an {@link Enchantment#process(int, SpellDesc, GameEvent)} invocation.
 	 *
 	 * @see Enchantment for more about enchantments.
 	 */
-	public SpellDesc spell;
+	public SpellDesc getSpell() {
+		return spell;
+	}
+
+	public EnchantmentDesc setSpell(SpellDesc spell) {
+		this.spell = spell;
+		return this;
+	}
+
 	/**
 	 * When {@code true}, indicates the enchantment should only last one turn.
 	 */
-	public boolean oneTurn;
+	public boolean isOneTurn() {
+		return oneTurn;
+	}
+
+	public EnchantmentDesc setOneTurn(boolean oneTurn) {
+		this.oneTurn = oneTurn;
+		return this;
+	}
+
 	/**
 	 * When {@code true}, indicates the owner of the enchantment for the purposes of evaluating the {@code player}
 	 * argument of a {@link net.demilich.metastone.game.spells.Spell#onCast(GameContext, Player, SpellDesc, Entity,
@@ -93,28 +194,60 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 * This implements Blessing of Wisdom, Power Word: Glory and other effects whose text would change depending on whose
 	 * perspective the text is read from.
 	 */
-	public boolean persistentOwner;
+	public boolean isPersistentOwner() {
+		return persistentOwner;
+	}
+
+	public EnchantmentDesc setPersistentOwner(boolean persistentOwner) {
+		this.persistentOwner = persistentOwner;
+		return this;
+	}
+
 	/**
 	 * When {@code true}, this {@link Enchantment} should not be removed by a {@link
-	 * net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion)} or {@link
+	 * net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Entity, Minion, Minion, boolean)} or {@link
 	 * net.demilich.metastone.game.logic.GameLogic#replaceCard(int, Card, Card)} effect.
 	 * <p>
 	 * Implements Shifter Zerus, Molten Blade and other in-hand every-turn-replacement effects.
 	 */
-	public boolean keepAfterTransform;
+	public boolean isKeepAfterTransform() {
+		return keepAfterTransform;
+	}
+
+	public EnchantmentDesc setKeepAfterTransform(boolean keepAfterTransform) {
+		this.keepAfterTransform = keepAfterTransform;
+		return this;
+	}
+
 	/**
 	 * The maximum number of times this trigger can fire until it expires.
 	 * <p>
 	 * When {@code null} (the default), the trigger can fire an unlimited number of times.
 	 */
-	public Integer maxFires;
+	public Integer getMaxFires() {
+		return maxFires;
+	}
+
+	public EnchantmentDesc setMaxFires(Integer maxFires) {
+		this.maxFires = maxFires;
+		return this;
+	}
+
 	/**
 	 * The maximum number of times this trigger can fire per sequence. This counter is reset at the beginning of the
 	 * sequence. Does <b>not</b> expire the trigger when exceeded.
 	 * <p>
 	 * When {@code null} (the default), the trigger can fire an unlimited number of times per sequence.
 	 */
-	public Integer maxFiresPerSequence;
+	public Integer getMaxFiresPerSequence() {
+		return maxFiresPerSequence;
+	}
+
+	public EnchantmentDesc setMaxFiresPerSequence(Integer maxFiresPerSequence) {
+		this.maxFiresPerSequence = maxFiresPerSequence;
+		return this;
+	}
+
 	/**
 	 * The number of times an {@link Enchantment} fires until it actually casts its spell.
 	 * <p>
@@ -123,14 +256,29 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 * Typically {@link #maxFires} is set to the same value as {@code countUntilCast} to limit the trigger to casting a
 	 * spell at most once, as soon as the {@link #eventTrigger} has fired {@code countUntilCast} times.
 	 */
-	public Integer countUntilCast;
+	public Integer getCountUntilCast() {
+		return countUntilCast;
+	}
+
+	public EnchantmentDesc setCountUntilCast(Integer countUntilCast) {
+		this.countUntilCast = countUntilCast;
+		return this;
+	}
+
 	/**
 	 * When {@code true}, treats the {@link GameContext#getEventValue()} as the amount to increment this enchantment's
 	 * firing counter.
 	 * <p>
 	 * Implements spellstones.
 	 */
-	public boolean countByValue;
+	public boolean isCountByValue() {
+		return countByValue;
+	}
+
+	public EnchantmentDesc setCountByValue(boolean countByValue) {
+		this.countByValue = countByValue;
+		return this;
+	}
 
 	/**
 	 * Triggers that activate this enchantment when they fired.
@@ -142,7 +290,14 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 * the trigger should have a condition to determine whether or not it activates. Activations are <b>NOT</b> evaluated
 	 * during the firing phase.
 	 */
-	public EventTriggerDesc[] activationTriggers;
+	public EventTriggerDesc[] getActivationTriggers() {
+		return activationTriggers;
+	}
+
+	public EnchantmentDesc setActivationTriggers(EventTriggerDesc[] activationTriggers) {
+		this.activationTriggers = activationTriggers;
+		return this;
+	}
 
 	/**
 	 * When set, these triggers will expire this enchantment when fired.
@@ -151,68 +306,54 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 * expired and will not fired. Thus you should use a {@link EventTriggerArg#QUEUE_CONDITION} if the trigger should
 	 * have a condition to determine whether or not it expires.
 	 */
-	public EventTriggerDesc[] expirationTriggers = new EventTriggerDesc[0];
+	public EventTriggerDesc[] getExpirationTriggers() {
+		return expirationTriggers;
+	}
+
+	public EnchantmentDesc setExpirationTriggers(EventTriggerDesc[] expirationTriggers) {
+		this.expirationTriggers = expirationTriggers;
+		return this;
+	}
 
 	/**
 	 * A name field to use when rendering the enchantment on the client
 	 */
-	public String name;
+	public String getName() {
+		return name;
+	}
+
+	public EnchantmentDesc setName(String name) {
+		this.name = name;
+		return this;
+	}
 
 	/**
 	 * A description field to use when rendering the enchantment on the client.
 	 */
-	public String description;
+	public String getDescription() {
+		return description;
+	}
 
-	public Set<Map.Entry<EnchantmentDescArg, Object>> entrySet() {
-		@SuppressWarnings("unchecked")
-		HashSet<Map.Entry<EnchantmentDescArg, Object>> entries = Sets.newHashSet(
-				immutableEntry(EnchantmentDescArg.EVENT_TRIGGER, eventTrigger),
-				immutableEntry(EnchantmentDescArg.SPELL, spell),
-				immutableEntry(EnchantmentDescArg.ONE_TURN, oneTurn),
-				immutableEntry(EnchantmentDescArg.PERSISTENT_OWNER, persistentOwner),
-				immutableEntry(EnchantmentDescArg.MAX_FIRES, maxFires),
-				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
-				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue),
-				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, maxFiresPerSequence),
-				immutableEntry(EnchantmentDescArg.EXPIRATION_TRIGGERS, expirationTriggers),
-				immutableEntry(EnchantmentDescArg.ACTIVATION_TRIGGERS, activationTriggers),
-				immutableEntry(EnchantmentDescArg.DESCRIPTION, description),
-				immutableEntry(EnchantmentDescArg.NAME, name)
-		);
-
-		return entries;
+	public EnchantmentDesc setDescription(String description) {
+		this.description = description;
+		return this;
 	}
 
 	/**
-	 * Creates an enchantment represented by this configuration.
-	 * <p>
-	 * The enchantment's {@link Enchantment#setHost(Entity)} call should be applied immediately afterwards to specify the
-	 * host of this enchantment. {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link
-	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} enchantments exist in play, and by convention they have
-	 * unspecified hosts.
-	 *
-	 * @return The enchantment
+	 * Zones where this enchantment is activated.
 	 */
-	@JsonIgnore
-	public Enchantment create() {
-		Enchantment enchantment = new Enchantment(eventTrigger.create(), spell, oneTurn);
-		enchantment.setMaxFires(maxFires);
-		enchantment.setPersistentOwner(persistentOwner);
-		enchantment.setKeepAfterTransform(keepAfterTransform);
-		enchantment.setCountUntilCast(countUntilCast);
-		enchantment.setCountByValue(countByValue);
-		enchantment.setMaxFiresPerSequence(maxFiresPerSequence);
-		enchantment.setName(name);
-		if (description != null) {
-			enchantment.setDescription(description);
-		}
-		if (expirationTriggers != null && expirationTriggers.length > 0) {
-			enchantment.setExpirationTriggers(Arrays.stream(expirationTriggers).map(EventTriggerDesc::create).collect(Collectors.toList()));
-		}
-		if (activationTriggers != null && activationTriggers.length > 0) {
-			enchantment.setActivationTriggers(Arrays.stream(activationTriggers).map(EventTriggerDesc::create).collect(Collectors.toList()));
-		}
-		return enchantment;
+	public Zones[] getZones() {
+		return zones;
 	}
 
+	public EnchantmentDesc setZones(Zones[] zones) {
+		this.zones = zones;
+		return this;
+	}
+
+	@Override
+	@Suspendable
+	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
+		return context.getLogic().tryCreateEnchantment(player, this, effectSource, enchantmentSource, host, force);
+	}
 }

@@ -86,11 +86,11 @@ public enum ParseValueType {
 	 */
 	ALGEBRAIC_OPERATION,
 	/**
-	 * A {@link net.demilich.metastone.game.spells.desc.condition.ConditionDesc}.
+	 * A {@link net.demilich.metastone.game.spells.desc.condition.Condition}.
 	 */
 	CONDITION,
 	/**
-	 * An array of {@link net.demilich.metastone.game.spells.desc.condition.ConditionDesc} objects.
+	 * An array of {@link net.demilich.metastone.game.spells.desc.condition.Condition} objects.
 	 */
 	CONDITION_ARRAY,
 	/**

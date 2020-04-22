@@ -107,7 +107,10 @@ public class FightSpell extends Spell {
 
 			if (resolvedSource instanceof Hero) {
 				// Activate the weapon if the hero has one
-				((Hero) resolvedSource).activateWeapon(true);
+				var owner = context.getPlayer(resolvedSource.getOwner());
+				if (!owner.getWeaponZone().isEmpty()) {
+					owner.getWeaponZone().get(0).setActive(true);
+				}
 			}
 
 			int numberOfAttacksBefore = resolvedSource.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
@@ -122,7 +125,10 @@ public class FightSpell extends Spell {
 
 			if (resolvedSource instanceof Hero) {
 				// Deactivate the weapon when we're done.
-				((Hero) resolvedSource).activateWeapon(false);
+				var owner = context.getPlayer(resolvedSource.getOwner());
+				if (!owner.getWeaponZone().isEmpty()) {
+					owner.getWeaponZone().get(0).setActive(false);
+				}
 			}
 		}
 	}

@@ -73,7 +73,7 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 
 		player.getDeck().move(card, player.getSetAsideZone());
 
-		final Minion summoned = card.summon();
+		final Minion summoned = card.minion();
 		boolean summonSuccess = context.getLogic().summon(player.getId(), summoned, source, -1, false);
 
 		player.getSetAsideZone().move(card, player.getDeck());

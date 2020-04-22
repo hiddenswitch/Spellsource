@@ -27,7 +27,7 @@ public class ExileTests extends TestBase {
 			context.endTurn();
 			Minion shouldHaveBlitz = playMinionCard(context, player, "minion_line_breaker");
 			assertTrue(shouldHaveBlitz.hasAttribute(Attribute.CHARGE));
-			assertTrue(shouldHaveBlitz.canAttackThisTurn());
+			assertTrue(shouldHaveBlitz.canAttackThisTurn(context));
 			assertTrue(context.getValidActions().stream().anyMatch(ga -> Objects.equals(ga.getSourceReference(), shouldHaveBlitz.getReference()) && Objects.equals(ga.getTargetReference(), opponent.getHero().getReference())));
 		});
 

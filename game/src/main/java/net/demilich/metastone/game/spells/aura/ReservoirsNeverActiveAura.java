@@ -9,12 +9,9 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  * <p>
  * Implements N'Zoth's Battlemaiden.
  */
-public final class ReservoirsNeverActiveAura extends Aura {
+public final class ReservoirsNeverActiveAura extends AbstractFriendlyCardAura {
 
 	public ReservoirsNeverActiveAura(AuraDesc desc) {
 		super(desc);
-		setDesc(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 }

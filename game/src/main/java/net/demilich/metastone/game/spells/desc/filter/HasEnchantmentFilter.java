@@ -23,7 +23,7 @@ public class HasEnchantmentFilter extends EntityFilter {
 			throw new NullPointerException("card");
 		}
 
-		for (Trigger e : context.getTriggersAssociatedWith(entity.getReference())) {
+		for (Trigger e : context.getLogic().getActiveTriggers(entity.getReference())) {
 			if (e instanceof Enchantment) {
 				Enchantment enchantment = (Enchantment) e;
 				if (enchantment.getSourceCard() != null && enchantment.getSourceCard().getCardId().equals(cardId)) {
