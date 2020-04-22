@@ -19,7 +19,6 @@
 	  "value": 1,
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
         "attribute": "LIFESTEAL"
       }
     }
