@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: If you have a weapon, gain +2/+2.",
+  "description": "Opener: If you have an item equipped, gain +2/+2.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {
