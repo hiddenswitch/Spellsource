@@ -7,7 +7,7 @@
     "baseHp": 2,
     "rarity": "COMMON",
     "race": "FAE",
-    "description": "After you draw a card, summon a 1/1 Faerie",
+    "description": "Whenever you draw a card, summon a 1/1 Faerie.",
     "trigger": {
         "eventTrigger": {
             "class": "CardDrawnTrigger",
