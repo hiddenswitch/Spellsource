@@ -29,11 +29,6 @@ public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
 
 	@Suspendable
-	GameAction getAutoHeroPower(GameContext context, Player player) {
-		return getHeroPowerActions(context, player).get(0);
-	}
-
-	@Suspendable
 	private List<GameAction> getHeroAttackActions(GameContext context, Player player) {
 		List<GameAction> heroAttackActions = new ArrayList<GameAction>();
 		Hero hero = player.getHero();
@@ -170,14 +165,6 @@ public class ActionLogic implements Serializable {
 		return validActions;
 	}
 
-	@Suspendable
-	boolean hasAutoHeroPower(GameContext context, Player player) {
-		Card heroPower = player.getHeroPowerZone().get(0);
-
-		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
-		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetSelection() == TargetSelection.AUTO);
-	}
-
 	/**
 	 * Rolls out actions. For actions that have {@code targetRequirement} values that aren't {@link TargetSelection#NONE},
 	 * returning new actions whose {@link GameAction#getTargetReference()} is a valid target.
@@ -189,7 +176,7 @@ public class ActionLogic implements Serializable {
 	 */
 	public void rollout(GameAction action, GameContext context, Player player, Collection<GameAction> actions) {
 		context.getLogic().processTargetModifiers(action);
-		if (action.getTargetRequirement() == TargetSelection.NONE || action.getTargetRequirement() == TargetSelection.AUTO) {
+		if (action.getTargetRequirement() == TargetSelection.NONE) {
 			actions.add(action);
 		} else {
 			for (Entity validTarget : targetLogic.getValidTargets(context, player, action)) {
