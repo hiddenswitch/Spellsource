@@ -326,7 +326,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return Optional.of(aftermath);
 		}
 
-		LOGGER.warn("tryPutAftermathIntoPlay {} {}: {} not in active zone but attempting to create this aftermath {} for it", context.getGameId(), sourceCard, host, spellDesc);
 		return Optional.empty();
 	}
 
@@ -2407,18 +2406,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * For heroes that have a {@link Card} that has automatic target selection, returns the hero power. It is not clear if
-	 * this is used by any hero power cards in the game.
-	 *
-	 * @param playerId The player equipped with an auto hero power.
-	 * @return The action to play the hero power.
-	 */
-	@Suspendable
-	public GameAction getAutoHeroPowerAction(int playerId) {
-		return actionLogic.getAutoHeroPower(context, context.getPlayer(playerId));
-	}
-
-	/**
 	 * Finds {@link ChooseOneOverrideAura} auras that affect the {@code card} and indicates what choose one override is
 	 * specified.
 	 *
@@ -2730,17 +2717,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Returns {@code true} if the given player has an "auto" (auto-targeting) hero power.
-	 *
-	 * @param player The player whose point of view should be considered.
-	 * @return {@code true} if the hero power is "auto" targeting.
-	 */
-	@Suspendable
-	public boolean hasAutoHeroPower(int player) {
-		return actionLogic.hasAutoHeroPower(context, context.getPlayer(player));
 	}
 
 	/**
@@ -5326,6 +5302,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			throw new IllegalStateException("infinite recursion");
 		}
 
+		context.onGameEventWillFire(event);
+
 		// Push the event data onto the event data stack, used by effects to determine what the EntityReference.EVENT_TARGET
 		// is and the value of EventValueProvider
 		pushEventData(event);
@@ -5410,6 +5388,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		} finally {
 			popEventData(event);
 			triggerDepth--;
+			context.onGameEventDidFire(event);
 		}
 	}
 

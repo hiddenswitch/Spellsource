@@ -29,6 +29,7 @@ import net.demilich.metastone.game.entities.EntityZoneTable;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.*;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.*;
 import net.demilich.metastone.game.services.Inventory;
 import net.demilich.metastone.game.spells.DrawCardSpell;
@@ -468,19 +469,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			adjacentMinions.add(minions.get(right));
 		}
 		return TargetLogic.withoutPermanents(adjacentMinions);
-	}
-
-	/**
-	 * Retrieves a hero power action that occurs automatically at the start of the turn, if one is specified for the
-	 * hero.
-	 * <p>
-	 * Implements certain scenarios.
-	 *
-	 * @return The game action that should be performed.
-	 */
-	@Suspendable
-	public GameAction getAutoHeroPowerAction() {
-		return getLogic().getAutoHeroPowerAction(getActivePlayerId());
 	}
 
 	/**
@@ -939,10 +927,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				endTurn();
 				return false;
 			}
-			if (getLogic().hasAutoHeroPower(getActivePlayerId())) {
-				performAction(getActivePlayerId(), getAutoHeroPowerAction());
-				return true;
-			}
 
 			boolean gameOver = updateAndGetGameOver();
 			if (gameOver) {
@@ -1315,6 +1299,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param enchantment The spell trigger that fired.
 	 */
+	@Suspendable
 	public void onEnchantmentFired(Enchantment enchantment) {
 	}
 
@@ -2036,5 +2021,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Nullable
 	public GameAction getCurrentAction() {
 		return actionStack.peekLast();
+	}
+
+	@Suspendable
+	public void onGameEventWillFire(GameEvent event) {
+	}
+
+	@Suspendable
+	public void onGameEventDidFire(GameEvent event) {
 	}
 }

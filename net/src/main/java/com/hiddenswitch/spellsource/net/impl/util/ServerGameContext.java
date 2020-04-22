@@ -765,17 +765,24 @@ public class ServerGameContext extends GameContext implements Server {
 		}
 	}
 
+	@Override
 	@Suspendable
-	public void fireGameEvent(GameEvent gameEvent) {
+	public void onGameEventWillFire(GameEvent event) {
+		super.onGameEventWillFire(event);
 		eventCounter.incrementAndGet();
 		// Do not build game state for events the client is not interested in
-		if (gameEvent.isClientInterested()) {
+		if (event.isClientInterested()) {
 			GameState gameStateCopy = getGameStateCopy();
 			for (Client client : getClients()) {
-				client.sendNotification(gameEvent, gameStateCopy);
+				client.sendNotification(event, gameStateCopy);
 			}
 		}
-		getLogic().fireGameEvent(gameEvent);
+	}
+
+	@Override
+	@Suspendable
+	public void onGameEventDidFire(GameEvent event) {
+		super.onGameEventDidFire(event);
 		if (eventCounter.decrementAndGet() == 0) {
 			for (Client client : getClients()) {
 				client.lastEvent();

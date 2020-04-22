@@ -145,7 +145,17 @@ public class Enchantment extends Entity implements Trigger {
 		if (!usesSpellTrigger) {
 			return false;
 		}
-		for (EventTrigger trigger : Iterables.concat(getTriggers(), getExpirationTriggers(), getActivationTriggers())) {
+		for (EventTrigger trigger : getTriggers()) {
+			if (trigger.interestedIn() == eventType || trigger.interestedIn() == EventTypeEnum.ALL) {
+				return true;
+			}
+		}
+		for (EventTrigger trigger : getExpirationTriggers()) {
+			if (trigger.interestedIn() == eventType || trigger.interestedIn() == EventTypeEnum.ALL) {
+				return true;
+			}
+		}
+		for (EventTrigger trigger : getActivationTriggers()) {
 			if (trigger.interestedIn() == eventType || trigger.interestedIn() == EventTypeEnum.ALL) {
 				return true;
 			}
