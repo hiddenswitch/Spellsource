@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Skill: Receive a Soar that draws a card.",
+  "description": "Skill: Recieve a Soar spell that draws a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

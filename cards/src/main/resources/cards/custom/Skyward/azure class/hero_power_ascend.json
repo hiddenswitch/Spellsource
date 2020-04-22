@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Skill: Add two Soar spells to your hand.",
+  "description": "Skill: Recieve two Soar spells.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

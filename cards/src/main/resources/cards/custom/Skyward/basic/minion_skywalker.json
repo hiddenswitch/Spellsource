@@ -6,14 +6,13 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Opener: Receive a random Skyward spell.",
+  "description": "Opener: Receive a random spell.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "heroClass": "AZURE",
         "cardType": "SPELL"
       }
     }
