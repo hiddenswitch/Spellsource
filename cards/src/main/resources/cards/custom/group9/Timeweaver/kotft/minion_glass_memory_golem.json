@@ -69,7 +69,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
+  "collectible": false,
   "sets": [
     "CUSTOM",
     "KNIGHTS_OF_THE_FROZEN_THRONE"
