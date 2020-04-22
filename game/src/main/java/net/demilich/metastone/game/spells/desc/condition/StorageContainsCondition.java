@@ -7,6 +7,10 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 
+/**
+ * {@code true} if the {@link EnvironmentEntityList} stored on the {@code source} contains any of the {@code target}
+ * entities.
+ */
 public class StorageContainsCondition extends Condition {
 	public StorageContainsCondition(ConditionDesc desc) {
 		super(desc);
@@ -20,6 +24,16 @@ public class StorageContainsCondition extends Condition {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	@Override
+	protected boolean multipleTargetsEvaluatedAsOr() {
+		return true;
+	}
+
+	@Override
+	protected boolean multipleTargetsEvaluatedAsAnd() {
 		return false;
 	}
 }

@@ -1,45 +1,26 @@
 package net.demilich.metastone.game.entities.heroes;
 
-import net.demilich.metastone.game.Player;
+import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
-import com.hiddenswitch.spellsource.client.models.EntityType;
-import net.demilich.metastone.game.entities.EntityZone;
-import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.cards.Attribute;
-
-import java.lang.ref.WeakReference;
+import net.demilich.metastone.game.targeting.Zones;
 
 public final class Hero extends Actor {
+	private static final Zones[] HERO_ZONE = new Zones[]{Zones.HERO};
 	private String heroClass;
-	private WeakReference<Player> playerRef = new WeakReference<>(null);
 
-	public Hero(Card heroCard, Player player) {
-		super(heroCard);
-		setPlayer(player);
+	public Hero(Card heroCard) {
+		super();
+		setSourceCard(heroCard);
 		setName(heroCard.getName());
 		setHeroClass(heroCard.getHeroClass());
 	}
 
-	public void activateWeapon(boolean active) {
-		if (getWeapon() != null) {
-			getWeapon().setActive(active);
-		}
-	}
-
 	@Override
 	public Hero clone() {
-		Hero clone = (Hero) super.clone();
-		return clone;
-	}
-
-	@Override
-	public int getAttack() {
-		int attack = super.getAttack();
-		if (getWeapon() != null && getWeapon().isActive()) {
-			attack += getWeapon().getWeaponDamage();
-		}
-		return attack;
+		return (Hero) super.clone();
 	}
 
 	public int getEffectiveHp() {
@@ -52,24 +33,13 @@ public final class Hero extends Actor {
 	}
 
 	@Override
-	public String getHeroClass() {
-		return heroClass;
+	public Zones[] getDefaultActiveTriggerZones() {
+		return HERO_ZONE;
 	}
 
-	public Card getHeroPower() {
-		if (getHeroPowerZone().size() > 0) {
-			return getHeroPowerZone().get(0);
-		} else {
-			return null;
-		}
-	}
-
-	public Weapon getWeapon() {
-		if (getWeaponZone().size() > 0) {
-			return getWeaponZone().get(0);
-		} else {
-			return null;
-		}
+	@Override
+	protected boolean hasNonZeroAttack(GameContext context) {
+		return getAttack() > 0 || !context.getPlayer(getOwner()).getWeaponZone().isEmpty() && context.getPlayer(getOwner()).getWeaponZone().get(0).getAttack() > 0;
 	}
 
 	/**
@@ -77,7 +47,7 @@ public final class Hero extends Actor {
 	 *
 	 * @param armor The requested change in armor.
 	 * @return The amount the armor changed. If damage is being dealt, then the armor will change {@code -Infinity < armor
-	 * 		<= 0} if it is possible.
+	 * <= 0} if it is possible.
 	 */
 	public int modifyArmor(final int armor) {
 		// armor cannot fall below zero
@@ -92,16 +62,7 @@ public final class Hero extends Actor {
 		this.heroClass = heroClass;
 	}
 
-	public EntityZone<Card> getHeroPowerZone() {
-		return playerRef.get().getHeroPowerZone();
-	}
-
-	public EntityZone<Weapon> getWeaponZone() {
-		return playerRef.get().getWeaponZone();
-	}
-
-	public Hero setPlayer(Player player) {
-		playerRef = new WeakReference<>(player);
-		return this;
+	public String getHeroClass() {
+		return heroClass;
 	}
 }

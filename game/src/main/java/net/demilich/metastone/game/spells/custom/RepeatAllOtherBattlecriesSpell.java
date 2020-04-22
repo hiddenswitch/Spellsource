@@ -3,8 +3,8 @@ package net.demilich.metastone.game.spells.custom;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.BattlecryAction;
-import net.demilich.metastone.game.actions.BattlecryAsPlaySpellCardAction;
+import net.demilich.metastone.game.actions.OpenerAction;
+import net.demilich.metastone.game.actions.OpenerAsPlaySpellCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
@@ -15,7 +15,7 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -88,22 +88,22 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 	 */
 	@Suspendable
 	public static boolean castBattlecryRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource) {
-		BattlecryAction action;
-		BattlecryDesc[] chooseOneBattlecries = battlecryCardSource.getDesc().getChooseOneBattlecries();
+		OpenerAction action;
+		OpenerDesc[] chooseOneBattlecries = battlecryCardSource.getDesc().getChooseOneBattlecries();
 
 		if (chooseOneBattlecries != null) {
 			if (battlecryCardSource.getAttributes().containsKey(Attribute.CHOICE)) {
 				int choice = battlecryCardSource.getAttributeValue(Attribute.CHOICE);
 				if (choice == -1) {
-					action = battlecryCardSource.getDesc().getChooseBothBattlecry().toBattlecryAction();
+					action = battlecryCardSource.getDesc().getChooseBothBattlecry().toOpenerAction();
 				} else {
-					action = chooseOneBattlecries[choice].toBattlecryAction();
+					action = chooseOneBattlecries[choice].toOpenerAction();
 				}
 
 			} else {
 
 				// Choose randomly
-				action = chooseOneBattlecries[context.getLogic().getRandom().nextInt()].toBattlecryAction();
+				action = chooseOneBattlecries[context.getLogic().getRandom().nextInt()].toOpenerAction();
 			}
 
 			// Make a rules-based choice
@@ -111,18 +111,18 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 			if (chooseOneOverride != ChooseOneOverride.NONE) {
 				switch (chooseOneOverride) {
 					case ALWAYS_FIRST:
-						action = chooseOneBattlecries[0].toBattlecryAction();
+						action = chooseOneBattlecries[0].toOpenerAction();
 						break;
 					case ALWAYS_SECOND:
-						action = chooseOneBattlecries[1].toBattlecryAction();
+						action = chooseOneBattlecries[1].toOpenerAction();
 						break;
 					case BOTH_COMBINED:
-						action = battlecryCardSource.getDesc().getChooseBothBattlecry().toBattlecryAction();
+						action = battlecryCardSource.getDesc().getChooseBothBattlecry().toOpenerAction();
 						break;
 				}
 			}
 		} else {
-			action = battlecryCardSource.getDesc().getBattlecry().toBattlecryAction();
+			action = battlecryCardSource.getDesc().getBattlecry().toOpenerAction();
 		}
 
 		if (action == null) {
@@ -141,7 +141,7 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 		action.setSourceReference(battlecrySource.getReference());
 		EntityReference battlecryTarget;
 		if (action.getTargetRequirement() != TargetSelection.NONE) {
-			PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), action.getSpell(), battlecryCardSource, action.getTargetRequirement(), action.getCondition());
+			PlaySpellCardAction spellCardAction = new OpenerAsPlaySpellCardAction(action.getSourceReference(), action.getSpell(), battlecryCardSource, action.getTargetRequirement(), action.getCondition());
 			// Compute the battlecry's valid targets as though it was a spell
 			List<Entity> targets = context.getLogic().getValidTargets(player.getId(), spellCardAction);
 			if (targets != null && !targets.isEmpty()) {

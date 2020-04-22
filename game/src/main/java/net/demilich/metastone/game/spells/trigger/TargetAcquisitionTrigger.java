@@ -19,7 +19,7 @@ public class TargetAcquisitionTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		TargetAcquisitionEvent targetAcquisitionEvent = (TargetAcquisitionEvent) event;
 
 		ActionType actionType = (ActionType) getDesc().get(EventTriggerArg.ACTION_TYPE);

@@ -15,6 +15,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -76,10 +77,10 @@ public final class DecaySpell extends Spell {
 			if (damage < 0) {
 				logger.error("onCast {} {}: Suspicious negative damage call", context.getGameId(), source);
 			}
-			context.getLogic().damage(player, (Actor) target, damage, source, true, DamageTypeEnum.DECAY);
+			context.getLogic().damage(player, (Actor) target, damage, source, true, EnumSet.of(DamageTypeEnum.DECAY));
 		} else if (target instanceof Weapon) {
 			int durabilityChange = desc.getValue(SpellArg.VALUE, context, player, target, source, -1);
-			context.getLogic().modifyDurability(player.getHero().getWeapon(), durabilityChange);
+			context.getLogic().modifyDurability(player.getWeaponZone().get(0), durabilityChange);
 		}
 	}
 

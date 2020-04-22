@@ -18,7 +18,7 @@ public class SpellstoneValueProvider extends ValueProvider {
         if (target == null) {
             return 0;
         }
-        List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference());
+	    List<Trigger> triggers = context.getLogic().getActiveTriggers(target.getReference());
         if (triggers.isEmpty()) {
             return 0;
         }

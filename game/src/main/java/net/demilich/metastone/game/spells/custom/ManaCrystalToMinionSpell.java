@@ -27,7 +27,7 @@ public class ManaCrystalToMinionSpell extends SummonSpell {
 				throw new UnsupportedOperationException("not a minion");
 			}
 
-			boolean summoned = context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
+			boolean summoned = context.getLogic().summon(player.getId(), card.minion(), source, -1, false);
 			if (summoned) {
 				summonCount++;
 				maxMana--;

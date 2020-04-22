@@ -8,6 +8,9 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+/**
+ * Counts entities matching the {@link ConditionArg#FILTER} using the evaluation rules of the {@link CountCondition}.
+ */
 public class GraveyardCountCondition extends CountCondition {
 
 	public GraveyardCountCondition(ConditionDesc desc) {

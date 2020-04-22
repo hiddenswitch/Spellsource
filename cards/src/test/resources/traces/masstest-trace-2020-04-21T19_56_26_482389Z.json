@@ -1,0 +1,26 @@
+{
+  "seed" : -3141785606513344354,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CORAL", "BLUEGREY" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_gasbelly_oni", "spell_bardic_inspiration", "minion_passionate_piper", "minion_end", "minion_songbird", "minion_crystal_shatterer", "minion_smug_theorist", "spell_soundwave", "spell_enchanting_tune", "minion_emerald_cleanser", "spell_bass_boost", "spell_mute", "minion_hold_hunter", "minion_passionate_piper", "spell_song_of_strength", "minion_frigid_bones", "minion_doodles", "minion_holdover_lich", "spell_bass_boost", "minion_noteweaver", "spell_mystical_song", "spell_song_of_strength", "minion_spirited_announcer_v2", "weapon_soundhorn", "weapon_soundhorn", "spell_mute", "minion_nezumi_master", "minion_enhancing_shaman", "minion_miniature_gunner", "minion_darkbent_drake" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_enenra", "minion_timewalker_initiate", "minion_ibaraki_doji", "minion_torchbearer", "minion_dead_horse", "minion_nightmare_warden", "minion_warclub_ruffian", "spell_yokai_fire", "spell_queens_command", "minion_whizbang_the_plunderful", "minion_sluggish_brute", "minion_inspiring_hero", "minion_uccian_hydra", "spell_cloak_and_dagger", "minion_articus__dragon_giant", "spell_rampant_aggression", "minion_towering_treant", "minion_feathered_fantasy", "minion_valiant_medic", "minion_enhancing_shaman", "minion_swiftfoot_shinobi", "minion_mighty_mufunga", "minion_yokai_shapeshifter", "minion_onis_eye", "minion_sonorous_spectre", "minion_cursing_chimp", "minion_enhancing_shaman", "minion_terrified_tanooki", "minion_insurgency_captain_krika", "spell_wicked_nature" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 9 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 51 ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 1, 0, 1, 5, 7, 3, 5, 0, 0, 6, 2, 1, 0, 0, 1, 0, 1, 1, 1, 0, 9, 0, 4, 6, 4, 4, 30, 17, 14, 5, 13, 14, 12, 18, 12, 4, 0, 4, 3, 8, 26, 2, 5, 6, 2, 7, 11, 6, 10, 3, 19, 6, 6, 9, 1, 11, 0, 5, 24, 1, 15, 7, 3, 1, 5, 4, 4, 7, 11, 10, 14, 10, 3, 0, 1, 1, 0, 1, 0, 1, 2, 2, 0, 16, 4, 8, 2, 0, 0, 7, 3, 5, 0, 3, 0, 1, 6, 1, 0, 0, 4, 4, 3 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

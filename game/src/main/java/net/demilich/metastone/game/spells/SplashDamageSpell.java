@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -12,6 +13,8 @@ import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageReceivedTrigger;
 import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.EnumSet;
 
 /**
  * Like a {@link DamageSpell}, except the {@code source} of the damage is changed to the {@link
@@ -35,10 +38,12 @@ public final class SplashDamageSpell extends DamageSpell {
 	}
 
 	@Override
-	protected DamageTypeEnum getDamageType(GameContext context, Player player, Entity source) {
+	protected EnumSet<DamageTypeEnum> getDamageType(GameContext context, Player player, Entity source) {
 		if (Entity.hasEntityType(source.getEntityType(), EntityType.ACTOR)) {
-			return DamageTypeEnum.PHYSICAL;
+			return EnumSet.of(DamageTypeEnum.PHYSICAL, DamageTypeEnum.SPLASH);
 		}
-		return super.getDamageType(context, player, source);
+		var damageType = super.getDamageType(context, player, source);
+		damageType.add(DamageTypeEnum.SPLASH);
+		return damageType;
 	}
 }

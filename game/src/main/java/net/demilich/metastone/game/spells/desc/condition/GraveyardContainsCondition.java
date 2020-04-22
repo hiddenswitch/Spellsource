@@ -7,6 +7,10 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * {@code true} if the graveyard contains an {@link Actor} that {@link Actor#diedOnBattlefield()} with the card ID from
+ * {@link ConditionArg#CARD} or the {@code target}'s source card.
+ */
 public class GraveyardContainsCondition extends Condition {
 
 	public GraveyardContainsCondition(ConditionDesc desc) {
@@ -15,24 +19,26 @@ public class GraveyardContainsCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		String cardId = (String) desc.get(ConditionArg.CARD);
-		if (desc.containsKey(ConditionArg.TARGET)) {
-			cardId = context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).get(0).getSourceCard().getCardId();
-		}
-		for (Entity deadEntity : player.getGraveyard()) {
+		var cardId = (String) desc.getOrDefault(ConditionArg.CARD, target.getSourceCard().getCardId());
+
+		for (var deadEntity : player.getGraveyard()) {
 			Card card;
 			if (deadEntity instanceof Actor && deadEntity.diedOnBattlefield()) {
-				Actor actor = (Actor) deadEntity;
+				var actor = (Actor) deadEntity;
 				card = actor.getSourceCard();
 			} else {
 				continue;
 			}
 
-			if (card.getCardId().equals(cardId)) {
+			if (card.getCardId().equalsIgnoreCase(cardId)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
+	}
 }

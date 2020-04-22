@@ -27,7 +27,7 @@ public class JoustSpell extends Spell {
 		if (!joustEvent.isWon()) {
 			SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
 			if (spell1 != null) {
-				SpellUtils.castChildSpell(context, player, spell1, source, target, joustEvent.getEventTarget());
+				SpellUtils.castChildSpell(context, player, spell1, source, target, joustEvent.getTarget());
 			}
 
 			return;
@@ -35,12 +35,12 @@ public class JoustSpell extends Spell {
 
 		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
 		if (spell2 != null) {
-			SpellUtils.castChildSpell(context, player, spell2, source, target, joustEvent.getEventTarget());
+			SpellUtils.castChildSpell(context, player, spell2, source, target, joustEvent.getTarget());
 			return;
 		}
 
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-		SpellUtils.castChildSpell(context, player, spell, source, joustEvent.getEventTarget());
+		SpellUtils.castChildSpell(context, player, spell, source, joustEvent.getTarget());
 	}
 
 }

@@ -59,9 +59,15 @@ public class MindControlOneTurnSpell extends MindControlSpell {
 		}
 
 		EventTrigger eventTrigger = revertTrigger.create();
-		eventTrigger.setOwner(player.getId());
-		Enchantment returnOnSilence = new Enchantment(silenceTrigger, eventTrigger, reverseMindcontrolSpell, true);
-		context.getLogic().addGameEventListener(player, returnOnSilence, target);
+		Enchantment returnOnSilence = new Enchantment();
+		returnOnSilence.getTriggers().add(silenceTrigger);
+		returnOnSilence.getTriggers().add(eventTrigger);
+		returnOnSilence.setSpell(reverseMindcontrolSpell);
+		returnOnSilence.setOneTurn(true);
+		returnOnSilence.setMaxFires(1);
+		returnOnSilence.setUsesSpellTrigger(true);
+
+		context.getLogic().addEnchantment(player, returnOnSilence, source, target);
 
 		// Apply the effects
 		SpellUtils.castChildSpell(context, player, effectSpell, source, target);

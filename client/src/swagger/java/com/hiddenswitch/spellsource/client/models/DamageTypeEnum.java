@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Types of damage.   - PHYSICAL: Physical damage is caused by physical attacks by actors.  - FATIGUE: Fatigue damage is caused by drawing from an empty deck.  - MAGICAL: Magical damage is caused by spells and effects. It is typically rendered by missiles in the client.  - DECAY: Decay damage is specific to the DECAY keyword. It deals one damage to the entity at the end of every one    of its owner&#39;s turns  - DEFLECT: Damage dealt from the Deflect ability to the hero.  - DRAIN: Damage dealt by a Drain ability.  - IGNORES_ARMOR: Damage that ignores armor when it is dealt to the hero. 
+ * Types of damage.   - PHYSICAL: Physical damage is caused by physical attacks by actors.  - FATIGUE: Fatigue damage is caused by drawing from an empty deck.  - MAGICAL: Magical damage is caused by spells and effects. It is typically rendered by missiles in the client.  - DECAY: Decay damage is specific to the DECAY keyword. It deals one damage to the entity at the end of every one    of its owner&#39;s turns  - DEFLECT: Damage dealt from the Deflect ability to the hero.  - DRAIN: Damage dealt by a Drain ability.  - IGNORES_ARMOR: Damage that ignores armor when it is dealt to the hero.  - SPLASH: Damage dealt by the SplashDamageSpell which is used to change the source of damage 
  */
 public enum DamageTypeEnum {
   
@@ -39,7 +39,9 @@ public enum DamageTypeEnum {
   
   DRAIN("DRAIN"),
   
-  IGNORES_ARMOR("IGNORES_ARMOR");
+  IGNORES_ARMOR("IGNORES_ARMOR"),
+  
+  SPLASH("SPLASH");
 
   private String value;
 

@@ -6,7 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
 /**
- * Returns {@code true} if the {@code source} card's pact, based on card ID, can be played.
+ * {@code true} if the {@code source} card's pact, based on card ID, can be played.
  */
 public class CanPlayPactCondition extends Condition {
 
@@ -17,5 +17,10 @@ public class CanPlayPactCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		return context.getLogic().canPlayPact(player, (Card) source);
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }

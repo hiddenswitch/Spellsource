@@ -14,6 +14,6 @@ public class TriggerSecretRevealSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		context.fireGameEvent(new SecretRevealedEvent(context, (Card) target, player.getId()));
+		context.getLogic().fireGameEvent(new SecretRevealedEvent(context, (Card) target, player.getId()));
 	}
 }

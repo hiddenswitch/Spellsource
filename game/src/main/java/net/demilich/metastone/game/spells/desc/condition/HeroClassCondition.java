@@ -6,6 +6,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
+/**
+ * {@code true} if the player's champion is {@link ConditionArg#HERO_CLASS}.
+ */
 public class HeroClassCondition extends Condition {
 
 	public HeroClassCondition(ConditionDesc desc) {
@@ -16,5 +19,10 @@ public class HeroClassCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		String heroClass = (String) desc.get(ConditionArg.HERO_CLASS);
 		return player.getHero().getSourceCard().hasHeroClass(heroClass);
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }

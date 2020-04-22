@@ -26,10 +26,10 @@ public final class TransformToAndBackSpell extends AddEnchantmentSpell {
 		SpellDesc setDescription = SetDescriptionSpell.create(desc.getString(SpellArg.DESCRIPTION) + originalName);
 		SpellUtils.castChildSpell(context, player, setDescription, source, target);
 		EnchantmentDesc trigger = new EnchantmentDesc();
-		trigger.maxFires = 2;
-		trigger.spell = transformBack;
-		trigger.eventTrigger = TurnEndTrigger.create(TargetPlayer.SELF);
-		trigger.countUntilCast = 2;
+		trigger.setMaxFires(2);
+		trigger.setSpell(transformBack);
+		trigger.setEventTrigger(TurnEndTrigger.create(TargetPlayer.SELF));
+		trigger.setCountUntilCast(2);
 		SpellDesc enchant = AddEnchantmentSpell.create(trigger);
 		super.onCast(context, player, enchant, source, target);
 	}

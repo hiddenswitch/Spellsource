@@ -33,9 +33,9 @@ public class TriggerSecretSpell extends Spell {
 							? ((Secret) (card.getSpell().get(SpellArg.SECRET))).getSpell().clone()
 							: card.getSpell().clone();
 
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), card));
+			context.getLogic().fireGameEvent(new SecretPlayedEvent(context, player.getId(), card));
 			SpellUtils.castChildSpell(context, player, secretSpell, card, target);
-			context.fireGameEvent(new SecretRevealedEvent(context, card, player.getId()));
+			context.getLogic().fireGameEvent(new SecretRevealedEvent(context, card, player.getId()));
 		} else {
 			logger.warn("onCast {} {}: Targeting {} which is not a secret", context.getGameId(), source, card);
 		}

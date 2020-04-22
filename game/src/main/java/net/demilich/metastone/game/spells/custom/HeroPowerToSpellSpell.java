@@ -31,7 +31,7 @@ public final class HeroPowerToSpellSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// TODO: Wrap the hero power effects in HeroPowerSpell
 		// Retrieve the actual hero power effect
-		Card heroPower = player.getHero().getHeroPower();
+		Card heroPower = player.getHeroPowerZone().get(0);
 
 		TargetSelection selection = heroPower.getDesc().getTargetSelection();
 		// Case 1: Check the spell
@@ -43,7 +43,7 @@ public final class HeroPowerToSpellSpell extends Spell {
 		// Case 2: Check the passiveTrigger's spell
 		EnchantmentDesc passiveTrigger = heroPower.getDesc().getPassiveTrigger();
 		if (passiveTrigger != null) {
-			spells = Stream.concat(spells, passiveTrigger.spell.spellStream(true));
+			spells = Stream.concat(spells, passiveTrigger.getSpell().spellStream(true));
 		}
 
 		// Find the HeroPowerSpell effects!
@@ -86,9 +86,6 @@ public final class HeroPowerToSpellSpell extends Spell {
 			spellCardDesc.setHeroClass(heroPower.getHeroClass());
 			spellCardDesc.setSet(heroPower.getCardSet());
 			spellCardDesc.setCollectible(false);
-			if (heroPower.getDesc().getPassiveAuras() != null) {
-				spellCardDesc.setPassiveAuras(heroPower.getDesc().getPassiveAuras());
-			}
 			spellCard = spellCardDesc.create();
 			context.addTempCard(spellCard);
 			if (heroPower.hasAttribute(Attribute.LIFESTEAL)) {

@@ -41,11 +41,11 @@ public final class FarseerNobundoSpell extends Spell {
 		existingTotems.put(SpellArg.TARGET, EntityReference.OTHER_FRIENDLY_MINIONS);
 
 		EnchantmentDesc trigger = new EnchantmentDesc();
-		trigger.eventTrigger = new EventTriggerDesc(BeforeMinionSummonedTrigger.class);
-		trigger.eventTrigger.put(EventTriggerArg.TARGET_PLAYER, TargetPlayer.SELF);
-		trigger.eventTrigger.put(EventTriggerArg.RACE, "TOTEM");
+		trigger.setEventTrigger(new EventTriggerDesc(BeforeMinionSummonedTrigger.class));
+		trigger.getEventTrigger().put(EventTriggerArg.TARGET_PLAYER, TargetPlayer.SELF);
+		trigger.getEventTrigger().put(EventTriggerArg.RACE, "TOTEM");
 
-		trigger.spell = new SpellDesc(AddActorEffectsToTargetActorSpell.create(spellTarget.getReference(), EntityReference.EVENT_TARGET));
+		trigger.setSpell(new SpellDesc(AddActorEffectsToTargetActorSpell.create(spellTarget.getReference(), EntityReference.EVENT_TARGET)));
 		SpellDesc newTotems = AddEnchantmentSpell.create(EntityReference.FRIENDLY_PLAYER, trigger);
 
 		Stream.of(existingTotems, newTotems)

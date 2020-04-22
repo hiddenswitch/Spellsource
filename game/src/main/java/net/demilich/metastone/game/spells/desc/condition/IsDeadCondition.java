@@ -7,6 +7,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
+/**
+ * {@code true} if the {@code target} {@link Entity#isDestroyed()}.
+ */
 public class IsDeadCondition extends Condition {
 
 	public IsDeadCondition(ConditionDesc desc) {
@@ -15,18 +18,11 @@ public class IsDeadCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		EntityReference entityReference = (EntityReference) desc.get(ConditionArg.TARGET);
-		Entity entity = null;
-		if (entityReference == null) {
-			entity = target;
-		} else {
-			List<Entity> entities = context.resolveTarget(player, source, entityReference);
-			if (entities == null || entities.isEmpty()) {
-				return false;
-			}
-			entity = entities.get(0);
-		}
-		return entity.isDestroyed();
+		return target.isDestroyed();
 	}
 
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
+	}
 }

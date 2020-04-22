@@ -1,30 +1,16 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 
-public class WeaponDestroyedEvent extends GameEvent {
-
-	private final Weapon weapon;
+/**
+ * The player destroyed their weapon.
+ */
+public class WeaponDestroyedEvent extends BasicGameEvent {
 
 	public WeaponDestroyedEvent(GameContext context, Weapon weapon) {
-		super(context, weapon.getOwner(), -1);
-		this.weapon = weapon;
+		super(GameEvent.EventTypeEnum.WEAPON_DESTROYED, context, weapon, weapon.getOwner(), -1);
 	}
-
-	@Override
-	public Entity getEventTarget() {
-		return getWeapon();
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.WEAPON_DESTROYED;
-	}
-
-	public Weapon getWeapon() {
-		return weapon;
-	}
-
 }

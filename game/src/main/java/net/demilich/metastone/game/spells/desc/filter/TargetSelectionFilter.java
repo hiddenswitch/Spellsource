@@ -13,9 +13,9 @@ public class TargetSelectionFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		Card card = entity.getSourceCard();
+		var card = entity.getSourceCard();
 
-		TargetSelection targetSelection = (TargetSelection) getDesc().get(EntityFilterArg.TARGET_SELECTION);
+		var targetSelection = (TargetSelection) getDesc().get(EntityFilterArg.TARGET_SELECTION);
 
 		if (targetSelection == null) {
 			targetSelection = TargetSelection.NONE;
@@ -23,6 +23,8 @@ public class TargetSelectionFilter extends EntityFilter {
 
 		if (card.hasBattlecry()) {
 			return card.getDesc().getBattlecry().getTargetSelection() == targetSelection;
-		} else return card.getTargetSelection() == targetSelection;
+		} else {
+			return card.getTargetSelection() == targetSelection;
+		}
 	}
 }

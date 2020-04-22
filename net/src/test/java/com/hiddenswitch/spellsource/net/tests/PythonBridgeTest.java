@@ -52,7 +52,7 @@ public class PythonBridgeTest {
 			"# 2x (7) Clash!\n" +
 			"# 2x (7) Landsieged Drake\n" +
 			"# 2x (7) Unstable Artifact\n" +
-			"# 1x (8) Headless Horseman, Revengeance\n" +
+			"# 1x (8) Maskless Manhorse, Revengeance\n" +
 			"# 1x (9) Gor'thal the Ravager\n" +
 			"# 1x (10) Raid Boss Gnaxx\n" +
 			"# 1x (10) Sorceress Eka\n" +

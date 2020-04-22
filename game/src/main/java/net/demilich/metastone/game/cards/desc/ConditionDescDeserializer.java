@@ -23,6 +23,7 @@ public class ConditionDescDeserializer extends DescDeserializer<ConditionDesc, C
 		ctx.add(ConditionArg.VALUE2, ParseValueType.VALUE);
 		ctx.add(ConditionArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
 		ctx.add(ConditionArg.TARGET, ParseValueType.TARGET_REFERENCE);
+		ctx.add(ConditionArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(ConditionArg.OPERATION, ParseValueType.OPERATION);
 		ctx.add(ConditionArg.INVERT, ParseValueType.BOOLEAN);
 		ctx.add(ConditionArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);

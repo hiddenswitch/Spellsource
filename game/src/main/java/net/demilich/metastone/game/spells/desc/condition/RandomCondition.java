@@ -10,7 +10,7 @@ import net.demilich.metastone.game.logic.GameLogic;
  * <p>
  * Used to simulate flipping a coin or "50% chance" effects.
  */
-public class RandomCondition extends Condition {
+public final class RandomCondition extends Condition {
 
 	public RandomCondition(ConditionDesc desc) {
 		super(desc);
@@ -21,4 +21,8 @@ public class RandomCondition extends Condition {
 		return context.getLogic().randomBool();
 	}
 
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
 }

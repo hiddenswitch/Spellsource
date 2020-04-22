@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class WhereverTheyAreEnchantment extends Enchantment {
 	private static Logger LOGGER = LoggerFactory.getLogger(WhereverTheyAreEnchantment.class);
 
-	private String cardId;
+	private final String cardId;
 
 	public WhereverTheyAreEnchantment(String cardId, SpellDesc desc, Card sourceCard) {
 		super();

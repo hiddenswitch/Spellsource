@@ -13,7 +13,7 @@
       "class": "ShuffleMinionToDeckSpell",
       "target": "SPELL_TARGET",
       "spell": {
-        "class": "custom.AddTriggerToCardSpell",
+        "class": "AddEnchantmentSpell",
         "target": "OUTPUT",
         "trigger": {
           "eventTrigger": {
@@ -33,8 +33,7 @@
               }
             ]
           }
-        },
-        "attribute": "PASSIVE_TRIGGERS"
+        }
       },
       "targetPlayer": "OWNER"
     }

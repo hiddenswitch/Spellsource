@@ -1,22 +1,17 @@
 package net.demilich.metastone.game.events;
 
-import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 
+/**
+ * A card was roasted (discarded from the deck).
+ * <p>
+ * Roasts cannot be cancelled the same way discards can.
+ */
 public final class RoastEvent extends DiscardEvent {
+
 	public RoastEvent(GameContext context, int playerId, Card card) {
-		super(context, playerId, card);
-	}
-
-	@Override
-	public GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ROASTED;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ROASTED, context, playerId, card);
 	}
 
 	@Override

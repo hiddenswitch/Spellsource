@@ -22,9 +22,9 @@ import java.util.List;
  * Battlecry actions occur when {@link net.demilich.metastone.game.entities.Actor} entities are played from cards and
  * have battlecries. A battlecry is a possibly targeted effect.
  */
-public final class BattlecryAction extends GameAction {
+public final class OpenerAction extends GameAction {
 
-	public static final BattlecryAction NONE = new BattlecryAction(NullSpell.create());
+	public static final OpenerAction NONE = new OpenerAction(NullSpell.create());
 	private static final String BATTLECRY_NAME = "Opener";
 	private final SpellDesc spell;
 	private Condition condition;
@@ -41,20 +41,20 @@ public final class BattlecryAction extends GameAction {
 	 * @param targetSelection The target selection to make.
 	 * @return An instance
 	 */
-	public static BattlecryAction createBattlecry(SpellDesc spell, TargetSelection targetSelection) {
-		BattlecryAction battlecry = new BattlecryAction(spell);
+	public static OpenerAction createBattlecry(SpellDesc spell, TargetSelection targetSelection) {
+		OpenerAction battlecry = new OpenerAction(spell);
 		battlecry.setTargetRequirement(targetSelection);
 		return battlecry;
 	}
 
-	protected BattlecryAction(SpellDesc spell) {
+	protected OpenerAction(SpellDesc spell) {
 		this.spell = spell;
 		setActionType(ActionType.BATTLECRY);
 	}
 
 	@Override
-	public BattlecryAction clone() {
-		return (BattlecryAction) super.clone();
+	public OpenerAction clone() {
+		return (OpenerAction) super.clone();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public final class BattlecryAction extends GameAction {
 	 * @param context The game context
 	 * @param player  The casting player
 	 * @return {@code true} if this battlecry can be executed <b>generally</b> (if it will even prompt the user for
-	 * 		targeting).
+	 * targeting).
 	 */
 	public boolean canBeExecuted(GameContext context, Player player) {
 		if (getCondition() == null) {
@@ -155,10 +155,10 @@ public final class BattlecryAction extends GameAction {
 
 	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof BattlecryAction)) {
+		if (!(other instanceof OpenerAction)) {
 			return false;
 		}
-		BattlecryAction rhs = (BattlecryAction) other;
+		OpenerAction rhs = (OpenerAction) other;
 		return new EqualsBuilder()
 				.appendSuper(super.equals(other))
 				.append(spell, rhs.spell)

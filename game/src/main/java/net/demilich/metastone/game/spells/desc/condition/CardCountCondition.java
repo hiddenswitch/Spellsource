@@ -10,7 +10,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
  * Counts the number of cards in the player's hand, and evalutes to {@code true} if the count equals the {@link
  * ConditionArg#VALUE}.
  * <p>
- * {@link ConditionArg#FILTER} is used to filter the cards counted.; or, if not specified, {@link
+ * {@link ConditionArg#FILTER} is used to filter the cards counted; or, if not specified, {@link
  * ConditionArg#CARD_FILTER} is used; or the total hand count is used.
  */
 public class CardCountCondition extends CountCondition {

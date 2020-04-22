@@ -288,7 +288,7 @@ public class SoulseekerTests extends TestBase {
 			assertEquals(player.getMinions().size(), 0);
 			context.endTurn();
 			assertEquals(player.getMinions().size(), 3);
-			assertFalse(player.getMinions().get(0).canAttackThisTurn());
+			assertFalse(player.getMinions().get(0).canAttackThisTurn(context));
 		});
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_dormant_spirits");

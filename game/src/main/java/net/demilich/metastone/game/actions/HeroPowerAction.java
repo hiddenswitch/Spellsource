@@ -17,14 +17,9 @@ import java.io.Serializable;
 /**
  * Indicates an action that is a hero power card.
  */
-public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
+public final class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
 
 	private final String choiceCardId;
-
-	private HeroPowerAction() {
-		choiceCardId = null;
-		setActionType(ActionType.HERO_POWER);
-	}
 
 	public HeroPowerAction(SpellDesc spell, Card card, TargetSelection targetRequirement, Card chosenCard) {
 		super(spell, card, targetRequirement);
@@ -62,7 +57,7 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 
 		innerExecute(context, playerId);
 		power.markUsed();
-		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
+		context.getLogic().fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
 	@Override

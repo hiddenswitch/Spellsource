@@ -1,20 +1,13 @@
 package net.demilich.metastone.game.entities;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
-import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.Zones;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -24,34 +17,27 @@ import java.util.List;
  * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON}),
  * {@link net.demilich.metastone.game.events.BoardChangedEvent} will be raised.
  */
-public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
+public abstract class Actor extends Entity {
 
-	private Card sourceCard;
-	private List<Enchantment> enchantments = new ArrayList<>();
-	private CardCostModifier cardCostModifier;
-	private int frozenDeathrattlesSize;
-
-	public Actor(Card sourceCard) {
-		this.setName(sourceCard != null ? sourceCard.getName() : null);
-		this.sourceCard = sourceCard;
+	public Actor() {
 	}
 
-	@Override
-	public void addDeathrattle(SpellDesc deathrattleSpell) {
-		if (!hasAttribute(Attribute.DEATHRATTLES)) {
-			setAttribute(Attribute.DEATHRATTLES, new ArrayList<SpellDesc>());
+	/**
+	 * Refreshes the number of attacks an {@link Actor} has, typically to 1 or the number of {@link Attribute#WINDFURY}
+	 * attacks if the actor has Windfury.
+	 *
+	 */
+	public void refreshAttacksPerRound() {
+		int attacks = 1;
+		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
+			attacks = GameLogic.MEGA_WINDFURY_ATTACKS;
+		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
+			attacks = GameLogic.WINDFURY_ATTACKS;
 		}
-		if (getDeathrattles().size() < GameLogic.MAX_DEATHRATTLES) {
-			getDeathrattles().add(deathrattleSpell);
-		}
+		setAttribute(Attribute.NUMBER_OF_ATTACKS, attacks);
 	}
 
-	@Override
-	public void addEnchantment(Enchantment enchantment) {
-		enchantments.add(enchantment);
-	}
-
-	public boolean canAttackThisTurn() {
+	public boolean canAttackThisTurn(GameContext context) {
 		if (hasAttribute(Attribute.CANNOT_ATTACK)
 				|| hasAttribute(Attribute.AURA_CANNOT_ATTACK)) {
 			return false;
@@ -66,52 +52,16 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		if (hasAttribute(Attribute.PERMANENT)) {
 			return false;
 		}
-		return getAttack() > 0 && ((getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + getAttributeValue(Attribute.EXTRA_ATTACKS)) > 0 || hasAttribute(Attribute.UNLIMITED_ATTACKS));
+		return hasNonZeroAttack(context) && ((getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + getAttributeValue(Attribute.EXTRA_ATTACKS)) > 0 || hasAttribute(Attribute.UNLIMITED_ATTACKS));
 	}
 
-	@Override
-	public void clearEnchantments() {
-		this.enchantments = new ArrayList<>();
+	protected boolean hasNonZeroAttack(GameContext context) {
+		return getAttack() > 0;
 	}
 
 	@Override
 	public Actor clone() {
-		Actor clone = (Actor) super.clone();
-		clone.attributes = this.attributes.clone();
-		clone.clearEnchantments();
-		for (Enchantment trigger : getEnchantments()) {
-			clone.enchantments.add(trigger.clone());
-		}
-		if (hasAttribute(Attribute.DEATHRATTLES)
-				|| (getDeathrattles().size() > 0)) {
-			clone.getAttributes().remove(Attribute.DEATHRATTLES);
-			for (SpellDesc deathrattleSpell : getDeathrattles()) {
-				SpellDesc deathrattleClone = deathrattleSpell.clone();
-				clone.addDeathrattle(deathrattleClone);
-			}
-		}
-		if (hasAttribute(Attribute.BATTLECRY)
-				|| (getDeathrattles().size() > 0)) {
-			clone.getAttributes().remove(Attribute.BATTLECRY);
-			for (BattlecryDesc battlecry : getBattlecries()) {
-				BattlecryDesc battlecryClone = battlecry.clone();
-				clone.addBattlecry(battlecryClone);
-			}
-		}
-
-		if (cardCostModifier != null) {
-			clone.cardCostModifier = cardCostModifier.clone();
-		}
-
-		updateTriggers();
-		return clone;
-	}
-
-	public void addBattlecry(BattlecryDesc battlecry) {
-		if (!hasAttribute(Attribute.BATTLECRY)) {
-			setAttribute(Attribute.BATTLECRY, new ArrayList<BattlecryDesc>());
-		}
-		getBattlecries().add(battlecry);
+		return (Actor) super.clone();
 	}
 
 	public int getArmor() {
@@ -151,32 +101,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		return getAttributeValue(Attribute.BASE_HP);
 	}
 
-	@SuppressWarnings("unchecked")
-	@NotNull
-	public List<BattlecryDesc> getBattlecries() {
-		Object attribute = getAttribute(Attribute.BATTLECRY);
-		if (attribute == null) {
-			return new ArrayList<>();
-		} else {
-			return (List<BattlecryDesc>) attribute;
-		}
-	}
-
-	public CardCostModifier getCardCostModifier() {
-		return cardCostModifier;
-	}
-
-	@SuppressWarnings("unchecked")
-	@NotNull
-	public List<SpellDesc> getDeathrattles() {
-		Object attribute = getAttribute(Attribute.DEATHRATTLES);
-		if (attribute == null) {
-			return new ArrayList<>();
-		} else {
-			return (List<SpellDesc>) attribute;
-		}
-	}
-
 	/**
 	 * The current number of hitpoints this actor has.
 	 *
@@ -197,22 +121,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 				+ getAttributeValue(Attribute.AURA_HP_BONUS);
 	}
 
-	@Override
-	public Card getSourceCard() {
-		return sourceCard;
-	}
-
-	@Override
-	public List<Enchantment> getEnchantments() {
-		return new ArrayList<>(enchantments);
-	}
-
-	@Override
-	public boolean hasEnchantment() {
-		return enchantments.size() != 0;
-	}
-
-
 	/**
 	 * Indicates whether or not the actor is mortally wounded.
 	 * <p>
@@ -221,7 +129,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	 * already dead minions before a {@link GameLogic#endOfSequence()} has been called.
 	 *
 	 * @return {@code true} if the minion's health is less than 1 or if the minion has the {@link Attribute#DESTROYED}
-	 * 		attribute.
+	 * attribute.
 	 */
 	@Override
 	public boolean isDestroyed() {
@@ -267,23 +175,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		setAttribute(Attribute.BASE_HP, value);
 	}
 
-	public void setBattlecry(BattlecryDesc battlecry) {
-		if (battlecry != null) {
-			if (!hasAttribute(Attribute.BATTLECRY)) {
-				setAttribute(Attribute.BATTLECRY, new ArrayList<BattlecryDesc>());
-			}
-			if (getBattlecries().size() == 0) {
-				getBattlecries().add(battlecry);
-			} else {
-				getBattlecries().set(0, battlecry);
-			}
-		}
-	}
-
-	public void setCardCostModifier(CardCostModifier cardCostModifier) {
-		this.cardCostModifier = cardCostModifier;
-	}
-
 	public void setHp(int value) {
 		setAttribute(Attribute.HP, value);
 	}
@@ -299,19 +190,11 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	@Override
 	public void setOwner(int ownerIndex) {
 		super.setOwner(ownerIndex);
-		updateTriggers();
 	}
 
 	@Override
 	public void setId(int id) {
 		super.setId(id);
-		updateTriggers();
-	}
-
-	private void updateTriggers() {
-		for (Enchantment trigger : enchantments) {
-			trigger.setHost(this);
-		}
 	}
 
 	public void setRace(String race) {
@@ -345,11 +228,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	}
 
 	@Override
-	public List<SpellDesc> getDeathrattleEnchantments() {
-		return getDeathrattles();
-	}
-
-	@Override
 	public Actor getCopy() {
 		Actor clone = this.clone();
 		clone.setEntityLocation(EntityLocation.UNASSIGNED);
@@ -357,50 +235,17 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		clone.setOwner(IdFactory.UNASSIGNED);
 		clone.getAttributes().put(Attribute.COPIED_FROM, this.getReference());
 		clone.getAttributes().remove(Attribute.TRANSFORM_REFERENCE);
-		// Clear aura buffs when copying an actor
-		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
-		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
-		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
-		clone.getAttributes().remove(Attribute.AURA_TAUNT);
-		clone.getAttributes().remove(Attribute.AURA_STEALTH);
-		clone.getAttributes().remove(Attribute.AURA_CANNOT_ATTACK);
-		clone.getAttributes().remove(Attribute.AURA_CANNOT_ATTACK_HEROES);
-		clone.getAttributes().remove(Attribute.AURA_CARD_ID);
-		clone.getAttributes().remove(Attribute.AURA_CHARGE);
-		clone.getAttributes().remove(Attribute.AURA_ECHO);
-		clone.getAttributes().remove(Attribute.AURA_IMMUNE);
-		clone.getAttributes().remove(Attribute.AURA_INVOKE);
-		clone.getAttributes().remove(Attribute.AURA_LIFESTEAL);
-		clone.getAttributes().remove(Attribute.AURA_POISONOUS);
-		clone.getAttributes().remove(Attribute.AURA_RUSH);
-		clone.getAttributes().remove(Attribute.AURA_WINDFURY);
-		clone.getAttributes().remove(Attribute.AURA_IMMUNE_WHILE_ATTACKING);
-		clone.getAttributes().remove(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
-		clone.getAttributes().remove(Attribute.AURA_SPELL_DAMAGE);
-		clone.getAttributes().remove(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
-		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
+		// Clear aura attributes when copying an actor
+		for (var auraAttribute : Attribute.getAuraAttributes()) {
+			clone.getAttributes().remove(auraAttribute);
+		}
 		return clone;
 	}
 
 	/**
-	 * Indicates that all the deathrattles currently on this actor should be frozen, i.e., they are intrinsic to this
-	 * actor's text.
+	 * Gets the zones where the {@link CardDesc#getTrigger()} and {@link CardDesc#getTriggers()} are active by default.
+	 *
+	 * @return
 	 */
-	public void freezeDeathrattles() {
-		if (getAttributes().get(Attribute.DEATHRATTLES) instanceof Boolean) {
-			frozenDeathrattlesSize = 0;
-			return;
-		}
-		frozenDeathrattlesSize = getDeathrattles().size();
-	}
-
-	/**
-	 * Removes the deathrattles that were not frozen, i.e., added as part of other effects.
-	 */
-	@Override
-	public void clearAddedDeathrattles() {
-		for (int i = getDeathrattles().size() - 1; i >= frozenDeathrattlesSize; i--) {
-			getDeathrattles().remove(i);
-		}
-	}
+	public abstract Zones[] getDefaultActiveTriggerZones();
 }

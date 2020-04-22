@@ -5,6 +5,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 
+/**
+ * {@code true} if the player has {@link GameLogic#MAX_MANA} mana.
+ */
 public class ManaMaxedCondition extends Condition {
 
 	public ManaMaxedCondition(ConditionDesc desc) {
@@ -16,4 +19,8 @@ public class ManaMaxedCondition extends Condition {
 		return (player.getMaxMana() >= GameLogic.MAX_MANA || player.getMana() >= GameLogic.MAX_MANA);
 	}
 
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
+	}
 }

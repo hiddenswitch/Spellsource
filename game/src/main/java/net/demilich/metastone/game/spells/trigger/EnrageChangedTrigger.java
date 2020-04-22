@@ -16,13 +16,13 @@ public class EnrageChangedTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		return event.getEventTarget() == host;
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		return event.getTarget() == host;
 	}
 
 	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.ENRAGE_CHANGED;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.ENRAGE_CHANGED;
 	}
 
 }

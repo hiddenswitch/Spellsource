@@ -9,7 +9,7 @@
   "condition": {
     "class": "OrCondition"
   },
-  "passiveAuras": [
+  "auras": [
     {
       "class": "BuffAura",
       "target": "FRIENDLY_MINIONS",

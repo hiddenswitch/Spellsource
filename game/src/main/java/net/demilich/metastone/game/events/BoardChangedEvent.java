@@ -1,22 +1,15 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
-public class BoardChangedEvent extends GameEvent {
+/**
+ * Fires whenever the board may have changed.
+ */
+public class BoardChangedEvent extends BasicGameEvent {
 
 	public BoardChangedEvent(GameContext context) {
-		super(context, -1, -1);
+		super(GameEvent.EventTypeEnum.BOARD_CHANGED, context, -1, -1);
 	}
-
-	@Override
-	public Entity getEventTarget() {
-		return null;
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.BOARD_CHANGED;
-	}
-
 }

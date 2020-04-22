@@ -11,13 +11,10 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  * behave as though the entity being compared (typically the left hand side of the comparison) is also every race
  * specified in {@link net.demilich.metastone.game.spells.desc.aura.AuraArg#RACES}.
  */
-public final class MenagerieMogulAura extends Aura {
+public final class MenagerieMogulAura extends EffectlessAura {
 
 	public MenagerieMogulAura(AuraDesc desc) {
 		super(desc);
-		setDesc(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 
 	public String[] getRaces() {

@@ -5,11 +5,13 @@ import co.paralleluniverse.strands.SuspendableRunnable;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.cards.test.TestCardResources;
+import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import com.hiddenswitch.spellsource.client.models.CardType;
@@ -20,6 +22,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -90,7 +93,7 @@ public class TestBase {
 		context.getLogic().endOfSequence();
 	}
 
-	protected static void assertAdapted(String name, Minion minion) {
+	protected static void assertAdapted(String name, Minion minion, GameContext context) {
 		if (name.equals("Crackling Shield")) {
 			assertTrue(minion.hasAttribute(Attribute.DIVINE_SHIELD));
 		} else if (name.equals("Flaming Claws")) {
@@ -100,8 +103,7 @@ public class TestBase {
 		} else if (name.equals("Liquid Membrane")) {
 			assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
 		} else if (name.equals("Living Spores")) {
-			assertNotNull(minion.getDeathrattles());
-			assertEquals(minion.getDeathrattles().size(), 1);
+			assertEquals(context.getLogic().getAftermaths(minion).count(), 1L);
 		} else if (name.equals("Massive")) {
 			assertTrue(minion.hasAttribute(Attribute.TAUNT));
 		} else if (name.equals("Poison Spit")) {
@@ -116,9 +118,9 @@ public class TestBase {
 		}
 	}
 
-	protected static void assertNotAdapted(String name, Minion minion) {
+	protected static void assertNotAdapted(String name, Minion minion, GameContext context) {
 		try {
-			assertAdapted(name, minion);
+			assertAdapted(name, minion, context);
 		} catch (AssertionError ex) {
 			return;
 		}
@@ -126,7 +128,7 @@ public class TestBase {
 	}
 
 	protected static void overrideMissilesTrigger(GameContext context, Entity source, Entity target) {
-		Enchantment enchantment = (Enchantment) context.getTriggersAssociatedWith(source.getReference()).get(0);
+		Enchantment enchantment = (Enchantment) context.getLogic().getActiveTriggers(source.getReference()).get(0);
 		SpellDesc spell = enchantment.getSpell().clone();
 		spell.remove(SpellArg.RANDOM_TARGET);
 		spell.setTarget(target.getReference());
@@ -173,23 +175,23 @@ public class TestBase {
 		return handle;
 	}
 
-	protected static OverrideHandle<EntityReference> overrideBattlecry(GameContext context, Player player, Function<List<BattlecryAction>, GameAction> battlecry) {
+	protected static OverrideHandle<EntityReference> overrideBattlecry(GameContext context, Player player, Function<List<OpenerAction>, GameAction> battlecry) {
 		Behaviour overriden = Mockito.spy(context.getBehaviours().get(player.getId()));
 		context.setBehaviour(player.getId(), overriden);
 		OverrideHandle<EntityReference> handle = new OverrideHandle<>();
 		Mockito.doAnswer(invocation -> {
 			List<GameAction> actions = invocation.getArgument(2);
-			if (actions.stream().allMatch(a -> a instanceof BattlecryAction)
+			if (actions.stream().allMatch(a -> a instanceof OpenerAction)
 					&& !handle.stopped.get()) {
-				List<BattlecryAction> battlecryActions = new ArrayList<>();
+				List<OpenerAction> openerActions = new ArrayList<>();
 
 				if (handle.get() != null
-						&& battlecryActions.stream().anyMatch(ba -> ba.getTargetReference().equals(handle.get()))) {
-					return battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(handle.get())).findFirst().orElseThrow(AssertionError::new);
+						&& openerActions.stream().anyMatch(ba -> ba.getTargetReference().equals(handle.get()))) {
+					return openerActions.stream().filter(ba -> ba.getTargetReference().equals(handle.get())).findFirst().orElseThrow(AssertionError::new);
 				}
 
-				actions.forEach(a -> battlecryActions.add((BattlecryAction) a));
-				BattlecryAction result = (BattlecryAction) battlecry.apply(battlecryActions);
+				actions.forEach(a -> openerActions.add((OpenerAction) a));
+				OpenerAction result = (OpenerAction) battlecry.apply(openerActions);
 				handle.set(result.getTargetReference());
 				return result;
 			} else {
@@ -223,6 +225,11 @@ public class TestBase {
 	public static <T extends Card> T receiveCard(GameContext context, Player player, String cardId) {
 		@SuppressWarnings("unchecked")
 		T card = (T) CardCatalogue.getCardById(cardId);
+		context.getLogic().receiveCard(player.getId(), card);
+		return card;
+	}
+
+	public static <T extends Card> T receiveCard(GameContext context, Player player, T card) {
 		context.getLogic().receiveCard(player.getId(), card);
 		return card;
 	}
@@ -279,6 +286,25 @@ public class TestBase {
 				throwableClass.getSimpleName());
 		fail(new AssertionError(message).getMessage());
 		return null;
+	}
+
+	public static Card receive(GameContext context, Player player, int attack, int hp, int manaCost, Attribute... attributes) {
+		CardDesc desc = new CardDesc();
+		desc.setId(context.getLogic().generateCardId());
+		desc.setName("Test Minion");
+		desc.setRarity(Rarity.FREE);
+		desc.setBaseAttack(attack);
+		desc.setBaseHp(hp);
+		desc.setType(CardType.MINION);
+		desc.setHeroClass(HeroClass.ANY);
+		desc.setAttributes(new AttributeMap());
+		desc.setBaseManaCost(manaCost);
+		for (Attribute gameTag : attributes) {
+			desc.getAttributes().put(gameTag, true);
+		}
+		var card = desc.create();
+		context.addTempCard(card);
+		return receiveCard(context, player, card.clone());
 	}
 
 	@FunctionalInterface
@@ -517,12 +543,12 @@ public class TestBase {
 
 	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player) {
-		context.performAction(player.getId(), player.getHero().getHeroPower().play());
+		context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 	}
 
 	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player, EntityReference target) {
-		PlayCardAction action = player.getHero().getHeroPower().play();
+		PlayCardAction action = player.getHeroPowerZone().get(0).play();
 		action.setTargetReference(target);
 		context.performAction(player.getId(), action);
 	}
@@ -575,6 +601,9 @@ public class TestBase {
 	protected static Minion playMinionCard(GameContext context, Player player, Card card) {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
+		}
+		if (card.getCardType() != CardType.MINION) {
+			throw new AssertionError(String.format("cannot PlayMinionCard on non-minion card %s", card));
 		}
 
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();

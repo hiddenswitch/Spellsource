@@ -54,11 +54,11 @@ public final class CreationSpell extends Spell {
 		nextSpell.put(SpellArg.CARDS, cardsLeft);
 		nextSpell.put(SpellArg.VALUE, newValue);
 		EnchantmentDesc nextCard = new EnchantmentDesc();
-		nextCard.maxFires = 1;
-		nextCard.spell = nextSpell;
+		nextCard.setMaxFires(1);
+		nextCard.setSpell(nextSpell);
 		EventTriggerDesc eventTrigger = CardPlayedTrigger.create();
 		eventTrigger.put(EventTriggerArg.HOST_TARGET_TYPE, TargetType.IGNORE_OTHER_TARGETS);
-		nextCard.eventTrigger = eventTrigger;
+		nextCard.setEventTrigger(eventTrigger);
 		SpellUtils.castChildSpell(context, player, AddEnchantmentSpell.create(nextCard), source, card);
 	}
 }

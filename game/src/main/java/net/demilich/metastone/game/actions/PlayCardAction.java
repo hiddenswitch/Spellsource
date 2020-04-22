@@ -103,15 +103,10 @@ public abstract class PlayCardAction extends GameAction {
 		if (card.hasAttribute(Attribute.INVOKED)) {
 			// Increment the number of invoked cards that were played
 			player.modifyAttribute(Attribute.INVOKED, 1);
-			context.fireGameEvent(new InvokedEvent(context, playerId, card, card.getAttributeValue(Attribute.INVOKED)));
+			context.getLogic().fireGameEvent(new InvokedEvent(context, playerId, card, card.getAttributeValue(Attribute.INVOKED)));
 		}
 
-		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			card.getDeathrattleEnchantments().clear();
-			card.getBattlecryEnchantments().clear();
-		}
-
-		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, card.getReference()));
+		context.getLogic().fireGameEvent(new AfterCardPlayedEvent(context, playerId, card.getReference()));
 		context.setLastCardPlayedBeforeCurrentSequence(playerId, card.getReference());
 		if (card.getZone() != Zones.GRAVEYARD || card.getZone() != Zones.REMOVED_FROM_PLAY) {
 			context.getLogic().removeCard(card);
@@ -138,7 +133,7 @@ public abstract class PlayCardAction extends GameAction {
 	public abstract void innerExecute(GameContext context, int playerId);
 
 	@Override
-	public Entity getSource(GameContext context) {
+	public Card getSource(GameContext context) {
 		return (Card) context.resolveSingleTarget(getSourceReference());
 	}
 

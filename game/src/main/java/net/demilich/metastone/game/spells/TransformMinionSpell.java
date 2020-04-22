@@ -20,7 +20,7 @@ import java.util.Map;
  * Transforms the {@code target} minion into the {@link SpellArg#CARD} or the <b>source card</b> of the entity pointed
  * to by {@link SpellArg#SECONDARY_TARGET}.
  *
- * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(SpellDesc, Minion, Minion) for the complete rules on
+ * @see GameLogic#transformMinion(SpellDesc, Entity, Minion, Minion, boolean) for the complete rules on
  * transformations.
  */
 public class TransformMinionSpell extends Spell {
@@ -72,7 +72,7 @@ public class TransformMinionSpell extends Spell {
 			LOGGER.warn("onCast {} {}: Card {} is not a minion card, skipping transform", context.getGameId(), source, card);
 			return;
 		}
-		context.getLogic().transformMinion(desc, (Minion) target, card.summon());
+		context.getLogic().transformMinion(desc, source, (Minion) target, card.minion(), true);
 	}
 }
 
