@@ -10,7 +10,8 @@
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "TurnEndTrigger"
+        "class": "TurnEndTrigger",
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "DrawCardSpell",
