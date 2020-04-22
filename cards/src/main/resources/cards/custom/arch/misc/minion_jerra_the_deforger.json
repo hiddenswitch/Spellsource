@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever your weapon is destroyed, deal 2 damage to all enemies.",
+  "description": "Whenever your item is destroyed, deal 2 damage to all enemies.",
   "trigger": {
     "eventTrigger": {
       "class": "WeaponDestroyedTrigger",
