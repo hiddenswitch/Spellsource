@@ -7,7 +7,7 @@
     "baseHp": 3,
     "rarity": "EPIC",
     "race": "BEAST",
-    "description": "Costs (1) less for each spell cast while in hand. Opener: Add a Lightning Strike to your hand.",
+    "description": "Costs (1) less for each spell cast while in hand. Opener: Receive a Lightning Strike.",
     "passiveTrigger": {
         "eventTrigger": {
             "class": "SpellCastedTrigger",
