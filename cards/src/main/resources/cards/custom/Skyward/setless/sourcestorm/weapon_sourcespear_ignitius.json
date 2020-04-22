@@ -6,7 +6,7 @@
     "damage": 4,
     "durability": 1,
     "rarity": "LEGENDARY",
-    "description": "Aftermath: Destroy all minions. Upgrade your Champion's Skill.",
+    "description": "Aftermath: Destroy all minions. Upgrade your Skill.",
     "deathrattle": {
         "class": "MetaSpell",
         "spells": [
