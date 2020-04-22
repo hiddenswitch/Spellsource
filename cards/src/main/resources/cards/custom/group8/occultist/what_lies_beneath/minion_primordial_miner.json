@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Aftermath: Add [1 Artifact] to your hand. (Increases for each copy of this in your Graveyard)",
+  "description": "Aftermath: Receive [1 random Artifact]. (Increases for each copy of this in your Graveyard)",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "value": {
@@ -53,8 +53,8 @@
         },
         "offset": 1
       },
-      "description1": " Artifact",
-      "description2": " Artifacts"
+      "description1": " random Artifact",
+      "description2": " random Artifacts"
     }
   ]
 }
