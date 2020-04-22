@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Whenever you equip gear, give it +1/+1.",
+  "description": "Whenever you equip an item, give it +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "WeaponEquippedTrigger",
