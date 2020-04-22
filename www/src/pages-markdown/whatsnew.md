@@ -7,6 +7,7 @@ header: true
 
 ### Upcoming Changes
 
+ - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
  - Volatile Wisdom now actually swaps cards. (1697)
  - Knowledge Hoarder now actually has Dash. (1684)
