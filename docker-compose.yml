@@ -307,6 +307,26 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
+#  ikev2:
+#    image: doctorpangloss/ikev2:latest
+#    build:
+#      context: ikev2
+#      dockerfile: Dockerfile
+#    networks:
+#      - web
+#      - backend
+#    ports:
+#      - 500:500/udp
+#      - 4500:4500/udp
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        window: 15s
+#      placement:
+#        constraints:
+#          - node.platform.arch == x86_64
+#          - node.labels.cpu == high
+#          - node.labels.disk == ssd
 volumes:
   mongodata:
   mancenterdata:

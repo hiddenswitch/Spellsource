@@ -920,11 +920,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
-	 * Applies this card's effects (everything except mana cost, attack and HP) to the specified actor. Mutates the
-	 * provided instance.
+	 * Applies the actor's {@link Attribute#RACE} to the specified instance
 	 *
-	 * @param instance An actor to apply effects to
-	 * @return The provided actor.
+	 * @param instance
 	 */
 	public void applyRace(Actor instance) {
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?

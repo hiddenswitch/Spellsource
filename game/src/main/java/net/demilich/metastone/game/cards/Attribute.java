@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.RoastSpell;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -528,7 +529,7 @@ public enum Attribute {
 	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link
 	 * net.demilich.metastone.game.events.GameEvent}.
 	 *
-	 * @see net.demilich.metastone.game.spells.trigger.TriggerManager for the complete rules on event triggering.
+	 * @see GameLogic#fireGameEvent(GameEvent)  for the complete rules on event triggering.
 	 * @see Enchantment for the entity that corresponds to a passive trigger.
 	 */
 	PASSIVE_TRIGGERS,
@@ -1137,7 +1138,7 @@ public enum Attribute {
 	/**
 	 * An override for the entity's description that indicates it has an {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
 	 * <p>
-	 * Contains an array {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc[]}.
+	 * Contains an array of {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc}
 	 */
 	DYNAMIC_DESCRIPTION,
 	/**
