@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
@@ -11,6 +12,34 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
  * {@link net.demilich.metastone.game.logic.GameLogic#setHpAndMaxHp(Actor, int)} effect.
  * <p>
  * Does not trigger off of {@link net.demilich.metastone.game.spells.ModifyAttributeSpell}.
+ * <table>
+ *   <caption>Values at the time of firing</caption>
+ *   <tr>
+ *     <td>Field</td>
+ *     <td>Value</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@link net.demilich.metastone.game.targeting.EntityReference#EVENT_SOURCE}</td>
+ *     <td>{@code null}</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@link net.demilich.metastone.game.targeting.EntityReference#EVENT_TARGET}</td>
+ *     <td>the target of the increase</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#TARGET_PLAYER}</td>
+ *     <td>the owner of the target</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#SOURCE_PLAYER}</td>
+ *     <td>the player that performed the increase</td>
+ *   </tr>
+ *   <tr>
+ *     <td>{@link net.demilich.metastone.game.spells.desc.valueprovider.EventValueProvider}</td>
+ *     <td>the amount {@link net.demilich.metastone.game.cards.Attribute#MAX_HP} was increased</td>
+ *   </tr>
+ * </table>
+ * @see net.demilich.metastone.game.events.MaxHpIncreasedEvent
  */
 public final class MaxHpIncreasedTrigger extends EventTrigger {
 
@@ -24,7 +53,7 @@ public final class MaxHpIncreasedTrigger extends EventTrigger {
 	}
 
 	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.MAX_HP_INCREASED;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.MAX_HP_INCREASED;
 	}
 }

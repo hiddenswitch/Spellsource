@@ -20,7 +20,6 @@ import java.util.Map;
  * <p>
  * For <b>example</b>, place the following as the {@code spell} property in the card JSON for a spell card that should
  * do nothing:
- * <p>
  * <pre>
  *     {
  *         "class": "NullSpell"
