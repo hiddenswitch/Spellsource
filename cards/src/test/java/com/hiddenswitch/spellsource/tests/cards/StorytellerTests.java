@@ -419,6 +419,20 @@ public class StorytellerTests extends TestBase {
 			Minion reducedCost = playMinionCard(context, player, "minion_chained_chimera");
 			assertEquals(player.getMana(), 10 - reducedCost.getSourceCard().getBaseManaCost());
 		});
+
+		// Test if a minion attacks your champion during your turn
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			var attacker = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			context.endTurn();
+			var discounted = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			assertEquals(1, costOf(context, player, discounted));
+			playCard(context, player, "secret_urgent_experiment");
+			assertEquals(1, costOf(context, player, discounted));
+			attack(context, opponent, attacker, player.getHero());
+			assertEquals(1, costOf(context, player, discounted), "urgent experiment never fires during your own turn");
+			assertEquals(player, context.getActivePlayer());
+		});
 	}
 
 	@Test

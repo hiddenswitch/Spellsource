@@ -77,10 +77,10 @@ public final class CopyCardEnchantmentsSpell extends Spell {
 					Actor applyingToActor = (Actor) applyingTo;
 
 					for (EnchantmentDesc enchantmentDesc : triggers) {
-						context.getLogic().addGameEventListener(player, enchantmentDesc.create(), applyingToActor);
+						context.getLogic().addEnchantment(player, enchantmentDesc.create(), source, applyingToActor);
 					}
 					for (AuraDesc aura : auras) {
-						context.getLogic().addGameEventListener(player, aura.create(), applyingToActor);
+						context.getLogic().addEnchantment(player, aura.create(), source, applyingToActor);
 					}
 				}
 			}

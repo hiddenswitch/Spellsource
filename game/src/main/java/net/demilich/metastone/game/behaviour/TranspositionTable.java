@@ -65,7 +65,7 @@ public class TranspositionTable {
 			}
 			for (Entity minion : player.getMinions()) {
 				hash = mergeHashes(hash, hash(minion));
-				hash = mergeHashes(hash, context.getTriggersAssociatedWith(minion.getReference()).size());
+				hash = mergeHashes(hash, context.getLogic().getActiveTriggers(minion.getReference()).size());
 			}
 
 		}

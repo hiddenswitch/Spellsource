@@ -25,6 +25,7 @@ public class EditorTest extends SpellsourceTestBase {
 				client.createUserAccount();
 				client.matchmakeQuickPlay(null);
 				client.play(1);
+				Strand.sleep(100);
 				// Check that the server game context gets edited properly
 				var serverGameContext = getServerGameContext(client.getUserId()).orElseThrow();
 				var envelope = Editor.putCard(new EnvelopeMethodPutCard()

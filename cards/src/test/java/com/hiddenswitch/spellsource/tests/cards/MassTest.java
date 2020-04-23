@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.function.Executable;

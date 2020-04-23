@@ -75,18 +75,7 @@ public class SwapCardsSpell extends Spell {
 		context.getLogic().removeEnchantments(card2);
 
 		for (Entity entity : new Entity[]{card1, card2}) {
-			switch (entity.getZone()) {
-				case HAND:
-					context.getLogic().processPassiveTriggers(context.getPlayer(entity.getOwner()), (Card) entity);
-					context.getLogic().processPassiveAuras(context.getPlayer(entity.getOwner()), (Card) entity);
-					break;
-				case DECK:
-					context.getLogic().processDeckTriggers(context.getPlayer(entity.getOwner()), (Card) entity);
-					break;
-				case BATTLEFIELD:
-					context.getLogic().processBattlefieldEnchantments(context.getPlayer(entity.getOwner()), (Actor) entity);
-					break;
-			}
+			context.getLogic().addEnchantments(context.getPlayer(entity.getOwner()), entity.getSourceCard(), entity.getSourceCard(), entity);
 		}
 	}
 }

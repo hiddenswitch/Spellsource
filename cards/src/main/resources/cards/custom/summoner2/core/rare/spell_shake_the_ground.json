@@ -1,0 +1,57 @@
+{
+  "name": "Shake The Ground",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "RARE",
+  "description": "Deal $3 damage to all minions. Invoke (2): Summon a 5/5 Worm.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "mana": 0,
+      "name": "Don't Invoke",
+      "description": "Just deal $3 damage to all minions.",
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 3
+      }
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "mana": 2,
+      "name": "Unearthed by the Quake",
+      "description": "Additionally summon a 5/5 Worm.",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DamageSpell",
+            "target": "ALL_MINIONS",
+            "value": 3
+          },
+          {
+            "class": "ForceDeathPhaseSpell"
+          },
+          {
+            "class": "SummonSpell",
+            "card": "token_giant_worm"
+          }
+        ]
+      }
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "INVOKE": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

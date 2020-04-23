@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.net.impl.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.net.Accounts;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.Gateway;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.net.impl.WebResult;

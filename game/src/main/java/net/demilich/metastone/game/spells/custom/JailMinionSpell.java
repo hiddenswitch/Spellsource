@@ -56,9 +56,9 @@ public final class JailMinionSpell extends Spell {
 
 		if (desc.containsKey(SpellArg.REVERT_TRIGGER)) {
 			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
-			enchantmentDesc.eventTrigger = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
-			enchantmentDesc.maxFires = 1;
-			enchantmentDesc.spell = resummon;
+			enchantmentDesc.setEventTrigger((EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER));
+			enchantmentDesc.setMaxFires(1);
+			enchantmentDesc.setSpell(resummon);
 			enchant = AddEnchantmentSpell.create(enchantmentDesc);
 		} else {
 			enchant = AddDeathrattleSpell.create(resummon);

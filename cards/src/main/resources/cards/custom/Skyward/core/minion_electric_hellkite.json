@@ -5,9 +5,9 @@
   "heroClass": "AZURE",
   "baseAttack": 3,
   "baseHp": 8,
-  "rarity": "LEGENDARY",
+  "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Whenever this takes damage, deal 3 damage to a random enemy.",
+  "description": "Whenever this takes damage, deal 3 damage ato a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

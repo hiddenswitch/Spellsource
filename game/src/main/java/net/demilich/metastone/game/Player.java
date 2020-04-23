@@ -18,7 +18,6 @@ import net.demilich.metastone.game.spells.DiscoverSpell;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
@@ -45,7 +44,7 @@ import java.util.stream.Collectors;
  * Unusually, the {@link Zones#WEAPON} and {@link Zones#HERO_POWER} zones are located on the {@link Hero} entity
  * retrievable by {@link #getHero()}.
  * <p>
- * More state is discoverable on the {@link GameContext#getEnvironment()} and {@link TriggerManager#getTriggers()}
+ * More state is discoverable on the {@link GameContext#getEnvironment()} and {@link GameContext#getTriggers()}
  * fields.
  * <p>
  * Player entities are the appropriate {@code target} of many effects, especially text that seems to "live on" after a
@@ -125,10 +124,6 @@ public class Player extends Entity implements Serializable {
 		this.graveyard = otherPlayer.getGraveyard().clone();
 		this.setAsideZone = otherPlayer.getSetAsideZone().clone();
 		this.heroZone = otherPlayer.getHeroZone().clone();
-		if (!heroZone.isEmpty()) {
-			heroZone.get(0).setPlayer(this);
-		}
-
 		this.heroPowerZone = otherPlayer.getHeroPowerZone().clone();
 		this.weaponZone = otherPlayer.getWeaponZone().clone();
 		this.mana = otherPlayer.mana;
@@ -184,7 +179,7 @@ public class Player extends Entity implements Serializable {
 	public Player(GameDeck deck, String name) {
 		this();
 		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy(), lookup);
-		this.setHero(deck.getHeroCard().createHero(this));
+		this.setHero(deck.getHeroCard().hero());
 		this.setName(name);
 	}
 
@@ -195,7 +190,7 @@ public class Player extends Entity implements Serializable {
 	 */
 	public Player(String heroClass) {
 		this();
-		this.setHero(HeroClass.getHeroCard(heroClass).createHero(this));
+		this.setHero(HeroClass.getHeroCard(heroClass).hero());
 	}
 
 	/**
@@ -353,7 +348,7 @@ public class Player extends Entity implements Serializable {
 	 * Sets the player's current hero. If a {@link Hero} currently exists in the hero zone, it is removed.
 	 *
 	 * @param hero The hero entity.
-	 * @see GameLogic#changeHero(Player, Hero) for the appropriate hero changing method for spells.
+	 * @see GameLogic#changeHero(Player, Entity, Hero) for the appropriate hero changing method for spells.
 	 */
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
@@ -498,9 +493,9 @@ public class Player extends Entity implements Serializable {
 			case QUEST:
 				return getQuests();
 			case NONE:
-				return EntityZone.empty(getId());
+				return EntityZone.empty(Zones.NONE, getId());
 			case ENCHANTMENT:
-				return EntityZone.empty(getId());
+				return EntityZone.empty(Zones.ENCHANTMENT, getId());
 		}
 		return null;
 	}
@@ -518,7 +513,7 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the hero power zone stored inside the hero entity.
 	 *
 	 * @return The hero power stored by this hero.
-	 * @see GameLogic#changeHero(Player, Hero) for the appropriate way to change heroes.
+	 * @see GameLogic#changeHero(Player, Entity, Hero) for the appropriate way to change heroes.
 	 */
 	public EntityZone<Card> getHeroPowerZone() {
 		return heroPowerZone;
@@ -613,5 +608,9 @@ public class Player extends Entity implements Serializable {
 
 	public Map<Integer, Entity> getLookup() {
 		return lookup;
+	}
+
+	public Weapon getWeapon() {
+		return getWeaponZone().isEmpty() ? null : getWeaponZone().get(0);
 	}
 }

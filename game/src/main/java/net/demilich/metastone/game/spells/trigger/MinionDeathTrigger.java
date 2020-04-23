@@ -40,17 +40,17 @@ public final class MinionDeathTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		KillEvent killEvent = (KillEvent) event;
-		if (killEvent.getVictim().getEntityType() != EntityType.MINION) {
+		if (killEvent.getTarget().getEntityType() != EntityType.MINION) {
 			return false;
 		}
 
-		if (killEvent.getVictim().hasAttribute(Attribute.PERMANENT)) {
+		if (killEvent.getTarget().hasAttribute(Attribute.PERMANENT)) {
 			return false;
 		}
 
-		Minion minion = (Minion) killEvent.getVictim();
+		Minion minion = (Minion) killEvent.getTarget();
 
 		String race = (String) getDesc().get(EventTriggerArg.RACE);
 		if (race != null && !Race.hasRace(event.getGameContext(), minion, race)) {

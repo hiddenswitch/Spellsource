@@ -5,7 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
 /**
- * Evaluates to {@code true} if the {@code player} can summon more minions.
+ * {@code true} if the {@code player} can summon more minions.
  */
 public class CanSummonCondition extends Condition {
 
@@ -16,5 +16,10 @@ public class CanSummonCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		return context.getLogic().canSummonMoreMinions(player);
+	}
+
+	@Override
+	protected boolean targetConditionArgOverridesSuppliedTarget() {
+		return false;
 	}
 }

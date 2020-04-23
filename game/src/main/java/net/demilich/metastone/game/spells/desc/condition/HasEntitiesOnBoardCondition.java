@@ -9,6 +9,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@code true} if all the {@link ConditionArg#CARDS} are on the board. Duplicates are counted.
+ */
 public class HasEntitiesOnBoardCondition extends Condition {
 
 	public HasEntitiesOnBoardCondition(ConditionDesc desc) {
@@ -17,28 +20,17 @@ public class HasEntitiesOnBoardCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		EntityReference entityReference = (EntityReference) desc.get(ConditionArg.TARGET);
-		Entity entity = null;
-		if (entityReference == null) {
-			entity = target;
-		} else {
-			List<Entity> entities = context.resolveTarget(player, entity, entityReference);
-			if (entities == null || entities.isEmpty()) {
-				return false;
-			}
-			entity = entities.get(0);
-		}
-		String[] cardNames = (String[]) desc.get(ConditionArg.CARDS);
+		var cardNames = (String[]) desc.get(ConditionArg.CARDS);
 
 		List<Actor> checkedActors = new ArrayList<Actor>(player.getMinions());
-		if (player.getHero().getWeapon() != null) {
-			checkedActors.add(player.getHero().getWeapon());
+		if (!player.getWeaponZone().isEmpty()) {
+			checkedActors.add(player.getWeaponZone().get(0));
 		}
 		checkedActors.add(player.getHero());
 
-		for (String cardName : cardNames) {
-			boolean check = false;
-			for (Actor actor : checkedActors) {
+		for (var cardName : cardNames) {
+			var check = false;
+			for (var actor : checkedActors) {
 				if (actor.getSourceCard().getCardId().equalsIgnoreCase(cardName)) {
 					check = true;
 					checkedActors.remove(actor);

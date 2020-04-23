@@ -23,6 +23,5 @@ public class AndCondition extends Condition {
 		}
 		return true;
 	}
-
 }
 

@@ -28,8 +28,8 @@ public final class AnobiiSpell extends AddDeathrattleSpell {
 		Entity deathrattleHost = context.resolveSingleTarget(player, source, (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, EntityReference.SELF));
 		Card cocoonCard = SpellUtils.getCard(context, desc);
 		Card originalCard = target.getSourceCard();
-		Minion cocoon = cocoonCard.summon();
-		context.getLogic().transformMinion(desc, (Minion) target, cocoon);
+		Minion cocoon = cocoonCard.minion();
+		context.getLogic().transformMinion(desc, source, (Minion) target, cocoon, true);
 		SpellDesc revertDeathrattle = TransformMinionSpell.create(cocoon.getReference(), originalCard.getCardId(), false);
 		// TODO: This should probably check that the minion isn't a cocoon anymore
 		super.onCast(context, player, AddDeathrattleSpell.create(revertDeathrattle), source, deathrattleHost);

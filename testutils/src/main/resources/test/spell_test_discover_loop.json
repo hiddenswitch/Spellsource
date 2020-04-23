@@ -1,0 +1,23 @@
+{
+  "name": "Test Discover Loop",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "CastCardsSpell"
+    },
+    "cards": [
+      "spell_test_discover_loop",
+      "spell_test_discover_loop",
+      "spell_test_discover_loop"
+    ]
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

@@ -1,13 +1,8 @@
 package com.hiddenswitch.spellsource.net.impl;
 
 import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Condition;
-import co.paralleluniverse.strands.SimpleConditionSynchronizer;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.util.MongoRecord;
 import com.mongodb.MongoCommandException;
 import io.opentracing.Span;
@@ -20,7 +15,6 @@ import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
@@ -29,7 +23,6 @@ import static io.vertx.ext.sync.Sync.streamAdaptor;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 /**

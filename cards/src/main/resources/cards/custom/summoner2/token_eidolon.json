@@ -1,0 +1,16 @@
+{
+  "name": "Eidolon",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Guard",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

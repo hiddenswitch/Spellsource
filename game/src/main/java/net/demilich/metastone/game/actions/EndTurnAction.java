@@ -13,7 +13,7 @@ import java.util.List;
  * This action ends the player's current turn.
  * <p>
  * Sometimes, the action is not available. This is typically due to a pending {@link DiscoverAction} or {@link
- * BattlecryAction}.
+ * OpenerAction}.
  */
 public class EndTurnAction extends GameAction {
 

@@ -1,0 +1,14 @@
+{
+  "name": "Burrower Worm",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

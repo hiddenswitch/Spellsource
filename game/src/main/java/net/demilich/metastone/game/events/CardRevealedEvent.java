@@ -5,32 +5,18 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.HasCard;
 
-public final class CardRevealedEvent extends GameEvent implements HasCard {
+import static com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.REVEAL_CARD;
 
-	private final Card card;
+/**
+ * A card was revealed. Signals to the client to simply render it.
+ * <p>
+ * Fired with {@link net.demilich.metastone.game.spells.RevealCardSpell} and some special spells that need to show cards
+ * one after another, like with {@link }
+ */
+public final class CardRevealedEvent extends CardEvent {
 
 	public CardRevealedEvent(GameContext context, int playerId, Card card) {
-		super(context, playerId, -1);
-		this.card = card;
-	}
-
-	public Card getSourceCard() {
-		return card;
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return getSourceCard();
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.REVEAL_CARD;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
+		super(REVEAL_CARD, true, context, playerId, -1, card);
 	}
 }
 

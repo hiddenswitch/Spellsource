@@ -80,11 +80,11 @@ public class BfsTests {
 		assertContains(nodes, Attribute.BATTLECRY, true);
 		assertContains(nodes, Attribute.SPELL_DAMAGE, 2);
 		assertContains(nodes, CardDescArg.COLLECTIBLE, true);
-		assertContains(nodes, CardDescArg.SET, "TEST");
+		assertContains(nodes, CardDescArg.SETS, "TEST");
 		assertContains(nodes, BattlecryDescArg.TARGET_SELECTION, TargetSelection.MINIONS);
 		assertContains(nodes, CardDescArg.ATTRIBUTES, card.getDesc().getAttributes());
 		assertContains(nodes, CardDescArg.TRIGGERS, card.getDesc().getTrigger());
-		assertContains(nodes, EnchantmentDescArg.EVENT_TRIGGER, card.getDesc().getTrigger().eventTrigger);
+		assertContains(nodes, EnchantmentDescArg.EVENT_TRIGGER, card.getDesc().getTrigger().getEventTrigger());
 
 	}
 

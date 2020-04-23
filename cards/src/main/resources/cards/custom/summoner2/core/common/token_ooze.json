@@ -1,0 +1,13 @@
+{
+  "name": "Ooze",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

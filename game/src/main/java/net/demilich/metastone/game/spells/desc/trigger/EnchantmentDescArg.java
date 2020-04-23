@@ -49,6 +49,10 @@ public enum EnchantmentDescArg {
 	 */
 	NAME,
 	/**
+	 * @see EnchantmentDesc#zones
+	 */
+	ZONES,
+	/**
 	 * @see EnchantmentDesc#activationTriggers
 	 */
 	ACTIVATION_TRIGGERS

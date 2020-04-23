@@ -12,7 +12,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -118,7 +118,6 @@ public class Encode {
 			subComponents.put("triggers", process(desc.getTrigger(), desc.getTriggers(), 0, "CardDesc"));
 			subComponents.put("manaCostModifiers", process(desc.getManaCostModifier(), null, 0, "CardDesc"));
 			subComponents.put("auras", process(desc.getAura(), desc.getAuras(), 0, "CardDesc"));
-			subComponents.put("passiveAuras", process(null, desc.getPassiveAuras(), 0, "CardDesc"));
 			subComponents.put("passiveTriggers", process(desc.getPassiveTrigger(), desc.getPassiveTriggers(), 0, "CardDesc"));
 			subComponents.put("deckTriggers", process(desc.getDeckTrigger(), desc.getDeckTriggers(), 0, "CardDesc"));
 			subComponents.put("gameTriggers", process(null, desc.getGameTriggers(), 0, "CardDesc"));
@@ -211,8 +210,8 @@ public class Encode {
 
 		for (int i = 0; i < size; i++) {
 			EnchantmentDesc desc = linked.get(i);
-			ProcessResults eventTrigger = process(desc.eventTrigger, null, depth, parent);
-			ProcessResults spell = process(desc.spell, null, depth, parent);
+			ProcessResults eventTrigger = process(desc.getEventTrigger(), null, depth, parent);
+			ProcessResults spell = process(desc.getSpell(), null, depth, parent);
 			// Include EnchantmentDesc base object
 			JsonObject record = new JsonObject();
 			record.put("CLASS", "EnchantmentDesc")
@@ -222,12 +221,12 @@ public class Encode {
 					.put("depth", depth)
 					.put("spell", spell.records.get("SpellDesc").get(0).getString("CLASS"))
 					.put("eventTrigger", eventTrigger.records.get("EventTriggerDesc").get(0).getString("CLASS"))
-					.put("countByValue", desc.countByValue)
-					.put("maxFires", desc.maxFires)
-					.put("countUntilCast", desc.countUntilCast)
-					.put("keepAfterTransform", desc.keepAfterTransform)
-					.put("oneTurn", desc.oneTurn)
-					.put("persistentOwner", desc.persistentOwner);
+					.put("countByValue", desc.isCountByValue())
+					.put("maxFires", desc.getMaxFires())
+					.put("countUntilCast", desc.getCountUntilCast())
+					.put("keepAfterTransform", desc.isKeepAfterTransform())
+					.put("oneTurn", desc.isOneTurn())
+					.put("persistentOwner", desc.isPersistentOwner());
 			results.records.put("EnchantmentDesc", record);
 			results.merge(spell);
 			results.merge(eventTrigger);
@@ -236,9 +235,9 @@ public class Encode {
 		return results;
 	}
 
-	public static ProcessResults process(BattlecryDesc single, BattlecryDesc[] multi, int depth, String parent) {
+	public static ProcessResults process(OpenerDesc single, OpenerDesc[] multi, int depth, String parent) {
 		// Custom handling of enchantment desc
-		final LinkedList<BattlecryDesc> linked = link(single, multi);
+		final LinkedList<OpenerDesc> linked = link(single, multi);
 		ProcessResults results = new ProcessResults();
 		results.depth = depth;
 		results.thisType = "BattlecryDesc";
@@ -249,7 +248,7 @@ public class Encode {
 		}
 
 		for (int i = 0; i < size; i++) {
-			BattlecryDesc desc = linked.get(i);
+			OpenerDesc desc = linked.get(i);
 			ProcessResults condition = process(desc.condition, null, depth, parent);
 			ProcessResults spell = process(desc.spell, null, depth, parent);
 			// Include EnchantmentDesc base object

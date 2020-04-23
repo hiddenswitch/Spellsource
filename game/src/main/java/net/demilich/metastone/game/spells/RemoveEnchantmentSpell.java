@@ -39,16 +39,14 @@ public final class RemoveEnchantmentSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, null, source, desc);
 		if (cards.isEmpty()) {
 			if (target.getEntityType() == EntityType.ENCHANTMENT) {
-				// Remove this target
-				Enchantment enchantment = (Enchantment) target;
-				enchantment.onRemove(context);
-				context.getTriggerManager().expire(enchantment);
+				var enchantment = (Enchantment) target;
+				enchantment.expire(context);
 			}
 			return;
 		}
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, Integer.MAX_VALUE);
 		Set<String> cardIds = cards.stream().map(Card::getCardId).collect(Collectors.toSet());
-		for (Trigger e : context.getTriggersAssociatedWith(target.getReference())) {
+		for (Trigger e : context.getLogic().getActiveTriggers(target.getReference())) {
 			if (howMany <= 0) {
 				break;
 			}
@@ -56,12 +54,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 				Enchantment enchantment = (Enchantment) e;
 				if (enchantment.getSourceCard() != null && cardIds.contains(enchantment.getSourceCard().getCardId())) {
 					howMany--;
-					enchantment.onRemove(context);
-					// TODO: What about targeting effects?
-					context.getTriggerManager().expire(enchantment);
-					if (enchantment.getZone() != Zones.ENCHANTMENT) {
-						context.getPlayer(enchantment.getOwner()).getRemovedFromPlay().add(enchantment);
-					}
+					enchantment.expire(context);
 				}
 			}
 		}

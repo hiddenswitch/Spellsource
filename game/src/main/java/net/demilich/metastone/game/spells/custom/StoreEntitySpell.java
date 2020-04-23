@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
  * Here, the {@code target} is the target chosen by the player.
  *
  * @see ReceiveCardsInStorageSpell for a spell that retrieves the {@link net.demilich.metastone.game.cards.Card}
- * 		entities in storage and puts them in your hand.
+ * entities in storage and puts them in your hand.
  * @see net.demilich.metastone.game.spells.desc.source.StoredEntitiesSource for a {@link
- * 		net.demilich.metastone.game.spells.desc.source.CardSource} that lets you access the entities stored by this spell.
+ * net.demilich.metastone.game.spells.desc.source.CardSource} that lets you access the entities stored by this spell.
  */
 public class StoreEntitySpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(StoreEntitySpell.class);
@@ -44,7 +44,7 @@ public class StoreEntitySpell extends Spell {
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
 			storageSource = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
-		final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
+		EnvironmentEntityList list = EnvironmentEntityList.getList(context);
 		list.add(storageSource, target);
 		logger.debug("onCast {} {}: The {} entity added {} to its stored entity list. The list now contains: {}", context.getGameId(), source, storageSource, target, list.getReferences(storageSource));
 	}

@@ -20,7 +20,6 @@ public class DebugContext extends GameContext {
 	@Suspendable
 	public void init() {
 		super.init();
-		startTrace();
 		startTurn(getActivePlayerId());
 	}
 

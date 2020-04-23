@@ -1,10 +1,7 @@
 package net.demilich.metastone.game.statistics;
 
 public enum Statistic {
-	// meta statistics
 	WIN_RATE,
-	// AVG_TURNS_TAKEN,
-
 	GAMES_WON,
 	GAMES_LOST,
 	DAMAGE_DEALT,
@@ -22,5 +19,7 @@ public enum Statistic {
 	WEAPONS_PLAYED,
 	CARDS_DISCARDED,
 	HERO_POWER_DAMAGE_DEALT,
-	ARMOR_LOST
+	ARMOR_LOST,
+	LAST_TURN,
+	PLAYED_LAST_TURN
 }

@@ -8,8 +8,8 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
 /**
- * Evaluates to {@code true} if the {@link ConditionArg#TARGET_PLAYER} has en entity-count [ {@link ConditionArg#OPERATION} ]
- * {@link ConditionArg#VALUE} cards.
+ * {@code true} if the {@link ConditionArg#TARGET_PLAYER} has en entity-count [ {@link ConditionArg#OPERATION} ] {@link
+ * ConditionArg#VALUE} cards.
  */
 public abstract class CountCondition extends Condition {
 
@@ -23,17 +23,14 @@ public abstract class CountCondition extends Condition {
 	}
 
 	@Override
-	public final boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
-		boolean invert = getDesc().getBool(ConditionArg.INVERT);
+	protected boolean isFulfilledForTarget(GameContext context, Player player, Entity source, Entity target, TargetPlayer targetPlayer) {
 		ConditionDesc desc = getDesc();
-		TargetPlayer targetPlayer = desc.containsKey(ConditionArg.TARGET_PLAYER) ? (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)
-				: TargetPlayer.SELF;
 		int cardCount = 0;
 		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
 		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
 		switch (targetPlayer) {
 			case EITHER:
-				return (SpellUtils.evaluateOperation(operation, getCountForPlayer(context, player, source, target), targetValue) || SpellUtils.evaluateOperation(operation, getCountForPlayer(context, context.getOpponent(player), source, target), targetValue)) != invert;
+				return (SpellUtils.evaluateOperation(operation, getCountForPlayer(context, player, source, target), targetValue) || SpellUtils.evaluateOperation(operation, getCountForPlayer(context, context.getOpponent(player), source, target), targetValue));
 			case BOTH:
 				cardCount = getCountForPlayer(context, player, source, target) + getCountForPlayer(context, context.getOpponent(player), source, target);
 				break;
@@ -62,7 +59,7 @@ public abstract class CountCondition extends Condition {
 
 		}
 
-		return SpellUtils.evaluateOperation(operation, cardCount, targetValue) != invert;
+		return SpellUtils.evaluateOperation(operation, cardCount, targetValue);
 	}
 
 	protected abstract int getCountForPlayer(GameContext context, Player player, Entity source, Entity target);

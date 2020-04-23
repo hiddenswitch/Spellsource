@@ -35,7 +35,7 @@ public final class ReturnToHandWithEnchantmentsSpell extends ShuffleToDeckWithEn
 		// It must still be in the hand to be a returned to hand effect
 		if (copiedCard.getZone() == Zones.HAND) {
 			SpellUtils.processKeptEnchantments(target, copiedCard);
-			context.fireGameEvent(new ReturnToHandEvent(context, player.getId(), copiedCard, target));
+			context.getLogic().fireGameEvent(new ReturnToHandEvent(context, player.getId(), copiedCard, target));
 		}
 	}
 }

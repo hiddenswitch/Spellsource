@@ -1,0 +1,17 @@
+{
+  "name": "Fae Guardian",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "FAE",
+  "description": "Dash",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -13,6 +13,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -158,8 +159,8 @@ public class DamageSpell extends Spell {
 		return damage;
 	}
 
-	protected DamageTypeEnum getDamageType(GameContext context, Player player, Entity source) {
-		return DamageTypeEnum.MAGICAL;
+	protected EnumSet<DamageTypeEnum> getDamageType(GameContext context, Player player, Entity source) {
+		return EnumSet.of(DamageTypeEnum.MAGICAL);
 	}
 }
 

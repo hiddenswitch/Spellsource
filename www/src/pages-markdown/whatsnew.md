@@ -4,18 +4,47 @@ date: "2020-02-01"
 path: "/whats-new"
 header: true
 ---
-### In Progress
 
- - Soulscream now correctly counts aftermaths. (1704)
+### 0.8.74-3.1.2 (April 22, 2017)
 
-### Upcoming Changes
+ - The Invoke keyword has been reworked! It now reads, "Invoke (X): Choose a bonus effect that costs (X) more."
+ - New updates to Skyward! Thanks @Nix
+ - Uncollectiblified Ancient's Aid, Mind Flay, Kind in Yellow (the 6/6), Unholy Tremors and Lash Out. (1698)
+ - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
+ - Volatile Wisdom now actually swaps cards. (1697)
  - Knowledge Hoarder now actually has Dash. (1684)
  - Fixed name "Right of Worhip" -> "Right of Worship" (1685)
  - The "Celestial Conduit" artifact now actually does its effect. (1686)
  - Vitium Surger now correctly gives you artifacts. (1688)
  - Fixed issues with Primordial Miner's text and effect. (1689)
  - Fixed Primordial Sword not returning anything. (1690)
+ - The Hercules Skill now properly buffs his (your?) attack. (1713)
+ - Blast Apart no longer damages more things more than it should. (1718)
+ - Diamond Sultan now has a dynamic description. (1711)
+ 
+### Notes on Skyward Updates
+
+Changes were made to the basic set in hopes of increasing the number of minions in the Skyward class so that they would be able to better develop a threatening board presence. Discarding spells has been introduced as a new class mechanic.
+
+- Soar is replaced with Flow. It is still available through using the hero power.
+- Favorable Winds replaced with High Flier. Lun ramping is not a focus of the class.
+- Gust replaced with Mistweaver. The 0-Cost spell felt like it did too little.
+- Blow Away has been replaced with Skydancer. Return to hand effects are not a focus of the class.
+- Fae Harbinger replaced with Blurred Rains.
+- Nimbus Strider’s text now reads “Can't be affected by Skills or spells.”
+- Spirited Sprite’s text now reads “After you cast a spell, deal 1 damage to all other minions.”
+- Unfurl Wings cost reduced to 1 to 0.
+- Dream of Ascendence cost reduced from 10 to 8.
+- Silent Nihilance expansion has been designed.
+- A Story with No Words expansion has been designed.
+- Ascella name changed to Astella to avoid jokes in translation.
+- Consideration has been made towards changing the class name to Skymage or Skyseeker.
+
+### 0.8.73-3.1.2 (April 17, 2020)
+
+ - Soulscream now correctly counts aftermaths. (1704)
+ - The bot is less likely to take down the server on infinitely-looping Source actions.
 
 ### 0.8.72-3.1.2 (April 7, 2020)
 

@@ -33,7 +33,7 @@ public final class SwapWithHandSpell extends ReturnTargetToHandSpell {
 			// return Alarm-o-bot to hand (Now it's safe and won't destroy itself!)
 			super.onCast(context, player, desc, source, target);
 			// Summon the minion, which ALSO won't destroy itself...
-			context.getLogic().summon(player.getId(), randomCard.summon(), source, originalPosition == player.getMinions().size() ? -1 : originalPosition, false);
+			context.getLogic().summon(player.getId(), randomCard.minion(), source, originalPosition == player.getMinions().size() ? -1 : originalPosition, false);
 		}
 	}
 }

@@ -3,15 +3,14 @@ package net.demilich.metastone.game.spells.custom;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.client.models.EntityType;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.ReturnTargetToHandSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,11 +29,11 @@ public final class SleightOfHandSpell extends ReturnTargetToHandSpell {
 			return;
 		}
 
-		Minion minion = (Minion) target;
+		Actor actor = (Actor) target;
 		int boardPosition = target.getEntityLocation().getIndex();
 
-		List<SpellDesc> deathrattles = new ArrayList<>(minion.getDeathrattles());
+		List<SpellDesc> aftermaths = context.getLogic().getAftermathSpells(actor);
 		super.onCast(context, player, desc, source, target);
-		context.getLogic().resolveAftermaths(player.getId(), target.getReference(), deathrattles, target.getOwner(), boardPosition);
+		context.getLogic().resolveAftermaths(player.getId(), target.getReference(), aftermaths, target.getOwner(), boardPosition);
 	}
 }

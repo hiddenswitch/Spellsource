@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.util.Set;
 
 /**
@@ -23,11 +24,11 @@ import java.util.Set;
 public final class CardAttributeMap extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
 
 	@JsonIgnore
-	private Card card;
+	private WeakReference<Card> card;
 
 	public CardAttributeMap(Card card) {
 		super();
-		this.card = card;
+		this.card = new WeakReference<>(card);
 	}
 
 	public CardAttributeMap() {
@@ -120,8 +121,6 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 					return HasEntrySet.link(desc.getDeckTrigger(), desc.getDeckTriggers(), EnchantmentDesc.class);
 				case GAME_TRIGGERS:
 					return desc.getGameTriggers();
-				case PASSIVE_AURAS:
-					return desc.getPassiveAuras();
 				case RACE:
 					return desc.getRace() == null ? Race.NONE : desc.getRace();
 				case SECRET:
@@ -178,8 +177,6 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 				return desc.getManaCostModifier() != null;
 			case PASSIVE_TRIGGERS:
 				return desc.getPassiveTrigger() != null || (desc.getPassiveTriggers() != null && desc.getPassiveTriggers().length > 0);
-			case PASSIVE_AURAS:
-				return desc.getPassiveAuras() != null && desc.getPassiveAuras().length > 0;
 			case DECK_TRIGGERS:
 				return desc.getDeckTrigger() != null || (desc.getDeckTriggers() != null && desc.getDeckTriggers().length > 0);
 			case GAME_TRIGGERS:
@@ -209,17 +206,17 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	}
 
 	public Card getCard() {
-		return card;
+		return card.get();
 	}
 
 	public void setCard(Card card) {
-		this.card = card;
+		this.card = new WeakReference<>(card);
 	}
 
 	@Override
 	public CardAttributeMap clone() {
-		CardAttributeMap clone = new CardAttributeMap(getCard());
-		clone.putAll(this);
+		CardAttributeMap clone = (CardAttributeMap) super.clone();
+		clone.setCard(getCard());
 		return clone;
 	}
 

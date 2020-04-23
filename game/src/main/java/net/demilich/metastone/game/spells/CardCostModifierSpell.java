@@ -115,7 +115,7 @@ public class CardCostModifierSpell extends Spell {
 		if (source != null && source.getSourceCard() != null) {
 			cardCostModifier.setSourceCard(source.getSourceCard());
 		}
-		context.getLogic().addGameEventListener(player, cardCostModifier, target == null ? player : target);
+		context.getLogic().addEnchantment(player, cardCostModifier, source, target == null ? player : target);
 	}
 
 }

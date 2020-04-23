@@ -1,8 +1,9 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+;
 import net.demilich.metastone.game.events.WeaponEquippedEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -15,10 +16,10 @@ public class WeaponEquippedTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		WeaponEquippedEvent summonEvent = (WeaponEquippedEvent) event;
 		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
-		if (requiredAttribute != null && !summonEvent.getWeapon().hasAttribute(requiredAttribute)) {
+		if (requiredAttribute != null && !((Weapon) summonEvent.getTarget()).hasAttribute(requiredAttribute)) {
 			return false;
 		}
 

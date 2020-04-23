@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -88,6 +89,10 @@ public class AttributeValueProvider extends ValueProvider {
 			if (entity instanceof Actor) {
 				Actor source = (Actor) entity;
 				if (attribute == Attribute.ATTACK) {
+					var player = context.getPlayer(source.getOwner());
+					if (source.getEntityType()== EntityType.HERO && !player.getWeaponZone().isEmpty() && player.getWeaponZone().get(0).isActive()) {
+						value += Math.max(0, player.getWeaponZone().get(0).getAttack());
+					}
 					value += Math.max(0, source.getAttack());
 				} else if (attribute == Attribute.MAX_HP) {
 					value += source.getMaxHp();

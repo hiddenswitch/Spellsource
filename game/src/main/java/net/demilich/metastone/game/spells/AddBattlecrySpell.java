@@ -5,15 +5,16 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Opener;
 import net.demilich.metastone.game.targeting.IdFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Gives the {@code target} card a {@link net.demilich.metastone.game.spells.desc.BattlecryDesc} specified in {@link
+ * Gives the {@code target} card a {@link OpenerDesc} specified in {@link
  * net.demilich.metastone.game.spells.desc.SpellArg#BATTLECRY}.
  */
 public class AddBattlecrySpell extends Spell {
@@ -30,7 +31,8 @@ public class AddBattlecrySpell extends Spell {
 			LOGGER.error("onCast {} {}: Trying to mutate a catalogue card {} very dangerously", context.getGameId(), source, card.getCardId());
 			return;
 		}
-		card.addBattlecry((BattlecryDesc) desc.get(SpellArg.BATTLECRY));
+		var openerDesc = (OpenerDesc) desc.get(SpellArg.BATTLECRY);
+		context.getLogic().addEnchantment(player,source,source.getSourceCard(),target,openerDesc,true,true);
 	}
 }
 

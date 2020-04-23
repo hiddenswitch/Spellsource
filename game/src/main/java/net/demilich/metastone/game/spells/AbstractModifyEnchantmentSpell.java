@@ -21,7 +21,7 @@ public abstract class AbstractModifyEnchantmentSpell extends Spell {
 			var enchantment = (Enchantment) target;
 			modifyEnchantment(enchantment);
 		} else {
-			var triggers = context.getTriggersAssociatedWith(target.getReference());
+			var triggers = context.getLogic().getActiveTriggers(target.getReference());
 			for (var trigger : triggers) {
 				if (trigger instanceof Enchantment) {
 					var enchantment = (Enchantment) trigger;

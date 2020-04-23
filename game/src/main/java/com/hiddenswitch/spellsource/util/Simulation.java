@@ -7,7 +7,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.behaviour.TycheBehaviour;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckListParsingException;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -53,8 +52,7 @@ public class Simulation {
 	public static Map<String, Class<? extends Behaviour>> getAllBehaviours() {
 		return ImmutableMap.of(
 				"GameStateValueBehaviour", GameStateValueBehaviour.class,
-				"PlayRandomBehaviour", PlayRandomBehaviour.class,
-				"TycheBehaviour", TycheBehaviour.class
+				"PlayRandomBehaviour", PlayRandomBehaviour.class
 		);
 	}
 

@@ -5,15 +5,21 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
-public class TriggerFired implements Notification {
+/**
+ * A trigger was fired from the specified enchantment.
+ */
+public final class TriggerFired implements Notification {
 
 	private final Enchantment enchantment;
 	private final EntityReference eventTarget;
+	private final WeakReference<Entity> source;
 
 	public TriggerFired(GameContext context, Enchantment enchantment) {
 		this.enchantment = enchantment;
+		this.source = new WeakReference<>(context.resolveSingleTarget(enchantment.getHostReference()));
 		this.eventTarget = context.getEventTargetStack().peek();
 	}
 
@@ -22,13 +28,13 @@ public class TriggerFired implements Notification {
 	}
 
 	@Override
-	public Entity getSource(GameContext context) {
-		return context.resolveSingleTarget(enchantment.getHostReference());
+	public Entity getSource() {
+		return source.get();
 	}
 
 	@Override
 	public List<Entity> getTargets(GameContext context, int player) {
-		return context.resolveTarget(context.getPlayer(player), getSource(context), eventTarget);
+		return context.resolveTarget(context.getPlayer(player), getSource(), eventTarget);
 	}
 
 	@Override
@@ -38,7 +44,7 @@ public class TriggerFired implements Notification {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		Entity source = getSource(context);
+		Entity source = getSource();
 		List<Entity> targets = getTargets(context, playerId);
 		Entity target = targets == null ? null : (targets.size() == 0 ? null : targets.get(0));
 		if (source != null && target != null) {

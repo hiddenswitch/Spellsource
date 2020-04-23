@@ -19,7 +19,7 @@ public class DamageCausedTrigger extends EventTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		DamageEvent damageEvent = (DamageEvent) event;
 
 		CardType cardType = (CardType) getDesc().get(EventTriggerArg.CARD_TYPE);
@@ -33,7 +33,7 @@ public class DamageCausedTrigger extends EventTrigger {
 			}
 		}
 
-		return damageEvent.getDamage() > 0;
+		return damageEvent.getValue() > 0;
 	}
 
 	@Override

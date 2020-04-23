@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.net.impl;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.net.Logic;
-import com.hiddenswitch.spellsource.net.Tracing;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.net.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.net.models.PersistAttributeResponse;
@@ -102,7 +102,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 				}
 			}
 
-			List<Entity> entities = gameContext.resolveTarget(activePlayer, event().getEventSource(), reference);
+			List<Entity> entities = gameContext.resolveTarget(activePlayer, event().getSource(), reference);
 			if (entities == null || entities.isEmpty()) {
 				return 0L;
 			}
