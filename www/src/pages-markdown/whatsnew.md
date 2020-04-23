@@ -5,6 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Firebolt now shows spell power correctly. (1724)
+
 ### 0.8.74-3.1.2 (April 22, 2017)
 
  - The Invoke keyword has been reworked! It now reads, "Invoke (X): Choose a bonus effect that costs (X) more."
