@@ -4561,6 +4561,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void startTurn(int playerId) {
 		var now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 		var player = context.getPlayer(playerId);
+		player.setAttribute(Attribute.STARTING_TURN);
 		int gameStartTime;
 		if (player.getAttributes().containsKey(Attribute.GAME_START_TIME_MILLIS)) {
 			gameStartTime = now;
@@ -4601,6 +4602,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		fireGameEvent(new TurnStartEvent(context, player.getId()));
 		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, TargetSelection.NONE, true, null);
 		endOfSequence();
+		player.getAttributes().remove(Attribute.STARTING_TURN);
 	}
 
 	/**
