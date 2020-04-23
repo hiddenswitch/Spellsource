@@ -101,7 +101,7 @@ import static java.util.stream.Collectors.toList;
  * statistics fields.</li>
  * <li>The {@link #getEnvironment()} "environment variables," referring to state or memory in the game that does not
  * live on entities.</li>
- * <li>The {@link TriggerManager#getTriggers()} value from the {@link #getLogic()} trigger manager.</li>
+ * <li>The {@link #getTriggers()} value from the {@link #getLogic()} trigger manager.</li>
  * <li>The {@link DeckFormat} living in {@link #getDeckFormat()}.</li>
  * <li>The next entity ID that will be returned by {@link GameLogic#generateId()}, which is stored in {@link
  * GameLogic#getIdFactory()}'s values.</li>

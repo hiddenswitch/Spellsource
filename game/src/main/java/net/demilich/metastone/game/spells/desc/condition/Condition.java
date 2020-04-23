@@ -39,7 +39,7 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 	 * <p>
 	 * {@code target} is context-sensitive. When used in {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#QUEUE_CONDITION}
 	 * or {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#FIRE_CONDITION}, {@code source} is the
-	 * {@link GameEvent#getEventSource()} and {@code target} is the {@link GameEvent#getEventTarget()}. The trigger's host
+	 * {@link GameEvent#getSource()} and {@code target} is the {@link GameEvent#getTarget()}. The trigger's host
 	 * is typically accessed using {@link EntityReference#TRIGGER_HOST}.
 	 *
 	 * @param context

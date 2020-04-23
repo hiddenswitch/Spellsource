@@ -1446,7 +1446,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param baseDamage The base amount of damage to deal.
 	 * @param source     The source of the damage.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean, DamageTypeEnum) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, EnumSet)  for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source) {
@@ -1462,7 +1462,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param source            The source of the damage.
 	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean, DamageTypeEnum) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, EnumSet)  for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {

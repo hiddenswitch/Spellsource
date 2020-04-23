@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.73
+SPELLSOURCE_VERSION=0.8.74
 
 usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
@@ -164,7 +164,7 @@ if [[ "$deploy_stack" == true ]]; then
   # Send secrets to the manager via an ssh pipe
   # shellcheck disable=SC2046
   env $(cat "secrets/spellsource/stack-application-production.env") docker-compose config |
-    ssh -i "secrets/deployment.rsa" doctorpangloss@"${SSH_HOST}" docker stack deploy --resolve-image always --compose-file - spellsource
+    ssh -i "secrets/deployment.rsa" doctorpangloss@"${SSH_HOST}" docker stack deploy --prune --resolve-image always --compose-file - spellsource
 fi
 
 if [[ "$deploy_steam" == true ]]; then

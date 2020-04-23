@@ -216,7 +216,7 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference SPELL_TARGET = new EntityReference(-26);
 	/**
-	 * This reference retrieves the (possibly {@code null}) entity pointed to by {@link GameEvent#getEventTarget()}. An
+	 * This reference retrieves the (possibly {@code null}) entity pointed to by {@link GameEvent#getTarget()}. An
 	 * event target is never itself a group reference; it always retrieves a specific entity.
 	 * <p>
 	 * To see which game events generate targets, which can be counter-intuitive, look at the constructors of the various
@@ -235,7 +235,7 @@ public final class EntityReference implements Serializable {
 	 * Inside an enchantment's {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#FIRE_CONDITION} and
 	 * {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#QUEUE_CONDITION}, which are the conditions
 	 * that evaluate whether or not the trigger for the enchantment should fire, the source entity is the {@link
-	 * GameEvent#getEventSource()}; it is <b>not</b> the entity hosting the trigger. To get the entity hosting the
+	 * GameEvent#getSource()}; it is <b>not</b> the entity hosting the trigger. To get the entity hosting the
 	 * trigger, use {@link #TRIGGER_HOST} instead.
 	 */
 	public static final EntityReference SELF = new EntityReference(-28);
@@ -351,7 +351,7 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference ALL_ENTITIES = new EntityReference(-45);
 	/**
-	 * References the {@link GameEvent#getEventSource()} entity when a trigger/enchantment is being evaluated.
+	 * References the {@link GameEvent#getSource()} entity when a trigger/enchantment is being evaluated.
 	 *
 	 * @see #EVENT_TARGET for more on how to discover what the source is set to for common events.
 	 */
@@ -404,7 +404,7 @@ public final class EntityReference implements Serializable {
 	 * fire condition or spell is currently being evaluated.
 	 * <p>
 	 * During a condition evaluation on an {@link net.demilich.metastone.game.spells.trigger.EventTrigger}, {@link #SELF}
-	 * refers to {@link GameEvent#getEventSource()}, not the host of the trigger whose condition is being evaluated. Use
+	 * refers to {@link GameEvent#getSource()}, not the host of the trigger whose condition is being evaluated. Use
 	 * this reference to get the host of the trigger currently being evaluated.
 	 *
 	 * @see #SELF for an important comparison about how this reference is used.

@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Unusually, the {@link Zones#WEAPON} and {@link Zones#HERO_POWER} zones are located on the {@link Hero} entity
  * retrievable by {@link #getHero()}.
  * <p>
- * More state is discoverable on the {@link GameContext#getEnvironment()} and {@link TriggerManager#getTriggers()}
+ * More state is discoverable on the {@link GameContext#getEnvironment()} and {@link GameContext#getTriggers()}
  * fields.
  * <p>
  * Player entities are the appropriate {@code target} of many effects, especially text that seems to "live on" after a

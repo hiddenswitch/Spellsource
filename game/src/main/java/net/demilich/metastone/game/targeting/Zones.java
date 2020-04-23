@@ -83,7 +83,7 @@ public enum Zones {
 	 * The hero power zone stores the hero power for a corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}.
 	 * Only one such card can be in the zone at a time.
 	 *
-	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
+	 * @see Player#getHeroPowerZone() for more about the hero power zone.
 	 */
 	HERO_POWER("K"),
 	/**
@@ -139,7 +139,7 @@ public enum Zones {
 	PLAYER("P"),
 	/**
 	 * The enchantment zone corresponds to the player's list of {@link Enchantment} entities in the {@link
-	 * TriggerManager#getTriggers()} list.
+	 * GameContext#getTriggers()} list.
 	 */
 	ENCHANTMENT("T");
 
