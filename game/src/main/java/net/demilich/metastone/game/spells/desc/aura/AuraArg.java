@@ -11,8 +11,10 @@ public enum AuraArg {
 	HP_BONUS,
 	APPLY_EFFECT,
 	PAY_EFFECT,
+	@Deprecated(since = "2")
 	SECONDARY_TRIGGER,
 	TRIGGERS,
+	@Deprecated(since = "2")
 	ALWAYS_APPLY,
 	REVERT_TRIGGER,
 	SPELL_CONDITION,
@@ -28,5 +30,6 @@ public enum AuraArg {
 	REMOVE_EFFECT,
 	DESCRIPTION,
 	NAME,
-	SPELL
+	SPELL,
+	ZONES
 }

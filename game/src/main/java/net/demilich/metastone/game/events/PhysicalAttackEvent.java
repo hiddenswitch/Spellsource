@@ -1,61 +1,32 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 
-public class PhysicalAttackEvent extends GameEvent implements HasVictim, HasValue {
-
-	private final Actor attacker;
-	private final Actor defender;
-	private final int damageDealt;
-
+/**
+ * An attacker (the {@link net.demilich.metastone.game.targeting.EntityReference#EVENT_SOURCE}) attacked the defender
+ * and dealt {@link net.demilich.metastone.game.spells.desc.valueprovider.EventValueProvider} damage.
+ */
+public class PhysicalAttackEvent extends ValueEvent {
 	public PhysicalAttackEvent(GameContext context, Actor attacker, Actor defender, int damageDealt) {
-		super(context, defender.getOwner(), attacker.getOwner());
-		this.attacker = attacker;
-		this.defender = defender;
-		this.damageDealt = damageDealt;
+		super(EventTypeEnum.PHYSICAL_ATTACK, true, context, context.getPlayer(attacker.getOwner()), attacker, defender, damageDealt);
+	}
+
+	PhysicalAttackEvent(EventTypeEnum eventType, boolean isClientInterested, GameContext context, Actor attacker, Actor defender, int damageDealt) {
+		super(eventType, isClientInterested, context, context.getPlayer(attacker.getOwner()), attacker, defender, damageDealt);
 	}
 
 	public Actor getAttacker() {
-		return attacker;
+		return (Actor) getSource();
 	}
 
 	public int getDamageDealt() {
-		return damageDealt;
+		return getValue();
 	}
 
 	public Actor getDefender() {
-		return defender;
-	}
-
-	@Override
-	public Entity getEventSource() {
-		return getAttacker();
-	}
-
-	@Override
-	public Entity getEventTarget() {
-		return getDefender();
-	}
-
-	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum getEventType() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.PHYSICAL_ATTACK;
-	}
-
-	@Override
-	public Entity getVictim() {
-		return getDefender();
-	}
-
-	@Override
-	public int getValue() {
-		return damageDealt;
-	}
-
-	@Override
-	public boolean isClientInterested() {
-		return true;
+		return (Actor) getTarget();
 	}
 }

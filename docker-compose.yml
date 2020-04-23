@@ -55,6 +55,10 @@ services:
       - web
       - backend
     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        window: 50s
       labels:
         - "traefik.versionedhost.frontend.rule=${GAME_VERSIONED_HOST_RULE}"
         - "traefik.versionedhost.frontend.entryPoints=http,https"
@@ -69,6 +73,11 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
+    healthcheck:
+      test: curl -sSX GET http://127.0.0.1/version || exit 1
+      interval: 10s
+      timeout: 1s
+      retries: 4
   mongo:
     image: "mongo:3.6"
     networks:
@@ -298,6 +307,26 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
+#  ikev2:
+#    image: doctorpangloss/ikev2:latest
+#    build:
+#      context: ikev2
+#      dockerfile: Dockerfile
+#    networks:
+#      - web
+#      - backend
+#    ports:
+#      - 500:500/udp
+#      - 4500:4500/udp
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        window: 15s
+#      placement:
+#        constraints:
+#          - node.platform.arch == x86_64
+#          - node.labels.cpu == high
+#          - node.labels.disk == ssd
 volumes:
   mongodata:
   mancenterdata:

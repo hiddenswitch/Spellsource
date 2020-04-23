@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
- * Returns {@code true} if the {@code source} is adjacent to the {@code target} or, when specified, the {@link
+ * {@code true} if the {@code source} is adjacent to the {@code target} or, when specified, the {@link
  * ConditionArg#TARGET}.
  * <p>
  * When being evaluated within an event stack, {@code source} is overridden to the {@link
@@ -27,10 +27,6 @@ public class IsAdjacentCondition extends Condition {
 			source = hasTriggerHost;
 		}
 
-		if (desc.containsKey(ConditionArg.TARGET)) {
-			target = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET));
-		}
-
 		for (Actor minion : context.getAdjacentMinions(source.getReference())) {
 			if (minion.getId() == target.getId()) {
 				return true;
@@ -38,5 +34,10 @@ public class IsAdjacentCondition extends Condition {
 		}
 
 		return false;
+	}
+
+	@Override
+	protected boolean singleTargetOnly() {
+		return true;
 	}
 }

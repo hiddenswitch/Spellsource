@@ -1,0 +1,35 @@
+{
+  "name": "Favorable Winds",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Gain an empty Lun.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "ManaMaxedCondition"
+        },
+        "spell1": {
+          "class": "ReceiveCardSpell",
+          "card": "spell_soar",
+          "targetPlayer": "SELF"
+        },
+        "spell2": {
+          "class": "ModifyMaxManaSpell",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

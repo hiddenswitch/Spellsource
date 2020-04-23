@@ -1,0 +1,38 @@
+{
+  "name": "Stoneskin",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "The next minion you summon this turn has +5 Health and Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "BeforeMinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "target": "EVENT_TARGET",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "hpBonus": 5
+          },
+          {
+            "class": "AddAttributeSpell",
+            "attribute": "TAUNT"
+          }
+        ]
+      },
+      "maxFires": 1,
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

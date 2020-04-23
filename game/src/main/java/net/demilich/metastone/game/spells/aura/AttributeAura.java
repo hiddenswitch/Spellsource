@@ -31,17 +31,12 @@ import net.demilich.metastone.game.cards.Attribute;
  *
  * @see Aura for a description of how the fields in the {@link AuraDesc} are interpreted.
  */
-public final class AttributeAura extends Aura {
+public final class AttributeAura extends SpellAura {
 
 	public AttributeAura(AuraDesc desc) {
-		super(desc.getSecondaryTrigger() != null ? desc.getSecondaryTrigger().create() : new WillEndSequenceTrigger(),
-				AddAttributeSpell.create(desc.getAttribute()),
-				RemoveAttributeSpell.create(desc.getAttribute()),
-				desc.getTarget(),
-				(EntityFilter) desc.get(AuraArg.FILTER),
-				desc.getCondition());
-		setDesc(desc);
-		includeExtraTriggers(desc);
+		super(desc);
+		setApplyAuraEffect(AddAttributeSpell.create(desc.getAttribute()));
+		setRemoveAuraEffect(RemoveAttributeSpell.create(desc.getAttribute()));
 	}
 
 	@Override

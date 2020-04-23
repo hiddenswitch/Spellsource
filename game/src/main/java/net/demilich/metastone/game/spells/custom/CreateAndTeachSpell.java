@@ -12,7 +12,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.*;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
+import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -79,10 +79,10 @@ public class CreateAndTeachSpell extends Spell {
 				minionCardDesc.setDescription(minionCardDesc.getDescription().replace("LESSON" + (k + 1), spell.getName()));
 			}
 			metaSpellDesc = metaSpellDesc.addArg(SpellArg.SPELLS, spells);
-			BattlecryDesc battlecryDesc = new BattlecryDesc();
-			battlecryDesc.setSpell(metaSpellDesc);
-			battlecryDesc.setTargetSelection(chosenTargetSelection);
-			minionCardDesc.setBattlecry(battlecryDesc);
+			OpenerDesc openerDesc = new OpenerDesc();
+			openerDesc.setSpell(metaSpellDesc);
+			openerDesc.setTargetSelection(chosenTargetSelection);
+			minionCardDesc.setBattlecry(openerDesc);
 
 			Card card = minionCardDesc.create();
 			context.addTempCard(card);

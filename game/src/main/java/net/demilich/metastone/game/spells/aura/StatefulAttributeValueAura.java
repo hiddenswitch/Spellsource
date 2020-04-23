@@ -4,9 +4,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
+;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -66,15 +65,12 @@ import java.util.Map;
  *   }
  * </pre>
  */
-public final class StatefulAttributeValueAura extends Aura {
+public final class StatefulAttributeValueAura extends EffectlessAura {
 
 	private Map<Integer, Integer> currentValues = new HashMap<>();
 
 	public StatefulAttributeValueAura(AuraDesc desc) {
 		super(desc);
-		includeExtraTriggers(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 
 	@Override

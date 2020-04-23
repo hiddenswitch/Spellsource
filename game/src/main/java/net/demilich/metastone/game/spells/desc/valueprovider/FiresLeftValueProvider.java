@@ -19,7 +19,7 @@ public class FiresLeftValueProvider extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		return context.getTriggersAssociatedWith(target.getReference())
+		return context.getLogic().getActiveTriggers(target.getReference())
 				.stream()
 				.filter(Enchantment.class::isInstance)
 				.map(Enchantment.class::cast)

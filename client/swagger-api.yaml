@@ -987,6 +987,7 @@ definitions:
        - DEFLECT: Damage dealt from the Deflect ability to the hero.
        - DRAIN: Damage dealt by a Drain ability.
        - IGNORES_ARMOR: Damage that ignores armor when it is dealt to the hero.
+       - SPLASH: Damage dealt by the SplashDamageSpell which is used to change the source of damage
     type: 'string'
     enum:
       - 'PHYSICAL'
@@ -996,6 +997,7 @@ definitions:
       - 'DEFLECT'
       - 'DRAIN'
       - 'IGNORES_ARMOR'
+      - 'SPLASH'
   GameEvent:
     type: 'object'
     properties:

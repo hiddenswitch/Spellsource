@@ -74,7 +74,7 @@ import java.util.List;
  * JSON key/value pair), a new {@link net.demilich.metastone.game.cards.desc.ParseValueType} needs to be added.
  *
  * @see DescDeserializer#init(DescDeserializer.SerializationContext) for the formal type of the values of these enum
- * 		keys.
+ * keys.
  */
 public enum SpellArg {
 	/**
@@ -102,7 +102,8 @@ public enum SpellArg {
 	 */
 	ATTRIBUTE,
 	/**
-	 * Indicates an aura, typically one that will be put into play on a target.
+	 * Indicates an {@link net.demilich.metastone.game.spells.desc.aura.AuraDesc}, typically one that will be put into
+	 * play on a target.
 	 *
 	 * @see net.demilich.metastone.game.spells.AddEnchantmentSpell for an example of a spell that uses this arg.
 	 */
@@ -318,7 +319,7 @@ public enum SpellArg {
 	 * card should be chosen from the list of cards to summon.
 	 *
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the complete targeting rules and how this arg is
-	 * 		interpreted.
+	 * interpreted.
 	 */
 	RANDOM_TARGET,
 	/**
@@ -378,7 +379,7 @@ public enum SpellArg {
 	 * Like {@link #SPELL}, a {@link SpellDesc} that's typically interpreted as the "second" or alternative spell.
 	 *
 	 * @see DiscoverSpell for an exaple of a spell that uses this arg. There, it is cast on the cards the player did
-	 * 		<b>not</b> choose.
+	 * <b>not</b> choose.
 	 */
 	SPELL2,
 	/**
@@ -492,7 +493,7 @@ public enum SpellArg {
 	 */
 	VALUE,
 	/**
-	 * Specifies a battlecry as a {@link BattlecryDesc} that will soon be added by a {@code AddBattlecrySpell}.
+	 * Specifies a battlecry as a {@link OpenerDesc} that will soon be added by a {@code AddBattlecrySpell}.
 	 */
 	BATTLECRY,
 	/**

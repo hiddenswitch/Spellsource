@@ -20,11 +20,6 @@ public class PlaySpellCardAction extends PlayCardAction {
 
 	private SpellDesc spell;
 
-	protected PlaySpellCardAction() {
-		super();
-		setActionType(ActionType.SPELL);
-	}
-
 	public PlaySpellCardAction(SpellDesc spell, Card card, TargetSelection targetSelection) {
 		super(card.getReference());
 		setActionType(ActionType.SPELL);

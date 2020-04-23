@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.DamageEvent;
 import net.demilich.metastone.game.events.DrainEvent;
 import net.demilich.metastone.game.spells.DrainSpell;
 import net.demilich.metastone.game.spells.Spell;
@@ -36,7 +35,7 @@ public final class YaganLifetakerSpell extends Spell {
 			DrainSpell.drain(context, player, source, 1, context.getLogic().getRandom(drainTo));
 		}
 		for (DrainEvent event : events) {
-			context.fireGameEvent(event);
+			context.getLogic().fireGameEvent(event);
 		}
 	}
 }

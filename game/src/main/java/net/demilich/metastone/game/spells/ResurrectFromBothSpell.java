@@ -44,7 +44,7 @@ public class ResurrectFromBothSpell extends Spell {
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
 			Card card = resurrectedMinion.getSourceCard();
-			context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
+			context.getLogic().summon(player.getId(), card.minion(), source, -1, false);
 			deadMinions.remove(resurrectedMinion);
 		}
 	}

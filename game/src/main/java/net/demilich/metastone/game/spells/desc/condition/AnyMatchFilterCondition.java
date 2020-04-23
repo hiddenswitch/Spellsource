@@ -9,8 +9,8 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
- * Passes if any of the entities returned by resolving {@link ConditionArg#TARGET} is passed by the filter supplied in
- * {@link ConditionArg#FILTER}.
+ * {@code true} if any of the entities returned by resolving {@link ConditionArg#TARGET} is passed by the filter
+ * supplied in {@link ConditionArg#FILTER}.
  */
 public class AnyMatchFilterCondition extends Condition {
 
@@ -27,18 +27,27 @@ public class AnyMatchFilterCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		EntityReference targetReference = (EntityReference) desc.get(ConditionArg.TARGET);
-		EntityFilter filter = (EntityFilter) desc.get(ConditionArg.FILTER);
-		if (targetReference == null && target != null) {
-			targetReference = target.getReference();
-		}
-		for (Entity entity : context.resolveTarget(player, source, targetReference)) {
-			if (filter == null || filter.matches(context, player, entity, source)) {
-				return true;
-			}
-		}
+		return true;
+	}
+
+	@Override
+	protected boolean singleTargetOnly() {
 		return false;
 	}
 
+	@Override
+	protected boolean multipleTargetsEvaluatedAsOr() {
+		return true;
+	}
+
+	@Override
+	protected boolean multipleTargetsEvaluatedAsAnd() {
+		return false;
+	}
+
+	@Override
+	protected boolean usesFilter() {
+		return true;
+	}
 }
 

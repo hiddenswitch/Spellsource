@@ -1,12 +1,15 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -20,9 +23,10 @@ import java.util.Map;
  * <p>
  * If a {@link SpellArg#SPELL} is specified, cast it on the newly revived minion as {@link EntityReference#OUTPUT}.
  * <p>
- * If a {@link SpellArg#SPELL1} is specified, it will be cast BEFORE THE REVIVAL, with the original targeted minion as {@link EntityReference#OUTPUT}.
- * This can be useful for the case of ensuring that the exact original minion is revived, not something that it might transform into by killing it.
- * (Interaction between Crazed Cultist and Pavel, Elemental of Surprise)
+ * If a {@link SpellArg#SPELL1} is specified, it will be cast BEFORE THE REVIVAL, with the original targeted minion as
+ * {@link EntityReference#OUTPUT}. This can be useful for the case of ensuring that the exact original minion is
+ * revived, not something that it might transform into by killing it. (Interaction between Crazed Cultist and Pavel,
+ * Elemental of Surprise)
  */
 public final class ReviveMinionSpell extends Spell {
 
@@ -45,10 +49,17 @@ public final class ReviveMinionSpell extends Spell {
 		Actor targetActor = (Actor) target;
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		Card card = targetActor.getSourceCard();
-		Minion minion = card.summon();
+		// Bring back the weapon. Happens when a weapon gets a minion's aftermath
+		if (GameLogic.isCardType(card.getCardType(), CardType.WEAPON)) {
+			context.getLogic().equipWeapon(player.getId(), card.weapon(), card, false);
+			return;
+		}
+
 		if (desc.containsKey(SpellArg.SPELL1)) {
 			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL1), source, target, targetActor);
 		}
+
+		Minion minion = card.minion();
 		if (hpAdjustment != 0) {
 			minion.setHp(hpAdjustment);
 		}

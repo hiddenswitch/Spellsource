@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
@@ -10,15 +11,13 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Triggers respond to {@link GameEvent} objects that are raised by various {@link GameLogic} methods, implementing
  * cards that do something when something else happens.
  *
  * @see Enchantment for an implementation that casts a spell when an event is raised. Most trigger effects behave like
- * 		this.
- * @see TriggerManager#fireGameEvent(GameEvent, List) for how the fields in this interface are used.
+ * this.
  */
 public interface Trigger extends Serializable {
 	/**
@@ -55,7 +54,7 @@ public interface Trigger extends Serializable {
 	 *
 	 * @param eventType The event type.
 	 * @return {@code true} if this trigger wants its {@link #onGameEvent(GameEvent)} method called whenever it {@link
-	 *    #queues(GameEvent)} to the specified {@code eventType}.
+	 * #queues(GameEvent)} to the specified {@code eventType}.
 	 */
 	boolean interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum eventType);
 
@@ -71,8 +70,11 @@ public interface Trigger extends Serializable {
 	 * Called when the trigger is added into a {@link GameContext}'s state.
 	 *
 	 * @param context The game context.
+	 * @param player
+	 * @param source
+	 * @param host
 	 */
-	void onAdd(GameContext context);
+	void onAdd(GameContext context, Player player, Entity source, Entity host);
 
 	/**
 	 * Handles an event this trigger {@link #queues(GameEvent)} for and is {@link #interestedIn(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum)}.
@@ -83,19 +85,11 @@ public interface Trigger extends Serializable {
 	void onGameEvent(GameEvent event);
 
 	/**
-	 * Called when the trigger is removed from the given game context.
-	 *
-	 * @param context The game context.
-	 */
-	@Suspendable
-	void onRemove(GameContext context);
-
-	/**
 	 * Sets or changes the {@link Entity} that is the owner / host of this trigger.
 	 *
-	 * @param host The host {@link Entity}/
+	 * @param entityReference The host {@link Entity}/
 	 */
-	void setHost(Entity host);
+	void setHostReference(EntityReference entityReference);
 
 	/**
 	 * Sets the player who is the owner of this trigger.
@@ -110,12 +104,12 @@ public interface Trigger extends Serializable {
 	 * owner, since the casting player of that spell should always draw the card it receives.
 	 *
 	 * @return {@code true} if the trigger's {@link #onGameEvent(GameEvent)} should be evaluated from the point of view of
-	 * 		the owner when the trigger was created, as opposed to what the owner is right now (which may have changed).
+	 * the owner when the trigger was created, as opposed to what the owner is right now (which may have changed).
 	 */
-	boolean hasPersistentOwner();
+	boolean isPersistentOwner();
 
 	/**
-	 * Indicates this trigger is only active for the current turn, then it should {@link #expire()}.
+	 * Indicates this trigger is only active for the current turn, then it should {@link #expire(GameContext)}.
 	 *
 	 * @return {@code true} if this is a one-turn long trigger.
 	 */
@@ -123,8 +117,9 @@ public interface Trigger extends Serializable {
 
 	/**
 	 * Expires the trigger; marks it for removal and prevents it from executing in the future.
+	 * @param context
 	 */
-	void expire();
+	void expire(GameContext context);
 
 	/**
 	 * Returns {@code true} if the trigger fire in response to the given {@link GameEvent}.

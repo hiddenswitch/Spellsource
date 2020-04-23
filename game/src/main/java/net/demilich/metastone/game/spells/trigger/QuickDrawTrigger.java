@@ -15,8 +15,8 @@ public final class QuickDrawTrigger extends CardDrawnTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		return super.innerQueues(event, host) &&
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		return super.innerQueues(event, enchantment, host) &&
 				!event.getGameContext().getPlayer(event.getTargetPlayerId()).hasAttribute(Attribute.STARTING_TURN);
 	}
 }

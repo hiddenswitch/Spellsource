@@ -9,7 +9,6 @@ import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.trigger.BeforeMinionSummonedTrigger;
@@ -48,18 +47,20 @@ public final class AddEnchantmentToMinionCardSpell extends AddEnchantmentSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc oldDesc, Entity source, Entity target) {
+		throw new UnsupportedOperationException();
+		/*
 		SpellDesc desc = new SpellDesc(AddEnchantmentSpell.class);
 		EnchantmentDesc summonedEnchantment = new EnchantmentDesc();
-		summonedEnchantment.eventTrigger = BeforeMinionSummonedTrigger.create();
-		summonedEnchantment.eventTrigger.put(EventTriggerArg.HOST_TARGET_TYPE, TargetType.IGNORE_OTHER_SOURCES);
+		summonedEnchantment.setEventTrigger(BeforeMinionSummonedTrigger.create());
+		summonedEnchantment.getEventTrigger().put(EventTriggerArg.HOST_TARGET_TYPE, TargetType.IGNORE_OTHER_SOURCES);
 		if (oldDesc.containsKey(SpellArg.TRIGGER)) {
-			summonedEnchantment.spell = AddEnchantmentSpell.create(EntityReference.EVENT_TARGET, (EnchantmentDesc) oldDesc.get(SpellArg.TRIGGER));
+			summonedEnchantment.setSpell(AddEnchantmentSpell.create(EntityReference.EVENT_TARGET, (EnchantmentDesc) oldDesc.get(SpellArg.TRIGGER)));
 		} else if (oldDesc.containsKey(SpellArg.AURA)) {
-			summonedEnchantment.spell = AddEnchantmentSpell.create(EntityReference.EVENT_TARGET, (Aura) oldDesc.get(SpellArg.AURA));
+			summonedEnchantment.setSpell(AddEnchantmentSpell.create(EntityReference.EVENT_TARGET, (Aura) oldDesc.get(SpellArg.AURA)));
 		} else {
 			LOGGER.error("onCast {} {}: Missing a trigger or an aura!", context.getGameId(), source);
 		}
 		desc.put(SpellArg.TRIGGER, summonedEnchantment);
-		super.onCast(context, player, desc, source, target);
+		super.onCast(context, player, desc, source, target);*/
 	}
 }

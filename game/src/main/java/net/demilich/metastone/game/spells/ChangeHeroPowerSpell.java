@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * @see CopyHeroPower to copy the opponent's hero power.
  * @see net.demilich.metastone.game.spells.aura.CardAura to temporarily change a card, like a hero power, to another
- * 		card.
+ * card.
  */
 public class ChangeHeroPowerSpell extends Spell {
 
@@ -53,8 +53,8 @@ public class ChangeHeroPowerSpell extends Spell {
 		heroPower.setOwner(hero.getOwner());
 		logger.debug("changeHeroPower {} {}: {}'s hero power was changed to {}", context.getGameId(), source, hero.getName(), heroPower);
 		// The old hero power should be removed from play.
-		Card oldHeroPower = hero.getHeroPower();
-		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), true, false);
+		var oldHeroPower = player.getHeroPowerZone().get(0);
+		context.getLogic().removeEnchantments(oldHeroPower);
 		oldHeroPower.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.getLogic().removeCard(oldHeroPower);
 		if (heroPower.getHeroClass().equals(HeroClass.INHERIT)) {
@@ -62,8 +62,6 @@ public class ChangeHeroPowerSpell extends Spell {
 		}
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
 		oldHeroPower.getAttributes().put(Attribute.TRANSFORM_REFERENCE, heroPower.getReference());
-		context.getLogic().processGameTriggers(player, heroPower);
-		context.getLogic().processPassiveTriggers(player, heroPower);
-		context.getLogic().processPassiveAuras(player, heroPower);
+		context.getLogic().addEnchantments(player, source, heroPower, heroPower);
 	}
 }

@@ -7,6 +7,7 @@ import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableQueue;

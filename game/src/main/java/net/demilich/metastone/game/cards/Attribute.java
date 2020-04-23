@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -8,6 +9,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.RoastSpell;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -15,7 +17,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A list of attributes on entities.
@@ -180,13 +181,13 @@ public enum Attribute {
 	/**
 	 * An {@link Actor} with {@link #MEGA_WINDFURY} has four attacks per turn.
 	 *
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
 	MEGA_WINDFURY,
 	/**
 	 * An {@link Actor} with {@link #UNLIMITED_ATTACKS} has unlimited attacks per turn.
 	 *
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
 	UNLIMITED_ATTACKS,
 	/**
@@ -253,13 +254,13 @@ public enum Attribute {
 	 * attack every turn.
 	 *
 	 * @see #WINDFURY for the attribute that sets the number of attacks an actor has to 2 at the start of the owner's
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking. turn.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking. turn.
 	 */
 	NUMBER_OF_ATTACKS,
 	/**
 	 * An attribute used by Giant Sand Worm that refreshes the number of attacks it has.
 	 *
-	 * @see Actor#canAttackThisTurn() for the complete rules of attacking.
+	 * @see Actor#canAttackThisTurn(GameContext) for the complete rules of attacking.
 	 */
 	EXTRA_ATTACKS,
 	/**
@@ -400,8 +401,8 @@ public enum Attribute {
 	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * the battlefield.
-	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Minion, Minion) for an unusual
-	 * situation where minions enter the battlefield.
+	 * @see GameLogic#transformMinion(net.demilich.metastone.game.spells.desc.SpellDesc, Entity, Minion, Minion, boolean)
+	 * for an unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
 	/**
@@ -528,7 +529,7 @@ public enum Attribute {
 	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link
 	 * net.demilich.metastone.game.events.GameEvent}.
 	 *
-	 * @see net.demilich.metastone.game.spells.trigger.TriggerManager for the complete rules on event triggering.
+	 * @see GameLogic#fireGameEvent(GameEvent)  for the complete rules on event triggering.
 	 * @see Enchantment for the entity that corresponds to a passive trigger.
 	 */
 	PASSIVE_TRIGGERS,
@@ -904,8 +905,8 @@ public enum Attribute {
 	 */
 	DEFLECT,
 	/**
-	 * Whenever a {@link Card} with this attribute is in your hand, and you have at least the invoke amount of mana, spend
-	 * that much mana instead of its base mana cost and gain the bonus effect written on the card.
+	 * Whenever a {@link Card} with this attribute is in your hand, and you have at least the invoke amount of mana, you
+	 * may gain an extra card with a bonus effect on it to cast with that extra mana.
 	 */
 	INVOKE,
 	/**
@@ -1137,7 +1138,7 @@ public enum Attribute {
 	/**
 	 * An override for the entity's description that indicates it has an {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
 	 * <p>
-	 * Contains an array {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc[]}.
+	 * Contains an array of {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc}
 	 */
 	DYNAMIC_DESCRIPTION,
 	/**
@@ -1183,14 +1184,17 @@ public enum Attribute {
 	/**
 	 * When set on a player entity, indicates the player is currently in the starting turn phase.
 	 */
-	STARTING_TURN;
+	STARTING_TURN,
+
+	EIDOLON_RACE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
 	}
 
 	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
-	private static final Set<Attribute> auraAttributes = EnumSet.copyOf(Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toList()));
+	private static final Set<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Sets.toImmutableEnumSet());
+
 	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
 			Attribute.ROASTED,
 			Attribute.DISCARDED,
@@ -1200,6 +1204,34 @@ public enum Attribute {
 			Attribute.SUMMONED_ON_TURN,
 			Attribute.DIED_ON_TURN
 	);
+
+	private static final Set<Attribute> enchantmentLikeAttributes = Sets.immutableEnumSet(Attribute.POISONOUS,
+			Attribute.DIVINE_SHIELD,
+			COSTS_HEALTH_INSTEAD_OF_MANA,
+			TEMPORARY_ATTACK_BONUS,
+			HEALING_BONUS,
+			SPELL_DAMAGE,
+			Attribute.STEALTH,
+			Attribute.TAUNT,
+			Attribute.CANNOT_ATTACK,
+			Attribute.ATTACK_EQUALS_HP,
+			Attribute.CANNOT_ATTACK_HEROES,
+			Attribute.CHARGE,
+			Attribute.DEFLECT,
+			Attribute.IMMUNE,
+			Attribute.ENRAGABLE,
+			Attribute.IMMUNE_WHILE_ATTACKING,
+			Attribute.FROZEN,
+			Attribute.KEEPS_ENCHANTMENTS,
+			Attribute.MAGNETIC,
+			Attribute.PERMANENT,
+			Attribute.RUSH,
+			Attribute.WITHER,
+			Attribute.INVOKE,
+			Attribute.LIFESTEAL,
+			Attribute.WINDFURY,
+			Attribute.ATTACK_BONUS,
+			Attribute.HP_BONUS);
 
 	/**
 	 * Contains the list of attributes that enchant cards as opposed to actors.
@@ -1230,5 +1262,9 @@ public enum Attribute {
 	 */
 	public static Set<Attribute> getStoresTurnNumberAttributes() {
 		return storesTurnNumberAttributes;
+	}
+
+	public static Set<Attribute> getEnchantmentLikeAttributes() {
+		return enchantmentLikeAttributes;
 	}
 }

@@ -16,13 +16,13 @@ public class PreDeflectDamageTrigger extends PreDamageTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
-		if (!super.innerQueues(event, host)) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
+		if (!super.innerQueues(event, enchantment, host)) {
 			return false;
 		}
 
 		PreDamageEvent preDamageEvent = (PreDamageEvent) event;
-		if (preDamageEvent.getDamageType() == DamageTypeEnum.DEFLECT) {
+		if (preDamageEvent.getDamageType().contains(DamageTypeEnum.DEFLECT)) {
 			return true;
 		}
 

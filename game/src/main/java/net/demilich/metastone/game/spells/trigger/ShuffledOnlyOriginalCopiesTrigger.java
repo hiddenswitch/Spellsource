@@ -12,11 +12,11 @@ public class ShuffledOnlyOriginalCopiesTrigger extends ShuffledTrigger {
 	}
 
 	@Override
-	protected boolean innerQueues(GameEvent event, Entity host) {
+	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		ShuffledEvent shuffledEvent = (ShuffledEvent) event;
 		if (shuffledEvent.isExtraCopy()) {
 			return false;
 		}
-		return super.innerQueues(event, host);
+		return super.innerQueues(event, enchantment, host);
 	}
 }

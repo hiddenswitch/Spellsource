@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.targeting;
 
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -12,11 +13,9 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
-import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -29,7 +28,7 @@ import java.util.Set;
  * <p>
  * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Entity, int,
  * boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
- * {@link Minion} is created by {@link Card#summon()} and placed into the {@link #BATTLEFIELD}.
+ * {@link Minion} is created by {@link Card#minion()} and placed into the {@link #BATTLEFIELD}.
  *
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.
  * @see net.demilich.metastone.game.entities.EntityLocation for more about entity locations and how zones are
@@ -84,7 +83,7 @@ public enum Zones {
 	 * The hero power zone stores the hero power for a corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}.
 	 * Only one such card can be in the zone at a time.
 	 *
-	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
+	 * @see Player#getHeroPowerZone() for more about the hero power zone.
 	 */
 	HERO_POWER("K"),
 	/**
@@ -140,19 +139,19 @@ public enum Zones {
 	PLAYER("P"),
 	/**
 	 * The enchantment zone corresponds to the player's list of {@link Enchantment} entities in the {@link
-	 * TriggerManager#getTriggers()} list.
+	 * GameContext#getTriggers()} list.
 	 */
 	ENCHANTMENT("T");
 
 	/**
 	 * These zones are public for notification purposes: both players ought to see their contents.
 	 */
-	public static final Set<Zones> PUBLIC = EnumSet.of(Zones.BATTLEFIELD, Zones.PLAYER, Zones.HERO, Zones.HERO_POWER, Zones.WEAPON, Zones.QUEST, Zones.SECRET);
+	public static final Set<Zones> PUBLIC = Sets.immutableEnumSet(Zones.BATTLEFIELD, Zones.PLAYER, Zones.HERO, Zones.HERO_POWER, Zones.WEAPON, Zones.QUEST, Zones.SECRET);
 	/**
 	 * These zones are private: only the player that owns the entity in the zone ought to see notifications originating
 	 * from that zone.
 	 */
-	public static final Set<Zones> PRIVATE = EnumSet.of(Zones.DISCOVER, Zones.HAND, Zones.DECK, Zones.SET_ASIDE_ZONE, Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
+	public static final Set<Zones> PRIVATE = Sets.immutableEnumSet(Zones.DISCOVER, Zones.HAND, Zones.DECK, Zones.SET_ASIDE_ZONE, Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
 	private static final Zones[] VALID_ZONES = new Zones[]{HAND, DECK, GRAVEYARD, BATTLEFIELD, SECRET, QUEST, HERO_POWER, HERO, WEAPON, DISCOVER, REMOVED_FROM_PLAY, SET_ASIDE_ZONE, PLAYER};
 	private String serialized;
 

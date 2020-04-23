@@ -15,6 +15,8 @@ import net.demilich.metastone.game.targeting.Zones;
 import java.util.List;
 import java.util.Objects;
 
+import static net.demilich.metastone.game.spells.aura.AbstractFriendlyCardAura.addFriendlyCardTriggers;
+
 /**
  * Changes the targeted card's card ID to match the specified {@link AuraArg#CARD}, allowing its behaviour to change.
  * <p>
@@ -30,12 +32,13 @@ import java.util.Objects;
  *   }
  * </pre>
  */
-public class CardAura extends AbstractFriendlyCardAura {
+public class CardAura extends SpellAura {
 
 	public CardAura(AuraDesc desc) {
 		super(desc);
-		applyAuraEffect = SetCardSpell.create((String) desc.get(AuraArg.CARD), true);
-		removeAuraEffect = SetCardSpell.revert(true);
+		addFriendlyCardTriggers(this);
+		setApplyAuraEffect(SetCardSpell.create((String) desc.get(AuraArg.CARD), true));
+		setRemoveAuraEffect(SetCardSpell.revert(true));
 		getTriggers().add(CardReceivedTrigger.create());
 	}
 

@@ -22,7 +22,7 @@ public class PutMinionOnBoardSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
 
-		if (context.getLogic().summon(player.getId(), card.summon(), source, -1, false)) {
+		if (context.getLogic().summon(player.getId(), card.minion(), source, -1, false)) {
 			card.getAttributes().put(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 			context.getLogic().removeCard(card);
 		}

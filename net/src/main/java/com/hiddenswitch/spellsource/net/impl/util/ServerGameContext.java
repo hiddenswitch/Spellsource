@@ -10,6 +10,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.GameState;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
@@ -393,7 +394,9 @@ public class ServerGameContext extends GameContext implements Server {
 			Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
-			Enchantment enchantment = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
+			Enchantment enchantment = new Enchantment();
+			enchantment.getTriggers().add(trigger.getEventTriggerDesc().create());
+			enchantment.setSpell(spell);
 			enchantment.setOwner(0);
 			getGameTriggers().add(enchantment);
 		}
@@ -764,16 +767,22 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	@Suspendable
-	public void fireGameEvent(GameEvent gameEvent) {
+	public void onGameEventWillFire(GameEvent event) {
+		super.onGameEventWillFire(event);
 		eventCounter.incrementAndGet();
 		// Do not build game state for events the client is not interested in
-		if (gameEvent.isClientInterested()) {
+		if (event.isClientInterested()) {
 			GameState gameStateCopy = getGameStateCopy();
 			for (Client client : getClients()) {
-				client.sendNotification(gameEvent, gameStateCopy);
+				client.sendNotification(event, gameStateCopy);
 			}
 		}
-		super.fireGameEvent(gameEvent, new ArrayList<>(gameTriggers));
+	}
+
+	@Override
+	@Suspendable
+	public void onGameEventDidFire(GameEvent event) {
+		super.onGameEventDidFire(event);
 		if (eventCounter.decrementAndGet() == 0) {
 			for (Client client : getClients()) {
 				client.lastEvent();

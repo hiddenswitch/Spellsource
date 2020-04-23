@@ -2,41 +2,59 @@ package net.demilich.metastone.game.events;
 
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * The base class for game events, or things that happen during the execution of a {@link
  * net.demilich.metastone.game.actions.GameAction} that other game rules may react to.
+ * <p>
+ * A {@code null} source will resolve to the {@link net.demilich.metastone.game.targeting.EntityReference#TRIGGER_HOST}
+ * when evaluating queueing and firing conditions.
  *
  * @see net.demilich.metastone.game.spells.trigger.Trigger for how to use game events to implement card text.
- * @see GameContext#fireGameEvent(GameEvent) for how game events are fired.
+ * @see net.demilich.metastone.game.logic.GameLogic#fireGameEvent(GameEvent) for how game events are fired.
  */
-public abstract class GameEvent implements Notification {
-	private transient final GameContext context;
+public abstract class GameEvent implements Notification, Cloneable {
+	private transient final WeakReference<GameContext> context;
+	private transient final WeakReference<Entity> source;
+	private transient final WeakReference<Entity> target;
 	private final int targetPlayerId;
 	private final int sourcePlayerId;
 
-	public GameEvent(GameContext context, int targetPlayerId, int sourcePlayerId) {
-		this.context = context;
-		this.targetPlayerId = targetPlayerId;
-		this.sourcePlayerId = sourcePlayerId;
+	public GameEvent(@NotNull GameContext context, Player player, Entity source, Entity target) {
+		this.context = new WeakReference<>(context);
+		this.source = new WeakReference<>(source);
+		this.target = new WeakReference<>(target);
+		sourcePlayerId = player.getId();
+		targetPlayerId = target == null ? -1 : target.getOwner();
 	}
 
+	public GameEvent(@NotNull GameContext context, Entity source, Entity target, int sourcePlayerId, int targetPlayerId) {
+		this.context = new WeakReference<>(context);
+		this.source = new WeakReference<>(source);
+		this.target = new WeakReference<>(target);
+		this.sourcePlayerId = sourcePlayerId;
+		this.targetPlayerId = targetPlayerId;
+	}
+
+
+	@Override
 	public Entity getSource() {
-		return getEventSource();
+		return source.get();
 	}
 
 	public Entity getTarget() {
-		return getEventTarget();
+		return target.get();
 	}
 
-	@Override
-	public Entity getSource(GameContext context) {
-		return getSource();
-	}
 
 	@Override
 	public List<Entity> getTargets(GameContext context, int player) {
@@ -44,22 +62,10 @@ public abstract class GameEvent implements Notification {
 		return target == null ? Collections.emptyList() : Collections.singletonList(target);
 	}
 
-	/**
-	 * Spells may specify to be cast on the event target; this is dependent on the actual event. For example, a
-	 * SummonEvent may return the summoned minion, a DamageEvent may return the damaged minion/hero, etc.
-	 *
-	 * @return
-	 */
-	public abstract Entity getEventTarget();
-
-	public Entity getEventSource() {
-		return null;
-	}
-
 	public abstract EventTypeEnum getEventType();
 
 	public GameContext getGameContext() {
-		return context;
+		return context.get();
 	}
 
 	public int getTargetPlayerId() {
@@ -72,7 +78,11 @@ public abstract class GameEvent implements Notification {
 
 	@Override
 	public String toString() {
-		return "[EVENT " + getClass().getSimpleName() + "]";
+		return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+				.append("eventType", getEventType())
+				.append("source", getSource())
+				.append("target", getTarget())
+				.toString();
 	}
 
 	@Override
@@ -83,6 +93,15 @@ public abstract class GameEvent implements Notification {
 	@Override
 	public String getDescription(GameContext context, int playerId) {
 		return toString();
+	}
+
+	@Override
+	protected GameEvent clone() {
+		try {
+			return (GameEvent) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
 

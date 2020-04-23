@@ -24,10 +24,10 @@ public class NetworkedGameLogic extends GameLogic {
 		} catch (Throwable baseThrowable) {
 			Throwable throwable = Throwables.getRootCause(baseThrowable);
 			if (throwable instanceof InterruptedException) {
-				logger.error("requestAction {}: Gameplay was interrupted", context.getGameId());
+				LOGGER.error("requestAction {}: Gameplay was interrupted", context.getGameId());
 				throw baseThrowable;
 			} else {
-				logger.error("requestAction {}: An error occurred requesting an action through the game logic, the first action or end turn was chosen", context.getGameId(), throwable);
+				LOGGER.error("requestAction {}: An error occurred requesting an action through the game logic, the first action or end turn was chosen", context.getGameId(), throwable);
 				return actions.stream().filter(e -> e.getActionType() == ActionType.END_TURN).findFirst().orElse(actions.get(0));
 			}
 		}

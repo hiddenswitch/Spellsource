@@ -8,13 +8,10 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  * evaluates to {@code true} and {@link net.demilich.metastone.game.spells.ReservoirSpell} always include their bonus
  * effects.
  */
-public final class ReservoirsAlwaysActiveAura extends Aura {
+public final class ReservoirsAlwaysActiveAura extends EffectlessAura {
 
 	public ReservoirsAlwaysActiveAura(AuraDesc desc) {
 		super(desc);
-		setDesc(desc);
-		applyAuraEffect = NullSpell.create();
-		removeAuraEffect = NullSpell.create();
 	}
 }
 
