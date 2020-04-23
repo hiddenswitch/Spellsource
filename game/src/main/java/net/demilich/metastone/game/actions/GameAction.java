@@ -140,13 +140,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		return true;
 	}
 
-	/**
-	 * A user-renderable description of what occurred in this notification.
-	 *
-	 * @param context
-	 * @param playerId
-	 * @return
-	 */
 	public String getDescription(GameContext context, int playerId) {
 		return getClass().getSimpleName();
 	}

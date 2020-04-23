@@ -45,7 +45,6 @@ import java.util.List;
  * Note that the {@link EntityReference#OUTPUT} refers to the newly copied minion. Since the copied minion is in the
  * {@link SpellArg#SECONDARY_TARGET} specifier, the copied minion is the attacker. The {@code target} is implied to be
  * the selected target of the spell, i.e., the original minion.
- * <p>
  */
 public class FightSpell extends Spell {
 

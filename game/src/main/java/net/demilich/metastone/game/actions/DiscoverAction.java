@@ -100,13 +100,6 @@ public class DiscoverAction extends GameAction implements HasCard {
 		return Collections.singletonList(context.resolveSingleTarget(getTargetReference()));
 	}
 
-	/**
-	 * Gets a plain English description of this discover action for UI purposes, if required.
-	 *
-	 * @param context  The game context.
-	 * @param playerId
-	 * @return A description of the card being discovered.
-	 */
 	public String getDescription(GameContext context, int playerId) {
 		if (playerId == context.getActivePlayerId()) {
 			return String.format("With %s, %s %s %s.", getSource(context).getName(), context.getPlayer(playerId).getName(), DISCOVERED_NAME, getCard().getName());

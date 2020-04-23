@@ -23,7 +23,6 @@ import java.util.Map;
  * <p>
  * For <b>example</b>, a spell may create a pact for both players that reads, "After your characters have been damaged
  * 10 times, lose the game."
- * <p>
  * <pre>
  *     {
  *         "class": "AddQuestSpell",

@@ -5,6 +5,11 @@ import net.demilich.metastone.game.events.GameEvent;
 ;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires whenever a target is drained using {@link net.demilich.metastone.game.spells.DrainSpell}.
+ *
+ * @see net.demilich.metastone.game.events.DrainEvent
+ */
 public final class DrainTrigger extends EventTrigger {
 
 	public DrainTrigger(EventTriggerDesc desc) {

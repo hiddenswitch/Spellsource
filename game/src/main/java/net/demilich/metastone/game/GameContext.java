@@ -95,7 +95,6 @@ import static java.util.stream.Collectors.toList;
  * Behaviour} objects in {@link #getBehaviours()}.
  * <p>
  * Game state is composed of a variety of fields that live inside the context. These fields are:
- * <p>
  * <ul>
  * <li>The {@link #getPlayers()} player objects. This includes zones, attributes on the player object itself, and some
  * statistics fields.</li>

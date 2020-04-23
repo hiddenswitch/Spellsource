@@ -8,8 +8,8 @@ import java.util.function.Function;
 /**
  * Implementors of this interface support being notified of changes to an ordered array.
  *
- * @param <T>
- * @param <K>
+ * @param <T> Value type
+ * @param <K> Key type
  */
 public interface DiffContext<T, K extends Comparable> {
 	/**

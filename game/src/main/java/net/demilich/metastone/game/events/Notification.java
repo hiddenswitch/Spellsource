@@ -28,6 +28,8 @@ public interface Notification extends Serializable {
 	/**
 	 * For visualization purposes, what are the targets of this notification?
 	 *
+	 * @param context game context
+	 * @param player  the player
 	 * @return A reference to the entity that is the visualizable target of this notification.
 	 */
 	List<Entity> getTargets(GameContext context, int player);
@@ -42,9 +44,9 @@ public interface Notification extends Serializable {
 	/**
 	 * A user-renderable description of what occurred in this notification.
 	 *
-	 * @param context
-	 * @param playerId
-	 * @return
+	 * @param context the game context
+	 * @param playerId the player ID
+	 * @return a description string
 	 */
 	String getDescription(GameContext context, int playerId);
 
