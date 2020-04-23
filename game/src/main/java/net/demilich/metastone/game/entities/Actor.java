@@ -69,18 +69,28 @@ public abstract class Actor extends Entity {
 	}
 
 	public int getAttack() {
-		int bonuses = getAttributeValue(Attribute.ATTACK_BONUS)
-				+ getAttributeValue(Attribute.AURA_ATTACK_BONUS) + getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS)
+		int bonuses = getAttributeValue(Attribute.ATTACK_BONUS) + getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS)
 				+ getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS);
+		int auraBonuses = getAttributeValue(Attribute.AURA_ATTACK_BONUS);
 		if (hasAttribute(Attribute.ATTACK_BONUS_MULTIPLIER) && getAttributeValue(Attribute.ATTACK_BONUS_MULTIPLIER) != 0) {
 			bonuses *= getAttributeValue(Attribute.ATTACK_BONUS_MULTIPLIER);
+			auraBonuses *= getAttributeValue(Attribute.ATTACK_BONUS_MULTIPLIER);
 		}
 
 		if (hasAttribute(Attribute.AURA_ATTACK_BONUS_MULTIPLIER) && getAttributeValue(Attribute.AURA_ATTACK_BONUS_MULTIPLIER) != 0) {
 			bonuses *= getAttributeValue(Attribute.AURA_ATTACK_BONUS_MULTIPLIER);
+			auraBonuses *= getAttributeValue(Attribute.AURA_ATTACK_BONUS_MULTIPLIER);
 		}
 
-		int attack = getAttributeValue(Attribute.ATTACK) + bonuses - getAttributeValue(Attribute.WITHERED);
+		int attack = getAttributeValue(Attribute.ATTACK) + bonuses;
+
+		if (attack + auraBonuses >= getAttributeValue(Attribute.AURA_MIN_ATTACK)) {
+			attack += auraBonuses;
+		} else if (attack > getAttributeValue(Attribute.AURA_MIN_ATTACK)) {
+			attack = getAttributeValue(Attribute.AURA_MIN_ATTACK);
+		}
+
+		attack -= getAttributeValue(Attribute.WITHERED);
 
 		if (hasAttribute(Attribute.ATTACK_MULTIPLIER) && getAttributeValue(Attribute.ATTACK_MULTIPLIER) != 0) {
 			attack *= getAttributeValue(Attribute.ATTACK_MULTIPLIER);

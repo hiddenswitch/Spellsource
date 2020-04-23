@@ -21,6 +21,7 @@ header: true
  - The Hercules Skill now properly buffs his (your?) attack. (1713)
  - Blast Apart no longer damages more things more than it should. (1718)
  - Diamond Sultan now has a dynamic description. (1711)
+ - Hope Eater's aura is now more consistent on removal. (1712)
  
 ### Notes on Skyward Updates
 
