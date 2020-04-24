@@ -7,6 +7,7 @@ header: true
 
 ### Upcoming Changes
  - Firebolt now shows spell power correctly. (1724)
+ - For Science! now buffs the right minion. (1726)
 
 ### 0.8.74-3.1.2 (April 22, 2017)
 
