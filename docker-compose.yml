@@ -100,89 +100,6 @@ services:
       interval: 8s
       timeout: 4s
       retries: 3
-  mediawiki:
-    image: "doctorpangloss/wiki:latest"
-    build:
-      context: mediawiki
-      dockerfile: Dockerfile
-    networks:
-      - web
-      - backend
-    environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - SMTP_HOST=${SMTP_HOST}
-      - SMTP_USERNAME=${SMTP_USERNAME}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - SMTP_DOMAIN=${SMTP_DOMAIN}
-      - MEDIAWIKI_SITE_NAME=Spellsource
-      - MEDIAWIKI_URL=https://wiki.hiddenswitch.com
-      - MEDIAWIKI_LOGO_URL=/resources/assets/wiki.png
-      - MEDIAWIKI_AWS_REGION=${MEDIAWIKI_AWS_REGION}
-      - MEDIAWIKI_AWS_BUCKET_ID=${MEDIAWIKI_AWS_BUCKET_ID}
-      - MEDIAWIKI_PARSOID_URL=http://parsoid:8000
-      - MEDIAWIKI_PARSOID_DOMAIN=mediawiki
-      - MEDIAWIKI_DB_TYPE=mysql
-      - MEDIAWIKI_DB_SERVER=mariadb
-      - MEDIAWIKI_DB_USER=spellsource
-      - MEDIAWIKI_DB_NAME=spellsource
-      - MEDIAWIKI_DB_PASSWORD=password
-      - MEDIAWIKI_DB_PREFIX=mediawiki
-      - MEDIAWIKI_SECURITY_KEY=${MEDIAWIKI_SECURITY_KEY}
-      - MEDIAWIKI_UPGRADE_KEY=${MEDIAWIKI_UPGRADE_KEY}
-      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
-      - GOOGLE_RECAPTCHA_SITE_KEY=${GOOGLE_RECAPTCHA_SITE_KEY}
-    volumes:
-      - mediawikidata:/var/www/html/images
-    deploy:
-      labels:
-        - "traefik.frontend.rule=${MEDIAWIKI_RULE}"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.frontend.entryPoints=http,https"
-        - "traefik.port=80"
-        - "traefik.enable=true"
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
-  parsoid:
-    image: "thenets/parsoid:0.10.0"
-    networks:
-      - backend
-    deploy:
-      labels:
-        - "traefik.enable=false"
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
-    environment:
-      - PARSOID_DOMAIN_mediawiki=http://mediawiki/api.php
-  mariadb:
-    image: mariadb:10.4.1
-    networks:
-      - backend
-    deploy:
-      restart_policy:
-        condition: on-failure
-        window: 15s
-      labels:
-        - "traefik.enable=false"
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
-    environment:
-      - MYSQL_DATABASE=spellsource
-      - MYSQL_PASSWORD=password
-      - MYSQL_USER=spellsource
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_ROOT_HOST=%
-    volumes:
-      - mariadbdata:/var/lib/mysql
   jaeger-collector:
     image: jaegertracing/jaeger-collector:1.15.1
     environment:
@@ -307,32 +224,10 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
-#  ikev2:
-#    image: doctorpangloss/ikev2:latest
-#    build:
-#      context: ikev2
-#      dockerfile: Dockerfile
-#    networks:
-#      - web
-#      - backend
-#    ports:
-#      - 500:500/udp
-#      - 4500:4500/udp
-#    deploy:
-#      restart_policy:
-#        condition: on-failure
-#        window: 15s
-#      placement:
-#        constraints:
-#          - node.platform.arch == x86_64
-#          - node.labels.cpu == high
-#          - node.labels.disk == ssd
 volumes:
   mongodata:
   mancenterdata:
   loadbalancerdata:
-  mediawikidata:
-  mariadbdata:
   cassandradata2:
 networks:
   web:
