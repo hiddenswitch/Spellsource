@@ -11,7 +11,7 @@ header: true
 
 ### 0.8.74-3.1.2 (April 22, 2017)
 
- - The Invoke keyword has been reworked! It now reads, "Invoke (X): Choose a bonus effect that costs (X) more."
+ - The Invoke keyword has been reworked! It now reads, "Invoke (X): Choose to spend X more Lun when played for an additional effect."
  - New updates to Skyward! Thanks @Nix
  - Uncollectiblified Ancient's Aid, Mind Flay, Kind in Yellow (the 6/6), Unholy Tremors and Lash Out. (1698)
  - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
