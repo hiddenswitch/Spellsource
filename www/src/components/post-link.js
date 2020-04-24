@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 
 const PostLink = ({ post }) => (
-  <Link to={post.frontmatter.path}>
+  <Link to={post.frontmatter.path || ('/' + post.frontmatter.permalink)}>
     {post.frontmatter.title}
   </Link>
 )

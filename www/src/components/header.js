@@ -23,6 +23,7 @@ const Header = () => {
           frontmatter {
             date(formatString: "MMMM DD, YYYY")
             path
+            permalink
             title
             header
           }
@@ -32,7 +33,7 @@ const Header = () => {
   }
 `)
   const pages = data.allMarkdownRemark.edges
-    .filter(edge => !!edge.node.frontmatter.date && !!edge.node.frontmatter.header)
+    .filter(edge => !!edge.node.frontmatter.header)
     .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
 
   return <header>

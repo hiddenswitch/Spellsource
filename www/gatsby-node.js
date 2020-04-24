@@ -4,6 +4,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
 
   const pageTemplate = path.resolve(`src/templates/page-template.js`)
+  const wikiTemplate = path.resolve(`src/templates/wiki-template.js`)
 
   const result = await graphql(`
     {
@@ -15,6 +16,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           node {
             frontmatter {
               path
+              permalink
             }
           }
         }
@@ -29,10 +31,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   }
 
   result.data.allMarkdownRemark.edges.forEach(({ node }) => {
-    createPage({
-      path: node.frontmatter.path,
-      component: pageTemplate,
-      context: {}, // additional data can be passed via context
-    })
+    if (node.frontmatter.permalink != null) {
+      createPage({
+        path: node.frontmatter.permalink,
+        component: wikiTemplate,
+        context: {}
+      })
+    } else if (node.frontmatter.path != null) {
+      createPage({
+        path: node.frontmatter.path,
+        component: pageTemplate,
+        context: {}, // additional data can be passed via context
+      })
+    }
   })
 }
