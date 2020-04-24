@@ -27,7 +27,7 @@ public abstract class CountCondition extends Condition {
 		ConditionDesc desc = getDesc();
 		int cardCount = 0;
 		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
-		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
+		ComparisonOperation operation = (ComparisonOperation) desc.getOrDefault(ConditionArg.OPERATION, ComparisonOperation.EQUAL);
 		switch (targetPlayer) {
 			case EITHER:
 				return (SpellUtils.evaluateOperation(operation, getCountForPlayer(context, player, source, target), targetValue) || SpellUtils.evaluateOperation(operation, getCountForPlayer(context, context.getOpponent(player), source, target), targetValue));

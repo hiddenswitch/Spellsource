@@ -714,9 +714,12 @@ public interface Games extends Verticle {
 		entity.collectible(card.isCollectible());
 		entity.discarded(card.hasAttribute(Attribute.DISCARDED));
 		entity.roasted(card.hasAttribute(Attribute.ROASTED));
-		// TODO: A little too underperformant so we're going to skip this
-		// entityState.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
 		String heroClass = card.getHeroClass();
+
+		// Put the condition met glow on the card
+		if (card.getZone() == Zones.HAND && entity.isPlayable()) {
+			entity.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
+		}
 
 		// Handles tri-class cards correctly
 		if (heroClass == null) {
