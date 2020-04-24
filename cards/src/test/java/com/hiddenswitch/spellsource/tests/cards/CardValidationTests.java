@@ -14,7 +14,7 @@ import java.io.IOException;
  * method to ensure that each card is well formed and can be parsed.
  */
 public class CardValidationTests {
-	private static final String CARDS_DIR = "src/main/resources/cards/custom/";
+	public static final String CARDS_DIR = "src/main/resources/cards/custom/";
 
 	public static Object[][] getCardFiles() {
 		return CardValidation.getCardFiles(CARDS_DIR);

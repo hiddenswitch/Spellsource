@@ -1,0 +1,26 @@
+{
+  "seed" : -5083880695868936771,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "DARKGREEN", "CANDY" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_ritual_of_undeath", "minion_lounge_brownie", "minion_ironplate_samurai", "minion_jack_in_the_box", "minion_kodama_bulwark", "minion_stallius_the_horned", "minion_fae_trickster", "minion_stalwart_sculptor", "minion_hulking_magmass", "minion_end_reveler", "spell_underwater_horrors", "quest_the_lost_city", "minion_doctosaur", "minion_corrupted_challenger", "minion_eldritch_scholar", "minion_demonic_frontrunner", "minion_blackflame_bomber", "minion_chaugnar_the_corruptor", "minion_faceless_shifter", "spell_chilling_warcry", "minion_fassnu_avenger", "spell_otherwordly_truth", "minion_mosshorn", "spell_cosmos_rift", "minion_the_rotten", "minion_chaotic_cutthroat", "minion_rapier_rodent", "minion_holy_giant", "minion_treasure_hunter", "minion_gobogeg" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_terrifying_display", "minion_knight_eternal", "minion_sly_conquistador", "minion_test_start_turns", "spell_front-row_fun", "spell_illusory_troupe", "minion_storyteller_dobo", "minion_matriarch_aiiran", "minion_vitium_surger", "minion_freyas_familliar", "spell_sleight_of_hands", "minion_faws", "minion_mighty_mufunga", "minion_aeon_channeler", "minion_mary_demasque", "minion_nezumi_master", "minion_floating_crystal", "minion_polycephalos", "minion_wink_dog", "minion_twilight_annihilator", "minion_bungling_busker", "minion_captain_of_the_guard", "minion_fassnu_avenger", "minion_selfburner", "spell_jaunty_tune", "minion_skeletal_warrior", "minion_emerald_cleanser", "minion_fairytale_tracker", "minion_opening_actor", "minion_bookkeeper" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 8, 15 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 60, 49, 44 ]
+  } ],
+  "actions" : [ 0, 0, 3, 1, 0, 1, 0, 0, 4, 1, 0, 1, 13, 11, 7, 1, 0, 0, 0, 2, 1, 2, 0, 3, 5, 2, 2, 1, 2, 0, 0, 3, 4, 8, 22, 4, 3, 0, 0, 1, 8, 1, 19, 2, 2, 0, 0, 0, 3, 6, 16, 2, 8, 4, 1, 2, 2, 16, 12, 6, 34, 27, 19, 10, 5, 0, 0, 26, 20, 26, 2, 10, 0, 4, 1, 1, 16, 2, 3, 0, 9, 3, 2, 0, 0, 28, 10, 7, 13, 1, 8, 29, 37, 42, 20, 21 ],
+  "id" : null,
+  "traceErrors" : false,
+  "version" : 4
+}

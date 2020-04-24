@@ -5201,8 +5201,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public boolean conditionMet(int localPlayerId, @NotNull Card card) {
 		try {
 			return card.getDesc()
-					.getConditions()
-					.allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
+					.getGlowConditions()
+					.anyMatch(condition -> condition.isFulfilled(context, context.getPlayer(localPlayerId), card, null));
 		} catch (Throwable ignored) {
 			return false;
 		}
