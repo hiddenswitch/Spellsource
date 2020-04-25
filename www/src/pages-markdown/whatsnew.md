@@ -9,6 +9,7 @@ header: true
 
  - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - A golden glow appears around cards whose condition is met.
+ - Card cost modifiers now correctly show buff / debuff status for cards in the hand.
 
 ### 0.8.74-3.1.2 (April 22, 2020)
 
