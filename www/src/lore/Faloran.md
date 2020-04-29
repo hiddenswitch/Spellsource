@@ -3,8 +3,11 @@ title: Faloran
 path: /wiki/Faloran
 layout: wiki
 ---
+![Faloran](Faloran Humanoid.png "fig:Faloran Humanoid")
+![Faloran](Faloran Fox.png "fig:Faloran Fox") 
 
-![Faloran](Faloran.png "fig:Faloran") Faloran is a
+
+Faloran is a
 [Hengeyokai](/wiki/Hengeyokai "wikilink") [Kitsune](Kitsune "wikilink") (Fox)
 Ninja and leader of the Kitsune subclan.
 
