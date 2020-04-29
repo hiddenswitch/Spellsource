@@ -1,6 +1,6 @@
 ---
 title: Yunnon
-permalink: wiki/Yunnon/
+path: /wiki/Yunnon
 layout: wiki
 ---
 
@@ -22,7 +22,7 @@ But Goyan was arrogant.
 He charged his advisor and alchemist, Shun Loa, with breaching the Great Wall.
 Over the course of his travels, Loa had heard of a substance that -- in high enough concentrations -- could trigger a huge explosion.
 So he collected it across Yunnon's vast holdings and managed to build a bomb.
-This was the first (human) recorded use of [Lun](/wiki/Lun_Substance "wikilink") as a weapon.
+This was the first (human) recorded use of [Lun](/wiki/Lun "wikilink") as a weapon.
 
 And it was devastatingly effective.
 

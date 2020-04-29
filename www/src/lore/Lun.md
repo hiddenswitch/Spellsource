@@ -1,6 +1,6 @@
 ---
 title: Lun
-permalink: wiki/Lun_Substance/
+path: /wiki/Lun
 layout: wiki
 ---
 

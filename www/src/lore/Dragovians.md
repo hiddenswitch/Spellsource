@@ -1,6 +1,6 @@
 ---
 title: Dragovians
-permalink: wiki/Dragovians/
+path: /wiki/Dragovians
 layout: wiki
 ---
 

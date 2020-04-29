@@ -1,6 +1,6 @@
 ---
 title: Dragonbreath
-permalink: wiki/Dragonbreath/
+path: /wiki/Dragonbreath
 layout: wiki
 ---
 

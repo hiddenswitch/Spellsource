@@ -1,6 +1,6 @@
 ---
 title: Wyspan
-permalink: wiki/Wyspan/
+path: /wiki/Wyspan
 layout: wiki
 ---
 

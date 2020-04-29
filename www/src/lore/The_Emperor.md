@@ -1,6 +1,6 @@
 ---
 title: The Emperor
-permalink: wiki/The_Emperor/
+path: /wiki/The_Emperor
 layout: wiki
 ---
 

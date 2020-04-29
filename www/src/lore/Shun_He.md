@@ -1,6 +1,6 @@
 ---
 title: Shun He
-permalink: wiki/Shun_He/
+path: /wiki/Shun_He
 layout: wiki
 ---
 
@@ -17,7 +17,7 @@ son of an advisor/alchemist to its great Khan. When the Lotus Empire invaded
 Yunnon, he was captured and refused to swear fealty. His bravery
 impressed the Lotus Emperor so he let Shun He live in servitude, but
 blinded him as punishment. For the next 20 years, Shun devoted himself
-to the study of [Lun](/wiki/Lun_Substance "wikilink"), the faint magical substance that
+to the study of [Lun](/wiki/Lun "wikilink"), the faint magical substance that
 pervades the world.
 
 He remembered one summer when glowing blue flecks -- like a thousand fireflies -- 

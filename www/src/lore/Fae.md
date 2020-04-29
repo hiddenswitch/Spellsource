@@ -1,6 +1,6 @@
 ---
 title: Fae
-permalink: wiki/Fae/
+path: /wiki/Fae
 layout: wiki
 ---
 

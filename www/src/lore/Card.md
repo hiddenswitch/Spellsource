@@ -1,6 +1,6 @@
 ---
 title: Card
-permalink: wiki/Card/
+path: /wiki/Card
 layout: wiki
 ---
 

@@ -16,7 +16,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           node {
             frontmatter {
               path
-              permalink
+              layout
             }
           }
         }
@@ -31,18 +31,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   }
 
   result.data.allMarkdownRemark.edges.forEach(({ node }) => {
-    if (node.frontmatter.permalink != null) {
-      createPage({
-        path: node.frontmatter.permalink,
-        component: wikiTemplate,
-        context: {}
-      })
-    } else if (node.frontmatter.path != null) {
-      createPage({
-        path: node.frontmatter.path,
-        component: pageTemplate,
-        context: {}, // additional data can be passed via context
-      })
-    }
+    // Is this a wiki page? then use the wiki template
+    let template = node.frontmatter.layout === 'wiki' ? wikiTemplate : pageTemplate
+    createPage({
+      path: node.frontmatter.path,
+      component: template,
+      context: {}
+    })
   })
 }

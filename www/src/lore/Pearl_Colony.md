@@ -1,6 +1,6 @@
 ---
 title: Pearl Colony
-permalink: wiki/Pearl_Colony/
+path: /wiki/Pearl_Colony
 layout: wiki
 ---
 

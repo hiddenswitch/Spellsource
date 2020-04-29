@@ -1,6 +1,6 @@
 ---
 title: How to Play
-permalink: wiki/How_to_Play/
+path: /wiki/How_to_Play
 layout: wiki
 ---
 

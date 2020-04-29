@@ -1,6 +1,6 @@
 ---
 title: Five Elements
-permalink: wiki/Five_Elements/
+path: /wiki/Five_Elements
 layout: wiki
 ---
 

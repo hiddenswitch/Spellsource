@@ -1,6 +1,6 @@
 ---
 title: Building a Deck
-permalink: wiki/Building_a_Deck/
+path: /wiki/Building_a_Deck
 layout: wiki
 ---
 

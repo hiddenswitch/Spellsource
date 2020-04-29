@@ -1,6 +1,6 @@
 ---
 title: Hengeyokai
-permalink: wiki/Hengeyokai/
+path: /wiki/Hengeyokai
 layout: wiki
 ---
 

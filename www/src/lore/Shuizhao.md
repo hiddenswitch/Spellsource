@@ -1,6 +1,6 @@
 ---
 title: Shuizhao
-permalink: wiki/Shuizhao/
+path: /wiki/Shuizhao
 layout: wiki
 ---
 

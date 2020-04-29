@@ -1,6 +1,6 @@
 ---
 title: Gramlot
-permalink: wiki/Gramlot/
+path: /wiki/Gramlot
 layout: wiki
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Princess Briila
-permalink: wiki/Princess_Briila/
+path: /wiki/Princess_Briila
 layout: wiki
 ---
 

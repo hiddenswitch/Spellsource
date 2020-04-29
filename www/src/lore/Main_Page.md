@@ -1,7 +1,7 @@
 ---
 title: Wiki
 header: true
-permalink: wiki/Main_Page/
+path: /wiki/Main_Page
 layout: wiki
 ---
 

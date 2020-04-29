@@ -1,6 +1,6 @@
 ---
 title: Season 1
-permalink: wiki/Season_1/
+path: /wiki/Season_1
 layout: wiki
 ---
 
@@ -39,7 +39,7 @@ layout: wiki
         [Hengeyokai](/wiki/Hengeyokai "wikilink") and vassals of the
         Dragovians, leave their forest home for war.
     -   Inora casts a spell to enable Shun He to visit and see her
-        hidden forest village. Shun He senses [Lun](/wiki/Lun_Substance "wikilink") and
+        hidden forest village. Shun He senses [Lun](/wiki/Lun "wikilink") and
         is overwhelmed by regaining sight after many years. They
         consummate their relationship the first time he takes in Inora's
         full beauty.

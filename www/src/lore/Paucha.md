@@ -1,6 +1,6 @@
 ---
 title: Paucha
-permalink: wiki/Paucha/
+path: /wiki/Paucha
 layout: wiki
 ---
 

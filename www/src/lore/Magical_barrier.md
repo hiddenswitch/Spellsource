@@ -1,6 +1,6 @@
 ---
 title: Magical barrier
-permalink: wiki/Magical_barrier/
+path: /wiki/Magical_barrier
 redirect_to: /wiki/Lunopause/
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Bogovey
-permalink: wiki/Bogovey/
+path: /wiki/Bogovey
 layout: wiki
 ---
 
