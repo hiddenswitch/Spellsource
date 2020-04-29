@@ -1,6 +1,6 @@
 ---
 title: Lungcao
-permalink: wiki/Lungcao/
+path: /wiki/Lungcao
 layout: wiki
 ---
 

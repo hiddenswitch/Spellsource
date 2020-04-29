@@ -1,3 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.unity	merge=unity
+*.prefab merge=unity
 *.exe filter=lfs diff=lfs merge=lfs -text

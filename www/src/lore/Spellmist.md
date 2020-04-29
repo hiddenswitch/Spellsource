@@ -1,6 +1,6 @@
 ---
 title: Spellmist
-permalink: wiki/Spellmist/
+path: /wiki/Spellmist
 layout: wiki
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Inora Ithkal
-permalink: wiki/Inora_Ithkal/
+path: /wiki/Inora_Ithkal
 layout: wiki
 ---
 

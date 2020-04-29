@@ -1,6 +1,6 @@
 ---
 title: Sylvan
-permalink: wiki/Sylvan/
+path: /wiki/Sylvan
 redirect_to: /wiki/Wyspan/
 ---
 

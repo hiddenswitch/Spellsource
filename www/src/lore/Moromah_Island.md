@@ -1,6 +1,6 @@
 ---
 title: Moromah Island
-permalink: wiki/Moromah_Island/
+path: /wiki/Moromah_Island
 layout: wiki
 ---
 

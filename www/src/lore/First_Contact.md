@@ -1,6 +1,6 @@
 ---
 title: First Contact
-permalink: wiki/First_Contact/
+path: /wiki/First_Contact
 layout: wiki
 ---
 

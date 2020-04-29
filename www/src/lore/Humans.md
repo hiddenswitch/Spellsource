@@ -1,6 +1,6 @@
 ---
 title: Humans
-permalink: wiki/Humans/
+path: /wiki/Humans
 layout: wiki
 ---
 

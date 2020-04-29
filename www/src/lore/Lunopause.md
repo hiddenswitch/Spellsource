@@ -1,6 +1,6 @@
 ---
 title: Lunopause
-permalink: wiki/Lunopause/
+path: /wiki/Lunopause
 layout: wiki
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Faloran
-permalink: wiki/Faloran/
+path: /wiki/Faloran
 layout: wiki
 ---
 

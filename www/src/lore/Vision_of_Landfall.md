@@ -1,6 +1,6 @@
 ---
 title: Vision of Landfall
-permalink: wiki/Vision_of_Landfall/
+path: /wiki/Vision_of_Landfall
 layout: wiki
 ---
 

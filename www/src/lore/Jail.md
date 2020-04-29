@@ -1,6 +1,6 @@
 ---
 title: Jail
-permalink: wiki/Jail/
+path: /wiki/Jail
 layout: wiki
 ---
 

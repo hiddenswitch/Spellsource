@@ -1,6 +1,6 @@
 ---
 title: Lir
-permalink: wiki/Lir/
+path: /wiki/Lir
 layout: wiki
 ---
 

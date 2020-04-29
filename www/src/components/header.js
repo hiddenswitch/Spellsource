@@ -23,7 +23,6 @@ const Header = () => {
           frontmatter {
             date(formatString: "MMMM DD, YYYY")
             path
-            permalink
             title
             header
           }

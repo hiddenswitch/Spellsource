@@ -1,6 +1,6 @@
 ---
 title: Spirit Folk
-permalink: wiki/Spirit_Folk/
+path: /wiki/Spirit_Folk
 redirect_to: /wiki/Fae/
 ---
 

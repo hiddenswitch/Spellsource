@@ -1,6 +1,6 @@
 ---
 title: Oni
-permalink: wiki/Oni/
+path: /wiki/Oni
 layout: wiki
 ---
 

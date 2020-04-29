@@ -1,6 +1,6 @@
 ---
 title: Keywords
-permalink: wiki/Keywords/
+path: /wiki/Keywords
 layout: wiki
 ---
 

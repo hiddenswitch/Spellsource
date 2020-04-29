@@ -1,6 +1,6 @@
 ---
 title: Passed Vision
-permalink: wiki/Passed_Vision/
+path: /wiki/Passed_Vision
 layout: wiki
 ---
 
