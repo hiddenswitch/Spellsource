@@ -38,7 +38,7 @@ Each of the four major clans—[Vohlok](/wiki/Vohlok "wikilink"),
     make them powerful spell casters.
 -   The **Fassnu** are ruthless samurai with limited flying. They are
     stouter in appearance with massive jaws like upright crocodiles.
--   Living on the [Eastern Cliffs](/wiki/Eastern_Cliffs "wikilink"), the
+-   Living primarily in the city of [Gramlot](/wiki/Gramlot "wikilink"), the
     **Jerbord** are supreme fishers, fliers, and traders. They are the
     most social dragovians and resemble pterodactyls.
 -   Finally, the **Bogovey** are heretics from the Vohlok Clan whose
