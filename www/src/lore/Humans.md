@@ -46,3 +46,18 @@ automata.
 The Lotus Empire technology is [Silkpunk](/wiki/Silkpunk "wikilink"): machines
 constructed of bamboo, silk, paper, coconut and leather. They all have
 an animal inspiration for their form.
+
+Main Human Heroes
+------------------
+
+[Shun He](/wiki/Shun_He "wikilink") (30) - Commander of the Spellsource expedition and Grand Alchemist of the Lotus Empire.
+
+Brass (undead) - Expedition navigator. He is Shun He's Frankenstein creation. A living-Lunvane, Brass is part-human part-golem and can intrinsically sense and harness Spellsource. Back in Yunnon, he was Shun He's best friend and died in the invasion. After Shun He rose up the ranks, he returned to his home town and dug up his grave. He used his knowledge of Spellsource to reanimate his body, and now his friend is back. As a side-effect of the process, Brass is now a powerful magic user.
+
+Himari (26) - Chief engineer of the expedition. Plucky, kawaii, and often-grease stained, she can fix just about anything.
+
+Qach (60) - Soldier/Bodyguard/Assassin. He's an expert swordsmen and archer that loves to drink. In service to Shun He's family for his entire life, Qach treats him like a son. It's not just a feeling either. Secretly, Qach is Shun He's biological father. He knows how much Shun He looks up to his dad, so he has sworn never to tell him the truth. But he will protect his son with his life.
+
+Ai (22) - Expedition Medic and Healer, Ai joined Shun's crew to see the world. She's secretly Emperor Wei's daughter and ran away to pursue adventure instead of live a life at court. She's also Himari's best friend.
+
+More to come.

@@ -1,6 +1,6 @@
 ---
 title: Lun
-permalink: wiki/Lun/
+permalink: wiki/Lun_Substance/
 layout: wiki
 ---
 
@@ -23,9 +23,26 @@ quickly disperses unless utilized. The quantity that evaporates from the
 stone is negligible in short time frame, but when constantly used it
 exponentially loses its volume.
 
-Historians argue that the Lun is the residue of Spellsource, or the
-Spellmist that condensated during larger emissions of Spellsources'
-energy, while the others claim that Lun is actually the separate entity
-that creates Spellmist, other than Spellsource. Current Grand Alchemist,
-[Shun He](/wiki/Shun_He "wikilink"), does not confirm either of the theorems,
-as he is not certain himself.
+Lun isn't a substance that's fully understand yet by anyone, and
+the different peoples of the world have different theories on what Lun *really* is.
+
+Humans that take noice of magic generally think the same thing that [Shun He](/wiki/Shun_He "wikilink") thought for most of his life&mdash;that Lun comes from the air.
+However, Shun's experiences on Moromah island are leading him to change his views.
+
+The ruling clan of the  enforce the view
+that Lun is the promethean gift of their emperor, the giant dragon slumbering inside
+Mount Moromah.
+
+The dominant view among [Dragovians](/wiki/Dragovians "wikilink") is that Lun is the
+promethean gift of their emperor, the giant dragon slumbering inside Mount Moromah.
+Specifically, it is the tears he sheds for his people that contain the magical
+substance. The haughty Vahlok clan collects these "tears" in the streams coming off the
+mountain and uses it to dominate the other clans. As keepers of the Emperor's tears,
+they follow strict traditions when it comes to magic and prevent any further
+investigation.
+
+The Bogovey clan was exiled from the rest of the Dragovians for questioning this orthodoxy. They believe they know the true nature of Lun. It comes from underground, and deep below the demongate on Krah, you can find the highest… and most dangerous concentrations of Lun.
+
+The animals and spirits of the world don't think very much about Lun, besides
+just seeing it as a substance that's pretty much everywhere.
+
