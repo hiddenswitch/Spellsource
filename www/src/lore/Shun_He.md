@@ -13,21 +13,41 @@ Empire](/wiki/Lotus_Empire "wikilink"), a blind monk and leader of the
 ### Biography
 
 Shun was born in the desert kingdom of [Yunnon](/wiki/Yunnon "wikilink"), the
-son of an advisor to its great Khan. When the Lotus Empire invaded
+son of an advisor/alchemist to its great Khan. When the Lotus Empire invaded 
 Yunnon, he was captured and refused to swear fealty. His bravery
 impressed the Lotus Emperor so he let Shun He live in servitude, but
 blinded him as punishment. For the next 20 years, Shun devoted himself
-to the study of [Lun](/wiki/Lun "wikilink"), the faint magical substance that
+to the study of [Lun](/wiki/Lun_Substance "wikilink"), the faint magical substance that
 pervades the world.
+
+He remembered one summer when glowing blue flecks -- like a thousand fireflies -- 
+floated through the air. His grandmother captured these flecks in jars to sell 
+at her market stand as trinkets, and young Shun He stole one for himself. As an 
+experiment, he dropped his sister's doll inside and sealed it up. That's when 
+something incredible happened. 
+
+The doll started to move on its own.
+
+Shun was able to recreate these results, and the emperor was so impressed that 
+he named him the new Grand Alchemist and orders him to use any resource he needs 
+to harness Lun and fashion it into weapons of war.
 
 Blindness forced Shun to adopt a rigorous scientific method,
 experiencing the world purely through science and mathematics. It also
 protected him from the sneers of the nobility at court — his outsider
 status and foreign appearance made Shun the frequent victim of the royal
-jester. When his research led him to discover the fabled source of all
-magic, he so impressed the Lotus Emperor that he commissioned Shun as
-his blind explorer. And any courtier that dared laugh would be
-immediately sentenced to death.
+jester. Nevertheless, he was relentless in his research. With the industrial 
+base of the Lotus Empire at his disposal, Shun He built the Lunvane -- 
+a device that can detect the presence of Lun in the air -- and with it he made
+discoveries: Lun's appearance is random except it appears more on windy days. 
+Then there's the most important discovery of all. 
+
+Lun is coming from the East, across the ocean.
+
+Armed with this knowledge, Shun He convinces the emperor to mount an expedition 
+and find the source of Lun. He so impressed the Lotus Emperor that he 
+commissioned Shun as his blind explorer. Now, any courtier that dared laugh 
+would be immediately sentenced to death.
 
 ### Arrival in the Lung Archipelago
 
@@ -52,4 +72,7 @@ at an alluvial beach.
 
 There, Shun made [first contact](/wiki/First_Contact "wikilink") with
 [Inora](/wiki/Inora_Ithkal "wikilink"), a three-eyed [Fae](Fae "wikilink")
-healer and sea priestess.
+healer and sea priestess. All the while, his Lunvane was going haywire. It was 
+no longer pointing in any one direction and instead spinning wildly.
+
+Perhaps the Lun doesn't come from the air after all…

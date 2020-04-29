@@ -6,7 +6,7 @@ layout: wiki
 
 **Awakening** is the process of initiating
 [Spellmist](/wiki/Spellmist "wikilink") sublimation from
-[Lun](/wiki/Lun "wikilink"), where the Awakener uses chemical reactions and
+[Lun](/wiki/Lun_Substance "wikilink"), where the Awakener uses chemical reactions and
 other Lunstone that is already in the process of Awakening to initiate
 the process. The Awakening is a tedious procedure that required years of
 training and practice, but its exact steps have evolved over time.
