@@ -37,7 +37,7 @@ Island](/wiki/Moromah_Island "wikilink"), the largest island of the
 archipelago. [Mount Moromah](/wiki/Mount_Moromah "wikilink") is the geographic
 location of the largest city on the island,
 [Atumjun](/wiki/Atumjun "wikilink"). Its most unusual gateway is the
-[Demongate](/wiki/Demongate "wikilink").
+[Demongate](/wiki/Demongate "wikilink"). Another large city is [Gramlot](/wiki/Gramlot "wikilink").
 
 ### Conflict
 
