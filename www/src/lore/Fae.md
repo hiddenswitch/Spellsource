@@ -4,8 +4,11 @@ path: /wiki/Fae
 layout: wiki
 ---
 
-![Land Fae](Spirit_Folk_of_the_Forest_(Land).jpg "fig:Land Fae") ![Sea
-Fae](Spirit_Folk_of_the_Sea.png "fig:Sea Fae") They are the first
+![Land Fae](Spirit_Folk_of_the_Forest_(Land).jpg "fig:Land Fae") 
+![Sea Fae](Spirit_Folk_of_the_Sea.png "fig:Sea Fae") 
+![Fae Minion](FaeMinion.png "fig:Fae Minion") 
+
+They are the first
 inhabitants of the [Lung Islands](/wiki/Moromah_Island "wikilink"), the
 descendants of [humans](humans "wikilink") who came to the Islands
 thousand of years ago and spirits of Nature. Slender and short with

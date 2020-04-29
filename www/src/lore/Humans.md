@@ -3,6 +3,7 @@ title: Humans
 path: /wiki/Humans
 layout: wiki
 ---
+![Human Minion](Human Minion.png "fig:A Human Minion")
 
 Humans are not native to the Lung Islands and have populated the rest of
 the world where magic is much rarer. The great explorer, [Shun

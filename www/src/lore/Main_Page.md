@@ -6,7 +6,7 @@ layout: wiki
 ---
 
 ![The Lung
-Archipelago](Map_of_the_Island_of_Moromah.jpg "fig:The Lung Archipelago")
+Archipelago](Map.png "fig:The Lung Archipelago")
 Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 [Shun He](/wiki/Shun_He "wikilink"), leads an expedition to find the fabled
 source of all magic. After many months at sea, his ships pierce a
