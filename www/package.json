@@ -10,6 +10,7 @@
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.3.0",
     "blockly": "^3.20200123.1",
     "enumify": "^2.0.0",
     "gatsby": "^2.19.23",
@@ -25,6 +26,7 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
     "react-blockly": "^5.0.0",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.0"
   },
   "devDependencies": {
