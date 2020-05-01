@@ -10,6 +10,30 @@ module.exports = {
         path: `${__dirname}/src/`,
       },
     },
+    {
+      resolve: `gatsby-transformer-json-hooks`,
+      options: {
+        onTransformObject: ({ fileNode, object }) => {
+          if (object.hasOwnProperty('fileFormatVersion')) {
+            // Set the id
+            object.id = fileNode.base.replace(/.json$/, '')
+          }
+        },
+        typeName: ({ node, object, isArray }) => {
+          // This is card JSON
+          if (object.hasOwnProperty('fileFormatVersion')) {
+            return 'Card'
+          }
+          return 'Json'
+        }
+      }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/../cards/src/main/resources/cards/custom`,
+      },
+    },
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
     `gatsby-image`,
@@ -39,9 +63,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-s3`,
       options: {
-        bucketName: "www.playspellsource.com",
-        protocol: "https",
-        hostname: "www.playspellsource.com",
+        bucketName: 'www.playspellsource.com',
+        protocol: 'https',
+        hostname: 'www.playspellsource.com',
       },
     },
     {
