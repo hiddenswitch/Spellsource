@@ -14,9 +14,14 @@ module.exports = {
       resolve: `gatsby-transformer-json-hooks`,
       options: {
         onTransformObject: ({ fileNode, object }) => {
-          if (object.hasOwnProperty('fileFormatVersion') && !object.id) {
-            // Set the id
-            object.id = fileNode.base.replace(/.json$/, '')
+          if (object.hasOwnProperty('fileFormatVersion')) {
+            if (!object.id) {
+              // Set the id
+              object.id = fileNode.base.replace(/.json$/, '')
+            }
+
+            // Also set a path on the cards node which corresponds to its URL in the website
+            object.path = '/cards/' + object.id
           }
         },
         typeName: ({ node, object, isArray }) => {
@@ -82,10 +87,16 @@ module.exports = {
             path: node => node.frontmatter.path,
             rawMarkdownBody: node => node.rawMarkdownBody
           },
+          Card: {
+            // TODO: Change the name of the field to be its content
+            title: node => node.name,
+            tags: node => '' , // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
+            rawMarkdownBody: node => node.description,
+            path: node => node.path
+          }
         },
         // Optional filter to limit indexed nodes
-        filter: (node, getNode) =>
-          node.frontmatter.tags !== 'exempt',
+        filter: (node, getNode) => true
       },
     },
   ],
