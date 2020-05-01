@@ -21,7 +21,6 @@
     "gatsby-remark-copy-linked-files": "^2.1.37",
     "gatsby-remark-images": "^3.1.44",
     "gatsby-source-filesystem": "^2.1.48",
-    "gatsby-transformer-json-hooks": "file:plugins/gatsby-transformer-json-hooks",
     "gatsby-transformer-remark": "^2.6.53",
     "gatsby-transformer-sharp": "^2.3.16",
     "node-sass": "^4.13.1",
