@@ -14,7 +14,7 @@ module.exports = {
       resolve: `gatsby-transformer-json-hooks`,
       options: {
         onTransformObject: ({ fileNode, object }) => {
-          if (object.hasOwnProperty('fileFormatVersion')) {
+          if (object.hasOwnProperty('fileFormatVersion') && !object.id) {
             // Set the id
             object.id = fileNode.base.replace(/.json$/, '')
           }
