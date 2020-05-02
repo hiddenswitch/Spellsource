@@ -11,25 +11,57 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `src`,
+        path: `${__dirname}/../unityclient/Assets/UBlockly/JsonBlocks/`,
+      },
+    }, {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `src`,
+        path: `${__dirname}/../unityclient/Assets/UBlockly/Toolboxes/Configs`,
+      },
+    },
+    {
       resolve: `gatsby-transformer-json-hooks`,
       options: {
         onTransformObject: ({ fileNode, object }) => {
+          // this is a card JSON
           if (object.hasOwnProperty('fileFormatVersion')) {
             if (!object.id) {
               // Set the id
               object.id = fileNode.base.replace(/.json$/, '')
             }
-
             // Also set a path on the cards node which corresponds to its URL in the website
             object.path = '/cards/' + object.id
+          } else if ((object.hasOwnProperty('args0') || object.hasOwnProperty('message0')) && object.hasOwnProperty('type')) {
+            // this is a blockly block
+            if (!object.id && !!object.type) {
+              object.id = object.type
+            }
+
+            object.path = '/blocks/' + object.id
+          } else if (object.hasOwnProperty('Style') && object.hasOwnProperty('BlockCategoryList')) {
+            // this is a toolbox definition
+            if (!object.id && !!object.Style) {
+              object.id = object.Style
+            }
+            object.path = '/toolboxes/' + object.id
           }
         },
         typeName: ({ node, object, isArray }) => {
           // This is card JSON
           if (object.hasOwnProperty('fileFormatVersion')) {
             return 'Card'
+          } else if ((object.hasOwnProperty('args0') || object.hasOwnProperty('message0')) && object.hasOwnProperty('type')) {
+            // this is a blockly block
+            return 'Block'
+          } else if (object.hasOwnProperty('Style') && object.hasOwnProperty('BlockCategoryList')) {
+            // this is a toolbox definition
+            return 'Toolbox'
           }
-          return 'Json'
+          // return 'Json'
         }
       }
     },
@@ -90,7 +122,7 @@ module.exports = {
           Card: {
             // TODO: Change the name of the field to be its content
             title: node => node.name,
-            tags: node => '' , // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
+            tags: node => '', // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
             rawMarkdownBody: node => node.description,
             path: node => node.path
           }
