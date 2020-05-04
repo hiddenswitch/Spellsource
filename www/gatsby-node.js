@@ -1,5 +1,36 @@
 const path = require(`path`)
 
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
+  const typeDefs = `
+  type Block implements Node {
+    type: String
+    messages: [String]
+    output: String
+    colour: String
+    nextStatement: [String]
+    previousStatement: [String]
+    args: [Args1]
+  }
+  type Args1 {
+    i: Int!
+    args: [Args]
+  }
+  type Args {
+    type: String
+    check: String
+    name: String
+    valueI: Int
+    valueS: String
+    min: Int
+    max: Int
+    int: Boolean
+    text: String
+  }
+  `
+  createTypes(typeDefs)
+}
+
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
 

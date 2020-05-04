@@ -1,56 +1,66 @@
-import React from 'react'
+import React, { useState } from 'react'
+import WorkspaceUtils from '../lib/workspace-utils'
 import Layout from '../components/creative-layout'
 import { useStaticQuery, graphql } from 'gatsby'
 import styles from './card-editor.module.css'
 import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
-import { has, isObject } from 'lodash'
+import { has, filter } from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
+import AceEditor from 'react-ace'
+import 'ace-builds/src-noconflict/mode-json'
+import 'ace-builds/src-noconflict/mode-xml'
+import 'ace-builds/src-noconflict/theme-github'
+import { Xml, FieldLabelSerializable } from 'blockly'
+
+class FieldLabelSerializableHidden extends FieldLabelSerializable {
+  constructor (opt_value, opt_validator, opt_config) {super(opt_value, opt_validator, opt_config)}
+
+  static fromJson (options) {
+    const field = new FieldLabelSerializableHidden()
+    field.setValue(options.value)
+    return field
+  }
+
+  getDisplayText_ () {
+    return ''
+  }
+}
+
+Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
 
 const CardEditor = () => {
+  const [code, setCode] = useState(``)
+  const [xml, setXml] = useState(``)
   const data = useStaticQuery(graphql`
   query {
+    toolbox {
+      BlockCategoryList {
+        BlockTypePrefix
+        CategoryName
+        ColorHex
+      }
+    }
     allBlock {
       edges {
         node {
           id
-          args0 {
-            check
-            int
-            name
-            type
-          }
-          args1 {
-            check
-            int
-            max
-            min
-            name
-            type
-            value
-          }
-          args2 {
-            check
-            name
-            type
-            value
-          }
-          args3 {
-            check
-            name
-            type
-          }
-          args4 {
-            check
-            name
-            type
+          args {
+            i
+            args {
+              type
+              check
+              name
+              valueS
+              valueI
+              min
+              max
+              int
+              text
+            }
           }
           colour
-          message0
-          message1
-          message2
-          message4
-          message3
+          messages
           nextStatement
           output
           previousStatement
@@ -60,12 +70,48 @@ const CardEditor = () => {
     }
   }`)
 
+  const toolboxCategories = data.toolbox.BlockCategoryList.map(({
+    BlockTypePrefix, CategoryName, ColorHex
+  }) => {
+    return {
+      name: CategoryName,
+      blocks: filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix))
+        .map(edge => {return { type: edge.node.type }})
+    }
+  })
+
   data.allBlock.edges.forEach(edge => {
     if (has(Blockly.Blocks, edge.node.type)) {
       return
     }
 
     const block = recursiveOmitBy(edge.node, ({ node }) => node === null)
+
+    // Patch back in values from union type
+    if (!!block.args) {
+      block.args.forEach(args => {
+        args.args.forEach(arg => {
+          if (!!arg.valueI) {
+            arg.value = arg.valueI
+            delete arg.valueI
+          }
+          if (!!arg.valueS) {
+            arg.value = arg.valueS
+            delete arg.valueS
+          }
+        })
+
+        block['args' + args.i.toString()] = args.args
+      })
+      delete block.args
+    }
+
+    if (!!block.messages) {
+      block.messages.forEach((message, i) => {
+        block['message' + i.toString()] = message
+      })
+      delete block.messages
+    }
 
     Blockly.Blocks[block.type] = {
       init: function () {
@@ -74,18 +120,48 @@ const CardEditor = () => {
     }
   })
 
+  function onCodeEditorChanged (newValue) {
+
+  }
+
+  function onWorkspaceChanged (workspace) {
+    setXml('<xml>' + Xml.workspaceToDom(workspace).innerHTML + '</xml>')
+    setCode(JSON.stringify(WorkspaceUtils.workspaceToDictionary(workspace)))
+  }
+
   return <Layout>
-    <ReactBlocklyComponent.BlocklyEditor
-      workspaceConfiguration={{
-        grid: {
-          spacing: 20,
-          length: 3,
-          colour: '#ccc',
-          snap: true
-        }
+    <div className={styles.codeEditor}>
+      <ReactBlocklyComponent.BlocklyEditor
+        workspaceDidChange={onWorkspaceChanged}
+        wrapperDivClassName={styles.codeEditor}
+        toolboxCategories={toolboxCategories}/>
+    </div>
+
+    <AceEditor
+      width={'100%'}
+      mode="json"
+      theme="github"
+      setOptions={{
+        'wrap': true
       }}
-      wrapperDivClassName={styles.fillHeight}
-      toolboxBlocks={data.allBlock.edges.map(edge => {return { type: edge.node.type }})}/>
+      readOnly={true}
+      onChange={onCodeEditorChanged}
+      value={code}
+      editorProps={{ $blockScrolling: true }}
+    />
+
+    <AceEditor
+      width={'100%'}
+      mode="xml"
+      theme="github"
+      setOptions={{
+        'wrap': true
+      }}
+      readOnly={true}
+      onChange={onCodeEditorChanged}
+      value={xml}
+      editorProps={{ $blockScrolling: true }}
+    />
   </Layout>
 }
 
