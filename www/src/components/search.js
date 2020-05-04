@@ -26,7 +26,7 @@ export default class Search extends Component {
         <ListGroup variant="flush" className={styles.searchResults}>
           {this.state.results.map(page => (
             <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-                <Link to={page.path}>{page.title}</Link>
+                <Link to={page.path}>{page.collectible === false ? <del>{page.title}</del> : page.title}</Link>
             </ListGroup.Item>
           ))}
         </ListGroup>
