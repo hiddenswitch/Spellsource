@@ -11,7 +11,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.3.0",
-    "blockly": "^3.20200123.1",
+    "blockly": "^3.20200402.1",
     "enumify": "^2.0.0",
     "gatsby": "^2.19.23",
     "gatsby-image": "^2.2.41",
@@ -23,11 +23,14 @@
     "gatsby-source-filesystem": "^2.1.48",
     "gatsby-transformer-remark": "^2.6.53",
     "gatsby-transformer-sharp": "^2.3.16",
+    "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
+    "react-ace": "^8.1.0",
     "react-blockly": "^5.0.0",
     "react-bootstrap": "^1.0.1",
-    "react-dom": "^16.13.0"
+    "react-dom": "^16.13.0",
+    "recursive-omit-by": "^2.0.0"
   },
   "devDependencies": {
     "gatsby-cli": "^2.9.0",
