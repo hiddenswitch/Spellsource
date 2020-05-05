@@ -65,6 +65,7 @@ const CardEditor = () => {
           output
           previousStatement
           type
+          data
         }
       }
     }
@@ -116,6 +117,9 @@ const CardEditor = () => {
     Blockly.Blocks[block.type] = {
       init: function () {
         this.jsonInit(block)
+        if (!!block.data) {
+          this.data = block.data
+        }
       }
     }
   })
@@ -126,7 +130,7 @@ const CardEditor = () => {
 
   function onWorkspaceChanged (workspace) {
     setXml('<xml>' + Xml.workspaceToDom(workspace).innerHTML + '</xml>')
-    setCode(JSON.stringify(WorkspaceUtils.workspaceToDictionary(workspace)))
+    setCode(JSON.stringify(WorkspaceUtils.workspaceToDictionary(workspace), null, 2))
   }
 
   return <Layout>
@@ -147,19 +151,6 @@ const CardEditor = () => {
       readOnly={true}
       onChange={onCodeEditorChanged}
       value={code}
-      editorProps={{ $blockScrolling: true }}
-    />
-
-    <AceEditor
-      width={'100%'}
-      mode="xml"
-      theme="github"
-      setOptions={{
-        'wrap': true
-      }}
-      readOnly={true}
-      onChange={onCodeEditorChanged}
-      value={xml}
       editorProps={{ $blockScrolling: true }}
     />
   </Layout>

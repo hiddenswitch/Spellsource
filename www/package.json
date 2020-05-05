@@ -4,7 +4,7 @@
   "description": "Spellsource Internet presence, including documentation, wiki and editor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "gatsby": "gatsby"
   },
   "author": "Benjamin Berman",
@@ -30,10 +30,16 @@
     "react-blockly": "^5.0.0",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.0",
-    "recursive-omit-by": "^2.0.0"
+    "recursive-omit-by": "^2.0.0",
+    "string-format": "^2.0.0"
   },
   "devDependencies": {
+    "babel-jest": "^26.0.0",
+    "babel-preset-gatsby": "^0.4.0",
     "gatsby-cli": "^2.9.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.0.0",
+    "react-test-renderer": "^16.13.1",
     "standard": "^14.3.1"
   }
 }
