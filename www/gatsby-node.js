@@ -11,6 +11,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     nextStatement: [String]
     previousStatement: [String]
     args: [Args1]
+    data: String
   }
   type Args1 {
     i: Int!
