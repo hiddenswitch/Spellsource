@@ -13,6 +13,8 @@ dependencies {
     implementation 'org.jetbrains:annotations:16.0.2'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
 
+    testImplementation project(':testutils')
+
     implementation project(':game')
     implementation project(':core')
     implementation project(':cards')
@@ -49,4 +51,8 @@ static def dotEnv(JavaExec task, File f) {
 
 run { t ->
     dotEnv(t, file('../secrets/spellsource/discordbot-secrets.env'))
+}
+
+test {
+    useJUnitPlatform()
 }
