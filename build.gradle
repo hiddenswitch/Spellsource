@@ -117,6 +117,10 @@ subprojects {
                     details.useVersion '3.24.0-GA'
                 }
 
+                if (details.requested.group == 'com.squareup.okhttp3') {
+                    details.useVersion '3.13.0'
+                }
+
                 if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
                     details.useVersion '4.5.4'
                 }
