@@ -10,11 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SimpleTests {
 
-		@BeforeAll
-		public static void init() {
-			CardCatalogue.loadAllCards();
-		}
-
 		@Test
 		public void testHelpCommand() {
 			Message response = DiscordBot.handleMessage("!help", null);

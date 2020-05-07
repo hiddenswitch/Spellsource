@@ -128,7 +128,7 @@ public interface Games extends Verticle {
 
 			@Override
 			public int hashCode() {
-				return com.google.common.base.Objects.hashCode(sourceReference, actionType);
+				return Objects.hash(sourceReference, actionType);
 			}
 		}
 

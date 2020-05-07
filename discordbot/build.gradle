@@ -15,7 +15,10 @@ dependencies {
 
     testImplementation project(':testutils')
 
-    implementation project(':game')
+    compileOnly 'org.graalvm.nativeimage:svm:20.0.0'
+
+    implementation project(path: ':game', configuration: 'uninstrumentedJars')
+    implementation project(':client')
     implementation project(':core')
     implementation project(':cards')
     implementation('net.dv8tion:JDA:4.1.1_142') {
@@ -33,10 +36,6 @@ shadowJar {
     manifest {
         attributes 'Main-Class': localMainClassName
     }
-}
-
-artifacts {
-    archives shadowJar
 }
 
 static def dotEnv(JavaExec task, File f) {

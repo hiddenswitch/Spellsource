@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.base.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -14,6 +13,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A condition is used for true or false comparisons in the {@link net.demilich.metastone.game.cards.desc.CardDesc} card
@@ -206,12 +206,12 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 		if (this == o) return true;
 		if (!(o instanceof Condition)) return false;
 		Condition condition = (Condition) o;
-		return Objects.equal(desc, condition.desc);
+		return desc.equals(condition.desc);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(desc);
+		return Objects.hash(desc);
 	}
 }
 
