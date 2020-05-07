@@ -87,10 +87,26 @@ public class DiscordBot extends ListenerAdapter {
 			} else {
 				cards = CardCatalogue.query(DeckFormat.all(), c -> c.getName().equalsIgnoreCase(nameOrId));
 			}
+
 			cards.sort(CARD_SORTER);
 
 			if (cards.isEmpty()) {
-				messageBuilder.append(" Sorry, I couldn't find a card with name/id \"").append(nameOrId).append("\" :/");
+				cards = CardCatalogue.query(DeckFormat.all(), c -> c.getName().toLowerCase().startsWith(nameOrId.toLowerCase()));
+				if (cards.isEmpty()) {
+					cards = CardCatalogue.query(DeckFormat.all(), c -> c.getName().toLowerCase().contains(nameOrId.toLowerCase()));
+				}
+				if (cards.isEmpty()) {
+					messageBuilder.append(" Sorry, I couldn't find anything close to a card with name/id \"").append(nameOrId).append("\" :/");
+				} else {
+					cards.sort(CARD_SORTER);
+					messageBuilder.append(" I couldn't find an exact match, but it could be: ");
+					for (int i = 0; i < cards.size() && i < 5; i++) {
+						sayCard(cards.get(i), messageBuilder);
+					}
+					if (cards.size() > 5) {
+						messageBuilder.append("\n(Capped at 5 results)");
+					}
+				}
 			} else {
 				messageBuilder.append(" Here you go: ");
 				if (cards.size() == 1) {
@@ -112,7 +128,7 @@ public class DiscordBot extends ListenerAdapter {
 			messageBuilder.append("If it matches a card, I'll give you its information.\n");
 			messageBuilder.append("(An ");
 			messageBuilder.append("italicized", ITALICS);
-			messageBuilder.append(" card id means it's uncollectible, and ");
+			messageBuilder.append(" card name means it's uncollectible, and ");
 			messageBuilder.append("strikethrough", STRIKETHROUGH);
 			messageBuilder.append(" means it's from an uncollectible class).\n");
 
@@ -133,13 +149,13 @@ public class DiscordBot extends ListenerAdapter {
 		boolean classCollectible = HeroClass.getClassCard(card.getHeroClass()) == null ||
 				HeroClass.getClassCard(card.getHeroClass()).isCollectible();
 		if (!cardCollectible && !classCollectible) {
-			messageBuilder.append(card.getCardId(), STRIKETHROUGH, ITALICS);
+			messageBuilder.append(card.getName(), STRIKETHROUGH, ITALICS);
 		} else if (!cardCollectible) {
-			messageBuilder.append(card.getCardId(), ITALICS);
+			messageBuilder.append(card.getName(), ITALICS);
 		} else if (!classCollectible) {
-			messageBuilder.append(card.getCardId(), STRIKETHROUGH);
+			messageBuilder.append(card.getName(), STRIKETHROUGH);
 		} else {
-			messageBuilder.append(card.getCardId());
+			messageBuilder.append(card.getName());
 		}
 
 		messageBuilder.append(" - ").append(stringify(card));

@@ -10,9 +10,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SimpleTests {
 
+<<<<<<< HEAD
+		@Test
+		public void testHelpCommand() {
+			Message response = DiscordBot.handleMessage("!help", null);
+=======
+	@BeforeAll
+	public static void init() {
+		CardCatalogue.loadAllCards();
+	}
+
 	@Test
 	public void testHelpCommand() {
 		Message response = DiscordBot.handleMessage("!help", null);
+>>>>>>> dcb686602d670b4aad6ec9383f571bc9b371e0f9
 
 		assertNotNull(response);
 		assertNotEquals("", response.getContentRaw());
