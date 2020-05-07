@@ -4,45 +4,15 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Deal 4 damage to the enemy Champion. Draw a card. Cast this when drawn.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "target": "ENEMY_HERO",
-          "value": 4,
-          "ignoreSpellDamage": true
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        }
-      ]
-    }
-  },
+  "description": "Casts when Drawn. Deal 4 damage to the enemy Champion.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DamageSpell",
-        "target": "ENEMY_HERO",
-        "value": 4,
-        "ignoreSpellDamage": true
-      },
-      {
-        "class": "DrawCardSpell"
-      }
-    ]
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 4
+  },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
   },
   "collectible": false,
   "set": "CUSTOM",
