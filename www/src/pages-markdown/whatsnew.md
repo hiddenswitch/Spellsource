@@ -5,11 +5,15 @@ path: "/whats-new"
 header: true
 ---
 
-### Current Build 0.8.75-3.1.3 (April 24, 2020)
+### Current Build 0.8.75-3.1.3 (May 7, 2020)
+ - Text and implementation of cards that cast when drawn have been standardized.
+ - Hope Eater's aura is now more consistent on removal. (1712)
+
+### 0.8.75-3.1.3 (April 24, 2020)
+
  - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - A golden glow appears around cards whose condition is met.
  - Card cost modifiers now correctly show buff / debuff status for cards in the hand.
- - Hope Eater's aura is now more consistent on removal. (1712)
 
 ### 0.8.74-3.1.2 (April 22, 2020)
 

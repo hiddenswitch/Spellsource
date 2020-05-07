@@ -1,0 +1,26 @@
+{
+  "seed" : -6335697625104322001,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "DARKGREEN", "MAGENTA" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_distortoise", "minion_bone_guard", "minion_jungle_king", "minion_mosshorn", "spell_arduous_invocation", "minion_grape_merchant", "minion_augmented_pixie", "minion_spirited_bomber", "minion_eldritech", "minion_azathoth", "minion_the_grudge", "minion_undead_trickster", "minion_flamerunner", "minion_shadowveiler", "spell_curse_of_desolation", "spell_unholy_tremors", "minion_magma_hound", "minion_pelagic_parasite", "spell_bloody_blow", "minion_plunderogue", "minion_lounge_brownie", "minion_festivity_golem", "minion_floating_crystal", "minion_hypnotist", "spell_lost_city_champion", "minion_kahl_of_the_deep", "minion_flutterer", "minion_rafaam_philanthropist", "minion_lunstone_rumbler", "minion_flare_fireworker" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_rabble_rouser", "minion_jabberwocky", "minion_uusyai_the_illustrious", "minion_timewalker_initiate", "spell_sword_sale", "minion_giants_toad", "minion_fifi_fizzlewarp", "minion_storesmaster", "minion_plunderogue", "minion_twilight_mercenary", "minion_unnerving_spectre", "minion_perplexed_courtsman", "minion_swarmed_captive", "minion_draconic_magnate", "minion_plunderogue", "minion_treasure_hunter", "minion_persuasive_thug", "minion_bittertide_crab", "minion_bittertide_crab", "minion_fae_trickster", "minion_faldoran_the_ninja", "minion_bookkeeper", "minion_lord_cookie", "minion_defender_of_tomorrow", "minion_gold_picaroon", "minion_quest_giver", "minion_highmountain_primalist", "spell_coercion", "minion_nezumi_master", "minion_yokai_bonder" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 58, 39, 48 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 4, 19, 16 ]
+  } ],
+  "actions" : [ 0, 2, 0, 0, 4, 0, 0, 0, 1, 0, 13, 4, 0, 0, 0, 10 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}
