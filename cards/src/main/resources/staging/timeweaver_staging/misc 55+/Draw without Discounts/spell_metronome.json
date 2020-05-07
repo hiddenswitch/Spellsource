@@ -4,40 +4,13 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Draw a card. Cast this when drawn.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DrawCardSpell",
-        },
-        {
-          "class": "SetAttributeSpell",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "PLAYED_FROM_HAND_OR_DECK"
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-      ]
-    }
-  },
+  "description": "Casts When Drawn. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "CastRandomSpellSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
-    }
+    "class": "DrawCardSpell"
+  },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
   },
   "collectible": false,
   "set": "CUSTOM",

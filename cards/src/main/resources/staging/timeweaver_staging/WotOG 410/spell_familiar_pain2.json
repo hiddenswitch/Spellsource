@@ -4,82 +4,30 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Casts when drawn. Deal 1 damage to the enemy hero. After you draw, shuffle a copy of this into your deck.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "target": "ENEMY_HERO",
-          "value": 1,
-        },
-        {
-          "class": "SetAttributeSpell",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "PLAYED_FROM_HAND_OR_DECK"
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        },
-        {
-          "class": "CastAfterSequenceSpell",
-          "spell": {
-            "class": "ShuffleToDeckSpell",
-            "card": "spell_familiar_pain2",
-            "howMany": 1,
-            "targetPlayer": "SELF"
-          }
-        }
-      ]
-    }
-  },
+  "description": "Casts When Drawn. Deal 1 damage to the enemy hero. Afterwards, shuffle a copy of this into your deck.",
   "targetSelection": "NONE",
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "target": "ENEMY_HERO",
-          "value": 1,
-        },
-        {
-          "class": "SetAttributeSpell",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "PLAYED_FROM_HAND_OR_DECK"
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        },
-        {
-          "class": "CastAfterSequenceSpell",
-          "spell": {
-            "class": "ShuffleToDeckSpell",
-            "card": "spell_familiar_pain2",
-            "howMany": 1,
-            "targetPlayer": "SELF"
-          }
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 1
+      },
+      {
+        "class": "CastAfterSequenceSpell",
+        "spell": {
+          "class": "ShuffleToDeckSpell",
+          "card": "spell_familiar_pain2",
+          "howMany": 1,
+          "targetPlayer": "SELF"
         }
-      ]
-    },
+      }
+    ]
+  },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
+  },
   "collectible": false,
   "set": "THE_OLD_GODS",
   "fileFormatVersion": 1

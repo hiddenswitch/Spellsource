@@ -4,43 +4,12 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Restore #2 Health to your champion and draw a card. Cast this when drawn.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "HealSpell",
-          "target": "FRIENDLY_HERO",
-          "value": 2
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        }
-      ]
-    }
-  },
+  "description": "Casts when drawn. Restore #2 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "HealSpell",
-        "target": "FRIENDLY_HERO",
-        "value": 2
-      },
-      {
-        "class": "DrawCardSpell"
-      }
-    ]
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 2
   },
   "collectible": false,
   "set": "CUSTOM",
