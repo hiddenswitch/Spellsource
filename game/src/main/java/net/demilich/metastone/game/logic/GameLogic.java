@@ -3758,7 +3758,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (isDrawnFromDeck) {
 				player.getStatistics().cardDrawn();
 			}
-			fireGameEvent(new DrawCardEvent(context, playerId, card, isDrawnFromDeck));
+ 			fireGameEvent(new DrawCardEvent(context, playerId, card, isDrawnFromDeck));
+
+			if (isDrawnFromDeck && card.hasAttribute(Attribute.CASTS_WHEN_DRAWN)) {
+				revealCard(player, card);
+				castSpell(playerId, card.getSpell(), card.getReference(), EntityReference.NONE, TargetSelection.NONE, true, null);
+				removeCard(card);
+				drawCard(playerId, card);
+			}
+
 		} else {
 			discardCard(player, card);
 		}
@@ -5201,8 +5209,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public boolean conditionMet(int localPlayerId, @NotNull Card card) {
 		try {
 			return card.getDesc()
-					.getConditions()
-					.allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
+					.getGlowConditions()
+					.anyMatch(condition -> condition.isFulfilled(context, context.getPlayer(localPlayerId), card, null));
 		} catch (Throwable ignored) {
 			return false;
 		}

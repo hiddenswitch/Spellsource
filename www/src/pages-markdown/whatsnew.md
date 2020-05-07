@@ -5,16 +5,23 @@ path: "/whats-new"
 header: true
 ---
 
-### Upcoming Changes
+### Current Build 0.8.75-3.1.3 (May 7, 2020)
+ - Text and implementation of cards that cast when drawn have been standardized.
+ - Hope Eater's aura is now more consistent on removal. (1712)
  - Firebolt now shows spell power correctly. (1724)
  - For Science! now buffs the right minion. (1726)
 
-### 0.8.74-3.1.2 (April 22, 2017)
+### 0.8.75-3.1.3 (April 24, 2020)
+
+ - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
+ - A golden glow appears around cards whose condition is met.
+ - Card cost modifiers now correctly show buff / debuff status for cards in the hand.
+
+### 0.8.74-3.1.2 (April 22, 2020)
 
  - The Invoke keyword has been reworked! It now reads, "Invoke (X): Choose to spend X more Lun when played for an additional effect."
  - New updates to Skyward! Thanks @Nix
  - Uncollectiblified Ancient's Aid, Mind Flay, Kind in Yellow (the 6/6), Unholy Tremors and Lash Out. (1698)
- - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - Cards shuffled by Gold Rush now properly cost (0) lun. (1683)
  - Volatile Wisdom now actually swaps cards. (1697)
  - Knowledge Hoarder now actually has Dash. (1684)

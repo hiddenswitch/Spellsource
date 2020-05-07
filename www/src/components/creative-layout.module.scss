@@ -10,7 +10,7 @@ $base-font-size: 17pt !default;
 $mobile-font-size: 17pt !default;
 $base-line-height: 1.2 !default;
 $container-width: 100% !default;
-$container-max-width: 650px !default;
+$container-max-width: 860px !default;
 
 // From dark
 :root {
@@ -167,6 +167,26 @@ footer {
   border-top: var(--border);
   border-bottom: var(--border);
   margin-bottom: 25px;
+}
+
+.menu .input-box {
+  border: var(--border);
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
+
+.menu .search-results {
+  position: absolute;
+  background-color: black;
+  z-index: 10;
+  margin-left: -0.25em;
+  margin-top: 0.25em;
+  padding-right: 2.5em;
+}
+
+.menu .search-list-group-item {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
 }
 
 .menu ul {

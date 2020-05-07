@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version "5.2.0"
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:1.7.20'
+    implementation 'org.jetbrains:annotations:16.0.2'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'com.google.guava:guava:26.0-jre'
+
+    testImplementation project(':testutils')
+
+    compileOnly 'org.graalvm.nativeimage:svm:20.0.0'
+
+    implementation project(path: ':game', configuration: 'uninstrumentedJars')
+    implementation project(':client')
+    implementation project(':core')
+    implementation project(':cards')
+    implementation('net.dv8tion:JDA:4.1.1_142') {
+        exclude module: 'opus-java'
+    }
+}
+
+def localMainClassName = "com.hiddenswitch.spellsource.discordbot.applications.DiscordBot"
+
+mainClassName = localMainClassName
+
+shadowJar {
+    mergeServiceFiles()
+    zip64 true
+    manifest {
+        attributes 'Main-Class': localMainClassName
+    }
+}
+
+static def dotEnv(JavaExec task, File f) {
+    if (!f.exists()) {
+        return
+    }
+    f.readLines().each() {
+        def (key, value) = it.tokenize('=')
+        task.environment(key, value)
+    }
+}
+
+run { t ->
+    // The container doesn't actually see all the secrets in here, so don't bother :)
+    dotEnv(t, file('../secrets/spellsource/stack-application-production.env'))
+}
+
+test {
+    useJUnitPlatform()
+}

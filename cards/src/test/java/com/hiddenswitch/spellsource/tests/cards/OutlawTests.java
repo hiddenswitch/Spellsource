@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -40,8 +41,7 @@ public class OutlawTests extends TestBase {
 				putOnTopOfDeck(context, player, "spell_lunstone");
 			}
 			Minion spookyTurret = playMinionCard(context, player, "minion_spooky_turret");
-			context.endTurn();
-			context.endTurn();
+			playMinionCard(context, player, "minion_test_draw");
 			assertTrue(spookyTurret.isDestroyed());
 			assertEquals(player.getHand().size(), 3);
 		});
@@ -52,8 +52,7 @@ public class OutlawTests extends TestBase {
 			}
 			Minion spookyTurret1 = playMinionCard(context, player, "minion_spooky_turret");
 			Minion spookyTurret2 = playMinionCard(context, player, "minion_spooky_turret");
-			context.endTurn();
-			context.endTurn();
+			playMinionCard(context, player, "minion_test_draw");
 			assertTrue(spookyTurret1.isDestroyed());
 			assertTrue(spookyTurret2.isDestroyed());
 			assertEquals(player.getHand().size(), 5);

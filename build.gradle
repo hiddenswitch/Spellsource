@@ -7,7 +7,7 @@ dependencies {
 }
 
 allprojects {
-    project.version = '0.8.74'
+    project.version = '0.8.75'
 }
 
 def jacksonVersion = '2.10.2'
@@ -42,7 +42,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'io.jaegertracing') {
-                    details.useVersion '1.0.0'
+                    details.useVersion '1.2.0'
                 }
 
                 if (details.requested.group == 'io.netty' && details.requested.version.contains('Final')) {
@@ -115,6 +115,10 @@ subprojects {
 
                 if (details.requested.group == 'org.javassist') {
                     details.useVersion '3.24.0-GA'
+                }
+
+                if (details.requested.group == 'com.squareup.okhttp3') {
+                    details.useVersion '3.13.0'
                 }
 
                 if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
