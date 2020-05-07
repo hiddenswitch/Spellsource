@@ -1446,7 +1446,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param baseDamage The base amount of damage to deal.
 	 * @param source     The source of the damage.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean, DamageTypeEnum) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, EnumSet)  for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source) {
@@ -1462,7 +1462,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param source            The source of the damage.
 	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean, DamageTypeEnum) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, EnumSet)  for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
@@ -4561,6 +4561,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void startTurn(int playerId) {
 		var now = (int) (System.currentTimeMillis() % Integer.MAX_VALUE);
 		var player = context.getPlayer(playerId);
+		player.setAttribute(Attribute.STARTING_TURN);
 		int gameStartTime;
 		if (player.getAttributes().containsKey(Attribute.GAME_START_TIME_MILLIS)) {
 			gameStartTime = now;
@@ -4601,6 +4602,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		fireGameEvent(new TurnStartEvent(context, player.getId()));
 		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, TargetSelection.NONE, true, null);
 		endOfSequence();
+		player.getAttributes().remove(Attribute.STARTING_TURN);
 	}
 
 	/**
@@ -5199,8 +5201,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public boolean conditionMet(int localPlayerId, @NotNull Card card) {
 		try {
 			return card.getDesc()
-					.getConditions()
-					.allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
+					.getGlowConditions()
+					.anyMatch(condition -> condition.isFulfilled(context, context.getPlayer(localPlayerId), card, null));
 		} catch (Throwable ignored) {
 			return false;
 		}

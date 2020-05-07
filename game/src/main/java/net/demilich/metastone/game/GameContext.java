@@ -95,13 +95,12 @@ import static java.util.stream.Collectors.toList;
  * Behaviour} objects in {@link #getBehaviours()}.
  * <p>
  * Game state is composed of a variety of fields that live inside the context. These fields are:
- * <p>
  * <ul>
  * <li>The {@link #getPlayers()} player objects. This includes zones, attributes on the player object itself, and some
  * statistics fields.</li>
  * <li>The {@link #getEnvironment()} "environment variables," referring to state or memory in the game that does not
  * live on entities.</li>
- * <li>The {@link TriggerManager#getTriggers()} value from the {@link #getLogic()} trigger manager.</li>
+ * <li>The {@link #getTriggers()} value from the {@link #getLogic()} trigger manager.</li>
  * <li>The {@link DeckFormat} living in {@link #getDeckFormat()}.</li>
  * <li>The next entity ID that will be returned by {@link GameLogic#generateId()}, which is stored in {@link
  * GameLogic#getIdFactory()}'s values.</li>

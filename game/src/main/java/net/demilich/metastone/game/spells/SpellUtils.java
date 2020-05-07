@@ -444,7 +444,7 @@ public class SpellUtils {
 	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
 	 *                inherited from this spell.
 	 * @param spells  A list of spells from which to generate virtual cards.
-	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecries()} that initiated this
+	 * @param source  The source entity, typically the {@link Card} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
 	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.

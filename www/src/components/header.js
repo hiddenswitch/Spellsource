@@ -3,6 +3,7 @@ import PostLink from './post-link'
 import { useStaticQuery, graphql, Link } from 'gatsby'
 import Img from 'gatsby-image'
 import styles from './creative-layout.module.scss'
+import Search from './search'
 
 const Header = () => {
   const data = useStaticQuery(graphql`
@@ -29,10 +30,13 @@ const Header = () => {
         }
       }
     }
+    siteSearchIndex {
+      index
+    }
   }
 `)
   const pages = data.allMarkdownRemark.edges
-    .filter(edge => !!edge.node.frontmatter.date && !!edge.node.frontmatter.header)
+    .filter(edge => !!edge.node.frontmatter.header)
     .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
 
   return <header>
@@ -40,7 +44,9 @@ const Header = () => {
       <ul>
         <li key={data.headerImage.id}><Link to='/'><Img fixed={data.headerImage.childImageSharp.fixed}/></Link></li>
         <li key={'javadocs'}><a href='/javadoc'>Docs</a></li>
-        {pages}</ul>
+        {pages}
+        <li key={'search'}><Search placeholder={'Search'} searchIndex={data.siteSearchIndex.index}/></li>
+      </ul>
     </div>
   </header>
 }

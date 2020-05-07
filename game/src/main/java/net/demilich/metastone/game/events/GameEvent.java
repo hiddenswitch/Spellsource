@@ -20,7 +20,7 @@ import java.util.List;
  * when evaluating queueing and firing conditions.
  *
  * @see net.demilich.metastone.game.spells.trigger.Trigger for how to use game events to implement card text.
- * @see GameContext#fireGameEvent(GameEvent) for how game events are fired.
+ * @see net.demilich.metastone.game.logic.GameLogic#fireGameEvent(GameEvent) for how game events are fired.
  */
 public abstract class GameEvent implements Notification, Cloneable {
 	private transient final WeakReference<GameContext> context;
