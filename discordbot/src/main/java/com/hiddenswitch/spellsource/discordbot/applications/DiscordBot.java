@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.discordbot.applications;
 
+import com.google.common.collect.Streams;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.core.JsonConfiguration;
 import net.demilich.metastone.game.cards.Card;
@@ -7,29 +8,34 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.EmoteManager;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import net.dv8tion.jda.internal.requests.Route;
 import org.apache.commons.collections4.ComparatorUtils;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static net.dv8tion.jda.api.MessageBuilder.Formatting.*;
+import static net.dv8tion.jda.api.MessageBuilder.Formatting.ITALICS;
+import static net.dv8tion.jda.api.MessageBuilder.Formatting.STRIKETHROUGH;
+
 
 public class DiscordBot extends ListenerAdapter {
 	static {
@@ -37,24 +43,19 @@ public class DiscordBot extends ListenerAdapter {
 		CardCatalogue.loadCardsFromFilesystemDirectories("cards/src/main/resources/cards", "game/src/main/resources/cards");
 	}
 
-//	Logger LOGGER = LoggerFactory.getLogger(DiscordBot.class);
+	final static int MAX_RESULTS = 5;
 	final static String CARD_COMMAND_REGEX = "^\\s*![Cc][Aa][Rr][Dd]\\s+(?<nameOrId>.*\\b)\\s*$";
 	final static String HELP_COMMAND_REGEX = "^\\s*![Hh][Ee][Ll][Pp]";
 
-	static Comparator<Card> CARD_SORTER;
-
 	public static void main(String[] args) throws InterruptedException, LoginException {
 		var apiKey = System.getenv("DISCORD_BOT_API_KEY");
-		var builder = JDABuilder.createDefault(apiKey);
-		builder.addEventListeners(new DiscordBot());
-		// Disable parts of the cache
-		builder.disableCache(EnumSet.allOf(CacheFlag.class));
-		// Set activity (like "playing Something")
-		builder.setActivity(Activity.playing("Spellsource"));
+		var builder = JDABuilder.createLight(apiKey);
+		builder.addEventListeners(new DiscordBot())
+				.enableIntents(GatewayIntent.GUILD_MESSAGES)
+				.disableCache(EnumSet.allOf(CacheFlag.class))
+				.setActivity(Activity.playing("Spellsource"));
 		var jda = builder.build();
 		jda.awaitReady();
-
-		CARD_SORTER = (o1, o2) -> ComparatorUtils.booleanComparator(true).compare(o1.isCollectible(), o2.isCollectible());
 	}
 
 	@Override
@@ -63,12 +64,33 @@ public class DiscordBot extends ListenerAdapter {
 
 		if (event.isFromType(ChannelType.TEXT) || event.isFromType(ChannelType.PRIVATE)) {
 			String messageContent = event.getMessage().getContentDisplay();
-//			LOGGER.info("Received: {}", messageContent);
 			handleMessage(messageContent, event);
 		}
 
 		if (event.getMessage().getMentionedUsers().stream().anyMatch(User::isBot)) {
 			event.getMessage().addReaction("❤️").submit();
+		}
+	}
+
+	public static class Match {
+		final Card card;
+		final boolean exactMatch;
+		final static Comparator<Match> MATCHER = ComparatorUtils.chainedComparator(
+				(m1, m2) -> ComparatorUtils.booleanComparator(true).compare(m1.exactMatch, m2.exactMatch),
+				(m1, m2) -> ComparatorUtils.booleanComparator(true).compare(m1.card.isCollectible(), m2.card.isCollectible())
+		);
+
+		public Match(Card card, boolean exactMatch) {
+			this.card = card;
+			this.exactMatch = exactMatch;
+		}
+
+		public Card getCard() {
+			return card;
+		}
+
+		public boolean isExactMatch() {
+			return exactMatch;
 		}
 	}
 
@@ -78,50 +100,42 @@ public class DiscordBot extends ListenerAdapter {
 		MessageBuilder messageBuilder = new MessageBuilder();
 
 		if (cardCommandMatcher.find()) {
-			if (event != null) messageBuilder.append(event.getAuthor().getAsMention());
-
-			var nameOrId = cardCommandMatcher.group("nameOrId").trim();
-			CardList cards = new CardArrayList();
-			if (nameOrId.contains("_")) {
-				cards = CardCatalogue.query(DeckFormat.all(), c -> c.getCardId().equalsIgnoreCase(nameOrId));
-			} else {
-				cards = CardCatalogue.query(DeckFormat.all(), c -> c.getName().equalsIgnoreCase(nameOrId));
+			if (event != null) {
+				messageBuilder.append(event.getAuthor().getAsMention());
 			}
 
-			cards.sort(CARD_SORTER);
+			var nameOrId = cardCommandMatcher.group("nameOrId").trim();
+
+			var cards = search(nameOrId);
 
 			if (cards.isEmpty()) {
-				cards = CardCatalogue.query(DeckFormat.all(), c -> c.getName().toLowerCase().startsWith(nameOrId.toLowerCase()));
-				if (cards.isEmpty()) {
-					cards = CardCatalogue.query(DeckFormat.all(), c -> c.getName().toLowerCase().contains(nameOrId.toLowerCase()));
-				}
-				if (cards.isEmpty()) {
-					messageBuilder.append(" Sorry, I couldn't find anything close to a card with name/id \"").append(nameOrId).append("\" :/");
-				} else {
-					cards.sort(CARD_SORTER);
-					messageBuilder.append(" I couldn't find an exact match, but it could be: ");
-					for (int i = 0; i < cards.size() && i < 5; i++) {
-						sayCard(cards.get(i), messageBuilder);
-					}
-					if (cards.size() > 5) {
-						messageBuilder.append("\n(Capped at 5 results)");
-					}
-				}
+				messageBuilder.append(" Sorry, I couldn't find anything close to a card with name or ID \"").append(nameOrId).append("\"");
 			} else {
-				messageBuilder.append(" Here you go: ");
-				if (cards.size() == 1) {
-					sayCard(cards.get(0), messageBuilder);
+				if (cards.get(0).exactMatch) {
+					messageBuilder.append(" Here you go: ");
 				} else {
-					for (Card card : cards) {
-						sayCard(card, messageBuilder);
+					messageBuilder.append(" I couldn't find an exact match, but it could be: ");
+				}
+
+				for (var match : cards) {
+					sayCard(match.card, messageBuilder);
+
+					// i.e. join
+					if (cards.size() > 1) {
 						messageBuilder.append("\n");
 					}
+				}
+
+				if (cards.size() > MAX_RESULTS) {
+					messageBuilder.append("\n(Capped at 5 results)");
 				}
 			}
 
 			response = messageBuilder.build();
 		} else if (messageContent.matches(HELP_COMMAND_REGEX)) {
-			if (event != null) messageBuilder.append(event.getAuthor().getAsMention());
+			if (event != null) {
+				messageBuilder.append(event.getAuthor().getAsMention());
+			}
 
 			messageBuilder.append(" Currently my only command is the `!card` command.\n");
 			messageBuilder.append("Put it at the start of your message followed by the name or id of a card.\n");
@@ -131,15 +145,37 @@ public class DiscordBot extends ListenerAdapter {
 			messageBuilder.append(" card name means it's uncollectible, and ");
 			messageBuilder.append("strikethrough", STRIKETHROUGH);
 			messageBuilder.append(" means it's from an uncollectible class).\n");
-
-
 			response = messageBuilder.build();
 		}
 
 		if (event != null && response != null) {
 			event.getChannel().sendMessage(response).submit();
+			System.gc();
 		}
 		return response;
+	}
+
+	@NotNull
+	public static List<Match> search(String nameOrId) {
+		return Streams.concat(
+				// Exact match
+				Stream.ofNullable(CardCatalogue.getCards().get(nameOrId)),
+				CardCatalogue.getCards()
+						.values()
+						.stream()
+						.filter(c -> c.getName().equalsIgnoreCase(nameOrId) && c.isCollectible())
+						.limit(1L)).map(c -> new Match(c, true))
+				.findFirst().map(Collections::singletonList).orElse(
+						// Partial Match
+						Streams.concat(
+								CardCatalogue.getCards().values().stream()
+										.filter(c -> c.getName().toLowerCase().startsWith(nameOrId.toLowerCase())),
+								CardCatalogue.getCards().values().stream()
+										.filter(c -> c.getName().toLowerCase().contains(nameOrId.toLowerCase()))
+						).map(c -> new Match(c, false))
+								.sorted(Match.MATCHER)
+								.limit(MAX_RESULTS + 1)
+								.collect(Collectors.toList()));
 	}
 
 	public static void sayCard(Card card, MessageBuilder messageBuilder) {
@@ -176,7 +212,7 @@ public class DiscordBot extends ListenerAdapter {
 		builder.append(card.getCardType().toString()).append(" ");
 		if (!card.getDescription().equals("")) {
 			builder.append("\"").append(card.getDescription().replace("#", "").replace("$", "")
-					.replace("[", "").replace("]","").trim()).append("\"");
+					.replace("[", "").replace("]", "").trim()).append("\"");
 		}
 		return builder.toString();
 	}

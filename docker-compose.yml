@@ -231,6 +231,8 @@ services:
       dockerfile: discordbot/Dockerfile
     networks:
       - web
+    environment:
+      - DISCORD_BOT_API_KEY=${DISCORD_BOT_API_KEY}
     deploy:
       restart_policy:
         condition: on-failure

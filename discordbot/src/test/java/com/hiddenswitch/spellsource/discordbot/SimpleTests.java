@@ -34,12 +34,12 @@ public class SimpleTests {
 
 	@Test
 	public void testMultipleCards() {
-		Message response = DiscordBot.handleMessage("!card devour", null);
+		Message response = DiscordBot.handleMessage("!card fae", null);
 
 		assertNotNull(response);
-		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("spell_devour"))));
-		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("spell_dominus_discard"))));
-		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("hero_power_devour"))));
+		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("minion_fae_embalmer"))));
+		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("minion_fae_horncaster"))));
+		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("minion_fae_wraith_caroline"))));
 	}
 
 	@Test

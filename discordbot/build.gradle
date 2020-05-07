@@ -12,6 +12,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.20'
     implementation 'org.jetbrains:annotations:16.0.2'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'com.google.guava:guava:26.0-jre'
 
     testImplementation project(':testutils')
 
@@ -49,7 +50,8 @@ static def dotEnv(JavaExec task, File f) {
 }
 
 run { t ->
-    dotEnv(t, file('../secrets/spellsource/discordbot-secrets.env'))
+    // The container doesn't actually see all the secrets in here, so don't bother :)
+    dotEnv(t, file('../secrets/spellsource/stack-application-production.env'))
 }
 
 test {
