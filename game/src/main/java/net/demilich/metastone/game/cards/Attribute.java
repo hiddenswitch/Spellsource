@@ -1190,7 +1190,11 @@ public enum Attribute {
 	 */
 	CASTS_WHEN_DRAWN,
 
-	EIDOLON_RACE;
+	EIDOLON_RACE,
+	/**
+	 * Represents the minimum attack that auras can reduce an actor's attack to
+	 */
+	AURA_MIN_ATTACK;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
