@@ -6,10 +6,10 @@ header: true
 ---
 
 ### Current Build 0.8.75-3.1.3 (April 24, 2020)
-
  - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - A golden glow appears around cards whose condition is met.
  - Card cost modifiers now correctly show buff / debuff status for cards in the hand.
+ - Hope Eater's aura is now more consistent on removal. (1712)
 
 ### 0.8.74-3.1.2 (April 22, 2020)
 
@@ -27,7 +27,6 @@ header: true
  - The Hercules Skill now properly buffs his (your?) attack. (1713)
  - Blast Apart no longer damages more things more than it should. (1718)
  - Diamond Sultan now has a dynamic description. (1711)
- - Hope Eater's aura is now more consistent on removal. (1712)
  
 ### Notes on Skyward Updates
 
