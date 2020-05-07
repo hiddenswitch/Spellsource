@@ -224,6 +224,24 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
+  discordbot:
+    image: doctorpangloss/discordbot:latest
+    build:
+      context: .
+      dockerfile: discordbot/Dockerfile
+    networks:
+      - web
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.enable=false"
+      placement:
+        constraints:
+          - node.platform.arch == x86_64
+          - node.labels.cpu == high
+          - node.labels.disk == ssd
 volumes:
   mongodata:
   mancenterdata:

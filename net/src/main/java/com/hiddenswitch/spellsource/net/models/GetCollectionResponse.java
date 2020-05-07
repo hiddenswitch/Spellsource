@@ -170,14 +170,14 @@ public final class GetCollectionResponse implements Serializable {
 		if (this == o) return true;
 		if (!(o instanceof GetCollectionResponse)) return false;
 		GetCollectionResponse that = (GetCollectionResponse) o;
-		return com.google.common.base.Objects.equal(responses, that.responses) &&
-				com.google.common.base.Objects.equal(inventoryRecords, that.inventoryRecords) &&
-				com.google.common.base.Objects.equal(getCollectionRecord(), that.getCollectionRecord());
+		return Objects.equals(responses, that.responses) &&
+				Objects.equals(inventoryRecords, that.inventoryRecords) &&
+				Objects.equals(collectionRecord, that.collectionRecord);
 	}
 
 	@Override
 	public int hashCode() {
-		return com.google.common.base.Objects.hashCode(responses, inventoryRecords, getCollectionRecord());
+		return Objects.hash(responses, inventoryRecords, collectionRecord);
 	}
 
 	public CollectionRecord getCollectionRecord() {

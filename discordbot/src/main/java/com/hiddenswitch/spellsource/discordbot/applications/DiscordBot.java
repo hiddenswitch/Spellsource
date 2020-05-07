@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.discordbot.applications;
 
 import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.core.JsonConfiguration;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -18,8 +19,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.internal.requests.Route;
 import org.apache.commons.collections4.ComparatorUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import javax.security.auth.login.LoginException;
@@ -31,14 +32,18 @@ import java.util.regex.Pattern;
 import static net.dv8tion.jda.api.MessageBuilder.Formatting.*;
 
 public class DiscordBot extends ListenerAdapter {
-	Logger LOGGER = LoggerFactory.getLogger(DiscordBot.class);
+	static {
+		JsonConfiguration.configureJson();
+		CardCatalogue.loadCardsFromFilesystemDirectories("cards/src/main/resources/cards", "game/src/main/resources/cards");
+	}
+
+//	Logger LOGGER = LoggerFactory.getLogger(DiscordBot.class);
 	final static String CARD_COMMAND_REGEX = "^\\s*![Cc][Aa][Rr][Dd]\\s+(?<nameOrId>.*\\b)\\s*$";
-	final static String HELP_COMMAND_REGEX = "^^\\s*![Hh][Ee][Ll][Pp]";
+	final static String HELP_COMMAND_REGEX = "^\\s*![Hh][Ee][Ll][Pp]";
 
 	static Comparator<Card> CARD_SORTER;
 
 	public static void main(String[] args) throws InterruptedException, LoginException {
-		CardCatalogue.loadAllCards();
 		var apiKey = System.getenv("DISCORD_BOT_API_KEY");
 		var builder = JDABuilder.createDefault(apiKey);
 		builder.addEventListeners(new DiscordBot());
@@ -58,7 +63,7 @@ public class DiscordBot extends ListenerAdapter {
 
 		if (event.isFromType(ChannelType.TEXT) || event.isFromType(ChannelType.PRIVATE)) {
 			String messageContent = event.getMessage().getContentDisplay();
-			LOGGER.info("Received: {}", messageContent);
+//			LOGGER.info("Received: {}", messageContent);
 			handleMessage(messageContent, event);
 		}
 
