@@ -213,4 +213,44 @@ public class OtherworlderTests extends TestBase {
 			assertEquals(target.getAttack(), targetAttack);
 		});
 	}
+
+	@Test
+	public void testHopeEater() {
+		runGym((context, player, opponent) -> {
+			Minion fourFour = playMinionCard(context, opponent, "minion_saloon_barkeep");
+			assertEquals(4, fourFour.getAttack());
+			assertEquals(4, fourFour.getHp());
+			Minion hopeEater = playMinionCard(context, player, "minion_hope_eater");
+			assertEquals(2, fourFour.getAttack());
+			destroy(context, hopeEater);
+			assertEquals(4, fourFour.getAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion fourFour = playMinionCard(context, opponent, "minion_saloon_barkeep");
+			assertEquals(4, fourFour.getAttack());
+			assertEquals(4, fourFour.getHp());
+			Minion hopeEater = playMinionCard(context, player, "minion_hope_eater");
+			Minion hopeEater2 = playMinionCard(context, player, "minion_hope_eater");
+			assertEquals(1, fourFour.getAttack());
+			destroy(context, hopeEater);
+			assertEquals(2, fourFour.getAttack());
+			destroy(context, hopeEater2);
+			assertEquals(4, fourFour.getAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion fourFour = playMinionCard(context, opponent, "minion_saloon_barkeep");
+			assertEquals(4, fourFour.getAttack());
+			assertEquals(4, fourFour.getHp());
+			Minion hopeEater = playMinionCard(context, player, "minion_hope_eater");
+			Minion hopeEater2 = playMinionCard(context, player, "minion_hope_eater");
+			assertEquals(1, fourFour.getAttack());
+			destroy(context, hopeEater2);
+			assertEquals(2, fourFour.getAttack());
+			destroy(context, hopeEater);
+			assertEquals(4, fourFour.getAttack());
+		});
+	}
+
 }

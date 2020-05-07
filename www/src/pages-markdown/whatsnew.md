@@ -5,8 +5,9 @@ path: "/whats-new"
 header: true
 ---
 
-### 0.8.75-3.1.3 (May 7, 2020)
+### Current Build 0.8.75-3.1.3 (May 7, 2020)
  - Text and implementation of cards that cast when drawn have been standardized.
+ - Hope Eater's aura is now more consistent on removal. (1712)
 
 ### 0.8.75-3.1.3 (April 24, 2020)
 
