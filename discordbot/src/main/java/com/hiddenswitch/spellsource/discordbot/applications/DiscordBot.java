@@ -100,10 +100,6 @@ public class DiscordBot extends ListenerAdapter {
 		MessageBuilder messageBuilder = new MessageBuilder();
 
 		if (cardCommandMatcher.find()) {
-			if (event != null) {
-				messageBuilder.append(event.getAuthor().getAsMention());
-			}
-
 			var nameOrId = cardCommandMatcher.group("nameOrId").trim();
 
 			var cards = search(nameOrId);
@@ -133,10 +129,6 @@ public class DiscordBot extends ListenerAdapter {
 
 			response = messageBuilder.build();
 		} else if (messageContent.matches(HELP_COMMAND_REGEX)) {
-			if (event != null) {
-				messageBuilder.append(event.getAuthor().getAsMention());
-			}
-
 			messageBuilder.append(" Currently my only command is the `!card` command.\n");
 			messageBuilder.append("Put it at the start of your message followed by the name or id of a card.\n");
 			messageBuilder.append("If it matches a card, I'll give you its information.\n");
