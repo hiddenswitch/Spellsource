@@ -1,0 +1,26 @@
+{
+  "seed" : 3481109392903164572,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CANDY", "TWILIGHT" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_warclub_ruffian", "minion_stubborn_stegodon", "minion_infinite_behemoth", "minion_sword_swallower", "minion_southsea_giant", "minion_grape_merchant", "minion_opening_actor", "minion_great_showman", "minion_darkshard_duelist", "minion_fireball_atlas", "minion_aeon_channeler", "minion_centaur_acumen", "spell_fantastical_play", "spell_road_trip", "minion_finale_architect", "minion_jungle_operative", "minion_timewalker_initiate", "minion_theatrical_frontliner", "spell_vaudeville_hook", "minion_undead_trickster", "minion_exotic_howler", "minion_crew_commander", "weapon_baton_of_thrills", "minion_inspiring_hero", "minion_frigid_bones", "minion_dreamwing_scout", "minion_kodama_bulwark", "minion_jack_in_the_box", "minion_mary_demasque", "minion_doodles" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_frenzied_zealot", "minion_hoffis_the_dunewalker", "minion_vitium_surger", "minion_lounge_brownie", "spell_gravelords_gambit", "minion_umbral tempest", "minion_tanglefer_of_the_jungle", "spell_death_throes", "minion_fleshshaper", "spell_hate_spike", "minion_feral_child", "minion_gatekeeper_acolyte", "minion_doodles", "spell_death_throes", "spell_hemoblade", "minion_squirrel_knight", "minion_mindswapper", "spell_siphon", "spell_crimson_gift", "minion_blue_nestwatcher", "minion_fairytale_tracker", "minion_soulstitcher", "minion_krentiaxx_tyrant", "minion_sourceborn_aelin", "minion_lingering_spirit", "minion_sand_giant", "minion_polycephalos", "minion_jack_in_the_box", "spell_hemoshade", "minion_inspiring_hero" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 37 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 30, 14 ]
+  } ],
+  "actions" : [ 0, 0, 3, 0, 2, 0, 5, 0, 0, 2, 1, 0, 0, 2, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 2, 1, 14, 0, 5, 2, 3, 4, 16, 10, 1, 4, 2, 10, 4, 3, 6, 2, 9, 5, 1, 2, 0, 3, 4, 0, 3, 7, 4, 4, 3, 13, 4, 1, 3, 26, 29, 28, 16, 1, 9, 1, 10, 6, 4, 10, 2, 3, 0, 0, 34, 8, 35, 16, 11, 0, 0, 3, 5, 4, 3, 3, 1, 0, 2, 13, 7, 2, 0, 1, 4, 0, 0, 25, 11, 1, 1, 0, 0, 8, 10, 8, 0, 4, 21, 1, 35, 5, 36, 5, 0, 4, 12, 2, 8, 7, 2, 7, 38, 31, 8, 3, 11, 11 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

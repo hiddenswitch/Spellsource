@@ -55,6 +55,18 @@ public class HeroClass {
 		return CardCatalogue.getHeroCard(heroClass);
 	}
 
+	/**
+	 * Retrieves the class card for a specified hero class.
+	 *
+	 * @param heroClass The hero class
+	 * @return A class card
+	 */
+	public static Card getClassCard(String heroClass) {
+		return CardCatalogue.getClassCards(DeckFormat.all()).stream()
+				.filter(card -> card.getHeroClass().equalsIgnoreCase(heroClass))
+				.findFirst().orElse(null);
+	}
+
 
 	/**
 	 * Gets all the classes (a list of strings) in the card catalogue.

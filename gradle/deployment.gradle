@@ -65,6 +65,16 @@ task generateSwaggerCsharp() {
     }
 }
 
+static def dotEnv(Exec task, File f) {
+    if (!f.exists()) {
+        return
+    }
+    f.readLines().each() {
+        def (key, value) = it.tokenize('=')
+        task.environment(key, value)
+    }
+}
+
 static def gitIgnore(File f) {
     if (!f.exists()) {
         return [] as List<String>
@@ -77,16 +87,6 @@ static def gitIgnore(File f) {
         }
     }
     return ignores
-}
-
-static def dotEnv(Exec task, File f) {
-    if (!f.exists()) {
-        return
-    }
-    f.readLines().each() {
-        def (key, value) = it.tokenize('=')
-        task.environment(key, value)
-    }
 }
 
 task unitySources(type: SourceTask) {
@@ -222,7 +222,7 @@ task distWWW(type: Exec, group: 'Spellsource') {
     commandLine './deploy.sh'
 }
 
-task deployAll(type: Exec, group: 'Spellsource') {
+task deployAll(group: 'Spellsource') {
     description("Deploys the server, the client and the website")
     dependsOn += [distSteam, distIOS, distAndroid, distWebGL, distSwarm, distWWW]
 }
