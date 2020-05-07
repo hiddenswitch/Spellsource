@@ -5,6 +5,9 @@ import net.demilich.metastone.game.events.GameEvent;
 ;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires when a {@code target} loses stealth.
+ */
 public class LoseStealthTrigger extends EventTrigger {
 
 	public LoseStealthTrigger(EventTriggerDesc desc) {

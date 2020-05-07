@@ -16,7 +16,7 @@ dependencies {
     api 'org.jetbrains:annotations:16.0.2'
     api 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'com.google.guava:guava:26.0-jre'
-    implementation 'io.jaegertracing:jaeger-client:1.0.0'
+    implementation 'io.jaegertracing:jaeger-client:1.2.0'
     implementation 'org.apache.commons:commons-lang3:3.7'
     implementation 'org.apache.commons:commons-math3:3.7'
     implementation 'commons-io:commons-io:2.5'

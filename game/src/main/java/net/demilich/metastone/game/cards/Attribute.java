@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -9,6 +8,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.RoastSpell;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
@@ -16,6 +16,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A list of attributes on entities.
@@ -528,7 +529,7 @@ public enum Attribute {
 	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link
 	 * net.demilich.metastone.game.events.GameEvent}.
 	 *
-	 * @see net.demilich.metastone.game.spells.trigger.TriggerManager for the complete rules on event triggering.
+	 * @see GameLogic#fireGameEvent(GameEvent)  for the complete rules on event triggering.
 	 * @see Enchantment for the entity that corresponds to a passive trigger.
 	 */
 	PASSIVE_TRIGGERS,
@@ -1137,7 +1138,7 @@ public enum Attribute {
 	/**
 	 * An override for the entity's description that indicates it has an {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
 	 * <p>
-	 * Contains an array {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc[]}.
+	 * Contains an array of {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc}
 	 */
 	DYNAMIC_DESCRIPTION,
 	/**
@@ -1196,7 +1197,7 @@ public enum Attribute {
 	}
 
 	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
-	private static final Set<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Sets.toImmutableEnumSet());
+	private static final Set<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toSet());
 
 	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
 			Attribute.ROASTED,
@@ -1208,7 +1209,7 @@ public enum Attribute {
 			Attribute.DIED_ON_TURN
 	);
 
-	private static final Set<Attribute> enchantmentLikeAttributes = Sets.immutableEnumSet(Attribute.POISONOUS,
+	private static final Set<Attribute> enchantmentLikeAttributes = EnumSet.of(Attribute.POISONOUS,
 			Attribute.DIVINE_SHIELD,
 			COSTS_HEALTH_INSTEAD_OF_MANA,
 			TEMPORARY_ATTACK_BONUS,

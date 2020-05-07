@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -49,15 +50,15 @@ public class CardValidation {
 		if (!Files.exists(path)) {
 			return new Object[0][0];
 		}
-		List<File> ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
+		var ALL_CARD_FILES = (List<File>) FileUtils.listFiles(
 				path.toFile(),
 				new RegexFileFilter("^(.*json)"),
 				DirectoryFileFilter.DIRECTORY);
 
-		int size = ALL_CARD_FILES.size();
+		var size = ALL_CARD_FILES.size();
 		File file;
-		Object[][] matrix = (Object[][]) Array.newInstance(Object.class, size, 1);
-		for (int i = 0; i < size; i++) {
+		var matrix = (Object[][]) Array.newInstance(Object.class, size, 1);
+		for (var i = 0; i < size; i++) {
 			file = ALL_CARD_FILES.get(i);
 			matrix[i][0] = file;
 		}
@@ -66,16 +67,23 @@ public class CardValidation {
 	}
 
 	public static void validateCard(File cardFile) throws IOException {
-		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
+		var resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
-			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
+			var record = CARD_PARSER.parseCard(resourceInputStream);
 			if (record.getDesc().getType() != CardType.FORMAT) {
 				assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
 			}
-			String description = record.getDesc().getDescription();
+
+			// Test glow does not cause crash when evaluated from hand
+			var testContext = GameContext.fromTwoRandomDecks();
+			testContext.init();
+			var card = record.getDesc().create();
+			testContext.getLogic().receiveCard(0, card);
+			record.getDesc().getGlowConditions().forEach(c -> c.isFulfilled(testContext, testContext.getPlayer1(), card, null));
+			var description = record.getDesc().getDescription();
 			if (description != null) {
-				AttributeMap attributes = record.getDesc().getAttributes();
+				var attributes = record.getDesc().getAttributes();
 				if (description.startsWith("Battlecry:")
 						|| description.startsWith("Opener:")) {
 					assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY),
@@ -95,9 +103,9 @@ public class CardValidation {
 				}
 			}
 		} catch (DecodeException ex) {
-			JsonProcessingException innerEx = (JsonProcessingException) ex.getCause();
+			var innerEx = (JsonProcessingException) ex.getCause();
 			if (innerEx != null) {
-				JsonLocation location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile, 0, 0, 0);
+				var location = innerEx.getLocation() != null ? innerEx.getLocation() : new JsonLocation(cardFile, 0, 0, 0);
 				fail(String.format("%s\n%s",
 						cardFile.getAbsolutePath() + ":" + location.getLineNr(),
 						innerEx.getMessage()));
@@ -109,21 +117,21 @@ public class CardValidation {
 
 	public static void validateCardReferences(File cardFile) throws IOException {
 		CardCatalogue.loadCardsFromPackage();
-		ResourceInputStream resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
+		var resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
-			CardCatalogueRecord record = CARD_PARSER.parseCard(resourceInputStream);
+			var record = CARD_PARSER.parseCard(resourceInputStream);
 			record.getDesc().bfs().build().forEach(node -> {
 				if (node.getKey().equals(SpellArg.CARD) || node.getKey().equals(EntityFilterArg.CARD)) {
-					String card = (String) node.getValue();
+					var card = (String) node.getValue();
 					if (SpellUtils.getSpecialCards().contains(card)) {
 						return;
 					}
 					CardCatalogue.getCardById(card);
 				} else if (node.getKey().equals(SpellArg.CARDS) || node.getKey().equals(EntityFilterArg.CARDS)) {
 					if (node.getValue() instanceof String[]) {
-						String[] cards = (String[]) node.getValue();
-						for (String card : cards) {
+						var cards = (String[]) node.getValue();
+						for (var card : cards) {
 							if (SpellUtils.getSpecialCards().contains(card)) {
 								continue;
 							}

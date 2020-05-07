@@ -12,6 +12,7 @@ import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.*;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.*;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -534,7 +535,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets a list of triggers that are active as soon as the game starts.
 	 *
 	 * @return The entity's defined game triggers
-	 * @see GameLogic#processGameTriggers(Player, Entity) for the place to activate these triggers.
+	 * @see GameLogic#addEnchantment(Player, Enchantment, Entity, Entity)  for the place to activate these triggers.
 	 */
 	public EnchantmentDesc[] getGameTriggers() {
 		return (EnchantmentDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new EnchantmentDesc[0]);

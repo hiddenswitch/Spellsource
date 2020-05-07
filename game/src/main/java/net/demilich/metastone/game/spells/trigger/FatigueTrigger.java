@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 ;
@@ -7,6 +8,9 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires when the player gets dealt damage from {@link net.demilich.metastone.game.cards.Attribute#FATIGUE}.
+ */
 public class FatigueTrigger extends EventTrigger {
 
 	public FatigueTrigger() {
@@ -32,8 +36,7 @@ public class FatigueTrigger extends EventTrigger {
 	}
 
 	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.FATIGUE;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.FATIGUE;
 	}
-
 }
