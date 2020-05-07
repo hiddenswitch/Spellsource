@@ -324,6 +324,9 @@ public class CardCatalogue {
 		try {
 			for (var directory : directories) {
 				var path = Path.of(directory);
+				if (!Files.exists(path)) {
+					continue;
+				}
 				Stream<Path> walk = null;
 				walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS);
 
