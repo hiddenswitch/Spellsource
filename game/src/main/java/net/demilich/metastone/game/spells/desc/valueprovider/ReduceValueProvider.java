@@ -23,6 +23,9 @@ import java.util.Map;
  * <p>
  * Specifying an attribute {@link ValueProviderArg#ATTRIBUTE} is a shorthand for a {@code "value1"} set to an {@link
  * AttributeValueProvider} with the specified attribute.
+ * <p>
+ * If a {@link ValueProviderArg#VALUE2} is specified and the number of resolve target entities is zero, returns this
+ * value.
  */
 public class ReduceValueProvider extends ValueProvider {
 
@@ -80,20 +83,8 @@ public class ReduceValueProvider extends ValueProvider {
 		int value;
 
 		if (operation == AlgebraicOperation.MAXIMUM) {
-			/* TODO: Revisit these value provider maximum errors
-			if (entities.isEmpty()) {
-				logger.error("provideValue {} {}: Trying to do a maximum with no entities targeted, returning zero.", context.getGameId(), host);
-				return 0;
-			}
-			*/
 			value = Integer.MIN_VALUE;
 		} else if (operation == AlgebraicOperation.MINIMUM) {
-			/* TODO: Revisit these value provider minimum errors
-			if (entities.isEmpty()) {
-				logger.error("provideValue {} {}: Trying to do a minimum with no entities targeted, returning zero.", context.getGameId(), host);
-				return 0;
-			}
-			*/
 			value = Integer.MAX_VALUE;
 		} else if (operation == AlgebraicOperation.MULTIPLY) {
 			value = 1;
@@ -103,6 +94,10 @@ public class ReduceValueProvider extends ValueProvider {
 			throw new UnsupportedOperationException("Cannot do a reduce with a DIVIDE, MODULO or NEGATE operator.");
 		} else {
 			value = 0;
+		}
+
+		if (entities.isEmpty() && getDesc().containsKey(ValueProviderArg.VALUE2)) {
+			return getDesc().getValue(ValueProviderArg.VALUE2, context, player, target, host, 0);
 		}
 
 		for (Entity entity : entities) {

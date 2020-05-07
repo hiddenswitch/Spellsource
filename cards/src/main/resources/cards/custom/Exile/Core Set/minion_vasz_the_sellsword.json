@@ -12,7 +12,14 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RecastUntilMinionsDestroyedSpell",
-      "howMany": 30,
+      "howMany": {
+        "class": "ReduceValueProvider",
+        "target": "ALL_OTHER_MINIONS",
+        "attribute": "HP",
+        "operation": "MINIMUM",
+        "offset": 1,
+        "value2": 1
+      },
       "spell": {
         "class": "DamageSpell",
         "target": "ALL_OTHER_MINIONS",

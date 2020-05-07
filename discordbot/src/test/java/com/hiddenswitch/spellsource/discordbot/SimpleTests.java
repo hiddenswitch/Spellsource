@@ -10,6 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SimpleTests {
 
+	@BeforeAll()
+	public static void loadCards() {
+		// Actual application uses cards loaded from directory at compile time
+		CardCatalogue.loadAllCards();
+	}
+
 	@Test
 	public void testHelpCommand() {
 		Message response = DiscordBot.handleMessage("!help", null);
@@ -42,7 +48,5 @@ public class SimpleTests {
 
 		assertNotNull(response);
 		assertTrue(response.getContentRaw().contains(DiscordBot.stringify(CardCatalogue.getCardById("minion_paven_elemental_of_surprise"))));
-
 	}
-
 }
