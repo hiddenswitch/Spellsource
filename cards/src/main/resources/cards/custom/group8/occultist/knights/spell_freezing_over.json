@@ -8,7 +8,6 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
         "class": "MinionPlayedTrigger",
@@ -17,7 +16,7 @@
       "oneTurn": true,
       "spell": {
         "class": "BuffSpell",
-        "target": "EVENT_TARGET",
+        "target": "SELF",
         "value": 3
       }
     }
