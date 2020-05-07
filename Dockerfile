@@ -25,7 +25,7 @@ COPY --from=0 /app/net/build/libs/net-*-${SPELLSOURCE_SHADOWJAR_CLASSIFIER}.jar 
 # Get the phusion base image docker run scripts
 COPY docker/root/etc/service /etc/service
 # TODO: Enforce that the jaeger-agent version matches our collector version
-COPY --from=jaegertracing/jaeger-agent:1.15 /go/bin/agent-linux /go/bin/agent-linux
+COPY --from=jaegertracing/jaeger-agent:1.17.1 /go/bin/agent-linux /go/bin/agent-linux
 
 # Health check for whether the code file was successfully copied and Java is correctly installed
 RUN ldconfig; \

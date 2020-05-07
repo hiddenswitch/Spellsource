@@ -42,7 +42,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'io.jaegertracing') {
-                    details.useVersion '1.0.0'
+                    details.useVersion '1.2.0'
                 }
 
                 if (details.requested.group == 'io.netty' && details.requested.version.contains('Final')) {
