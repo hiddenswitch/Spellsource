@@ -101,7 +101,7 @@ services:
       timeout: 4s
       retries: 3
   jaeger-collector:
-    image: jaegertracing/jaeger-collector:1.15.1
+    image: jaegertracing/jaeger-collector:1.17.1
     environment:
       - SPAN_STORAGE_TYPE=cassandra
       - CASSANDRA_SERVERS=cassandra
@@ -126,7 +126,7 @@ services:
           - node.labels.cpu == high
           - node.labels.disk == ssd
   jaeger-schema:
-    image: jaegertracing/jaeger-cassandra-schema:1.15.1
+    image: jaegertracing/jaeger-cassandra-schema:1.17.1
     environment:
       - CQLSH_HOST=cassandra
       - MODE=test
@@ -143,7 +143,7 @@ services:
     networks:
       - backend
   jaeger-query:
-    image: jaegertracing/jaeger-query:1.15.1
+    image: jaegertracing/jaeger-query:1.17.1
     environment:
       - SPAN_STORAGE_TYPE=cassandra
       - CASSANDRA_SERVERS=cassandra
