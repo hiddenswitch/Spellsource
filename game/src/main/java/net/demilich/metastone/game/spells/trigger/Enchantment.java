@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
@@ -34,6 +31,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
@@ -72,7 +71,7 @@ public class Enchantment extends Entity implements Trigger {
 	private static final Zones[] DEFAULT_PASSIVE_ZONES = new Zones[]{Zones.HERO_POWER, Zones.HAND};
 	private static final Zones[] DEFAULT_GAME_ZONES = new Zones[]{Zones.DISCOVER, Zones.SET_ASIDE_ZONE, Zones.DECK, Zones.HAND};
 	private static final Zones[] DEFAULT_DECK_ZONES = new Zones[]{Zones.DECK};
-	private static final ImmutableSet<Zones> DEFAULT_BATTLEFIELD_ZONES_SET = Arrays.stream(Enchantment.getDefaultBattlefieldZones()).collect(Sets.toImmutableEnumSet());
+	private static final Set<Zones> DEFAULT_BATTLEFIELD_ZONES_SET = Arrays.stream(Enchantment.getDefaultBattlefieldZones()).collect(Collectors.toSet());
 	protected List<EventTrigger> triggers = new ArrayList<>();
 	protected List<EventTrigger> expirationTriggers = new ArrayList<>();
 	protected List<EventTrigger> activationTriggers = new ArrayList<>();
@@ -558,7 +557,7 @@ public class Enchantment extends Entity implements Trigger {
 		return DEFAULT_DECK_ZONES;
 	}
 
-	public static ImmutableSet<Zones> getDefaultBattlefieldZonesSet() {
+	public static Set<Zones> getDefaultBattlefieldZonesSet() {
 		return DEFAULT_BATTLEFIELD_ZONES_SET;
 	}
 

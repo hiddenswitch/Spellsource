@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
@@ -56,7 +55,7 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(Card.class);
 
-	public static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = Sets.immutableEnumSet(
+	public static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = EnumSet.of(
 			Attribute.PASSIVE_TRIGGERS,
 			Attribute.DECK_TRIGGERS,
 			Attribute.BASE_ATTACK,
@@ -73,7 +72,7 @@ public class Card extends Entity implements HasChooseOneActions {
 			Attribute.CARD_TAUNT
 	);
 
-	protected static final Set<Attribute> HERO_ATTRIBUTES = Sets.immutableEnumSet(
+	protected static final Set<Attribute> HERO_ATTRIBUTES = EnumSet.of(
 			Attribute.HP,
 			Attribute.BATTLECRY,
 			Attribute.MAX_HP,
