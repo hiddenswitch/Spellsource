@@ -4,10 +4,7 @@ import com.google.common.collect.Streams;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.core.JsonConfiguration;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -40,7 +37,7 @@ import static net.dv8tion.jda.api.MessageBuilder.Formatting.STRIKETHROUGH;
 public class DiscordBot extends ListenerAdapter {
 	static {
 		JsonConfiguration.configureJson();
-		CardCatalogue.loadCardsFromFilesystemDirectories("cards/src/main/resources/cards", "game/src/main/resources/cards");
+		CardCatalogue.loadCardsFromFilesystemDirectories("../cards/src/main/resources/cards", "cards/src/main/resources/cards", "../game/src/main/resources/cards", "game/src/main/resources/cards");
 	}
 
 	final static int MAX_RESULTS = 5;
@@ -155,16 +152,13 @@ public class DiscordBot extends ListenerAdapter {
 				CardCatalogue.getCards()
 						.values()
 						.stream()
-						.filter(c -> c.getName().equalsIgnoreCase(nameOrId) && c.isCollectible())
+						.filter(c -> c.getName().trim().equalsIgnoreCase(nameOrId.toLowerCase()))
 						.limit(1L)).map(c -> new Match(c, true))
 				.findFirst().map(Collections::singletonList).orElse(
 						// Partial Match
-						Streams.concat(
-								CardCatalogue.getCards().values().stream()
-										.filter(c -> c.getName().toLowerCase().startsWith(nameOrId.toLowerCase())),
-								CardCatalogue.getCards().values().stream()
-										.filter(c -> c.getName().toLowerCase().contains(nameOrId.toLowerCase()))
-						).map(c -> new Match(c, false))
+						CardCatalogue.getCards().values().stream()
+								.filter(c -> c.getName().toLowerCase().contains(nameOrId.toLowerCase())).map(c -> new Match(c, false))
+								.distinct()
 								.sorted(Match.MATCHER)
 								.limit(MAX_RESULTS + 1)
 								.collect(Collectors.toList()));
