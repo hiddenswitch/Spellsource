@@ -226,3 +226,8 @@ task deployAll(group: 'Spellsource') {
     description("Deploys the server, the client and the website")
     dependsOn += [distSteam, distIOS, distAndroid, distWebGL, distSwarm, distWWW]
 }
+
+task bumpVersion(type: Exec, group: 'Spellsource') {
+    description('Bumps the server version')
+    commandLine './deploy.sh', '-v'
+}
