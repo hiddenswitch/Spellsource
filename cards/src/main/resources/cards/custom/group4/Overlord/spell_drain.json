@@ -4,31 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Lifedrain. Deal $3 damage to a random enemy. Cast this when drawn.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "target": "ENEMY_CHARACTERS",
-          "randomTarget": true,
-          "value": 3
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        }
-      ]
-    }
-  },
+  "description": "Casts When Drawn. Lifedrain. Deal $3 damage to a random enemy.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
@@ -37,7 +13,8 @@
     "value": 3
   },
   "attributes": {
-    "LIFESTEAL": true
+    "LIFESTEAL": true,
+    "CASTS_WHEN_DRAWN": true
   },
   "collectible": false,
   "set": "VERDANT_DREAMS",

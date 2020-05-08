@@ -4,43 +4,15 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Restore #4 Health to your Champion. Draw a card. Cast this when drawn.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "HealSpell",
-          "target": "FRIENDLY_HERO",
-          "value": 4
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        }
-      ]
-    }
-  },
+  "description": "Casts When Drawn. Restore #4 Health to your Champion.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "HealSpell",
-        "target": "FRIENDLY_HERO",
-        "value": 4
-      },
-      {
-        "class": "DrawCardSpell"
-      }
-    ]
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 4
+  },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
   },
   "collectible": false,
   "set": "CUSTOM",
