@@ -4,34 +4,16 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "When you draw this, take 7 damage and draw a card.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "target": "FRIENDLY_HERO",
-          "value": 7,
-          "ignoreSpellDamage": true
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        }
-      ]
-    }
-  },
+  "description": "Casts when drawn. Take 7 damage.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "NullSpell"
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 7,
+    "ignoreSpellDamage": true
+  },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
   },
   "collectible": false,
   "set": "CUSTOM",

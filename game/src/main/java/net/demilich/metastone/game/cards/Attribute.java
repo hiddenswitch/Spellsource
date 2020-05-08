@@ -1185,8 +1185,16 @@ public enum Attribute {
 	 * When set on a player entity, indicates the player is currently in the starting turn phase.
 	 */
 	STARTING_TURN,
+	/**
+	 * Attribute to track if a spell should cast itself automatically when drawn, also drawing another card in the process.
+	 */
+	CASTS_WHEN_DRAWN,
 
-	EIDOLON_RACE;
+	EIDOLON_RACE,
+	/**
+	 * Represents the minimum attack that auras can reduce an actor's attack to
+	 */
+	AURA_MIN_ATTACK;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
