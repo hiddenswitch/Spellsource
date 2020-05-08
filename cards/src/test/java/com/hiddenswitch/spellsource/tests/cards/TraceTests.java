@@ -106,6 +106,7 @@ public class TraceTests extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("getTraces")
+	@Execution(ExecutionMode.SAME_THREAD)
 	public void testTraces(Trace trace) {
 		if ("ignore".equals(trace.getId())) {
 			return;
