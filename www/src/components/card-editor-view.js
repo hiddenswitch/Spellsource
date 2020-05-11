@@ -56,8 +56,10 @@ const CardEditorView = () => {
               max
               int
               text
+              options
             }
           }
+          inputsInline
           colour
           messages
           nextStatement
@@ -128,7 +130,7 @@ const CardEditorView = () => {
   }
 
   function onWorkspaceChanged (workspace) {
-    setXml('<xml>' + Xml.workspaceToDom(workspace).innerHTML + '</xml>')
+    setXml(('<xml>' + Xml.workspaceToDom(workspace).innerHTML + '</xml>').replace(/>/gi,'>\n'))
     setCode(JSON.stringify(WorkspaceUtils.workspaceToDictionary(workspace), null, 2))
   }
 

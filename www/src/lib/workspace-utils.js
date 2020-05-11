@@ -4,6 +4,7 @@ import format from 'string-format'
 
 export default class WorkspaceUtils {
   static BLOCKLY_OPENER = 'BLOCKLY_OPENER'
+  static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL'
 
   static xmlToDictionary (xml, prev = null) {
     switch (xml.nodeName) {
@@ -54,24 +55,33 @@ export default class WorkspaceUtils {
 
         const hasData = find(childNodes, cn => cn.nodeName === 'data')
         if (hasData) {
-          const value = hasData.innerHTML
+          const values = hasData.innerHTML.split(',')
 
-          switch (value) {
-            case WorkspaceUtils.BLOCKLY_OPENER:
-              if (!!prev) {
-                prev['battlecry'] = obj
-              }
-              return prev
-            default:
-              const allValues = filter(childNodes, cn =>
-                cn.nodeName === 'field')
-              const valuesObj = fromPairs(map(allValues, cn =>
-                [cn.attributes['name'].value, cn.innerHTML])
-              )
+          for (let i = 0; i < values.length; i++) {
+            const value = values[i]
+            switch (value) {
+              case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL:
+                if (!!obj.spell && !obj.spell.target) {
+                  obj.spell.target = 'OUTPUT'
+                }
+                break
+              case WorkspaceUtils.BLOCKLY_OPENER:
+                if (!!prev) {
+                  prev['battlecry'] = obj
+                }
+                return prev
+              default:
+                const allValues = filter(childNodes, cn =>
+                  cn.nodeName === 'field')
+                const valuesObj = fromPairs(map(allValues, cn =>
+                  [cn.attributes['name'].value, cn.innerHTML])
+                )
 
-              const res = format(value, valuesObj)
-              return !isNaN(res) ? +res : res
+                const res = format(value, valuesObj)
+                return !isNaN(res) ? +res : res
+            }
           }
+
         }
         return obj
       default:

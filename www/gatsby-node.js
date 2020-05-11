@@ -31,6 +31,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     previousStatement: [String]
     args: [Args1]
     data: String
+    inputsInline: Boolean
   }
   type Args1 {
     i: Int!
@@ -46,6 +47,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     max: Int
     int: Boolean
     text: String
+    options: [[String]]
   }
   `
   createTypes(typeDefs)
