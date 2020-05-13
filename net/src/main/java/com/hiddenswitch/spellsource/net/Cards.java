@@ -125,14 +125,13 @@ public interface Cards {
 					.stream()
 					.map(CardCatalogueRecord::getDesc)
 					.filter(cd -> DeckFormat.spellsource().isInFormat(cd.getSet())
-							&& cd.getType() != CardType.GROUP
-							&& cd.getType() != CardType.HERO_POWER
-							&& cd.getType() != CardType.ENCHANTMENT)
-					.map(CardDesc::create)
-					.map(card -> Games.getEntity(workingContext, card, 0))
-					.map(entity -> {
-						// Don't waste space storing locations on these
-						entity.l(null);
+							&& cd.getType() != CardType.GROUP)
+					.map(card -> {
+						var entity = Games.getEntity(workingContext, card.create(), 0)
+								// Include the art specification
+								.art(card.getArt())
+								// Do not store the location on the card database
+								.l(null);
 						return new CardRecord()
 								.id(entity.getCardId())
 								.entity(entity);
