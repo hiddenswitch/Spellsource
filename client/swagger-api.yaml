@@ -1,8 +1,5 @@
 # Spellsource auto-generated client for Unity and Java specification using swagger
-# Run ./client.sh after modifying this file
-# Examine build.gradle for more about how swagger-codegen is invoked for C# and Java
-# Note a typo in the java template in the exact version of swagger-codegen that is required causes the
-# client/build.gradle file to have a syntax issue
+# Generate the classes using
 swagger: "2.0"
 info:
   version: 4.0.1
@@ -1808,6 +1805,138 @@ definitions:
           When set on the player entity, indicates the effects occuring now are during the player's turn start phase.
         type: 'boolean'
         default: false
+      art:
+        $ref: '#/definitions/Art'
+  Art:
+    type: 'object'
+    description: |
+      Contains information the client needs for an art asset.
+    properties:
+      token:
+        $ref: '#/definitions/Sprite'
+      lit:
+        $ref: '#/definitions/Color'
+      shadow:
+        $ref: '#/definitions/Color'
+      body:
+        $ref: '#/definitions/Font'
+  Sprite:
+    type: 'object'
+    description: |
+      Specifies a sprite or image
+    properties:
+      named:
+        type: 'string'
+        description: |
+          The sprite name in the client.
+  Font:
+    type: 'object'
+    description: |
+      Contains a font (type, size, styling, etc.) specification
+    properties:
+      name:
+        type: 'string'
+        description: |
+          A named font face to use for rendering
+      size:
+        type: 'string'
+        description: |
+          A size specification for the font.
+
+          Supported specifications:
+           - A single number specificaton, like 12. Specifies size in terms of Unity canvas units.
+           - A range number specification, like 9-32. Specifies the text object should auto-size between these values.
+      face:
+        $ref: '#/definitions/Color'
+      outline:
+        type: object
+        properties:
+          color:
+            $ref: '#/definitions/Color'
+          thickness:
+            type: number
+            format: float
+            description: Thickness of the outline in TextMeshPro SDF units
+      underlay:
+        type: object
+        properties:
+          offsetX:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+          offsetY:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+          dilate:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+          softness:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+  Color:
+    type: 'object'
+    description: |
+      Describes a color or a command to set a specific color value.
+    properties:
+      named:
+        type: string
+        description: |
+          Lookup a color by name (context-sensitive).
+      rgb:
+        type: object
+        properties:
+          r:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+            description: Red channel in units of 0.0-1.0
+          g:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+            description: Green channel in units of 0.0-1.0
+          b:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+            description: Blue channel in units of 0.0-1.0
+      hsv:
+        type: object
+        properties:
+          h:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+            description: Blue channel in units of 0.0-1.0
+          s:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+            description: Blue channel in units of 0.0-1.0
+          v:
+            type: number
+            format: float
+            x-nullable: false
+            default: 0
+            description: Blue channel in units of 0.0-1.0
+      a:
+        type: number
+        format: float
+        description: Alpha in units of 0.0-1.0
+        x-nullable: false
+        default: 1
   DraftsChooseCardRequest:
     type: 'object'
     required:

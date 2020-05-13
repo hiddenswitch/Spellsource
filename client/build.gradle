@@ -94,6 +94,7 @@ task generateSwaggerJava {
     outputs.dir(generatedSourcesPath)
 
     doLast {
+        delete(generatedSourcesPath)
         def config = new SpellsourceJavaCodegen();
         config.setInputSpec(absoluteInputPath)
         config.setOutputDir(project.projectDir.absolutePath)

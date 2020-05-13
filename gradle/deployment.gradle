@@ -35,6 +35,7 @@ task generateSwaggerCsharp() {
     inputs.dir(templatePath)
     outputs.dir(outputPath)
     doLast {
+        delete(outputPath)
         def config = new CSharpNullableGenerator()
         config.setInputSpec(file(inputPath).absolutePath)
         config.setOutputDir(outputDir.absolutePath)
