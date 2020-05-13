@@ -1,12 +1,18 @@
 import { Xml } from 'blockly'
-import { find, map, fromPairs, filter } from 'lodash'
+import { find, map, fromPairs, filter, extend } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
   static BLOCKLY_OPENER = 'BLOCKLY_OPENER'
   static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL'
+  static BLOCKLY_ATTRIBUTES = 'BLOCKLY_ATTRIBUTES'
+  static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
+  static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
 
   static xmlToDictionary (xml, prev = null) {
+    const statements = []
+    let nextNode = null
+    let next = null
     switch (xml.nodeName) {
       case '#document':
         if (!!xml.firstElementChild) {
@@ -25,7 +31,6 @@ export default class WorkspaceUtils {
         }
         const childNodes = Array.from(xml.childNodes)
         const length = childNodes.length
-        let next = null
         for (let i = 0; i < length; i++) {
           const childNode = childNodes[i]
           switch (childNode.nodeName) {
@@ -41,16 +46,19 @@ export default class WorkspaceUtils {
             case 'value':
               obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild)
               break
+            case 'statement':
+              statements.push(childNode)
+              break
             case 'next':
               if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === 'block') {
-                next = childNode.firstElementChild
+                nextNode = childNode.firstElementChild
               }
               break
           }
         }
 
-        if (!!next) {
-          WorkspaceUtils.xmlToDictionary(next, obj)
+        if (!!nextNode) {
+          next = WorkspaceUtils.xmlToDictionary(nextNode, obj)
         }
 
         const hasData = find(childNodes, cn => cn.nodeName === 'data')
@@ -60,6 +68,39 @@ export default class WorkspaceUtils {
           for (let i = 0; i < values.length; i++) {
             const value = values[i]
             switch (value) {
+              case WorkspaceUtils.BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE:
+                if (!obj.attribute) {
+                  return {}
+                }
+                const boolAttribute = { [obj.attribute]: true }
+                if (!!next) {
+                  extend(boolAttribute, next)
+                }
+                return boolAttribute
+              case WorkspaceUtils.BLOCKLY_INT_ATTRIBUTE:
+                if (!obj.attribute) {
+                  return {}
+                }
+                const intAttribute = { [obj.attribute]: obj.value }
+                if (!!next) {
+                  extend(intAttribute, next)
+                }
+                return intAttribute
+              case WorkspaceUtils.BLOCKLY_ATTRIBUTES:
+                let attributes = {}
+                for (let i = 0; i < statements.length; i++) {
+                  const statement = statements[i].firstElementChild
+                  if (!statement) {
+                    continue
+                  }
+                  extend(attributes, WorkspaceUtils.xmlToDictionary(statement, {}))
+                }
+                // Assign the attributes on the "previous" object i.e. the card
+                if (!!prev) {
+                  prev['attributes'] = attributes
+                }
+
+                return attributes
               case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL:
                 if (!!obj.spell && !obj.spell.target) {
                   obj.spell.target = 'OUTPUT'
@@ -69,7 +110,7 @@ export default class WorkspaceUtils {
                 if (!!prev) {
                   prev['battlecry'] = obj
                 }
-                return prev
+                return obj
               default:
                 const allValues = filter(childNodes, cn =>
                   cn.nodeName === 'field')
