@@ -8,8 +8,9 @@ export default class WorkspaceUtils {
   static BLOCKLY_ATTRIBUTES = 'BLOCKLY_ATTRIBUTES'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
+  static BLOCKLY_RANDOM_TARGET = 'BLOCKLY_RANDOM_TARGET'
 
-  static xmlToDictionary (xml, prev = null) {
+  static xmlToDictionary (xml, prev = null, parent = null) {
     const statements = []
     let nextNode = null
     let next = null
@@ -44,7 +45,7 @@ export default class WorkspaceUtils {
               obj[childNode.attributes['name'].value] = !isNaN(childNode.innerHTML) ? +childNode.innerHTML : childNode.innerHTML
               break
             case 'value':
-              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild)
+              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild, null, obj)
               break
             case 'statement':
               statements.push(childNode)
@@ -111,6 +112,11 @@ export default class WorkspaceUtils {
                   prev['battlecry'] = obj
                 }
                 return obj
+              case WorkspaceUtils.BLOCKLY_RANDOM_TARGET:
+                if (!!parent) {
+                  parent.randomTarget = true;
+                }
+                return obj['target']
               default:
                 const allValues = filter(childNodes, cn =>
                   cn.nodeName === 'field')
