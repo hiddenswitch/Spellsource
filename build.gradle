@@ -94,7 +94,7 @@ subprojects {
                 }
 
                 if (details.requested.name == 'micronaut-inject' || details.requested.name == 'micronaut-runtime') {
-                    details.useVersion '1.3.1'
+                    details.useVersion '1.3.5'
                 }
 
                 if (details.requested.group == 'org.junit.jupiter') {
