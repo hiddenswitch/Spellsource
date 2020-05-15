@@ -4,11 +4,14 @@ import format from 'string-format'
 
 export default class WorkspaceUtils {
   static BLOCKLY_OPENER = 'BLOCKLY_OPENER'
+  static BLOCKLY_AFTERMATH = 'BLOCKLY_AFTERMATH'
   static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL'
+  static BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL'
   static BLOCKLY_ATTRIBUTES = 'BLOCKLY_ATTRIBUTES'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
   static BLOCKLY_RANDOM_TARGET = 'BLOCKLY_RANDOM_TARGET'
+  static BLOCKLY_ARRAY = 'BLOCKLY_ARRAY'
 
   static xmlToDictionary (xml, prev = null, parent = null) {
     const statements = []
@@ -102,14 +105,36 @@ export default class WorkspaceUtils {
                 }
 
                 return attributes
+              case this.BLOCKLY_ARRAY:
+                //TODO I sorta almost got it working lol
+                let thingies = [];
+                for (let i = 0; i < statements.length; i++) {
+                  if (!!statements[i]) {
+                    thingies[i] = WorkspaceUtils.xmlToDictionary(statements[i].firstElementChild);
+                  }
+                }
+                if (!!prev && !!statements[0]) {
+                  prev[statements[0].attributes['name'].value] = thingies
+                }
+                return thingies;
               case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL:
                 if (!!obj.spell && !obj.spell.target) {
                   obj.spell.target = 'OUTPUT'
                 }
                 break
+              case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL:
+                if (!!obj.spell && !obj.spell.target) {
+                  obj.spell.target = 'EVENT_TARGET'
+                }
+                break
               case WorkspaceUtils.BLOCKLY_OPENER:
                 if (!!prev) {
                   prev['battlecry'] = obj
+                }
+                return obj
+              case WorkspaceUtils.BLOCKLY_AFTERMATH:
+                if (!!prev) {
+                  prev['deathrattle'] = obj
                 }
                 return obj
               case WorkspaceUtils.BLOCKLY_RANDOM_TARGET:
