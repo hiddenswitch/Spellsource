@@ -20,8 +20,7 @@
       "randomTarget": true
     }
   },
-  "attributes": {
-  },
+  "attributes": {},
   "collectible": true,
   "sets": [
     "CUSTOM",

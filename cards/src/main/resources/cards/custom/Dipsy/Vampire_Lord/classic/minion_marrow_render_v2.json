@@ -18,7 +18,7 @@
   "attributes": {
     "BATTLECRY": true,
     "TAUNT": true,
-	"DRAIN": true
+    "DRAIN": true
   },
   "collectible": false,
   "sets": [

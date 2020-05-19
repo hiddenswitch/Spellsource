@@ -5,6 +5,10 @@ path: "/whats-new"
 header: true
 ---
 
+Thanks for playing this beta of Spellsource!
+
+Read more at [our website](http://www.playspellsource.com) and join our [Discord](https://discord.gg/HmbESh2)!
+
 ### Current Build 0.8.76-3.1.3 (May 7, 2020)
 
  - Text and implementation of cards that cast when drawn have been standardized.

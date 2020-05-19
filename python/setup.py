@@ -70,7 +70,8 @@ setup(name='spellsource',
                         'hearthstone',
                         'pymongo',
                         'mistletoe',
-                        'GitPython'],
+                        'GitPython',
+                        'SecretColors==1.1.0'],
       extras_require={
           'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
       },

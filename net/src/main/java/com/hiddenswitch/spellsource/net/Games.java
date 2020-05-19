@@ -765,38 +765,13 @@ public interface Games extends Verticle {
 				break;
 			case SPELL:
 			case HERO_POWER:
-				int damage = 0;
-				int spellpowerDamage = 0;
-				SpellDesc spell = card.getSpell();
-
-				// Could be a choose-one hero power card
-				if (spell == null) {
-					break;
-				}
-
-				/*
-				if (card.getZone() == Zones.HAND
-						&& DamageSpell.class.isAssignableFrom(spell.getDescClass())
-						&& owningPlayer != null) {
-
-					Minion oneOne = CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()).summon();
-					oneOne.setId(65535);
-					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, oneOne);
-					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);
-				}
-				*/
-				entity.underAura(spellpowerDamage > damage
-						|| hostsTrigger);
-				entity.spellDamage(spellpowerDamage);
+				entity.underAura(hostsTrigger);
 				break;
 			case CHOOSE_ONE:
 				// TODO: Handle choose one cards
 				break;
 			case CLASS:
-				entity.blackText(card.isBlackText());
-				if (card.getColor() != null) {
-					entity.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
-				}
+				entity.art(card.getDesc().getArt());
 				break;
 			case FORMAT:
 				entity.cardSets(Arrays.asList(card.getCardSets()));

@@ -163,8 +163,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	private DynamicDescriptionDesc[] dynamicDescription;
 	private Boolean legacy;
 	private String hero;
-	private int[] color;
-	private boolean blackText;
 	private String[] secondPlayerBonusCards;
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
@@ -1089,14 +1087,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return dynamicDescription;
 	}
 
-	public int[] getColor() {
-		return color;
-	}
-
-	public boolean isBlackText() {
-		return blackText;
-	}
-
 	public String[] getSecondPlayerBonusCards() {
 		return secondPlayerBonusCards;
 	}
@@ -1140,14 +1130,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setHero(String hero) {
 		this.hero = hero;
-	}
-
-	public void setColor(int[] color) {
-		this.color = color;
-	}
-
-	public void setBlackText(boolean blackText) {
-		this.blackText = blackText;
 	}
 
 	@JsonIgnore

@@ -16,7 +16,7 @@
         "target": "SELF"
       }
     }
-      ],
+  ],
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",

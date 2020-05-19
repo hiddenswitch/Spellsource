@@ -11,13 +11,13 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DrainSpell",
-	  "target": "ADJACENT_MINIONS",
+      "target": "ADJACENT_MINIONS",
       "value": 3
     }
   },
   "attributes": {
     "BATTLECRY": true,
-	"DRAIN": true
+    "DRAIN": true
   },
   "collectible": false,
   "sets": [

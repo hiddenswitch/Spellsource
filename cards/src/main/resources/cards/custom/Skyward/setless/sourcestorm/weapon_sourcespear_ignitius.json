@@ -1,29 +1,29 @@
 {
-    "name": "Sourcespear Ignitius",
-    "baseManaCost": 10,
-    "type": "WEAPON",
-    "heroClass": "AZURE",
-    "damage": 4,
-    "durability": 1,
-    "rarity": "LEGENDARY",
-    "description": "Aftermath: Destroy all minions. Upgrade your Champion's Skill.",
-    "deathrattle": {
-        "class": "MetaSpell",
-        "spells": [
-            {
-                "class": "DestroySpell",
-                "target": "ALL_MINIONS"
-            },
-            {
-                "class": "ChangeHeroPowerSpell",
-                "card": "hero_power_ascend"
-            }
-        ]
-    },
-    "attributes": {
-        "DEATHRATTLES": true
-    },
-    "collectible": true,
-    "set": "SOURCESTORM",
-    "fileFormatVersion": 1
+  "name": "Sourcespear Ignitius",
+  "baseManaCost": 10,
+  "type": "WEAPON",
+  "heroClass": "AZURE",
+  "damage": 4,
+  "durability": 1,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Destroy all minions. Upgrade your Champion's Skill.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS"
+      },
+      {
+        "class": "ChangeHeroPowerSpell",
+        "card": "hero_power_ascend"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SOURCESTORM",
+  "fileFormatVersion": 1
 }

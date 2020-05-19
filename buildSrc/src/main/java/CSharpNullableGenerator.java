@@ -1,5 +1,7 @@
+import io.swagger.codegen.CodegenModel;
 import io.swagger.codegen.CodegenProperty;
 import io.swagger.codegen.languages.CSharpClientCodegen;
+import io.swagger.models.Model;
 
 import java.io.File;
 import java.util.ArrayList;

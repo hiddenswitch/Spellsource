@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_baron_aldus",
   "heroClass": "NAVY",
-  "color": [70, 120, 205],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.27450980392156865,
+      "g": 0.47058823529411764,
+      "b": 0.803921568627451,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.204,
+      "g": 0.353,
+      "b": 0.6,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.067,
+      "g": 0.118,
+      "b": 0.2,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.514,
+      "g": 0.647,
+      "b": 0.867,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_koltira",
   "heroClass": "BLOOD",
-  "color": [102, 23, 21],
-  "blackText": false,
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.4,
+      "g": 0.09019607843137255,
+      "b": 0.08235294117647059,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.298,
+      "g": 0.067,
+      "b": 0.059,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.098,
+      "g": 0.02,
+      "b": 0.02,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.6,
+      "g": 0.392,
+      "b": 0.384,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

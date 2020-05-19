@@ -108,7 +108,7 @@ this.{{name}} = {{name}};
         /// <value>{{description}}</value>{{/description}}
         [DataMember(Name="{{baseName}}", EmitDefaultValue={{emitDefaultValue}})]{{#isDate}}
         [JsonConverter(typeof(SwaggerDateConverter))]{{/isDate}}
-        [SerializeField] private {{{datatype}}} m_{{name}};
+        [SerializeField] private {{{datatype}}} m_{{name}}{{#defaultValue}} = {{{defaultValue}}}{{/defaultValue}};
         public {{{datatype}}} {{name}} { get { return m_{{name}}; } {{#isReadOnly}}private {{/isReadOnly}}set { m_{{name}} = value; } }
         {{/isEnum}}
         {{/isInherited}}

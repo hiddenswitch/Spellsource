@@ -14,16 +14,16 @@
         "value": 5
       },
       {
-            "class": "CastRepeatedlySpell",
-            "spell": {
-              "class": "ShuffleToDeckSpell",
-              "value": 1,
-              "filter": {
-                 "class": "CardFilter",
-                 "heroClass": "NEONGREEN"
-               }
-            },
-            "howMany": 15
+        "class": "CastRepeatedlySpell",
+        "spell": {
+          "class": "ShuffleToDeckSpell",
+          "value": 1,
+          "filter": {
+            "class": "CardFilter",
+            "heroClass": "NEONGREEN"
+          }
+        },
+        "howMany": 15
       }
     ]
   },

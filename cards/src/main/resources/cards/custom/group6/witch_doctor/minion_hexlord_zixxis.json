@@ -15,12 +15,12 @@
       "cardFilter": {
         "class": "CardFilter",
         "value": {
-		  "class": "LastTurnValueProvider",
+          "class": "LastTurnValueProvider",
           "targetPlayer": "OPPONENT"
-		},
-		"attribute": "PLAYED_FROM_HAND_OR_DECK",
-		"cardType": "SPELL",
-		"operation": "EQUAL"
+        },
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "cardType": "SPELL",
+        "operation": "EQUAL"
       },
       "cardSource": {
         "class": "GraveyardCardsSource",

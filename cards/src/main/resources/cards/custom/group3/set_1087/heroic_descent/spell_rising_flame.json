@@ -20,15 +20,15 @@
     "spell2": {
       "class": "MetaSpell",
       "spells": [
-	    {
+        {
           "class": "AddAttributeSpell",
           "attribute": "RUSH"
-		},
-		{
-		  "class": "AddAttributeSpell",
+        },
+        {
+          "class": "AddAttributeSpell",
           "attribute": "TAUNT"
-		}
-	  ]
+        }
+      ]
     }
   },
   "attributes": {},

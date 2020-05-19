@@ -31,7 +31,7 @@
     }
   },
   "attributes": {
-	"TAUNT": true
+    "TAUNT": true
   },
   "collectible": false,
   "set": "CUSTOM",

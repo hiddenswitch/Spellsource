@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",
-	"target": "FRIENDLY_HERO",
+    "target": "FRIENDLY_HERO",
     "condition": {
       "class": "IsDamagedCondition"
     },

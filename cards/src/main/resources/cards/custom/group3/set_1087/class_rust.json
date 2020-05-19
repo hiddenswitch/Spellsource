@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_alder_ravenwald",
   "heroClass": "RUST",
-  "color": [183, 65, 14],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.7176470588235294,
+      "g": 0.2549019607843137,
+      "b": 0.054901960784313725,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.537,
+      "g": 0.188,
+      "b": 0.039,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.176,
+      "g": 0.063,
+      "b": 0.012,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.812,
+      "g": 0.502,
+      "b": 0.369,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

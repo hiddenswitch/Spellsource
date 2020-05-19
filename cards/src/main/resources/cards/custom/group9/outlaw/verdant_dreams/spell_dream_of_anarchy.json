@@ -19,7 +19,7 @@
             "class": "EntityCountValueProvider",
             "target": "FRIENDLY_MINIONS"
           }
-		}
+        }
       },
       {
         "class": "FightSpell",

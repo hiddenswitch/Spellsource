@@ -15,6 +15,7 @@ from .ext.fixpullrequest import PullRequestFixSession
 from .ext.hearthcards import write_set_stubs
 from .ext.populatedecklists import write_decklists
 from .ext.updatedbf import write_dbf_json
+from .ext.fixcolor import fix_colors as _fix_colors
 
 
 @click.group()
@@ -64,6 +65,16 @@ def format_cards(path):
     Formats JSON card files.
     """
     fix_cards(path)
+
+
+@_cli.command()
+@click.option('--path', default='./cards/src/main/resources/cards',
+              help='the filepath to walk for card JSON', show_default=True)
+def fix_colors(path):
+    """
+    Fixes the colors specified in an older card format and calculates new shades
+    """
+    _fix_colors(path)
 
 
 @_cli.command()

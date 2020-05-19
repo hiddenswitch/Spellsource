@@ -10,7 +10,7 @@
     "class": "MinionOnBoardCondition",
     "value": 3,
     "operation": "GREATER_OR_EQUAL",
-	"targetPlayer": "OPPONENT"
+    "targetPlayer": "OPPONENT"
   },
   "spell": {
     "class": "DestroySpell"

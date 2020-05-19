@@ -17,86 +17,84 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.ColorHsv;
-import com.hiddenswitch.spellsource.client.models.ColorRgb;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Describes a color or a command to set a specific color value. 
+ * Describes a Unity color. 
  */
-@ApiModel(description = "Describes a color or a command to set a specific color value. ")
+@ApiModel(description = "Describes a Unity color. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Color implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("named")
-  private String named = null;
+  @JsonProperty("r")
+  private Float r = 0.0f;
 
-  @JsonProperty("rgb")
-  private ColorRgb rgb = null;
+  @JsonProperty("g")
+  private Float g = 0.0f;
 
-  @JsonProperty("hsv")
-  private ColorHsv hsv = null;
+  @JsonProperty("b")
+  private Float b = 0.0f;
 
   @JsonProperty("a")
   private Float a = 1.0f;
 
-  public Color named(String named) {
-    this.named = named;
+  public Color r(Float r) {
+    this.r = r;
     return this;
   }
 
    /**
-   * Lookup a color by name (context-sensitive). 
-   * @return named
+   * Red channel in units of 0.0-1.0
+   * @return r
   **/
-  @ApiModelProperty(value = "Lookup a color by name (context-sensitive). ")
-  public String getNamed() {
-    return named;
+  @ApiModelProperty(required = true, value = "Red channel in units of 0.0-1.0")
+  public Float getR() {
+    return r;
   }
 
-  public void setNamed(String named) {
-    this.named = named;
+  public void setR(Float r) {
+    this.r = r;
   }
 
-  public Color rgb(ColorRgb rgb) {
-    this.rgb = rgb;
+  public Color g(Float g) {
+    this.g = g;
     return this;
   }
 
    /**
-   * Get rgb
-   * @return rgb
+   * Green channel in units of 0.0-1.0
+   * @return g
   **/
-  @ApiModelProperty(value = "")
-  public ColorRgb getRgb() {
-    return rgb;
+  @ApiModelProperty(required = true, value = "Green channel in units of 0.0-1.0")
+  public Float getG() {
+    return g;
   }
 
-  public void setRgb(ColorRgb rgb) {
-    this.rgb = rgb;
+  public void setG(Float g) {
+    this.g = g;
   }
 
-  public Color hsv(ColorHsv hsv) {
-    this.hsv = hsv;
+  public Color b(Float b) {
+    this.b = b;
     return this;
   }
 
    /**
-   * Get hsv
-   * @return hsv
+   * Blue channel in units of 0.0-1.0
+   * @return b
   **/
-  @ApiModelProperty(value = "")
-  public ColorHsv getHsv() {
-    return hsv;
+  @ApiModelProperty(required = true, value = "Blue channel in units of 0.0-1.0")
+  public Float getB() {
+    return b;
   }
 
-  public void setHsv(ColorHsv hsv) {
-    this.hsv = hsv;
+  public void setB(Float b) {
+    this.b = b;
   }
 
   public Color a(Float a) {
@@ -108,7 +106,7 @@ public class Color implements Serializable {
    * Alpha in units of 0.0-1.0
    * @return a
   **/
-  @ApiModelProperty(value = "Alpha in units of 0.0-1.0")
+  @ApiModelProperty(required = true, value = "Alpha in units of 0.0-1.0")
   public Float getA() {
     return a;
   }
@@ -127,15 +125,15 @@ public class Color implements Serializable {
       return false;
     }
     Color color = (Color) o;
-    return Objects.equals(this.named, color.named) &&
-        Objects.equals(this.rgb, color.rgb) &&
-        Objects.equals(this.hsv, color.hsv) &&
+    return Objects.equals(this.r, color.r) &&
+        Objects.equals(this.g, color.g) &&
+        Objects.equals(this.b, color.b) &&
         Objects.equals(this.a, color.a);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(named, rgb, hsv, a);
+    return Objects.hash(r, g, b, a);
   }
 
 
@@ -144,9 +142,9 @@ public class Color implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Color {\n");
     
-    sb.append("    named: ").append(toIndentedString(named)).append("\n");
-    sb.append("    rgb: ").append(toIndentedString(rgb)).append("\n");
-    sb.append("    hsv: ").append(toIndentedString(hsv)).append("\n");
+    sb.append("    r: ").append(toIndentedString(r)).append("\n");
+    sb.append("    g: ").append(toIndentedString(g)).append("\n");
+    sb.append("    b: ").append(toIndentedString(b)).append("\n");
     sb.append("    a: ").append(toIndentedString(a)).append("\n");
     sb.append("}");
     return sb.toString();

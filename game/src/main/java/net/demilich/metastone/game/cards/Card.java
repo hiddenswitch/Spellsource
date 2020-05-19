@@ -1091,14 +1091,6 @@ public class Card extends Entity implements HasChooseOneActions {
 		return super.compareTo(o);
 	}
 
-	public boolean isBlackText() {
-		return getDesc().isBlackText();
-	}
-
-	public int[] getColor() {
-		return getDesc().getColor();
-	}
-
 	public ConditionDesc getTargetSelectionCondition() {
 		return getDesc().getTargetSelectionCondition();
 	}

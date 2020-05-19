@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_senzaku",
   "heroClass": "ROSE",
-  "color": [244, 194, 194],
-  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.9568627450980393,
+      "g": 0.7607843137254902,
+      "b": 0.7607843137254902,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.718,
+      "g": 0.569,
+      "b": 0.569,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.239,
+      "g": 0.188,
+      "b": 0.188,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.969,
+      "g": 0.839,
+      "b": 0.839,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    }
+  }
 }
