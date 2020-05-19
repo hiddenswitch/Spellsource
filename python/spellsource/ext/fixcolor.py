@@ -7,6 +7,8 @@ from .cards import write_card, iter_card_and_file_path
 from SecretColors.utils import text_color, get_complementary, color_in_between, hsl_to_hex, rgb_to_hex, hex_to_hsl, \
     hex_to_rgb, rgb_to_hsl, hsl_to_rgb
 
+_STROKE_HSL = rgb_to_hsl(28.0 / 255.0, 30.0 / 255.0, 94.0 / 255.0)
+
 
 def fix_colors(path: Optional[str] = None):
     if path is None:
@@ -46,7 +48,7 @@ def fix_color(card):
     (h, s, l) = rgb_to_hsl(r, g, b)
     # (ch, cs, cl) = hex_to_hsl(complement)
     primary = (r, g, b)
-    secondary, _, shadow = map(hex_to_rgb, color_in_between(primary_hex, hsl_to_hex(h, 1.0, 0.0), 3))
+    secondary, _, shadow = map(hex_to_rgb, color_in_between(primary_hex, hsl_to_hex(h, s, _STROKE_HSL[2]), 3))
     highlight = hex_to_rgb(color_in_between(primary_hex, hsl_to_hex(h, 1.0, 1.0), 2)[0])
     body_c = hex_to_rgb(text_color(primary_hex))
 
