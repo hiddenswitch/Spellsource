@@ -18,8 +18,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.Color;
-import com.hiddenswitch.spellsource.client.models.FontOutline;
-import com.hiddenswitch.spellsource.client.models.FontUnderlay;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -34,109 +32,25 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Font implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("name")
-  private String name = null;
+  @JsonProperty("vertex")
+  private Color vertex = null;
 
-  @JsonProperty("size")
-  private String size = null;
-
-  @JsonProperty("face")
-  private Color face = null;
-
-  @JsonProperty("outline")
-  private FontOutline outline = null;
-
-  @JsonProperty("underlay")
-  private FontUnderlay underlay = null;
-
-  public Font name(String name) {
-    this.name = name;
+  public Font vertex(Color vertex) {
+    this.vertex = vertex;
     return this;
   }
 
    /**
-   * A named font face to use for rendering 
-   * @return name
-  **/
-  @ApiModelProperty(value = "A named font face to use for rendering ")
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Font size(String size) {
-    this.size = size;
-    return this;
-  }
-
-   /**
-   * A size specification for the font.  Supported specifications:  - A single number specificaton, like 12. Specifies size in terms of Unity canvas units.  - A range number specification, like 9-32. Specifies the text object should auto-size between these values. 
-   * @return size
-  **/
-  @ApiModelProperty(value = "A size specification for the font.  Supported specifications:  - A single number specificaton, like 12. Specifies size in terms of Unity canvas units.  - A range number specification, like 9-32. Specifies the text object should auto-size between these values. ")
-  public String getSize() {
-    return size;
-  }
-
-  public void setSize(String size) {
-    this.size = size;
-  }
-
-  public Font face(Color face) {
-    this.face = face;
-    return this;
-  }
-
-   /**
-   * Get face
-   * @return face
+   * Get vertex
+   * @return vertex
   **/
   @ApiModelProperty(value = "")
-  public Color getFace() {
-    return face;
+  public Color getVertex() {
+    return vertex;
   }
 
-  public void setFace(Color face) {
-    this.face = face;
-  }
-
-  public Font outline(FontOutline outline) {
-    this.outline = outline;
-    return this;
-  }
-
-   /**
-   * Get outline
-   * @return outline
-  **/
-  @ApiModelProperty(value = "")
-  public FontOutline getOutline() {
-    return outline;
-  }
-
-  public void setOutline(FontOutline outline) {
-    this.outline = outline;
-  }
-
-  public Font underlay(FontUnderlay underlay) {
-    this.underlay = underlay;
-    return this;
-  }
-
-   /**
-   * Get underlay
-   * @return underlay
-  **/
-  @ApiModelProperty(value = "")
-  public FontUnderlay getUnderlay() {
-    return underlay;
-  }
-
-  public void setUnderlay(FontUnderlay underlay) {
-    this.underlay = underlay;
+  public void setVertex(Color vertex) {
+    this.vertex = vertex;
   }
 
 
@@ -149,16 +63,12 @@ public class Font implements Serializable {
       return false;
     }
     Font font = (Font) o;
-    return Objects.equals(this.name, font.name) &&
-        Objects.equals(this.size, font.size) &&
-        Objects.equals(this.face, font.face) &&
-        Objects.equals(this.outline, font.outline) &&
-        Objects.equals(this.underlay, font.underlay);
+    return Objects.equals(this.vertex, font.vertex);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, size, face, outline, underlay);
+    return Objects.hash(vertex);
   }
 
 
@@ -167,11 +77,7 @@ public class Font implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Font {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
-    sb.append("    face: ").append(toIndentedString(face)).append("\n");
-    sb.append("    outline: ").append(toIndentedString(outline)).append("\n");
-    sb.append("    underlay: ").append(toIndentedString(underlay)).append("\n");
+    sb.append("    vertex: ").append(toIndentedString(vertex)).append("\n");
     sb.append("}");
     return sb.toString();
   }

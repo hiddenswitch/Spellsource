@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "race": "ELEMENTAL",
   "description": "Hidden. Costs (1) less for each card you've drawn this game.",
-    "attributes": {
+  "attributes": {
     "STEALTH": true
   },
   "collectible": true,

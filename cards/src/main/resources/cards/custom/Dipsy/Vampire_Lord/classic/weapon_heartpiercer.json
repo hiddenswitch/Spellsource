@@ -34,7 +34,7 @@
   },
   "attributes": {
     "DEATHRATTLES": true,
-	"DRAIN": true
+    "DRAIN": true
   },
   "collectible": false,
   "sets": [

@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "BuffSpell",
-		"value": {
+        "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 4
         }
@@ -22,10 +22,10 @@
           "class": "GatekeeperShaValueProvider",
           "offset": 4
         },
-		"spell": {
-		  "class": "DamageSpell",
-		  "target": "ALL_MINIONS"
-		}
+        "spell": {
+          "class": "DamageSpell",
+          "target": "ALL_MINIONS"
+        }
       }
     ]
   },

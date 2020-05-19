@@ -22,7 +22,7 @@
   },
   "collectible": false,
   "attributes": {
-	"DRAIN": true
+    "DRAIN": true
   },
   "sets": [
     "CUSTOM",

@@ -37,8 +37,14 @@ public class Art implements Serializable {
   @JsonProperty("token")
   private Sprite token = null;
 
-  @JsonProperty("lit")
-  private Color lit = null;
+  @JsonProperty("primary")
+  private Color primary = null;
+
+  @JsonProperty("secondary")
+  private Color secondary = null;
+
+  @JsonProperty("highlight")
+  private Color highlight = null;
 
   @JsonProperty("shadow")
   private Color shadow = null;
@@ -64,22 +70,58 @@ public class Art implements Serializable {
     this.token = token;
   }
 
-  public Art lit(Color lit) {
-    this.lit = lit;
+  public Art primary(Color primary) {
+    this.primary = primary;
     return this;
   }
 
    /**
-   * Get lit
-   * @return lit
+   * Get primary
+   * @return primary
   **/
   @ApiModelProperty(value = "")
-  public Color getLit() {
-    return lit;
+  public Color getPrimary() {
+    return primary;
   }
 
-  public void setLit(Color lit) {
-    this.lit = lit;
+  public void setPrimary(Color primary) {
+    this.primary = primary;
+  }
+
+  public Art secondary(Color secondary) {
+    this.secondary = secondary;
+    return this;
+  }
+
+   /**
+   * Get secondary
+   * @return secondary
+  **/
+  @ApiModelProperty(value = "")
+  public Color getSecondary() {
+    return secondary;
+  }
+
+  public void setSecondary(Color secondary) {
+    this.secondary = secondary;
+  }
+
+  public Art highlight(Color highlight) {
+    this.highlight = highlight;
+    return this;
+  }
+
+   /**
+   * Get highlight
+   * @return highlight
+  **/
+  @ApiModelProperty(value = "")
+  public Color getHighlight() {
+    return highlight;
+  }
+
+  public void setHighlight(Color highlight) {
+    this.highlight = highlight;
   }
 
   public Art shadow(Color shadow) {
@@ -129,14 +171,16 @@ public class Art implements Serializable {
     }
     Art art = (Art) o;
     return Objects.equals(this.token, art.token) &&
-        Objects.equals(this.lit, art.lit) &&
+        Objects.equals(this.primary, art.primary) &&
+        Objects.equals(this.secondary, art.secondary) &&
+        Objects.equals(this.highlight, art.highlight) &&
         Objects.equals(this.shadow, art.shadow) &&
         Objects.equals(this.body, art.body);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, lit, shadow, body);
+    return Objects.hash(token, primary, secondary, highlight, shadow, body);
   }
 
 
@@ -146,7 +190,9 @@ public class Art implements Serializable {
     sb.append("class Art {\n");
     
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
-    sb.append("    lit: ").append(toIndentedString(lit)).append("\n");
+    sb.append("    primary: ").append(toIndentedString(primary)).append("\n");
+    sb.append("    secondary: ").append(toIndentedString(secondary)).append("\n");
+    sb.append("    highlight: ").append(toIndentedString(highlight)).append("\n");
     sb.append("    shadow: ").append(toIndentedString(shadow)).append("\n");
     sb.append("    body: ").append(toIndentedString(body)).append("\n");
     sb.append("}");

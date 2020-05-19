@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_nerzhul",
   "heroClass": "OBSIDIAN",
-  "color": [70, 80, 90],
-  "blackText": false,
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.27450980392156865,
+      "g": 0.3137254901960784,
+      "b": 0.35294117647058826,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.204,
+      "g": 0.235,
+      "b": 0.263,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.067,
+      "g": 0.078,
+      "b": 0.086,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.514,
+      "g": 0.541,
+      "b": 0.569,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

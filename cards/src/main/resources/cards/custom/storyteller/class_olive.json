@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_lomenia",
   "heroClass": "OLIVE",
-  "color": [130, 120, 5],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.5098039215686274,
+      "g": 0.47058823529411764,
+      "b": 0.0196078431372549,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.38,
+      "g": 0.353,
+      "b": 0.012,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.125,
+      "g": 0.118,
+      "b": 0.004,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.671,
+      "g": 0.647,
+      "b": 0.345,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

@@ -41,7 +41,7 @@
   "collectible": true,
   "attributes": {
     "DECAY": true,
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "set": "CUSTOM",
   "fileFormatVersion": 1

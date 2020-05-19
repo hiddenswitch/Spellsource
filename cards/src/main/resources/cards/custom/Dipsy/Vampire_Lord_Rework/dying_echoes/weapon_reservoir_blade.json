@@ -7,7 +7,7 @@
   "durability": 2,
   "rarity": "COMMON",
   "description": "After your champion attacks, give your minions +1 Health.",
-   "trigger": {
+  "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
       "sourceEntityType": "HERO",

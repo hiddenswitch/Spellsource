@@ -15,8 +15,8 @@
       },
       {
         "class": "ShuffleToDeckSpell",
-		"targetPlayer": "OPPONENT",
-		"card": "token_spell_endless_hunger"
+        "targetPlayer": "OPPONENT",
+        "card": "token_spell_endless_hunger"
       }
     ]
   },

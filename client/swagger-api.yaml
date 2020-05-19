@@ -1782,18 +1782,6 @@ definitions:
           turn 0.
         type: 'boolean'
         default: false
-      color:
-        description: |
-          The color for the class
-        type: 'array'
-        items:
-          type: 'number'
-          format: 'float'
-      blackText:
-        description: |
-          Whether the class should use black text instead of the default white
-        type: 'boolean'
-        default: false
       cardSets:
         description: |
           The card sets listed by the card
@@ -1814,7 +1802,11 @@ definitions:
     properties:
       token:
         $ref: '#/definitions/Sprite'
-      lit:
+      primary:
+        $ref: '#/definitions/Color'
+      secondary:
+        $ref: '#/definitions/Color'
+      highlight:
         $ref: '#/definitions/Color'
       shadow:
         $ref: '#/definitions/Color'
@@ -1834,103 +1826,36 @@ definitions:
     description: |
       Contains a font (type, size, styling, etc.) specification
     properties:
-      name:
-        type: 'string'
-        description: |
-          A named font face to use for rendering
-      size:
-        type: 'string'
-        description: |
-          A size specification for the font.
-
-          Supported specifications:
-           - A single number specificaton, like 12. Specifies size in terms of Unity canvas units.
-           - A range number specification, like 9-32. Specifies the text object should auto-size between these values.
-      face:
+      vertex:
         $ref: '#/definitions/Color'
-      outline:
-        type: object
-        properties:
-          color:
-            $ref: '#/definitions/Color'
-          thickness:
-            type: number
-            format: float
-            description: Thickness of the outline in TextMeshPro SDF units
-      underlay:
-        type: object
-        properties:
-          offsetX:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-          offsetY:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-          dilate:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-          softness:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
   Color:
     type: 'object'
     description: |
-      Describes a color or a command to set a specific color value.
+      Describes a Unity color.
+    required:
+      - r
+      - g
+      - b
+      - a
     properties:
-      named:
-        type: string
-        description: |
-          Lookup a color by name (context-sensitive).
-      rgb:
-        type: object
-        properties:
-          r:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-            description: Red channel in units of 0.0-1.0
-          g:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-            description: Green channel in units of 0.0-1.0
-          b:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-            description: Blue channel in units of 0.0-1.0
-      hsv:
-        type: object
-        properties:
-          h:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-            description: Blue channel in units of 0.0-1.0
-          s:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-            description: Blue channel in units of 0.0-1.0
-          v:
-            type: number
-            format: float
-            x-nullable: false
-            default: 0
-            description: Blue channel in units of 0.0-1.0
+      r:
+        type: number
+        format: float
+        x-nullable: false
+        default: 0
+        description: Red channel in units of 0.0-1.0
+      g:
+        type: number
+        format: float
+        x-nullable: false
+        default: 0
+        description: Green channel in units of 0.0-1.0
+      b:
+        type: number
+        format: float
+        x-nullable: false
+        default: 0
+        description: Blue channel in units of 0.0-1.0
       a:
         type: number
         format: float

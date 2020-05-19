@@ -11,7 +11,7 @@
     "target": "ENEMY_MINIONS",
     "value": 1,
     "howMany": 6
-},
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

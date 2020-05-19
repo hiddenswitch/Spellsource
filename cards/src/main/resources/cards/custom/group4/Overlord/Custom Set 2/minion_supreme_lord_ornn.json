@@ -12,7 +12,7 @@
       "class": "HighlanderDeckCondition"
     },
     "targetSelection": "NONE",
-    "spell":  {
+    "spell": {
       "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",
       "aura": {

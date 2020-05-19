@@ -19,7 +19,7 @@
   },
   "attributes": {
     "LIFESTEAL": true,
-	"DECAY": true
+    "DECAY": true
   },
   "collectible": true,
   "sets": [

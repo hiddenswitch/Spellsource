@@ -10,61 +10,61 @@
     "class": "MetaSpell",
     "spells": [
       {
-      "class": "RecruitSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "ManaCostFilter",
-            "value": 1,
-            "operation": "EQUAL"
-          }
-        ]
-      },
-      "cardLocation": "DECK",
-      "targetPlayer": "SELF"
+        "class": "RecruitSpell",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 1,
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardLocation": "DECK",
+        "targetPlayer": "SELF"
       },
       {
-      "class": "RecruitSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "ManaCostFilter",
-            "value": 3,
-            "operation": "EQUAL"
-          }
-        ]
+        "class": "RecruitSpell",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 3,
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardLocation": "DECK",
+        "targetPlayer": "SELF"
       },
-      "cardLocation": "DECK",
-      "targetPlayer": "SELF"
-      },
-	  {
-      "class": "RecruitSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "ManaCostFilter",
-            "value": 5,
-            "operation": "EQUAL"
-          }
-        ]
-      },
-      "cardLocation": "DECK",
-      "targetPlayer": "SELF"
+      {
+        "class": "RecruitSpell",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "ManaCostFilter",
+              "value": 5,
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardLocation": "DECK",
+        "targetPlayer": "SELF"
       }
     ]
   },

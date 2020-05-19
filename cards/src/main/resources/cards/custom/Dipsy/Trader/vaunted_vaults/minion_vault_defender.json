@@ -14,7 +14,7 @@
       "class": "DestroySpell",
       "filter": {
         "class": "OddCostFilter",
-		"invert": true
+        "invert": true
       }
     }
   },

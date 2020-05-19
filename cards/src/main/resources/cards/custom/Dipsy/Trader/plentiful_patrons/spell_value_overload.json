@@ -11,17 +11,17 @@
     "spells": [
       {
         "class": "ReceiveCardSpell",
-		"value": {
-		  "class": "AlgebraicValueProvider",
-		  "operation": "SUBTRACT",
-		  "value1": 10,
-		  "value2": {
-			"class": "PlayerAttributeValueProvider",
-			"playerAttribute": "HAND_COUNT",
-			"targetPlayer": "SELF"
-		  }
-		},
-		"card": "token_customer"
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 10,
+          "value2": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          }
+        },
+        "card": "token_customer"
       },
       {
         "class": "SummonSpell",

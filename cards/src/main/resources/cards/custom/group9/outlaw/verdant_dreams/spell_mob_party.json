@@ -13,7 +13,7 @@
       "minion_trigger_happy_rebel",
       "minion_trigger_happy_rebel"
     ],
-	"spell": {
+    "spell": {
       "class": "AddAttributeSpell",
       "target": "OUTPUT",
       "attribute": "TAUNT"

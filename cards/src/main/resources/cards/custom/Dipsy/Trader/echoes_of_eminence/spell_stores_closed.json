@@ -11,13 +11,13 @@
     "spells": [
       {
         "class": "ShuffleMinionToDeckSpell",
-		"target": "FRIENDLY_MINIONS",
-		"targetPlayer": "SELF"
+        "target": "FRIENDLY_MINIONS",
+        "targetPlayer": "SELF"
       },
       {
         "class": "ShuffleMinionToDeckSpell",
-		"target": "ENEMY_MINIONS",
-		"targetPlayer": "OPPONENT"
+        "target": "ENEMY_MINIONS",
+        "targetPlayer": "OPPONENT"
       }
     ]
   },

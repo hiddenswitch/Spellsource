@@ -18,18 +18,18 @@
       }
     },
     "spell1": {
-     "class": "SummonSpell",
-    "cards": [
-      "minion_shielding_smasher",
-      "minion_shielding_smasher"
-    ]
+      "class": "SummonSpell",
+      "cards": [
+        "minion_shielding_smasher",
+        "minion_shielding_smasher"
+      ]
     },
     "spell2": {
       "class": "SummonSpell",
-    "cards": [
-      "minion_shielding_smasher",
-      "minion_shielding_smasher"
-    ]
+      "cards": [
+        "minion_shielding_smasher",
+        "minion_shielding_smasher"
+      ]
     }
   },
   "sets": [

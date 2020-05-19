@@ -17,13 +17,13 @@
       },
       {
         "class": "AddDeathrattleSpell",
-		"target": "FRIENDLY_MINIONS",	
-		"card": "enchantment_bloodsoaked_construct"
+        "target": "FRIENDLY_MINIONS",
+        "card": "enchantment_bloodsoaked_construct"
       }
     ]
   },
   "attributes": {
-	"DEATHRATTLES": true
+    "DEATHRATTLES": true
   },
   "collectible": false,
   "sets": [

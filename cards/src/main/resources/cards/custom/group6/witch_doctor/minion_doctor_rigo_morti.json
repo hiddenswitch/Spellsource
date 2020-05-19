@@ -9,9 +9,9 @@
   "description": "Opener: Gain a copy of all Aftermaths in your hand.",
   "battlecry": {
     "targetSelection": "NONE",
-	"spell": {
-	  "class": "CopyDeathrattleSpell",
-	  "target": "FRIENDLY_HAND",
+    "spell": {
+      "class": "CopyDeathrattleSpell",
+      "target": "FRIENDLY_HAND",
       "filter": {
         "class": "AttributeFilter",
         "attribute": "DEATHRATTLES",

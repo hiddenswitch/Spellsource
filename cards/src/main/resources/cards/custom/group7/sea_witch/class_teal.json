@@ -2,10 +2,42 @@
   "name": "Sea Witch",
   "type": "CLASS",
   "hero": "hero_lady_vashj_sea_witch",
-  "color": [77, 214, 148],
-  "blackText": false,
   "heroClass": "TEAL",
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.30196078431372547,
+      "g": 0.8392156862745098,
+      "b": 0.5803921568627451,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.224,
+      "g": 0.627,
+      "b": 0.431,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.075,
+      "g": 0.208,
+      "b": 0.141,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.533,
+      "g": 0.89,
+      "b": 0.718,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

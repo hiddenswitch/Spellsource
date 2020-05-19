@@ -22,7 +22,7 @@
     "spell2": {
       "class": "SummonSpell",
       "card": "token_44dragon"
-	}
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -10,7 +10,7 @@
     "class": "TemporaryAttackSpell",
     "target": "FRIENDLY_HERO",
     "value": {
-	  "class": "EntityCountValueProvider",
+      "class": "EntityCountValueProvider",
       "target": "ALL_CHARACTERS",
       "filter": {
         "class": "DamagedFilter"
@@ -19,7 +19,7 @@
         "class": "GatekeeperShaValueProvider",
         "offset": 1
       }
-	}
+    }
   },
   "dynamicDescription": [
     {

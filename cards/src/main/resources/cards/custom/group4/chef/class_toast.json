@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_warchef_gordo",
   "heroClass": "TOAST",
-  "color": [247, 201, 135],
-  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.9686274509803922,
+      "g": 0.788235294117647,
+      "b": 0.5294117647058824,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.725,
+      "g": 0.588,
+      "b": 0.396,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.239,
+      "g": 0.196,
+      "b": 0.129,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.976,
+      "g": 0.855,
+      "b": 0.682,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    }
+  }
 }

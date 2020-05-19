@@ -21,7 +21,7 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-		"armorBonus": {
+        "armorBonus": {
           "class": "GatekeeperShaValueProvider",
           "offset": 12
         }

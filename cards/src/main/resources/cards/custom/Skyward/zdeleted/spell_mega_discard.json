@@ -1,34 +1,34 @@
 {
-    "name": "Mega Discard",
-    "baseManaCost": 0,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "FREE",
-    "description": "Choose and discard a card.",
-    "targetSelection": "NONE",
-    "spell": {
-        "class": "MetaSpell",
-        "spells": [
-            {
-                "class": "DiscoverSpell",
-                "cardSource": {
-                    "class": "HandSource"
-                },
-                "exclusive": true,
-                "howMany": 10,
-                "spell": {
-                    "class": "DiscardSpell"
-                }
-            }
-        ]
-    },
-    "attributes": {
-        "ECHO": true
-    },
-    "collectible": false,
-    "sets": [
-        "CUSTOM",
-        "BASIC"
-    ],
-    "fileFormatVersion": 1
+  "name": "Mega Discard",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Choose and discard a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "cardSource": {
+          "class": "HandSource"
+        },
+        "exclusive": true,
+        "howMany": 10,
+        "spell": {
+          "class": "DiscardSpell"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
 }
