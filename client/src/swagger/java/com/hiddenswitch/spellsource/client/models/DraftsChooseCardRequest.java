@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DraftsChooseCardRequest implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("cardIndex")
   private Integer cardIndex = null;

@@ -31,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksPutRequest implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("heroClass")
   private String heroClass = null;

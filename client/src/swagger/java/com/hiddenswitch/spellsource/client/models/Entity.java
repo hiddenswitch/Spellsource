@@ -35,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Entity implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
   private Integer id = -1;

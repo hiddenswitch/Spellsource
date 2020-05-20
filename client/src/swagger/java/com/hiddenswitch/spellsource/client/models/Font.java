@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Font implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("vertex")
   private Color vertex = null;

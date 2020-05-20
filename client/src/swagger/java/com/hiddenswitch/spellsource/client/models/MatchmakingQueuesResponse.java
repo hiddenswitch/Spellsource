@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class MatchmakingQueuesResponse implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("queues")
   private List<MatchmakingQueueItem> queues = null;

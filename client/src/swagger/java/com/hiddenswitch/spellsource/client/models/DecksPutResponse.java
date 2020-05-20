@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksPutResponse implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("deckId")
   private String deckId = null;

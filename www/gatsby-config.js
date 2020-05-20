@@ -6,6 +6,10 @@ function isNumber (num) {
   return typeof num == 'number'
 }
 
+function isArray (arr) {
+  return Array.isArray(arr)
+}
+
 module.exports = {
   siteMetadata: {
     title: `Spellsource`,
@@ -63,6 +67,13 @@ module.exports = {
                       arg['valueS'] = arg.value
                       delete arg.value
                     }
+                  }
+                  if (!!arg.check) {
+                    if (isArray(arg.check)) {
+                      return
+                    }
+
+                    arg['check'] = [arg.check]
                   }
                 })
                 newArgs.push({ i: i, args: args })
@@ -162,8 +173,8 @@ module.exports = {
           },
           Card: {
             // TODO: Change the name of the field to be its content
-            title: node => node.type + " " + node.name,
-            tags: node => '' , // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
+            title: node => node.type + ' ' + node.name,
+            tags: node => '', // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
             rawMarkdownBody: node => node.description,
             path: node => node.path,
             collectible: node => node.collectible

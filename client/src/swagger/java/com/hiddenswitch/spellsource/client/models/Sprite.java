@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Sprite implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("named")
   private String named = null;

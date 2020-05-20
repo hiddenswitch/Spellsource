@@ -39,7 +39,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   }
   type Args {
     type: String
-    check: String
+    check: [String]
     name: String
     valueI: Int
     valueS: String

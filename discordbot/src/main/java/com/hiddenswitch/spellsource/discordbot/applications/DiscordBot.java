@@ -49,6 +49,12 @@ public class DiscordBot extends ListenerAdapter {
 				.setActivity(Activity.playing("Spellsource"));
 		var jda = builder.build();
 		jda.awaitReady();
+		for (var i = 0; i < args.length; i++) {
+			if (args[i].equalsIgnoreCase("exit")) {
+				jda.shutdown();
+				System.exit(0);
+			}
+		}
 	}
 
 	@Override
