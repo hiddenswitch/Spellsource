@@ -12,7 +12,10 @@
     "value": 2,
     "filter": {
       "class": "SpecificCardFilter",
-      "cards": ["token_tauntentacle","token_tentacle"]
+      "cards": [
+        "token_tauntentacle",
+        "token_tentacle"
+      ]
     }
   },
   "collectible": true,

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
+import com.hiddenswitch.spellsource.client.models.Art;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -162,11 +163,10 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	private DynamicDescriptionDesc[] dynamicDescription;
 	private Boolean legacy;
 	private String hero;
-	private int[] color;
-	private boolean blackText;
 	private String[] secondPlayerBonusCards;
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
+	private Art art;
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
 
@@ -1087,14 +1087,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		return dynamicDescription;
 	}
 
-	public int[] getColor() {
-		return color;
-	}
-
-	public boolean isBlackText() {
-		return blackText;
-	}
-
 	public String[] getSecondPlayerBonusCards() {
 		return secondPlayerBonusCards;
 	}
@@ -1140,14 +1132,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		this.hero = hero;
 	}
 
-	public void setColor(int[] color) {
-		this.color = color;
-	}
-
-	public void setBlackText(boolean blackText) {
-		this.blackText = blackText;
-	}
-
 	@JsonIgnore
 	public Stream<AbstractEnchantmentDesc<?>> getEnchantmentDescs() {
 		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(
@@ -1173,5 +1157,14 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	@Override
 	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateEnchantmentCard(context, player, effectSource, enchantmentSource, host, force);
+	}
+
+	public Art getArt() {
+		return art;
+	}
+
+	public CardDesc setArt(Art art) {
+		this.art = art;
+		return this;
 	}
 }

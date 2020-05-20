@@ -15,17 +15,17 @@
     "cardFilter": {
       "class": "AndFilter",
       "filters": [
-        {   
-		  "class": "CardFilter",
+        {
+          "class": "CardFilter",
           "cardType": "MINION"
         },
         {
           "class": "CardFilter",
-     	  "value": 7,
-		  "attribute": "BASE_MANA_COST",
-		  "cardType": "MINION",
-		  "operation": "GREATER_OR_EQUAL"
-		}
+          "value": 7,
+          "attribute": "BASE_MANA_COST",
+          "cardType": "MINION",
+          "operation": "GREATER_OR_EQUAL"
+        }
       ]
     },
     "cardSource": {
@@ -35,7 +35,7 @@
     }
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

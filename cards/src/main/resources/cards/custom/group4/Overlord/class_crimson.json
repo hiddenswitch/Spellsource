@@ -3,13 +3,41 @@
   "type": "CLASS",
   "hero": "hero_wraith_mandron",
   "heroClass": "CRIMSON",
-  "color": [
-    220,
-    20,
-    60
-  ],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.8627450980392157,
+      "g": 0.0784313725490196,
+      "b": 0.23529411764705882,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.753,
+      "g": 0.067,
+      "b": 0.204,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.541,
+      "g": 0.047,
+      "b": 0.145,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.906,
+      "g": 0.384,
+      "b": 0.486,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

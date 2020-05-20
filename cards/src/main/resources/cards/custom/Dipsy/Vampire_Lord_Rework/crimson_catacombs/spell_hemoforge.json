@@ -20,14 +20,14 @@
       },
       {
         "class": "FromDeckToHandSpell",
-		"value": {
+        "value": {
           "class": "GatekeeperShaValueProvider",
           "offset": 2
         },
-		"cardFilter": {
-		  "class": "CardFilter",
-		  "cardType": "WEAPON"
-		}
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "WEAPON"
+        }
       }
     ]
   },

@@ -19,7 +19,7 @@
         "value": 1,
         "cardType": "MINION",
         "operation": "SUBTRACT",
-		"race": "DRAGON"
+        "race": "DRAGON"
       }
     }
   },

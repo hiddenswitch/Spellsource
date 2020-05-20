@@ -9,7 +9,7 @@
   "spell": {
     "class": "ShuffleMinionToDeckSpell",
     "targetPlayer": "OWNER",
-	"spell": {
+    "spell": {
       "class": "CardCostModifierSpell",
       "target": "OUTPUT",
       "cardCostModifier": {
@@ -18,7 +18,7 @@
         "value": 2,
         "operation": "ADD"
       }
-	}
+    }
   },
   "collectible": true,
   "sets": [

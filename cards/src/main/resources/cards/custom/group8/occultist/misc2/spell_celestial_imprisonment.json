@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",
-	"targetPlayer": "OWNER",
+    "targetPlayer": "OWNER",
     "target": "ALL_MINIONS",
     "filter": {
       "class": "AttributeFilter",

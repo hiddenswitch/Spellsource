@@ -6,7 +6,7 @@
   "rarity": "COMMON",
   "description": "Give a minion Deflect. Draw a card.",
   "targetSelection": "MINIONS",
-  "spell": {    
+  "spell": {
     "class": "MetaSpell",
     "spells": [
       {

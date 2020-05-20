@@ -33,7 +33,10 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "sets": ["CUSTOM","KOBOLDS_AND_CATACOMBS"],
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1,
   "dynamicDescription": [
     {

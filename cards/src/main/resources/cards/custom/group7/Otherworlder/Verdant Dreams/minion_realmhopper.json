@@ -15,13 +15,13 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "cards": [
-      "secret_secret_of_winter",
-      "secret_secret_of_spring",
-      "secret_secret_of_summer",
-      "secret_secret_of_autumn",
-      "secret_secret_of_twilight"
-    ],
-    "randomTarget": true
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
     }
   },
   "attributes": {

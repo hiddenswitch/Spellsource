@@ -8,8 +8,8 @@
   "rarity": "EPIC",
   "description": "Opener: Resurrect the last allied minion that died this game. Set its remaining Health to 1.",
   "battlecry": {
-	"condition": {
-	  "class": "ComparisonCondition",
+    "condition": {
+      "class": "ComparisonCondition",
       "operation": "GREATER",
       "value1": {
         "class": "EntityCountValueProvider",
@@ -17,7 +17,7 @@
         "filter": {
           "class": "EntityTypeFilter",
           "entityType": "MINION"
-        } 
+        }
       },
       "value2": 0
     },
@@ -25,12 +25,12 @@
     "spell": {
       "class": "ResurrectSpell",
       "target": "FRIENDLY_LAST_DIED_MINION",
-	  "spell": {
-	    "class": "SetAttributeSpell",
+      "spell": {
+        "class": "SetAttributeSpell",
         "target": "OUTPUT",
         "value": 1,
         "attribute": "HP"
-	  }
+      }
     }
   },
   "attributes": {

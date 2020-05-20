@@ -15,12 +15,12 @@
       "value1": {
         "class": "AttributeValueProvider",
         "target": "ENEMY_HERO",
-		"attribute": "HP"
+        "attribute": "HP"
       },
       "value2": {
         "class": "AttributeValueProvider",
         "target": "FRIENDLY_HERO",
-		"attribute": "HP"
+        "attribute": "HP"
       }
     },
     "spell": {

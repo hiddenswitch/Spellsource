@@ -10,18 +10,18 @@
     "class": "ConditionalEffectSpell",
     "condition": {
       "class": "HoldsCardCondition",
-       "cardFilter": {
-          "class": "CardFilter",
-          "manaCost": 10
-        }
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 10
+      }
     },
     "spell1": {
       "class": "DrawCardSpell",
       "value": 1,
-	  "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
-     }
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      }
     },
     "spell2": {
       "class": "CardCostModifierSpell",

@@ -38,7 +38,7 @@
             "class": "UnweightedCatalogueSource"
           }
         },
-		{
+        {
           "class": "ReceiveCardSpell",
           "cardFilter": {
             "class": "CardFilter",

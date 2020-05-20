@@ -19,7 +19,7 @@
         "attribute": "ARTIFACT",
         "operation": "HAS"
       },
-	  "cardSource": {
+      "cardSource": {
         "class": "UncollectibleCatalogueSource"
       }
     }

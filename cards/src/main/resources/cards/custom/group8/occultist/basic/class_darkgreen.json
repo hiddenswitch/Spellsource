@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_jikr",
   "heroClass": "DARKGREEN",
-  "color": [46, 82, 3],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.1803921568627451,
+      "g": 0.3215686274509804,
+      "b": 0.011764705882352941,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.196,
+      "g": 0.353,
+      "b": 0.012,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.235,
+      "g": 0.424,
+      "b": 0.012,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.451,
+      "g": 0.545,
+      "b": 0.341,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

@@ -11,110 +11,110 @@
     "spells": [
       {
         "class": "DiscoverSpell",
-		 "cardFilter": {
-           "class": "AndFilter",
-		   "filters": [
-		     {
-               "class": "CardFilter",
-               "cardType": "MINION"
-			 },
-			 {
-			   "class": "CardFilter",
-			   "heroClass": "OPPONENT"
-			 }
-		   ]
-	     },
-		 "cardSource": {
-		   "class": "CatalogueSource",
-		   "targetPlayer": "OPPONENT"
-		 },
-		 "spell": {
-           "class": "ReceiveCardSpell",
-           "targetPlayer": "SELF",
-           "spell": {
-             "class": "CardCostModifierSpell",
-             "target": "OUTPUT",
-             "cardCostModifier": {
-               "class": "CardCostModifier",
-               "target": "SELF",
-               "value": 1,
-               "operation": "SUBTRACT"
-             }
-           }
-		 }
-      },
-	  {
-        "class": "DiscoverSpell",
-		 "cardFilter": {
-           "class": "AndFilter",
-		   "filters": [
-		     {
-               "class": "CardFilter",
-               "cardType": "SPELL"
-			 },
-			 {
-			   "class": "CardFilter",
-			   "heroClass": "OPPONENT"
-			 }
-		   ]
-	     },
-		 "cardSource": {
-		   "class": "CatalogueSource",
-		   "targetPlayer": "OPPONENT"
-		 },
-		 "spell": {
-           "class": "ReceiveCardSpell",
-           "targetPlayer": "SELF",
-           "spell": {
-             "class": "CardCostModifierSpell",
-             "target": "OUTPUT",
-             "cardCostModifier": {
-               "class": "CardCostModifier",
-               "target": "SELF",
-               "value": 1,
-               "operation": "SUBTRACT"
-             }
-           }
-		 }
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "OPPONENT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          }
+        }
       },
       {
         "class": "DiscoverSpell",
-		 "cardFilter": {
-           "class": "AndFilter",
-		   "filters": [
-		     {
-               "class": "CardFilter",
-               "cardType": "WEAPON"
-			 },
-			 {
-			   "class": "CardFilter",
-			   "heroClass": "OPPONENT"
-			 }
-		   ]
-	     },
-		 "cardSource": {
-		   "class": "CatalogueSource",
-		   "targetPlayer": "OPPONENT"
-		 },
-		 "spell": {
-           "class": "ReceiveCardSpell",
-           "targetPlayer": "SELF",
-           "spell": {
-             "class": "CardCostModifierSpell",
-             "target": "OUTPUT",
-             "cardCostModifier": {
-               "class": "CardCostModifier",
-               "target": "SELF",
-               "value": 1,
-               "operation": "SUBTRACT"
-             }
-           }
-		 }
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "OPPONENT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          }
+        }
+      },
+      {
+        "class": "DiscoverSpell",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "WEAPON"
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "OPPONENT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          }
+        }
       }
     ]
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "sets": [

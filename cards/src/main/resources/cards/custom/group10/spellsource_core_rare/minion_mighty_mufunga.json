@@ -12,7 +12,6 @@
     "target": "OTHER_FRIENDLY_MINIONS",
     "attackBonus": 2
   },
-
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1

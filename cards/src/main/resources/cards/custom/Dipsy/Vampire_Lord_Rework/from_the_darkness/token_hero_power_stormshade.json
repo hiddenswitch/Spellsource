@@ -9,7 +9,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
-	"target": "FRIENDLY_HERO",
+    "target": "FRIENDLY_HERO",
     "spells": [
       {
         "class": "TemporaryAttackSpell",

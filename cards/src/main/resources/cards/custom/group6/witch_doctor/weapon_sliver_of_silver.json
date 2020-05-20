@@ -18,11 +18,11 @@
       "class": "ModifyAttributeSpell",
       "target": "FRIENDLY_HERO",
       "attribute": "SPELL_DAMAGE",
-	  "value": 1,
+      "value": 1,
       "revertTrigger": {
         "class": "TurnEndTrigger"
       }
-	}
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

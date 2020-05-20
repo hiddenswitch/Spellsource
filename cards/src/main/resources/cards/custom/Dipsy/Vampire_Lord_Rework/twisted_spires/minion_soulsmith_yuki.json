@@ -9,15 +9,15 @@
   "description": "Your champion and weapon are both Immune.",
   "auras": [
     {
-	  "class": "AttributeAura",
-	  "target": "FRIENDLY_HERO",
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO",
       "attribute": "AURA_IMMUNE"
-	},
-	{
-	  "class": "AttributeAura",
-	  "target": "FRIENDLY_WEAPON",
+    },
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_WEAPON",
       "attribute": "AURA_IMMUNE"
-	}
+    }
   ],
   "collectible": true,
   "sets": [

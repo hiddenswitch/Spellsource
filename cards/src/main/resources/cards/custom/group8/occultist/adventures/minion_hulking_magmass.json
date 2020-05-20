@@ -15,13 +15,13 @@
       "value": {
         "class": "DiedThisTurnValueProvider",
         "targetPlayer": "BOTH",
-		"multiplier": 2
+        "multiplier": 2
       }
     }
   },
   "attributes": {
     "BATTLECRY": true,
-	"TAUNT": true
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

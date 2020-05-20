@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_ophelia",
   "heroClass": "DARKBLUE",
-  "color": [0, 0, 75],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.2509,
+      "g": 0.2274,
+      "b": 0.6117,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.22,
+      "g": 0.2,
+      "b": 0.541,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.165,
+      "g": 0.149,
+      "b": 0.408,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.494,
+      "g": 0.482,
+      "b": 0.737,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

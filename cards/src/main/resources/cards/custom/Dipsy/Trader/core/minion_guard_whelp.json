@@ -19,7 +19,7 @@
     }
   },
   "attributes": {
-	"BATTLECRY": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "sets": [

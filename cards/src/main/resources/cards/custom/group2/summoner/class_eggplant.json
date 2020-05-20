@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_mephilia",
   "heroClass": "EGGPLANT",
-  "color": [135, 94, 115],
-  "blackText": false,
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.5294117647058824,
+      "g": 0.3686274509803922,
+      "b": 0.45098039215686275,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.463,
+      "g": 0.322,
+      "b": 0.396,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.337,
+      "g": 0.235,
+      "b": 0.29,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.682,
+      "g": 0.576,
+      "b": 0.631,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

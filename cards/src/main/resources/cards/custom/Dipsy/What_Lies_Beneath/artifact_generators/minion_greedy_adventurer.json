@@ -10,10 +10,10 @@
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
     "howMany": 2,
-	"cardFilter": {
+    "cardFilter": {
       "class": "CardFilter",
       "attribute": "ARTIFACT",
-	  "operation": "HAS"
+      "operation": "HAS"
     },
     "cardSource": {
       "class": "UncollectibleCatalogueSource"

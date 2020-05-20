@@ -16,7 +16,7 @@
     },
     "spell": {
       "class": "FromDeckToHandSpell",
-	  "value": 1,
+      "value": 1,
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION",
