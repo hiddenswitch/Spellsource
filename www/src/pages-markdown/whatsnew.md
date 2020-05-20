@@ -9,7 +9,12 @@ Thanks for playing this beta of Spellsource!
 
 Read more at [our website](http://www.playspellsource.com) and join our [Discord](https://discord.gg/HmbESh2)!
 
-### Current Build 0.8.76-3.1.3 (May 7, 2020)
+### Current Build 0.8.77-3.2.0 (May 20, 2020)
+
+ - The user interface has been restyled.
+ - The friends list is temporarily disabled for the next few days to be repaired and restyled.
+
+### 0.8.76-3.1.3 (May 7, 2020)
 
  - Text and implementation of cards that cast when drawn have been standardized.
  - Hope Eater's aura is now more consistent on removal. (1712)
