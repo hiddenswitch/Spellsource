@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DraftsPostRequest implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("startDraft")
   private Boolean startDraft = null;

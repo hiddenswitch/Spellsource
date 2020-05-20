@@ -57,3 +57,12 @@ run { t ->
 test {
     useJUnitPlatform()
 }
+
+task genReflectionProps(type: JavaExec) { t ->
+    dotEnv(t, file('../secrets/spellsource/stack-application-production.env'))
+    dependsOn compileJava
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.hiddenswitch.spellsource.discordbot.applications.DiscordBot'
+    args(['exit'])
+    jvmArgs(["-agentlib:native-image-agent=config-output-dir=" + file("${project.projectDir.path}/src/main/resources//META-INF/native-image/com.hiddenswitch/discordbot/").absolutePath])
+}

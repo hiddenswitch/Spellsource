@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Art implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("token")
   private Sprite token = null;
