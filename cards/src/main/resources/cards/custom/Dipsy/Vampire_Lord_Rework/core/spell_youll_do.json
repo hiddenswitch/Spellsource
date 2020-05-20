@@ -21,15 +21,15 @@
           "attribute": "HP"
         }
       },
-	  {
-	    "class": "TemporaryAttackSpell",
+      {
+        "class": "TemporaryAttackSpell",
         "target": "FRIENDLY_HERO",
         "value": {
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "HP"
         }
-	  }
+      }
     ]
   },
   "collectible": true,

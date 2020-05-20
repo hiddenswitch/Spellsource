@@ -69,27 +69,13 @@ class TextMeshRenderer(BaseRenderer):
         # return template.format(token.src, inner, title)
 
     def render_link(self, token):
+        template = '<color=#40d2f0><u><link="{target}">{inner}</link></u></color>'
+        target = self.escape_url(token.target)
         inner = self.render_inner(token)
-        return inner
-        # template = '<a href="{target}"{title}>{inner}</a>'
-        # target = self.escape_url(token.target)
-        # if token.title:
-        #     title = ' title="{}"'.format(self.escape_html(token.title))
-        # else:
-        #     title = ''
-        # inner = self.render_inner(token)
-        # return template.format(target=target, title=title, inner=inner)
+        return template.format(target=target, inner=inner)
 
     def render_auto_link(self, token):
-        inner = self.render_inner(token)
-        return inner
-        # template = '<a href="{target}">{inner}</a>'
-        # if token.mailto:
-        #     target = 'mailto:{}'.format(token.target)
-        # else:
-        #     target = self.escape_url(token.target)
-        # inner = self.render_inner(token)
-        # return template.format(target=target, inner=inner)
+        return self.render_link(token)
 
     def render_escape_sequence(self, token):
         return self.render_inner(token)
@@ -198,7 +184,7 @@ class TextMeshRenderer(BaseRenderer):
 
     @staticmethod
     def render_thematic_break(token):
-        return '<hr />'
+        return ''
 
     @staticmethod
     def render_line_break(token):

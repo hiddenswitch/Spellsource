@@ -27,7 +27,7 @@
           "operation": "GREATER"
         },
         "ifTrue": -1,
-        "ifFalse": -0
+        "ifFalse": 0
       }
     },
     "hpBonus": -2

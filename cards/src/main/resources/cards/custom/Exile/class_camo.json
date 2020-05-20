@@ -3,13 +3,41 @@
   "type": "CLASS",
   "hero": "hero_hanlao",
   "heroClass": "CAMO",
-  "color": [
-    68,
-    73,
-    66
-  ],
-  "blackText": false,
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.26666666666666666,
+      "g": 0.28627450980392155,
+      "b": 0.25882352941176473,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.255,
+      "g": 0.275,
+      "b": 0.247,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.239,
+      "g": 0.259,
+      "b": 0.231,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.51,
+      "g": 0.522,
+      "b": 0.506,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

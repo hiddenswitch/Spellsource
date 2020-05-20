@@ -3,13 +3,41 @@
   "type": "CLASS",
   "hero": "hero_izzy_jameson",
   "heroClass": "LIGHTBROWN",
-  "color": [
-    255,
-    222,
-    173
-  ],
-  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 1.0,
+      "g": 0.8705882352941177,
+      "b": 0.6784313725490196,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.867,
+      "g": 0.722,
+      "b": 0.506,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.604,
+      "g": 0.431,
+      "b": 0.169,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 1.0,
+      "g": 0.914,
+      "b": 0.784,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    }
+  }
 }

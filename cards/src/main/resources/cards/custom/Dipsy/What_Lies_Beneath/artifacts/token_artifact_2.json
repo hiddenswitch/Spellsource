@@ -9,7 +9,7 @@
   "spell": {
     "class": "DamageSpell",
     "target": "ENEMY_MINIONS",
-	"value": 2
+    "value": 2
   },
   "attributes": {
     "ARTIFACT": true

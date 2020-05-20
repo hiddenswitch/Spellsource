@@ -8,22 +8,22 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-     "spells": [
-       {
-         "class": "SummonSpell",
-         "cards": [
-           "token_tauntentacle",
-           "token_tauntentacle",
-           "token_tauntentacle"
-         ]
-       },
-       {
-         "class": "DamageSpell",
-         "target": "FRIENDLY_HERO",
-         "value": 3,
-         "ignoreSpellDamage": true
-       }
-       ]
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_tauntentacle",
+          "token_tauntentacle",
+          "token_tauntentacle"
+        ]
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+        "ignoreSpellDamage": true
+      }
+    ]
   },
   "collectible": false,
   "fileFormatVersion": 1,

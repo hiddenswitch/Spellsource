@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_mienzhou",
   "heroClass": "JADE",
-  "color": [0, 168, 107],
-  "blackText": false,
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.0,
+      "g": 0.6588235294117647,
+      "b": 0.4196078431372549,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.0,
+      "g": 0.612,
+      "b": 0.388,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.0,
+      "g": 0.518,
+      "b": 0.329,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.333,
+      "g": 0.773,
+      "b": 0.612,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

@@ -17,7 +17,7 @@
       "target": "OTHER_FRIENDLY_MINIONS",
       "attackBonus": 2,
       "hpBonus": 2,
-	  "filter": {
+      "filter": {
         "class": "CardFilter",
         "race": "ELEMENTAL"
       },

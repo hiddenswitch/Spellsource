@@ -13,7 +13,7 @@
     "target": "LEFTMOST_ENEMY_MINION"
   },
   "attributes": {
-	"TAUNT": true,
+    "TAUNT": true,
     "DEATHRATTLES": true
   },
   "collectible": false,

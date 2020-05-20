@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_atropos",
   "heroClass": "TIME",
-  "color": [212, 212, 227],
-  "blackText": true,
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.8313725490196079,
+      "g": 0.8313725490196079,
+      "b": 0.8901960784313725,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.667,
+      "g": 0.667,
+      "b": 0.737,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.345,
+      "g": 0.345,
+      "b": 0.435,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.886,
+      "g": 0.886,
+      "b": 0.925,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    }
+  }
 }

@@ -20,7 +20,7 @@
   },
   "attributes": {
     "ECHO": true,
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

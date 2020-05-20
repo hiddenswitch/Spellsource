@@ -9,7 +9,7 @@
   "description": "Opener: If your opponent has more cards in hand than you, summon two 2/2 Peasants with Dash.",
   "battlecry": {
     "targetSelection": "NONE",
-	"condition": {
+    "condition": {
       "class": "ComparisonCondition",
       "operation": "GREATER",
       "value1": {
@@ -23,22 +23,22 @@
     },
     "spell": {
       "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "SummonSpell",
-            "boardPositionRelative": "LEFT",
-            "card": "token_peasant"
-          },
-          {
-            "class": "SummonSpell",
-            "boardPositionRelative": "RIGHT",
-            "card": "token_peasant"
-          }
-        ]
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_peasant"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_peasant"
+        }
+      ]
     }
   },
   "attributes": {
-	"BATTLECRY": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "sets": [

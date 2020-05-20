@@ -16,3 +16,8 @@ task netRunDebug(group: 'Contributors') {
     description("Starts the Spellsource server attachable as a Remote debug target from IntelliJ")
     dependsOn ':net:runDebug'
 }
+
+task swagger(group: 'Contributors') {
+    description("Generates sources from the client/swagger-api.yaml. Run this whenever you change that file.")
+    dependsOn += ['client:generateSwaggerJava', 'generateSwaggerCsharp']
+}

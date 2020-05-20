@@ -3,13 +3,41 @@
   "type": "CLASS",
   "hero": "hero_yasha",
   "heroClass": "MAGENTA",
-  "color": [
-    225,
-    25,
-    150
-  ],
-  "blackText": false,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.8823529411764706,
+      "g": 0.09803921568627451,
+      "b": 0.5882352941176471,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.765,
+      "g": 0.082,
+      "b": 0.51,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.537,
+      "g": 0.059,
+      "b": 0.357,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.918,
+      "g": 0.396,
+      "b": 0.722,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

@@ -12,7 +12,7 @@
       "class": "PlayerAttributeValueProvider",
       "playerAttribute": "HAND_COUNT",
       "targetPlayer": "SELF",
-	  "cardFilter": {
+      "cardFilter": {
         "class": "OddCostFilter"
       }
     },

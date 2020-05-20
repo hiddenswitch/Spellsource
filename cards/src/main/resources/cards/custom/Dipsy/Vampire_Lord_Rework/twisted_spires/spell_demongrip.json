@@ -20,7 +20,7 @@
         "spell": {
           "class": "DamageSpell",
           "target": "LEFTMOST_ENEMY_MINION",
-		  "value": {
+          "value": {
             "class": "GatekeeperShaValueProvider",
             "offset": 4
           }
@@ -37,7 +37,7 @@
         "spell": {
           "class": "DamageSpell",
           "target": "RIGHTMOST_ENEMY_MINION",
-		  "value": {
+          "value": {
             "class": "GatekeeperShaValueProvider",
             "offset": 4
           }

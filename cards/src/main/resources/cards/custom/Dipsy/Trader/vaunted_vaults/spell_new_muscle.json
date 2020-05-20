@@ -12,37 +12,37 @@
       "class": "SummonSpell"
     },
     "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-		  {
-		    "class": "CardFilter",
-			"value": 7,
-			"attribute": "BASE_MANA_COST",
-			"cardType": "MINION",
-			"operation": "GREATER_OR_EQUAL"
-		  },
-          {
-            "class": "CardFilter",
-            "heroClass": "SELF",
-            "invert": true
-          },
-          {
-            "class": "CardFilter",
-            "heroClass": "ANY",
-            "invert": true
-          }
-        ]
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "value": 7,
+          "attribute": "BASE_MANA_COST",
+          "cardType": "MINION",
+          "operation": "GREATER_OR_EQUAL"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "SELF",
+          "invert": true
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "ANY",
+          "invert": true
+        }
+      ]
     },
-	"cardSource": {
-        "class": "UnweightedCatalogueSource"
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "sets": [

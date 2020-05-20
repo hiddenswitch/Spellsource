@@ -1,25 +1,25 @@
 {
-    "name": "Faerie Warcaller",
-    "baseManaCost": 3,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 3,
-    "baseHp": 3,
-    "rarity": "RARE",
-    "race": "FAE",
-    "description": "Your other Fae have +1/+1.",
-    "aura": {
-        "class": "BuffAura",
-        "target": "OTHER_FRIENDLY_MINIONS",
-        "attackBonus": 1,
-        "hpBonus": 1,
-        "filter": {
-            "class": "RaceFilter",
-            "race": "FAE"
-        }
-    },
-    "attributes": {},
-    "collectible": true,
-    "set": "VERDANT_DREAMS",
-    "fileFormatVersion": 1
+  "name": "Faerie Warcaller",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Your other Fae have +1/+1.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 1,
+    "filter": {
+      "class": "RaceFilter",
+      "race": "FAE"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
 }

@@ -3,13 +3,41 @@
   "type": "CLASS",
   "hero": "hero_ascella_aeon",
   "heroClass": "AZURE",
-  "color": [
-    40,
-    255,
-    230
-  ],
-  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.1568627450980392,
+      "g": 1.0,
+      "b": 0.9019607843137255,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.118,
+      "g": 0.867,
+      "b": 0.78,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.039,
+      "g": 0.604,
+      "b": 0.541,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.435,
+      "g": 1.0,
+      "b": 0.933,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    }
+  }
 }
