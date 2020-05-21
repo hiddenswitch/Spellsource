@@ -33,6 +33,48 @@ public class Sprite implements Serializable {
   @JsonProperty("named")
   private String named = null;
 
+  /**
+   * The sprite&#39;s pivor point.   - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)  - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels    of width, as though the pivot point is the middle of the rectangle formed at the bottom of the sprite.  - CENTER: The center middle of the sprite (i.e. 0.5, 0.5)  - FLYING: Beyond the bottom of the sprite (i.e. 0.5, 2.0) 
+   */
+  public enum PivotEnum {
+    BOTTOM("BOTTOM"),
+    
+    DIMETRIC_2X1_FLOOR("DIMETRIC_2X1_FLOOR"),
+    
+    CENTER("CENTER"),
+    
+    FLYING("FLYING");
+
+    private String value;
+
+    PivotEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static PivotEnum fromValue(String text) {
+      for (PivotEnum b : PivotEnum.values()) {
+        if (String.valueOf(b.value).equals(text)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+  @JsonProperty("pivot")
+  private PivotEnum pivot = null;
+
   public Sprite named(String named) {
     this.named = named;
     return this;
@@ -51,6 +93,24 @@ public class Sprite implements Serializable {
     this.named = named;
   }
 
+  public Sprite pivot(PivotEnum pivot) {
+    this.pivot = pivot;
+    return this;
+  }
+
+   /**
+   * The sprite&#39;s pivor point.   - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)  - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels    of width, as though the pivot point is the middle of the rectangle formed at the bottom of the sprite.  - CENTER: The center middle of the sprite (i.e. 0.5, 0.5)  - FLYING: Beyond the bottom of the sprite (i.e. 0.5, 2.0) 
+   * @return pivot
+  **/
+  @ApiModelProperty(value = "The sprite's pivor point.   - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)  - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels    of width, as though the pivot point is the middle of the rectangle formed at the bottom of the sprite.  - CENTER: The center middle of the sprite (i.e. 0.5, 0.5)  - FLYING: Beyond the bottom of the sprite (i.e. 0.5, 2.0) ")
+  public PivotEnum getPivot() {
+    return pivot;
+  }
+
+  public void setPivot(PivotEnum pivot) {
+    this.pivot = pivot;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -61,12 +121,13 @@ public class Sprite implements Serializable {
       return false;
     }
     Sprite sprite = (Sprite) o;
-    return Objects.equals(this.named, sprite.named);
+    return Objects.equals(this.named, sprite.named) &&
+        Objects.equals(this.pivot, sprite.pivot);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(named);
+    return Objects.hash(named, pivot);
   }
 
 
@@ -76,6 +137,7 @@ public class Sprite implements Serializable {
     sb.append("class Sprite {\n");
     
     sb.append("    named: ").append(toIndentedString(named)).append("\n");
+    sb.append("    pivot: ").append(toIndentedString(pivot)).append("\n");
     sb.append("}");
     return sb.toString();
   }

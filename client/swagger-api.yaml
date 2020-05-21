@@ -1503,16 +1503,6 @@ definitions:
         type: 'string'
       l:
         $ref: '#/definitions/EntityLocation'
-      background:
-        description: |
-          When not null, override the default background for this entity's card ID with this key corresponding to
-          backgrounds from the server.
-        type: 'string'
-      portrait:
-        description: |
-          When not null, override the default portrait for this entity's card ID with this key corresponding to
-          portraits from the server.
-        type: 'string'
       gold:
         description: Render this entity with a "gold" effect.
         type: 'boolean'
@@ -1800,7 +1790,9 @@ definitions:
     description: |
       Contains information the client needs for an art asset.
     properties:
-      token:
+      sprite:
+        $ref: '#/definitions/Sprite'
+      spriteShadow:
         $ref: '#/definitions/Sprite'
       primary:
         $ref: '#/definitions/Color'
@@ -1821,6 +1813,21 @@ definitions:
         type: 'string'
         description: |
           The sprite name in the client.
+      pivot:
+        description: |
+          The sprite's pivor point.
+
+           - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)
+           - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels
+             of width, as though the pivot point is the middle of the rectangle formed at the bottom of the sprite.
+           - CENTER: The center middle of the sprite (i.e. 0.5, 0.5)
+           - FLYING: Beyond the bottom of the sprite (i.e. 0.5, 2.0)
+        type: string
+        enum:
+          - 'BOTTOM'
+          - 'DIMETRIC_2X1_FLOOR'
+          - 'CENTER'
+          - 'FLYING'
   Font:
     type: 'object'
     description: |
