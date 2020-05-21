@@ -1,5 +1,5 @@
 import { Xml } from 'blockly'
-import { find, map, fromPairs, filter, extend } from 'lodash'
+import { find, map, fromPairs, filter, extend, isArray, isObject } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
@@ -7,14 +7,42 @@ export default class WorkspaceUtils {
   static BLOCKLY_AFTERMATH = 'BLOCKLY_AFTERMATH'
   static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL'
   static BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL'
-  static BLOCKLY_ATTRIBUTES = 'BLOCKLY_ATTRIBUTES'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
   static BLOCKLY_RANDOM_TARGET = 'BLOCKLY_RANDOM_TARGET'
-  static BLOCKLY_ARRAY = 'BLOCKLY_ARRAY'
+  static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
+  static BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
 
+  /**
+   * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
+   *
+   * When given an XML document, this will descend, depth-first, to recursive calls to this function, building the
+   * object bottom-up.
+   *
+   * For example,
+   *
+   * <block 1> xmlToDictionary(1) {
+   *   <statement 2> xmlToDictionary(2) {
+   *     <block 3 ...> xmlToDictionary(3) {return reduce 2, 3}
+   *       <next>
+   *         <block 4 ...> xmlToDictionary(4) {return reduce 3, 4}
+   *       </next>
+   *   </statement> return reduce 2, 1 }
+   * </block> return 1 }
+   *
+   * The way we signal the time and objects to reduce with is using the <data> element for blocks.
+   *
+   * attributes block (something + an attributes object calculated from the crap we received)
+   *   int attribute (something + int attribute + bool attribute + int attribute)
+   *     bool attribute (something + int attribute + bool attribute)
+   *       int attribute add this int attribute to whatever was previous to it (something + int attribute)
+   *
+   * @param xml
+   * @param prev
+   * @param parent
+   * @returns {{}|*|{}|[]}
+   */
   static xmlToDictionary (xml, prev = null, parent = null) {
-    const statements = []
     let nextNode = null
     let next = null
     switch (xml.nodeName) {
@@ -51,7 +79,7 @@ export default class WorkspaceUtils {
               obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild, null, obj)
               break
             case 'statement':
-              statements.push(childNode)
+              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild, null, obj)
               break
             case 'next':
               if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === 'block') {
@@ -68,10 +96,16 @@ export default class WorkspaceUtils {
         const hasData = find(childNodes, cn => cn.nodeName === 'data')
         if (hasData) {
           const values = hasData.innerHTML.split(',')
-
+          let retValue = null
           for (let i = 0; i < values.length; i++) {
             const value = values[i]
             switch (value) {
+              case WorkspaceUtils.BLOCKLY_EXTEND_PREVIOUS:
+                if (!!prev) {
+                  extend(prev, obj)
+                }
+                retValue = obj
+                break
               case WorkspaceUtils.BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE:
                 if (!obj.attribute) {
                   return {}
@@ -80,7 +114,8 @@ export default class WorkspaceUtils {
                 if (!!next) {
                   extend(boolAttribute, next)
                 }
-                return boolAttribute
+                retValue = boolAttribute
+                break
               case WorkspaceUtils.BLOCKLY_INT_ATTRIBUTE:
                 if (!obj.attribute) {
                   return {}
@@ -89,34 +124,19 @@ export default class WorkspaceUtils {
                 if (!!next) {
                   extend(intAttribute, next)
                 }
-                return intAttribute
-              case WorkspaceUtils.BLOCKLY_ATTRIBUTES:
-                let attributes = {}
-                for (let i = 0; i < statements.length; i++) {
-                  const statement = statements[i].firstElementChild
-                  if (!statement) {
-                    continue
-                  }
-                  extend(attributes, WorkspaceUtils.xmlToDictionary(statement, {}))
-                }
-                // Assign the attributes on the "previous" object i.e. the card
-                if (!!prev) {
-                  prev['attributes'] = attributes
-                }
-
-                return attributes
-              case this.BLOCKLY_ARRAY:
-                //TODO I sorta almost got it working lol
-                let thingies = [];
-                for (let i = 0; i < statements.length; i++) {
-                  if (!!statements[i]) {
-                    thingies[i] = WorkspaceUtils.xmlToDictionary(statements[i].firstElementChild);
+                retValue = intAttribute
+                break
+              case this.BLOCKLY_ARRAY_ELEMENT:
+                // Handle every array statement on this block
+                retValue = [obj]
+                if (!!next) {
+                  if (isArray(next)) {
+                    retValue = retValue.concat(next)
+                  } else {
+                    retValue = retValue.concat([next])
                   }
                 }
-                if (!!prev && !!statements[0]) {
-                  prev[statements[0].attributes['name'].value] = thingies
-                }
-                return thingies;
+                break
               case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL:
                 if (!!obj.spell && !obj.spell.target) {
                   obj.spell.target = 'OUTPUT'
@@ -131,17 +151,20 @@ export default class WorkspaceUtils {
                 if (!!prev) {
                   prev['battlecry'] = obj
                 }
-                return obj
+                retValue = obj
+                break
               case WorkspaceUtils.BLOCKLY_AFTERMATH:
                 if (!!prev) {
                   prev['deathrattle'] = obj
                 }
-                return obj
+                retValue = obj
+                break
               case WorkspaceUtils.BLOCKLY_RANDOM_TARGET:
                 if (!!parent) {
-                  parent.randomTarget = true;
+                  parent.randomTarget = true
                 }
-                return obj['target']
+                retValue = obj['target']
+                break
               default:
                 const allValues = filter(childNodes, cn =>
                   cn.nodeName === 'field')
@@ -150,10 +173,13 @@ export default class WorkspaceUtils {
                 )
 
                 const res = format(value, valuesObj)
-                return !isNaN(res) ? +res : res
+                retValue = !isNaN(res) ? +res : res
+                break
             }
           }
-
+          if (retValue !== null) {
+            return retValue
+          }
         }
         return obj
       default:
