@@ -54,12 +54,6 @@ public class Entity implements Serializable {
   @JsonProperty("l")
   private EntityLocation l = null;
 
-  @JsonProperty("background")
-  private String background = null;
-
-  @JsonProperty("portrait")
-  private String portrait = null;
-
   @JsonProperty("gold")
   private Boolean gold = false;
 
@@ -349,42 +343,6 @@ public class Entity implements Serializable {
 
   public void setL(EntityLocation l) {
     this.l = l;
-  }
-
-  public Entity background(String background) {
-    this.background = background;
-    return this;
-  }
-
-   /**
-   * When not null, override the default background for this entity&#39;s card ID with this key corresponding to backgrounds from the server. 
-   * @return background
-  **/
-  @ApiModelProperty(value = "When not null, override the default background for this entity's card ID with this key corresponding to backgrounds from the server. ")
-  public String getBackground() {
-    return background;
-  }
-
-  public void setBackground(String background) {
-    this.background = background;
-  }
-
-  public Entity portrait(String portrait) {
-    this.portrait = portrait;
-    return this;
-  }
-
-   /**
-   * When not null, override the default portrait for this entity&#39;s card ID with this key corresponding to portraits from the server. 
-   * @return portrait
-  **/
-  @ApiModelProperty(value = "When not null, override the default portrait for this entity's card ID with this key corresponding to portraits from the server. ")
-  public String getPortrait() {
-    return portrait;
-  }
-
-  public void setPortrait(String portrait) {
-    this.portrait = portrait;
   }
 
   public Entity gold(Boolean gold) {
@@ -1509,8 +1467,6 @@ public class Entity implements Serializable {
         Objects.equals(this.name, entity.name) &&
         Objects.equals(this.description, entity.description) &&
         Objects.equals(this.l, entity.l) &&
-        Objects.equals(this.background, entity.background) &&
-        Objects.equals(this.portrait, entity.portrait) &&
         Objects.equals(this.gold, entity.gold) &&
         Objects.equals(this.boardPosition, entity.boardPosition) &&
         Objects.equals(this.owner, entity.owner) &&
@@ -1576,7 +1532,7 @@ public class Entity implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, l, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, art);
+    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, art);
   }
 
 
@@ -1591,8 +1547,6 @@ public class Entity implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    l: ").append(toIndentedString(l)).append("\n");
-    sb.append("    background: ").append(toIndentedString(background)).append("\n");
-    sb.append("    portrait: ").append(toIndentedString(portrait)).append("\n");
     sb.append("    gold: ").append(toIndentedString(gold)).append("\n");
     sb.append("    boardPosition: ").append(toIndentedString(boardPosition)).append("\n");
     sb.append("    owner: ").append(toIndentedString(owner)).append("\n");

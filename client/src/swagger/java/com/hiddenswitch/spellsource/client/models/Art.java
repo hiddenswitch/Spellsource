@@ -33,8 +33,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class Art implements Serializable {
 
-  @JsonProperty("token")
-  private Sprite token = null;
+  @JsonProperty("sprite")
+  private Sprite sprite = null;
+
+  @JsonProperty("spriteShadow")
+  private Sprite spriteShadow = null;
 
   @JsonProperty("primary")
   private Color primary = null;
@@ -51,22 +54,40 @@ public class Art implements Serializable {
   @JsonProperty("body")
   private Font body = null;
 
-  public Art token(Sprite token) {
-    this.token = token;
+  public Art sprite(Sprite sprite) {
+    this.sprite = sprite;
     return this;
   }
 
    /**
-   * Get token
-   * @return token
+   * Get sprite
+   * @return sprite
   **/
   @ApiModelProperty(value = "")
-  public Sprite getToken() {
-    return token;
+  public Sprite getSprite() {
+    return sprite;
   }
 
-  public void setToken(Sprite token) {
-    this.token = token;
+  public void setSprite(Sprite sprite) {
+    this.sprite = sprite;
+  }
+
+  public Art spriteShadow(Sprite spriteShadow) {
+    this.spriteShadow = spriteShadow;
+    return this;
+  }
+
+   /**
+   * Get spriteShadow
+   * @return spriteShadow
+  **/
+  @ApiModelProperty(value = "")
+  public Sprite getSpriteShadow() {
+    return spriteShadow;
+  }
+
+  public void setSpriteShadow(Sprite spriteShadow) {
+    this.spriteShadow = spriteShadow;
   }
 
   public Art primary(Color primary) {
@@ -169,7 +190,8 @@ public class Art implements Serializable {
       return false;
     }
     Art art = (Art) o;
-    return Objects.equals(this.token, art.token) &&
+    return Objects.equals(this.sprite, art.sprite) &&
+        Objects.equals(this.spriteShadow, art.spriteShadow) &&
         Objects.equals(this.primary, art.primary) &&
         Objects.equals(this.secondary, art.secondary) &&
         Objects.equals(this.highlight, art.highlight) &&
@@ -179,7 +201,7 @@ public class Art implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, primary, secondary, highlight, shadow, body);
+    return Objects.hash(sprite, spriteShadow, primary, secondary, highlight, shadow, body);
   }
 
 
@@ -188,7 +210,8 @@ public class Art implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Art {\n");
     
-    sb.append("    token: ").append(toIndentedString(token)).append("\n");
+    sb.append("    sprite: ").append(toIndentedString(sprite)).append("\n");
+    sb.append("    spriteShadow: ").append(toIndentedString(spriteShadow)).append("\n");
     sb.append("    primary: ").append(toIndentedString(primary)).append("\n");
     sb.append("    secondary: ").append(toIndentedString(secondary)).append("\n");
     sb.append("    highlight: ").append(toIndentedString(highlight)).append("\n");
