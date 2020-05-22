@@ -1,6 +1,6 @@
 {
     "name": "Thunderclap Phoenix",
-    "baseManaCost": 6,
+    "baseManaCost": 8,
     "type": "MINION",
     "heroClass": "AZURE",
     "baseAttack": 3,
