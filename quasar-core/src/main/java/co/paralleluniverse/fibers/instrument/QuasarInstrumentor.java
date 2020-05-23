@@ -53,6 +53,7 @@ public final class QuasarInstrumentor {
     private boolean verbose;
     private boolean debug;
     private int logLevelMask;
+    private boolean quiet;
 
     public QuasarInstrumentor() {
         this(false);
@@ -283,11 +284,17 @@ public final class QuasarInstrumentor {
     }
 
     public void log(LogLevel level, String msg, Object... args) {
+        if (quiet) {
+            return;
+        }
         if (log != null && (logLevelMask & (1 << level.ordinal())) != 0)
             log.log(level, msg, args);
     }
 
     public void error(String msg, Throwable ex) {
+        if (quiet) {
+            return;
+        }
         if (log != null)
             log.error(msg, ex);
     }
@@ -359,5 +366,13 @@ public final class QuasarInstrumentor {
         out.append('$');
         
         return Pattern.compile(out.toString());
+    }
+
+    public void setQuiet(boolean quiet) {
+        this.quiet = quiet;
+    }
+
+    public boolean getQuiet() {
+        return quiet;
     }
 }
