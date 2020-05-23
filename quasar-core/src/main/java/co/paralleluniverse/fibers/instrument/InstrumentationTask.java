@@ -130,6 +130,7 @@ public class InstrumentationTask extends Task {
             instrumentor.setDebug(debug);
             instrumentor.setAllowMonitors(allowMonitors);
             instrumentor.setAllowBlocking(allowBlocking);
+            instrumentor.setQuiet(true);
             instrumentor.setLog(new Log() {
                 @Override
                 public void log(LogLevel level, String msg, Object... args) {
