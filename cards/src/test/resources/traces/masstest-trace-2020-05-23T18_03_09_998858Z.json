@@ -1,0 +1,26 @@
+{
+  "seed" : 7643559559633124404,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CORAL", "COPPER" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_klive_icetooth", "minion_void_reaper", "weapon_ancestral_wardrum", "minion_composer", "minion_tree_giant", "minion_captain_of_the_guard", "minion_mutamite_terror", "minion_magelight_dragon", "minion_captain_of_the_guard", "minion_end", "minion_composer", "spell_mystical_song", "minion_lundurr_the_reborn", "minion_sneaky_kaeru", "minion_doodles", "minion_soup_savant", "minion_ironplate_samurai", "weapon_frisky_fiddle", "weapon_ancestral_wardrum", "minion_bronze_warden", "spell_enchanting_tune", "spell_enchanting_tune", "minion_glass_golem", "minion_festivity_golem", "minion_sleepy_sprite", "spell_mystical_song", "minion_kairozdormu", "weapon_soundhorn", "spell_earworm", "minion_infinite_futurist" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "weapon_six_shooter", "minion_bromeliad_pup", "weapon_rusty_pitchfork", "minion_hooded_ritualist", "spell_armed_and_dangerous", "minion_polychrome_hydra", "minion_bramblebound_warrior", "minion_grape_merchant", "spell_reloading", "minion_captain_karver", "weapon_silver_scattershot", "weapon_rusty_pitchfork", "minion_blackflame_bomber", "minion_saloon_barkeep", "minion_dreamway_whale", "weapon_silvershot_pistol", "minion_treeleach", "minion_necksnapper", "minion_demonic_frontrunner", "spell_mass_betrayal", "minion_trigger_happy_rebel", "minion_hired_gunsmith", "minion_hands_on_historian", "minion_klive_icetooth", "minion_centaur_acumen", "minion_miniature_gunner", "spell_trigger_happy", "minion_mcgrief", "minion_bone_guard", "minion_mechanical_golem" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 14, 9 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 40, 44 ]
+  } ],
+  "actions" : [ 0, 4, 0, 0, 0, 1, 1, 0, 4, 1, 12, 5, 4, 0, 0, 4, 13, 0, 1, 0, 1, 3, 0, 0, 14, 16, 4, 0, 2, 9, 8, 7, 1, 5, 1, 7, 4, 5, 0, 1, 1, 4, 10, 0, 5, 2, 1, 9, 3, 7, 5, 1, 0, 0, 9, 10, 1, 0, 0, 3, 0, 5, 0, 2, 0, 0, 0, 3, 0, 13, 8, 5, 0, 0, 11, 6, 2, 0, 0, 0, 20, 2, 1, 3, 0, 0, 4, 2, 7, 4, 0, 3 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

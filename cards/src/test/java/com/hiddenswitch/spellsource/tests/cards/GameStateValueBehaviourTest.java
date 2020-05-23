@@ -359,6 +359,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Card fireball = receiveCard(context, player, "spell_test_deal_6");
 			player.setMana(4);
 			player.setMaxMana(4);
+			playCard(context, player, "spell_set_deal_1_hero_power");
 			opponent.getHero().setHp(2);
 			List<GameAction> actions = context.getValidActions();
 			assertTrue(actions.stream().anyMatch(ga -> fireball.getReference().equals(ga.getSourceReference())

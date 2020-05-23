@@ -1,0 +1,16 @@
+{
+  "name": "Set Deal 1 Hero Power",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ChangeHeroPowerSpell",
+    "card": "hero_power_deal_1"
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
