@@ -11,10 +11,12 @@ import java.nio.file.Path;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class CardCatalogueTest {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
 
 	@Test
 	public void testCardCatalogueLoads() {
-		CardCatalogue.loadCardsFromFilesystemDirectories("../cards/src/main/resources/cards", "../game/src/main/resources/cards");
 		Assertions.assertTrue(CardCatalogue.getAll().size() > 1000);
 		Assertions.assertTrue(CardCatalogue.getBaseClasses(DeckFormat.spellsource()).size() > 5);
 	}

@@ -1,0 +1,26 @@
+{
+  "seed" : -1702952166224122654,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "DARKGREEN", "CORAL" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_ominous_obliterator", "minion_disco_inferno", "minion_gobogeg", "minion_mutating_monstrosity", "minion_slumbering_nurikabe", "minion_mechanical_monstrosity", "minion_beholder_of_the_beginning", "spell_abduct", "spell_rain_of_tentacles", "minion_inept_investigator", "minion_captain_of_the_guard", "spell_doomed_expedition", "minion_giant_serpent", "minion_sourcing_specialist", "minion_magedrainer", "minion_astral_anomaly", "spell_volatile_wisdom", "minion_mutated_brute", "minion_wolfcrier", "minion_divine_cleric", "minion_merciless_corruptor", "minion_undead_trickster", "minion_peacock_mystic", "spell_underwater_horrors", "spell_lost_city_champion", "minion_swarmed_captive", "spell_doom_project", "minion_servant_of_twilight", "minion_ominous_obliterator", "spell_rain_of_tentacles" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_backup_bard", "minion_inept_investigator", "spell_enchanting_tune", "minion_gargoyle_warden", "minion_reckless_giant", "spell_soundwave", "weapon_crowd_pleaser", "minion_spritely_scamp", "minion_spritely_scamp", "minion_jack_of_all_trades", "spell_power_chord", "spell_sheet_music", "minion_magedrainer", "minion_alien_invader", "minion_lounge_brownie", "minion_magedrainer", "spell_earworm", "minion_hunchback_supplier", "spell_enchanting_tune", "spell_song_of_strength", "minion_holy_bulwark", "spell_uplifting_melody", "spell_earworm", "minion_songbird", "spell_magical_secrets", "spell_power_chord", "minion_sparkly_messenger", "minion_mutamite_terror", "minion_dragonling_pet", "minion_noteweaver" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 45, 36, 65 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 32 ]
+  } ],
+  "actions" : [ 1, 0, 0, 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 7, 0, 1, 0, 0, 0, 4, 0, 0, 3, 1, 18, 6, 19, 0, 12, 1, 6, 1, 5, 0, 9, 4, 5, 2, 8, 7, 0, 53, 39, 6, 9, 7, 5, 9, 1, 0, 22, 19, 3, 1, 8, 1, 0, 29, 28, 25, 11, 2, 3, 0, 0, 28, 16, 1, 3, 8, 0, 0, 15, 26, 9, 0, 4, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}
