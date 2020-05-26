@@ -1,9 +1,9 @@
 [submodule "internalcontent/src"]
 	path = internalcontent/src
-	url = git@github.com:doctorpangloss/Spellsource-internalcontent.git
+	url = git@github.com:hiddenswitch/Spellsource-internalcontent.git
 [submodule "secrets"]
 	path = secrets
-	url = git@github.com:doctorpangloss/HiddenSwitch-Secrets.git
+	url = git@github.com:hiddenswitch/HiddenSwitch-Secrets.git
 [submodule "unityclient"]
 	path = unityclient
 	url = git@github.com:hiddenswitch/Spellsource-Client.git
