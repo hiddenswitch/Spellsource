@@ -131,7 +131,7 @@ dependencies {
         exclude group: 'org.objenesis', module: '*'
     }
     testImplementation group: 'io.vertx', name: 'vertx-unit', version: '3.8.3'
-    testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.9.3.Final') {
+    testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.11.2.Final') {
         exclude group: 'javax.activation', module: 'activation'
         exclude group: 'org.jboss.spec.javax.annotation', module: '*'
         exclude group: 'org.jboss.spec.javax.ws.rs', module: '*'
