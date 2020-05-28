@@ -124,6 +124,42 @@ subprojects {
                 if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
                     details.useVersion '4.5.4'
                 }
+
+                if (details.requested.group == 'org.jboss.logging') {
+                    details.useVersion '3.4.1.Final'
+                }
+
+                if (details.requested.group == 'io.reactivex.rxjava2') {
+                    details.useVersion '2.2.12'
+                }
+
+                if (details.requested.group == 'javax.xml.bind' && details.requested.module.name == 'jaxb-api') {
+                    details.useVersion '2.3.1'
+                }
+
+                if (details.requested.group == 'com.google.code.gson') {
+                    details.useVersion '2.8.6'
+                }
+
+                if (details.requested.group == 'org.jvnet.mimepull') {
+                    details.useVersion '1.9.10'
+                }
+
+                if (details.requested.group == 'commons-codec') {
+                    details.useVersion '1.13'
+                }
+
+                if (details.requested.group == 'org.glassfish.jaxb' && details.requested.name == 'jaxb-runtime') {
+                    details.useVersion '2.3.1'
+                }
+
+                if (details.requested.group == 'org.jboss.resteasy') {
+                    details.useVersion '3.11.2.Final'
+                }
+
+                if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
+                    details.useVersion '1.20'
+                }
             }
         }
     }
