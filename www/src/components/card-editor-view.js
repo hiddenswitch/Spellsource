@@ -21,12 +21,19 @@ class FieldLabelSerializableHidden extends FieldLabelSerializable {
     return field
   }
 
+  getSize() {
+    let size = super.getSize();
+    size.width = -10;
+    return size;
+  }
+
   getDisplayText_ () {
     return ''
   }
 }
 
 Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
+Blockly.HSV_SATURATION = .65;
 
 const CardEditorView = () => {
   const [code, setCode] = useState(``)
