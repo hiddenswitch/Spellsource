@@ -2,45 +2,6 @@
 # This uses environment variables and authorization keys that you do not have.
 version: '3.7'
 services:
-  loadbalancer:
-    image: "traefik:v2.2"
-    networks:
-      - web
-    command: >
-      --log.level=ERROR
-      --entrypoints.web.address=:80
-      --entrypoints.web.http.redirections.entrypoint.to=websecure
-      --entrypoints.web.http.redirections.entrypoint.scheme=https
-      --entrypoints.websecure.address=:443
-      --entrypoints.websecure.http.tls.certResolver=myresolver
-      --providers.docker=true
-      --certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}
-      --certificatesresolvers.myresolver.acme.storage="/data/acme-v2.json"
-      --certificatesresolvers.myresolver.acme.tlschallenge=true
-      --tracing.servicename=traefik
-      --tracing.jaeger.samplingtype=const
-      --tracing.jaeger.samplingparam=1.0
-      --tracing.jaeger.collector.endpoint=http://jaeger-collector:14268/api/traces?format=jaeger.thrift
-      --providers.docker.endpoint=unix:///var/run/docker.sock
-      --providers.docker.swarmmode=true
-      --providers.docker.network=web
-      --providers.docker.watch=true
-      --providers.docker.exposedbydefault=false
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - loadbalancerdata:/data
-    deploy:
-      restart_policy:
-        condition: on-failure
-        window: 8s
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
   game:
     image: doctorpangloss/spellsource:latest
     build:
@@ -174,12 +135,12 @@ services:
       labels:
         - traefik.http.routers.jaeger-query-router.rule=Host(`${JAEGER_QUERY_HOST}`)
         - traefik.http.routers.jaeger-query-router.entrypoints=web,websecure
-        - traefik.http.routers.jaeger-query-router.middlewares=auth
+        - traefik.http.routers.jaeger-query-router.middlewares=auth-jq
         - traefik.http.routers.jaeger-query-router.tls=true
         - traefik.http.routers.jaeger-query-router.tls.certResolver=myresolver
         - traefik.http.routers.jaeger-query-router.service=jaeger-query-service
         - traefik.http.services.jaeger-query-service.loadbalancer.server.port=16686
-        - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH_BASIC_HASH}
+        - traefik.http.middlewares.auth-jq.basicauth.users=${TRAEFIK_AUTH_BASIC_HASH}
         - traefik.enable=true
       placement:
         constraints:
@@ -266,7 +227,6 @@ services:
 volumes:
   mongodata:
   mancenterdata:
-  loadbalancerdata:
   cassandradata2:
 networks:
   web:
