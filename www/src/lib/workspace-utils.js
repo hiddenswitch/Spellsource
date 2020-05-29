@@ -129,6 +129,9 @@ export default class WorkspaceUtils {
               case this.BLOCKLY_ARRAY_ELEMENT:
                 // Handle every array statement on this block
                 retValue = [obj]
+                if (!!obj.i) {
+                  retValue = [obj.i]
+                }
                 if (!!next) {
                   if (isArray(next)) {
                     retValue = retValue.concat(next)
