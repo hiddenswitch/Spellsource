@@ -3,24 +3,29 @@
 version: '3.7'
 services:
   loadbalancer:
-    image: "traefik:v1.7-alpine"
+    image: "traefik:v2.2"
     networks:
       - web
-    command: |
-      --docker \
-      --entryPoints="Name:http Address::80 Redirect.EntryPoint:https" \
-      --entryPoints="Name:https Address::443 TLS" \
-      --retry \
-      --acme \
-      --acme.tlschallenge \
-      --acme.email="${ACME_EMAIL}" \
-      --acme.storage="/data/acme.json" \
-      --acme.entrypoint="https" \
-      --acme.ondemand=true \
-      --docker.swarmmode \
-      --docker.network=web \
-      --docker.watch \
-      --docker.exposedbydefault=false
+    command: >
+      --log.level=ERROR
+      --entrypoints.web.address=:80
+      --entrypoints.web.http.redirections.entrypoint.to=websecure
+      --entrypoints.web.http.redirections.entrypoint.scheme=https
+      --entrypoints.websecure.address=:443
+      --entrypoints.websecure.http.tls.certResolver=myresolver
+      --providers.docker=true
+      --certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}
+      --certificatesresolvers.myresolver.acme.storage="/data/acme-v2.json"
+      --certificatesresolvers.myresolver.acme.tlschallenge=true
+      --tracing.servicename=traefik
+      --tracing.jaeger.samplingtype=const
+      --tracing.jaeger.samplingparam=1.0
+      --tracing.jaeger.collector.endpoint=http://jaeger-collector:14268/api/traces?format=jaeger.thrift
+      --providers.docker.endpoint=unix:///var/run/docker.sock
+      --providers.docker.swarmmode=true
+      --providers.docker.network=web
+      --providers.docker.watch=true
+      --providers.docker.exposedbydefault=false
     ports:
       - 80:80
       - 443:443
@@ -60,14 +65,20 @@ services:
         delay: 30s
         window: 50s
       labels:
-        - "traefik.versionedhost.frontend.rule=${GAME_VERSIONED_HOST_RULE}"
-        - "traefik.versionedhost.frontend.entryPoints=http,https"
-        - "traefik.versionedurl.frontend.rule=${GAME_VERSIONED_URL_RULE}"
-        - "traefik.versionedurl.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.backend.loadbalancer.stickiness=true"
-        - "traefik.port=80"
-        - "traefik.enable=true"
+        - traefik.http.routers.game-versioned-host.service=game
+        - traefik.http.routers.game-versioned-host.rule=Host(`${GAME_VERSIONED_HOST}`)
+        - traefik.http.routers.game-versioned-host.entrypoints=web,websecure
+        - traefik.http.routers.game-versioned-host.tls=true
+        - traefik.http.routers.game-versioned-host.tls.certResolver=myresolver
+        - traefik.http.routers.game-versioned-url.service=game
+        - traefik.http.routers.game-versioned-url.rule=Host(`${GAME_VERSIONED_URL_HOST}`) && PathPrefix(`${GAME_VERSIONED_URL_PATH_PREFIX}`)
+        - traefik.http.routers.game-versioned-url.middlewares=game-versioned-url-path-prefix-stripped
+        - traefik.http.routers.game-versioned-url.entrypoints=web,websecure
+        - traefik.http.routers.game-versioned-url.tls=true
+        - traefik.http.routers.game-versioned-url.tls.certResolver=myresolver
+        - traefik.http.services.game.loadbalancer.server.port=80
+        - traefik.http.middlewares.game-versioned-url-path-prefix-stripped.stripprefix.prefixes=${GAME_VERSIONED_URL_PATH_PREFIX}
+        - traefik.enable=true
       placement:
         constraints:
           - node.platform.arch == x86_64
@@ -89,7 +100,7 @@ services:
         condition: on-failure
         window: 10s
       labels:
-        - "traefik.enable=false"
+        - traefik.enable=false
       placement:
         constraints:
           - node.platform.arch == x86_64
@@ -115,11 +126,14 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=${JAEGER_COLLECTOR_RULE}"
-        - "traefik.versionedurl.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.port=14268"
-        - "traefik.enable=true"
+        - traefik.http.routers.jaeger-collector-router.rule=Host(`${GAME_VERSIONED_HOST}`) && PathPrefix(`${JAEGER_URL_PATH_PREFIX}`)
+        - traefik.http.routers.jaeger-collector-router.service=jaeger-collector
+        - traefik.http.routers.jaeger-collector-router.entrypoints=web,websecure
+        - traefik.http.routers.jaeger-collector-router.tls=true
+        - traefik.http.routers.jaeger-collector-router.tls.certResolver=myresolver
+        - traefik.http.services.jaeger-collector.loadbalancer.server.port=14268
+        - traefik.http.middlewares.api-v3-prefix-strip.stripprefix.prefixes=/api/v3/
+        - traefik.enable=true
       placement:
         constraints:
           - node.platform.arch == x86_64
@@ -158,12 +172,15 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=${JAEGER_QUERY_RULE}"
-        - "traefik.versionedurl.frontend.auth.basic.users=${TRAEFIK_AUTH_BASIC_HASH}"
-        - "traefik.versionedurl.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.port=16686"
-        - "traefik.enable=true"
+        - traefik.http.routers.jaeger-query-router.rule=Host(`${JAEGER_QUERY_HOST}`)
+        - traefik.http.routers.jaeger-query-router.entrypoints=web,websecure
+        - traefik.http.routers.jaeger-query-router.middlewares=auth
+        - traefik.http.routers.jaeger-query-router.tls=true
+        - traefik.http.routers.jaeger-query-router.tls.certResolver=myresolver
+        - traefik.http.routers.jaeger-query-router.service=jaeger-query-service
+        - traefik.http.services.jaeger-query-service.loadbalancer.server.port=16686
+        - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_AUTH_BASIC_HASH}
+        - traefik.enable=true
       placement:
         constraints:
           - node.platform.arch == x86_64
@@ -214,11 +231,13 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.versionedurl.frontend.rule=${SKYHOOK_RULE}"
-        - "traefik.versionedurl.frontend.entryPoints=http,https"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.port=8080"
-        - "traefik.enable=true"
+        - traefik.http.routers.skyhook-router.rule=Host(`${SKYHOOK_HOST}`)
+        - traefik.http.routers.skyhook-router.entrypoints=web,websecure
+        - traefik.http.routers.skyhook-router.tls=true
+        - traefik.http.routers.skyhook-router.tls.certResolver=myresolver
+        - traefik.http.routers.skyhook-router.service=skyhook-router-service
+        - traefik.http.services.skyhook-router-service.loadbalancer.server.port=8080
+        - traefik.enable=true
       placement:
         constraints:
           - node.platform.arch == x86_64
@@ -238,7 +257,7 @@ services:
         condition: on-failure
         window: 15s
       labels:
-        - "traefik.enable=false"
+        - traefik.enable=false
       placement:
         constraints:
           - node.platform.arch == x86_64
