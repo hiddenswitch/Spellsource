@@ -1,5 +1,5 @@
 import { Xml } from 'blockly'
-import { find, map, fromPairs, filter, extend, isArray, isObject } from 'lodash'
+import { extend, filter, find, fromPairs, isArray, map } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
@@ -42,18 +42,22 @@ export default class WorkspaceUtils {
    * @param parent
    * @returns {{}|*|{}|[]}
    */
-  static xmlToDictionary (xml, prev = null, parent = null) {
+  static xmlToCardScript (xml, prev = null, parent = null) {
     let nextNode = null
     let next = null
     switch (xml.nodeName) {
       case '#document':
         if (!!xml.firstElementChild) {
-          return WorkspaceUtils.xmlToDictionary(xml.firstElementChild)
+          return WorkspaceUtils.xmlToCardScript(xml.firstElementChild)
         }
         break
       case 'xml':
         if (!!xml.firstElementChild) {
-          return WorkspaceUtils.xmlToDictionary(xml.firstElementChild)
+          const elementNodes = filter(Array.from(xml.childNodes), cn => cn.nodeType === Node.ELEMENT_NODE)
+          if (elementNodes.length === 1) {
+            return WorkspaceUtils.xmlToCardScript(elementNodes[0])
+          }
+          return map(elementNodes, cn => WorkspaceUtils.xmlToCardScript(cn))
         }
         break
       case 'block':
@@ -76,10 +80,10 @@ export default class WorkspaceUtils {
               obj[childNode.attributes['name'].value] = !isNaN(childNode.innerHTML) ? +childNode.innerHTML : childNode.innerHTML
               break
             case 'value':
-              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild, null, obj)
+              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
               break
             case 'statement':
-              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToDictionary(childNode.firstElementChild, null, obj)
+              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
               break
             case 'next':
               if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === 'block') {
@@ -90,7 +94,7 @@ export default class WorkspaceUtils {
         }
 
         if (!!nextNode) {
-          next = WorkspaceUtils.xmlToDictionary(nextNode, obj)
+          next = WorkspaceUtils.xmlToCardScript(nextNode, obj)
         }
 
         const hasData = find(childNodes, cn => cn.nodeName === 'data')
@@ -190,9 +194,9 @@ export default class WorkspaceUtils {
     }
   }
 
-  static workspaceToDictionary (workspace) {
+  static workspaceToCardScript (workspace) {
     const xml = Xml.workspaceToDom(workspace)
     console.log(xml)
-    return WorkspaceUtils.xmlToDictionary(xml)
+    return WorkspaceUtils.xmlToCardScript(xml)
   }
 }

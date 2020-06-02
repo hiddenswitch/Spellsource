@@ -26,7 +26,7 @@ exponentially loses its volume.
 Lun isn't a substance that's fully understand yet by anyone, and
 the different peoples of the world have different theories on what Lun *really* is.
 
-Humans that take noice of magic generally think the same thing that [Shun He](/wiki/Shun_He "wikilink") thought for most of his life&mdash;that Lun comes from the air.
+Humans that take notice of magic generally think the same thing that [Shun He](/wiki/Shun_He "wikilink") thought for most of his life&mdash;that Lun comes from the air.
 However, Shun's experiences on Moromah island are leading him to change his views.
 
 The ruling clan of the  enforce the view
