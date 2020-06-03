@@ -64,6 +64,13 @@ const CardEditorView = () => {
               int
               text
               options
+              shadow {
+                type
+                fields {
+                  name
+                  value
+                }
+              }
             }
           }
           inputsInline
@@ -84,8 +91,11 @@ const CardEditorView = () => {
   }) => {
     return {
       name: CategoryName,
-      blocks: filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix))
-        .map(edge => {return { type: edge.node.type }})
+      blocks: filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
+      && !edge.node.type.endsWith('SHADOW'))
+        .map(edge => {return {
+          type: edge.node.type
+        }})
     }
   })
 
@@ -127,6 +137,26 @@ const CardEditorView = () => {
         this.jsonInit(block)
         if (!!block.data) {
           this.data = block.data
+        }
+        for (let i = 0; i < 10; i++) {
+          if (!!block['args' + i.toString()]) {
+            for (let j = 0; j < 10; j++) {
+              if (!!block['args' + i.toString()][j] && !!block['args' + i.toString()][j].shadow) {
+                const shadow = block['args' + i.toString()][j].shadow;
+                let shadowBlock = this.workspace.newBlock(shadow.type)
+                shadowBlock.setShadow(true)
+                if (!!shadow.fields) {
+                  for (let field of shadow.fields) {
+                    shadowBlock.setFieldValue(field.value, field.name)
+                  }
+                }
+                const connection = block['args' + i.toString()][j].type.endsWith('statement') ?
+                  shadowBlock.previousConnection: shadowBlock.outputConnection
+                this.getInput(block['args' + i.toString()][j].name).connection.connect(connection)
+                shadowBlock.initSvg()
+              }
+            }
+          }
         }
       }
     }
