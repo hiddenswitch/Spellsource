@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
-import { useStaticQuery, graphql } from 'gatsby'
+import { graphql, useStaticQuery } from 'gatsby'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
-import Blockly from 'blockly'
-import { has, filter } from 'lodash'
+import Blockly, { FieldLabelSerializable } from 'blockly'
+import { filter, has, isArray, map } from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
-import { Xml, FieldLabelSerializable } from 'blockly'
 
 class FieldLabelSerializableHidden extends FieldLabelSerializable {
   constructor (opt_value, opt_validator, opt_config) {super(opt_value, opt_validator, opt_config)}
@@ -21,10 +20,10 @@ class FieldLabelSerializableHidden extends FieldLabelSerializable {
     return field
   }
 
-  getSize() {
-    let size = super.getSize();
-    size.width = -10;
-    return size;
+  getSize () {
+    let size = super.getSize()
+    size.width = -10
+    return size
   }
 
   getDisplayText_ () {
@@ -33,11 +32,9 @@ class FieldLabelSerializableHidden extends FieldLabelSerializable {
 }
 
 Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
-Blockly.HSV_SATURATION = .65;
+Blockly.HSV_SATURATION = .65
 
 const CardEditorView = () => {
-  const [code, setCode] = useState(``)
-  const [xml, setXml] = useState(``)
   const data = useStaticQuery(graphql`
   query {
     toolbox {
@@ -86,19 +83,23 @@ const CardEditorView = () => {
     }
   }`)
 
-  const toolboxCategories = data.toolbox.BlockCategoryList.map(({
-    BlockTypePrefix, CategoryName, ColorHex
-  }) => {
-    return {
-      name: CategoryName,
-      blocks: filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
-      && !edge.node.type.endsWith('SHADOW'))
-        .map(edge => {return {
-          type: edge.node.type
-        }})
-    }
-  })
+  function getInitialToolboxCategories () {
+    return data.toolbox.BlockCategoryList.map(({
+      BlockTypePrefix, CategoryName, ColorHex
+    }) => {
+      return {
+        name: CategoryName,
+        blocks: filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
+        && !edge.node.type.endsWith('SHADOW'))
+          .map(edge => {return { type: edge.node.type }})
+      }
+    })
+  }
 
+  const [code, setCode] = useState(``)
+  const [toolboxCategories, setToolboxCategories] = useState(getInitialToolboxCategories())
+
+  // All of our spells, triggers, entity reference enum values, etc.
   data.allBlock.edges.forEach(edge => {
     if (has(Blockly.Blocks, edge.node.type)) {
       return
@@ -162,13 +163,27 @@ const CardEditorView = () => {
     }
   })
 
-  function onCodeEditorChanged (newValue) {
-
-  }
-
   function onWorkspaceChanged (workspace) {
-    setXml(('<xml>' + Xml.workspaceToDom(workspace).innerHTML + '</xml>').replace(/>/gi,'>\n'))
-    setCode(JSON.stringify(WorkspaceUtils.workspaceToDictionary(workspace), null, 2))
+    const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
+    // Generate the blocks that correspond to the cards in the workspace
+    if (isArray(cardScript)) {
+      map(filter(cardScript, topLevelElement => !!topLevelElement.id), card => {
+        const cardId = card.id
+        return {
+          cardId: cardId,
+          init: function () {
+            this.jsonInit({
+              'type': 'Card_' + cardId,
+              'args0': [],
+              'message0': 'card named ' + card.name,
+              'output': 'Card',
+              'data': cardId
+            })
+          }
+        }
+      })
+    }
+    setCode(JSON.stringify(cardScript, null, 2))
   }
 
   return (<span>
@@ -184,7 +199,6 @@ const CardEditorView = () => {
         'wrap': true
       }}
       readOnly={true}
-      onChange={onCodeEditorChanged}
       value={code}
       editorProps={{ $blockScrolling: true }}
     /></span>)

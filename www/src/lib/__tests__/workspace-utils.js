@@ -5,7 +5,7 @@ function expectConversion (str, json) {
 
   const xml = parser.parseFromString(str, 'text/xml')
 
-  expect(WorkspaceUtils.xmlToDictionary(xml)).toEqual(json)
+  expect(WorkspaceUtils.xmlToCardScript(xml)).toEqual(json)
 }
 
 describe('WorkspaceUtils', () => {
