@@ -65,7 +65,8 @@ const CardEditorView = () => {
                 type
                 fields {
                   name
-                  value
+                  valueS
+                  valueI
                 }
               }
             }
@@ -139,22 +140,31 @@ const CardEditorView = () => {
         if (!!block.data) {
           this.data = block.data
         }
+        //init shadow blocks
         for (let i = 0; i < 10; i++) {
           if (!!block['args' + i.toString()]) {
             for (let j = 0; j < 10; j++) {
-              if (!!block['args' + i.toString()][j] && !!block['args' + i.toString()][j].shadow) {
-                const shadow = block['args' + i.toString()][j].shadow;
-                let shadowBlock = this.workspace.newBlock(shadow.type)
-                shadowBlock.setShadow(true)
-                if (!!shadow.fields) {
-                  for (let field of shadow.fields) {
-                    shadowBlock.setFieldValue(field.value, field.name)
+              const arg = block['args' + i.toString()][j];
+              if (!!arg) {
+                const shadow = arg.shadow;
+                if (!!shadow) {
+                  let shadowBlock = this.workspace.newBlock(shadow.type)
+                  shadowBlock.setShadow(true)
+                  if (!!shadow.fields) {
+                    for (let field of shadow.fields) {
+                      if (!!field.valueI) {
+                        shadowBlock.setFieldValue(field.valueI, field.name)
+                      }
+                      if (!!field.valueS) {
+                        shadowBlock.setFieldValue(field.valueS, field.name)
+                      }
+                    }
                   }
+                  const connection = arg.type.endsWith('statement') ?
+                    shadowBlock.previousConnection: shadowBlock.outputConnection
+                  this.getInput(arg.name).connection.connect(connection)
+                  shadowBlock.initSvg()
                 }
-                const connection = block['args' + i.toString()][j].type.endsWith('statement') ?
-                  shadowBlock.previousConnection: shadowBlock.outputConnection
-                this.getInput(block['args' + i.toString()][j].name).connection.connect(connection)
-                shadowBlock.initSvg()
               }
             }
           }
