@@ -45,7 +45,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 							LOGGER.error("createDatagramSocket: Failed to listen to multicast group", listener.cause());
 							isListening.fail(listener.cause());
 						}
-						final DatagramSocket socket = listener.result();
+						DatagramSocket socket = listener.result();
 						socket.handler(packet -> {
 							if (!packet.data().getString(0, clientCall.length()).equals(clientCall)) {
 								return;
@@ -56,8 +56,8 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 							String host = Gateway.getHostIpAddress();
 							socket.send(getResponsePrefix() + "http://" + host + ":" + Configuration.apiGatewayPort() + "/", packet.sender().port(), packet.sender().host(), Promise.promise());
 						});
-
 						isListening.complete();
+						LOGGER.info("createDatagramSocket: isListening");
 					});
 				});
 	}
