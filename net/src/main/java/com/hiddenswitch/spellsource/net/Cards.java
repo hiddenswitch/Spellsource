@@ -10,6 +10,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
+import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
@@ -159,7 +160,7 @@ public interface Cards {
 			SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards/cards");
 			// Invalidate the cache here
 			cache.put("cards-version", Vertx.currentContext().deploymentID());
-			cache.put("cards-last-modified", Gateway.DATE_TIME_FORMATTER.format(new Date()));
+			cache.put("cards-last-modified", Utils.formatRFC1123DateTime(new Date().getTime()));
 		} catch (RuntimeException runtimeException) {
 			Tracing.error(runtimeException, span, true);
 			throw runtimeException;

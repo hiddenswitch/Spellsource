@@ -38,6 +38,7 @@ import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerFormat;
+import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
@@ -733,7 +734,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		context.response().putHeader("Cache-Control", "public, max-age=31536000");
 		context.response().putHeader("Last-Modified", lastModified);
-		context.response().putHeader("Date", DATE_TIME_FORMATTER.format(new Date()));
+		context.response().putHeader("Date", Utils.formatRFC1123DateTime(new Date().getTime()));
 
 		if (context.request().method() == HttpMethod.HEAD) {
 			return WebResult.succeeded(new GetCardsResponse().version(cardsVersion));

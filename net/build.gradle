@@ -62,14 +62,14 @@ dependencies {
     implementation group: 'joda-time', name: 'joda-time', version: '2.10.2'
     implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
-    api group: 'io.vertx', name: 'vertx-core', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-web-client', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-web', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-rx-java2', version: '3.8.3'
-    implementation group: 'io.vertx', name: 'vertx-mail-client', version: '3.8.3'
+    api group: 'io.vertx', name: 'vertx-core', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-web-client', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-web', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-rx-java2', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-mail-client', version: '3.9.1'
     implementation 'org.jetbrains:annotations:16.0.2'
     implementation 'io.jaegertracing:jaeger-client:1.2.0'
     implementation 'io.netty:netty-transport-native-epoll:4.1.43.Final:linux-x86_64'
@@ -123,14 +123,14 @@ dependencies {
 
     testImplementation project(':testutils')
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-    testImplementation 'io.vertx:vertx-core:3.8.3:tests'
+    testImplementation 'io.vertx:vertx-core:3.9.1:tests'
     testImplementation('org.powermock:powermock-module-junit4:2.0.2') {
         exclude group: 'org.objenesis', module: '*'
     }
     testImplementation('org.powermock:powermock-api-mockito2:2.0.2') {
         exclude group: 'org.objenesis', module: '*'
     }
-    testImplementation group: 'io.vertx', name: 'vertx-unit', version: '3.8.3'
+    testImplementation group: 'io.vertx', name: 'vertx-unit', version: '3.9.1'
     testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.11.2.Final') {
         exclude group: 'javax.activation', module: 'activation'
         exclude group: 'org.jboss.spec.javax.annotation', module: '*'

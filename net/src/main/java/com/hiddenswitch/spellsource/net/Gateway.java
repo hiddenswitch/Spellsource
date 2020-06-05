@@ -114,8 +114,6 @@ import java.util.Comparator;
  * </pre></li></ol>
  */
 public interface Gateway extends Verticle {
-	DateFormat DATE_TIME_FORMATTER = Utils.createRFC1123DateTimeFormatter();
-
 	static Gateway create() {
 		return new GatewayImpl(Configuration.apiGatewayPort());
 	}
