@@ -60,6 +60,7 @@ export default class WorkspaceUtils {
           return map(elementNodes, cn => WorkspaceUtils.xmlToCardScript(cn))
         }
         break
+      case 'shadow':
       case 'block':
         const obj = {}
         if (!xml.hasChildNodes()) {
@@ -79,11 +80,11 @@ export default class WorkspaceUtils {
             case 'field':
               obj[childNode.attributes['name'].value] = !isNaN(childNode.innerHTML) ? +childNode.innerHTML : childNode.innerHTML
               break
-            case 'value':
-              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
-              break
             case 'statement':
-              obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
+            case 'value':
+              if (childNode.firstElementChild.nodeName === 'shadow' && childNode.lastElementChild !== childNode.firstElementChild) {
+                obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.lastElementChild, null, obj)
+              } else obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
               break
             case 'next':
               if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === 'block') {
