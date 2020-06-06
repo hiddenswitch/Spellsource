@@ -48,6 +48,16 @@ exports.createSchemaCustomization = ({ actions }) => {
     int: Boolean
     text: String
     options: [[String]]
+    shadow: Shadow
+  }
+  type Shadow {
+    type: String
+    fields: [Field]
+  }
+  type Field {
+    name: String
+    valueI: Int
+    valueS: String
   }
   `
   createTypes(typeDefs)
