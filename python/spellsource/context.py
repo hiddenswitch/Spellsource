@@ -177,10 +177,9 @@ class Context(contextlib.AbstractContextManager):
     def _start_gateway(port=0) -> JavaGateway:
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
-        hearthstone_jar_path = Context.find_resource_path('hearthstone-0.8.77.jar')
         net_jar_path = Context.find_resource_path('net-0.8.77-all.jar')
         port = launch_gateway(port=port,
-                              classpath=os.pathsep.join((hearthstone_jar_path, net_jar_path)),
+                              classpath=os.pathsep.join((net_jar_path, )),
                               die_on_exit=True)
 
         # connect python side to Java side with Java dynamic port and start python

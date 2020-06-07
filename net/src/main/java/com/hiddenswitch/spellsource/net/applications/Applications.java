@@ -9,7 +9,10 @@ import io.atomix.utils.net.Address;
 import io.atomix.vertx.AtomixClusterManager;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBusOptions;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.micrometer.MicrometerMetricsOptions;
+import io.vertx.micrometer.VertxPrometheusOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +48,13 @@ public interface Applications {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
+				.setMetricsOptions(
+						new MicrometerMetricsOptions()
+								.setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)
+										.setStartEmbeddedServer(true)
+										.setEmbeddedServerOptions(new HttpServerOptions().setPort(Configuration.metricsPort()))
+										.setEmbeddedServerEndpoint("/metrics/vertx"))
+								.setEnabled(true))
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors()), then -> {
 
 			Vertx vertx = then.result();

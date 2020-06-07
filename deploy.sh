@@ -14,13 +14,15 @@ where:
     -C  builds the stack
     -s  deploys the stack to the specified SSH_HOST, a docker swarm manager
     -S  deploys build macOS and Windows binaries to Steam
+    -m  clones the mongo database locally to ./.mongo
 "
 deploy_steam=false
 deploy_stack=false
 build_stack=false
 bump_version=false
+dump_mongo=false
 install_dependencies=false
-while getopts "hvCsSD" opt; do
+while getopts "hvCsSDm" opt; do
   case "$opt" in
   h*)
     echo "$usage"
@@ -41,6 +43,10 @@ while getopts "hvCsSD" opt; do
   S)
     deploy_steam=true
     echo "Deploying to Steam"
+    ;;
+  m)
+    dump_mongo=true
+    echo "Cloning mongo"
     ;;
   C)
     build_stack=true
@@ -175,4 +181,20 @@ if [[ "$deploy_steam" == true ]]; then
     +login "${STEAMCMD_ACCOUNT}" "${STEAMCMD_PASSWORD}" "${STEAMCMD_GUARD_CODE}" \
     +run_app_build_http "/home/steam/workdir/secrets/spellsource/steam-app-build.vdf" \
     +quit
+fi
+
+if [[ ${dump_mongo} == true ]]; then
+  dump_dir=$(mktemp -d)
+  archive_path="${dump_dir}"/dump.tar.gz
+  echo "Archive Path: ${archive_path}"
+
+  docker context import hiddenswitch secrets/hiddenswitch.dockercontext >/dev/null || true
+  docker context use hiddenswitch >/dev/null
+  docker run --network=backend -i --rm mongo:3.6 bash -c "mkdir -pv ./out >/dev/null; mongodump  --excludeCollection=games --uri=mongodb://spellsource_mongo:27017/metastone >/dev/null; tar -czvf ./archive.tar.gz ./dump >/dev/null; cat archive.tar.gz" >"${archive_path}"
+  mkdir -pv .mongo
+  mongod --dbpath=.mongo --bind_ip_all >/dev/null & mongo_pid=$!
+  echo "mongod pid: ${mongo_pid}"
+  tar -C "${dump_dir}" -xzvf "${archive_path}"
+  mongorestore --drop --uri=mongodb://localhost:27017/metastone "${dump_dir}"/dump
+  kill -2 ${mongo_pid}
 fi

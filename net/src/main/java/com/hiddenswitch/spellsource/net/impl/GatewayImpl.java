@@ -21,20 +21,17 @@ import com.hiddenswitch.spellsource.net.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.net.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.util.Serialization;
-import io.opentracing.Scope;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.impl.VertxInternal;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.LoggerFormat;
@@ -86,6 +83,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
+		CardCatalogue.loadCardsFromPackage();
 		Connection.registerCodecs();
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		io.vertx.core.logging.LoggerFactory.initialise();
@@ -99,12 +97,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setPerFrameWebsocketCompressionSupported(true)
 				.setPerMessageWebsocketCompressionSupported(true)
 				.setCompressionSupported(true));
-		Router router = Router.router(vertx);
+		var router = Router.router(vertx);
 
 		LOGGER.info("start: Configuring router on instance {}", this.deploymentID());
 
-		AuthHandler authHandler = SpellsourceAuthHandler.create();
-		BodyHandler bodyHandler = BodyHandler.create()
+		var authHandler = SpellsourceAuthHandler.create();
+		var bodyHandler = BodyHandler.create()
 				.setBodyLimit(Configuration.maxBodyBytes())
 				.setHandleFileUploads(false)
 				.setPreallocateBodyBuffer(true);
@@ -133,9 +131,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Create default matchmaking queues
 		queues = Matchmaking.startDefaultQueues();
 		// Create draft queue
-		Closeable draftQueue = Draft.startDraftQueue();
+		var draftQueue = Draft.startDraftQueue();
 
-		final Closeable originalQueues = queues;
+		var originalQueues = queues;
 		queues = fut -> {
 			originalQueues.close(v1 -> {
 				serverMessaging.close(v2 -> {
@@ -400,14 +398,14 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		}
 
 		if (userId.equals(targetUserId)) {
-			final Account account = getAccount(userId);
+			final var account = getAccount(userId);
 			if (account == null) {
 				return WebResult.notFound("Unexpectedly, an account with your userId %s was not found", userId);
 			}
 
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(account)));
 		} else {
-			UserRecord record = Accounts.get(targetUserId);
+			var record = Accounts.get(targetUserId);
 			if (record == null) {
 				return WebResult.notFound("An account with userId %s was not found", userId);
 			}
@@ -426,7 +424,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<CreateAccountResponse> createAccount(RoutingContext context, CreateAccountRequest request) throws SuspendExecution, InterruptedException {
-		com.hiddenswitch.spellsource.net.models.CreateAccountResponse internalResponse = Accounts
+		var internalResponse = Accounts
 				.createAccount(new com.hiddenswitch.spellsource.net.models.CreateAccountRequest()
 						.withEmailAddress(request.getEmail())
 						.withPassword(request.getPassword())
@@ -443,9 +441,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		}
 
 		// Initialize the collection
-		final String userId = internalResponse.getUserId();
+		final var userId = internalResponse.getUserId();
 		Logic.initializeUser(InitializeUserRequest.create(userId));
-		final Account account = getAccount(userId);
+		final var account = getAccount(userId);
 		return WebResult.succeeded(new CreateAccountResponse()
 				.loginToken(internalResponse.getLoginToken().getToken())
 				.account(account));
@@ -475,7 +473,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		DeckCreateRequest createRequest;
 		if (request.getDeckList() == null
 				|| request.getDeckList().equals("")) {
-			final String heroClass = request.getHeroClass();
+			final var heroClass = request.getHeroClass();
 
 			createRequest = new DeckCreateRequest()
 					.withName(request.getName())
@@ -486,7 +484,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
 		}
 
-		DeckCreateResponse internalResponse = Decks.createDeck(createRequest
+		var internalResponse = Decks.createDeck(createRequest
 				.withUserId(userId));
 
 		return WebResult.succeeded(new DecksPutResponse()
@@ -499,7 +497,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			return WebResult.forbidden("Cannot access a different user's deck, until you are an ally.");
 		}
 
-		GetCollectionResponse collection = Inventory.getCollection(new GetCollectionRequest()
+		var collection = Inventory.getCollection(new GetCollectionRequest()
 				.withUserId(userId)
 				.withDeckId(deckId));
 
@@ -532,10 +530,10 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<DecksGetAllResponse> decksGetAll(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		List<String> decks = Accounts.get(userId).getDecks();
+		var decks = Accounts.get(userId).getDecks();
 
 		List<DecksGetResponse> responses = new ArrayList<>();
-		for (String deck : decks) {
+		for (var deck : decks) {
 			responses.add(getDeck(userId, deck).result());
 		}
 
@@ -553,7 +551,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<MatchmakingQueuesResponse> matchmakingGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		List<String> decks = Accounts.get(userId).getDecks();
+		var decks = Accounts.get(userId).getDecks();
 		return WebResult.succeeded(
 				new MatchmakingQueuesResponse()
 						.addQueuesItem(new MatchmakingQueueItem()
@@ -576,7 +574,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	public WebResult<FriendPutResponse> friendPut(RoutingContext context, String userId, FriendPutRequest req)
 			throws SuspendExecution, InterruptedException {
 		// lookup own user account
-		UserRecord myAccount = (UserRecord) context.user();
+		var myAccount = (UserRecord) context.user();
 
 		if (req.getFriendId() != null) {
 			return WebResult.failed(409, new IllegalArgumentException("Not supported."));
@@ -588,7 +586,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		}
 
 		try {
-			FriendPutResponse response = Friends.putFriend(myAccount, req);
+			var response = Friends.putFriend(myAccount, req);
 			return WebResult.succeeded(response);
 		} catch (NullPointerException ex) {
 			return WebResult.failed(404, ex);
@@ -600,9 +598,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	public WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId)
 			throws SuspendExecution, InterruptedException {
-		UserRecord myAccount = (UserRecord) context.user();
+		var myAccount = (UserRecord) context.user();
 		try {
-			UnfriendResponse response = Friends.unfriend(myAccount, friendId);
+			var response = Friends.unfriend(myAccount, friendId);
 			return WebResult.succeeded(response);
 		} catch (NullPointerException ex) {
 			return WebResult.failed(404, ex);
@@ -613,7 +611,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<DraftState> draftsGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		DraftRecord record = Draft.get(new GetDraftRequest().withUserId(userId));
+		var record = Draft.get(new GetDraftRequest().withUserId(userId));
 		if (record == null) {
 			return WebResult.notFound("You have not started a draft. Start one first.");
 		}
@@ -649,7 +647,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	public WebResult<DraftState> draftsChooseHero(RoutingContext context, String userId, DraftsChooseHeroRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			DraftRecord record = Draft.doDraftAction(new DraftActionRequest()
+			var record = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withHeroIndex(request.getHeroIndex()));
 
@@ -664,7 +662,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	public WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException {
 		try {
-			DraftRecord record = Draft.doDraftAction(new DraftActionRequest()
+			var record = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withCardIndex(request.getCardIndex()));
 			return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));
@@ -682,7 +680,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<InviteResponse> getInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
-		Invite invite = mongo().findOne(Invites.INVITES, json("_id", inviteId), Invite.class);
+		var invite = mongo().findOne(Invites.INVITES, json("_id", inviteId), Invite.class);
 		if (invite == null) {
 			return WebResult.notFound("This invite was not found");
 		}
@@ -722,11 +720,11 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
 		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
 
-		String cardsVersion = cache.get("cards-version");
-		String lastModified = cache.get("cards-last-modified");
+		var cardsVersion = cache.get("cards-version");
+		var lastModified = cache.get("cards-last-modified");
 
 		context.response().putHeader("ETag", cardsVersion);
-		String userVersion = context.request().getHeader("If-None-Match");
+		var userVersion = context.request().getHeader("If-None-Match");
 		if (userVersion != null &&
 				userVersion.equals(cardsVersion)) {
 			return WebResult.succeeded(304, new GetCardsResponse().version(cardsVersion));
@@ -748,7 +746,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetGameRecordResponse> getGameRecord(RoutingContext context, String userId, String gameId) throws SuspendExecution, InterruptedException {
-		GameRecord record = mongo().findOne(Games.GAMES, json("_id", gameId), GameRecord.class);
+		var record = mongo().findOne(Games.GAMES, json("_id", gameId), GameRecord.class);
 		if (record == null) {
 			return WebResult.notFound("No game with the specified ID was found.");
 		}
@@ -758,18 +756,18 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		}
 
 		// TODO: Use the user's actual localized time zone, maybe as for it as a parameter?
-		String createdAtLocalized = record.getCreatedAt()
+		var createdAtLocalized = record.getCreatedAt()
 				.toInstant()
 				.atZone(ZoneId.systemDefault())
 				.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
 
-		Replay replay = Games.replayFromGameContext(GameContext.fromTrace(record.getTrace()));
+		var replay = Games.replayFromGameContext(GameContext.fromTrace(record.getTrace()));
 
 		// Censor non-bot games
 		if (!record.isBotGame()) {
-			int opponentId = userId.equals(record.getPlayerUserIds().get(0)) ? 1 : 0;
-			for (int i = 0; i < replay.getGameStates().size(); i++) {
-				ReplayGameStates pair = replay.getGameStates().get(i);
+			var opponentId = userId.equals(record.getPlayerUserIds().get(0)) ? 1 : 0;
+			for (var i = 0; i < replay.getGameStates().size(); i++) {
+				var pair = replay.getGameStates().get(i);
 				if (opponentId == 0) {
 					pair.first(null);
 				} else {
@@ -788,7 +786,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetGameRecordIdsResponse> getGameRecordIds(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
-		List<JsonObject> ids = mongo().findWithOptions(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, userId), new FindOptions().setFields(json(MongoRecord.ID, 1)));
+		var ids = mongo().findWithOptions(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, userId), new FindOptions().setFields(json(MongoRecord.ID, 1)));
 		return WebResult.succeeded(
 				new GetGameRecordIdsResponse()
 						.gameIds(ids.stream().map(j -> j.getString(MongoRecord.ID))
@@ -800,19 +798,25 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		var span = tracer.buildSpan("Gateway/getAccount")
 				.withTag("userId", userId)
 				.start();
-		try (Scope scope = tracer.activateSpan(span)) {
+		try (var scope = tracer.activateSpan(span)) {
 			// Get the personal collection
-			UserRecord record = Accounts.get(userId);
-			GetCollectionResponse personalCollection = Inventory.getCollection(GetCollectionRequest.user(record.getId()));
+			var record = Accounts.get(userId);
+			var personalCollection = Inventory.getCollection(GetCollectionRequest.user(record.getId()));
+
+			// Fixes missing personal collection data
+			if (personalCollection.getCollectionRecord() == null) {
+				Inventory.createCollection(CreateCollectionRequest.startingCollection(userId));
+				personalCollection = Inventory.getCollection(GetCollectionRequest.user(record.getId()));
+			}
 
 			// Get the decks
-			GetCollectionResponse deckCollections = Inventory.getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
+			var deckCollections = Inventory.getCollection(GetCollectionRequest.decks(userId, record.getDecks()));
 
-			final String displayName = record.getUsername();
-			final List<GetCollectionResponse> responses = deckCollections.getResponses();
-			List<Friend> friends = record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList());
+			var displayName = record.getUsername();
+			var responses = deckCollections.getResponses();
+			var friends = record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList());
 
-			for (Friend friend : friends) {
+			for (var friend : friends) {
 				friend.presence(Presence.getPresence(friend.getFriendId()));
 			}
 

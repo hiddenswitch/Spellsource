@@ -95,7 +95,11 @@ public class DeckFormat implements Serializable {
 	 * CardCatalogue#loadCardsFromPackage()} has not been called. OSGi-friendly.
 	 */
 	public static DeckFormat spellsource() {
-		return getFormat("Spellsource");
+		var format = getFormat("Spellsource");
+		if (format == null) {
+			throw new NullPointerException("must load cards first with CardCatalogue.loadCardsFromPackage()");
+		}
+		return format;
 	}
 
 	public static DeckFormat all() {

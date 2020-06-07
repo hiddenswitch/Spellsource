@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.common.Tracing;
 import io.atomix.vertx.VertxFutures;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -46,7 +47,13 @@ public class Sync {
 	@NotNull
 	@Suspendable
 	public static <T> Handler<T> suspendableHandler(FiberScheduler scheduler, SuspendableAction1<T> handler) {
-		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
+		return p -> {
+			Fiber<Void> voidFiber = new Fiber<>(scheduler, () -> handler.call(p));
+			voidFiber.setUncaughtExceptionHandler((f, e) -> {
+				Tracing.error(e);
+			});
+			voidFiber.start();
+		};
 	}
 
 	@Suspendable
