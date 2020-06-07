@@ -90,12 +90,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(port)
-				.setMaxWebsocketFrameSize(65536)
-				.setWebsocketAllowServerNoContext(true)
-				.setWebsocketPreferredClientNoContext(true)
-				.setMaxWebsocketMessageSize(100 * 65536)
-				.setPerFrameWebsocketCompressionSupported(true)
-				.setPerMessageWebsocketCompressionSupported(true)
+				.setMaxWebSocketFrameSize(65536)
+				.setWebSocketAllowServerNoContext(true)
+				.setWebSocketPreferredClientNoContext(true)
+				.setMaxWebSocketMessageSize(100 * 65536)
+				.setPerFrameWebSocketCompressionSupported(true)
+				.setPerMessageWebSocketCompressionSupported(true)
 				.setCompressionSupported(true));
 		var router = Router.router(vertx);
 
