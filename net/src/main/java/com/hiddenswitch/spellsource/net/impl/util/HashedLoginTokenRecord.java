@@ -63,17 +63,6 @@ public class HashedLoginTokenRecord implements Serializable {
 	 */
 	@JsonIgnore
 	public boolean check(String secret) {
-		boolean sha256Comparison = Accounts.hash(secret).equals(hashedToken);
-		if (sha256Comparison) {
-			return true;
-		}
-
-		boolean scryptComparison = false;
-		try {
-			scryptComparison = SCryptUtil.check(secret, hashedToken);
-		} catch (IllegalArgumentException unknownTokenFormat) {
-			return false;
-		}
-		return scryptComparison;
+		return Accounts.hash(secret).equals(hashedToken);
 	}
 }

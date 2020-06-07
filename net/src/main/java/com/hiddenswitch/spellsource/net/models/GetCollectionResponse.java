@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.models;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
 import com.hiddenswitch.spellsource.common.Tracing;
@@ -106,7 +107,7 @@ public final class GetCollectionResponse implements Serializable {
 		List<CardRecord> records = new ArrayList<>();
 
 		for (InventoryRecord cr : inventoryRecords) {
-			final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionRecord().getId());
+			CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionRecord().getId());
 
 			if (record == null) {
 				continue;

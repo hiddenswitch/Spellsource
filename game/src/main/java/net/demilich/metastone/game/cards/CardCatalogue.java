@@ -422,7 +422,7 @@ public class CardCatalogue {
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
-	public synchronized static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
+	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
 		if (!firstLoad()) {
 			return;
 		}

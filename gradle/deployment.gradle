@@ -232,3 +232,9 @@ task bumpVersion(type: Exec, group: 'Spellsource') {
     description('Bumps the server version')
     commandLine './deploy.sh', '-v'
 }
+
+
+task cloneMongo(type: Exec, group: 'Spellsource') {
+    description("Connects to the production database, dumps its database file, then restores the database to your local mongo.")
+    commandLine './deploy.sh', '-m'
+}

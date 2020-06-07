@@ -69,10 +69,12 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web', version: '3.9.1'
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.9.1'
     implementation group: 'io.vertx', name: 'vertx-rx-java2', version: '3.9.1'
+    implementation group: 'io.vertx', name: 'vertx-micrometer-metrics', version: '3.9.1'
     implementation group: 'io.vertx', name: 'vertx-mail-client', version: '3.9.1'
     implementation 'org.jetbrains:annotations:16.0.2'
     implementation 'io.jaegertracing:jaeger-client:1.2.0'
     implementation 'io.netty:netty-transport-native-epoll:4.1.43.Final:linux-x86_64'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.5.1'
 
     implementation('com.esotericsoftware:kryo:4.0.2') {
         exclude group: 'org.objenesis', module: '*'

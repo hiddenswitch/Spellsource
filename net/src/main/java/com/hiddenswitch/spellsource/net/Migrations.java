@@ -600,7 +600,12 @@ public interface Migrations extends Verticle {
 							CardCatalogue.loadCardsFromPackage();
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(44, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(45)
+						.withUp(thisVertx -> {
+							removeCards("spell_earthquake");
+						}))
+				.migrateTo(45, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())))
 		;
 	}
