@@ -32,12 +32,11 @@ public class DeckFormat implements Serializable {
 		}
 	}
 
-	private static Map<String, DeckFormat> FORMATS = new HashMap<>();
 
 	public static void populateFormats(CardList formatCards) {
-		FORMATS.put("All", ALL);
+		CardCatalogue.FORMATS.put("All", ALL);
 		for (Card formatCard : formatCards) {
-			FORMATS.put(formatCard.getName(), new DeckFormat()
+			CardCatalogue.FORMATS.put(formatCard.getName(), new DeckFormat()
 					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
 					.setValidDeckCondition(formatCard.getDesc().getCondition())
 					.withName(formatCard.getName())
@@ -46,11 +45,11 @@ public class DeckFormat implements Serializable {
 	}
 
 	public static DeckFormat getFormat(String name) {
-		return FORMATS.get(name);
+		return CardCatalogue.FORMATS.get(name);
 	}
 
 	public static Map<String, DeckFormat> formats() {
-		return FORMATS;
+		return CardCatalogue.FORMATS;
 	}
 
 	public static DeckFormat getSmallestSupersetFormat(Set<String> requiredSets) {
@@ -96,6 +95,10 @@ public class DeckFormat implements Serializable {
 	 */
 	public static DeckFormat spellsource() {
 		var format = getFormat("Spellsource");
+		if (format == null) {
+			CardCatalogue.loadCardsFromPackage();
+		}
+		format = getFormat("Spellsource");
 		if (format == null) {
 			throw new NullPointerException("must load cards first with CardCatalogue.loadCardsFromPackage()");
 		}

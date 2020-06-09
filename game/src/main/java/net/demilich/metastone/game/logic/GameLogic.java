@@ -82,9 +82,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int MAX_MINIONS = 7;
 	/**
-	 * The maximum number of deathrattle enchantments that can be added to an actor.
+	 * The maximum number of aftermath enchantments that can be added to an actor.
 	 */
-	public static final int MAX_DEATHRATTLES = 16;
+	public static final int MAX_AFTERMATHS = 16;
 	/**
 	 * The maximum number of {@link Card} entities that can be in a {@link Zones#HAND}.
 	 */
@@ -313,7 +313,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		var shouldCreateAftermath = false;
 
 		if (host instanceof Actor) {
-			if (host.getZone() == Zones.BATTLEFIELD || host.getZone() == Zones.WEAPON || host.getZone() == Zones.HERO || host.getZone() == Zones.GRAVEYARD) {
+			var inValidZone = host.getZone() == Zones.BATTLEFIELD || host.getZone() == Zones.WEAPON || host.getZone() == Zones.HERO || host.getZone() == Zones.GRAVEYARD;
+			var tooManyAftermaths = hasTooManyAftermaths(host);
+			if (inValidZone && !tooManyAftermaths) {
 				shouldCreateAftermath = true;
 			}
 		}
@@ -327,6 +329,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		return Optional.empty();
+	}
+
+	public boolean hasTooManyAftermaths(Entity host) {
+		return host.getAttributeValue(Attribute.AFTERMATH_COUNT) > MAX_AFTERMATHS;
 	}
 
 	/**
@@ -459,6 +465,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (enchantment.getSourceCard() == null) {
 			enchantment.setSourceCard(host.getSourceCard());
+		}
+
+		if (enchantment instanceof Aftermath) {
+			var tooManyAftermaths = hasTooManyAftermaths(host);
+			if (tooManyAftermaths) {
+				LOGGER.error("addEnchantment {} {}: Too many aftermaths on {}", context.getGameId(), effectSource, host);
+			}
 		}
 
 		enchantment.onAdd(context, player, effectSource, host);
@@ -3758,7 +3771,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (isDrawnFromDeck) {
 				player.getStatistics().cardDrawn();
 			}
- 			fireGameEvent(new DrawCardEvent(context, playerId, card, isDrawnFromDeck));
+			fireGameEvent(new DrawCardEvent(context, playerId, card, isDrawnFromDeck));
 
 			if (isDrawnFromDeck && card.hasAttribute(Attribute.CASTS_WHEN_DRAWN)) {
 				revealCard(player, card);
@@ -4227,11 +4240,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@NotNull
-	public Stream<Aftermath> getAftermaths(Actor actor) {
+	public Stream<Aftermath> getAftermaths(Entity host) {
 		return context.getTriggers().stream()
 				.filter(t -> t instanceof Aftermath)
 				.map(t -> (Aftermath) t)
-				.filter(a -> !a.isExpired() && a.isActivated() && Objects.equals(a.getHostReference(), actor.getReference()));
+				.filter(a -> !a.isExpired() && a.isActivated() && Objects.equals(a.getHostReference(), host.getReference()));
 	}
 
 	/**
@@ -5024,7 +5037,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		fireGameEvent(new BoardChangedEvent(context));
 	}
 
-	public Random getRandom() {
+	public XORShiftRandom getRandom() {
 		return random;
 	}
 

@@ -5,6 +5,7 @@ import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -215,7 +216,7 @@ public class DraftLogic {
 		return getRandom().nextFloat();
 	}
 
-	private Random getRandom() {
+	private XORShiftRandom getRandom() {
 		return getContext().getPrivateState().getRandom();
 	}
 

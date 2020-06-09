@@ -37,6 +37,7 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	private EntityReference targetReference;
 	private boolean overrideChild;
 
+	@Suspendable
 	public boolean canBeExecutedOn(GameContext gameContext, Player player, Entity entity) {
 		return true;
 	}

@@ -1,6 +1,9 @@
 package net.demilich.metastone.game.spells.trigger;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
@@ -24,6 +27,25 @@ public final class Aftermath extends Enchantment {
 		setOwner(host.getOwner());
 		setSourceCard(sourceCard);
 		this.aftermath = spellDesc;
+	}
+
+	@Override
+	@Suspendable
+	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
+		if (host != null && !added) {
+			host.modifyAttribute(Attribute.AFTERMATH_COUNT, 1);
+		}
+		super.onAdd(context, player, source, host);
+	}
+
+	@Override
+	@Suspendable
+	public void expire(GameContext context) {
+		var host = context.resolveSingleTarget(getHostReference());
+		if (host != null && !expired) {
+			host.modifyAttribute(Attribute.AFTERMATH_COUNT, -1);
+		}
+		super.expire(context);
 	}
 
 	@Override

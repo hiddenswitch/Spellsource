@@ -3,6 +3,7 @@ package net.demilich.metastone.game.cards;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.*;
@@ -114,7 +115,7 @@ public final class CardZone extends EntityZone<Card> implements CardList {
 	}
 
 	@Override
-	public CardList shuffle(Random random) {
+	public CardList shuffle(XORShiftRandom random) {
 		Collections.shuffle(internal, random);
 		for (int i = 0; i < internal.size(); i++) {
 			internal.get(i).setEntityLocation(new EntityLocation(getZone(), getPlayer(), i));

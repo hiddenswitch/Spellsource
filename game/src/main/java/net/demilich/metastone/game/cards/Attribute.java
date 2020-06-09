@@ -1186,15 +1186,22 @@ public enum Attribute {
 	 */
 	STARTING_TURN,
 	/**
-	 * Attribute to track if a spell should cast itself automatically when drawn, also drawing another card in the process.
+	 * Attribute to track if a spell should cast itself automatically when drawn, also drawing another card in the
+	 * process.
 	 */
 	CASTS_WHEN_DRAWN,
-
+	/**
+	 * Stores the Eidolon effect tribe.
+	 */
 	EIDOLON_RACE,
 	/**
 	 * Represents the minimum attack that auras can reduce an actor's attack to
 	 */
-	AURA_MIN_ATTACK;
+	AURA_MIN_ATTACK,
+	/**
+	 * The number of aftermaths active on this entity.
+	 */
+	AFTERMATH_COUNT;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
