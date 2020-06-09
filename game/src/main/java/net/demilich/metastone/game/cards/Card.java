@@ -175,9 +175,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		clone.attributes = ((CardAttributeMap) this.attributes).clone();
+		/*clone.attributes = ((CardAttributeMap) this.attributes).clone();*/
 		clone.getAttributes().setCard(clone);
-		clone.setDesc(this.getDesc());
+		/*clone.setDesc(this.getDesc());*/
 		return clone;
 	}
 

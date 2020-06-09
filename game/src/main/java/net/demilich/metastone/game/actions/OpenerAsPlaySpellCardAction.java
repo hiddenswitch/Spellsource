@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.actions;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -25,6 +26,7 @@ public final class OpenerAsPlaySpellCardAction extends PlaySpellCardAction {
 	}
 
 	@Override
+	@Suspendable
 	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
 		EntityFilter filter = getSpell().getEntityFilter();
 		Entity source = context.resolveSingleTarget(sourceMinion);

@@ -33,6 +33,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.junit.platform.commons.util.ExceptionUtils;
@@ -452,7 +453,7 @@ public class TestBase {
 	}
 
 	@BeforeAll
-	public static void loadCards() throws Exception {
+	public static void loadCards() {
 		CardCatalogue.loadCardsFromPackage();
 	}
 

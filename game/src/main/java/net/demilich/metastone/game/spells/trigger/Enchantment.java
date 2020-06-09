@@ -91,6 +91,7 @@ public class Enchantment extends Entity implements Trigger {
 	protected int firesThisSequence;
 	protected boolean copyToActor;
 	protected Zones[] zones;
+	protected boolean added;
 
 	public Enchantment() {
 	}
@@ -170,6 +171,7 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	@Suspendable
 	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
+		added = true;
 	}
 
 	/**
@@ -274,6 +276,7 @@ public class Enchantment extends Entity implements Trigger {
 		clone.setId(IdFactory.UNASSIGNED);
 		clone.setEntityLocation(EntityLocation.UNASSIGNED);
 		clone.hostReference = EntityReference.NONE;
+		clone.added = false;
 		clone.expired = false;
 		clone.fires = 0;
 		if (!isPersistentOwner()) {
@@ -378,6 +381,7 @@ public class Enchantment extends Entity implements Trigger {
 		return oneTurn;
 	}
 
+	@Suspendable
 	public boolean fires(GameEvent event) {
 		var host = event.getGameContext().resolveSingleTarget(hostReference, false);
 		// Expired
