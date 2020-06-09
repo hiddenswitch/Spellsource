@@ -14,7 +14,7 @@ jdk:
 services:
   - mongodb
 script:
-  - travis_wait 50 gradle test
+  - travis_wait 50 ./gradlew test
 env:
   global:
     JAVA_OPTS=-Xmx1024m
