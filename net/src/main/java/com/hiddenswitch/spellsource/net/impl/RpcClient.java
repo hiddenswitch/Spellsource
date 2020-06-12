@@ -99,7 +99,7 @@ public interface RpcClient<T> {
 	 * to an API.
 	 * <p>
 	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
-	 * (e.g., a handler wrapped in {@link Sync#suspendableHandler(SuspendableAction1)}) to use this proxy. The methods
+	 * (e.g., a handler wrapped in {@link Sync#fiber(SuspendableAction1)}) to use this proxy. The methods
 	 * called on the proxy will return their values, even though the call with go across the event bus.
 	 * <p>
 	 * You <b>can</b> reuse this proxy for more than one sync method call.
@@ -114,7 +114,7 @@ public interface RpcClient<T> {
 	 * to an API as served by a specific instance.
 	 * <p>
 	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
-	 * (e.g., a handler wrapped in {@link Sync#suspendableHandler(SuspendableAction1)}) to use this proxy. The methods
+	 * (e.g., a handler wrapped in {@link Sync#fiber(SuspendableAction1)}) to use this proxy. The methods
 	 * called on the proxy will return their values, even though the call with go across the event bus.
 	 * <p>
 	 * You <b>can</b> reuse this proxy for more than one sync method call.
@@ -132,7 +132,7 @@ public interface RpcClient<T> {
 	 * {@link co.paralleluniverse.fibers.Fiber} but not enforced to be.
 	 * <p>
 	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
-	 * (e.g., a handler wrapped in {@link Sync#suspendableHandler(SuspendableAction1)}) to use this proxy. The methods
+	 * (e.g., a handler wrapped in {@link Sync#fiber(SuspendableAction1)}) to use this proxy. The methods
 	 * called on the proxy will return their values, even though the call with go across {@link
 	 * io.vertx.core.eventbus.EventBus}.
 	 * <p>

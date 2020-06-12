@@ -7,7 +7,6 @@ import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 import org.asynchttpclient.netty.ws.NettyWebSocket;
 import org.asynchttpclient.ws.WebSocketListener;
 import org.asynchttpclient.ws.WebSocketUpgradeHandler;
-import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket, AutoCloseable {
@@ -69,7 +69,7 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 
 	public void onError(Throwable e) {
 		ExceptionUtils.printRootCauseStackTrace(e);
-		Assert.fail(e.getMessage());
+		fail(e.getMessage());
 	}
 
 	@Override

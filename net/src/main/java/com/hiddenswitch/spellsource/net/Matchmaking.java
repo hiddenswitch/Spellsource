@@ -11,14 +11,10 @@ import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableQueue;
-import com.hiddenswitch.spellsource.net.impl.DeckId;
-import com.hiddenswitch.spellsource.net.impl.GameId;
-import com.hiddenswitch.spellsource.net.impl.UserId;
+import com.hiddenswitch.spellsource.net.impl.*;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.models.ConfigurationRequest;
 import com.hiddenswitch.spellsource.net.models.MatchmakingRequest;
-import com.hiddenswitch.spellsource.net.impl.MatchmakingQueueConfiguration;
-import com.hiddenswitch.spellsource.net.impl.MatchmakingQueueEntry;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -41,7 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.getContextScheduler;
 
 /**
@@ -429,11 +425,11 @@ public interface Matchmaking extends Verticle {
 		Connection.connected((connection, fut) -> {
 			LOGGER.trace("handleConnections {}: Matchmaking ready", connection.userId());
 			// If the user disconnects, dequeue them immediately.
-			connection.endHandler(suspendableHandler(v -> {
+			connection.endHandler(Sync.fiber(v -> {
 				dequeue(new UserId(connection.userId()));
 			}));
 
-			connection.handler(suspendableHandler(msg -> {
+			connection.handler(Sync.fiber(msg -> {
 				EnvelopeMethod method = msg.getMethod();
 
 				if (method != null) {

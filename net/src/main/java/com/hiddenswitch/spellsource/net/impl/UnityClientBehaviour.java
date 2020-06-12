@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -95,7 +95,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalArgumentException("noActivityTimeout must be positive");
 		}
 
-		reader.handler(suspendableHandler(this::handleWebSocketMessage));
+		reader.handler(com.hiddenswitch.spellsource.net.impl.Sync.fiber(this::handleWebSocketMessage));
 	}
 
 	private void secondIntervalElapsed(Long timer) {
@@ -450,7 +450,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				throw new RuntimeException(execution);
 			}
 		} else {
-			suspendableHandler(callback).handle(action);
+			com.hiddenswitch.spellsource.net.impl.Sync.fiber(callback).handle(action);
 		}
 	}
 

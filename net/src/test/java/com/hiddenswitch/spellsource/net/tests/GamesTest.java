@@ -3,24 +3,27 @@ package com.hiddenswitch.spellsource.net.tests;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.impl.UserId;
+import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
-import io.vertx.ext.unit.TestContext;
-import org.junit.Test;
+import io.vertx.core.Vertx;
+import io.vertx.junit5.Timeout;
+import io.vertx.junit5.VertxTestContext;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GamesTest extends SpellsourceTestBase {
 
-	@Test(timeout = 15000L)
-	public void testReconnectsResumesMulligan(TestContext context) {
-		sync(() -> {
+	@Test
+	@Timeout(15000)
+	public void testReconnectsResumesMulligan(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
 			AtomicInteger mulligans = new AtomicInteger(0);
 			try (UnityClient client = new UnityClient(context) {
 				@Override
@@ -35,28 +38,26 @@ public class GamesTest extends SpellsourceTestBase {
 				invoke0(client::matchmakeQuickPlay, null);
 				invoke0(client::waitUntilDone);
 				Strand.sleep(100L);
-				context.assertFalse(client.isConnected());
-//				Strand.sleep(100L);
-				// Game should still be running
-				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
-//				Strand.sleep(100L);
+				assertFalse(client.isConnected());
+				assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 				// Reconnect
 				client.getTurnsToPlay().set(999);
 				client.play();
 				invoke0(client::waitUntilDone);
-				context.assertTrue(client.getTurnsPlayed() > 0);
-				context.assertTrue(client.isGameOver());
-				context.assertEquals(mulligans.get(), 1);
+				assertTrue(client.getTurnsPlayed() > 0);
+				assertTrue(client.isGameOver());
+				assertEquals(mulligans.get(), 1);
 			}
-		}, context);
+		}, context, vertx);
 
 	}
 
-	@Test(timeout = 15000L)
-	public void testReconnectsResumesNormalActions(TestContext context) throws InterruptedException {
+	@Test
+	@Timeout(15000)
+	public void testReconnectsResumesNormalActions(Vertx vertx, VertxTestContext context) throws InterruptedException {
 		AtomicInteger requests = new AtomicInteger();
 		List<Integer> actions = new ArrayList<>();
-		sync(() -> {
+		runOnFiberContext(() -> {
 			try (UnityClient client = new UnityClient(context) {
 				@Override
 				protected boolean onRequestAction(ServerToClientMessage message) {
@@ -67,7 +68,7 @@ public class GamesTest extends SpellsourceTestBase {
 						disconnect();
 						return false;
 					} else if (reqs == 1) {
-						context.assertEquals(message.getActions().getCompatibility().size(), actions.size());
+						assertEquals(message.getActions().getCompatibility().size(), actions.size());
 					}
 
 					return true;
@@ -77,17 +78,17 @@ public class GamesTest extends SpellsourceTestBase {
 				invoke0(client::matchmakeQuickPlay, null);
 				invoke0(client::waitUntilDone);
 				Strand.sleep(100L);
-				context.assertFalse(client.isConnected());
+				assertFalse(client.isConnected());
 				Strand.sleep(100L);
 				// Game should still be running
-				context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
+				assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 				Strand.sleep(100L);
 				// Reconnect
 				invoke0(client::play);
 				invoke0(client::waitUntilDone);
-				context.assertTrue(client.getTurnsPlayed() > 0);
-				context.assertTrue(client.isGameOver());
+				assertTrue(client.getTurnsPlayed() > 0);
+				assertTrue(client.isGameOver());
 			}
-		}, context);
+		}, context, vertx);
 	}
 }

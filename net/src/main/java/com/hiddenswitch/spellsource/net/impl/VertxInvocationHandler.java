@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitFiber;
 
 /**
@@ -164,6 +164,6 @@ final class VertxInvocationHandler<T> implements InvocationHandler, Serializable
 			throw new RuntimeException("Unspecified serialization option in invocation.");
 		}
 
-		eb.request(address, message, deliveryOptions, suspendableHandler(handler));
+		eb.request(address, message, deliveryOptions, Sync.fiber(handler));
 	}
 }

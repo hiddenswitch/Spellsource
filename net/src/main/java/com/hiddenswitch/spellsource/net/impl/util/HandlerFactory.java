@@ -5,6 +5,7 @@ import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.net.Accounts;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.Gateway;
+import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.net.impl.WebResult;
 import io.vertx.core.Handler;
@@ -14,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * Configures handlers for HTTP requests.
@@ -32,7 +33,7 @@ public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
 
 	public static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
-		return suspendableHandler((context) -> {
+		return Sync.fiber((context) -> {
 			Throwable t = null;
 			try {
 				handler.call(context);

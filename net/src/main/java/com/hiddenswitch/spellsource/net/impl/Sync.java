@@ -4,17 +4,20 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.Tracing;
 import io.atomix.vertx.VertxFutures;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.ext.sync.SuspendableRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.*;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.getContextScheduler;
 
 /**
  * Contains utilities for:
@@ -23,7 +26,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * methods</li>
  * <li>Creating handlers for vertx callbacks that support throwing {@link co.paralleluniverse.fibers.SuspendExecution}
  * (i.e. checked exception that ensures your fiber will be instrumented) using {@link
- * #suspendableHandler(SuspendableAction1)}</li>
+ * #fiber(SuspendableAction1)}</li>
  * <li>Calling a fiber-synchronous method at a later time using {@link #defer(SuspendableAction1)}.</li>
  * </ul>
  */
@@ -35,24 +38,36 @@ public class Sync {
 	 */
 	@Suspendable
 	public static void defer(SuspendableAction1<Void> handler) {
-		Vertx.currentContext().runOnContext(suspendableHandler(handler));
+		Vertx.currentContext().runOnContext(fiber(handler));
 	}
 
 	@Suspendable
-	public static <T> Handler<T> suspendableHandler(SuspendableAction1<T> handler) {
-		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
-		return suspendableHandler(scheduler, handler);
+	public static <T> Handler<T> fiber(SuspendableAction1<T> handler) {
+		var scheduler = getContextScheduler();
+		return fiber(scheduler, handler);
+	}
+
+	@Suspendable
+	public static void fiber(SuspendableCallable<?> context) {
+		var fiber = new Fiber<>(getContextScheduler(), context);
+		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+		fiber.start();
+	}
+
+	@Suspendable
+	public static void fiber(SuspendableRunnable context) {
+		var fiber = new Fiber<Void>(getContextScheduler(), context::run);
+		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+		fiber.start();
 	}
 
 	@NotNull
 	@Suspendable
-	public static <T> Handler<T> suspendableHandler(FiberScheduler scheduler, SuspendableAction1<T> handler) {
-		return p -> {
-			Fiber<Void> voidFiber = new Fiber<>(scheduler, () -> handler.call(p));
-			voidFiber.setUncaughtExceptionHandler((f, e) -> {
-				Tracing.error(e);
-			});
-			voidFiber.start();
+	public static <T> Handler<T> fiber(FiberScheduler scheduler, SuspendableAction1<T> handler) {
+		return v -> {
+			var fiber = new Fiber<Void>(scheduler, () -> handler.call(v));
+			fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+			fiber.start();
 		};
 	}
 

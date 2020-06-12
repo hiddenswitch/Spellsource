@@ -81,7 +81,7 @@ public class Fiber<V> extends Strand implements Joinable<V>, Serializable, Futur
     private static final long serialVersionUID = 2783452871536981L;
     protected static final FlightRecorder flightRecorder = Debug.isDebug() ? Debug.getGlobalFlightRecorder() : null;
 
-    private static final boolean verifyInstrumentation = SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.verifyInstrumentation");
+    private static final boolean verifyInstrumentation = false; //SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.verifyInstrumentation");
 
     static {
         if (Debug.isDebug())

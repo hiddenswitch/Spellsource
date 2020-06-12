@@ -98,7 +98,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'org.junit.jupiter') {
-                    details.useVersion '5.6.0-M1'
+                    details.useVersion '5.6.2'
                 }
 
                 if (details.requested.name == 'joda-time') {

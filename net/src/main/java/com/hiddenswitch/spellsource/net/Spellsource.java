@@ -4,47 +4,27 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hiddenswitch.spellsource.cards.base.BaseCardResources;
 import com.hiddenswitch.spellsource.net.impl.Trigger;
-import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.*;
-import com.hiddenswitch.spellsource.net.models.CollectionTypes;
-import com.hiddenswitch.spellsource.net.models.DeckDeleteRequest;
-import com.hiddenswitch.spellsource.net.models.MigrationRequest;
-import com.hiddenswitch.spellsource.net.impl.Mongo;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import io.vertx.core.*;
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
-import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
-import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.events.GameEvent;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import static com.hiddenswitch.spellsource.net.Draft.DRAFTS;
-import static com.hiddenswitch.spellsource.net.Inventory.COLLECTIONS;
-import static com.hiddenswitch.spellsource.net.Inventory.INVENTORY;
-import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
-import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
-import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -58,6 +38,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class Spellsource {
 	private static Spellsource instance;
+	private final int gatewayPort;
 	private List<DeckCreateRequest> cachedStandardDecks;
 	private Map<String, PersistenceHandler> persistAttributeHandlers = new ConcurrentHashMap<>();
 	private Map<String, Trigger> gameTriggers = new ConcurrentHashMap<>();
@@ -67,7 +48,8 @@ public class Spellsource {
 		DatabindCodec.mapper().setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 	}
 
-	protected Spellsource() {
+	protected Spellsource(int gatewayPort) {
+		this.gatewayPort = gatewayPort;
 	}
 
 	/**
@@ -77,10 +59,14 @@ public class Spellsource {
 	 */
 	public synchronized static Spellsource spellsource() {
 		if (instance == null) {
-			instance = new Spellsource();
+			instance = new Spellsource(Configuration.apiGatewayPort());
 		}
 
 		return instance;
+	}
+
+	public synchronized static Spellsource spellsource(int gatewayPort) {
+		return new Spellsource(gatewayPort);
 	}
 
 	/**
@@ -207,7 +193,7 @@ public class Spellsource {
 
 	protected List<Supplier<Verticle>> services() {
 		return Arrays.asList(
-				Gateway::create,
+				() -> Gateway.create(gatewayPort),
 				Games::create
 		);
 	}
