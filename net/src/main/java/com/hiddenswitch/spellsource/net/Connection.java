@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -79,7 +79,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @return
 	 */
 	static Handler<RoutingContext> handler() {
-		return suspendableHandler(Connection::connected);
+		return Sync.fiber(Connection::connected);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			// All handlers should run simultaneously but we'll wait until the handlers have run
 			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
 				Promise<Void> fut = Promise.promise();
-				Vertx.currentContext().runOnContext(suspendableHandler(v -> {
+				Vertx.currentContext().runOnContext(Sync.fiber(v -> {
 					span.log("setupHandler");
 					setupHandler.handle(connection, fut);
 				}));

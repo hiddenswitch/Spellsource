@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMultimap;
 import com.hiddenswitch.spellsource.net.impl.AddedChangedRemoved;
 import com.hiddenswitch.spellsource.net.impl.ConversationId;
+import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import io.reactivex.disposables.Disposable;
 import io.vertx.core.Future;
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * Provides the methods to help users message each other.
@@ -27,7 +28,7 @@ public interface Conversations {
 			defer(v1 -> {
 				try {
 					SuspendableMultimap<ConversationId, ChatMessage> conversations = SuspendableMultimap.getOrCreate("conversations");
-					connection.handler(suspendableHandler(msg -> {
+					connection.handler(Sync.fiber(msg -> {
 						// Send a message
 						if (msg.getMethod() != null && msg.getMethod().getSendMessage() != null) {
 							EnvelopeMethodSendMessage sendMessage = msg.getMethod().getSendMessage();

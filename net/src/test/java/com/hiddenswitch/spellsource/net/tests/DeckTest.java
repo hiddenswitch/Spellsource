@@ -4,19 +4,17 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
-import com.hiddenswitch.spellsource.net.models.CreateAccountResponse;
+import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
+import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
-import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
-import com.hiddenswitch.spellsource.net.models.*;
-import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,35 +25,33 @@ import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Created by bberman on 2/16/17.
- */
 public class DeckTest extends SpellsourceTestBase {
 
 	@Test
-	public void testCreateDeck(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse player1 = createRandomAccount();
-			final String userId1 = player1.getUserId();
+	public void testCreateDeck(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var player1 = createRandomAccount();
+			var userId1 = player1.getUserId();
 			Logic.initializeUser(InitializeUserRequest.create(userId1).withUserId(userId1));
-			DeckCreateResponse deckCreateResponse = createDeckForUserId(userId1);
-			GetCollectionResponse collectionResponse = getDeck(deckCreateResponse.getDeckId());
-			context.assertEquals(collectionResponse.getInventoryRecords().size(), 30);
-		}, context);
+			var deckCreateResponse = createDeckForUserId(userId1);
+			var collectionResponse = getDeck(deckCreateResponse.getDeckId());
+			assertEquals(collectionResponse.getInventoryRecords().size(), 30);
+		}, context, vertx);
 	}
 
 	@Test
-	public void testCreateManyDecks(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse player1 = createRandomAccount();
-			final String userId1 = player1.getUserId();
+	public void testCreateManyDecks(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var player1 = createRandomAccount();
+			var userId1 = player1.getUserId();
 			Logic.initializeUser(InitializeUserRequest.create(userId1).withUserId(userId1));
 
-			for (int i = 0; i < 100; i++) {
-				context.assertEquals(getDeck(createDeckForUserId(userId1).getDeckId()).getInventoryRecords().size(), 30);
+			for (var i = 0; i < 100; i++) {
+				assertEquals(getDeck(createDeckForUserId(userId1).getDeckId()).getInventoryRecords().size(), 30);
 			}
-		}, context);
+		}, context, vertx);
 	}
 
 	private GetCollectionResponse getDeck(String deckId) throws SuspendExecution, InterruptedException {
@@ -63,39 +59,39 @@ public class DeckTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	public void testUpdateDecks(TestContext context) {
+	public void testUpdateDecks(Vertx vertx, VertxTestContext context) {
 		// Get my card collection
 		// Pick a card at random to replace
-		sync(() -> {
-			CreateAccountResponse player1 = createRandomAccount();
-			final String userId1 = player1.getUserId();
+		runOnFiberContext(() -> {
+			var player1 = createRandomAccount();
+			var userId1 = player1.getUserId();
 			Logic.initializeUser(InitializeUserRequest.create(userId1).withUserId(userId1));
 			// Get my card collection
-			GetCollectionResponse personalCollection = Inventory.getCollection(GetCollectionRequest.user(userId1));
-			String deckId = createDeckForUserId(userId1).getDeckId();
-			GetCollectionResponse deck1 = getDeck(deckId);
+			var personalCollection = Inventory.getCollection(GetCollectionRequest.user(userId1));
+			var deckId = createDeckForUserId(userId1).getDeckId();
+			var deck1 = getDeck(deckId);
 			// Pick a card at random to replace
-			InventoryRecord replacement = personalCollection.getInventoryRecords().get(nextInt(0, personalCollection.getInventoryRecords().size()));
-			InventoryRecord toReplace = deck1.getInventoryRecords().get(nextInt(0, deck1.getInventoryRecords().size()));
+			var replacement = personalCollection.getInventoryRecords().get(nextInt(0, personalCollection.getInventoryRecords().size()));
+			var toReplace = deck1.getInventoryRecords().get(nextInt(0, deck1.getInventoryRecords().size()));
 
 			Decks.updateDeck(DeckUpdateRequest.create(userId1, deckId, new DecksUpdateCommand()
 					.pullAllInventoryIds(Collections.singletonList(toReplace.getId()))
 					.pushInventoryIds(new DecksUpdateCommandPushInventoryIds().each(Collections.singletonList(replacement.getId())))));
 
-			GetCollectionResponse deck2 = getDeck(deckId);
-			context.assertTrue(deck2.getInventoryRecords().contains(replacement));
-			context.assertFalse(deck2.getInventoryRecords().contains(toReplace));
-		}, context);
+			var deck2 = getDeck(deckId);
+			assertTrue(deck2.getInventoryRecords().contains(replacement));
+			assertFalse(deck2.getInventoryRecords().contains(toReplace));
+		}, context, vertx);
 	}
 
 	@Test
-	public void testUpdateDecksWithCardIds(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse player1 = createRandomAccount();
-			final String userId = player1.getUserId();
-			CreateCollectionResponse emptyUserCollection = Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
-			DeckCreateResponse deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", "TEST"));
-			DeckUpdateResponse update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
+	public void testUpdateDecksWithCardIds(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var player1 = createRandomAccount();
+			var userId = player1.getUserId();
+			Inventory.createCollection(CreateCollectionRequest.emptyUserCollection(userId));
+			var deck = Decks.createDeck(DeckCreateRequest.empty(userId, "name", "TEST"));
+			var update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
 					.pushCardIds(new DecksUpdateCommandPushCardIds()
 							.addEachItem("spell_test_summon_tokens")
 							.addEachItem("spell_test_summon_tokens")
@@ -103,47 +99,47 @@ public class DeckTest extends SpellsourceTestBase {
 							.addEachItem("minion_test_3_2"))));
 
 
-			context.assertEquals(4L, update.getAddedInventoryIds().stream().distinct().count());
-			GetCollectionResponse userCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
-			context.assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
-			context.assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
+			assertEquals(4L, update.getAddedInventoryIds().stream().distinct().count());
+			var userCollection = Inventory.getCollection(GetCollectionRequest.user(userId));
+			assertEquals(3L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
+			assertEquals(1L, userCollection.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
 			update = Decks.updateDeck(DeckUpdateRequest.create(userId, deck.getDeckId(), new DecksUpdateCommand()
 					.pullAllCardIds(Arrays.asList("spell_test_summon_tokens", "spell_test_summon_tokens", "minion_test_3_2"))));
-			context.assertEquals(3L, update.getRemovedInventoryIds().stream().distinct().count());
-			GetCollectionResponse updatedDeck = Inventory.getCollection(GetCollectionRequest.deck(deck.getDeckId()));
-			context.assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
-			context.assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
-		}, context);
+			assertEquals(3L, update.getRemovedInventoryIds().stream().distinct().count());
+			var updatedDeck = Inventory.getCollection(GetCollectionRequest.deck(deck.getDeckId()));
+			assertEquals(1L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("spell_test_summon_tokens")).count());
+			assertEquals(0L, updatedDeck.getInventoryRecords().stream().filter(ir -> ir.getCardId().equals("minion_test_3_2")).count());
+		}, context, vertx);
 	}
 
 	@Test
-	public void testDeleteDecks(TestContext context) {
+	public void testDeleteDecks(Vertx vertx, VertxTestContext context) {
 		// Get my card collection
 		// Delete the deck
-		sync(() -> {
-			CreateAccountResponse player1 = createRandomAccount();
-			final String userId1 = player1.getUserId();
+		runOnFiberContext(() -> {
+			var player1 = createRandomAccount();
+			var userId1 = player1.getUserId();
 			Logic.initializeUser(InitializeUserRequest.create(userId1).withUserId(userId1));
 			// Get my card collection
-			GetCollectionResponse personalCollection = Inventory.getCollection(GetCollectionRequest.user(userId1));
-			String deckId = createDeckForUserId(userId1).getDeckId();
-			GetCollectionResponse deck1 = getDeck(deckId);
-			context.assertEquals(deck1.getInventoryRecords().size(), 30);
+			var personalCollection = Inventory.getCollection(GetCollectionRequest.user(userId1));
+			var deckId = createDeckForUserId(userId1).getDeckId();
+			var deck1 = getDeck(deckId);
+			assertEquals(deck1.getInventoryRecords().size(), 30);
 			// Delete the deck
-			DeckDeleteResponse response = Decks.deleteDeck(DeckDeleteRequest.create(deckId));
-			context.assertFalse(Accounts.get(userId1).getDecks().contains(deckId));
-		}, context);
+			Decks.deleteDeck(DeckDeleteRequest.create(deckId));
+			assertFalse(Accounts.get(userId1).getDecks().contains(deckId));
+		}, context, vertx);
 	}
 
 	@Test
-	public void testGetStandardDecks(TestContext context) {
-		context.assertTrue(Spellsource.spellsource().getStandardDecks().size() > 0);
-		Spellsource.spellsource().getStandardDecks().forEach(d -> context.assertEquals(30, d.getCardIds().size()));
+	public void testGetStandardDecks() {
+		assertTrue(Spellsource.spellsource().getStandardDecks().size() > 0);
+		Spellsource.spellsource().getStandardDecks().forEach(d -> assertEquals(30, d.getCardIds().size()));
 	}
 
 	@Test
-	public void testInventoryAttributesSerializeDeserializeCorrectly(TestContext context) {
-		sync(() -> {
+	public void testInventoryAttributesSerializeDeserializeCorrectly(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
 			var car = createRandomAccount();
 			var deckCreateResponse = Decks.createDeck(
 					DeckCreateRequest.fromCardIds(HeroClass.NAVY, CardCatalogue.getOneOneNeutralMinionCardId()).withUserId(car.getUserId()));
@@ -155,21 +151,21 @@ public class DeckTest extends SpellsourceTestBase {
 					inventoryItemId, attributes
 			));
 			var jsonObject = json(record);
-			context.assertEquals(1,
+			assertEquals(1,
 					jsonObject.getJsonObject("inventoryAttributes")
 							.getJsonObject(inventoryItemId)
 							.getInteger(Attribute.ARMOR.name()), "serialize correctly");
 
 			var deserialized = jsonObject.mapTo(CollectionRecord.class);
-			context.assertEquals(1, (int) deserialized.getInventoryAttributes().get(inventoryItemId).get(Attribute.ARMOR), "deserializes correctly");
-		}, context);
+			assertEquals(1, (int) deserialized.getInventoryAttributes().get(inventoryItemId).get(Attribute.ARMOR), "deserializes correctly");
+		}, context, vertx);
 	}
 
 	@Test
-	public void testPlayerEntityAttributeUpdate(TestContext context) {
-		sync(() -> {
-			try (UnityClient client = new UnityClient(context)) {
-				client.createUserAccount();
+	public void testPlayerEntityAttributeUpdate(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			try (var client = new UnityClient(context)) {
+				invoke0(client::createUserAccount);
 				var createDeckResult = createDeckForUserId(client.getUserId().toString());
 				var gameDeck = createDeckResult.getCollection().asDeck(client.getUserId().toString());
 				var signatureCardId = gameDeck.getCards().get(0).getCardId();
@@ -185,13 +181,13 @@ public class DeckTest extends SpellsourceTestBase {
 				var serverGameContext = getServerGameContext(client.getUserId());
 				// In AI games, the player is always player zero.
 				var player = serverGameContext.orElseThrow().getPlayers().stream().filter(p -> p.getUserId().equals(client.getUserId().toString())).findFirst().orElseThrow();
-				context.assertEquals(signatureCardId, player.getAttribute(Attribute.SIGNATURE));
+				assertEquals(signatureCardId, player.getAttribute(Attribute.SIGNATURE));
 				client.waitUntilDone();
 
 				var deck = invoke(client.getApi()::decksGet, createDeckResult.getDeckId());
-				context.assertEquals(PlayerEntityAttributes.SIGNATURE, deck.getCollection().getPlayerEntityAttributes().get(0).getAttribute());
-				context.assertEquals(signatureCardId, deck.getCollection().getPlayerEntityAttributes().get(0).getStringValue());
+				assertEquals(PlayerEntityAttributes.SIGNATURE, deck.getCollection().getPlayerEntityAttributes().get(0).getAttribute());
+				assertEquals(signatureCardId, deck.getCollection().getPlayerEntityAttributes().get(0).getStringValue());
 			}
-		}, context);
+		}, context, vertx);
 	}
 }

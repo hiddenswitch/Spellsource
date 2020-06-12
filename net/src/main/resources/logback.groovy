@@ -53,7 +53,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 }
 
-root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
+root(DEBUG, ["STDOUT"])
 
 logger("io.netty", ERROR)
 logger("io.atomix", WARN)

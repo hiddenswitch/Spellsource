@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
-import com.hiddenswitch.spellsource.net.impl.Mongo;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
@@ -18,19 +17,15 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.Deployment;
 import io.vertx.core.impl.VertxInternal;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.RunTestOnContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
+import io.vertx.junit5.VertxExtension;
+import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,37 +33,26 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.core.Vertx.currentContext;
 
-@RunWith(VertxUnitRunner.class)
+@ExtendWith(VertxExtension.class)
 public abstract class SpellsourceTestBase {
 
-	protected RunTestOnContext getTestContext() {
-		return new RunTestOnContext();
-	}
-
-	@Rule
-	public RunTestOnContext contextRule = getTestContext();
-
-	@Before
-	public void setUp(TestContext testContext) throws InterruptedException {
+	@BeforeEach
+	public void setUp(Vertx vertx, VertxTestContext testContext) {
 		CardCatalogue.loadCardsFromPackage();
 		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-		Vertx vertx = contextRule.vertx();
-		vertx.exceptionHandler(testContext::fail);
+		vertx.exceptionHandler(testContext::failNow);
 		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 
-		Migrations.migrate(vertx, testContext.asyncAssertSuccess(v1 -> {
-			Spellsource.spellsource().deployAll(vertx, getConcurrency(), testContext.asyncAssertSuccess());
+		Migrations.migrate(vertx, testContext.succeeding(v1 -> {
+			Spellsource.spellsource().deployAll(vertx, getConcurrency(), testContext.completing());
 		}));
 	}
 
 	protected int getConcurrency() {
 		return Runtime.getRuntime().availableProcessors();
-	}
-
-	@After
-	public void tearDown(TestContext testContext) {
 	}
 
 	/**
@@ -91,10 +75,6 @@ public abstract class SpellsourceTestBase {
 				.withInventoryIds(inventoryIds));
 	}
 
-	public static boolean isCI() {
-		return Boolean.parseBoolean(System.getenv("CI"));
-	}
-
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
 		return Accounts.createAccount(new CreateAccountRequest().withEmailAddress("test-" + RandomStringUtils.randomAlphanumeric(32) + "@test.com")
 				.withName("username" + RandomStringUtils.randomAlphanumeric(32)).withPassword("password"));
@@ -109,16 +89,30 @@ public abstract class SpellsourceTestBase {
 	}
 
 	@Suspendable
-	public void sync(SuspendableRunnable action, TestContext testContext) {
-		Handler<AsyncResult<Void>> handler = testContext.asyncAssertSuccess();
-		Vertx.currentContext().runOnContext(suspendableHandler(v -> {
+	public void runOnFiberContext(SuspendableRunnable action, VertxTestContext testContext, Vertx vertx, Handler<AsyncResult<Void>> handler) {
+		vertx.runOnContext(v -> fiber(() -> {
 			try {
 				action.run();
 				handler.handle(Future.succeededFuture());
 			} catch (Throwable throwable) {
 				handler.handle(Future.failedFuture(throwable));
+				testContext.failNow(throwable);
 			}
 		}));
+	}
+
+	@Suspendable
+	public void runOnFiberContext(SuspendableRunnable action, VertxTestContext testContext, Vertx vertx) {
+		runOnFiberContext(action, testContext, vertx, testContext.completing());
+	}
+
+	@Suspendable
+	protected void verify(VertxTestContext context, SuspendableRunnable block) {
+		try {
+			block.run();
+		} catch (Throwable t) {
+			context.failNow(t);
+		}
 	}
 
 	/**
@@ -129,7 +123,7 @@ public abstract class SpellsourceTestBase {
 	 */
 	@Suspendable
 	protected Optional<ServerGameContext> getServerGameContext(UserId eitherUserId) {
-		var vertx = (VertxInternal) contextRule.vertx();
+		var vertx = (VertxInternal) currentContext().owner();
 
 		return vertx.deploymentIDs()
 				.stream()

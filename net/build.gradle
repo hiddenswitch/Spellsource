@@ -80,15 +80,15 @@ dependencies {
         exclude group: 'org.objenesis', module: '*'
     }
 
-    implementation('io.atomix:atomix:3.1.5') {
+    implementation('io.atomix:atomix:3.1.8') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
-    implementation('io.atomix:atomix-raft:3.1.5') {
+    implementation('io.atomix:atomix-raft:3.1.8') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
-    implementation('io.atomix:atomix-primary-backup:3.1.5') {
+    implementation('io.atomix:atomix-primary-backup:3.1.8') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
@@ -110,10 +110,7 @@ dependencies {
     testRuntimeOnly group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
     testRuntimeOnly 'org.glassfish.jersey.core:jersey-common:2.+'
 
-    testImplementation(platform("org.junit:junit-bom:5.6.0-M1"))
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine") {
-        because 'allows JUnit 3 and JUnit 4 tests to run'
-    }
+    testImplementation(platform("org.junit:junit-bom:5.6.2"))
     testRuntimeOnly(project(':client')) {
         exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
         exclude group: 'javax.ws.rs', module: 'jsr311-api'
@@ -124,15 +121,8 @@ dependencies {
     }
 
     testImplementation project(':testutils')
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
     testImplementation 'io.vertx:vertx-core:3.9.1:tests'
-    testImplementation('org.powermock:powermock-module-junit4:2.0.2') {
-        exclude group: 'org.objenesis', module: '*'
-    }
-    testImplementation('org.powermock:powermock-api-mockito2:2.0.2') {
-        exclude group: 'org.objenesis', module: '*'
-    }
-    testImplementation group: 'io.vertx', name: 'vertx-unit', version: '3.9.1'
+    testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.1'
     testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.11.2.Final') {
         exclude group: 'javax.activation', module: 'activation'
         exclude group: 'org.jboss.spec.javax.annotation', module: '*'
@@ -142,7 +132,6 @@ dependencies {
     testImplementation(group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9') {
         exclude group: 'com.sun.activation', module: '*'
     }
-    testImplementation group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.6'
 }
 
 run {

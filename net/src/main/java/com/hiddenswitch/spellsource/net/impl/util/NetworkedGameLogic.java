@@ -9,7 +9,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * Handles interrupting a request action.

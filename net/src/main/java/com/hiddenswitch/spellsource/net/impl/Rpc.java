@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * This class provides a way to register and connect to verticles advertised on the Vert.x {@link EventBus}. Its
@@ -124,10 +124,10 @@ public class Rpc {
 			MessageConsumer consumer;
 			if (serialization == RpcOptions.Serialization.JAVA) {
 				eventBusHandler = new BufferEventBusHandler<>(finalMethod);
-				consumer = eb.consumer(address, suspendableHandler(eventBusHandler));
+				consumer = eb.consumer(address, fiber(eventBusHandler));
 			} else if (serialization == RpcOptions.Serialization.JSON) {
 				eventBusHandler = new JsonEventBusHandler<>(finalMethod, method.getParameterTypes()[0]);
-				consumer = eb.<JsonObject>consumer(address, suspendableHandler(eventBusHandler));
+				consumer = eb.<JsonObject>consumer(address, fiber(eventBusHandler));
 			} else {
 				throw new RuntimeException("Unexpected serialization option for this event bus handler.");
 			}
@@ -139,7 +139,7 @@ public class Rpc {
 				AbstractVerticle deployedInstance = (AbstractVerticle) instance;
 				// Specific deployment instance ID consumer.
 				final String specificInstanceAddress = deployedInstance.deploymentID() + "::" + address;
-				MessageConsumer consumerSpecific = eb.consumer(specificInstanceAddress, suspendableHandler(eventBusHandler));
+				MessageConsumer consumerSpecific = eb.consumer(specificInstanceAddress, fiber(eventBusHandler));
 				return Stream.of(consumer, consumerSpecific);
 			}
 
