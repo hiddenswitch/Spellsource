@@ -1,7 +1,9 @@
 package com.hiddenswitch.spellsource.net.tests.impl;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -31,6 +33,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
@@ -80,6 +85,26 @@ public abstract class SpellsourceTestBase {
 				.withName("username" + RandomStringUtils.randomAlphanumeric(32)).withPassword("password"));
 	}
 
+	public static CreateAccountResponse createRandomAccount(VertxTestContext testContext, Vertx vertx) throws ExecutionException, InterruptedException {
+		if (Fiber.isCurrentFiber()) {
+			try {
+				return createRandomAccount();
+			} catch (SuspendExecution suspendExecution) {
+				throw new RuntimeException(suspendExecution);
+			}
+		} else {
+			// we're in the test worker
+			var response = new AtomicReference<CreateAccountResponse>();
+
+			joinOnFiberContext(() -> {
+				response.set(createRandomAccount());
+			}, testContext, vertx);
+
+			return response.get();
+		}
+
+	}
+
 	public static DefaultApi getApi() {
 		DefaultApi api = new DefaultApi();
 		api.setApiClient(new ApiClient());
@@ -104,6 +129,21 @@ public abstract class SpellsourceTestBase {
 	@Suspendable
 	public void runOnFiberContext(SuspendableRunnable action, VertxTestContext testContext, Vertx vertx) {
 		runOnFiberContext(action, testContext, vertx, testContext.completing());
+	}
+
+	@Suspendable
+	public static void joinOnFiberContext(SuspendableRunnable action, VertxTestContext testContext, Vertx vertx) throws ExecutionException, InterruptedException {
+		var fut = new SettableFuture<Void>();
+		vertx.runOnContext(v -> fiber(() -> {
+			try {
+				action.run();
+				fut.set(null);
+			} catch (Throwable throwable) {
+				testContext.failNow(throwable);
+				fut.setException(throwable);
+			}
+		}));
+		fut.get();
 	}
 
 	@Suspendable
