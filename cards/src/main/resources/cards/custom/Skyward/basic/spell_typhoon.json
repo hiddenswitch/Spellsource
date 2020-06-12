@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Deal $3 damage to all enemies.",
+  "description": "Deal 3 damage to all enemies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

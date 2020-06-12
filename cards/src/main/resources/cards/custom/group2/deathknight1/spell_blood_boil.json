@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to all enemies. Restore #1 Health to your champion for each one hit.",
+  "description": "Deal 2 damage to all enemies. Restore #1 Health to your champion for each one hit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

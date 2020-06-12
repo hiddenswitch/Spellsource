@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "BLUEGREY",
   "rarity": "FREE",
-  "description": "Take $2 damage and summon a 2/2 Lesser Oni.",
+  "description": "Take 2 damage and summon a 2/2 Lesser Oni.",
   "targetSelection": "NONE",
   "condition": {
     "class": "CanSummonCondition"

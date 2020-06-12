@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "COPPER",
   "rarity": "FREE",
-  "description": "Deal $2 damage.",
+  "description": "Deal 2 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",

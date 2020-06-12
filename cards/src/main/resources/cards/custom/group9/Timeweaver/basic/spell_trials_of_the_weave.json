@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Deal $4 damage to all enemies. Restore #2 Health to enemies that live.",
+  "description": "Deal 4 damage to all enemies. Restore #2 Health to enemies that live.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

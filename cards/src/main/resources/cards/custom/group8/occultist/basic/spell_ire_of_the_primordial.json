@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Deal $8 damage to two random enemy minions.",
+  "description": "Deal 8 damage to two random enemy minions.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 1,

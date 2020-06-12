@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Deal $4 damage. Roast 3 cards.",
+  "description": "Deal 4 damage. Roast 3 cards.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

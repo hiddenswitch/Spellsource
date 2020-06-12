@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "FREE",
-  "description": "Deal $6 damage randomly split among all enemy minions.",
+  "description": "Deal 6 damage randomly split among all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

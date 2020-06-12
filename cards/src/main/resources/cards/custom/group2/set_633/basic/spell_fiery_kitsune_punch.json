@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Deal $7 damage to the enemy champion.",
+  "description": "Deal 7 damage to the enemy champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

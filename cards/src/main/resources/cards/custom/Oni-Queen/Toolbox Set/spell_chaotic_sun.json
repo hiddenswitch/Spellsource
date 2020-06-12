@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Deal $4 damage. Your opponent draws a Fatigue card.",
+  "description": "Deal 4 damage. Your opponent draws a Fatigue card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

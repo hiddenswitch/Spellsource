@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to all enemies. Summon two 1/1 Tentacles with Guard",
+  "description": "Deal 1 damage to all enemies. Summon two 1/1 Tentacles with Guard",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

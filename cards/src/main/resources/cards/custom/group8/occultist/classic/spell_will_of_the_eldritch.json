@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Destroy an allied minion. Deal $2 damage to all enemies.",
+  "description": "Destroy an allied minion. Deal 2 damage to all enemies.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Deal $3 damage to all enemies. Costs (1) less for each spell cast while in hand.",
+  "description": "Deal 3 damage to all enemies. Costs (1) less for each spell cast while in hand.",
   "targetSelection": "NONE",
   "passiveTrigger": {
     "eventTrigger": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Choose a minion. At the end of your turn, deal $3 damage to it.",
+  "description": "Choose a minion. At the end of your turn, deal 3 damage to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

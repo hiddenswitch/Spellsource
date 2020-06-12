@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Draw $2 cards. Affected by Spellpower.",
+  "description": "Draw 2 cards. Affected by Spellpower.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

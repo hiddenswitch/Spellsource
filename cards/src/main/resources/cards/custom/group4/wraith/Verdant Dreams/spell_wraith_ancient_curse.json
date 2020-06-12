@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "Deal $6 damage to both champions, but bypassing YOUR armor. Then, gain 6 Armor.",
+  "description": "Deal 6 damage to both champions, but bypassing YOUR armor. Then, gain 6 Armor.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

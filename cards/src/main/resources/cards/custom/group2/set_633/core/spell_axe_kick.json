@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Deal $2 damage to a minion and adjacent minions.",
+  "description": "Deal 2 damage to a minion and adjacent minions.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

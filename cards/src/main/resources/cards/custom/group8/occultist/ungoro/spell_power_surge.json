@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to a minion. Give it Dash and Guard.",
+  "description": "Deal 1 damage to a minion. Give it Dash and Guard.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

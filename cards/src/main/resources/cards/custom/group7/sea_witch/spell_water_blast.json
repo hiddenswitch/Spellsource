@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "COMMON",
-  "description": "Deal $3 damage. Reservoir (20+): Shuffle a copy of this spell into your deck.",
+  "description": "Deal 3 damage. Reservoir (20+): Shuffle a copy of this spell into your deck.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ReservoirSpell",

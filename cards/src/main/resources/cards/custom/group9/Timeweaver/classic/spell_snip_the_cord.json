@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Deal $3 damage. Reshuffle 1, draw 1. Surge: Deal $2 more damage.",
+  "description": "Deal 3 damage. Reshuffle 1, draw 1. Surge: Deal 2 more damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

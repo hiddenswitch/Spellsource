@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Summon $1 3/3 Bat. (Increases with Spellpower)",
+  "description": "Summon 1 3/3 Bat. (Increases with Spellpower)",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

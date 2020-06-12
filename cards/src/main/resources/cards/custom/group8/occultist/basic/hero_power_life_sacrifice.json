@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Skill: Deal $1 damage. Restore #3 Health to your champion.",
+  "description": "Skill: Deal 1 damage. Restore #3 Health to your champion.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",

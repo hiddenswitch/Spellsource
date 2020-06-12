@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Deal $3 damage. Receive two 1/1 Larva.",
+  "description": "Deal 3 damage. Receive two 1/1 Larva.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

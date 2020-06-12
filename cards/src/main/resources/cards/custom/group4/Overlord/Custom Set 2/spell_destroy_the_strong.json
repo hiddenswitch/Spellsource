@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "Deal $3 damage to all minions except Captives and Underlings.",
+  "description": "Deal 3 damage to all minions except Captives and Underlings.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Choose a minion. Deal $3 damage to the minions next to it.",
+  "description": "Choose a minion. Deal 3 damage to the minions next to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

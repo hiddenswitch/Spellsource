@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to four random minions.",
+  "description": "Deal 2 damage to four random minions.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 1,

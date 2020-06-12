@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "Whenever your champion attacks, deal $3 damage to it.",
+  "description": "Whenever your champion attacks, deal 3 damage to it.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

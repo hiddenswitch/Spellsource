@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Deal $3 damage to all enemy minions. Soulbind for each one that dies.",
+  "description": "Deal 3 damage to all enemy minions. Soulbind for each one that dies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

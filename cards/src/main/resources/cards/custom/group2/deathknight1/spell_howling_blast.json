@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Deal $1 damage to all characters and Stun them.",
+  "description": "Deal 1 damage to all characters and Stun them.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

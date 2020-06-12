@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Deal $2 damage to all enemy minions.",
+  "description": "Deal 2 damage to all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Deal $2 damage. (Roast 2 cards to upgrade).",
+  "description": "Deal 2 damage. (Roast 2 cards to upgrade).",
   "passiveTrigger": {
     "countUntilCast": 2,
     "eventTrigger": {

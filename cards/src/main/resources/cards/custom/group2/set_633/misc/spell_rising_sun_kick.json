@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Deal $1 damage to a minion and adjacent minions for each minion your opponent controls.",
+  "description": "Deal 1 damage to a minion and adjacent minions for each minion your opponent controls.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

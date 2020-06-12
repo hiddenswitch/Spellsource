@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to a minion. If that kills it, deal $2 damage to adjacent minions too.",
+  "description": "Deal 2 damage to a minion. If that kills it, deal 2 damage to adjacent minions too.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

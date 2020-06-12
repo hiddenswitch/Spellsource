@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "FREE",
-  "description": "Give a minion +3 Attack. Deal $3 damage to it. (Improved by Spellpower)",
+  "description": "Give a minion +3 Attack. Deal 3 damage to it. (Improved by Spellpower)",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

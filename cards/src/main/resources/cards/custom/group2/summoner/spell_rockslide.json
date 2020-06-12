@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Deal $1 damage to all enemy minions and summon a 0/1 Pebble with Guard for each.",
+  "description": "Deal 1 damage to all enemy minions and summon a 0/1 Pebble with Guard for each.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

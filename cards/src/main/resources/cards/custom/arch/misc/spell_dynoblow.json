@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Deal $8 damage to a random minion. Then deal $4 damage to a random minion. Then $2. Then $1.",
+  "description": "Deal 8 damage to a random minion. Then deal 4 damage to a random minion. Then 2. Then 1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

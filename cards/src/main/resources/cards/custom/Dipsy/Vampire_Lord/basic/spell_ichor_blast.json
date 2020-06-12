@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Deal $2 damage to a minion, then $2 more at the end of this turn.",
+  "description": "Deal 2 damage to a minion, then 2 more at the end of this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

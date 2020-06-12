@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to a random enemy. Draw a card. Cast this when Roasted.",
+  "description": "Deal 2 damage to a random enemy. Draw a card. Cast this when Roasted.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "RoastTrigger",

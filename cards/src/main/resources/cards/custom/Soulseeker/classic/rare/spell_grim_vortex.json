@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "RARE",
-  "description": "Deal $2 damage to all minions. Costs (1) less for each allied minion.",
+  "description": "Deal 2 damage to all minions. Costs (1) less for each allied minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

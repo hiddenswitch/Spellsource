@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "<b>Wither (10).</b> Deal $1 damage.",
+  "description": "<b>Wither (10).</b> Deal 1 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

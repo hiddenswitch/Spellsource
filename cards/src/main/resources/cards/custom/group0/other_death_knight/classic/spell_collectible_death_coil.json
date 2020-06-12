@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Deal $5 damage to an enemy, or restore #5 Health to an allied character.",
+  "description": "Deal 5 damage to an enemy, or restore #5 Health to an allied character.",
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal $3 damage. Receive a Hot Meal that deals 1 damage.",
+  "description": "Deal 3 damage. Receive a Hot Meal that deals 1 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

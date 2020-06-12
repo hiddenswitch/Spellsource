@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Deal $3 damage to all minions. Invoke (7): Summon a 5/5 Worm.",
+  "description": "Deal 3 damage to all minions. Invoke (7): Summon a 5/5 Worm.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

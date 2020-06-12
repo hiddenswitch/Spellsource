@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Deal $2 damage to each player's leftmost minion. It either dies, recast this.",
+  "description": "Deal 2 damage to each player's leftmost minion. It either dies, recast this.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.RecastIfMinionsDestroyedSpell",

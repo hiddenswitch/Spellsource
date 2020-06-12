@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to all enemy minions and $3 damage to your champion.",
+  "description": "Deal 1 damage to all enemy minions and 3 damage to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

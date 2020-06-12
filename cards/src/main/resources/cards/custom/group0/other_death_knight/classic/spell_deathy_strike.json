@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Lifedrain. Deal $3 damage.",
+  "description": "Lifedrain. Deal 3 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

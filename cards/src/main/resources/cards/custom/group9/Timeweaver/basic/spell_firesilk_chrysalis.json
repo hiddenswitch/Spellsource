@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Deal $1 Damage. Gain 3 Armor.",
+  "description": "Deal 1 Damage. Gain 3 Armor.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "COMMON",
-  "description": "Deal $[4] damage to the left and rightmost enemy minions.",
+  "description": "Deal 4 damage to the left and rightmost enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

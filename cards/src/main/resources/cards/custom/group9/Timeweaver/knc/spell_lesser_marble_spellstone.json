@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "RARE",
-  "description": "Deal $1 damage to all enemies. (End your turn with unspent lun to upgrade)",
+  "description": "Deal 1 damage to all enemies. (End your turn with unspent lun to upgrade)",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

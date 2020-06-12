@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Deal $1 damage. Supremacy: Give your champion +3 Attack this turn.",
+  "description": "Deal 1 damage. Supremacy: Give your champion +3 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

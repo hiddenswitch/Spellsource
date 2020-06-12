@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "FREE",
-  "description": "Lifedrain. Deal $3 damage. Shuffle a copy of this into your opponent's deck.",
+  "description": "Lifedrain. Deal 3 damage. Shuffle a copy of this into your opponent's deck.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "RARE",
-  "description": "Deal $2 damage to a random enemy minion. If it dies, draw 2 cards.",
+  "description": "Deal 2 damage to a random enemy minion. If it dies, draw 2 cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",
