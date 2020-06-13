@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -189,9 +189,9 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	/**
 	 * Shuffles the instance with the given random number generator.
 	 *
-	 * @param random A {@link Random} instance.
+	 * @param random A {@link XORShiftRandom} instance.
 	 */
-	CardList shuffle(Random random);
+	CardList shuffle(XORShiftRandom random);
 
 	/**
 	 * Gets a {@link List} that references the contents of this instance.

@@ -1,4 +1,4 @@
-FROM oracle/graalvm-ce:19.3.1-java11 as graalvm
+FROM oracle/graalvm-ce:20.0.0-java11 as graalvm
 RUN gu install native-image
 COPY ./micro /home/app/micro
 COPY ./cards /home/app/cards

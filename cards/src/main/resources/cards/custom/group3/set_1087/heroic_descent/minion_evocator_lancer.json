@@ -10,7 +10,7 @@
   "battlecry": {
     "spell": {
       "class": "SummonSpell",
-	  "card": "token_ebon_drake",
+      "card": "token_ebon_drake",
       "value": {
         "class": "CardCountValueProvider",
         "offset": -1,
@@ -36,7 +36,7 @@
           "targetPlayer": "SELF"
         }
       }
-	}
+    }
   },
   "attributes": {
     "BATTLECRY": true

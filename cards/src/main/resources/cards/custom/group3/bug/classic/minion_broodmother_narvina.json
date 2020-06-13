@@ -14,21 +14,21 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-        "class": "SummonSpell",
-        "value": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "value1": {
           "class": "AlgebraicValueProvider",
-          "value1": {
-            "class": "AlgebraicValueProvider",
-            "value1": 7,
-            "value2": {
-              "class": "BoardCountValueProvider"
-            },
-            "operation": "SUBTRACT"
+          "value1": 7,
+          "value2": {
+            "class": "BoardCountValueProvider"
           },
-          "value2": 2,
-          "operation": "MAXIMUM"
+          "operation": "SUBTRACT"
         },
-        "card": "token_spiderling"
+        "value2": 2,
+        "operation": "MAXIMUM"
+      },
+      "card": "token_spiderling"
     },
     "maxFiresPerSequence": 7
   },

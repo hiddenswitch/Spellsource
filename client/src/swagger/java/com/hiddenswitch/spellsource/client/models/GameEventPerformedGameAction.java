@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GameEventPerformedGameAction implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("actionType")
   private ActionType actionType = null;

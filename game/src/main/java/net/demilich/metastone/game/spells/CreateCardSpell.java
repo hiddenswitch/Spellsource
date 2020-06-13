@@ -23,12 +23,10 @@ import java.util.stream.Collectors;
 
 /**
  * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
- * 		{@link CreateCardFromChoicesSpell} for an example.
+ * {@link CreateCardFromChoicesSpell} for an example.
  */
 @Deprecated
 public class CreateCardSpell extends Spell {
-
-	Logger logger = LoggerFactory.getLogger(CreateCardSpell.class);
 
 	@Suspendable
 	private SpellDesc[] discoverCardParts(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

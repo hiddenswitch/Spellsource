@@ -62,6 +62,7 @@ logger("co.paralleluniverse", ERROR)
 logger("net.demilich", WARN)
 logger("io.vertx", INFO)
 logger("io.jaegertracing", ERROR)
+logger("com.hiddenswitch.spellsource.common.Tracing", ERROR)
 
 // Production group
 logger("com.hiddenswitch", INFO)

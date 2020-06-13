@@ -113,6 +113,12 @@ Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/9871
 
 Make sure the Public group is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
 
+> The Discord bot will not compile due to an error that reads, in part, "Classes that should be initialized at run time got initialized during image building"
+
+Add the class or the package containing it to end of the list of classes in the `Args = --initialize-at-build-time=...` line to [native-image.properties](discordbot/src/main/resources/META-INF/native-image/com.hiddenswitch/discordbot/native-image.properties).
+
+You may have to regenerate reflection config using `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)

@@ -1,4 +1,3 @@
-  
 {
   "name": "Lifeform Assimilation",
   "baseManaCost": 2,
@@ -21,10 +20,10 @@
         "class": "CardCostModifierSpell",
         "target": "FRIENDLY_HERO_POWER",
         "cardCostModifier": {
-           "class": "CardCostModifier",
-           "target": "SELF",
-           "value": 1,
-           "operation": "SET"
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 1,
+          "operation": "SET"
         }
       }
     ]

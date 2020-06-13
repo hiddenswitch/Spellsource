@@ -14,7 +14,7 @@
     }
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

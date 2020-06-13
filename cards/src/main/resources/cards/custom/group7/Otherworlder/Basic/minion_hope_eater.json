@@ -8,25 +8,28 @@
   "rarity": "FREE",
   "race": "TITAN",
   "description": "Enemy minions have -2 Attack but not less than 1.",
-  "aura": {
-    "class": "BuffAura",
-    "target": "ENEMY_MINIONS",
-    "attackBonus": {
-        "class": "AlgebraicValueProvider",
-        "operation": "MAXIMUM",
-        "value1": -2,
-        "value2": {
-          "class": "AlgebraicValueProvider",
-          "operation": "NEGATE",
-          "value1": {
-            "class": "AttributeValueProvider",
-            "attribute": "ATTACK"
-          },
-          "offset": 1
-        }
+  "auras": [
+    {
+      "class": "Aura",
+      "target": "ENEMY_MINIONS",
+      "applyEffect": {
+        "class": "SetAttributeSpell",
+        "attribute": "AURA_MIN_ATTACK",
+        "value": 1
       },
-    "hpBonus": 0
-  },
+      "removeEffect": {
+        "class": "SetAttributeSpell",
+        "attribute": "AURA_MIN_ATTACK",
+        "value": 0
+      }
+    },
+    {
+      "class": "BuffAura",
+      "target": "ENEMY_MINIONS",
+      "attackBonus": -2,
+      "hpBonus": 0
+    }
+  ],
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

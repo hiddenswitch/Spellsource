@@ -17,14 +17,17 @@
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
-      "class": "SummonSpell",
-      "target": "SELF",
-      "boardPositionRelative": "RIGHT",
+      "class": "CastAfterSequenceSpell",
       "spell": {
-        "class": "SetAttributeSpell",
-        "target": "OUTPUT",
-        "value": 1,
-        "attribute": "HP"
+        "class": "SummonSpell",
+        "target": "SELF",
+        "boardPositionRelative": "RIGHT",
+        "spell": {
+          "class": "SetAttributeSpell",
+          "target": "OUTPUT",
+          "value": 1,
+          "attribute": "HP"
+        }
       }
     }
   },

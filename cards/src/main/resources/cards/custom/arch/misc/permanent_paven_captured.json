@@ -22,5 +22,6 @@
     "PERMANENT": true
   },
   "collectible": false,
+  "fileFormatVersion": 1,
   "set": "CUSTOM"
 }

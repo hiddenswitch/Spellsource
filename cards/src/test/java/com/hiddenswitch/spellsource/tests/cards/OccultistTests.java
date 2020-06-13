@@ -259,4 +259,15 @@ public class OccultistTests extends TestBase {
 			}
 		});
 	}
+
+	@Test
+	public void testForScience() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, 1, 1);
+			playCard(context, player, "spell_freezing_over", minion);
+			Minion minion2 = playMinionCard(context, player, 2, 2);
+			assertEquals(4, minion.getAttack());
+			assertEquals(2, minion2.getAttack());
+		});
+	}
 }

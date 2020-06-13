@@ -1,13 +1,13 @@
 /*
  * Quasar: lightweight threads and actors for the JVM.
  * Copyright (c) 2013-2015, Parallel Universe Software Co. All rights reserved.
- * 
+ *
  * This program and the accompanying materials are dual-licensed under
  * either the terms of the Eclipse Public License v1.0 as published by
  * the Eclipse Foundation
- *  
+ *
  *   or (per the licensee's choosing)
- *  
+ *
  * under the terms of the GNU Lesser General Public License version 3.0
  * as published by the Free Software Foundation.
  */
@@ -79,13 +79,16 @@ public class SuspendablesScanner extends Task {
     private boolean append = false;
     private String supersFile;
     private String suspendablesFile;
+    private boolean quiet;
 
     public SuspendablesScanner() {
         this.ant = getClass().getClassLoader() instanceof AntClassLoader;
         this.projectDir = null;
+	      this.quiet = true;
     }
 
     public SuspendablesScanner(Path projectDir) {
+	      this.quiet = true;
         this.ant = getClass().getClassLoader() instanceof AntClassLoader;
         this.projectDir = projectDir;
         assert !ant;
@@ -219,6 +222,38 @@ public class SuspendablesScanner extends Task {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void log(Throwable t, int msgLevel) {
+        if (quiet) {
+            return;
+        }
+        super.log(t, msgLevel);
+    }
+
+    @Override
+    public void log(String msg, Throwable t, int msgLevel) {
+        if (quiet) {
+            return;
+        }
+        super.log(msg, t, msgLevel);
+    }
+
+    @Override
+    public void log(String msg, int msgLevel) {
+        if (quiet) {
+            return;
+        }
+        super.log(msg, msgLevel);
+    }
+
+    @Override
+    public void log(String msg) {
+        if (quiet) {
+            return;
+        }
+        super.log(msg);
     }
 
     private void scanExternalSuspendables() throws IOException {

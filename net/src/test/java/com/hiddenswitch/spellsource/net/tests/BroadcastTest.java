@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.net.Broadcaster;
 import com.hiddenswitch.spellsource.net.Configuration;
 import com.hiddenswitch.spellsource.net.Gateway;
 import io.vertx.core.Vertx;
+import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -40,23 +41,19 @@ public class BroadcastTest {
 			vertx.createDatagramSocket(new DatagramSocketOptions()
 					.setReuseAddress(true)
 					.setReusePort(true))
-					.listen(verticle.getMulticastPort(), "0.0.0.0", context.asyncAssertSuccess(listening -> {
-						vertx.setTimer(1000L, v -> {
-							listening.listenMulticastGroup(verticle.getMulticastAddress(), Gateway.mainInterface().getName(), null, context.asyncAssertSuccess(socket -> {
-								vertx.setTimer(1000L, v2 -> {
-									socket.handler(packet -> {
-										String packetData = packet.data().toString();
-										if (packetData.equals(verticle.getClientCall())) {
-											return;
-										}
-										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Configuration.apiGatewayPort() + "/");
-										context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Configuration.apiGatewayPort() + "/");
-										context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Configuration.apiGatewayPort() + "/");
-										async.complete();
-									});
-									socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), context.asyncAssertSuccess());
-								});
-							}));
+					.listen(verticle.getMulticastPort() + 1, "0.0.0.0", context.asyncAssertSuccess(socket -> {
+						socket.handler(packet -> {
+							String packetData = packet.data().toString();
+							context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Configuration.apiGatewayPort() + "/");
+							context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Configuration.apiGatewayPort() + "/");
+							context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Configuration.apiGatewayPort() + "/");
+							async.complete();
+						});
+
+						var testHandler = context.<DatagramSocket>asyncAssertSuccess();
+						vertx.setTimer(2000L, v -> {
+							socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), testHandler);
+							LOGGER.info("BroadcastTest: packet sent");
 						});
 					}));
 		}));

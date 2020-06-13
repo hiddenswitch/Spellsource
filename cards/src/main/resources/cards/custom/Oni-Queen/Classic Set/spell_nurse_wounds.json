@@ -7,10 +7,10 @@
   "description": "Give all damaged allies Hidden. Draw a card for each.",
   "targetSelection": "NONE",
   "spell": {
-	"class": "MetaSpell",
-	"spells": [
-	  {
-	    "class": "AddAttributeSpell",
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
         "target": "FRIENDLY_CHARACTERS",
         "attribute": "STEALTH",
         "revertTrigger": {
@@ -20,18 +20,18 @@
         "filter": {
           "class": "DamagedFilter"
         }
-	  },
-	  {
-	    "class": "DrawCardSpell",
+      },
+      {
+        "class": "DrawCardSpell",
         "value": {
           "class": "EntityCountValueProvider",
           "target": "FRIENDLY_CHARACTERS",
           "filter": {
             "class": "DamagedFilter"
-		  }
-		}
+          }
+        }
       }
-	]
+    ]
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",

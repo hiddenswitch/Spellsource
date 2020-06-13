@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
-import com.hiddenswitch.spellsource.common.Tracing;
-import net.demilich.metastone.game.GameContext;
 import com.hiddenswitch.spellsource.client.models.ActionType;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.PlayGameLogicRandomBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
@@ -14,10 +14,11 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
-import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test
@@ -357,6 +359,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Card fireball = receiveCard(context, player, "spell_test_deal_6");
 			player.setMana(4);
 			player.setMaxMana(4);
+			playCard(context, player, "spell_set_deal_1_hero_power");
 			opponent.getHero().setHp(2);
 			List<GameAction> actions = context.getValidActions();
 			assertTrue(actions.stream().anyMatch(ga -> fireball.getReference().equals(ga.getSourceReference())

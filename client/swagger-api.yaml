@@ -1,8 +1,5 @@
 # Spellsource auto-generated client for Unity and Java specification using swagger
-# Run ./client.sh after modifying this file
-# Examine build.gradle for more about how swagger-codegen is invoked for C# and Java
-# Note a typo in the java template in the exact version of swagger-codegen that is required causes the
-# client/build.gradle file to have a syntax issue
+# Generate the classes using
 swagger: "2.0"
 info:
   version: 4.0.1
@@ -1506,16 +1503,6 @@ definitions:
         type: 'string'
       l:
         $ref: '#/definitions/EntityLocation'
-      background:
-        description: |
-          When not null, override the default background for this entity's card ID with this key corresponding to
-          backgrounds from the server.
-        type: 'string'
-      portrait:
-        description: |
-          When not null, override the default portrait for this entity's card ID with this key corresponding to
-          portraits from the server.
-        type: 'string'
       gold:
         description: Render this entity with a "gold" effect.
         type: 'boolean'
@@ -1785,18 +1772,6 @@ definitions:
           turn 0.
         type: 'boolean'
         default: false
-      color:
-        description: |
-          The color for the class
-        type: 'array'
-        items:
-          type: 'number'
-          format: 'float'
-      blackText:
-        description: |
-          Whether the class should use black text instead of the default white
-        type: 'boolean'
-        default: false
       cardSets:
         description: |
           The card sets listed by the card
@@ -1808,6 +1783,92 @@ definitions:
           When set on the player entity, indicates the effects occuring now are during the player's turn start phase.
         type: 'boolean'
         default: false
+      art:
+        $ref: '#/definitions/Art'
+  Art:
+    type: 'object'
+    description: |
+      Contains information the client needs for an art asset.
+    properties:
+      sprite:
+        $ref: '#/definitions/Sprite'
+      spriteShadow:
+        $ref: '#/definitions/Sprite'
+      primary:
+        $ref: '#/definitions/Color'
+      secondary:
+        $ref: '#/definitions/Color'
+      highlight:
+        $ref: '#/definitions/Color'
+      shadow:
+        $ref: '#/definitions/Color'
+      body:
+        $ref: '#/definitions/Font'
+  Sprite:
+    type: 'object'
+    description: |
+      Specifies a sprite or image
+    properties:
+      named:
+        type: 'string'
+        description: |
+          The sprite name in the client.
+      pivot:
+        description: |
+          The sprite's pivor point.
+
+           - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)
+           - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels
+             of width, as though the pivot point is the middle of the rectangle formed at the bottom of the sprite.
+           - CENTER: The center middle of the sprite (i.e. 0.5, 0.5)
+           - FLYING: Beyond the bottom of the sprite (i.e. 0.5, 2.0)
+        type: string
+        enum:
+          - 'BOTTOM'
+          - 'DIMETRIC_2X1_FLOOR'
+          - 'CENTER'
+          - 'FLYING'
+  Font:
+    type: 'object'
+    description: |
+      Contains a font (type, size, styling, etc.) specification
+    properties:
+      vertex:
+        $ref: '#/definitions/Color'
+  Color:
+    type: 'object'
+    description: |
+      Describes a Unity color.
+    required:
+      - r
+      - g
+      - b
+      - a
+    properties:
+      r:
+        type: number
+        format: float
+        x-nullable: false
+        default: 0
+        description: Red channel in units of 0.0-1.0
+      g:
+        type: number
+        format: float
+        x-nullable: false
+        default: 0
+        description: Green channel in units of 0.0-1.0
+      b:
+        type: number
+        format: float
+        x-nullable: false
+        default: 0
+        description: Blue channel in units of 0.0-1.0
+      a:
+        type: number
+        format: float
+        description: Alpha in units of 0.0-1.0
+        x-nullable: false
+        default: 1
   DraftsChooseCardRequest:
     type: 'object'
     required:

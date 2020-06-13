@@ -11,12 +11,12 @@
     "spells": [
       {
         "class": "DamageSpell",
-		"value": 5
+        "value": 5
       },
       {
         "class": "ReceiveCardSpell",
         "card": "spell_gold_coin",
-		"value": 2
+        "value": 2
       }
     ]
   },

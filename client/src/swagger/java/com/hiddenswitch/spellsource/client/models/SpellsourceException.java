@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class SpellsourceException implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("message")
   private String message = null;

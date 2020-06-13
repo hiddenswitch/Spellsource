@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.models;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
 import com.hiddenswitch.spellsource.common.Tracing;
@@ -106,7 +107,7 @@ public final class GetCollectionResponse implements Serializable {
 		List<CardRecord> records = new ArrayList<>();
 
 		for (InventoryRecord cr : inventoryRecords) {
-			final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionRecord().getId());
+			CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionRecord().getId());
 
 			if (record == null) {
 				continue;
@@ -170,14 +171,14 @@ public final class GetCollectionResponse implements Serializable {
 		if (this == o) return true;
 		if (!(o instanceof GetCollectionResponse)) return false;
 		GetCollectionResponse that = (GetCollectionResponse) o;
-		return com.google.common.base.Objects.equal(responses, that.responses) &&
-				com.google.common.base.Objects.equal(inventoryRecords, that.inventoryRecords) &&
-				com.google.common.base.Objects.equal(getCollectionRecord(), that.getCollectionRecord());
+		return Objects.equals(responses, that.responses) &&
+				Objects.equals(inventoryRecords, that.inventoryRecords) &&
+				Objects.equals(collectionRecord, that.collectionRecord);
 	}
 
 	@Override
 	public int hashCode() {
-		return com.google.common.base.Objects.hashCode(responses, inventoryRecords, getCollectionRecord());
+		return Objects.hash(responses, inventoryRecords, collectionRecord);
 	}
 
 	public CollectionRecord getCollectionRecord() {

@@ -15,19 +15,19 @@
   "spell": {
     "class": "MetaSpell",
     "spells": [
-	  {
-		  "class": "ReturnTargetToHandSpell"
-	  },
-	  {
-		  "class": "MultiTargetSpell",
-		  "target": "ENEMY_MINIONS",
-		  "value": 1,
-		  "spell": {
-		    "class": "ReturnTargetToHandSpell"
-		  }
-	  } 
-	]
-  },      
+      {
+        "class": "ReturnTargetToHandSpell"
+      },
+      {
+        "class": "MultiTargetSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1,
+        "spell": {
+          "class": "ReturnTargetToHandSpell"
+        }
+      }
+    ]
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

@@ -16,9 +16,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * A DiscoverAction is a card and spell tuple that corresponds to a particular card selected by the player and the spell
@@ -72,6 +70,7 @@ public class DiscoverAction extends GameAction implements HasCard {
 	 * @return {@code true} if the discover action can be called on a particular entity.
 	 */
 	@Override
+	@Suspendable
 	public final boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
 		return false;
 	}
@@ -100,13 +99,6 @@ public class DiscoverAction extends GameAction implements HasCard {
 		return Collections.singletonList(context.resolveSingleTarget(getTargetReference()));
 	}
 
-	/**
-	 * Gets a plain English description of this discover action for UI purposes, if required.
-	 *
-	 * @param context  The game context.
-	 * @param playerId
-	 * @return A description of the card being discovered.
-	 */
 	public String getDescription(GameContext context, int playerId) {
 		if (playerId == context.getActivePlayerId()) {
 			return String.format("With %s, %s %s %s.", getSource(context).getName(), context.getPlayer(playerId).getName(), DISCOVERED_NAME, getCard().getName());
@@ -133,23 +125,18 @@ public class DiscoverAction extends GameAction implements HasCard {
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		boolean base = super.equals(other);
-		if (!(other instanceof DiscoverAction)) {
-			return false;
-		}
-		DiscoverAction rhs = (DiscoverAction) other;
-		return new EqualsBuilder().appendSuper(base)
-				.append(spell, rhs.spell)
-				.build();
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof DiscoverAction)) return false;
+		if (!super.equals(o)) return false;
+		DiscoverAction that = (DiscoverAction) o;
+		return Objects.equals(getSpell(), that.getSpell()) &&
+				Objects.compare(getCard(), that.getCard(), Card::compareTo) == 0;
 	}
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder()
-				.appendSuper(super.hashCode())
-				.append(spell)
-				.build();
+		return Objects.hash(super.hashCode(), getSpell(), getCard());
 	}
 
 	@Override

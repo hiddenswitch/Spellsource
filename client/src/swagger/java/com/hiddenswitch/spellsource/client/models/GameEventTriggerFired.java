@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GameEventTriggerFired implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("triggerSourceId")
   private Integer triggerSourceId = null;

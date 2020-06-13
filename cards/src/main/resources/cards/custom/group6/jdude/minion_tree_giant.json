@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "race": "ELEMENTAL",
   "description": "Guard. Costs (1) less for each Guard minion you've played this game.",
-    "attributes": {
+  "attributes": {
     "TAUNT": true
   },
   "collectible": true,

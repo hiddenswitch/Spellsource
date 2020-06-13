@@ -17,6 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.Art;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.EntityLocation;
 import com.hiddenswitch.spellsource.client.models.EntityType;
@@ -34,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Entity implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
   private Integer id = -1;
@@ -53,12 +53,6 @@ public class Entity implements Serializable {
 
   @JsonProperty("l")
   private EntityLocation l = null;
-
-  @JsonProperty("background")
-  private String background = null;
-
-  @JsonProperty("portrait")
-  private String portrait = null;
 
   @JsonProperty("gold")
   private Boolean gold = false;
@@ -234,17 +228,14 @@ public class Entity implements Serializable {
   @JsonProperty("gameStarted")
   private Boolean gameStarted = false;
 
-  @JsonProperty("color")
-  private List<Float> color = null;
-
-  @JsonProperty("blackText")
-  private Boolean blackText = false;
-
   @JsonProperty("cardSets")
   private List<String> cardSets = null;
 
   @JsonProperty("isStartingTurn")
   private Boolean isStartingTurn = false;
+
+  @JsonProperty("art")
+  private Art art = null;
 
   public Entity id(Integer id) {
     this.id = id;
@@ -352,42 +343,6 @@ public class Entity implements Serializable {
 
   public void setL(EntityLocation l) {
     this.l = l;
-  }
-
-  public Entity background(String background) {
-    this.background = background;
-    return this;
-  }
-
-   /**
-   * When not null, override the default background for this entity&#39;s card ID with this key corresponding to backgrounds from the server. 
-   * @return background
-  **/
-  @ApiModelProperty(value = "When not null, override the default background for this entity's card ID with this key corresponding to backgrounds from the server. ")
-  public String getBackground() {
-    return background;
-  }
-
-  public void setBackground(String background) {
-    this.background = background;
-  }
-
-  public Entity portrait(String portrait) {
-    this.portrait = portrait;
-    return this;
-  }
-
-   /**
-   * When not null, override the default portrait for this entity&#39;s card ID with this key corresponding to portraits from the server. 
-   * @return portrait
-  **/
-  @ApiModelProperty(value = "When not null, override the default portrait for this entity's card ID with this key corresponding to portraits from the server. ")
-  public String getPortrait() {
-    return portrait;
-  }
-
-  public void setPortrait(String portrait) {
-    this.portrait = portrait;
   }
 
   public Entity gold(Boolean gold) {
@@ -1434,50 +1389,6 @@ public class Entity implements Serializable {
     this.gameStarted = gameStarted;
   }
 
-  public Entity color(List<Float> color) {
-    this.color = color;
-    return this;
-  }
-
-  public Entity addColorItem(Float colorItem) {
-    if (this.color == null) {
-      this.color = new ArrayList<>();
-    }
-    this.color.add(colorItem);
-    return this;
-  }
-
-   /**
-   * The color for the class 
-   * @return color
-  **/
-  @ApiModelProperty(value = "The color for the class ")
-  public List<Float> getColor() {
-    return color;
-  }
-
-  public void setColor(List<Float> color) {
-    this.color = color;
-  }
-
-  public Entity blackText(Boolean blackText) {
-    this.blackText = blackText;
-    return this;
-  }
-
-   /**
-   * Whether the class should use black text instead of the default white 
-   * @return blackText
-  **/
-  @ApiModelProperty(value = "Whether the class should use black text instead of the default white ")
-  public Boolean isBlackText() {
-    return blackText;
-  }
-
-  public void setBlackText(Boolean blackText) {
-    this.blackText = blackText;
-  }
-
   public Entity cardSets(List<String> cardSets) {
     this.cardSets = cardSets;
     return this;
@@ -1522,6 +1433,24 @@ public class Entity implements Serializable {
     this.isStartingTurn = isStartingTurn;
   }
 
+  public Entity art(Art art) {
+    this.art = art;
+    return this;
+  }
+
+   /**
+   * Get art
+   * @return art
+  **/
+  @ApiModelProperty(value = "")
+  public Art getArt() {
+    return art;
+  }
+
+  public void setArt(Art art) {
+    this.art = art;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1538,8 +1467,6 @@ public class Entity implements Serializable {
         Objects.equals(this.name, entity.name) &&
         Objects.equals(this.description, entity.description) &&
         Objects.equals(this.l, entity.l) &&
-        Objects.equals(this.background, entity.background) &&
-        Objects.equals(this.portrait, entity.portrait) &&
         Objects.equals(this.gold, entity.gold) &&
         Objects.equals(this.boardPosition, entity.boardPosition) &&
         Objects.equals(this.owner, entity.owner) &&
@@ -1598,15 +1525,14 @@ public class Entity implements Serializable {
         Objects.equals(this.cardSet, entity.cardSet) &&
         Objects.equals(this.rarity, entity.rarity) &&
         Objects.equals(this.gameStarted, entity.gameStarted) &&
-        Objects.equals(this.color, entity.color) &&
-        Objects.equals(this.blackText, entity.blackText) &&
         Objects.equals(this.cardSets, entity.cardSets) &&
-        Objects.equals(this.isStartingTurn, entity.isStartingTurn);
+        Objects.equals(this.isStartingTurn, entity.isStartingTurn) &&
+        Objects.equals(this.art, entity.art);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, l, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, color, blackText, cardSets, isStartingTurn);
+    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, art);
   }
 
 
@@ -1621,8 +1547,6 @@ public class Entity implements Serializable {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    l: ").append(toIndentedString(l)).append("\n");
-    sb.append("    background: ").append(toIndentedString(background)).append("\n");
-    sb.append("    portrait: ").append(toIndentedString(portrait)).append("\n");
     sb.append("    gold: ").append(toIndentedString(gold)).append("\n");
     sb.append("    boardPosition: ").append(toIndentedString(boardPosition)).append("\n");
     sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
@@ -1681,10 +1605,9 @@ public class Entity implements Serializable {
     sb.append("    cardSet: ").append(toIndentedString(cardSet)).append("\n");
     sb.append("    rarity: ").append(toIndentedString(rarity)).append("\n");
     sb.append("    gameStarted: ").append(toIndentedString(gameStarted)).append("\n");
-    sb.append("    color: ").append(toIndentedString(color)).append("\n");
-    sb.append("    blackText: ").append(toIndentedString(blackText)).append("\n");
     sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
     sb.append("    isStartingTurn: ").append(toIndentedString(isStartingTurn)).append("\n");
+    sb.append("    art: ").append(toIndentedString(art)).append("\n");
     sb.append("}");
     return sb.toString();
   }

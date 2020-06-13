@@ -9,14 +9,14 @@
   "description": "Opener: If you've played 5 Artifacts this game, replace your Skill with \"Source an Artifact\".[]",
   "battlecry": {
     "targetSelection": "NONE",
-	"condition": {
+    "condition": {
       "class": "ComparisonCondition",
       "value1": {
         "class": "CardsPlayedValueProvider",
         "filter": {
           "class": "CardFilter",
           "attribute": "ARTIFACT",
-	     "operation": "HAS"
+          "operation": "HAS"
         },
         "targetPlayer": "SELF"
       },

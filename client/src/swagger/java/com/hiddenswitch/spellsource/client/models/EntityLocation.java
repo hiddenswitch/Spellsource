@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EntityLocation implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("i")
   private Integer i = null;

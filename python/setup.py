@@ -42,7 +42,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.8.74',
+      version='0.8.77',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -52,8 +52,8 @@ setup(name='spellsource',
       data_files=[
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.74-all.jar'),
-                                 os.path.join(SRC_PATH, 'hearthstone', 'build', 'libs', 'internalcontent-0.8.74.jar'),
+          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.77-all.jar'),
+                                 os.path.join(SRC_PATH, 'hearthstone', 'build', 'libs', 'internalcontent-0.8.77.jar'),
                                  os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,
@@ -70,7 +70,8 @@ setup(name='spellsource',
                         'hearthstone',
                         'pymongo',
                         'mistletoe',
-                        'GitPython'],
+                        'GitPython',
+                        'SecretColors==1.1.0'],
       extras_require={
           'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
       },

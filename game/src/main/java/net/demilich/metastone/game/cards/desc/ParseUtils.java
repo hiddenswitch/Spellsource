@@ -55,9 +55,8 @@ public class ParseUtils {
 	@SuppressWarnings("deprecation")
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
-		try {
+		if (lowerCaseName.length() > 0 && Character.isDigit(lowerCaseName.charAt(0))) {
 			return new EntityReference(Integer.parseInt(lowerCaseName));
-		} catch (Exception ignored) {
 		}
 		switch (lowerCaseName) {
 			case "none":

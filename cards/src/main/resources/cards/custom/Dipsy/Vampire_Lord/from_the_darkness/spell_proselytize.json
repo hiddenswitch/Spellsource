@@ -7,17 +7,17 @@
   "description": "Put the leftmost enemy minion into your hand. Double its Health.",
   "targetSelection": "NONE",
   "spell": {
-      "class": "ReturnTargetToHandSpell",
-	  "target": "LEFTMOST_ENEMY_MINION",
-      "spell": {
-        "class": "BuffSpell",
+    "class": "ReturnTargetToHandSpell",
+    "target": "LEFTMOST_ENEMY_MINION",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "hpBonus": {
+        "class": "AttributeValueProvider",
         "target": "OUTPUT",
-        "hpBonus": {
-          "class": "AttributeValueProvider",
-          "target": "OUTPUT",
-          "attribute": "HP"
-        }
+        "attribute": "HP"
       }
+    }
   },
   "collectible": false,
   "sets": [

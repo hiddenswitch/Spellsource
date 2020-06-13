@@ -37,6 +37,7 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	private EntityReference targetReference;
 	private boolean overrideChild;
 
+	@Suspendable
 	public boolean canBeExecutedOn(GameContext gameContext, Player player, Entity entity) {
 		return true;
 	}
@@ -140,13 +141,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		return true;
 	}
 
-	/**
-	 * A user-renderable description of what occurred in this notification.
-	 *
-	 * @param context
-	 * @param playerId
-	 * @return
-	 */
 	public String getDescription(GameContext context, int playerId) {
 		return getClass().getSimpleName();
 	}

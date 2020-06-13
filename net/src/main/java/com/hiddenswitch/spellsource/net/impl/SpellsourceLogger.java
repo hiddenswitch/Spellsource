@@ -23,11 +23,6 @@ public class SpellsourceLogger implements LoggerHandler {
 	private final io.vertx.core.logging.Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
-	 * The Date formatter (UTC JS compatible format)
-	 */
-	private final DateFormat dateTimeFormat = Utils.createRFC1123DateTimeFormatter();
-
-	/**
 	 * log before request or after
 	 */
 	private final boolean immediate;
@@ -101,7 +96,7 @@ public class SpellsourceLogger implements LoggerHandler {
 
 				message = String.format("%s - - [%s] \"%s %s %s\" %d %d \"%s\" \"%s\"",
 						remoteClient,
-						dateTimeFormat.format(new Date(timestamp)),
+						Utils.formatRFC1123DateTime(timestamp),
 						method,
 						uri,
 						versionFormatted,

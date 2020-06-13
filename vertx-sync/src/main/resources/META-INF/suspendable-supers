@@ -1,0 +1,7 @@
+co.paralleluniverse.fibers.FiberAsync.requestAsync()V
+io.vertx.core.AbstractVerticle.start()V
+io.vertx.core.AbstractVerticle.start(Lio/vertx/core/Future;)V
+io.vertx.core.AbstractVerticle.stop()V
+io.vertx.core.Handler.handle(Ljava/lang/Object;)V
+io.vertx.core.Verticle.start(Lio/vertx/core/Future;)V
+io.vertx.ext.sync.impl.AsyncAdaptor.requestAsync()V

@@ -8,6 +8,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -76,7 +77,14 @@ public class MetaSpell extends Spell {
 		}
 		// Manually obtain sub spells for performance reasons, this is accessed very often
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
+		// We mutate an array here so we must clone the desc's spells array
+		SpellDesc[] originalSpellDescs = (SpellDesc[]) desc.get(SpellArg.SPELLS);
+		SpellDesc[] spells;
+		if (originalSpellDescs != null) {
+			spells = Arrays.copyOf(originalSpellDescs, originalSpellDescs.length);
+		} else {
+			spells = new SpellDesc[0];
+		}
 		SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
 		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
@@ -85,10 +93,8 @@ public class MetaSpell extends Spell {
 			if (spell != null) {
 				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
 			}
-			if (spells != null) {
-				for (int i = 0; i < spells.length; i++) {
-					spells[i] = spells[i].addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
-				}
+			for (int i = 0; i < spells.length; i++) {
+				spells[i] = spells[i].addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
 			}
 			if (spell1 != null) {
 				spell1 = spell1.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
@@ -101,10 +107,8 @@ public class MetaSpell extends Spell {
 			if (spell != null) {
 				each(context, player, source, target, spell);
 			}
-			if (spells != null && spells.length > 0) {
-				for (SpellDesc subSpell : spells) {
-					each(context, player, source, target, subSpell);
-				}
+			for (SpellDesc subSpell : spells) {
+				each(context, player, source, target, subSpell);
 			}
 			if (spell1 != null) {
 				each(context, player, source, target, spell1);

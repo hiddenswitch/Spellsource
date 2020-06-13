@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 ;
@@ -9,15 +10,18 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 import java.util.Map;
 
+/**
+ * Fires at the start of the game.
+ * <p>
+ * Use to implement "Start of Game" effects.
+ * <p>
+ * The player whose game is starting is the {@code targetPlayer}.
+ */
 public class GameStartTrigger extends EventTrigger {
 	public static EventTriggerDesc create(TargetPlayer targetPlayer) {
 		Map<EventTriggerArg, Object> arguments = new EventTriggerDesc(GameStartTrigger.class);
 		arguments.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
 		return new EventTriggerDesc(arguments);
-	}
-
-	public GameStartTrigger() {
-		this(new EventTriggerDesc(GameStartTrigger.class));
 	}
 
 	public GameStartTrigger(EventTriggerDesc desc) {
@@ -30,8 +34,8 @@ public class GameStartTrigger extends EventTrigger {
 	}
 
 	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.GAME_START;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.GAME_START;
 	}
 
 }

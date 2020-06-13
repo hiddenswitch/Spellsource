@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeChanged implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("friend")
   private Friend friend = null;

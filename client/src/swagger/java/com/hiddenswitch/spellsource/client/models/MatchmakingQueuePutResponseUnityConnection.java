@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class MatchmakingQueuePutResponseUnityConnection implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("url")
   private String url = null;

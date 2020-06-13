@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class InvitePostRequest implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("friend")
   private Boolean friend = false;

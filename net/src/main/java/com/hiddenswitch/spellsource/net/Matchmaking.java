@@ -310,7 +310,7 @@ public interface Matchmaking extends Verticle {
 
 									// Create a game for every pair
 									if (thisMatchRequests.size() % 2 != 0) {
-										throw new AssertionError("thisMatchRequests.size()");
+										throw new AssertionError(String.format("thisMatchRequests.size() was not divisible by two, it was %d", thisMatchRequests.size()));
 									}
 
 									for (int i = 0; i < thisMatchRequests.size(); i += 2) {

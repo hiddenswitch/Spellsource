@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TEST",
+  "rarity": "FREE",
+  "description": "Deal $1 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

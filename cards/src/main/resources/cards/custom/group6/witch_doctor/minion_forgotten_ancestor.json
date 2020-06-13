@@ -14,7 +14,7 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-		"attribute": "TAUNT"
+        "attribute": "TAUNT"
       },
       {
         "class": "AddAttributeSpell",

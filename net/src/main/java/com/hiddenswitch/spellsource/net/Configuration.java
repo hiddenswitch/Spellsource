@@ -34,5 +34,11 @@ public interface Configuration {
 		return System.getenv().getOrDefault("ATOMIX_BOOTSTRAP_NODE", null);
 	}
 
-	static int maxBodyBytes() {return 10000;}
+	static int maxBodyBytes() {
+		return 10000;
+	}
+
+	static int metricsPort() {
+		return 8081;
+	}
 }

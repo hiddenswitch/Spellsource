@@ -18,36 +18,36 @@
     },
     "targetSelection": "NONE",
     "spell": {
-	  "class": "MetaSpell",
-	  "spells": [
+      "class": "MetaSpell",
+      "spells": [
         {
-		  "class": "AddEnchantmentSpell",
-		  "target": "SELF",
-		  "trigger": {
-			  "eventTrigger": {
-			  "class": "AfterSpellCastedTrigger",
-			  "sourcePlayer": "SELF"
-			  },
-			  "spell": {
-			  "class": "DiscoverSpell",
-			  "spell": {
-			  	"class": "ReceiveCardSpell",
-			  	"targetPlayer": "SELF"
-			  },
-			  "cardFilter": {
-				"class": "CardFilter",
-				"heroClass": "SELF",
-				"cardType": "SPELL"
-			  }
-			  }
-		  }
-	    }, 
-		{
-		  "class": "AddAttributeSpell",
-		  "target": "SELF",
-          "attribute": "DISCOVER"	
-		}
-	  ]
+          "class": "AddEnchantmentSpell",
+          "target": "SELF",
+          "trigger": {
+            "eventTrigger": {
+              "class": "AfterSpellCastedTrigger",
+              "sourcePlayer": "SELF"
+            },
+            "spell": {
+              "class": "DiscoverSpell",
+              "spell": {
+                "class": "ReceiveCardSpell",
+                "targetPlayer": "SELF"
+              },
+              "cardFilter": {
+                "class": "CardFilter",
+                "heroClass": "SELF",
+                "cardType": "SPELL"
+              }
+            }
+          }
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "DISCOVER"
+        }
+      ]
     }
   },
   "attributes": {

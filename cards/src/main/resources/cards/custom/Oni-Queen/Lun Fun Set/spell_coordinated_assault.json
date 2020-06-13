@@ -1,4 +1,3 @@
-
 {
   "name": "Coordinated Assault",
   "baseManaCost": 2,
@@ -24,7 +23,7 @@
     }
   },
   "attributes": {
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

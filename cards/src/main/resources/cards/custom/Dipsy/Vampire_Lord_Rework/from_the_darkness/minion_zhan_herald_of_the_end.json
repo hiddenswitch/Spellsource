@@ -27,16 +27,16 @@
           "value1": {
             "class": "AttributeValueProvider",
             "target": "FRIENDLY_HERO",
-			"attribute": "HP"
+            "attribute": "HP"
           },
           "value2": 15
         },
-		{
-		  "class": "MinionCountCondition",
-		  "value": 1,
-		  "operation": "EQUAL",
-		  "targetPlayer": "SELF"
-		}
+        {
+          "class": "MinionCountCondition",
+          "value": 1,
+          "operation": "EQUAL",
+          "targetPlayer": "SELF"
+        }
       ]
     },
     "spell": {

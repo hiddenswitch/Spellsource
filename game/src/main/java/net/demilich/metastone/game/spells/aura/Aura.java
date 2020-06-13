@@ -163,6 +163,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Override
+	@Suspendable
 	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 		super.onAdd(context, player, source, host);
 		affectedEntities.clear();

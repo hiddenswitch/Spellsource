@@ -8,11 +8,11 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "manaCost": 5
-        }
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 5
+    }
   },
   "collectible": true,
   "sets": [

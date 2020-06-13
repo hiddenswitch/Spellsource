@@ -1,5 +1,7 @@
+import io.swagger.codegen.CodegenModel;
 import io.swagger.codegen.CodegenProperty;
 import io.swagger.codegen.languages.CSharpClientCodegen;
+import io.swagger.models.Model;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 class CSharpNullableGenerator extends CSharpClientCodegen {
+	CSharpNullableGenerator() {
+		super();
+		reservedWords().add("color");
+		reservedWords().add("sprite");
+	}
+
 	@Override
 	public String getTypeDeclaration(io.swagger.models.properties.Property p) {
 		var declaration = super.getTypeDeclaration(p);
@@ -35,7 +43,8 @@ class CSharpNullableGenerator extends CSharpClientCodegen {
 		String packageFolder = sourceFolder + File.separator + packageName;
 		String clientPackageDir = packageFolder + File.separator + clientPackage;
 		supportingFiles.removeIf(supportingFile -> !supportingFile.destinationFilename.endsWith("cs"));
-		supportingFiles.removeIf(supportingFile -> supportingFile.folder.equals(clientPackageDir));
+		supportingFiles.removeIf(supportingFile -> supportingFile.folder.equals(clientPackageDir)
+				&& !supportingFile.destinationFilename.contains("SwaggerDateConverter"));
 		modelDocTemplateFiles.clear();
 		apiDocTemplateFiles.clear();
 	}

@@ -82,6 +82,7 @@ public final class OpenerAction extends GameAction {
 	 * @return {@code true} if the entity is a valid target for the battlecry.
 	 */
 	@Override
+	@Suspendable
 	public final boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
 		if (!super.canBeExecutedOn(context, player, entity)) {
 			return false;

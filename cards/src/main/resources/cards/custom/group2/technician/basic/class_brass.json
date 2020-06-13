@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_brass",
   "heroClass": "BRASS",
-  "color": [0,0,0],
-  "blackText": false,
   "collectible": false,
   "set": "GRAVEYARD",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.0,
+      "g": 0.0,
+      "b": 0.0,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.055,
+      "g": 0.055,
+      "b": 0.055,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.173,
+      "g": 0.173,
+      "b": 0.173,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.333,
+      "g": 0.333,
+      "b": 0.333,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  }
 }

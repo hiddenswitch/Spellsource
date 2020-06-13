@@ -10,7 +10,7 @@
     "class": "ConditionalEffectSpell",
     "condition": {
       "class": "IsDeadCondition",
-	  "invert": true
+      "invert": true
     },
     "spell1": {
       "class": "DamageSpell",

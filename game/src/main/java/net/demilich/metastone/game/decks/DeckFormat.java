@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.decks;
 
-import com.google.common.base.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
@@ -33,12 +32,11 @@ public class DeckFormat implements Serializable {
 		}
 	}
 
-	private static Map<String, DeckFormat> FORMATS = new HashMap<>();
 
 	public static void populateFormats(CardList formatCards) {
-		FORMATS.put("All", ALL);
+		CardCatalogue.FORMATS.put("All", ALL);
 		for (Card formatCard : formatCards) {
-			FORMATS.put(formatCard.getName(), new DeckFormat()
+			CardCatalogue.FORMATS.put(formatCard.getName(), new DeckFormat()
 					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
 					.setValidDeckCondition(formatCard.getDesc().getCondition())
 					.withName(formatCard.getName())
@@ -47,11 +45,11 @@ public class DeckFormat implements Serializable {
 	}
 
 	public static DeckFormat getFormat(String name) {
-		return FORMATS.get(name);
+		return CardCatalogue.FORMATS.get(name);
 	}
 
 	public static Map<String, DeckFormat> formats() {
-		return FORMATS;
+		return CardCatalogue.FORMATS;
 	}
 
 	public static DeckFormat getSmallestSupersetFormat(Set<String> requiredSets) {
@@ -96,7 +94,15 @@ public class DeckFormat implements Serializable {
 	 * CardCatalogue#loadCardsFromPackage()} has not been called. OSGi-friendly.
 	 */
 	public static DeckFormat spellsource() {
-		return getFormat("Spellsource");
+		var format = getFormat("Spellsource");
+		if (format == null) {
+			CardCatalogue.loadCardsFromPackage();
+		}
+		format = getFormat("Spellsource");
+		if (format == null) {
+			throw new NullPointerException("must load cards first with CardCatalogue.loadCardsFromPackage()");
+		}
+		return format;
 	}
 
 	public static DeckFormat all() {
@@ -160,12 +166,12 @@ public class DeckFormat implements Serializable {
 		if (this == o) return true;
 		if (!(o instanceof DeckFormat)) return false;
 		DeckFormat that = (DeckFormat) o;
-		return Objects.equal(name, that.name);
+		return name.equals(that.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(name);
+		return Objects.hash(name);
 	}
 
 	public String[] getSecondPlayerBonusCards() {

@@ -15,10 +15,10 @@
       "class": "AndCondition",
       "conditions": [
         {
-            "class": "CardCountCondition",
-            "value": 10,
-            "operation": "GREATER_OR_EQUAL",
-            "targetPlayer": "SELF"
+          "class": "CardCountCondition",
+          "value": 10,
+          "operation": "GREATER_OR_EQUAL",
+          "targetPlayer": "SELF"
         },
         {
           "class": "OwnedByPlayerCondition",

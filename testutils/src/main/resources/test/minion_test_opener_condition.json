@@ -1,0 +1,27 @@
+{
+  "name": "Summons a minion if board size is 1",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_neutral_test_1"
+    },
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

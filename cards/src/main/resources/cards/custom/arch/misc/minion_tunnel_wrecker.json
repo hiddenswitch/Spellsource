@@ -12,7 +12,7 @@
     "eventTrigger": {
       "class": "CardDrawnTrigger",
       "targetPlayer": "SELF",
-      "fireCondition": {        
+      "fireCondition": {
         "class": "AttributeCondition",
         "attribute": "STARTED_IN_DECK",
         "invert": true,
@@ -27,4 +27,4 @@
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
-} 
+}

@@ -1,0 +1,26 @@
+{
+  "seed" : 1484573587096755960,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "ROSE", "ROSE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_deep_borer", "spell_ghostly_essence", "spell_devil_within", "minion_zalmah", "minion_secretive_chanter", "spell_corvid_call", "minion_fiendish_giant", "minion_fading_berserker", "minion_expert_explorer", "spell_manic_outburst", "minion_nightmare_dragonflight", "minion_nice_cream", "minion_daring_duelist", "minion_shimmerscale", "minion_baby_griffin", "minion_hostile_snapdragon", "minion_fading_berserker", "minion_witching_traveler", "minion_tree_giant", "minion_nightmare_warden", "minion_bromeliad_pup", "spell_embue_phantasms", "spell_spiritual_diffusion", "minion_hypnotic_chameleon", "minion_hotheaded_villager", "minion_undead_trickster", "minion_dreadmire_hexxer", "minion_secretive_chanter", "minion_hypnotic_chameleon", "weapon_enchanting_whip" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_nightmare_whelp", "minion_prized_boar", "secret_funeral_rites", "minion_mind_controlled_mech", "secret_ghastly_visage", "minion_ursol_the_wise", "minion_darkbent_drake", "spell_cursed_mask", "minion_antique_collector", "minion_tainted_raven", "minion_flingin_alchemist", "minion_defender_of_tomorrow", "minion_redhide_butcher", "minion_titanic_fanatic", "spell_ashes_to_ashes_voodoo", "spell_rage_ascension", "secret_shallow_grave", "minion_perplexed_courtsman", "spell_shadow_puppetry", "minion_soultracker", "minion_bloodseeker", "minion_nilfheim_needlegunner", "spell_embue_phantasms", "minion_ghuun", "minion_clash_flamecore", "minion_bookkeeper", "minion_crew_commander", "minion_cursing_disciple", "minion_brawler_bushi", "secret_shallow_grave" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 38 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 6, 12, 8 ]
+  } ],
+  "actions" : [ 0, 0, 2, 0, 0, 0, 6, 2, 0, 0, 3, 0, 0, 0, 11, 0, 0, 0, 12, 2, 8, 3, 9, 3, 0, 9 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}
