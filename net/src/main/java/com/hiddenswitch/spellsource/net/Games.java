@@ -128,7 +128,7 @@ public interface Games extends Verticle {
 
 			@Override
 			public int hashCode() {
-				return com.google.common.base.Objects.hashCode(sourceReference, actionType);
+				return Objects.hash(sourceReference, actionType);
 			}
 		}
 
@@ -714,9 +714,12 @@ public interface Games extends Verticle {
 		entity.collectible(card.isCollectible());
 		entity.discarded(card.hasAttribute(Attribute.DISCARDED));
 		entity.roasted(card.hasAttribute(Attribute.ROASTED));
-		// TODO: A little too underperformant so we're going to skip this
-		// entityState.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
 		String heroClass = card.getHeroClass();
+
+		// Put the condition met glow on the card
+		if (card.getZone() == Zones.HAND && entity.isPlayable()) {
+			entity.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
+		}
 
 		// Handles tri-class cards correctly
 		if (heroClass == null) {
@@ -762,38 +765,13 @@ public interface Games extends Verticle {
 				break;
 			case SPELL:
 			case HERO_POWER:
-				int damage = 0;
-				int spellpowerDamage = 0;
-				SpellDesc spell = card.getSpell();
-
-				// Could be a choose-one hero power card
-				if (spell == null) {
-					break;
-				}
-
-				/*
-				if (card.getZone() == Zones.HAND
-						&& DamageSpell.class.isAssignableFrom(spell.getDescClass())
-						&& owningPlayer != null) {
-
-					Minion oneOne = CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()).summon();
-					oneOne.setId(65535);
-					damage = DamageSpell.getDamage(workingContext, owningPlayer, card.getSpell(), card, oneOne);
-					spellpowerDamage = workingContext.getLogic().applySpellpower(owningPlayer, card, damage);
-				}
-				*/
-				entity.underAura(spellpowerDamage > damage
-						|| hostsTrigger);
-				entity.spellDamage(spellpowerDamage);
+				entity.underAura(hostsTrigger);
 				break;
 			case CHOOSE_ONE:
 				// TODO: Handle choose one cards
 				break;
 			case CLASS:
-				entity.blackText(card.isBlackText());
-				if (card.getColor() != null) {
-					entity.color(Arrays.asList(card.getColor()[0] / 255f, card.getColor()[1] / 255f, card.getColor()[2] / 255f));
-				}
+				entity.art(card.getDesc().getArt());
 				break;
 			case FORMAT:
 				entity.cardSets(Arrays.asList(card.getCardSets()));

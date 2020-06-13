@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
@@ -34,8 +35,8 @@ public class HealingTrigger extends EventTrigger {
 	}
 
 	@Override
-	public com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum interestedIn() {
-		return com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.HEAL;
+	public EventTypeEnum interestedIn() {
+		return EventTypeEnum.HEAL;
 	}
 
 }

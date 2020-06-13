@@ -21,7 +21,7 @@
     }
   ],
   "attributes": {
-	"TAUNT": true
+    "TAUNT": true
   },
   "collectible": true,
   "sets": [

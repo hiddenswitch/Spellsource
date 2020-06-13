@@ -10,7 +10,12 @@
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "attribute": "CASTS_WHEN_DRAWN",
+        "invert": true
+      }
     },
     "spell": {
       "class": "ShuffleToDeckSpell",

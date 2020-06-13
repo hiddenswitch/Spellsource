@@ -20,7 +20,7 @@
         {
           "class": "DamageSpell",
           "target": "EVENT_TARGET",
-		  "ignoreSpellDamage": true,
+          "ignoreSpellDamage": true,
           "value": {
             "class": "AttributeValueProvider",
             "target": "FRIENDLY_HERO",
@@ -30,7 +30,7 @@
         {
           "class": "DamageSpell",
           "target": "FRIENDLY_HERO",
-		  "ignoreSpellDamage": true,
+          "ignoreSpellDamage": true,
           "value": {
             "class": "AttributeValueProvider",
             "target": "EVENT_TARGET",

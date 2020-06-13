@@ -3,8 +3,6 @@
   "type": "CLASS",
   "hero": "hero_sandbox",
   "heroClass": "TEST",
-  "color": [0, 0, 0],
-  "blackText": false,
   "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1

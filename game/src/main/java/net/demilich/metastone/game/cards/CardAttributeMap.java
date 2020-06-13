@@ -31,10 +31,6 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		this.card = new WeakReference<>(card);
 	}
 
-	public CardAttributeMap() {
-		super();
-	}
-
 	public Set<Attribute> unsafeKeySet() {
 		Set<Attribute> keys = new ConcurrentHashSet<>();
 		keys.addAll(super.keySet());

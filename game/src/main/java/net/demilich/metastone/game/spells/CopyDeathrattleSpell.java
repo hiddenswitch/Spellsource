@@ -69,6 +69,9 @@ public class CopyDeathrattleSpell extends AddDeathrattleSpell {
 		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard()))).collect(toList());
 		Actor finalCopyTo = copyTo;
 		aftermaths.forEach(a -> {
+			if (context.getLogic().hasTooManyAftermaths(finalCopyTo)) {
+				return;
+			}
 			var spell = a.getSpell();
 			var aftermath = spell.tryCreate(context, player, source, a.getEnchantmentSource(), finalCopyTo, true);
 			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, finalCopyTo);

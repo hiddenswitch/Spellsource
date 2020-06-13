@@ -1,0 +1,26 @@
+{
+  "seed" : -5603434624532440144,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "DARKMAGENTA", "DARKBLUE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_cratering_fists", "minion_jungle_operative", "spell_awakening_rite", "minion_nice_cream", "minion_twintailed_fox", "minion_twintailed_fox", "minion_holy_giant", "minion_swarmed_captive", "minion_kofko_crystal_conduit", "minion_dreamway_whale", "minion_vohkrovanis", "minion_mighty_mufunga", "spell_chant", "minion_bogovey_supplicant", "minion_flare_fireworker", "minion_holdout_soldier", "minion_dimensional_courier", "minion_oni_channeler", "minion_the_imperial_soul", "minion_wink_dog", "minion_greedy_adventurer", "spell_mass_reprisal", "spell_chant", "spell_take_down", "spell_circle_of_creation", "minion_petal_knight", "minion_deranged_greengill", "minion_oni_channeler", "spell_conjure_colossus", "spell_rain_of_giants" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_rainbow_runner", "spell_rite_of_promise", "spell_rite_of_passage", "spell_rebirth", "minion_ethereal_vanguard", "minion_treasure_hunter", "minion_cursing_chimp", "minion_flare_fireworker", "minion_whiptail_gatherer", "minion_cinderslinger", "secret_transmute_life", "secret_reverse_volition", "minion_soul_warden", "secret_transmute_life", "minion_father_kiliar", "spell_render_imaginary", "minion_commander_gareth", "minion_tree_giant", "minion_osiris", "spell_reflect", "minion_verdant_dreams_dracomancer", "minion_petal_knight", "minion_lost_lover", "minion_flare_fireworker", "minion_alien_invader", "minion_corrupt_sentinel", "minion_selfburner", "minion_lost_lover", "minion_bittertide_crab", "secret_reverse_volition" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 56 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 31 ]
+  } ],
+  "actions" : [ 1, 0, 0, 0, 4, 0, 0, 1, 0, 3, 1, 2, 1, 3, 0, 4, 7, 4, 0, 0, 4, 0, 1, 2, 0, 13, 1, 19, 3, 2, 0, 8, 3, 4, 11, 0, 0, 29, 15, 7, 14, 7, 1, 0, 24, 19, 7, 0, 13, 12, 6, 4, 5, 21, 7, 1, 2, 0, 0, 6, 9, 2, 0, 1, 5, 6, 3, 2, 3, 6, 4, 2, 11, 7, 3, 8, 10, 10, 12, 14, 10, 18, 5, 0, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

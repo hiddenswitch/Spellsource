@@ -25,7 +25,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-	"DISCOVER": true
+    "DISCOVER": true
   },
   "collectible": true,
   "set": "CUSTOM",

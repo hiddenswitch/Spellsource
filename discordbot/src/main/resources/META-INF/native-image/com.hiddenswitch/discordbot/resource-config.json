@@ -1,0 +1,7 @@
+{
+  "resources":[
+    {"pattern":"\\QMETA-INF/services/io.vertx.core.spi.json.JsonCodec\\E"}, 
+    {"pattern":"\\Qorg/slf4j/impl/StaticLoggerBinder.class\\E"}
+  ],
+  "bundles":[]
+}

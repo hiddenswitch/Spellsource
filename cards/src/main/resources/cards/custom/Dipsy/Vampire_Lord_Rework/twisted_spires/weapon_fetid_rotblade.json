@@ -17,8 +17,8 @@
     }
   },
   "attributes": {
-	"POISONOUS": true,
-	"DECAY": true
+    "POISONOUS": true,
+    "DECAY": true
   },
   "collectible": true,
   "sets": [

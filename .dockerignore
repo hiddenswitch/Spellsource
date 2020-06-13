@@ -24,6 +24,7 @@ setup.cfg
 !core/*
 !micro/*
 !internalcontent/*
+!discordbot/*
 # Omit intermediate build data
 **/build/
 **/classes/

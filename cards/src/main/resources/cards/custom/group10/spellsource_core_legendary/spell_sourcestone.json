@@ -5,40 +5,13 @@
   "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Casts when drawn. Draw a card. Destroy all minions",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "DestroySpell",
-          "target": "ALL_MINIONS"
-        },
-        {
-          "class": "SetAttributeSpell",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "PLAYED_FROM_HAND_OR_DECK"
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "EVENT_TARGET"
-        },
-        {
-          "class": "DrawCardSpell"
-        }
-      ]
-    }
-  },
   "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",
     "target": "ALL_MINIONS"
+  },
+  "attributes": {
+    "CASTS_WHEN_DRAWN": true
   },
   "collectible": false,
   "set": "SPELLSOURCE_BASIC",

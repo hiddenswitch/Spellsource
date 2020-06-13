@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_darion",
   "heroClass": "ICE",
-  "color": [185, 247, 247],
-  "blackText": true,
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "primary": {
+      "r": 0.7254901960784313,
+      "g": 0.9686274509803922,
+      "b": 0.9686274509803922,
+      "a": 1.0
+    },
+    "secondary": {
+      "r": 0.553,
+      "g": 0.831,
+      "b": 0.831,
+      "a": 1.0
+    },
+    "shadow": {
+      "r": 0.216,
+      "g": 0.561,
+      "b": 0.561,
+      "a": 1.0
+    },
+    "highlight": {
+      "r": 0.816,
+      "g": 0.976,
+      "b": 0.976,
+      "a": 1.0
+    },
+    "body": {
+      "vertex": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0,
+        "a": 1.0
+      }
+    }
+  }
 }

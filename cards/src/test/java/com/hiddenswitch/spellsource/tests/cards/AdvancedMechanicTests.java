@@ -717,4 +717,28 @@ public class AdvancedMechanicTests extends TestBase {
 			assertFalse(context.getValidActions().stream().anyMatch(a -> Objects.equals(a.getSourceReference(), card.getReference())));
 		});
 	}
+
+	@Test
+	public void testNewCastsWhenDrawn() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "spell_trick");
+			shuffleToDeck(context, player, "spell_trick");
+			context.getLogic().drawCard(player.getId(), null);
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(opponent.getHero().getBaseHp() - 8, opponent.getHero().getHp());
+		});
+
+
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "spell_trick");
+			}
+			assertEquals(opponent.getHero().getBaseHp(), opponent.getHero().getHp());
+			shuffleToDeck(context, player, "spell_trick");
+			context.getLogic().drawCard(player.getId(), null);
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(opponent.getHero().getBaseHp(), opponent.getHero().getHp());
+		});
+	}
 }

@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "TIME",
   "rarity": "LEGENDARY",
-  "description": "Opener: Your cards cost (1) less this game. Shuffle 1-Cost cards you’ve played into your deck.",
+  "description": "Opener: Your cards cost (1) less this game. Shuffle 1-Cost cards you\u2019ve played into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

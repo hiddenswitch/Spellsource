@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "SummonSpell",
-	  "boardPositionRelative": "RIGHT",
+      "boardPositionRelative": "RIGHT",
       "card": "token_customer"
     }
   },

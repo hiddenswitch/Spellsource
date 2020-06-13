@@ -13,14 +13,14 @@
         "class": "SummonSpell",
         "card": "token_customer"
       },
-	  {
-	    "class": "ReceiveCardSpell",
+      {
+        "class": "ReceiveCardSpell",
         "card": "spell_gold_coin"
-	  },
+      },
       {
         "class": "ShuffleToDeckSpell",
         "card": "spell_pyramid_scheme",
-		"howMany": 2
+        "howMany": 2
       }
     ]
   },

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -147,7 +148,7 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	}
 
 	@Override
-	public CardList shuffle(Random random) {
+	public CardList shuffle(XORShiftRandom random) {
 		Collections.shuffle(cards, random);
 		return this;
 	}

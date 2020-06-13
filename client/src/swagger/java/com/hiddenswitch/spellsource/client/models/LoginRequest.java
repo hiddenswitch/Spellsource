@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class LoginRequest implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("email")
   private String email = null;

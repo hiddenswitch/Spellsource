@@ -15,11 +15,11 @@
       },
       {
         "class": "ReceiveCardSpell",
-		"cardFilter": {
-		  "class": "CardFilter",
+        "cardFilter": {
+          "class": "CardFilter",
           "cardType": "SPELL"
         }
-	  }
+      }
     ]
   },
   "collectible": true,

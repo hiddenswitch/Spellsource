@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeSub implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("editableCards")
   private Object editableCards = null;

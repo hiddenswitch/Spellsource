@@ -10,6 +10,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
+import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
@@ -125,14 +126,13 @@ public interface Cards {
 					.stream()
 					.map(CardCatalogueRecord::getDesc)
 					.filter(cd -> DeckFormat.spellsource().isInFormat(cd.getSet())
-							&& cd.getType() != CardType.GROUP
-							&& cd.getType() != CardType.HERO_POWER
-							&& cd.getType() != CardType.ENCHANTMENT)
-					.map(CardDesc::create)
-					.map(card -> Games.getEntity(workingContext, card, 0))
-					.map(entity -> {
-						// Don't waste space storing locations on these
-						entity.l(null);
+							&& cd.getType() != CardType.GROUP)
+					.map(card -> {
+						var entity = Games.getEntity(workingContext, card.create(), 0)
+								// Include the art specification
+								.art(card.getArt())
+								// Do not store the location on the card database
+								.l(null);
 						return new CardRecord()
 								.id(entity.getCardId())
 								.entity(entity);
@@ -160,7 +160,7 @@ public interface Cards {
 			SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards/cards");
 			// Invalidate the cache here
 			cache.put("cards-version", Vertx.currentContext().deploymentID());
-			cache.put("cards-last-modified", Gateway.DATE_TIME_FORMATTER.format(new Date()));
+			cache.put("cards-last-modified", Utils.formatRFC1123DateTime(new Date().getTime()));
 		} catch (RuntimeException runtimeException) {
 			Tracing.error(runtimeException, span, true);
 			throw runtimeException;

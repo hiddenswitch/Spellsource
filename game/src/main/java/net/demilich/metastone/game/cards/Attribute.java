@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -17,6 +16,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A list of attributes on entities.
@@ -1185,15 +1185,30 @@ public enum Attribute {
 	 * When set on a player entity, indicates the player is currently in the starting turn phase.
 	 */
 	STARTING_TURN,
-
-	EIDOLON_RACE;
+	/**
+	 * Attribute to track if a spell should cast itself automatically when drawn, also drawing another card in the
+	 * process.
+	 */
+	CASTS_WHEN_DRAWN,
+	/**
+	 * Stores the Eidolon effect tribe.
+	 */
+	EIDOLON_RACE,
+	/**
+	 * Represents the minimum attack that auras can reduce an actor's attack to
+	 */
+	AURA_MIN_ATTACK,
+	/**
+	 * The number of aftermaths active on this entity.
+	 */
+	AFTERMATH_COUNT;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
 	}
 
 	private static final List<Attribute> cardEnchantmentAttributes = List.of(CARD_TAUNT);
-	private static final Set<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Sets.toImmutableEnumSet());
+	private static final Set<Attribute> auraAttributes = Arrays.stream(Attribute.values()).filter(attr -> attr.name().startsWith("AURA_")).collect(Collectors.toSet());
 
 	private static final Set<Attribute> storesTurnNumberAttributes = EnumSet.of(
 			Attribute.ROASTED,
@@ -1205,7 +1220,7 @@ public enum Attribute {
 			Attribute.DIED_ON_TURN
 	);
 
-	private static final Set<Attribute> enchantmentLikeAttributes = Sets.immutableEnumSet(Attribute.POISONOUS,
+	private static final Set<Attribute> enchantmentLikeAttributes = EnumSet.of(Attribute.POISONOUS,
 			Attribute.DIVINE_SHIELD,
 			COSTS_HEALTH_INSTEAD_OF_MANA,
 			TEMPORARY_ATTACK_BONUS,

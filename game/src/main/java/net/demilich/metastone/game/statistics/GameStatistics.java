@@ -20,9 +20,9 @@ import java.util.Map;
  * @see SimulationResult for
  */
 public class GameStatistics implements Cloneable, Serializable {
-	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
+	private final Map<Statistic, Object> stats = new EnumMap<>(Statistic.class);
 	private final Map<String, Map<Integer, Integer>> cardsPlayed = new HashMap<>();
-	private final Map<String, Integer> minionsSummoned = new HashMap<String, Integer>();
+	private final Map<String, Integer> minionsSummoned = new HashMap<>();
 
 	private void add(Statistic key, long value) {
 		if (!stats.containsKey(key)) {
@@ -79,10 +79,13 @@ public class GameStatistics implements Cloneable, Serializable {
 	public GameStatistics clone() {
 		GameStatistics clone = new GameStatistics();
 		clone.stats.putAll(stats);
-		clone.getCardsPlayed().putAll(getCardsPlayed());
-		for (Map.Entry<String, Map<Integer, Integer>> item : cardsPlayed.entrySet()) {
-			HashMap<Integer, Integer> value = new HashMap<>(item.getValue());
-			clone.getCardsPlayed().put(item.getKey(), value);
+		clone.cardsPlayed.putAll(getCardsPlayed());
+		for (var kv : cardsPlayed.entrySet()) {
+			var m = new HashMap<Integer, Integer>();
+			for (var kv1 : kv.getValue().entrySet()) {
+				m.put(kv1.getKey(), kv1.getValue());
+			}
+			clone.cardsPlayed.put(kv.getKey(), m);
 		}
 		clone.getMinionsSummoned().putAll(getMinionsSummoned());
 		return clone;

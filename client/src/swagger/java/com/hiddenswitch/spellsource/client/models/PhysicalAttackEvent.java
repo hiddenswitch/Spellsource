@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class PhysicalAttackEvent implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("attacker")
   private Entity attacker = null;

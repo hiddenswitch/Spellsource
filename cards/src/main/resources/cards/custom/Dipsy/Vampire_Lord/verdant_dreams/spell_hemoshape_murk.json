@@ -17,18 +17,18 @@
       },
       {
         "class": "AddAttributeSpell",
-		"target": "FRIENDLY_MINIONS",
-		"attribute": "STEALTH",
-		"filter": {
-		  "class": "AttributeFilter",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "STEALTH",
+        "filter": {
+          "class": "AttributeFilter",
           "attribute": "STEALTH",
-		  "invert": true,
-		  "operation": "HAS"
-		},
-		"revertTrigger": {
-		  "class": "TurnStartTrigger",
+          "invert": true,
+          "operation": "HAS"
+        },
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
-		}
+        }
       }
     ]
   },

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
+import com.hiddenswitch.spellsource.client.models.Art;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -45,6 +46,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.cards.desc.HasEntrySet.link;
 
 /**
@@ -161,14 +163,16 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	private DynamicDescriptionDesc[] dynamicDescription;
 	private Boolean legacy;
 	private String hero;
-	private int[] color;
-	private boolean blackText;
 	private String[] secondPlayerBonusCards;
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
+	private Art art;
+	@JsonIgnore
+	private transient List<Condition> glowConditions;
 
 	public CardDesc() {
 		super();
+
 	}
 
 	/**
@@ -1019,50 +1023,45 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	}
 
 	/**
-	 * Iterates through all the conditions specified in the card.
+	 * Iterates through the most important conditions on the card, heuristically.
 	 * <p>
-	 * This includes spell conditions ({@link #getCondition()}, battlecry conditions {@link OpenerDesc#getCondition()},
+	 * This includes spell conditions ({@link #getCondition()}, opener conditions {@link OpenerDesc#getCondition()},
 	 * {@link ComboSpell} and condition arguments specified on subspells.
 	 *
 	 * @return A stream.
 	 */
 	@JsonIgnore
-	public Stream<ConditionDesc> getConditions() {
-		Stream<ConditionDesc> stream = Stream.empty();
-		// Case 1: Spell condition
-		if (getCondition() != null) {
-			stream = Stream.concat(stream, Stream.of(getCondition()));
-		}
-		// Case 2: Condition on battlecry
-		if (getBattlecry() != null
-				&& getBattlecry().condition != null) {
-			stream = Stream.concat(stream, Stream.of(getBattlecry().condition));
-		}
+	public Stream<Condition> getGlowConditions() {
+		if (glowConditions == null) {
+			glowConditions = bfs()
+					.build()
+					.filter(node -> {
+						if (node.getDepth() >= 3) {
+							return false;
+						}
 
-		// Case 3: ComboSpell, conditions in subspells
-		Stream<SpellDesc> spells = Stream.empty();
-		if (getSpell() != null) {
-			spells = Stream.concat(spells, getSpell().spellStream(20));
+						if (node.getParent() == null || (!(node.getParent().getValue() instanceof OpenerDesc)
+								&& !(node.getParent().getValue() instanceof CardDesc))) {
+							return false;
+						}
+
+						if (node.getValue() instanceof Condition || node.getValue() instanceof ConditionDesc) {
+							return true;
+						}
+						return false;
+					})
+					.map(node -> {
+						var conditionObj = node.getValue();
+						if (conditionObj instanceof ConditionDesc) {
+							return ((ConditionDesc) conditionObj).create();
+						} else if (conditionObj instanceof Condition) {
+							return (Condition) conditionObj;
+						}
+						return null;
+					}).filter(Objects::nonNull)
+					.collect(toList());
 		}
-
-		if (getBattlecry().spell != null) {
-			spells = Stream.concat(spells, getBattlecry().spell.spellStream(20));
-		}
-
-		stream = Stream.concat(stream, spells.flatMap(spellDesc -> {
-			if (spellDesc.getClass().isAssignableFrom(ComboSpell.class)) {
-				return Stream.of(ComboCondition.INSTANCE.getDesc());
-			}
-			if (spellDesc.containsKey(SpellArg.CONDITION)) {
-				return Stream.of(((Condition) spellDesc.get(SpellArg.CONDITION)).getDesc());
-			}
-			if (spellDesc.containsKey(SpellArg.CONDITIONS)) {
-				return Arrays.stream((Condition[]) spellDesc.get(SpellArg.CONDITIONS)).map(Condition::getDesc);
-			}
-			return Stream.empty();
-		}));
-
-		return stream;
+		return glowConditions.stream();
 	}
 
 	/**
@@ -1086,14 +1085,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {
 		return dynamicDescription;
-	}
-
-	public int[] getColor() {
-		return color;
-	}
-
-	public boolean isBlackText() {
-		return blackText;
 	}
 
 	public String[] getSecondPlayerBonusCards() {
@@ -1141,14 +1132,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		this.hero = hero;
 	}
 
-	public void setColor(int[] color) {
-		this.color = color;
-	}
-
-	public void setBlackText(boolean blackText) {
-		this.blackText = blackText;
-	}
-
 	@JsonIgnore
 	public Stream<AbstractEnchantmentDesc<?>> getEnchantmentDescs() {
 		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(
@@ -1174,5 +1157,14 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	@Override
 	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateEnchantmentCard(context, player, effectSource, enchantmentSource, host, force);
+	}
+
+	public Art getArt() {
+		return art;
+	}
+
+	public CardDesc setArt(Art art) {
+		this.art = art;
+		return this;
 	}
 }

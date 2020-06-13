@@ -1,33 +1,33 @@
 {
-    "name": "Sun Rager",
-    "baseManaCost": 3,
-    "type": "MINION",
-    "heroClass": "AZURE",
-    "baseAttack": 5,
-    "baseHp": 1,
-    "rarity": "COMMON",
-    "race": "ELEMENTAL",
-    "description": "Opener: If you're holding a 1-Cost spell, gain Dash.",
-    "battlecry": {
-        "condition": {
-            "class": "HoldsCardCondition",
-            "cardFilter": {
-                "class": "CardFilter",
-                "value": 1,
-                "attribute": "BASE_MANA_COST",
-                "operation": "EQUAL"    
-            }
-        },
-        "spell": {
-            "class": "AddAttributeSpell",
-            "target": "SELF",
-            "attribute": "RUSH"
-        }
+  "name": "Sun Rager",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 5,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Opener: If you're holding a 1-Cost spell, gain Dash.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "operation": "EQUAL"
+      }
     },
-    "attributes": {
-        "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "VERDANT_DREAMS",
-    "fileFormatVersion": 1
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "RUSH"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
 }

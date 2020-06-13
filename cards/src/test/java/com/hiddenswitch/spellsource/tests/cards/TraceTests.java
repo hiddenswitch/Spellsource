@@ -90,6 +90,9 @@ public class TraceTests extends TestBase {
 	 *   {@link net.demilich.metastone.game.logic.GameLogic}, like {@link net.demilich.metastone.game.logic.GameLogic#getRandom(List)}</li>.
 	 *   <li><b>Using state that is not deterministic.</b> For example, you should not use non-deterministic objects or
 	 *   fields in {@link net.demilich.metastone.game.spells.Spell} classes.</li>
+	 *   <li><b>Mutate {@link net.demilich.metastone.game.cards.desc.Desc} objects.</b> For example, you retrieve
+	 *   an array of {@code SpellDesc} using {@code (SpellDesc[])desc.get(SpellArg.SPELLS)} and mutate the array,
+	 *   replacing elements inside of it thereby changing the card for all subsequent games.</li>
 	 * </ul>
 	 */
 	@RepeatedTest(1000)
@@ -106,15 +109,38 @@ public class TraceTests extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("getTraces")
+	@Execution(ExecutionMode.SAME_THREAD)
 	public void testTraces(Trace trace) {
 		if ("ignore".equals(trace.getId())) {
 			return;
 		}
 
-		TestBase.assertTimeoutPreemptively(Duration.ofMillis(3700), () -> {
-			trace.replayContext(false, null);
+		TestBase.assertTimeoutPreemptively(Duration.ofMillis(20000), () -> {
+			var traceClone = trace.clone();
+			var context1 = trace.replayContext(false, null);
+			var context2 = traceClone.replayContext(false, null);
+			assertEquals(context1.getTurn(), context2.getTurn(), diagnose(context1, context2));
 			return null;
 		}, "timeout");
+	}
+
+	private String diagnose(GameContext context1, GameContext context2) {
+		for (var j = 1; j < Math.min(context1.getTrace().getActions().size(), context2.getTrace().getActions().size()); j++) {
+			if (!context1.getTrace().getRawActions().get(j).equals(context2.getTrace().getRawActions().get(j))) {
+				var gameAction1 = context1.getTrace().getRawActions().get(j - 1);
+				var gameAction2 = context1.getTrace().getRawActions().get(j);
+				var gameAction3 = context2.getTrace().getRawActions().get(j - 1);
+				var gameAction4 = context2.getTrace().getRawActions().get(j);
+				return String.format("A diverging outcome was observed between a game context and its trace between actions %d and %d:" +
+								"\nContext: \n'%s' to '%s'\nTrace:\n'%s' to '%s'",
+						j - 1, j,
+						gameAction1.getDescription(context1, 0),
+						gameAction2.getDescription(context1, 0),
+						gameAction3.getDescription(context2, 0),
+						gameAction4.getDescription(context2, 0));
+			}
+		}
+		return "No issues detected";
 	}
 
 	/**
@@ -133,21 +159,7 @@ public class TraceTests extends TestBase {
 				LOGGER.info("A failed trace was observed, its cards will be added to a list of possibility problematic cards.");
 				cards.addAll(context1.getEntities().filter(e -> e.getEntityType().equals(EntityType.CARD) && e.hasAttribute(Attribute.STARTED_IN_DECK)
 						|| e.hasAttribute(Attribute.STARTED_IN_HAND)).map(Entity::getSourceCard).map(Card::getCardId).collect(toList()));
-
-				for (var j = 1; j < Math.min(context1.getTrace().getActions().size(), context2.getTrace().getActions().size()); j++) {
-					if (!context1.getTrace().getActions().get(j).equals(context2.getTrace().getActions().get(j))) {
-						var gameAction1 = context1.getTrace().getRawActions().get(j - 1);
-						var gameAction2 = context1.getTrace().getRawActions().get(j);
-						var gameAction3 = context2.getTrace().getRawActions().get(j - 1);
-						var gameAction4 = context2.getTrace().getRawActions().get(j);
-						LOGGER.info("A diverging was observed between a game context and its trace:\nContext: \n'{}' to '{}'\nTrace:\n'{}' to '{}'",
-								gameAction1.getDescription(context1, 0),
-								gameAction2.getDescription(context1, 0),
-								gameAction3.getDescription(context2, 0),
-								gameAction4.getDescription(context2, 0));
-						break;
-					}
-				}
+				LOGGER.info(diagnose(context1, context2));
 			}
 
 		});

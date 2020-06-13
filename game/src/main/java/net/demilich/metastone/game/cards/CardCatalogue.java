@@ -36,6 +36,7 @@ import static java.util.stream.Collectors.toMap;
  * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
  */
 public class CardCatalogue {
+	public static final Map<String, DeckFormat> FORMATS = new HashMap<>();
 	private static Map<String, Card> classCards;
 	private static Map<String, Card> heroCards;
 	private static Map<String, Card> formatCards;
@@ -324,6 +325,9 @@ public class CardCatalogue {
 		try {
 			for (var directory : directories) {
 				var path = Path.of(directory);
+				if (!Files.exists(path)) {
+					continue;
+				}
 				Stream<Path> walk = null;
 				walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS);
 
@@ -415,6 +419,21 @@ public class CardCatalogue {
 		}
 	}
 
+	public static void unloadCards() {
+		if (loaded.compareAndSet(true, false)) {
+			bannedCardIds.clear();
+			hardRemovalCardIds.clear();
+			records.clear();
+			recordsByName.clear();
+			cards.clear();
+			formatCards.clear();
+			classCards.clear();
+			classCardsForFormat.clear();
+			heroCards.clear();
+			baseClassesForFormat.clear();
+			FORMATS.clear();
+		}
+	}
 	/**
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.

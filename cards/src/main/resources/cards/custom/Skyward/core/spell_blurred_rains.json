@@ -1,50 +1,50 @@
 {
-    "name": "Blurred Rains",
-    "baseManaCost": 0,
-    "type": "SPELL",
-    "heroClass": "AZURE",
-    "rarity": "EPIC",
-    "description": "Discard a spell. Your spells cost (1) less this turn.",
-    "targetSelection": "NONE",
-    "spell": {
-        "class": "MetaSpell",
-        "spells": [
-            {
-                "class": "DiscoverSpell",
-                "cardSource": {
-                    "class": "HandSource"
-                },
-                "cardFilter": {
-                    "class": "CardFilter",
-                    "cardType": "SPELL"
-                },
-                "exclusive": true,
-                "howMany": 10,
-                "spell": {
-                    "class": "DiscardSpell"
-                }
-            },
-            {
-                "class": "CardCostModifierSpell",
-                "target": "FRIENDLY_PLAYER",
-                "cardCostModifier": {
-                    "class": "OneTurnCostModifier",
-                    "value": 1,
-                    "cardType": "SPELL",
-                    "expirationTrigger": {
-                        "class": "TurnEndTrigger",
-                        "targetPlayer": "SELF"
-                    },
-                    "operation": "SUBTRACT",
-                    "targetPlayer": "SELF"
-                }
-            }
-        ]
-    },
-    "collectible": true,
-    "sets": [
-        "CUSTOM",
-        "CLASSIC"
-    ],
-    "fileFormatVersion": 1
+  "name": "Blurred Rains",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "EPIC",
+  "description": "Discard a spell. Your spells cost (1) less this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "cardSource": {
+          "class": "HandSource"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        "exclusive": true,
+        "howMany": 10,
+        "spell": {
+          "class": "DiscardSpell"
+        }
+      },
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "OneTurnCostModifier",
+          "value": 1,
+          "cardType": "SPELL",
+          "expirationTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "operation": "SUBTRACT",
+          "targetPlayer": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
 }

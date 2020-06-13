@@ -31,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GetAccountsResponse implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("accounts")
   private List<Account> accounts = null;

@@ -10,7 +10,7 @@
   "description": "Whenever an allied Spirit attacks, receive a random card.",
   "trigger": {
     "eventTrigger": {
-     "class": "TargetAcquisitionTrigger",
+      "class": "TargetAcquisitionTrigger",
       "actionType": "PHYSICAL_ATTACK",
       "fireCondition": {
         "class": "RaceCondition",

@@ -15,10 +15,7 @@ import io.vertx.ext.web.impl.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.net.*;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,8 +114,6 @@ import java.util.Comparator;
  * </pre></li></ol>
  */
 public interface Gateway extends Verticle {
-	DateFormat DATE_TIME_FORMATTER = Utils.createRFC1123DateTimeFormatter();
-
 	static Gateway create() {
 		return new GatewayImpl(Configuration.apiGatewayPort());
 	}
@@ -198,14 +193,16 @@ public interface Gateway extends Verticle {
 			boolean isLoopback = false;
 			boolean supportsMulticast = false;
 			boolean isVirtualbox = false;
+			boolean isSelfAssigned = false;
 			try {
+				isSelfAssigned = ni.inetAddresses().anyMatch(i -> i.getHostAddress().startsWith("169"));
 				isLoopback = ni.isLoopback();
 				supportsMulticast = ni.supportsMulticast();
 				isVirtualbox = ni.getDisplayName().contains("VirtualBox") || ni.getDisplayName().contains("Host-Only");
-			} catch (IOException loopbackTestFailure) {
+			} catch (IOException failure) {
 			}
 			final boolean hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
-			return supportsMulticast && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox;
+			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
 		return networkInterface;
 	}

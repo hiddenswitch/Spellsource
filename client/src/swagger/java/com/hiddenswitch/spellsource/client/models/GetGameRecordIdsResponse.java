@@ -31,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GetGameRecordIdsResponse implements Serializable {
-  private static final long serialVersionUID = 1L;
 
   @JsonProperty("gameIds")
   private List<String> gameIds = null;

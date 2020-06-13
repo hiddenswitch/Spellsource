@@ -3,6 +3,8 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.common.Tracing;
+import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.impl.util.PersistenceContext;
@@ -43,7 +45,7 @@ import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
  * SuspendableAction1)}.
  */
 public interface Logic {
-	Logger logger = LoggerFactory.getLogger(Logic.class);
+	Logger LOGGER = LoggerFactory.getLogger(Logic.class);
 
 	/**
 	 * Initializes custom networked attributes in network-only games (i.e. {@link com.hiddenswitch.spellsource.net.impl.util.ServerGameContext})
@@ -185,15 +187,20 @@ public interface Logic {
 	 * @see PersistenceTrigger for more about how this method is used.
 	 */
 	static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
-		try {
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("Logic/getDescriptionFromRecord")
+				.withTag("userId", userId)
+				.withTag("deckId", deckId)
+				.start();
+		try (var s1 = tracer.activateSpan(span)) {
 			// Set up the attributes
 			String cardId = cardRecord.getCardDesc().getId();
-			final Card cardById = CardCatalogue.getCardById(cardId);
-			if (cardById == null) {
-				logger.error("getDescriptionFromRecord: Card with desc.id={} was not found", cardId);
+			if (!CardCatalogue.getCards().containsKey(cardId.toLowerCase())) {
+				Tracing.error(new NullPointerException(cardId), span, true);
 				return null;
 			}
 
+			Card cardById = CardCatalogue.getCardById(cardId);
 			CardDesc desc = cardById.getDesc().clone();
 
 			if (desc.getAttributes() == null) {
@@ -214,8 +221,10 @@ public interface Logic {
 
 			return desc;
 		} catch (Exception ex) {
-			logger.error("getDescriptionFromRecord: Error {} retrieving data for userId={}, deckId={}, cardRecord={}", ex, userId, deckId, cardRecord);
+			Tracing.error(ex, span, true);
 			return null;
+		} finally {
+			span.finish();
 		}
 	}
 

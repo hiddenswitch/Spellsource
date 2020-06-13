@@ -33,6 +33,7 @@ public interface Trigger extends Serializable {
 	 * @param event A game event.
 	 * @return {@code true} if the trigger should queue in response to this event.
 	 */
+	@Suspendable
 	boolean queues(GameEvent event);
 
 	/**
@@ -74,6 +75,7 @@ public interface Trigger extends Serializable {
 	 * @param source
 	 * @param host
 	 */
+	@Suspendable
 	void onAdd(GameContext context, Player player, Entity source, Entity host);
 
 	/**
@@ -119,6 +121,7 @@ public interface Trigger extends Serializable {
 	 * Expires the trigger; marks it for removal and prevents it from executing in the future.
 	 * @param context
 	 */
+	@Suspendable
 	void expire(GameContext context);
 
 	/**
@@ -129,6 +132,7 @@ public interface Trigger extends Serializable {
 	 * @param event The currently raised event.
 	 * @return {@code true} if the trigger can fire.
 	 */
+	@Suspendable
 	default boolean fires(GameEvent event) {
 		return queues(event);
 	}

@@ -15,7 +15,7 @@
     "spell": {
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
-	  "value": 1
+      "value": 1
     }
   },
   "collectible": true,

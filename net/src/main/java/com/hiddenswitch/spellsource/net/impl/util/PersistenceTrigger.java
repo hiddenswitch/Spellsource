@@ -111,6 +111,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
+	@Suspendable
 	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 	}
 
@@ -137,6 +138,7 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	}
 
 	@Override
+	@Suspendable
 	public boolean fires(GameEvent event) {
 		return true;
 	}

@@ -11,7 +11,7 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "BuffSpell",
-	  "target": "FRIENDLY_HERO",
+      "target": "FRIENDLY_HERO",
       "hpBonus": 2
     }
   },
