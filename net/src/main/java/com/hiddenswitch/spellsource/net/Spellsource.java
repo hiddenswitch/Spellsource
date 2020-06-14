@@ -34,7 +34,7 @@ import static java.util.stream.Collectors.toList;
  * <p>
  * When adding new collections, this class stores the migrations where index creation is appropriate.
  *
- * @see com.hiddenswitch.spellsource.net.applications.LocalClustered for the entry point of the executable.
+ * @see com.hiddenswitch.spellsource.net.applications.Clustered for the entry point of the executable.
  */
 public class Spellsource {
 	private static Spellsource instance;

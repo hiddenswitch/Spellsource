@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.net.impl;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.core.JsonConfiguration;
@@ -22,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.awaitEvent;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class ConnectionImpl implements Connection {
 	static {
@@ -123,6 +129,11 @@ public class ConnectionImpl implements Connection {
 				}
 			} else {
 				Tracing.error(new RuntimeException("endHandler: Ending the same socket twice, for some mysterious reason"), span, true);
+			}
+			try {
+				Strand.sleep(800L);
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+				throw new RuntimeException(suspendExecution);
 			}
 		});
 

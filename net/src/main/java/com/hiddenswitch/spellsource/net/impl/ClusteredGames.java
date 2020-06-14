@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
@@ -21,7 +22,9 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -37,19 +40,23 @@ import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.core.json.JsonObject.mapFrom;
+import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
 public class ClusteredGames extends SyncVerticle implements Games {
-	private Registration registration;
+
 	private Map<GameId, ServerGameContext> contexts = new ConcurrentHashMap<>();
+	private MessageConsumer<JsonObject> registration;
 
 	@Override
 	public void start() throws SuspendExecution {
 		CardCatalogue.loadCardsFromPackage();
-
-		registration = Rpc.register(this, Games.class);
-		LOGGER.info("start: Consumers={}", registration.getMessageConsumers().stream().map(MessageConsumer::address).collect(toList()));
+		var eb = Vertx.currentContext().owner().eventBus();
+		registration = eb.consumer("Games/createGameSession",
+				fiber((Message<JsonObject> request) ->
+						request.reply(json(createGameSession(request.body().mapTo(ConfigurationRequest.class))))));
 	}
 
 	public Map<GameId, ServerGameContext> getContexts() {
@@ -127,6 +134,10 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 					// Deal with ending the game
 					context.addEndGameHandler(session -> {
+						// Do not record replays if we're interrupting
+						if (Strand.currentStrand().isInterrupted()) {
+							return;
+						}
 						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
 						GameId gameOverId = new GameId(session.getGameId());
 						// The players should not accidentally wind back up in games
@@ -276,7 +287,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			Objects.requireNonNull(gameId.toString());
 			removeGameAndRecordReplay(gameId);
 		}
-		Rpc.unregister(registration);
+		Void t = awaitResult(h -> registration.unregister(h));
 		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		Games.LOGGER.debug("stop: Sessions killed");
 		super.stop();

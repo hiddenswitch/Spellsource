@@ -11,6 +11,7 @@ import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;
 import io.vertx.ext.sync.impl.HandlerReceiverAdaptorImpl;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
@@ -89,8 +90,32 @@ public class Sync {
 		if (!(res instanceof RuntimeException)) {
 			return new RuntimeException(res);
 		} else {
+			// Append the current stack so we see what called await fiber
+			res.setStackTrace(concatAndFilterStackTrace(res, new Throwable()));
 			return (RuntimeException) res;
 		}
+	}
+
+	private static StackTraceElement[] concatAndFilterStackTrace(Throwable... throwables) {
+		var length = 0;
+		for (var i = 0; i < throwables.length; i++) {
+			length += throwables[i].getStackTrace().length;
+		}
+		var newStack = new ArrayList<StackTraceElement>(length);
+		for (Throwable throwable : throwables) {
+			var stack = throwable.getStackTrace();
+			for (var i = 0; i < stack.length; i++) {
+				if (stack[i].getClassName().startsWith("co.paralleluniverse.fibers.") ||
+						stack[i].getClassName().startsWith("io.vertx.ext.sync.") ||
+						stack[i].getClassName().startsWith("io.netty.") ||
+						stack[i].getClassName().startsWith("io.vertx.core.impl.") ||
+						stack[i].getClassName().startsWith("sun.nio.")) {
+					continue;
+				}
+				newStack.add(stack[i]);
+			}
+		}
+		return newStack.toArray(new StackTraceElement[0]);
 	}
 
 	/**

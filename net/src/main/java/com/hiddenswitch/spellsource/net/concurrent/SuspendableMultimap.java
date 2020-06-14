@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.net.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
@@ -15,15 +16,22 @@ import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
-	Map<String, SuspendableMultimap> MAP_CACHE = new ConcurrentHashMap<>();
+	Map<String, SuspendableMultimap> MAP_CACHE = new HashMap<>();
+	ReentrantLock LOCK = new ReentrantLock();
+
+	@Suspendable
+	static <K, V> SuspendableMultimap<K, V> create(Vertx vertx, String name) {
+		if (vertx.isClustered()) {
+			return new SuspendableAtomixMultimap<>(name, vertx);
+		} else {
+			return new LocalMultimap<K, V>();
+		}
+	}
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
@@ -31,24 +39,24 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 		Vertx vertx = Vertx.currentContext().owner();
 		String key = vertx.hashCode() + name;
 
-		return MAP_CACHE.computeIfAbsent(key, new Function<>() {
-			@Override
-			@Suspendable
-			public SuspendableMultimap apply(String ignored) {
-				if (vertx.isClustered()) {
-					return new SuspendableAtomixMultimap<>(name, vertx);
-				} else {
-					return new LocalMultimap<K, V>();
-				}
+		LOCK.lock();
+		try {
+			SuspendableMultimap<K, V> v;
+			if ((v = MAP_CACHE.get(key)) == null) {
+				SuspendableMultimap<K, V> newValue = create(vertx, key);
+				MAP_CACHE.put(key, newValue);
+				return newValue;
 			}
-		});
+			return v;
+		} finally {
+			LOCK.unlock();
+		}
 	}
 
 	@Suspendable
 	static <K, V> AddedChangedRemoved<K, V> subscribeToKeyInMultimap(String name, K key) throws SuspendExecution {
 		SuspendableMultimap<K, V> map = getOrCreate(name);
 		return new SingleKeyAddedChangedRemoved<>(key, map);
-
 	}
 
 	// Query Operations
@@ -99,7 +107,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * key-value pair that's already in the multimap has no effect.
 	 *
 	 * @return {@code true} if the method increased the size of the multimap, or {@code false} if the multimap already
-	 * 		contained the key-value pair and doesn't allow duplicates
+	 * contained the key-value pair and doesn't allow duplicates
 	 */
 	@Suspendable
 	boolean put(@Nullable K key, @Nullable V value);
@@ -146,7 +154,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * <p>If {@code values} is empty, this is equivalent to {@link #removeAll(Object) removeAll(key)}.
 	 *
 	 * @return the collection of replaced values, or an empty collection if no values were previously associated with the
-	 * 		key. The collection <i>may</i> be modifiable, but updating it will have no effect on the multimap.
+	 * key. The collection <i>may</i> be modifiable, but updating it will have no effect on the multimap.
 	 */
 	@Suspendable
 	List<V> replaceValues(@Nullable K key, Iterable<? extends V> values);
@@ -158,7 +166,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * #keySet()}, {@link #asMap()}, or any other views.
 	 *
 	 * @return the values that were removed (possibly empty). The returned collection <i>may</i> be modifiable, but
-	 * 		updating it will have no effect on the multimap.
+	 * updating it will have no effect on the multimap.
 	 */
 	@Suspendable
 	List<V> removeAll(@Nullable K key);

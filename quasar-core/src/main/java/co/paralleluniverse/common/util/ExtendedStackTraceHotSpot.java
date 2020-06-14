@@ -228,7 +228,7 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
             if (!javaVersion.startsWith("1.8") && !javaVersion.startsWith("8.") && !javaVersion.startsWith("1.9") && !javaVersion.startsWith("9.")
                 && !javaVersion.startsWith("11") && !javaVersion.startsWith("12") && !javaVersion.startsWith("13"))
                 throw new IllegalStateException("UnsupportedJavaVersion");
-            if (!System.getProperty("java.vm.name").toLowerCase().contains("hotspot"))
+            if (!System.getProperty("java.vm.name").toLowerCase().contains("hotspot") && !System.getProperty("java.vm.name").toLowerCase().contains("OpenJDK"))
                 throw new IllegalStateException("Not HotSpot");
             // the JVM blocks access to Throwable.backtrace via reflection
             // backtrace = ReflectionUtil.accessible(Throwable.class.getDeclaredField("backtrace"));

@@ -13,6 +13,10 @@ import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.net.impl.Rpc;
 import io.vertx.core.Verticle;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -51,6 +55,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.client.models.EntityType.*;
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
 
@@ -298,8 +304,9 @@ public interface Games extends Verticle {
 	static MatchCreateResponse createGame(ConfigurationRequest request) throws SuspendExecution, InterruptedException {
 		Matchmaking.LOGGER.debug("createMatch: Creating match for request {}", request);
 
-		Games gamesService = Rpc.connect(Games.class).sync();
-		return new MatchCreateResponse(gamesService.createGameSession(request));
+		var eb = Vertx.currentContext().owner().eventBus();
+		Message<JsonObject> response = awaitResult(h -> eb.request("Games/createGameSession", json(request), h));
+		return new MatchCreateResponse(response.body().mapTo(CreateGameSessionResponse.class));
 	}
 
 	/**

@@ -176,13 +176,13 @@ public class DeckTest extends SpellsourceTestBase {
 								.attribute(PlayerEntityAttributes.SIGNATURE)
 								.stringValue(signatureCardId)));
 
-				client.matchmakeQuickPlay(createDeckResult.getDeckId());
-				client.play();
+				invoke0(client::matchmakeQuickPlay, createDeckResult.getDeckId());
+				invoke0(client::play);
 				var serverGameContext = getServerGameContext(client.getUserId());
 				// In AI games, the player is always player zero.
 				var player = serverGameContext.orElseThrow().getPlayers().stream().filter(p -> p.getUserId().equals(client.getUserId().toString())).findFirst().orElseThrow();
 				assertEquals(signatureCardId, player.getAttribute(Attribute.SIGNATURE));
-				client.waitUntilDone();
+				invoke0(client::waitUntilDone);
 
 				var deck = invoke(client.getApi()::decksGet, createDeckResult.getDeckId());
 				assertEquals(PlayerEntityAttributes.SIGNATURE, deck.getCollection().getPlayerEntityAttributes().get(0).getAttribute());

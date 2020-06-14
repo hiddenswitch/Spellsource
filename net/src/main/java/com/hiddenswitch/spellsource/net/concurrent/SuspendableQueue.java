@@ -119,5 +119,6 @@ public interface SuspendableQueue<V> extends AutoCloseable {
 	}
 
 	@Override
+	@Suspendable
 	void close();
 }

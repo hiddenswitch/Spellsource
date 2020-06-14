@@ -284,7 +284,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 
 			// Read messages from the client and send them to the server processing this request.
-			connection.handler(com.hiddenswitch.spellsource.net.impl.Sync.fiber(env -> {
+			connection.handler(fiber(env -> {
 				if (env.getGame() != null && env.getGame().getClientToServer() != null) {
 					ClientToServerMessage msg = env.getGame().getClientToServer();
 					if (msg.getMessageType() == MessageType.FIRST_MESSAGE) {
@@ -306,7 +306,7 @@ public class ServerGameContext extends GameContext implements Server {
 			});
 
 			// When the user disconnects, make sure to remove these event bus registrations
-			connection.endHandler(com.hiddenswitch.spellsource.net.impl.Sync.fiber(v1 -> {
+			connection.endHandler(fiber(v1 -> {
 				try {
 					consumers.remove(consumer);
 					consumer.unregister();
@@ -480,7 +480,7 @@ public class ServerGameContext extends GameContext implements Server {
 				// Only two human players will get timers
 				timerLengthMillis = getLogic().getMulliganTimeMillis();
 				timerStartTimeMillis = System.currentTimeMillis();
-				mulliganTimerId = scheduler.setTimer(timerLengthMillis, com.hiddenswitch.spellsource.net.impl.Sync.fiber(this::endMulligans));
+				mulliganTimerId = scheduler.setTimer(timerLengthMillis, fiber(this::endMulligans));
 			} else {
 				LOGGER.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
 				timerLengthMillis = null;
@@ -647,7 +647,7 @@ public class ServerGameContext extends GameContext implements Server {
 				timerStartTimeMillis = System.currentTimeMillis();
 
 				if (turnTimerId == null) {
-					turnTimerId = scheduler.setTimer(timerLengthMillis, com.hiddenswitch.spellsource.net.impl.Sync.fiber(ignored -> {
+					turnTimerId = scheduler.setTimer(timerLengthMillis, fiber(ignored -> {
 						// Since executing the callback may itself trigger more action requests, we'll indicate to
 						// the NetworkDelegate (i.e., this ServerGameContext instance) that further
 						// networkRequestActions should be executed immediately.

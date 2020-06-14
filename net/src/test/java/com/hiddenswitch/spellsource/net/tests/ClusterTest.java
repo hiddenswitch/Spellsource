@@ -58,9 +58,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	 */
 	@Suspendable
 	private void vertx(int gatewayPort, VertxTestContext testContext, Handler<Vertx> handler, Node... bootstrapNodes) {
-		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
-		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-		CardCatalogue.loadCardsFromPackage();
+		staticSetUp();
 
 		var atomixInstance = new AtomicReference<Atomix>();
 		var instance = Cluster.create(gatewayPort + 1, bootstrapNodes);
@@ -81,7 +79,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	}
 
 	@Test()
-	@Timeout(95000)
+	@Timeout(115000)
 	@Suspendable
 	public void testMultiHostMultiClientCluster(VertxTestContext context) throws ExecutionException, InterruptedException {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
@@ -165,6 +163,6 @@ public class ClusterTest extends SpellsourceTestBase {
 				}
 			}
 		}, context, vertx, context.succeeding());
-		context.awaitCompletion(95000, TimeUnit.MILLISECONDS);
+		context.awaitCompletion(115000, TimeUnit.MILLISECONDS);
 	}
 }

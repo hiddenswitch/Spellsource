@@ -6,11 +6,13 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.net.Accounts;
-import com.hiddenswitch.spellsource.net.Friends;
-import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.net.Matchmaking;
+import com.hiddenswitch.spellsource.net.*;
+import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableQueue;
+import com.hiddenswitch.spellsource.net.impl.GameId;
+import com.hiddenswitch.spellsource.net.impl.InviteId;
+import com.hiddenswitch.spellsource.net.impl.UserId;
+import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
@@ -349,14 +351,15 @@ public class InvitesTest extends SpellsourceTestBase {
 					receivedInvite.await();
 
 					// Accept the invite with a deck ID, which should enqueue automatically
-					var acceptInviteResponse = invoke(recipient.getApi()::acceptInvite, inviteResponse.getInvite().getId(), new AcceptInviteRequest()
+					Invites.accept(new InviteId(inviteResponse.getInvite().getId()), new AcceptInviteRequest()
 							.match(new MatchmakingQueuePutRequest()
 									.queueId(inviteResponse.getInvite().getQueueId())
-									.deckId(recipient.getAccount().getDecks().get(0).getId())));
+									.deckId(recipient.getAccount().getDecks().get(0).getId())), Accounts.get(recipient.getUserId().toString()));
 
 
-					assertTrue(Games.getUsersInGames().containsKey(recipient.getUserId()), "Both players should be in a game now");
-					assertTrue(Games.getUsersInGames().containsKey(sender.getUserId()), "Both players should be in a game now");
+					SuspendableMap<UserId, GameId> usersInGames = Games.getUsersInGames();
+					assertTrue(usersInGames.containsKey(recipient.getUserId()), "Both players should be in a game now");
+					assertTrue(usersInGames.containsKey(sender.getUserId()), "Both players should be in a game now");
 					sender.play();
 					recipient.play();
 
@@ -369,11 +372,10 @@ public class InvitesTest extends SpellsourceTestBase {
 
 					// Check that the queue has been destroyed.
 					assertFalse(SuspendableQueue.exists(inviteResponse.getInvite().getQueueId()), "The queue should be destroyed");
-					assertFalse(Games.getUsersInGames().containsKey(recipient.getUserId()), "Neither players should be in a game now");
-					assertFalse(Games.getUsersInGames().containsKey(sender.getUserId()), "Neither players should be in a game now");
+					assertFalse(usersInGames.containsKey(recipient.getUserId()), "Neither players should be in a game now");
+					assertFalse(usersInGames.containsKey(sender.getUserId()), "Neither players should be in a game now");
 				}
 			}
 		}, testContext, vertx);
-
 	}
 }
