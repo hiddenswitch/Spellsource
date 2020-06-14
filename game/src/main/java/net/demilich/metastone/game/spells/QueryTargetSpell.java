@@ -30,23 +30,23 @@ import java.util.stream.Collectors;
  * use {@link QueryTargetSpell}.
  * <p>
  * No effects are cast when the result of the query is empty.
- * <h1>Targeting:</h1>
+ * <b>Targeting:</b>
  * First, the original list of targets is collected. When {@link SpellArg#TARGET} is specified, the query is executed
  * against the full collection of targets. When it is not specified, the query is executed on the cards returned by
  * {@link SpellArg#CARD_SOURCE}.
  *
- * <h1>Shuffling:</h1>
+ * <b>Shuffling:</b>
  * If {@link SpellArg#RANDOM_TARGET} is {@code true}, the list is now shuffled.
- * <h1>Filtering:</h1>
+ * <b>Filtering:</b>
  * The targets are filtered using {@link SpellArg#FILTER} or {@link SpellArg#CARD_FILTER}. If {@link SpellArg#TARGET} is
  * specified with a {@link SpellArg#CARD_FILTER}, the <b>source cards</b> of the targets are used. Otherwise, if a
  * {@link SpellArg#FILTER} is specified, the filter is evaluated normally.
- * <h1>Sorting:</h1>
+ * <b>Sorting:</b>
  * If a {@link SpellArg#VALUE} is provided, that value is evaluated against every element in the targets list and used
  * to sort in ascending order. If a value is not provided, the natural order (i.e., index in the zone or catalogue) is
  * used. To reverse the list, set {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg#MULTIPLIER}
  * to {@code -1}.
- * <h1>Skips and Limits:</h1>
+ * <b>Skips and Limits:</b>
  * The first {@link SpellArg#SECONDARY_VALUE} targets are skipped, defaulting to {@code 0}. Then, the next {@link
  * SpellArg#HOW_MANY} targets are taken, defaulting to {@code 1}.
  * <p>
@@ -54,7 +54,7 @@ import java.util.stream.Collectors;
  * EntityReference#EVENT_TARGET} is set), {@link ValueProvider} specifications given for either of these arguments will
  * be evaluated with the {@code target} given by {@link EntityReference#TARGET} or {@link EntityReference#EVENT_TARGET},
  * or {@code null}.
- * <h1>Casting:</h1>
+ * <b>Casting:</b>
  * Finally, the {@link SpellArg#SPELL} is cast on each {@code target} in order. You should <b>not</b> use {@link
  * EntityReference#OUTPUT} here, the selected target is passed directly as a target of the spell. If a {@link
  * SpellArg#CONDITION} is specified, casting only continues so long as there are elements <b>and</b> the condition is

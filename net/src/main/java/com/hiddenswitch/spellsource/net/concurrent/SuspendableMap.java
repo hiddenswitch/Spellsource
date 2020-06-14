@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.net.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableAsyncMap;
 import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableWrappedMap;
 import io.vertx.core.AsyncResult;
@@ -9,41 +10,49 @@ import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public abstract class SuspendableMap<K, V> {
-	private static Map<String, SuspendableMap> MAP_CACHE = new ConcurrentHashMap<>();
+	private static Map<String, SuspendableMap> MAP_CACHE = new HashMap<>();
+	private static ReentrantLock LOCK = new ReentrantLock();
 
 	@Suspendable
+	private static <K, V> SuspendableMap<K, V> create(Vertx vertx, String name) {
+		SharedData client = vertx.sharedData();
+		if (vertx.isClustered()) {
+			AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
+			return new SuspendableAsyncMap<>(map);
+		} else {
+			return new SuspendableWrappedMap<>(client.getLocalMap(name));
+		}
+	}
+
+	@Suspendable
+	@SuppressWarnings("unchecked")
 	public static <K, V> SuspendableMap<K, V> getOrCreate(String name) {
 		Vertx vertx = Vertx.currentContext().owner();
 		String key = vertx.hashCode() + name;
 
-		@SuppressWarnings("unchecked")
-		SuspendableMap<K, V> suspendableMap = MAP_CACHE.computeIfAbsent(key, new Function<String, SuspendableMap>() {
-					@Override
-					@Suspendable
-					public SuspendableMap apply(String k) {
-						SharedData client = vertx.sharedData();
-						if (vertx.isClustered()) {
-							AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
-							return new SuspendableAsyncMap<>(map);
-						} else {
-							return new SuspendableWrappedMap<>(client.getLocalMap(name));
-						}
-					}
-				}
-		);
-		return suspendableMap;
+
+		LOCK.lock();
+		try {
+			SuspendableMap<K, V> v;
+			if ((v = MAP_CACHE.get(key)) == null) {
+				SuspendableMap<K, V> newValue = create(vertx, key);
+				MAP_CACHE.put(key, newValue);
+				return newValue;
+			}
+			return v;
+		} finally {
+			LOCK.unlock();
+		}
 	}
 
+	@Suspendable
 	public static <K, V> void getOrCreate(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
 		Vertx vertx = Vertx.currentContext().owner();
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();

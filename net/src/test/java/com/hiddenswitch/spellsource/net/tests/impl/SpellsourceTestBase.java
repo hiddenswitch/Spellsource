@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.SuspendableRunnable;
+import com.hiddenswitch.containers.MongoDBContainer;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.net.*;
@@ -28,12 +29,13 @@ import net.demilich.metastone.game.decks.DeckCreateRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -42,18 +44,28 @@ import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.core.Vertx.currentContext;
 
 @ExtendWith(VertxExtension.class)
+@Testcontainers
 public abstract class SpellsourceTestBase {
+
+	@Container
+	public MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:3.6");
 
 	@BeforeEach
 	public void setUp(Vertx vertx, VertxTestContext testContext) {
-		CardCatalogue.loadCardsFromPackage();
-		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-		vertx.exceptionHandler(testContext::failNow);
-		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+		staticSetUp();
 
+		vertx.exceptionHandler(testContext::failNow);
 		Migrations.migrate(vertx, testContext.succeeding(v1 -> {
 			Spellsource.spellsource().deployAll(vertx, getConcurrency(), testContext.completing());
 		}));
+	}
+
+	@Suspendable
+	public void staticSetUp() {
+		CardCatalogue.loadCardsFromPackage();
+		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
+		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
+		System.getProperties().put("mongo.url", mongoDBContainer.getReplicaSetUrl());
 	}
 
 	protected int getConcurrency() {

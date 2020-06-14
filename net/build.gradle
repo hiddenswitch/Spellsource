@@ -7,22 +7,21 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 apply from: '../gradle/instrument.gradle'
 
-def localMainClassName = "com.hiddenswitch.spellsource.net.applications.LocalClustered"
-def defaultMainClass = "com.hiddenswitch.spellsource.net.applications.Clustered"
+def testMainClassName = "com.hiddenswitch.spellsource.net.tests.LocalClustered"
+mainClassName = "com.hiddenswitch.spellsource.net.applications.Clustered"
 
-def debugSystemProperties = ["spellsource.port"                        : System.getenv().getOrDefault("PORT", "8080"),
+def debugSystemProperties = ["rootProject.projectDir"                  : rootProject.projectDir,
+                             "spellsource.port"                        : System.getenv().getOrDefault("PORT", "8080"),
                              "spellsource.root.logger.level"           : "DEBUG",
                              "games.defaultNoActivityTimeout"          : "999999000",
                              "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory"]
 
 
-mainClassName = localMainClassName
-
 shadowJar {
     mergeServiceFiles()
     zip64 true
     manifest {
-        attributes 'Main-Class': defaultMainClass
+        attributes 'Main-Class': mainClassName
     }
 }
 
@@ -46,6 +45,7 @@ configurations.runtime {
 }
 
 dependencies {
+    implementation platform('org.testcontainers:testcontainers-bom:1.14.3')
     implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
@@ -80,15 +80,15 @@ dependencies {
         exclude group: 'org.objenesis', module: '*'
     }
 
-    implementation('io.atomix:atomix:3.1.8') {
+    implementation('io.atomix:atomix:3.1.5') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
-    implementation('io.atomix:atomix-raft:3.1.8') {
+    implementation('io.atomix:atomix-raft:3.1.5') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
-    implementation('io.atomix:atomix-primary-backup:3.1.8') {
+    implementation('io.atomix:atomix-primary-backup:3.1.5') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
@@ -121,6 +121,9 @@ dependencies {
     }
 
     testImplementation project(':testutils')
+    testImplementation "org.testcontainers:testcontainers"
+    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation('org.testcontainers:mongodb')
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.1'
     testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.11.2.Final') {
         exclude group: 'javax.activation', module: 'activation'
@@ -135,19 +138,14 @@ dependencies {
 
 run {
     description("Starts the Spellsource server")
+    dependsOn += [classes, testClasses]
+    classpath sourceSets.test.runtimeClasspath
     setSystemProperties(debugSystemProperties)
-}
-
-task(runDebug, type: JavaExec) {
-    dependsOn classes
-    description("Starts the Spellsource server attachable as a Remote debug target from IntelliJ")
-    setSystemProperties(debugSystemProperties)
-    setJvmArgs(["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
-    main = localMainClassName
+    main = testMainClassName
 }
 
 test {
-    description('Tests the server. Make sure mongod is running.')
+    description('Tests the server.')
     setSystemProperties(debugSystemProperties)
     useJUnitPlatform()
     maxParallelForks = 1

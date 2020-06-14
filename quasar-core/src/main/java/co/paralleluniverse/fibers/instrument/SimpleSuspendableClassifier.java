@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
@@ -94,7 +95,7 @@ public class SimpleSuspendableClassifier implements SuspendableClassifier {
 
     private static void parse(URL file, Set<String> set, Set<String> classSet) {
         try (InputStream is = file.openStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String line;
 
             for (int linenum = 1; (line = reader.readLine()) != null; linenum++) {

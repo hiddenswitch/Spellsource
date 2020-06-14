@@ -70,7 +70,7 @@ import static java.util.stream.Collectors.toList;
  * Notice that the keys of the objects in the JSON are transformed, "camelCase", from the names in the {@code enum} in
  * {@link SpellArg}.
  *
- * <h3>Deathrattles</h3>
+ * <b>Deathrattles</b>
  * <p>
  * This class also describes an actor's deathrattle.
  * <p>

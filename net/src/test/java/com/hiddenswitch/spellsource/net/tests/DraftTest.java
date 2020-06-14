@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.tests;
 
+import com.amazonaws.util.Throwables;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.draft.DraftStatus;
@@ -66,20 +67,32 @@ public class DraftTest extends SpellsourceTestBase {
 			api.getApiClient().setApiKey(car.getLoginToken());
 
 			try {
-				api.draftsGet();
+				invoke(api::draftsGet);
 				fail("A draft should not yet exist.");
-			} catch (ApiException e) {
-				assertEquals(404, e.getCode(), "The exception codes for drafts get do not match.");
+			} catch (Throwable e) {
+				var e1 = Throwables.getRootCause(e);
+				if (e1 instanceof ApiException) {
+					var t = (ApiException) e1;
+					assertEquals(404, t.getCode(), "The exception codes for drafts get do not match.");
+				} else {
+					fail("Wrong exception");
+				}
 			}
 
 
 			var state = invoke(api::draftsPost, new DraftsPostRequest().startDraft(true));
 			assertEquals(DraftState.StatusEnum.SELECT_HERO, state.getStatus(), "The result of starting a draft is unexpectedly not select hero.");
 			try {
-				api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
+				invoke(api::draftsChooseCard, new DraftsChooseCardRequest().cardIndex(1));
 				fail("The client should fail to advance a draft without choosing a hero first.");
-			} catch (ApiException e) {
-				assertEquals(400, e.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
+			} catch (Throwable e) {
+				var e1 = Throwables.getRootCause(e);
+				if (e1 instanceof ApiException) {
+					var t = (ApiException) e1;
+					assertEquals(400, t.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
+				} else {
+					fail("Wrong exception");
+				}
 			}
 
 
@@ -101,10 +114,9 @@ public class DraftTest extends SpellsourceTestBase {
 
 			final var deckId = state.getDeckId();
 
-
-			try (var client = new UnityClient(context,car.getLoginToken())) {
+			try (var client = new UnityClient(context, car.getLoginToken())) {
 				invoke0(client::ensureConnected);
-				client.matchmakeQuickPlay(deckId);
+				invoke0(client::matchmakeQuickPlay, deckId);
 				invoke0(client::waitUntilDone);
 				assertTrue(client.isGameOver());
 				assertTrue(client.getTurnsPlayed() > 0);

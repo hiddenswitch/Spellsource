@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.net.tests.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.fibers.futures.AsyncCompletionStage;
+import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
@@ -57,7 +58,7 @@ public class UnityClient implements AutoCloseable {
 	private Account account;
 	private VertxTestContext context;
 	private NettyWebsocketClientEndpoint realtime;
-	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
+	private AtomicReference<SettableFuture<Void>> matchmakingFut = new AtomicReference<>(new SettableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
@@ -156,12 +157,12 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Suspendable
-	public CompletableFuture<Void> matchmake(String deckId, String queueId) {
+	public Future<Void> matchmake(String deckId, String queueId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
 
-		var fut = new CompletableFuture<Void>() {
+		var fut = new SettableFuture<Void>() {
 			@Override
 			public boolean cancel(boolean mayInterruptIfRunning) {
 				realtime.sendMessage(Json.encode(new Envelope()
@@ -270,7 +271,7 @@ public class UnityClient implements AutoCloseable {
 
 		// Might have been cancelled
 		assertFalse(matchmakingFut.get().isDone());
-		matchmakingFut.get().complete(null);
+		matchmakingFut.get().set(null);
 	}
 
 	@Suspendable
@@ -389,9 +390,9 @@ public class UnityClient implements AutoCloseable {
 	public void matchmakeAndPlay(String deckId, String queueId) {
 		var matchmaking = matchmake(deckId, queueId);
 		try {
-			AsyncCompletionStage.get(matchmaking, 35000L, TimeUnit.MILLISECONDS);
+			matchmaking.get(35000L, TimeUnit.MILLISECONDS);
 			play();
-		} catch (InterruptedException | ExecutionException | SuspendExecution ex) {
+		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
 		} catch (TimeoutException e) {
 			Tracing.error(e, parentSpan, true);
