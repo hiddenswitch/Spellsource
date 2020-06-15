@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.net.tests;
 
+import com.hiddenswitch.containers.KeycloakContainer;
 import com.hiddenswitch.containers.MongoDBContainer;
 import com.hiddenswitch.spellsource.net.Broadcaster;
 import com.hiddenswitch.spellsource.net.applications.Applications;
@@ -23,19 +24,37 @@ import java.time.temporal.ChronoUnit;
 public class LocalClustered {
 	public static void main(String[] args) throws IOException {
 		var rootProjectDir = System.getProperties().getProperty("rootProject.projectDir", "./");
-		var path = Path.of(rootProjectDir, ".mongo").toAbsolutePath();
-		Files.createDirectories(path);
-		var container = new MongoDBContainer("mongo:3.6")
+
+		var dbPath = Path.of(rootProjectDir, ".mongo").toAbsolutePath();
+		Files.createDirectories(dbPath);
+		var database = new MongoDBContainer("mongo:3.6")
 				.withStartupTimeout(Duration.of(20, ChronoUnit.SECONDS));
-		container.addFileSystemBind(path.toString(), "/data/db", BindMode.READ_WRITE);
-		container.start();
-		String mongoUrl = container.getReplicaSetUrl().replace("/test", "/metastone");
-		System.out.println(mongoUrl);
+		database.addFileSystemBind(dbPath.toString(), "/data/db", BindMode.READ_WRITE);
+		database.start();
+		var mongoUrl = database.getReplicaSetUrl().replace("/test", "/metastone");
 		System.getProperties().put("mongo.url", mongoUrl);
+
+		/*
+		var keycloak = new KeycloakContainer();
+		keycloak.start();
+		*/
+		Applications.LOGGER.info("main: mongo.url is {}", mongoUrl);
+//		Applications.LOGGER.info("main: keycloak.url is {}", keycloak.getAuthServerUrl());
+
 		GlobalTracer.registerIfAbsent(NoopTracerFactory.create());
-		Applications.startServer(vertx -> vertx.result().deployVerticle(Broadcaster.create(), done -> {
-			((VertxInternal) vertx.result()).addCloseHook(v -> container.close());
-			Applications.LOGGER.info("main: Broadcaster deployed");
-		}));
+		Applications.startServer(vertx -> {
+			if (vertx.failed()) {
+				database.close();
+//				keycloak.close();
+				return;
+			}
+
+			((VertxInternal) vertx.result()).addCloseHook(v -> {
+				database.close();
+//				keycloak.close();
+			});
+
+			vertx.result().deployVerticle(Broadcaster.create(), done -> Applications.LOGGER.info("main: Broadcaster deployed"));
+		});
 	}
 }

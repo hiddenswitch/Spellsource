@@ -17,6 +17,7 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 	private static final String MONGODB_VERSION_DEFAULT = "3.6";
 	private static final String MONGODB_DATABASE_NAME_DEFAULT = "metastone";
 	private String databaseName = MONGODB_DATABASE_NAME_DEFAULT;
+	private boolean replSet = false;
 
 	public MongoDBContainer() {
 		this("mongo:" + MONGODB_VERSION_DEFAULT);
@@ -24,8 +25,7 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 
 	public MongoDBContainer(@NotNull String dockerImageName) {
 		super(dockerImageName);
-		this.withExposedPorts(new Integer[]{27017});
-		this.withCommand(new String[]{"--replSet", "docker-rs"});
+		this.withExposedPorts(27017);
 		this.waitingFor(Wait.forLogMessage(".*waiting for connections on port.*", 1));
 	}
 
@@ -42,7 +42,9 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 	}
 
 	protected void containerIsStarted(InspectContainerResponse containerInfo) {
-		this.initReplicaSet();
+		if (isReplSet()) {
+			this.initReplicaSet();
+		}
 	}
 
 	private String[] buildMongoEvalCommand(String command) {
@@ -111,6 +113,19 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 	public static class ReplicaSetInitializationException extends RuntimeException {
 		ReplicaSetInitializationException(String errorMessage) {
 			super(errorMessage);
+		}
+	}
+
+	public boolean isReplSet() {
+		return replSet;
+	}
+
+	public void setReplSet(boolean replSet) {
+		this.replSet = replSet;
+		if (replSet) {
+			this.withCommand("--replSet", "docker-rs");
+		} else {
+			this.withCommand();
 		}
 	}
 }

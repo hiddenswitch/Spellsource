@@ -22,8 +22,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * A specification for the HTTP API that clients can access. See the Swagger specification for detailed documentation of
- * each of these methods.
+ * A specification for the HTTP API that clients can access. See the Swagger specification (<a
+ * href="https://github.com/hiddenswitch/Spellsource/blob/master/client/swagger-api.yaml">here</a>) for detailed
+ * documentation of each of these methods.
  * <p>
  * To create a new HTTP API endpoint:
  *
