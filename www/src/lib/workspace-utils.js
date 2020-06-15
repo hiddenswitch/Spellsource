@@ -1,4 +1,4 @@
-import { Xml } from 'blockly'
+import {isNumber, Xml} from 'blockly'
 import { extend, filter, find, fromPairs, isArray, map } from 'lodash'
 import format from 'string-format'
 
@@ -12,6 +12,10 @@ export default class WorkspaceUtils {
   static BLOCKLY_RANDOM_TARGET = 'BLOCKLY_RANDOM_TARGET'
   static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
   static BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
+  static BLOCKLY_RACE_FILTER = 'BLOCKLY_RACE_FILTER'
+  static BLOCKLY_RACE_FILTER_SPELL = 'BLOCKLY_RACE_FILTER_SPELL'
+  static BLOCKLY_INVERT = 'BLOCKLY_INVERT'
+  static BLOCKLY_CARD_COST_MODIFIER = 'BLOCKLY_CARD_COST_MODIFIER'
 
   /**
    * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
@@ -167,11 +171,47 @@ export default class WorkspaceUtils {
                 }
                 retValue = obj
                 break
+              case WorkspaceUtils.BLOCKLY_CARD_COST_MODIFIER:
+                if (!!prev) {
+                  if (!!obj['condition']) {
+                    prev['manaCostModifier'] = {
+                      class: 'ConditionalValueProvider',
+                      condition: obj['condition'],
+                      ifFalse: 0,
+                      ifTrue: value
+                    }
+                  } else if (!isNumber(obj.value)) {
+                    prev['manaCostModifier'] = obj.value
+                  }
+                }
+                retValue = obj
+                break
               case WorkspaceUtils.BLOCKLY_RANDOM_TARGET:
                 if (!!parent) {
                   parent.randomTarget = true
                 }
                 retValue = obj['target']
+                break
+              case WorkspaceUtils.BLOCKLY_RACE_FILTER:
+                if (!!parent) {
+                  parent.filter = {
+                    class: 'RaceFilter',
+                    race: obj['race']
+                  }
+                }
+                retValue = obj['target']
+                break
+              case WorkspaceUtils.BLOCKLY_RACE_FILTER_SPELL:
+                if (!!parent) {
+                  parent.filterToBePutInSpell = {
+                    class: 'RaceFilter',
+                    race: obj['race']
+                  }
+                }
+                break
+              case WorkspaceUtils.BLOCKLY_INVERT:
+                retValue = obj['condition']
+                retValue.invert = true
                 break
               default:
                 const allValues = filter(childNodes, cn =>
@@ -186,13 +226,23 @@ export default class WorkspaceUtils {
             }
           }
           if (retValue !== null) {
-            return retValue
+            return this.postProcessCardScript(retValue)
           }
         }
-        return obj
+        return this.postProcessCardScript(obj)
       default:
         throw new Error('invalid block type to pass here')
     }
+  }
+
+  static postProcessCardScript(cardScript) {
+    if (!!cardScript.filterToBePutInSpell) {
+      if (!!cardScript.spell) {
+        cardScript.spell.filter = cardScript.filterToBePutInSpell
+      }
+      delete cardScript.filterToBePutInSpell
+    }
+    return cardScript
   }
 
   static workspaceToCardScript (workspace) {
