@@ -177,8 +177,8 @@ const CardEditorView = () => {
     const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
     // Generate the blocks that correspond to the cards in the workspace
     if (isArray(cardScript)) {
-      map(filter(cardScript, topLevelElement => !!topLevelElement.id), card => {
-        const cardId = card.id
+      map(filter(cardScript, topLevelElement => !!topLevelElement && !!topLevelElement.name), card => {
+        const cardId = card.name.toLowerCase().replace(' ', '')
         return {
           cardId: cardId,
           init: function () {
@@ -191,8 +191,9 @@ const CardEditorView = () => {
             })
           }
         }
-      })
+      }).forEach(card => Blockly.Blocks['Card_' + card.cardId] = card)
     }
+    workspace.refreshToolboxSelection()
     setCode(JSON.stringify(cardScript, null, 2))
   }
 
