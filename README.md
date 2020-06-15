@@ -28,6 +28,8 @@ To implement new effects (called **Spells** inside Spellsource) add a new Spell 
 
 You can learn more about the Spellsource AI as implemented in the [GameStateValueBehaviour](game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) class.
 
+The server application starts in [Clustered](net/src/main/java/com/hiddenswitch/spellsource/net/applications/Clustered.java). `./gradlew netRun` uses [LocalClustered](net/src/test/java/com/hiddenswitch/spellsource/net/tests/LocalClustered.java).
+
 The client is private, please contact for access on the Discord.
 
 ### Tasks

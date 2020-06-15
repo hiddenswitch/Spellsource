@@ -123,7 +123,6 @@ dependencies {
     testImplementation project(':testutils')
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
-    testImplementation('org.testcontainers:mongodb')
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.1'
     testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.11.2.Final') {
         exclude group: 'javax.activation', module: 'activation'
