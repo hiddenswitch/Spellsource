@@ -239,14 +239,32 @@ export default class WorkspaceUtils {
   }
 
   static postProcessCardScript(cardScript) {
+    /*
     if (!!cardScript.filterToBePutInSpell) {
       if (!!cardScript.spell) {
         cardScript.spell.filter = cardScript.filterToBePutInSpell
       }
       delete cardScript.filterToBePutInSpell
     }
+    */
     if (!!cardScript.card && !(cardScript.card instanceof String)) {
       delete cardScript.card
+    }
+
+    if (!!cardScript.options) {
+      for (const option in cardScript.options) {
+        cardScript[option] = cardScript.options[option]
+      }
+      delete cardScript.options
+    } else if (isArray(cardScript)) {
+      for (const cardScriptElement of cardScript) {
+        if (!!cardScriptElement.options) {
+          for (const option in cardScriptElement.options) {
+            cardScriptElement[option] = cardScriptElement.options[option]
+          }
+          delete cardScriptElement.options
+        }
+      }
     }
     return cardScript
   }

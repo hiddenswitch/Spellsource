@@ -43,6 +43,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     name: String
     valueI: Int
     valueS: String
+    valueB: Boolean
     min: Int
     max: Int
     int: Boolean
