@@ -12,7 +12,7 @@ export default class WorkspaceUtils {
   static BLOCKLY_RANDOM_TARGET = 'BLOCKLY_RANDOM_TARGET'
   static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
   static BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
-  static BLOCKLY_RACE_FILTER = 'BLOCKLY_RACE_FILTER'
+  static BLOCKLY_FILTER = 'BLOCKLY_FILTER'
   static BLOCKLY_RACE_FILTER_SPELL = 'BLOCKLY_RACE_FILTER_SPELL'
   static BLOCKLY_INVERT = 'BLOCKLY_INVERT'
   static BLOCKLY_CARD_COST_MODIFIER = 'BLOCKLY_CARD_COST_MODIFIER'
@@ -192,14 +192,13 @@ export default class WorkspaceUtils {
                 }
                 retValue = obj['target']
                 break
-              case WorkspaceUtils.BLOCKLY_RACE_FILTER:
+              case WorkspaceUtils.BLOCKLY_FILTER:
                 if (!!parent) {
-                  parent.filter = {
-                    class: 'RaceFilter',
-                    race: obj['race']
-                  }
+                  parent.filter = obj['filter']
                 }
-                retValue = obj['target']
+                if (!!obj['target']) {
+                  retValue = obj['target']
+                }
                 break
               case WorkspaceUtils.BLOCKLY_RACE_FILTER_SPELL:
                 if (!!parent) {
@@ -210,7 +209,11 @@ export default class WorkspaceUtils {
                 }
                 break
               case WorkspaceUtils.BLOCKLY_INVERT:
-                retValue = obj['condition']
+                if (!!obj['condition']) {
+                  retValue = obj['condition']
+                } else if (!!obj['filter']) {
+                  retValue = obj['filter']
+                }
                 retValue.invert = true
                 break
               default:
@@ -241,6 +244,9 @@ export default class WorkspaceUtils {
         cardScript.spell.filter = cardScript.filterToBePutInSpell
       }
       delete cardScript.filterToBePutInSpell
+    }
+    if (!!cardScript.card && !(cardScript.card instanceof String)) {
+      delete cardScript.card
     }
     return cardScript
   }

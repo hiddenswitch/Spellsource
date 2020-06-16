@@ -42,6 +42,7 @@ const CardEditorView = () => {
         BlockTypePrefix
         CategoryName
         ColorHex
+        Extras
       }
     }
     allBlock {
@@ -86,13 +87,21 @@ const CardEditorView = () => {
 
   function getInitialToolboxCategories () {
     return data.toolbox.BlockCategoryList.map(({
-      BlockTypePrefix, CategoryName, ColorHex
+      BlockTypePrefix, CategoryName, ColorHex, Extras
     }) => {
+      let blocks = filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
+        && !edge.node.type.endsWith('SHADOW'))
+        .map(edge => {return { type: edge.node.type }})
+      if (!!Extras) {
+        for (const extra of Extras) {
+          blocks[blocks.length] = {
+            type: extra
+          }
+        }
+      }
       return {
         name: CategoryName,
-        blocks: filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
-        && !edge.node.type.endsWith('SHADOW'))
-          .map(edge => {return { type: edge.node.type }})
+        blocks: blocks
       }
     })
   }
