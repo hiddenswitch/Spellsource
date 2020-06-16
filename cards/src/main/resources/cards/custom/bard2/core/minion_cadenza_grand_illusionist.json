@@ -1,0 +1,125 @@
+{
+  "name": "Grand Illusionist Cadenza",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Summon two copies of this. They attack random enemies then die.",
+    "battlecry": {
+    "spell": {
+    "class": "MetaSpell",
+    "spells": [
+        {
+          "class": "SummonSpell",
+          "target": "SELF",
+          "spell": {
+            "class": "MetaSpell",
+			"spells": [
+			{
+              "class": "AddEnchantmentSpell",
+              "target": "OUTPUT",
+              "trigger": {
+                "eventTrigger": {
+                  "class": "TurnEndTrigger",
+                  "targetPlayer": "SELF"
+                },
+                "spell": {
+                  "class": "DestroySpell",
+                  "target": "SELF"
+                }
+              }
+        },
+        {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "RESERVED_BOOLEAN_3"
+        },
+        {  
+        "class": "TargetToSourceSecondaryToTargetSpell",
+        "target": "FRIENDLY_MINIONS",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "FightSpell",
+              "target": "ENEMY_MINIONS",
+              "randomTarget": true
+            },
+            {
+              "class": "ForceDeathPhaseSpell"
+            }
+			]
+          }
+		  ],
+          "boardPositionRelative": "LEFT"
+        }
+		}
+		},
+        {
+          "class": "SummonSpell",
+          "target": "SELF",
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+		{
+              "class": "AddEnchantmentSpell",
+              "target": "OUTPUT",
+              "trigger": {
+                "eventTrigger": {
+                  "class": "TurnEndTrigger",
+                  "targetPlayer": "SELF"
+                },
+                "spell": {
+                  "class": "DestroySpell",
+                  "target": "SELF"
+                }
+              }
+        },
+        {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "RESERVED_BOOLEAN_3"
+        },
+        {  
+        "class": "TargetToSourceSecondaryToTargetSpell",
+        "target": "FRIENDLY_MINIONS",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "FightSpell",
+              "target": "ENEMY_MINIONS",
+              "randomTarget": true
+            },
+            {
+              "class": "ForceDeathPhaseSpell"
+            }
+			]
+			}
+		  ],
+          "boardPositionRelative": "RIGHT"
+        },
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "RESERVED_BOOLEAN_3",
+          "operation": "HAS"
+        },
+       {
+        "class": "RemoveAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "RESERVED_BOOLEAN_3"
+	  }
+	  }
+	  }
+	 ]
+	}
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

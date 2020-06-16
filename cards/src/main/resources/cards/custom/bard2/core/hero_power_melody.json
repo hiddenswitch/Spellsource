@@ -1,0 +1,17 @@
+{
+  "name": "Melody",
+  "heroPower": "hero_power_melody",
+  "baseManaCost": ,
+  "type": "HERO_POWER",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": "Give the leftmost unit in your hand +2/+2",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.BuffLeftmostMinionInHandSpell",
+    "value": 2
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
