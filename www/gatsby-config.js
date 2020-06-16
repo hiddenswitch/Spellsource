@@ -62,11 +62,14 @@ module.exports = {
                   if (!!arg.value) {
                     if (isNumber(arg.value)) {
                       arg['valueI'] = arg.value
-                      delete arg.value
                     } else if (isString(arg.value)) {
                       arg['valueS'] = arg.value
-                      delete arg.value
+                    } else if (arg.value === true) {
+                      arg['valueB'] = true
+                    } else if (arg.value === false) {
+                      arg['valueB'] = false
                     }
+                    delete arg.value
                   }
                   if (!!arg.check) {
                     if (isArray(arg.check)) {

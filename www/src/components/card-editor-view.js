@@ -42,7 +42,6 @@ const CardEditorView = () => {
         BlockTypePrefix
         CategoryName
         ColorHex
-        Extras
       }
     }
     allBlock {
@@ -57,6 +56,7 @@ const CardEditorView = () => {
               name
               valueS
               valueI
+              valueB
               min
               max
               int
@@ -101,7 +101,8 @@ const CardEditorView = () => {
       }
       return {
         name: CategoryName,
-        blocks: blocks
+        blocks: blocks,
+        colour: ColorHex
       }
     })
   }
@@ -128,6 +129,14 @@ const CardEditorView = () => {
           if (!!arg.valueS) {
             arg.value = arg.valueS
             delete arg.valueS
+          }
+          if (!!arg.valueB) {
+            if (arg.valueB === true) {
+              arg.value = true
+            } else if (arg.valueB === false) {
+              arg.value = false
+            }
+            delete arg.valueB
           }
         })
 
@@ -166,6 +175,9 @@ const CardEditorView = () => {
                       }
                       if (!!field.valueS) {
                         shadowBlock.setFieldValue(field.valueS, field.name)
+                      }
+                      if (!!field.valueB) {
+                        shadowBlock.setFieldValue(field.valueB, field.name)
                       }
                     }
                   }
