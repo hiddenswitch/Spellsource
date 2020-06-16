@@ -1,0 +1,24 @@
+{
+  "name": "Rhythm Thief",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Whenever you cast a spell, deal 2 damage to the enemy champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell":  {
+        "class": "DamageSpell",
+		"target": "ENEMY_HERO",
+        "value": 2
+      }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
