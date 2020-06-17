@@ -32,6 +32,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     args: [Args1]
     data: String
     inputsInline: Boolean
+    hat: String
   }
   type Args1 {
     i: Int!
