@@ -7,6 +7,7 @@ layout: wiki
 
 ![The Lung
 Archipelago](Map.png "fig:The Lung Archipelago")
+
 Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 [Shun He](/wiki/Shun_He "wikilink"), leads an expedition to find the fabled
 source of all magic. After many months at sea, his ships pierce a
@@ -80,5 +81,4 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 
 ### Credits
 
-Created by Alexander Berman and Camille Stochitch. Copyright © 2019
-Hidden Switch, All Rights Reserved.
+See the [credits](/credits "wikilink") page.

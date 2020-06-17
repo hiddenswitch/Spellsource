@@ -11,7 +11,7 @@ const Header = () => {
     headerImage: file(relativePath: { eq: "assets/icon.png" }) {
       id
       childImageSharp {
-        fixed(width: 53) {
+        fixed(width: 25) {
           ...GatsbyImageSharpFixed
         }
       }
