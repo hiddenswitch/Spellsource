@@ -1,5 +1,5 @@
 ---
-title: "Whats New"
+title: "What's New"
 date: "2020-02-01"
 path: "/whats-new"
 header: true
