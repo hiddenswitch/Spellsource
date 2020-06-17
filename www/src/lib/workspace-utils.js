@@ -3,19 +3,12 @@ import { extend, filter, find, fromPairs, isArray, map } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
-  static BLOCKLY_OPENER = 'BLOCKLY_OPENER'
-  static BLOCKLY_AFTERMATH = 'BLOCKLY_AFTERMATH'
   static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL'
   static BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
-  static BLOCKLY_RANDOM_TARGET = 'BLOCKLY_RANDOM_TARGET'
   static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
   static BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
-  static BLOCKLY_FILTER = 'BLOCKLY_FILTER'
-  static BLOCKLY_RACE_FILTER_SPELL = 'BLOCKLY_RACE_FILTER_SPELL'
-  static BLOCKLY_INVERT = 'BLOCKLY_INVERT'
-  static BLOCKLY_CARD_COST_MODIFIER = 'BLOCKLY_CARD_COST_MODIFIER'
 
   /**
    * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
@@ -88,7 +81,9 @@ export default class WorkspaceUtils {
             case 'value':
               if (childNode.firstElementChild.nodeName === 'shadow' && childNode.lastElementChild !== childNode.firstElementChild) {
                 obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.lastElementChild, null, obj)
-              } else obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
+              } else {
+                obj[childNode.attributes['name'].value] = WorkspaceUtils.xmlToCardScript(childNode.firstElementChild, null, obj)
+              }
               break
             case 'next':
               if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === 'block') {
@@ -159,63 +154,6 @@ export default class WorkspaceUtils {
                   obj.spell.target = 'EVENT_TARGET'
                 }
                 break
-              case WorkspaceUtils.BLOCKLY_OPENER:
-                if (!!prev) {
-                  prev['battlecry'] = obj
-                }
-                retValue = obj
-                break
-              case WorkspaceUtils.BLOCKLY_AFTERMATH:
-                if (!!prev) {
-                  prev['deathrattle'] = obj
-                }
-                retValue = obj
-                break
-              case WorkspaceUtils.BLOCKLY_CARD_COST_MODIFIER:
-                if (!!prev) {
-                  if (!!obj['condition']) {
-                    prev['manaCostModifier'] = {
-                      class: 'ConditionalValueProvider',
-                      condition: obj['condition'],
-                      ifFalse: 0,
-                      ifTrue: value
-                    }
-                  } else if (!isNumber(obj.value)) {
-                    prev['manaCostModifier'] = obj.value
-                  }
-                }
-                retValue = obj
-                break
-              case WorkspaceUtils.BLOCKLY_RANDOM_TARGET:
-                if (!!parent) {
-                  parent.randomTarget = true
-                }
-                retValue = obj['target']
-                break
-              case WorkspaceUtils.BLOCKLY_FILTER:
-                if (!!parent) {
-                  parent.filter = obj['filter']
-                }
-                if (!!obj['target']) {
-                  retValue = obj['target']
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_RACE_FILTER_SPELL:
-                if (!!parent) {
-                  parent.filterToBePutInSpell = {
-                    class: 'RaceFilter',
-                    race: obj['race']
-                  }
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_INVERT:
-                if (!!obj['condition']) {
-                  retValue = obj['condition']
-                } else if (!!obj['filter']) {
-                  retValue = obj['filter']
-                }
-                retValue.invert = true
-                break
               default:
                 const allValues = filter(childNodes, cn =>
                   cn.nodeName === 'field')
@@ -239,34 +177,61 @@ export default class WorkspaceUtils {
   }
 
   static postProcessCardScript(cardScript) {
-    /*
-    if (!!cardScript.filterToBePutInSpell) {
-      if (!!cardScript.spell) {
-        cardScript.spell.filter = cardScript.filterToBePutInSpell
+    if (isArray(cardScript)) {
+      for (const cardScriptElement of cardScript) {
+        this.rearrangeInputValues(cardScriptElement)
       }
-      delete cardScript.filterToBePutInSpell
+    } else {
+      this.rearrangeInputValues(cardScript)
     }
-    */
+
     if (!!cardScript.card && !(cardScript.card instanceof String)) {
       delete cardScript.card
     }
 
-    if (!!cardScript.options) {
-      for (const option in cardScript.options) {
-        cardScript[option] = cardScript.options[option]
-      }
-      delete cardScript.options
-    } else if (isArray(cardScript)) {
-      for (const cardScriptElement of cardScript) {
-        if (!!cardScriptElement.options) {
-          for (const option in cardScriptElement.options) {
-            cardScriptElement[option] = cardScriptElement.options[option]
+    return cardScript
+  }
+
+  static rearrangeInputValues(cardScript) {
+    //go through the children to bring super.* up
+    for (const cardScriptKey in cardScript) {
+      if (cardScript.propertyIsEnumerable(cardScriptKey)) {
+        //first time go through all the ones that definitely won't override what we're working with
+        for (const cardScriptElementKey in cardScript[cardScriptKey]) {
+          if (cardScriptElementKey.startsWith('super.')) {
+            let newKey = cardScriptElementKey.substring(cardScriptElementKey.indexOf('.') + 1)
+            cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            delete cardScript[cardScriptKey][cardScriptElementKey]
           }
-          delete cardScriptElement.options
+        }
+        //then do the last one that might override what we're working with
+        if (!!cardScript[cardScriptKey]['super']) {
+          if (cardScript[cardScriptKey].propertyIsEnumerable('super')
+            && typeof cardScript[cardScriptKey]['super'] !== 'string') {
+            extend(cardScript[cardScriptKey], cardScript[cardScriptKey]['super'])
+            delete cardScript[cardScriptKey]['super']
+          } else {
+            cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
+          }
         }
       }
     }
-    return cardScript
+
+    //go through the keys here to bring down any *.*
+    for (const cardScriptKey in cardScript) {
+      if (!cardScriptKey.startsWith('super') && cardScriptKey.includes('.')) {
+        let newKey = cardScriptKey.substring(0, cardScriptKey.indexOf('.'))
+        let newKey2 = cardScriptKey.substring(cardScriptKey.indexOf('.') + 1)
+        if (!cardScript.hasOwnProperty(newKey)) {
+          cardScript[newKey] = {}
+        }
+        if (cardScript.propertyIsEnumerable(newKey)) {
+          cardScript[newKey][newKey2] = cardScript[cardScriptKey]
+          delete cardScript[cardScriptKey]
+          this.rearrangeInputValues(cardScript[newKey])
+        }
+      }
+    }
   }
 
   static workspaceToCardScript (workspace) {

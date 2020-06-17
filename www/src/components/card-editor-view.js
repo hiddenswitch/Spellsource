@@ -80,6 +80,7 @@ const CardEditorView = () => {
           previousStatement
           type
           data
+          hat
         }
       }
     }
@@ -157,6 +158,9 @@ const CardEditorView = () => {
         this.jsonInit(block)
         if (!!block.data) {
           this.data = block.data
+        }
+        if (!!block.hat) {
+          this.hat = block.hat
         }
         //init shadow blocks
         for (let i = 0; i < 10; i++) {
