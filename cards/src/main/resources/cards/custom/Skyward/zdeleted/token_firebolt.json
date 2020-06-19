@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "FREE",
-  "description": "Deal $3 damage. Draw a card.",
+  "description": "Deal $2 damage. Draw a card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 3
+        "value": 2
       },
       {
         "class": "DrawCardSpell",
