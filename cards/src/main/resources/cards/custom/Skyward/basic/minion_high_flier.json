@@ -1,13 +1,13 @@
 {
   "name": "Mistweaver",
-  "baseManaCost": 2,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AZURE",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Opener: Gain +1/+1 for each Soar spell in your hand.",
+  "description": "Opener: Gain +1/+1 for each spell in your hand.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

@@ -1,10 +1,10 @@
 {
   "name": "Dream of Ascendance",
-  "baseManaCost": 8,
+  "baseManaCost": 10,
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "LEGENDARY",
-  "description": "For the rest of the game, your Soar spells turn into Firebolts that also deal 3 damage.",
+  "description": "For the rest of the game, your Soar spells turn into Firebolts that also deal $2 damage.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
