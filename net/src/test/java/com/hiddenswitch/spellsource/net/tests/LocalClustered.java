@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.net.tests;
 
-import com.hiddenswitch.containers.KeycloakContainer;
 import com.hiddenswitch.containers.MongoDBContainer;
 import com.hiddenswitch.spellsource.net.Broadcaster;
 import com.hiddenswitch.spellsource.net.applications.Applications;
@@ -33,25 +32,17 @@ public class LocalClustered {
 		database.start();
 		var mongoUrl = database.getReplicaSetUrl().replace("/test", "/metastone");
 		System.getProperties().put("mongo.url", mongoUrl);
-
-		/*
-		var keycloak = new KeycloakContainer();
-		keycloak.start();
-		*/
 		Applications.LOGGER.info("main: mongo.url is {}", mongoUrl);
-//		Applications.LOGGER.info("main: keycloak.url is {}", keycloak.getAuthServerUrl());
 
 		GlobalTracer.registerIfAbsent(NoopTracerFactory.create());
 		Applications.startServer(vertx -> {
 			if (vertx.failed()) {
 				database.close();
-//				keycloak.close();
 				return;
 			}
 
 			((VertxInternal) vertx.result()).addCloseHook(v -> {
 				database.close();
-//				keycloak.close();
 			});
 
 			vertx.result().deployVerticle(Broadcaster.create(), done -> Applications.LOGGER.info("main: Broadcaster deployed"));
