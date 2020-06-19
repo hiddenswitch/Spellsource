@@ -1,60 +1,73 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Index } from 'elasticlunr'
+import React, { useState } from 'react'
 
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { Form, FormControl, ListGroup } from 'react-bootstrap'
 import styles from './creative-layout.module.scss'
 
+import { useIndex } from '../hooks/use-index'
+
 // Search component
-export default class Search extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      query: ``,
-      results: [],
+function Search (props) {
+  const [query, setQuery] = useState(``)
+  const [results, setResults] = useState([])
+
+  const index = useIndex()
+
+  const dropDownMenu = () => {
+    const encoded = encodeURI(query)
+    if (encoded.length !== 0) {
+      return (
+        <ListGroup.Item className={styles.searchListGroupItem}>
+          <Link to={`../searchresults?query=${encoded}`}>
+            See more...</Link>
+        </ListGroup.Item>
+      )
     }
   }
 
-  render () {
-    return (
-      <div className={styles.inputBox}>
-        <Form>
-          <FormControl type="text" placeholder={this.props.placeholder} className="mr-sm-2" value={this.state.query}
-                       onChange={this.search}/>
-        </Form>
-        <ListGroup variant="flush" className={styles.searchResults}>
-          {this.state.results.map(page => (
-            <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-                <Link to={page.path}>{page.title}</Link>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </div>
-    )
+  // update input value
+  const updateQuery = event => {
+    setQuery(event.target.value)
   }
 
-  getOrCreateIndex = () =>
-    this.index
-      ? this.index
-      : // Create an elastic lunr index and hydrate with graphql query results
-      Index.load(this.props.searchIndex)
+  // display full search page on enter
+  const navigateToSearchResults = event => {
+    event.preventDefault()
+    const encoded = encodeURI(query)
+    navigate(`../searchresults?query=${encoded}`)
+  }
 
-  search = evt => {
+  const search = evt => {
     const query = evt.target.value
-    this.index = this.getOrCreateIndex()
-    this.setState({
-      query,
+    setQuery(query)
+    setResults(index
       // Query the index with search string to get an [] of IDs
-      results: this.index
-        .search(query, { expand: true })
-        .slice(0, 5)
-        // Map over each ID and return the full document
-        .map(({ ref }) => this.index.documentStore.getDoc(ref)),
-    })
+      .search(query, { expand: true }) // accept partial matches
+      .slice(0, 5)
+      // map over each ID and return full document
+      .map(({ ref }) => index.documentStore.getDoc(ref)))
   }
+
+  return (
+    <div className={styles.inputBox}>
+      <Form onSubmit={e => navigateToSearchResults(e)}>
+        <FormControl type="text" placeholder={props.placeholder} className="mr-sm-2"
+                     value={query}
+                     onChange={e => {
+                       updateQuery(e)
+                       search(e)
+                     }}/>
+      </Form>
+      <ListGroup variant="flush" className={styles.searchResults}>
+        {results.map(page => (
+          <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
+            <Link to={page.path}>{page.title}</Link>
+          </ListGroup.Item>
+        ))}
+        {dropDownMenu()}
+      </ListGroup>
+    </div>
+  )
 }
 
-Search.propTypes = {
-  searchIndex: PropTypes.object,
-}
+export default Search

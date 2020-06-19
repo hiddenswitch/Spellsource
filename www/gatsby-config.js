@@ -1,3 +1,6 @@
+const remark = require('remark')
+const visit = require('unist-util-visit')
+
 function isString (str) {
   return typeof str === 'string'
 }
@@ -172,7 +175,16 @@ module.exports = {
             title: node => node.frontmatter.title,
             tags: node => node.frontmatter.tags,
             path: node => node.frontmatter.path,
-            rawMarkdownBody: node => node.rawMarkdownBody
+            rawMarkdownBody: node => node.rawMarkdownBody,
+            excerpt: node => {
+              const excerptLength = 250 // Hard coded excerpt length
+              let excerpt = ''
+              const tree = remark().parse(node.rawMarkdownBody)
+              visit(tree, 'text', (node) => {
+                excerpt += node.value
+              })
+              return excerpt.slice(0, excerptLength) + '...'
+            }
           },
           Card: {
             // TODO: Change the name of the field to be its content
@@ -180,7 +192,8 @@ module.exports = {
             tags: node => '', // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
             rawMarkdownBody: node => node.description,
             path: node => node.path,
-            collectible: node => node.collectible
+            collectible: node => node.collectible,
+            excerpt: node => node.description,
           }
         },
         // Optional filter to limit indexed nodes
