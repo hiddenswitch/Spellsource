@@ -11,7 +11,7 @@ const Header = () => {
     headerImage: file(relativePath: { eq: "assets/icon.png" }) {
       id
       childImageSharp {
-        fixed(width: 53) {
+        fixed(width: 25) {
           ...GatsbyImageSharpFixed
         }
       }
@@ -30,11 +30,9 @@ const Header = () => {
         }
       }
     }
-    siteSearchIndex {
-      index
-    }
   }
 `)
+
   const pages = data.allMarkdownRemark.edges
     .filter(edge => !!edge.node.frontmatter.header)
     .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
@@ -45,7 +43,7 @@ const Header = () => {
         <li key={data.headerImage.id}><Link to='/'><Img fixed={data.headerImage.childImageSharp.fixed}/></Link></li>
         <li key={'javadocs'}><a href='/javadoc'>Docs</a></li>
         {pages}
-        <li key={'search'}><Search placeholder={'Search'} searchIndex={data.siteSearchIndex.index}/></li>
+        <li key={'search'}><Search placeholder={'Search'} /></li>
       </ul>
     </div>
   </header>

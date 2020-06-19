@@ -9,7 +9,7 @@ $base-font-family: 'compasspromedium', 'Source Code Pro', monospace !default;
 $base-font-size: 17pt !default;
 $mobile-font-size: 17pt !default;
 $base-line-height: 1.2 !default;
-$container-width: 100% !default;
+$container-width: calc(100% - 120px) !default;
 $container-max-width: 860px !default;
 
 // From dark
@@ -167,6 +167,8 @@ footer {
   border-top: var(--border);
   border-bottom: var(--border);
   margin-bottom: 25px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .menu .input-box {
