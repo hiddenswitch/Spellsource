@@ -3,7 +3,7 @@ import WorkspaceUtils from '../lib/workspace-utils'
 import { graphql, useStaticQuery } from 'gatsby'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
-import Blockly, { FieldLabelSerializable } from 'blockly'
+import Blockly, {FieldLabelSerializable, getMainWorkspace} from 'blockly'
 import { filter, has, isArray, map } from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
 import AceEditor from 'react-ace'
@@ -88,22 +88,28 @@ const CardEditorView = () => {
 
   function getInitialToolboxCategories () {
     return data.toolbox.BlockCategoryList.map(({
-      BlockTypePrefix, CategoryName, ColorHex, Extras
+      BlockTypePrefix, CategoryName, ColorHex, Custom
     }) => {
       let blocks = filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
         && !edge.node.type.endsWith('SHADOW'))
         .map(edge => {return { type: edge.node.type }})
-      if (!!Extras) {
-        for (const extra of Extras) {
-          blocks[blocks.length] = {
-            type: extra
-          }
+      let button = []
+      if (CategoryName === 'Cards') {
+        button[0] = {
+          text: "Find External Card Block",
+          callbackKey: "findCard"
+        }
+        button[1] = {
+          text: "Add External Card to Workspace",
+          callbackKey: "importCard"
         }
       }
       return {
         name: CategoryName,
         blocks: blocks,
-        colour: ColorHex
+        colour: ColorHex,
+        button: button,
+        custom: Custom
       }
     })
   }
@@ -131,12 +137,8 @@ const CardEditorView = () => {
             arg.value = arg.valueS
             delete arg.valueS
           }
-          if (!!arg.valueB) {
-            if (arg.valueB === true) {
-              arg.value = true
-            } else if (arg.valueB === false) {
-              arg.value = false
-            }
+          if (arg.hasOwnProperty('valueB')) {
+            arg.value = arg.valueB
             delete arg.valueB
           }
         })
@@ -155,48 +157,60 @@ const CardEditorView = () => {
 
     Blockly.Blocks[block.type] = {
       init: function () {
-        this.jsonInit(block)
-        if (!!block.data) {
-          this.data = block.data
-        }
-        if (!!block.hat) {
-          this.hat = block.hat
-        }
-        //init shadow blocks
-        for (let i = 0; i < 10; i++) {
-          if (!!block['args' + i.toString()]) {
-            for (let j = 0; j < 10; j++) {
-              const arg = block['args' + i.toString()][j];
-              if (!!arg) {
-                const shadow = arg.shadow;
-                if (!!shadow) {
-                  let shadowBlock = this.workspace.newBlock(shadow.type)
-                  shadowBlock.setShadow(true)
-                  if (!!shadow.fields) {
-                    for (let field of shadow.fields) {
-                      if (!!field.valueI) {
-                        shadowBlock.setFieldValue(field.valueI, field.name)
-                      }
-                      if (!!field.valueS) {
-                        shadowBlock.setFieldValue(field.valueS, field.name)
-                      }
-                      if (!!field.valueB) {
-                        shadowBlock.setFieldValue(field.valueB, field.name)
-                      }
-                    }
+        extendedJsonInit(this, block)
+      }
+    }
+  })
+
+  function extendedJsonInit(thisBlock, block) {
+    thisBlock.jsonInit(block)
+    if (!!block.data) {
+      thisBlock.data = block.data
+    }
+    if (!!block.hat) {
+      thisBlock.hat = block.hat
+    }
+    //init shadow blocks
+    for (let i = 0; i < 10; i++) {
+      if (!!block['args' + i.toString()]) {
+        for (let j = 0; j < 10; j++) {
+          const arg = block['args' + i.toString()][j];
+          if (!!arg) {
+            const shadow = arg.shadow;
+            if (!!shadow) {
+              let shadowBlock = thisBlock.workspace.newBlock(shadow.type)
+              shadowBlock.setShadow(true)
+              if (!!shadow.fields) {
+                for (let field of shadow.fields) {
+                  if (!!field.valueI) {
+                    shadowBlock.setFieldValue(field.valueI, field.name)
                   }
-                  const connection = arg.type.endsWith('statement') ?
-                    shadowBlock.previousConnection: shadowBlock.outputConnection
-                  this.getInput(arg.name).connection.connect(connection)
-                  shadowBlock.initSvg()
+                  if (!!field.valueS) {
+                    shadowBlock.setFieldValue(field.valueS, field.name)
+                  }
+                  if (!!field.valueB) {
+                    shadowBlock.setFieldValue(field.valueB, field.name)
+                  }
                 }
+              }
+              const connection = arg.type.endsWith('statement') ?
+                shadowBlock.previousConnection: shadowBlock.outputConnection
+              thisBlock.getInput(arg.name).connection.connect(connection)
+              shadowBlock.initSvg()
+            }
+            //gotta do this because it seems like the block -> xml conversion hates booleans
+            if (arg.hasOwnProperty('value')) {
+              if (arg.value === true) {
+                arg.value = 'TRUE'
+              } else if (arg.value === false) {
+                arg.value = 'FALSE'
               }
             }
           }
         }
       }
     }
-  })
+  }
 
   function onWorkspaceChanged (workspace) {
     const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
@@ -220,6 +234,12 @@ const CardEditorView = () => {
     }
     workspace.refreshToolboxSelection()
     setCode(JSON.stringify(cardScript, null, 2))
+    workspace.registerButtonCallback("findCard", () => {
+      alert("Coming \"Soon\"")
+    })
+    workspace.registerButtonCallback("importCard", () => {
+      alert("Coming \"Soon\"")
+    })
   }
 
   return (<span>
@@ -237,7 +257,8 @@ const CardEditorView = () => {
       readOnly={true}
       value={code}
       editorProps={{ $blockScrolling: true }}
-    /></span>)
+    />
+  </span>)
 }
 
 export default CardEditorView
