@@ -3,8 +3,9 @@ import { extend, filter, find, fromPairs, isArray, map } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
-  static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL'
-  static BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL'
+  static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN'
+  static BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN'
+  static BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN = 'BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
   static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
@@ -144,14 +145,21 @@ export default class WorkspaceUtils {
                   }
                 }
                 break
-              case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILD_SPELL:
-                if (!!obj.spell && !obj.spell.target) {
+              case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN:
+                if (!!obj['spell.spell'] && !obj['spell.target'] && obj['spell.spell'].target === 'SPELL_TARGET') {
+                  obj['spell.spell'].target = 'OUTPUT'
+                } else if (!!obj.spell && (!obj.spell.target || obj.spell.target === 'SPELL_TARGET')) {
                   obj.spell.target = 'OUTPUT'
                 }
                 break
-              case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILD_SPELL:
-                if (!!obj.spell && !obj.spell.target) {
+              case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN:
+                if (!!obj.spell && (!obj.spell.target || obj.spell.target === 'SPELL_TARGET')) {
                   obj.spell.target = 'EVENT_TARGET'
+                }
+                break
+              case WorkspaceUtils.BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN:
+                if (!!obj.spell && obj.spell.target === 'SPELL_TARGET') {
+                  delete obj.spell.target
                 }
                 break
               default:
@@ -176,6 +184,20 @@ export default class WorkspaceUtils {
     }
   }
 
+  /**
+   * Makes final changes to the cardScript to make it valid
+   *
+   * Input value names that contain '.'s will be rearranged,
+   * as defined by the rearrangeInputValues method
+   *
+   * Cards that have opener(battlecry) and/or aftermath(deathrattle)
+   * properties will be given their respective attributes
+   *
+   * Boolean values are also fixed here
+   *
+   * @param cardScript
+   * @returns the modified cardScript
+   */
   static postProcessCardScript(cardScript) {
     if (isArray(cardScript)) {
       for (const cardScriptElement of cardScript) {
@@ -189,10 +211,66 @@ export default class WorkspaceUtils {
       delete cardScript.card
     }
 
+
+    if (!!cardScript.battlecry) {
+      if (!cardScript.attributes) {
+        cardScript.attributes = {}
+      }
+      cardScript.attributes.BATTLECRY = true;
+    }
+
+    if (!!cardScript.deathrattle) {
+      if (!cardScript.attributes) {
+        cardScript.attributes = {}
+      }
+      cardScript.attributes.DEATHRATTLES = true;
+    }
+
     return cardScript
   }
 
+  /**
+   * Usage:
+   *    ...
+   *    {
+   *      "super.X": "value"
+   *      ...
+   *    }
+   *
+   *    super tries to move the argument up a level,
+   *    so that the level above will look like
+   *
+   *    ...
+   *    "X": "value",
+   *    {
+   *      ...
+   *    }
+   *
+   *    -----
+   *
+   *    {
+   *      ...
+   *      "X.Y": "value"
+   *    }
+   *
+   *    other uses of '.' try to move the argument down a level,
+   *    so that it will look like
+   *
+   *    {
+   *      ...
+   *      "X": {
+   *        "Y": "value"
+   *      }
+   *    }
+   *
+   *    if "X" is already present, then "Y" will simply be put in as an argument
+   *    if "X" isn't there already, it will be created
+   * @param cardScript
+   */
   static rearrangeInputValues(cardScript) {
+    if (typeof cardScript === 'string') {
+      return
+    }
     //go through the children to bring super.* up
     for (const cardScriptKey in cardScript) {
       if (cardScript.propertyIsEnumerable(cardScriptKey)) {
@@ -230,6 +308,14 @@ export default class WorkspaceUtils {
           delete cardScript[cardScriptKey]
           this.rearrangeInputValues(cardScript[newKey])
         }
+      }
+
+      //gotta do this because it seems like the original block -> xml conversion hates booleans
+      if (cardScript[cardScriptKey] === 'TRUE') {
+        cardScript[cardScriptKey] = true
+      }
+      if (cardScript[cardScriptKey] === 'FALSE') {
+        cardScript[cardScriptKey] = false
       }
     }
   }
