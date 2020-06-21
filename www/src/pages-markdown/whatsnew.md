@@ -9,7 +9,24 @@ Thanks for playing this beta of Spellsource!
 
 Read more at [our website](http://www.playspellsource.com) and join our [Discord](https://discord.gg/HmbESh2)!
 
-### Current Build 0.8.77-3.2.0 (May 20, 2020)
+### Current Build 0.8.78-3.2.1 (June 19, 2020)
+
+ - The search results have been improved in the website.
+ - Formatting specifiers no longer appear in the collection's large card preview.
+ - The color of the large card's text is now correctly white.
+ - The opposing deck setting scrollbar is now correct.
+ - Decks no longer appear selected incorrectly after winning a game.
+ - Skyward class cards have been rebalanced.
+ - Losing no longer shows a Victory! screen.
+ - Decks now display correctly for many accounts that incorrectly had their personal collections deleted.
+ - The edit pencil icon is no longer missing from the portrait orientation of the game.
+ - The opposing battlefield no longer lays out incorrectly when the opponent issues attacks mixed with summoning.
+ - The targeting arrow now behaves better.
+ - The skill hex for the allied champion is now positioned better.
+ - The mana token is no longer missing from mulligan cards.
+ - The macOS Steam UI is now properly sized.
+
+### 0.8.77-3.2.0 (May 20, 2020)
 
  - The user interface has been restyled.
  - The friends list is temporarily disabled for the next few days to be repaired and restyled.
