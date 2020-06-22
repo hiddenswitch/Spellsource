@@ -246,7 +246,7 @@ export default class WorkspaceUtils {
    *      ...
    *    }
    *
-   *    -----
+   *    -----------------------------------------------------------------------
    *
    *    {
    *      ...
@@ -265,12 +265,47 @@ export default class WorkspaceUtils {
    *
    *    if "X" is already present, then "Y" will simply be put in as an argument
    *    if "X" isn't there already, it will be created
+   *
+   *    -----------------------------------------------------------------------
+   *
+   *    ...
+   *    "X,Y.Z": "value"
+   *    ...
+   *
+   *    ',' will put a value into multiple different places,
+   *    so that it will look like
+   *
+   *    ...
+   *    "X": "value",
+   *    "Y.Z": "value"
+   *    ...
+   *
+   *    which will be split as shown above, turning into
+   *
+   *    ...
+   *    "X": "value",
+   *    "Y": {
+   *      "Z": "value"
+   *    }
    * @param cardScript
    */
   static rearrangeInputValues(cardScript) {
     if (typeof cardScript === 'string') {
       return
     }
+
+    //first, split up any args with ','
+    for (const cardScriptKey in cardScript) {
+      if (cardScriptKey.includes(",")) {
+        let newKeys = cardScriptKey.split(",")
+        for (const key of newKeys) {
+          cardScript[key] = cardScript[cardScriptKey]
+        }
+        delete cardScript[cardScriptKey]
+      }
+    }
+
+
     //go through the children to bring super.* up
     for (const cardScriptKey in cardScript) {
       if (cardScript.propertyIsEnumerable(cardScriptKey)) {
