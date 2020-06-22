@@ -2,9 +2,6 @@ package com.hiddenswitch.spellsource.net.models;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 4/3/17.
- */
 public class MatchCreateResponse implements Serializable {
 	private final CreateGameSessionResponse createGameSessionResponse;
 

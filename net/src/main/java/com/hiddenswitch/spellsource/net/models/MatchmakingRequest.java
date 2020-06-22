@@ -5,9 +5,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 1/23/17.
- */
 public class MatchmakingRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	protected boolean allowBots;

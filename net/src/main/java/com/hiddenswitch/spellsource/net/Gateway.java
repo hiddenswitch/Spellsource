@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.net.impl.GatewayImpl;
-import com.hiddenswitch.spellsource.net.impl.util.HandlerFactory;
+import com.hiddenswitch.spellsource.net.impl.util.Handlers;
 import com.hiddenswitch.spellsource.net.models.DeckDeleteResponse;
 import com.hiddenswitch.spellsource.net.impl.WebResult;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -11,12 +11,10 @@ import io.vertx.core.Verticle;
 import io.vertx.core.VertxException;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.impl.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.*;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +34,7 @@ import java.util.Comparator;
  * be added to the {@code server.yaml} file. </li>
  * <li>Create an entry in this interface corresponding to the new operation that returns a {@link WebResult} typed with
  * your new response type {@code R}. Depending on which parameters you supply to the method, you will imply different
- * behaviour for the serialization and authorization boilerplate provided by {@link HandlerFactory}. (1) Every method
+ * behaviour for the serialization and authorization boilerplate provided by {@link Handlers}. (1) Every method
  * should start with an {@link RoutingContext} argument; (2) if the method requires the user to be authenticated and
  * authorized, the next argument should be {@code String userId}, or omit the argument; (3) if the path is variable,
  * e.g., {@code /decks/:deckId}, the next argument should be a {@link String} whose name matches the variable name,
@@ -86,7 +84,7 @@ import java.util.Comparator;
  * this::getAccounts));
  *     }
  * </pre>
- * In order to not use Java annotations, this codebase uses {@link HandlerFactory} to wrap your API methods. It provides
+ * In order to not use Java annotations, this codebase uses {@link Handlers} to wrap your API methods. It provides
  * serialization of requests, deserialization of responses and user authentication/authorization for your API method
  * body. It will figure out automatically based on the method signature whether or not you need authorization and what
  * your response type is. Some examples:

@@ -29,10 +29,10 @@ import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
  *
  * @see Gateway for a full description of how to create new API methods.
  */
-public class HandlerFactory {
-	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
+public interface Handlers {
+	Logger LOGGER = LoggerFactory.getLogger(Handlers.class);
 
-	public static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
+	static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
 		return Sync.fiber((context) -> {
 			Throwable t = null;
 			try {
@@ -55,7 +55,7 @@ public class HandlerFactory {
 			} finally {
 				if (t != null) {
 					Tracing.error(t);
-					logger.error("handler error", t);
+					LOGGER.error("handler error", t);
 				}
 			}
 		});
@@ -71,7 +71,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type.
 	 * @return A new suspendable handler.
 	 */
-	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
+	static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String userId = Accounts.userId(context);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
@@ -89,7 +89,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type.
 	 * @return A new suspendable handler.
 	 */
-	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, RequestHandler<T, R> internalHandler) {
+	static <T, R> Handler<RoutingContext> handler(Class<T> classT, RequestHandler<T, R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, request);
@@ -106,7 +106,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type
 	 * @return A new suspendable handler.
 	 */
-	public static <R> Handler<RoutingContext> handler(String paramName, AuthorizedParamHandler<R> internalHandler) {
+	static <R> Handler<RoutingContext> handler(String paramName, AuthorizedParamHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String request = context.pathParam(paramName);
 			String userId = Accounts.userId(context);
@@ -126,7 +126,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type.
 	 * @return A new suspendable handler.
 	 */
-	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, String paramName, AuthorizedBodyAndParamHandler<T, R> internalHandler) {
+	static <T, R> Handler<RoutingContext> handler(Class<T> classT, String paramName, AuthorizedBodyAndParamHandler<T, R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String param = context.pathParam(paramName);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
@@ -144,7 +144,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type.
 	 * @return A new suspendable handler.
 	 */
-	public static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
+	static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId);
@@ -159,7 +159,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type.
 	 * @return A new suspendable handler.
 	 */
-	public static <R> Handler<RoutingContext> handler(EmptyHandler<R> internalHandler) {
+	static <R> Handler<RoutingContext> handler(EmptyHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			WebResult<R> result = internalHandler.call(context);
 			respond(context, result);
@@ -198,7 +198,7 @@ public class HandlerFactory {
 	 * @param <R>             The response class type.
 	 * @return A new suspendable handler.
 	 */
-	public static <R> Handler<RoutingContext> paramHandler(String paramName, ParamHandler<R> internalHandler) {
+	static <R> Handler<RoutingContext> paramHandler(String paramName, ParamHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String request = context.pathParam(paramName);
 			WebResult<R> result = internalHandler.call(context, request);
@@ -212,7 +212,7 @@ public class HandlerFactory {
 	 * @param <R> The response type
 	 */
 	@FunctionalInterface
-	public interface AuthorizedHandler<R> {
+	interface AuthorizedHandler<R> {
 		WebResult<R> call(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 	}
 
@@ -223,7 +223,7 @@ public class HandlerFactory {
 	 * @param <R> The response type
 	 */
 	@FunctionalInterface
-	public interface AuthorizedRequestHandler<T, R> {
+	interface AuthorizedRequestHandler<T, R> {
 		WebResult<R> call(RoutingContext context, String userId, T request) throws SuspendExecution, InterruptedException;
 	}
 
@@ -234,7 +234,7 @@ public class HandlerFactory {
 	 * @param <R> The response type.
 	 */
 	@FunctionalInterface
-	public interface RequestHandler<T, R> {
+	interface RequestHandler<T, R> {
 		WebResult<R> call(RoutingContext context, T request) throws SuspendExecution, InterruptedException;
 	}
 
@@ -244,7 +244,7 @@ public class HandlerFactory {
 	 * @param <R> The response type
 	 */
 	@FunctionalInterface
-	public interface AuthorizedParamHandler<R> {
+	interface AuthorizedParamHandler<R> {
 		WebResult<R> call(RoutingContext context, String userId, String param) throws SuspendExecution, InterruptedException;
 	}
 
@@ -255,7 +255,7 @@ public class HandlerFactory {
 	 * @param <R> The response type
 	 */
 	@FunctionalInterface
-	public interface AuthorizedBodyAndParamHandler<T, R> {
+	interface AuthorizedBodyAndParamHandler<T, R> {
 		WebResult<R> call(RoutingContext context, String userId, String param, T request) throws SuspendExecution, InterruptedException;
 	}
 
@@ -265,7 +265,7 @@ public class HandlerFactory {
 	 * @param <R> The response type.
 	 */
 	@FunctionalInterface
-	public interface ParamHandler<R> {
+	interface ParamHandler<R> {
 		WebResult<R> call(RoutingContext context, String param) throws SuspendExecution, InterruptedException;
 	}
 
@@ -275,7 +275,7 @@ public class HandlerFactory {
 	 * @param <R> The response type
 	 */
 	@FunctionalInterface
-	public interface EmptyHandler<R> {
+	interface EmptyHandler<R> {
 		WebResult<R> call(RoutingContext context) throws SuspendExecution, InterruptedException;
 	}
 }

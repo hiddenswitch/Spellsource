@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by bberman on 1/19/17.
+ * Adds cards or inventory items to a collection.
  */
 public final class AddToCollectionRequest implements Serializable {
 	private String collectionId;

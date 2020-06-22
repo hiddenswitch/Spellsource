@@ -83,7 +83,7 @@ You cannot use the GitHub Desktop app to download this repository.
 
 ### Getting started with Development on macOS
 
-Requirements: **Java 11 or later** and **Docker**.
+Requirements: **Java 11 or later** and **Docker**. Check your current version of Java using `java --version`.
 
  1. Install dependencies:
     ```shell script

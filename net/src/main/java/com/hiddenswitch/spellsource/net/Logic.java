@@ -160,23 +160,6 @@ public interface Logic {
 	}
 
 	/**
-	 * Gracefully ends a game. This will return decks that are currently in use.
-	 *
-	 * @param request The game to end
-	 * @return Information about the game that was ended.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static EndGameResponse endGame(EndGameRequest request) throws SuspendExecution, InterruptedException {
-		// Return all currently borrowed decks
-		final List<String> deckIds = request.getPlayers().stream().map(EndGameRequest.Player::getDeckId).collect
-				(Collectors.toList());
-		Inventory.returnToCollection(new ReturnToCollectionRequest().withDeckIds(deckIds));
-
-		return new EndGameResponse();
-	}
-
-	/**
 	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an {@link
 	 * net.demilich.metastone.game.cards.Card} in the game.
 	 *
