@@ -36,11 +36,11 @@ public class LocalClustered {
 		System.getProperties().put("mongo.url", mongoUrl);
 
 
-		var keycloak = new KeycloakContainer();
-		var importFile;
-		var importFileInContainer = "/tmp/" + importFile;
-		keycloak.withCopyFileToContainer(MountableFile.forHostPath(Path.of(rootProjectDir,"secrets/realm-export.json")) importFileInContainer);
-		keycloak.withEnv("KEYCLOAK_IMPORT", importFileInContainer);
+		var importFileInContainer = "/realm.json";
+		var keycloak = new KeycloakContainer()
+				.withCopyFileToContainer(MountableFile.forHostPath(Path.of(rootProjectDir, "secrets/realm-export.json")), importFileInContainer)
+				.withEnv("KEYCLOAK_IMPORT", importFileInContainer);
+		keycloak.getAuthServerUrl();
 		keycloak.start();
 
 
