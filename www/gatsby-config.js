@@ -62,7 +62,7 @@ module.exports = {
               if (!!object['args' + i.toString()]) {
                 const args = object['args' + i.toString()]
                 args.forEach(arg => {
-                  if (!!arg.value) {
+                  if (arg.hasOwnProperty('value')) {
                     if (isNumber(arg.value)) {
                       arg['valueI'] = arg.value
                     } else if (isString(arg.value)) {
