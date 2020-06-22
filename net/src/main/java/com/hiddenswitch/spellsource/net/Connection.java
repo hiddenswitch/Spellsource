@@ -211,6 +211,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			owner.eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
 			owner.eventBus().registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
 			owner.eventBus().registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
+			owner.eventBus().registerDefaultCodec(MatchmakingQueueEntry.class, new MatchmakingQueueEntryCodec());
 		}
 	}
 

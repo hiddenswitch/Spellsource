@@ -1,4 +1,4 @@
-package co.paralleluniverse.fibers.instrument;
+package co.paralleluniverse.fibers;
 
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;

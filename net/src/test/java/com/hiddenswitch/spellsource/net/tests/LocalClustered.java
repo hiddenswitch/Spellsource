@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.net.tests;
 
-import com.hiddenswitch.containers.KeycloakContainer;
 import com.hiddenswitch.containers.MongoDBContainer;
 import com.hiddenswitch.spellsource.net.Broadcaster;
 import com.hiddenswitch.spellsource.net.applications.Applications;
@@ -8,7 +7,6 @@ import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.impl.VertxInternal;
 import org.testcontainers.containers.BindMode;
-import org.testcontainers.utility.MountableFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,32 +33,20 @@ public class LocalClustered {
 		var mongoUrl = database.getReplicaSetUrl().replace("/test", "/metastone");
 		System.getProperties().put("mongo.url", mongoUrl);
 
-
-		var importFileInContainer = "/realm.json";
-		var keycloak = new KeycloakContainer()
-				.withCopyFileToContainer(MountableFile.forHostPath(Path.of(rootProjectDir, "secrets/realm-export.json")), importFileInContainer)
-				.withEnv("KEYCLOAK_IMPORT", importFileInContainer);
-		keycloak.getAuthServerUrl();
-		keycloak.start();
-
-
 		Applications.LOGGER.info("main: mongo.url is {}", mongoUrl);
-		Applications.LOGGER.info("main: keycloak.url is {}", keycloak.getAuthServerUrl());
 
 		GlobalTracer.registerIfAbsent(NoopTracerFactory.create());
 		Applications.startServer(vertx -> {
 			if (vertx.failed()) {
 				database.close();
-				keycloak.close();
 				return;
 			}
 
 			((VertxInternal) vertx.result()).addCloseHook(v -> {
 				database.close();
-				keycloak.close();
 			});
 
-			vertx.result().deployVerticle(Broadcaster.create(), done -> Applications.LOGGER.info("main: Broadcaster deployed"));
+			vertx.result().deployVerticle(Broadcaster.create(), done -> Applications.LOGGER.info("main: Broadcaster deployed. You may now run the game."));
 		});
 	}
 }
