@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
@@ -847,11 +848,14 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
-		if (server != null) {
-			server.close();
-		}
 		if (queues != null) {
 			Sync.invoke1(queues::close);
 		}
+
+		if (server != null) {
+			Void t = Sync.invoke1(server::close);
+		}
+
+		Strand.sleep(2000L);
 	}
 }

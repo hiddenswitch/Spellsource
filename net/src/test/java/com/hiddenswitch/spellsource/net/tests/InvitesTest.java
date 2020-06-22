@@ -8,11 +8,9 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableQueue;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.InviteId;
 import com.hiddenswitch.spellsource.net.impl.UserId;
-import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
@@ -371,7 +369,6 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertTrue(sender.getTurnsPlayed() > 0);
 
 					// Check that the queue has been destroyed.
-					assertFalse(SuspendableQueue.exists(inviteResponse.getInvite().getQueueId()), "The queue should be destroyed");
 					assertFalse(usersInGames.containsKey(recipient.getUserId()), "Neither players should be in a game now");
 					assertFalse(usersInGames.containsKey(sender.getUserId()), "Neither players should be in a game now");
 				}
