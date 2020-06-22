@@ -138,7 +138,13 @@ const CardEditorView = () => {
             delete arg.valueS
           }
           if (arg.hasOwnProperty('valueB')) {
-            arg.value = arg.valueB
+            //arg.value = arg.valueB
+            //gotta do this because it seems like the block -> xml conversion hates booleans
+            if (arg.valueB === true) {
+              arg.value = 'TRUE'
+            } else if (arg.valueB === false) {
+              arg.value = 'FALSE'
+            }
             delete arg.valueB
           }
         })
@@ -197,14 +203,6 @@ const CardEditorView = () => {
                 shadowBlock.previousConnection: shadowBlock.outputConnection
               thisBlock.getInput(arg.name).connection.connect(connection)
               shadowBlock.initSvg()
-            }
-            //gotta do this because it seems like the block -> xml conversion hates booleans
-            if (arg.hasOwnProperty('value')) {
-              if (arg.value === true) {
-                arg.value = 'TRUE'
-              } else if (arg.value === false) {
-                arg.value = 'FALSE'
-              }
             }
           }
         }
