@@ -12,9 +12,4 @@ public interface Migrator {
 	Migrator add(MigrationRequest request);
 
 	void migrateTo(final int version, final Handler<MigrationToResponse> response);
-
-	@Suspendable
-	default Void migrateTo(int version) throws SuspendExecution, InterruptedException {
-		return awaitFiber(h -> migrateTo(version, h::handle));
-	}
 }

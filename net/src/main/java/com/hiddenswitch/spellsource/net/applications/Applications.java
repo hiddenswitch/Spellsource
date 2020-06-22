@@ -1,9 +1,10 @@
 package com.hiddenswitch.spellsource.net.applications;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.hiddenswitch.spellsource.common.Tracing;
-import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.impl.RpcClient;
+import com.hiddenswitch.spellsource.net.Cluster;
+import com.hiddenswitch.spellsource.net.Configuration;
+import com.hiddenswitch.spellsource.net.Migrations;
+import com.hiddenswitch.spellsource.net.Spellsource;
 import io.atomix.cluster.Node;
 import io.atomix.core.Atomix;
 import io.atomix.utils.net.Address;
@@ -40,7 +41,7 @@ public interface Applications {
 		int atomixPort = Configuration.atomixPort();
 		int vertxClusterPort = Configuration.vertxClusterPort();
 		io.vertx.core.logging.LoggerFactory.initialise();
-		long nanos = Duration.of(RpcClient.DEFAULT_TIMEOUT, ChronoUnit.MILLIS).toNanos();
+		long nanos = Duration.of(8000, ChronoUnit.MILLIS).toNanos();
 		Node[] nodes = new Node[0];
 		if (Configuration.atomixBootstrapNode() != null) {
 			nodes = new Node[]{Node.builder()
@@ -57,7 +58,7 @@ public interface Applications {
 				.setClusterManager(clusterManager)
 				.setEventBusOptions(new EventBusOptions().setPort(vertxClusterPort))
 				.setPreferNativeTransport(true)
-				.setBlockedThreadCheckInterval(RpcClient.DEFAULT_TIMEOUT)
+				.setBlockedThreadCheckInterval(8000L)
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)

@@ -663,7 +663,7 @@ public interface Accounts {
 
 		router.route(resetUrl)
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.returnUnhandledExceptions(routingContext -> {
+				.handler(Handlers.returnUnhandledExceptions(routingContext -> {
 					routingContext.response().setStatusCode(303);
 
 					String password1 = routingContext.request().getFormAttribute("password1");

@@ -5,9 +5,6 @@ import net.demilich.metastone.game.cards.Attribute;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by bberman on 6/6/17.
- */
 public class PersistAttributeRequest implements Serializable {
 	private String id;
 	private EventLogicRequest request;

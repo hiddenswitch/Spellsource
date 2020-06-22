@@ -4,9 +4,6 @@ import com.hiddenswitch.spellsource.net.impl.util.DraftRecord;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 6/12/17.
- */
 public class RetireDraftResponse implements Serializable {
 	private DraftRecord record;
 

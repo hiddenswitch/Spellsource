@@ -136,8 +136,6 @@ public class ServerGameContext extends GameContext implements Server {
 					// These must be game decks at this point
 					.map(deck -> (GameDeck) deck)
 					.collect(toList())));
-			// Mulligans should happen simultaneously
-			setLogic(new NetworkedGameLogic());
 
 			// Persistence effects mean cards that remember things that have happened to them in other games
 			enablePersistenceEffects();
@@ -400,16 +398,6 @@ public class ServerGameContext extends GameContext implements Server {
 			enchantment.setOwner(0);
 			getGameTriggers().add(enchantment);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return A simultaneous mulligan game logic
-	 */
-	@Override
-	public NetworkedGameLogic getLogic() {
-		return (NetworkedGameLogic) super.getLogic();
 	}
 
 	/**

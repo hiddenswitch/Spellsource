@@ -3,16 +3,14 @@ package com.hiddenswitch.spellsource.net.models;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by bberman on 1/19/17.
- */
 public final class BorrowFromCollectionRequest implements Serializable {
 	private String collectionId;
 	private List<String> collectionIds;
 	private String userId;
 	private List<String> inventoryIds;
 
-	public BorrowFromCollectionRequest() {}
+	public BorrowFromCollectionRequest() {
+	}
 
 	public BorrowFromCollectionRequest withCollectionId(String collectionId) {
 		this.collectionId = collectionId;

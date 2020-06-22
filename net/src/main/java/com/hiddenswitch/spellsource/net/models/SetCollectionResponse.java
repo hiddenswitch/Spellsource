@@ -6,9 +6,6 @@ import io.vertx.ext.mongo.MongoClientUpdateResult;
 import java.io.Serializable;
 import java.util.Map;
 
-/**
- * Created by bberman on 2/17/17.
- */
 public class SetCollectionResponse implements Serializable {
 	private final Map<String, Object> added;
 	private final Map<String, Object> removed;

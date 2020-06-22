@@ -27,7 +27,6 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 	public static final String MIGRATIONS = "migrations";
 	private List<MigrationRequest> migrations = new ArrayList<>();
 	private static Logger logger = LoggerFactory.getLogger(Migrations.class);
-	private Registration registration;
 
 	public MigrationsImpl() {
 		super();
@@ -57,18 +56,11 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 				throw e2;
 			}
 		}
-
-
-		registration = Rpc.register(this, Migrations.class);
 	}
 
 	@Override
 	public void stop() throws Exception {
 		super.stop();
-
-		if (registration != null) {
-			Rpc.unregister(registration);
-		}
 	}
 
 	@Override
