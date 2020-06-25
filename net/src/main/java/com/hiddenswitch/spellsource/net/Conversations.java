@@ -13,7 +13,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * Provides the methods to help users message each other.
