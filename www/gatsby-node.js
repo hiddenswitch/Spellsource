@@ -55,6 +55,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   type Shadow {
     type: String
     fields: [Field]
+    notActuallyShadow: Boolean
   }
   type Field {
     name: String

@@ -17,7 +17,7 @@ const LoadableComponent = Loadable.Map({
       const all = Blockly.Workspace.getAll()
       for (let i = 0; i < all.length; i++) {
         const workspace = all[i]
-        if (!workspace.parentWorkspace) {
+        if (!workspace.parentWorkspace && workspace.rendered) {
           Blockly.svgResize(workspace)
         }
       }
