@@ -1,5 +1,5 @@
 import {isNumber, Xml} from 'blockly'
-import { extend, filter, find, fromPairs, isArray, map } from 'lodash'
+import { extend, filter, find, fromPairs, isArray, map, merge } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
@@ -201,16 +201,14 @@ export default class WorkspaceUtils {
   static postProcessCardScript(cardScript) {
     if (isArray(cardScript)) {
       for (const cardScriptElement of cardScript) {
-        this.rearrangeInputValues(cardScriptElement)
+        this.postProcessCardScript(cardScriptElement)
       }
-    } else {
-      this.rearrangeInputValues(cardScript)
+      return cardScript
     }
-
-    if (!!cardScript.card && !(cardScript.card instanceof String)) {
+    this.rearrangeInputValues(cardScript)
+    if (!!cardScript.card && !(typeof cardScript.card === 'string')) {
       delete cardScript.card
     }
-
 
     if (!!cardScript.battlecry) {
       if (!cardScript.attributes) {
@@ -318,14 +316,15 @@ export default class WorkspaceUtils {
           }
         }
         //then do the last one that might override what we're working with
-        if (!!cardScript[cardScriptKey]['super']) {
-          if (cardScript[cardScriptKey].propertyIsEnumerable('super')
-            && typeof cardScript[cardScriptKey]['super'] !== 'string') {
-            extend(cardScript[cardScriptKey], cardScript[cardScriptKey]['super'])
-            delete cardScript[cardScriptKey]['super']
-          } else {
+        if (!!cardScript[cardScriptKey]['super']
+          && typeof cardScript[cardScriptKey]['super'] === 'string') {
             cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
-          }
+        }
+
+        if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
+          && typeof cardScript['super'] !== 'string') {
+          merge(cardScript, cardScript['super'])
+          delete cardScript['super']
         }
       }
     }
