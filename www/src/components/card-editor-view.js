@@ -86,49 +86,33 @@ const CardEditorView = () => {
         }
       }
     }
+    allCard {
+      edges {
+        node {
+          id
+          name
+          baseManaCost
+          heroClass
+          type
+          collectible
+          art {
+            primary {
+              r
+              g
+              b
+            }
+          }
+        }
+      }
+    }
   }`)
 
-  const categories = {};
   const [dummyCardsWorkspace, setdummyCardsWorkspace] = useState(new Blockly.Workspace())
-
-  function getInitialToolboxCategories () {
-    return data.toolbox.BlockCategoryList.map(({
-      BlockTypePrefix, CategoryName, ColorHex, Custom
-    }) => {
-      let blocks
-      if (!!BlockTypePrefix) {
-        blocks = filter(data.allBlock.edges, edge => edge.node.type.startsWith(BlockTypePrefix)
-          && !edge.node.type.endsWith('SHADOW'))
-          .map(edge => {return { type: edge.node.type }})
-      }
-      let type
-      if (Custom === 'SEARCH') {
-        type = 'search'
-      }
-
-      categories[CategoryName] = {
-        name: CategoryName,
-        blocks: blocks,
-        colour: ColorHex,
-        custom: Custom,
-        type: type
-      }
-      return categories[CategoryName]
-    })
-  }
-
-  function cardsCategoryCallback(workspace) {
-    let xmlList = [];
-    xmlList.push(Blockly.Xml.textToDom('<button text="Find External Card Block" callbackKey="findCard"></button>'))
-    xmlList.push(Blockly.Xml.textToDom('<button text="Add External Card to Workspace" callbackKey="importCard"></button>'))
-    dummyCardsWorkspace.getAllBlocks().forEach(block => {
-      xmlList.push(Blockly.Xml.blockToDom(block))
-    })
-    return xmlList
-  }
-
+  const [heroClassColors, setHeroClassColors] = useState({
+    ANY: "#A6A6A6"
+  })
   const [code, setCode] = useState(``)
-  const [toolboxCategories, setToolboxCategories] = useState(getInitialToolboxCategories())
+  const [toolboxCategories, setToolboxCategories] = useState({})
   const [inited, setInited] = useState(false)
 
   // All of our spells, triggers, entity reference enum values, etc.
@@ -180,6 +164,94 @@ const CardEditorView = () => {
         extendedJsonInit(this, block)
       }
     }
+  })
+
+  /**
+   * first pass through the card catalogue to figure out all the collectible
+   * hero classes and their colors
+   */
+  data.allCard.edges.forEach(edge => {
+    let card = edge.node;
+    let type = 'HeroClass_' + card.heroClass
+    if (has(Blockly.Blocks, type)) {
+      return
+    }
+    if (card.type === 'CLASS' && card.collectible) {
+      let color = Blockly.utils.colour.rgbToHex(
+        card.art.primary.r * 255,
+        card.art.primary.g * 255,
+        card.art.primary.b * 255
+      )
+
+      heroClassColors[card.heroClass] = color
+      Blockly.Blocks[type] = {
+        init: function () {
+          this.jsonInit({
+            "type": type,
+            "message0": card.name,
+            "output": "HeroClass",
+            "colour": color
+          })
+          this.data = card.heroClass
+        }
+      }
+    }
+  })
+
+  //second pass through to actually get the cards
+  data.allCard.edges.forEach(edge => {
+    let card = edge.node;
+    let type = 'ExternalCard_' + card.id
+    if (has(Blockly.Blocks, type)) {
+      return
+    }
+    if (card.baseManaCost != null
+      && heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
+      let color = heroClassColors[card.heroClass]
+      let message = card.type
+        .replace('_', ' ')
+        .split(' ')
+        .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+        .join(' ')
+      Blockly.Blocks[type] = {
+        init: function () {
+          this.jsonInit({
+            "type": type,
+            "args0": [],
+            "message0": message + " (" + card.baseManaCost + ") " + card.name,
+            "output": "Card",
+            "colour": color
+          })
+          this.data = card.id
+        }
+      }
+    }
+  })
+
+  data.toolbox.BlockCategoryList.map(({
+      BlockTypePrefix, CategoryName, ColorHex, Custom
+    }) => {
+    let blocks = []
+    if (!!BlockTypePrefix) {
+      for (let blocksKey in Blockly.Blocks) {
+        if (blocksKey.startsWith(BlockTypePrefix) && !blocksKey.endsWith('SHADOW')) {
+          blocks.push({type: blocksKey})
+        }
+      }
+    }
+    let type
+    if (CategoryName === 'Search') {
+      type = 'search'
+    }
+
+    toolboxCategories[CategoryName] = {
+      name: CategoryName,
+      blocks: blocks,
+      colour: ColorHex,
+      custom: Custom,
+      type: type
+    }
+
   })
 
   function extendedJsonInit(thisBlock, block) {
@@ -262,15 +334,19 @@ const CardEditorView = () => {
         + card.name.toLowerCase().replace(' ', '_')
       let type = 'RealCard_' + cardId;
       let color = "#888888"
-      if (!!card.heroClass && workspace.getBlocksByType("HeroClass_" + card.heroClass).length !== 0) {
-        color = workspace.getBlocksByType("HeroClass_" + card.heroClass)[0].getColour()
+      if (!!card.heroClass){
+        color = heroClassColors[card.heroClass]
       }
+      let message = card.type
+        .replace('_', ' ')
+        .split(' ')
+        .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+        .join(' ')
       Blockly.Blocks[type] = {
         init: function () {
           this.jsonInit({
             "type": type,
-            "args0": [],
-            "message0": "\"" + card.name + "\"",
+            "message0": message + " (" + card.baseManaCost + ") " + card.name,
             "output": "Card",
             "colour": color
           })
@@ -285,29 +361,40 @@ const CardEditorView = () => {
       }
       cardsStillInUse.push(type)
     }
+
   }
 
   function initializeWorkspace(workspace) {
     workspace.registerToolboxCategoryCallback("CARDS", cardsCategoryCallback)
     workspace.registerButtonCallback("findCard", () => {
-      alert("Coming \"Soon\"")
+      alert('Coming "Soon"')
     })
     workspace.registerButtonCallback("importCard", () => {
-      alert("Coming \"Soon\"")
+      alert('Coming "Soon"')
     })
 
-    map(categories['Cards'].blocks, block => {
+    toolboxCategories['Cards'].blocks.forEach(block => {
       dummyCardsWorkspace.newBlock(block.type)
     })
 
     setInited(true)
   }
 
+  function cardsCategoryCallback(workspace) {
+    let xmlList = [];
+    xmlList.push(Blockly.Xml.textToDom('<button text="Find External Card Block" callbackKey="findCard"></button>'))
+    xmlList.push(Blockly.Xml.textToDom('<button text="Add External Card to Workspace" callbackKey="importCard"></button>'))
+    dummyCardsWorkspace.getAllBlocks().forEach(block => {
+      xmlList.push(Blockly.Xml.blockToDom(block))
+    })
+    return xmlList
+  }
+
   return (<span>
     <ReactBlocklyComponent.BlocklyEditor
       workspaceDidChange={onWorkspaceChanged}
       wrapperDivClassName={styles.codeEditor}
-      toolboxCategories={toolboxCategories}
+      toolboxCategories={Object.values(toolboxCategories)}
     />
     <AceEditor
       width={'100%'}
@@ -322,5 +409,6 @@ const CardEditorView = () => {
     />
   </span>)
 }
+
 
 export default CardEditorView
