@@ -13,7 +13,12 @@ const SearchResults = ({ location }) => {
   const query = parsed.query
 
   let index = useIndex()
-  const results = index.search(query, { expand: true }).map(({ ref }) => index.documentStore.getDoc(ref))
+  const results = index
+    .search(query, { expand: true })
+    .map(({ ref }) => index.documentStore.getDoc(ref))
+    .filter(doc => {
+      return doc.nodeType === 'Card' || doc.nodeType === 'MarkdownRemark'
+    })
 
   if (results.length === 0) {
     return (

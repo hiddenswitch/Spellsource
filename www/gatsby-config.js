@@ -167,13 +167,12 @@ module.exports = {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`title`, `tags`, `rawMarkdownBody`],
+        fields: [`title`, `rawMarkdownBody`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type MarkdownRemark, list how to resolve the fields` values
           MarkdownRemark: {
             title: node => node.frontmatter.title,
-            tags: node => node.frontmatter.tags,
             path: node => node.frontmatter.path,
             rawMarkdownBody: node => node.rawMarkdownBody,
             excerpt: node => {
@@ -184,16 +183,21 @@ module.exports = {
                 excerpt += node.value
               })
               return excerpt.slice(0, excerptLength) + '...'
-            }
+            },
+            nodeType: node => 'MarkdownRemark'
           },
           Card: {
             // TODO: Change the name of the field to be its content
             title: node => node.name,
-            tags: node => '', // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
             rawMarkdownBody: node => node.description,
             path: node => node.path,
             collectible: node => node.collectible,
             excerpt: node => node.description,
+            nodeType: node => 'Card'
+          },
+          Block: {
+            title: node => node.messages.join(' '),
+            nodeType: node => 'Block'
           }
         },
         // Optional filter to limit indexed nodes
