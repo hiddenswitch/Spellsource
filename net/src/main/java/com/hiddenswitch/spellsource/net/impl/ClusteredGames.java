@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
+import com.google.common.cache.CacheBuilder;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
@@ -263,7 +264,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 							.setPlayerUserIds(userIds)
 							.setDeckIds(deckIds)
 							.setPlayerNames(playerNames);
-					mongo().insert(Games.GAMES, mapFrom(gameRecord));
+					if (!Strand.currentStrand().isInterrupted()) {
+						mongo().insert(Games.GAMES, mapFrom(gameRecord));
+					}
 				} catch (Throwable any) {
 					Tracing.error(any);
 				} finally {
@@ -286,6 +289,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		for (GameId gameId : contexts.keySet()) {
 			Objects.requireNonNull(gameId.toString());
 			removeGameAndRecordReplay(gameId);
+		}
+		if (contexts.size() != 0) {
+			Games.LOGGER.warn("stop: Did not succeed in stopping all sessions");
 		}
 		Void t = awaitResult(h -> registration.unregister(h));
 		Games.LOGGER.debug("stop: Activity monitors unregistered");

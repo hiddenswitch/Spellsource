@@ -1,6 +1,8 @@
 package com.hiddenswitch.spellsource.common;
 
 import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableRunnable;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.core.Version;
@@ -59,20 +61,25 @@ public interface Tracing {
 	}
 
 	static Tracer initialize(String serviceName, String samplerType, Number samplerParameter) {
-		Configuration.SamplerConfiguration samplerConfig = Configuration.SamplerConfiguration.fromEnv()
+		var samplerConfig = Configuration.SamplerConfiguration.fromEnv()
 				.withType(samplerType)
 				.withParam(samplerParameter);
 
-		Configuration.ReporterConfiguration reporterConfig = Configuration.ReporterConfiguration.fromEnv()
+		var senderConfiguration = Configuration.SenderConfiguration.fromEnv();
+		if (senderConfiguration.getAgentHost() == null) {
+			senderConfiguration.withAgentHost("localhost");
+		}
+		if (senderConfiguration.getAgentPort() == null) {
+			senderConfiguration.withAgentPort(6831);
+		}
+		var reporterConfig = Configuration.ReporterConfiguration.fromEnv()
 				.withLogSpans(true)
-				.withSender(Configuration.SenderConfiguration.fromEnv()
-						.withAgentHost("localhost")
-						.withAgentPort(6831));
+				.withSender(senderConfiguration);
 
 		Map<String, String> map = new HashMap<>();
 		map.put("version", Version.version());
 
-		Configuration config = new Configuration(serviceName)
+		var config = new Configuration(serviceName)
 				.withTracerTags(map)
 				.withSampler(samplerConfig)
 				.withReporter(reporterConfig);

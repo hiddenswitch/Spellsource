@@ -17,5 +17,5 @@ package co.paralleluniverse.common.monitoring;
  * @author pron
  */
 public enum MonitorType {
-    JMX, METRICS, NONE;
+    JMX, METRICS, MICROMETER, NONE;
 }

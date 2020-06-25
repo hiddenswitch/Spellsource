@@ -25,7 +25,8 @@ import com.codahale.metrics.Timer;
  *
  * @author pron
  */
-public class Metrics {
+public class
+Metrics {
     private static final MetricRegistry metrics = new MetricRegistry();
     private static final JmxReporter reporter;
     

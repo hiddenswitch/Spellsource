@@ -1,10 +1,7 @@
 package com.hiddenswitch.spellsource.net.applications;
 
 import com.hiddenswitch.spellsource.common.Tracing;
-import com.hiddenswitch.spellsource.net.Cluster;
-import com.hiddenswitch.spellsource.net.Configuration;
-import com.hiddenswitch.spellsource.net.Migrations;
-import com.hiddenswitch.spellsource.net.Spellsource;
+import com.hiddenswitch.spellsource.net.*;
 import io.atomix.cluster.Node;
 import io.atomix.core.Atomix;
 import io.atomix.utils.net.Address;
@@ -38,18 +35,18 @@ public interface Applications {
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		// Shared data between all instances of the server is done through a library called Atomix
 		// We'll start atomix now
-		int atomixPort = Configuration.atomixPort();
-		int vertxClusterPort = Configuration.vertxClusterPort();
+		var atomixPort = Configuration.atomixPort();
+		var vertxClusterPort = Configuration.vertxClusterPort();
 		io.vertx.core.logging.LoggerFactory.initialise();
-		long nanos = Duration.of(8000, ChronoUnit.MILLIS).toNanos();
-		Node[] nodes = new Node[0];
+		var nanos = Duration.of(8000, ChronoUnit.MILLIS).toNanos();
+		var nodes = new Node[0];
 		if (Configuration.atomixBootstrapNode() != null) {
 			nodes = new Node[]{Node.builder()
 					.withAddress(Address.from(Configuration.atomixBootstrapNode()))
 					.build()};
 		}
 
-		Atomix atomix = Cluster.create(atomixPort, nodes);
+		var atomix = Cluster.create(atomixPort, nodes);
 		atomix.start().join();
 		ClusterManager clusterManager = new AtomixClusterManager(atomix);
 
@@ -67,13 +64,19 @@ public interface Applications {
 								.setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)
 										.setStartEmbeddedServer(true)
 										.setEmbeddedServerOptions(new HttpServerOptions().setPort(Configuration.metricsPort()))
-										.setEmbeddedServerEndpoint("/metrics/vertx"))
+										.setEmbeddedServerEndpoint("/metrics"))
 								.setEnabled(true))
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors()), then -> {
+			if (then.failed()) {
+				LOGGER.error("main: Vertx launch failed", then.cause());
+				return;
+			}
 
-			Vertx vertx = then.result();
+			var vertx = then.result();
 			// Set up tracing now that we started vertx
 			Tracing.initializeGlobal(vertx);
+			// Set up metrics
+			Metrics.defaultMetrics();
 
 			// Migrate the database
 			Migrations.migrate(vertx, v1 -> {

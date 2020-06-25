@@ -1,5 +1,6 @@
 package io.vertx.ext.sync;
 
+import co.paralleluniverse.common.monitoring.MonitorType;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberExecutorScheduler;
 import co.paralleluniverse.fibers.FiberScheduler;

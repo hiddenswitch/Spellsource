@@ -606,6 +606,15 @@ public class ServerGameContext extends GameContext implements Server {
 				return null;
 			}));
 
+			// Closing the context should interrupt the fiber
+			// Not sure if this should be done at construction time.
+			Vertx.currentContext().addCloseHook(v -> {
+				if (getFiber() != null && !getFiber().isInterrupted()) {
+					getFiber().interrupt();
+				}
+				v.handle(Future.succeededFuture());
+			});
+
 			getFiber().start();
 			LOGGER.debug("play {}: Fiber started", gameId);
 		} else {
