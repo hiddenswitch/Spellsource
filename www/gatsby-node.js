@@ -22,6 +22,12 @@ exports.onCreateWebpackConfig = ({
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
   const typeDefs = `
+  type ToolboxBlockCategoryList implements Node {
+    BlockTypePrefix: String
+    CategoryName: String
+    ColorHex: String
+    Custom: String
+  }
   type Block implements Node {
     type: String
     messages: [String]
