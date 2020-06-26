@@ -296,6 +296,5 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		Void t = awaitResult(h -> registration.unregister(h));
 		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		Games.LOGGER.debug("stop: Sessions killed");
-		super.stop();
 	}
 }
