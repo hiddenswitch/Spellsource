@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
@@ -24,6 +23,8 @@ import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.util.Serialization;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -73,8 +74,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	private final int port;
 	private HttpServer server;
-	private Closeable queues;
-	private Closeable serverMessaging;
+	private Closeable customCloseables;
 
 	public GatewayImpl(int port) {
 		this.port = port;
@@ -118,7 +118,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(Connection.handler());
 
 		// Send game traffic over the Connection nowadays.
-		serverMessaging = ServerGameContext.handleConnections();
+		var serverMessaging = ServerGameContext.handleConnections();
 
 		// Enable friend list updates via envelope messaging channel
 		Friends.handleConnections();
@@ -130,17 +130,18 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		Conversations.handleConnections();
 
 		// Create default matchmaking queues
-		queues = Matchmaking.startDefaultQueues();
+		var defaultQueues = Matchmaking.startDefaultQueues();
 		// Create draft queue
 		var draftQueue = Draft.startDraftQueue();
 
-		var originalQueues = queues;
-		queues = fut -> {
-			originalQueues.close(v1 -> {
-				serverMessaging.close(v2 -> {
-					draftQueue.close(fut);
-				});
-			});
+		customCloseables = fut -> {
+			var closed1 = Promise.<Void>promise();
+			var closed2 = Promise.<Void>promise();
+			var closed3 = Promise.<Void>promise();
+			CompositeFuture.join(closed1.future(), closed2.future(), closed3.future()).onComplete(res -> fut.handle(res.mapEmpty()));
+			draftQueue.close(closed1.future());
+			defaultQueues.close(closed2.future());
+			serverMessaging.close(closed3.future());
 		};
 
 		// Handle the enqueue and dequeue methods through the matchmaker
@@ -848,14 +849,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
-		if (queues != null) {
-			Sync.invoke1(queues::close);
+		if (customCloseables != null) {
+			Sync.invoke1(customCloseables::close);
 		}
 
 		if (server != null) {
 			Void t = Sync.invoke1(server::close);
 		}
-
-		Strand.sleep(2000L);
 	}
 }
