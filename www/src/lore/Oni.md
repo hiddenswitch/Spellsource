@@ -6,7 +6,7 @@ layout: wiki
 
 ![Red and Blue Oni](Red_and_Blue_Oni.jpg "fig:Red and Blue Oni") 
 ![Oni Minion](Oni Minion.png "fig:Oni Minion")
-
+![Ogre Attack](Ogre_Attack.gif "fig: Ogre attack animation")
 
 A long time ago, the [Vohlok](/wiki/Vohlok "wikilink")
 [Dragovians](/wiki/Dragovians "wikilink") fought a religious war against a
@@ -29,6 +29,3 @@ However, Greater and more chaotic Oni can be summoned by any magic user
 on the islands. Some have exchanged their services for freedom and now
 roam a swamp or haunt a ruined castle. The Bogovey still regularly call
 upon these creatures.
-
-
-![Animated Oni](Ogre_Attack.gif "fig: Ogre Oni Attacking") 

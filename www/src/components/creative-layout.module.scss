@@ -9,14 +9,14 @@ $base-font-family: 'compasspromedium', 'Source Code Pro', monospace !default;
 $base-font-size: 17pt !default;
 $mobile-font-size: 17pt !default;
 $base-line-height: 1.2 !default;
-$container-width: calc(100% - 120px) !default;
-$container-max-width: 860px !default;
+$container-width: calc(100% - 50px) !default;
+$container-max-width: 700px !default;
 
 // From dark
 :root {
   --base-color: #DBDBDB;
   --primary-color: #A2FC8F;
-  --border: dashed 1px rgba(219, 219, 219, 0.9);
+  --border: solid 1px rgba(219, 219, 219, 0.9);
   --selection-background: rgba(219, 219, 219, 0.99);
   --selection-text: #000;
   --background-color: #000;
@@ -59,7 +59,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-size: $base-font-size;
+  //font-size: $base-font-size;
   margin: 0px;
   margin-top: 22px;
   font-weight: bold;
@@ -81,8 +81,27 @@ a:hover {
   background-color: var(--base-color);
 }
 
+summary:hover{
+  color: var(--background-color);
+  background-color: var(--base-color);
+}
+
 .primary-text {
   color: var(--primary-color);
+}
+
+#full-width { // for landing page image
+  left: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  max-width: 100vw;
+  position: relative;
+  right: 50%;
+  width: 100vw;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 @media only screen and (max-device-width: 500px) {
@@ -103,6 +122,13 @@ h6:before { content: "######";  margin-right: 9px; }*/
  */
 .container {
   width: $container-width;
+  margin-right: auto;
+  margin-left: auto;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+}
+
+section {
   max-width: $container-max-width;
   margin-right: auto;
   margin-left: auto;
@@ -117,7 +143,7 @@ footer {
 }
 
 header {
-  margin-top: 25px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -128,6 +154,15 @@ header p {
 
 footer {
   margin-bottom: 20px;
+}
+
+.fullscreen-div {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-bottom: 25px;
+  overflow: hidden;
 }
 
 /**

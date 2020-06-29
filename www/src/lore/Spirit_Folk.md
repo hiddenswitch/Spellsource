@@ -1,7 +1,9 @@
 ---
 title: Spirit Folk
 path: /wiki/Spirit_Folk
-redirect_to: /wiki/Fae/
+layout: wiki
 ---
 
-You should automatically be redirected to [Fae](/wiki/Fae/)
+## Spirit Folk
+
+See: [Fae](/wiki/Fae/).

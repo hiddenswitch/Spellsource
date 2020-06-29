@@ -4,6 +4,8 @@ path: /wiki/Wyspan
 layout: wiki
 ---
 
+## Wyspan
+
 [Wyspan](/wiki/Wyspan "wikilink") is the common tongue on the islands of the
 Lung Archipelago.
 

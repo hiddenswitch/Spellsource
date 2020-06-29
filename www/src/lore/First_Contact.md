@@ -4,6 +4,8 @@ path: /wiki/First_Contact
 layout: wiki
 ---
 
+## First Contact
+
 First contact describes the actual meeting (as opposed to
 [vision](/wiki/Vision_of_Landfall "wikilink")) between the human [Shun
 He](/wiki/Shun_He "wikilink") and the [Fae](Fae "wikilink") healer [Inora

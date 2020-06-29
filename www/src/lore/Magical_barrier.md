@@ -1,7 +1,9 @@
 ---
-title: Magical barrier
-path: /wiki/Magical_barrier
-redirect_to: /wiki/Lunopause/
+title: Magical Barrier
+path: /wiki/magical_barrier
+layout: wiki
 ---
 
-You should automatically be redirected to [Lunopause](/wiki/Lunopause/)
+## Magical Barrier
+
+See: [Lunopause](/wiki/Lunopause/).
