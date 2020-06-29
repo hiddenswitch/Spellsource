@@ -3,6 +3,9 @@ title: Faloran
 path: /wiki/Faloran
 layout: wiki
 ---
+
+## Faloran
+
 ![Faloran](Faloran Humanoid.png "fig:Faloran Humanoid")
 ![Faloran](Faloran Fox.png "fig:Faloran Fox") 
 

@@ -4,6 +4,8 @@ path: /wiki/Spellmist
 layout: wiki
 ---
 
+## Spellmist
+
 **Spellmist** is the gaseous, highly energized inert substance that can
 be utilized into what most people call magic.
 

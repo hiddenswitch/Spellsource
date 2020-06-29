@@ -6,7 +6,6 @@ layout: wiki
 
 ![Land Fae](Spirit_Folk_of_the_Forest_(Land).jpg "fig:Land Fae") 
 ![Sea Fae](Spirit_Folk_of_the_Sea.png "fig:Sea Fae") 
-![Fae Minion](FaeMinion.png "fig:Fae Minion") 
 
 They are the first
 inhabitants of the [Lung Islands](/wiki/Moromah_Island "wikilink"), the
@@ -23,6 +22,8 @@ the Forest. They have special powers related to natural forces or
 events: for instance, they can communicate with animals and each other
 using [Passed Vision](/wiki/Passed_Vision "wikilink"), or use the [five
 elements](/wiki/Five_Elements "wikilink") to cast spells.
+
+![Fae Minion](FaeMinion.png "fig:Fae Minion") 
 
 ### Tribes
 

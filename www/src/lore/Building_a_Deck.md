@@ -4,6 +4,8 @@ path: /wiki/Building_a_Deck
 layout: wiki
 ---
 
+## Building a Deck
+
 Before any game of Spellsource, you first have to construct a deck! If
 building a deck seems daunting or too time consuming for your tastes,
 that's no problem! We have plenty of pre-built decks for you to choose

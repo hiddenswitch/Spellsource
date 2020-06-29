@@ -4,6 +4,8 @@ path: /wiki/Shun_He
 layout: wiki
 ---
 
+## Shun He
+
 ![Shun He, Grand Alchemist of the Lotus
 Empire](Shun He Rev.png "fig:Shun He, Grand Alchemist of the Lotus Empire")
 Shun He is the Grand Alchemist of the [Lotus

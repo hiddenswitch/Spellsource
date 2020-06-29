@@ -4,6 +4,8 @@ path: /wiki/Awakening
 layout: wiki
 ---
 
+## Awakening
+
 **Awakening** is the process of initiating
 [Spellmist](/wiki/Spellmist "wikilink") sublimation from
 [Lun](/wiki/Lun "wikilink"), where the Awakener uses chemical reactions and

@@ -63,6 +63,7 @@ Christopher Rodowicz
 Trancy Zhu  
 Jessica Zhao  
 Jessica Eng  
+Vicki Xu
 
 ## NYU Game Lab
 

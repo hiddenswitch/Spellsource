@@ -4,6 +4,8 @@ path: /wiki/Lun
 layout: wiki
 ---
 
+## Lun
+
 **Lun** (also known as The Spellstone, Gurin-no-Magatama, or Lunstone)
 is a rare mineral that can be found on [The
 Mainland](/wiki/The_Mainland "wikilink"). It is the only known substance that

@@ -4,6 +4,8 @@ path: /wiki/Hengeyokai
 layout: wiki
 ---
 
+## Hengeyokai
+
 ![Tanuki Hengeyokai](Tanuki_Hengeyokai.png "fig:Tanuki Hengeyokai")
 ![Kitsune Hengeyokai](Kitsune_Hengeyokai.jpg "fig:Kitsune Hengeyokai")
 ![Sanu Hengeyokai](Sanu_Hengeyokai.jpg "fig:Sanu Hengeyokai") 

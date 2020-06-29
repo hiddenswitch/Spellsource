@@ -4,6 +4,8 @@ path: /wiki/Paucha
 layout: wiki
 ---
 
+## Paucha
+
 ![Paucha](Paucha.png "fig:Paucha") Paucha is the Goddess of Madness of
 the Oni.
 
