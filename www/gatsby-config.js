@@ -193,10 +193,13 @@ module.exports = {
             path: node => node.path,
             collectible: node => node.collectible,
             excerpt: node => node.description,
-            nodeType: node => 'Card'
+            nodeType: node => 'Card',
+            heroClass: node => node.heroClass,
+            baseManaCost: node => node.baseManaCost
           },
           Block: {
-            title: node => node.messages.join(' '),
+            title: node => node.type.replace('_', ' ') + ' ' +
+              node.messages.join(' ').replace('%(\\d)',''),
             nodeType: node => 'Block'
           }
         },
