@@ -26,7 +26,6 @@ exports.createSchemaCustomization = ({ actions }) => {
     BlockTypePrefix: String
     CategoryName: String
     ColorHex: String
-    Custom: String
   }
   type Block implements Node {
     type: String
