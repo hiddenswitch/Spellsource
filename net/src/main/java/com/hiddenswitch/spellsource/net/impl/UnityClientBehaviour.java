@@ -154,6 +154,22 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
+	@Suspendable
+	private GameplayRequest getMulliganRequest() {
+		requestsLock.lock();
+		try {
+			for (GameplayRequest request : getRequests()) {
+				if (request.getType() == GameplayRequestType.MULLIGAN) {
+					return request;
+				}
+			}
+			return null;
+		} finally {
+			requestsLock.unlock();
+		}
+	}
+
+	@Suspendable
 	private GameplayRequest getRequest(String messageId) {
 		requestsLock.lock();
 		try {
@@ -219,9 +235,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					break;
 				case UPDATE_ACTION:
 					// Indicates the player has made a choice about which action to take.
-					if (server == null) {
-						throw new RuntimeException();
-					}
 					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
@@ -229,14 +242,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					onActionReceived(messageId, message.getActionIndex());
 					break;
 				case UPDATE_MULLIGAN:
-					if (server == null) {
-						throw new RuntimeException();
-					}
 					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
-					final String messageId2 = message.getRepliesTo();
-					onMulliganReceived(messageId2, message.getDiscardedCardIndices());
+					onMulliganReceived(message.getDiscardedCardIndices());
 					break;
 				case EMOTE:
 					server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage());
@@ -318,14 +327,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 * The starting hand is also sent in the {@link net.demilich.metastone.game.targeting.Zones#SET_ASIDE_ZONE}, where the
 	 * index in the set aside zone corresponds to the index that should be sent to discard.
 	 *
-	 * @param messageId
 	 * @param discardedCardIndices A list of indices in the list of starter cards that should be discarded.
 	 */
 	@Suspendable
-	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
+	public void onMulliganReceived(List<Integer> discardedCardIndices) {
 		requestsLock.lock();
 		try {
-			GameplayRequest request = getRequest(messageId);
+			GameplayRequest request = getMulliganRequest();
 			if (request == null) {
 				// The game may have ended, a mulligan is being received twice, or the game was conceded.
 				return;
