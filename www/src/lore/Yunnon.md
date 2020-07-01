@@ -4,8 +4,6 @@ path: /wiki/Yunnon
 layout: wiki
 ---
 
-## Yunnon
-
 For most of its history, Yunnon was a landlocked desert backwater constantly warred over by bloodthirsty Khans.
 Thirty years before [Shun He](/wiki/Shun_He "wikilink")'s discovery of the Lun Islands (30 BD), a Khan named Goyan united all the tribes and went on a conquering rampage.
 Kingdom after kingdom fell before his armies of horse archers across the plains.

@@ -4,8 +4,6 @@ path: /wiki/Pearl_Colony
 layout: wiki
 ---
 
-## Pearl Colony
-
 Pearl Colony is the first and largest [Human](/wiki/Humans "wikilink")
 settlement in the [Lung Archipelago](/wiki/Moromah_Island "wikilink").
 

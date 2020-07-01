@@ -4,8 +4,6 @@ path: /wiki/Hengeyokai
 layout: wiki
 ---
 
-## Hengeyokai
-
 ![Tanuki Hengeyokai](Tanuki_Hengeyokai.png "fig:Tanuki Hengeyokai")
 ![Kitsune Hengeyokai](Kitsune_Hengeyokai.jpg "fig:Kitsune Hengeyokai")
 ![Sanu Hengeyokai](Sanu_Hengeyokai.jpg "fig:Sanu Hengeyokai") 
@@ -19,7 +17,7 @@ due to exposure to the Islands' magic.
 ### Language and Names
 
 The Hengeyokai have their own language (a form of
-[Sylvan](/wiki/Sylvan "wikilink")), which is the same regardless of animal
+[Sylvan](/wiki/Wyspan "wikilink")), which is the same regardless of animal
 type, and which they speak regardless of their form. They can also
 communicate with natural animals with the same form or closely related
 form as theirs. For instance, an Inu (dog) can understand dog and wolf

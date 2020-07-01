@@ -4,8 +4,6 @@ path: /wiki/Season_1
 layout: wiki
 ---
 
-## Season 1
-
 -   Episode 1: Arrival
     -   The blind alchemist [Shun He](/wiki/Shun_He "wikilink") arrives on
         [Moromah Island](/wiki/Moromah_Island "wikilink") onboard his magical

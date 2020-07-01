@@ -141,13 +141,13 @@ module.exports = {
               // It's important to specify the maxWidth (in pixels) of
               // the content container as this plugin uses this as the
               // base for generating different widths of each image.
-              maxWidth: 1200,
+              maxWidth: 700,
               linkImagesToOriginal: false,
               backgroundColor: 'transparent',
               withWebp: true,
               disableBgImage: true,
               quality: 100,
-              wrapperStyle: `float: right; width: 100%; margin-left: 1em; margin-bottom: 1em;`
+              wrapperStyle: `float: right; width: 100%; margin-left: 0.5em; margin-bottom: 0.5em;`
             },
           },
           {
@@ -155,27 +155,6 @@ module.exports = {
             options: {
               maintainCase: false,
               removeAccents: true,
-            },
-          },
-          `remark-image-attributes`,
-          {
-            resolve: `gatsby-remark-image-attributes`,
-            options: {
-
-              // ?Array<String>
-              //   Any names declared here are added
-              //   to the default set of attributes,
-              //   which the plugin will use to style
-              //   the image.
-              styleAttributes: [`float`, `margin-left`, `margin-bottom`, `width`],
-
-              // ?Boolean
-              //   If true, all attributes that
-              //   aren't styleAttributes, will be
-              //   added as data-* attributes to the
-              //   image.
-              dataAttributes: true,
-
             },
           },
         ],

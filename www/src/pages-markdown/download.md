@@ -4,16 +4,19 @@ date: "2020-02-01"
 path: "/download"
 header: true
 ---
+## Play Now
 
-<div style="text-align: center;">
-    <img src="../assets/play-now.gif" width="50%"/>
-    <h2><a href="/game">[Play Now]</a></h2>
-    <p>(Firefox and Chrome)</p>
+<p />
+<div style="text-align: center; align-content: center;">
+    <a href="#android-users"><img src="../assets/android-logo.png" alt="Android"></a>
+    <a href="#ios-users"><img src="../assets/iOS-logo.png" alt="iOS"></a>
+    <a href="/game"><img src="../assets/firefox-logo.png" alt="Firefox"></a>
+    <a href="/game"><img src="../assets/chrome-logo.png" alt="Chrome"></a>
 </div>
 
 For users on other browsers, go to our [Discord](https://discord.gg/HmbESh2) and ask for the Steam key.
- 
-To join the mobile betas:
+
+##Mobile Betas
 
 #### iOS Users
 
@@ -24,6 +27,6 @@ You can find the iOS Beta [here](https://testflight.apple.com/join/pkMfO2qa). Yo
 Join the [Spellsource Google Group](https://groups.google.com/forum/#!forum/spellsource-alpha-testers), then follow the instructions in the welcome message to participate in testing.
 You must be logged into Google Play to join the testing program. Your e-mail will be shared with the developers. 
 
-#### Windows Users
-
-Join the [Spellsource Google Group](https://groups.google.com/forum/#!forum/spellsource-alpha-testers), then follow the instructions in the welcome message to participate in testing.
+<div style="text-align: center;">
+    <img src="../assets/play-now.gif" class="creative-layout-module--emphasis-image--1dLUr" alt="in-game gif"/>
+</div>

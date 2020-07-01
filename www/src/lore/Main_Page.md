@@ -4,7 +4,7 @@ header: true
 path: /wiki/Main_Page
 layout: wiki
 ---
-## Your journey begins here...
+### Your journey begins here...
 <p />
 
 ![The Lung
@@ -13,7 +13,7 @@ Archipelago](Map.png "fig:The Lung Archipelago")
 Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 [Shun He](/wiki/Shun_He "wikilink"), leads an expedition to find the fabled
 source of all magic. After many months at sea, his ships pierce a
-[magical barrier](magical_barrier "wikilink") and crash on a mysterious
+[magical barrier](/wiki/Lunopause "wikilink") and crash on a mysterious
 [Volcanic island](/wiki/Moromah_Island "wikilink"). With his ships destroyed,
 he steps up a colony aided by local [Fae](/wiki/Fae "wikilink"), strange
 humanoid creatures imbued with magic. This must be the spell-source

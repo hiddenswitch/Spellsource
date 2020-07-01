@@ -4,8 +4,6 @@ path: /wiki/Vision_of_Landfall
 layout: wiki
 ---
 
-## Vision of Landfall
-
 The Vision of Landfall describes a dream by [the
 Emperor](the_Emperor "wikilink") that [Princess
 Briila](/wiki/Princess_Briila "wikilink") interrupted while trying to diagnose

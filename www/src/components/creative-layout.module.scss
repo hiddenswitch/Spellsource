@@ -9,17 +9,17 @@ $base-font-family: 'compasspromedium', 'Source Code Pro', monospace !default;
 $base-font-size: 17pt !default;
 $mobile-font-size: 17pt !default;
 $base-line-height: 1.2 !default;
-$container-width: calc(100% - 50px) !default;
-$container-max-width: 700px !default;
+$container-width: 100% !default;
+$main-width: 700px !default;
 
 // From dark
 :root {
   --base-color: #DBDBDB;
   --primary-color: #A2FC8F;
-  --border: solid 1px rgba(219, 219, 219, 0.9);
-  --selection-background: rgba(219, 219, 219, 0.99);
-  --selection-text: #000;
-  --background-color: #000;
+  --border: solid 1px #DBDBDB;
+  --selection-background: #DBDBDB;
+  --selection-text: #21215c;
+  --background-color: #21215c;
   --text-color: var(--base-color);
   --placeholder-color: var(--base-color);
   --link-color: var(--base-color);
@@ -59,11 +59,34 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  //font-size: $base-font-size;
   margin: 0px;
   margin-top: 22px;
   font-weight: bold;
   color: var(--text-color);
+}
+
+h1 {
+  font-size: 60px;
+}
+
+h2 {
+  font-size: 40px;
+}
+
+h3 {
+  font-size: 27px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: $base-font-size;
+}
+
+h6 {
+  font-size: 15px;
 }
 
 p, ul, ol {
@@ -81,27 +104,13 @@ a:hover {
   background-color: var(--base-color);
 }
 
-summary:hover{
+summary:hover {
   color: var(--background-color);
   background-color: var(--base-color);
 }
 
 .primary-text {
   color: var(--primary-color);
-}
-
-#full-width { // for landing page image
-  left: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  max-width: 100vw;
-  position: relative;
-  right: 50%;
-  width: 100vw;
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
 
 @media only screen and (max-device-width: 500px) {
@@ -124,12 +133,16 @@ h6:before { content: "######";  margin-right: 9px; }*/
   width: $container-width;
   margin-right: auto;
   margin-left: auto;
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;
+}
+
+main {
+  max-width: calc(100% - 50px);
+  width: $main-width;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 section {
-  max-width: $container-max-width;
   margin-right: auto;
   margin-left: auto;
 }
@@ -142,6 +155,10 @@ footer {
   text-align: right;
 }
 
+footer p {
+  margin-right: 2.5%;
+}
+
 header {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -152,17 +169,27 @@ header p {
   margin: 0;
 }
 
-footer {
-  margin-bottom: 20px;
+.emphasis-image {
+  width: $main-width;
+  max-width: 95%;
+  margin: auto;
+}
+
+.small-logo {
+  width: 30px;
+  margin: auto;
 }
 
 .fullscreen-div {
-  display: flex;
   min-height: 100vh;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  margin-bottom: 25px;
-  overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }
 
 /**
@@ -202,8 +229,9 @@ footer {
   border-top: var(--border);
   border-bottom: var(--border);
   margin-bottom: 25px;
-  display: flex;
-  justify-content: space-around;
+  text-align: left;
+  //white-space: nowrap;
+  //overflow-x: hidden;
 }
 
 .menu .input-box {
@@ -214,7 +242,7 @@ footer {
 
 .menu .search-results {
   position: absolute;
-  background-color: black;
+  background-color: var(--background-color);
   z-index: 10;
   margin-left: -0.25em;
   margin-top: 0.25em;
@@ -222,6 +250,7 @@ footer {
 }
 
 .menu .search-list-group-item {
+  text-align: left;
   padding-left: 0.25em;
   padding-right: 0.25em;
 }
@@ -231,7 +260,9 @@ footer {
   margin-bottom: 12px;
   padding-left: 0px;
   list-style-type: none;
-  text-align: left;
+  //text-align: left;
+  text-align: center;
+  position: relative;
 }
 
 .menu ul li {

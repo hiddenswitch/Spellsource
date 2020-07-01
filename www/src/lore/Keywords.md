@@ -4,8 +4,6 @@ path: /wiki/Keywords
 layout: wiki
 ---
 
-## Keywords
-
 Here is a list of Spellsource Keywords that will help you in your
 adventures on the [Lung Archipelago](/wiki/Lung_Archipelago "wikilink")!
 

@@ -4,8 +4,6 @@ path: /wiki/Passed_Vision
 layout: wiki
 ---
 
-## Passed Vision
-
 Passed Vision describes a power among specially trained
 [Fae](/wiki/Fae "wikilink") to share a recent visual image or memory.
 

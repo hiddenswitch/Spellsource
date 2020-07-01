@@ -4,8 +4,6 @@ path: /wiki/Moromah_Island
 layout: wiki
 ---
 
-## Moromah Island
-
 ![The Island of Moromah and Known
 Locations](Map_of_the_Island_of_Moromah.jpg "fig:The Island of Moromah and Known Locations")
 Moromah Island is the largest island of the [Lung

@@ -4,8 +4,6 @@ path: /wiki/Lunopause
 layout: wiki
 ---
 
-## Lunopause
-
 The Lung Archipelago is surrounded by a magical, physically impenetrable
 barrier known as the Lunopause.
 
