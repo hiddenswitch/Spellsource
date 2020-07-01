@@ -4,8 +4,6 @@ path: /wiki/First_Contact
 layout: wiki
 ---
 
-## First Contact
-
 First contact describes the actual meeting (as opposed to
 [vision](/wiki/Vision_of_Landfall "wikilink")) between the human [Shun
 He](/wiki/Shun_He "wikilink") and the [Fae](Fae "wikilink") healer [Inora
@@ -35,5 +33,5 @@ Leading Shun He to the fire, hand in hand, she could pass vision to him
 as long as they touched and felt the heat. In this vision, Shun He
 learned of a source of water, technology to build with steelgrass, the
 written and spoken languages of the archipelago
-([Sylvan](/wiki/Sylvan "wikilink")), and the identity of the Fae's leader,
+([Sylvan](/wiki/Wyspan "wikilink")), and the identity of the Fae's leader,
 [Shiramba](/wiki/Shiramba "wikilink").

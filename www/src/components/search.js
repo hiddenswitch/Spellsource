@@ -18,7 +18,7 @@ function Search (props) {
     if (encoded.length !== 0) {
       return (
         <ListGroup.Item className={styles.searchListGroupItem}>
-          <Link to={`../searchresults?query=${encoded}`}>
+          <Link to={`./searchresults?query=${encoded}`}>
             See more...</Link>
         </ListGroup.Item>
       )
@@ -51,7 +51,7 @@ function Search (props) {
   return (
     <div className={styles.inputBox}>
       <Form onSubmit={e => navigateToSearchResults(e)}>
-        <FormControl type="text" placeholder={props.placeholder} className="mr-sm-2"
+        <FormControl type="text" placeholder={props.placeholder}
                      value={query}
                      onChange={e => {
                        updateQuery(e)

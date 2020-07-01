@@ -4,8 +4,6 @@ path: /wiki/Shuizhao
 layout: wiki
 ---
 
-## Shuizhao
-
 Shuizhao are a giant crustacean inhabiting the island near
 [Pearl](/wiki/Pearl "wikilink").
 

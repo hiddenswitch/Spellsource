@@ -6,9 +6,7 @@ export default ({ children }) => {
   return <div className={styles.container}>
     <Header/>
     <main>
-      <section>
-        {children}
-      </section>
+      {children}
     </main>
     <footer><p>Copyright © 2020 Hidden Switch</p></footer>
   </div>

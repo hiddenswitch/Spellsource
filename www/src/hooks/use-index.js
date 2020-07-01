@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import { createContext, useContext } from 'react'
 
 import { graphql, useStaticQuery } from 'gatsby'
 import { Index } from 'elasticlunr'

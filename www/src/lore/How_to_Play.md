@@ -4,8 +4,6 @@ path: /wiki/How_to_Play
 layout: wiki
 ---
 
-## How to Play
-
 This page will guide you through a game of Spellsource! We're going to
 assume that you already have a valid deck, but if you don't have that
 yet, take a look [here](/wiki/Building_a_Deck "wikilink") to get started! If

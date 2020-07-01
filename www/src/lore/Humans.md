@@ -4,8 +4,6 @@ path: /wiki/Humans
 layout: wiki
 ---
 
-## Humans
-
 ![Human Minion](Human Minion.png "fig:A Human Minion")
 
 Humans are not native to the Lung Islands and have populated the rest of

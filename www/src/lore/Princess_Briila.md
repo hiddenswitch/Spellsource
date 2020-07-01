@@ -4,8 +4,6 @@ path: /wiki/Princess_Briila
 layout: wiki
 ---
 
-## Princess Briila
-
 Princess Briila is the ruler of the lead Dragovian tribe, the Vohlok.
 She was the former High Priestess of their faith. ![Princess
 Briila](Princess Briila.png "fig:Princess Briila")
