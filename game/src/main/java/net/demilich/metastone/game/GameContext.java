@@ -264,6 +264,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		setStatus(fromContext.getStatus());
 		setTurnState(fromContext.getTurnState());
 		setWinner(fromContext.getWinner());
+		setTrace(getTrace().clone());
 		if (fromContext.getTrace() != null) {
 			setTrace(fromContext.getTrace().clone());
 		}
