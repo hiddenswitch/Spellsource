@@ -126,7 +126,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../cards/src/main/resources/cards/custom`,
+        path: `${__dirname}/../cards/src/main/resources/cards`,
       },
     },
     `gatsby-plugin-sass`,
