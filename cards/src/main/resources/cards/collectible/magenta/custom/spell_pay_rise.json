@@ -1,0 +1,30 @@
+{
+  "name": "Pay Rise",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "COMMON",
+  "description": "Give your minions +2 Attack and Dash.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 0
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "RUSH"
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_PLENTIFULPATRONS"
+  ]
+}

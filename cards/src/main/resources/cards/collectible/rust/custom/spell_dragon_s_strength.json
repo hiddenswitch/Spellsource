@@ -1,0 +1,21 @@
+{
+  "name": "Dragon's Strength",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "FREE",
+  "description": "Give a minion +6/+6.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 6,
+    "hpBonus": 6
+  },
+  "attributes": {},
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

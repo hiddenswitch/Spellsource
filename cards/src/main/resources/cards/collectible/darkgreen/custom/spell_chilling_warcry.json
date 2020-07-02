@@ -1,0 +1,34 @@
+{
+  "name": "Chilling Warcry",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Give an allied minion +2/+2, then Stun your other minions.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "FROZEN",
+        "filter": {
+          "class": "EntityEqualsFilter",
+          "invert": true,
+          "secondaryTarget": "TARGET"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ]
+}

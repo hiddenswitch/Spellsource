@@ -1,0 +1,51 @@
+{
+  "name": "Bogovey Supplicant",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Opener: Receive a 4/4 Demon. Invoke (3): Summon it instead.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "InvokeSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "card": "token_flaming_oni",
+        "targetPlayer": "SELF"
+      },
+      "spell1": {
+        "class": "InvokeOptionSpell",
+        "name": "Don't Supplicate",
+        "description": "Receive the 4/4 Demon",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "card": "token_flaming_oni",
+          "targetPlayer": "SELF"
+        },
+        "mana": 0
+      },
+      "spell2": {
+        "class": "InvokeOptionSpell",
+        "name": "Do Supplicate",
+        "description": "Summon the 4/4 Demon",
+        "spell": {
+          "class": "SummonSpell",
+          "card": "token_flaming_oni",
+          "targetPlayer": "SELF"
+        },
+        "mana": 3
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "INVOKE": 3
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

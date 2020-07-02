@@ -1,0 +1,37 @@
+{
+  "name": "Furious Fiend",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Opener: Deal 3 damage to each player's leftmost minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "LEFTMOST_ENEMY_MINION",
+          "value": 3
+        },
+        {
+          "class": "DamageSpell",
+          "target": "LEFTMOST_FRIENDLY_MINION",
+          "value": 3
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ]
+}

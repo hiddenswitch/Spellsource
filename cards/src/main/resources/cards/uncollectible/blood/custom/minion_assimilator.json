@@ -1,0 +1,31 @@
+{
+  "name": "Soulbinder",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "After a minion dies, Drain 2 Health from a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DrainSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

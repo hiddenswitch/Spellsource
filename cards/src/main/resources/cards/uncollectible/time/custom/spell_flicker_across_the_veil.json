@@ -1,0 +1,23 @@
+{
+  "name": "Flicker Across the Veil",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "Destroy a minion. At the end of your opponent's turn, resummon it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "JailMinionSpell",
+    "revertTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "secondaryTarget": "FRIENDLY_PLAYER"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Lord Xue",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Your Health increasing effects are doubled.",
+  "aura": {
+    "class": "ModifyBuffSpellAura",
+    "target": "FRIENDLY_CARDS",
+    "hpBonus": {
+      "class": "GameValueProvider",
+      "gameValue": "SPELL_VALUE"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Dragon Caretaker",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Opener: Give an allied Dragon +2 Health.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "filter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      },
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

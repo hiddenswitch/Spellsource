@@ -1,0 +1,22 @@
+{
+  "name": "Redhide Butcher",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Hidden. Aftermath: Discard the leftmost card in your hand.",
+  "deathrattle": {
+    "class": "DiscardSpell",
+    "target": "LEFTMOST_FRIENDLY_CARD_HAND"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

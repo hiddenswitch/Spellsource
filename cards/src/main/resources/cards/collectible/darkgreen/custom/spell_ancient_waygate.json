@@ -1,0 +1,33 @@
+{
+  "name": "Ancient Waygate",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage to all minions. Summon a random 2-Cost minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 2
+      },
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 2
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "ONE_NIGHT_IN_KARAZHAN"
+  ]
+}

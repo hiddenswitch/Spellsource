@@ -1,0 +1,46 @@
+{
+  "name": "Xitalu",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you shuffle a card into a deck, shuffle in two extra copies.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "ShuffledOnlyOriginalCopiesTrigger",
+        "sourcePlayer": "SELF",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ShuffleToDeckSpell",
+        "target": "EVENT_TARGET",
+        "exclusive": true,
+        "howMany": 2,
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "ShuffledOnlyOriginalCopiesTrigger",
+        "sourcePlayer": "SELF",
+        "targetPlayer": "OPPONENT"
+      },
+      "spell": {
+        "class": "ShuffleToDeckSpell",
+        "target": "EVENT_TARGET",
+        "exclusive": true,
+        "howMany": 2,
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  ],
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ]
+}

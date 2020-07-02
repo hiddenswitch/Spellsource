@@ -1,0 +1,20 @@
+{
+  "name": "Aegis Sentinel",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 15,
+  "rarity": "FREE",
+  "description": "Guard. Elusive.",
+  "attributes": {
+    "TAUNT": true,
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "name": "Formless Womb",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Permanent. At the end of your turn, deal 1 damage to all characters. After dealing 10, destroy it and summon an 8/8 Titan.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ALL_OTHER_CHARACTERS",
+        "value": 1
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "fireCondition": {
+          "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "TOTAL_MINION_DAMAGE_DEALT_THIS_GAME"
+          },
+          "value2": 10
+        },
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell",
+            "target": "TRIGGER_HOST"
+          },
+          {
+            "class": "SummonSpell",
+            "card": "token_titan_8_8"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

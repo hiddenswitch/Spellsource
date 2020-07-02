@@ -1,0 +1,23 @@
+{
+  "name": "Atomius",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Aftermath: Fire four blasts at random enemies that deal 4 damage.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 4,
+    "howMany": 4
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

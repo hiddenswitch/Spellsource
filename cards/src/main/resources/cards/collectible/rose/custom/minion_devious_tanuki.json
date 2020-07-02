@@ -1,0 +1,24 @@
+{
+  "name": "Devious Tanuki",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "This costs (2) less while your opponent has 5 or more cards in hand.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "OPPONENT"
+    },
+    "ifFalse": 0,
+    "ifTrue": 2
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Broodmother Narvina",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever a minion dies, summon two 1/1 Spiderlings. (Up to 14)",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
+        "value1": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 7,
+          "value2": {
+            "class": "BoardCountValueProvider"
+          }
+        },
+        "value2": 2
+      },
+      "card": "token_spiderling"
+    },
+    "maxFiresPerSequence": 7
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Skyward",
+  "type": "CLASS",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.933,
+      "g": 1.0,
+      "r": 0.435
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.9019607843137255,
+      "g": 1.0,
+      "r": 0.1568627450980392
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.78,
+      "g": 0.867,
+      "r": 0.118
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.541,
+      "g": 0.604,
+      "r": 0.039
+    }
+  },
+  "hero": "hero_ascella_aeon"
+}

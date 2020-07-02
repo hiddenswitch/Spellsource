@@ -1,0 +1,47 @@
+{
+  "name": "Ritual of Annihilation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Destroy an enemy minion and [X random enemy minions].",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "MultiTargetSpell",
+        "target": "ENEMY_MINIONS",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "RESERVED_INTEGER_1"
+        },
+        "spell": {
+          "class": "DestroySpell"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1"
+      },
+      "description1": " random enemy minion",
+      "description2": " random enemy minions"
+    }
+  ]
+}

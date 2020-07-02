@@ -1,0 +1,45 @@
+{
+  "name": "Grandmage Wynk",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Start of Game: If your deck has no spells, give your champion Spellpower +2.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "fireCondition": {
+          "class": "DeckContainsCondition",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          "invert": true
+        },
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "value": 2,
+            "attribute": "SPELL_DAMAGE"
+          },
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF",
+            "targetPlayer": "SELF"
+          }
+        ]
+      }
+    }
+  ]
+}

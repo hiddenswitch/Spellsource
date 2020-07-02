@@ -1,0 +1,29 @@
+{
+  "name": "Denkeeper Sinthi",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Your rightmost card costs (0) while you hold 9 or more cards.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "target": "RIGHTMOST_FRIENDLY_CARD_HAND",
+    "value": 0,
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      },
+      "value2": 9
+    },
+    "operation": "SET"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,46 @@
+{
+  "name": "The Lost City",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Take damage from your cards 7 times. Reward: Ghatanothoa.",
+  "quest": {
+    "class": "DamageReceivedTrigger",
+    "queueCondition": {
+      "class": "OrCondition",
+      "conditions": [
+        {
+          "class": "CardPropertyCondition",
+          "target": "EVENT_SOURCE",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardPropertyCondition",
+          "target": "EVENT_SOURCE",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "CardPropertyCondition",
+          "target": "EVENT_SOURCE",
+          "cardType": "WEAPON"
+        }
+      ]
+    },
+    "sourcePlayer": "SELF",
+    "targetEntityType": "HERO",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 7,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_ghatanothoa"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

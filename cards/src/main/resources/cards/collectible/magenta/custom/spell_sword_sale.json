@@ -1,0 +1,22 @@
+{
+  "name": "Sword Sale!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "FREE",
+  "description": "Both players equip a 3/2 weapon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "token_weapon_exotic_sword"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

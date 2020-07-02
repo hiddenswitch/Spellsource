@@ -1,0 +1,32 @@
+{
+  "name": "Temple Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Guard. Aftermath: Transform your Tentacles into Temple Guardians.",
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "FRIENDLY_MINIONS",
+    "card": "minion_temple_guardian",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cards": [
+        "token_tauntentacle",
+        "token_tentacle"
+      ]
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "LEAGUE_OF_EXPLORERS"
+  ]
+}

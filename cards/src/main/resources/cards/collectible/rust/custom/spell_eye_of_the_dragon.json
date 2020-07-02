@@ -1,0 +1,21 @@
+{
+  "name": "Eye of The Dragon",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "FREE",
+  "description": "Give all allies +1 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TemporaryAttackSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

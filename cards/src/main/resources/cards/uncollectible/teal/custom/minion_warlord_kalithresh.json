@@ -1,0 +1,34 @@
+{
+  "name": "Warlord Kalithresh",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 6,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Guard. Opener: Shuffle 7 'Ocean Depths' into your deck. Draw 2 cards.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ShuffleToDeckSpell",
+          "card": "spell_ocean_depths",
+          "howMany": 7
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

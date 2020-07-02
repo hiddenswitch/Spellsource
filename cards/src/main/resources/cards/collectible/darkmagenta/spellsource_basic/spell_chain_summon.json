@@ -1,0 +1,40 @@
+{
+  "name": "Chain Summon",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "EPIC",
+  "description": "Summon a copy of a minion. Invoke (3): Two copies.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "name": "Summon",
+      "description": "Summon 1 copy of the targeted minion.",
+      "spell": {
+        "class": "SummonSpell"
+      },
+      "mana": 0
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "name": "Chain Summon",
+      "description": "Summon 2 copies of the targeted minion.",
+      "spell": {
+        "class": "SummonSpell",
+        "value": 2
+      },
+      "mana": 3
+    }
+  },
+  "attributes": {
+    "INVOKE": 3
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Katar",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Whenever you play a minion, gain +1 Attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "target": "FRIENDLY_WEAPON",
+      "value": 1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

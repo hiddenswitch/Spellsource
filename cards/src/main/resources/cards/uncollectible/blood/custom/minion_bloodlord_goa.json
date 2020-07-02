@@ -1,0 +1,30 @@
+{
+  "name": "Bloodlord Goa",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Opener: Gain the aftermath, \"Repeat all other allied aftermaths.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "custom.RepeatAllAftermathsSpell"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

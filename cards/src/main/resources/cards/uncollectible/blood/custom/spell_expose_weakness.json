@@ -1,0 +1,33 @@
+{
+  "name": "Expose Weakness",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Deal $2 damage to each player's leftmost minion. It either dies, recast this.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.RecastIfMinionsDestroyedSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "LEFTMOST_FRIENDLY_MINION",
+          "value": 2
+        },
+        {
+          "class": "DamageSpell",
+          "target": "LEFTMOST_ENEMY_MINION",
+          "value": 2
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Corona, Fae Defender",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "FAE",
+  "description": "Your other Fae have Elusive and +2/+1.",
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "BuffAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "FAE"
+      },
+      "hpBonus": 1
+    },
+    {
+      "class": "AttributeAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attribute": "AURA_UNTARGETABLE_BY_SPELLS",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "FAE"
+      }
+    }
+  ]
+}

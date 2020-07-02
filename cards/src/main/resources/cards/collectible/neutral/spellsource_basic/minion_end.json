@@ -1,0 +1,42 @@
+{
+  "name": "End",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Minions cost (10) and are 10/10 when played.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "target": "BOTH_HANDS",
+    "value": 10,
+    "cardType": "MINION",
+    "operation": "SET",
+    "targetPlayer": "BOTH"
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "BeforeMinionPlayedTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "EVENT_TARGET",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 10
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 10
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

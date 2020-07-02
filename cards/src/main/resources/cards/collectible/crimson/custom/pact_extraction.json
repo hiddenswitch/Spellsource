@@ -1,0 +1,38 @@
+{
+  "name": "Extraction",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "<b>Pact:</b> After your champion takes damage, give a random enemy minion -4 Health.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 1,
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "ENEMY_MINIONS",
+        "hpBonus": -4,
+        "randomTarget": true
+      }
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

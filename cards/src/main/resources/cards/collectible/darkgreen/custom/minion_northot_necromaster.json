@@ -1,0 +1,70 @@
+{
+  "name": "Northot, Necromaster",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Whenever an allied minion dies, summon a Tentacle with its Attack and Health. (Up to 7)",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "ComparisonCondition",
+            "operation": "GREATER",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "target": "EVENT_TARGET",
+              "attribute": "MAX_HP"
+            },
+            "value2": 0
+          },
+          {
+            "class": "CanSummonCondition"
+          }
+        ]
+      },
+      "spell": {
+        "class": "CreateSummonSpell",
+        "name": "Undying Tentacle",
+        "spell": {
+          "class": "NullSpell"
+        },
+        "attackBonus": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_ATTACK"
+        },
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_HP"
+        },
+        "mana": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MINIMUM",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "EVENT_TARGET",
+            "attribute": "BASE_MANA_COST"
+          }
+        }
+      }
+    },
+    "maxFiresPerSequence": 7
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ]
+}

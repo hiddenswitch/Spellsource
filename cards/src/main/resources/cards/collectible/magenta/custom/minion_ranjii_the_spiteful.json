@@ -1,0 +1,28 @@
+{
+  "name": "Ran'Jii the Spiteful",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you receive a card, deal 3 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 3,
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_PLENTIFULPATRONS"
+  ]
+}

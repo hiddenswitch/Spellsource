@@ -1,0 +1,24 @@
+{
+  "name": "Blood Moon Rising",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "All minions' Attack is equal to their Health this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "ALL_MINIONS",
+    "attribute": "AURA_ATTACK_EQUALS_HP",
+    "revertTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

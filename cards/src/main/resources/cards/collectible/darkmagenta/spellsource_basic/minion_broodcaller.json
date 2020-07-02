@@ -1,0 +1,91 @@
+{
+  "name": "Broodcaller",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Opener: Summon two 1/1 Whelps. Invoke (1): Give them Blitz.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "InvokeSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "LEFT",
+            "card": "token_whelp"
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_whelp"
+          }
+        ]
+      },
+      "spell1": {
+        "class": "InvokeOptionSpell",
+        "name": "Don't Invoke",
+        "description": "Summon two 1/1 Whelps",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SummonSpell",
+              "boardPositionRelative": "LEFT",
+              "card": "token_whelp"
+            },
+            {
+              "class": "SummonSpell",
+              "boardPositionRelative": "RIGHT",
+              "card": "token_whelp"
+            }
+          ]
+        },
+        "mana": 0
+      },
+      "spell2": {
+        "class": "InvokeOptionSpell",
+        "name": "Brood Awakening",
+        "description": "Summon two 1/1 Whelps with Blitz.",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SummonSpell",
+              "spell": {
+                "class": "AddAttributeSpell",
+                "target": "OUTPUT",
+                "attribute": "CHARGE"
+              },
+              "boardPositionRelative": "LEFT",
+              "card": "token_whelp"
+            },
+            {
+              "class": "SummonSpell",
+              "spell": {
+                "class": "AddAttributeSpell",
+                "target": "OUTPUT",
+                "attribute": "CHARGE"
+              },
+              "boardPositionRelative": "RIGHT",
+              "card": "token_whelp"
+            }
+          ]
+        },
+        "mana": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "INVOKE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

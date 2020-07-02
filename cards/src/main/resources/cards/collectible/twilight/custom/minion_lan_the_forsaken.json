@@ -1,0 +1,32 @@
+{
+  "name": "Lan the Forsaken",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Your Lifedrain effects heal ALL allies.",
+  "aura": {
+    "class": "LifedrainHealsAdditionalAura",
+    "target": "FRIENDLY_CARDS",
+    "triggers": [
+      {
+        "class": "CardPlayedTrigger"
+      },
+      {
+        "class": "BoardChangedTrigger"
+      },
+      {
+        "class": "WillEndSequenceTrigger"
+      }
+    ],
+    "secondaryTarget": "FRIENDLY_CHARACTERS"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

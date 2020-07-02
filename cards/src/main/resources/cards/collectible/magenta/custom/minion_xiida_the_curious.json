@@ -1,0 +1,50 @@
+{
+  "name": "Xii'Da the Curious",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you play an odd-Cost card, play it again (on the same target).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "fireCondition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "EVENT_TARGET",
+        "filter": {
+          "class": "OddCostFilter"
+        }
+      },
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "PlayCardsRandomlySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "DoubleBattlecriesAura",
+      "target": "FRIENDLY_CARDS",
+      "filter": {
+        "class": "OddCostFilter"
+      }
+    },
+    {
+      "class": "SpellsCastTwiceAura",
+      "target": "FRIENDLY_CARDS",
+      "filter": {
+        "class": "OddCostFilter"
+      }
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

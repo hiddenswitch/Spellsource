@@ -1,0 +1,41 @@
+{
+  "name": "Blood Altar",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "After you play a Drain card, Source a Drain card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "requiredAttribute": "DRAIN",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "DRAIN",
+        "operation": "HAS"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ]
+}

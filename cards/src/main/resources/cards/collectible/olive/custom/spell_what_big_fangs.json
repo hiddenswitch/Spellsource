@@ -1,0 +1,29 @@
+{
+  "name": "What Big Fangs!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Whenever it attacks, deal 3 damage to its target.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TargetAcquisitionTrigger",
+        "actionType": "PHYSICAL_ATTACK",
+        "hostTargetType": "IGNORE_OTHER_SOURCES",
+        "sourceEntityType": "MINION",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "EVENT_TARGET",
+        "value": 3
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

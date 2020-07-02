@@ -521,5 +521,15 @@ def run(mongo_url: str = None, gradle_cmd: str = 'gradle', default_gradle: bool 
         java.wait()
 
 
+@_cli.command()
+def sort_and_fix():
+    """
+    Sorts the cards and fixes their formatting
+    """
+    from .ext.sortcards import sort_cards
+    sort_cards()
+    fix_cards()
+
+
 def main():
     _cli()

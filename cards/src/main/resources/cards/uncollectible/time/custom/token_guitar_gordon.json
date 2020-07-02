@@ -1,0 +1,19 @@
+{
+  "name": "Guitar Gordon",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Extra Strike",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ]
+}

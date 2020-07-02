@@ -1,0 +1,39 @@
+{
+  "name": "Lost City's Guardian",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Source a minion in your deck. Summon it with Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "PutMinionOnBoardFromDeckSpell",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "OUTPUT",
+        "attribute": "TAUNT"
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    },
+    "exclusive": true
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

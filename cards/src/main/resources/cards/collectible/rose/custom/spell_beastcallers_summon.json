@@ -1,0 +1,21 @@
+{
+  "name": "Beastcaller's Summon",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Summon a 4/4 Beast with Dash. Shuffle 3 copies of it into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "OUTPUT",
+      "howMany": 3
+    },
+    "card": "token_hungry_jaguar"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

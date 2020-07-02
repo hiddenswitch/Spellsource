@@ -1,0 +1,44 @@
+{
+  "name": "Death Knight",
+  "type": "CLASS",
+  "heroClass": "OBSIDIAN",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.569,
+      "g": 0.541,
+      "r": 0.514
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.35294117647058826,
+      "g": 0.3137254901960784,
+      "r": 0.27450980392156865
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.329,
+      "g": 0.294,
+      "r": 0.255
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.286,
+      "g": 0.251,
+      "r": 0.224
+    }
+  },
+  "hero": "hero_nerzhul"
+}

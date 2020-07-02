@@ -1,0 +1,27 @@
+{
+  "name": "Street Salesman",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "At the end of each turn, summon a 1/1 Customer.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_customer"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_PLENTIFULPATRONS"
+  ]
+}

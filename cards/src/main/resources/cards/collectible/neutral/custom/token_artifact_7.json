@@ -1,0 +1,27 @@
+{
+  "name": "Celestial Conduit",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Discover spells until their combined Cost equals 15 or more.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.CelestialConduitSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "secondaryValue": 15
+  },
+  "attributes": {
+    "ARTIFACT": true,
+    "DISCOVER": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

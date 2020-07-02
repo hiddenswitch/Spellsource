@@ -1,0 +1,27 @@
+{
+  "name": "Sudden Conversion",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Choose a minion. It Drains the Health of the minions adjacent to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DrainSpell",
+    "target": "ADJACENT_TO_TARGET",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "secondaryTarget": "TARGET"
+  },
+  "attributes": {
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

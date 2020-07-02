@@ -1,0 +1,41 @@
+{
+  "name": "You'll Do",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Destroy an allied minion. Restore its Health to your champion and gain that much Attack this turn.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "HP"
+        }
+      },
+      {
+        "class": "TemporaryAttackSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "HP"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Kumiho, Nine-tailed Kitsune",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 11,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Dash, Deflect.",
+  "attributes": {
+    "DEFLECT": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

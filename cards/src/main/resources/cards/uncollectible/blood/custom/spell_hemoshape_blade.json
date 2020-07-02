@@ -1,0 +1,30 @@
+{
+  "name": "Hemoshape: Blade",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Take 3 damage. Equip a 2/3 weapon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_hemoblade"
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

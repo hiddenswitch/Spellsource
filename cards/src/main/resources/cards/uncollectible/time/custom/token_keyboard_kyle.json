@@ -1,0 +1,19 @@
+{
+  "name": "Keyboard Kyle",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Hidden",
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ]
+}

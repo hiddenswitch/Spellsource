@@ -1,0 +1,68 @@
+{
+  "name": "Power to the People",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "EPIC",
+  "description": "If you control a Beast, give your minions +1/+1. Repeat for Fae and Dragon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "RaceFilter",
+            "race": "BEAST"
+          }
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "hpBonus": 1
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "RaceFilter",
+            "race": "FAE"
+          }
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "hpBonus": 1
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "RaceFilter",
+            "race": "DRAGON"
+          }
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 1,
+          "hpBonus": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ]
+}

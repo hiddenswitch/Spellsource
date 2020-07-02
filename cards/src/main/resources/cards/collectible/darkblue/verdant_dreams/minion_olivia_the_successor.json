@@ -1,0 +1,29 @@
+{
+  "name": "Olivia, the Successor",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Your Spirits cost (2) less this turn.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "value": 2,
+        "race": "SPIRIT",
+        "cardType": "MINION",
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

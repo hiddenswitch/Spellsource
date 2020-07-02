@@ -1,0 +1,19 @@
+{
+  "name": "Bone Bruiser",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "<b>Guard</b>",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

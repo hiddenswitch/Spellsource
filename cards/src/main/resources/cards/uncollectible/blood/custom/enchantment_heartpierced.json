@@ -1,0 +1,14 @@
+{
+  "name": "Heartpierced",
+  "type": "ENCHANTMENT",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "When Heartpiercer is no longer equipped, drain the host's health for Heartpiercer's holder.",
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

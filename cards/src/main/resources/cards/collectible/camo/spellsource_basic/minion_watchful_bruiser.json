@@ -1,0 +1,27 @@
+{
+  "name": "Watchful Bruiser",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Can only attack if another minion attacked this turn.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "triggers": [
+      {
+        "class": "AfterPhysicalAttackTrigger"
+      }
+    ],
+    "condition": {
+      "class": "HasAttackedCondition",
+      "target": "ALL_OTHER_MINIONS"
+    },
+    "attribute": "AURA_CANNOT_ATTACK"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

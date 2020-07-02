@@ -1,0 +1,27 @@
+{
+  "name": "Drakonid Commander",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Opener: Give a character +4 Attack this turn.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

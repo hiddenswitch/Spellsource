@@ -1,0 +1,16 @@
+{
+  "name": "Underling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

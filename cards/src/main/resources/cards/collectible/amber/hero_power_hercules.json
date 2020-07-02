@@ -1,0 +1,21 @@
+{
+  "name": "Pride and Power",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "I don't need any Skill to beat you.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": 1,
+    "hpBonus": 0
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

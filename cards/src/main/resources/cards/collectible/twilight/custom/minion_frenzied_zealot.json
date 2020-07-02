@@ -1,0 +1,27 @@
+{
+  "name": "Frenzied Zealot",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Opener: Give your champion +3 Attack this turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Ritual of Exultation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Draw [X cards]. They cost (0).",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "SELF",
+      "attribute": "RESERVED_INTEGER_1"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1"
+      },
+      "description1": " card",
+      "description2": " cards"
+    }
+  ]
+}

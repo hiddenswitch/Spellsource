@@ -1,0 +1,30 @@
+{
+  "name": "Contract",
+  "heroPower": "hero_power_oni_summon",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Take $2 damage and summon a 2/2 Lesser Oni.",
+  "condition": {
+    "class": "CanSummonCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_lesser_oni"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

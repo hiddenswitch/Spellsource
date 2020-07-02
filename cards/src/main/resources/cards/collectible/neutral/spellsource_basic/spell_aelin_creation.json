@@ -1,0 +1,31 @@
+{
+  "name": "Creation",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Receive a copy of 3 random cards in your deck. They cost (0).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "value": 3,
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      }
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Lesser Vampire",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

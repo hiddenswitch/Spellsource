@@ -1,0 +1,30 @@
+{
+  "name": "Sliver of Silver",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "After your champion attacks, give it Spellpower +1 this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 1,
+      "attribute": "SPELL_DAMAGE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

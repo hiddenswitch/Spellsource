@@ -1,0 +1,44 @@
+{
+  "name": "Monk",
+  "type": "CLASS",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.612,
+      "g": 0.773,
+      "r": 0.333
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.4196078431372549,
+      "g": 0.6588235294117647,
+      "r": 0.0
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.388,
+      "g": 0.612,
+      "r": 0.0
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.329,
+      "g": 0.518,
+      "r": 0.0
+    }
+  },
+  "hero": "hero_mienzhou"
+}

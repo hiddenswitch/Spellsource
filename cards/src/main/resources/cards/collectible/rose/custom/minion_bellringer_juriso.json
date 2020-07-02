@@ -1,0 +1,49 @@
+{
+  "name": "Bellringer Juriso",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If you control an Aftermath minion, trigger 3 different random Aftermaths in your graveyard.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "MinionOnBoardCondition",
+        "cardFilter": {
+          "class": "AttributeFilter",
+          "attribute": "DEATHRATTLES",
+          "operation": "HAS"
+        },
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "custom.TriggerDistinctAftermathsInGraveyard",
+        "value": 3,
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "attribute": "DEATHRATTLES",
+              "operation": "HAS"
+            },
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "ACTOR"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Menagerie Mogul",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Your Customers count as Beasts, Fae and Dragons. Opener: Summon two 1/1 Customers.",
+  "aura": {
+    "class": "MenagerieMogulAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "token_customer"
+    },
+    "races": [
+      "BEAST",
+      "FAE",
+      "DRAGON"
+    ]
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_customer"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_customer"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ]
+}

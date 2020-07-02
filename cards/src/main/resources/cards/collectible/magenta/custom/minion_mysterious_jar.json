@@ -1,0 +1,31 @@
+{
+  "name": "Mysterious Jar",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "At the end of your turns, summon a random 1-Cost minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 1
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

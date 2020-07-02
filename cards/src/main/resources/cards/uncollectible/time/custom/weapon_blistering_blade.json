@@ -1,0 +1,21 @@
+{
+  "name": "Blistering Blade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "TIME",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "COMMON",
+  "description": "Extra Strike.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HERO",
+    "attribute": "AURA_WINDFURY"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

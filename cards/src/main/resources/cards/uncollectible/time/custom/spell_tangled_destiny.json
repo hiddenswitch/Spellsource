@@ -1,0 +1,26 @@
+{
+  "name": "Tangled Destiny",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Add a random allied minion that died this game to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

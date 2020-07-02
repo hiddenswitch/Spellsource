@@ -1,0 +1,49 @@
+{
+  "name": "Warp Scythe",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "TWILIGHT",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Your champion deals and takes double damage when attacking minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "EVENT_TARGET",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_HERO",
+            "attribute": "ATTACK"
+          },
+          "ignoreSpellDamage": true
+        },
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_HERO",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "EVENT_TARGET",
+            "attribute": "ATTACK"
+          },
+          "ignoreSpellDamage": true
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

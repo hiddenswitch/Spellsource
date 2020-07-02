@@ -1,0 +1,16 @@
+{
+  "name": "Hemoblade",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}
