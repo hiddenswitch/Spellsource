@@ -1,0 +1,69 @@
+{
+  "name": "Dark Skies",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "EPIC",
+  "description": "Draw a spell. It costs ([3]) less. When you cast it, take [3] damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "value": {
+              "class": "GatekeeperShaValueProvider",
+              "offset": 3
+            },
+            "operation": "SUBTRACT"
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "SpellCastedTrigger",
+              "hostTargetType": "IGNORE_OTHER_SOURCES"
+            },
+            "spell": {
+              "class": "DamageSpell",
+              "target": "FRIENDLY_HERO",
+              "value": {
+                "class": "GatekeeperShaValueProvider",
+                "offset": 3
+              },
+              "ignoreSpellDamage": true
+            }
+          }
+        }
+      ]
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Frantic Search",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "RARE",
+  "description": "Draw 3 cards. Discard any even-Cost cards drawn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3,
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "OUTPUT",
+        "filter": {
+          "class": "EvenCostFilter"
+        }
+      },
+      "spell": {
+        "class": "DiscardSpell",
+        "target": "OUTPUT"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

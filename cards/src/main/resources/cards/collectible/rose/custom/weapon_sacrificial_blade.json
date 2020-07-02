@@ -1,0 +1,33 @@
+{
+  "name": "Sacrificial Blade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Opener: If a minion died this turn, restore #5 Health to your champion.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": {
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH"
+      },
+      "value2": 0
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

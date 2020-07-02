@@ -1,0 +1,25 @@
+{
+  "name": "Red Lightning",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Choose a minion. Deal $3 damage to the minions next to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "NullSpell"
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

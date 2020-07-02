@@ -1,0 +1,47 @@
+{
+  "name": "Overpower",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Passive Skill. Your Dragons have +3 Attack.",
+  "condition": {
+    "class": "OrCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "description": "Your Dragons have +3 Attack.",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "BuffAura",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 3,
+        "filter": {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+        },
+        "hpBonus": 0
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "BuffAura",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 3,
+      "filter": {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      },
+      "hpBonus": 0
+    }
+  ]
+}

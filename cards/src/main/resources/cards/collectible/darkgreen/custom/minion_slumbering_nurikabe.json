@@ -1,0 +1,37 @@
+{
+  "name": "Slumbering Nurikabe",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Permanent. When your hand becomes full, awaken this and give it Guard.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "fireCondition": {
+        "class": "CardCountCondition",
+        "value": 10,
+        "operation": "GREATER_OR_EQUAL",
+        "targetPlayer": "SELF"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_slumbering_nurikabe"
+    }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

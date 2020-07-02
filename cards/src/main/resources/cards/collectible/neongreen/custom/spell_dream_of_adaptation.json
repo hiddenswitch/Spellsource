@@ -1,0 +1,23 @@
+{
+  "name": "Dream of Adaptation",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "EPIC",
+  "description": "Discard a 1-cost spell. Change your skill into that spell.",
+  "spell": {
+    "class": "DiscardSpell",
+    "target": "FRIENDLY_HAND",
+    "spell": {
+      "class": "HeroPowerToSpellSpell"
+    },
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL",
+      "manaCost": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

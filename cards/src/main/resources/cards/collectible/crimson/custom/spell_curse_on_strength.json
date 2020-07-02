@@ -1,0 +1,29 @@
+{
+  "name": "Curse on Strength",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Give an enemy minion -4 Attack this turn. Draw a card.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "value": -4
+      },
+      {
+        "class": "DrawCardSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

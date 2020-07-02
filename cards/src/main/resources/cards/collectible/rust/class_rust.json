@@ -1,0 +1,44 @@
+{
+  "name": "Dragoon",
+  "type": "CLASS",
+  "heroClass": "RUST",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.369,
+      "g": 0.502,
+      "r": 0.812
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.054901960784313725,
+      "g": 0.2549019607843137,
+      "r": 0.7176470588235294
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.047,
+      "g": 0.227,
+      "r": 0.647
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.035,
+      "g": 0.18,
+      "r": 0.51
+    }
+  },
+  "hero": "hero_alder_ravenwald"
+}

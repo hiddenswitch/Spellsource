@@ -1,0 +1,44 @@
+{
+  "name": "Otherworlder",
+  "type": "CLASS",
+  "heroClass": "NEONGREEN",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.373,
+      "g": 0.973,
+      "r": 0.6
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.058823529411764705,
+      "g": 0.9607843137254902,
+      "r": 0.4
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.047,
+      "g": 0.835,
+      "r": 0.345
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.024,
+      "g": 0.584,
+      "r": 0.235
+    }
+  },
+  "hero": "hero_oth"
+}

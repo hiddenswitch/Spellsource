@@ -1,0 +1,23 @@
+{
+  "name": "Ritual of Undeath",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Give your minions \"Aftermath: Resummon this\".",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "LEAGUE_OF_EXPLORERS"
+  ]
+}

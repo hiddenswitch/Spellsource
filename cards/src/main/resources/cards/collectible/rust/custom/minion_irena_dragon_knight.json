@@ -1,0 +1,29 @@
+{
+  "name": "Irena, Dragon Knight",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Blitz. Adjacent Dragons have double Attack.",
+  "aura": {
+    "class": "StatefulAttributeValueAura",
+    "target": "ADJACENT_MINIONS",
+    "value": 2,
+    "attribute": "AURA_ATTACK_MULTIPLIER",
+    "filter": {
+      "class": "CardFilter",
+      "race": "DRAGON"
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Moon Gladiator",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Dash. After this attacks and kills a 1-Health minion, deal 2 damage to all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "value": 1,
+        "attribute": "HP",
+        "operation": "EQUAL"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "OverkillSpell",
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 2
+      }
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

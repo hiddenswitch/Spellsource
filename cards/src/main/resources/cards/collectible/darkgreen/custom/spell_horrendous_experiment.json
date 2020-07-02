@@ -1,0 +1,24 @@
+{
+  "name": "Horrendous Experiment",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Choose an allied minion. Receive two copies of it with +3/+3.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "CopyCardSpell",
+    "value": 2,
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ]
+}

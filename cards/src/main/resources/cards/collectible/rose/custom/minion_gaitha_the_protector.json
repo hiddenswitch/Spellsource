@@ -1,0 +1,58 @@
+{
+  "name": "Gaitha the Protector",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Opener: Your minions can't be reduced below 1 Health this round.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attribute": "CANNOT_REDUCE_HP_BELOW_1",
+          "revertTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "BeforeMinionSummonedTrigger",
+              "targetPlayer": "SELF"
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "EVENT_TARGET",
+              "attribute": "CANNOT_REDUCE_HP_BELOW_1",
+              "revertTrigger": {
+                "class": "TurnStartTrigger",
+                "targetPlayer": "SELF"
+              }
+            }
+          },
+          "revertTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          }
+        }
+      ]
+    }
+  },
+  "targetSelection": "NONE",
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

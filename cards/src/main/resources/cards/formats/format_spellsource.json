@@ -1,0 +1,74 @@
+{
+  "name": "Spellsource",
+  "type": "FORMAT",
+  "rarity": "FREE",
+  "description": "The format with Custom made cards ONLY.",
+  "condition": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "class": "ComparisonCondition",
+        "description": "Decks must have 30 cards",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_DECK"
+        },
+        "value2": 30
+      },
+      {
+        "class": "DeckContainsCondition",
+        "description": "Decks must not contain cards from other classes",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "heroClass": "ANY",
+              "invert": true
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "SELF",
+              "invert": true
+            }
+          ]
+        },
+        "invert": true
+      },
+      {
+        "class": "NumberOfCopiesCondition",
+        "target": "FRIENDLY_DECK",
+        "value": 2,
+        "description": "Decks can't have more than 2 copies of a card",
+        "operation": "LESS_OR_EQUAL"
+      },
+      {
+        "class": "NumberOfCopiesCondition",
+        "target": "FRIENDLY_DECK",
+        "value": 1,
+        "description": "Decks can only have 1 copy of Legendary cards",
+        "filter": {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY"
+        },
+        "operation": "EQUAL"
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "secondPlayerBonusCards": [
+    "spell_lunstone"
+  ],
+  "sets": [
+    "SPELLSOURCE",
+    "SPELLSOURCE_BASIC",
+    "VERDANT_DREAMS",
+    "SANDS_OF_TIME",
+    "BATTLE_FOR_ASHENVALE",
+    "WHAT_LIES_BENEATH",
+    "SOURCESTORM",
+    "CUSTOM"
+  ]
+}

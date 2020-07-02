@@ -1,0 +1,31 @@
+{
+  "name": "Illusory Troupe",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Summon two copies of it with 1 Attack and Guard.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 2,
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        },
+        {
+          "class": "SetAttackSpell",
+          "value": 1
+        }
+      ]
+    },
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

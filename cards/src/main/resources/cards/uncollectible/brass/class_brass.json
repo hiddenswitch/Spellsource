@@ -1,0 +1,44 @@
+{
+  "name": "Technician",
+  "type": "CLASS",
+  "heroClass": "BRASS",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "GRAVEYARD",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.333,
+      "g": 0.333,
+      "r": 0.333
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.0,
+      "r": 0.0
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.055,
+      "g": 0.055,
+      "r": 0.055
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.173,
+      "g": 0.173,
+      "r": 0.173
+    }
+  },
+  "hero": "hero_brass"
+}

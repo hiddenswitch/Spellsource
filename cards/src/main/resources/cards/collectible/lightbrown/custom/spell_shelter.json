@@ -1,0 +1,28 @@
+{
+  "name": "Shelter",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+  "description": "Give a minion +6 Health. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 6
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

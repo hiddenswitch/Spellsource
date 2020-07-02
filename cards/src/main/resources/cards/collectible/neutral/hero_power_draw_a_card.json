@@ -1,0 +1,19 @@
+{
+  "name": "Doodle",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Skill: Draw a card. Switch back after taking 10 damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

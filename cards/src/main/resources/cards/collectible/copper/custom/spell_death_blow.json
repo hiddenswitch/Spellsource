@@ -1,0 +1,28 @@
+{
+  "name": "Death Blow",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "RARE",
+  "description": "Deal $2 damage to a random enemy minion. If it dies, draw 2 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "target": "ENEMY_MINIONS",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "randomTarget": true,
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

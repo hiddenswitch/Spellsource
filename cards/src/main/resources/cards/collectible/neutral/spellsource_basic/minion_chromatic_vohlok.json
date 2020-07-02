@@ -1,0 +1,29 @@
+{
+  "name": "Chromatic Vohlok",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Spellpower +1. Opener: Transform adjacent minions into copies of this.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "target": "ADJACENT_MINIONS",
+      "spell": {
+        "class": "custom.CopyMinionSpell"
+      },
+      "secondaryTarget": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,52 @@
+{
+  "name": "8th Heaven Formation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "EPIC",
+  "description": "Deal $8 damage randomly split among all enemies. If a Demon died this turn, deal $8 damage instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": {
+        "class": "DiedThisTurnValueProvider",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "DEMON"
+        },
+        "targetPlayer": "BOTH"
+      },
+      "value2": 0
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 8
+    },
+    "spell2": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 8
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "targetSelectionCondition": {
+    "class": "ComparisonCondition",
+    "operation": "GREATER",
+    "value1": {
+      "class": "DiedThisTurnValueProvider",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "DEMON"
+      },
+      "targetPlayer": "BOTH"
+    },
+    "value2": 0
+  },
+  "targetSelectionOverride": "ANY"
+}

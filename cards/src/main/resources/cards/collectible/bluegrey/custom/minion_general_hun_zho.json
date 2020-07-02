@@ -1,0 +1,50 @@
+{
+  "name": "General Hun'zho",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Opener: If your deck has no duplicates, promote your other minions and those in hand to Legendary status.",
+  "battlecry": {
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReplaceCardsSpell",
+          "target": "FRIENDLY_HAND",
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          },
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "TransformToRandomMinionSpell",
+          "target": "OTHER_FRIENDLY_MINIONS",
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "MINION"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

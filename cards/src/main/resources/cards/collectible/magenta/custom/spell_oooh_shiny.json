@@ -1,0 +1,28 @@
+{
+  "name": "Oooh, Shiny!",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "LEGENDARY",
+  "description": "For the rest of the game, your Gold Coins are upgraded to Platinum Coins.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "aura": {
+      "class": "CardAura",
+      "target": "FRIENDLY_CARDS",
+      "card": "token_spell_platinum_coin",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_gold_coin"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ]
+}

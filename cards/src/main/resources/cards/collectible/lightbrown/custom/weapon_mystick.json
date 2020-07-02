@@ -1,0 +1,30 @@
+{
+  "name": "Mystick",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "LIGHTBROWN",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "RARE",
+  "description": "<b>Decay</b>. Your champion has +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": 2
+  },
+  "attributes": {
+    "DECAY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

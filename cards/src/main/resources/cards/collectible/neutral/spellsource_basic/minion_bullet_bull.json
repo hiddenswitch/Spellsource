@@ -1,0 +1,31 @@
+{
+  "name": "Bullet Bull",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Dash. Has double Attack during your turn.",
+  "aura": {
+    "class": "AttributeValueAura",
+    "target": "SELF",
+    "value": 2,
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    },
+    "attribute": "AURA_ATTACK_MULTIPLIER",
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

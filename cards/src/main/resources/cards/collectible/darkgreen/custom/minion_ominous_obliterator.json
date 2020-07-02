@@ -1,0 +1,20 @@
+{
+  "name": "Ominous Obliterator",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Guard, Dash.",
+  "attributes": {
+    "RUSH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ]
+}

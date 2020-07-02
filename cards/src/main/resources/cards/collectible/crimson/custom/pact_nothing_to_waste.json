@@ -1,0 +1,38 @@
+{
+  "name": "Nothing to Waste",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "<b>Pact:</b> After you've dealt 2 damage, summon a 2/2 Captive with <b>Guard</b>.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "cards": [
+          "token_captiveguard_overlord"
+        ]
+      },
+      "countByValue": true
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

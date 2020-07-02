@@ -1,0 +1,31 @@
+{
+  "name": "Revelation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Destroy all your Lun. Set the Cost of all cards in your hand to (1).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ModifyMaxManaSpell",
+        "value": -10
+      },
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_HAND",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 1,
+          "operation": "SET"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

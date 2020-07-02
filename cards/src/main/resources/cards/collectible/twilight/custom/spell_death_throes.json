@@ -1,0 +1,64 @@
+{
+  "name": "Death Throes",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Source a minion in your graveyard. Resurrect it with Decay.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "target": "OUTPUT",
+        "condition": {
+          "class": "AttributeCondition",
+          "attribute": "DECAY",
+          "invert": true,
+          "operation": "HAS"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "AddEnchantmentSpell",
+              "trigger": {
+                "eventTrigger": {
+                  "class": "TurnEndTrigger",
+                  "targetPlayer": "OWNER"
+                },
+                "spell": {
+                  "class": "DecaySpell"
+                }
+              }
+            },
+            {
+              "class": "AddAttributeSpell",
+              "attribute": "DECAY"
+            }
+          ]
+        }
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ]
+}

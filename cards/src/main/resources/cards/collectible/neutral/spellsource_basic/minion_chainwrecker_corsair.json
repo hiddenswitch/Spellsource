@@ -1,0 +1,39 @@
+{
+  "name": "Fallen Warrior",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "SPIRIT",
+  "description": "Your champion also damages adjacent minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "target": "FRIENDLY_HERO",
+      "spell": {
+        "class": "AdjacentEffectSpell",
+        "spell2": {
+          "class": "DamageSpell",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_HERO",
+            "attribute": "ATTACK"
+          }
+        }
+      },
+      "secondaryTarget": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

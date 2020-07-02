@@ -1,0 +1,44 @@
+{
+  "name": "Memory of Ranabosh",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "When you trigger 2 allied Secrets, awaken this. []",
+  "trigger": {
+    "countUntilCast": 2,
+    "eventTrigger": {
+      "class": "SecretRevealedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "minion_ranabosh_in_memory"
+    },
+    "keepAfterTransform": false
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        "(",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "SpellstoneValueProvider"
+          }
+        },
+        " more!)"
+      ]
+    }
+  ]
+}

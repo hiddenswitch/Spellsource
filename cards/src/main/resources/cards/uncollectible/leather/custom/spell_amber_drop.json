@@ -1,0 +1,28 @@
+{
+  "name": "Amber Drop",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "RARE",
+  "description": "Repeatable this turn. Source a 1-cost minion, then summon three copies of it",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 3
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 1
+    }
+  },
+  "attributes": {
+    "DISCOVER": true,
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

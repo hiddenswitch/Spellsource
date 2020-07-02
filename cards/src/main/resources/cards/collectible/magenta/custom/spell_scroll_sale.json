@@ -1,0 +1,49 @@
+{
+  "name": "Scroll Sale!",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "EPIC",
+  "description": "Source a spell from other classes. Give it to both players.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      }
+    },
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "SELF",
+          "invert": true
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "ANY",
+          "invert": true
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_PLENTIFULPATRONS"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "name": "Kintora, the Heir",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Your Lesser Onis are 4/4 and take double damage this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "AttributeAura",
+            "target": "FRIENDLY_MINIONS",
+            "attribute": "AURA_TAKE_DOUBLE_DAMAGE",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "token_lesser_oni"
+            }
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "Aura",
+            "target": "FRIENDLY_MINIONS",
+            "applyEffect": {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "SetAttackSpell",
+                  "value": 4,
+                  "exclusive": false
+                },
+                {
+                  "class": "SetHpSpell",
+                  "value": 4,
+                  "exclusive": false
+                }
+              ]
+            },
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "token_lesser_oni"
+            },
+            "removeEffect": {
+              "class": "NullSpell"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

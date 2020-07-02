@@ -1,0 +1,50 @@
+{
+  "name": "Cyclotron",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Opener: Draw [0 cards]. (Increases for each unspent Lun after this is played).",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MANA"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
+        "value1": 0,
+        "value2": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          },
+          "value2": {
+            "class": "ManaCostProvider",
+            "target": "SELF"
+          }
+        }
+      },
+      "description1": " card",
+      "description2": " cards"
+    }
+  ]
+}

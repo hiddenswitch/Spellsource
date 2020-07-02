@@ -1,0 +1,46 @@
+{
+  "name": "Meek Inheritor",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Opener: Reshuffle 4 (Surge: 3) cards, then draw 5.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "EitherOrSpell",
+          "condition": {
+            "class": "SurgeCondition"
+          },
+          "spell1": {
+            "class": "ChooseAndReshuffleSpell",
+            "value": 3
+          },
+          "spell2": {
+            "class": "ChooseAndReshuffleSpell",
+            "value": 4
+          }
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 5
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SURGE": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

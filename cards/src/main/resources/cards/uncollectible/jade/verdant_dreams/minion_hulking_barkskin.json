@@ -1,0 +1,19 @@
+{
+  "name": "Hulking Barkskin",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Guard, Elusive, Deflect",
+  "attributes": {
+    "DEFLECT": true,
+    "TAUNT": true,
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

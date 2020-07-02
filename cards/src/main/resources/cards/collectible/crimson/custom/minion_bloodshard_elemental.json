@@ -1,0 +1,24 @@
+{
+  "name": "Charged Gargoyle",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "<b>Aftermath</b>: Deal 2 damage to all enemies.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

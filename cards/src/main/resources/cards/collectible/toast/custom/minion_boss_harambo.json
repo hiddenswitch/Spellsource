@@ -1,0 +1,48 @@
+{
+  "name": "Boss Harambo",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Opener: Receive 10 Apples that give a minion +1/+1. Excess Apples go to the bottom of your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "PutOnBottomOfDeckSpell",
+          "card": "spell_apple",
+          "howMany": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "value": {
+            "class": "AlgebraicValueProvider",
+            "operation": "SUBTRACT",
+            "value1": 10,
+            "value2": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "HAND_COUNT",
+              "targetPlayer": "SELF"
+            }
+          },
+          "card": "spell_apple"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

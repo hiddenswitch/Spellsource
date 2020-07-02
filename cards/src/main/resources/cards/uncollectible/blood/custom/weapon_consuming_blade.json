@@ -1,0 +1,34 @@
+{
+  "name": "Consuming Blade",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 4,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "After your champion attacks and kills a minion, it gains +4 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "hpBonus": 4
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

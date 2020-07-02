@@ -1,0 +1,20 @@
+{
+  "name": "Shielding Smasher",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "<b>Guard</b>",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

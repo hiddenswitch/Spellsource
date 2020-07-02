@@ -1,0 +1,47 @@
+{
+  "name": "Double Next Spell",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "The next spell played this turn is cast twice.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "CastAfterSequenceSpell",
+        "spell": {
+          "class": "RemoveEnchantmentSpell",
+          "target": "TRIGGER_HOST",
+          "card": "enchantment_double_next_spell"
+        }
+      },
+      "activationTriggers": [
+        {
+          "class": "WillEndSequenceTrigger"
+        }
+      ]
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_double_next_spell"
+      }
+    }
+  ],
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "SPELLS_CAST_TWICE"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

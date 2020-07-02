@@ -1,0 +1,106 @@
+{
+  "name": "Savage Dancer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Opener: Your next Signature deals 2 damage to the enemy champion for each minion that dies.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "SpellCastedTrigger",
+          "fireCondition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "EVENT_SOURCE",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "FRIENDLY_SIGNATURE"
+            }
+          },
+          "sourcePlayer": "SELF"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SetAttributeSpell",
+              "target": "FRIENDLY_PLAYER",
+              "value": {
+                "class": "CardCountValueProvider",
+                "cardSource": {
+                  "class": "GraveyardDiedMinionsSource",
+                  "targetPlayer": "BOTH"
+                },
+                "multiplier": -1
+              },
+              "attribute": "RESERVED_INTEGER_5"
+            },
+            {
+              "class": "AddEnchantmentSpell",
+              "target": "FRIENDLY_PLAYER",
+              "trigger": {
+                "eventTrigger": {
+                  "class": "AfterSpellCastedTrigger",
+                  "fireCondition": {
+                    "class": "AnyMatchFilterCondition",
+                    "target": "EVENT_SOURCE",
+                    "filter": {
+                      "class": "SpecificCardFilter",
+                      "secondaryTarget": "FRIENDLY_SIGNATURE"
+                    }
+                  },
+                  "sourcePlayer": "SELF"
+                },
+                "spell": {
+                  "class": "CastAfterSequenceSpell",
+                  "spell": {
+                    "class": "MetaSpell",
+                    "spells": [
+                      {
+                        "class": "ModifyAttributeSpell",
+                        "target": "FRIENDLY_PLAYER",
+                        "value": {
+                          "class": "CardCountValueProvider",
+                          "cardSource": {
+                            "class": "GraveyardDiedMinionsSource",
+                            "targetPlayer": "BOTH"
+                          }
+                        },
+                        "attribute": "RESERVED_INTEGER_5"
+                      },
+                      {
+                        "class": "DamageSpell",
+                        "target": "ENEMY_HERO",
+                        "value": {
+                          "class": "AttributeValueProvider",
+                          "target": "FRIENDLY_PLAYER",
+                          "attribute": "RESERVED_INTEGER_5",
+                          "multiplier": 2
+                        },
+                        "ignoreSpellDamage": 2
+                      }
+                    ]
+                  }
+                },
+                "maxFires": 1
+              }
+            }
+          ]
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

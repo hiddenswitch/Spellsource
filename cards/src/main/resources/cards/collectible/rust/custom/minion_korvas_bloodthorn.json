@@ -1,0 +1,40 @@
+{
+  "name": "Korvas Bloodthorn",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "After you cast a spell on a minion, give it \"Elusive to your opponent\".",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "EVENT_TARGET",
+      "aura": {
+        "class": "AttributeAura",
+        "target": "SELF",
+        "triggers": [
+          {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "BOTH"
+          }
+        ],
+        "condition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "INACTIVE"
+        },
+        "attribute": "AURA_UNTARGETABLE_BY_SPELLS",
+        "persistentOwner": true
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

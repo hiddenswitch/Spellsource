@@ -1,0 +1,32 @@
+{
+  "name": "Sandman",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Opener: Summon 1/2 Gales with Dash until you control 3 minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecastWhileSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_gale"
+      },
+      "howMany": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_MINIONS",
+        "multiplier": -1,
+        "offset": 3
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

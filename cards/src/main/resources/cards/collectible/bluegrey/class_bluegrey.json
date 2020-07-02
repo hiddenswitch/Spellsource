@@ -1,0 +1,44 @@
+{
+  "name": "Oni Queen",
+  "type": "CLASS",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.89,
+      "g": 0.773,
+      "r": 0.729
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.8392156862745098,
+      "g": 0.6588235294117647,
+      "r": 0.596078431372549
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.714,
+      "g": 0.541,
+      "r": 0.478
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.463,
+      "g": 0.302,
+      "r": 0.247
+    }
+  },
+  "hero": "hero_paucha"
+}

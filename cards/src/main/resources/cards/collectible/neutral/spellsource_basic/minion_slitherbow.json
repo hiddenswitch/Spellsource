@@ -1,0 +1,30 @@
+{
+  "name": "Slitherbow",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Hidden. Whenever an enemy minion attacks, swap Health with it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "SwapHpSpell",
+      "target": "ATTACKER",
+      "secondaryTarget": "SELF"
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

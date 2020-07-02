@@ -1,0 +1,40 @@
+{
+  "name": "Archaic Awakening",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Give a minion <b>Decay<b> and +2/+3.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DECAY"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DecaySpell"
+          }
+        }
+      }
+    ]
+  },
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

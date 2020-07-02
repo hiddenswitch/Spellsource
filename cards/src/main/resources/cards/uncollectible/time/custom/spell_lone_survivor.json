@@ -1,0 +1,24 @@
+{
+  "name": "Lone Survivor",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Destroy minions adjacent to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "NullSpell"
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ]
+}

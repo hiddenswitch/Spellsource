@@ -1,0 +1,60 @@
+{
+  "name": "Alagard's Infusion",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "LEGENDARY",
+  "description": "Give all minions in your hand and deck \"Opener: Cast a random Storyteller spell\".",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddBattlecrySpell",
+        "target": "FRIENDLY_HAND",
+        "battlecry": {
+          "spell": {
+            "class": "CastRandomSpellSpell",
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "OLIVE",
+              "cardType": "SPELL"
+            }
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "AddBattlecrySpell",
+        "target": "FRIENDLY_DECK",
+        "battlecry": {
+          "spell": {
+            "class": "CastRandomSpellSpell",
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "OLIVE",
+              "cardType": "SPELL"
+            }
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

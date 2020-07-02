@@ -1,0 +1,29 @@
+{
+  "name": "Deep Envoy",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Opener: Choose a minion. Your Skill now summons Eidolons with the same Tribe as it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "custom.StoreRaceToAttributeSpell",
+      "attribute": "EIDOLON_RACE",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "NONE",
+        "invert": true
+      },
+      "secondaryTarget": "FRIENDLY_PLAYER"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

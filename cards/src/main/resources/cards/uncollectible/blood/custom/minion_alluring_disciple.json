@@ -1,0 +1,31 @@
+{
+  "name": "Alluring Disciple",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Opener: Copy an enemy minion's Attack.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "SetAttackSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "TARGET",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

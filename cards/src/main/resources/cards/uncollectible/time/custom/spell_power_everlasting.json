@@ -1,0 +1,22 @@
+{
+  "name": "Power Everlasting",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "Give an allied minion and its copies +2 attack, wherever they are.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "WhereverTheyAreSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 2
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ]
+}
