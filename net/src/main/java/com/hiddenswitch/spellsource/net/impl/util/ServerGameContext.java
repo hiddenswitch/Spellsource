@@ -141,8 +141,6 @@ public class ServerGameContext extends GameContext implements Server {
 			enablePersistenceEffects();
 			enableTriggers();
 
-			List<Integer> usedPlayerIds = new ArrayList<>(2);
-
 			// Check if we should later enable editing
 			var isEditable = Editor.isEditable(this);
 
@@ -150,23 +148,12 @@ public class ServerGameContext extends GameContext implements Server {
 			// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
 			for (Configuration configuration : getPlayerConfigurations()) {
 				UserId userId = configuration.getUserId();
-				if (userId == null) {
-					throw new IllegalArgumentException("userId cannot be null");
-				}
 
 				// Initialize the player objects
 				// This will create an actual valid deck and player object
 				GameDeck deck = (GameDeck) configuration.getDeck().clone();
-				if (deck == null) {
-					throw new IllegalArgumentException("deck cannot be null");
-				}
 
 				Player player = Player.forUser(userId.toString(), configuration.getPlayerId(), deck);
-				if (usedPlayerIds.contains(configuration.getPlayerId())) {
-					throw new IllegalArgumentException("playerId already used");
-				}
-				usedPlayerIds.add(configuration.getPlayerId());
-
 				setPlayer(configuration.getPlayerId(), player);
 				// ...and import all the attributes that might be specific to the queue and its rules (typically just the
 				// DECK_ID and USER_ID attributes at the moment.
@@ -197,10 +184,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 					// We'll want to unregister and close these when this instance is disposed
 					closeables.add(consumer::unregister);
-					closeables.add(fut -> {
-						producer.close();
-						fut.handle(Future.succeededFuture());
-					});
+					closeables.add(producer::close);
 
 					// Create a client that handles game events and action/mulligan requests
 					UnityClientBehaviour client = new UnityClientBehaviour(this,
@@ -213,22 +197,6 @@ public class ServerGameContext extends GameContext implements Server {
 
 					// This client too needs to be closed
 					closeableBehaviour = client;
-
-					// Once the game is disposed, there should be no more client instances referenced here
-					closeables.add(fut -> {
-						consumer.unregister();
-						getClients().clear();
-						CompositeFuture.join(getBehaviours().stream()
-								.filter(Closeable.class::isInstance)
-								.map(Closeable.class::cast).map(c -> {
-									Promise<Void> promise = Promise.promise();
-									c.close(promise);
-									return promise.future();
-								}).collect(toList()))
-								.setHandler(h -> fut.handle(h.succeeded() ? Future.succeededFuture() : Future.failedFuture(h.cause())));
-						setBehaviour(0, null);
-						setBehaviour(1, null);
-					});
 
 					// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
 					// and mulligan calls

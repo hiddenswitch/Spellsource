@@ -30,12 +30,6 @@ artifacts {
 }
 
 repositories {
-    maven {
-        url 'http://oss.sonatype.org/content/repositories/snapshots'
-    }
-    maven {
-        url 'https://jitpack.io'
-    }
     jcenter()
 }
 
@@ -58,7 +52,7 @@ dependencies {
         exclude group: 'jakarta.xml.bind', module: '*'
         exclude group: 'jakarta.activation', module: '*'
     }
-    implementation 'io.github.classgraph:classgraph:4.8.59'
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation group: 'joda-time', name: 'joda-time', version: '2.10.2'
     implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'

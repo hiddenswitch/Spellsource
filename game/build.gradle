@@ -9,7 +9,7 @@ dependencies {
     api project(':client')
     api project(':core')
     api 'io.vertx:vertx-core:3.9.1'
-    implementation 'io.github.classgraph:classgraph:4.8.59'
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation project(':vertx-sync')
 
     api 'org.slf4j:slf4j-api:1.7.20'
