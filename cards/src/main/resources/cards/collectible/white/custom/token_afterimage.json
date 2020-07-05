@@ -1,0 +1,16 @@
+{
+  "name": "Afterimage",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

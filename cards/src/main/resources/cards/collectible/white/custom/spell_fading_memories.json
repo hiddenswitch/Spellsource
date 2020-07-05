@@ -1,0 +1,21 @@
+
+{
+  "name": "Fading Memories",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Fill your board with 1/3 Fragments with Decay.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+	"value": 7,
+	"card": "token_fragment"
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

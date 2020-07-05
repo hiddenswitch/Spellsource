@@ -1,0 +1,29 @@
+{
+  "name": "Fragment",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Decay.",
+  "race": "SPIRIT",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DecaySpell"
+    }
+  },
+  "attributes": {
+	"DECAY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,53 @@
+
+{
+  "name": "Ryora's Protection",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "LEGENDARY",
+  "description": "Your champion is immune this round. Return this spell to your hand when you control a Beast at the start of your turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+	"spells": [
+	  {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_HERO",
+        "attribute": "IMMUNE",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+	  },
+	  {
+	    "class": "AddEnchantmentSpell",
+		"target": "FRIENDLY_PLAYER",
+		"trigger": {
+		  "eventTrigger": {
+		    "class": "TurnStartTrigger",
+			"targetPlayer": "SELF",
+			"fireCondition": {
+			  "class": "MinionOnBoardCondition",
+			  "cardFilter": {
+			    "class": "RaceFilter",
+				"race": "BEAST"
+			  }
+			}
+		  },
+		  "spell": {
+		    "class": "ReceiveCardSpell",
+			"card": "spell_ryoras_protection",
+			"targetPlayer": "SELF"
+		  },
+		  "maxFires": 1
+		}
+	  }
+    ]
+  },	
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Cackling Spinster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Opener: Each player shuffles their hand into their deck and draws that many cards.",
+  "battlecry": {
+    "targetSelection": "NONE",
+	"spell": {
+	  "class": "BothPlayersSpell",
+      "spell": {
+        "class": "CastRepeatedlySpell",
+        "howMany": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "MetaSpell",
+              "target": "LEFTMOST_FRIENDLY_CARD_HAND",
+              "spells": [
+                {
+                  "class": "ShuffleToDeckSpell",
+                  "value": 1
+                },
+                {
+                  "class": "RemoveCardSpell"
+                }
+              ]
+            },
+            {
+              "class": "DrawCardSpell",
+              "value": 1
+            }
+          ]
+        }
+      }
+	}
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}
