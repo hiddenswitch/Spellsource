@@ -1,0 +1,32 @@
+{
+  "name": "Ryora's Disciple",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Give your Spirits +1/+2.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "SPIRIT"
+      },
+	  "attackBonus": 1,
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

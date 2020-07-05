@@ -1,0 +1,31 @@
+{
+  "name": "Elder Dreamguide",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "As long as the last unit you played was a Beast, your Spirits cost (2) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "target": "FRIENDLY_HAND",
+    "value": -2,
+	"race": "SPIRIT",
+	"cardType": "MINION",
+    "condition": {
+      "class": "RaceCondition",
+	  "race": "BEAST",
+	  "target": "FRIENDLY_LAST_MINION_PLAYED"
+    },
+    "operation": "SET",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

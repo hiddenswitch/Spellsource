@@ -1,0 +1,68 @@
+  
+{
+  "name": "Mental Assault",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Consume 2 to draw two cards and deal $4 damage to a unit.",
+  "targetSelection": "MINIONS",
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "CardCountValueProvider",
+      "offset": {
+        "class": "BoardCountValueProvider",
+		"offset": -1
+      }
+    },
+    "value2": 2,
+    "operation": "GREATER_OR_EQUAL"
+  },
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "QueryTargetSpell",
+        "howMany": 2,
+        "target": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "INDEX",
+          "multiplier": -1
+        },
+        "spell": {
+          "class": "DestroySpell"
+        }
+      },
+      {
+        "class": "MetaSpell",
+        "howMany": {
+          "class": "BoardCountValueProvider",
+          "offset": 2,
+          "multiplier": -1
+        },
+        "spells": [
+          {
+            "class": "DiscardSpell",
+            "target": "RIGHTMOST_FRIENDLY_CARD_HAND"
+          }
+        ]
+      },
+	  {
+	    "class": "DrawCardSpell",
+		"value": 2
+	  },
+	  {
+	    "class": "DamageSpell",
+		"value": 4
+	  }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

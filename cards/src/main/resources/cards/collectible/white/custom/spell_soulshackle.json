@@ -1,0 +1,48 @@
+{
+  "name": "Soulshackle",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Take control of an enemy minion with 3 or less Attack this round. It gains Guard.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 3,
+      "attribute": "ATTACK",
+      "operation": "LESS_OR_EQUAL"
+    },
+	"spells": [
+	  {
+	    "class": "MindControlSpell"
+	  },
+	  {
+	    "class": "AddAttributeSpell",
+		"attribute": "TAUNT"
+	  },
+	  {
+	    "class": "AddEnchantmentSpell",
+		"trigger": {
+		  "eventTrigger": {
+		    "class": "TurnStartTrigger",
+			"targetPlayer": "SELF"
+		  },
+		  "spell": {
+		    "class": "MindControlSpell",
+			"targetPlayer": "OPPONENT",
+			"target": "TRIGGER_HOST"
+		  },
+		  "maxFires": 1
+		}
+	  }
+	]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

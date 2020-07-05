@@ -1,0 +1,79 @@
+{
+  "name": "Portal Keeper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Aftermath: Consume 1 to summon two 1/3 Fragments with Decay.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "offset": {
+          "class": "BoardCountValueProvider",
+		  "offset": -1
+        }
+      },
+      "value2": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "QueryTargetSpell",
+          "howMany": 1,
+          "target": "OTHER_FRIENDLY_MINIONS",
+	      "filter": {
+	        "class": "EntityEqualsFilter",
+		    "invert": true,
+		    "secondaryTarget": "TRIGGER_HOST"
+	      },
+          "value": {
+            "class": "AttributeValueProvider",
+            "attribute": "INDEX",
+            "multiplier": -1
+          },
+          "spell": {
+            "class": "DestroySpell"
+          }
+        },
+        {
+          "class": "MetaSpell",
+          "howMany": {
+            "class": "BoardCountValueProvider",
+            "offset": 1,
+            "multiplier": -1
+          },
+          "spells": [
+            {
+              "class": "DiscardSpell",
+              "target": "RIGHTMOST_FRIENDLY_CARD_HAND"
+            }
+          ]
+        },
+		{
+          "class": "SummonSpell",
+          "cards": [
+		    "fragment",
+			"fragment"
+		  ]
+		}
+      ]
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}
