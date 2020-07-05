@@ -820,10 +820,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		getActivityMonitors().clear();
 		requests.clear();
 		messageBuffer.clear();
-		try {
-			writer.end();
-		} catch (IllegalStateException alreadyClosed) {
-		}
 		completionHandler.handle(Future.succeededFuture());
 	}
 

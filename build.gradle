@@ -10,9 +10,6 @@ allprojects {
     project.version = '0.8.78'
 }
 
-def jacksonVersion = '2.10.2'
-def jacksonDatabindVersion = '2.10.2'
-
 subprojects {
     repositories {
         jcenter()
