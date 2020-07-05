@@ -1,6 +1,6 @@
 {
   "name": "Yokai Loremaster",
-  "baseManaCost": 0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "WHITE",
   "baseAttack": 2,
