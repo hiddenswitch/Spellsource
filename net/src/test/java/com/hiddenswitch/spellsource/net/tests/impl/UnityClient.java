@@ -287,9 +287,7 @@ public class UnityClient implements AutoCloseable {
 			}
 		}
 		if (turnsToPlay.get() <= 0) {
-			if (!gameOver && onGameOver != null) {
-				onGameOver.handle(this);
-			}
+
 			if (!gameOver) {
 				gameOverLatch.countDown();
 			}

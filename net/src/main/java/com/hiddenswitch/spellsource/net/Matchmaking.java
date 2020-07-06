@@ -20,6 +20,7 @@ import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -68,7 +70,7 @@ public interface Matchmaking {
 			}
 
 			var currentQueue = getUsersInQueues();
-			var alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
+			var alreadyQueued = currentQueue.putIfAbsent(request.getUserId(), request.getQueueId()) != null;
 			if (alreadyQueued) {
 				throw new IllegalStateException("User is already enqueued in a different queue.");
 			}
@@ -103,8 +105,13 @@ public interface Matchmaking {
 	 */
 	@NotNull
 	@Suspendable
-	static SuspendableMap<UserId, String> getUsersInQueues() {
+	static SuspendableMap<String, String> getUsersInQueues() {
 		return SuspendableMap.getOrCreate("Matchmaking/currentQueue");
+	}
+
+	@NotNull
+	static void getUsersInQueues(Handler<AsyncResult<AsyncMap<String, String>>> handler) {
+		SuspendableMap.<String, String>getOrCreate("Matchmaking/currentQueue", handler);
 	}
 
 	/**
@@ -120,7 +127,7 @@ public interface Matchmaking {
 		try (var s = GlobalTracer.get().activateSpan(span)) {
 			span.setTag("userId", userId.toString());
 			var currentQueue = getUsersInQueues();
-			var queueId = currentQueue.remove(userId);
+			var queueId = currentQueue.remove(userId.toString());
 			if (queueId != null) {
 				var eventBus = Vertx.currentContext().owner().eventBus();
 				eventBus.send(getQueueAddress(queueId), new MatchmakingQueueEntry()
@@ -260,17 +267,8 @@ public interface Matchmaking {
 										}
 									}
 
-									var interrupted = Strand.interrupted();
-									if (request == null || interrupted) {
-										span.log(interrupted ? "interrupted" : "timeout");
-										// The request timed out.
-										// Remove any awaiting users, then break
-										removeEnqueuedAndNotify(queueId, thisMatchRequests, userToQueue);
-
-										if (interrupted) {
-											Strand.currentStrand().interrupt();
-											return null;
-										}
+									if (request == null) {
+										span.log("timeout");
 
 										// queue.destroy() is dealt with outside of here
 										if (queueConfiguration.isOnce()) {
@@ -287,7 +285,7 @@ public interface Matchmaking {
 										case CANCEL:
 											var finalRequest = request;
 											thisMatchRequests.removeIf(existingReq -> existingReq.getUserId().equals(finalRequest.body().getUserId()));
-											userToQueue.remove(new UserId(request.body().getUserId()));
+											userToQueue.remove(request.body().getUserId());
 											break;
 									}
 
@@ -370,7 +368,7 @@ public interface Matchmaking {
 									throw runtimeException;
 								} finally {
 									for (var request : thisMatchRequests) {
-										userToQueue.remove(new UserId(request.getUserId()));
+										userToQueue.remove(request.getUserId());
 									}
 									gameCreateSpan.finish();
 								}
@@ -383,6 +381,7 @@ public interface Matchmaking {
 								span.finish();
 							}
 						} while (/*Queues that run once are typically private games*/!queueConfiguration.isOnce());
+
 						if (queueConfiguration.isOnce()) {
 							return null;
 						}
@@ -399,15 +398,9 @@ public interface Matchmaking {
 						lock.release();
 					}
 
-					var interrupted = Strand.interrupted();
-
 					if (consumer != null) {
-						// TODO: Explore how to change this into a
+						// TODO: Explore how to change this into a blocking operation
 						consumer.unregister();
-					}
-
-					if (interrupted) {
-						Strand.currentStrand().interrupt();
 					}
 				}
 				return null;
@@ -421,6 +414,7 @@ public interface Matchmaking {
 			if (queueConfiguration.isJoin()) {
 				try {
 					awaitReady.await(4000L, TimeUnit.MILLISECONDS);
+					span1.setTag("startedHere", true);
 				} catch (Throwable e) {
 					var cause = Throwables.getRootCause(e);
 					if (cause instanceof TimeoutException) {
@@ -444,13 +438,14 @@ public interface Matchmaking {
 				}
 
 				if (!thisMatchRequests.isEmpty()) {
-					var interrupted = Strand.interrupted();
-
-					removeEnqueuedAndNotify(queueId, thisMatchRequests, getUsersInQueues());
-
-					if (interrupted) {
-						Strand.currentStrand().interrupt();
-					}
+					getUsersInQueues(res -> {
+						if (res.succeeded()) {
+							removeEnqueuedAndNotify(queueId, thisMatchRequests, res.result(), completionHandler);
+						} else {
+							completionHandler.handle(res.mapEmpty());
+						}
+					});
+					return;
 				}
 
 				completionHandler.handle(Future.succeededFuture());
@@ -459,8 +454,6 @@ public interface Matchmaking {
 			// We may have already been interrupted
 			if (Strand.currentStrand().isInterrupted()) {
 				closeable.close(Promise.promise());
-			} else if (queueConfiguration.isAutomaticallyClose()) {
-				context.addCloseHook(closeable);
 			}
 
 			return closeable;
@@ -470,14 +463,16 @@ public interface Matchmaking {
 
 	}
 
-	@Suspendable
-	static void removeEnqueuedAndNotify(String queueId, ArrayList<MatchmakingRequest> thisMatchRequests, SuspendableMap<UserId, String> userToQueue) {
+	static void removeEnqueuedAndNotify(String queueId, List<MatchmakingRequest> thisMatchRequests, AsyncMap<String, String> userToQueue, Handler<AsyncResult<Void>> completionHandler) {
 		for (var existingRequest : thisMatchRequests) {
-			if (userToQueue.remove(new UserId(existingRequest.getUserId()), queueId)) {
-				var connection = Connection.writeStream(existingRequest.getUserId());
-				// Notify the user they were dequeued
-				connection.write(new Envelope().result(new EnvelopeResult().dequeue(new DefaultMethodResponse())));
-			}
+			userToQueue.remove(existingRequest.getUserId(), res -> {
+				if (res.succeeded()) {
+					var connection = Connection.writeStream(existingRequest.getUserId());
+					connection.write(new Envelope().result(new EnvelopeResult().dequeue(new DefaultMethodResponse())));
+				}
+
+				completionHandler.handle(Future.succeededFuture());
+			});
 		}
 	}
 

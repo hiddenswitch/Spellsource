@@ -137,7 +137,9 @@ public class Sync {
 						stack[i].getClassName().startsWith("io.vertx.ext.sync.") ||
 						stack[i].getClassName().startsWith("io.netty.") ||
 						stack[i].getClassName().startsWith("io.vertx.core.impl.") ||
-						stack[i].getClassName().startsWith("sun.nio.")) {
+						stack[i].getClassName().startsWith("sun.nio.") ||
+						stack[i].getClassName().startsWith("java.base/java.util.concurrent") ||
+						stack[i].getClassName().startsWith("java.util.concurrent")) {
 					continue;
 				}
 				newStack.add(stack[i]);

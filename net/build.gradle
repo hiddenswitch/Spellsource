@@ -74,15 +74,15 @@ dependencies {
         exclude group: 'org.objenesis', module: '*'
     }
 
-    implementation('io.atomix:atomix:3.1.5') {
+    implementation('io.atomix:atomix:3.1.8') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
-    implementation('io.atomix:atomix-raft:3.1.5') {
+    implementation('io.atomix:atomix-raft:3.1.8') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
-    implementation('io.atomix:atomix-primary-backup:3.1.5') {
+    implementation('io.atomix:atomix-primary-backup:3.1.8') {
         exclude group: 'org.objenesis', module: '*'
         exclude group: 'io.github.classgraph', module: 'classgraph'
     }
