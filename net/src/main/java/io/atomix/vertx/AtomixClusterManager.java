@@ -23,10 +23,9 @@ import io.atomix.cluster.ClusterMembershipEventListener;
 import io.atomix.core.Atomix;
 import io.atomix.core.counter.AtomicCounter;
 import io.atomix.core.lock.AtomicLock;
-import io.atomix.core.map.AsyncAtomicMap;
-import io.atomix.core.map.AtomicMap;
 import io.atomix.primitive.Consistency;
 import io.atomix.primitive.Replication;
+import io.atomix.primitive.protocol.ProxyProtocol;
 import io.atomix.protocols.backup.MultiPrimaryProtocol;
 import io.atomix.utils.concurrent.SingleThreadContext;
 import io.atomix.utils.concurrent.ThreadContext;
@@ -47,6 +46,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -136,8 +136,8 @@ public class AtomixClusterManager implements ClusterManager {
 	public <K, V> void getAsyncMultiMap(String name, Handler<AsyncResult<AsyncMultiMap<K, V>>> handler) {
 		atomix.<K, V>atomicMultimapBuilder(name)
 				.withProtocol(getProtocol())
-				.withCacheEnabled(true)
-				.withCacheSize(DEFAULT_CACHE_SIZE)
+//				.withCacheEnabled(true)
+//				.withCacheSize(DEFAULT_CACHE_SIZE)
 				.withSerializer(createSerializer())
 				.buildAsync()
 				.whenComplete(VertxFutures.convertHandler(
@@ -148,8 +148,8 @@ public class AtomixClusterManager implements ClusterManager {
 	public <K, V> void getAsyncMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
 		atomix.<K, V>atomicMapBuilder(name)
 				.withProtocol(getProtocol())
-				.withCacheEnabled(true)
-				.withCacheSize(DEFAULT_CACHE_SIZE)
+//				.withCacheEnabled(true)
+//				.withCacheSize(DEFAULT_CACHE_SIZE)
 				.withSerializer(createSerializer())
 				.buildAsync()
 				.whenComplete(VertxFutures.convertHandler(
@@ -169,7 +169,8 @@ public class AtomixClusterManager implements ClusterManager {
 		Context context = vertx.getOrCreateContext();
 		lockCache.getUnchecked(name).whenComplete((lock, error) -> {
 			if (error == null) {
-				lock.async().tryLock(Duration.ofMillis(timeout)).whenComplete((lockResult, lockError) -> {
+				var fut = (timeout == Long.MAX_VALUE || timeout == -1) ? lock.async().lock().thenApply(Optional::of) : lock.async().tryLock(Duration.ofMillis(timeout));
+				fut.whenComplete((lockResult, lockError) -> {
 					if (lockError == null) {
 						if (lockResult.isPresent()) {
 							context.runOnContext(v -> Future.<Lock>succeededFuture(new AtomixLock(vertx, lock)).setHandler(handler));
@@ -274,11 +275,11 @@ public class AtomixClusterManager implements ClusterManager {
 		return active.get();
 	}
 
-	public MultiPrimaryProtocol getProtocol() {
+	public ProxyProtocol getProtocol() {
 		return MultiPrimaryProtocol.builder()
 				.withConsistency(Consistency.LINEARIZABLE)
-				.withReplication(Replication.ASYNCHRONOUS)
-				.withBackups(1)
+				.withReplication(Replication.SYNCHRONOUS)
+				.withBackups(3)
 				.build();
 	}
 }

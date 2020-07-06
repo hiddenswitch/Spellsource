@@ -53,7 +53,7 @@ public interface Invites {
 	static void handleConnections() {
 		Connection.connected((connection, fut) -> {
 			String userId = connection.userId();
-			connection.endHandler(Sync.fiber(v -> {
+			connection.addCloseHandler(fiber(v -> {
 				// Reject pending challenge invites
 				List<JsonObject> invites = mongo().findWithOptions(INVITES, json(
 						"queueId", json("$ne", null),
@@ -70,6 +70,7 @@ public interface Invites {
 								"canceling/rejecting it due to disconnect.", userId);
 					}
 				}
+				v.complete();
 			}));
 			defer(v -> {
 				try {
@@ -220,7 +221,7 @@ public interface Invites {
 			Vertx vertx = Vertx.currentContext().owner();
 
 			// Set timer to expire the invite after 15 minutes
-			vertx.setTimer(DEFAULT_EXPIRY_TIME, Sync.fiber(timerId -> {
+			vertx.setTimer(DEFAULT_EXPIRY_TIME, fiber(timerId -> {
 				// If the invite hasn't been acted on, expire it
 				mongo().updateCollection(INVITES,
 						json("_id", inviteId.toString(), "status", json("$in", PENDING_STATUSES)),

@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
+import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
@@ -18,7 +19,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
@@ -28,6 +31,26 @@ import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckTest extends SpellsourceTestBase {
+
+	/**
+	 * Creates a random deck for the user.
+	 *
+	 * @param userId
+	 * @return
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	public static DeckCreateResponse createDeckForUserId(String userId) throws SuspendExecution, InterruptedException {
+		GetCollectionResponse collection = Inventory.getCollection(GetCollectionRequest.user(userId));
+		Collections.shuffle(collection.getInventoryRecords());
+		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
+		return Decks.createDeck(new DeckCreateRequest()
+				.withUserId(userId)
+				.withHeroClass("TEST")
+				.withName("Test Deck")
+				.withFormat("All")
+				.withInventoryIds(inventoryIds));
+	}
 
 	@Test
 	public void testCreateDeck(Vertx vertx, VertxTestContext context) {

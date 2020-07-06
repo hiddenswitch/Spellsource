@@ -30,12 +30,12 @@ public interface Presence {
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
 		Connection.connected((connection, fut) -> {
-			connection.endHandler(Sync.fiber(ignored -> {
+			connection.addCloseHandler(fiber(v -> {
 				SuspendableCounter connections = connections(connection.userId());
 				if (connections.decrementAndGet() == 0L) {
 					notifyFriendsOfPresence(new UserId(connection.userId()), PresenceEnum.OFFLINE);
-					connections.close();
 				}
+				v.complete();
 			}));
 
 			defer(v -> {

@@ -72,26 +72,6 @@ public abstract class SpellsourceTestBase {
 		return Runtime.getRuntime().availableProcessors();
 	}
 
-	/**
-	 * Creates a random deck for the user.
-	 *
-	 * @param userId
-	 * @return
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	public static DeckCreateResponse createDeckForUserId(String userId) throws SuspendExecution, InterruptedException {
-		GetCollectionResponse collection = Inventory.getCollection(GetCollectionRequest.user(userId));
-		Collections.shuffle(collection.getInventoryRecords());
-		List<String> inventoryIds = collection.getInventoryRecords().subList(0, 30).stream().map(InventoryRecord::getId).collect(Collectors.toList());
-		return Decks.createDeck(new DeckCreateRequest()
-				.withUserId(userId)
-				.withHeroClass("TEST")
-				.withName("Test Deck")
-				.withFormat("All")
-				.withInventoryIds(inventoryIds));
-	}
-
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
 		return Accounts.createAccount(new CreateAccountRequest().withEmailAddress("test-" + RandomStringUtils.randomAlphanumeric(32) + "@test.com")
 				.withName("username" + RandomStringUtils.randomAlphanumeric(32)).withPassword("password"));

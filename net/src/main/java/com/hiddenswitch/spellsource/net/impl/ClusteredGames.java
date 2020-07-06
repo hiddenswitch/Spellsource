@@ -244,7 +244,11 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			// Set the player's presence to no longer be in a game
 			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
 			for (String userId : userIds) {
+				var interrupted = Strand.interrupted();
 				Presence.updatePresence(userId);
+				if (interrupted) {
+					Strand.currentStrand().interrupt();
+				}
 			}
 
 			try {

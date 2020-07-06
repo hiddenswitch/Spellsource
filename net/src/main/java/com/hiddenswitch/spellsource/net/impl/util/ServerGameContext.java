@@ -248,7 +248,6 @@ public class ServerGameContext extends GameContext implements Server {
 			consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 			consumers.add(consumer);
 
-
 			// Read messages from the client and send them to the server processing this request.
 			connection.handler(fiber(env -> {
 				if (env.getGame() != null && env.getGame().getClientToServer() != null) {
@@ -271,15 +270,11 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			});
 
-			// When the user disconnects, make sure to remove these event bus registrations
-			connection.endHandler(fiber(v1 -> {
-				try {
-					consumers.remove(consumer);
-					consumer.unregister();
-				} catch (Throwable any) {
-					LOGGER.error("handleConnections: ", any);
-				}
-			}));
+			// When the connection is closed for any reason (client disconnect or server shutdown), make sure to remove these event bus registrations
+			connection.addCloseHandler(v1 -> {
+				consumers.remove(consumer);
+				consumer.unregister(v1);
+			});
 
 			consumer.completionHandler(fut);
 		};
@@ -291,17 +286,11 @@ public class ServerGameContext extends GameContext implements Server {
 		return completionHandler -> {
 			Connection.getHandlers().remove(handler);
 
-			CompositeFuture.all(consumers.stream().map(mc -> {
+			CompositeFuture.join(consumers.stream().map(mc -> {
 				Promise<Void> promise = Promise.promise();
 				mc.unregister(promise);
 				return promise.future();
-			}).collect(toList())).setHandler(v1 -> {
-				if (v1.succeeded()) {
-					completionHandler.handle(Future.succeededFuture());
-				} else {
-					completionHandler.handle(Future.failedFuture(v1.cause()));
-				}
-			});
+			}).collect(toList())).onComplete(v1 -> completionHandler.handle(v1.mapEmpty()));
 		};
 	}
 

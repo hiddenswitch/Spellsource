@@ -43,6 +43,7 @@ public interface Applications {
 		if (Configuration.atomixBootstrapNode() != null) {
 			nodes = new Node[]{Node.builder()
 					.withAddress(Address.from(Configuration.atomixBootstrapNode()))
+					.withId(Cluster.getMemberId(Configuration.atomixBootstrapNode()))
 					.build()};
 		}
 
