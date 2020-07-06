@@ -12,7 +12,7 @@ import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
 import { Form } from 'react-bootstrap'
 import { useIndex } from '../hooks/use-index'
-import BlocklyWorkspace from 'react-blockly/dist-modules/BlocklyWorkspace'
+import JsonConversionUtils from '../lib/json-conversion-utils'
 
 class FieldLabelSerializableHidden extends FieldLabelSerializable {
   constructor (opt_value, opt_validator, opt_config) {
@@ -47,7 +47,6 @@ const CardEditorView = () => {
         BlockTypePrefix
         CategoryName
         ColorHex
-        Custom
       }
     }
     allBlock {
@@ -102,6 +101,7 @@ const CardEditorView = () => {
           heroClass
           type
           collectible
+          description
           art {
             primary {
               r
@@ -172,11 +172,7 @@ const CardEditorView = () => {
         delete block.messages
       }
 
-      Blockly.Blocks[block.type] = {
-        init: function () {
-          extendedJsonInit(this, block)
-        }
-      }
+      addBlock(block)
     })
 
     /**
@@ -197,77 +193,97 @@ const CardEditorView = () => {
         )
 
         heroClassColors[card.heroClass] = color
-        Blockly.Blocks[type] = {
-          init: function () {
-            this.jsonInit({
-              'type': type,
-              'message0': card.name,
-              'output': 'HeroClass',
-              'colour': color
-            })
-            this.data = card.heroClass
-          }
+        let block = {
+          'type': type,
+          'message0': card.name,
+          'output': 'HeroClass',
+          'colour': color,
+          'data': card.heroClass
         }
+        addBlock(block)
       }
     })
 
     //second pass through to actually get the cards
     data.allCard.edges.forEach(edge => {
       let card = edge.node
-      let type = 'ExternalCard_' + card.id
+      let type = 'CatalogueCard_' + card.id
       if (has(Blockly.Blocks, type)) {
         return
       }
       if (card.baseManaCost != null
         && heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
         let color = heroClassColors[card.heroClass]
-        Blockly.Blocks[type] = {
-          init: function () {
-            this.jsonInit({
-              'type': type,
-              'args0': [],
-              'message0': cardMessage(card),
-              'output': 'Card',
-              'colour': color
-            })
-            this.data = card.id
-          }
+        let block = {
+          'type': type,
+          'args0': [],
+          'message0': cardMessage(card),
+          'output': 'Card',
+          'colour': color,
+          'data': card.id
         }
+        addBlock(block)
       }
     })
   }
 
+  function addBlock(block) {
+    Blockly.Blocks[block.type] = {
+      init: function () {
+        this.jsonInit(block)
+        if (!!block.data) {
+          this.data = block.data
+        }
+        if (!!block.hat) {
+          this.hat = block.hat
+        }
+        if (block.type.endsWith('SHADOW')) {
+          this.setMovable(false)
+        }
+      }
+    }
+    Blockly.Blocks[block.type].json = block
+    JsonConversionUtils.addBlockToMap(block)
+  }
+
   function getToolboxCategories (onlyCategory = null) {
-    let i = -1
+    let index = -1
     return data.toolbox.BlockCategoryList.map(({
       BlockTypePrefix, CategoryName, ColorHex
     }) => {
-      i++
+      index++
       if (!!onlyCategory && CategoryName !== onlyCategory) {
-        return toolboxCategories[i] //my attempt to reduce the runtime a bit
+        return toolboxCategories[index] //my attempt to reduce the runtime a bit
       }
       let blocks = []
       if (!!BlockTypePrefix) {
         for (let blocksKey in Blockly.Blocks) {
-          if (!blocksKey.endsWith('SHADOW') && blocksKey.startsWith(BlockTypePrefix)) {
-            blocks.push({ type: blocksKey })
-          } else if (CategoryName === 'Cards' && blocksKey.startsWith('RealCard')) {
-            blocks.push({ type: blocksKey })
+          if ((!blocksKey.endsWith('SHADOW') && blocksKey.startsWith(BlockTypePrefix))
+          || (CategoryName === 'Cards' && blocksKey.startsWith('RealCard'))) {
+            blocks.push({
+              type: blocksKey,
+              values: shadowBlockJsonCreation(blocksKey),
+              next: blocksKey.startsWith('Starter') ?
+                {type:'Property_SHADOW', shadow:true}
+                : undefined
+            })
           }
         }
       } else if (CategoryName === 'Search Results') {
         results.forEach(value => {
-          blocks.push({ type: value.id })
+          blocks.push({
+            type: value.id,
+            values: shadowBlockJsonCreation(value.id),
+            next: value.id.startsWith('Starter') ?
+              {type:'Property_SHADOW', shadow:true}
+              : undefined
+          })
         })
       }
       let button = []
       if (CategoryName === 'Cards') {
         button[0] = {
-          text: 'Find External Card Block',
-          callbackKey: 'findCard'
-        }
-        button[1] = {
-          text: 'Add External Card to Workspace',
+          text: 'Add External Card Code to Workspace',
           callbackKey: 'importCard'
         }
       }
@@ -281,56 +297,40 @@ const CardEditorView = () => {
     })
   }
 
-  const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
-
-  function extendedJsonInit (thisBlock, block) {
-    thisBlock.jsonInit(block)
-    if (!!block.data) {
-      thisBlock.data = block.data
-    }
-    if (!!block.hat) {
-      thisBlock.hat = block.hat
-    }
-    if (!thisBlock.workspace.isFlyout) {
-      return
-    }
-    //init shadow blocks
-    for (let i = 0; i < 10; i++) {
-      if (!!block['args' + i.toString()]) {
-        for (let j = 0; j < 10; j++) {
-          const arg = block['args' + i.toString()][j]
-          if (!!arg) {
-            const shadow = arg.shadow
-            if (!!shadow) {
-              let shadowBlock = thisBlock.workspace.newBlock(shadow.type)
-              if (shadow.notActuallyShadow) {
-                shadowBlock.setMovable(false)
-              } else {
-                shadowBlock.setShadow(true)
-              }
-              if (!!shadow.fields) {
-                for (let field of shadow.fields) {
-                  if (!!field.valueI) {
-                    shadowBlock.setFieldValue(field.valueI, field.name)
-                  }
-                  if (!!field.valueS) {
-                    shadowBlock.setFieldValue(field.valueS, field.name)
-                  }
-                  if (!!field.valueB) {
-                    shadowBlock.setFieldValue(field.valueB, field.name)
-                  }
+  //Turns our own json formatting for shadow blocks into the formatting
+  //that's used for specifying toolbox categories (recursively)
+  function shadowBlockJsonCreation(type) {
+    let block = Blockly.Blocks[type]
+    let values = {}
+    if (!!block && !!block.json) {
+      let json = block.json
+      for (let i = 0; i < 10; i++) {
+        if (!!json['args' + i.toString()]) {
+          for (let j = 0; j < 10; j++) {
+            const arg = json['args' + i.toString()][j]
+            if (!!arg && !!arg.shadow) {
+              let fields = {}
+              if (!!arg.shadow.fields) {
+                for (let field of arg.shadow.fields) {
+                  fields[field.name] = field.valueI
                 }
               }
-              const connection = arg.type.endsWith('statement') ?
-                shadowBlock.previousConnection : shadowBlock.outputConnection
-              thisBlock.getInput(arg.name).connection.connect(connection)
-              shadowBlock.initSvg()
+              values[arg.name] = {
+                type: arg.shadow.type,
+                shadow: !arg.shadow.notActuallyShadow,
+                fields: fields,
+                values: shadowBlockJsonCreation(arg.shadow.type)
+              }
             }
           }
         }
       }
     }
+    return values
   }
+
+
+  const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
 
   function onWorkspaceChanged (workspace) {
     if (!inited) {
@@ -412,7 +412,38 @@ const CardEditorView = () => {
       alert('Coming "Soon"')
     })
     workspace.registerButtonCallback('importCard', () => {
-      alert('Coming "Soon"')
+      let p = prompt("Input the name of the card (or the wiki page URL for more precision)")
+      let cardId = null
+      let card = null
+      if (p.includes('{')) {
+        card = JSON.parse(p)
+      } else if (p.includes('www')) {
+        cardId = p.split('cards/')[1]
+      } else {
+        for (let edge of data.allCard.edges) {
+          let card = edge.node
+          if (card.name.toLowerCase() === p.toLowerCase()) {
+            cardId = card.id
+            break
+          }
+        }
+      }
+      if (!!cardId) {
+        for (let edge of data.allCard.edges) {
+          if (edge.node.id === cardId) {
+            card = edge.node
+            break
+          }
+        }
+      }
+
+
+      if (!!card) {
+        console.log(card)
+      }
+
+      JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
+      Blockly.getMainWorkspace().getToolbox().clearSelection()
     })
 
     workspace.addChangeListener((event) => {
@@ -422,39 +453,7 @@ const CardEditorView = () => {
     setInited(true)
   }
 
-  function generateStarter(workspace, card) {
-    let block = workspace.newBlock('Starter_' + card.type)
-    ['baseManaCost', 'name', 'baseAttack', 'baseHp', 'heroClass', 'rarity', 'description'].forEach(arg => {
-      if (!!card[arg]) {
-        block.getField(arg).setValue(card[arg])
-      }
-    })
 
-    let lowestBlock = block
-
-    if (card.description.toLowerCase().includes('opener')) {
-      let extraBlock = workspace.newBlock('Property_opener1')
-      extraBlock.setCommentText('Your description contained "Opener" so we thought you might need this property')
-      extraBlock.previousConnection.connect(lowestBlock.nextConnection)
-      lowestBlock = extraBlock
-    }
-
-    if (card.description.toLowerCase().includes('aftermath')) {
-      let extraBlock = workspace.newBlock('Property_aftermath')
-      extraBlock.setCommentText('Your description contained "Aftermath" so we thought you might need this property')
-      extraBlock.previousConnection.connect(lowestBlock.nextConnection)
-      lowestBlock = extraBlock
-    }
-
-    if (card.description.toLowerCase().includes('whenever')) {
-      let extraBlock = workspace.newBlock('Property_triggers')
-      extraBlock.setCommentText('Your description contained "Whenever" so we thought you might need this property')
-      extraBlock.previousConnection.connect(lowestBlock.nextConnection)
-      lowestBlock = extraBlock
-    }
-
-    return block
-  }
 
   // update input value
   const updateQuery = event => {
@@ -486,7 +485,7 @@ const CardEditorView = () => {
         .map(doc => {
           if (doc.nodeType === 'Card') {
             return {
-              id: 'ExternalCard_' + doc.id
+              id: 'CatalogueCard_' + doc.id
             }
           }
           return doc
@@ -497,7 +496,7 @@ const CardEditorView = () => {
   }
 
   return (<span>
-    <Form inline>
+    <Form inline onSubmit={(event) => event.preventDefault()}>
       <Form.Control type="text" placeholder={'Search blocks'}
                     value={query}
                     onChange={e => {
@@ -510,10 +509,13 @@ const CardEditorView = () => {
       <Form.Check style={{display: "inline"}}>
         <Form.Check.Input onChange={e => {
           setChecked(!checked)
-          search({target: {value: query}})
-          handleSearchResults({target: {value: query}})
+          if (query.length > 0) {
+            search({target: {value: query}})
+            handleSearchResults({target: {value: query}})
+          }
         }}
-          value={checked} style={
+          value={checked}
+          style={
           {
             height: "15px",
             width: "15px",
@@ -521,7 +523,7 @@ const CardEditorView = () => {
           }
         }
         />
-        <Form.Check.Label> Show External Card Blocks</Form.Check.Label>
+        <Form.Check.Label> Show Card Catalogue Blocks</Form.Check.Label>
       </Form.Check>
     </Form>
     <ReactBlocklyComponent.BlocklyEditor
