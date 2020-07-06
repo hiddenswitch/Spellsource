@@ -209,6 +209,9 @@ export default class WorkspaceUtils {
     if (!!cardScript.card && !(typeof cardScript.card === 'string')) {
       delete cardScript.card
     }
+    if (cardScript.target === 'IT') {
+      delete cardScript.target
+    }
 
     if (!!cardScript.battlecry) {
       if (!cardScript.attributes) {
@@ -222,6 +225,11 @@ export default class WorkspaceUtils {
         cardScript.attributes = {}
       }
       cardScript.attributes.DEATHRATTLES = true;
+    }
+
+    if (!!cardScript.class && cardScript.class.endsWith('Aura')
+    && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
+      cardScript.attribute = 'AURA_' + cardScript.attribute
     }
 
     return cardScript
