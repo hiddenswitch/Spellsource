@@ -246,12 +246,11 @@ public interface Invites {
 			if (request.getQueueId() != null || request.getDeckId() != null) {
 				// Assert that the player isn't currently in a match.
 
-				UserId userId = new UserId(user.getId());
-				if (Matchmaking.getUsersInQueues().containsKey(userId)) {
+				if (Matchmaking.getUsersInQueues().containsKey(user.getId())) {
 					throw new IllegalStateException("User is currently in a queue already. Dequeue first");
 				}
 
-				if (Games.getUsersInGames().containsKey(userId)) {
+				if (Games.getUsersInGames().containsKey(new UserId(user.getId()))) {
 					throw new IllegalStateException("User is currently in a game already. That game must be ended first.");
 				}
 
@@ -386,8 +385,7 @@ public interface Invites {
 
 		// Check that the opponent is still in the queue
 		if (invite.getQueueId() != null) {
-			UserId opponentInQueue = new UserId(invite.getFromUserId());
-			if (!Objects.equals(Matchmaking.getUsersInQueues().get(opponentInQueue), (invite.getQueueId()))) {
+			if (!Objects.equals(Matchmaking.getUsersInQueues().get(invite.getFromUserId()), (invite.getQueueId()))) {
 				throw new IllegalStateException("Opponent no longer in queue.");
 			}
 		}

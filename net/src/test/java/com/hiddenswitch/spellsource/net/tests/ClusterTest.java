@@ -5,6 +5,7 @@ import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.net.impl.MatchmakingQueueConfiguration;
 import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
@@ -15,24 +16,32 @@ import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.atomix.cluster.Node;
 import io.atomix.core.Atomix;
 import io.atomix.vertx.AtomixClusterManager;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.impl.EventBusImpl;
+import io.vertx.core.eventbus.impl.HandlerHolder;
+import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
 import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.impl.utils.ConcurrentCyclicSequence;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -162,6 +171,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			}
 		}, context, vertx, context.succeeding());
 		context.awaitCompletion(115, TimeUnit.SECONDS);
+		assertTrue(context.completed());
 		closeAll(vertxInstances);
 	}
 
@@ -195,22 +205,38 @@ public class ClusterTest extends SpellsourceTestBase {
 	@NotNull
 	private Node[] getBootstrapNodes(int[] ports) {
 		return Arrays.stream(ports).mapToObj(port ->
-				Node.builder().withHost("0.0.0.0").withPort(port + 1).withId(Cluster.getMemberId(port + 1, "0.0.0.0")).build()).toArray(Node[]::new);
+		{
+			var hostIpAddress = "localhost"; //Gateway.getHostIpAddress();
+			return Node.builder().withHost(hostIpAddress).withPort(port + 1).withId(Cluster.getMemberId(port + 1, hostIpAddress)).build();
+		}).toArray(Node[]::new);
 	}
 
 	@Test()
-	@Timeout(115000)
 	@Suspendable
-	public void testGracefulHandoverOfMatchmakingQueues() throws ExecutionException, InterruptedException {
+	public void testGracefulHandoverOfMatchmakingQueues() throws InterruptedException, IllegalAccessException {
 		var context = new VertxTestContext();
 		// setup 3 vertx instances
 		var ports = new int[]{8083, 9093, 10013};
 		var vertxInstances = getVertxes(context, ports);
 
-		// We're going to bring down the first one because it is hosting the queue, so use the 3rd one instead to run the
-		// tests
-		var vertx = vertxInstances.get(2);
+		// Find the instance that started the queue
+		Vertx instanceWithQueue = null;
+		Vertx instanceWithoutQueue = null;
+		for (var vertx : vertxInstances) {
+			var eb = ((ClusteredEventBus) vertx.eventBus());
+			@SuppressWarnings("unchecked")
+			var handlerMap = (ConcurrentMap<String, ConcurrentCyclicSequence<HandlerHolder>>) FieldUtils.readField(eb, "handlerMap", true);
+			if (handlerMap.containsKey(Matchmaking.getQueueAddress("constructed"))) {
+				instanceWithQueue = vertx;
+			} else {
+				instanceWithoutQueue = vertx;
+			}
+		}
 
+		assertNotNull(instanceWithQueue);
+		assertNotNull(instanceWithoutQueue);
+		assertNotEquals(instanceWithoutQueue, instanceWithQueue);
+		Vertx finalInstanceWithQueue = instanceWithQueue;
 		runOnFiberContext(() -> {
 			var account = createRandomAccount();
 			var decks = Logic.initializeUser(InitializeUserRequest.create(account.getUserId()));
@@ -222,19 +248,64 @@ public class ClusterTest extends SpellsourceTestBase {
 
 			assertTrue(res, "should have enqueued");
 			var usersInQueues = Matchmaking.getUsersInQueues();
-			assertTrue(usersInQueues.containsKey(new UserId(account.getUserId())), "should be in queue");
-			Void t = awaitResult(h -> vertxInstances.get(0).close(h));
-			// is this just a timing issue?
-			Strand.sleep(1000);
-			assertFalse(usersInQueues.containsKey(new UserId(account.getUserId())), "should not be in queue");
+			assertTrue(usersInQueues.containsKey(account.getUserId()), "should be in queue");
+			Void t = awaitResult(finalInstanceWithQueue::close);
+			assertFalse(usersInQueues.containsKey(account.getUserId()), "should not be in queue");
 
 			res = Matchmaking.enqueue(new MatchmakingRequest()
 					.setQueueId(Matchmaking.CONSTRUCTED)
 					.withDeckId(deck)
 					.withUserId(account.getUserId()));
 			assertTrue(res, "user should have succeeded enqueueing somewhere else due to failover of running the queue");
-		}, context, vertx, context.completing());
+		}, context, instanceWithoutQueue, context.succeeding());
+		context.awaitCompletion(45, TimeUnit.SECONDS);
+		assertNull(context.causeOfFailure());
+		assertTrue(context.completed());
+		closeAll(vertxInstances);
+	}
+
+	@Test
+	public void testGracefulShutdownOfRunningGames() throws InterruptedException {
+		var context = new VertxTestContext();
+		// setup 3 vertx instances
+		var ports = new int[]{8083, 9093, 10013};
+		var vertxInstances = getVertxes(context, ports);
+
+		// We're going to bring down the first one because it is hosting the queue, so use the 3rd one instead to run the
+		// tests
+		var vertx = vertxInstances.get(2);
+		var checkpoint = context.checkpoint(1);
+		runOnFiberContext(() -> {
+			String userId = awaitResult(h -> {
+				vertx.executeBlocking(v -> {
+					try (var client = new UnityClient(context, ports[0])) {
+						// Game over is called by shutting down the server
+						client.gameOverHandler(ignored -> {
+							context.verify(() -> {
+								assertEquals(1, client.getTurnsPlayed(), "turns played");
+								checkpoint.flag();
+							});
+							v.complete();
+						});
+
+						client.ensureConnected();
+						client.createUserAccount();
+						client.matchmakeQuickPlay(null);
+						client.play(1);
+						// call the shutdown
+						h.handle(Future.succeededFuture(client.getAccount().getId()));
+					}
+				}, false, context.succeeding());
+			});
+			assertTrue(Games.getUsersInGames().containsKey(new UserId(userId)), "should be in game before host closed");
+			Void t = awaitResult(h -> vertxInstances.get(0).close(h));
+
+			assertFalse(Games.getUsersInGames().containsKey(new UserId(userId)), "should not be in queue now that host is closed");
+			assertFalse(Matchmaking.getUsersInQueues().containsKey(userId), "should not be in game now that host is closed");
+		}, context, vertx, context.succeeding());
+
 		context.awaitCompletion(30, TimeUnit.SECONDS);
+		assertTrue(context.completed());
 		closeAll(vertxInstances);
 	}
 

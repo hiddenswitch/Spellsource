@@ -74,7 +74,6 @@ public class AtomixClusterManager implements ClusterManager {
 				@Override
 				public CompletableFuture<AtomicLock> load(String key) throws Exception {
 					return atomix.atomicLockBuilder(key)
-							.withProtocol(getProtocol())
 							.buildAsync();
 				}
 			});
@@ -84,7 +83,6 @@ public class AtomixClusterManager implements ClusterManager {
 				@Override
 				public CompletableFuture<AtomicCounter> load(String key) throws Exception {
 					return atomix.atomicCounterBuilder(key)
-							.withProtocol(getProtocol())
 							.buildAsync();
 				}
 			});
@@ -135,9 +133,6 @@ public class AtomixClusterManager implements ClusterManager {
 	@Override
 	public <K, V> void getAsyncMultiMap(String name, Handler<AsyncResult<AsyncMultiMap<K, V>>> handler) {
 		atomix.<K, V>atomicMultimapBuilder(name)
-				.withProtocol(getProtocol())
-//				.withCacheEnabled(true)
-//				.withCacheSize(DEFAULT_CACHE_SIZE)
 				.withSerializer(createSerializer())
 				.buildAsync()
 				.whenComplete(VertxFutures.convertHandler(
@@ -147,9 +142,6 @@ public class AtomixClusterManager implements ClusterManager {
 	@Override
 	public <K, V> void getAsyncMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
 		atomix.<K, V>atomicMapBuilder(name)
-				.withProtocol(getProtocol())
-//				.withCacheEnabled(true)
-//				.withCacheSize(DEFAULT_CACHE_SIZE)
 				.withSerializer(createSerializer())
 				.buildAsync()
 				.whenComplete(VertxFutures.convertHandler(
@@ -159,7 +151,7 @@ public class AtomixClusterManager implements ClusterManager {
 	@Override
 	public <K, V> Map<K, V> getSyncMap(String name) {
 		return new AtomixMap<>(vertx, atomix.<K, V>atomicMapBuilder(name)
-				.withProtocol(getProtocol())
+//				.withProtocol(getProtocol())
 				.withSerializer(createSerializer())
 				.build());
 	}
@@ -273,13 +265,5 @@ public class AtomixClusterManager implements ClusterManager {
 	@Override
 	public boolean isActive() {
 		return active.get();
-	}
-
-	public ProxyProtocol getProtocol() {
-		return MultiPrimaryProtocol.builder()
-				.withConsistency(Consistency.LINEARIZABLE)
-				.withReplication(Replication.SYNCHRONOUS)
-				.withBackups(3)
-				.build();
 	}
 }

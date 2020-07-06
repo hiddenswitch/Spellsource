@@ -19,9 +19,6 @@ import java.util.function.Function;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public abstract class SuspendableMap<K, V> {
-	private static final Map<String, SuspendableMap> MAP_CACHE = new HashMap<>();
-	private static ReentrantLock LOCK = new ReentrantLock();
-
 	@Suspendable
 	private static <K, V> SuspendableMap<K, V> create(Vertx vertx, String name) {
 		SharedData client = vertx.sharedData();
@@ -36,25 +33,9 @@ public abstract class SuspendableMap<K, V> {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public static <K, V> SuspendableMap<K, V> getOrCreate(String name) {
-		Vertx vertx = Vertx.currentContext().owner();
-		String key = vertx.hashCode() + name;
-
-
-		LOCK.lock();
-		try {
-			SuspendableMap<K, V> v;
-			if ((v = MAP_CACHE.get(key)) == null) {
-				SuspendableMap<K, V> newValue = create(vertx, key);
-				MAP_CACHE.put(key, newValue);
-				return newValue;
-			}
-			return v;
-		} finally {
-			LOCK.unlock();
-		}
+		return create(Vertx.currentContext().owner(), name);
 	}
 
-	@Suspendable
 	public static <K, V> void getOrCreate(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
 		Vertx vertx = Vertx.currentContext().owner();
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
