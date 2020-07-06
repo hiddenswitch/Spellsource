@@ -52,6 +52,33 @@ public class Sync {
 	}
 
 	/**
+	 * Awaits a result. Does not die due to an interrupt. Very dangerous.
+	 *
+	 * @param consumer
+	 * @param <T>
+	 * @return
+	 */
+	@Suspendable
+	public static <T> T awaitResultUninterruptibly(Consumer<Handler<AsyncResult<T>>> consumer) {
+		try {
+			return new AsyncAdaptor<T>() {
+				@Override
+				protected void checkInterrupted() throws InterruptedException {
+				}
+
+				@Override
+				@Suspendable
+				protected void requestAsync() {
+					super.requestAsync();
+					consumer.accept(this);
+				}
+			}.run();
+		} catch (Throwable t) {
+			throw makeSafe(t);
+		}
+	}
+
+	/**
 	 * Invoke an asynchronous operation and obtain the result synchronous. The fiber will be blocked until the result is
 	 * available. No kernel thread is blocked. The consumer will be called inside a Fiber.
 	 *

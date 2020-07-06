@@ -2,12 +2,17 @@ package com.hiddenswitch.spellsource.net.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.amazonaws.util.Throwables;
 import com.hiddenswitch.spellsource.net.Migrations;
 import com.hiddenswitch.spellsource.net.models.MigrateToRequest;
 import com.hiddenswitch.spellsource.net.models.MigrationRequest;
 import com.hiddenswitch.spellsource.net.models.MigrationResponse;
 import com.hiddenswitch.spellsource.net.models.MigrationToResponse;
+import com.mongodb.DuplicateKeyException;
+import com.mongodb.MongoException;
+import com.mongodb.MongoWriteException;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.mongo.WriteOption;
 import io.vertx.ext.sync.SyncVerticle;
@@ -21,7 +26,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class MigrationsImpl extends SyncVerticle implements Migrations {
 	public static final String MIGRATIONS = "migrations";
@@ -82,12 +89,14 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 			version = request.getVersion();
 		}
 
-		JsonObject control = getControl();
-		int currentVersion = control.getInteger("version");
+
 		if (!lock()) {
 			logger.warn("Not migrating, control is locked (there may be another migration in progress).");
 			return MigrationToResponse.succeededMigration();
 		}
+
+		var controlDoc = mongo().findOne(MIGRATIONS, json("_id", "control"), json("_id", 1, "version", 1, "locked", 1));
+		var currentVersion = controlDoc.getInteger("version");
 
 		if (null != request.getRerun()
 				&& request.getRerun()) {
@@ -129,6 +138,7 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 			}
 		}
 
+		// currentVersion was updated
 		unlock(currentVersion);
 		return MigrationToResponse.succeededMigration();
 	}
@@ -159,29 +169,39 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 	}
 
 	private boolean lock() throws SuspendExecution, InterruptedException {
-		return Mongo.mongo().updateCollection(MIGRATIONS, json("_id", "control", "locked", false), json("$set",
-				json("locked", true, "lockedAt", Instant.now()))).getDocModified() == 1;
+		try {
+			MongoClientUpdateResult res = awaitResult(h -> mongo().client().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", false), json(
+					"$set", json("locked", true, "lockedAt", Instant.now()),
+					"$setOnInsert", json("version", 0)),
+					new UpdateOptions()
+							.setUpsert(true)
+							.setWriteOption(WriteOption.FSYNCED), h));
+			return res.getDocModified() == 1 || !res.getDocUpsertedId().isEmpty();
+		} catch (Throwable ex) {
+			var cause = Throwables.getRootCause(ex);
+			if (ex instanceof MongoWriteException) {
+				if (((MongoWriteException) ex).getCode() == 11000) {
+					// we tried to insert because we could not find a doc that was unlocked, id already exists, so its locked
+					return false;
+				}
+			}
+
+			throw ex;
+		}
 	}
 
 
-	private JsonObject unlock(int version) throws SuspendExecution, InterruptedException {
-		return setControl(json("locked", false, "version", version));
+	private void unlock(int version) throws SuspendExecution, InterruptedException {
+		mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", true, "version", version),
+				json("$set", json("locked", false)),
+				new UpdateOptions()
+						.setWriteOption(WriteOption.FSYNCED));
 	}
 
 	private void unlock() throws SuspendExecution, InterruptedException {
-		Mongo.mongo().updateCollection(MIGRATIONS, json("_id", "control"), json("$set", json("locked", false)));
-	}
-
-	private JsonObject setControl(JsonObject controlDocument) throws SuspendExecution, InterruptedException {
-		Mongo.mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control"), json("$set", json("version", controlDocument.getInteger("version"), "locked", controlDocument.getBoolean("locked"))),
+		mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", true),
+				json("$set", json("locked", false)),
 				new UpdateOptions()
-						.setUpsert(true)
-						.setWriteOption(WriteOption.MAJORITY));
-		return controlDocument;
-	}
-
-	private JsonObject getControl() throws InterruptedException, SuspendExecution {
-		JsonObject control = Mongo.mongo().findOne(MIGRATIONS, json("_id", "control"), json());
-		return control == null ? setControl(json("version", 0, "locked", false)) : control;
+						.setWriteOption(WriteOption.FSYNCED));
 	}
 }

@@ -9,15 +9,17 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
+import io.vertx.servicediscovery.impl.LocalAsyncMap;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public abstract class SuspendableMap<K, V> {
-	private static Map<String, SuspendableMap> MAP_CACHE = new HashMap<>();
+	private static final Map<String, SuspendableMap> MAP_CACHE = new HashMap<>();
 	private static ReentrantLock LOCK = new ReentrantLock();
 
 	@Suspendable
@@ -100,6 +102,8 @@ public abstract class SuspendableMap<K, V> {
 
 	@Suspendable
 	public abstract Set<Map.Entry<K, V>> entrySet();
+
+	public abstract AsyncMap<K, V> async();
 
 	@Suspendable
 	public V replace(K key, V value) {

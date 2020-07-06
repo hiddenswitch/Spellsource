@@ -1,17 +1,23 @@
 package com.hiddenswitch.spellsource.net.concurrent.impl;
 
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.LocalMap;
+import io.vertx.core.shareddata.impl.LocalAsyncMapImpl;
+import io.vertx.servicediscovery.impl.LocalAsyncMap;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SuspendableWrappedMap<K, V> extends SuspendableMap<K, V> {
 	private final LocalMap<K, V> localMap;
+	private final LocalAsyncMap<K, V> localAsyncMap;
 
 	public SuspendableWrappedMap(LocalMap<K, V> localMap) {
 		this.localMap = localMap;
+		this.localAsyncMap = new LocalAsyncMap<>(localMap);
 	}
 
 	@Override
@@ -82,5 +88,10 @@ public class SuspendableWrappedMap<K, V> extends SuspendableMap<K, V> {
 	@Override
 	public Set<Map.Entry<K, V>> entrySet() {
 		return localMap.entrySet();
+	}
+
+	@Override
+	public AsyncMap<K, V> async() {
+		return localAsyncMap;
 	}
 }

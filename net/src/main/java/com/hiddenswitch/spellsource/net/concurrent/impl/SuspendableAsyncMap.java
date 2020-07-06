@@ -130,6 +130,11 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	}
 
 	@Override
+	public AsyncMap<K, V> async() {
+		return map;
+	}
+
+	@Override
 	public String toString() {
 		return "SyncMap";
 	}

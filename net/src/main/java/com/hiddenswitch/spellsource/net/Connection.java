@@ -167,7 +167,10 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 				span.log("ready");
 			});
 
-			connection.endHandler(v -> span.finish());
+			connection.addCloseHandler(fut -> {
+				span.finish();
+				fut.complete();
+			});
 			connection.exceptionHandler(ex -> {
 				// Wrap this so we can see where it actually occurs
 				if (!(ex instanceof IOException)) {
@@ -274,9 +277,13 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return this;
 	}
 
-	@Override
-	default Connection endHandler(Handler<Void> endHandler) {
+	default Connection addCloseHandler(Handler<Promise<Void>> closeHandler) {
 		return this;
+	}
+
+	@Override
+	default ReadStream<Envelope> endHandler(@io.vertx.codegen.annotations.Nullable Handler<Void> endHandler) {
+		throw new UnsupportedOperationException("should not schedule things to happen when the user closes the connection");
 	}
 
 	/**
