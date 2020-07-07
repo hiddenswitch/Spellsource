@@ -16,6 +16,7 @@
     "enumify": "^2.0.0",
     "gatsby": "^2.19.23",
     "gatsby-image": "^2.2.41",
+    "gatsby-plugin-anchor-links": "^1.1.1",
     "gatsby-plugin-s3": "^0.3.3",
     "gatsby-plugin-sass": "^2.1.29",
     "gatsby-plugin-sharp": "^2.4.5",

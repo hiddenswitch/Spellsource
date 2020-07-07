@@ -7,6 +7,7 @@ header: true
 ## Play Now
 
 <p />
+
 <div style="text-align: center; align-content: center;">
     <a href="#android-users"><img src="../assets/android-logo.png" alt="Android"></a>
     <a href="#ios-users"><img src="../assets/iOS-logo.png" alt="iOS"></a>

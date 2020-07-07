@@ -104,6 +104,16 @@ a:hover {
   background-color: var(--base-color);
 }
 
+figure {
+  display: inline-block;
+  margin: 20px;
+  align-items: center;
+}
+
+figcaption {
+  text-align: center;
+}
+
 summary:hover {
   color: var(--background-color);
   background-color: var(--base-color);
@@ -113,9 +123,23 @@ summary:hover {
   color: var(--primary-color);
 }
 
+.emphasis-image {
+  width: $main-width;
+  max-width: 95%;
+  margin: auto;
+}
+
+.small-logo {
+  width: 75px;
+}
+
 @media only screen and (max-device-width: 500px) {
   * {
     font-size: $mobile-font-size !important;
+  }
+  .emphasis-image {
+    width: 100vw;
+    //margin-left: calc(-50vw + 50%);
   }
 }
 
@@ -169,17 +193,6 @@ header p {
   margin: 0;
 }
 
-.emphasis-image {
-  width: $main-width;
-  max-width: 95%;
-  margin: auto;
-}
-
-.small-logo {
-  width: 30px;
-  margin: auto;
-}
-
 .fullscreen-div {
   min-height: 100vh;
   width: 100vw;
@@ -229,9 +242,9 @@ header p {
   border-top: var(--border);
   border-bottom: var(--border);
   margin-bottom: 25px;
-  text-align: left;
-  //white-space: nowrap;
-  //overflow-x: hidden;
+  white-space: nowrap;
+  overflow-x: auto;
+  position: relative;
 }
 
 .menu .input-box {
@@ -241,17 +254,18 @@ header p {
 }
 
 .menu .search-results {
-  position: absolute;
   background-color: var(--background-color);
   z-index: 10;
   margin-left: -0.25em;
   margin-top: 0.25em;
   padding-right: 2.5em;
+  position: fixed;
+  top: auto;
 }
 
 .menu .search-list-group-item {
   text-align: left;
-  padding-left: 0.25em;
+  padding-left: 0.2em;
   padding-right: 0.25em;
 }
 
@@ -260,9 +274,8 @@ header p {
   margin-bottom: 12px;
   padding-left: 0px;
   list-style-type: none;
-  //text-align: left;
   text-align: center;
-  position: relative;
+  //position: relative;
 }
 
 .menu ul li {

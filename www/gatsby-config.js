@@ -130,6 +130,7 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-image`,
     `gatsby-transformer-sharp`,
+    `gatsby-plugin-anchor-links`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {
