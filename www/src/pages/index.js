@@ -7,7 +7,6 @@ import styles from '../components/creative-layout.module.scss'
 import spellsource from '../assets/spellsource-resized.png'
 import gameEnvironment from '../assets/sector-5.png'
 import cloud from '../assets/transparent-cloud.png'
-import discord from '../assets/discord-pixel-art.png'
 import playingGif from '../assets/index-gif.gif'
 
 const url = (name, wrap = false) => `${wrap ? 'url(' : ''}https://awv3node-homepage.surge.sh/build/assets/${name}.svg${wrap ? ')' : ''}`
