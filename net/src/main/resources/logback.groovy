@@ -69,6 +69,7 @@ logger("org.mongodb.driver", ERROR)
 logger("com.hiddenswitch", INFO)
 logger("io.atomix.cluster.messaging.impl", ERROR)
 logger("io.atomix.cluster.discovery", DEBUG)
+logger("io.vertx.spi.cluster.redis.RedisClusterManager", DEBUG)
 
 // Test group
 logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
@@ -78,3 +79,4 @@ logger("com.neovisionaries.ws.client", WARN)
 logger("org.asynchttpclient", WARN)
 logger("org.testcontainers", WARN)
 logger("com.github.dockerjava", WARN)
+logger("org.redisson", ERROR)

@@ -54,7 +54,7 @@ public interface Bots {
 					.setThrowsExceptions(false));
 	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<>() {
 	};
-	String BOTS_INDEX_PLANS = "Bots/indexPlans";
+	String BOTS_INDEX_PLANS = "Bots.indexPlans";
 
 	/**
 	 * Decide which cards to mulligan given a starting hand.

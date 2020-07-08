@@ -22,16 +22,12 @@ public interface Configuration {
 		return port;
 	}
 
-	static int atomixPort() {
+	static int clusterManagerPort() {
 		return Integer.parseInt(System.getenv().getOrDefault("ATOMIX_PORT", "5701"));
 	}
 
 	static int vertxClusterPort() {
 		return Integer.parseInt(System.getenv().getOrDefault("VERTX_CLUSTER_PORT", "5710"));
-	}
-
-	static String atomixBootstrapNode() {
-		return System.getenv().getOrDefault("ATOMIX_BOOTSTRAP_NODE", null);
 	}
 
 	static int maxBodyBytes() {

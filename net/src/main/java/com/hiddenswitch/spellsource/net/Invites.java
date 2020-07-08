@@ -257,7 +257,7 @@ public interface Invites {
 				// This is (potentially also) a matchmaking queue request
 				// Create a new queue just for this invite.
 				// Right now, anyone can wait in any queue, but this is probably the most convenient.
-				String customQueueId = user.getUsername() + "/" + inviteId + "/" + request.getQueueId();
+				String customQueueId = user.getUsername() + "." + inviteId + "." + request.getQueueId();
 				invite.queueId(customQueueId);
 
 				// The matchmaker will close itself automatically if no one joins after 4s or the

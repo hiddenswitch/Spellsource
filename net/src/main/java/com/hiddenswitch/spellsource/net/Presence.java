@@ -94,6 +94,6 @@ public interface Presence {
 	@NotNull
 	@Suspendable
 	static SuspendableCounter connections(String userId) {
-		return SuspendableCounter.getOrCreate("Presence/connections/" + userId);
+		return SuspendableCounter.getOrCreate("Presence.connections." + userId);
 	}
 }
