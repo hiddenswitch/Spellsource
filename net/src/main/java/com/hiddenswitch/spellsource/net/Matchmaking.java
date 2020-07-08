@@ -216,7 +216,7 @@ public interface Matchmaking {
 					while (!Strand.currentStrand().isInterrupted()) {
 						// Use an async lock so that timing out doesn't throw an exception
 						// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
-						lock = SuspendableLock.lock("Matchmaking.queues." + queueId, Long.MAX_VALUE);
+						lock = SuspendableLock.lock("Matchmaking.queues.locks." + queueId, Long.MAX_VALUE);
 
 						long gamesCreated = 0;
 
@@ -484,7 +484,7 @@ public interface Matchmaking {
 
 	@NotNull
 	static String getQueueAddress(String queueId) {
-		return "Matchmaking.queues." + queueId;
+		return "Matchmaking.queues.handlers." + queueId;
 	}
 
 	static long getTimeout() {
