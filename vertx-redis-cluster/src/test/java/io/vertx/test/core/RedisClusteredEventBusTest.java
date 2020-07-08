@@ -6,14 +6,15 @@ import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.redis.RedisClusterManager;
 import org.junit.ClassRule;
 import org.junit.Ignore;
+import org.junit.Rule;
 
 /**
  * @author <a href="mailto:guoyu.511@gmail.com">Guo Yu</a>
  */
 public class RedisClusteredEventBusTest extends ClusteredEventBusTest {
 
-	@ClassRule
-	public static RedisContainer redisContainer = new RedisContainer();
+	@Rule
+	public RedisContainer redisContainer = new RedisContainer();
 
 	@Override
 	public void before() throws Exception {

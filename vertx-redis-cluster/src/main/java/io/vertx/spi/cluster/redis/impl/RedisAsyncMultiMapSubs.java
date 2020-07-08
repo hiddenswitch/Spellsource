@@ -35,9 +35,9 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.impl.clustered.ClusterNodeInfo;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * SUBS_MAP_NAME = "__vertx.subs"
@@ -75,12 +75,53 @@ class RedisAsyncMultiMapSubs extends RedisAsyncMultiMap<String, ClusterNodeInfo>
 	}
 
 	@Override
-	public void remove(String s, ClusterNodeInfo clusterNodeInfo, Handler<AsyncResult<Boolean>> completionHandler) {
-		if (redisson.isShutdown()) {
-			completionHandler.handle(Future.succeededFuture(true));
-			return;
-		}
-
-		super.remove(s, clusterNodeInfo, completionHandler);
+	public void removeAllForValue(ClusterNodeInfo v, Handler<AsyncResult<Void>> completionHandler) {
+		removeAllMatching(value -> value == v || value.equals(v), completionHandler);
 	}
+
+	/**
+	 * Remove values which satisfies the given predicate in all keys.
+	 *
+	 * @see io.vertx.core.eventbus.impl.clustered.ClusteredEventBus#setClusterViewChangedHandler
+	 */
+	@Override
+	public void removeAllMatching(Predicate<ClusterNodeInfo> p, Handler<AsyncResult<Void>> completionHandler) {
+		Context context = vertx.getOrCreateContext();
+		batchRemoveAllMatching(p, ar -> {
+			if (ar.failed()) {
+				context.runOnContext(vd -> completionHandler.handle(Future.failedFuture(ar.cause())));
+			} else {
+				context.runOnContext(vd -> completionHandler.handle(Future.succeededFuture(ar.result())));
+			}
+		});
+	}
+
+	private void batchRemoveAllMatching(Predicate<ClusterNodeInfo> p, Handler<AsyncResult<Void>> completionHandler) {
+		List<Map.Entry<String, ClusterNodeInfo>> deletedList = new ArrayList<>();
+		multiMap.entries().forEach(entry -> {
+			ClusterNodeInfo value = entry.getValue();
+			if (p.test(value)) { // XXX: "!members.contains(ci.nodeId)"
+				deletedList.add(entry);
+			}
+		});
+
+		if (!deletedList.isEmpty()) {
+			RBatch batch = redisson.createBatch(BatchOptions.defaults().executionMode(ExecutionMode.REDIS_WRITE_ATOMIC).skipResult());
+			deletedList.forEach(entry -> {
+				multiMap.removeAsync(entry.getKey(), entry.getValue());
+			});
+
+			batch.executeAsync().whenCompleteAsync((result, e) -> {
+				if (e != null) {
+					log.warn("error: {}", e.toString());
+					completionHandler.handle(Future.failedFuture(e));
+				} else { // XXX: skipResult() ==> result.class=<null>, result=null
+					completionHandler.handle(Future.succeededFuture());
+				}
+			});
+		} else {
+			completionHandler.handle(Future.succeededFuture());
+		}
+	}
+
 }

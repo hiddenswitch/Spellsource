@@ -23,7 +23,10 @@ import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,9 +43,11 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class ClusterTest extends SpellsourceTestBase {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ClusterTest.class);
+	private List<Vertx> vertxInstances;
 
 	@Override
 	protected int getConcurrency() {
@@ -83,8 +88,7 @@ public class ClusterTest extends SpellsourceTestBase {
 
 	@Test()
 	@Suspendable
-	public void testMultiHostMultiClientCluster() throws ExecutionException, InterruptedException {
-		var context = new VertxTestContext();
+	public void testMultiHostMultiClientCluster(VertxTestContext context) throws ExecutionException, InterruptedException {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		var numberOfGames = 1;
 		var baseRate = 2;
@@ -95,7 +99,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		// Must be odd
 		assertEquals(count % 2, 1);
 		var latch = context.checkpoint(count * ports.length);
-		var vertxInstances = getVertxes(context, ports);
+		vertxInstances = getVertxes(context, ports);
 
 		for (var vertx : vertxInstances) {
 			var clusterManager = ((VertxInternal) vertx).getClusterManager();
@@ -146,6 +150,7 @@ public class ClusterTest extends SpellsourceTestBase {
 								LOGGER.info("execute {}: Done {}", client.getUserId(), k);
 								assertTrue(client.isGameOver());
 								assertTrue(client.getTurnsPlayed() > 1);
+								LOGGER.info("FLAG {}", queueNumber);
 							}
 
 							latch.flag();
@@ -155,11 +160,10 @@ public class ClusterTest extends SpellsourceTestBase {
 				}
 			}
 		}, context, vertx, context.succeeding());
-		context.awaitCompletion(115, TimeUnit.SECONDS);
-		if (context.causeOfFailure() != null) {
-			fail(context.causeOfFailure());
-		}
-		assertTrue(context.completed());
+	}
+
+	@AfterEach
+	public void closeContexts() {
 		closeAll(vertxInstances);
 	}
 
@@ -200,11 +204,10 @@ public class ClusterTest extends SpellsourceTestBase {
 
 	@Test()
 	@Suspendable
-	public void testGracefulHandoverOfMatchmakingQueues() throws InterruptedException, IllegalAccessException {
-		var context = new VertxTestContext();
+	public void testGracefulHandoverOfMatchmakingQueues(VertxTestContext context) throws InterruptedException, IllegalAccessException {
 		// setup 3 vertx instances
 		var ports = new int[]{8083, 9093, 10013};
-		var vertxInstances = getVertxes(context, ports);
+		vertxInstances = getVertxes(context, ports);
 
 		vertxInstances.stream()
 				.map(v -> (VertxImpl) v)
@@ -248,21 +251,14 @@ public class ClusterTest extends SpellsourceTestBase {
 					.withDeckId(deck)
 					.withUserId(account.getUserId()));
 			assertTrue(res, "user should have succeeded enqueueing somewhere else due to failover of running the queue");
-		}, context, instanceWithoutQueue, context.succeeding());
-		context.awaitCompletion(45, TimeUnit.SECONDS);
-		if (context.causeOfFailure() != null) {
-			fail(context.causeOfFailure());
-		}
-		assertTrue(context.completed());
-		closeAll(vertxInstances);
+		}, context, instanceWithoutQueue, context.completing());
 	}
 
 	@Test
-	public void testGracefulShutdownOfRunningGames() throws InterruptedException {
-		var context = new VertxTestContext();
+	public void testGracefulShutdownOfRunningGames(VertxTestContext context) throws InterruptedException {
 		// setup 3 vertx instances
 		var ports = new int[]{8083, 9093, 10013};
-		var vertxInstances = getVertxes(context, ports);
+		vertxInstances = getVertxes(context, ports);
 
 		// We're going to bring down the first one because it is hosting the queue, so use the 3rd one instead to run the
 		// tests
@@ -296,17 +292,13 @@ public class ClusterTest extends SpellsourceTestBase {
 			assertFalse(Games.getUsersInGames().containsKey(new UserId(userId)), "should not be in queue now that host is closed");
 			assertFalse(Matchmaking.getUsersInQueues().containsKey(userId), "should not be in game now that host is closed");
 		}, context, vertx, context.succeeding());
-
-		context.awaitCompletion(30, TimeUnit.SECONDS);
-		if (context.causeOfFailure() != null) {
-			fail(context.causeOfFailure());
-		}
-		assertTrue(context.completed());
-		closeAll(vertxInstances);
 	}
 
 	@Suspendable
 	private void closeAll(List<Vertx> vertxInstances) {
+		if (vertxInstances == null) {
+			return;
+		}
 		for (var living : vertxInstances) {
 			living.close();
 		}
