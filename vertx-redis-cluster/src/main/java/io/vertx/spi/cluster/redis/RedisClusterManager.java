@@ -15,34 +15,34 @@
  */
 package io.vertx.spi.cluster.redis;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-
-import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
-import io.vertx.core.*;
 import io.vertx.core.Future;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.TaskQueue;
-import org.redisson.Redisson;
-import org.redisson.api.*;
-
+import io.vertx.core.*;
 import io.vertx.core.eventbus.impl.clustered.ClusterNodeInfo;
-import org.redisson.client.codec.StringCodec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.Counter;
 import io.vertx.core.shareddata.Lock;
 import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.core.spi.cluster.NodeListener;
+import org.redisson.Redisson;
+import org.redisson.api.RAtomicLong;
+import org.redisson.api.RBucket;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * https://github.com/redisson/redisson/wiki/11.-Redis-commands-mapping
@@ -71,7 +71,7 @@ public class RedisClusterManager implements ClusterManager {
 	private final int refreshRateMillis = 200;
 	private long shutdownQuietPeriod = DEFAULT_SHUTDOWN_QUIET_PERIOD;
 	private long shutdownTimeout = DEFAULT_SHUTDOWN_TIMEOUT;
-	private final int creditsPerAppearance = timeToLiveMillis / refreshRateMillis * 2;
+	private final int creditsPerAppearance = timeToLiveMillis / refreshRateMillis * 4;
 
 
 	private Vertx vertx;
@@ -88,10 +88,9 @@ public class RedisClusterManager implements ClusterManager {
 	private long timerId = -1;
 	private RBucket<String> thisNodeBucket;
 	private final AtomicBoolean isActive = new AtomicBoolean();
-	private final TaskQueue taskQueue = new TaskQueue();
-	private final Queue<Runnable> pendingNodeActions = new ArrayDeque<>();
 	private final Multiset<String> nodeCredits = LinkedHashMultiset.create();
 	private Handler<AsyncResult<Void>> joinHandler;
+	private Object nodeListenerLock = new Object();
 
 
 	public RedisClusterManager(String singleServerRedisUrl) {
@@ -250,9 +249,15 @@ public class RedisClusterManager implements ClusterManager {
 	 */
 	@Override
 	public void nodeListener(NodeListener nodeListener) {
-		this.nodeListener = nodeListener;
-		while (!pendingNodeActions.isEmpty()) {
-			pendingNodeActions.remove().run();
+		Objects.requireNonNull(nodeListener);
+		synchronized (nodeListenerLock) {
+			boolean first = this.nodeListener == null;
+			this.nodeListener = nodeListener;
+			if (first) {
+				for (String node : nodes) {
+					this.nodeListener.nodeAdded(node);
+				}
+			}
 		}
 	}
 
@@ -302,7 +307,7 @@ public class RedisClusterManager implements ClusterManager {
 	}
 
 	private void updateNodes() {
-		List<String> someNodes = redisson.getKeys().getKeysStreamByPattern(VERTX_NODELIST_PREFIX + "*", 99)
+		List<String> someNodes = redisson.getKeys().getKeysStreamByPattern(VERTX_NODELIST_PREFIX + "*", 8)
 				.map(key -> key.replace(VERTX_NODELIST_PREFIX, ""))
 				.collect(Collectors.toList());
 
@@ -317,31 +322,30 @@ public class RedisClusterManager implements ClusterManager {
 		List<String> nodesUnseen = new ArrayList<>(nodes);
 		List<String> nodesNow = new ArrayList<>(nodeCredits.elementSet());
 
-		for (String nodeNow : nodesNow) {
-			if (!nodesUnseen.remove(nodeNow)) {
-				nodes.add(nodeNow);
-				if (nodes.size() >= minNodes) {
-					// No longer constrained for starting
-					minNodes = Integer.MIN_VALUE;
-					if (isActive.compareAndSet(false, true)) {
-						vertx.getOrCreateContext().runOnContext(v -> {
-							joinHandler.handle(Future.succeededFuture());
-						});
-					} else if (nodeListener != null) {
-						nodeListener.nodeAdded(nodeNow);
-					} else {
-						pendingNodeActions.add(() -> nodeListener.nodeAdded(nodeNow));
+		synchronized (nodeListenerLock) {
+			for (String nodeNow : nodesNow) {
+				if (!nodesUnseen.remove(nodeNow)) {
+					nodes.add(nodeNow);
+
+					if (nodes.size() >= minNodes) {
+						// No longer constrained for starting
+						minNodes = Integer.MIN_VALUE;
+						if (isActive.compareAndSet(false, true)) {
+							vertx.getOrCreateContext().runOnContext(v -> {
+								joinHandler.handle(Future.succeededFuture());
+							});
+						} else if (nodeListener != null) {
+							nodeListener.nodeAdded(nodeNow);
+						}
 					}
 				}
 			}
-		}
 
-		for (String nodeUnseen : nodesUnseen) {
-			nodes.remove(nodeUnseen);
-			if (nodeListener != null) {
-				nodeListener.nodeLeft(nodeUnseen);
-			} else {
-				pendingNodeActions.add(() -> nodeListener.nodeLeft(nodeUnseen));
+			for (String nodeUnseen : nodesUnseen) {
+				nodes.remove(nodeUnseen);
+				if (nodeListener != null) {
+					nodeListener.nodeLeft(nodeUnseen);
+				}
 			}
 		}
 	}
