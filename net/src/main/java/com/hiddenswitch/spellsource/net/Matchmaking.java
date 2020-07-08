@@ -37,8 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
 import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
-import static io.vertx.ext.sync.Sync.awaitResult;
-import static io.vertx.ext.sync.Sync.getContextScheduler;
+import static io.vertx.ext.sync.Sync.*;
 
 /**
  * The matchmaking service is the primary entry point into ranked games for clients.
@@ -106,12 +105,12 @@ public interface Matchmaking {
 	@NotNull
 	@Suspendable
 	static SuspendableMap<String, String> getUsersInQueues() {
-		return SuspendableMap.getOrCreate("Matchmaking/currentQueue");
+		return SuspendableMap.getOrCreate("Matchmaking.currentQueue");
 	}
 
 	@NotNull
 	static void getUsersInQueues(Handler<AsyncResult<AsyncMap<String, String>>> handler) {
-		SuspendableMap.<String, String>getOrCreate("Matchmaking/currentQueue", handler);
+		SuspendableMap.<String, String>getOrCreate("Matchmaking.currentQueue", handler);
 	}
 
 	/**
@@ -208,7 +207,7 @@ public interface Matchmaking {
 			var thisMatchRequests = new ArrayList<MatchmakingRequest>();
 			var thisFiber = new AtomicReference<Fiber<Void>>(null);
 
-			thisFiber.set(new Fiber<>("Matchmaking/queues/" + queueId, getContextScheduler(), () -> {
+			thisFiber.set(new Fiber<>("Matchmaking.queues." + queueId, getContextScheduler(context), () -> {
 				var userToQueue = getUsersInQueues();
 
 				SuspendableLock lock = null;
@@ -217,9 +216,8 @@ public interface Matchmaking {
 					while (!Strand.currentStrand().isInterrupted()) {
 						// Use an async lock so that timing out doesn't throw an exception
 						// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
-						lock = SuspendableLock.lock("Matchmaking/queues/" + queueId, Long.MAX_VALUE);
+						lock = SuspendableLock.lock("Matchmaking.queues." + queueId, Long.MAX_VALUE);
 
-						LOGGER.trace("startMatchmaker {}: Started", queueId);
 						long gamesCreated = 0;
 
 						var vertx = context.owner();
@@ -392,6 +390,9 @@ public interface Matchmaking {
 						// expected when this is going down
 						return null;
 					}
+//					if (cause instanceof VertxException && cause.getMessage().contains("Timed out")) {
+//						return null;
+//					}
 					throw ex;
 				} finally {
 					if (lock != null) {
@@ -409,11 +410,16 @@ public interface Matchmaking {
 			thisFiber.get().setUncaughtExceptionHandler((f, e) -> context.exceptionHandler().handle(e));
 
 			// We don't join on the fiber (we don't wait until the queue has actually started), we return immediately.
-			thisFiber.get().start();
+			context.runOnContext(v -> {
+				thisFiber.get().start();
+			});
 
 			if (queueConfiguration.isJoin()) {
 				try {
-					awaitReady.await(4000L, TimeUnit.MILLISECONDS);
+					if (!awaitReady.await(4000L, TimeUnit.MILLISECONDS)) {
+						throw new TimeoutException();
+					}
+
 					span1.setTag("startedHere", true);
 				} catch (Throwable e) {
 					var cause = Throwables.getRootCause(e);
@@ -478,7 +484,7 @@ public interface Matchmaking {
 
 	@NotNull
 	static String getQueueAddress(String queueId) {
-		return "Matchmaking/queues/" + queueId;
+		return "Matchmaking.queues." + queueId;
 	}
 
 	static long getTimeout() {

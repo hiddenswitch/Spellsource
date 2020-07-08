@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.net.models;
 
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import io.vertx.core.json.JsonObject;
 
 import java.io.Serializable;
 
@@ -128,6 +128,6 @@ public class MatchmakingRequest implements Serializable {
 
 	@Override
 	public String toString() {
-		return new ReflectionToStringBuilder(this).build();
+		return JsonObject.mapFrom(this).encode();
 	}
 }

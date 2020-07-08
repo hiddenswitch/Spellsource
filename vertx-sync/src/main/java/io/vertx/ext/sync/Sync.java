@@ -8,6 +8,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.channels.Channel;
 import com.google.common.base.Throwables;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxThread;
 import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;
 import io.vertx.ext.sync.impl.HandlerReceiverAdaptorImpl;

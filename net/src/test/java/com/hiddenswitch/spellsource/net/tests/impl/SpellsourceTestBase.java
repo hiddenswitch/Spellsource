@@ -6,6 +6,8 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.containers.MongoDBContainer;
+import com.hiddenswitch.containers.RedisContainer;
+import com.hiddenswitch.containers.ZookeeperContainer;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.net.*;
@@ -32,6 +34,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -50,8 +53,11 @@ public abstract class SpellsourceTestBase {
 	@Container
 	public MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:3.6");
 
+	@Container
+	public RedisContainer redisContainer = new RedisContainer().withReuse(false);
+
 	@BeforeEach
-	public void setUp(Vertx vertx, VertxTestContext testContext) {
+	public void setUp(Vertx vertx, VertxTestContext testContext) throws IOException {
 		staticSetUp();
 
 		vertx.exceptionHandler(testContext::failNow);
@@ -62,10 +68,16 @@ public abstract class SpellsourceTestBase {
 
 	@Suspendable
 	public void staticSetUp() {
+		try {
+			redisContainer.clear();
+		} catch (IOException | InterruptedException e) {
+		throw new RuntimeException(e);
+		}
 		CardCatalogue.loadCardsFromPackage();
 		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 		GlobalTracer.registerIfAbsent(NoopTracerFactory::create);
 		System.getProperties().put("mongo.url", mongoDBContainer.getReplicaSetUrl());
+		System.getProperties().put("redis.url", redisContainer.getRedisUrl());
 	}
 
 	protected int getConcurrency() {

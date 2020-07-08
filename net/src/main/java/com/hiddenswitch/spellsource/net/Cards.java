@@ -157,7 +157,7 @@ public interface Cards {
 				.start();
 		Scope scope = tracer.activateSpan(span);
 		try {
-			SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards/cards");
+			SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards.cards");
 			// Invalidate the cache here
 			cache.put("cards-version", Vertx.currentContext().deploymentID());
 			cache.put("cards-last-modified", Utils.formatRFC1123DateTime(new Date().getTime()));

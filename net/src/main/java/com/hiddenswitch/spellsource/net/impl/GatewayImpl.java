@@ -126,9 +126,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Enable presence
 		Presence.handleConnections();
 
-		// Enable realtime conversations
-		Conversations.handleConnections();
-
 		// Create default matchmaking queues
 		var defaultQueues = Matchmaking.startDefaultQueues();
 		// Create draft queue
@@ -720,7 +717,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards.cards");
 
 		var cardsVersion = cache.get("cards-version");
 		var lastModified = cache.get("cards-last-modified");
