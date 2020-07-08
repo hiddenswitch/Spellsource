@@ -6,7 +6,6 @@ layout: wiki
 
 ![Red and Blue Oni](Red_and_Blue_Oni.jpg "fig:Red and Blue Oni") 
 ![Oni Minion](Oni Minion.png "fig:Oni Minion")
-![Ogre Attack](Ogre_Attack.gif "fig: Ogre attack animation")
 
 A long time ago, the [Vohlok](/wiki/Vohlok "wikilink")
 [Dragovians](/wiki/Dragovians "wikilink") fought a religious war against a
@@ -15,6 +14,8 @@ devastated the islands. The Vohlok won and drove the Oni back and sealed
 their [Demongate](/wiki/Fire_Gate "wikilink"). The Volhok also used their
 magic to make the heretics flightless. The heretics became the
 [Bogovey](/wiki/Bogovey "wikilink").
+
+<img src="Ogre_Attack.gif" alt="Ogre Attack" title="fig: Ogre attack animation" style="float: right;"/>
 
 ### Society
 
