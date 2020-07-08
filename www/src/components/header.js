@@ -43,6 +43,7 @@ const Header = () => {
         <li key={data.headerImage.id}><Link to='/'><Img fixed={data.headerImage.childImageSharp.fixed}/></Link></li>
         <li key={'javadocs'}><a href='/javadoc'>[Docs]</a></li>
         {pages}
+        <li key={'download'}><a href='/download'>[Play Now]</a></li>
         <li key={'search'}><Search placeholder={'Search'} /></li>
       </ul>
     </div>

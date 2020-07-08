@@ -65,7 +65,7 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 <details>
 <summary>Who will you main?</summary>
 
-![Champions](../assets/champions.png)
+![Champions](../assets/champions-resized.png)
 
 -   [Shun He](/wiki/Shun_He "wikilink"), the Grand Alchemist of the Lotus
     Empire.
