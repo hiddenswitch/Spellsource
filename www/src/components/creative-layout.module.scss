@@ -599,4 +599,8 @@ pre {
   color: var(--code-color-14);
 }
 
-/* Literal.Number.Integer.Long */
+textarea.blocklyCommentTextarea {
+  background-color: lightgray;
+  color: black;
+  font-size: 12pt;
+}
