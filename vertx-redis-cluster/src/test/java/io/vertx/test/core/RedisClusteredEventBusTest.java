@@ -24,7 +24,7 @@ public class RedisClusteredEventBusTest extends ClusteredEventBusTest {
 
 	@Override
 	protected ClusterManager getClusterManager() {
-		return new RedisClusterManager(redisContainer.getRedisUrl(), 2);
+		return new RedisClusterManager(redisContainer.getRedisUrl(), 1);
 	}
 
 	// Failing tests

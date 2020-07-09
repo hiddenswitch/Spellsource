@@ -58,7 +58,7 @@ public class DefaultFactory implements Factory {
   @Override
   public <K, V> Map<K, V> createMap(Vertx vertx, RedissonClient redisson, String name) {
     NameWithCodec nameWithCodec = specify.selectCodecByName(name, new JsonJacksonCodec());
-    return new RedisMapCache<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
+    return new RedisMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
   }
 
   /**
@@ -76,7 +76,7 @@ public class DefaultFactory implements Factory {
   @Override
   public Map<String, String> createMapHaInfo(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson,
       String name) {
-    return new RedisMapCache<>(vertx, redisson, name, new StringCodec());
+    return new RedisMap<>(vertx, redisson, name, new StringCodec());
   }
 
   // ===
@@ -156,8 +156,7 @@ public class DefaultFactory implements Factory {
       } else {
         codec = def;
       }
-      log.debug("old name: '{}', new name: '{}', keyType: {}, valType :{}, codec: '{}'", name, types.name,
-          types.keyType, types.valType, codec);
+//      log.debug("old name: '{}', new name: '{}', keyType: {}, valType :{}, codec: '{}'", name, types.name, types.keyType, types.valType, codec);
       return new NameWithCodec(types.name, codec);
     }
   }
