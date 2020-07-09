@@ -6,7 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.Tracing;
-import io.atomix.vertx.VertxFutures;
+import com.hiddenswitch.spellsource.util.VertxFutures;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;

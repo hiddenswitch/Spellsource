@@ -42,8 +42,14 @@ subprojects {
                     details.useVersion '1.2.0'
                 }
 
-                if (details.requested.group == 'io.netty' && details.requested.version.contains('Final')) {
-                    details.useVersion "4.1.43.Final"
+                if (details.requested.group == 'io.netty'
+                        && details.requested.version.contains('Final')
+                        && details.requested.name != 'netty-tcnative-boringssl-static') {
+                    details.useVersion "4.1.49.Final"
+                }
+
+                if (details.requested.group == 'org.apache.zookeeper') {
+                    details.useVersion '3.5.8'
                 }
 
                 if (details.requested.module.name == 'reactive-streams') {
@@ -76,6 +82,10 @@ subprojects {
 
                 if (details.requested.group == 'ch.qos.logback') {
                     details.useVersion "1.1.7"
+                }
+
+                if (details.requested.group == 'log4j') {
+                    details.useVersion "1.2.17"
                 }
 
                 if (details.requested.group == 'com.google.truth') {
@@ -138,12 +148,36 @@ subprojects {
                     details.useVersion '2.8.6'
                 }
 
+                if (details.requested.group == 'com.google.code.findbugs') {
+                    details.useVersion '3.0.2'
+                }
+
+                if (details.requested.group == 'com.google.errorprone') {
+                    details.useVersion '2.1.3'
+                }
+
+                if (details.requested.group == 'io.grpc') {
+                    details.useVersion '1.28.1'
+                }
+
+                if (details.requested.group == 'org.testcontainers') {
+                    details.useVersion '1.14.3'
+                }
+
+                if (details.requested.group == 'org.apache.ignite') {
+                    details.useVersion '2.8.1'
+                }
+
                 if (details.requested.group == 'org.jvnet.mimepull') {
                     details.useVersion '1.9.10'
                 }
 
                 if (details.requested.group == 'commons-codec') {
                     details.useVersion '1.13'
+                }
+
+                if (details.requested.group == 'org.codehaus.mojo') {
+                    details.useVersion '1.17'
                 }
 
                 if (details.requested.group == 'org.glassfish.jaxb' && details.requested.name == 'jaxb-runtime') {
@@ -164,6 +198,10 @@ subprojects {
 
                 if (details.requested.group == 'org.hdrhistogram') {
                     details.useVersion '2.1.12'
+                }
+
+                if (details.requested.group == 'javax.cache') {
+                    details.useVersion '1.1.1'
                 }
             }
         }

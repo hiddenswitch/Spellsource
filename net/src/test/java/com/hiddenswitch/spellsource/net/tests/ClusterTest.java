@@ -1,58 +1,53 @@
 package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.net.impl.MatchmakingQueueConfiguration;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.models.InitializeUserRequest;
 import com.hiddenswitch.spellsource.net.models.MatchmakingRequest;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
-import io.atomix.cluster.Node;
-import io.atomix.core.Atomix;
-import io.atomix.vertx.AtomixClusterManager;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.eventbus.impl.EventBusImpl;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.eventbus.impl.HandlerHolder;
 import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
+import io.vertx.core.impl.VertxImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.utils.ConcurrentCyclicSequence;
-import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class ClusterTest extends SpellsourceTestBase {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ClusterTest.class);
+	private List<Vertx> vertxInstances;
 
 	@Override
 	protected int getConcurrency() {
@@ -73,33 +68,27 @@ public class ClusterTest extends SpellsourceTestBase {
 	 * @param bootstrapNodes
 	 */
 	@Suspendable
-	private void vertx(int gatewayPort, VertxTestContext testContext, Handler<Vertx> handler, Node... bootstrapNodes) {
+	private void vertx(int gatewayPort, VertxTestContext testContext, Handler<Vertx> handler, String... bootstrapNodes) {
 		staticSetUp();
-
-		var atomixInstance = new AtomicReference<Atomix>();
-		var instance = Cluster.create(gatewayPort + 1, bootstrapNodes);
-		atomixInstance.set(instance);
-
-		instance.start().thenAccept(v -> {
-			Vertx.clusteredVertx(new VertxOptions()
-							.setPreferNativeTransport(true)
-							.setClusterManager(new AtomixClusterManager(atomixInstance.get())),
-					testContext.succeeding(vertx -> {
-						vertx.exceptionHandler(testContext::failNow);
-						Migrations.migrate(vertx, testContext.succeeding(v1 -> Spellsource.spellsource(gatewayPort).deployAll(vertx, getConcurrency(), testContext.succeeding(v2 -> {
-							vertx.runOnContext(v3 -> {
-								Connection.registerCodecs();
-								handler.handle(vertx);
-							});
+		Cluster.create(gatewayPort + 1, bootstrapNodes)
+				.onComplete(testContext.succeeding(instance -> Vertx.clusteredVertx(new VertxOptions()
+								.setPreferNativeTransport(true)
+								.setEventBusOptions(new EventBusOptions().setPort(gatewayPort + 2))
+								.setClusterManager(instance),
+						testContext.succeeding(vertx -> {
+							vertx.exceptionHandler(testContext::failNow);
+							Migrations.migrate(vertx, testContext.succeeding(v1 -> Spellsource.spellsource(gatewayPort).deployAll(vertx, getConcurrency(), testContext.succeeding(v2 -> {
+								vertx.runOnContext(v3 -> {
+									Connection.registerCodecs();
+									handler.handle(vertx);
+								});
+							}))));
 						}))));
-					}));
-		});
 	}
 
 	@Test()
 	@Suspendable
-	public void testMultiHostMultiClientCluster() throws ExecutionException, InterruptedException {
-		var context = new VertxTestContext();
+	public void testMultiHostMultiClientCluster(VertxTestContext context) throws ExecutionException, InterruptedException {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		var numberOfGames = 1;
 		var baseRate = 2;
@@ -110,7 +99,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		// Must be odd
 		assertEquals(count % 2, 1);
 		var latch = context.checkpoint(count * ports.length);
-		var vertxInstances = getVertxes(context, ports);
+		vertxInstances = getVertxes(context, ports);
 
 		for (var vertx : vertxInstances) {
 			var clusterManager = ((VertxInternal) vertx).getClusterManager();
@@ -161,6 +150,7 @@ public class ClusterTest extends SpellsourceTestBase {
 								LOGGER.info("execute {}: Done {}", client.getUserId(), k);
 								assertTrue(client.isGameOver());
 								assertTrue(client.getTurnsPlayed() > 1);
+								LOGGER.info("FLAG {}", queueNumber);
 							}
 
 							latch.flag();
@@ -170,8 +160,10 @@ public class ClusterTest extends SpellsourceTestBase {
 				}
 			}
 		}, context, vertx, context.succeeding());
-		context.awaitCompletion(115, TimeUnit.SECONDS);
-		assertTrue(context.completed());
+	}
+
+	@AfterEach
+	public void closeContexts() {
 		closeAll(vertxInstances);
 	}
 
@@ -193,8 +185,7 @@ public class ClusterTest extends SpellsourceTestBase {
 
 		for (var i = 0; i < ports.length; i++) {
 			var fut = new CompletableFuture<Vertx>();
-			vertx(ports[i], context, fut::complete,
-					bootstrapNodes);
+			vertx(ports[i], context, fut::complete, bootstrapNodes);
 
 			vertxInstances.add(fut);
 		}
@@ -203,21 +194,24 @@ public class ClusterTest extends SpellsourceTestBase {
 	}
 
 	@NotNull
-	private Node[] getBootstrapNodes(int[] ports) {
+	private String[] getBootstrapNodes(int[] ports) {
 		return Arrays.stream(ports).mapToObj(port ->
 		{
-			var hostIpAddress = "localhost"; //Gateway.getHostIpAddress();
-			return Node.builder().withHost(hostIpAddress).withPort(port + 1).withId(Cluster.getMemberId(port + 1, hostIpAddress)).build();
-		}).toArray(Node[]::new);
+			var hostIpAddress = Gateway.getHostIpAddress();
+			return hostIpAddress + ":" + (port + 1);
+		}).toArray(String[]::new);
 	}
 
 	@Test()
 	@Suspendable
-	public void testGracefulHandoverOfMatchmakingQueues() throws InterruptedException, IllegalAccessException {
-		var context = new VertxTestContext();
+	public void testGracefulHandoverOfMatchmakingQueues(VertxTestContext context) throws InterruptedException, IllegalAccessException {
 		// setup 3 vertx instances
 		var ports = new int[]{8083, 9093, 10013};
-		var vertxInstances = getVertxes(context, ports);
+		vertxInstances = getVertxes(context, ports);
+
+		vertxInstances.stream()
+				.map(v -> (VertxImpl) v)
+				.forEach(v -> assertEquals(3, v.getClusterManager().getNodes().size()));
 
 		// Find the instance that started the queue
 		Vertx instanceWithQueue = null;
@@ -249,7 +243,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			assertTrue(res, "should have enqueued");
 			var usersInQueues = Matchmaking.getUsersInQueues();
 			assertTrue(usersInQueues.containsKey(account.getUserId()), "should be in queue");
-			Void t = awaitResult(finalInstanceWithQueue::close);
+			Void t = awaitResult(h -> finalInstanceWithQueue.close(h));
 			assertFalse(usersInQueues.containsKey(account.getUserId()), "should not be in queue");
 
 			res = Matchmaking.enqueue(new MatchmakingRequest()
@@ -257,19 +251,14 @@ public class ClusterTest extends SpellsourceTestBase {
 					.withDeckId(deck)
 					.withUserId(account.getUserId()));
 			assertTrue(res, "user should have succeeded enqueueing somewhere else due to failover of running the queue");
-		}, context, instanceWithoutQueue, context.succeeding());
-		context.awaitCompletion(45, TimeUnit.SECONDS);
-		assertNull(context.causeOfFailure());
-		assertTrue(context.completed());
-		closeAll(vertxInstances);
+		}, context, instanceWithoutQueue, context.completing());
 	}
 
 	@Test
-	public void testGracefulShutdownOfRunningGames() throws InterruptedException {
-		var context = new VertxTestContext();
+	public void testGracefulShutdownOfRunningGames(VertxTestContext context) throws InterruptedException {
 		// setup 3 vertx instances
 		var ports = new int[]{8083, 9093, 10013};
-		var vertxInstances = getVertxes(context, ports);
+		vertxInstances = getVertxes(context, ports);
 
 		// We're going to bring down the first one because it is hosting the queue, so use the 3rd one instead to run the
 		// tests
@@ -288,8 +277,8 @@ public class ClusterTest extends SpellsourceTestBase {
 							v.complete();
 						});
 
-						client.ensureConnected();
 						client.createUserAccount();
+						client.ensureConnected();
 						client.matchmakeQuickPlay(null);
 						client.play(1);
 						// call the shutdown
@@ -303,14 +292,13 @@ public class ClusterTest extends SpellsourceTestBase {
 			assertFalse(Games.getUsersInGames().containsKey(new UserId(userId)), "should not be in queue now that host is closed");
 			assertFalse(Matchmaking.getUsersInQueues().containsKey(userId), "should not be in game now that host is closed");
 		}, context, vertx, context.succeeding());
-
-		context.awaitCompletion(30, TimeUnit.SECONDS);
-		assertTrue(context.completed());
-		closeAll(vertxInstances);
 	}
 
 	@Suspendable
 	private void closeAll(List<Vertx> vertxInstances) {
+		if (vertxInstances == null) {
+			return;
+		}
 		for (var living : vertxInstances) {
 			living.close();
 		}
