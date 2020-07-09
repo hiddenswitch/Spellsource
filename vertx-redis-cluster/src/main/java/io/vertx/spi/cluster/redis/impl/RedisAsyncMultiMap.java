@@ -15,12 +15,7 @@
  */
 package io.vertx.spi.cluster.redis.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
@@ -88,17 +83,22 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 		);
 	}
 
+	Map<K, Deque<Handler<AsyncResult<ChoosableIterable<V>>>>> handlers = new ConcurrentHashMap<>();
+
 	/**
 	 * @see io.vertx.core.eventbus.impl.clustered.ClusteredEventBus#sendOrPub(SendContextImpl<T>)
 	 */
 	@Override
 	public void get(K k, Handler<AsyncResult<ChoosableIterable<V>>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
+		Deque<Handler<AsyncResult<ChoosableIterable<V>>>> queue = handlers.computeIfAbsent(k, ignored -> new ArrayDeque<>());
+		queue.addLast(resultHandler);
 		multiMap.getAllAsync(k).whenComplete((v, e) -> { // v class is java.util.LinkedHashSet
+			Handler<AsyncResult<ChoosableIterable<V>>> toCall = queue.removeFirst();
 			if (e != null) {
-				context.runOnContext(vd -> resultHandler.handle(Future.failedFuture(e)));
+				context.runOnContext(vd -> toCall.handle(Future.failedFuture(e)));
 			} else {
-				context.runOnContext(vd -> resultHandler.handle(Future.succeededFuture(getCurrentRef(k, v))));
+				context.runOnContext(vd -> toCall.handle(Future.succeededFuture(getCurrentRef(k, v))));
 			}
 		});
 

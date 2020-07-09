@@ -31,14 +31,14 @@ import io.vertx.core.Vertx;
 /**
  * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
  */
-class RedisMapCache<K, V> implements Map<K, V> {
+class RedisMap<K, V> implements Map<K, V> {
 
 	protected final Vertx vertx;
-	protected final RMapCache<K, V> map;
+	protected final RMap<K, V> map;
 	protected final String name;
 	protected final RedissonClient redisson;
 
-	public RedisMapCache(Vertx vertx, RedissonClient redisson, String name, Codec codec) {
+	public RedisMap(Vertx vertx, RedissonClient redisson, String name, Codec codec) {
 		this.redisson = redisson;
 		Objects.requireNonNull(redisson, "redisson");
 		Objects.requireNonNull(name, "name");
@@ -52,11 +52,11 @@ class RedisMapCache<K, V> implements Map<K, V> {
 	 *
 	 * @see org.redisson.codec.JsonJacksonCodec
 	 */
-	protected RMapCache<K, V> createMap(RedissonClient redisson, String name, Codec codec) {
+	protected RMap<K, V> createMap(RedissonClient redisson, String name, Codec codec) {
 		if (codec == null) {
-			return redisson.getMapCache(name, MapOptions.defaults());
+			return redisson.getMap(name, MapOptions.defaults());
 		} else {
-			return redisson.getMapCache(name, codec, MapOptions.defaults());
+			return redisson.getMap(name, codec, MapOptions.defaults());
 		}
 	}
 
@@ -72,6 +72,7 @@ class RedisMapCache<K, V> implements Map<K, V> {
 
 	@Override
 	public boolean containsKey(Object key) {
+		Objects.requireNonNull(key);
 		return map.containsKey(key);
 	}
 
@@ -82,11 +83,14 @@ class RedisMapCache<K, V> implements Map<K, V> {
 
 	@Override
 	public V get(Object key) {
+		Objects.requireNonNull(key);
 		return map.get(key);
 	}
 
 	@Override
 	public V put(K key, V value) {
+		Objects.requireNonNull(key);
+		Objects.requireNonNull(value);
 		return map.put(key, value);
 	}
 
