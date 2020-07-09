@@ -384,7 +384,7 @@ public interface Editor {
 
 	@NotNull
 	static String getPutCardAddress(String gameId) {
-		return "Editor/" + gameId + "/putCard";
+		return "Editor." + gameId + ".putCard";
 	}
 
 	/**

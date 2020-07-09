@@ -55,7 +55,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	public void start() throws SuspendExecution {
 		CardCatalogue.loadCardsFromPackage();
 		var eb = Vertx.currentContext().owner().eventBus();
-		registration = eb.consumer("Games/createGameSession",
+		registration = eb.consumer("Games.createGameSession",
 				fiber((Message<JsonObject> request) ->
 						request.reply(json(createGameSession(request.body().mapTo(ConfigurationRequest.class))))));
 	}

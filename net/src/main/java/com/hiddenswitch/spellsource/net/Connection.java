@@ -69,7 +69,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	static String toBusAddress(String userId) {
-		return "Connection/clusteredConsumer/" + userId;
+		return "Connection.clusteredConsumer." + userId;
 	}
 
 	/**
@@ -109,11 +109,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	static Deque<SetupHandler> getHandlers() {
 		Vertx vertx = Vertx.currentContext().owner();
 		final Context context = vertx.getOrCreateContext();
-		Deque<SetupHandler> handlers = context.get("Connection/handlers");
+		Deque<SetupHandler> handlers = context.get("Connection.handlers");
 
 		if (handlers == null) {
 			handlers = new ConcurrentLinkedDeque<>();
-			context.put("Connection/handlers", handlers);
+			context.put("Connection.handlers", handlers);
 		}
 		return handlers;
 	}

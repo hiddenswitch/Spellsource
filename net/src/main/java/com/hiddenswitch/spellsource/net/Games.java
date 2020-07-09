@@ -66,7 +66,7 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES_PLAYERS_MAP = "Games/players";
+	String GAMES_PLAYERS_MAP = "Games.players";
 	String GAMES = "games";
 	Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
@@ -278,7 +278,7 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games/connections");
+		return SuspendableMap.getOrCreate("Games.connections");
 	}
 
 	/**
@@ -303,7 +303,7 @@ public interface Games extends Verticle {
 		Matchmaking.LOGGER.debug("createMatch: Creating match for request {}", request);
 
 		var eb = Vertx.currentContext().owner().eventBus();
-		Message<JsonObject> response = awaitResult(h -> eb.request("Games/createGameSession", json(request), h));
+		Message<JsonObject> response = awaitResult(h -> eb.request("Games.createGameSession", json(request), h));
 		return new MatchCreateResponse(response.body().mapTo(CreateGameSessionResponse.class));
 	}
 

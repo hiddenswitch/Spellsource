@@ -80,8 +80,8 @@ public class ServerGameContext extends GameContext implements Server {
 	private static final long CLOSE_TIMEOUT_MILLIS = 4000L;
 	private static final long REGISTRATION_TIMEOUT = 4000L;
 	private static Logger LOGGER = LoggerFactory.getLogger(ServerGameContext.class);
-	public static final String WRITER_ADDRESS_PREFIX = "Games/writer[";
-	public static final String READER_ADDRESS_PREFIX = "Games/reader[";
+	public static final String WRITER_ADDRESS_PREFIX = "Games.writer.";
+	public static final String READER_ADDRESS_PREFIX = "Games.reader.";
 
 	private final transient ReentrantLock lock = new ReentrantLock();
 	private final transient Queue<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
@@ -315,7 +315,7 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	@NotNull
 	public static String getMessagesFromClientAddress(String userId) {
-		return READER_ADDRESS_PREFIX + userId + "]";
+		return READER_ADDRESS_PREFIX + userId;
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	@NotNull
 	public static String getMessagesFromServerAddress(String userId) {
-		return WRITER_ADDRESS_PREFIX + userId + "]";
+		return WRITER_ADDRESS_PREFIX + userId;
 	}
 
 	/**
