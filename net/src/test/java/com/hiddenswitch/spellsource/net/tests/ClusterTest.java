@@ -24,6 +24,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -202,7 +203,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		}).toArray(String[]::new);
 	}
 
-	@Test()
+	@RepeatedTest(10)
 	@Suspendable
 	public void testGracefulHandoverOfMatchmakingQueues(VertxTestContext context) throws InterruptedException, IllegalAccessException {
 		// setup 3 vertx instances
@@ -244,6 +245,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			var usersInQueues = Matchmaking.getUsersInQueues();
 			assertTrue(usersInQueues.containsKey(account.getUserId()), "should be in queue");
 			Void t = awaitResult(h -> finalInstanceWithQueue.close(h));
+			Strand.sleep(8000);
 			assertFalse(usersInQueues.containsKey(account.getUserId()), "should not be in queue");
 
 			res = Matchmaking.enqueue(new MatchmakingRequest()
@@ -254,7 +256,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		}, context, instanceWithoutQueue, context.completing());
 	}
 
-	@Test
+	@RepeatedTest(10)
 	public void testGracefulShutdownOfRunningGames(VertxTestContext context) throws InterruptedException {
 		// setup 3 vertx instances
 		var ports = new int[]{8083, 9093, 10013};
@@ -288,7 +290,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			});
 			assertTrue(Games.getUsersInGames().containsKey(new UserId(userId)), "should be in game before host closed");
 			Void t = awaitResult(h -> vertxInstances.get(0).close(h));
-
+			Strand.sleep(1000);
 			assertFalse(Games.getUsersInGames().containsKey(new UserId(userId)), "should not be in queue now that host is closed");
 			assertFalse(Matchmaking.getUsersInQueues().containsKey(userId), "should not be in game now that host is closed");
 		}, context, vertx, context.succeeding());
