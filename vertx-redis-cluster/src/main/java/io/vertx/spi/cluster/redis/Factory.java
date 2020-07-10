@@ -15,19 +15,15 @@
  */
 package io.vertx.spi.cluster.redis;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.impl.clustered.ClusterNodeInfo;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ClusterManager;
-import io.vertx.core.spi.cluster.NodeListener;
 import io.vertx.spi.cluster.redis.impl.DefaultFactory;
 import org.redisson.api.RedissonClient;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -45,10 +41,6 @@ public interface Factory {
 
 	Map<String, String> createMapHaInfo(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson,
 	                                    String name);
-
-	interface PendingMessageProcessor {
-		void run();
-	}
 
 	static Factory createDefaultFactory() {
 		return new DefaultFactory();

@@ -7,8 +7,6 @@
  * SPELLSOURCE_LOGGING_LEVEL=TRACE gradle net:run
  */
 
-
-import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.filter.ThresholdFilter
 
 appender("STDOUT", ConsoleAppender) {

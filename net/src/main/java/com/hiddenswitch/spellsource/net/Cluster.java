@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Manages the Atomix-based clustering and in-memory state management of Spellsource game servers
+ * Manages the clustering and in-memory state management of Spellsource game servers
  */
 public interface Cluster {
 	Logger LOGGER = LoggerFactory.getLogger(Cluster.class);
 
 	static Future<ClusterManager> create(int clusterPort, String... nodes) {
-		return Future.succeededFuture(new RedisClusterManager(System.getProperty("redis.url", "redis://redis"), nodes.length));
+		return Future.succeededFuture(new RedisClusterManager(Configuration.getRedisUrl(), nodes.length));
 	}
 }

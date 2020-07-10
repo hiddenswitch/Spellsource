@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.net.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableAsyncMap;
 import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableWrappedMap;
 import io.vertx.core.AsyncResult;
@@ -9,12 +8,8 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
-import io.vertx.servicediscovery.impl.LocalAsyncMap;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -24,7 +19,7 @@ public abstract class SuspendableMap<K, V> {
 		SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {
 			AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
-			return new SuspendableAsyncMap<>(map);
+			return new SuspendableAsyncMap<>(name, map);
 		} else {
 			return new SuspendableWrappedMap<>(client.getLocalMap(name));
 		}
@@ -49,7 +44,6 @@ public abstract class SuspendableMap<K, V> {
 	public abstract boolean isEmpty();
 
 	@Suspendable
-	@SuppressWarnings("unchecked")
 	public abstract boolean containsKey(K key);
 
 	@Suspendable

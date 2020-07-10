@@ -37,4 +37,8 @@ public interface Configuration {
 	static int metricsPort() {
 		return 8081;
 	}
+
+	static String getRedisUrl() {
+		return System.getProperty("redis.url", System.getenv().getOrDefault("REDIS_URL", "redis://redis"));
+	}
 }

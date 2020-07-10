@@ -40,17 +40,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * batch.atomic return's value must using Codec to Object. (always return String type)
- *
- * @see org.redisson.RedissonSetMultimapValues
- */
 class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 
 	private final RSetMultimap<K, V> map;
 	private final Vertx vertx;
 	private final ClusterManager clusterManager;
 	private final RedissonClient redisson;
+
+	// Helps maintain iterator state
 	private final LoadingCache<K, AtomicInteger> iterators = CacheBuilder.newBuilder()
 			.maximumSize(100)
 			.expireAfterAccess(60, TimeUnit.SECONDS)
@@ -74,6 +71,7 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 	@Override
 	public void add(K k, V v, Handler<AsyncResult<Void>> completionHandler) {
 		if (redisson.isShutdown()) {
+			// TODO: Should we gracefully allow adding here?¬
 			completionHandler.handle(Future.failedFuture(new VertxException("redisson shut down")));
 			return;
 		}
@@ -88,11 +86,18 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 			return;
 		}
 		Context context = vertx.getOrCreateContext();
+		// Always retrieve the freshest subs list
 		map.getAllAsync(k).onComplete((values, t) -> {
 			context.runOnContext(i -> {
 				if (t != null) {
 					asyncResultHandler.handle(Future.failedFuture(t));
 				} else {
+					// This approach to generating a ChooseableIterable implements round robin in a very straightforward way -
+					// it rotates a list by an amount specified in an integer stored in the multimap. The list is always sorted
+					// on the ClusterNodeInfo.nodeId first, which are authored to have an order that is the same across all nodes.
+					// Changes to the subs list that occur while this is iterating will naturally not propagate to the
+					// ChooseableIterable but that is not part of the API anyhow. Additionally this approach does not trick the
+					// event bus into doing an ordered send.
 					List<V> valueList = values.stream()
 							.sorted(Comparator.comparing(v -> {
 								if (v instanceof ClusterNodeInfo) {
@@ -103,6 +108,7 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 							}))
 							.filter(v -> {
 								if (v instanceof ClusterNodeInfo) {
+									// We will make a gentle affordance to check if the cluster node currently exists.
 									return clusterManager.getNodes().contains(((ClusterNodeInfo) v).nodeId);
 								} else {
 									return true;
@@ -162,16 +168,20 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 		(map.readAllKeySetAsync().thenCompose(keys -> {
 			return RedissonPromise.allOf(
 					keys.stream().map(key -> {
+						// It does not appear that redis will require locking across the whole map to achieve this. The context of
+						// removeAllMatching is to clean up down nodes, so there aren't going to be nodeIds that should be removed
+						// "added back in" while this is executing.
+
 //						RLock lock = map.getLock(key);
 //						int id = (int) System.currentTimeMillis();
 						return /*lock.lockAsync(4000, TimeUnit.MILLISECONDS, id)
 								.thenCompose(v3 -> {
 									return */map.getAllAsync(key) /*;
 								})*/.thenCompose(values -> {
-									return RedissonPromise.allOf(values.stream().filter(p)
-											.map(value -> map.removeAsync(key, value).toCompletableFuture())
-											.toArray(CompletableFuture[]::new));
-								})/*.thenCompose(ignored -> {
+							return RedissonPromise.allOf(values.stream().filter(p)
+									.map(value -> map.removeAsync(key, value).toCompletableFuture())
+									.toArray(CompletableFuture[]::new));
+						})/*.thenCompose(ignored -> {
 									return lock.unlockAsync(id);
 								})*/
 								.toCompletableFuture();
@@ -198,6 +208,7 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 
 		@Override
 		public V choose() {
+			// We're assuming you only choose once.
 			if (chose) {
 				throw new UnsupportedOperationException();
 			}

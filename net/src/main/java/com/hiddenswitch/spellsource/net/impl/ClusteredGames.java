@@ -4,10 +4,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
-import com.google.common.cache.CacheBuilder;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.server.Configuration;
 import com.hiddenswitch.spellsource.net.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.net.impl.util.DeckType;
@@ -17,10 +15,6 @@ import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.models.ConfigurationRequest;
 import com.hiddenswitch.spellsource.net.models.CreateGameSessionResponse;
 import com.hiddenswitch.spellsource.net.models.GetCollectionRequest;
-import com.hiddenswitch.spellsource.net.models.GetCollectionResponse;
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.Message;
@@ -35,7 +29,10 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
@@ -52,7 +49,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	private MessageConsumer<JsonObject> registration;
 
 	@Override
-	public void start() throws SuspendExecution {
+	protected void syncStart() throws SuspendExecution {
 		CardCatalogue.loadCardsFromPackage();
 		var eb = Vertx.currentContext().owner().eventBus();
 		registration = eb.consumer("Games.createGameSession",
@@ -66,11 +63,11 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 	@Override
 	public CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException {
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("ClusteredGames/createGameSession")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("ClusteredGames/createGameSession")
 				.asChildOf(request.getSpanContext())
 				.start();
-		try (Scope s1 = tracer.activateSpan(span)) {
+		try (var s1 = tracer.activateSpan(span)) {
 			span.log(json(request).getMap());
 			Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
 
@@ -83,11 +80,11 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			// stuff about cards.
 			Logic.triggers();
 			// Get the collection data from the configurations that are not yet populated with valid cards
-			for (Configuration configuration : request.getConfigurations()) {
-				AttributeMap playerAttributes = new AttributeMap();
+			for (var configuration : request.getConfigurations()) {
+				var playerAttributes = new AttributeMap();
 
 				if (configuration.getDeck() instanceof CollectionDeck) {
-					GetCollectionResponse deckCollection = Inventory.getCollection(new GetCollectionRequest()
+					var deckCollection = Inventory.getCollection(new GetCollectionRequest()
 							.withUserId(configuration.getUserId().toString())
 							.withDeckId(configuration.getDeck().getDeckId()));
 
@@ -104,7 +101,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					}
 				}
 
-				String username = mongo().findOne(Accounts.USERS, json("_id", configuration.getUserId().toString()), UserRecord.class).getUsername();
+				var username = mongo().findOne(Accounts.USERS, json("_id", configuration.getUserId().toString()), UserRecord.class).getUsername();
 				configuration.setName(username);
 				// TODO: Get more attributes from database
 				playerAttributes.put(Attribute.NAME, username);
@@ -114,13 +111,13 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				configuration.setPlayerAttributes(playerAttributes);
 			}
 
-			CreateGameSessionResponse pending = CreateGameSessionResponse.pending(deploymentID());
-			SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
-			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
-			CreateGameSessionResponse connection = connections.putIfAbsent(request.getGameId(), pending);
+			var pending = CreateGameSessionResponse.pending(deploymentID());
+			var connections = Games.getConnections();
+			var games = Games.getUsersInGames();
+			var connection = connections.putIfAbsent(request.getGameId(), pending);
 			// If we're the ones deploying this match...
 			if (connection == null) {
-				ServerGameContext context = new ServerGameContext(
+				var context = new ServerGameContext(
 						request.getGameId(),
 						new VertxScheduler(Vertx.currentContext().owner()),
 						request.getConfigurations());
@@ -129,7 +126,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				context.setSpanContext(span.context());
 
 				try {
-					for (Configuration configuration : request.getConfigurations()) {
+					for (var configuration : request.getConfigurations()) {
 						games.put(configuration.getUserId(), request.getGameId());
 					}
 
@@ -140,12 +137,12 @@ public class ClusteredGames extends SyncVerticle implements Games {
 							return;
 						}
 						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
-						GameId gameOverId = new GameId(session.getGameId());
+						var gameOverId = new GameId(session.getGameId());
 						// The players should not accidentally wind back up in games
 						removeGameAndRecordReplay(gameOverId);
 					});
 
-					CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), context);
+					var response = CreateGameSessionResponse.session(deploymentID(), context);
 					connections.replace(request.getGameId(), response);
 					contexts.put(request.getGameId(), context);
 					// Plays the game context in its own fiber
@@ -159,7 +156,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					}
 					Tracing.error(any, span, true);
 					// If an error occurred, make sure to remove users from the games we just put them into.
-					for (Configuration configuration : request.getConfigurations()) {
+					for (var configuration : request.getConfigurations()) {
 						games.remove(configuration.getUserId(), request.getGameId());
 					}
 					connections.remove(request.getGameId());
@@ -186,52 +183,54 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	@Suspendable
 	private void removeGameAndRecordReplay(@NotNull GameId gameId) throws SuspendExecution {
 		Objects.requireNonNull(gameId);
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay")
 				.asChildOf(tracer.activeSpan())
 				.start();
-		Scope scope = tracer.activateSpan(span);
+		var scope = tracer.activateSpan(span);
 		try {
 			if (!contexts.containsKey(gameId)) {
-				Games.LOGGER.debug("endGame {}: This deployment with deploymentId {} does not contain the gameId, or this game has already been ended", gameId, deploymentID());
+				Games.LOGGER.debug("removeGameAndRecordReplay {}: This deployment with deploymentId {} does not contain the gameId, or this game has already been ended", gameId, deploymentID());
 				return;
 			}
-			Games.LOGGER.debug("endGame {}", gameId);
-			ServerGameContext gameContext = contexts.remove(gameId);
+			Games.LOGGER.debug("removeGameAndRecordReplay {}", gameId);
+			var gameContext = contexts.remove(gameId);
 			Games.getConnections().remove(gameId);
 
 			UserId winner = null;
+
 			try {
-				gameContext.updateAndGetGameOver();
+				var isGameOver = gameContext.updateAndGetGameOver();
+				Games.LOGGER.debug("removeGameAndRecordReplay: updateAndGetGameOver={}", isGameOver);
 				if (gameContext.getWinner() != null && gameContext.getWinner().getUserId() != null) {
 					winner = new UserId(gameContext.getWinner().getUserId());
 				}
 				// Save the wins/losses
 				if (winner != null) {
-					String userIdWinner = winner.toString();
-					String userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
-					String deckIdWinner = (String) gameContext.getWinner().getAttribute(Attribute.DECK_ID);
-					String deckIdLoser = (String) gameContext.getOpponent(gameContext.getWinner()).getAttribute(Attribute.DECK_ID);
+					var userIdWinner = winner.toString();
+					var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
+					var deckIdWinner = (String) gameContext.getWinner().getAttribute(Attribute.DECK_ID);
+					var deckIdLoser = (String) gameContext.getOpponent(gameContext.getWinner()).getAttribute(Attribute.DECK_ID);
 					// Check if this deck was a draft deck
 					if (mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
 							json("$inc", json("totalGames", 1, "wins", 1))).getDocModified() > 0L) {
 						mongo().updateCollection(Draft.DRAFTS, json("_id", userIdWinner), json("$inc", json("publicDraftState.wins", 1)));
-						LOGGER.trace("endGame {}: Marked {} as winner in draft", gameId, userIdWinner);
+						LOGGER.debug("endGame {}: Marked {} as winner in draft", gameId, userIdWinner);
 					} else {
 						mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner),
 								json("$inc", json("totalGames", 1, "wins", 1)));
-						LOGGER.trace("endGame {}: Marked {} as winner in other", gameId, userIdWinner);
+						LOGGER.debug("endGame {}: Marked {} as winner in other", gameId, userIdWinner);
 					}
 
 					// Check if this deck was a draft deck
 					if (mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser, "deckType", DeckType.DRAFT.toString()),
 							json("$inc", json("totalGames", 1))).getDocModified() > 0L) {
 						mongo().updateCollection(Draft.DRAFTS, json("_id", userIdLoser), json("$inc", json("publicDraftState.losses", 1)));
-						LOGGER.trace("endGame {}: Marked {} as loser in draft", gameId, userIdLoser);
+						LOGGER.debug("endGame {}: Marked {} as loser in draft", gameId, userIdLoser);
 					} else {
 						mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser),
 								json("$inc", json("totalGames", 1)));
-						LOGGER.trace("endGame {}: Marked {} as loser in other", gameId, userIdLoser);
+						LOGGER.debug("endGame {}: Marked {} as loser in other", gameId, userIdLoser);
 					}
 				}
 				// If the game is still running when this is called, make sure to force end the game
@@ -242,8 +241,8 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			}
 
 			// Set the player's presence to no longer be in a game
-			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
-			for (String userId : userIds) {
+			var userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
+			for (var userId : userIds) {
 				var interrupted = Strand.interrupted();
 				Presence.updatePresence(userId);
 				if (interrupted) {
@@ -252,16 +251,16 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			}
 
 			try {
-				boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
-				List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
-				List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(toList());
+				var botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
+				var deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
+				var playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(toList());
 
-				Span saveSpan = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay/saveReplay")
+				var saveSpan = tracer.buildSpan("ClusteredGames/removeGameAndRecordReplay/saveReplay")
 						.asChildOf(span)
 						.start();
-				Scope scope2 = tracer.activateSpan(saveSpan);
+				var scope2 = tracer.activateSpan(saveSpan);
 				try {
-					GameRecord gameRecord = new GameRecord(gameId.toString())
+					var gameRecord = new GameRecord(gameId.toString())
 							.setTrace(gameContext.getTrace())
 							.setCreatedAt(new Date())
 							.setBotGame(botGame)
@@ -288,9 +287,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 	@Override
 	@Suspendable
-	public void stop() throws Exception {
-		Games.LOGGER.debug("stop: Stopping the ClusteredGamesImpl.");
-		for (GameId gameId : contexts.keySet()) {
+	protected void syncStop() throws SuspendExecution {
+		Games.LOGGER.debug("stop: Stopping the ClusteredGamesImpl, hosting contexts: {}", contexts.keySet().stream().map(GameId::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
+		for (var gameId : contexts.keySet()) {
 			Objects.requireNonNull(gameId.toString());
 			removeGameAndRecordReplay(gameId);
 		}

@@ -26,9 +26,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- *
- */
 class RedisMap<K, V> implements Map<K, V> {
 
 	protected final Vertx vertx;
@@ -37,9 +34,9 @@ class RedisMap<K, V> implements Map<K, V> {
 	protected final RedissonClient redisson;
 
 	public RedisMap(Vertx vertx, RedissonClient redisson, String name, Codec codec) {
-		this.redisson = redisson;
 		Objects.requireNonNull(redisson, "redisson");
 		Objects.requireNonNull(name, "name");
+		this.redisson = redisson;
 		this.vertx = vertx;
 		this.name = name;
 		this.map = createMap(redisson, this.name, codec);
