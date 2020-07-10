@@ -1,7 +1,5 @@
 package com.hiddenswitch.spellsource.net.impl;
 
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -13,9 +11,10 @@ import java.util.stream.Collectors;
 /**
  * Utilities for working with JSON.
  */
-public class QuickJson {
+public interface QuickJson {
+
 	@SafeVarargs
-	public static <T> JsonArray array(final T... args) {
+	static <T> JsonArray array(final T... args) {
 		JsonArray arr = new JsonArray();
 		for (T arg : args) {
 			// Insert photo of Pink Wojack here going "aaaaaaAAAAAAAHHHHH"
@@ -29,11 +28,11 @@ public class QuickJson {
 		return arr;
 	}
 
-	public static JsonObject json(final Object... args) {
+	static JsonObject json(final Object... args) {
 		return jsonPut(new JsonObject(), args);
 	}
 
-	public static JsonObject jsonPut(JsonObject existing, final Object... args) {
+	static JsonObject jsonPut(JsonObject existing, final Object... args) {
 		if (args == null
 				|| args.length == 0) {
 			return new JsonObject();
@@ -64,21 +63,21 @@ public class QuickJson {
 		return j;
 	}
 
-	public static <T> T fromJson(JsonObject json, Class<T> classOfT) {
+	static <T> T fromJson(JsonObject json, Class<T> classOfT) {
 		if (json == null) {
 			return null;
 		}
 		return DatabindCodec.mapper().convertValue(json.getMap(), classOfT);
 	}
 
-	public static <T> List<T> fromJson(List<JsonObject> jsons, Class<T> elementClass) {
+	static <T> List<T> fromJson(List<JsonObject> jsons, Class<T> elementClass) {
 		if (jsons == null) {
 			return Collections.emptyList();
 		}
 		return jsons.stream().map(o -> fromJson(o, elementClass)).collect(Collectors.toList());
 	}
 
-	public static <T> List<T> fromJson(JsonArray json, Class<T> listElement) {
+	static <T> List<T> fromJson(JsonArray json, Class<T> listElement) {
 		if (json == null) {
 			return Collections.emptyList();
 		}

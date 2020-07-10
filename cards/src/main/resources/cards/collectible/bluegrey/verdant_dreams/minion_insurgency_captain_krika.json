@@ -1,0 +1,75 @@
+{
+  "name": "Insurgency Captain Krika",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Opener: If your champion attacked 3 times this game, your minions have Dash this game.[]",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "ATTACKS_THIS_GAME"
+      },
+      "value2": 3
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "AttributeAura",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "AURA_RUSH"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "ATTACKS_THIS_GAME"
+        },
+        "value2": 3
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 3,
+              "value2": {
+                "class": "AttributeValueProvider",
+                "target": "FRIENDLY_HERO",
+                "attribute": "ATTACKS_THIS_GAME"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
+}

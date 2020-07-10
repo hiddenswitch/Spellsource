@@ -1,0 +1,25 @@
+{
+  "name": "Kindred Ritual",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "RARE",
+  "description": "Draw 2 cards. Costs (2) less for each Tribal minion in your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardCountValueProvider",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "NONE",
+      "invert": true
+    },
+    "multiplier": 2
+  }
+}

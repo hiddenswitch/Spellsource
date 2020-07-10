@@ -1,6 +1,8 @@
 package com.hiddenswitch.spellsource.net.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
+import io.vertx.codegen.annotations.Nullable;
+import io.vertx.core.Context;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.shareddata.Lock;
@@ -70,14 +72,16 @@ public interface SuspendableLock {
 		@Suspendable
 		@NotNull
 		static VertxLock lock(String name, long timeout) {
-			Lock lock = awaitResult(h -> Vertx.currentContext().owner().sharedData().getLockWithTimeout(name, timeout, h));
+			var context = Vertx.currentContext();
+			Lock lock = awaitResult(h -> context.owner().sharedData().getLockWithTimeout(name, timeout, h));
 			return new VertxLock(lock);
 		}
 
-		@Suspendable
 		@NotNull
+		@Suspendable
 		static VertxLock lock(String name) {
-			Lock lock = awaitResult(h -> Vertx.currentContext().owner().sharedData().getLock(name, h));
+			var context = Vertx.currentContext();
+			Lock lock = awaitResult(h -> context.owner().sharedData().getLock(name, h));
 			return new VertxLock(lock);
 		}
 

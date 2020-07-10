@@ -1,0 +1,54 @@
+{
+  "name": "Marble Lunstone",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "RARE",
+  "description": "Deal $1 damage to all enemies. Repeat once. (End your turn with unspent lun to upgrade)",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "queueCondition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MANA"
+        },
+        "value2": 0
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_greater_marble_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ]
+}

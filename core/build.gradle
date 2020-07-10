@@ -9,7 +9,7 @@ group 'com.hiddenswitch'
 dependencies {
     implementation 'io.vertx:vertx-core:3.9.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
-    implementation 'io.github.classgraph:classgraph:4.8.59'
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation 'org.slf4j:slf4j-api:1.7.20'
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.jetbrains:annotations:16.0.2'

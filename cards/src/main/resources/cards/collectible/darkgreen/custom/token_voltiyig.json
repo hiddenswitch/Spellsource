@@ -1,0 +1,16 @@
+{
+  "name": "Voltiyig",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Doom has come.",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ]
+}

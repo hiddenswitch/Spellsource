@@ -1,0 +1,29 @@
+{
+  "name": "Marrow Render",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Guard. Opener: Drain 1 Health from all other minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrainSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DRAIN": true,
+    "TAUNT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

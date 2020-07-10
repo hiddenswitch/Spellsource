@@ -1,0 +1,36 @@
+{
+  "name": "Archivist Krag",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Play all cards from your deck that didn't start in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PlayCardsRandomlySpell",
+      "spell": {
+        "class": "RemoveCardSpell",
+        "target": "OUTPUT"
+      },
+      "cardFilter": {
+        "class": "AttributeFilter",
+        "attribute": "STARTED_IN_DECK",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

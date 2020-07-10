@@ -1,0 +1,33 @@
+{
+  "name": "Gatekeeper Sha",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Your spells cost Health instead of Lun. Whenever you cast a spell, shuffle a copy into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "EVENT_SOURCE",
+      "value": 1
+    }
+  },
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "SPELLS_COST_HEALTH"
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

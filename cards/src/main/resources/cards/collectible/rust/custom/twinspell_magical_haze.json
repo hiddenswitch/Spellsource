@@ -1,0 +1,28 @@
+{
+  "name": "Magical Haze",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Summon a random Elemental from your hand and give it Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 1,
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "TAUNT"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL",
+      "cardType": "MINION"
+    },
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

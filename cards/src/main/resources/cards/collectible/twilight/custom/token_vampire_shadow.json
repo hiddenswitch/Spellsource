@@ -1,0 +1,16 @@
+{
+  "name": "Shadow",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ]
+}

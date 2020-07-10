@@ -42,9 +42,12 @@ ENV PORT=80
 ENV ATOMIX_PORT=5701
 # Port for TCP connections from the Vertx eventbus
 ENV VERTX_CLUSTER_PORT=5710
+# Prometheus metrics endpoint to be used with promswarmconnect
+ENV METRICS_ENDPOINT=":8081/metrics,instance=_HOSTNAME_"
 # Do not launch the UDP broadcaster inside this server instance
 ENV SPELLSOURCE_BROADCAST=false
 
+# Spellsource API and websocket
 EXPOSE 80
 
 # Use baseimage-docker's init system. See docker/root/etc/service for the run scripts.

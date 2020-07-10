@@ -1,0 +1,23 @@
+{
+  "name": "Eager Convert",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Aftermath: Summon a 5/5 Vampire.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_vampire"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

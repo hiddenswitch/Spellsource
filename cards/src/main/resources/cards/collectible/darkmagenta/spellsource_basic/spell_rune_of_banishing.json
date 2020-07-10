@@ -1,0 +1,73 @@
+{
+  "name": "Rune of Banishing",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "EPIC",
+  "description": "Destroy a minion that costs (4) or more. Invoke (4): All minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell": {
+      "class": "DestroySpell"
+    },
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 4,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "name": "Banishing",
+      "description": "Destroy just the targeted minion.",
+      "condition": {
+        "class": "MinionOnBoardCondition",
+        "cardFilter": {
+          "class": "ManaCostFilter",
+          "value": 4,
+          "operation": "GREATER_OR_EQUAL"
+        },
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "DestroySpell"
+      },
+      "mana": 0
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "name": "Banishest",
+      "description": "Destroy ALL minions.",
+      "spell": {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS"
+      },
+      "mana": 4
+    }
+  },
+  "attributes": {
+    "INVOKE": 4
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "targetSelectionCondition": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "class": "MinionOnBoardCondition",
+        "cardFilter": {
+          "class": "ManaCostFilter",
+          "value": 4,
+          "operation": "GREATER_OR_EQUAL"
+        },
+        "invert": true,
+        "targetPlayer": "BOTH"
+      },
+      {
+        "class": "InvokeCondition"
+      }
+    ]
+  },
+  "targetSelectionOverride": "NONE"
+}

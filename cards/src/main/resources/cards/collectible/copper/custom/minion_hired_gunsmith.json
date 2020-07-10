@@ -1,0 +1,36 @@
+{
+  "name": "Hired Gunsmith",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener: The next weapon you play this turn costs (2) less.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "value": 2,
+        "cardType": "WEAPON",
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "cardType": "WEAPON",
+          "sourcePlayer": "SELF"
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "MEAN_STREETS_OF_GADGETZAN"
+  ]
+}

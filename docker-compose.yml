@@ -162,24 +162,6 @@ services:
           - node.platform.arch == x86_64
           - node.labels.cpu == high
           - node.labels.disk == ssd
-  ddnsroute53:
-    image: doctorpangloss/ddnsroute53:latest
-    build:
-      context: ddnsroute53
-      dockerfile: Dockerfile
-    networks:
-      - web
-    environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - DDNSROUTE53_UPDATE_IN_DOMAINS=${DDNSROUTE53_UPDATE_IN_DOMAINS}
-      - DDNSROUTE53_UPDATE_IP_ADDRESS=${DDNSROUTE53_UPDATE_IP_ADDRESS}
-    deploy:
-      placement:
-        constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
   skyhook:
     image: doctorpangloss/skyhook:latest
     build:

@@ -1,0 +1,36 @@
+{
+  "name": "A Coven's Debt",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "<b>Pact:</b> After you play a <b>Pact</b>, draw 3 cards.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 1,
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "requiredAttribute": "PACT",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 3
+      }
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

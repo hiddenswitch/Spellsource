@@ -5,9 +5,9 @@ import com.hiddenswitch.spellsource.util.Serialization;
 import java.io.Serializable;
 
 /**
- * Created by bberman on 2/15/17.
+ * Implementation of a web result.
  */
-public class WebResultImpl<T> implements WebResult<T>, Serializable {
+class WebResultImpl<T> implements WebResult<T>, Serializable {
 	private final T result;
 	private final Throwable cause;
 	private final Integer responseCode;

@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+}
+
+apply plugin: 'idea'
+apply plugin: 'java-library'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    api "org.testcontainers:testcontainers"
+}
+
+compileJava {
+    options.warnings = false
+}
+
+java {
+    sourceCompatibility(JavaVersion.VERSION_1_8)
+}

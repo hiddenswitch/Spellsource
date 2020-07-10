@@ -1,0 +1,30 @@
+{
+  "name": "Mind Ray",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Deal 5 damage to a minion. Costs (2) while your hand is full.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 5
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 10,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "SELF"
+    },
+    "ifFalse": 0,
+    "ifTrue": 3
+  },
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

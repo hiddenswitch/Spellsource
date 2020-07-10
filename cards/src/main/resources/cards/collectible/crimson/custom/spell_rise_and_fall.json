@@ -1,0 +1,30 @@
+{
+  "name": "On The Offence",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage to a minion. Summon a 2/2 Captive.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_captive_overlord"
+        ]
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

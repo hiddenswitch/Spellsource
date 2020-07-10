@@ -1,0 +1,57 @@
+{
+  "name": "Dynoblow",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "EPIC",
+  "description": "Deal $8 damage to a random minion. Then deal $4 damage to a random minion. Then $2. Then $1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 8,
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "randomTarget": true
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 4,
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "randomTarget": true
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 2,
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "randomTarget": true
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 1,
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

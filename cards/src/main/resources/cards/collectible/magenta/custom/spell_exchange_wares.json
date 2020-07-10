@@ -1,0 +1,24 @@
+{
+  "name": "Exchange Wares",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "RARE",
+  "description": "Both players draw a card from their opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "StealCardSpell",
+      "target": "ENEMY_DECK",
+      "cardLocation": "HAND",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

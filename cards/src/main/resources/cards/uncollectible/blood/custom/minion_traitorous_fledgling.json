@@ -1,0 +1,28 @@
+{
+  "name": "Traitorous Fledgling",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Drain 3 Health from adjacent minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrainSpell",
+      "target": "ADJACENT_MINIONS",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

@@ -7,6 +7,7 @@ import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableFunction;
+import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeoutException;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
@@ -66,7 +67,7 @@ public interface Editor {
 			for (var existingCard : mongo().find(EDITABLE_CARDS, json("ownerUserId", userId), EditableCard.class)) {
 				connection.write(new Envelope().added(new EnvelopeAdded().editableCard(existingCard)));
 			}
-			connection.handler(suspendableHandler(env -> {
+			connection.handler(Sync.fiber(env -> {
 				var tracer = GlobalTracer.get();
 				// Process a delete card request
 				if (env.getMethod() != null && env.getMethod().getDeleteCard() != null) {
@@ -226,7 +227,7 @@ public interface Editor {
 		var eventBus = Vertx.currentContext().owner().eventBus();
 
 		String gameId = gameContext.getGameId();
-		var registration = eventBus.<JsonObject>consumer(getPutCardAddress(gameId), suspendableHandler(msg -> {
+		var registration = eventBus.<JsonObject>consumer(getPutCardAddress(gameId), Sync.fiber(msg -> {
 			var userId = msg.body().getString("userId");
 			Objects.requireNonNull(userId);
 			var putCard = fromJson(msg.body().getJsonObject("putCard"), EnvelopeMethodPutCard.class);
@@ -383,7 +384,7 @@ public interface Editor {
 
 	@NotNull
 	static String getPutCardAddress(String gameId) {
-		return "Editor/" + gameId + "/putCard";
+		return "Editor." + gameId + ".putCard";
 	}
 
 	/**

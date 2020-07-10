@@ -2,6 +2,11 @@ package com.hiddenswitch.spellsource.net.impl;
 
 import io.vertx.core.AsyncResult;
 
+/**
+ * Standard responses for Spellsource REST services
+ *
+ * @param <T>
+ */
 public interface WebResult<T> extends AsyncResult<T> {
 	default int responseCode() {
 		if (cause() != null) {

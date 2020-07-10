@@ -6,9 +6,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * Created by bberman on 2/19/17.
- */
 public final class LogicResponse implements Serializable {
 	private Map<EntityReference, Map<Attribute, Object>> modifiedAttributes = new HashMap<>();
 	private List<String> gameIdsAffected = new ArrayList<>();

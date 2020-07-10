@@ -1,0 +1,27 @@
+{
+  "name": "Hungering Acolyte",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener: Drain 2 Health from a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DrainSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

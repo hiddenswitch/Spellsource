@@ -3,26 +3,25 @@ package com.hiddenswitch.spellsource.net.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
-import com.hiddenswitch.spellsource.net.Spellsource;
-import com.hiddenswitch.spellsource.net.Logic;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.spellsource.net.Spellsource;
 import com.hiddenswitch.spellsource.net.impl.GameId;
-import com.hiddenswitch.spellsource.net.impl.RpcClient;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Handler;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+
+;
 
 /**
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
@@ -42,15 +41,9 @@ import java.io.Serializable;
  * whether it must wait for the consequences of persistent effects or not. When it does not have to wait for the
  * consequences of a persistence effect, this implementation makes a non-blocking call to the database, much like an
  * ordinary analytics method call would.
- * <p>
- * This class requires a reference to an {@link RpcClient} for {@link Logic}. It relies on the different ways RPC calls
- * can be made, like {@link RpcClient#sync()} versus {@link RpcClient#async(Handler)}.
  */
 public class PersistenceTrigger implements Trigger, Serializable {
 	static Logger logger = LoggerFactory.getLogger(PersistenceTrigger.class);
-	/**
-	 * The {@link RpcClient} for the {@link Logic} service.
-	 */
 	private transient final GameContext context;
 	private final GameId gameId;
 

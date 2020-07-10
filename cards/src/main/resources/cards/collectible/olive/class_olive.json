@@ -1,0 +1,44 @@
+{
+  "name": "Storyteller",
+  "type": "CLASS",
+  "heroClass": "OLIVE",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.345,
+      "g": 0.647,
+      "r": 0.671
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.0196078431372549,
+      "g": 0.47058823529411764,
+      "r": 0.5098039215686274
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.016,
+      "g": 0.459,
+      "r": 0.494
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.016,
+      "g": 0.435,
+      "r": 0.471
+    }
+  },
+  "hero": "hero_lomenia"
+}

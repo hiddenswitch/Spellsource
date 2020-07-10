@@ -1,0 +1,45 @@
+{
+  "name": "High Shaman Mawliki",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Your spells have Toxic. Your healing is doubled. Your other minions have Elusive and Guard.",
+  "attributes": {
+    "HEAL_AMPLIFY_MULTIPLIER": 2
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_CARDS",
+      "triggers": [
+        {
+          "class": "WillEndSequenceTrigger"
+        },
+        {
+          "class": "CardPlayedTrigger"
+        }
+      ],
+      "attribute": "AURA_POISONOUS",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      }
+    },
+    {
+      "class": "AttributeAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attribute": "AURA_TAUNT"
+    },
+    {
+      "class": "AttributeAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attribute": "AURA_UNTARGETABLE_BY_SPELLS"
+    }
+  ]
+}

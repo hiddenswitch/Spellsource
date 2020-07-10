@@ -12,8 +12,8 @@ import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
@@ -21,12 +21,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Deque;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.toList;
  * you a new connection to a unique user.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
-	Map<String, Boolean> CODECS_REGISTERED = new ConcurrentHashMap<>();
+	Set<EventBus> CODECS_REGISTERED = Collections.newSetFromMap(new WeakHashMap<>());
 
 	/**
 	 * Retrieves a valid reference to write to a connection from anywhere, as long as the event bus on the other node is
@@ -69,7 +69,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	static String toBusAddress(String userId) {
-		return "Connection/clusteredConsumer/" + userId;
+		return "Connection.clusteredConsumer." + userId;
 	}
 
 	/**
@@ -79,7 +79,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @return
 	 */
 	static Handler<RoutingContext> handler() {
-		return suspendableHandler(Connection::connected);
+		return Sync.fiber(Connection::connected);
 	}
 
 	/**
@@ -109,11 +109,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	static Deque<SetupHandler> getHandlers() {
 		Vertx vertx = Vertx.currentContext().owner();
 		final Context context = vertx.getOrCreateContext();
-		Deque<SetupHandler> handlers = context.get("Connection/handlers");
+		Deque<SetupHandler> handlers = context.get("Connection.handlers");
 
 		if (handlers == null) {
 			handlers = new ConcurrentLinkedDeque<>();
-			context.put("Connection/handlers", handlers);
+			context.put("Connection.handlers", handlers);
 		}
 		return handlers;
 	}
@@ -167,7 +167,10 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 				span.log("ready");
 			});
 
-			connection.endHandler(v -> span.finish());
+			connection.addCloseHandler(fut -> {
+				span.finish();
+				fut.complete();
+			});
 			connection.exceptionHandler(ex -> {
 				// Wrap this so we can see where it actually occurs
 				if (!(ex instanceof IOException)) {
@@ -178,7 +181,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			// All handlers should run simultaneously but we'll wait until the handlers have run
 			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
 				Promise<Void> fut = Promise.promise();
-				Vertx.currentContext().runOnContext(suspendableHandler(v -> {
+				Vertx.currentContext().runOnContext(Sync.fiber(v -> {
 					span.log("setupHandler");
 					setupHandler.handle(connection, fut);
 				}));
@@ -198,19 +201,16 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * only.
 	 */
 	static void registerCodecs() {
-		Vertx owner = Vertx.currentContext().owner();
-		String nodeId;
+		synchronized (CODECS_REGISTERED) {
+			Vertx owner = Vertx.currentContext().owner();
 
-		if (((VertxInternal) owner).getClusterManager() == null) {
-			nodeId = owner.toString();
-		} else {
-			nodeId = ((VertxInternal) owner).getNodeID();
-		}
-
-		if (CODECS_REGISTERED.putIfAbsent(nodeId, true) == null) {
-			owner.eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
-			owner.eventBus().registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
-			owner.eventBus().registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
+			var eventBus = owner.eventBus();
+			if (CODECS_REGISTERED.add(eventBus)) {
+				eventBus.registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
+				eventBus.registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
+				eventBus.registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
+				eventBus.registerDefaultCodec(MatchmakingQueueEntry.class, new MatchmakingQueueEntryCodec());
+			}
 		}
 	}
 
@@ -273,9 +273,13 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return this;
 	}
 
-	@Override
-	default Connection endHandler(Handler<Void> endHandler) {
+	default Connection addCloseHandler(Handler<Promise<Void>> closeHandler) {
 		return this;
+	}
+
+	@Override
+	default ReadStream<Envelope> endHandler(@io.vertx.codegen.annotations.Nullable Handler<Void> endHandler) {
+		throw new UnsupportedOperationException("should not schedule things to happen when the user closes the connection");
 	}
 
 	/**

@@ -1,0 +1,42 @@
+{
+  "name": "Twintailed Fox",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKMAGENTA",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Invoke (2): Choose a minion. Add a copy of it to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "InvokeSpell",
+      "spell1": {
+        "class": "InvokeOptionSpell",
+        "name": "Don't Invoke",
+        "description": "Do nothing to the targeted minion.",
+        "mana": 0
+      },
+      "spell2": {
+        "class": "InvokeOptionSpell",
+        "name": "Twin Tails",
+        "description": "Add a copy of the targeted minion to your hand.",
+        "spell": {
+          "class": "CopyCardSpell"
+        },
+        "mana": 2
+      }
+    },
+    "targetSelectionCondition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelectionOverride": "MINIONS"
+  },
+  "attributes": {
+    "INVOKE": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Crimson Pact",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Drain the Health of an allied minion.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "DrainSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "secondaryTarget": "FRIENDLY_HERO"
+  },
+  "attributes": {
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

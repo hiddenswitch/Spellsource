@@ -1,0 +1,20 @@
+{
+  "name": "The Imperial Soul",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Your minions have Spellpower +1.",
+  "aura": {
+    "class": "AttributeValueAura",
+    "target": "FRIENDLY_MINIONS",
+    "value": 1,
+    "attribute": "AURA_SPELL_DAMAGE"
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

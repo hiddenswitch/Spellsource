@@ -648,7 +648,6 @@ public interface Migrations extends Verticle {
 	 * @throws InterruptedException
 	 */
 	@Suspendable
-	@RpcOptions(sendTimeoutMS = 4 * 60 * 1000L)
 	MigrationToResponse migrateTo(MigrateToRequest request) throws SuspendExecution, InterruptedException;
 
 	/**

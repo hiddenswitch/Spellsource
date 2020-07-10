@@ -1,0 +1,37 @@
+{
+  "name": "Stalagmite Stomper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 1,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Opener: If you played another Elemental this turn, gain 8 Armor.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayedThisTurnValueProvider",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "ELEMENTAL"
+        }
+      },
+      "value2": 1
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 8
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

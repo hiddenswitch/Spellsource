@@ -1,0 +1,42 @@
+{
+  "name": "Mindswapper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Opener: Swap the leftmost card in your hand with your opponent's.",
+  "battlecry": {
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "CardCountCondition",
+          "value": 1,
+          "operation": "GREATER_OR_EQUAL",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "CardCountCondition",
+          "value": 1,
+          "operation": "GREATER_OR_EQUAL",
+          "targetPlayer": "OPPONENT"
+        }
+      ]
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SwapCardsSpell",
+      "target": "LEFTMOST_ENEMY_CARD_HAND",
+      "secondaryTarget": "LEFTMOST_FRIENDLY_CARD_HAND"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

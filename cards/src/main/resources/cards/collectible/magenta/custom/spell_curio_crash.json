@@ -1,0 +1,31 @@
+{
+  "name": "Curio Crash",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "FREE",
+  "description": "Deal 3 damage. Receive a random spell.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

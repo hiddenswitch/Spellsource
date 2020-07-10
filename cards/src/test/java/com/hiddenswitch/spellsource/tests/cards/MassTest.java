@@ -39,7 +39,7 @@ public class MassTest extends TestBase {
 	public void testRandomMassPlay() {
 		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {
-			assertTimeoutPreemptively(Duration.ofMillis(4200), () -> {
+			assertTimeoutPreemptively(Duration.ofMillis(420000), () -> {
 						context.play();
 						return null;
 					},

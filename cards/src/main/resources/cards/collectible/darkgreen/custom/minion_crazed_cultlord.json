@@ -1,0 +1,39 @@
+{
+  "name": "Crazed Cultlord",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Opener: Destroy an allied minion. Then, resummon it with Dash.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "OUTPUT",
+        "attribute": "RUSH"
+      },
+      "spell1": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell"
+          },
+          {
+            "class": "ForceDeathPhaseSpell"
+          }
+        ]
+      },
+      "targetPlayer": "OWNER"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

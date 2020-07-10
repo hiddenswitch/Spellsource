@@ -1,0 +1,31 @@
+{
+  "name": "Sanguisiren",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Opener: Take control of an enemy minion with 3 or less remaining Health.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MindControlSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 3,
+        "attribute": "HP",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

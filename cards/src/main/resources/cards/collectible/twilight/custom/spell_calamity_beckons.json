@@ -1,0 +1,18 @@
+{
+  "name": "Calamity Beckons",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "LEGENDARY",
+  "description": "Destroy your deck. Summon every minion you destroyed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.CalamityBeckonsSpell"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

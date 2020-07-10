@@ -1,0 +1,28 @@
+{
+  "name": "Restore Artifact",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "COMMON",
+  "description": "Give your Weapon +2 Durability. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_WEAPON",
+        "hpBonus": 2
+      }
+    ]
+  },
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

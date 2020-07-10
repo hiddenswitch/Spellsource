@@ -1,0 +1,26 @@
+{
+  "name": "Bogovanis",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Opener: Put a Sourcestone under the top card of your opponent's deck. It destroys all minions when drawn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PutDeckTopSpell",
+      "card": "spell_sourcestone",
+      "secondaryValue": 1,
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

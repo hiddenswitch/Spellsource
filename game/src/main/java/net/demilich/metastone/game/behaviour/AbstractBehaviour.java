@@ -14,13 +14,12 @@ import java.util.List;
  * A base class for behaviours that implement no action or a default action when its methods are called.
  */
 public abstract class AbstractBehaviour implements Behaviour, Serializable {
-	public Behaviour clone() {
+	public AbstractBehaviour clone() {
 		try {
-			return (Behaviour) super.clone();
+			return (AbstractBehaviour) super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	@Override

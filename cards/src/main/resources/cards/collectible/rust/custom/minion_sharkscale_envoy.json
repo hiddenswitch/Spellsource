@@ -1,0 +1,63 @@
+{
+  "name": "Sharkscale Envoy",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "The first Dragon you play each turn costs (2) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 2,
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "CardCountValueProvider",
+            "cardFilter": {
+              "class": "AndFilter",
+              "filters": [
+                {
+                  "class": "CardFilter",
+                  "race": "DRAGON",
+                  "cardType": "MINION"
+                },
+                {
+                  "class": "AttributeFilter",
+                  "value": {
+                    "class": "CurrentTurnValueProvider"
+                  },
+                  "attribute": "PLAYED_FROM_HAND_OR_DECK",
+                  "operation": "EQUAL"
+                }
+              ]
+            },
+            "cardSource": {
+              "class": "GraveyardCardsSource",
+              "targetPlayer": "SELF"
+            }
+          },
+          "value2": 0
+        }
+      ]
+    },
+    "cardType": "MINION",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DRAGON"
+    },
+    "operation": "SUBTRACT",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

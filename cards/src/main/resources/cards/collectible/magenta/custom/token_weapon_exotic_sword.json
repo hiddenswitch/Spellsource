@@ -1,0 +1,16 @@
+{
+  "name": "Exotic Sword",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "MAGENTA",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

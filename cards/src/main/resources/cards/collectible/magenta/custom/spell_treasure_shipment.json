@@ -1,0 +1,46 @@
+{
+  "name": "Treasure Shipment",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "COMMON",
+  "description": "Source a Legendary card from other classes.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "SELF",
+          "invert": true
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "ANY",
+          "invert": true
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

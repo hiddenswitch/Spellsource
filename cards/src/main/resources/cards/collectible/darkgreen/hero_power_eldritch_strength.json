@@ -1,0 +1,38 @@
+{
+  "name": "Eldritch Strength",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Passive Skill: Whenever you play a card, draw a card.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HeroPowerSpell",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Gloomlurker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Guard. Aftermath: Destroy the lowest-Health enemy minion.",
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ENEMY_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "ENEMY_MINIONS",
+        "operation": "MINIMUM",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
+      },
+      "attribute": "HP",
+      "operation": "EQUAL"
+    },
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

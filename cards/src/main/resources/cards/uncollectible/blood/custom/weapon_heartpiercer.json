@@ -1,0 +1,45 @@
+{
+  "name": "Heartpiercer",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "Aftermath: Your champion Drains the Health of all minions damaged by this weapon.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "EVENT_TARGET",
+      "card": "enchantment_heartpierced"
+    }
+  },
+  "deathrattle": {
+    "class": "DrainSpell",
+    "target": "ALL_MINIONS",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "filter": {
+      "class": "HasEnchantmentFilter",
+      "card": "enchantment_heartpierced"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

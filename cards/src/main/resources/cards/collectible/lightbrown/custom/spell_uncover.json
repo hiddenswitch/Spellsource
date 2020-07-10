@@ -1,0 +1,24 @@
+{
+  "name": "Uncover",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+  "description": "Receive a random Fossil.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_bone_bouncer",
+      "token_bone_bruiser",
+      "token_bone_bowman"
+    ],
+    "randomTarget": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

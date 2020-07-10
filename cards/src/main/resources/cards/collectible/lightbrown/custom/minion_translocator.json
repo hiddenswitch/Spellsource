@@ -1,0 +1,24 @@
+{
+  "name": "Translocator",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Whenever you shuffle a card into your deck, restore 2 Health to your champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "ShuffledTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

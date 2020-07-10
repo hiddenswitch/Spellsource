@@ -1,0 +1,31 @@
+{
+  "name": "Blood-Bound Golem",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "<b>Guard</b>. Costs (3) if your champion took damage this turn.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "value": 0,
+      "attribute": "DAMAGE_THIS_TURN",
+      "operation": "GREATER"
+    },
+    "ifFalse": 0,
+    "ifTrue": 2
+  },
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

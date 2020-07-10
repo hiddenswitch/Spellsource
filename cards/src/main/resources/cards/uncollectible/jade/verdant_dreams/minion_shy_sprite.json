@@ -1,0 +1,17 @@
+{
+  "name": "Shy Sprite",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Deflect. You can use your Skill twice per turn.",
+  "attributes": {
+    "DEFLECT": true,
+    "HERO_POWER_USAGES": 2
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Unstable Ironbeast",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Dash. Aftermath: Give a random allied minion +1/+1 and Guard.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      }
+    ]
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

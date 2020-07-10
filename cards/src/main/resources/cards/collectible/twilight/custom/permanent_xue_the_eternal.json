@@ -1,0 +1,43 @@
+{
+  "name": "Xue the Eternal",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Restore [10] more excess Health to allies to revive this.",
+  "trigger": {
+    "countUntilCast": 10,
+    "eventTrigger": {
+      "class": "ExcessHealingTrigger",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "minion_xue_the_eternal"
+    },
+    "countByValue": true
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 10
+      }
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

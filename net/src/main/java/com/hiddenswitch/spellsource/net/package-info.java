@@ -44,7 +44,7 @@
  * </pre>
  * Observe that {@code "h"} is the callback for the async function {@code sendMail}.
  * <p>
- * Callbacks that should be executed as fibers can be wrapped with {@link com.hiddenswitch.spellsource.net.impl.Sync#suspendableHandler(co.paralleluniverse.strands.SuspendableAction1)}.
+ * Callbacks that should be executed as fibers can be wrapped with {@link com.hiddenswitch.spellsource.net.impl.Sync#fiber(co.paralleluniverse.strands.SuspendableAction1)}.
  * <p>
  * To easily access the Spellsource database, use {@link com.hiddenswitch.spellsource.net.impl.Mongo#mongo()} in a fiber:
  * <pre>

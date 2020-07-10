@@ -1,0 +1,53 @@
+{
+  "name": "Twisted Flesh",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 7,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever this takes damage from your cards or Skill, restore it to full Health.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "queueCondition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "WEAPON"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_SOURCE",
+            "cardType": "HERO_POWER"
+          }
+        ]
+      },
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Seagoblin Plunderer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Shuffle two 3/4 Seagoblins into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "token_gilblin_marauder",
+      "howMany": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

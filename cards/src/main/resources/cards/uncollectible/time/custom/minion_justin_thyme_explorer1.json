@@ -1,0 +1,58 @@
+{
+  "name": "Justin Thyme, Explorer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Surge: If you played an Elemental last turn and are holding a Dragon, gain +4/+3 and Blitz.",
+  "battlecry": {
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "PlayedLastTurnCondition",
+          "filter": {
+            "class": "CardFilter",
+            "race": "ELEMENTAL"
+          }
+        },
+        {
+          "class": "HoldsCardCondition",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "DRAGON"
+          }
+        },
+        {
+          "class": "SurgeCondition"
+        }
+      ]
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 4,
+          "hpBonus": 3
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "CHARGE"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

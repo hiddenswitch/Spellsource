@@ -1,0 +1,51 @@
+{
+  "name": "Ferronivore",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Opener: Destroy an allied Mech to deal its stats as damage randomly split among all enemies.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "ADD",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "ATTACK"
+        },
+        "value2": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
+      },
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "MissilesSpell",
+          "target": "ENEMY_CHARACTERS",
+          "howMany": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

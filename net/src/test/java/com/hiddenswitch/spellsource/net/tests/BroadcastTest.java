@@ -6,24 +6,23 @@ import com.hiddenswitch.spellsource.net.Gateway;
 import io.vertx.core.Vertx;
 import io.vertx.core.datagram.DatagramSocket;
 import io.vertx.core.datagram.DatagramSocketOptions;
-import io.vertx.ext.unit.Async;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.RunTestOnContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import io.vertx.junit5.Timeout;
+import io.vertx.junit5.VertxExtension;
+import io.vertx.junit5.VertxTestContext;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunWith(VertxUnitRunner.class)
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(VertxExtension.class)
 public class BroadcastTest {
 	private static Logger LOGGER = LoggerFactory.getLogger(BroadcastTest.class);
-	@Rule
-	public RunTestOnContext contextRule = new RunTestOnContext();
 
 	@Test
-	public void testBroadcastCallResponse(TestContext context) {
+	@Timeout(4500)
+	public void testBroadcastCallResponse(VertxTestContext context, Vertx vertx) throws InterruptedException {
 		// On Travis, UDP broadcast is disabled.
 		if (System.getenv().containsKey("CI")) {
 			LOGGER.warn("UDP broadcast will not test correctly in the Travis environment.");
@@ -31,26 +30,27 @@ public class BroadcastTest {
 		}
 
 		System.setProperty("java.net.preferIPv4Stack", "true");
-		Vertx vertx = contextRule.vertx();
-		vertx.exceptionHandler(context.exceptionHandler());
-		Broadcaster verticle = Broadcaster.create();
-		String expectedHostname = Gateway.getHostIpAddress();
-		Async async = context.async();
+		vertx.exceptionHandler(context::failNow);
+		var verticle = Broadcaster.create();
+		var expectedHostname = Gateway.getHostIpAddress();
+		var async = context.checkpoint();
 
-		vertx.deployVerticle(verticle, context.asyncAssertSuccess(then -> {
+		vertx.deployVerticle(verticle, context.succeeding(then -> {
 			vertx.createDatagramSocket(new DatagramSocketOptions()
 					.setReuseAddress(true)
 					.setReusePort(true))
-					.listen(verticle.getMulticastPort() + 1, "0.0.0.0", context.asyncAssertSuccess(socket -> {
+					.listen(verticle.getMulticastPort() + 1, "0.0.0.0", context.succeeding(socket -> {
 						socket.handler(packet -> {
-							String packetData = packet.data().toString();
-							context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Configuration.apiGatewayPort() + "/");
-							context.assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Configuration.apiGatewayPort() + "/");
-							context.assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Configuration.apiGatewayPort() + "/");
-							async.complete();
+							context.verify(() -> {
+								String packetData = packet.data().toString();
+								assertNotEquals(packetData, verticle.getResponsePrefix() + "http://127.0.0.1:" + Configuration.apiGatewayPort() + "/");
+								assertNotEquals(packetData, verticle.getResponsePrefix() + "http://0.0.0.0:" + Configuration.apiGatewayPort() + "/");
+								assertEquals(packetData, verticle.getResponsePrefix() + "http://" + expectedHostname + ":" + Configuration.apiGatewayPort() + "/");
+							});
+							async.flag();
 						});
 
-						var testHandler = context.<DatagramSocket>asyncAssertSuccess();
+						var testHandler = context.<DatagramSocket>succeeding();
 						vertx.setTimer(2000L, v -> {
 							socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), testHandler);
 							LOGGER.info("BroadcastTest: packet sent");
@@ -58,5 +58,4 @@ public class BroadcastTest {
 					}));
 		}));
 	}
-
 }

@@ -1,0 +1,41 @@
+{
+  "name": "Gravekeeper Grallows",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Give a random Weapon in your hand \"Aftermath: Summon Grallows\".",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    },
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "SummonSpell",
+          "card": "minion_gravekeeper_grallows"
+        }
+      },
+      {
+        "class": "AddDescriptionSpell",
+        "description": "Aftermath: Summon Grallows."
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Metallic Manadrake",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Opener: At the end of this turn, deal $[0] damage to all enemies. (Increases for each unspent lun)",
+  "battlecry": {
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MANA"
+      }
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ]
+}

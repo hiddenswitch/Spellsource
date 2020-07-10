@@ -1,0 +1,37 @@
+{
+  "name": "Taletellers",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Opener: Receive a copy of each other Elemental you played this turn.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 10,
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": {
+          "class": "CurrentTurnValueProvider"
+        },
+        "race": "ELEMENTAL",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "cardType": "MINION",
+        "operation": "EQUAL"
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

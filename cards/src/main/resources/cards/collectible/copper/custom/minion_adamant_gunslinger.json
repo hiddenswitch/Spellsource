@@ -1,0 +1,27 @@
+{
+  "name": "Adamant Gunslinger",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Opener: Deal 4 damage randomly split among all enemy minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_MINIONS",
+      "howMany": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

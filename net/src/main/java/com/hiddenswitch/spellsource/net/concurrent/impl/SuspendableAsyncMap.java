@@ -9,20 +9,21 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import static io.vertx.ext.sync.Sync.awaitFiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
+	private final String name;
 	private final AsyncMap<K, V> map;
 
-	public SuspendableAsyncMap(AsyncMap<K, V> map) {
+	public SuspendableAsyncMap(String name, AsyncMap<K, V> map) {
+		this.name = name;
 		this.map = map;
 	}
 
 	@Override
 	@Suspendable
 	public int size() {
-		return awaitFiber(map::size);
+		return awaitResult(map::size);
 	}
 
 	@Override
@@ -33,14 +34,13 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 
 	@Override
 	@Suspendable
-	@SuppressWarnings("unchecked")
-	public boolean containsKey(Object key) {
+	public boolean containsKey(K key) {
 		if (key == null) {
 			throw new NullPointerException("key");
 		}
 
 		return awaitResult(done -> {
-			map.get((K) key, then -> {
+			map.get(key, then -> {
 				done.handle(Future.succeededFuture(then.succeeded() && then.result() != null));
 			});
 		});
@@ -82,7 +82,8 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public boolean remove(K key, V value) {
-		return awaitResult(h -> map.removeIfPresent((K) key, (V) value, h));
+		Boolean res = awaitResult(h -> map.removeIfPresent((K) key, (V) value, h));
+		return res;
 	}
 
 	@Override
@@ -127,6 +128,11 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	@Suspendable
 	public Set<Map.Entry<K, V>> entrySet() {
 		return awaitResult(map::entries).entrySet();
+	}
+
+	@Override
+	public AsyncMap<K, V> async() {
+		return map;
 	}
 
 	@Override

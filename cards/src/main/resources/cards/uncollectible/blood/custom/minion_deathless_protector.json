@@ -1,0 +1,31 @@
+{
+  "name": "Deathless Protector",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Guard. At the start of your turn, Drain 2 Health from the minion(s) opposite this one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrainSpell",
+      "target": "OPPOSITE_MINIONS",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "DRAIN": true,
+    "TAUNT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ]
+}

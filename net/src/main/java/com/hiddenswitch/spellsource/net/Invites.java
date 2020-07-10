@@ -6,6 +6,7 @@ import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.Invite.StatusEnum;
 import com.hiddenswitch.spellsource.net.impl.InviteId;
+import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.models.MatchmakingRequest;
@@ -31,7 +32,7 @@ import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.core.json.JsonObject.mapFrom;
 
 /**
@@ -52,7 +53,7 @@ public interface Invites {
 	static void handleConnections() {
 		Connection.connected((connection, fut) -> {
 			String userId = connection.userId();
-			connection.endHandler(suspendableHandler(v -> {
+			connection.addCloseHandler(fiber(v -> {
 				// Reject pending challenge invites
 				List<JsonObject> invites = mongo().findWithOptions(INVITES, json(
 						"queueId", json("$ne", null),
@@ -69,6 +70,7 @@ public interface Invites {
 								"canceling/rejecting it due to disconnect.", userId);
 					}
 				}
+				v.complete();
 			}));
 			defer(v -> {
 				try {
@@ -219,7 +221,7 @@ public interface Invites {
 			Vertx vertx = Vertx.currentContext().owner();
 
 			// Set timer to expire the invite after 15 minutes
-			vertx.setTimer(DEFAULT_EXPIRY_TIME, suspendableHandler(timerId -> {
+			vertx.setTimer(DEFAULT_EXPIRY_TIME, fiber(timerId -> {
 				// If the invite hasn't been acted on, expire it
 				mongo().updateCollection(INVITES,
 						json("_id", inviteId.toString(), "status", json("$in", PENDING_STATUSES)),
@@ -244,19 +246,18 @@ public interface Invites {
 			if (request.getQueueId() != null || request.getDeckId() != null) {
 				// Assert that the player isn't currently in a match.
 
-				UserId userId = new UserId(user.getId());
-				if (Matchmaking.getUsersInQueues().containsKey(userId)) {
+				if (Matchmaking.getUsersInQueues().containsKey(user.getId())) {
 					throw new IllegalStateException("User is currently in a queue already. Dequeue first");
 				}
 
-				if (Games.getUsersInGames().containsKey(userId)) {
+				if (Games.getUsersInGames().containsKey(new UserId(user.getId()))) {
 					throw new IllegalStateException("User is currently in a game already. That game must be ended first.");
 				}
 
 				// This is (potentially also) a matchmaking queue request
 				// Create a new queue just for this invite.
 				// Right now, anyone can wait in any queue, but this is probably the most convenient.
-				String customQueueId = user.getUsername() + "/" + inviteId + "/" + request.getQueueId();
+				String customQueueId = user.getUsername() + "." + inviteId + "." + request.getQueueId();
 				invite.queueId(customQueueId);
 
 				// The matchmaker will close itself automatically if no one joins after 4s or the
@@ -384,8 +385,7 @@ public interface Invites {
 
 		// Check that the opponent is still in the queue
 		if (invite.getQueueId() != null) {
-			UserId opponentInQueue = new UserId(invite.getFromUserId());
-			if (!Objects.equals(Matchmaking.getUsersInQueues().get(opponentInQueue), (invite.getQueueId()))) {
+			if (!Objects.equals(Matchmaking.getUsersInQueues().get(invite.getFromUserId()), (invite.getQueueId()))) {
 				throw new IllegalStateException("Opponent no longer in queue.");
 			}
 		}

@@ -1,0 +1,27 @@
+{
+  "name": "Niche in the Market",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "RARE",
+  "description": "Summon a 1/1 Customer for each odd-Cost card in your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "PlayerAttributeValueProvider",
+      "cardFilter": {
+        "class": "OddCostFilter"
+      },
+      "playerAttribute": "HAND_COUNT",
+      "targetPlayer": "SELF"
+    },
+    "card": "token_customer"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Cosmic Apparitions",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Source a minion and shuffle two copies of it into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ReceiveCardSpell"
+            },
+            {
+              "class": "ShuffleToDeckSpell",
+              "howMany": 2
+            }
+          ]
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
