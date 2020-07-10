@@ -17,5 +17,4 @@ script:
   - travis_wait 50 ./gradlew test --no-parallel
 env:
   global:
-    JAVA_OPTS=-Xmx1024m
-    MONGO_URL=mongodb://127.0.0.1:27017/testdb
+    - JAVA_OPTS=-Xmx1024m

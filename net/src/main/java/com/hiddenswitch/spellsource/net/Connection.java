@@ -14,7 +14,6 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
@@ -22,13 +21,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Deque;
-import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -39,7 +37,7 @@ import static java.util.stream.Collectors.toList;
  * you a new connection to a unique user.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
-	Map<EventBus, Boolean> CODECS_REGISTERED = new WeakHashMap<>();
+	Set<EventBus> CODECS_REGISTERED = Collections.newSetFromMap(new WeakHashMap<>());
 
 	/**
 	 * Retrieves a valid reference to write to a connection from anywhere, as long as the event bus on the other node is
@@ -203,14 +201,16 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * only.
 	 */
 	static void registerCodecs() {
-		Vertx owner = Vertx.currentContext().owner();
+		synchronized (CODECS_REGISTERED) {
+			Vertx owner = Vertx.currentContext().owner();
 
-		var eventBus = owner.eventBus();
-		if (CODECS_REGISTERED.putIfAbsent(eventBus, true) == null) {
-			eventBus.registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
-			eventBus.registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
-			eventBus.registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
-			eventBus.registerDefaultCodec(MatchmakingQueueEntry.class, new MatchmakingQueueEntryCodec());
+			var eventBus = owner.eventBus();
+			if (CODECS_REGISTERED.add(eventBus)) {
+				eventBus.registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
+				eventBus.registerDefaultCodec(ServerToClientMessage.class, new ServerToClientMessageCodec());
+				eventBus.registerDefaultCodec(ClientToServerMessage.class, new ClientToServerMessageCodec());
+				eventBus.registerDefaultCodec(MatchmakingQueueEntry.class, new MatchmakingQueueEntryCodec());
+			}
 		}
 	}
 

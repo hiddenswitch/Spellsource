@@ -25,8 +25,6 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.codec.JsonJacksonCodec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -36,14 +34,12 @@ import java.util.Map;
  * @see org.redisson.api.LocalCachedMapOptions
  */
 public class DefaultFactory implements Factory {
-	private static final Logger log = LoggerFactory.getLogger(DefaultFactory.class);
 
 	private final SpecifyCodec specify = new SpecifyCodec();
 
 	@Override
 	public <K, V> AsyncMap<K, V> createAsyncMap(Vertx vertx, RedissonClient redisson, String name) {
-		NameWithCodec nameWithCodec = specify.selectCodecByName(name, new RedisMapCodec());
-		return new RedisAsyncMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
+		return new RedisAsyncMap<>(vertx, redisson, name);
 	}
 
 	@Override
@@ -64,10 +60,7 @@ public class DefaultFactory implements Factory {
 	@Override
 	public AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, ClusterManager clusterManager,
 	                                                                      RedissonClient redisson, String name) {
-		// Not 100% what this does
-		//    PendingMessageProcessor pendingMessageProcessor = new DefaultPendingMessageProcessor(vertx, clusterManager, subs);
-		//    pendingMessageProcessor.run();
-		return new RedisAsyncMultiMap<String, ClusterNodeInfo>(vertx, clusterManager, redisson, name);
+		return new RedisAsyncMultiMap<>(vertx, clusterManager, redisson, name);
 	}
 
 	@Override
@@ -76,13 +69,12 @@ public class DefaultFactory implements Factory {
 		return new RedisMap<>(vertx, redisson, name, new StringCodec());
 	}
 
-	// ===
 	private enum Type {
 		DEFAULT(""), KEY_STRING("@key:String"), VAL_STRING("@val:String"), VAL_JSON("@val:Json");
 
 		final private String value;
 
-		private Type(String value) {
+		Type(String value) {
 			this.value = value;
 		}
 	}
@@ -135,25 +127,24 @@ public class DefaultFactory implements Factory {
 				codec = StringCodec.INSTANCE;
 			} else if (types.keyType == Type.KEY_STRING && types.valType == Type.VAL_JSON) {
 				codec = new KeyValueCodec(//
-						JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-						JsonJacksonCodec.INSTANCE.getValueDecoder(), //
-						StringCodec.INSTANCE.getMapKeyEncoder(), //
-						StringCodec.INSTANCE.getMapKeyDecoder(), //
-						JsonJacksonCodec.INSTANCE.getValueEncoder(), //
+						JsonJacksonCodec.INSTANCE.getValueEncoder(),
+						JsonJacksonCodec.INSTANCE.getValueDecoder(),
+						StringCodec.INSTANCE.getMapKeyEncoder(),
+						StringCodec.INSTANCE.getMapKeyDecoder(),
+						JsonJacksonCodec.INSTANCE.getValueEncoder(),
 						JsonJacksonCodec.INSTANCE.getValueDecoder());
 			} else if (types.keyType == Type.KEY_STRING) {
 				RedisMapCodec valCodec = new RedisMapCodec();
 				codec = new KeyValueCodec(//
-						valCodec.getValueEncoder(), // JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-						valCodec.getValueDecoder(), // JsonJacksonCodec.INSTANCE.getValueDecoder(), //
-						StringCodec.INSTANCE.getMapKeyEncoder(), //
-						StringCodec.INSTANCE.getMapKeyDecoder(), //
-						valCodec.getValueEncoder(), // JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-						valCodec.getValueDecoder()); // JsonJacksonCodec.INSTANCE.getValueDecoder());
+						valCodec.getValueEncoder(),
+						valCodec.getValueDecoder(),
+						StringCodec.INSTANCE.getMapKeyEncoder(),
+						StringCodec.INSTANCE.getMapKeyDecoder(),
+						valCodec.getValueEncoder(),
+						valCodec.getValueDecoder());
 			} else {
 				codec = def;
 			}
-//      log.debug("old name: '{}', new name: '{}', keyType: {}, valType :{}, codec: '{}'", name, types.name, types.keyType, types.valType, codec);
 			return new NameWithCodec(types.name, codec);
 		}
 	}

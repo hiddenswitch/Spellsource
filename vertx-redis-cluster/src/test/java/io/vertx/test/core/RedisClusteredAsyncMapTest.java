@@ -26,9 +26,10 @@ public class RedisClusteredAsyncMapTest extends ClusteredAsyncMapTest {
 		return new RedisClusterManager(redisContainer.getRedisUrl());
 	}
 
+
 	// Failing tests
 	@Override
-	@Ignore("semantics not supported by Redis ttl maps")
+	@Ignore("semantics not supported by Redis ttl maps, will throw if user attempts to use this functionality")
 	public void testMapPutTtlThenPut() {
 	}
 }

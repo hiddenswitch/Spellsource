@@ -49,7 +49,7 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 
 	@Override
 	@Suspendable
-	public void start() throws SuspendExecution {
+	protected void syncStart() throws SuspendExecution {
 		// Automatically migrate if we have a version specified in an environment value
 		if (System.getenv().containsKey("MIGRATE")) {
 			try {
@@ -66,8 +66,7 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 	}
 
 	@Override
-	public void stop() throws Exception {
-		super.stop();
+	protected void syncStop() throws SuspendExecution {
 	}
 
 	@Override

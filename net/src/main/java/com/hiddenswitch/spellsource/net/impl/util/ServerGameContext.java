@@ -12,8 +12,8 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.impl.*;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.net.impl.*;
 import com.hiddenswitch.spellsource.net.impl.server.BotsServiceBehaviour;
 import com.hiddenswitch.spellsource.net.impl.server.Configuration;
 import com.hiddenswitch.spellsource.net.impl.server.VertxScheduler;
@@ -26,7 +26,6 @@ import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
-import io.vertx.core.Future;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
@@ -57,7 +56,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Stream;
@@ -183,8 +185,14 @@ public class ServerGameContext extends GameContext implements Server {
 					registrationsReady.add(registration);
 
 					// We'll want to unregister and close these when this instance is disposed
-					closeables.add(consumer::unregister);
-					closeables.add(producer::close);
+					closeables.add(fut -> {
+						LOGGER.debug("closeables {}: unregistering consumer", gameId);
+						consumer.unregister(fut);
+					});
+					closeables.add(fut -> {
+						LOGGER.debug("closeables {}: unregistering producer", gameId);
+						producer.close(fut);
+					});
 
 					// Create a client that handles game events and action/mulligan requests
 					UnityClientBehaviour client = new UnityClientBehaviour(this,
@@ -209,7 +217,12 @@ public class ServerGameContext extends GameContext implements Server {
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
 
-				closeables.add(closeableBehaviour);
+				Closeable finalCloseableBehaviour = closeableBehaviour;
+
+				closeables.add(fut -> {
+					LOGGER.debug("closeables {}: closing client {}", gameId, finalCloseableBehaviour);
+					finalCloseableBehaviour.close(fut);
+				});
 			}
 
 			// Only enable editing if we actually got this far
@@ -802,6 +815,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	protected void notifyPlayersGameOver() {
 		for (Client client : getClients()) {
+			LOGGER.debug("notifyPlayersGameOver: notifying {}", client.getUserId());
 			client.sendGameOver(getGameStateCopy(), getWinner());
 		}
 	}
@@ -821,6 +835,7 @@ public class ServerGameContext extends GameContext implements Server {
 	protected void endGame() {
 		lock.lock();
 		try {
+			LOGGER.debug("endGame {}: calling end game", gameId);
 			isRunning = false;
 			// Close the inbound messages from the client, they should be ignored by these client instances
 			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
@@ -837,9 +852,9 @@ public class ServerGameContext extends GameContext implements Server {
 			// We have to release the users before we call end game, because that way when the client receives the end game
 			// message, their model of the world is that they're no longer in a game.
 			releaseUsers();
-
 			// Actually end the game
 			super.endGame();
+			LOGGER.debug("endGame {}: called super.endGame", gameId);
 
 			// No end of game handler should be called more than once, so we're removing them one-by-one as we're processing
 			// them.
@@ -852,6 +867,8 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			}
 
+			LOGGER.debug("endGame {}: endGameHandlers run", gameId);
+
 			// Now that the game is over, we have to stop processing the game event loop. We'll check that we're not in the
 			// loop right now. If we are, we don't need to interrupt ourselves. Conceding, server shutdown and other lifecycle
 			// issues will result, eventually, in calling end game outside this game's event loop. In that case, we'll
@@ -860,6 +877,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// other callbacks that may be processing player modifications to the game.
 			if (getFiber() != null && !Strand.currentStrand().equals(getFiber())) {
 				getFiber().interrupt();
+				LOGGER.debug("endGame {}: interrupted fiber", gameId);
 				setFiber(null);
 			}
 		} finally {
@@ -874,14 +892,21 @@ public class ServerGameContext extends GameContext implements Server {
 		GameId gameId = new GameId(getGameId());
 		if (Fiber.isCurrentFiber() && Vertx.currentContext() != null) {
 			SuspendableMap<UserId, GameId> games = null;
+			SuspendableMap<String, String> queues;
 			try {
 				games = Games.getUsersInGames();
+				queues = Matchmaking.getUsersInQueues();
 			} catch (SuspendExecution suspendExecution) {
 				throw new RuntimeException(suspendExecution);
 			}
 
+
 			for (UserId userId : getUserIds()) {
-				games.remove(userId, gameId);
+				var res = games.get(userId);
+				if (!games.remove(userId, gameId)) {
+					LOGGER.warn("releaseUsers {}: failed to release {} because it contains {}", gameId, userId, res);
+				}
+				queues.remove(userId.toString());
 			}
 		} else {
 			UserId[] userIds = getUserIds().toArray(new UserId[0]);
@@ -961,6 +986,7 @@ public class ServerGameContext extends GameContext implements Server {
 					iter.remove();
 				}
 			}
+			LOGGER.debug("dispose {}: closers closed", gameId);
 			super.dispose();
 		} finally {
 			span.finish();

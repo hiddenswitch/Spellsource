@@ -8,13 +8,13 @@ import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.redis.RedisClusterManager;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 /**
+ * @author <a href="mailto:ben@hiddenswitch.com">Benjamin Berman</a>
  * @author <a href="mailto:guoyu.511@gmail.com">Guo Yu</a>
  */
 public class RedisClusteredAsynchronousLockTest extends ClusteredAsynchronousLockTest {
@@ -34,6 +34,12 @@ public class RedisClusteredAsynchronousLockTest extends ClusteredAsynchronousLoc
 		return new RedisClusterManager(redisContainer.getRedisUrl());
 	}
 
+	/**
+	 * From {@link #testLockReleased(Consumer)}
+	 *
+	 * @param action
+	 * @throws Exception
+	 */
 	private void testLockReleased1(Consumer<CountDownLatch> action) throws Exception {
 		CountDownLatch lockAquiredLatch = new CountDownLatch(1);
 		this.vertices[0].sharedData().getLockWithTimeout("pimpo", this.getLockTimeout(), this.onSuccess((lock) -> {
@@ -49,6 +55,11 @@ public class RedisClusteredAsynchronousLockTest extends ClusteredAsynchronousLoc
 		this.await();
 	}
 
+	/**
+	 * Tests locks for closed nodes, a behavior that works correctly in this cluster manager
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testLockReleasedForClosedNode1() throws Exception {
 		this.testLockReleased1((latch) -> {
@@ -58,10 +69,15 @@ public class RedisClusteredAsynchronousLockTest extends ClusteredAsynchronousLoc
 		});
 	}
 
+	/**
+	 * Tests locks for killed nodes, a behavior that works correctly in this cluster manager
+	 *
+	 * @throws Exception
+	 */
 	@Test
 	public void testLockReleasedForKilledNode1() throws Exception {
 		this.testLockReleased1((latch) -> {
-			VertxInternal vi = (VertxInternal)this.vertices[0];
+			VertxInternal vi = (VertxInternal) this.vertices[0];
 			vi.getClusterManager().leave(this.onSuccess((v) -> {
 				latch.countDown();
 			}));

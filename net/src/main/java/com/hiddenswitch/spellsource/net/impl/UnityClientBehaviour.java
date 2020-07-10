@@ -830,4 +830,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public List<ActivityMonitor> getActivityMonitors() {
 		return activityMonitors;
 	}
+
+	@Override
+	public String toString() {
+		return "UnityClientBehaviour{" +
+				"userId=" + userId +
+				", playerId=" + playerId +
+				", server=" + server +
+				'}';
+	}
 }

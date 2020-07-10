@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.PresenceEnum;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableCounter;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
