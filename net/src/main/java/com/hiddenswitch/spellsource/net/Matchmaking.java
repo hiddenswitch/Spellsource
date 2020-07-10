@@ -387,12 +387,8 @@ public interface Matchmaking {
 				} catch (RuntimeException ex) {
 					var cause = Throwables.getRootCause(ex);
 					if (cause instanceof InterruptedException) {
-						// expected when this is going down
 						return null;
 					}
-//					if (cause instanceof VertxException && cause.getMessage().contains("Timed out")) {
-//						return null;
-//					}
 					throw ex;
 				} finally {
 					if (lock != null) {
