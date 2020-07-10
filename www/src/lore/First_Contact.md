@@ -33,5 +33,5 @@ Leading Shun He to the fire, hand in hand, she could pass vision to him
 as long as they touched and felt the heat. In this vision, Shun He
 learned of a source of water, technology to build with steelgrass, the
 written and spoken languages of the archipelago
-([Sylvan](/wiki/Wyspan "wikilink")), and the identity of the Fae's leader,
+([Wyspan](/wiki/Wyspan "wikilink")), and the identity of the Fae's leader,
 [Shiramba](/wiki/Shiramba "wikilink").
