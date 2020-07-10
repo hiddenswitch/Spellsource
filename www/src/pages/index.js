@@ -78,7 +78,6 @@ const Index = () => {
 
           <ParallaxLayer
             offset={0}
-            // speed={-0.9}
             speed={1}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={() => parallax.scrollTo(1.5)}>
