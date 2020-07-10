@@ -15,21 +15,19 @@
  */
 package io.vertx.spi.cluster.redis.impl;
 
+import io.vertx.core.Vertx;
+import org.redisson.api.MapOptions;
+import org.redisson.api.RMap;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.Codec;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.redisson.api.MapOptions;
-import org.redisson.api.RMap;
-import org.redisson.api.RMapCache;
-import org.redisson.api.RedissonClient;
-import org.redisson.client.codec.Codec;
-
-import io.vertx.core.Vertx;
-
 /**
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
+ *
  */
 class RedisMap<K, V> implements Map<K, V> {
 

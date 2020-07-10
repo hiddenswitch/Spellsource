@@ -15,217 +15,202 @@
  */
 package io.vertx.spi.cluster.redis.impl;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.function.Predicate;
-
-import org.redisson.api.BatchOptions;
-import org.redisson.api.BatchOptions.ExecutionMode;
-import org.redisson.api.RBatch;
-import org.redisson.api.RSetMultimap;
-import org.redisson.api.RedissonClient;
-import org.redisson.client.codec.Codec;
-
-import io.vertx.core.AsyncResult;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import io.vertx.core.*;
+import io.vertx.core.eventbus.impl.clustered.ClusterNodeInfo;
 import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ChoosableIterable;
+import io.vertx.core.spi.cluster.ClusterManager;
+import org.redisson.api.RSetMultimap;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
+import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.misc.RedissonPromise;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * batch.atomic return's value must using Codec to Object. (always return String type)
  *
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
  * @see org.redisson.RedissonSetMultimapValues
  */
 class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
-	private static final Logger log = LoggerFactory.getLogger(RedisAsyncMultiMap.class);
 
-	protected final ConcurrentMap<K, ChoosableSet<V>> choosableSetPtr = new ConcurrentHashMap<>();
-	protected final RedissonClient redisson;
-	protected final Vertx vertx;
-	protected final RSetMultimap<K, V> multiMap;
-	protected final String name;
+	private final RSetMultimap<K, V> map;
+	private final Vertx vertx;
+	private final ClusterManager clusterManager;
+	private final RedissonClient redisson;
+	private final LoadingCache<K, AtomicInteger> iterators = CacheBuilder.newBuilder()
+			.maximumSize(100)
+			.expireAfterAccess(60, TimeUnit.SECONDS)
+			.build(new CacheLoader<K, AtomicInteger>() {
+				@Override
+				public AtomicInteger load(K key) {
+					return new AtomicInteger();
+				}
+			});
 
-	public RedisAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name, Codec codec) {
-		Objects.requireNonNull(redisson, "redisson");
-		Objects.requireNonNull(name, "name");
+	RedisAsyncMultiMap(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson, String name) {
 		this.vertx = vertx;
+		this.clusterManager = clusterManager;
 		this.redisson = redisson;
-		this.name = name;
-		this.multiMap = createMultimap(this.redisson, this.name, codec);
-	}
-
-	/**
-	 * Here you can customize(override method) a "Codec"
-	 *
-	 * @see org.redisson.codec.JsonJacksonCodec
-	 */
-	protected RSetMultimap<K, V> createMultimap(RedissonClient redisson, String name, Codec codec) {
-		if (codec == null) {
-			return redisson.getSetMultimap(name); // redisson.getSetMultimapCache(name);
-		} else {
-			return redisson.getSetMultimap(name, codec);
-		}
+		this.map = redisson.getSetMultimap(name, new KeyValueCodec(
+				JsonJacksonCodec.INSTANCE.getValueEncoder(), JsonJacksonCodec.INSTANCE.getValueDecoder(),
+				StringCodec.INSTANCE.getMapKeyEncoder(), StringCodec.INSTANCE.getMapKeyDecoder(),
+				JsonJacksonCodec.INSTANCE.getValueEncoder(), JsonJacksonCodec.INSTANCE.getValueDecoder()));
 	}
 
 	@Override
 	public void add(K k, V v, Handler<AsyncResult<Void>> completionHandler) {
+		if (redisson.isShutdown()) {
+			completionHandler.handle(Future.failedFuture(new VertxException("redisson shut down")));
+			return;
+		}
 		Context context = vertx.getOrCreateContext();
-		multiMap.putAsync(k, v).whenComplete((added, e) -> context.runOnContext(vd -> //
-				completionHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture())) //
-		);
+		map.putAsync(k, v).onComplete((r, t) -> context.runOnContext(i -> completionHandler.handle(Future.succeededFuture())));
 	}
 
-	Map<K, Deque<Handler<AsyncResult<ChoosableIterable<V>>>>> handlers = new ConcurrentHashMap<>();
-
-	/**
-	 * @see io.vertx.core.eventbus.impl.clustered.ClusteredEventBus#sendOrPub(SendContextImpl<T>)
-	 */
 	@Override
-	public void get(K k, Handler<AsyncResult<ChoosableIterable<V>>> resultHandler) {
+	public void get(K k, Handler<AsyncResult<ChoosableIterable<V>>> asyncResultHandler) {
+		if (redisson.isShutdown()) {
+			asyncResultHandler.handle(Future.failedFuture(new VertxException("redisson shut down")));
+			return;
+		}
 		Context context = vertx.getOrCreateContext();
-		Deque<Handler<AsyncResult<ChoosableIterable<V>>>> queue = handlers.computeIfAbsent(k, ignored -> new ArrayDeque<>());
-		queue.addLast(resultHandler);
-		multiMap.getAllAsync(k).whenComplete((v, e) -> { // v class is java.util.LinkedHashSet
-			Handler<AsyncResult<ChoosableIterable<V>>> toCall = queue.removeFirst();
-			if (e != null) {
-				context.runOnContext(vd -> toCall.handle(Future.failedFuture(e)));
-			} else {
-				context.runOnContext(vd -> toCall.handle(Future.succeededFuture(getCurrentRef(k, v))));
-			}
-		});
+		map.getAllAsync(k).onComplete((values, t) -> {
+			context.runOnContext(i -> {
+				if (t != null) {
+					asyncResultHandler.handle(Future.failedFuture(t));
+				} else {
+					List<V> valueList = values.stream()
+							.sorted(Comparator.comparing(v -> {
+								if (v instanceof ClusterNodeInfo) {
+									return ((ClusterNodeInfo) v).nodeId;
+								} else {
+									return v.toString();
+								}
+							}))
+							.filter(v -> {
+								if (v instanceof ClusterNodeInfo) {
+									return clusterManager.getNodes().contains(((ClusterNodeInfo) v).nodeId);
+								} else {
+									return true;
+								}
+							}).collect(Collectors.toList());
+					if (!valueList.isEmpty()) {
+						try {
+							Collections.rotate(valueList, iterators.get(k).getAndIncrement() % valueList.size());
+						} catch (ExecutionException e) {
+							throw new RuntimeException(e);
+						}
+					}
+					asyncResultHandler.handle(Future.succeededFuture(new ChoosableList(valueList)));
+				}
+			});
 
+		});
 	}
 
 	@Override
 	public void remove(K k, V v, Handler<AsyncResult<Boolean>> completionHandler) {
+		if (redisson.isShutdown()) {
+			completionHandler.handle(Future.failedFuture(new VertxException("redisson shut down")));
+			return;
+		}
 		Context context = vertx.getOrCreateContext();
-		multiMap.removeAsync(k, v).whenComplete((removed, e) -> context.runOnContext(vd -> //
-				completionHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(removed))) //
-		);
+		map.removeAsync(k, v).onComplete((r, t) -> context.runOnContext(i -> completionHandler.handle(t == null ? Future.succeededFuture(r) : Future.failedFuture(t))));
 	}
 
 	@Override
 	public void removeAllForValue(V v, Handler<AsyncResult<Void>> completionHandler) {
-		removeAllMatching(value -> value == v || value.equals(v), completionHandler);
+		if (redisson.isShutdown()) {
+			completionHandler.handle(Future.failedFuture(new VertxException("redisson shut down")));
+			return;
+		}
+		Context context = vertx.getOrCreateContext();
+
+		map.readAllKeySetAsync().thenCompose(keys -> {
+			return RedissonPromise.allOf(
+					keys.stream().map(key -> {
+						return map.removeAsync(key, v).toCompletableFuture();
+					}).toArray(CompletableFuture[]::new)
+			);
+		}).handle((v2, t) -> {
+			context.runOnContext(i -> completionHandler.handle(t == null ? Future.succeededFuture() : Future.failedFuture(t)));
+			return null;
+		});
 	}
 
-	/**
-	 * Remove values which satisfies the given predicate in all keys.
-	 */
 	@Override
 	public void removeAllMatching(Predicate<V> p, Handler<AsyncResult<Void>> completionHandler) {
-		Context context = vertx.getOrCreateContext();
-		batchRemoveAllMatching(p, ar -> {
-			if (ar.failed()) {
-				context.runOnContext(vd -> completionHandler.handle(Future.failedFuture(ar.cause())));
-			} else {
-				context.runOnContext(vd -> completionHandler.handle(Future.succeededFuture(ar.result())));
-			}
-		});
-	}
-
-	@SuppressWarnings({"rawtypes", "deprecation"})
-	private void batchRemoveAllMatching(Predicate<V> p, Handler<AsyncResult<Void>> completionHandler) {
-		multiMap.readAllKeySetAsync().whenComplete((keys, e) -> {
-			if (e != null) {
-				log.warn("error: {}", e.toString());
-				completionHandler.handle(Future.failedFuture(e));
-			} else {
-				if (keys.isEmpty()) {
-					completionHandler.handle(Future.succeededFuture());
-					return;
-				}
-				Map<K, Future> keyFutures = new HashMap<>(keys.size());
-				keys.forEach(key -> {
-					keyFutures.put(key, Future.future());
-				});
-				for (K key : keys) {
-					Future keyFuture = keyFutures.get(key);
-					multiMap.getAllAsync(key).whenComplete((values, e2) -> {
-						if (e2 != null) {
-							keyFuture.fail(e2);
-						} else {
-							if (values.isEmpty()) {
-								keyFuture.complete();
-							} else {
-								List<V> deletedList = new ArrayList<>();
-								values.forEach(value -> {
-									if (p.test(value)) { // XXX
-										deletedList.add(value);
-									}
-								});
-
-								if (deletedList.isEmpty()) {
-									keyFuture.complete();
-								} else {
-									RBatch batch = redisson.createBatch(BatchOptions.defaults()
-											.executionMode(ExecutionMode.REDIS_WRITE_ATOMIC).skipResult());
-									deletedList.forEach(value -> {
-										multiMap.removeAsync(key, value);
-									});
-									batch.executeAsync().whenCompleteAsync((result, e3) -> {
-										if (e != null) {
-											log.warn("key: {}, error: {}", key, e3.toString());
-											keyFuture.fail(e3);
-										} else { // XXX: skipResult() ==> result.class=<null>, result=null
-											keyFuture.complete();
-										}
-									});
-								}
-							}
-						}
-					});
-				}
-				//
-				CompositeFuture.join(new ArrayList<>(keyFutures.values())).setHandler(ar -> completionHandler
-						.handle(ar.failed() ? Future.failedFuture(ar.cause()) : Future.succeededFuture()));
-			}
-		});
-	}
-
-	private ChoosableSet<V> getCurrentRef(K k, Collection<V> v) {
-		ChoosableSet<V> current = choosableSetPtr.get(k);
-		ChoosableSet<V> newSet = new ChoosableSet<>(vertx, v);
-		if (current == null) {
-			ChoosableSet<V> previous = choosableSetPtr.putIfAbsent(k, newSet);
-			if (previous != null) {
-				if (!previous.equals(newSet)) {
-					choosableSetPtr.put(k, newSet);
-					// log.debug("Using newSet: {}", newSet);
-					current = newSet;
-				} else {
-					// log.debug("Using previous: {}", previous);
-					current = previous;
-				}
-			} else {
-				current = newSet;
-				// log.debug("Using newSet: {}", newSet);
-			}
-		} else {
-			if (!current.equals(newSet)) {
-				choosableSetPtr.put(k, newSet);
-				// log.debug("Using newSet: {}, old: {}", newSet, current);
-				current = newSet;
-			} else {
-				if (current.isEmpty() || newSet.isEmpty()) {
-					log.debug("Using current: {}, newSet: {}", current, newSet);
-				}
-			}
+		if (redisson.isShutdown()) {
+			completionHandler.handle(Future.failedFuture(new VertxException("redisson shut down")));
+			return;
 		}
-		return current;
+		Context context = vertx.getOrCreateContext();
+		(map.readAllKeySetAsync().thenCompose(keys -> {
+			return RedissonPromise.allOf(
+					keys.stream().map(key -> {
+//						RLock lock = map.getLock(key);
+//						int id = (int) System.currentTimeMillis();
+						return /*lock.lockAsync(4000, TimeUnit.MILLISECONDS, id)
+								.thenCompose(v3 -> {
+									return */map.getAllAsync(key) /*;
+								})*/.thenCompose(values -> {
+									return RedissonPromise.allOf(values.stream().filter(p)
+											.map(value -> map.removeAsync(key, value).toCompletableFuture())
+											.toArray(CompletableFuture[]::new));
+								})/*.thenCompose(ignored -> {
+									return lock.unlockAsync(id);
+								})*/
+								.toCompletableFuture();
+					}).toArray(CompletableFuture[]::new)
+			);
+		})).handle((v2, t) -> {
+			context.runOnContext(i -> completionHandler.handle(t == null ? Future.succeededFuture() : Future.failedFuture(t)));
+			return null;
+		});
 	}
 
-	@Override
-	public String toString() {
-		return super.toString() + "{name=" + name + "}";
-	}
+	private static class ChoosableList<V> implements ChoosableIterable<V> {
+		List<V> items;
+		boolean chose;
 
+		public ChoosableList(List<V> items) {
+			this.items = items;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			return items.isEmpty();
+		}
+
+		@Override
+		public V choose() {
+			if (chose) {
+				throw new UnsupportedOperationException();
+			}
+			chose = true;
+			if (items.isEmpty()) {
+				return null;
+			}
+			return items.get(0);
+		}
+
+		@Override
+		public Iterator<V> iterator() {
+			return items.iterator();
+		}
+	}
 }

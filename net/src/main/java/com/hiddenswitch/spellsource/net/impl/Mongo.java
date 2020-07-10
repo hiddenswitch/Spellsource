@@ -14,15 +14,14 @@ import io.vertx.ext.mongo.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
-import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResultUninterruptibly;
-import static io.vertx.ext.sync.Sync.streamAdaptor;
-
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResultUninterruptibly;
 
 /**
  * There is only one Mongo.
@@ -627,12 +626,17 @@ public class Mongo implements Closeable {
 	}
 
 	private void closeNow() {
+		var closeFutThis = closeFut;
+		if (closeFutThis == null) {
+			return;
+		}
+		closeFut = null;
 		try {
 			client.close();
 			createdOnContext.remove("__mongo");
-			closeFut.handle(Future.succeededFuture());
+			closeFutThis.handle(Future.succeededFuture());
 		} catch (Throwable t) {
-			closeFut.handle(Future.failedFuture(t));
+			closeFutThis.handle(Future.failedFuture(t));
 		}
 	}
 }
