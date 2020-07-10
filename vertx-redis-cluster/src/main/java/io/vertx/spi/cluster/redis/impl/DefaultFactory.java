@@ -31,133 +31,130 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
- * 
  * @see org.redisson.api.RLocalCachedMap
  * @see org.redisson.Redisson#getLocalCachedMap
  * @see org.redisson.api.LocalCachedMapOptions
- * 
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
  */
 public class DefaultFactory implements Factory {
-  private static final Logger log = LoggerFactory.getLogger(DefaultFactory.class);
+	private static final Logger log = LoggerFactory.getLogger(DefaultFactory.class);
 
-  private final SpecifyCodec specify = new SpecifyCodec();
+	private final SpecifyCodec specify = new SpecifyCodec();
 
-  @Override
-  public <K, V> AsyncMap<K, V> createAsyncMap(Vertx vertx, RedissonClient redisson, String name) {
-    NameWithCodec nameWithCodec = specify.selectCodecByName(name, new RedisMapCodec());
-    return new RedisAsyncMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
-  }
+	@Override
+	public <K, V> AsyncMap<K, V> createAsyncMap(Vertx vertx, RedissonClient redisson, String name) {
+		NameWithCodec nameWithCodec = specify.selectCodecByName(name, new RedisMapCodec());
+		return new RedisAsyncMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
+	}
 
-  @Override
-  public <K, V> AsyncMultiMap<K, V> createAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name) {
-    NameWithCodec nameWithCodec = specify.selectCodecByName(name, new JsonJacksonCodec());
-    return new RedisAsyncMultiMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
-  }
+	@Override
+	public <K, V> AsyncMultiMap<K, V> createAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name, ClusterManager clusterManager) {
+		NameWithCodec nameWithCodec = specify.selectCodecByName(name, new JsonJacksonCodec());
+		return new RedisAsyncMultiMap<K, V>(vertx, clusterManager, redisson, nameWithCodec.name);
+	}
 
-  @Override
-  public <K, V> Map<K, V> createMap(Vertx vertx, RedissonClient redisson, String name) {
-    NameWithCodec nameWithCodec = specify.selectCodecByName(name, new JsonJacksonCodec());
-    return new RedisMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
-  }
+	@Override
+	public <K, V> Map<K, V> createMap(Vertx vertx, RedissonClient redisson, String name) {
+		NameWithCodec nameWithCodec = specify.selectCodecByName(name, new JsonJacksonCodec());
+		return new RedisMap<>(vertx, redisson, nameWithCodec.name, nameWithCodec.codec);
+	}
 
-  /**
-   * EventBus ready been created
-   */
-  @Override
-  public AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, ClusterManager clusterManager,
-      RedissonClient redisson, String name) {
-    AsyncMultiMap<String, ClusterNodeInfo> subs = new RedisAsyncMultiMapSubs(vertx, clusterManager, redisson, name);
-//    PendingMessageProcessor pendingMessageProcessor = new DefaultPendingMessageProcessor(vertx, clusterManager, subs);
-//    pendingMessageProcessor.run();
-    return subs;
-  }
+	/**
+	 * EventBus ready been created
+	 */
+	@Override
+	public AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, ClusterManager clusterManager,
+	                                                                      RedissonClient redisson, String name) {
+		// Not 100% what this does
+		//    PendingMessageProcessor pendingMessageProcessor = new DefaultPendingMessageProcessor(vertx, clusterManager, subs);
+		//    pendingMessageProcessor.run();
+		return new RedisAsyncMultiMap<String, ClusterNodeInfo>(vertx, clusterManager, redisson, name);
+	}
 
-  @Override
-  public Map<String, String> createMapHaInfo(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson,
-      String name) {
-    return new RedisMap<>(vertx, redisson, name, new StringCodec());
-  }
+	@Override
+	public Map<String, String> createMapHaInfo(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson,
+	                                           String name) {
+		return new RedisMap<>(vertx, redisson, name, new StringCodec());
+	}
 
-  // ===
-  private enum Type {
-    DEFAULT(""), KEY_STRING("@key:String"), VAL_STRING("@val:String"), VAL_JSON("@val:Json");
+	// ===
+	private enum Type {
+		DEFAULT(""), KEY_STRING("@key:String"), VAL_STRING("@val:String"), VAL_JSON("@val:Json");
 
-    final private String value;
+		final private String value;
 
-    private Type(String value) {
-      this.value = value;
-    }
-  }
+		private Type(String value) {
+			this.value = value;
+		}
+	}
 
-  private class NameWithCodec {
-    final public String name;
-    final public Codec codec;
+	private class NameWithCodec {
+		final public String name;
+		final public Codec codec;
 
-    public NameWithCodec(String name, Codec codec) {
-      this.name = name;
-      this.codec = codec;
-    }
-  }
+		public NameWithCodec(String name, Codec codec) {
+			this.name = name;
+			this.codec = codec;
+		}
+	}
 
-  private class SpecifyCodec {
+	private class SpecifyCodec {
 
-    private class WhichType {
-      private String name;
-      private Type keyType = Type.DEFAULT;
-      private Type valType = Type.DEFAULT;
-    }
+		private class WhichType {
+			private String name;
+			private Type keyType = Type.DEFAULT;
+			private Type valType = Type.DEFAULT;
+		}
 
-    private WhichType parseType(String name) {
-      int idx = name.indexOf(Type.KEY_STRING.value);
-      WhichType type = new WhichType();
-      if (idx != -1) {
-        type.keyType = Type.KEY_STRING;
-        name = name.substring(0, idx) + name.substring(idx + Type.KEY_STRING.value.length());
-      }
-      idx = name.indexOf(Type.VAL_STRING.value);
-      if (idx != -1) {
-        type.valType = Type.VAL_STRING;
-        name = name.substring(0, idx) + name.substring(idx + Type.VAL_STRING.value.length());
-      } else {
-        idx = name.indexOf(Type.VAL_JSON.value);
-        if (idx != -1) {
-          type.valType = Type.VAL_JSON;
-          name = name.substring(0, idx) + name.substring(idx + Type.VAL_JSON.value.length());
-        }
-      }
-      type.name = name;
-      return type;
-    }
+		private WhichType parseType(String name) {
+			int idx = name.indexOf(Type.KEY_STRING.value);
+			WhichType type = new WhichType();
+			if (idx != -1) {
+				type.keyType = Type.KEY_STRING;
+				name = name.substring(0, idx) + name.substring(idx + Type.KEY_STRING.value.length());
+			}
+			idx = name.indexOf(Type.VAL_STRING.value);
+			if (idx != -1) {
+				type.valType = Type.VAL_STRING;
+				name = name.substring(0, idx) + name.substring(idx + Type.VAL_STRING.value.length());
+			} else {
+				idx = name.indexOf(Type.VAL_JSON.value);
+				if (idx != -1) {
+					type.valType = Type.VAL_JSON;
+					name = name.substring(0, idx) + name.substring(idx + Type.VAL_JSON.value.length());
+				}
+			}
+			type.name = name;
+			return type;
+		}
 
-    private NameWithCodec selectCodecByName(String name, Codec def) {
-      WhichType types = parseType(name);
+		private NameWithCodec selectCodecByName(String name, Codec def) {
+			WhichType types = parseType(name);
 
-      Codec codec;
-      if (types.keyType == Type.KEY_STRING && types.valType == Type.VAL_STRING) {
-        codec = StringCodec.INSTANCE;
-      } else if (types.keyType == Type.KEY_STRING && types.valType == Type.VAL_JSON) {
-        codec = new KeyValueCodec(//
-            JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-            JsonJacksonCodec.INSTANCE.getValueDecoder(), //
-            StringCodec.INSTANCE.getMapKeyEncoder(), //
-            StringCodec.INSTANCE.getMapKeyDecoder(), //
-            JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-            JsonJacksonCodec.INSTANCE.getValueDecoder());
-      } else if (types.keyType == Type.KEY_STRING) {
-        RedisMapCodec valCodec = new RedisMapCodec();
-        codec = new KeyValueCodec(//
-            valCodec.getValueEncoder(), // JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-            valCodec.getValueDecoder(), // JsonJacksonCodec.INSTANCE.getValueDecoder(), //
-            StringCodec.INSTANCE.getMapKeyEncoder(), //
-            StringCodec.INSTANCE.getMapKeyDecoder(), //
-            valCodec.getValueEncoder(), // JsonJacksonCodec.INSTANCE.getValueEncoder(), //
-            valCodec.getValueDecoder()); // JsonJacksonCodec.INSTANCE.getValueDecoder());
-      } else {
-        codec = def;
-      }
+			Codec codec;
+			if (types.keyType == Type.KEY_STRING && types.valType == Type.VAL_STRING) {
+				codec = StringCodec.INSTANCE;
+			} else if (types.keyType == Type.KEY_STRING && types.valType == Type.VAL_JSON) {
+				codec = new KeyValueCodec(//
+						JsonJacksonCodec.INSTANCE.getValueEncoder(), //
+						JsonJacksonCodec.INSTANCE.getValueDecoder(), //
+						StringCodec.INSTANCE.getMapKeyEncoder(), //
+						StringCodec.INSTANCE.getMapKeyDecoder(), //
+						JsonJacksonCodec.INSTANCE.getValueEncoder(), //
+						JsonJacksonCodec.INSTANCE.getValueDecoder());
+			} else if (types.keyType == Type.KEY_STRING) {
+				RedisMapCodec valCodec = new RedisMapCodec();
+				codec = new KeyValueCodec(//
+						valCodec.getValueEncoder(), // JsonJacksonCodec.INSTANCE.getValueEncoder(), //
+						valCodec.getValueDecoder(), // JsonJacksonCodec.INSTANCE.getValueDecoder(), //
+						StringCodec.INSTANCE.getMapKeyEncoder(), //
+						StringCodec.INSTANCE.getMapKeyDecoder(), //
+						valCodec.getValueEncoder(), // JsonJacksonCodec.INSTANCE.getValueEncoder(), //
+						valCodec.getValueDecoder()); // JsonJacksonCodec.INSTANCE.getValueDecoder());
+			} else {
+				codec = def;
+			}
 //      log.debug("old name: '{}', new name: '{}', keyType: {}, valType :{}, codec: '{}'", name, types.name, types.keyType, types.valType, codec);
-      return new NameWithCodec(types.name, codec);
-    }
-  }
+			return new NameWithCodec(types.name, codec);
+		}
+	}
 }

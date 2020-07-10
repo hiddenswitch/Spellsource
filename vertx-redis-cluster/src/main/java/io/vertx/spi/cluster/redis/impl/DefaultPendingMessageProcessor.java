@@ -15,8 +15,6 @@
  */
 package io.vertx.spi.cluster.redis.impl;
 
-import java.lang.reflect.InvocationTargetException;
-
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -28,17 +26,18 @@ import io.vertx.core.eventbus.impl.MessageImpl;
 import io.vertx.core.eventbus.impl.clustered.ClusterNodeInfo;
 import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
 import io.vertx.core.eventbus.impl.clustered.ClusteredMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.vertx.core.net.impl.ServerID;
 import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ChoosableIterable;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.core.spi.metrics.EventBusMetrics;
 import io.vertx.spi.cluster.redis.Factory.PendingMessageProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
  * @see io.vertx.core.eventbus.impl.clustered.ConnectionHolder
  * @see io.vertx.core.eventbus.impl.clustered.ClusteredEventBus
  */

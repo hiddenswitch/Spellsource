@@ -43,8 +43,6 @@ import java.util.stream.Collectors;
 
 /**
  * https://github.com/redisson/redisson/wiki/11.-Redis-commands-mapping
- *
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
  */
 public class RedisClusterManager implements ClusterManager {
 	private static final Logger log = LoggerFactory.getLogger(RedisClusterManager.class);
@@ -58,14 +56,14 @@ public class RedisClusterManager implements ClusterManager {
 	 * @see io.vertx.core.eventbus.impl.clustered.ClusteredEventBus
 	 */
 	private static final String SUBS_MAP_NAME = "__vertx:subs";
-	private static final long DEFAULT_SHUTDOWN_QUIET_PERIOD = 2000L;
-	private static final long DEFAULT_SHUTDOWN_TIMEOUT = 8800L;
+	private static final long DEFAULT_SHUTDOWN_QUIET_PERIOD = 8000L;
+	private static final long DEFAULT_SHUTDOWN_TIMEOUT = 30000L;
 	private static final String VERTX_NODELIST_PREFIX = "__vertx:nodelist:";
 
 	private final Factory factory;
 	private final int minNodes;
-	private final int timeToLiveMillis = 1000;
-	private final int refreshRateMillis = 200;
+	private final int timeToLiveMillis = 4000;
+	private final int refreshRateMillis = 500;
 	private long shutdownQuietPeriod = DEFAULT_SHUTDOWN_QUIET_PERIOD;
 	private long shutdownTimeout = DEFAULT_SHUTDOWN_TIMEOUT;
 	private final int creditsPerAppearance = timeToLiveMillis / refreshRateMillis * 2;
@@ -99,7 +97,7 @@ public class RedisClusterManager implements ClusterManager {
 	public RedisClusterManager(String singleServerRedisUrl, int minNodes) {
 		Config config = new Config();
 		config.useSingleServer().setAddress(singleServerRedisUrl);
-		config.setLockWatchdogTimeout(1000);
+		config.setLockWatchdogTimeout(4000);
 		this.redisson = Redisson.create(config);
 		this.baseId = UUID.fromString(redisson.getId()).getLeastSignificantBits() & ~0xFFFF;
 		this.factory = Factory.createDefaultFactory();
@@ -139,7 +137,7 @@ public class RedisClusterManager implements ClusterManager {
 				}
 			} else {
 				AsyncMultiMap<K, V> asyncMultiMap = (AsyncMultiMap<K, V>) asyncMultiMaps.computeIfAbsent(name,
-						key -> factory.createAsyncMultiMap(vertx, redisson, name));
+						key -> factory.createAsyncMultiMap(vertx, redisson, name, this));
 				future.complete(asyncMultiMap);
 			}
 
@@ -150,11 +148,6 @@ public class RedisClusterManager implements ClusterManager {
 	public <K, V> void getAsyncMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> resultHandler) {
 		Objects.requireNonNull(name);
 		Objects.requireNonNull(resultHandler);
-		if (name.equals(CLUSTER_MAP_NAME)) {
-			log.error("name cannot be '{}'", name);
-			resultHandler.handle(Future.failedFuture(new IllegalArgumentException("name cannot be '" + name + "'")));
-			return;
-		}
 		vertx.executeBlocking(future -> {
 			@SuppressWarnings("unchecked")
 			AsyncMap<K, V> asyncMap = (AsyncMap<K, V>) asyncMaps.computeIfAbsent(name,
@@ -302,10 +295,16 @@ public class RedisClusterManager implements ClusterManager {
 						}
 
 						if (!redisson.isShuttingDown() && !redisson.isShutdown()) {
-							thisNodeBucket.setIfExistsAsync("ok", timeToLiveMillis, TimeUnit.MILLISECONDS)
-									.exceptionally(t -> {
-										log.error("{} previously timed out and node lefts were fired!", nodeId);
-										return null;
+							thisNodeBucket.getAndSetAsync("ok", timeToLiveMillis, TimeUnit.MILLISECONDS)
+									.onComplete((r, t) -> {
+										if (t != null) {
+											vertx.cancelTimer(this.timerId);
+											log.error("{} join refresh errored", nodeId, t);
+											return;
+										}
+										if (r == null) {
+											log.error("{} join refresh timed out previously due to expiration", nodeId, t);
+										}
 									});
 
 							// Node monitor
@@ -356,7 +355,7 @@ public class RedisClusterManager implements ClusterManager {
 			Collections.sort(nodesAdded);
 			Collections.sort(nodesRemoved);
 
-			registerListeners(nodesAdded);
+//			registerListeners(nodesAdded);
 
 			for (String nodeAdded : nodesAdded) {
 				if (isActive.get() && nodeListener != null) {
@@ -385,7 +384,7 @@ public class RedisClusterManager implements ClusterManager {
 			}
 			String name = VERTX_NODELIST_PREFIX + nodeAdded;
 			log.debug("registerListeners: {} listening for {}", nodeId, name);
-			RBucket<Object> bucket = redisson.getBucket(name);
+			RBucket<String> bucket = redisson.getBucket(name, new StringCodec());
 			AtomicInteger deletedListener = new AtomicInteger();
 			AtomicInteger expiredListener = new AtomicInteger();
 			deletedListener.set(bucket.addListener(new DeletedObjectListener() {
@@ -411,7 +410,6 @@ public class RedisClusterManager implements ClusterManager {
 	}
 
 	private void immediatelyRemoveNode(String nodeRemoved) {
-//		return;
 		nodeCredits.setCount(nodeRemoved, 0);
 		if (nodes.remove(nodeRemoved) && nodeListener != null) {
 			nodeListener.nodeLeft(nodeRemoved);
@@ -423,6 +421,7 @@ public class RedisClusterManager implements ClusterManager {
 	 */
 	@Override
 	public void leave(Handler<AsyncResult<Void>> resultHandler) {
+		Context context = vertx.getOrCreateContext();
 		log.debug("leave: called {}", nodeId);
 		if (redisson.isShuttingDown() || redisson.isShutdown()) {
 			log.debug("leave: {} already shut down", nodeId);
@@ -443,19 +442,22 @@ public class RedisClusterManager implements ClusterManager {
 			}
 			fut.complete();
 		}, false, Promise.promise());
-		thisNodeBucket.unlinkAsync().onComplete((r, t) -> {
+
+		thisNodeBucket.deleteAsync().onComplete((r, t) -> {
 			if (!r) {
 				log.warn("leave: failed to unlink {}", thisNodeBucket.getName());
 			}
-//			context.runOnContext(v -> {
 			if (t == null) {
 				log.debug("leave: deleted {}", thisNodeBucket.getName());
-				resultHandler.handle(Future.succeededFuture());
+				context.runOnContext(v -> {
+					resultHandler.handle(Future.succeededFuture());
+				});
 			} else {
 				log.error("leave: failed to delete {}", thisNodeBucket.getName(), t);
-				resultHandler.handle(Future.failedFuture(t));
+				context.runOnContext(v -> {
+					resultHandler.handle(Future.failedFuture(t));
+				});
 			}
-//			});
 		});
 	}
 

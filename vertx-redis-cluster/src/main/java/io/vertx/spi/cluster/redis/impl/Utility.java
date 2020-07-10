@@ -15,13 +15,6 @@
  */
 package io.vertx.spi.cluster.redis.impl;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Map;
-import java.util.Objects;
-
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
 import io.vertx.core.impl.HAManager;
@@ -29,10 +22,15 @@ import io.vertx.core.impl.VertxImpl;
 import io.vertx.core.spi.cluster.ClusterManager;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Non Public API Utility
- *
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
  */
 class Utility {
 

@@ -15,34 +15,22 @@
  */
 package io.vertx.spi.cluster.redis.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
+import io.vertx.core.*;
+import io.vertx.core.shareddata.AsyncMap;
 import org.redisson.api.RMapCache;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import org.redisson.client.protocol.RedisStrictCommand;
 import org.redisson.client.protocol.convertor.LongReplayConvertor;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.shareddata.AsyncMap;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @author <a href="mailto:leo.tu.taipei@gmail.com">Leo Tu</a>
+ *
  */
 class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	// private static final Logger log = LoggerFactory.getLogger(RedisAsyncMap.class);
-
-	protected final RedisStrictCommand<Long> ZSCORE_LONG = new RedisStrictCommand<Long>("ZSCORE",
-			new LongReplayConvertor()); // RedisCommands.ZSCORE
 
 	protected final Vertx vertx;
 	protected final RedissonClient redisson;
@@ -79,7 +67,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 		Objects.requireNonNull(k);
 		Objects.requireNonNull(resultHandler);
 		Context context = vertx.getOrCreateContext();
-		map.getAsync(k).whenComplete((v, e) -> context.runOnContext(vd ->
+		map.getAsync(k).onComplete((v, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(v)))
 		);
 	}
@@ -90,7 +78,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 		Objects.requireNonNull(v);
 		Objects.requireNonNull(completionHandler);
 		Context context = vertx.getOrCreateContext();
-		map.fastPutAsync(k, v).whenComplete((added, e) -> context.runOnContext(vd ->
+		map.fastPutAsync(k, v).onComplete((added, e) -> context.runOnContext(vd ->
 				completionHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture()))
 		);
 	}
@@ -101,7 +89,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 		Objects.requireNonNull(v);
 		Objects.requireNonNull(completionHandler);
 		Context context = vertx.getOrCreateContext();
-		map.fastPutAsync(k, v, ttl, TimeUnit.MILLISECONDS).whenComplete((added, e) -> context.runOnContext(vd ->
+		map.fastPutAsync(k, v, ttl, TimeUnit.MILLISECONDS).onComplete((added, e) -> context.runOnContext(vd ->
 				completionHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture()))
 		);
 	}
@@ -112,7 +100,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void putIfAbsent(K k, V v, Handler<AsyncResult<V>> completionHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.putIfAbsentAsync(k, v).whenComplete((previousValue, e) -> context.runOnContext(vd ->
+		map.putIfAbsentAsync(k, v).onComplete((previousValue, e) -> context.runOnContext(vd ->
 				completionHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(previousValue)))
 		);
 	}
@@ -124,7 +112,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	public void putIfAbsent(K k, V v, long ttl, Handler<AsyncResult<V>> completionHandler) {
 		Context context = vertx.getOrCreateContext();
 		map.putIfAbsentAsync(k, v, ttl, TimeUnit.MILLISECONDS)
-				.whenComplete((previousValue, e) -> context.runOnContext(vd ->
+				.onComplete((previousValue, e) -> context.runOnContext(vd ->
 						completionHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(previousValue)))
 				);
 	}
@@ -132,7 +120,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void remove(K k, Handler<AsyncResult<V>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.removeAsync(k).whenComplete((previousValue, e) -> context.runOnContext(vd ->
+		map.removeAsync(k).onComplete((previousValue, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(previousValue)))
 		);
 	}
@@ -140,7 +128,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void removeIfPresent(K k, V v, Handler<AsyncResult<Boolean>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.removeAsync(k, v).whenComplete((removed, e) -> context.runOnContext(vd ->
+		map.removeAsync(k, v).onComplete((removed, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(removed)))
 		);
 	}
@@ -151,7 +139,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void replace(K k, V v, Handler<AsyncResult<V>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.replaceAsync(k, v).whenComplete((previousValue, e) -> context.runOnContext(vd ->
+		map.replaceAsync(k, v).onComplete((previousValue, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(previousValue)))
 		);
 	}
@@ -159,7 +147,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void replaceIfPresent(K k, V oldValue, V newValue, Handler<AsyncResult<Boolean>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.replaceAsync(k, oldValue, newValue).whenComplete((replaced, e) -> context.runOnContext(vd ->
+		map.replaceAsync(k, oldValue, newValue).onComplete((replaced, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(replaced)))
 		);
 	}
@@ -167,7 +155,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void clear(Handler<AsyncResult<Void>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.deleteAsync().whenComplete((deleted, e) -> context.runOnContext(vd ->
+		map.deleteAsync().onComplete((deleted, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture()))
 		);
 	}
@@ -175,7 +163,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void size(Handler<AsyncResult<Integer>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.sizeAsync().whenComplete((v, e) -> context.runOnContext(vd ->
+		map.sizeAsync().onComplete((v, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(v)))
 		);
 	}
@@ -183,7 +171,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void keys(Handler<AsyncResult<Set<K>>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.readAllKeySetAsync().whenComplete((v, e) -> context.runOnContext(vd ->
+		map.readAllKeySetAsync().onComplete((v, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(v)))
 		);
 	}
@@ -191,7 +179,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void values(Handler<AsyncResult<List<V>>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.readAllValuesAsync().whenComplete((v, e) -> context.runOnContext(vd ->
+		map.readAllValuesAsync().onComplete((v, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e)
 						: Future.succeededFuture((v instanceof List) ? (List<V>) v : new ArrayList<>(v))))
 		);
@@ -200,7 +188,7 @@ class RedisAsyncMap<K, V> implements AsyncMap<K, V> { // extends MapTTL<K, V>
 	@Override
 	public void entries(Handler<AsyncResult<Map<K, V>>> resultHandler) {
 		Context context = vertx.getOrCreateContext();
-		map.readAllMapAsync().whenComplete((v, e) -> context.runOnContext(vd ->
+		map.readAllMapAsync().onComplete((v, e) -> context.runOnContext(vd ->
 				resultHandler.handle(e != null ? Future.failedFuture(e) : Future.succeededFuture(v)))
 		);
 	}
