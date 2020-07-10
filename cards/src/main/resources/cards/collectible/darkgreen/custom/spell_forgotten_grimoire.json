@@ -1,0 +1,33 @@
+{
+  "name": "Forgotten Grimoire",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Receive 3 random spells. Shuffle this into your opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "value": 3,
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_forgotten_grimoire",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

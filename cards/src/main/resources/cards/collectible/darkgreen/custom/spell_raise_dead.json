@@ -1,0 +1,35 @@
+{
+  "name": "Raise the Dead",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Summon three 3/3 Ghouls. Costs (4) less if at least 3 minions died this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_raise_ghoul",
+      "token_raise_ghoul",
+      "token_raise_ghoul"
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH"
+      },
+      "value2": 3
+    },
+    "ifFalse": 0,
+    "ifTrue": 4
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "name": "Mysterious Questgiver",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Opener: Source three 1-Cost Timeweaver minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "TIME",
+            "cardType": "MINION",
+            "manaCost": 1
+          }
+        },
+        {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "TIME",
+            "cardType": "MINION",
+            "manaCost": 1
+          }
+        },
+        {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "TIME",
+            "cardType": "MINION",
+            "manaCost": 1
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Good Omens",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Draw 3 cards. Reduce their Costs by (2).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3,
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
+    },
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

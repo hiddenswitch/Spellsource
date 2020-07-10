@@ -11,8 +11,10 @@ import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.models.*;
-import com.hiddenswitch.spellsource.net.impl.Rpc;
 import io.vertx.core.Verticle;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -51,6 +53,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.client.models.EntityType.*;
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
 
@@ -62,7 +66,7 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES_PLAYERS_MAP = "Games/players";
+	String GAMES_PLAYERS_MAP = "Games.players";
 	String GAMES = "games";
 	Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
@@ -274,7 +278,7 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games/connections");
+		return SuspendableMap.getOrCreate("Games.connections");
 	}
 
 	/**
@@ -298,8 +302,9 @@ public interface Games extends Verticle {
 	static MatchCreateResponse createGame(ConfigurationRequest request) throws SuspendExecution, InterruptedException {
 		Matchmaking.LOGGER.debug("createMatch: Creating match for request {}", request);
 
-		Games gamesService = Rpc.connect(Games.class).sync();
-		return new MatchCreateResponse(gamesService.createGameSession(request));
+		var eb = Vertx.currentContext().owner().eventBus();
+		Message<JsonObject> response = awaitResult(h -> eb.request("Games.createGameSession", json(request), h));
+		return new MatchCreateResponse(response.body().mapTo(CreateGameSessionResponse.class));
 	}
 
 	/**

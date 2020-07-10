@@ -1,0 +1,44 @@
+{
+  "name": "Rebel",
+  "type": "CLASS",
+  "heroClass": "CAMO",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.506,
+      "g": 0.522,
+      "r": 0.51
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.25882352941176473,
+      "g": 0.28627450980392155,
+      "r": 0.26666666666666666
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.247,
+      "g": 0.275,
+      "r": 0.255
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.231,
+      "g": 0.259,
+      "r": 0.239
+    }
+  },
+  "hero": "hero_hanlao"
+}

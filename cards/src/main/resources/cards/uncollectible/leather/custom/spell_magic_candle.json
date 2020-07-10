@@ -1,0 +1,28 @@
+{
+  "name": "Magic Candle",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Repeatable this turn. Source a Legendary minion, then summon it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 1
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "rarity": "LEGENDARY",
+      "cardType": "MINION"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true,
+    "ECHO": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

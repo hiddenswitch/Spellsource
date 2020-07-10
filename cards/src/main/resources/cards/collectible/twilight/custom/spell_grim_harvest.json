@@ -1,0 +1,46 @@
+{
+  "name": "Grim Harvest",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Deal $[3] damage to all enemies. Restore #[3] Health to all allies.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        }
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_CHARACTERS",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

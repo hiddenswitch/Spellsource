@@ -1,0 +1,25 @@
+{
+  "name": "Ninjarcher",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Whenever you draw a card, deal 2 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

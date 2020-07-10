@@ -14,7 +14,7 @@
     "blockly": "^3.20200402.1",
     "canvas": "^2.6.1",
     "enumify": "^2.0.0",
-    "gatsby": "^2.19.23",
+    "gatsby": "^2.20.24",
     "gatsby-image": "^2.2.41",
     "gatsby-plugin-anchor-links": "^1.1.1",
     "gatsby-plugin-s3": "^0.3.3",

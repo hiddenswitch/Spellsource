@@ -1,0 +1,17 @@
+{
+  "name": "Horse",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

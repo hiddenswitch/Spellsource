@@ -1,0 +1,24 @@
+{
+  "name": "The Impossible Harvest",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Add 50 cards to your hand. Reward: Bountiful Por'zora.",
+  "quest": {
+    "class": "CardReceivedTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 50,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_bountiful_porzora"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

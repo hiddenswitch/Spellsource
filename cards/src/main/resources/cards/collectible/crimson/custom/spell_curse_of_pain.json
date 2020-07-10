@@ -1,0 +1,32 @@
+{
+  "name": "Essence of Pain",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Choose a minion. Whenever it attacks, it loses 4 health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TargetAcquisitionTrigger",
+        "actionType": "PHYSICAL_ATTACK",
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
+      },
+      "spell": {
+        "class": "ModifyAttributeSpell",
+        "target": "TRIGGER_HOST",
+        "value": -4,
+        "attribute": "HP"
+      },
+      "persistentOwner": true
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

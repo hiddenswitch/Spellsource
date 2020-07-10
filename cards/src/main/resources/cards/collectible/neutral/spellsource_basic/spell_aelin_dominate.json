@@ -1,0 +1,35 @@
+{
+  "name": "Dominate",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Return any minion to your hand. Summon a 10/10 copy of it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "OUTPUT",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "value": 10
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 10
+          }
+        ]
+      },
+      "targetPlayer": "SELF"
+    },
+    "targetPlayer": "SELF"
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

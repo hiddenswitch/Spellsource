@@ -1,0 +1,36 @@
+{
+  "name": "Hope Eater",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "TITAN",
+  "description": "Enemy minions have -2 Attack but not less than 1.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "Aura",
+      "target": "ENEMY_MINIONS",
+      "applyEffect": {
+        "class": "SetAttributeSpell",
+        "value": 1,
+        "attribute": "AURA_MIN_ATTACK"
+      },
+      "removeEffect": {
+        "class": "SetAttributeSpell",
+        "value": 0,
+        "attribute": "AURA_MIN_ATTACK"
+      }
+    },
+    {
+      "class": "BuffAura",
+      "target": "ENEMY_MINIONS",
+      "attackBonus": -2,
+      "hpBonus": 0
+    }
+  ]
+}

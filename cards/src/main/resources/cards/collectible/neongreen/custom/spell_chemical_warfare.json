@@ -1,0 +1,17 @@
+{
+  "name": "Chemical Warfare",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "EPIC",
+  "description": "Give all cards in your hand <b>Wither (2)</b>.",
+  "spell": {
+    "class": "ModifyAttributeSpell",
+    "target": "FRIENDLY_HAND",
+    "value": 2,
+    "attribute": "WITHER"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

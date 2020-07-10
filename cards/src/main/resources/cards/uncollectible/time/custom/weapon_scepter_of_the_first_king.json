@@ -1,0 +1,45 @@
+{
+  "name": "Scepter of the First King",
+  "baseManaCost": 10,
+  "type": "WEAPON",
+  "heroClass": "TIME",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you play a card, add a 0-Cost spell to your hand. At the end of your turn, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL",
+          "manaCost": 0
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "FRIENDLY_WEAPON"
+      }
+    }
+  ],
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ]
+}

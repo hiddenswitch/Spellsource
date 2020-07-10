@@ -2,15 +2,9 @@ package com.hiddenswitch.spellsource.net.applications;
 
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.impl.RpcClient;
-import io.atomix.cluster.Node;
-import io.atomix.core.Atomix;
-import io.atomix.utils.net.Address;
-import io.atomix.vertx.AtomixClusterManager;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
 import org.slf4j.Logger;
@@ -22,60 +16,62 @@ import java.time.temporal.ChronoUnit;
 public interface Applications {
 	Logger LOGGER = LoggerFactory.getLogger(Applications.class);
 
+	/**
+	 * Starts the game server.
+	 *
+	 * @param handler
+	 */
 	static void startServer(Handler<AsyncResult<Vertx>> handler) {
+		// Workaround for IPv6 systems
 		System.setProperty("java.net.preferIPv4Stack", "true");
+		// Improves mongodb performance by using the async version of the driver
 		System.setProperty("org.mongodb.async.type", "netty");
+		// Vertx should log using SLF4J a java logging library
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
-		int atomixPort = Configuration.atomixPort();
-		int vertxClusterPort = Configuration.vertxClusterPort();
+		// Shared data between all instances of the server is done through a library called Atomix
+		// We'll start atomix now
+		var clusterManagerPort = Configuration.clusterManagerPort();
+		var vertxClusterPort = Configuration.vertxClusterPort();
 		io.vertx.core.logging.LoggerFactory.initialise();
-		long nanos = Duration.of(RpcClient.DEFAULT_TIMEOUT, ChronoUnit.MILLIS).toNanos();
-		Node[] nodes = new Node[0];
-		if (Configuration.atomixBootstrapNode() != null) {
-			nodes = new Node[]{Node.builder()
-					.withAddress(Address.from(Configuration.atomixBootstrapNode()))
-					.build()};
-		}
+		var nanos = Duration.of(8000, ChronoUnit.MILLIS).toNanos();
+		var nodes = System.getenv().getOrDefault("BOOTSTRAP_ADDRESS", "localhost:" + clusterManagerPort);
+		var clusterManagerFut = Cluster.create(clusterManagerPort, nodes);
 
-		Atomix atomix = Cluster.create(atomixPort, nodes);
-		atomix.start().join();
-		ClusterManager clusterManager = new AtomixClusterManager(atomix);
-		Vertx.clusteredVertx(new VertxOptions()
-				.setClusterManager(clusterManager)
-				.setEventBusOptions(new EventBusOptions().setPort(vertxClusterPort))
-				.setPreferNativeTransport(true)
-				.setBlockedThreadCheckInterval(RpcClient.DEFAULT_TIMEOUT)
-				.setWarningExceptionTime(nanos)
-				.setMaxEventLoopExecuteTime(nanos)
-				.setMaxWorkerExecuteTime(nanos)
-				.setMetricsOptions(
-						new MicrometerMetricsOptions()
-								.setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)
-										.setStartEmbeddedServer(true)
-										.setEmbeddedServerOptions(new HttpServerOptions().setPort(Configuration.metricsPort()))
-										.setEmbeddedServerEndpoint("/metrics/vertx"))
-								.setEnabled(true))
-				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors()), then -> {
-
-			Vertx vertx = then.result();
-			Tracing.initializeGlobal(vertx);
-			Migrations.migrate(vertx, v1 -> {
-				if (v1.failed()) {
-					LOGGER.error("main: Migration failed", v1.cause());
-					handler.handle(Future.failedFuture(v1.cause()));
-					return;
-				}
-				Spellsource.spellsource().deployAll(vertx, v2 -> {
-					if (v2.failed()) {
-						LOGGER.error("main: Deployment failed", v2.cause());
-						handler.handle(Future.failedFuture(v2.cause()));
-						return;
-					}
-
-					LOGGER.info("main: {} clustered with members {}", clusterManager.getNodeID(), clusterManager.getNodes());
-					handler.handle(Future.succeededFuture(vertx));
-				});
-			});
-		});
+		clusterManagerFut
+				.compose(clusterManager -> {
+					var promise = Promise.<Vertx>promise();
+					Vertx.clusteredVertx(new VertxOptions()
+							.setClusterManager(clusterManager)
+							.setEventBusOptions(new EventBusOptions().setPort(vertxClusterPort))
+							.setPreferNativeTransport(true)
+							.setBlockedThreadCheckInterval(8000L)
+							.setWarningExceptionTime(nanos)
+							.setMaxEventLoopExecuteTime(nanos)
+							.setMaxWorkerExecuteTime(nanos)
+							.setMetricsOptions(
+									new MicrometerMetricsOptions()
+											.setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)
+													.setStartEmbeddedServer(true)
+													.setEmbeddedServerOptions(new HttpServerOptions().setPort(Configuration.metricsPort()))
+													.setEmbeddedServerEndpoint("/metrics"))
+											.setEnabled(true))
+							.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors()), promise);
+					return promise.future();
+				})
+				.compose(vertx -> {
+					// Set up tracing now that we started vertx
+					Tracing.initializeGlobal(vertx);
+					// Set up metrics
+					Metrics.defaultMetrics();
+					var promise = Promise.<Void>promise();
+					Migrations.migrate(vertx, promise);
+					return promise.future().map(ignored -> vertx);
+				})
+				.compose(vertx -> {
+					var promise = Promise.<CompositeFuture>promise();
+					Spellsource.spellsource().deployAll(vertx, promise);
+					return promise.future().map(ignored -> vertx);
+				})
+				.onComplete(handler);
 	}
 }

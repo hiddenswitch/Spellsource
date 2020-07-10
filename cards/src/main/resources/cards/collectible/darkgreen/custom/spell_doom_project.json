@@ -1,0 +1,30 @@
+{
+  "name": "Doom Project",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Each champion takes $4 damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 4
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 4
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ]
+}

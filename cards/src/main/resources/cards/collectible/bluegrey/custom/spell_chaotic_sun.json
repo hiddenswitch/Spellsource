@@ -1,0 +1,26 @@
+{
+  "name": "Chaotic Sun",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "RARE",
+  "description": "Deal $4 damage. Your opponent draws a Fatigue card.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 4
+      },
+      {
+        "class": "FatigueSpell",
+        "targetSelection": "NONE",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

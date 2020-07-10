@@ -1,0 +1,62 @@
+{
+  "name": "New \"Recruits\"",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "EPIC",
+  "description": "Summon three 1/1 Goons. If you're holding a Coin, discard it and summon five Goons instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "cards": [
+          "spell_gold_coin",
+          "token_spell_platinum_coin"
+        ]
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "value": {
+            "class": "ConditionalValueProvider",
+            "condition": {
+              "class": "HoldsCardCondition",
+              "cardFilter": {
+                "class": "SpecificCardFilter",
+                "cards": [
+                  "spell_gold_coin",
+                  "token_spell_platinum_coin"
+                ]
+              }
+            },
+            "ifFalse": 3,
+            "ifTrue": 5
+          },
+          "card": "token_goon"
+        },
+        {
+          "class": "DiscardSpell",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "cards": [
+              "spell_gold_coin",
+              "token_spell_platinum_coin"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

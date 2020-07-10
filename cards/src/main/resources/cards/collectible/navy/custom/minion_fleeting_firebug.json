@@ -1,0 +1,33 @@
+{
+  "name": "Fleeting Firebug",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Aftermath: At the end of your turn, summon a Firebug for your opponent.",
+  "deathrattle": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_fleeting_firebug",
+        "targetPlayer": "OPPONENT"
+      },
+      "maxFires": 1
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

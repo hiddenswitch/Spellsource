@@ -62,14 +62,17 @@ module.exports = {
               if (!!object['args' + i.toString()]) {
                 const args = object['args' + i.toString()]
                 args.forEach(arg => {
-                  if (!!arg.value) {
+                  if (arg.hasOwnProperty('value')) {
                     if (isNumber(arg.value)) {
                       arg['valueI'] = arg.value
-                      delete arg.value
                     } else if (isString(arg.value)) {
                       arg['valueS'] = arg.value
-                      delete arg.value
+                    } else if (arg.value === true) {
+                      arg['valueB'] = true
+                    } else if (arg.value === false) {
+                      arg['valueB'] = false
                     }
+                    delete arg.value
                   }
                   if (!!arg.check) {
                     if (isArray(arg.check)) {
@@ -123,7 +126,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../cards/src/main/resources/cards/custom`,
+        path: `${__dirname}/../cards/src/main/resources/cards`,
       },
     },
     `gatsby-plugin-sass`,
@@ -173,13 +176,12 @@ module.exports = {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`title`, `tags`, `rawMarkdownBody`],
+        fields: [`title`, `rawMarkdownBody`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type MarkdownRemark, list how to resolve the fields` values
           MarkdownRemark: {
             title: node => node.frontmatter.title,
-            tags: node => node.frontmatter.tags,
             path: node => node.frontmatter.path,
             rawMarkdownBody: node => node.rawMarkdownBody,
             excerpt: node => {
@@ -190,16 +192,24 @@ module.exports = {
                 excerpt += node.value
               })
               return excerpt.slice(0, excerptLength) + '...'
-            }
+            },
+            nodeType: node => 'MarkdownRemark'
           },
           Card: {
             // TODO: Change the name of the field to be its content
             title: node => node.name,
-            tags: node => '', // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
             rawMarkdownBody: node => node.description,
             path: node => node.path,
             collectible: node => node.collectible,
             excerpt: node => node.description,
+            nodeType: node => 'Card',
+            heroClass: node => node.heroClass,
+            baseManaCost: node => node.baseManaCost
+          },
+          Block: {
+            title: node => node.type.replace('_', ' ') + ' ' +
+              node.messages.join(' ').replace('%(\\d)',''),
+            nodeType: node => 'Block'
           }
         },
         // Optional filter to limit indexed nodes

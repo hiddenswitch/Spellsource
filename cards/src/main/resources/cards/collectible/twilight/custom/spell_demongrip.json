@@ -1,0 +1,60 @@
+{
+  "name": "Demongrip",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Deal $[4] damage to the left and rightmost enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "MinionCountCondition",
+          "value": 0,
+          "operation": "GREATER",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "LEFTMOST_ENEMY_MINION",
+          "value": {
+            "class": "GatekeeperShaValueProvider",
+            "offset": 4
+          }
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "MinionCountCondition",
+          "value": 1,
+          "operation": "GREATER",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "RIGHTMOST_ENEMY_MINION",
+          "value": {
+            "class": "GatekeeperShaValueProvider",
+            "offset": 4
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 4
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

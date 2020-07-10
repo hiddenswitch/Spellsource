@@ -1,0 +1,30 @@
+{
+  "name": "Darkshard Duelist",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "Opener: Your opponent summons a random minion from their hand. Attack it.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "spell": {
+        "class": "FightSpell",
+        "target": "OUTPUT",
+        "secondaryTarget": "SELF"
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Kooky Curator",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Draw two odd-Cost minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "OddCostFilter"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ]
+}

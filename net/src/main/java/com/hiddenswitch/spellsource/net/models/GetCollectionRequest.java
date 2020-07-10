@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by bberman on 1/22/17.
- */
 public final class GetCollectionRequest implements Serializable {
 	private String userId;
 	private String deckId;

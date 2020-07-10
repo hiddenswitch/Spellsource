@@ -1,0 +1,37 @@
+{
+  "name": "Imperfect Duplicate",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Summon a Golem with stats equal to its Cost.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "CreateSummonSpell",
+    "name": "Imperfect Golem",
+    "spell": {
+      "class": "NullSpell"
+    },
+    "attackBonus": {
+      "class": "AttributeValueProvider",
+      "target": "TARGET",
+      "attribute": "BASE_MANA_COST"
+    },
+    "hpBonus": {
+      "class": "AttributeValueProvider",
+      "target": "TARGET",
+      "attribute": "BASE_MANA_COST"
+    },
+    "mana": {
+      "class": "AttributeValueProvider",
+      "target": "TARGET",
+      "attribute": "BASE_MANA_COST"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

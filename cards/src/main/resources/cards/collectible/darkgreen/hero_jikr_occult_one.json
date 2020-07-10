@@ -1,0 +1,33 @@
+{
+  "name": "Aylith the Deceiver",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Destroy your deck. Shuffle two copies of your hand into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_DECK"
+        },
+        {
+          "class": "ShuffleToDeckSpell",
+          "target": "FRIENDLY_HAND",
+          "howMany": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

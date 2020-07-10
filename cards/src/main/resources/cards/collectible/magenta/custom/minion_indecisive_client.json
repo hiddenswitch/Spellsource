@@ -1,0 +1,34 @@
+{
+  "name": "Indecisive Client",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Source a Source card.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "DISCOVER",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

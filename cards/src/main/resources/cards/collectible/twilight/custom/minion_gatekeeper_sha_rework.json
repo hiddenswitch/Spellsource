@@ -1,0 +1,20 @@
+{
+  "name": "Gatekeeper Sha",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "All the numbers on your Vampire Lord spells are (1) higher.",
+  "aura": {
+    "class": "GatekeeperShaAura",
+    "value": 1
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

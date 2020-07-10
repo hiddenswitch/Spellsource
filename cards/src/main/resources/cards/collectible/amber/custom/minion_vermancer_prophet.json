@@ -1,0 +1,32 @@
+{
+  "name": "The Prophet",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Source two minions that died this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter"
+      },
+      "cardSource": {
+        "class": "GraveyardDiedMinionsSource",
+        "distinct": true,
+        "targetPlayer": "BOTH"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Kraken's Call",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Restore #2 Health. Shuffle two copies of 'Ocean Depths' into your deck.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 2
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_ocean_depths",
+        "howMany": 2
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Warmage Zhou",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Dash. Opener: Deal 2 damage to a random enemy. Repeat [0 times]. (Increases for each ally that died this turn)",
+  "battlecry": {
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "howMany": {
+        "class": "DiedThisTurnValueProvider",
+        "offset": 1,
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "DiedThisTurnValueProvider",
+        "target": "SELF"
+      },
+      "description1": " time",
+      "description2": " times"
+    }
+  ]
+}

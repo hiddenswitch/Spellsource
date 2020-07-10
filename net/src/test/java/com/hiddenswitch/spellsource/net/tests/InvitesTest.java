@@ -6,86 +6,94 @@ import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.net.Accounts;
-import com.hiddenswitch.spellsource.net.Friends;
-import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.net.Matchmaking;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableQueue;
+import com.hiddenswitch.spellsource.net.*;
+import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.net.impl.GameId;
+import com.hiddenswitch.spellsource.net.impl.InviteId;
+import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
-import io.vertx.ext.unit.TestContext;
-import org.junit.Test;
+import io.vertx.core.Vertx;
+import io.vertx.junit5.Timeout;
+import io.vertx.junit5.VertxTestContext;
+import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static co.paralleluniverse.strands.Strand.sleep;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
 import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InvitesTest extends SpellsourceTestBase {
 
-	@Test(timeout = 36000L)
-	public void testFriendInvite(TestContext testContext) throws InterruptedException, SuspendExecution {
-		sync(() -> {
+	@Test
+	@Timeout(36000)
+	public void testFriendInvite(Vertx vertx, VertxTestContext testContext) throws InterruptedException, SuspendExecution {
+		runOnFiberContext(() -> {
 			// Regular friending.
-			CountDownLatch friended = new CountDownLatch(1);
-			CountDownLatch didReceiveFriend = new CountDownLatch(1);
-			AtomicInteger inviteChecks = new AtomicInteger(2);
-			AtomicReference<String> recipientId = new AtomicReference<>();
+			var friended = new CountDownLatch(1);
+			var didReceiveFriend = new CountDownLatch(1);
+			var inviteChecks = new AtomicInteger(2);
+			var recipientId = new AtomicReference<String>();
 			try (
-					UnityClient sender = new UnityClient(testContext) {
+					var sender = new UnityClient(testContext) {
 						@Override
 						@Suspendable
 						protected void handleMessage(Envelope message) {
-							if (message.getAdded() != null && message.getAdded().getFriend() != null) {
-								testContext.assertNotNull(message.getAdded().getFriend().getFriendId());
-								testContext.assertEquals(message.getAdded().getFriend().getFriendId(), recipientId.get());
-								didReceiveFriend.countDown();
-							}
+							verify(testContext, () -> {
+								if (message.getAdded() != null && message.getAdded().getFriend() != null) {
+									assertNotNull(message.getAdded().getFriend().getFriendId());
+									assertEquals(message.getAdded().getFriend().getFriendId(), recipientId.get());
+									didReceiveFriend.countDown();
+								}
 
+								if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+									var invite = message.getAdded().getInvite();
+									if (invite.getStatus() == Invite.StatusEnum.ACCEPTED) {
+										inviteChecks.decrementAndGet();
+										inviteChecks.decrementAndGet();
+									} else {
+										assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(invite.getStatus()));
+										inviteChecks.decrementAndGet();
+									}
+								}
+
+								if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+									var invite = message.getChanged().getInvite();
+									if (inviteChecks.get() == 1) {
+										assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
+										inviteChecks.decrementAndGet();
+									}
+								}
+							});
+
+						}
+					}) {
+				try (var recipient = new UnityClient(testContext) {
+					@Override
+					@Suspendable
+					protected void handleMessage(Envelope message) {
+						verify(testContext, () -> {
 							if (message.getAdded() != null && message.getAdded().getInvite() != null) {
-								Invite invite = message.getAdded().getInvite();
-								if (invite.getStatus() == Invite.StatusEnum.ACCEPTED) {
-									inviteChecks.decrementAndGet();
-									inviteChecks.decrementAndGet();
-								} else {
-									testContext.assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(invite.getStatus()));
-									inviteChecks.decrementAndGet();
+								var invite = message.getAdded().getInvite();
+								try {
+									if (invite.getFriendId() != null) {
+										assertEquals(Invite.StatusEnum.PENDING, invite.getStatus());
+										this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
+										friended.countDown();
+									}
+								} catch (Exception ex) {
+									fail(ex.getMessage());
 								}
 							}
 
 							if (message.getChanged() != null && message.getChanged().getInvite() != null) {
-								Invite invite = message.getChanged().getInvite();
-								if (inviteChecks.get() == 1) {
-									testContext.assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
-									inviteChecks.decrementAndGet();
-								}
+								var invite = message.getChanged().getInvite();
+								assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
 							}
-						}
-					}) {
-				try (UnityClient recipient = new UnityClient(testContext) {
-					@Override
-					@Suspendable
-					protected void handleMessage(Envelope message) {
-						if (message.getAdded() != null && message.getAdded().getInvite() != null) {
-							Invite invite = message.getAdded().getInvite();
-							try {
-								if (invite.getFriendId() != null) {
-									testContext.assertEquals(Invite.StatusEnum.PENDING, invite.getStatus());
-									this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
-									friended.countDown();
-								}
-							} catch (Exception ex) {
-								testContext.fail(ex.getMessage());
-							}
-						}
-
-						if (message.getChanged() != null && message.getChanged().getInvite() != null) {
-							Invite invite = message.getChanged().getInvite();
-							testContext.assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
-						}
+						});
 					}
 				}) {
 					invoke0(sender::createUserAccount);
@@ -95,77 +103,82 @@ public class InvitesTest extends SpellsourceTestBase {
 					invoke0(sender::ensureConnected);
 
 					recipientId.set(recipient.getUserId().toString());
-					testContext.assertTrue(recipient.getAccount().getName().contains("#"));
+					assertTrue(recipient.getAccount().getName().contains("#"));
 
-					InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
+					var inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
 							.friend(true)
 							// Get name contains the privacy token
 							.toUserNameWithToken(recipient.getAccount().getName())
 							.message("Would you be my friend?"));
 
-					testContext.assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
+					assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
 					friended.await();
 					didReceiveFriend.await();
 					sleep(1000L);
-					testContext.assertEquals(0, inviteChecks.get());
+					assertEquals(0, inviteChecks.get());
 
-					GetAccountsResponse updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
-					GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
-					testContext.assertEquals(1, updatedRecipient.getAccounts().get(0).getFriends().size());
-					testContext.assertEquals(1, updatedSender.getAccounts().get(0).getFriends().size());
-					testContext.assertEquals(sender.getUserId().toString(), updatedRecipient.getAccounts().get(0).getFriends().get(0).getFriendId());
-					testContext.assertEquals(recipient.getUserId().toString(), updatedSender.getAccounts().get(0).getFriends().get(0).getFriendId());
+					var updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
+					var updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
+					assertEquals(1, updatedRecipient.getAccounts().get(0).getFriends().size());
+					assertEquals(1, updatedSender.getAccounts().get(0).getFriends().size());
+					assertEquals(sender.getUserId().toString(), updatedRecipient.getAccounts().get(0).getFriends().get(0).getFriendId());
+					assertEquals(recipient.getUserId().toString(), updatedSender.getAccounts().get(0).getFriends().get(0).getFriendId());
 				}
 			}
-		}, testContext);
+		}, testContext, vertx);
 	}
 
-	@Test(timeout = 18000L)
-	public void testRecipientRejectsFriend(TestContext testContext) throws InterruptedException, SuspendExecution {
-		sync(() -> {
-			CountDownLatch rejected = new CountDownLatch(1);
-			AtomicInteger inviteChecks = new AtomicInteger(2);
-			AtomicReference<String> recipientId = new AtomicReference<>();
-			try (UnityClient sender = new UnityClient(testContext) {
+	@Test
+	@Timeout(18000)
+	public void testRecipientRejectsFriend(Vertx vertx, VertxTestContext testContext) throws InterruptedException, SuspendExecution {
+		runOnFiberContext(() -> {
+			var rejected = new CountDownLatch(1);
+			var inviteChecks = new AtomicInteger(2);
+			var recipientId = new AtomicReference<String>();
+			try (var sender = new UnityClient(testContext) {
 				@Override
 				@Suspendable
 				protected void handleMessage(Envelope message) {
-					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
-						testContext.fail("Should not have friended");
-					}
+					verify(testContext, () -> {
+						if (message.getAdded() != null && message.getAdded().getFriend() != null) {
+							fail("Should not have friended");
+						}
 
-					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
-						Invite invite = message.getAdded().getInvite();
-						// Confirm the invite statuses are updated correctly
-						testContext.assertTrue(
-								Sets.newHashSet(Invite.StatusEnum.UNDELIVERED,
-										Invite.StatusEnum.PENDING)
-										.contains(invite.getStatus()));
-						inviteChecks.decrementAndGet();
-					}
+						if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+							var invite = message.getAdded().getInvite();
+							// Confirm the invite statuses are updated correctly
+							assertTrue(
+									Sets.newHashSet(Invite.StatusEnum.UNDELIVERED,
+											Invite.StatusEnum.PENDING)
+											.contains(invite.getStatus()));
+							inviteChecks.decrementAndGet();
+						}
 
-					if (message.getChanged() != null && message.getChanged().getInvite() != null) {
-						Invite invite = message.getChanged().getInvite();
-						testContext.assertEquals(Invite.StatusEnum.REJECTED, invite.getStatus());
-						inviteChecks.decrementAndGet();
-					}
+						if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+							var invite = message.getChanged().getInvite();
+							assertEquals(Invite.StatusEnum.REJECTED, invite.getStatus());
+							inviteChecks.decrementAndGet();
+						}
+					});
 				}
 			}) {
-				try (UnityClient recipient = new UnityClient(testContext) {
+				try (var recipient = new UnityClient(testContext) {
 					@Override
 					protected void handleMessage(Envelope message) {
-						if (message.getAdded() != null && message.getAdded().getInvite() != null) {
-							Invite invite = message.getAdded().getInvite();
-							try {
-								if (invite.getFriendId() != null) {
-									testContext.assertEquals(Invite.StatusEnum.PENDING, invite.getStatus());
-									this.getApi().deleteInvite(invite.getId());
-									rejected.countDown();
+						verify(testContext, () -> {
+							if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+								var invite = message.getAdded().getInvite();
+								try {
+									if (invite.getFriendId() != null) {
+										assertEquals(Invite.StatusEnum.PENDING, invite.getStatus());
+										this.getApi().deleteInvite(invite.getId());
+										rejected.countDown();
+									}
+								} catch (Exception ex) {
+									fail(ex.getMessage());
 								}
-							} catch (Exception ex) {
-								testContext.fail(ex.getMessage());
 							}
-						}
+						});
 					}
 				}) {
 					invoke0(sender::createUserAccount);
@@ -175,68 +188,73 @@ public class InvitesTest extends SpellsourceTestBase {
 					invoke0(sender::ensureConnected);
 
 					recipientId.set(recipient.getUserId().toString());
-					testContext.assertTrue(recipient.getAccount().getName().contains("#"));
+					assertTrue(recipient.getAccount().getName().contains("#"));
 
-					InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
+					var inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
 							.friend(true)
 							// Get name contains the privacy token
 							.toUserNameWithToken(recipient.getAccount().getName())
 							.message("Would you be my friend?"));
 
-					testContext.assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
+					assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
 					rejected.await();
 					sleep(1000L);
-					testContext.assertEquals(0, inviteChecks.get());
+					assertEquals(0, inviteChecks.get());
 
-					GetAccountsResponse updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
-					GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
-					testContext.assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
-					testContext.assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
+					var updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
+					var updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
+					assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
+					assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
 				}
 			}
-		}, testContext);
+		}, testContext, vertx);
 	}
 
-	@Test(timeout = 18000L)
-	public void testSenderCancelsFriend(TestContext testContext) throws InterruptedException, SuspendExecution {
-		sync(() -> {
-			CountDownLatch receivedInvite = new CountDownLatch(1);
-			CountDownLatch inviteChecks = new CountDownLatch(2);
-			AtomicReference<String> recipientId = new AtomicReference<>();
-			try (UnityClient sender = new UnityClient(testContext) {
+	@Test
+	@Timeout(18000)
+	public void testSenderCancelsFriend(Vertx vertx, VertxTestContext testContext) throws InterruptedException, SuspendExecution {
+		runOnFiberContext(() -> {
+			var receivedInvite = new CountDownLatch(1);
+			var inviteChecks = new CountDownLatch(2);
+			var recipientId = new AtomicReference<String>();
+			try (var sender = new UnityClient(testContext) {
 				@Override
 				@Suspendable
 				protected void handleMessage(Envelope message) {
-					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
-						testContext.fail("Should not have friended");
-					}
+					verify(testContext, () -> {
+						if (message.getAdded() != null && message.getAdded().getFriend() != null) {
+							fail("Should not have friended");
+						}
+					});
 				}
 			}) {
-				try (UnityClient recipient = new UnityClient(testContext) {
+				try (var recipient = new UnityClient(testContext) {
 					@Override
 					@Suspendable
 					protected void handleMessage(Envelope message) {
-						if (message.getChanged() != null && message.getChanged().getInvite() != null) {
-							Invite invite = message.getChanged().getInvite();
-							testContext.assertEquals(Invite.StatusEnum.CANCELLED, invite.getStatus());
-							try {
-								// Accepting the invite should fail
-								this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
-								testContext.fail("Should not be able to accept cancelled invite");
-							} catch (ApiException didFail) {
-								testContext.assertEquals(didFail.getCode(), 418);
-								inviteChecks.countDown();
-							}
-						}
-						if (message.getAdded() != null && message.getAdded().getInvite() != null) {
-							Invite invite = message.getAdded().getInvite();
-							if (invite.getFriendId() != null) {
-								if (invite.getStatus() == Invite.StatusEnum.PENDING) {
+						verify(testContext, () -> {
+							if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+								var invite = message.getChanged().getInvite();
+								assertEquals(Invite.StatusEnum.CANCELLED, invite.getStatus());
+								try {
+									// Accepting the invite should fail
+									this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
+									fail("Should not be able to accept cancelled invite");
+								} catch (ApiException didFail) {
+									assertEquals(didFail.getCode(), 418);
 									inviteChecks.countDown();
-									receivedInvite.countDown();
 								}
 							}
-						}
+							if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+								var invite = message.getAdded().getInvite();
+								if (invite.getFriendId() != null) {
+									if (invite.getStatus() == Invite.StatusEnum.PENDING) {
+										inviteChecks.countDown();
+										receivedInvite.countDown();
+									}
+								}
+							}
+						});
 					}
 				}) {
 					invoke0(sender::createUserAccount);
@@ -245,36 +263,37 @@ public class InvitesTest extends SpellsourceTestBase {
 					invoke0(sender::ensureConnected);
 
 					recipientId.set(recipient.getUserId().toString());
-					testContext.assertTrue(recipient.getAccount().getName().contains("#"));
+					assertTrue(recipient.getAccount().getName().contains("#"));
 
-					InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
+					var inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
 							.friend(true)
 							// Get name contains the privacy token
 							.toUserNameWithToken(recipient.getAccount().getName())
 							.message("Would you be my friend?"));
 
-					testContext.assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
+					assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
 					receivedInvite.await();
-					InviteResponse cancelResponse = invoke(sender.getApi()::deleteInvite, inviteResponse.getInvite().getId());
-					testContext.assertEquals(Invite.StatusEnum.CANCELLED, cancelResponse.getInvite().getStatus());
+					var cancelResponse = invoke(sender.getApi()::deleteInvite, inviteResponse.getInvite().getId());
+					assertEquals(Invite.StatusEnum.CANCELLED, cancelResponse.getInvite().getStatus());
 					inviteChecks.await();
-					GetAccountsResponse updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
-					GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
-					testContext.assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
-					testContext.assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
+					var updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
+					var updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
+					assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
+					assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
 				}
 			}
-		}, testContext);
+		}, testContext, vertx);
 	}
 
-	@Test(timeout = 18000L)
-	public void testPrivateGameInvite(TestContext testContext) throws InterruptedException, SuspendExecution {
-		sync(() -> {
-			CountDownLatch receivedInvite = new CountDownLatch(1);
-			try (UnityClient sender = new UnityClient(testContext) {
+	@Test
+	@Timeout(18000)
+	public void testPrivateGameInvite(Vertx vertx, VertxTestContext testContext) throws InterruptedException, SuspendExecution {
+		runOnFiberContext(() -> {
+			var receivedInvite = new CountDownLatch(1);
+			try (var sender = new UnityClient(testContext) {
 				@Override
 				protected int getActionIndex(ServerToClientMessage message) {
-					Optional<SpellAction> endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+					var endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
 					if (endTurn.isPresent()) {
 						return endTurn.get().getAction();
 					}
@@ -286,10 +305,10 @@ public class InvitesTest extends SpellsourceTestBase {
 					handleGameMessages(env);
 				}
 			}) {
-				try (UnityClient recipient = new UnityClient(testContext) {
+				try (var recipient = new UnityClient(testContext) {
 					@Override
 					protected int getActionIndex(ServerToClientMessage message) {
-						Optional<SpellAction> endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
+						var endTurn = message.getActions().getAll().stream().filter(ga -> ga.getActionType().equals(ActionType.END_TURN)).findFirst();
 						if (endTurn.isPresent()) {
 							return endTurn.get().getAction();
 						}
@@ -318,7 +337,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					// Friend them coercively
 
 					// Send a 1v1 invite
-					InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
+					var inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
 							.queueId("customQueueId")
 							// Start the queue automatically
 							.deckId(sender.getAccount().getDecks().get(0).getId())
@@ -326,18 +345,19 @@ public class InvitesTest extends SpellsourceTestBase {
 							.toUserNameWithToken(recipient.getAccount().getName())
 							.message("Would you be my friend?"));
 
-					testContext.assertEquals(inviteResponse.getInvite().getQueueId(), Matchmaking.getUsersInQueues().get(sender.getUserId()), "The sender was queued automatically because the sender specified a deckId");
+					assertEquals(inviteResponse.getInvite().getQueueId(), Matchmaking.getUsersInQueues().get(sender.getUserId().toString()), "The sender was queued automatically because the sender specified a deckId");
 					receivedInvite.await();
 
 					// Accept the invite with a deck ID, which should enqueue automatically
-					AcceptInviteResponse acceptInviteResponse = invoke(recipient.getApi()::acceptInvite, inviteResponse.getInvite().getId(), new AcceptInviteRequest()
+					Invites.accept(new InviteId(inviteResponse.getInvite().getId()), new AcceptInviteRequest()
 							.match(new MatchmakingQueuePutRequest()
 									.queueId(inviteResponse.getInvite().getQueueId())
-									.deckId(recipient.getAccount().getDecks().get(0).getId())));
+									.deckId(recipient.getAccount().getDecks().get(0).getId())), Accounts.get(recipient.getUserId().toString()));
 
 
-					testContext.assertTrue(Games.getUsersInGames().containsKey(recipient.getUserId()), "Both players should be in a game now");
-					testContext.assertTrue(Games.getUsersInGames().containsKey(sender.getUserId()), "Both players should be in a game now");
+					SuspendableMap<UserId, GameId> usersInGames = Games.getUsersInGames();
+					assertTrue(usersInGames.containsKey(recipient.getUserId()), "Both players should be in a game now");
+					assertTrue(usersInGames.containsKey(sender.getUserId()), "Both players should be in a game now");
 					sender.play();
 					recipient.play();
 
@@ -345,17 +365,14 @@ public class InvitesTest extends SpellsourceTestBase {
 					// The players should be in a game, and play it.
 					invoke0(recipient::waitUntilDone);
 					invoke0(sender::waitUntilDone);
-					testContext.assertTrue(recipient.getTurnsPlayed() > 0);
-					testContext.assertTrue(sender.getTurnsPlayed() > 0);
+					assertTrue(recipient.getTurnsPlayed() > 0);
+					assertTrue(sender.getTurnsPlayed() > 0);
 
 					// Check that the queue has been destroyed.
-					testContext.assertFalse(SuspendableQueue.exists(inviteResponse.getInvite().getQueueId()), "The queue should be destroyed");
-					testContext.assertFalse(Games.getUsersInGames().containsKey(recipient.getUserId()), "Neither players should be in a game now");
-					testContext.assertFalse(Games.getUsersInGames().containsKey(sender.getUserId()), "Neither players should be in a game now");
-
+					assertFalse(usersInGames.containsKey(recipient.getUserId()), "Neither players should be in a game now");
+					assertFalse(usersInGames.containsKey(sender.getUserId()), "Neither players should be in a game now");
 				}
 			}
-		}, testContext);
-
+		}, testContext, vertx);
 	}
 }

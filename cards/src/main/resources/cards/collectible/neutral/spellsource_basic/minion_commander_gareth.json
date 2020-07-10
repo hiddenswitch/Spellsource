@@ -1,0 +1,30 @@
+{
+  "name": "Commander Gareth",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "After this attacks, your other minions attack the same target. (At most once more)",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "TRIGGER_HOST",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "FightSpell",
+      "target": "EVENT_TARGET",
+      "secondaryTarget": "OTHER_FRIENDLY_MINIONS"
+    },
+    "maxFiresPerSequence": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

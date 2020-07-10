@@ -1,0 +1,43 @@
+{
+  "name": "Gazal the Glorious",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Your next Signature gives your minions +2/+2",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "AfterCardPlayedTrigger",
+          "fireCondition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "EVENT_SOURCE",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "FRIENDLY_SIGNATURE"
+            }
+          },
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

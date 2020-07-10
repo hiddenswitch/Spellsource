@@ -1,0 +1,24 @@
+{
+  "name": "Captive",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "<b>Guard. Aftermath:</b> Summon an underling.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_underling_overlord"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

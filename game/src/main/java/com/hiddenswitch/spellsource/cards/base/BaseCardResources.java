@@ -17,6 +17,6 @@ public class BaseCardResources extends AbstractCardResources<BaseCardResources> 
 
 	@Override
 	public String getDirectoryPrefix() {
-		return "cards/basecards";
+		return "basecards/";
 	}
 }

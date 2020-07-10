@@ -1,0 +1,19 @@
+{
+  "name": "Astella Aeon",
+  "heroPower": "hero_power_rise",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Skill: Receive a Soar spell that draws a card.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

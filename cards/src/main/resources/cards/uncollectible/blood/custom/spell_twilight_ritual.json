@@ -1,0 +1,23 @@
+{
+  "name": "Twilight Ritual",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Give a minion +2 Health for each card in your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "hpBonus": {
+      "class": "CardCountValueProvider",
+      "multiplier": 2,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Exotic Goods",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "COMMON",
+  "description": "Source three cards from other classes.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.ExoticGoodsSpell"
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

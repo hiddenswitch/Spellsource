@@ -1,0 +1,44 @@
+{
+  "name": "Iceblade Giantslayer",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "TIME",
+  "damage": 8,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "Opener: Stun your champion, Reshuffle 1. Surge: Don't.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "SurgeCondition"
+      },
+      "spell1": {
+        "class": "NullSpell"
+      },
+      "spell2": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "FRIENDLY_HERO",
+            "attribute": "FROZEN"
+          },
+          {
+            "class": "ChooseAndReshuffleSpell"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

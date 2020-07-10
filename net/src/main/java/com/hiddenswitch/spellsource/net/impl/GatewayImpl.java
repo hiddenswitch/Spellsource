@@ -23,6 +23,8 @@ import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.util.Serialization;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Closeable;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -72,8 +74,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	private final int port;
 	private HttpServer server;
-	private Closeable queues;
-	private Closeable serverMessaging;
+	private Closeable customCloseables;
 
 	public GatewayImpl(int port) {
 		this.port = port;
@@ -82,7 +83,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	@Suspendable
-	public void start() throws RuntimeException, SuspendExecution {
+	protected void syncStart() throws RuntimeException, SuspendExecution {
 		CardCatalogue.loadCardsFromPackage();
 		Connection.registerCodecs();
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
@@ -117,7 +118,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(Connection.handler());
 
 		// Send game traffic over the Connection nowadays.
-		serverMessaging = ServerGameContext.handleConnections();
+		var serverMessaging = ServerGameContext.handleConnections();
 
 		// Enable friend list updates via envelope messaging channel
 		Friends.handleConnections();
@@ -125,21 +126,19 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Enable presence
 		Presence.handleConnections();
 
-		// Enable realtime conversations
-		Conversations.handleConnections();
-
 		// Create default matchmaking queues
-		queues = Matchmaking.startDefaultQueues();
+		var defaultQueues = Matchmaking.startDefaultQueues();
 		// Create draft queue
 		var draftQueue = Draft.startDraftQueue();
 
-		var originalQueues = queues;
-		queues = fut -> {
-			originalQueues.close(v1 -> {
-				serverMessaging.close(v2 -> {
-					draftQueue.close(fut);
-				});
-			});
+		customCloseables = fut -> {
+			var closed1 = Promise.<Void>promise();
+			var closed2 = Promise.<Void>promise();
+			var closed3 = Promise.<Void>promise();
+			CompositeFuture.join(closed1.future(), closed2.future(), closed3.future()).onComplete(res -> fut.handle(res.mapEmpty()));
+			draftQueue.close(closed1.future());
+			defaultQueues.close(closed2.future());
+			serverMessaging.close(closed3.future());
 		};
 
 		// Handle the enqueue and dequeue methods through the matchmaker
@@ -236,140 +235,140 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(authHandler);
 		router.route("/accounts/:targetUserId")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("targetUserId", this::getAccount));
+				.handler(Handlers.handler("targetUserId", this::getAccount));
 
 		router.route("/accounts")
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.handler(LoginRequest.class, this::login));
+				.handler(Handlers.handler(LoginRequest.class, this::login));
 		router.route("/accounts")
 				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(CreateAccountRequest.class, this::createAccount));
+				.handler(Handlers.handler(CreateAccountRequest.class, this::createAccount));
 		router.route("/accounts")
 				.method(HttpMethod.GET)
 				.handler(authHandler);
 		router.route("/accounts")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
+				.handler(Handlers.handler(GetAccountsRequest.class, this::getAccounts));
 
 		router.route("/accounts-password")
 				.handler(authHandler);
 		router.route("/accounts-password")
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.handler(com.hiddenswitch.spellsource.client.models.ChangePasswordRequest.class, this::changePassword));
+				.handler(Handlers.handler(com.hiddenswitch.spellsource.client.models.ChangePasswordRequest.class, this::changePassword));
 
 		router.route("/cards")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(this::getCards));
+				.handler(Handlers.handler(this::getCards));
 
 		router.route("/cards")
 				.method(HttpMethod.HEAD)
-				.handler(HandlerFactory.handler(this::getCards));
+				.handler(Handlers.handler(this::getCards));
 
 		router.route("/decks")
 				.handler(authHandler);
 		router.route("/decks")
 				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(DecksPutRequest.class, this::decksPut));
+				.handler(Handlers.handler(DecksPutRequest.class, this::decksPut));
 		router.route("/decks")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(this::decksGetAll));
+				.handler(Handlers.handler(this::decksGetAll));
 
 		router.route("/decks/:deckId")
 				.handler(authHandler);
 		router.route("/decks/:deckId")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("deckId", this::decksGet));
+				.handler(Handlers.handler("deckId", this::decksGet));
 
 		router.route("/decks/:deckId")
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
+				.handler(Handlers.handler(DecksUpdateCommand.class, "deckId", this::decksUpdate));
 
 		router.route("/decks/:deckId")
 				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler("deckId", this::decksDelete));
+				.handler(Handlers.handler("deckId", this::decksDelete));
 
 		router.route("/matchmaking")
 				.handler(authHandler);
 		router.route("/matchmaking")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(this::matchmakingGet));
+				.handler(Handlers.handler(this::matchmakingGet));
 
 		router.route("/matchmaking")
 				.handler(authHandler);
 		router.route("/matchmaking")
 				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler(this::matchmakingDelete));
+				.handler(Handlers.handler(this::matchmakingDelete));
 
 		router.route("/friends")
 				.handler(authHandler);
 		router.route("/friends")
 				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(FriendPutRequest.class, this::friendPut));
+				.handler(Handlers.handler(FriendPutRequest.class, this::friendPut));
 
 		router.route("/friends/:friendId")
 				.handler(authHandler);
 		router.route("/friends/:friendId")
 				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler("friendId", this::unFriend));
+				.handler(Handlers.handler("friendId", this::unFriend));
 
 		router.route("/games/:gameId")
 				.handler(authHandler);
 		router.route("/games/:gameId")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("gameId", this::getGameRecord));
+				.handler(Handlers.handler("gameId", this::getGameRecord));
 
 		router.route("/games")
 				.handler(authHandler);
 		router.route("/games")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(this::getGameRecordIds));
+				.handler(Handlers.handler(this::getGameRecordIds));
 
 		router.route("/invites")
 				.handler(authHandler);
 		router.route("/invites")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(this::getInvites));
+				.handler(Handlers.handler(this::getInvites));
 
 		router.route("/invites")
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.handler(InvitePostRequest.class, this::postInvite));
+				.handler(Handlers.handler(InvitePostRequest.class, this::postInvite));
 
 		router.route("/invites/:inviteId")
 				.handler(authHandler);
 
 		router.route("/invites/:inviteId")
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.handler(AcceptInviteRequest.class, "inviteId", this::acceptInvite));
+				.handler(Handlers.handler(AcceptInviteRequest.class, "inviteId", this::acceptInvite));
 
 		router.route("/invites/:inviteId")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("inviteId", this::getInvite));
+				.handler(Handlers.handler("inviteId", this::getInvite));
 
 		router.route("/invites/:inviteId")
 				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler("inviteId", this::deleteInvite));
+				.handler(Handlers.handler("inviteId", this::deleteInvite));
 
 		router.route("/drafts")
 				.handler(authHandler);
 		router.route("/drafts")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler(this::draftsGet));
+				.handler(Handlers.handler(this::draftsGet));
 
 		router.route("/drafts")
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
+				.handler(Handlers.handler(DraftsPostRequest.class, this::draftsPost));
 
 		router.route("/drafts/hero")
 				.handler(authHandler);
 		router.route("/drafts/hero")
 				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
+				.handler(Handlers.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
 
 		router.route("/drafts/cards")
 				.handler(authHandler);
 		router.route("/drafts/cards")
 				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
+				.handler(Handlers.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
 		router.route("/invites")
 				.handler(authHandler);
@@ -718,7 +717,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards.cards");
 
 		var cardsVersion = cache.get("cards-version");
 		var lastModified = cache.get("cards-last-modified");
@@ -844,19 +843,15 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		}
 	}
 
-
-	public Games getGames() throws InterruptedException, SuspendExecution {
-		return Rpc.connect(Games.class).sync();
-	}
-
 	@Override
 	@Suspendable
-	public void stop() throws Exception {
-		if (server != null) {
-			server.close();
+	protected void syncStop() throws SuspendExecution {
+		if (customCloseables != null) {
+			Sync.invoke1(customCloseables::close);
 		}
-		if (queues != null) {
-			Sync.invoke1(queues::close);
+
+		if (server != null) {
+			Void t = Sync.invoke1(server::close);
 		}
 	}
 }

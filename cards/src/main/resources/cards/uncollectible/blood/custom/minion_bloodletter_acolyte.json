@@ -1,0 +1,31 @@
+{
+  "name": "Bloodletter Acolyte",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Whenever this minion takes damage, give all minions in your hand +1 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "hpBonus": 1
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

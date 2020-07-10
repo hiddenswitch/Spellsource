@@ -1,0 +1,27 @@
+{
+  "name": "Bloodburn",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Give a minion +2 Health, then swap its Attack and Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 2
+      },
+      {
+        "class": "SwapAttackAndHpSpell"
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

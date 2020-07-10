@@ -1,0 +1,30 @@
+{
+  "name": "Scaleseller",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Aftermath: Both players receive two 2/2 Dragons.",
+  "deathrattle": {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_dragon_trader",
+        "token_dragon_trader"
+      ]
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ]
+}

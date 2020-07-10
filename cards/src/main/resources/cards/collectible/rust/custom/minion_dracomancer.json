@@ -1,0 +1,33 @@
+{
+  "name": "Dracomancer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "After this attacks, transform it into a 4/4 Dragon.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_SOURCE",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_44dragon"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Three Fathoms Below",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Destroy a minion. Shuffle 3 'Ocean Depths' into your deck.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_ocean_depths",
+        "howMany": 3
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

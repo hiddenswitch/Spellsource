@@ -1,0 +1,40 @@
+{
+  "name": "Bloodburner",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Opener: If you have less Health remaining than your opponent, deal 2 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "target": "ENEMY_HERO",
+        "attribute": "HP"
+      },
+      "value2": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "HP"
+      }
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

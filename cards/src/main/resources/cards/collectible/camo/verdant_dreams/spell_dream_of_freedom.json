@@ -1,0 +1,40 @@
+{
+  "name": "Dream of Freedom",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "LEGENDARY",
+  "description": "Both players summon random minions from their deck until their board is full. Give your minions Dash.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BothPlayersSpell",
+        "spell": {
+          "class": "RecruitSpell",
+          "value": 7,
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          "cardLocation": "DECK"
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "RUSH",
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "RUSH",
+          "invert": true,
+          "operation": "HAS"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Arcane Accelerator",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Whenever you cast a spell, gain Spell Damage +1 this turn only.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "SPELL_DAMAGE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

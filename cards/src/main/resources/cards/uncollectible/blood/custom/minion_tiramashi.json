@@ -1,0 +1,29 @@
+{
+  "name": "Tiramashi",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you Drain Health from another minion, add a copy of it to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DrainTrigger",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "EVENT_TARGET",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

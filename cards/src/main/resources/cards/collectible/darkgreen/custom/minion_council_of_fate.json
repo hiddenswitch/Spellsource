@@ -1,0 +1,34 @@
+{
+  "name": "Council of Fate",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 10,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If your deck has no duplicates, decide the fate of the universe.",
+  "battlecry": {
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
+      "cards": [
+        "spell_ruin_it",
+        "spell_restore_it",
+        "spell_renew_it",
+        "spell_reshape_it"
+      ],
+      "howMany": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

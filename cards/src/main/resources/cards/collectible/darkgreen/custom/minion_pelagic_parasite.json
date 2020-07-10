@@ -1,0 +1,25 @@
+{
+  "name": "Pelagic Parasite",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Aftermath: Transform a random enemy minion into a 1/1 Tentacle with Guard.",
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "ENEMY_MINIONS",
+    "card": "token_tauntentacle",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Yig the Doombringer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Receive \"Voltiyig\". It has three times this minion's Attack and Health and costs (10).",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "attackBonus": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "ATTACK",
+        "multiplier": 3
+      },
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "MAX_HP",
+        "multiplier": 3
+      }
+    },
+    "card": "token_voltiyig"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ]
+}

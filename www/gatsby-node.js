@@ -22,6 +22,11 @@ exports.onCreateWebpackConfig = ({
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
   const typeDefs = `
+  type ToolboxBlockCategoryList implements Node {
+    BlockTypePrefix: String
+    CategoryName: String
+    ColorHex: String
+  }
   type Block implements Node {
     type: String
     messages: [String]
@@ -32,6 +37,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     args: [Args1]
     data: String
     inputsInline: Boolean
+    hat: String
   }
   type Args1 {
     i: Int!
@@ -43,6 +49,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     name: String
     valueI: Int
     valueS: String
+    valueB: Boolean
     min: Int
     max: Int
     int: Boolean
@@ -53,6 +60,7 @@ exports.createSchemaCustomization = ({ actions }) => {
   type Shadow {
     type: String
     fields: [Field]
+    notActuallyShadow: Boolean
   }
   type Field {
     name: String

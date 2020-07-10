@@ -1,0 +1,47 @@
+{
+  "name": "Soulstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Destroy an allied minion. If you've played all five of these, awaken Magoria!",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "AlgebraicValueProvider",
+            "operation": "MODULO",
+            "value1": {
+              "class": "CardsPlayedValueProvider",
+              "filter": {
+                "class": "SpecificCardFilter",
+                "card": "spell_soul_stone"
+              }
+            },
+            "value2": 5
+          },
+          "value2": 0
+        },
+        "spell": {
+          "class": "SummonSpell",
+          "card": "token_magoria"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

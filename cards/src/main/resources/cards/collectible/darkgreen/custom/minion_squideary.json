@@ -1,0 +1,32 @@
+{
+  "name": "Squideary",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Aftermath: Give your Tentacles +1/+1.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "filter": {
+      "class": "SpecificCardFilter",
+      "cards": [
+        "token_tauntentacle",
+        "token_tentacle"
+      ]
+    },
+    "hpBonus": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "LEAGUE_OF_EXPLORERS"
+  ]
+}

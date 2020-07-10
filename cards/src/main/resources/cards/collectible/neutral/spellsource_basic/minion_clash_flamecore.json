@@ -1,0 +1,25 @@
+{
+  "name": "Clash Flamecore",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Aftermath: Destroy two random enemy minions.",
+  "deathrattle": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DestroySpell"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Xue the Eternal",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "Dash. Guard. Opener and Aftermath: Go dormant. Restore 10 excess Health to allies to revive this.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "permanent_xue_the_eternal"
+    }
+  },
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "SELF",
+    "card": "permanent_xue_the_eternal"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true,
+    "RUSH": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

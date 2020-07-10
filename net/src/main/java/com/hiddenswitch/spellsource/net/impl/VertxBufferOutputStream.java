@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by bberman on 11/26/16.
+ * Converts a vertx buffer into an {@link OutputStream}
  */
 public class VertxBufferOutputStream extends OutputStream {
 	private final Buffer buffer;

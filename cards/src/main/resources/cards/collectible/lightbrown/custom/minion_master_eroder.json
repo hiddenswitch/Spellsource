@@ -1,0 +1,50 @@
+{
+  "name": "Master Eroder",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Opener: Give all enemy minions <b>Decay<b>.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DECAY",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "OWNER"
+            },
+            "spell": {
+              "class": "DecaySpell"
+            }
+          }
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DECAY"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

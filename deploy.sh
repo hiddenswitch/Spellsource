@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.77
+SPELLSOURCE_VERSION=0.8.78
 
 usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
@@ -192,9 +192,10 @@ if [[ ${dump_mongo} == true ]]; then
   docker context use hiddenswitch >/dev/null
   docker run --network=backend -i --rm mongo:3.6 bash -c "mkdir -pv ./out >/dev/null; mongodump  --excludeCollection=games --uri=mongodb://spellsource_mongo:27017/metastone >/dev/null; tar -czvf ./archive.tar.gz ./dump >/dev/null; cat archive.tar.gz" >"${archive_path}"
   mkdir -pv .mongo
-  mongod --dbpath=.mongo --bind_ip_all >/dev/null & mongo_pid=$!
+  docker context use default >/dev/null
+  mongo_pid=$(docker run --rm -v="$(pwd)"/.mongo:/data/db -p="27017:27017" -d mongo:3.6)
   echo "mongod pid: ${mongo_pid}"
   tar -C "${dump_dir}" -xzvf "${archive_path}"
   mongorestore --drop --uri=mongodb://localhost:27017/metastone "${dump_dir}"/dump
-  kill -2 ${mongo_pid}
+  docker stop ${mongo_pid}
 fi

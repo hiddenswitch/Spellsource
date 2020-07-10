@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * Provides presence information to players who are each other's friends.
@@ -29,12 +29,12 @@ public interface Presence {
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
 		Connection.connected((connection, fut) -> {
-			connection.endHandler(suspendableHandler(ignored -> {
+			connection.addCloseHandler(fiber(v -> {
 				SuspendableCounter connections = connections(connection.userId());
 				if (connections.decrementAndGet() == 0L) {
 					notifyFriendsOfPresence(new UserId(connection.userId()), PresenceEnum.OFFLINE);
-					connections.close();
 				}
+				v.complete();
 			}));
 
 			defer(v -> {
@@ -93,6 +93,6 @@ public interface Presence {
 	@NotNull
 	@Suspendable
 	static SuspendableCounter connections(String userId) {
-		return SuspendableCounter.getOrCreate("Presence/connections/" + userId);
+		return SuspendableCounter.getOrCreate("Presence.connections." + userId);
 	}
 }

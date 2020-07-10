@@ -1,0 +1,32 @@
+{
+  "name": "Tower Ophidian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Supremacy: Summon a copy of this.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "SummonSpell",
+        "target": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

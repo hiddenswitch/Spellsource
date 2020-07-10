@@ -1,0 +1,19 @@
+{
+  "name": "Unending Nightmare",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Whenever your turn ends, destroy and resummon it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "card": "enchantment_unending_nightmare"
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

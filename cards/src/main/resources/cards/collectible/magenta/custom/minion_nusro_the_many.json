@@ -1,0 +1,61 @@
+{
+  "name": "Nus'Ro the Many",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you draw a card, transform it into a random Beast, Fae and Dragon.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReplaceCardsSpell",
+          "target": "EVENT_TARGET",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "BEAST",
+            "cardType": "MINION"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "FAE",
+            "cardType": "MINION"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "DRAGON",
+            "cardType": "MINION"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ]
+}

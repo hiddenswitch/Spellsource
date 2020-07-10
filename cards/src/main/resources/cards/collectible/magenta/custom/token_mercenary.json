@@ -1,0 +1,19 @@
+{
+  "name": "Mercenary",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Guard.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Ichor Blast",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Deal $2 damage to a minion, then $2 more at the end of this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DamageSpell",
+            "target": "TRIGGER_HOST",
+            "value": {
+              "class": "SpellDamageValueProvider",
+              "value": 2
+            }
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

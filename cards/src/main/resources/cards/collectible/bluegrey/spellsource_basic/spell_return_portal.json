@@ -1,0 +1,20 @@
+{
+  "name": "Return Portal",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "COMMON",
+  "description": "Return an allied minion to your hand. Give it Dash.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "RUSH"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

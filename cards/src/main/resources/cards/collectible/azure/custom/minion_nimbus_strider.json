@@ -1,0 +1,21 @@
+{
+  "name": "Nimbus Strider",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Can't be affected by Skills or spells.",
+  "aura": {
+    "class": "IncorruptibilityAura",
+    "target": "SELF"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

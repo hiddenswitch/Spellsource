@@ -1,0 +1,44 @@
+{
+  "name": "Vampire Lord",
+  "type": "CLASS",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.722,
+      "g": 0.333,
+      "r": 0.722
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.5882352941176471,
+      "g": 0.0,
+      "r": 0.5882352941176471
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.557,
+      "g": 0.0,
+      "r": 0.557
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.502,
+      "g": 0.0,
+      "r": 0.502
+    }
+  },
+  "hero": "hero_jian_shin"
+}

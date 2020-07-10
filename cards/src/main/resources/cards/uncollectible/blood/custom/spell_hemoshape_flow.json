@@ -1,0 +1,30 @@
+{
+  "name": "Hemoshape: Flow",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Take 3 damage. Restore #8 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "HealSpell",
+        "value": 8
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

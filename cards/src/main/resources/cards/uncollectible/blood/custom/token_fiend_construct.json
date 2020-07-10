@@ -1,0 +1,16 @@
+{
+  "name": "Fiend",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

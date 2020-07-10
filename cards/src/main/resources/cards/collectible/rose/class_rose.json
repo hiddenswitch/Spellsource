@@ -1,0 +1,44 @@
+{
+  "name": "Witch Doctor",
+  "type": "CLASS",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.839,
+      "g": 0.839,
+      "r": 0.969
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.7607843137254902,
+      "g": 0.7607843137254902,
+      "r": 0.9568627450980393
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.588,
+      "g": 0.588,
+      "r": 0.816
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.243,
+      "g": 0.243,
+      "r": 0.541
+    }
+  },
+  "hero": "hero_senzaku"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Heartstopper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Your Drain cards cost (1) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "requiredAttribute": "DRAIN"
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

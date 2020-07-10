@@ -1,0 +1,23 @@
+{
+  "name": "Unseen Horrors",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Summon two random minions from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

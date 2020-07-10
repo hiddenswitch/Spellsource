@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -28,6 +29,43 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.SAME_THREAD)
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
+
+	@Test
+	public void testRequestDiscovers() {
+		var traceJson = "{\n" +
+				"  \"seed\" : 1010101010101,\n" +
+				"  \"catalogueVersion\" : 2,\n" +
+				"  \"heroClasses\" : [ \"RUST\", \"RUST\" ],\n" +
+				"  \"deckCardIds\" : [ {\n" +
+				"    \"playerId\" : 0,\n" +
+				"    \"cardIds\" : [ \"weapon_cleaver_of_glory\", \"minion_fireguard_bulwark\", \"minion_vohkrovanis\", \"minion_freyas_familliar\", \"minion_majestic_fennec\", \"minion_sinestra\", \"minion_sable_explorer\", \"minion_recurring_torrent\", \"minion_sable_explorer\", \"minion_dracomancer\", \"spell_rising_flame\", \"minion_treasure_hunter\", \"minion_wyrmrest_aspirant\", \"minion_beloved_benji\", \"spell_vehemence\", \"minion_bibliothecat\", \"minion_mindswapper\", \"minion_dreamway_whale\", \"minion_reckless_hero\", \"minion_amathyst_panther\", \"minion_dracomancer\", \"minion_treeleach\", \"minion_tick_and_tock\", \"minion_cursing_disciple\", \"minion_trailblazer\", \"minion_oni_entrapper\", \"spell_zagroz__inferno_bomb\", \"minion_shedding_chameleon\", \"minion_devouring_devilsaur\", \"weapon_lava_saber\" ]\n" +
+				"  }, {\n" +
+				"    \"playerId\" : 1,\n" +
+				"    \"cardIds\" : [ \"weapon_cleaver_of_glory\", \"minion_fireguard_bulwark\", \"minion_vohkrovanis\", \"minion_freyas_familliar\", \"minion_majestic_fennec\", \"minion_sinestra\", \"minion_sable_explorer\", \"minion_recurring_torrent\", \"minion_sable_explorer\", \"minion_dracomancer\", \"spell_rising_flame\", \"minion_treasure_hunter\", \"minion_wyrmrest_aspirant\", \"minion_beloved_benji\", \"spell_vehemence\", \"minion_bibliothecat\", \"minion_mindswapper\", \"minion_dreamway_whale\", \"minion_reckless_hero\", \"minion_amathyst_panther\", \"minion_dracomancer\", \"minion_treeleach\", \"minion_tick_and_tock\", \"minion_cursing_disciple\", \"minion_trailblazer\", \"minion_oni_entrapper\", \"spell_zagroz__inferno_bomb\", \"minion_shedding_chameleon\", \"minion_devouring_devilsaur\", \"weapon_lava_saber\" ]\n" +
+				"  } ],\n" +
+				"  \"deckFormatName\" : \"Spellsource\",\n" +
+				"  \"deckFormatSets\" : [ \"VERDANT_DREAMS\", \"SPELLSOURCE\", \"SANDS_OF_TIME\", \"WHAT_LIES_BENEATH\", \"BATTLE_FOR_ASHENVALE\", \"CUSTOM\", \"SPELLSOURCE_BASIC\", \"SOURCESTORM\" ],\n" +
+				"  \"secondPlayerBonusCards\" : [ \"spell_lunstone\" ],\n" +
+				"  \"mulligans\" : [ {\n" +
+				"    \"playerId\" : 1,\n" +
+				"    \"entityIds\" : [ 55, 65 ]\n" +
+				"  }, {\n" +
+				"    \"playerId\" : 0,\n" +
+				"    \"entityIds\" : [ 10, 28, 27 ]\n" +
+				"  } ],\n" +
+				"  \"id\" : null,\n" +
+				"  \"traceErrors\" : false,\n" +
+				"  \"version\" : 4\n" +
+				"}";
+
+		var context = Trace.load(traceJson).replayContext();
+		context.setBehaviour(0, new GameStateValueBehaviour()
+				.setThrowsExceptions(false));
+		context.setBehaviour(1, new GameStateValueBehaviour()
+				.setThrowsExceptions(false));
+		context.resume();
+		assertTrue(context.updateAndGetGameOver(), "Gracefully handles issues with Celestial Conduit here");
+	}
 
 	@Test
 	public void testBailsOutInfiniteDiscover() {

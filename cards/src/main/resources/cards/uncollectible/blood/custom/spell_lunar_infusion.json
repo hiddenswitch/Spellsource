@@ -1,0 +1,30 @@
+{
+  "name": "Lunar Infusion",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Draw a spell. Give an allied character Health equal to its cost.",
+  "targetSelection": "FRIENDLY_CHARACTERS",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "target": "OUTPUT",
+        "attribute": "BASE_MANA_COST"
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ]
+}

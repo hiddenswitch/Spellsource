@@ -1,0 +1,30 @@
+{
+  "name": "Bloodclaw",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 1,
+  "durability": 4,
+  "rarity": "COMMON",
+  "description": "After your champion attacks, restore #2 Health to it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

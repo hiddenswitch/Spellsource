@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by bberman on 12/7/16.
+ * Converts a vertx buffer into an {@link InputStream}.
  */
 public class VertxBufferInputStream extends InputStream {
 	private Buffer input;

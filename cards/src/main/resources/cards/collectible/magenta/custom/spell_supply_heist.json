@@ -1,0 +1,125 @@
+{
+  "name": "Supply Heist",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "EPIC",
+  "description": "Source a minion, spell and weapon from your opponent's class. They all cost (1) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          },
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "OPPONENT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource",
+          "targetPlayer": "OPPONENT"
+        }
+      },
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          },
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "OPPONENT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource",
+          "targetPlayer": "OPPONENT"
+        }
+      },
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          },
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "WEAPON"
+            },
+            {
+              "class": "CardFilter",
+              "heroClass": "OPPONENT"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource",
+          "targetPlayer": "OPPONENT"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

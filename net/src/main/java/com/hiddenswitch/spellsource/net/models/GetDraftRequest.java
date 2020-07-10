@@ -2,9 +2,6 @@ package com.hiddenswitch.spellsource.net.models;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 6/11/17.
- */
 public final class GetDraftRequest implements Serializable {
 	public String userId;
 

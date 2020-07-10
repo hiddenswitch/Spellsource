@@ -1,0 +1,32 @@
+{
+  "name": "Flamerunner",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "At the end of your turns, if you restored Health this turn, summon a 2/2 Elemental.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "value": 0,
+        "attribute": "HEALING_THIS_TURN",
+        "operation": "GREATER"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_ember_elemental"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

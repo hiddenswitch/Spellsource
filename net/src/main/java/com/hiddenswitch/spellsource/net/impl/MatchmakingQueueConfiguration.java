@@ -4,6 +4,12 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 
 import java.io.Serializable;
 
+/**
+ * Configures a queue.
+ * <p>
+ * Queue configuration affects the way {@link com.hiddenswitch.spellsource.net.Matchmaking#startMatchmaker(String,
+ * MatchmakingQueueConfiguration)} will create and run a queue.
+ */
 public class MatchmakingQueueConfiguration implements Serializable {
 	private String name;
 	private CardDesc[] rules;
@@ -17,8 +23,16 @@ public class MatchmakingQueueConfiguration implements Serializable {
 	private long awaitingLobbyTimeout = 0L;
 	private boolean once;
 	private boolean join;
-	private boolean automaticallyClose;
+	private boolean automaticallyClose = true;
 
+	/**
+	 * The friendly, user-facing name of the queue.
+	 * <p>
+	 * The {@code queueId} is provided to {@link com.hiddenswitch.spellsource.net.Matchmaking#startMatchmaker(String,
+	 * MatchmakingQueueConfiguration)} directly.
+	 *
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
@@ -28,6 +42,15 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * Work in progress scenario building. Gets a set of cards that should be put into play.
+	 * <p>
+	 * They are cast by Player 1.
+	 * <p>
+	 * This can be used to specify scenarios and other custom behaviours that players can join in.
+	 *
+	 * @return
+	 */
 	public CardDesc[] getRules() {
 		return rules;
 	}
@@ -37,6 +60,12 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * The size of the lobby of this queue. Typically, this should be 2 for a multiplayer game and 1 for a single player
+	 * game.
+	 *
+	 * @return
+	 */
 	public int getLobbySize() {
 		return lobbySize;
 	}
@@ -46,6 +75,11 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * When {@code true}, specifies that player 2 should be filled by a bot.
+	 *
+	 * @return
+	 */
 	public boolean isBotOpponent() {
 		return botOpponent;
 	}
@@ -55,6 +89,12 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * Currently unused. Specifies the match's wins and losses should be recorded and affect the player's matchmaknig
+	 * rank.
+	 *
+	 * @return
+	 */
 	public boolean isRanked() {
 		return ranked;
 	}
@@ -64,6 +104,11 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * Currently unused. Indicates this lobby should not be visible in any public listings.
+	 *
+	 * @return
+	 */
 	public boolean isPrivateLobby() {
 		return privateLobby;
 	}
@@ -73,6 +118,12 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * Currently unused. Specifies that the game should start as soon as enough players queue to meet the lobby size. This
+	 * is currently the default behaviour and cannot be overridden.
+	 *
+	 * @return
+	 */
 	public boolean isStartsAutomatically() {
 		return startsAutomatically;
 	}
@@ -91,6 +142,11 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
+	/**
+	 * Only runs one game in this queue, then closses.
+	 *
+	 * @return
+	 */
 	public boolean isOnce() {
 		return once;
 	}
@@ -143,6 +199,9 @@ public class MatchmakingQueueConfiguration implements Serializable {
 
 	/**
 	 * Should the matchmaking creation invocation wait until the matchmaker is actually ready?
+	 * <p>
+	 * If the queue has been started elsewhere in the cluster, the matchmaker will be ready (i.e., it's ready to run in
+	 * backup mode).
 	 *
 	 * @return
 	 */
@@ -157,6 +216,7 @@ public class MatchmakingQueueConfiguration implements Serializable {
 
 	/**
 	 * Should the fiber be interrupted as soon as the vertx instance is closed?
+	 *
 	 * @return
 	 */
 	public boolean isAutomaticallyClose() {

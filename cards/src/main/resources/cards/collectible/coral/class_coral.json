@@ -1,0 +1,44 @@
+{
+  "name": "Bard",
+  "type": "CLASS",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.549,
+      "g": 0.647,
+      "r": 0.984
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.3254901960784314,
+      "g": 0.4745098039215686,
+      "r": 0.9803921568627451
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.243,
+      "g": 0.384,
+      "r": 0.847
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.09,
+      "g": 0.204,
+      "r": 0.592
+    }
+  },
+  "hero": "hero_loralyn"
+}

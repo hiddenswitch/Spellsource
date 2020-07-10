@@ -9,39 +9,26 @@ import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
+import java.util.*;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public abstract class SuspendableMap<K, V> {
-	private static Map<String, SuspendableMap> MAP_CACHE = new ConcurrentHashMap<>();
+	@Suspendable
+	private static <K, V> SuspendableMap<K, V> create(Vertx vertx, String name) {
+		SharedData client = vertx.sharedData();
+		if (vertx.isClustered()) {
+			AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
+			return new SuspendableAsyncMap<>(name, map);
+		} else {
+			return new SuspendableWrappedMap<>(client.getLocalMap(name));
+		}
+	}
 
 	@Suspendable
+	@SuppressWarnings("unchecked")
 	public static <K, V> SuspendableMap<K, V> getOrCreate(String name) {
-		Vertx vertx = Vertx.currentContext().owner();
-		String key = vertx.hashCode() + name;
-
-		@SuppressWarnings("unchecked")
-		SuspendableMap<K, V> suspendableMap = MAP_CACHE.computeIfAbsent(key, new Function<String, SuspendableMap>() {
-					@Override
-					@Suspendable
-					public SuspendableMap apply(String k) {
-						SharedData client = vertx.sharedData();
-						if (vertx.isClustered()) {
-							AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
-							return new SuspendableAsyncMap<>(map);
-						} else {
-							return new SuspendableWrappedMap<>(client.getLocalMap(name));
-						}
-					}
-				}
-		);
-		return suspendableMap;
+		return create(Vertx.currentContext().owner(), name);
 	}
 
 	public static <K, V> void getOrCreate(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
@@ -57,7 +44,6 @@ public abstract class SuspendableMap<K, V> {
 	public abstract boolean isEmpty();
 
 	@Suspendable
-	@SuppressWarnings("unchecked")
 	public abstract boolean containsKey(K key);
 
 	@Suspendable
@@ -91,6 +77,8 @@ public abstract class SuspendableMap<K, V> {
 
 	@Suspendable
 	public abstract Set<Map.Entry<K, V>> entrySet();
+
+	public abstract AsyncMap<K, V> async();
 
 	@Suspendable
 	public V replace(K key, V value) {

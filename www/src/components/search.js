@@ -62,9 +62,14 @@ function Search (props) {
     setResults(index
       // Query the index with search string to get an [] of IDs
       .search(query, { expand: true }) // accept partial matches
+      // map over each ID and return full document
+      .map(({ ref }) => index.documentStore.getDoc(ref))
+      .filter(doc => {
+        return doc.nodeType === 'Card' || doc.nodeType === 'MarkdownRemark'
+      })
       .slice(0, 5)
       // map over each ID and return full document
-      .map(({ ref }) => index.documentStore.getDoc(ref)))
+    )
   }
 
   return (
@@ -78,6 +83,11 @@ function Search (props) {
                      }}/>
       </Form>
       <ListGroup variant="flush" style={{ left: searchListLeft }} className={styles.searchResults}>
+        {results.map(page => (
+          <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
+            <Link to={page.path}>{page.title}</Link>
+          </ListGroup.Item>
+        ))}
         {dropDownMenu()}
       </ListGroup>
     </div>
