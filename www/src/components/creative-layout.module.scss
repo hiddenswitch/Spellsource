@@ -123,9 +123,11 @@ summary:hover {
   color: var(--primary-color);
 }
 
-.emphasis-image {
+.emphasis-gif {
   width: $main-width;
   max-width: 95%;
+  height: auto;
+  flex: 1;
   margin: auto;
 }
 
@@ -135,20 +137,24 @@ summary:hover {
 
 @media only screen and (max-device-width: 500px) {
   * {
-    font-size: $mobile-font-size !important;
-  }
-  .emphasis-image {
-    width: 100vw;
-    //margin-left: calc(-50vw + 50%);
+    font-size: $base-font-size !important;
   }
 }
 
-/*h1:before { content: "#";  margin-right: 9px; }
-h2:before { content: "##";  margin-right: 9px; }
-h3:before { content: "###";  margin-right: 9px; }
-h4:before { content: "####";  margin-right: 9px; }
-h5:before { content: "#####";  margin-right: 9px; }
-h6:before { content: "######";  margin-right: 9px; }*/
+@media only screen and (max-device-width: 700px) {
+  .emphasis-gif {
+    width: 100vw;
+    max-width: 100vw;
+    margin: calc(-50vw + 50%);
+  }
+}
+
+  /*h1:before { content: "#";  margin-right: 9px; }
+  h2:before { content: "##";  margin-right: 9px; }
+  h3:before { content: "###";  margin-right: 9px; }
+  h4:before { content: "####";  margin-right: 9px; }
+  h5:before { content: "#####";  margin-right: 9px; }
+  h6:before { content: "######";  margin-right: 9px; }*/
 
 /**
  * Layout
@@ -174,7 +180,7 @@ section {
 footer {
   color: var(--text-color);
   border-top: var(--border);
-  margin: 20px auto 15px;
+  margin: 22px auto 15px;
   padding-top: 10px;
   text-align: right;
 }
@@ -194,7 +200,6 @@ header p {
 }
 
 .fullscreen-div {
-  min-height: 100vh;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   scrollbar-width: none;
@@ -275,12 +280,12 @@ header p {
   padding-left: 0px;
   list-style-type: none;
   text-align: center;
-  //position: relative;
 }
 
 .menu ul li {
   display: inline-block;
   margin-left: 10px;
+  user-select: none;
 }
 
 .menu ul li a {

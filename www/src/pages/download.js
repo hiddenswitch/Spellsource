@@ -43,8 +43,9 @@ const Download = () => {
         <p>Join the <a href="https://groups.google.com/forum/#!forum/spellsource-alpha-testers">Spellsource Google Group</a>, then follow the instructions in the welcome message to participate in testing.
           You must be logged into Google Play to join the testing program. Your e-mail will be shared with the developers.
         </p>
+        <br/>
         <div style={{ textAlign: 'center' }}>
-          <img src={playNow} className={styles.emphasisImage} alt="in-game gif"/>
+          <img src={playNow} className={styles.emphasisGif} alt="in-game gif"/>
         </div>
       </section>
     </Layout>

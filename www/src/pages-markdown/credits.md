@@ -72,3 +72,5 @@ Frank Lantz
 ## Rochester Institute of Technology
 
 Andy Phelps
+
+Copyright © 2020 Hidden Switch

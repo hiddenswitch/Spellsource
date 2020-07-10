@@ -16,18 +16,39 @@ const Index = () => {
   return (
     <Layout>
       <section className={styles.fullscreenDiv}>
-        <Parallax pages={1.5} scrolling={true} vertical ref={ref => (parallax = ref)}>
+        <Parallax pages={1.99} scrolling={true} vertical ref={ref => (parallax = ref)}>
           <ParallaxLayer offset={0} speed={1}
                          style={{ backgroundImage: 'linear-gradient(#21215c, #533B63, #341F42)' }}/>
+
+          <ParallaxLayer offset={1} speed={1.1}>
+            <section style={{ width: '700px', maxWidth: '95%', minHeight: '257.63px' }}>
+              <h3 style={{ textAlign: 'center' }}>
+                <Link to="/download">[Play Now]</Link> - <a href="https://discord.gg/HmbESh2">[Discord]</a> - <Link
+                to="/contribute">[Contribute]</Link>
+              </h3>
+              <p></p>
+              <p>Spellsource is a community-driven digital card game <b>where every card is free</b>. Spellsource features
+                thousands of community-authored cards. </p>
+              <p>Learn more about the game <Link to="/wiki/Main_Page">here</Link> and the keywords <Link
+                to="/keywords">here</Link>. </p>
+              <p>Support us by <Link to="/contribute">authoring your own cards</Link> and <a
+                href="mailto:ben@hiddenswitch.com">contact us</a> about your own art.</p>
+              <p>This is alpha-quality software. You can see more on our <a
+                href="https://github.com/hiddenswitch/Spellsource-Server">GitHub</a>. </p>
+            </section>
+            <section style={{ textAlign: 'center', minHeight: '400px', height: 'auto' }}>
+              <img src={playingGif} className={styles.emphasisGif} alt="in-game gif"/>
+            </section>
+          </ParallaxLayer>
+
           <ParallaxLayer offset={0.99} speed={1} style={{
             backgroundImage: `url(${gameEnvironment})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center center'
           }}/>
 
-          <ParallaxLayer offset={0} speed={0} factor={3}
-                         style={{ backgroundImage: url('stars', true), backgroundSize: 'cover' }}
-                         onClick={() => parallax.scrollTo(1)}/>
+          <ParallaxLayer offset={0} speed={0} factor={1.5}
+                         style={{ backgroundImage: url('stars', true), backgroundSize: 'cover' }}/>
 
           <ParallaxLayer offset={0.43} speed={0.8} style={{ opacity: 0.1 }}>
             <img src={cloud} style={{ display: 'block', width: '20%', marginLeft: '55%' }} alt=""/>
@@ -59,28 +80,11 @@ const Index = () => {
             offset={0}
             // speed={-0.9}
             speed={1}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={spellsource} alt="In-Game Screenshot" className={styles.emphasisImage}/>
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            onClick={() => parallax.scrollTo(1.5)}>
+            <img src={spellsource} alt="In-Game Screenshot" style={{ width: '700px', maxWidth: '95%' }}/>
           </ParallaxLayer>
         </Parallax>
-      </section>
-      <section>
-        <h3 style={{ textAlign: 'center' }}>
-          <Link to="/download">[Play Now]</Link> - <a href="https://discord.gg/HmbESh2">[Discord]</a> - <Link
-          to="/contribute">[Contribute]</Link>
-        </h3>
-        <p></p>
-        <p>Spellsource is a community-driven digital card game <b>where every card is free</b>. Spellsource features
-          thousands of community-authored cards. </p>
-        <p>Learn more about the game <Link to="/wiki/Main_Page">here</Link> and the keywords <Link
-          to="/keywords">here</Link>. </p>
-        <p>Support us by <Link to="/contribute">authoring your own cards</Link> and <a
-          href="mailto:ben@hiddenswitch.com">contact us</a> about your own art.</p>
-        <p>This is alpha-quality software. You can see more on our <a
-          href="https://github.com/hiddenswitch/Spellsource-Server">GitHub</a>. </p>
-      </section>
-      <section style={{ textAlign: 'center' }}>
-        <img src={playingGif} className={styles.emphasisImage} alt="in-game gif"/>
       </section>
     </Layout>
   )
