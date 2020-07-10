@@ -153,7 +153,7 @@ export default class WorkspaceUtils {
                 }
                 break
               case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN:
-                if (!!obj.spell && (!obj.spell.target || obj.spell.target === 'SPELL_TARGET')) {
+                if (!!obj.spell && (obj.spell.target === 'IT')) {
                   obj.spell.target = 'EVENT_TARGET'
                 }
                 break
@@ -230,6 +230,11 @@ export default class WorkspaceUtils {
     if (!!cardScript.class && cardScript.class.endsWith('Aura')
     && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
       cardScript.attribute = 'AURA_' + cardScript.attribute
+    }
+
+    if (!!cardScript.triggers && cardScript.triggers.length === 1) {
+      cardScript.trigger = cardScript.triggers[0]
+      delete cardScript.triggers
     }
 
     return cardScript
