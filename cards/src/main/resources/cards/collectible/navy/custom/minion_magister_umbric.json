@@ -19,7 +19,7 @@
       "cardCostModifier": {
         "class": "CardCostModifier",
         "target": "SELF",
-        "value": 1,
+        "value": 10,
         "operation": "SUBTRACT"
       },
       "randomTarget": true
