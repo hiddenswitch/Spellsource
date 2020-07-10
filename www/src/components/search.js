@@ -13,15 +13,15 @@ function Search (props) {
   const [searchListLeft, setSearchListLeft] = useState(0)
 
   function updatePosition () {
-    setSearchListLeft(inputBox.current.getBoundingClientRect().left);
+    setSearchListLeft(inputBox.current.getBoundingClientRect().left)
   }
 
   // css sizing for input box
-  const inputBox = useRef(null);
+  const inputBox = useRef(null)
   useEffect(() => {
-    window.addEventListener('resize', updatePosition);
+    window.addEventListener('resize', updatePosition)
     updatePosition();
-    return () => window.removeEventListener('resize', updatePosition);
+    return () => window.removeEventListener('resize', updatePosition)
   }, []);
 
   const index = useIndex()
