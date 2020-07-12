@@ -6,7 +6,7 @@
 
 This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
 
-**[Play now in your browser, or download for your platform here.](www/src/pages-markdown/download.md)**
+**[Play now in your browser, or download for your platform here.](https://www.playspellsource.com/download)**
 
 Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
 

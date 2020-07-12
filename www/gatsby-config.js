@@ -133,6 +133,7 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-image`,
     `gatsby-transformer-sharp`,
+    `gatsby-plugin-anchor-links`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {
@@ -144,12 +145,20 @@ module.exports = {
               // It's important to specify the maxWidth (in pixels) of
               // the content container as this plugin uses this as the
               // base for generating different widths of each image.
-              maxWidth: 860,
+              maxWidth: 700,
               linkImagesToOriginal: false,
               backgroundColor: 'transparent',
               withWebp: true,
               disableBgImage: true,
               quality: 100,
+              wrapperStyle: `float: right; width: 100%; margin-left: 0.5em; margin-bottom: 0.5em;`
+            },
+          },
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              maintainCase: false,
+              removeAccents: true,
             },
           },
         ],

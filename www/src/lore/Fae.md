@@ -6,7 +6,6 @@ layout: wiki
 
 ![Land Fae](Spirit_Folk_of_the_Forest_(Land).jpg "fig:Land Fae") 
 ![Sea Fae](Spirit_Folk_of_the_Sea.png "fig:Sea Fae") 
-![Fae Minion](FaeMinion.png "fig:Fae Minion") 
 
 They are the first
 inhabitants of the [Lung Islands](/wiki/Moromah_Island "wikilink"), the
@@ -18,11 +17,13 @@ live in families or clans, and answer to a Lord: the [Lord of the
 Forest](/wiki/Lord_of_the_Forest "wikilink") and the [Lord of the
 Rivers](/wiki/Lord_of_the_Rivers "wikilink"). These Lords are pure magical
 beings. They also cohabit with the [Hengeyokai](/wiki/Hengeyokai "wikilink")
-and speak the same language, [Sylvan](/wiki/Sylvan "wikilink"), or language of
+and speak the same language, [Wyspan](/wiki/Wyspan "wikilink"), or language of
 the Forest. They have special powers related to natural forces or
 events: for instance, they can communicate with animals and each other
 using [Passed Vision](/wiki/Passed_Vision "wikilink"), or use the [five
 elements](/wiki/Five_Elements "wikilink") to cast spells.
+
+![Fae Minion](FaeMinion.png "fig:Fae Minion") 
 
 ### Tribes
 

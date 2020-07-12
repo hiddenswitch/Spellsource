@@ -5,11 +5,14 @@ path: "/whats-new"
 header: true
 ---
 
-Thanks for playing this beta of Spellsource!
+## What's New
 
-Read more at [our website](http://www.playspellsource.com) and join our [Discord](https://discord.gg/HmbESh2)!
+Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
+[Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
 ### Current Build 0.8.78-3.2.1 (June 19, 2020)
+<details>
+<summary>Bug fixes...</summary>
 
  - The search results have been improved in the website.
  - Formatting specifiers no longer appear in the collection's large card preview.
@@ -26,25 +29,41 @@ Read more at [our website](http://www.playspellsource.com) and join our [Discord
  - The mana token is no longer missing from mulligan cards.
  - The macOS Steam UI is now properly sized.
 
-### 0.8.77-3.2.0 (May 20, 2020)
+</details>
 
- - The user interface has been restyled.
- - The friends list is temporarily disabled for the next few days to be repaired and restyled.
+### 0.8.77-3.2.0 (May 20, 2020)
+<details>
+<summary>User interface, friends list...</summary>
+
+- The user interface has been restyled.
+- The friends list is temporarily disabled for the next few days to be repaired and restyled.
+
+</details>
 
 ### 0.8.76-3.1.3 (May 7, 2020)
+<details>
+<summary>Card implementation improvements...</summary>
 
  - Text and implementation of cards that cast when drawn have been standardized.
  - Hope Eater's aura is now more consistent on removal. (1712)
  - Firebolt now shows spell power correctly. (1724)
  - For Science! now buffs the right minion. (1726)
+ 
+</details>
 
 ### 0.8.75-3.1.3 (April 24, 2020)
+<details>
+<summary>Fixes to cards for uncollectible classes and card cost modifiers...</summary>
 
  - Cards for uncollectible classes no longer show up at all in the collection unless the collectible filter is turned off. (1691)
  - A golden glow appears around cards whose condition is met.
  - Card cost modifiers now correctly show buff / debuff status for cards in the hand.
+ 
+</details>
 
 ### 0.8.74-3.1.2 (April 22, 2020)
+<details>
+<summary>Keywords, name fixes, card bugfixes...</summary>
 
  - The Invoke keyword has been reworked! It now reads, "Invoke (X): Choose to spend X more Lun when played for an additional effect."
  - New updates to Skyward! Thanks @Nix
@@ -61,7 +80,11 @@ Read more at [our website](http://www.playspellsource.com) and join our [Discord
  - Blast Apart no longer damages more things more than it should. (1718)
  - Diamond Sultan now has a dynamic description. (1711)
  
+</details>
+
 ### Notes on Skyward Updates
+<details>
+<summary>Improving board presence of minions in the Skyward class...</summary>
 
 Changes were made to the basic set in hopes of increasing the number of minions in the Skyward class so that they would be able to better develop a threatening board presence. Discarding spells has been introduced as a new class mechanic.
 
@@ -79,12 +102,19 @@ Changes were made to the basic set in hopes of increasing the number of minions 
 - Ascella name changed to Astella to avoid jokes in translation.
 - Consideration has been made towards changing the class name to Skymage or Skyseeker.
 
+</details>
+
 ### 0.8.73-3.1.2 (April 17, 2020)
+<details>
+<summary>Soulscream and bot fixes...</summary>
 
  - Soulscream now correctly counts aftermaths. (1704)
  - The bot is less likely to take down the server on infinitely-looping Source actions.
+ </details>
 
 ### 0.8.72-3.1.2 (April 7, 2020)
+<details>
+<summary>Resolution and rendering fixes, and new cards</summary>
 
  - The full screen resolution is set to the display's desktop resolution, fixing odd rendering issues on Windows devices. (1644)
  - Your playable cards and units no longer flicker a green outline at the end of your turn in Quick Play and other situations where your opponent completes their turn very quickly. (1557)
@@ -116,7 +146,9 @@ Changes were made to the basic set in hopes of increasing the number of minions 
  - Frontline Coward is now correctly an Overlord card. (1671)
  - Oni Queen's Enenra now actually gains its Stealth. (1670)
  
+ 
 #### Notes from Logovazz about Rebel and Oni Queen
+
 
 **Oni Queen Update**
  - Cloak and Dagger now reads "Give your Hidden minions Toxic."
@@ -167,7 +199,12 @@ Exile has been renamed to Rebel.
  - Skill, Cost and Lun are now correctly capitalised across all cards. Champion is now correctly not capitalised across all cards.
  - Also fixed some general grammatical issues I stumbled across, like missing full stops.
  
+</details>
+ 
+
 ### 0.8.71-3.1.1 (March 28, 2020)
+<details>
+<summary>Card tweaks and interactions...</summary>
 
  - Both versions of Doodles now work. (1632)
  - Cards will not be played randomly more than once per reading of the text "play cards randomly." Concretely, a card is marked as being played randomly and is not eligible to be played randomly again, until all the cards in the selected list of cards are done being played randomly. Fixes issues related to Titan Feast playing Titan Feast in the deck.
@@ -189,9 +226,13 @@ Exile has been renamed to Rebel.
  - Mysterious Questgiver now properly makes 3 Discoveries. (1579)
  - Nilfheim Needlegunner no longer triggers off of itself. (1610)
  - Herald of Fate no longer just gives you double openers forever. (1577)
+ 
+</details>
 
 ### 0.8.70-3.1.1 (March 27, 2020)
-
+<details>
+<summary>30 new Overload and Skyward cards, Storyteller and Archaeologist buffs, balance updates...</summary>
+ 
  - Introducing 30 new Overlord cards, thanks @Bromora! (1560)
  - Storyteller has been buffed, thanks @skurleton! (1571)
  - Archaelogist has been buffed and has one rework, thanks @Pircival! (1574)
@@ -280,7 +321,11 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
 *New Cards*
  - Draconic Doubler, Shortrun Stockpiler, Valiant Medic, Coordinated Assault, Migraine, Rally, Enenra
 
+</details>
+
 ### 0.8.69-3.1.1 (March 21, 2020)
+<details>
+<summary>Ringmaster class, Vampire Lord and Dragoon rework, balance and reliability...</summary>
 
  - Introducing the Ringmaster class! When building a deck, make sure to choose a Signature spell!
  - Screen layout on the client has been improved.
@@ -293,8 +338,12 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
  - Improve the reliability of Spirit from Long Past and other interactions with the graveyard as a source of cards.
  - Soulscream no longer concedes a match and now has correct behaviour. (1584)
  - Various Hive Queen balance changes. (1568)
+ 
+ </details>
 
 ### 0.8.68-3.1.0 (March 13, 2020)
+<details>
+<summary>Improvements to Quick Play, adding Freezing Over to On Play, tweaks to Crate of Dynamite and Otherworldly Truth...</summary>
 
  - A text-based card editor is now active during Quick Play. Access it by clicking the pencil icon in the top tray of the battlefield. You will not be able to draw cards during a multiplayer game.
  - Moon Gladiator now has the correct effect. (1563)
@@ -303,8 +352,12 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
  - Sunken Terror's text now reflects how it plays a copy of shuffled cards, not the originals. (1547)
  - Otherwordly Truth now correctly shuffles all 3 cards and not 1 at random. (1547)
  - Crate of Dynamite can now only be cast on friendly minions for simplicity's sake (1356)
+ 
+ </details>
 
 ### 0.8.67-3.0.10 (February 14, 2020)
+<details>
+<summary>Updates on appearance, account creation, card operations...</summary>
 
  - End turn button just says the text for now in a tweak of its appearance.
  - No longer show the full screen button on mobile platforms. (fix client 29)
@@ -324,8 +377,12 @@ Pirates seemed off as a one-off tribe in Spellsource when the Tribes represent d
  - Yig's Mastermind now only plays 3 cards instead of 5, and also properly removes them from your deck. (1536)
  - Freezing Over now properly buffs the minion only when playing minions, not summoning them. (1561)
 
-### 0.8.66-3.0.9 (February 6, 2020)
+</details>
 
+### 0.8.66-3.0.9 (February 6, 2020)
+<details>
+<summary> Changes to neutrals, Oni Queen, Witch Doc, Soulseeker...</summary>
+ 
  - The client now shows colors on cards.
  - Inspecting a card on mobile in the collection interface no longer leaves it stuck on screen.
  - Issues in the client related to some kinds of targeting have been fixed.
@@ -389,7 +446,7 @@ In addition, extensive edits by @Logovaz summarized here:
  
  - Witching Traveler now sets cost of card to 0 from 1.
  
-### Soulseeker Changes
+#### Soulseeker Changes
 
  - Major changes to Soulseeker: “Obvious nerfs," card deletions, reflavoring and set changes, new cards, in particular Secrets archetype.
  - Reverse Volition: 1 mana common spell "Secret: When your opponent plays a minion, return it to their hand." (Replaces Dormant Spirits)
@@ -431,8 +488,12 @@ In addition, extensive edits by @Logovaz summarized here:
  - Awaken is now a basic card (was core/classic).
  - Essence Harvester is now a core (classic) card (was setless).
  - Lost Legionnaire (formerly Jekk Trinity) is now a core (classic) card (was setless)
+ 
+</details>
 
 ### 0.8.65-3.0.8 (January 24th, 2020)
+<details>
+<summary>Tweaks to Large Spiderling, Necronomicon, Lost City's Guardian, and more...</summary>
 
  - Large Spiderling now correctly states that it deals 4 damage and not 3. (1497)
  - Necronomicon now correctly inflicts 3 damage instead of 2. (1503)
@@ -446,7 +507,11 @@ In addition, extensive edits by @Logovaz summarized here:
  - The Imperial Ritual: "Combo deck which needs you to have a setup turn, playing Imperial Soul and Grasp of God, then on the next turn, copying imperial soul with Spawn of Evil, the second one being affected by Forgotten Science, then you play Freying Familiar, and then you cast Doom Project for the win."
  - New Archaeologist Decks: Elemental Arch, Discover Archaeologist and Armor-Hulk's Reign! (1499)
 
+</details>
+
 ### 0.8.64-3.0.8 (January 19th, 2020)
+<details>
+<summary>New champion, new Archaeologist cards, and more...</summary>
 
  - Introducing the Trader champion!
  - Adding new Archaeologist cards!
@@ -469,15 +534,24 @@ In addition, extensive edits by @Logovaz summarized here:
  - Bloodlord Goa now properly recasts Aftermaths, even ones triggered by cards like Soulscream. (1489)
  - The 4th Ring Warden now correctly only affects your own minions. (1490)
  
+</details>
+ 
+
 ### 0.8.63-3.0.8 (January 14, 2020)
+<details>
+<summary>Updates to Oni Queen, Deft Familiar, Dark Rule, Fifi FIzzlewarp, Zilch...</summary>
 
  - New Oni Queen cards and updates. (since 0.8.62)
  - Deft Familiar now correctly upgrades your hero power.
  - Dark Rule now correctly selects from different Overlord tokens.
  - Fifi Fizzlewarp no longer interacts specially with cards that also trigger at the start of the game.
  - Zilch, God of Nothing correctly does not count permanents for its effect.
+ 
+</details>
 
 ### 0.8.62-3.0.8 (January 13, 2020)
+<details>
+<summary>New cards, cost tweaks...</summary>
 
  - New Vampire Lord cards and updates. (1444)
  - Wraith has been updated as the Overlord. (1445)
@@ -493,8 +567,12 @@ In addition, extensive edits by @Logovaz summarized here:
  - Waygate Commander now reads: "Your Demons have Dash." (1461)
  - General Hun'zho now affects hand as well as board. (1461)
  - Rallying Speech now costs 1. (1461)
+ 
+</details>
 
 ### 0.8.61-3.0.8 (January 9, 2020)
+<details>
+<summary>Lots of appearance updates...</summary>
 
  - Faceless Nightmare, Totemic Split, Ichor Conversion, Felstalker, Shadow Satyr, Nightmare Portal, and Nemsy, Awakened Calamity have been moved out of the Spellsource set. Eternal Time Eater is now in the Timeweaver class. (server fix #1441)
  - Fae Flyrider, Forest Get-Together, and Tall Tales are now correctly in the Spellsource format. (server fix #1460)
@@ -522,7 +600,11 @@ In addition, extensive edits by @Logovaz summarized here:
  - Insurgency Captain Krika now correctly activates every time its owner's hero attacks. (server fix #1442)
  - Bluefist Trainer, Liver Eater, and Bogovey Traitor now have their appropriate tribes. (server fix #1442)
 
+</details>
+
 ### 0.8.60-3.0.7 (January 7, 2020)
+<details>
+<summary>Changes to Hive Mind, Deepsea Duel, among others...</summary>
 
  - Lesser Old One, Doomed Expedition and Raise the Dead are now correctly in the collection. (server fix #1475)
  - Phanton Advisor no longer has text for the purposes of Fifi Fizzlewarp. (server fix #1469, server fix #1466)
@@ -536,10 +618,12 @@ In addition, extensive edits by @Logovaz summarized here:
  - You can now attack as quickly as you can issue commands.
  - Surveyor Skag no longer puts the same card copied multiple times at the bottom of your deck. 
  - Destroying minions that go dormant during their summoning phase no longer crashes the game. For example, if Paven, Elemental of Surprise gained Miserable Conclusion (a destroy effect) on its Opener due to Alagard's Infusion and then destroys itself in the Opener, it correctly transforms into its permanent.
+ 
+</details>
 
 ### 0.8.59-3.0.6.2 (December 29th, 2019)
-
-Hotfixes to the client and server.
+<details>
+<summary>Hotfixes to the client and server... </summary>
 
  - The end game screen now appears correctly. (client fix #21)
  - Commands now correctly issue on the first turn when the player starts. (client fix #22)
@@ -560,16 +644,20 @@ Hotfixes to the client and server.
  - On mobile devices, the game will not rotate to landscape if portrait orientation lock is enabled.
  - The notch cutout obscures part of the end turn button on iPhone X devices when oriented landscape right.
 
-### 0.8.58-3.0.6.1 (December 29th, 2019)
+</details>
 
-Hotfixes to the client and server.
+### 0.8.58-3.0.6.1 (December 29th, 2019)
+<details>
+<summary>Hotfixes to the client and server...</summary>
 
  - Some issues with selection have been addressed.
  - Sometimes, games would linger and not end. The most common cause of this issue has been addressed.
 
-### 0.8.57-3.0.6 (December 28th, 2019)
+</details>
 
-Improvements to the client and server.
+### 0.8.57-3.0.6 (December 28th, 2019)
+<details>
+<summary>Improvements to the client and server...</summary>
 
  - Icons throughout the interface are hot-fixed and cards in your deck can be deleted again. (client fix #8)
  - When your opponent reconnects during your turn, you no longer lose the ability to take actions. (client fix #16, client fix #17, server fix #1464)
@@ -578,9 +666,11 @@ Improvements to the client and server.
  - Openers and discovers no longer prompt you with a panel rendered off-screen, allowing you to correctly perform an action.
  - When you complete a mulligan, your mulligan prompt correctly goes away; when your opponent completes a mulligan, you can again safely mulligan; spamming the mulligan button no longer crashes the game.
 
-### 0.8.56-3.0.5 (December 18th, 2019)
+</details>
 
-Improvements to the client.
+### 0.8.56-3.0.5 (December 18th, 2019)
+<details>
+<summary>Improvements to the client...</summary>
 
  - The hand now expands to the width of the screen on desktops again.
  - Better aspect ratio / zooming management on desktops.
@@ -588,34 +678,35 @@ Improvements to the client.
  - Remove unneeded assets
  - Cards can now be cancelled in the click activation event patttern.
  - On non-mobile devices, the hand tray no longer needs to open and close. Your cards will raise automatically when you hover over them.
+ 
+</details>
 
 ### 0.8.56-3.0.4 (December 15th, 2019)
+<details>
+<summary>Android release and known issues...</summary>
 
-Android release.
-
-##### Known Issues:
- 
+ - Android release
  - If you're upgrading from the previous version, the collection on macOS and Windows clients is missing cards.
+
+</details>
 
 ### 0.8.56-3.0.3 (December 14th, 2019)
 
 Maintenance iOS release.
 
 ### 0.8.56-3.0.2 (December 12th, 2019)
-
-Fixes to the client.
-
-##### Usability Fixes:
+<details>
+<summary>Usability fixes to the client...</summary>
 
  - There are no longer lines between the tiles of the background grid. (client fix #7)
  - The entire battlefield is visible on mobile, and portrait mode has been enabled.
  - Tapping a targetable card to play it now works.
+ 
+</details>
 
 ### 0.8.56-3.0.1 (December 11th, 2019)
-
-Fixes to the client.
-
-##### Usability Fixes:
+<details>
+<summary>Usability fixes to client...</summary>
 
  - Spells without targets are now easier to play and are easier to cancel. (client fix #6)
  - Mulligan button spam should no longer cause a crash. (client fix #5)
@@ -628,24 +719,23 @@ Fixes to the client.
  - Canceling a no-target spell or card is easier.
  - The opponent's play card animations are disabled for now, the played card visualization should appear much more reliably.
 
+</details>
+
 ### 0.8.55-3.0.0 (December 10th, 2019)
+<details>
+<summary>Version 3 client live, content fixes...</summary>
 
-The Version 3 client is now live and quite buggy.
-
-##### Content Fixes:
-
+ - The Version 3 client is now live and quite buggy.
  - Obvious Ambush now reads, "Destroy a friendly minion. Summon a 3/3 Worm." (1437)
+ 
+</details>
 
 ### 0.8.54-2.0.38 (October 27th, 2019)
+<details>
+<summary>Bug fixes and content fixes...</summary>
 
-Bug fixes.
-
-Giving yourself more than 10 Lun (but not Lun stones) during your turn now preserves that lun. This means you can use the Lunstone while you have 10 lun, and you will correctly have 11 lun. Other effects which spend all your lun will scale correctly to that 11th lun.
-
-Using a skill now spends its lun before the skill effects are evaluating, making skills behave like cards played from the hand.
-
-##### Content Fixes:
-
+ - Giving yourself more than 10 Lun (but not Lun stones) during your turn now preserves that lun. This means you can use the Lunstone while you have 10 lun, and you will correctly have 11 lun. Other effects which spend all your lun will scale correctly to that 11th lun.
+ - Using a skill now spends its lun before the skill effects are evaluating, making skills behave like cards played from the hand.
  - Yagan Lifetaker now correctly buffs minions randomly. (1438)
  - Flame Burp now deals the correct amount of damage, 1. (1436)
  - Livid Zealot and other text copying effects now correctly copy triggers and auras onto actors already in play. (1435)
@@ -668,14 +758,13 @@ Using a skill now spends its lun before the skill effects are evaluating, making
  - Devour now correctly drains to the friendly champion. (1417)
  - The Reiri minion token now correctly shows how much damage is left for it to activate. (1417)
 
+</details>
+
 ### 0.8.53-2.0.38 (October 25th, 2019)
+<details>
+<summary>Bug fixes, balance changes, massive content additions, and content fixes...</summary> 
 
-Bug fixes, balance changes and massive content additions.
-
-Please note that the client is currently in maintenance mode while the new build is being developed!
-
-##### Content Additions:
-
+ - Please note that the client is currently in maintenance mode while the new build is being developed!
  - Vohkrovanis, "Start of Game: Replace your deck with 30 random cards. Discard your hand, and draw that many cards." (1371)
  - Introducing 4 Archaeologist legendaries: Archivist Krag, Farseer Kethaan, Jerra the Deforger and Thrakul the Armorhulk. (1393)
  - Introducing the Exile class, the Oni-Queen class, and new Witch Doctor cards! (1414)
@@ -683,9 +772,6 @@ Please note that the client is currently in maintenance mode while the new build
  - New Occultist cards. (1398)
  - The Vampire Lord has been reworked. (1413)
  - Bard has been reworked. (1416)
- 
-##### Content Fixes:
-
  - Imperfect Duplicate now correctly summons a minion based on the target's stats. (1404)
  - Sneaky Kaeru now returns to the hand when its health is 1. (1401)
  - Bloodmoon Ritual is now in the collection. (1399)
@@ -726,22 +812,18 @@ Please note that the client is currently in maintenance mode while the new build
  - Stonecold Sergeant now has 5 Health. (1407)
  - Stormwind Commander now has 4 Health. (1407)
  - Forces Unite now costs 6. (1407)
+ 
+</details>
 
 ### 0.8.52-2.0.38 (September 20th, 2019)
+<details>
+<summary>Thanks, bug fixes, content additions, content fixes...</summary>
 
-Thanks to @Logovaz for a great contribution to Witch Doctor.
-
-Bug fixes.
-
-##### Content Additions:
-
+ - Thanks to @Logovaz for a great contribution to Witch Doctor. Bug fixes.
  - Quick Chant - 1 Lun Basic Spell "Restore a friendly minion to full Health. Give it +3 Health."
  - Jungle Survivalist - 2/1/2 Common Minion "Opener: Discover a spell."
  - Cemetary Party - 4 Lun Rare Spell "Resurrect a friendly Aftermath minion. Add a copy of it to your hand."
  - Story Collector - 3/1/5 Epic Minion "Opener: If you cast a spell this turn, add two random Witch Doctor spells to your hand."
-
-##### Content Fixes:
-
  - Lifedrain now does not apply if the source shares an owner with the target, the source is a spell, and the target is a hero. In other words, "Take X damage" effects no longer are influenced by Lifedrain.
  - Auto-Cannibalism can now be cast with less than 16 health. (1383)
  - Vermancer is now called Hive Queen (1397)
@@ -762,27 +844,20 @@ Bug fixes.
  - Legendary hero card Puppeteer Senzaku and Basic minion Spiritcaller have been removed.
  - Ptero Max has fixed text "Your Beasts gain an extra attack after attacking and killing minions." from "Your Beasts can attack again after they attack and kill a minion." No change in interaction.
 
+</details>
+
 ### 0.8.51-2.0.38 (September 2nd, 2019)
 
 Tribes are now visible on cards again. (1358)
 
 ### 0.8.51-2.0.37 (September 1st, 2019)
+<details>
+<summary>Thanks, content additions, usability and content fixes...</summary>
 
-Content additions and bug fixes.
-
-Thanks @Bromora for the contribution to Wraith!
-
-##### Usability Fixes:
-
+ - Content additions and bug fixes. Thanks @Bromora for the contribution to Wraith!
  - Deleting a deck no longer glitches out the client on non-Windows platforms. (1372)
  - Legibility of buffs has been improved, showing a darkened rectangle when a buff is applied. Buffs will be visualized differently in the new client. (1367)
-
-##### Content Additions:
-
  - Wraith Verdant Dreams cards. Thanks @Bromora!
-
-##### Content Fixes:
-
  - Some Fae cards have been renamed. (1362)
  - Wither now reads: "Wither (X): Whenever this hits a minion, its attack is reduced by X next time it could attack."
  - Changing skills with skills, like Ghanathoa's effects, no longer cause a draw. (1370)
@@ -800,12 +875,12 @@ Thanks @Bromora for the contribution to Wraith!
  - Spells that are not castable when the board is full, like many summoning spells, no longer incorrectly count permanents (regression).
  - Shuffling Unearthed Horrors while Xitalu is in play will now correctly shuffle in buffed cards. Additionally, other shuffle trigger effects now have synergy with Xitalu in the expected way. (1338)
  - Jae'kilden now references itself in its description correctly. (1374)
+ 
+</details>
 
 ### 0.8.50-2.0.36 (August 21st, 2019)
-
-Quality of life improvements for the client.
-
-##### Usability Fixes:
+<details>
+<summary>Quality of life improvements for the client, usability fixes...</summary>
 
  - It should be easier to drag your own hero for a physical attack. Be careful not to cast a spell on yourself!
  - Memory usage should be lower on web.
@@ -813,17 +888,14 @@ Quality of life improvements for the client.
  - Popups are less jarring and more legible.
  - Text is more legible.
  - The appearance of lun, attack and health values is more consistent.
+ 
+</details>
 
 ### 0.8.50-2.0.35 (August 20th, 2019)
-
-Bug fixes and new cards.
-
-##### Content Additions:
+<details>
+<summary>Bug fixes and new cards...</summary>
 
  - New cards for Otherworlder (thanks @AnterogradeNil!)
- 
-##### Content Fixes:
-
  - Flamerunner now reads "At the end of your turn, if you restored Health this turn, summon a 2/2  Elemental." (1323)
  - The Glutton now correctly eats enemy minions. (1351)
  - Effects which count minions no longer count permanents.
@@ -834,40 +906,28 @@ Bug fixes and new cards.
  - Broodmother Narvina no longer interacts with Terrain Devourer to cause an infinite loop when the board is full.
  - Pacts no longer appear as playable in the hand when a pact of the same source card is already in play. (1347)
  - Lord Henryk now deals 10 damage, costs (10) and is an 8/8. (1345)
+ 
+</details>
 
 ### 0.8.49-2.0.35 (August 19th, 2019)
-
-Bug fixes and networked performance improvements.
-
-##### Known Issues:
+<details>
+<summary>Bug fixes and networked performance improvements...</summary>
 
  - The client will not always render damage values above the cards. It sometimes renders them behind.
-
-##### Usability Fixes:
-
  - The server sends significantly less redundant data to the client.
  - The client no longer shows cost zero and a missing card type for every card in a deck (regression).
-
-##### Content Fixes:
-
  - Curse of Aim no longer causes a game crash.
  - Eternal Steed and Rending Curse no longer interact to cause a crash.
+ 
+</details>
 
 ### 0.8.48-2.0.35 (August 17th, 2019)
+<details>
+<summary>New Wraith class, some thanks, bug fixes...</summary>
 
-Introducing the Wraith class! Big thanks to @Bromara for the contribution.
-
-The Spellsource community would also like to show its immense gratitude to Sam (Fermata) and @lilumani for their wonderful contributions to code, art and other important creative tasks.
-
-Bug fixes.
-New Otherworlder cards thanks to @AnterogradeNil!
-
-##### Content Additions:
-
+ - Introducing the Wraith class! Big thanks to @Bromara for the contribution.
+ - The Spellsource community would also like to show its immense gratitude to Sam (Fermata) and @lilumani for their wonderful contributions to code, art and other important creative tasks.
  - Many Otherworlder cards have been added to the game thanks to @AnterogradeNil!
-
-##### Content Fixes:
-
  - Iron Preserver, Paleontologist, Dig Up Shovel, Excalibur, Rustblade, Sentry Orb and Translife Mirror now appear in the collection. (1319)
  - The Wraith haunting its way into Spellsource thanks to @Bromara! (1313)
  - Bloody Blow now properly marked under "BASIC" and "CUSTOM" sets. (1322) 
@@ -881,20 +941,17 @@ New Otherworlder cards thanks to @AnterogradeNil!
  - A number of cards that trigger off of shuffling effects, such as Xitalu, now properly work. (1334)
  - Sot Mountain Excavation no longer deals damage to the player champion and instead just removes the armor.
  - Bloody Reconstruction now appears in the Collection again. (1342)
+ 
+</details>
 
 ### 0.8.47-2.0.35 (August 5th, 2019)
+<details>
+<summary>Soulseeker class, Archeologist class, content additions and fixes...</summary></details>
 
-Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
-
-Also, Archaeologist is digging is way into the game, thanks to @Pircival! 
-
-##### Content Additions:
-
+ - Welcome to the Soulseeker class with a big thanks to @birb for the contribution!
+ - Also, Archaeologist is digging is way into the game, thanks to @Pircival! 
  - Archaeologist class added with Basic/Core cards. (1263)
  - New Soulseeker class courtesy of @birb and a new spooky keyword Soulbind: Summon one of four 0/1 Spirits with special aftermaths.
-
-##### Content Fixes:
-
  - The Occultist card Seeker of Knowledge has been removed from the game.
  - Flaxen Whelp now reads "Opener: If there are at least 3 minions on the board, draw a card."  (1263)
 
@@ -903,13 +960,10 @@ Also, Archaeologist is digging is way into the game, thanks to @Pircival!
 Hotfix for an issue related to closing games introduced with metrics we do not use.
 
 ### 0.8.45-2.0.35 (August 1st, 2019)
+<details>
+<summary>Bug fixes and new Monk cards...</summary>
 
-Bug fixes.
-
-New Monk cards thanks to @Grand! (1290)
-
-##### Content Fixes:
-
+ - New Monk cards thanks to @Grand! (1290)
  - Many cards that before referenced Mana now refer to Lun instead. (1306)
  - Berry Hoarder now correctly draws all copies of 0-cost cards in the owner's decks instead of just one copy of each. (1307)
  - Blessed Koi Statue is no longer an Elemental. (1290)
@@ -928,49 +982,37 @@ New Monk cards thanks to @Grand! (1290)
  - Defenders with zero attack, Catta the Merciless, and Holdover Lich no longer interact to cause an infinite recursion.
  - Stealing a Formless Rancour no longer causes a crash.
  - If you create a Deep Borer from a Chimera, it will harmlessly shuffle itself inside your deck.
-
-##### Other Fixes:
-
  - Accepting friend invites works again. (1303)
+ 
+</details>
 
 ### 0.8.44-2.0.35 (July 31st, 2019)
 
 Spellpower in the hand no longer causes game-crashing issues.
 
 ### 0.8.43-2.0.35 (July 31st, 2019)
+<details>
+<summary>Fixed disconnect bug, content fixes...</summary>
 
-Disconnects and other forms of game interruption do not cause unusual effects in game (a regression since 0.8.41).
-
-Additional bug fixes.
-
-##### Content Fixes:
-
+ - Disconnects and other forms of game interruption do not cause unusual effects in game (a regression since 0.8.41).
  - The neutral and test champions no longer appear in the draft.
  - Birdbrain is now a Witchdoctor card.
  - Distortoise now correctly does 3 damage to the owner instead of 2. (1294)
  - Prized Boar Aftermath now properly reflects the printed effect. (1293) 
- - Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)
+ - Monolith of Doom now does not update its description while on the board and now properly reflects its effect. (1291)\
+ 
+</details>
 
 ### 0.8.42-2.0.35 (July 30th, 2019)
 
 Hotfix decks missing hero classes.
 
 ### 0.8.41-2.0.35 (July 29th, 2019)
+<details>
+<summary>Non-Spellsource content removed from game, new Storyteller cards, content fixes...</summary>
 
-Non-Spellsource content is removed from the game.
-
-New Storyteller cards thanks to @Skurleton!
-
-The bot will now play more new decks in its rotation.
-
-Many other bug fixes.
-
-##### Content Additions:
-
- - New Storyteller cards. (1237)
-
-##### Content Fixes:
-
+ - New Storyteller cards thanks to @Skurleton! (1237)
+ - The bot will now play more new decks in its rotation.
  - Non-Spellsource content has been migrated to a "Do Nothing" card. (1180, 1285)
  - All Monk cards, except for Core and Basic ones, are no longer collectible in order to begin rebuilding the class from the ground up. (1238)
  - Minion Cadenza is now properly a Musician card instead of a Neutral card. (1234)
@@ -995,6 +1037,8 @@ Many other bug fixes.
  - Manly Mountaineer now properly has Dash. (1233)
  - Tome of Secrets now works properly. (1233)
  - Dramatic Playwright now only changes the attack of one enemy minion. (1233)
+ 
+</details>
 
 ### 0.8.40-2.0.35 (July 16th, 2019)
 
@@ -1009,17 +1053,12 @@ Some forms of network lag should be addressed in this update, because the server
 Hot fixing the removal of the bot decklists that contain old cards.
 
 ### 0.8.37-2.0.33 (July 14th, 2019)
-
-New content and bug fixes!
-
-##### Content Additions:
+<details>
+<summary>New content and bug fixes...</summary>
 
  - Introducing Storyteller's Basic and Classic cards, with a big thanks to @Skurleton! (1221)
  - Introducing Musician, with a big thanks to @Samswize! (1210, 1218)
  - Introducing Outlaw, with a big thanks to @JDude60! His keyword, Quick Draw, means: Whenever a card is drawn...
-
-##### Content Fixes:
-
  - Roll and Immortal Prelate no longer crash shuffling minions that have gained Auras into the hand or deck. (1124)
  - Rafaam, Archivist can now discover cards from other classes that are in 'The Supreme Archive'. (1225)
  - Warden Saihan now correctly labeled as a Monk Legendary. (1227)
@@ -1027,19 +1066,14 @@ New content and bug fixes!
  - Catta the Merciless no longer causes an infinite loop with minions that deal zero damage.
  - Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
  - Icecream Lich and the Technician are now removed from your collections.
+ 
+</details>
 
 ### 0.8.36-2.0.32 (July 6th, 2019)
-
-Bug fixes and new Verdant Dreams cards.
-
-For Python users, the build is now compatible with Java 11.
-
-##### Content Additions:
+<details>
+<summary>Bug fixes and new Verdant Dreams cards, build now compatible with Java 11...</summary>
 
 - Thanks to another contribution from @Grand, more Verdant Dreams cards have been introduced! (1099)
-
-##### Context Fixes:
-
  - Thanks to contributions from @Grand, Monk has been updated. (1219)
  - When you have a Lifesteal weapon equipped and get dealt fatigue damage, your champion no longer restores health.
  - Teaching a card a return-to-hand spell and playing that card twice no longer causes a crash. Other cards with card creation effects no longer have unusual side effects related to returning minions to hand.
@@ -1050,9 +1084,14 @@ For Python users, the build is now compatible with Java 11.
  - Silverbone Claw now buffs a dragon in hand even if it is the only dragon in the player's hand. (1208)
  - Living Mana no longer puts you into negative mana. (1026)
  - Mollusk Meister now has the correct effects. (1115)
+ 
+</details>
 
 ### 0.8.35-2.0.31 (July 1st, 2019)
+<details>
+<summary>Fixing issues with cards with changed IDs, tweaks to Spike...</summary>
 
-Fixing issues with cards not being found or detected after their IDs were changed.
+ - Fixing issues with cards not being found or detected after their IDs were changed.
+ - Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
 
-Spike, Pet Whelp's ability now triggers if the owner's deck only contains dragons instead of whether it contains exactly 30 dragons. (1220)
+</details>

@@ -2,11 +2,13 @@ import html
 import re
 from itertools import chain
 from urllib.parse import quote
+
 from mistletoe import block_token, span_token
 from mistletoe.base_renderer import BaseRenderer
 
 
 class TextMeshRenderer(BaseRenderer):
+    _DETAILS_SUMMARY_REGEXP = re.compile(r'</?details>|</?summary>')
     """
     HTML renderer class.
 
@@ -83,8 +85,7 @@ class TextMeshRenderer(BaseRenderer):
     def render_raw_text(self, token):
         return self.escape_html(token.content)
 
-    @staticmethod
-    def render_html_span(token):
+    def render_html_span(self, token):
         return token.content
 
     def render_heading(self, token):
@@ -182,17 +183,14 @@ class TextMeshRenderer(BaseRenderer):
         inner = self.render_inner(token)
         return template.format(tag=tag, attr=attr, inner=inner)
 
-    @staticmethod
-    def render_thematic_break(token):
+    def render_thematic_break(self, token):
         return ''
 
-    @staticmethod
-    def render_line_break(token):
+    def render_line_break(self, token):
         return '\n' if token.soft else '<br />\n'
 
-    @staticmethod
-    def render_html_block(token):
-        return token.content
+    def render_html_block(self, token):
+        return TextMeshRenderer._DETAILS_SUMMARY_REGEXP.sub('', token.content)
 
     def render_document(self, token):
         self.footnotes.update(token.footnotes)
