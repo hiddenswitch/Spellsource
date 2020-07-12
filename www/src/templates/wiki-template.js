@@ -9,6 +9,7 @@ export default function Template ({
   const { html } = markdownRemark
   return (
     <Layout>
+      <h2>{data.markdownRemark.frontmatter.title}</h2>
       <div
         className="blog-post-content"
         dangerouslySetInnerHTML={{ __html: html }}
