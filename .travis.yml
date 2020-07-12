@@ -14,7 +14,7 @@ jdk:
 services:
   - docker
 script:
-  - travis_wait 50 ./gradlew test --no-parallel
+  - travis_wait 50 ./gradlew cards:test net:test
 env:
   global:
     - JAVA_OPTS=-Xmx1024m
