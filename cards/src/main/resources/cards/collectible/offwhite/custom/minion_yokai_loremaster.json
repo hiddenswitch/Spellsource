@@ -1,0 +1,46 @@
+{
+  "name": "Yokai Loremaster",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Each player discards a spell at random and draws a spell.",
+  "race": "BEAST",
+  "battlecry": {
+    "targetSelection": "NONE",
+	"spell": {
+	  "class": "BothPlayersSpell",
+	  "spell": {
+	    "class": "MetaSpell",
+		"spells": [
+		  {
+		    "class": "DiscardSpell",
+			"cardFilter": {
+			  "class": "CardFilter",
+			  "cardType": "SPELL"
+			}
+		  },
+		  {
+		    "class": "FromDeckToHandSpell",
+			"value": 1,
+			"cardFilter": {
+			  "class": "CardFilter",
+			  "cardType": "SPELL"
+			}
+		  }
+		]
+	  }
+	}
+  },
+  "attributes": {
+	"BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

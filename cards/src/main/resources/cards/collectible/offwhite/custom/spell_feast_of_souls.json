@@ -1,0 +1,63 @@
+{
+  "name": "Feast of Souls",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "EPIC",
+  "description": "Deal [0] damage to all units. For each that died, give the survivors +1/+1. (Increases for each unit)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "MinionDeathTrigger"
+          },
+          "spell": {
+            "class": "CastAfterSequenceSpell",
+            "spell": {
+              "class": "BuffSpell",
+              "target": "ALL_MINIONS",
+              "attackBonus": 1,
+              "hpBonus": 1
+            }
+          }
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": {
+          "class": "BoardCountValueProvider",
+          "targetPlayer": "BOTH"
+        }
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "spell_feast_of_souls"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "BoardCountValueProvider",
+        "targetPlayer": "BOTH"
+      }
+    }
+  ],
+  "fileFormatVersion": 1
+}
