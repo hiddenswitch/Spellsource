@@ -1,0 +1,31 @@
+{
+  "name": "Mind Melder",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Opener: Take control of an enemy minion with 3 or less Health.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MindControlSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 3,
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

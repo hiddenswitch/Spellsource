@@ -1,0 +1,45 @@
+{
+  "name": "Insomnia",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "COMMON",
+  "description": "Stun two random enemy units. They gain Decay.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "FROZEN"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DECAY"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "OPPONENT"
+            },
+            "spell": {
+              "class": "DecaySpell"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

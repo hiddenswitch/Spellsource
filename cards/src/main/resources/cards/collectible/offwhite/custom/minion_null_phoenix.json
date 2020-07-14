@@ -1,0 +1,48 @@
+{
+  "name": "Null Phoenix",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "SPIRIT",
+  "description": "Aftermath: If you have exactly 7 cards in hand, return this to your hand. Your Null Phoenixes cost (1) less this game.",
+  "deathrattle": {
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 7,
+      "operation": "EQUAL",
+      "targetPlayer": "SELF"
+    },
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_null_phoenix"
+          },
+          "value": -1
+        }
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "minion_null_phoenix",
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

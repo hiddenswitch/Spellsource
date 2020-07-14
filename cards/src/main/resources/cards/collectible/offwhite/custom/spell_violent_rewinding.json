@@ -1,0 +1,28 @@
+{
+  "name": "Violent Rewinding",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "EPIC",
+  "description": "Destroy all units summoned last turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+	"target": "ALL_MINIONS",
+	"filter": {
+	  "class": "AttributeFilter",
+	  "value": {
+	    "class": "CurrentTurnValueProvider",
+		"offset": -1
+	  },
+	  "attribute": "SUMMONED_ON_TURN",
+	  "operation": "EQUAL"
+	}
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

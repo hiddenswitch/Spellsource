@@ -1,0 +1,39 @@
+{
+  "name": "Echoes of the Vengeant",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "LEGENDARY",
+  "description": "Summon a 1/1 copy of each unit in your graveyard that doesn't have Decay.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ResurrectSpell",
+    "value": 7,
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DECAY",
+      "operation": "HAS",
+      "invert": true
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 1
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}
