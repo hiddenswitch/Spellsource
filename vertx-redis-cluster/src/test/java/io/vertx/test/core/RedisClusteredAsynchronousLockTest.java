@@ -31,11 +31,15 @@ public class RedisClusteredAsynchronousLockTest extends ClusteredAsynchronousLoc
 
 	@Override
 	protected ClusterManager getClusterManager() {
-		return new RedisClusterManager(redisContainer.getRedisUrl());
+		// Run tests without graceful exit to demonstrate durability in case of a kill
+		return new RedisClusterManager(redisContainer.getRedisUrl())
+				.setExitGracefully(false);
 	}
 
 	/**
 	 * From {@link #testLockReleased(Consumer)}
+	 * <p>
+	 * This cluster implementation correctly expires leases when nodes go down
 	 *
 	 * @param action
 	 * @throws Exception

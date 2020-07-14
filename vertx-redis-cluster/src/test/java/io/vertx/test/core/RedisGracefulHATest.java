@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 
 
-public class RedisHATest extends HATest {
+public class RedisGracefulHATest extends HATest {
 
 	@ClassRule
 	public static RedisContainer redisContainer = new RedisContainer();
@@ -22,7 +22,6 @@ public class RedisHATest extends HATest {
 
 	@Override
 	protected ClusterManager getClusterManager() {
-		return new RedisClusterManager(redisContainer.getRedisUrl(), 1)
-				.setExitGracefully(false);
+		return new RedisClusterManager(redisContainer.getRedisUrl(),1);
 	}
 }

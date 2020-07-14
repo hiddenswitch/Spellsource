@@ -68,6 +68,10 @@ class RedisMap<K, V> implements Map<K, V> {
 	@Override
 	public boolean containsKey(Object key) {
 		Objects.requireNonNull(key);
+		// Workaround for current HAManager implementation
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return false;
+		}
 		return map.containsKey(key);
 	}
 
@@ -84,6 +88,9 @@ class RedisMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V put(K key, V value) {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return null;
+		}
 		Objects.requireNonNull(key);
 		Objects.requireNonNull(value);
 		return map.put(key, value);
