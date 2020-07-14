@@ -18,24 +18,20 @@ package io.vertx.spi.cluster.redis.impl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import io.vertx.core.Future;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.impl.clustered.ClusterNodeInfo;
 import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ChoosableIterable;
-import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.spi.cluster.redis.RedisClusterManager;
 import org.redisson.api.RSetMultimap;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.misc.RedissonPromise;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -44,8 +40,10 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 
 	private final RSetMultimap<K, V> map;
 	private final Vertx vertx;
-	private final ClusterManager clusterManager;
+	private final RedisClusterManager clusterManager;
 	private final RedissonClient redisson;
+	private final Map<K, Deque<HandlerTuple<V>>> handlers = new ConcurrentHashMap<>();
+	private final ConcurrentMap<K, Timestamped<V>> latest = new ConcurrentHashMap<>();
 
 	// Helps maintain iterator state
 	private final LoadingCache<K, AtomicInteger> iterators = CacheBuilder.newBuilder()
@@ -58,7 +56,7 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 				}
 			});
 
-	RedisAsyncMultiMap(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson, String name) {
+	RedisAsyncMultiMap(Vertx vertx, RedisClusterManager clusterManager, RedissonClient redisson, String name) {
 		this.vertx = vertx;
 		this.clusterManager = clusterManager;
 		this.redisson = redisson;
@@ -86,11 +84,25 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 			return;
 		}
 		Context context = vertx.getOrCreateContext();
+		enqueue(context, asyncResultHandler, k);
 		// Always retrieve the freshest subs list
-		map.getAllAsync(k).onComplete((values, t) -> {
+		map.getAllAsync(k).onComplete((res, t) -> {
+			Collection<V> values = latest.compute(k, (k1, collectionTimestamped) -> {
+				if (collectionTimestamped == null || System.nanoTime() > collectionTimestamped.time) {
+					return new Timestamped<>(res);
+				} else {
+					return collectionTimestamped;
+				}
+			}).collection;
+
 			context.runOnContext(i -> {
+				HandlerTuple<V> dequeue = dequeue(k);
+				Handler<AsyncResult<ChoosableIterable<V>>> handler = dequeue.handler;
+				if (context != dequeue.context) {
+					handler = x -> dequeue.context.runOnContext(v -> dequeue.handler.handle(x));
+				}
 				if (t != null) {
-					asyncResultHandler.handle(Future.failedFuture(t));
+					handler.handle(Future.failedFuture(t));
 				} else {
 					// This approach to generating a ChooseableIterable implements round robin in a very straightforward way -
 					// it rotates a list by an amount specified in an integer stored in the multimap. The list is always sorted
@@ -108,8 +120,9 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 							}))
 							.filter(v -> {
 								if (v instanceof ClusterNodeInfo) {
-									// We will make a gentle affordance to check if the cluster node currently exists.
-									return clusterManager.getNodes().contains(((ClusterNodeInfo) v).nodeId);
+									// We will make a gentle affordance to check if the cluster node is flakey
+									String nodeId = ((ClusterNodeInfo) v).nodeId;
+									return !clusterManager.isFailing(nodeId);
 								} else {
 									return true;
 								}
@@ -121,10 +134,24 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 							throw new RuntimeException(e);
 						}
 					}
-					asyncResultHandler.handle(Future.succeededFuture(new ChoosableList(valueList)));
+					handler.handle(Future.succeededFuture(new ChoosableList(valueList)));
 				}
 			});
+		});
+	}
 
+
+	private HandlerTuple<V> dequeue(K k) {
+		return handlers.get(k).removeFirst();
+	}
+
+	private void enqueue(Context context, Handler<AsyncResult<ChoosableIterable<V>>> asyncResultHandler, K k) {
+		handlers.compute(k, (k1, handlerTuples) -> {
+			if (handlerTuples == null) {
+				handlerTuples = new ArrayDeque<>();
+			}
+			handlerTuples.addLast(new HandlerTuple<>(context, asyncResultHandler));
+			return handlerTuples;
 		});
 	}
 
@@ -222,6 +249,26 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 		@Override
 		public Iterator<V> iterator() {
 			return items.iterator();
+		}
+	}
+
+	private static class Timestamped<T> {
+		private final Collection<T> collection;
+		private final long time;
+
+		public Timestamped(Collection<T> collection) {
+			this.time = System.nanoTime();
+			this.collection = collection;
+		}
+	}
+
+	private static class HandlerTuple<V> {
+		private final Context context;
+		private final Handler<AsyncResult<ChoosableIterable<V>>> handler;
+
+		public HandlerTuple(Context context, Handler<AsyncResult<ChoosableIterable<V>>> handler) {
+			this.context = context;
+			this.handler = handler;
 		}
 	}
 }

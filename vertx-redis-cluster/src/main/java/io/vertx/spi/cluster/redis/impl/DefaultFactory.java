@@ -21,6 +21,7 @@ import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.spi.cluster.AsyncMultiMap;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.redis.Factory;
+import io.vertx.spi.cluster.redis.RedisClusterManager;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import org.redisson.client.codec.StringCodec;
@@ -43,7 +44,7 @@ public class DefaultFactory implements Factory {
 	}
 
 	@Override
-	public <K, V> AsyncMultiMap<K, V> createAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name, ClusterManager clusterManager) {
+	public <K, V> AsyncMultiMap<K, V> createAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name, RedisClusterManager clusterManager) {
 		NameWithCodec nameWithCodec = specify.selectCodecByName(name, new JsonJacksonCodec());
 		return new RedisAsyncMultiMap<K, V>(vertx, clusterManager, redisson, nameWithCodec.name);
 	}
@@ -58,7 +59,7 @@ public class DefaultFactory implements Factory {
 	 * EventBus ready been created
 	 */
 	@Override
-	public AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, ClusterManager clusterManager,
+	public AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, RedisClusterManager clusterManager,
 	                                                                      RedissonClient redisson, String name) {
 		return new RedisAsyncMultiMap<>(vertx, clusterManager, redisson, name);
 	}

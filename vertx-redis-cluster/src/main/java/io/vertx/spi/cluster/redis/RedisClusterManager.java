@@ -111,7 +111,7 @@ public class RedisClusterManager implements ClusterManager {
 	// Keeps track if this cluster manager is right now asking the HA manager to verify its verticles have not been
 	// redeployed elsewhere due to transient networking issues.
 	private volatile boolean checkingSelfFailover;
-
+	private boolean exitGracefully = true;
 
 	public RedisClusterManager(String singleServerRedisUrl) {
 		this(singleServerRedisUrl, 1);
@@ -120,7 +120,7 @@ public class RedisClusterManager implements ClusterManager {
 	public RedisClusterManager(String singleServerRedisUrl, int minNodes) {
 		Config config = new Config();
 		config.useSingleServer().setAddress(singleServerRedisUrl);
-		config.setLockWatchdogTimeout(30000);
+		config.setLockWatchdogTimeout(2000);
 		this.redisson = Redisson.create(config);
 		this.baseId = UUID.fromString(redisson.getId()).getLeastSignificantBits() & ~0xFFFF;
 		this.factory = Factory.createDefaultFactory();
@@ -482,13 +482,23 @@ public class RedisClusterManager implements ClusterManager {
 		isActive.set(false);
 
 		vertx.executeBlocking(outerFut -> {
-			thisNodeBucket.deleteAsync()
+			RFuture<Boolean> booleanRFuture;
+			if (isExitGracefully()) {
+				booleanRFuture = thisNodeBucket.deleteAsync();
+			} else {
+				booleanRFuture = RedissonPromise.newSucceededFuture(false);
+			}
+			booleanRFuture
 					.thenCompose(deleted -> {
 						if (!deleted) {
 							LOGGER.debug("leave: failed to delete {}", thisNodeBucket.getName());
 						}
 
-						return RedissonPromise.allOf(locks.stream().map(lock -> lock.unlockAsync().toCompletableFuture()).toArray(CompletableFuture[]::new));
+						if (isExitGracefully()) {
+							return RedissonPromise.allOf(locks.stream().map(lock -> lock.unlockAsync().toCompletableFuture()).toArray(CompletableFuture[]::new));
+						} else {
+							return RedissonPromise.newSucceededFuture(null);
+						}
 					})
 					.handle((v, t) -> {
 						if (t != null) {
@@ -498,7 +508,11 @@ public class RedisClusterManager implements ClusterManager {
 
 						vertx.executeBlocking(fut -> {
 							try {
-								redisson.shutdown(shutdownQuietPeriod, shutdownTimeout, TimeUnit.MILLISECONDS);
+								if (isExitGracefully()) {
+									redisson.shutdown(shutdownQuietPeriod, shutdownTimeout, TimeUnit.MILLISECONDS);
+								} else {
+									redisson.shutdown(0, 0, TimeUnit.MILLISECONDS);
+								}
 								fut.complete();
 							} catch (Throwable t2) {
 								fut.fail(t2);
@@ -645,5 +659,29 @@ public class RedisClusterManager implements ClusterManager {
 		}
 	}
 
+	/**
+	 * Specifies whether this cluster manager should exit gracefully when {@link #leave(Handler)} is called.
+	 * <p>
+	 * When not exiting gracefully, locks are not closed and the node membership entry is not removed.
+	 *
+	 * @return
+	 */
+	public boolean isExitGracefully() {
+		return exitGracefully;
+	}
 
+	public RedisClusterManager setExitGracefully(boolean exitGracefully) {
+		this.exitGracefully = exitGracefully;
+		return this;
+	}
+
+	/**
+	 * Based on the heartbeat of the specified node ID, is it failing?
+	 *
+	 * @param nodeId
+	 * @return
+	 */
+	public boolean isFailing(String nodeId) {
+		return nodeCredits.count(nodeId) <= creditsPerAppearance / 2;
+	}
 }

@@ -32,11 +32,11 @@ public interface Factory {
 
 	<K, V> AsyncMap<K, V> createAsyncMap(Vertx vertx, RedissonClient redisson, String name);
 
-	<K, V> AsyncMultiMap<K, V> createAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name, ClusterManager clusterManager);
+	<K, V> AsyncMultiMap<K, V> createAsyncMultiMap(Vertx vertx, RedissonClient redisson, String name, RedisClusterManager clusterManager);
 
 	<K, V> Map<K, V> createMap(Vertx vertx, RedissonClient redisson, String name);
 
-	AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, ClusterManager clusterManager,
+	AsyncMultiMap<String, ClusterNodeInfo> createAsyncMultiMapSubs(Vertx vertx, RedisClusterManager clusterManager,
 	                                                               RedissonClient redisson, String name);
 
 	Map<String, String> createMapHaInfo(Vertx vertx, ClusterManager clusterManager, RedissonClient redisson,
