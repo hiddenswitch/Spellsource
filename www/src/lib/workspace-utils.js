@@ -332,12 +332,15 @@ export default class WorkspaceUtils {
         if (!!cardScript[cardScriptKey]['super']
           && typeof cardScript[cardScriptKey]['super'] === 'string') {
             cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
-        }
-
-        if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
+        } else if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
           && typeof cardScript['super'] !== 'string') {
+          let andWhenEveryonesSuper = !!cardScript.super.super
           merge(cardScript, cardScript['super'])
-          delete cardScript['super']
+          if (andWhenEveryonesSuper) {
+            //no one will be
+          } else {
+            delete cardScript['super']
+          }
         }
       }
     }
@@ -369,7 +372,7 @@ export default class WorkspaceUtils {
 
   static workspaceToCardScript (workspace) {
     const xml = Xml.workspaceToDom(workspace)
-    console.log(xml)
+    //console.log(xml)
     return WorkspaceUtils.xmlToCardScript(xml)
   }
 }

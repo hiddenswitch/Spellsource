@@ -391,28 +391,27 @@ export default class JsonConversionUtils {
       let fewest = null
       for (let goodMatch of goodMatches) { //choose the one with the fewest extra properties
         let argsList = this.argsList(goodMatch);
-        let extras = 0
+        let score = 0
         for (let arg of argsList) {
-          let hasIt = false
-          for (let property of relevantProperties) {
+          let delta = 1
+          for (let property in json) {
             if (arg.name.startsWith(property)) {
               if (arg.type === 'field_label_serializable_hidden') {
                 if (arg.value === json[property]) {
-                  hasIt = true
+                  delta = 0
                 }
               } else {
-                hasIt = true
+                delta = 0
               }
               break
             }
           }
-          if (!hasIt) {
-            extras++
-          }
+          score += delta
         }
-        if (!fewest || extras < fewest) {
+        if (fewest === null || score < fewest
+          || (score <= fewest && bestMatch.type.localeCompare(goodMatch.type) > 0)) {
           bestMatch = goodMatch
-          fewest = extras
+          fewest = score
         }
       }
     }
@@ -454,6 +453,16 @@ export default class JsonConversionUtils {
       this.handleArg(filterBlock.getInput('super.filter').connection, parentJson.filter, 'filter', workspace, json)
       connection.connect(filterBlock.outputConnection)
       filterBlock.initSvg()
+    } else if (!!json.invert && !this.argsList(bestMatch).map(arg => arg.name.split('.').slice(-1)[0]).includes('invert')) {
+      let invertBlock
+      if (json.class.endsWith('Filter')) {
+        invertBlock = this.newBlock(workspace, 'Filter_NOT')
+      } else if (json.class.endsWith('Condition')) {
+        invertBlock = this.newBlock(workspace, 'Condition_NOT')
+      }
+      invertBlock.getInput('super').connection.connect(newBlock.outputConnection)
+      connection.connect(invertBlock.outputConnection)
+      invertBlock.initSvg()
     } else {
       if (statement) {
         connection.connect(newBlock.previousConnection)
@@ -463,26 +472,51 @@ export default class JsonConversionUtils {
     }
     newBlock.initSvg()
 
+    //now handle each dropdown on the new block (assumes stuff will just work)
+    for (let dropdown of this.dropdownsList(bestMatch)) {
+      let jsonElement = json[dropdown.name]
+      if (!jsonElement && (dropdown.name.includes('.') || dropdown.name.includes('super'))) {
+        jsonElement = this.tryToFindCorrectElement(dropdown.name, json, parentJson)
+      }
+
+      if (!jsonElement) {
+        continue
+      }
+
+      newBlock.setFieldValue(jsonElement, dropdown.name)
+    }
+
     //now handle each input on the new block
     for (let inputArg of this.inputsList(bestMatch)) {
-      if (inputArg.name === 'target' && json.hasOwnProperty('randomTarget')) { //handles the randomTarget arg
+      let name = inputArg.name;
+      let jsonElement = json[name];
+      if (!jsonElement && (name.includes('.') || name.includes('super'))) {
+        jsonElement = this.tryToFindCorrectElement(name, json, parentJson)
+        name = name.split('.').slice(-1)[0]
+      }
+
+      if (!jsonElement) {
+        continue
+      }
+
+      if (name === 'target' && json.randomTarget != null) { //handles the randomTarget arg
         let randomBlock = this.newBlock(workspace, 'EntityReference_RANDOM')
-        this.handleArg(randomBlock.getInput('super').connection, json[inputArg.name], inputArg.name, workspace, json)
-        newBlock.getInput(inputArg.name).connection.connect(randomBlock.outputConnection)
+        this.handleArg(randomBlock.getInput('super').connection, jsonElement, name, workspace, json)
+        newBlock.getInput(name).connection.connect(randomBlock.outputConnection)
         randomBlock.initSvg()
-      } else if (!!json[inputArg.name]) { //if the json has a corresponding argument
-        if (typeof json[inputArg.name] !== 'object' && (inputArg.name.startsWith('value') || inputArg.name.endsWith('Bonus')
-          || inputArg.name === 'howMany' || inputArg.name.startsWith('if')
+      } else { //if the json has a corresponding argument
+        if (typeof jsonElement !== 'object' && (name.startsWith('value') || name.endsWith('Bonus')
+          || name === 'howMany' || name.startsWith('if')
         )) { //integer block stuff
-          this.handleIntArg(newBlock, inputArg, workspace, json[inputArg.name])
-        } else if (inputArg.name === 'spells' || inputArg.name === 'conditions'
-          || inputArg.name === 'filters') { //arrays of things stuff
-          let thingArray = json[inputArg.name]
+          this.handleIntArg(newBlock, inputArg, workspace, jsonElement)
+        } else if (name === 'spells' || name === 'conditions'
+          || name === 'filters') { //arrays of things stuff
+          let thingArray = jsonElement
           let lowestBlock = newBlock.getFirstStatementConnection().targetBlock()
           this.handleArg(lowestBlock.getInput('i').connection, thingArray[0], 'i', workspace, thingArray)
           for (let i = 1; i < thingArray.length; i++) {
             let thingI
-            switch (inputArg.name) {
+            switch (name) {
               case 'conditions':
                 thingI = this.newBlock(workspace, 'Condition_I')
                 break
@@ -499,19 +533,26 @@ export default class JsonConversionUtils {
             lowestBlock = thingI
           }
 
-        } else if (inputArg.name === 'trigger') {
+        } else if (name === 'trigger') {
           this.enchantment(json.trigger, workspace, newBlock.getFirstStatementConnection().targetBlock())
         } else { //default recursion case
-          this.handleArg(newBlock.getInput(inputArg.name).connection, json[inputArg.name], inputArg.name, workspace, json)
+          this.handleArg(newBlock.getInput(name).connection, jsonElement, name, workspace, json)
         }
       }
     }
+  }
 
-    //now handle each dropdown on the new block (assumes stuff will just work)
-    for (let dropdown of this.dropdownsList(bestMatch)) {
-      if (json.hasOwnProperty(dropdown.name)) {
-        newBlock.setFieldValue(json[dropdown.name], dropdown.name)
-      }
+  static tryToFindCorrectElement(name, json, parentJson) {
+    let i = name.indexOf('.')
+    if (i <= 0) {
+      return json[name]
+    }
+    let start = name.substring(0, i)
+    let rest = name.substring(i + 1)
+    if (start === 'super' && !!parentJson) {
+      return this.tryToFindCorrectElement(rest, parentJson, null)
+    } else if (!!json[start]){
+      return this.tryToFindCorrectElement(rest, json[start], json)
     }
   }
 
@@ -532,6 +573,7 @@ export default class JsonConversionUtils {
     inputName = inputName.split('.').slice(-1)[0]
     let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
     let block
+    let consoleBlock
     if (typeof json !== 'object') {
       if (type === 'Attribute') {
         if (!!parentJson.value) {
@@ -547,6 +589,7 @@ export default class JsonConversionUtils {
         output: type,
         message0: BlocklyMiscUtils.toHappyFormatting(json.toString())
       }
+      consoleBlock = JSON.parse(JSON.stringify(block))
     } else {
       let props = this.relevantProperties(json);
       let className = json.class
@@ -573,10 +616,13 @@ export default class JsonConversionUtils {
           }
         } else {
           arg.type = 'input_value'
-          arg.check = BlocklyMiscUtils.inputNameToBlockOutput(prop)
+          arg.check = (prop === 'attribute' ? (!!parentJson.value ? 'Int' : 'Bool') : '')
+            + BlocklyMiscUtils.inputNameToBlockOutput(prop)
           arg.shadow = {
             type: prop === 'target' ? 'EntityReference_IT' :
-              BlocklyMiscUtils.inputNameToBlockType(prop) + '_SHADOW'
+              BlocklyMiscUtils.inputNameToBlockType(prop) +
+              (prop === 'attribute' ? (!!parentJson.value ? '_INT_SHADOW' : '_BOOL_SHADOW')
+              : '_SHADOW')
           }
         }
         messages.push(newMessage)
@@ -600,13 +646,21 @@ export default class JsonConversionUtils {
         block.previousStatement = 'Auras'
         block.nextStatement = 'Auras'
       }
+      consoleBlock = JSON.parse(JSON.stringify(block))
       for (let j = 1; j <= messages.length; j++) {
         block['message' + j.toString()] = messages[j - 1]
         block['args' + j.toString()] = [args[j - 1]]
+
+
+        consoleBlock.message0 += ' ' + messages[j-1].replace('%1', '%'+(j+1).toString())
+        consoleBlock.args0.push(args[j-1])
       }
+
     }
 
     BlocklyMiscUtils.addBlock(block)
+    console.log('Had to create new block ' + block.type)
+    console.log(JSON.stringify(consoleBlock, null, 2).toString())
     return block
   }
 
@@ -615,7 +669,8 @@ export default class JsonConversionUtils {
     let relevantProperties = []
     for (let property in json) {
       if ((property === 'randomTarget' && !!json.target) || property === 'class'
-        || property === 'fireCondition' || property === 'queueCondition') {
+        || property === 'fireCondition' || property === 'queueCondition'
+        || property === 'invert') {
         continue
       }
       if (!!json[property]) {
@@ -639,16 +694,24 @@ export default class JsonConversionUtils {
       if (props.includes('attribute') && props.includes('operation')
         && !props.includes('value') && json.operation === 'HAS') {
         delete json.operation
+        props = this.relevantProperties(json);
       }
     }
-
 
     if (className === 'CardFilter') {
       if (props.length === 1) { //cardfilters for just a race can be race filters
         if (props[0] === 'race') {
           return {
             class: 'RaceFilter',
-            race: json.race
+            race: json.race,
+            invert: json.invert
+          }
+        }
+        if (props[0] === 'attribute') {
+          return {
+            class: 'AttributeFilter',
+            attribute: json.attribute,
+            invert: json.invert
           }
         }
       } else if (!(props.length === 2 && props.includes('attribute') && (props.includes('value') || props.includes('operation')))
@@ -668,7 +731,7 @@ export default class JsonConversionUtils {
           })
         }
         if (!!json.attribute) {
-          if (!json.value && (!json.operation || json.operation === 'HAS')) {
+          if (!json.value && (!json.operation || json.operation === 'HAS') && !!this.enumBlocksDictionary[json.attribute]) {
             if ((this.enumBlocksDictionary[json.attribute].output === 'BoolAttribute')) {
               filters.push({
                 class: 'AttributeFilter',
@@ -699,7 +762,8 @@ export default class JsonConversionUtils {
         }
         return {
           class: 'AndFilter',
-          filters: filters
+          filters: filters,
+          invert: json.invert
         }
       }
     }
