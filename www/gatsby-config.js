@@ -207,9 +207,9 @@ module.exports = {
             baseManaCost: node => node.baseManaCost
           },
           Block: {
-            title: node => node.type.replace('_', ' ') + ' ' +
-              node.messages.join(' ').replace('%(\\d)',''),
-            nodeType: node => 'Block'
+            title: node => node.type.replace('_', ' '),
+            nodeType: node => 'Block',
+            rawMarkdownBody: node => node.searchMessage
           }
         },
         // Optional filter to limit indexed nodes

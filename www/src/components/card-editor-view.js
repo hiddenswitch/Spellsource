@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
-import {graphql, Link, navigate, useStaticQuery} from 'gatsby'
+import {graphql, useStaticQuery} from 'gatsby'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
-import Blockly, {BlockSvg, FieldLabelSerializable, Workspace, WorkspaceSvg} from 'blockly'
-import {filter, has, isArray, map} from 'lodash'
+import Blockly, {FieldLabelSerializable} from 'blockly'
+import {has, isArray} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-json'
@@ -37,8 +37,6 @@ class FieldLabelSerializableHidden extends FieldLabelSerializable {
   }
 }
 
-Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
-Blockly.HSV_SATURATION = .65
 
 const CardEditorView = () => {
   const data = useStaticQuery(graphql`
@@ -128,6 +126,8 @@ const CardEditorView = () => {
   const index = useIndex()
 
   if (!inited) {
+    Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
+    Blockly.HSV_SATURATION = .65
     Blockly.Blocks = {} //we don't use any of the default Blockly blocks
 
     //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
@@ -167,6 +167,10 @@ const CardEditorView = () => {
             happyWidth = Math.round(row.width / 10) * 10
           }
           let missingSpace = happyWidth - row.width
+          this.addAlignmentPadding_(row, missingSpace);
+        }
+        if (this.block_.hat && i === 2 && row.width < this.topRow.width) {
+          let missingSpace = this.topRow.width - row.width
           this.addAlignmentPadding_(row, missingSpace);
         }
       }
@@ -305,8 +309,8 @@ const CardEditorView = () => {
   function getToolboxCategories(onlyCategory = null) {
     let index = -1
     return data.toolbox.BlockCategoryList.map(({
-                                                 BlockTypePrefix, CategoryName, ColorHex
-                                               }) => {
+       BlockTypePrefix, CategoryName, ColorHex
+     }) => {
       index++
       if (!!onlyCategory && CategoryName !== onlyCategory) {
         return toolboxCategories[index] //my attempt to reduce the runtime a bit
@@ -499,10 +503,6 @@ const CardEditorView = () => {
       JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
       Blockly.getMainWorkspace().getToolbox().clearSelection()
       setToolboxCategories(getToolboxCategories())
-    })
-
-    workspace.addChangeListener((event) => {
-      console.log(event.type)
     })
 
     setInited(true)

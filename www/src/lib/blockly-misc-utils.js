@@ -79,6 +79,9 @@ export default class BlocklyMiscUtils {
 
 
   static inputNameToBlockType(inputName) {
+    if (inputName.includes('.')) {
+      inputName = inputName.split('.').slice(-1)[0]
+    }
     switch (inputName) {
       case 'card':
         return 'Card'
