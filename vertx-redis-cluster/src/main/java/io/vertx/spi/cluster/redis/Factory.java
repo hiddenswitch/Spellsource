@@ -25,9 +25,6 @@ import org.redisson.api.RedissonClient;
 
 import java.util.Map;
 
-/**
- *
- */
 public interface Factory {
 
 	<K, V> AsyncMap<K, V> createAsyncMap(Vertx vertx, RedissonClient redisson, String name);

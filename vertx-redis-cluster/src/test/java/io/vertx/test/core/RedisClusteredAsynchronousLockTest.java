@@ -13,10 +13,6 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
-/**
- * @author <a href="mailto:ben@hiddenswitch.com">Benjamin Berman</a>
- * @author <a href="mailto:guoyu.511@gmail.com">Guo Yu</a>
- */
 public class RedisClusteredAsynchronousLockTest extends ClusteredAsynchronousLockTest {
 
 	@ClassRule

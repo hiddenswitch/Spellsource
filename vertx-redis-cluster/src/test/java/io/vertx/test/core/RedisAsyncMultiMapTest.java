@@ -8,9 +8,6 @@ import io.vertx.spi.cluster.redis.RedisClusterManager;
 import org.junit.Before;
 import org.junit.ClassRule;
 
-/**
- * @author <a href="mailto:guoyu.511@gmail.com">Guo Yu</a>
- */
 public class RedisAsyncMultiMapTest extends AsyncMultiMapTest {
 
 	@ClassRule
