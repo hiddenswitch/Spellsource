@@ -1,8 +1,9 @@
-from setuptools import setup
-from setuptools.command.install import install
 import os
 import subprocess
 import sys
+
+from setuptools import setup
+from setuptools.command.install import install
 
 if sys.version_info < (3, 6):
     sys.exit('Spellsource requires at least Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
@@ -11,7 +12,7 @@ try:
     java_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode('utf-8')
     if java_version == '':
         java_version = subprocess.check_output(["java", "-version"]).decode('utf-8')
-    if '11' not in java_version and '12' not in java_version and '13' not in java_version:
+    if all(str(x) + '.' not in java_version for x in range(11, 100)):
         raise ValueError
 except:
     sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
