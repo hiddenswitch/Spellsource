@@ -17,6 +17,7 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
       - REPORTER_GRPC_HOST_PORT=jaeger-collector:14250
+      - REDIS_URL=redis://redis:6379
     networks:
       - web
       - backend
@@ -25,6 +26,7 @@ services:
         condition: on-failure
         delay: 30s
         window: 50s
+      replicas: 4
       labels:
         - traefik.http.routers.game-versioned-host.service=game
         - traefik.http.routers.game-versioned-host.rule=Host(`${GAME_VERSIONED_HOST}`)
@@ -38,18 +40,29 @@ services:
         - traefik.http.routers.game-versioned-url.tls=true
         - traefik.http.routers.game-versioned-url.tls.certResolver=myresolver
         - traefik.http.services.game.loadbalancer.server.port=80
+        - traefik.http.services.game.loadBalancer.sticky.cookie=true
         - traefik.http.middlewares.game-versioned-url-path-prefix-stripped.stripprefix.prefixes=${GAME_VERSIONED_URL_PATH_PREFIX}
         - traefik.enable=true
       placement:
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 3
     healthcheck:
       test: curl -sSX GET http://127.0.0.1/version || exit 1
       interval: 10s
       timeout: 1s
       retries: 4
+  redis:
+    image: "redis:6.0.5"
+    networks:
+      - backend
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 10s
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.level == 3
   mongo:
     image: "mongo:3.6"
     networks:
@@ -63,10 +76,9 @@ services:
       labels:
         - traefik.enable=false
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 2
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/metastone --quiet
       interval: 8s
@@ -96,10 +108,9 @@ services:
         - traefik.http.middlewares.api-v3-prefix-strip.stripprefix.prefixes=/api/v3/
         - traefik.enable=true
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 3
   jaeger-schema:
     image: jaegertracing/jaeger-cassandra-schema:1.17.1
     environment:
@@ -111,10 +122,9 @@ services:
       restart_policy:
         condition: none
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 3
     networks:
       - backend
   jaeger-query:
@@ -143,10 +153,9 @@ services:
         - traefik.http.middlewares.auth-jq.basicauth.users=${TRAEFIK_AUTH_BASIC_HASH}
         - traefik.enable=true
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 3
   cassandra:
     image: cassandra:3.11
     volumes:
@@ -158,10 +167,9 @@ services:
         condition: on-failure
         window: 15s
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 2
   skyhook:
     image: doctorpangloss/skyhook:latest
     build:
@@ -182,10 +190,9 @@ services:
         - traefik.http.services.skyhook-router-service.loadbalancer.server.port=8080
         - traefik.enable=true
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 3
   discordbot:
     image: doctorpangloss/discordbot:latest
     build:
@@ -202,10 +209,9 @@ services:
       labels:
         - traefik.enable=false
       placement:
+        replicas: 1
         constraints:
-          - node.platform.arch == x86_64
-          - node.labels.cpu == high
-          - node.labels.disk == ssd
+          - node.labels.level == 3
 volumes:
   mongodata:
   mancenterdata:

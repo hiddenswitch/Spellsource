@@ -62,13 +62,25 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	@Override
 	@Suspendable
 	public V put(K key, V value) {
-		return awaitResult(h -> map.put(key, value, then -> h.handle(Future.succeededFuture(value))));
+		return awaitResult(h -> map.put(key, value, then -> h.handle(then.map(value))));
+	}
+
+	@Override
+	@Suspendable
+	public V put(K key, V value, long timeToLiveMillis) {
+		return awaitResult(h -> map.put(key, value, timeToLiveMillis, then -> h.handle(then.map(value))));
 	}
 
 	@Override
 	@Suspendable
 	public V putIfAbsent(K key, V value) {
 		return awaitResult(h -> map.putIfAbsent(key, value, h));
+	}
+
+	@Override
+	@Suspendable
+	public V putIfAbsent(K key, V value, long timeToLiveMillis) {
+		return awaitResult(h -> map.putIfAbsent(key, value, timeToLiveMillis, h));
 	}
 
 	@Override
