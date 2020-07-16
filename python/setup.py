@@ -38,13 +38,13 @@ class CompileSpellsource(install):
         else:
             gradle_cmd = './gradlew'
         subprocess.check_call([f"{gradle_cmd} net:shadowJar"], cwd=SRC_PATH, shell=True)
-        subprocess.check_call([f"{gradle_cmd} hearthstone:jar"], cwd=SRC_PATH, shell=True)
+        subprocess.check_call([f"{gradle_cmd} internalcontent:jar"], cwd=SRC_PATH, shell=True)
         install.run(self)
 
 
 setup(name='spellsource',
       version='0.8.78',
-      description='The Spellsource card game engine, supports Hearthstone AI and simulation',
+      description='The Spellsource card game engine for card game AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
       url='http://github.com/hiddenswitch/Spellsource-Server',
@@ -54,7 +54,7 @@ setup(name='spellsource',
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
           ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.78-all.jar'),
-                                 os.path.join(SRC_PATH, 'hearthstone', 'build', 'libs', 'internalcontent-0.8.78.jar'),
+                                 os.path.join(SRC_PATH, 'internalcontent', 'build', 'libs', 'internalcontent-0.8.78.jar'),
                                  os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,
@@ -68,13 +68,12 @@ setup(name='spellsource',
                         'autoboto==0.4.3',
                         'scrapy',
                         'boto3',
-                        'hearthstone',
                         'pymongo',
                         'mistletoe',
                         'GitPython',
                         'SecretColors==1.1.0'],
       extras_require={
-          'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
+          'ext': ['numpy', 'h5py', 'keras', 'nltk', 'gitpython']
       },
       entry_points={
           'console_scripts': [
@@ -82,7 +81,7 @@ setup(name='spellsource',
           ]
       },
       packages=['spellsource', 'spellsource.ext', 'spellsource.tests'],
-      keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
+      keywords=['artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
                 'ml'],
       classifiers=['Development Status :: 3 - Alpha',
                    # Indicate who your project is intended for
