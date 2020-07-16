@@ -29,6 +29,7 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -114,7 +115,8 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			var pending = CreateGameSessionResponse.pending(deploymentID());
 			var connections = Games.getConnections();
 			var games = Games.getUsersInGames();
-			var connection = connections.putIfAbsent(request.getGameId(), pending);
+			var timeToLiveMillis = Duration.ofMinutes(60).toMillis();
+			var connection = connections.putIfAbsent(request.getGameId(), pending, timeToLiveMillis);
 			// If we're the ones deploying this match...
 			if (connection == null) {
 				var context = new ServerGameContext(
@@ -127,7 +129,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 				try {
 					for (var configuration : request.getConfigurations()) {
-						games.put(configuration.getUserId(), request.getGameId());
+						games.put(configuration.getUserId(), request.getGameId(), timeToLiveMillis);
 					}
 
 					// Deal with ending the game

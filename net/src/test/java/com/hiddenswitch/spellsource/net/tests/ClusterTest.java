@@ -24,7 +24,6 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -214,7 +213,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	public void testGracefulHandoverOfMatchmakingQueues(VertxTestContext context) throws InterruptedException, IllegalAccessException {
 		var testSetup = new TestSetup(context).invoke();
 		var instanceWithoutQueue = testSetup.getInstanceWithout();
-		var finalInstanceWithQueue = testSetup.getInstanceWith();
+		var instanceWithQueue = testSetup.getInstanceWith();
 		runOnFiberContext(() -> {
 			var account = createRandomAccount();
 			var decks = Logic.initializeUser(InitializeUserRequest.create(account.getUserId()));
@@ -227,10 +226,9 @@ public class ClusterTest extends SpellsourceTestBase {
 			assertTrue(res, "should have enqueued");
 			var usersInQueues = Matchmaking.getUsersInQueues();
 			assertTrue(usersInQueues.containsKey(account.getUserId()), "should be in queue");
-			Void t = awaitResult(h -> finalInstanceWithQueue.close(h));
+			Void t = awaitResult(instanceWithQueue::close);
 			Strand.sleep(8000);
 			assertFalse(usersInQueues.containsKey(account.getUserId()), "should not be in queue");
-
 			res = Matchmaking.enqueue(new MatchmakingRequest()
 					.setQueueId(Matchmaking.CONSTRUCTED)
 					.withDeckId(deck)

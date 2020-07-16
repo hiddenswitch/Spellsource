@@ -57,7 +57,13 @@ public abstract class SuspendableMap<K, V> {
 	public abstract V put(K key, V value);
 
 	@Suspendable
+	public abstract V put(K key, V value, long timeToLiveMillis);
+
+	@Suspendable
 	public abstract V putIfAbsent(K key, V value);
+
+	@Suspendable
+	public abstract V putIfAbsent(K key, V value, long timeToLiveMillis);
 
 	@Suspendable
 	@SuppressWarnings("unchecked")

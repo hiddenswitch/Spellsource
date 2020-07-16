@@ -3,7 +3,6 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.base.Throwables;
@@ -27,17 +26,17 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
 import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
-import static io.vertx.ext.sync.Sync.*;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.getContextScheduler;
 
 /**
  * The matchmaking service is the primary entry point into ranked games for clients.
@@ -69,7 +68,7 @@ public interface Matchmaking {
 			}
 
 			var currentQueue = getUsersInQueues();
-			var alreadyQueued = currentQueue.putIfAbsent(request.getUserId(), request.getQueueId()) != null;
+			var alreadyQueued = currentQueue.putIfAbsent(request.getUserId(), request.getQueueId(), Duration.ofMinutes(60).toMillis()) != null;
 			if (alreadyQueued) {
 				throw new IllegalStateException("User is already enqueued in a different queue.");
 			}
