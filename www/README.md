@@ -7,3 +7,10 @@ npm install -g gatsby-cli
 npm install --save
 gatsby develop
 ```
+
+After gatsby-cli is installed, 
+
+```shell script
+npm install --save
+gatsby clean
+```

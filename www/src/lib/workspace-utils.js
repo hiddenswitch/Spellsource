@@ -153,7 +153,7 @@ export default class WorkspaceUtils {
                 }
                 break
               case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN:
-                if (!!obj.spell && (!obj.spell.target || obj.spell.target === 'SPELL_TARGET')) {
+                if (!!obj.spell && (obj.spell.target === 'IT')) {
                   obj.spell.target = 'EVENT_TARGET'
                 }
                 break
@@ -209,6 +209,9 @@ export default class WorkspaceUtils {
     if (!!cardScript.card && !(typeof cardScript.card === 'string')) {
       delete cardScript.card
     }
+    if (cardScript.target === 'IT') {
+      delete cardScript.target
+    }
 
     if (!!cardScript.battlecry) {
       if (!cardScript.attributes) {
@@ -222,6 +225,16 @@ export default class WorkspaceUtils {
         cardScript.attributes = {}
       }
       cardScript.attributes.DEATHRATTLES = true;
+    }
+
+    if (!!cardScript.class && cardScript.class.endsWith('Aura')
+    && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
+      cardScript.attribute = 'AURA_' + cardScript.attribute
+    }
+
+    if (!!cardScript.triggers && cardScript.triggers.length === 1) {
+      cardScript.trigger = cardScript.triggers[0]
+      delete cardScript.triggers
     }
 
     return cardScript
@@ -319,12 +332,15 @@ export default class WorkspaceUtils {
         if (!!cardScript[cardScriptKey]['super']
           && typeof cardScript[cardScriptKey]['super'] === 'string') {
             cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
-        }
-
-        if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
+        } else if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
           && typeof cardScript['super'] !== 'string') {
+          let andWhenEveryonesSuper = !!cardScript.super.super
           merge(cardScript, cardScript['super'])
-          delete cardScript['super']
+          if (andWhenEveryonesSuper) {
+            //no one will be
+          } else {
+            delete cardScript['super']
+          }
         }
       }
     }
@@ -356,7 +372,7 @@ export default class WorkspaceUtils {
 
   static workspaceToCardScript (workspace) {
     const xml = Xml.workspaceToDom(workspace)
-    console.log(xml)
+    //console.log(xml)
     return WorkspaceUtils.xmlToCardScript(xml)
   }
 }

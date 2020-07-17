@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.net.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableAsyncMap;
 import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableWrappedMap;
 import io.vertx.core.AsyncResult;
@@ -11,21 +10,16 @@ import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public abstract class SuspendableMap<K, V> {
-	private static Map<String, SuspendableMap> MAP_CACHE = new HashMap<>();
-	private static ReentrantLock LOCK = new ReentrantLock();
-
 	@Suspendable
 	private static <K, V> SuspendableMap<K, V> create(Vertx vertx, String name) {
 		SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {
 			AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
-			return new SuspendableAsyncMap<>(map);
+			return new SuspendableAsyncMap<>(name, map);
 		} else {
 			return new SuspendableWrappedMap<>(client.getLocalMap(name));
 		}
@@ -34,25 +28,9 @@ public abstract class SuspendableMap<K, V> {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public static <K, V> SuspendableMap<K, V> getOrCreate(String name) {
-		Vertx vertx = Vertx.currentContext().owner();
-		String key = vertx.hashCode() + name;
-
-
-		LOCK.lock();
-		try {
-			SuspendableMap<K, V> v;
-			if ((v = MAP_CACHE.get(key)) == null) {
-				SuspendableMap<K, V> newValue = create(vertx, key);
-				MAP_CACHE.put(key, newValue);
-				return newValue;
-			}
-			return v;
-		} finally {
-			LOCK.unlock();
-		}
+		return create(Vertx.currentContext().owner(), name);
 	}
 
-	@Suspendable
 	public static <K, V> void getOrCreate(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
 		Vertx vertx = Vertx.currentContext().owner();
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
@@ -66,7 +44,6 @@ public abstract class SuspendableMap<K, V> {
 	public abstract boolean isEmpty();
 
 	@Suspendable
-	@SuppressWarnings("unchecked")
 	public abstract boolean containsKey(K key);
 
 	@Suspendable
@@ -80,7 +57,13 @@ public abstract class SuspendableMap<K, V> {
 	public abstract V put(K key, V value);
 
 	@Suspendable
+	public abstract V put(K key, V value, long timeToLiveMillis);
+
+	@Suspendable
 	public abstract V putIfAbsent(K key, V value);
+
+	@Suspendable
+	public abstract V putIfAbsent(K key, V value, long timeToLiveMillis);
 
 	@Suspendable
 	@SuppressWarnings("unchecked")
@@ -100,6 +83,8 @@ public abstract class SuspendableMap<K, V> {
 
 	@Suspendable
 	public abstract Set<Map.Entry<K, V>> entrySet();
+
+	public abstract AsyncMap<K, V> async();
 
 	@Suspendable
 	public V replace(K key, V value) {

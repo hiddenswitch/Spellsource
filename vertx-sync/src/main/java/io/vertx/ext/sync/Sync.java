@@ -8,6 +8,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.channels.Channel;
 import com.google.common.base.Throwables;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxThread;
 import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;
 import io.vertx.ext.sync.impl.HandlerReceiverAdaptorImpl;
@@ -39,6 +40,33 @@ public class Sync {
 	public static <T> T awaitResult(Consumer<Handler<AsyncResult<T>>> consumer) {
 		try {
 			return new AsyncAdaptor<T>() {
+				@Override
+				@Suspendable
+				protected void requestAsync() {
+					super.requestAsync();
+					consumer.accept(this);
+				}
+			}.run();
+		} catch (Throwable t) {
+			throw makeSafe(t);
+		}
+	}
+
+	/**
+	 * Awaits a result. Does not die due to an interrupt. Very dangerous.
+	 *
+	 * @param consumer
+	 * @param <T>
+	 * @return
+	 */
+	@Suspendable
+	public static <T> T awaitResultUninterruptibly(Consumer<Handler<AsyncResult<T>>> consumer) {
+		try {
+			return new AsyncAdaptor<T>() {
+				@Override
+				protected void checkInterrupted() throws InterruptedException {
+				}
+
 				@Override
 				@Suspendable
 				protected void requestAsync() {
@@ -110,7 +138,9 @@ public class Sync {
 						stack[i].getClassName().startsWith("io.vertx.ext.sync.") ||
 						stack[i].getClassName().startsWith("io.netty.") ||
 						stack[i].getClassName().startsWith("io.vertx.core.impl.") ||
-						stack[i].getClassName().startsWith("sun.nio.")) {
+						stack[i].getClassName().startsWith("sun.nio.") ||
+						stack[i].getClassName().startsWith("java.base/java.util.concurrent") ||
+						stack[i].getClassName().startsWith("java.util.concurrent")) {
 					continue;
 				}
 				newStack.add(stack[i]);

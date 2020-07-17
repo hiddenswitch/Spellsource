@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.78
+SPELLSOURCE_VERSION=0.8.79
 
 usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
@@ -160,6 +160,7 @@ if [[ "$build_stack" == true ]]; then
   # shellcheck disable=SC2046
   unset $(grep -v '^#' "secrets/spellsource/stack-application-production.env" | sed -E 's/(.*)=.*/\1/' | xargs)
   export COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1
+  docker context use default
   docker-compose build
   docker-compose push
 fi
@@ -174,6 +175,8 @@ if [[ "$deploy_stack" == true ]]; then
 fi
 
 if [[ "$deploy_steam" == true ]]; then
+  # should be executed with local docker
+  docker context use default
   docker build -t steamguardcli -f steamguardcli/Dockerfile ./steamguardcli
   source "secrets/spellsource/unityclient-build.env"
   STEAMCMD_GUARD_CODE="$(docker run --rm -v="$(pwd)"/secrets/spellsource/maFiles:/data steamguardcli mono /build/steamguard --mafiles-path /data generate-code)"

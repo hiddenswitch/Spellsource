@@ -1,5 +1,6 @@
 package io.vertx.ext.sync.benchmark;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Vertx;
 import io.vertx.ext.sync.SyncVerticle;
@@ -22,7 +23,7 @@ public class SyncBenchmarkVerticle extends SyncVerticle {
 
   @Override
   @Suspendable
-  public void start() {
+  protected void syncStart() throws SuspendExecution {
 
     ai = new SomeAsyncInterfaceImpl(vertx);
 
@@ -30,7 +31,11 @@ public class SyncBenchmarkVerticle extends SyncVerticle {
 
   }
 
-  @Suspendable
+	@Override
+	protected void syncStop() throws SuspendExecution, InterruptedException {
+	}
+
+	@Suspendable
   protected void benchmarkMethod()  {
 
     try {

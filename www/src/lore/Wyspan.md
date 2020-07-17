@@ -10,7 +10,7 @@ Lung Archipelago.
 Like conventional human languages, it has a spoken and phonetic written
 representation.
 
-Runes of Sylvan imbued with [dragonbreath](dragonbreath "wikilink")
+Runes of Sylvan imbued with [dragonbreath](Dragonbreath "wikilink")
 whisper.
 
 Some animals without suction or lips, like the

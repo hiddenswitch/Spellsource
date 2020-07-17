@@ -1,0 +1,30 @@
+{
+  "name": "Temporal Flicker",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "RARE",
+  "description": "Stun all enemy units. Give all Allied units Blitz.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN",
+        "target": "ENEMY_MINIONS"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "CHARGE",
+        "target": "FRIENDLY_MINIONS"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

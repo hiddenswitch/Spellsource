@@ -63,6 +63,7 @@ Christopher Rodowicz
 Trancy Zhu  
 Jessica Zhao  
 Jessica Eng  
+Vicki Xu
 
 ## NYU Game Lab
 
@@ -71,3 +72,5 @@ Frank Lantz
 ## Rochester Institute of Technology
 
 Andy Phelps
+
+Copyright © 2020 Hidden Switch

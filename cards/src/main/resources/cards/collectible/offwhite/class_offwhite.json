@@ -1,0 +1,43 @@
+{
+  "name": "Dreamer",
+  "type": "CLASS",
+  "hero": "hero_abraham",
+  "heroClass": "OFFWHITE",
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.949,
+      "g": 0.973,
+      "r": 0.988
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.988,
+      "g": 0.976,
+      "r": 0.949
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.69,
+      "g": 0.659,
+      "r": 0.592
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.525,
+      "g": 0.616,
+      "r": 0.69
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

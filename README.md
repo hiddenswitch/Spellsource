@@ -6,7 +6,7 @@
 
 This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
 
-**[Play now in your browser, or download for your platform here.](www/src/pages-markdown/download.md)**
+**[Play now in your browser, or download for your platform here.](https://www.playspellsource.com/download)**
 
 Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
 
@@ -167,6 +167,27 @@ Make sure the Public group is [added here](https://appstoreconnect.apple.com/Web
 Add the class or the package containing it to end of the list of classes in the `Args = --initialize-at-build-time=...` line to [native-image.properties](discordbot/src/main/resources/META-INF/native-image/com.hiddenswitch/discordbot/native-image.properties).
 
 You may have to regenerate reflection config using **sdkman**'s Graal distributable. Then, `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
+
+> `./gradlew distSwarm` fails with the message of the form:
+
+```shell script
+#13 71.30 FAILURE: Build failed with an exception.
+#13 71.30 
+#13 71.30 * What went wrong:
+#13 71.30 Could not determine the dependencies of task ':net:shadowJar'.
+#13 71.30 > Could not resolve all dependencies for configuration ':net:runtimeClasspath'.
+#13 71.30    > Could not resolve project :vertx-redis-cluster.
+#13 71.30      Required by:
+#13 71.30          project :net
+#13 71.30       > Unable to find a matching configuration of project :subproject:
+#13 71.30           - None of the consumable configurations have attributes.
+```
+
+Make sure to add the sub project directory and any others that need to be visible to doctor to [.dockerignore](.dockerignore) in the form of `!directory/*`.
+
+> `discordbot` Swarm build (`./gradlew distSwarm`) fails with `com.oracle.svm.driver.NativeImage$NativeImageError: Image build request failed with exit status 137`
+
+On **macOS**, allocate more memory to your Docker host.
 
 ### Special Thanks
 

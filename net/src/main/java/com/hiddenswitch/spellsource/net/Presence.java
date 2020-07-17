@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.PresenceEnum;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableCounter;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
@@ -30,12 +29,12 @@ public interface Presence {
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
 		Connection.connected((connection, fut) -> {
-			connection.endHandler(Sync.fiber(ignored -> {
+			connection.addCloseHandler(fiber(v -> {
 				SuspendableCounter connections = connections(connection.userId());
 				if (connections.decrementAndGet() == 0L) {
 					notifyFriendsOfPresence(new UserId(connection.userId()), PresenceEnum.OFFLINE);
-					connections.close();
 				}
+				v.complete();
 			}));
 
 			defer(v -> {
@@ -94,6 +93,6 @@ public interface Presence {
 	@NotNull
 	@Suspendable
 	static SuspendableCounter connections(String userId) {
-		return SuspendableCounter.getOrCreate("Presence/connections/" + userId);
+		return SuspendableCounter.getOrCreate("Presence.connections." + userId);
 	}
 }

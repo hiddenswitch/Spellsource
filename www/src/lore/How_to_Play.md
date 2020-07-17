@@ -19,7 +19,6 @@ standard format, both players will have decks of 30 cards and begin with
 life before they do the same to you!
 
 ### Play of the Game
-
 #### Beginning the Game
 
 ![An example of a mulligan. In this example, we are keeping the middle
@@ -39,7 +38,8 @@ both players have finished their mulligan, Player 2 will receive a
 ![This is an example of a player's hand and Lun count. In this case, the
 player has 7 Lun crystals total, but only 1 available left to use this
 turn.](Hand_and_Lun.png "fig:This is an example of a player's hand and Lun count. In this case, the player has 7 Lun crystals total, but only 1 available left to use this turn.")
-**The Board**
+
+#### The Board
 
 Each player has multiple different zones to utilize.
 
@@ -73,7 +73,8 @@ left to right). The skill is highlighted, meaning that it still can be
 used this turn, and the highlight around our champion means that it can
 still attack this
 turn.](Screen_Shot_2019-08-01_at_10.34.06_AM.png "fig:Here we can see the player's weapon, skill, and champion (going from left to right). The skill is highlighted, meaning that it still can be used this turn, and the highlight around our champion means that it can still attack this turn.")
-**Each Turn**
+
+#### Each Turn
 
 Each player's turn will begin with their upkeep. During this, the player
 will refresh all of their used Lun, gain a new Lun, and draw a card from

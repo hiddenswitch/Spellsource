@@ -83,7 +83,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	@Suspendable
-	public void start() throws RuntimeException, SuspendExecution {
+	protected void syncStart() throws RuntimeException, SuspendExecution {
 		CardCatalogue.loadCardsFromPackage();
 		Connection.registerCodecs();
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
@@ -125,9 +125,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		// Enable presence
 		Presence.handleConnections();
-
-		// Enable realtime conversations
-		Conversations.handleConnections();
 
 		// Create default matchmaking queues
 		var defaultQueues = Matchmaking.startDefaultQueues();
@@ -720,7 +717,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards/cards");
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards.cards");
 
 		var cardsVersion = cache.get("cards-version");
 		var lastModified = cache.get("cards-last-modified");
@@ -848,7 +845,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	@Suspendable
-	public void stop() throws Exception {
+	protected void syncStop() throws SuspendExecution {
 		if (customCloseables != null) {
 			Sync.invoke1(customCloseables::close);
 		}

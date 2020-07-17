@@ -52,16 +52,16 @@ public interface Invites {
 	 */
 	static void handleConnections() {
 		Connection.connected((connection, fut) -> {
-			String userId = connection.userId();
-			connection.endHandler(Sync.fiber(v -> {
+			var userId = connection.userId();
+			connection.addCloseHandler(fiber(v -> {
 				// Reject pending challenge invites
-				List<JsonObject> invites = mongo().findWithOptions(INVITES, json(
+				var invites = mongo().findWithOptions(INVITES, json(
 						"queueId", json("$ne", null),
 						"status", json("$in", PENDING_STATUSES),
 						"$or", array(json("fromUserId", userId),
 								json("toUserId", userId))), new FindOptions()
 						.setFields(json("_id", 1)));
-				for (JsonObject invite : invites) {
+				for (var invite : invites) {
 					try {
 						deleteInvite(new InviteId(invite.getString("_id")), new UserId(userId));
 					} catch (IllegalStateException ex) {
@@ -70,6 +70,7 @@ public interface Invites {
 								"canceling/rejecting it due to disconnect.", userId);
 					}
 				}
+				v.complete();
 			}));
 			defer(v -> {
 				try {
@@ -77,8 +78,8 @@ public interface Invites {
 					expireInvites(userId);
 
 					// Notify recipients of all pending invites.
-					List<Invite> invites = mongo().find(INVITES, json("toUserId", userId, "status", json("$in", PENDING_STATUSES)), Invite.class);
-					for (Invite invite : invites) {
+					var invites = mongo().find(INVITES, json("toUserId", userId, "status", json("$in", PENDING_STATUSES)), Invite.class);
+					for (var invite : invites) {
 						if (invite.getStatus() == StatusEnum.UNDELIVERED) {
 							invite.status(StatusEnum.PENDING);
 						}
@@ -87,7 +88,7 @@ public interface Invites {
 					}
 
 					// Set undelivered to pending
-					JsonArray ids = new JsonArray(invites.stream().map(Invite::getId).collect(Collectors.toList()));
+					var ids = new JsonArray(invites.stream().map(Invite::getId).collect(Collectors.toList()));
 					// State may have changed in between, only mess with the undelivered/pending ones
 					mongo().updateCollectionWithOptions(INVITES,
 							json("_id", json("$in", ids), "status", json("$in", PENDING_STATUSES)),
@@ -109,18 +110,18 @@ public interface Invites {
 	 */
 	@Suspendable
 	static void expireInvites(String expire) {
-		long time = System.currentTimeMillis();
-		List<Invite> shouldBeExpiredInvites = mongo().find(INVITES, json(
+		var time = System.currentTimeMillis();
+		var shouldBeExpiredInvites = mongo().find(INVITES, json(
 				"toUserId", expire,
 				"status", json("$in", PENDING_STATUSES),
 				"expiresAt", json("$lt", time)
 		), Invite.class);
-		int totalExpired = shouldBeExpiredInvites.size();
+		var totalExpired = shouldBeExpiredInvites.size();
 
 		// Cache retrieved connections
 		Map<String, WriteStream<Envelope>> connections = new HashMap<>();
-		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
-			WriteStream<Envelope> fromConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getFromUserId(), Connection::writeStream);
+		for (var shouldBeExpiredInvite : shouldBeExpiredInvites) {
+			var fromConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getFromUserId(), Connection::writeStream);
 			fromConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
 		}
 
@@ -130,12 +131,12 @@ public interface Invites {
 				"expiresAt", json("$lt", time)
 		), Invite.class);
 		totalExpired += shouldBeExpiredInvites.size();
-		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
-			WriteStream<Envelope> toConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getToUserId(), Connection::writeStream);
+		for (var shouldBeExpiredInvite : shouldBeExpiredInvites) {
+			var toConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getToUserId(), Connection::writeStream);
 			toConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
 		}
 
-		MongoClientUpdateResult updateResult = mongo().updateCollectionWithOptions(INVITES,
+		var updateResult = mongo().updateCollectionWithOptions(INVITES,
 				json("$and", array(json(
 						"status", json("$in", PENDING_STATUSES),
 						"expiresAt", json("$lt", time)),
@@ -162,7 +163,7 @@ public interface Invites {
 	static InviteResponse invite(InvitePostRequest request, UserRecord user) throws SuspendExecution {
 		UserRecord toUser;
 		Closeable matchmaker = null;
-		boolean queued = false;
+		var queued = false;
 
 		try {
 			if (request.getToUserId() != null) {
@@ -174,7 +175,7 @@ public interface Invites {
 				}
 			} else if (request.getToUserNameWithToken() != null) {
 				try {
-					String[] tokens = request.getToUserNameWithToken().split("#");
+					var tokens = request.getToUserNameWithToken().split("#");
 					toUser = mongo().findOne(Accounts.USERS, json("username", tokens[0], "privacyToken", tokens[1]), UserRecord.class);
 					// Throws null pointer exception, should be handled in parent
 					// Users found this way do not need to be friends
@@ -210,24 +211,24 @@ public interface Invites {
 				}
 			}
 
-			InviteId inviteId = InviteId.create();
+			var inviteId = InviteId.create();
 
 			// Configure expiration
-			Calendar expiryTime = Calendar.getInstance();
+			var expiryTime = Calendar.getInstance();
 			expiryTime.setTime(new Date());
 			expiryTime.add(Calendar.MINUTE, 15);
 
-			Vertx vertx = Vertx.currentContext().owner();
+			var vertx = Vertx.currentContext().owner();
 
 			// Set timer to expire the invite after 15 minutes
-			vertx.setTimer(DEFAULT_EXPIRY_TIME, Sync.fiber(timerId -> {
+			vertx.setTimer(DEFAULT_EXPIRY_TIME, fiber(timerId -> {
 				// If the invite hasn't been acted on, expire it
 				mongo().updateCollection(INVITES,
 						json("_id", inviteId.toString(), "status", json("$in", PENDING_STATUSES)),
 						json("$set", json("status", StatusEnum.TIMEOUT.getValue())));
 			}));
 
-			Invite invite = new Invite()
+			var invite = new Invite()
 					.id(inviteId.toString())
 					.fromName(user.getUsername())
 					.toName(toUser.getUsername())
@@ -245,19 +246,18 @@ public interface Invites {
 			if (request.getQueueId() != null || request.getDeckId() != null) {
 				// Assert that the player isn't currently in a match.
 
-				UserId userId = new UserId(user.getId());
-				if (Matchmaking.getUsersInQueues().containsKey(userId)) {
+				if (Matchmaking.getUsersInQueues().containsKey(user.getId())) {
 					throw new IllegalStateException("User is currently in a queue already. Dequeue first");
 				}
 
-				if (Games.getUsersInGames().containsKey(userId)) {
+				if (Games.getUsersInGames().containsKey(new UserId(user.getId()))) {
 					throw new IllegalStateException("User is currently in a game already. That game must be ended first.");
 				}
 
 				// This is (potentially also) a matchmaking queue request
 				// Create a new queue just for this invite.
 				// Right now, anyone can wait in any queue, but this is probably the most convenient.
-				String customQueueId = user.getUsername() + "/" + inviteId + "/" + request.getQueueId();
+				var customQueueId = user.getUsername() + "." + inviteId + "." + request.getQueueId();
 				invite.queueId(customQueueId);
 
 				// The matchmaker will close itself automatically if no one joins after 4s or the
@@ -319,7 +319,7 @@ public interface Invites {
 	static void sendInvite(@NotNull Invite invite) throws SuspendExecution {
 		// Notify both users of the new invite, but only wait to see if the recipient is around to actually receive it right
 		// now. We'll update the record immediately and only insert it into the db with the proper status
-		WriteStream<Envelope> toUserConnection = Connection.writeStream(invite.getToUserId());
+		var toUserConnection = Connection.writeStream(invite.getToUserId());
 		if (invite.getStatus() == StatusEnum.UNDELIVERED) {
 			invite.status(StatusEnum.PENDING);
 		}
@@ -352,7 +352,7 @@ public interface Invites {
 	 */
 	static @NotNull
 	AcceptInviteResponse accept(@NotNull InviteId inviteId, @NotNull AcceptInviteRequest request, @NotNull UserRecord recipient) throws SuspendExecution, InterruptedException {
-		Invite invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
+		var invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
 		if (invite == null) {
 			throw new NullPointerException(String.format("Invite not found: %s", inviteId));
 		}
@@ -385,15 +385,14 @@ public interface Invites {
 
 		// Check that the opponent is still in the queue
 		if (invite.getQueueId() != null) {
-			UserId opponentInQueue = new UserId(invite.getFromUserId());
-			if (!Objects.equals(Matchmaking.getUsersInQueues().get(opponentInQueue), (invite.getQueueId()))) {
+			if (!Objects.equals(Matchmaking.getUsersInQueues().get(invite.getFromUserId()), (invite.getQueueId()))) {
 				throw new IllegalStateException("Opponent no longer in queue.");
 			}
 		}
 
-		AcceptInviteResponse res = new AcceptInviteResponse();
+		var res = new AcceptInviteResponse();
 		res.invite(invite);
-		Envelope env = new Envelope();
+		var env = new Envelope();
 		if (invite.getFriendId() != null) {
 			// Make them friends, regardless if they are already friends.
 			res.friend(Friends.putFriend(recipient, new FriendPutRequest().friendId(invite.getFriendId())));
@@ -402,7 +401,7 @@ public interface Invites {
 		if (invite.getQueueId() != null) {
 			try {
 				// Regardless of what the client specified as its queueId, use the one from the invite
-				MatchmakingQueuePutRequest match = request.getMatch();
+				var match = request.getMatch();
 				match.queueId(invite.getQueueId());
 				Matchmaking.enqueue(new MatchmakingRequest(match, recipient.getId()));
 				// TODO: Wait a beat for the game to start, but actually set up a thing to wait for when it actually starts
@@ -422,11 +421,11 @@ public interface Invites {
 		mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", StatusEnum.ACCEPTED.getValue())));
 
 		env.changed(new EnvelopeChanged().invite(invite));
-		WriteStream<Envelope> recipientConnection = Connection.writeStream(recipient.getId());
+		var recipientConnection = Connection.writeStream(recipient.getId());
 		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
 		recipientConnection.write(env);
 
-		WriteStream<Envelope> senderConnection = Connection.writeStream(invite.getFromUserId());
+		var senderConnection = Connection.writeStream(invite.getFromUserId());
 		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
 		senderConnection.write(new Envelope().changed(new EnvelopeChanged().invite(invite)));
 
@@ -447,19 +446,19 @@ public interface Invites {
 	 */
 	static @NotNull
 	InviteResponse deleteInvite(@NotNull InviteId inviteId, @NotNull UserId userId) throws SuspendExecution {
-		Invite invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
+		var invite = mongo().findOne(INVITES, json("_id", inviteId.toString()), Invite.class);
 
 		if (invite == null) {
 			throw new NullPointerException(String.format("Invite not found: %s", inviteId));
 		}
 
-		boolean isSender = invite.getFromUserId().equals(userId.toString());
-		boolean isRecipient = invite.getToUserId().equals(userId.toString());
+		var isSender = invite.getFromUserId().equals(userId.toString());
+		var isRecipient = invite.getToUserId().equals(userId.toString());
 		if (!isSender && !isRecipient) {
 			throw new SecurityException("You did not have access to change this invite.");
 		}
 
-		StatusEnum status = isSender ? StatusEnum.CANCELLED : StatusEnum.REJECTED;
+		var status = isSender ? StatusEnum.CANCELLED : StatusEnum.REJECTED;
 		switch (invite.getStatus()) {
 			case PENDING:
 			case UNDELIVERED:
@@ -477,12 +476,12 @@ public interface Invites {
 
 		mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", status)));
 
-		Envelope env = new Envelope().changed(new EnvelopeChanged().invite(invite));
-		WriteStream<Envelope> recipientConnection = Connection.writeStream(invite.getToUserId());
+		var env = new Envelope().changed(new EnvelopeChanged().invite(invite));
+		var recipientConnection = Connection.writeStream(invite.getToUserId());
 		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
 		recipientConnection.write(env);
 
-		WriteStream<Envelope> senderConnection = Connection.writeStream(invite.getFromUserId());
+		var senderConnection = Connection.writeStream(invite.getFromUserId());
 		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
 		senderConnection.write(env);
 

@@ -57,6 +57,9 @@ dependencies {
     implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
     api group: 'io.vertx', name: 'vertx-core', version: '3.9.1'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation project(':vertx-redis-cluster')
     implementation group: 'io.vertx', name: 'vertx-mongo-client', version: '3.9.1'
     implementation group: 'io.vertx', name: 'vertx-web-client', version: '3.9.1'
     implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.9.1'
@@ -74,18 +77,6 @@ dependencies {
         exclude group: 'org.objenesis', module: '*'
     }
 
-    implementation('io.atomix:atomix:3.1.5') {
-        exclude group: 'org.objenesis', module: '*'
-        exclude group: 'io.github.classgraph', module: 'classgraph'
-    }
-    implementation('io.atomix:atomix-raft:3.1.5') {
-        exclude group: 'org.objenesis', module: '*'
-        exclude group: 'io.github.classgraph', module: 'classgraph'
-    }
-    implementation('io.atomix:atomix-primary-backup:3.1.5') {
-        exclude group: 'org.objenesis', module: '*'
-        exclude group: 'io.github.classgraph', module: 'classgraph'
-    }
     implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
     implementation group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
     implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
@@ -114,6 +105,7 @@ dependencies {
         because 'allows tests to run from IDEs that bundle older version of launcher'
     }
 
+    testImplementation project(':testcontainers')
     testImplementation project(':testutils')
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
