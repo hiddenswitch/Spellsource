@@ -15,26 +15,29 @@
       "operation": "EQUAL",
       "targetPlayer": "SELF"
     },
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER",
-        "cardCostModifier": {
-          "class": "CardCostModifier",
-          "filter": {
-            "class": "SpecificCardFilter",
-            "card": "minion_null_phoenix"
-          },
-          "value": -1
+    "class": "ConditionalSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_null_phoenix"
+            },
+            "value": -1
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "minion_null_phoenix",
+          "targetPlayer": "SELF"
         }
-      },
-      {
-        "class": "ReceiveCardSpell",
-        "card": "minion_null_phoenix",
-        "targetPlayer": "SELF"
-      }
-    ]
+      ]
+	}
   },
   "attributes": {
     "DEATHRATTLES": true
