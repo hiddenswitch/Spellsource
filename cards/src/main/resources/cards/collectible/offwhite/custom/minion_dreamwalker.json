@@ -1,0 +1,24 @@
+{
+  "name": "Dreamwalker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Aftermath: Receive a 3/3 Afterimage.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "card": "token_afterimage"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

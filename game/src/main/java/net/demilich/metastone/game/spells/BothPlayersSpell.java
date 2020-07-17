@@ -31,10 +31,12 @@ public final class BothPlayersSpell extends MetaSpell {
 		// We'll perform another target acquisition for the opposing player
 		if (SpellUtils.getAuras(context, HoardingWhelpAura.class, source).isEmpty()) {
 			player = context.getOpponent(player);
-			var spellTarget = (EntityReference) context.getEnvironment().getOrDefault(Environment.TARGET, null);
-			// We're going to use a null source action because the opposing player is not actually performing an action. This
-			// prevents the opponent's target override effects from affecting how their point of view is cast.
-			targets = context.getLogic().resolveTarget(player, source, spellTarget, desc, null).getTargets();
+			if (targets != null) {
+				var spellTarget = (EntityReference) context.getEnvironment().getOrDefault(Environment.TARGET, null);
+				// We're going to use a null source action because the opposing player is not actually performing an action. This
+				// prevents the opponent's target override effects from affecting how their point of view is cast.
+				targets = context.getLogic().resolveTarget(player, source, spellTarget, desc, null).getTargets();
+			}
 			super.cast(context, player, desc, source, targets);
 		}
 	}

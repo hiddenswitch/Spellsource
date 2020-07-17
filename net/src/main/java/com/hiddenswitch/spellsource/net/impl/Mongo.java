@@ -10,20 +10,18 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.metrics.Measured;
 import io.vertx.ext.mongo.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
-import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResult;
-import static io.vertx.ext.sync.Sync.streamAdaptor;
-
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
+import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResultUninterruptibly;
 
 /**
  * There is only one Mongo.
@@ -76,7 +74,7 @@ public class Mongo implements Closeable {
 		var span = getSpan("insert", json("collection", collection, "document", document));
 		mongoTry();
 		try {
-			return awaitResult(h -> client().insert(collection, document, h));
+			return awaitResultUninterruptibly(h -> client().insert(collection, document, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -91,9 +89,9 @@ public class Mongo implements Closeable {
 
 	private void mongoFinally(Span span) {
 		span.finish();
-		// If this was the last task, close now.
+		// If this was the last task, close in a short while, which will check again that pending task count is zero
 		if (pending.decrementAndGet() == 0 && isClosing.get()) {
-			closeNow();
+			closeShortly();
 		}
 	}
 
@@ -102,7 +100,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("insertWithOptions", json("document", document, "writeOption", writeOption));
 		try {
-			return awaitResult(h -> client().insertWithOptions(collection, document, writeOption, h));
+			return awaitResultUninterruptibly(h -> client().insertWithOptions(collection, document, writeOption, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -116,7 +114,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("updateCollection", json("collection", collection, "query", query, "update", update));
 		try {
-			return awaitResult(h -> client().updateCollection(collection, query, update, h));
+			return awaitResultUninterruptibly(h -> client().updateCollection(collection, query, update, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -137,7 +135,7 @@ public class Mongo implements Closeable {
 				var id = (String) update.getJsonObject("$set").remove("_id");
 				update.put("$setOnInsert", new JsonObject().put("_id", id));
 			}
-			return awaitResult(h -> client().updateCollectionWithOptions(collection, query, update, options, h));
+			return awaitResultUninterruptibly(h -> client().updateCollectionWithOptions(collection, query, update, options, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -151,7 +149,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("find", json("collection", collection, "query", query));
 		try {
-			return awaitResult(h -> client().find(collection, query, h));
+			return awaitResultUninterruptibly(h -> client().find(collection, query, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -165,7 +163,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("find", json("collection", collection, "query", query));
 		try {
-			final List<JsonObject> objs = awaitResult(h -> client().find(collection, query, h));
+			final List<JsonObject> objs = awaitResultUninterruptibly(h -> client().find(collection, query, h));
 			return fromJson(objs, returnClass);
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
@@ -180,7 +178,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("findWithOptions", json("collection", collection, "query", query, "options", options.toJson()));
 		try {
-			final List<JsonObject> objs = awaitResult(h -> client().findWithOptions(collection, query, options, h));
+			final List<JsonObject> objs = awaitResultUninterruptibly(h -> client().findWithOptions(collection, query, options, h));
 			return fromJson(objs, returnClass);
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
@@ -195,7 +193,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("findWithOptions", json("collection", collection, "query", query, "options", options.toJson()));
 		try {
-			return awaitResult(h -> client().findWithOptions(collection, query, options, h));
+			return awaitResultUninterruptibly(h -> client().findWithOptions(collection, query, options, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -215,7 +213,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("findOne", json("collection", collection, "query", query, "fields", fields));
 		try {
-			return awaitResult(h -> client().findOne(collection, query, fields, h));
+			return awaitResultUninterruptibly(h -> client().findOne(collection, query, fields, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -229,7 +227,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("findOne", json("collection", collection, "query", query, "fields", fields));
 		try {
-			JsonObject obj = awaitResult(h -> client().findOne(collection, query, fields, h));
+			JsonObject obj = awaitResultUninterruptibly(h -> client().findOne(collection, query, fields, h));
 			if (obj == null) {
 				return null;
 			}
@@ -247,7 +245,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("findOne", json("collection", collection, "query", query));
 		try {
-			JsonObject obj = awaitResult(h -> client().findOne(collection, query, null, h));
+			JsonObject obj = awaitResultUninterruptibly(h -> client().findOne(collection, query, null, h));
 			if (obj == null) {
 				return null;
 			}
@@ -265,7 +263,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("count", json("collection", collection, "query", query));
 		try {
-			return awaitResult(h -> client().count(collection, query, h));
+			return awaitResultUninterruptibly(h -> client().count(collection, query, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -279,7 +277,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("getCollections", new JsonObject());
 		try {
-			return awaitResult(h -> client().getCollections(h));
+			return awaitResultUninterruptibly(h -> client().getCollections(h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -293,7 +291,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("createIndex", json("collection", collection, "key", key));
 		try {
-			return awaitResult(h -> client().createIndex(collection, key, h));
+			return awaitResultUninterruptibly(h -> client().createIndex(collection, key, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -307,7 +305,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("createIndex", json("collection", collection, "key", key, "options", options.toJson()));
 		try {
-			return awaitResult(h -> client().createIndexWithOptions(collection, key, options, h));
+			return awaitResultUninterruptibly(h -> client().createIndexWithOptions(collection, key, options, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -321,7 +319,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("dropIndex", json("collection", collection, "indexName", indexName));
 		try {
-			return awaitResult(h -> client().dropIndex(collection, indexName, h));
+			return awaitResultUninterruptibly(h -> client().dropIndex(collection, indexName, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -341,7 +339,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("removeDocuments", json("collection", collection, "query", query));
 		try {
-			return awaitResult(h -> client().removeDocuments(collection, query, h));
+			return awaitResultUninterruptibly(h -> client().removeDocuments(collection, query, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -363,7 +361,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("removeDocumentsWithOptions", json("collection", collection, "query", query, "writeOption", writeOption));
 		try {
-			return awaitResult(h -> client().removeDocumentsWithOptions(collection, query, writeOption, h));
+			return awaitResultUninterruptibly(h -> client().removeDocumentsWithOptions(collection, query, writeOption, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -383,7 +381,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("removeDocument", json("collection", collection, "query", query));
 		try {
-			return awaitResult(h -> client().removeDocument(collection, query, h));
+			return awaitResultUninterruptibly(h -> client().removeDocument(collection, query, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -405,7 +403,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("removeDocumentWithOptions", json("collection", collection, "query", query, "writeOption", writeOption));
 		try {
-			return awaitResult(h -> client().removeDocumentWithOptions(collection, query, writeOption, h));
+			return awaitResultUninterruptibly(h -> client().removeDocumentWithOptions(collection, query, writeOption, h));
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
 			throw throwable;
@@ -424,7 +422,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("createCollection", json("collectionName", collectionName));
 		try {
-			return awaitResult(h -> client().createCollection(collectionName, h));
+			return awaitResultUninterruptibly(h -> client().createCollection(collectionName, h));
 		} catch (MongoCommandException ex) {
 			if (ex.getErrorCode() == 48 /*Namespace already exists*/) {
 				return null;
@@ -453,7 +451,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("findOneAndUpdate", json("collection", collection, "query", query, "update", update));
 		try {
-			JsonObject obj = awaitResult(h -> client().findOneAndUpdate(collection, query, update, h));
+			JsonObject obj = awaitResultUninterruptibly(h -> client().findOneAndUpdate(collection, query, update, h));
 			return fromJson(obj, returnClass);
 		} catch (Throwable throwable) {
 			Tracing.error(throwable, span, true);
@@ -475,7 +473,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("bulkWrite", json("collection", collection, "count", operations.size()));
 		try {
-			MongoClientBulkWriteResult res = awaitResult(h -> client().bulkWrite(collection, operations, h));
+			MongoClientBulkWriteResult res = awaitResultUninterruptibly(h -> client().bulkWrite(collection, operations, h));
 			span.setTag("insertedCount", res.getInsertedCount())
 					.setTag("matchedCount", res.getMatchedCount())
 					.setTag("modifiedCount", res.getModifiedCount())
@@ -502,7 +500,7 @@ public class Mongo implements Closeable {
 		mongoTry();
 		var span = getSpan("bulkWrite", json("collection", collection, "count", operations.size(), "bulkWriteOptions", bulkWriteOptions.toJson()));
 		try {
-			MongoClientBulkWriteResult res = awaitResult(h -> client().bulkWriteWithOptions(collection, operations, bulkWriteOptions, h));
+			MongoClientBulkWriteResult res = awaitResultUninterruptibly(h -> client().bulkWriteWithOptions(collection, operations, bulkWriteOptions, h));
 			span.setTag("insertedCount", res.getInsertedCount())
 					.setTag("matchedCount", res.getMatchedCount())
 					.setTag("modifiedCount", res.getModifiedCount())
@@ -585,7 +583,7 @@ public class Mongo implements Closeable {
 	 * @param pipeline     the Mongo aggregation pipeline
 	 * @param watchOptions the options
 	@Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
-	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
+	                                                                     WatchOptions watchOptions) { return awaitResultUninterruptibly(h -> client().watch(collection, pipeline, watchOptions, h)); }
 	*/
 
 	/**
@@ -612,20 +610,33 @@ public class Mongo implements Closeable {
 			closeFut = completionHandler;
 			createdOnContext.runOnContext(v -> {
 				if (pending.get() == 0) {
-					// We can close immediately
-					closeNow();
+					// Check if there's still nothing pending in a short while
+					closeShortly();
 				}
 			});
 		}
 	}
 
+	private void closeShortly() {
+		createdOnContext.owner().setTimer(1000L, timerId -> {
+			if (pending.get() == 0) {
+				closeNow();
+			}
+		});
+	}
+
 	private void closeNow() {
+		var closeFutThis = closeFut;
+		if (closeFutThis == null) {
+			return;
+		}
+		closeFut = null;
 		try {
 			client.close();
 			createdOnContext.remove("__mongo");
-			closeFut.handle(Future.succeededFuture());
+			closeFutThis.handle(Future.succeededFuture());
 		} catch (Throwable t) {
-			closeFut.handle(Future.failedFuture(t));
+			closeFutThis.handle(Future.failedFuture(t));
 		}
 	}
 }

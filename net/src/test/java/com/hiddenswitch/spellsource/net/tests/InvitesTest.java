@@ -345,7 +345,7 @@ public class InvitesTest extends SpellsourceTestBase {
 							.toUserNameWithToken(recipient.getAccount().getName())
 							.message("Would you be my friend?"));
 
-					assertEquals(inviteResponse.getInvite().getQueueId(), Matchmaking.getUsersInQueues().get(sender.getUserId()), "The sender was queued automatically because the sender specified a deckId");
+					assertEquals(inviteResponse.getInvite().getQueueId(), Matchmaking.getUsersInQueues().get(sender.getUserId().toString()), "The sender was queued automatically because the sender specified a deckId");
 					receivedInvite.await();
 
 					// Accept the invite with a deck ID, which should enqueue automatically

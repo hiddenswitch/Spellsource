@@ -31,15 +31,15 @@ public class MassTest extends TestBase {
 	private static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MassTest.class);
 
 	/**
-	 * Fuzzes the game by randomly playing decks 3,000 times.
+	 * Fuzzes the game by randomly playing decks 10,000 times.
 	 * <p>
-	 * The game is given a maximum of 4,200 milliseconds to execute.
+	 * The game is given a maximum of 10,000 milliseconds to execute.
 	 */
 	@RepeatedTest(value = 10000)
 	public void testRandomMassPlay() {
 		GameContext context = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
 		try {
-			assertTimeoutPreemptively(Duration.ofMillis(420000), () -> {
+			assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
 						context.play();
 						return null;
 					},
@@ -48,6 +48,8 @@ public class MassTest extends TestBase {
 							" trace using getStackTrace(). This will show you where the game context is stuck.");
 		} catch (Throwable any) {
 			var trace = context.getTrace();
+			LOGGER.error("To diagnose this issue, a trace (a completely reproducible replay of the game that fails) has been" +
+					" saved into cards/src/test/resources/traces. You can replay this trace using TraceTests.");
 			saveTraceWithException(trace, path1, path2);
 			throw any;
 		}

@@ -1,9 +1,6 @@
 package com.hiddenswitch.spellsource.net.tests;
 
-import com.hiddenswitch.containers.GrafanaContainer;
-import com.hiddenswitch.containers.JaegerContainer;
-import com.hiddenswitch.containers.MongoDBContainer;
-import com.hiddenswitch.containers.PrometheusContainer;
+import com.hiddenswitch.containers.*;
 import com.hiddenswitch.spellsource.net.Broadcaster;
 import com.hiddenswitch.spellsource.net.Configuration;
 import com.hiddenswitch.spellsource.net.applications.Applications;
@@ -42,8 +39,9 @@ public class LocalClustered {
 		var prometheus = new PrometheusContainer();
 		var grafana = new GrafanaContainer(jaeger.getAgentHost(), jaeger.getAgentPort())
 				.withFileSystemBind(Path.of(rootProjectDir, "grafana", "data").toString(), GrafanaContainer.GRAFANA_STORAGE_DIR);
+		var redis = new RedisContainer();
 
-		var closeables = Stream.of(database, jaeger, prometheus, grafana)
+		var closeables = Stream.of(database, jaeger, prometheus, grafana, redis)
 				.parallel()
 				.peek(GenericContainer::start)
 				.map(container -> (AutoCloseable) container)
@@ -52,6 +50,7 @@ public class LocalClustered {
 		var mongoUrl = database.getReplicaSetUrl().replace("/test", "/metastone");
 		// Passes the database URL to the Mongo code
 		System.getProperties().put("mongo.url", mongoUrl);
+		System.getProperties().put("redis.url", redis.getRedisUrl());
 		// Passes jaeger information to the Tracing code
 		System.getProperties().put("JAEGER_AGENT_HOST", jaeger.getAgentHost());
 		System.getProperties().put("JAEGER_AGENT_PORT", jaeger.getAgentPort().toString());

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.events;
 
-import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.OpenerAction;
@@ -17,13 +16,13 @@ public class SummonEvent extends CardEvent {
 	private final OpenerAction[] openerActions;
 
 	public SummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean resolvedOpener, OpenerAction... openerActions) {
-		super(EventTypeEnum.SUMMON, context, context.getPlayer(source.getOwner()), source, minion, source.getSourceCard());
+		super(EventTypeEnum.SUMMON, true, context, context.getPlayer(source.getOwner()), source, minion, source.getSourceCard());
 		this.resolvedOpener = resolvedOpener;
 		this.openerActions = openerActions;
 	}
 
 	SummonEvent(EventTypeEnum eventType, GameContext context, Actor minion, Entity source, boolean resolvedOpener, OpenerAction[] openerActions) {
-		super(eventType, context, context.getPlayer(source.getOwner()), source, minion, source.getSourceCard());
+		super(eventType, true, context, context.getPlayer(source.getOwner()), source, minion, source.getSourceCard());
 		this.resolvedOpener = resolvedOpener;
 		this.openerActions = openerActions;
 	}

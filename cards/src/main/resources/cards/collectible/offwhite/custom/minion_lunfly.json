@@ -1,0 +1,29 @@
+{
+  "name": "Lunfly",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Cards that cost less than 3 cost (3).",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "target": "BOTH_HANDS",
+    "value": 3,
+	"filter": {
+	  "class": "AttributeFilter",
+      "attribute": "BASE_MANA_COST",
+	  "value": 3,
+	  "operation": "LESS"
+	},
+    "operation": "SET",
+    "targetPlayer": "BOTH"
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

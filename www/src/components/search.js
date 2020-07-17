@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import { Link, navigate } from 'gatsby'
 import { Form, FormControl, ListGroup } from 'react-bootstrap'
@@ -10,6 +10,19 @@ import { useIndex } from '../hooks/use-index'
 function Search (props) {
   const [query, setQuery] = useState(``)
   const [results, setResults] = useState([])
+  const [searchListLeft, setSearchListLeft] = useState(0)
+
+  function updatePosition () {
+    setSearchListLeft(inputBox.current.getBoundingClientRect().left)
+  }
+
+  // css sizing for input box
+  const inputBox = useRef(null)
+  useEffect(() => {
+    window.addEventListener('resize', updatePosition)
+    updatePosition();
+    return () => window.removeEventListener('resize', updatePosition)
+  }, []);
 
   const index = useIndex()
 
@@ -18,8 +31,13 @@ function Search (props) {
     if (encoded.length !== 0) {
       return (
         <ListGroup.Item className={styles.searchListGroupItem}>
-          <Link to={`../searchresults?query=${encoded}`}>
-            See more...</Link>
+          {results.map(page => (
+            <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
+              <Link to={page.path}>{page.title}</Link>
+            </ListGroup.Item>
+          ))}
+          <ListGroup.Item className={styles.searchListGroupItem}><Link to={`./searchresults?query=${encoded}`}>
+            See more...</Link></ListGroup.Item>
         </ListGroup.Item>
       )
     }
@@ -28,6 +46,7 @@ function Search (props) {
   // update input value
   const updateQuery = event => {
     setQuery(event.target.value)
+    window.setTimeout(() => updatePosition(), 10)
   }
 
   // display full search page on enter
@@ -49,25 +68,21 @@ function Search (props) {
         return doc.nodeType === 'Card' || doc.nodeType === 'MarkdownRemark'
       })
       .slice(0, 5)
+      // map over each ID and return full document
     )
   }
 
   return (
     <div className={styles.inputBox}>
-      <Form onSubmit={e => navigateToSearchResults(e)}>
-        <FormControl type="text" placeholder={props.placeholder} className="mr-sm-2"
+      <Form ref={inputBox} onSubmit={e => navigateToSearchResults(e)}>
+        <FormControl type="text" placeholder={props.placeholder}
                      value={query}
                      onChange={e => {
                        updateQuery(e)
                        search(e)
                      }}/>
       </Form>
-      <ListGroup variant="flush" className={styles.searchResults}>
-        {results.map(page => (
-          <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-            <Link to={page.path}>{page.title}</Link>
-          </ListGroup.Item>
-        ))}
+      <ListGroup variant="flush" style={{ left: searchListLeft }} className={styles.searchResults}>
         {dropDownMenu()}
       </ListGroup>
     </div>

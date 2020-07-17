@@ -1,43 +1,42 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
-import { graphql, Link, navigate, useStaticQuery } from 'gatsby'
+import {graphql, useStaticQuery} from 'gatsby'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
-import Blockly, { BlockSvg, FieldLabelSerializable, Workspace, WorkspaceSvg } from 'blockly'
-import { filter, has, isArray, map } from 'lodash'
+import Blockly, {FieldLabelSerializable} from 'blockly'
+import {has, isArray} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
-import { Form } from 'react-bootstrap'
-import { useIndex } from '../hooks/use-index'
-import BlocklyWorkspace from 'react-blockly/dist-modules/BlocklyWorkspace'
+import {Form} from 'react-bootstrap'
+import {useIndex} from '../hooks/use-index'
+import JsonConversionUtils from '../lib/json-conversion-utils'
+import BlocklyMiscUtils from "../lib/blockly-misc-utils";
 
 class FieldLabelSerializableHidden extends FieldLabelSerializable {
-  constructor (opt_value, opt_validator, opt_config) {
+  constructor(opt_value, opt_validator, opt_config) {
     super(opt_value, opt_validator, opt_config)
   }
 
-  static fromJson (options) {
+  static fromJson(options) {
     const field = new FieldLabelSerializableHidden()
     field.setValue(options.value)
     return field
   }
 
-  getSize () {
+  getSize() {
     let size = super.getSize()
     size.width = -10
     return size
   }
 
-  getDisplayText_ () {
+  getDisplayText_() {
     return ''
   }
 }
 
-Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
-Blockly.HSV_SATURATION = .65
 
 const CardEditorView = () => {
   const data = useStaticQuery(graphql`
@@ -47,7 +46,6 @@ const CardEditorView = () => {
         BlockTypePrefix
         CategoryName
         ColorHex
-        Custom
       }
     }
     allBlock {
@@ -102,6 +100,7 @@ const CardEditorView = () => {
           heroClass
           type
           collectible
+          description
           art {
             primary {
               r
@@ -127,14 +126,94 @@ const CardEditorView = () => {
   const index = useIndex()
 
   if (!inited) {
+    Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
+    Blockly.HSV_SATURATION = .65
     Blockly.Blocks = {} //we don't use any of the default Blockly blocks
+
+    //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
+    Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function () {
+      let oldRows = this.rows;
+      this.rows = [];
+
+      for (let r = 0; r < oldRows.length; r++) {
+        this.rows.push(oldRows[r]);
+        if (r !== oldRows.length - 1) {
+          let spacerRow = this.makeSpacerRow_(oldRows[r], oldRows[r + 1]);
+          if (r !== oldRows.length - 2 && r !== 0) {
+            spacerRow.height = spacerRow.height / 2
+
+            let spacerRow2 = this.makeSpacerRow_(oldRows[r], oldRows[r + 1]);
+            spacerRow2.height = spacerRow2.height / 2
+            this.rows.push(spacerRow2);
+          }
+          this.rows.push(spacerRow);
+        }
+      }
+    };
+    //now every single important row has a spacer or equivalent both above and below
+
+    Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function () {
+      const Types = Blockly.blockRendering.Types
+      //align statement rows normally and align input rows to nearest 10 pixels
+      for (let i = 0, row; (row = this.rows[i]); i++) {
+        if (row.hasStatement) {
+          this.alignStatementRow_(row);
+        }
+        if (row.hasExternalInput && row.width > 1) {
+          let happyWidth
+          if (row.width < 50) {
+            happyWidth = Math.ceil(row.width / 10) * 10
+          } else {
+            happyWidth = Math.round(row.width / 10) * 10
+          }
+          let missingSpace = happyWidth - row.width
+          this.addAlignmentPadding_(row, missingSpace);
+        }
+        if (this.block_.hat && i === 2 && row.width < this.topRow.width) {
+          let missingSpace = this.topRow.width - row.width
+          this.addAlignmentPadding_(row, missingSpace);
+        }
+      }
+      //spacer/top/bottom rows take on the width of their adjacent non-spacer row
+      for (let i = 0, row; (row = this.rows[i]); i++) {
+        if (Types.isSpacer(row) || Types.isTopOrBottomRow(row)) {
+          let currentWidth = row.width;
+          let desiredWidth = 0
+
+          if (Types.isSpacer(row)) {
+            let aboveRow = this.rows[i + 1]
+            let belowRow = this.rows[i - 1]
+            if (!!aboveRow && !Types.isSpacer(aboveRow) && !Types.isTopOrBottomRow(aboveRow)) {
+              desiredWidth = aboveRow.width
+            }
+            if (!!belowRow && !Types.isSpacer(belowRow) && !Types.isTopOrBottomRow(belowRow)) {
+              desiredWidth = belowRow.width
+            }
+          } else if (Types.isTopRow(row)) {
+            desiredWidth = this.rows[2].width
+          } else if (Types.isBottomRow(row)) {
+            desiredWidth = this.rows[i - 2].width
+          }
+
+
+          let missingSpace = desiredWidth - currentWidth;
+          if (missingSpace > 0) {
+            this.addAlignmentPadding_(row, missingSpace);
+          }
+          if (Types.isTopOrBottomRow(row)) {
+            row.widthWithConnectedBlocks = row.width
+          }
+        }
+      }
+    }
+
     // All of our spells, triggers, entity reference enum values, etc.
     data.allBlock.edges.forEach(edge => {
       if (has(Blockly.Blocks, edge.node.type)) {
         return
       }
 
-      const block = recursiveOmitBy(edge.node, ({ node }) => node === null)
+      const block = recursiveOmitBy(edge.node, ({node}) => node === null)
 
       // Patch back in values from union type
       if (!!block.args) {
@@ -172,11 +251,7 @@ const CardEditorView = () => {
         delete block.messages
       }
 
-      Blockly.Blocks[block.type] = {
-        init: function () {
-          extendedJsonInit(this, block)
-        }
-      }
+      BlocklyMiscUtils.addBlock(block)
     })
 
     /**
@@ -197,80 +272,84 @@ const CardEditorView = () => {
         )
 
         heroClassColors[card.heroClass] = color
-        Blockly.Blocks[type] = {
-          init: function () {
-            this.jsonInit({
-              'type': type,
-              'message0': card.name,
-              'output': 'HeroClass',
-              'colour': color
-            })
-            this.data = card.heroClass
-          }
+        let block = {
+          'type': type,
+          'message0': card.name,
+          'output': 'HeroClass',
+          'colour': color,
+          'data': card.heroClass
         }
+        BlocklyMiscUtils.addBlock(block)
       }
     })
 
     //second pass through to actually get the cards
     data.allCard.edges.forEach(edge => {
       let card = edge.node
-      let type = 'ExternalCard_' + card.id
+      let type = 'CatalogueCard_' + card.id
       if (has(Blockly.Blocks, type)) {
         return
       }
       if (card.baseManaCost != null
         && heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
         let color = heroClassColors[card.heroClass]
-        Blockly.Blocks[type] = {
-          init: function () {
-            this.jsonInit({
-              'type': type,
-              'args0': [],
-              'message0': cardMessage(card),
-              'output': 'Card',
-              'colour': color
-            })
-            this.data = card.id
-          }
+        let block = {
+          'type': type,
+          'args0': [],
+          'message0': cardMessage(card),
+          'output': 'Card',
+          'colour': color,
+          'data': card.id
         }
+        BlocklyMiscUtils.addBlock(block)
       }
     })
   }
 
-  function getToolboxCategories (onlyCategory = null) {
-    let i = -1
+  function getToolboxCategories(onlyCategory = null) {
+    let index = -1
     return data.toolbox.BlockCategoryList.map(({
-      BlockTypePrefix, CategoryName, ColorHex
-    }) => {
-      i++
+       BlockTypePrefix, CategoryName, ColorHex
+     }) => {
+      index++
       if (!!onlyCategory && CategoryName !== onlyCategory) {
-        return toolboxCategories[i] //my attempt to reduce the runtime a bit
+        return toolboxCategories[index] //my attempt to reduce the runtime a bit
       }
       let blocks = []
       if (!!BlockTypePrefix) {
         for (let blocksKey in Blockly.Blocks) {
-          if (!blocksKey.endsWith('SHADOW') && blocksKey.startsWith(BlockTypePrefix)) {
-            blocks.push({ type: blocksKey })
-          } else if (CategoryName === 'Cards' && blocksKey.startsWith('RealCard')) {
-            blocks.push({ type: blocksKey })
+          if ((!blocksKey.endsWith('SHADOW') && blocksKey.startsWith(BlockTypePrefix))
+            || (CategoryName === 'Cards' && blocksKey.startsWith('WorkspaceCard'))) {
+            blocks.push({
+              type: blocksKey,
+              values: shadowBlockJsonCreation(blocksKey),
+              next: blocksKey.startsWith('Starter') ?
+                {type: 'Property_SHADOW', shadow: true}
+                : undefined
+            })
           }
         }
+
+        JsonConversionUtils.blockTypeColors[BlockTypePrefix] = ColorHex
       } else if (CategoryName === 'Search Results') {
         results.forEach(value => {
-          blocks.push({ type: value.id })
+          blocks.push({
+            type: value.id,
+            values: shadowBlockJsonCreation(value.id),
+            next: value.id.startsWith('Starter') ?
+              {type: 'Property_SHADOW', shadow: true}
+              : undefined
+          })
         })
       }
       let button = []
       if (CategoryName === 'Cards') {
         button[0] = {
-          text: 'Find External Card Block',
-          callbackKey: 'findCard'
-        }
-        button[1] = {
-          text: 'Add External Card to Workspace',
+          text: 'Add External Card Code to Workspace',
           callbackKey: 'importCard'
         }
       }
+
 
       return {
         name: CategoryName,
@@ -281,58 +360,42 @@ const CardEditorView = () => {
     })
   }
 
-  const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
-
-  function extendedJsonInit (thisBlock, block) {
-    thisBlock.jsonInit(block)
-    if (!!block.data) {
-      thisBlock.data = block.data
-    }
-    if (!!block.hat) {
-      thisBlock.hat = block.hat
-    }
-    if (!thisBlock.workspace.isFlyout) {
-      return
-    }
-    //init shadow blocks
-    for (let i = 0; i < 10; i++) {
-      if (!!block['args' + i.toString()]) {
-        for (let j = 0; j < 10; j++) {
-          const arg = block['args' + i.toString()][j]
-          if (!!arg) {
-            const shadow = arg.shadow
-            if (!!shadow) {
-              let shadowBlock = thisBlock.workspace.newBlock(shadow.type)
-              if (shadow.notActuallyShadow) {
-                shadowBlock.setMovable(false)
-              } else {
-                shadowBlock.setShadow(true)
-              }
-              if (!!shadow.fields) {
-                for (let field of shadow.fields) {
-                  if (!!field.valueI) {
-                    shadowBlock.setFieldValue(field.valueI, field.name)
-                  }
-                  if (!!field.valueS) {
-                    shadowBlock.setFieldValue(field.valueS, field.name)
-                  }
-                  if (!!field.valueB) {
-                    shadowBlock.setFieldValue(field.valueB, field.name)
-                  }
+  //Turns our own json formatting for shadow blocks into the formatting
+  //that's used for specifying toolbox categories (recursively)
+  function shadowBlockJsonCreation(type) {
+    let block = Blockly.Blocks[type]
+    let values = {}
+    if (!!block && !!block.json) {
+      let json = block.json
+      for (let i = 0; i < 10; i++) {
+        if (!!json['args' + i.toString()]) {
+          for (let j = 0; j < 10; j++) {
+            const arg = json['args' + i.toString()][j]
+            if (!!arg && !!arg.shadow) {
+              let fields = {}
+              if (!!arg.shadow.fields) {
+                for (let field of arg.shadow.fields) {
+                  fields[field.name] = field.valueI
                 }
               }
-              const connection = arg.type.endsWith('statement') ?
-                shadowBlock.previousConnection : shadowBlock.outputConnection
-              thisBlock.getInput(arg.name).connection.connect(connection)
-              shadowBlock.initSvg()
+              values[arg.name] = {
+                type: arg.shadow.type,
+                shadow: !arg.shadow.notActuallyShadow,
+                fields: fields,
+                values: shadowBlockJsonCreation(arg.shadow.type)
+              }
             }
           }
         }
       }
     }
+    return values
   }
 
-  function onWorkspaceChanged (workspace) {
+
+  const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
+
+  function onWorkspaceChanged(workspace) {
     if (!inited) {
       initializeWorkspace(workspace)
     }
@@ -351,7 +414,7 @@ const CardEditorView = () => {
       update = true
     }
     for (let blocksKey in Blockly.Blocks) {
-      if (blocksKey.startsWith('RealCard') && !cardsStillInUse.includes(blocksKey)) {
+      if (blocksKey.startsWith('WorkspaceCard') && !cardsStillInUse.includes(blocksKey)) {
         delete Blockly.Blocks[blocksKey]
         update = true
       }
@@ -362,12 +425,12 @@ const CardEditorView = () => {
     }
   }
 
-  function createCard (card, workspace, cardsStillInUse) {
+  function createCard(card, workspace, cardsStillInUse) {
     if (!!card && !!card.name) {
       let cardId = card.type.toLowerCase()
         + '_'
         + card.name.toLowerCase().replace(' ', '_')
-      let type = 'RealCard_' + cardId
+      let type = 'WorkspaceCard_' + cardId
       let color = '#888888'
       if (!!card.heroClass) {
         color = heroClassColors[card.heroClass]
@@ -393,68 +456,58 @@ const CardEditorView = () => {
 
   }
 
+  //make the message for a generated block for a catalogue/created card
   function cardMessage(card) {
     let ret = '(' + card.baseManaCost + ') ';
     if (card.type === 'MINION') {
       ret += card.baseAttack + '/' + card.baseHp;
     } else {
-      ret += card.type.replace('_', ' ')
-        .split(' ')
-        .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
-        .join(' ')
+      ret += BlocklyMiscUtils.toHappyFormatting(card.type)
     }
     ret += ' ' + card.name;
     return ret
   }
 
-  function initializeWorkspace (workspace) {
-    workspace.registerButtonCallback('findCard', () => {
-      alert('Coming "Soon"')
-    })
+  function initializeWorkspace(workspace) {
     workspace.registerButtonCallback('importCard', () => {
-      alert('Coming "Soon"')
-    })
+      let p = prompt("Input the name of the card (or the wiki page URL for more precision)")
+      let cardId = null
+      let card = null
+      if (p.includes('{')) {
+        card = JSON.parse(p)
+      } else if (p.includes('www')) {
+        cardId = p.split('cards/')[1]
+      } else {
+        for (let edge of data.allCard.edges) {
+          let card = edge.node
+          if (card.name.toLowerCase() === p.toLowerCase()) {
+            cardId = card.id
+            break
+          }
+        }
+      }
+      if (!!cardId) {
+        for (let edge of data.allCard.edges) {
+          if (edge.node.id === cardId) {
+            card = edge.node
+            break
+          }
+        }
+      }
 
-    workspace.addChangeListener((event) => {
-      console.log(event.type)
+
+      if (!!card) {
+        console.log(card)
+      }
+
+      JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
+      Blockly.getMainWorkspace().getToolbox().clearSelection()
+      setToolboxCategories(getToolboxCategories())
     })
 
     setInited(true)
   }
 
-  function generateStarter(workspace, card) {
-    let block = workspace.newBlock('Starter_' + card.type)
-    ['baseManaCost', 'name', 'baseAttack', 'baseHp', 'heroClass', 'rarity', 'description'].forEach(arg => {
-      if (!!card[arg]) {
-        block.getField(arg).setValue(card[arg])
-      }
-    })
-
-    let lowestBlock = block
-
-    if (card.description.toLowerCase().includes('opener')) {
-      let extraBlock = workspace.newBlock('Property_opener1')
-      extraBlock.setCommentText('Your description contained "Opener" so we thought you might need this property')
-      extraBlock.previousConnection.connect(lowestBlock.nextConnection)
-      lowestBlock = extraBlock
-    }
-
-    if (card.description.toLowerCase().includes('aftermath')) {
-      let extraBlock = workspace.newBlock('Property_aftermath')
-      extraBlock.setCommentText('Your description contained "Aftermath" so we thought you might need this property')
-      extraBlock.previousConnection.connect(lowestBlock.nextConnection)
-      lowestBlock = extraBlock
-    }
-
-    if (card.description.toLowerCase().includes('whenever')) {
-      let extraBlock = workspace.newBlock('Property_triggers')
-      extraBlock.setCommentText('Your description contained "Whenever" so we thought you might need this property')
-      extraBlock.previousConnection.connect(lowestBlock.nextConnection)
-      lowestBlock = extraBlock
-    }
-
-    return block
-  }
 
   // update input value
   const updateQuery = event => {
@@ -479,14 +532,14 @@ const CardEditorView = () => {
     setQuery(query)
     setResults(index
         // Query the index with search string to get an [] of IDs
-        .search(query, { expand: true }) // accept partial matches
-        .map(({ ref }) => index.documentStore.getDoc(ref))
+        .search(query, {expand: true}) // accept partial matches
+        .map(({ref}) => index.documentStore.getDoc(ref))
         .filter(doc => doc.nodeType === 'Block' || (doc.nodeType === 'Card' && checked
           && heroClassColors.hasOwnProperty(doc.heroClass) && !!doc.baseManaCost))
         .map(doc => {
           if (doc.nodeType === 'Card') {
             return {
-              id: 'ExternalCard_' + doc.id
+              id: 'CatalogueCard_' + doc.id
             }
           }
           return doc
@@ -497,7 +550,7 @@ const CardEditorView = () => {
   }
 
   return (<span>
-    <Form inline>
+    <Form inline onSubmit={(event) => event.preventDefault()}>
       <Form.Control type="text" placeholder={'Search blocks'}
                     value={query}
                     onChange={e => {
@@ -510,18 +563,21 @@ const CardEditorView = () => {
       <Form.Check style={{display: "inline"}}>
         <Form.Check.Input onChange={e => {
           setChecked(!checked)
-          search({target: {value: query}})
-          handleSearchResults({target: {value: query}})
-        }}
-          value={checked} style={
-          {
-            height: "15px",
-            width: "15px",
-            webkitAppearance: "checkbox"
+          if (query.length > 0) {
+            search({target: {value: query}})
+            handleSearchResults({target: {value: query}})
           }
-        }
+        }}
+                          value={checked}
+                          style={
+                            {
+                              height: "15px",
+                              width: "15px",
+                              webkitAppearance: "checkbox"
+                            }
+                          }
         />
-        <Form.Check.Label> Show External Card Blocks</Form.Check.Label>
+        <Form.Check.Label> Show Card Catalogue Blocks</Form.Check.Label>
       </Form.Check>
     </Form>
     <ReactBlocklyComponent.BlocklyEditor
@@ -538,7 +594,7 @@ const CardEditorView = () => {
       }}
       readOnly={true}
       value={code}
-      editorProps={{ $blockScrolling: true }}
+      editorProps={{$blockScrolling: true}}
     />
   </span>)
 }

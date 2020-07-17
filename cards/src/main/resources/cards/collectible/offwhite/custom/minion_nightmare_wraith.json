@@ -1,0 +1,51 @@
+{
+  "name": "Nightmare Wraith",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "Opener: Your opponent summons a random minion from their hand. This copies its stats.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "SELF",
+        "spells": [
+		  {
+		    "class": "SetAttackSpell",
+			"value": {
+			  "class": "AttributeValueProvider",
+			  "target": "OUTPUT",
+			  "attribute": "ATTACK"
+			}
+		  },
+		  {
+		    "class": "SetHpSpell",
+			"value": {
+			  "class": "AttributeValueProvider",
+			  "target": "OUTPUT",
+			  "attribute": "HP"
+			}
+		  }
+		]
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

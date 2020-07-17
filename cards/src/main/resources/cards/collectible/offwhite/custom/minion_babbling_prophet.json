@@ -1,0 +1,34 @@
+{
+  "name": "Babbling Prophet",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener: Source a copy of a card from your deck and put it on top.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "PutDeckTopSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

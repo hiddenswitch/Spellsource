@@ -66,7 +66,7 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES_PLAYERS_MAP = "Games/players";
+	String GAMES_PLAYERS_MAP = "Games.players";
 	String GAMES = "games";
 	Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
@@ -125,7 +125,7 @@ public interface Games extends Verticle {
 			public boolean equals(Object o) {
 				if (this == o) return true;
 				if (!(o instanceof ActionKey)) return false;
-				ActionKey actionKey = (ActionKey) o;
+				var actionKey = (ActionKey) o;
 				return sourceReference == actionKey.sourceReference &&
 						actionType == actionKey.actionType;
 			}
@@ -136,12 +136,12 @@ public interface Games extends Verticle {
 			}
 		}
 
-		Map<ActionKey, List<GameAction>> actionMap = actions.stream()
+		var actionMap = actions.stream()
 				.unordered()
 				.collect(Collectors.groupingBy(ActionKey::new));
-		EntityZone<Minion> friendlyMinions = workingContext.getPlayer(playerId).getMinions();
-		CardZone discovers = workingContext.getPlayer(playerId).getDiscoverZone();
-		GameActions clientActions = new GameActions()
+		var friendlyMinions = workingContext.getPlayer(playerId).getMinions();
+		var discovers = workingContext.getPlayer(playerId).getDiscoverZone();
+		var clientActions = new GameActions()
 				.all(
 						actionMap.entrySet()
 								.stream()
@@ -160,14 +160,14 @@ public interface Games extends Verticle {
 										kv.getValue().sort(Comparator.comparingInt(GameAction::getId));
 										return IntStream.range(0, discovers.size())
 												.mapToObj(i -> {
-													GameAction sourceAction = kv.getValue().get(i);
+													var sourceAction = kv.getValue().get(i);
 													return new SpellAction()
 															.sourceId(discovers.get(i).getId())
 															.action(sourceAction.getId())
 															.actionType(ActionType.DISCOVER);
 												});
 									} else if (kv.getValue().get(0).getTargetRequirement() == TargetSelection.NONE) {
-										GameAction ga = kv.getValue().get(0);
+										var ga = kv.getValue().get(0);
 										return Stream.of(new SpellAction()
 												.sourceId(kv.getKey().sourceReference)
 												.action(ga.getId())
@@ -206,11 +206,11 @@ public interface Games extends Verticle {
 	 * @return A client-specific view of the event.
 	 */
 	static com.hiddenswitch.spellsource.client.models.GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
-		com.hiddenswitch.spellsource.client.models.GameEvent clientEvent = new com.hiddenswitch.spellsource.client.models.GameEvent();
+		var clientEvent = new com.hiddenswitch.spellsource.client.models.GameEvent();
 
 		clientEvent.eventType(event.getEventType());
 
-		GameContext workingContext = event.getGameContext().clone();
+		var workingContext = event.getGameContext().clone();
 		var source = event.getSource(workingContext);
 		var target = event.getTarget();
 		var value = event instanceof HasValue ? ((HasValue) event).getValue() : null;
@@ -278,7 +278,7 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games/connections");
+		return SuspendableMap.getOrCreate("Games.connections");
 	}
 
 	/**
@@ -303,7 +303,7 @@ public interface Games extends Verticle {
 		Matchmaking.LOGGER.debug("createMatch: Creating match for request {}", request);
 
 		var eb = Vertx.currentContext().owner().eventBus();
-		Message<JsonObject> response = awaitResult(h -> eb.request("Games/createGameSession", json(request), h));
+		Message<JsonObject> response = awaitResult(h -> eb.request("Games.createGameSession", json(request), h));
 		return new MatchCreateResponse(response.body().mapTo(CreateGameSessionResponse.class));
 	}
 
@@ -342,21 +342,21 @@ public interface Games extends Verticle {
 		// Censor the opponent hand and deck entities
 		// All minions are visible
 		// Heroes and players are visible
-		int localPlayerId = local.getId();
+		var localPlayerId = local.getId();
 
 		List<com.hiddenswitch.spellsource.client.models.Entity> localHand = new ArrayList<>();
-		for (Card card : local.getHand()) {
-			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, localPlayerId);
+		for (var card : local.getHand()) {
+			var entity = getEntity(workingContext, card, localPlayerId);
 			localHand.add(entity);
 		}
 
 		// Add complete information for the local hand
 		entities.addAll(localHand);
 
-		for (EntityZone<Minion> battlefield : Arrays.asList(local.getMinions(), opponent.getMinions())) {
+		for (var battlefield : Arrays.asList(local.getMinions(), opponent.getMinions())) {
 			List<com.hiddenswitch.spellsource.client.models.Entity> minions = new ArrayList<>();
-			for (Minion minion : battlefield) {
-				com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, minion, localPlayerId);
+			for (var minion : battlefield) {
+				var entity = getEntity(workingContext, minion, localPlayerId);
 				minions.add(entity);
 			}
 
@@ -366,8 +366,8 @@ public interface Games extends Verticle {
 
 		List<com.hiddenswitch.spellsource.client.models.Entity> localSecrets = new ArrayList<>();
 		// Add complete information for the local secrets
-		for (Secret secret : local.getSecrets()) {
-			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, secret, localPlayerId);
+		for (var secret : local.getSecrets()) {
+			var entity = getEntity(workingContext, secret, localPlayerId);
 			localSecrets.add(entity);
 		}
 
@@ -375,8 +375,8 @@ public interface Games extends Verticle {
 
 		// Add limited information for opposing secrets
 		List<com.hiddenswitch.spellsource.client.models.Entity> opposingSecrets = new ArrayList<>();
-		for (Secret secret : opponent.getSecrets()) {
-			com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		for (var secret : opponent.getSecrets()) {
+			var entity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(secret.getId())
 					.entityType(SECRET)
 					.owner(secret.getOwner())
@@ -396,8 +396,8 @@ public interface Games extends Verticle {
 
 		List<com.hiddenswitch.spellsource.client.models.Entity> playerEntities = new ArrayList<>();
 		// Create the heroes
-		for (Player player : Arrays.asList(local, opponent)) {
-			com.hiddenswitch.spellsource.client.models.Entity playerEntity = new com.hiddenswitch.spellsource.client.models.Entity()
+		for (var player : Arrays.asList(local, opponent)) {
+			var playerEntity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(player.getId())
 					.name(player.getName())
 					.entityType(PLAYER)
@@ -410,7 +410,7 @@ public interface Games extends Verticle {
 					.gameStarted(player.hasAttribute(Attribute.GAME_STARTED));
 			playerEntities.add(playerEntity);
 			// The heroes may have wound up in the graveyard
-			com.hiddenswitch.spellsource.client.models.Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
+			var heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
 
 			if (heroEntity == null) {
 				continue;
@@ -423,11 +423,11 @@ public interface Games extends Verticle {
 					.lockedMana(player.getLockedMana());
 			playerEntities.add(heroEntity);
 			if (!player.getHeroPowerZone().isEmpty()) {
-				com.hiddenswitch.spellsource.client.models.Entity heroPowerEntity = getEntity(workingContext, player.getHeroPowerZone().get(0), localPlayerId);
+				var heroPowerEntity = getEntity(workingContext, player.getHeroPowerZone().get(0), localPlayerId);
 				playerEntities.add(heroPowerEntity);
 			}
 			if (!player.getWeaponZone().isEmpty()) {
-				com.hiddenswitch.spellsource.client.models.Entity weaponEntity = getEntity(workingContext, player.getWeaponZone().get(0), localPlayerId);
+				var weaponEntity = getEntity(workingContext, player.getWeaponZone().get(0), localPlayerId);
 				playerEntities.add(weaponEntity);
 			}
 		}
@@ -446,11 +446,11 @@ public interface Games extends Verticle {
 				.collect(toList()));
 
 		// Get the heroes that may have wound up in the graveyard
-		List<Entity> graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
+		var graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
 				.filter(e -> e.getEntityType() == HERO)
 				.map(h -> {
-					Entity e = getEntity(workingContext, h, localPlayerId);
-					Player owner = h.getOwner() == local.getId() ? local : opponent;
+					var e = getEntity(workingContext, h, localPlayerId);
+					var owner = h.getOwner() == local.getId() ? local : opponent;
 					e
 							.mana(owner.getMana())
 							.maxMana(owner.getMaxMana())
@@ -545,8 +545,8 @@ public interface Games extends Verticle {
 
 		var owner = workingContext.getPlayer(actor.getOwner());
 
-		Card card = actor.getSourceCard();
-		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		var card = actor.getSourceCard();
+		var entity = new com.hiddenswitch.spellsource.client.models.Entity()
 				.description(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
 				.name(actor.getName())
 				.id(actor.getId())
@@ -572,7 +572,7 @@ public interface Games extends Verticle {
 		entity.baseManaCost(card.getBaseManaCost());
 		entity.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entity.deathrattles(actor.hasAttribute(Attribute.DEATHRATTLES));
-		boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
+		var playable = actor.getOwner() == workingContext.getActivePlayerId()
 				&& actor.getOwner() == localPlayerId
 				&& workingContext.getStatus() == GameStatus.RUNNING
 				&& actor.canAttackThisTurn(workingContext);
@@ -611,7 +611,7 @@ public interface Games extends Verticle {
 		entity.permanent(actor.hasAttribute(Attribute.PERMANENT));
 		entity.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entity.tribe(actor.getRace());
-		List<Trigger> triggers = workingContext.getLogic().getActiveTriggers(actor.getReference());
+		var triggers = workingContext.getLogic().getActiveTriggers(actor.getReference());
 		entity.hostsTrigger(triggers.size() > 0);
 		return entity;
 	}
@@ -629,7 +629,7 @@ public interface Games extends Verticle {
 			return null;
 		}
 
-		com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
+		var entity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
 		if (enchantment instanceof Secret
 				&& localPlayerId != enchantment.getOwner()) {
 			// Censor information about the secret if it does not belong to the player.
@@ -672,20 +672,20 @@ public interface Games extends Verticle {
 			return null;
 		}
 
-		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		var entity = new com.hiddenswitch.spellsource.client.models.Entity()
 				.entityType(CARD)
 				.name(card.getName())
 				.id(card.getId())
 				.cardId(card.getCardId());
-		int owner = card.getOwner();
+		var owner = card.getOwner();
 		Player owningPlayer;
-		String description = card.getDescription();
+		var description = card.getDescription();
 		if (owner != -1) {
 			if (card.getZone() == Zones.HAND
 					|| card.getZone() == Zones.SET_ASIDE_ZONE
 					|| card.getZone() == Zones.HERO_POWER
 					&& owner == localPlayerId) {
-				boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
+				var playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
 				entity.playable(playable);
@@ -719,7 +719,7 @@ public interface Games extends Verticle {
 		entity.collectible(card.isCollectible());
 		entity.discarded(card.hasAttribute(Attribute.DISCARDED));
 		entity.roasted(card.hasAttribute(Attribute.ROASTED));
-		String heroClass = card.getHeroClass();
+		var heroClass = card.getHeroClass();
 
 		// Put the condition met glow on the card
 		if (card.getZone() == Zones.HAND && entity.isPlayable()) {
@@ -733,13 +733,13 @@ public interface Games extends Verticle {
 
 		entity.heroClass(heroClass);
 		entity.cardType(card.getCardType());
-		boolean hostsTrigger = workingContext.getLogic().getActiveTriggers(card.getReference()).size() > 0;
+		var hostsTrigger = workingContext.getLogic().getActiveTriggers(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file -doombubbles
 		switch (card.getCardType()) {
 			case HERO:
 				// Retrieve the weapon attack
-				Card weapon = card.getWeapon();
+				var weapon = card.getWeapon();
 				if (weapon != null) {
 					entity.attack(weapon.getBaseDamage());
 				}
@@ -831,24 +831,24 @@ public interface Games extends Verticle {
 	 * @return
 	 */
 	static Replay replayFromGameContext(GameContext originalCtx) {
-		Replay replay = new Replay();
-		AtomicReference<com.hiddenswitch.spellsource.common.GameState> gameStateOld = new AtomicReference<>();
+		var replay = new Replay();
+		var gameStateOld = new AtomicReference<com.hiddenswitch.spellsource.common.GameState>();
 		Consumer<GameContext> augmentReplayWithCtx = (GameContext ctx) -> {
 			// We record each game state by dumping the {@link GameState} objects from each player's point of
 			// view and any state transitions into the replay.
-			ReplayGameStates gameStates = new ReplayGameStates();
-			GameState gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
+			var gameStates = new ReplayGameStates();
+			var gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
 			// NOTE: It seems difficult to get Swagger codegen to actually respect a default empty array so instead we
 			// set one manually.
 			gameStateFirst.setPowerHistory(new ArrayList<>());
-			GameState gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
+			var gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
 			gameStateSecond.setPowerHistory(new ArrayList<>());
 			gameStates.first(gameStateFirst);
 			gameStates.second(gameStateSecond);
 			replay.addGameStatesItem(gameStates);
 
-			com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
-			ReplayDeltas delta = new ReplayDeltas();
+			var gameStateNew = ctx.getGameState();
+			var delta = new ReplayDeltas();
 			delta.forward(computeChangeSet(gameStateNew));
 			if (gameStateOld.get() != null) {
 				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
@@ -862,7 +862,7 @@ public interface Games extends Verticle {
 
 		try {
 			// Replay the game from a trace while capturing the {@link Replay} object.
-			GameContext replayCtx = originalCtx.getTrace().replayContext(
+			var replayCtx = originalCtx.getTrace().replayContext(
 					false,
 					augmentReplayWithCtx
 			);
@@ -886,11 +886,11 @@ public interface Games extends Verticle {
 	 * @param state
 	 */
 	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId, @NotNull net.demilich.metastone.game.entities.Entity entity, @NotNull Entity state) {
-		int attackBonus = 0;
-		int hpBonus = 0;
-		boolean hasTaunt = false;
+		var attackBonus = 0;
+		var hpBonus = 0;
+		var hasTaunt = false;
 		hasTaunt |= entity.hasAttribute(Attribute.CARD_TAUNT);
-		for (WhereverTheyAreEnchantment e : context.getTriggers()
+		for (var e : context.getTriggers()
 				.stream()
 				.filter(e -> !e.isExpired() && e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
 				.map(WhereverTheyAreEnchantment.class::cast)
@@ -904,11 +904,11 @@ public interface Games extends Verticle {
 			} else {
 				spells = Collections.singletonList(e.getSpell());
 			}
-			for (SpellDesc desc : spells) {
+			for (var desc : spells) {
 				if (BuffSpell.class.isAssignableFrom(desc.getDescClass())) {
 					attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
 					hpBonus += desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
-					int value = desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					var value = desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
 					attackBonus += value;
 					hpBonus += value;
 				}

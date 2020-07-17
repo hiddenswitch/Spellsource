@@ -38,6 +38,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     data: String
     inputsInline: Boolean
     hat: String
+    searchMessage: String
   }
   type Args1 {
     i: Int!
@@ -129,4 +130,54 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       context: {}
     })
   })
+}
+
+exports.createResolvers = ({ createResolvers }) => {
+  const resolvers = {
+    Block: {
+      searchMessage: {
+        resolve(source, args, context, info) {
+          let node = source
+          const getNodeForBlockType = (type) => {
+            return context.nodeModel.getNodeById({
+              id: type
+            })
+          }
+          const getTextForNode = (node) => {
+            let text = ''
+            for (let i = 0; i < node.messages.length; i++) {
+              let message = node.messages[i]
+              if (!!node.args && !!node.args[i] && !!node.args[i].args) {
+                let args = node.args[i].args
+                for (let j = 0; j < args.length; j++) {
+                  let text = getTextForArg(args[j])
+                  message = message.replace('%' + (j + 1).toString(), text)
+                }
+              }
+              text += message + ' '
+            }
+            return text
+          }
+          const getTextForArg = (arg) => {
+            if (!!arg.shadow) {
+              let shadowType = arg.shadow.type
+              let shadowNode = getNodeForBlockType(shadowType)
+              return getTextForNode(shadowNode)
+            }
+            if (!!arg.options) {
+              let text = ''
+              for (let option of arg.options) {
+                text += option[0] + ' '
+              }
+              return text
+            }
+            return ''
+          }
+          return getTextForNode(node).replace(/\s+/g,' ').trim()
+          //removing excess whitespace just in case ^^^
+        }
+      }
+    }
+  }
+  createResolvers(resolvers)
 }

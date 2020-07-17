@@ -1,7 +1,5 @@
 package com.hiddenswitch.spellsource.net.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.core.JsonConfiguration;
@@ -14,7 +12,6 @@ import io.opentracing.log.Fields;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
@@ -23,7 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitEvent;
@@ -39,8 +38,12 @@ public class ConnectionImpl implements Connection {
 	private final List<Handler<Throwable>> exceptionHandlers = new ArrayList<>();
 	private final List<Handler<Void>> drainHandlers = new ArrayList<>();
 	private final List<Handler<Envelope>> handlers = new ArrayList<>();
-	private final List<Handler<Void>> endHandlers = new ArrayList<>();
+	private final List<Handler<Promise<Void>>> closeHandlers = new ArrayList<>();
 	private final String eventBusAddress;
+	private final AtomicBoolean closing = new AtomicBoolean(false);
+	private final List<Handler<AsyncResult<Void>>> awaitClosers = new CopyOnWriteArrayList<>();
+	private MessageConsumer<Envelope> consumer;
+	private CompositeFuture closedFuture;
 
 	public ConnectionImpl(String userId, String eventBusAddress) {
 		this.userId = userId;
@@ -49,10 +52,13 @@ public class ConnectionImpl implements Connection {
 
 	@Override
 	public void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler, SpanContext parentSpan) {
+		if (this.socket != null) {
+			throw new UnsupportedOperationException();
+		}
 		this.socket = socket;
 		String eventBusAddress = getEventBusAddress();
 		EventBus eventBus = Vertx.currentContext().owner().eventBus();
-		MessageConsumer<Envelope> consumer = eventBus.consumer(eventBusAddress);
+		consumer = eventBus.consumer(eventBusAddress);
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("Connection/internal")
 				.asChildOf(parentSpan)
@@ -66,19 +72,6 @@ public class ConnectionImpl implements Connection {
 				msg.fail(-1, written.cause().getMessage());
 			}
 		}));
-
-		MessageConsumer<Buffer> closeConsumer = eventBus.consumer(getEventBusCloserAddress());
-		closeConsumer.handler(msg -> {
-			try {
-				socket.close();
-				span.finish();
-				msg.reply(Buffer.buffer("closed"));
-			} catch (IllegalStateException alreadyClosed) {
-				msg.reply(Buffer.buffer("already closed"));
-			} catch (Throwable any) {
-				msg.fail(-1, "could not close");
-			}
-		});
 
 		// Read handler
 		socket.handler(buf -> {
@@ -107,44 +100,46 @@ public class ConnectionImpl implements Connection {
 			}
 		});
 
-		var endOnce = new AtomicBoolean(false);
-		socket.endHandler(v1 -> {
-			if (endOnce.compareAndSet(false, true)) {
-				try {
-					span.log("ending");
-					for (Handler<Void> handler : endHandlers) {
-						handler.handle(v1);
-					}
-					exceptionHandlers.clear();
-					drainHandlers.clear();
-					handlers.clear();
-					endHandlers.clear();
-					consumer.unregister();
-					closeConsumer.unregister();
-					span.log("ended");
-				} catch (Throwable any) {
-					Tracing.error(any, span, true);
-				} finally {
-					span.finish();
-				}
-			} else {
-				Tracing.error(new RuntimeException("endHandler: Ending the same socket twice, for some mysterious reason"), span, true);
-			}
-			try {
-				Strand.sleep(800L);
-			} catch (SuspendExecution | InterruptedException suspendExecution) {
-				throw new RuntimeException(suspendExecution);
-			}
-		});
+		// Client closed the connection
+		socket.endHandler(v1 -> handleClose(Promise.promise()));
 
 		if (readyHandler != null) {
-			Promise<Void> v1 = Promise.promise();
-			Promise<Void> v2 = Promise.promise();
-			consumer.completionHandler(v1);
-			closeConsumer.completionHandler(v2);
-			CompositeFuture.join(v1.future(), v2.future()).setHandler(v -> {
-				readyHandler.handle(v.succeeded() ? Future.succeededFuture() : Future.failedFuture(v.cause()));
+			consumer.completionHandler(readyHandler);
+		}
+	}
+
+	private void handleClose(Handler<AsyncResult<Void>> completed) {
+		if (closing.compareAndSet(false, true)) {
+			var promises = new ArrayList<Promise<Void>>();
+			for (Handler<Promise<Void>> handler : closeHandlers) {
+				var promise = Promise.<Void>promise();
+				promises.add(promise);
+				handler.handle(promise);
+			}
+			exceptionHandlers.clear();
+			drainHandlers.clear();
+			handlers.clear();
+			closeHandlers.clear();
+			var promise = Promise.<Void>promise();
+			promises.add(promise);
+			consumer.unregister(promise);
+			closedFuture = CompositeFuture.all(promises.stream().map(Promise::future).collect(Collectors.toList()));
+			closedFuture.onComplete(v -> {
+				completed.handle(v.mapEmpty());
+				for (var closer : awaitClosers) {
+					closer.handle(v.mapEmpty());
+				}
 			});
+		} else {
+			if (closedFuture != null) {
+				for (var i = 0; i < closedFuture.size(); i++) {
+					if (!closedFuture.isComplete(i)) {
+						awaitClosers.add(completed);
+						return;
+					}
+				}
+			}
+			completed.handle(Future.succeededFuture());
 		}
 	}
 
@@ -223,8 +218,8 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public Connection endHandler(Handler<Void> endHandler) {
-		endHandlers.add(endHandler);
+	public Connection addCloseHandler(Handler<Promise<Void>> closeHandler) {
+		closeHandlers.add(closeHandler);
 		return this;
 	}
 
@@ -242,14 +237,10 @@ public class ConnectionImpl implements Connection {
 
 	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
-		end(completionHandler);
+		handleClose(v -> end(completionHandler));
 	}
 
 	public String getEventBusAddress() {
 		return eventBusAddress;
-	}
-
-	public String getEventBusCloserAddress() {
-		return eventBusAddress + "/closer";
 	}
 }
