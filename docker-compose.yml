@@ -3,7 +3,7 @@
 version: '3.7'
 services:
   game:
-    image: doctorpangloss/spellsource:latest
+    image: "doctorpangloss/spellsource:latest"
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,8 +16,8 @@ services:
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
-      - REPORTER_GRPC_HOST_PORT=jaeger-collector:14250
-      - REDIS_URL=redis://redis:6379
+      - REPORTER_GRPC_HOST_PORT=tasks.spellsource_jaeger-collector:14250
+      - REDIS_URL=redis://tasks.spellsource_redis:6379
     networks:
       - web
       - backend
@@ -26,7 +26,7 @@ services:
         condition: on-failure
         delay: 30s
         window: 50s
-      replicas: 4
+      replicas: 1
       labels:
         - traefik.http.routers.game-versioned-host.service=game
         - traefik.http.routers.game-versioned-host.rule=Host(`${GAME_VERSIONED_HOST}`)
@@ -75,8 +75,8 @@ services:
         window: 10s
       labels:
         - traefik.enable=false
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 2
     healthcheck:
@@ -107,12 +107,12 @@ services:
         - traefik.http.services.jaeger-collector.loadbalancer.server.port=14268
         - traefik.http.middlewares.api-v3-prefix-strip.stripprefix.prefixes=/api/v3/
         - traefik.enable=true
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 3
   jaeger-schema:
-    image: jaegertracing/jaeger-cassandra-schema:1.17.1
+    image: "jaegertracing/jaeger-cassandra-schema:1.17.1"
     environment:
       - CQLSH_HOST=cassandra
       - MODE=test
@@ -121,14 +121,14 @@ services:
     deploy:
       restart_policy:
         condition: none
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 3
     networks:
       - backend
   jaeger-query:
-    image: jaegertracing/jaeger-query:1.17.1
+    image: "jaegertracing/jaeger-query:1.17.1"
     environment:
       - SPAN_STORAGE_TYPE=cassandra
       - CASSANDRA_SERVERS=cassandra
@@ -152,12 +152,12 @@ services:
         - traefik.http.services.jaeger-query-service.loadbalancer.server.port=16686
         - traefik.http.middlewares.auth-jq.basicauth.users=${TRAEFIK_AUTH_BASIC_HASH}
         - traefik.enable=true
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 3
   cassandra:
-    image: cassandra:3.11
+    image: "cassandra:3.11"
     volumes:
       - cassandradata2:/var/lib/cassandra
     networks:
@@ -166,12 +166,12 @@ services:
       restart_policy:
         condition: on-failure
         window: 15s
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 2
   skyhook:
-    image: doctorpangloss/skyhook:latest
+    image: "doctorpangloss/skyhook:latest"
     build:
       context: skyhook
       dockerfile: Dockerfile
@@ -189,12 +189,12 @@ services:
         - traefik.http.routers.skyhook-router.service=skyhook-router-service
         - traefik.http.services.skyhook-router-service.loadbalancer.server.port=8080
         - traefik.enable=true
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 3
   discordbot:
-    image: doctorpangloss/discordbot:latest
+    image: "doctorpangloss/discordbot:latest"
     build:
       context: .
       dockerfile: discordbot/Dockerfile
@@ -208,8 +208,8 @@ services:
         window: 15s
       labels:
         - traefik.enable=false
+      replicas: 1
       placement:
-        replicas: 1
         constraints:
           - node.labels.level == 3
 volumes:
