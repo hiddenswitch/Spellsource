@@ -5,6 +5,7 @@ import com.hiddenswitch.spellsource.net.*;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.impl.launcher.commands.BareCommand;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
 import org.slf4j.Logger;
@@ -71,6 +72,12 @@ public interface Applications {
 					var promise = Promise.<CompositeFuture>promise();
 					Spellsource.spellsource().deployAll(vertx, promise);
 					return promise.future().map(ignored -> vertx);
+				})
+				.compose(vertx -> {
+					var hook = new Thread(BareCommand.getTerminationRunnable(vertx, io.vertx.core.logging.LoggerFactory.getLogger(Applications.class), null));
+					hook.setName("vertx-shutdown-hook");
+					Runtime.getRuntime().addShutdownHook(hook);
+					return Future.succeededFuture(vertx);
 				})
 				.onComplete(handler);
 	}
