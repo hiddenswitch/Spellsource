@@ -185,6 +185,10 @@ You may have to regenerate reflection config using **sdkman**'s Graal distributa
 
 Make sure to add the sub project directory and any others that need to be visible to doctor to [.dockerignore](.dockerignore) in the form of `!directory/*`.
 
+> `discordbot` Swarm build (`./gradlew distSwarm`) fails with `com.oracle.svm.driver.NativeImage$NativeImageError: Image build request failed with exit status 137`
+
+On **macOS**, allocate more memory to your Docker host.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)

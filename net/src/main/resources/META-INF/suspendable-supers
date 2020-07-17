@@ -1,2 +1,3 @@
 io.vertx.core.Closeable.close(Lio/vertx/core/Handler;)V
+io.vertx.core.Handler.handle(Ljava/lang/Object;)V
 io.vertx.ext.web.handler.AuthHandler.parseCredentials(Lio/vertx/ext/web/RoutingContext;Lio/vertx/core/Handler;)V
