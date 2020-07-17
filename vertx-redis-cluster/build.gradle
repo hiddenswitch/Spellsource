@@ -15,11 +15,11 @@ java {
 }
 
 dependencies {
-    api 'io.vertx:vertx-core:3.+'
+    api 'io.vertx:vertx-core:3.9.1'
     api 'org.redisson:redisson:3.13.+'
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'io.vertx:vertx-docgen:0.9.2'
-    implementation 'io.vertx:vertx-codetrans:3.+'
+    implementation 'io.vertx:vertx-codetrans:3.9.1'
     implementation 'org.apache.commons:commons-lang3:3.+'
     testImplementation 'io.vertx:vertx-core:3.9.1'
     testImplementation project(':testcontainers')

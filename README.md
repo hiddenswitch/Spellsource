@@ -168,6 +168,23 @@ Add the class or the package containing it to end of the list of classes in the 
 
 You may have to regenerate reflection config using **sdkman**'s Graal distributable. Then, `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
 
+> `./gradlew distSwarm` fails with the message of the form:
+
+```shell script
+#13 71.30 FAILURE: Build failed with an exception.
+#13 71.30 
+#13 71.30 * What went wrong:
+#13 71.30 Could not determine the dependencies of task ':net:shadowJar'.
+#13 71.30 > Could not resolve all dependencies for configuration ':net:runtimeClasspath'.
+#13 71.30    > Could not resolve project :vertx-redis-cluster.
+#13 71.30      Required by:
+#13 71.30          project :net
+#13 71.30       > Unable to find a matching configuration of project :subproject:
+#13 71.30           - None of the consumable configurations have attributes.
+```
+
+Make sure to add the sub project directory and any others that need to be visible to doctor to [.dockerignore](.dockerignore) in the form of `!directory/*`.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)

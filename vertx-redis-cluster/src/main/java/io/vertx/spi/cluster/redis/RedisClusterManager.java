@@ -119,7 +119,13 @@ public class RedisClusterManager implements ClusterManager {
 
 	public RedisClusterManager(String singleServerRedisUrl, int minNodes) {
 		Config config = new Config();
-		config.useSingleServer().setAddress(singleServerRedisUrl);
+		config.useSingleServer()
+				.setRetryAttempts(12)
+				.setRetryInterval(2000)
+				.setPingConnectionInterval(2000)
+				.setConnectTimeout(30000)
+				.setKeepAlive(true)
+				.setAddress(singleServerRedisUrl);
 		config.setLockWatchdogTimeout(2000);
 		this.redisson = Redisson.create(config);
 		this.baseId = UUID.fromString(redisson.getId()).getLeastSignificantBits() & ~0xFFFF;
@@ -482,13 +488,13 @@ public class RedisClusterManager implements ClusterManager {
 		isActive.set(false);
 
 		vertx.executeBlocking(outerFut -> {
-			RFuture<Boolean> booleanRFuture;
+			RFuture<Boolean> clenaup;
 			if (isExitGracefully()) {
-				booleanRFuture = thisNodeBucket.deleteAsync();
+				clenaup = thisNodeBucket.deleteAsync();
 			} else {
-				booleanRFuture = RedissonPromise.newSucceededFuture(false);
+				clenaup = RedissonPromise.newSucceededFuture(false);
 			}
-			booleanRFuture
+			clenaup
 					.thenCompose(deleted -> {
 						if (!deleted) {
 							LOGGER.debug("leave: failed to delete {}", thisNodeBucket.getName());

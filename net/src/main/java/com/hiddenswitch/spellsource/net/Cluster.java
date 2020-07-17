@@ -13,6 +13,6 @@ public interface Cluster {
 	Logger LOGGER = LoggerFactory.getLogger(Cluster.class);
 
 	static Future<ClusterManager> create(int clusterPort, String... nodes) {
-		return Future.succeededFuture(new RedisClusterManager(Configuration.getRedisUrl(), nodes.length));
+		return Future.succeededFuture(new RedisClusterManager(Configuration.getRedisUrl(), Math.max(1, nodes.length)));
 	}
 }
