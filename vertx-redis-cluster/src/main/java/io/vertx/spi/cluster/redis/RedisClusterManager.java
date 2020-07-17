@@ -47,6 +47,16 @@ import static java.util.stream.Collectors.toList;
 /**
  * A Redis-backed cluster manager. Uses Redisson for cluster primitives.
  * <p>
+ * Usage:
+ * <pre>
+ * {@code
+ *  RedisClusterManager clusterManager = new RedisClusterManager("redis://redis:6379");
+ *  Vertx.clusteredVertx(new VertxOptions()
+ * 							.setClusterManager(clusterManager), vertx -> { ... });
+ * }
+ * </pre>
+ * You can also put the JAR on the classpath.
+ * <p>
  * Node membership is maintained by heartbeat to Redis, i.e. redis keys are set frequently by this cluster manager, and
  * they are evicted by redis.
  * <p>
@@ -114,14 +124,38 @@ public class RedisClusterManager implements ClusterManager {
 	private boolean exitGracefully = true;
 	private int checksFailedUntilHealthy = 1;
 
+	/**
+	 * Create a cluster manager with carefully-chosen defaults for Kubernetes and Docker Swarm-style deployments.
+	 *
+	 * @param singleServerRedisUrl A Redis instance configured as a standalone server.
+	 */
 	public RedisClusterManager(String singleServerRedisUrl) {
 		this(singleServerRedisUrl, 1);
 	}
 
+	/**
+	 * Create a cluster manager with carefully-chosen defaults for Kubernetes and Docker Swarm-style deployments.
+	 *
+	 * @param singleServerRedisUrl A Redis instance configured as a standalone server.
+	 * @param minNodes             The minimum number of other nodes to "await" to appear until the cluster reports it is
+	 *                             successfully connected. Defaults to {@code 1}. This can be used when you know the
+	 *                             minimum number of replicas / instances of vertx you need until the application is
+	 *                             considered deployed.
+	 */
 	public RedisClusterManager(String singleServerRedisUrl, int minNodes) {
 		this(singleServer(singleServerRedisUrl), minNodes);
 	}
 
+	/**
+	 * Create a cluster manager with carefully-chosen defaults for Kubernetes and Docker Swarm-style deployments.
+	 *
+	 * @param config   A Redisson configuration object. Use {@link #singleServer(String)} to get started with a standalone
+	 *                 setup. It is recommended to enable keep alive and set a long connection timeout. Finally, set the
+	 *                 lock watchdog timeout to something low (like 2000 milliseconds).
+	 * @param minNodes The minimum number of other nodes to "await" to appear until the cluster reports it is successfully
+	 *                 connected. Defaults to {@code 1}. This can be used when you know the minimum number of replicas /
+	 *                 instances of vertx you need until the application is considered deployed.
+	 */
 	public RedisClusterManager(Config config, int minNodes) {
 		this.redisson = Redisson.create(config);
 		this.baseId = UUID.fromString(redisson.getId()).getLeastSignificantBits() & ~0xFFFF;
@@ -129,14 +163,34 @@ public class RedisClusterManager implements ClusterManager {
 		this.minNodes = minNodes;
 	}
 
+	/**
+	 * Create a cluster manager with carefully-chosen defaults for Kubernetes and Docker Swarm-style deployments.
+	 *
+	 * @param config A Redisson configuration object. Use {@link #singleServer(String)} to get started with a standalone
+	 *               setup. It is recommended to enable keep alive and set a long connection timeout. Finally, set the
+	 *               lock watchdog timeout to something low (like 2000 milliseconds).
+	 */
 	public RedisClusterManager(Config config) {
 		this(config, 1);
 	}
 
+	/**
+	 * Retrieves a Redisson configuration for a single standalone server you can customize.
+	 *
+	 * @param address The address of the server
+	 * @return a config
+	 */
 	public static Config singleServer(String address) {
 		return singleServer(address, 12);
 	}
 
+	/**
+	 * Retrieves a Redisson configuration for a single standalone server you can customize.
+	 *
+	 * @param address       The address of the server
+	 * @param retryAttempts The number of times to retry a failed Redis command (defaults to {@code 12}).
+	 * @return a config
+	 */
 	public static Config singleServer(String address, int retryAttempts) {
 		Config config = new Config();
 		config.useSingleServer()
@@ -153,23 +207,17 @@ public class RedisClusterManager implements ClusterManager {
 	/**
 	 * The amount of time a node will not be heard from in order to be considered dead.
 	 *
-	 * @return
+	 * @return A small value, usually less than 8s.
 	 */
 	public long getNodeTimeout() {
 		return timeToLiveMillis * coefficientOfTimeout;
 	}
 
-	/**
-	 *
-	 */
 	@Override
 	public void setVertx(Vertx vertx) {
 		this.vertx = vertx;
 	}
 
-	/**
-	 * EventBus been created !
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public <K, V> void getAsyncMultiMap(String name, Handler<AsyncResult<AsyncMultiMap<K, V>>> resultHandler) {

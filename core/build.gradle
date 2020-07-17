@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 group 'com.hiddenswitch'
 
 dependencies {
-    implementation 'io.vertx:vertx-core:3.9.1'
+    implementation 'io.vertx:vertx-core:3.9.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation 'org.slf4j:slf4j-api:1.7.20'
