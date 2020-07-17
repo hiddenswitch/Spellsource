@@ -83,11 +83,6 @@ function Search (props) {
                      }}/>
       </Form>
       <ListGroup variant="flush" style={{ left: searchListLeft }} className={styles.searchResults}>
-        {results.map(page => (
-          <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-            <Link to={page.path}>{page.title}</Link>
-          </ListGroup.Item>
-        ))}
         {dropDownMenu()}
       </ListGroup>
     </div>
