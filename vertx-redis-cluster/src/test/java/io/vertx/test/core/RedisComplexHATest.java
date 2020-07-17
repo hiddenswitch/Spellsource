@@ -26,7 +26,8 @@ public class RedisComplexHATest extends ComplexHATest {
 
 	@Override
 	protected ClusterManager getClusterManager() {
-		return new RedisClusterManager(redisContainer.getRedisUrl(), 1).setExitGracefully(false);
+		return new RedisClusterManager(redisContainer.getRedisUrl(), 1)
+				.setExitGracefully(false);
 	}
 
 	@Override

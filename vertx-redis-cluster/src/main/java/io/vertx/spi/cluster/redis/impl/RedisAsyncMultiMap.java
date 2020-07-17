@@ -43,7 +43,6 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 	private final RedisClusterManager clusterManager;
 	private final RedissonClient redisson;
 	private final Map<K, Deque<HandlerTuple<V>>> handlers = new ConcurrentHashMap<>();
-	private final ConcurrentMap<K, Timestamped<V>> latest = new ConcurrentHashMap<>();
 
 	// Helps maintain iterator state
 	private final LoadingCache<K, AtomicInteger> iterators = CacheBuilder.newBuilder()
@@ -87,14 +86,6 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 		enqueue(context, asyncResultHandler, k);
 		// Always retrieve the freshest subs list
 		map.getAllAsync(k).onComplete((res, t) -> {
-			Collection<V> values = latest.compute(k, (k1, collectionTimestamped) -> {
-				if (collectionTimestamped == null || System.nanoTime() > collectionTimestamped.time) {
-					return new Timestamped<>(res);
-				} else {
-					return collectionTimestamped;
-				}
-			}).collection;
-
 			context.runOnContext(i -> {
 				HandlerTuple<V> dequeue = dequeue(k);
 				Handler<AsyncResult<ChoosableIterable<V>>> handler = dequeue.handler;
@@ -110,7 +101,7 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 					// Changes to the subs list that occur while this is iterating will naturally not propagate to the
 					// ChooseableIterable but that is not part of the API anyhow. Additionally this approach does not trick the
 					// event bus into doing an ordered send.
-					List<V> valueList = values.stream()
+					List<V> roundRobinned = res.stream()
 							.sorted(Comparator.comparing(v -> {
 								if (v instanceof ClusterNodeInfo) {
 									return ((ClusterNodeInfo) v).nodeId;
@@ -122,19 +113,19 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 								if (v instanceof ClusterNodeInfo) {
 									// We will make a gentle affordance to check if the cluster node is flakey
 									String nodeId = ((ClusterNodeInfo) v).nodeId;
-									return !clusterManager.isFailing(nodeId);
+									return clusterManager.isHealthy(nodeId);
 								} else {
 									return true;
 								}
 							}).collect(Collectors.toList());
-					if (!valueList.isEmpty()) {
+					if (!roundRobinned.isEmpty()) {
 						try {
-							Collections.rotate(valueList, iterators.get(k).getAndIncrement() % valueList.size());
+							Collections.rotate(roundRobinned, iterators.get(k).getAndIncrement() % roundRobinned.size());
 						} catch (ExecutionException e) {
-							throw new RuntimeException(e);
+							handler.handle(Future.failedFuture(e));
 						}
 					}
-					handler.handle(Future.succeededFuture(new ChoosableList(valueList)));
+					handler.handle(Future.succeededFuture(new ChoosableList<>(roundRobinned)));
 				}
 			});
 		});
@@ -205,9 +196,11 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 								.thenCompose(v3 -> {
 									return */map.getAllAsync(key) /*;
 								})*/.thenCompose(values -> {
-							return RedissonPromise.allOf(values.stream().filter(p)
-									.map(value -> map.removeAsync(key, value).toCompletableFuture())
-									.toArray(CompletableFuture[]::new));
+							return RedissonPromise.allOf(
+									values.stream()
+											.filter(p)
+											.map(value -> map.removeAsync(key, value).toCompletableFuture())
+											.toArray(CompletableFuture[]::new));
 						})/*.thenCompose(ignored -> {
 									return lock.unlockAsync(id);
 								})*/
@@ -249,16 +242,6 @@ class RedisAsyncMultiMap<K, V> implements AsyncMultiMap<K, V> {
 		@Override
 		public Iterator<V> iterator() {
 			return items.iterator();
-		}
-	}
-
-	private static class Timestamped<T> {
-		private final Collection<T> collection;
-		private final long time;
-
-		public Timestamped(Collection<T> collection) {
-			this.time = System.nanoTime();
-			this.collection = collection;
 		}
 	}
 

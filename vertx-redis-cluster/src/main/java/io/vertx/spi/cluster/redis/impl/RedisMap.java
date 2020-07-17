@@ -21,10 +21,7 @@ import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 class RedisMap<K, V> implements Map<K, V> {
 
@@ -57,11 +54,17 @@ class RedisMap<K, V> implements Map<K, V> {
 
 	@Override
 	public int size() {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return 0;
+		}
 		return map.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return true;
+		}
 		return map.isEmpty();
 	}
 
@@ -77,12 +80,18 @@ class RedisMap<K, V> implements Map<K, V> {
 
 	@Override
 	public boolean containsValue(Object value) {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return false;
+		}
 		return map.containsValue(value);
 	}
 
 	@Override
 	public V get(Object key) {
 		Objects.requireNonNull(key);
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return null;
+		}
 		return map.get(key);
 	}
 
@@ -98,33 +107,51 @@ class RedisMap<K, V> implements Map<K, V> {
 
 	@Override
 	public V remove(Object key) {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return null;
+		}
 		return map.remove(key);
 	}
 
 	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return;
+		}
 		map.putAll(m);
 	}
 
 	@Override
 	public void clear() {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return;
+		}
 		map.clear();
 	}
 
 	@Override
 	public Set<K> keySet() {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return Collections.emptySet();
+		}
 		// "map.keySet()" <b>DOESN'T</b> fetch all of them as {@link #readAllKeySet()} does.
 		return map.readAllKeySet();
 	}
 
 	@Override
 	public Collection<V> values() {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return Collections.emptyList();
+		}
 		// "map.values()" <b>DOESN'T</b> fetch all of them as {@link #readAllValues()} does.
 		return map.readAllValues();
 	}
 
 	@Override
 	public Set<Entry<K, V>> entrySet() {
+		if (redisson.isShutdown() || redisson.isShuttingDown()) {
+			return Collections.emptySet();
+		}
 		// "map.entrySet()" <b>DOESN'T</b> fetch all of them as {@link #readAllEntrySet()} does.
 		return map.readAllEntrySet();
 	}

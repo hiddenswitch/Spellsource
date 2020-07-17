@@ -5,7 +5,6 @@ import io.vertx.core.eventbus.ClusteredEventBusTest;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.redis.RedisClusterManager;
 import org.junit.ClassRule;
-import org.junit.Rule;
 
 public class RedisClusteredEventBusTest extends ClusteredEventBusTest {
 
@@ -14,13 +13,12 @@ public class RedisClusteredEventBusTest extends ClusteredEventBusTest {
 
 	@Override
 	public void before() throws Exception {
-		redisContainer.clear();
 		super.before();
 	}
 
 	@Override
 	protected ClusterManager getClusterManager() {
 		return new RedisClusterManager(redisContainer.getRedisUrl(), 1)
-				.setExitGracefully(true);
+				.setExitGracefully(false);
 	}
 }

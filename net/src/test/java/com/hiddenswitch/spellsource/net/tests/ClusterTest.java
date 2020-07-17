@@ -71,13 +71,13 @@ public class ClusterTest extends SpellsourceTestBase {
 	 */
 	@Suspendable
 	private void vertx(int gatewayPort, VertxTestContext testContext, Handler<Vertx> handler, String... bootstrapNodes) {
-		vertx(gatewayPort, testContext, (vertx, res) -> Spellsource.spellsource(gatewayPort).deployAll(vertx, getConcurrency(), h -> res.handle(h.mapEmpty())), handler, bootstrapNodes);
+		vertx(testContext, (vertx, res) -> Spellsource.spellsource(gatewayPort).deployAll(vertx, getConcurrency(), h -> res.handle(h.mapEmpty())), handler, bootstrapNodes);
 	}
 
 	@Suspendable
-	private void vertx(int gatewayPort, VertxTestContext testContext, BiConsumer<Vertx, Handler<AsyncResult<Void>>> deploy, Handler<Vertx> handler, String... bootstrapNodes) {
+	private void vertx(VertxTestContext testContext, BiConsumer<Vertx, Handler<AsyncResult<Void>>> deploy, Handler<Vertx> handler, String... bootstrapNodes) {
 		staticSetUp();
-		Cluster.create(gatewayPort + 1, bootstrapNodes)
+		Cluster.create(bootstrapNodes)
 				.onComplete(testContext.succeeding(instance -> Vertx.clusteredVertx(new VertxOptions()
 								.setPreferNativeTransport(true)
 								.setClusterManager(instance),
@@ -243,7 +243,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		var instanceWithoutGame = new CompletableFuture<Vertx>();
 		var instanceWithGameFuture = new CompletableFuture<Vertx>();
 
-		vertx(8083, context, (vertx, handler) -> {
+		vertx(context, (vertx, handler) -> {
 			var p1 = Promise.<String>promise();
 			var p2 = Promise.<String>promise();
 			vertx.deployVerticle(new ClusteredGames(), p1);
@@ -251,7 +251,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			CompositeFuture.join(p1.future(), p2.future()).onComplete(h -> handler.handle(Future.succeededFuture()));
 		}, instanceWithGameFuture::complete, "a", "b");
 
-		vertx(9094, context, (vertx, handler) -> {
+		vertx(context, (vertx, handler) -> {
 			var p1 = Promise.<String>promise();
 			vertx.deployVerticle(Gateway.create(9094), p1);
 			p1.future().onComplete(h -> handler.handle(Future.succeededFuture()));
