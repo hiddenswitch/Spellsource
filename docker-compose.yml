@@ -26,7 +26,7 @@ services:
         condition: on-failure
         delay: 30s
         window: 50s
-      replicas: 1
+      replicas: 4
       labels:
         - traefik.http.routers.game-versioned-host.service=game
         - traefik.http.routers.game-versioned-host.rule=Host(`${GAME_VERSIONED_HOST}`)

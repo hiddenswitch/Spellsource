@@ -22,7 +22,7 @@ public class RedisHATest extends HATest {
 
 	@Override
 	protected ClusterManager getClusterManager() {
-		return new RedisClusterManager(redisContainer.getRedisUrl(), 1)
+		return new RedisClusterManager(RedisClusterManager.singleServer(redisContainer.getRedisUrl(), 1), 1)
 				.setExitGracefully(false);
 	}
 }

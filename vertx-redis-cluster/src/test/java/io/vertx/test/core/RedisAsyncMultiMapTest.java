@@ -16,7 +16,6 @@ public class RedisAsyncMultiMapTest extends AsyncMultiMapTest {
 	@Override
 	@Before
 	public void before() throws Exception {
-		redisContainer.clear();
 		super.before();
 	}
 

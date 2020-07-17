@@ -12,7 +12,10 @@ import org.slf4j.LoggerFactory;
 public interface Cluster {
 	Logger LOGGER = LoggerFactory.getLogger(Cluster.class);
 
-	static Future<ClusterManager> create(int clusterPort, String... nodes) {
-		return Future.succeededFuture(new RedisClusterManager(Configuration.getRedisUrl(), Math.max(1, nodes.length)));
+	static Future<ClusterManager> create(String... nodes) {
+		var result = new RedisClusterManager(Configuration.getRedisUrl(), Math.max(1, nodes.length));
+		result.setExitGracefully(true)
+				.setChecksFailedUntilHealthy(result.getCreditsPerAppearance());
+		return Future.succeededFuture(result);
 	}
 }

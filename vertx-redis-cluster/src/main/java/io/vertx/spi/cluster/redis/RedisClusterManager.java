@@ -82,8 +82,8 @@ public class RedisClusterManager implements ClusterManager {
 
 	private final Factory factory;
 	private final int minNodes;
-	private final int timeToLiveMillis = 1000;
-	private final int refreshRateMillis = 200;
+	private final int timeToLiveMillis = 2000;
+	private final int refreshRateMillis = 400;
 	private final long shutdownQuietPeriod = DEFAULT_SHUTDOWN_QUIET_PERIOD;
 	private final long shutdownTimeout = DEFAULT_SHUTDOWN_TIMEOUT;
 	private final int coefficientOfTimeout = 2;
@@ -112,21 +112,17 @@ public class RedisClusterManager implements ClusterManager {
 	// redeployed elsewhere due to transient networking issues.
 	private volatile boolean checkingSelfFailover;
 	private boolean exitGracefully = true;
+	private int checksFailedUntilHealthy = 1;
 
 	public RedisClusterManager(String singleServerRedisUrl) {
 		this(singleServerRedisUrl, 1);
 	}
 
 	public RedisClusterManager(String singleServerRedisUrl, int minNodes) {
-		Config config = new Config();
-		config.useSingleServer()
-				.setRetryAttempts(12)
-				.setRetryInterval(2000)
-				.setPingConnectionInterval(2000)
-				.setConnectTimeout(30000)
-				.setKeepAlive(true)
-				.setAddress(singleServerRedisUrl);
-		config.setLockWatchdogTimeout(2000);
+		this(singleServer(singleServerRedisUrl), minNodes);
+	}
+
+	public RedisClusterManager(Config config, int minNodes) {
 		this.redisson = Redisson.create(config);
 		this.baseId = UUID.fromString(redisson.getId()).getLeastSignificantBits() & ~0xFFFF;
 		this.factory = Factory.createDefaultFactory();
@@ -134,10 +130,24 @@ public class RedisClusterManager implements ClusterManager {
 	}
 
 	public RedisClusterManager(Config config) {
-		this.redisson = Redisson.create(config);
-		this.baseId = UUID.fromString(redisson.getId()).getLeastSignificantBits() & ~0xFFFF;
-		this.factory = Factory.createDefaultFactory();
-		this.minNodes = 1;
+		this(config, 1);
+	}
+
+	public static Config singleServer(String address) {
+		return singleServer(address, 12);
+	}
+
+	public static Config singleServer(String address, int retryAttempts) {
+		Config config = new Config();
+		config.useSingleServer()
+				.setAddress(address)
+				.setRetryAttempts(retryAttempts)
+				.setRetryInterval(2000)
+				.setPingConnectionInterval(2000)
+				.setConnectTimeout(30000)
+				.setKeepAlive(true);
+		config.setLockWatchdogTimeout(2000);
+		return config;
 	}
 
 	/**
@@ -496,7 +506,7 @@ public class RedisClusterManager implements ClusterManager {
 			}
 			clenaup
 					.thenCompose(deleted -> {
-						if (!deleted) {
+						if (!deleted && isExitGracefully()) {
 							LOGGER.debug("leave: failed to delete {}", thisNodeBucket.getName());
 						}
 
@@ -682,12 +692,34 @@ public class RedisClusterManager implements ClusterManager {
 	}
 
 	/**
-	 * Based on the heartbeat of the specified node ID, is it failing?
+	 * Based on the heartbeat of the specified node ID, is it healthy?
 	 *
 	 * @param nodeId
 	 * @return
 	 */
-	public boolean isFailing(String nodeId) {
-		return nodeCredits.count(nodeId) <= creditsPerAppearance / 2;
+	public boolean isHealthy(String nodeId) {
+		return nodeCredits.count(nodeId) >= Math.max(creditsPerAppearance - checksFailedUntilHealthy, 0);
+	}
+
+	public int getCreditsPerAppearance() {
+		return creditsPerAppearance;
+	}
+
+	/**
+	 * For every {@link #refreshRateMillis} refresh, how many times should a node be missing until it is considered
+	 * unhealthy and therefore we should not attempt to send it event bus messages?
+	 * <p>
+	 * The default and minimum is {@code 1}, i.e., the node must pass <b>every</b> check with full credits (because
+	 * credits are reduced by one every check).
+	 *
+	 * @return
+	 */
+	public int getChecksFailedUntilHealthy() {
+		return checksFailedUntilHealthy;
+	}
+
+	public RedisClusterManager setChecksFailedUntilHealthy(int checksFailedUntilHealthy) {
+		this.checksFailedUntilHealthy = Math.min(getCreditsPerAppearance(), Math.max(1, checksFailedUntilHealthy));
+		return this;
 	}
 }

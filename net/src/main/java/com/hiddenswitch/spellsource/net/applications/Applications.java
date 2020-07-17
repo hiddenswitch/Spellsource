@@ -36,14 +36,18 @@ public interface Applications {
 		io.vertx.core.logging.LoggerFactory.initialise();
 		var nanos = Duration.of(8000, ChronoUnit.MILLIS).toNanos();
 		var nodes = System.getenv().getOrDefault("BOOTSTRAP_ADDRESS", "localhost:" + clusterManagerPort);
-		var clusterManagerFut = Cluster.create(clusterManagerPort, nodes);
+		var clusterManagerFut = Cluster.create(nodes);
+		var hostIpAddress = Gateway.getHostIpAddress();
 
 		clusterManagerFut
 				.compose(clusterManager -> {
 					var promise = Promise.<Vertx>promise();
 					Vertx.clusteredVertx(new VertxOptions()
 							.setClusterManager(clusterManager)
-							.setEventBusOptions(new EventBusOptions().setPort(vertxClusterPort))
+							.setEventBusOptions(new EventBusOptions()
+									.setPort(vertxClusterPort)
+									.setHost(hostIpAddress)
+									.setClusterPublicHost(hostIpAddress))
 							.setPreferNativeTransport(true)
 							.setBlockedThreadCheckInterval(8000L)
 							.setWarningExceptionTime(nanos)
