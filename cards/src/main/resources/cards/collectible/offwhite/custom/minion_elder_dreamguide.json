@@ -11,7 +11,7 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "target": "FRIENDLY_HAND",
-    "value": -2,
+    "value": 2,
 	"race": "SPIRIT",
 	"cardType": "MINION",
     "condition": {
@@ -19,7 +19,7 @@
 	  "race": "BEAST",
 	  "target": "FRIENDLY_LAST_MINION_PLAYED"
     },
-    "operation": "SET",
+    "operation": "SUBTRACT",
     "targetPlayer": "SELF"
   },
   "collectible": true,
