@@ -19,6 +19,14 @@ public class Application {
 }
 ```
 
+Redis should be configured to enable keyspace events. In the CLI, use:
+
+```shell script
+redis-cli CONFIG SET notify-keyspace-events Exg
+```
+
+This is optional.
+
 Please fork if you need to downgrade your Vertx version. Note earlier versions of Vertx did not have as complete a cluster management test suite as the current Vertx.
 
 ### Testing
@@ -38,6 +46,19 @@ public class RedisContainer extends GenericContainer<RedisContainer> {
 
 	public void clear() throws IOException, InterruptedException {
 		execInContainer("redis-cli", "FLUSHALL");
+	}
+
+	@Override
+	protected void containerIsStarted(InspectContainerResponse containerInfo) {
+		super.containerIsStarted(containerInfo);
+		try {
+			ExecResult res = execInContainer("redis-cli", "CONFIG", "SET", "notify-keyspace-events", "Exg");
+			if (!res.getStdout().contains("OK")) {
+				throw new AssertionError(res.getStdout());
+			}
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public String getRedisUrl() {

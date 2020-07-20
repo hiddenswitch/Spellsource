@@ -118,11 +118,8 @@ public class RedisClusterManager implements ClusterManager {
 	private Handler<AsyncResult<Void>> joinHandler;
 	private Object nodeListenerLock = new Object();
 	private String nodeId;
-	// Keeps track if this cluster manager is right now asking the HA manager to verify its verticles have not been
-	// redeployed elsewhere due to transient networking issues.
-	private volatile boolean checkingSelfFailover;
 	private boolean exitGracefully = true;
-	private int checksFailedUntilHealthy = 1;
+	private int checksFailedUntilHealthy = 2;
 
 	/**
 	 * Create a cluster manager with carefully-chosen defaults for Kubernetes and Docker Swarm-style deployments.
@@ -413,13 +410,7 @@ public class RedisClusterManager implements ClusterManager {
 											LOGGER.warn("{} join refresh timed out previously due to expiration. This indicates that there " +
 													"a transient networking issue between this cluster manager and Redis that lasted longer than " +
 													"{} milliseconds. Other nodes will assume this node died if the amount of time it appeared " +
-													"exceeds {} milliseconds, and a failover may have occurred. Because of this, the cluster " +
-													"manager will now check for failover.", nodeId, timeToLiveMillis, getNodeTimeout());
-											if (!checkingSelfFailover) {
-												checkingSelfFailover = true;
-												nodeListener.nodeAdded(getNodeID());
-												checkingSelfFailover = false;
-											}
+													"exceeds {} milliseconds, and a failover may have occurred.", nodeId, timeToLiveMillis, getNodeTimeout());
 										}
 									});
 
@@ -746,7 +737,7 @@ public class RedisClusterManager implements ClusterManager {
 	 * @return
 	 */
 	public boolean isHealthy(String nodeId) {
-		return nodeCredits.count(nodeId) >= Math.max(creditsPerAppearance - checksFailedUntilHealthy, 0);
+		return nodeCredits.count(nodeId) > Math.max(creditsPerAppearance - checksFailedUntilHealthy, 0);
 	}
 
 	public int getCreditsPerAppearance() {
