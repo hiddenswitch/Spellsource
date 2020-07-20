@@ -106,8 +106,13 @@ export default class WorkspaceUtils {
             const value = values[i]
             switch (value) {
               case WorkspaceUtils.BLOCKLY_EXTEND_PREVIOUS:
+                if (!!obj.customArg && !!obj.customValue) {
+                  obj[obj.customArg] = obj.customValue
+                  delete obj.customArg
+                  delete obj.customValue
+                }
                 if (!!prev) {
-                  extend(prev, obj)
+                  merge(prev, obj)
                 }
                 retValue = obj
                 break
@@ -145,6 +150,7 @@ export default class WorkspaceUtils {
                   }
                 }
                 break
+              /*
               case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN:
                 if (!!obj['spell.spell'] && !obj['spell.target'] && obj['spell.spell'].target === 'SPELL_TARGET') {
                   obj['spell.spell'].target = 'OUTPUT'
@@ -162,6 +168,7 @@ export default class WorkspaceUtils {
                   delete obj.spell.target
                 }
                 break
+               */
               default:
                 const allValues = filter(childNodes, cn =>
                   cn.nodeName === 'field')
@@ -211,6 +218,9 @@ export default class WorkspaceUtils {
     }
     if (cardScript.target === 'IT') {
       delete cardScript.target
+    }
+    if (cardScript.cardType === 'ANY') {
+      delete cardScript.cardType
     }
 
     if (!!cardScript.battlecry) {
@@ -305,6 +315,7 @@ export default class WorkspaceUtils {
       return
     }
 
+
     //first, split up any args with ','
     for (const cardScriptKey in cardScript) {
       if (cardScriptKey.includes(",")) {
@@ -324,7 +335,12 @@ export default class WorkspaceUtils {
         for (const cardScriptElementKey in cardScript[cardScriptKey]) {
           if (cardScriptElementKey.startsWith('super.')) {
             let newKey = cardScriptElementKey.substring(cardScriptElementKey.indexOf('.') + 1)
-            cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            if (cardScriptKey.includes('.')) {
+              let correctPrefix = cardScriptKey.split('.').slice(0, -1).join('.')
+              cardScript[correctPrefix + '.' + newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            } else {
+              cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            }
             delete cardScript[cardScriptKey][cardScriptElementKey]
           }
         }
@@ -356,7 +372,7 @@ export default class WorkspaceUtils {
         if (cardScript.propertyIsEnumerable(newKey)) {
           cardScript[newKey][newKey2] = cardScript[cardScriptKey]
           delete cardScript[cardScriptKey]
-          this.rearrangeInputValues(cardScript[newKey])
+          this.postProcessCardScript(cardScript[newKey])
         }
       }
 

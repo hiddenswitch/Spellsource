@@ -37,6 +37,10 @@ class FieldLabelSerializableHidden extends FieldLabelSerializable {
   }
 }
 
+Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
+Blockly.HSV_SATURATION = .65
+Blockly.Blocks = {} //we don't use any of the default Blockly blocks
+
 
 const CardEditorView = () => {
   const data = useStaticQuery(graphql`
@@ -126,9 +130,6 @@ const CardEditorView = () => {
   const index = useIndex()
 
   if (!inited) {
-    Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
-    Blockly.HSV_SATURATION = .65
-    Blockly.Blocks = {} //we don't use any of the default Blockly blocks
 
     //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
     Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function () {
@@ -375,7 +376,7 @@ const CardEditorView = () => {
               let fields = {}
               if (!!arg.shadow.fields) {
                 for (let field of arg.shadow.fields) {
-                  fields[field.name] = field.valueI
+                  fields[field.name] = field.valueI || field.valueS || field.valueB
                 }
               }
               values[arg.name] = {
@@ -464,7 +465,7 @@ const CardEditorView = () => {
     } else {
       ret += BlocklyMiscUtils.toHappyFormatting(card.type)
     }
-    ret += ' ' + card.name;
+    ret += ' "' + card.name + '"';
     return ret
   }
 
@@ -497,7 +498,7 @@ const CardEditorView = () => {
 
 
       if (!!card) {
-        console.log(card)
+        //console.log(card)
       }
 
       JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
@@ -568,14 +569,14 @@ const CardEditorView = () => {
             handleSearchResults({target: {value: query}})
           }
         }}
-                          value={checked}
-                          style={
-                            {
-                              height: "15px",
-                              width: "15px",
-                              webkitAppearance: "checkbox"
-                            }
-                          }
+          value={checked}
+          style={
+            {
+              height: "15px",
+              width: "15px",
+              webkitAppearance: "checkbox"
+            }
+          }
         />
         <Form.Check.Label> Show Card Catalogue Blocks</Form.Check.Label>
       </Form.Check>

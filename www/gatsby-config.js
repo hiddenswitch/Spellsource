@@ -91,7 +91,19 @@ module.exports = {
             const newMessages = []
             for (let i = 0; i <= 9; i++) {
               if (!!object['message' + i.toString()]) {
-                newMessages.push(object['message' + i.toString()])
+                let newMessage = object['message' + i.toString()]
+                if (!!newArgs[i] && !!newArgs[i].args) {
+                  for (let j = 0; j < newArgs[i].args.length; j++) {
+                    let arg = newArgs[i].args[j]
+                    let token = '%' + (j+1).toString()
+                    if (arg.type === 'field_label_serializable_hidden'
+                      && !newMessage.includes(token)) {
+                      newMessage = token + newMessage
+                      console.warn('Block ' + object.type + ' forgot arg ' + token + ' in message' + i.toString())
+                    }
+                  }
+                }
+                newMessages.push(newMessage)
               } else {
                 break
               }
