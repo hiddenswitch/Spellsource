@@ -1,5 +1,6 @@
 package com.hiddenswitch.containers;
 
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -17,6 +18,19 @@ public class RedisContainer extends GenericContainer<RedisContainer> {
 
 	public void clear() throws IOException, InterruptedException {
 		execInContainer("redis-cli", "FLUSHALL");
+	}
+
+	@Override
+	protected void containerIsStarted(InspectContainerResponse containerInfo) {
+		super.containerIsStarted(containerInfo);
+		try {
+			ExecResult res = execInContainer("redis-cli", "CONFIG", "SET", "notify-keyspace-events", "Exg");
+			if (!res.getStdout().contains("OK")) {
+				throw new AssertionError(res.getStdout());
+			}
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public String getRedisUrl() {
