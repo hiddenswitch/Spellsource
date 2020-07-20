@@ -106,6 +106,8 @@ export default class BlocklyMiscUtils {
         return 'TargetPlayer'
       case 'heroClass':
         return 'HeroClass'
+      case 'rarity':
+        return 'Rarity'
       case 'attribute':
         return 'Attribute'
       case 'targetSelection':
@@ -123,8 +125,7 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  static inputNameToBlockOutput(inputName) {
-    let type = this.inputNameToBlockType(inputName)
+  static blockTypeToOuput(type) {
     switch (type) {
       case 'Spell':
       case 'ValueProvider':
