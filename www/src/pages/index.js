@@ -13,10 +13,19 @@ const url = (name, wrap = false) => `${wrap ? 'url(' : ''}https://awv3node-homep
 
 const Index = () => {
   let parallax
+
+  const parallaxPages = () => {
+    if (window.matchMedia("(max-width: 500px)").matches) {
+      return(2.15)
+    } else {
+      return(1.99)
+    }
+  }
+
   return (
     <Layout>
       <section className={styles.fullscreenDiv}>
-        <Parallax pages={1.99} scrolling={true} vertical ref={ref => (parallax = ref)}>
+        <Parallax pages={parallaxPages()} scrolling={true} vertical ref={ref => (parallax = ref)}>
           <ParallaxLayer offset={0} speed={1}
                          style={{ backgroundImage: 'linear-gradient(#21215c, #533B63, #341F42)' }}/>
 
