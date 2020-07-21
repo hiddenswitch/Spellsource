@@ -51,7 +51,7 @@ import static io.vertx.core.Vertx.currentContext;
 public abstract class SpellsourceTestBase {
 
 	@Container
-	public MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:3.6");
+	public MongoDBContainer mongoDBContainer = new MongoDBContainer();
 
 	@Container
 	public RedisContainer redisContainer = new RedisContainer().withReuse(false);
