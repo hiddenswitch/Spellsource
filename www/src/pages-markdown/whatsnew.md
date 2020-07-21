@@ -10,7 +10,20 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
-### Current Build 0.8.78-3.2.1 (June 19, 2020)
+### Current Build 0.8.79-3.2.1 (July 20, 2020)
+<details>
+<summary>Say hello to the Dreamer class! And other bug fixes...</summary>
+
+ - The Spellsource server is now more reliable than ever.
+ - The [website](https://www.playspellsource.com) has gotten a brand-new appearance.
+ - Mulligans behave better when playing against human opponents.
+ - The board is updated faster when playing against a human opponent.
+ - A few cards had their descriptions tweaked.
+ - Buttons in the client have improved.
+
+</details>
+
+### 0.8.78-3.2.1 (June 19, 2020)
 <details>
 <summary>Bug fixes...</summary>
 
