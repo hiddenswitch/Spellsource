@@ -31,7 +31,7 @@ public class LocalClustered {
 
 		var dbPath = Path.of(rootProjectDir, ".mongo").toAbsolutePath();
 		Files.createDirectories(dbPath);
-		var database = new MongoDBContainer("mongo:3.6")
+		var database = new MongoDBContainer()
 				.withStartupTimeout(Duration.of(20, ChronoUnit.SECONDS));
 		database.addFileSystemBind(dbPath.toString(), "/data/db", BindMode.READ_WRITE);
 

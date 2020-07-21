@@ -168,7 +168,8 @@ fi
 if [[ "$deploy_stack" == true ]]; then
   # Only used in this script
   source "secrets/common-deployment.env"
-  # Send secrets to the manager via an ssh pipe
+  docker context import hiddenswitch secrets/hiddenswitch.dockercontext >/dev/null || true
+  docker context use hiddenswitch >/dev/null
   # shellcheck disable=SC2046
   env $(cat "secrets/spellsource/stack-application-production.env") docker-compose config |
     ssh -i "secrets/deployment.rsa" doctorpangloss@"${SSH_HOST}" docker stack deploy --prune --resolve-image always --compose-file - spellsource
