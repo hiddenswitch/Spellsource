@@ -1,3 +1,6 @@
+@charset "utf-8";
+@import "../styles/font.scss";
+
 .card-display-template {
     position: relative;
     image-rendering: pixelated;
@@ -94,36 +97,86 @@
     z-index: 0;
 }
 
+.attackToken {
+    position: absolute;
+    z-index: 10;
+    top: 130px;
+    left: 11px;
+}
+
+.hpToken {
+    position: absolute;
+    z-index: 10;
+    top: 132px;
+    left: 95px;
+}
+
 .name {
     position: absolute;
     z-index: 6;
     font-size: 12px;
     left: 2em;
     top: 3px;
+    text-shadow: -1px 0.7px #21215c;
+    max-width: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .baseManaCost {
     position: absolute;
-    left: 107px;
-    font-size: 6px;
-    font-family: Trenco sans-serif;
-    top: 9px;
+    left: 106.5px;
+    font-size: 10px;
+    font-family: 'trenco', monospace;
+    top: 5.5px;
     z-index: 7;
+}
+
+.baseAttack {
+    position: absolute;
+    font-family: 'trenco', monospace;
+    font-size: 10px;
+    z-index: 11;
+    color: #CF596D;
+    text-shadow: -1px 0.7px black;
+    left: 23px;
+    top: 135px;
+}
+
+.baseHp {
+    position: absolute;
+    font-family: 'trenco', monospace;
+    z-index: 11;
+    font-size: 10px;
+    color: #A4E9C7;
+    text-shadow: -1px 0.7px black;
+    left: 105px;
+    top: 135px;
 }
 
 .description {
     position: absolute;
     font-size: 10px;
-    line-height: 7px;
-    font-family: Trenco sans-serif;
+    line-height: 5px;
+    font-family: 'trenco', monospace;
+    text-shadow: -1px 0.7px #21215c;
+}
+
+.type {
+    position: absolute;
+    font-size: 7px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20px;
 }
 
 .description-box {
     position: absolute;
-    left: 33px;
+    left: 34px;
     top: 105px;
     z-index: 7;
-    width: 73px;
+    width: 69px;
     height: 40px;
 }
 
