@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './card-display.module.css'
 
 import backgroundLayer from '../card-images/layer-1.png'
@@ -6,6 +6,8 @@ import whiteBanner from '../card-images/layer-3.png'
 import highlight from '../card-images/layer-4.png'
 import shadow from '../card-images/layer-5.png'
 import secondary from '../card-images/layer-6.png'
+import baseAttack from '../card-images/attack-token.png'
+import baseHp from '../card-images/health-token.png'
 
 import pedestalPrimary from '../card-images/pedestal-primary.png'
 import pedestalSecondary from '../card-images/pedestal-secondary.png'
@@ -29,7 +31,17 @@ function CardDisplay (props) {
         return (`rgba(${props.art.shadow.r * 255}, ${props.art.shadow.g * 255}, ${props.art.shadow.b * 255}, ${props.art.shadow.a * 255})`)
       }
     } else {
-      return (`rgba(130, 125, 200, 1.0)`) // placeholder color
+      if (field === 'text') {
+        return (`rgba(255, 255, 255, 255)`)
+      } else if (field === 'highlightColor') {
+        return (`rgba(251, 165, 140, 255)`)
+      } else if (field === 'primaryColor') {
+        return (`rgba(250, 121, 83, 255)`)
+      } else if (field === 'secondaryColor') {
+        return (`rgba(216, 98, 62, 255)`)
+      } else if (field === 'shadowColor') {
+        return (`rgba(151, 61, 23, 255)`)
+      }
     }
   }
 
@@ -38,15 +50,14 @@ function CardDisplay (props) {
       <img src={backgroundLayer} className={styles.layerOne} alt='card'/>
       <div className={styles.descriptionBox}>
         <p className={styles.description} style={{
-          color: checkIfNull('text'),
-          textShadow: `-1px 0.7px ${checkIfNull('shadowColor')}`
+          color: checkIfNull('text')
         }}>{props.description}</p>
+        <p className={styles.type}>{props.type}</p>
       </div>
       <p className={styles.baseManaCost}>{props.baseManaCost}</p>
       <p className={styles.name}
          style={{
-           color: checkIfNull('text'),
-           textShadow: `-1px 0.7px ${checkIfNull('shadowColor')}`
+           color: checkIfNull('text')
          }}>{props.name}</p>
       <div className={styles.primary}
            style={{ background: `linear-gradient(${checkIfNull('primaryColor')}, ${checkIfNull('primaryColor')}), url(${whiteBanner}) no-repeat` }}/>
@@ -62,15 +73,17 @@ function CardDisplay (props) {
            style={{ background: `linear-gradient(${checkIfNull('secondaryColor')}, ${checkIfNull('secondaryColor')}), url(${pedestalSecondary}) no-repeat` }}/>
       <div className={styles.pedestalShadow}
            style={{ background: `linear-gradient(${checkIfNull('shadowColor')}, ${checkIfNull('shadowColor')}), url(${pedestalShadow}) no-repeat` }}/>
-      <img src={windowBackground} className={styles.windowBackground} alt="" />
+      <img src={windowBackground} className={styles.windowBackground} alt=""/>
+      <img src={baseAttack} className={styles.attackToken} alt=""/>
+      <p className={styles.baseAttack}>{props.baseAttack}</p>
+      <img src={baseHp} className={styles.hpToken} alt=""/>
+      <p className={styles.baseHp}>{props.baseHp}</p>
       <div className={styles.heroAndShadow}>
-        <img src={selkie} className={styles.hero} alt="hero" />
-        <img src={selkieShadow} className={styles.heroShadow} alt="" />
+        <img src={selkie} className={styles.hero} alt="hero"/>
+        <img src={selkieShadow} className={styles.heroShadow} alt=""/>
       </div>
     </div>
   )
 }
-
-// cant get clips lol
 
 export default CardDisplay

@@ -19,7 +19,6 @@ $main-width: 700px !default;
   --border: solid 1px #DBDBDB;
   --selection-background: #DBDBDB;
   --selection-text: #21215c;
-  //--background-color: white;
   --background-color: #21215c;
   --text-color: var(--base-color);
   --placeholder-color: var(--base-color);
@@ -136,11 +135,11 @@ summary:hover {
   width: 75px;
 }
 
-@media only screen and (max-device-width: 500px) {
-  * {
-    font-size: $base-font-size !important;
-  }
-}
+//@media only screen and (max-device-width: 500px) {
+//  * {
+//    font-size: $base-font-size !important;
+//  }
+//}
 
 @media only screen and (max-device-width: 700px) {
   .emphasis-gif {
