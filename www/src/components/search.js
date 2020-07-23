@@ -36,7 +36,7 @@ function Search (props) {
               <Link to={page.path}>{page.title}</Link>
             </ListGroup.Item>
           ))}
-          <ListGroup.Item className={styles.searchListGroupItem}><Link to={`./searchresults?query=${encoded}`}>
+          <ListGroup.Item className={styles.searchListGroupItem}><Link to={`/searchresults?query=${encoded}`}>
             See more...</Link></ListGroup.Item>
         </ListGroup.Item>
       )

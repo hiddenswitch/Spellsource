@@ -1,3 +1,4 @@
+const lodash = require(`lodash`)
 const path = require(`path`)
 
 exports.onCreateWebpackConfig = ({
@@ -134,9 +135,39 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
 exports.createResolvers = ({ createResolvers }) => {
   const resolvers = {
+    Card: {
+      art: {
+        resolve (source, args, context, info) {
+          if (source.type === 'CLASS') {
+            return source.art
+          }
+
+          // if the art field already exists, just extend it
+          // with the appropriate class colors
+          let heroClass = source.heroClass
+          if (!heroClass) {
+            return source.art
+          }
+
+          // The card JSON uses ANY as the enum to mean a neutral card
+          if (heroClass === 'ANY') {
+            // the name of the class card is going to be class_neutral not class_any
+            heroClass = 'neutral'
+          }
+          const classCard = context.nodeModel.getNodeById({ id: `class_${heroClass.toLowerCase()}` })
+          if (!classCard) {
+            return source.art
+          }
+
+          const art = source.art || {}
+          lodash.defaultsDeep(art, classCard.art)
+          return art
+        }
+      }
+    },
     Block: {
       searchMessage: {
-        resolve(source, args, context, info) {
+        resolve (source, args, context, info) {
           let node = source
           const getNodeForBlockType = (type) => {
             return context.nodeModel.getNodeById({
@@ -173,7 +204,7 @@ exports.createResolvers = ({ createResolvers }) => {
             }
             return ''
           }
-          return getTextForNode(node).replace(/\s+/g,' ').trim()
+          return getTextForNode(node).replace(/\s+/g, ' ').trim()
           //removing excess whitespace just in case ^^^
         }
       }
