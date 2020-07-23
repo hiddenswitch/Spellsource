@@ -14,7 +14,7 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 	private static final int CONTAINER_EXIT_CODE_OK = 0;
 	private static final int MONGODB_INTERNAL_PORT = 27017;
 	private static final int AWAIT_INIT_REPLICA_SET_ATTEMPTS = 60;
-	private static final String MONGODB_VERSION_DEFAULT = "4.2";
+	private static final String MONGODB_VERSION_DEFAULT = "3.6";
 	private static final String MONGODB_DATABASE_NAME_DEFAULT = "metastone";
 	private String databaseName = MONGODB_DATABASE_NAME_DEFAULT;
 	private boolean replSet = false;
@@ -26,7 +26,7 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 	public MongoDBContainer(@NotNull String dockerImageName) {
 		super(dockerImageName);
 		this.withExposedPorts(27017);
-		this.waitingFor(Wait.forLogMessage(".*waiting for connections on port.*", 1));
+		waitingFor(Wait.forLogMessage(".*waiting for connections on port.*", 1));
 	}
 
 	public String getReplicaSetUrl() {
