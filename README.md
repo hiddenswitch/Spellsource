@@ -189,6 +189,10 @@ Make sure to add the sub project directory and any others that need to be visibl
 
 On **macOS**, allocate more memory to your Docker host.
 
+> `./gradlew net:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
+
+Make sure to use your local `docker` context using `docker context use default`.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)
