@@ -71,19 +71,30 @@ function CardDisplay (props) {
     shadow: toRgbaString(art.shadow),
   }
 
+  const checkTextColor = () => {
+    if (art.body.vertex === `rgba(0, 0, 0, 1)`) {
+      return (`none`)
+    }
+    else {
+      return (`-2px 2px #21215c`)
+    }
+  }
+
   return (
     <div className={styles.cardDisplayTemplate}>
       <img src={backgroundLayer} className={styles.layerOne} alt='card'/>
       <div className={styles.descriptionBox}>
         <p className={styles.description} style={{
-          color: art.body.vertex
+          color: art.body.vertex,
+          textShadow: checkTextColor()
         }}>{props.description}</p>
         <p className={styles.type}>{props.type}</p>
       </div>
       <p className={styles.baseManaCost}>{props.baseManaCost}</p>
       <p className={styles.name}
          style={{
-           color: art.body.vertex
+           color: art.body.vertex,
+           textShadow: checkTextColor()
          }}>{props.name}</p>
       <div className={styles.primary}
            style={{ background: `linear-gradient(${art.primary}, ${art.primary}), url(${whiteBanner}) no-repeat` }}/>
