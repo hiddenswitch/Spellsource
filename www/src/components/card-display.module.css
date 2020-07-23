@@ -63,7 +63,7 @@
     width: 96px;
     height: 48px;
     left: 84px;
-    top: 144px;
+    top: 145px;
     mask-image: url('../card-images/pedestal-primary.png');
     -webkit-mask-image: url('../card-images/pedestal-primary.png');
 }
@@ -158,7 +158,7 @@
 
 .description {
     position: absolute;
-    font-size: 20px;
+    font-size: 23px;
     line-height: 10px;
     font-family: 'trenco', monospace;
     text-shadow: -2px 2px #21215c;
