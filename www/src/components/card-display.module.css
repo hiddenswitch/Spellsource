@@ -6,6 +6,7 @@
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+    height: 320px;
 }
 
 .layer-one {
@@ -116,9 +117,8 @@
     z-index: 6;
     font-size: 24px;
     left: 2em;
-    top: 6px;
-    text-shadow: -2px 2px #21215c;
-    max-width: 140px;
+    top: 7px;
+    max-width: 134px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -129,7 +129,7 @@
     left: 213px;
     font-size: 20px;
     font-family: 'trenco', monospace;
-    text-shadow: -2px 2px black;
+    text-shadow: -1.5px 1.5px black;
     top: 11px;
     z-index: 7;
 }
@@ -140,7 +140,7 @@
     font-size: 20px;
     z-index: 11;
     color: #CF596D;
-    text-shadow: -2px 2px black;
+    text-shadow: -1.5px 1.5px black;
     left: 45.5px;
     top: 271px;
 }
@@ -151,7 +151,7 @@
     z-index: 11;
     font-size: 20px;
     color: #A4E9C7;
-    text-shadow: -2px 2px black;
+    text-shadow: -1.5px 1.5px black;
     left: 209.5px;
     top: 271px;
 }
@@ -161,7 +161,6 @@
     font-size: 23px;
     line-height: 10px;
     font-family: 'trenco', monospace;
-    text-shadow: -2px 2px #21215c;
 }
 
 .type {
@@ -169,7 +168,7 @@
     font-size: 14px;
     left: 50%;
     transform: translateX(-50%);
-    top: 40px;
+    top: 45px;
 }
 
 .description-box {
