@@ -19,7 +19,7 @@ export default function Template ({
     <Layout>
       <h2>{name} ({baseManaCost})</h2>
       <p>{rarity}</p>
-      <div style={{ marginBottom: '190px' }}>
+      <div style={{ marginBottom: '370px' }}>
         <CardDisplay name={name} baseManaCost={baseManaCost} description={description} art={art} baseAttack={baseAttack} baseHp={baseHp} type={type}/>
       </div>
       <h3>{typeAndStats}</h3>
