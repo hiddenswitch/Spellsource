@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React from 'react'
 import styles from './card-display.module.css'
 
 import backgroundLayer from '../card-images/layer-1.png'
@@ -15,34 +15,60 @@ import pedestalShadow from '../card-images/pedestal-shadow.png'
 import windowBackground from '../card-images/large-card-window-background.png'
 import selkie from '../card-images/selkie.png'
 import selkieShadow from '../card-images/selkie-shadow.png'
+import { defaultsDeep} from 'lodash'
+
+const defaultArt = {
+  'primary': {
+    'r': 0.443,
+    'g': 0.396,
+    'b': 0.509,
+    'a': 1.0
+  },
+  'secondary': {
+    'r': 0.207,
+    'g': 0.282,
+    'b': 0.466,
+    'a': 1.0
+  },
+  'shadow': {
+    'r': 0.207,
+    'g': 0.282,
+    'b': 0.466,
+    'a': 1.0
+  },
+  'highlight': {
+    'r': 0.768,
+    'g': 0.67,
+    'b': 0.764,
+    'a': 1.0
+  },
+  'body': {
+    'vertex': {
+      'r': 1.0,
+      'g': 1.0,
+      'b': 1.0,
+      'a': 1.0
+    }
+  }
+}
+
+const toRgbaString = (v) => {
+  return `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})`
+}
 
 function CardDisplay (props) {
-  const checkIfNull = (field) => {
-    if (props.art) {
-      if (field === 'text' && props.art.body && props.art.body.vertex) {
-        return (`rgba(${props.art.body.vertex.r * 255},${props.art.body.vertex.g * 255},${props.art.body.vertex.b * 255},${props.art.body.vertex.a * 255})`)
-      } else if (field === 'highlightColor' && props.art.highlight) {
-        return (`rgba(${props.art.highlight.r * 255}, ${props.art.highlight.g * 255}, ${props.art.highlight.b * 255}, ${props.art.highlight.a * 255})`)
-      } else if (field === 'primaryColor' && props.art.primary) {
-        return (`rgba(${props.art.primary.r * 255}, ${props.art.primary.g * 255}, ${props.art.primary.b * 255}, ${props.art.primary.a * 255})`)
-      } else if (field === 'secondaryColor' && props.art.secondary) {
-        return (`rgba(${props.art.secondary.r * 255}, ${props.art.secondary.g * 255}, ${props.art.secondary.b * 255}, ${props.art.secondary.a * 255})`)
-      } else if (field === 'shadowColor' && props.art.shadow) {
-        return (`rgba(${props.art.shadow.r * 255}, ${props.art.shadow.g * 255}, ${props.art.shadow.b * 255}, ${props.art.shadow.a * 255})`)
-      }
-    } else {
-      if (field === 'text') {
-        return (`rgba(255, 255, 255, 255)`)
-      } else if (field === 'highlightColor') {
-        return (`rgba(251, 165, 140, 255)`)
-      } else if (field === 'primaryColor') {
-        return (`rgba(250, 121, 83, 255)`)
-      } else if (field === 'secondaryColor') {
-        return (`rgba(216, 98, 62, 255)`)
-      } else if (field === 'shadowColor') {
-        return (`rgba(151, 61, 23, 255)`)
-      }
-    }
+  let art = {}
+  defaultsDeep(art, props.art, defaultArt)
+  art = {
+    ...art,
+    body: {
+      ...art.body,
+      vertex: toRgbaString(art.body.vertex)
+    },
+    highlight: toRgbaString(art.highlight),
+    primary: toRgbaString(art.primary),
+    secondary: toRgbaString(art.secondary),
+    shadow: toRgbaString(art.shadow),
   }
 
   return (
@@ -50,29 +76,29 @@ function CardDisplay (props) {
       <img src={backgroundLayer} className={styles.layerOne} alt='card'/>
       <div className={styles.descriptionBox}>
         <p className={styles.description} style={{
-          color: checkIfNull('text')
+          color: art.body.vertex
         }}>{props.description}</p>
         <p className={styles.type}>{props.type}</p>
       </div>
       <p className={styles.baseManaCost}>{props.baseManaCost}</p>
       <p className={styles.name}
          style={{
-           color: checkIfNull('text')
+           color: art.body.vertex
          }}>{props.name}</p>
       <div className={styles.primary}
-           style={{ background: `linear-gradient(${checkIfNull('primaryColor')}, ${checkIfNull('primaryColor')}), url(${whiteBanner}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.primary}, ${art.primary}), url(${whiteBanner}) no-repeat` }}/>
       <div className={styles.highlight}
-           style={{ background: `linear-gradient(${checkIfNull('highlightColor')}, ${checkIfNull('highlightColor')}), url(${highlight}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.highlight}, ${art.highlight}), url(${highlight}) no-repeat` }}/>
       <div className={styles.shadow}
-           style={{ background: `linear-gradient(${checkIfNull('shadowColor')}, ${checkIfNull('shadowColor')}), url(${shadow}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${shadow}) no-repeat` }}/>
       <div className={styles.secondary}
-           style={{ background: `linear-gradient(${checkIfNull('secondaryColor')}, ${checkIfNull('secondaryColor')}), url(${secondary}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${secondary}) no-repeat` }}/>
       <div className={styles.pedestalPrimary}
-           style={{ background: `linear-gradient(${checkIfNull('primaryColor')}, ${checkIfNull('primaryColor')}), url(${pedestalPrimary}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.primary}, ${art.primary}), url(${pedestalPrimary}) no-repeat` }}/>
       <div className={styles.pedestalSecondary}
-           style={{ background: `linear-gradient(${checkIfNull('secondaryColor')}, ${checkIfNull('secondaryColor')}), url(${pedestalSecondary}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${pedestalSecondary}) no-repeat` }}/>
       <div className={styles.pedestalShadow}
-           style={{ background: `linear-gradient(${checkIfNull('shadowColor')}, ${checkIfNull('shadowColor')}), url(${pedestalShadow}) no-repeat` }}/>
+           style={{ background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${pedestalShadow}) no-repeat` }}/>
       <img src={windowBackground} className={styles.windowBackground} alt=""/>
       <img src={baseAttack} className={styles.attackToken} alt=""/>
       <p className={styles.baseAttack}>{props.baseAttack}</p>
