@@ -15,7 +15,7 @@ import pedestalShadow from '../card-images/pedestal-shadow.png'
 import windowBackground from '../card-images/large-card-window-background.png'
 import selkie from '../card-images/selkie.png'
 import selkieShadow from '../card-images/selkie-shadow.png'
-import { defaultsDeep} from 'lodash'
+import { defaultsDeep } from 'lodash'
 
 const defaultArt = {
   'primary': {
@@ -49,6 +49,10 @@ const defaultArt = {
       'b': 1.0,
       'a': 1.0
     }
+  },
+  'sprite': {
+    'named': selkie,
+    'shadow': selkieShadow
   }
 }
 
@@ -69,13 +73,16 @@ function CardDisplay (props) {
     primary: toRgbaString(art.primary),
     secondary: toRgbaString(art.secondary),
     shadow: toRgbaString(art.shadow),
+    sprite: {
+      // named: art.sprite.named,
+      ...art.sprite
+    }
   }
 
   const checkTextColor = () => {
     if (art.body.vertex === `rgba(0, 0, 0, 1)`) {
       return (`none`)
-    }
-    else {
+    } else {
       return (`-2px 2px #21215c`)
     }
   }
@@ -116,8 +123,8 @@ function CardDisplay (props) {
       <img src={baseHp} className={styles.hpToken} alt=""/>
       <p className={styles.baseHp}>{props.baseHp}</p>
       <div className={styles.heroAndShadow}>
-        <img src={selkie} className={styles.hero} alt="hero"/>
-        <img src={selkieShadow} className={styles.heroShadow} alt=""/>
+        <img src={art.sprite.named} className={styles.hero} alt="hero"/>
+        <img src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
       </div>
     </div>
   )
