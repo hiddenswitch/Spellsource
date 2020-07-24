@@ -1,0 +1,42 @@
+{
+  "name": "Kayn the Corrupter",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "<b>Opener</b>: Summon two 0/3 Source Mines as your opponent's left and right-most minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "cards": [
+            "token_source_mine"
+          ],
+          "targetPlayer": "OPPONENT"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionAbsolute": 0,
+          "cards": [
+            "token_source_mine"
+          ],
+          "targetPlayer": "OPPONENT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

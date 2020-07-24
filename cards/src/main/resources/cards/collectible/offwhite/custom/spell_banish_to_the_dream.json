@@ -1,0 +1,34 @@
+{
+  "name": "Banish to the Dream",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "RARE",
+  "description": "If your opponent controls exactly one unit, silence and destroy it.",
+  "condition": {
+    "class": "MinionOnBoardCondition",
+    "value": 1,
+    "operation": "EQUAL",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

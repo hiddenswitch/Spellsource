@@ -1,0 +1,43 @@
+{
+  "name": "Awakening",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Add four random spells from different classes to your hand. They cost (0).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 4,
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      }
+    },
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "SELF",
+          "invert": true
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

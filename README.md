@@ -6,7 +6,7 @@
 
 This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
 
-**[Play now in your browser, or download for your platform here.](www/src/pages-markdown/download.md)**
+**[Play now in your browser, or download for your platform here.](https://www.playspellsource.com/download)**
 
 Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
 
@@ -20,23 +20,49 @@ The `Spellsource-Server` project is a 2-player card battler that supports hosted
 
 See the complete code reference [here](https://www.playspellsource.com/javadoc).
 
+### Getting Around
+
+Cards are located at [cards/src/main/resources/cards/custom](cards/src/main/resources/cards/custom).
+
+To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [game/src/main/java/net/demilich/metastone/game/spells](game/src/main/java/net/demilich/metastone/game/spells).
+
+You can learn more about the Spellsource AI as implemented in the [GameStateValueBehaviour](game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) class.
+
+The server application starts in [Clustered](net/src/main/java/com/hiddenswitch/spellsource/net/applications/Clustered.java). `./gradlew netRun` uses [LocalClustered](net/src/test/java/com/hiddenswitch/spellsource/net/tests/LocalClustered.java).
+
+The client is private, please contact for access on the Discord.
+
 ### Tasks
 
-Make sure to be running **Mongo** when you start the server.
-
 ```shell script
-$ ./gradlew tasks --group contributors
+$ ./gradlew tasks --group spellsource
+
+> Task :tasks
+
 ------------------------------------------------------------
 Tasks runnable from root project
 ------------------------------------------------------------
 
-Contributors tasks
-------------------
+Spellsource tasks
+-----------------
+bumpVersion - Bumps the server version
+cloneMongo - Connects to the production database, dumps its database file, then restores the database to your local mongo.
+deployAll - Deploys the server, the client and the website
+distAndroid - Builds and uploads the Android project to Google Play
+distIOS - Builds and uploads to Testflight the iOS project
+distSteam - Uploads the macOS and Windows builds to Steam
+distSwarm - Deploys to a Docker Swarm
+distWebGL - Uploads the WebGL build to playspellsource.com
+distWWW - Builds and deploys the website (requires npm, python, the .venv virtualenv installed)
 netRun - Starts the Spellsource server
 netRunDebug - Starts the Spellsource server attachable as a Remote debug target from IntelliJ
-testAll - Runs all tests. Make sure mongod is running. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.
+swagger - Generates sources from the client/swagger-api.yaml. Run this whenever you change that file.
+testAll - Runs all tests. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.
 
 To see all tasks and more detail, run gradle tasks --all
+
+To see more detail about a task, run gradle help --task <task>
+
 ```
 
 ### Cloning this repository
@@ -53,20 +79,39 @@ Failures are normal if you do not have permissions to the repositories.
 
 If you have the permissions, you will need to add your SSH key to the private repositories, for both BitBucket and GitHub, to access all of them. Contact us on the Discord at the start of this document if you'd like to contribute to private work like the game client.
 
+You cannot use the GitHub Desktop app to download this repository.
+
 ### Getting started with Development on macOS
 
-Requirements: Java 11 or later, Mongo Community Edition 3.6, Python 3.7 or later, Node 10 or later.
+Requirements: **Java 11 or later** and **Docker**. Check your current version of Java using `java --version`.
 
- 1. Install all dependencies except Java using `./deploy.sh -D`.
- 2. See Spellsource-specific tasks using `./gradlew tasks --group contributors`.
- 3. Run **Mongo** using `mkdir -pv .mongo/ && mongod --bind_ip_all --dbpath=.mongo/`, then run tests using `./gradlew testAll`
- 4. Open the project with **IntelliJ Community Edition**.
+ 1. Install dependencies:
+    ```shell script
+    # XCode binaries
+    xcode-select --install
+    # Brew
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    # Docker. Look carefully at any messages brew tells you and do them
+    brew cask install docker
+    # Java (if required)
+    brew install java
+    # Not sure why brew doesn't just do this for you
+    sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+    brew link --force java
+    ```
+ 2. Clone the repository:
+    ```shell script
+    git clone https://github.com/hiddenswitch/Spellsource.git
+    cd Spellsource
+    ```
+ 3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
+ 4. Run tests using `./gradlew testAll`
+ 5. Start a local server using `./gradlew netRun`
+ 6. Generate project files using `./gradlew idea`, then open the project with **IntelliJ Community Edition**. You can install this with `brew cask install intellij-idea-ce`.
 
 ### Getting started with Development on Windows
 
-Visit the [Windows Development Guide](www/src/pages-markdown/windowsdevelopment.md) for more about Windows development.
-
-Like with macOS, you can see Spellsource-specific gradle tasks using `./gradlew tasks --group contributors`.
+Development on Windows is currently not supported.
 
 ### Contributing Cards
 
@@ -77,6 +122,14 @@ Visit the [Contribution Guide](www/src/pages-markdown/contribute.md) for more ab
 Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative user for these.
 
 ### Troubleshooting
+
+> I cannot clone the repository.
+
+The GitHub Desktop app is not supported. Please use the `git` command line commands to clone the repository:
+
+```shell script
+git clone https://github.com/hiddenswitch/Spellsource.git
+```
 
 > I am having issues with Git Submodules, like failures to download
 
@@ -92,10 +145,6 @@ sudo sysctl -w kern.maxfilesperproc=524288
 ulimit -n 200000
 sudo launchctl limit maxfiles 524288 5242880
 ```
-
-> All the tests in `net:test` fail or take too long to complete.
-
-Make sure you are running `mongo`.
 
 > `testTraces` is failing.
 
@@ -117,7 +166,32 @@ Make sure the Public group is [added here](https://appstoreconnect.apple.com/Web
 
 Add the class or the package containing it to end of the list of classes in the `Args = --initialize-at-build-time=...` line to [native-image.properties](discordbot/src/main/resources/META-INF/native-image/com.hiddenswitch/discordbot/native-image.properties).
 
-You may have to regenerate reflection config using `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
+You may have to regenerate reflection config using **sdkman**'s Graal distributable. Then, `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
+
+> `./gradlew distSwarm` fails with the message of the form:
+
+```shell script
+#13 71.30 FAILURE: Build failed with an exception.
+#13 71.30 
+#13 71.30 * What went wrong:
+#13 71.30 Could not determine the dependencies of task ':net:shadowJar'.
+#13 71.30 > Could not resolve all dependencies for configuration ':net:runtimeClasspath'.
+#13 71.30    > Could not resolve project :vertx-redis-cluster.
+#13 71.30      Required by:
+#13 71.30          project :net
+#13 71.30       > Unable to find a matching configuration of project :subproject:
+#13 71.30           - None of the consumable configurations have attributes.
+```
+
+Make sure to add the sub project directory and any others that need to be visible to doctor to [.dockerignore](.dockerignore) in the form of `!directory/*`.
+
+> `discordbot` Swarm build (`./gradlew distSwarm`) fails with `com.oracle.svm.driver.NativeImage$NativeImageError: Image build request failed with exit status 137`
+
+On **macOS**, allocate more memory to your Docker host.
+
+> `./gradlew net:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
+
+Make sure to use your local `docker` context using `docker context use default`.
 
 ### Special Thanks
 

@@ -1,0 +1,41 @@
+{
+  "name": "Festivity Golem",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Opener: Draw [0 cards]. (Increases for each unique Tribe you control)",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "DistinctTribesValueProvider",
+        "target": "FRIENDLY_MINIONS",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "DistinctTribesValueProvider",
+        "target": "FRIENDLY_MINIONS",
+        "race": "ELEMENTAL",
+        "targetPlayer": "SELF"
+      },
+      "description1": " card",
+      "description2": " cards"
+    }
+  ]
+}

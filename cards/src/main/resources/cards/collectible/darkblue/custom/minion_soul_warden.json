@@ -1,0 +1,40 @@
+{
+  "name": "Soul Warden",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Summon 1/1 copies of your Spirits that died this turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.SummonFriendlyMinionsThatDiedSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "value": 1
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 1
+          }
+        ]
+      },
+      "filter": {
+        "class": "RaceFilter",
+        "race": "SPIRIT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

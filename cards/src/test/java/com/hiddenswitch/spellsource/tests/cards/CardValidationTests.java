@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import com.hiddenswitch.spellsource.testutils.CardValidation;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -10,11 +11,12 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)
- * method to ensure that each card is well formed and can be parsed.
+ * This test will iterate through all the cards in the cards resources dir and invoke the {@link
+ * net.demilich.metastone.game.cards.CardParser#parseCard(ResourceInputStream)} method to ensure that each card is well
+ * formed and can be parsed.
  */
 public class CardValidationTests {
-	public static final String CARDS_DIR = "src/main/resources/cards/custom/";
+	public static final String CARDS_DIR = "src/main/resources/cards/";
 
 	public static Object[][] getCardFiles() {
 		return CardValidation.getCardFiles(CARDS_DIR);

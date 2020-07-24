@@ -1,0 +1,32 @@
+{
+  "name": "Ichor Spewer",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 4,
+  "baseHp": 12,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Guard. Your other minions have Dash and Toxic.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attribute": "AURA_RUSH"
+    },
+    {
+      "class": "AttributeAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attribute": "AURA_POISONOUS"
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ]
+}

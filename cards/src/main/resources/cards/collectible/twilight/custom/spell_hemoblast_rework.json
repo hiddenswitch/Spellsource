@@ -1,0 +1,46 @@
+{
+  "name": "Hemoblast",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "COMMON",
+  "description": "Take [3] damage. Deal $[4] damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 3
+        },
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 4
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 3
+    },
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 4
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ]
+}

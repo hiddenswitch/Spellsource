@@ -1,0 +1,23 @@
+{
+  "name": "Sunken Terror",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Whenever you shuffle a card into your deck, play a copy of it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "ShuffledTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "PlayCardsRandomlySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

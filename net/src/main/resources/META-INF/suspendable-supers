@@ -1,16 +1,2 @@
-com.hiddenswitch.spellsource.net.concurrent.SuspendableQueue.close()V
-com.hiddenswitch.spellsource.net.impl.AddedChangedRemoved.added()Lio/reactivex/Observable;
-com.hiddenswitch.spellsource.net.impl.AddedChangedRemoved.changed()Lio/reactivex/Observable;
-com.hiddenswitch.spellsource.net.impl.AddedChangedRemoved.removed()Lio/reactivex/Observable;
 io.vertx.core.Closeable.close(Lio/vertx/core/Handler;)V
-io.vertx.core.shareddata.AsyncMap.entries(Lio/vertx/core/Handler;)V
-io.vertx.core.shareddata.AsyncMap.keys(Lio/vertx/core/Handler;)V
-io.vertx.core.shareddata.AsyncMap.values(Lio/vertx/core/Handler;)V
-io.vertx.ext.sync.SyncVerticle.$deserializeLambda$(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;
 io.vertx.ext.web.handler.AuthHandler.parseCredentials(Lio/vertx/ext/web/RoutingContext;Lio/vertx/core/Handler;)V
-java.lang.AutoCloseable.close()V
-java.lang.Object.equals(Ljava/lang/Object;)Z
-java.lang.Object.hashCode()I
-java.lang.reflect.InvocationHandler.invoke(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object;
-java.util.function.Function.apply(Ljava/lang/Object;)Ljava/lang/Object;
-net.demilich.metastone.game.GameContext.$deserializeLambda$(Ljava/lang/invoke/SerializedLambda;)Ljava/lang/Object;

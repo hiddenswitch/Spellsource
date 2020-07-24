@@ -1,0 +1,22 @@
+{
+  "name": "Paven, Elemental of Surprise",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Aftermath: Go dormant. Source a card to revive this.",
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "SELF",
+    "card": "permanent_paven_captured"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

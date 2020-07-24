@@ -1,0 +1,30 @@
+{
+  "name": "Store's Closed!",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "COMMON",
+  "description": "Shuffle all minions into their owners' decks.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ShuffleMinionToDeckSpell",
+        "target": "FRIENDLY_MINIONS",
+        "targetPlayer": "SELF"
+      },
+      {
+        "class": "ShuffleMinionToDeckSpell",
+        "target": "ENEMY_MINIONS",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ]
+}

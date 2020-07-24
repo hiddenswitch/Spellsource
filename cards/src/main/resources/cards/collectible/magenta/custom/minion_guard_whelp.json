@@ -1,0 +1,30 @@
+{
+  "name": "Guard Whelp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Opener: Give another minion Immune this turn.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "IMMUNE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

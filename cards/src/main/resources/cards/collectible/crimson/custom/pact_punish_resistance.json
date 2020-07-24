@@ -1,0 +1,40 @@
+{
+  "name": "Punish Resistance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "<b>Pact:</b> After an allied minion dies, give a random enemy minion \"Aftermath: Deal 3 damage to all allied minions\".",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 1,
+      "eventTrigger": {
+        "class": "MinionDeathTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddDeathrattleSpell",
+        "target": "ENEMY_MINIONS",
+        "spell": {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 3
+        },
+        "randomTarget": true
+      }
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM"
+  ]
+}

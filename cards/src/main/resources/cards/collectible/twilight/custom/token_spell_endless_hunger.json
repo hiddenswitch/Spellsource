@@ -1,0 +1,32 @@
+{
+  "name": "Endless Hunger",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Lifedrain. Deal $3 damage. Shuffle a copy of this into your opponent's deck.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "token_spell_endless_hunger",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ]
+}

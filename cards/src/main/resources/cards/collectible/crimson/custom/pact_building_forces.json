@@ -1,0 +1,47 @@
+{
+  "name": "Building Forces",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "EPIC",
+  "description": "<b>Pact:</b> After three spells are played, gain 7 Armor and summon a 2/3 Defender with Guard.",
+  "condition": {
+    "class": "CanPlayPactCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddPactSpell",
+    "pact": {
+      "countUntilCast": 3,
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "cardType": "SPELL",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "FRIENDLY_HERO",
+            "armorBonus": 7
+          },
+          {
+            "class": "SummonSpell",
+            "cards": [
+              "token_bone_boy"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "PACT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM"
+  ]
+}

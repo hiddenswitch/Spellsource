@@ -1,0 +1,44 @@
+{
+  "name": "Summoner",
+  "type": "CLASS",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.694,
+      "g": 0.333,
+      "r": 0.694
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.5450980392156862,
+      "g": 0.0,
+      "r": 0.5450980392156862
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.525,
+      "g": 0.0,
+      "r": 0.525
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.49,
+      "g": 0.0,
+      "r": 0.49
+    }
+  },
+  "hero": "hero_sephilia"
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Bluefist Trainer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Whenever another allied minion survives damage, give it +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "attackBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

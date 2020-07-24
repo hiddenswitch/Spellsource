@@ -1,0 +1,45 @@
+{
+  "name": "Essence Scatter",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Destroy a minion. Restore #8 health to its owner.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "OPPONENT"
+          }
+        ],
+        "spells": [
+          {
+            "class": "HealSpell",
+            "target": "FRIENDLY_HERO",
+            "value": 8
+          },
+          {
+            "class": "HealSpell",
+            "target": "ENEMY_HERO",
+            "value": 8
+          }
+        ]
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

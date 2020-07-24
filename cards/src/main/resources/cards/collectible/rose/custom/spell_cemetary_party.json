@@ -1,0 +1,23 @@
+{
+  "name": "Cemetary Party",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Resurrect an allied Aftermath minion. Receive a copy of it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ResurrectSpell",
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "OUTPUT"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DEATHRATTLES"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

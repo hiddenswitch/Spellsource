@@ -1,21 +1,23 @@
 package com.hiddenswitch.spellsource.net.tests;
 
-import com.hiddenswitch.spellsource.client.models.GameEvent;
-import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;;
-import org.junit.Assert;
-import org.junit.Test;
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+;
 
 public class TypeTest {
 	@Test
 	public void testGameEvents() {
-		Stream.of(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.values())
+		Stream.of(EventTypeEnum.values())
 				.forEach(ge -> {
 					try {
-						GameEvent.EventTypeEnum.valueOf(ge.toString());
+						EventTypeEnum.valueOf(ge.toString());
 					} catch (Exception e) {
-						Assert.fail(ge.toString());
+						fail(ge.toString());
 					}
 				});
 	}

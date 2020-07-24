@@ -1,0 +1,31 @@
+{
+  "name": "Lun Cannoneer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "<b>Opener:</b> Deal 3 damage. <b>Aftermath:</b> Deal 3 damage to your champion.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 3
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM"
+  ]
+}

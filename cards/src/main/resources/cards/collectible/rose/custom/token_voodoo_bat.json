@@ -1,0 +1,14 @@
+{
+  "name": "Voodoo Bat",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

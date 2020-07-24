@@ -1,0 +1,23 @@
+{
+  "name": "Miasma Warder",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Guard. Aftermath: Give a random allied minion Guard.",
+  "deathrattle": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "TAUNT",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

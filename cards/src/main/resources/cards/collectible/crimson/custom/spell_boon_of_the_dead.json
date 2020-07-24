@@ -1,0 +1,24 @@
+{
+  "name": "Corpse Explosion",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "COMMON",
+  "description": "Give your minions \"Aftermath: Deal 2 damage to the enemy champion\".",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

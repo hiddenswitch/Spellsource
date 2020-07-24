@@ -1,0 +1,38 @@
+{
+  "name": "Bighand Brute",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener: Deal [0] damage to a minion. (Increases for each other card in your hand)",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "offset": -1,
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  ]
+}

@@ -3,6 +3,8 @@ package com.hiddenswitch.spellsource.net.tests.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.fibers.futures.AsyncCompletionStage;
+import co.paralleluniverse.strands.SettableFuture;
+import co.paralleluniverse.strands.SuspendableRunnable;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.ImmutableMap;
@@ -27,16 +29,19 @@ import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.unit.TestContext;
+import io.vertx.junit5.VertxTestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.Nullable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+
 
 public class UnityClient implements AutoCloseable {
 	private static Logger LOGGER = LoggerFactory.getLogger(UnityClient.class);
@@ -51,9 +56,9 @@ public class UnityClient implements AutoCloseable {
 	private volatile boolean gameOver;
 	private Handler<UnityClient> onGameOver;
 	private Account account;
-	private TestContext context;
+	private VertxTestContext context;
 	private NettyWebsocketClientEndpoint realtime;
-	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
+	private AtomicReference<SettableFuture<Void>> matchmakingFut = new AtomicReference<>(new SettableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
@@ -79,49 +84,71 @@ public class UnityClient implements AutoCloseable {
 		tracer.activateSpan(parentSpan);
 	}
 
-	public UnityClient(TestContext context) {
+	public UnityClient(VertxTestContext context) {
 		this();
 		this.context = context;
 	}
 
-	public UnityClient(TestContext context, int port) {
+	public UnityClient(VertxTestContext context, int port) {
 		this(context);
 		thisUrl = BASE + port;
 		apiClient.setBasePath(thisUrl);
 		api = new DefaultApi(apiClient);
 	}
 
-	public UnityClient(TestContext context, String token) {
+	private void verify(SuspendableRunnable block) {
+		if (context != null) {
+			try {
+				block.run();
+			} catch (Throwable t) {
+				context.failNow(t);
+			}
+		} else {
+			try {
+				block.run();
+			} catch (Throwable throwable) {
+				fail(throwable);
+			}
+		}
+	}
+
+	public UnityClient(VertxTestContext context, String token) {
 		this(context);
 		this.loginToken = token;
 		api.getApiClient().setApiKey(loginToken);
 	}
 
+	@Suspendable
 	public UnityClient createUserAccount() {
 		return createUserAccount(null);
 	}
 
+	@Suspendable
 	public UnityClient createUserAccount(String username) {
 		if (username == null) {
 			username = RandomStringUtils.randomAlphanumeric(10);
 		}
 
-		try {
-			CreateAccountResponse car = api.createAccount(
-					new CreateAccountRequest()
-							.email(username + "@hiddenswitch.com")
-							.name(username)
-							.password("testpass"));
-			loginToken = car.getLoginToken();
-			api.getApiClient().setApiKey(loginToken);
-			account = car.getAccount();
-			context.assertNotNull(account);
-			context.assertTrue(account.getDecks().size() > 0);
-			LOGGER.debug("createUserAccount {} {}: Created account", id, car.getAccount().getId());
-		} catch (ApiException e) {
-			Tracing.error(e, parentSpan, true);
-			context.fail(e);
-		}
+		var finalUsername = username;
+		verify(() -> {
+			try {
+				var car = api.createAccount(
+						new CreateAccountRequest()
+								.email(finalUsername + "@hiddenswitch.com")
+								.name(finalUsername)
+								.password("testpass"));
+				loginToken = car.getLoginToken();
+				api.getApiClient().setApiKey(loginToken);
+				account = car.getAccount();
+				assertNotNull(account);
+				assertTrue(account.getDecks().size() > 0);
+
+				LOGGER.debug("createUserAccount {} {}: Created account", id, car.getAccount().getId());
+			} catch (ApiException e) {
+				Tracing.error(e, parentSpan, true);
+				fail(e);
+			}
+		});
 		return this;
 	}
 
@@ -130,12 +157,12 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	@Suspendable
-	public CompletableFuture<Void> matchmake(String deckId, String queueId) {
+	public Future<Void> matchmake(String deckId, String queueId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
 
-		CompletableFuture<Void> fut = new CompletableFuture<Void>() {
+		var fut = new SettableFuture<Void>() {
 			@Override
 			public boolean cancel(boolean mayInterruptIfRunning) {
 				realtime.sendMessage(Json.encode(new Envelope()
@@ -148,7 +175,7 @@ public class UnityClient implements AutoCloseable {
 
 		matchmakingFut.set(fut);
 		ensureConnected();
-		context.assertTrue(realtime.isOpen());
+		assertTrue(realtime.isOpen());
 		try {
 			messagingLock.lock();
 			sendMessage(new Envelope()
@@ -169,7 +196,7 @@ public class UnityClient implements AutoCloseable {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
-				AtomicReference<Span> span = new AtomicReference<>(tracer.buildSpan("ServerGameContext/play")
+				var span = new AtomicReference<Span>(tracer.buildSpan("ServerGameContext/play")
 						.asChildOf(parentSpan)
 						.start());
 				span.get().log("connecting");
@@ -177,12 +204,12 @@ public class UnityClient implements AutoCloseable {
 					span.get().setTag("userId", getAccount().getId());
 				}
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
-				CountDownLatch firstMessage = new CountDownLatch(1);
+				var firstMessage = new CountDownLatch(1);
 				LOGGER.debug("ensureConnected {}: Connected", id);
 				realtime.setMessageHandler((String message) -> {
-					Scope s = tracer.activateSpan(span.get());
+					var s = tracer.activateSpan(span.get());
 					try {
-						Envelope env = Json.decodeValue(message, Envelope.class);
+						var env = Json.decodeValue(message, Envelope.class);
 						if (env.getAdded() != null && env.getAdded().getSpanContext() != null) {
 							// Finish the current span, then create another.
 							span.get().finish();
@@ -207,19 +234,19 @@ public class UnityClient implements AutoCloseable {
 					} catch (RuntimeException runtimeException) {
 						Tracing.error(runtimeException, span.get(), true);
 //						close();
-						context.fail(runtimeException);
+						fail(runtimeException);
 					} finally {
 						s.close();
 					}
 				});
 				realtime.connect();
 				firstMessage.await(4000, TimeUnit.MILLISECONDS);
-				context.assertTrue(firstMessage.getCount() <= 0);
+				assertTrue(firstMessage.getCount() <= 0);
 			}
 		} catch (Throwable any) {
 //			close();
 			Tracing.error(any, parentSpan, true);
-			context.fail(any);
+			fail(any);
 		} finally {
 			messagingLock.unlock();
 		}
@@ -239,12 +266,12 @@ public class UnityClient implements AutoCloseable {
 
 		if (matchmakingFut.get().isCancelled()) {
 			Tracing.error(new IllegalStateException("matchmaking was cancelled"), parentSpan, true);
-			context.fail(new IllegalStateException("matchmaking was cancelled"));
+			fail(new IllegalStateException("matchmaking was cancelled"));
 		}
 
 		// Might have been cancelled
-		context.assertFalse(matchmakingFut.get().isDone());
-		matchmakingFut.get().complete(null);
+		assertFalse(matchmakingFut.get().isDone());
+		matchmakingFut.get().set(null);
 	}
 
 	@Suspendable
@@ -253,16 +280,14 @@ public class UnityClient implements AutoCloseable {
 			return;
 		}
 
-		ServerToClientMessage message = env.getGame().getServerToClient();
-		for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
+		var message = env.getGame().getServerToClient();
+		for (var handler : handlers) {
 			if (handler != null) {
 				handler.accept(message);
 			}
 		}
 		if (turnsToPlay.get() <= 0) {
-			if (!gameOver && onGameOver != null) {
-				onGameOver.handle(this);
-			}
+
 			if (!gameOver) {
 				gameOverLatch.countDown();
 			}
@@ -275,7 +300,7 @@ public class UnityClient implements AutoCloseable {
 
 		switch (message.getMessageType()) {
 			case ON_UPDATE:
-				Integer turnNumber = message.getGameState().getTurnNumber();
+				var turnNumber = message.getGameState().getTurnNumber();
 				if (turnNumber != null && lastTurnPlayed != turnNumber) {
 					turnsPlayed.incrementAndGet();
 					turnsPlayedLatch.countDown();
@@ -287,7 +312,7 @@ public class UnityClient implements AutoCloseable {
 				}
 				break;
 			case ON_GAME_EVENT:
-				context.assertNotNull(message.getEvent());
+				assertNotNull(message.getEvent());
 				assertValidStateAndChanges(message);
 				break;
 			case ON_MULLIGAN:
@@ -298,8 +323,8 @@ public class UnityClient implements AutoCloseable {
 					gameOverLatch.countDown();
 					break;
 				}
-				context.assertNotNull(message.getStartingCards());
-				context.assertTrue(message.getStartingCards().size() > 0);
+				assertNotNull(message.getStartingCards());
+				assertTrue(message.getStartingCards().size() > 0);
 				realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 						.messageType(MessageType.UPDATE_MULLIGAN)
 						.repliesTo(message.getId())
@@ -312,9 +337,9 @@ public class UnityClient implements AutoCloseable {
 				}
 				assertValidActions(message);
 				assertValidStateAndChanges(message);
-				context.assertNotNull(message.getGameState());
-				context.assertNotNull(message.getChanges());
-				context.assertNotNull(message.getActions());
+				assertNotNull(message.getGameState());
+				assertNotNull(message.getChanges());
+				assertNotNull(message.getActions());
 				respondRandomAction(message);
 				break;
 			case ON_GAME_END:
@@ -348,7 +373,7 @@ public class UnityClient implements AutoCloseable {
 	 */
 	@Suspendable
 	public void matchmakeQuickPlay(@Nullable String deckId) {
-		String queueId = "quickPlay";
+		var queueId = "quickPlay";
 		matchmakeAndPlay(deckId, queueId);
 	}
 
@@ -361,21 +386,21 @@ public class UnityClient implements AutoCloseable {
 	 */
 	@Suspendable
 	public void matchmakeAndPlay(String deckId, String queueId) {
-		CompletableFuture<Void> matchmaking = matchmake(deckId, queueId);
+		var matchmaking = matchmake(deckId, queueId);
 		try {
-			AsyncCompletionStage.get(matchmaking, 35000L, TimeUnit.MILLISECONDS);
+			matchmaking.get(35000L, TimeUnit.MILLISECONDS);
 			play();
-		} catch (InterruptedException | ExecutionException | SuspendExecution ex) {
+		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
 		} catch (TimeoutException e) {
 			Tracing.error(e, parentSpan, true);
-			context.fail(e);
+			fail(e);
 		}
 	}
 
 	@Suspendable
 	public void matchmakeConstructedPlay(String deckId) {
-		String queueId = "constructed";
+		var queueId = "constructed";
 		matchmakeAndPlay(deckId, queueId);
 	}
 
@@ -421,12 +446,12 @@ public class UnityClient implements AutoCloseable {
 			LOGGER.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
 			return;
 		}
-		final int actionCount = message.getActions().getCompatibility().size();
-		context.assertTrue(actionCount > 0);
+		final var actionCount = message.getActions().getCompatibility().size();
+		assertTrue(actionCount > 0);
 		// There should always be an end turn, choose one, discover or battlecry action
 		// Pick a random action
-		int action = getActionIndex(message);
-		context.assertNotNull(realtime);
+		var action = getActionIndex(message);
+		assertNotNull(realtime);
 		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 				.messageType(MessageType.UPDATE_ACTION)
 				.repliesTo(message.getId())
@@ -483,34 +508,34 @@ public class UnityClient implements AutoCloseable {
 	}
 
 	protected void assertValidStateAndChanges(ServerToClientMessage message) {
-		context.assertNotNull(message.getGameState());
-		context.assertNotNull(message.getChanges());
-		context.assertNotNull(message.getGameState().getTurnNumber());
-		context.assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.PLAYER).count() == 2);
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).count() >= 2);
-		context.assertTrue(message.getGameState().getEntities().stream().filter(e ->
+		assertNotNull(message.getGameState());
+		assertNotNull(message.getChanges());
+		assertNotNull(message.getGameState().getTurnNumber());
+		assertTrue(message.getGameState().getEntities().stream().allMatch(e -> e.getId() >= 0));
+		assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.PLAYER).count() == 2);
+		assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).count() >= 2);
+		assertTrue(message.getGameState().getEntities().stream().filter(e ->
 				e.getEntityType() == EntityType.HERO
 						&& e.getL().getZ() == EntityLocation.ZEnum.E
 		).allMatch(h ->
 				null != h.getMaxMana()));
-		context.assertNotNull(message.getGameState().getTurnNumber());
+		assertNotNull(message.getGameState().getTurnNumber());
 		if (message.getGameState().getTurnNumber() > 0) {
-			context.assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).anyMatch(h ->
+			assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getEntityType() == EntityType.HERO).anyMatch(h ->
 					h.getMaxMana() >= 1));
 		}
-		final Set<Integer> entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
+		final var entityIds = message.getGameState().getEntities().stream().map(Entity::getId).collect(Collectors.toSet());
 		final Set<Integer> changeIds = new HashSet<>(message.getChanges().getIds());
-		final boolean contains = entityIds.containsAll(changeIds);
+		final var contains = entityIds.containsAll(changeIds);
 		if (!contains) {
-			context.fail(/*message.toString()*/ "An ID is missing! " + Sets.difference(changeIds, entityIds).toString());
+			fail(/*message.toString()*/ "An ID is missing! " + Sets.difference(changeIds, entityIds).toString());
 		}
 		if (message.getMessageType() == MessageType.ON_GAME_EVENT
 				&& message.getEvent() != null
 				&& message.getEvent().getEventType() == GameEvent.EventTypeEnum.TRIGGER_FIRED) {
-			context.assertTrue(entityIds.contains(message.getEvent().getTriggerFired().getTriggerSourceId()));
+			assertTrue(entityIds.contains(message.getEvent().getTriggerFired().getTriggerSourceId()));
 		}
-		context.assertTrue(contains);
+		assertTrue(contains);
 	}
 
 	private int random(int upper) {
@@ -564,7 +589,7 @@ public class UnityClient implements AutoCloseable {
 			gameOverLatch.await(120L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			Tracing.error(e, parentSpan, true);
-			context.fail(e);
+			fail(e);
 		}
 		return this;
 	}

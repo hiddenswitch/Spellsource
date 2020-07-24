@@ -1,0 +1,44 @@
+{
+  "name": "Baron",
+  "type": "CLASS",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.867,
+      "g": 0.647,
+      "r": 0.514
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.803921568627451,
+      "g": 0.47058823529411764,
+      "r": 0.27450980392156865
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.694,
+      "g": 0.4,
+      "r": 0.231
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.478,
+      "g": 0.267,
+      "r": 0.145
+    }
+  },
+  "hero": "hero_baron_aldus"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Loyal Landowner",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Instead of attacking, this summons a 1/1 Sapling that attacks the target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "value": -1,
+          "attribute": "NUMBER_OF_ATTACKS"
+        },
+        {
+          "class": "SummonSpell",
+          "spell": {
+            "class": "SetAttackerSpell",
+            "target": "OUTPUT"
+          },
+          "card": "token_sapling"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

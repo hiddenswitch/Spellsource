@@ -1,0 +1,23 @@
+{
+  "name": "Mystery Box",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "FREE",
+  "description": "Summon a random 5-Cost minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 5
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

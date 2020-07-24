@@ -1,0 +1,42 @@
+{
+  "name": "Fumewalker Zin",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Whenever an allied Demon dies, gain Dodge and Hidden.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "fireCondition": {
+        "class": "RaceCondition",
+        "race": "DEMON"
+      },
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "TRIGGER_HOST",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DIVINE_SHIELD"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "STEALTH"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

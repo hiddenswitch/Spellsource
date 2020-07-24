@@ -1,0 +1,22 @@
+{
+  "name": "The Aegis Horn",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Summon a 2/15 Sentinel with Guard and Elusive.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_aegis_horn_sentinel"
+  },
+  "attributes": {
+    "ARTIFACT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

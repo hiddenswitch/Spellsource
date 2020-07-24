@@ -1,0 +1,32 @@
+{
+  "name": "Eternal Steed",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "SPIRIT",
+  "description": "Aftermath: At the end of this turn, summon an Eternal Steed.",
+  "deathrattle": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_eternal_steed"
+      },
+      "maxFires": 1
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

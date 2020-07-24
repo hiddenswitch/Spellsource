@@ -1,0 +1,25 @@
+{
+  "name": "Lord of the Sea",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Your Champion has 60 maximum Health this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SetAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 60,
+      "attribute": "MAX_HP"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

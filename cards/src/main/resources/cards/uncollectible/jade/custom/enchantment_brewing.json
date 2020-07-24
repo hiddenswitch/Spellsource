@@ -1,0 +1,37 @@
+{
+  "name": "Brewing",
+  "type": "ENCHANTMENT",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Your champion can only take 1 damage at a time until the start of your next turn.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "PreDamageTrigger",
+        "sourcePlayer": "BOTH",
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ModifyDamageSpell",
+        "value": 1,
+        "operation": "SET"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_brewing"
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

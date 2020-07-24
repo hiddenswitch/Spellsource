@@ -1,0 +1,38 @@
+{
+  "name": "Unending Nightmare",
+  "type": "ENCHANTMENT",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Whenever your turn ends, destroy this minion and resummon it,",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "SELF"
+        },
+        {
+          "class": "ReviveMinionSpell",
+          "target": "SELF",
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "OUTPUT",
+            "card": "enchantment_unending_nightmare"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

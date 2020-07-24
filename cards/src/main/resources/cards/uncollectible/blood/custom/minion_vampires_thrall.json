@@ -1,0 +1,24 @@
+{
+  "name": "Vampire's Thrall",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Minions adjacent to this one have +1 Health.",
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "BuffAura",
+      "target": "ADJACENT_MINIONS",
+      "attackBonus": 0,
+      "hpBonus": 1
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

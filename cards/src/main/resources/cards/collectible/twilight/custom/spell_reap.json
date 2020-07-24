@@ -1,0 +1,42 @@
+{
+  "name": "Reap",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Destroy the lowest-Health minion on the field. Repeatable this turn.",
+  "condition": {
+    "class": "ComparisonCondition",
+    "operation": "GREATER",
+    "value1": {
+      "class": "EntityCountValueProvider",
+      "target": "ALL_MINIONS"
+    },
+    "value2": 0
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "ALL_MINIONS",
+        "attribute": "HP",
+        "operation": "MINIMUM"
+      },
+      "attribute": "HP"
+    },
+    "randomTarget": true
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

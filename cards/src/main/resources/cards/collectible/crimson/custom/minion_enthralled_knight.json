@@ -1,0 +1,36 @@
+{
+  "name": "Enthralled Knight",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "<b>Opener:</b> Deal 3 damage to an enemy. Restore #3 Health to your champion.",
+  "battlecry": {
+    "targetSelection": "ENEMY_CHARACTERS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 3
+        },
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 3
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

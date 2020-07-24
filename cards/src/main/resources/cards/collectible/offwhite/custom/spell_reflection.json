@@ -1,0 +1,32 @@
+{
+  "name": "Reflection",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "COMMON",
+  "description": "Choose an enemy unit. Summon a 3/3 copy of it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 3
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 3
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

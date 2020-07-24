@@ -1,0 +1,29 @@
+{
+  "name": "Nilfheim Needlegunner",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "After you play a card, deal 2 damage split among all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterCardPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 2
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Gloomlurker",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Guard. Aftermath: Destroy the leftmost enemy minion.",
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "LEFTMOST_ENEMY_MINION"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

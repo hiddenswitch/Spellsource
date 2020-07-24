@@ -1,0 +1,23 @@
+{
+  "name": "Soul Drain",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Return a minion to its owner's hand. It costs Health instead of Lun.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "COSTS_HEALTH_INSTEAD_OF_MANA"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

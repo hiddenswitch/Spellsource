@@ -1,0 +1,33 @@
+{
+  "name": "Vitium Surger",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever this takes damage, receive a random Artifact.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "ARTIFACT",
+        "operation": "HAS"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

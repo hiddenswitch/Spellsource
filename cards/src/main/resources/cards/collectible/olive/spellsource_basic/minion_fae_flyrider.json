@@ -1,0 +1,31 @@
+{
+  "name": "Fae Flyrider",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "FAE",
+  "description": "Dash. Has +2 Attack while you have a Beast.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "SELF",
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      },
+      "targetPlayer": "SELF"
+    },
+    "attackBonus": 2,
+    "hpBonus": 0
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

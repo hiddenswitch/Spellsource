@@ -1,0 +1,29 @@
+{
+  "name": "Henchman Helper",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Give an allied Guard minion +4/+4.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 4,
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "TAUNT",
+        "operation": "HAS"
+      },
+      "hpBonus": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

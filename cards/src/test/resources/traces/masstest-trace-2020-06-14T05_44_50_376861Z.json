@@ -1,0 +1,26 @@
+{
+  "seed" : -457860132252981460,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "MAGENTA", "AMBER" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_menagerie_mogul", "minion_volcanic_elemental", "spell_pyramid_scheme", "minion_guard_sprite", "minion_skeletal_warrior", "minion_vault_defender", "spell_exotic_goods", "minion_giant_serpent", "minion_lounge_brownie", "minion_crystal_golem", "minion_anxious_shopkeep", "spell_mystery_box", "minion_volcanic_elemental", "minion_senior_explorer", "spell_steed_sale", "minion_chainwrecker_corsair", "minion_guild_guard", "minion_tree_giant", "spell_flood_the_market", "minion_scaleseller", "minion_mystical_merchant", "minion_rohei_the_bold", "minion_inora_spellbound", "spell_hired_help", "minion_giant_reaper", "minion_fiendish_giant", "minion_blackflame_bomber", "spell_coin_toss", "minion_lava_manticore", "minion_mosshorn" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_lumina", "minion_uccian_hydra", "minion_stubborn_stegodon", "minion_lounge_brownie", "spell_breeding_grounds", "spell_crystal_wings", "minion_doctosaur", "minion_giant", "minion_mindswapper", "minion_lord_cookie", "minion_acolyte_of_peroth'arn", "minion_sly_conquistador", "minion_chromatic_vohlok", "spell_pollinate", "minion_dea", "minion_champion_of_death", "minion_gargoyle_warden", "minion_squirrel_knight", "minion_dragonfly", "minion_monarch_barata", "minion_chief_vigilante", "minion_nervous_worker", "minion_vitium_surger", "minion_blood_cultist", "minion_vermancer_prophet", "minion_bittertide_crab", "minion_gentleman_s_giant", "spell_hive_mind", "minion_vohkrovanis", "spell_golden_scarab" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 9, 16, 20 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 60, 40 ]
+  } ],
+  "actions" : [ 0, 1, 1, 0, 0, 0, 0, 0, 2, 1, 4, 0, 0, 0, 0, 0, 0, 0, 1, 4, 4, 0, 0, 6, 0, 22, 2, 5, 0, 2, 26, 9, 4, 0, 0, 10, 8, 19, 4, 9, 3, 1, 40, 5, 0, 0, 1, 0, 3, 16, 3, 2, 7, 14, 4, 27, 12, 4, 0, 1, 4, 0, 28, 1, 3, 1, 9, 35, 12, 8, 24, 5, 2, 6, 1, 2, 0, 1, 0, 16, 6, 2, 5, 0, 46, 25, 4, 14, 8, 1, 0, 20, 0, 2, 0, 1, 0, 12, 5, 3, 1, 0, 7, 5, 3, 0, 5, 2, 2, 21, 11, 6, 32, 24, 11, 0, 5, 1, 0, 8, 5, 0, 2 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

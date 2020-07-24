@@ -1,0 +1,34 @@
+{
+  "name": "Doctosaur",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "After your champion attacks, your Mechs attack the same target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "target": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "FightSpell"
+      },
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "secondaryTarget": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

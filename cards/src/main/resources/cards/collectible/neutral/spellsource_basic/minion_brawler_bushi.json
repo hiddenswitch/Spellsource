@@ -1,0 +1,25 @@
+{
+  "name": "Brawler Bushi",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever a minion attacks, swap its Attack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "MINION"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "EVENT_SOURCE"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

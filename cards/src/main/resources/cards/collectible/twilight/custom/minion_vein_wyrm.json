@@ -1,0 +1,22 @@
+{
+  "name": "Vein Wyrm",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Dash. Costs (1) less for each point of excess Health you've restored to allies this turn.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ExcessHealingThisTurnValueProvider"
+  },
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

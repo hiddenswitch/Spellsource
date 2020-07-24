@@ -1,0 +1,40 @@
+{
+  "name": "Altranissa",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Opener and Supremacy: Summon a 4/4 Dragon with Blitz.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_55dragoncharge"
+      }
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_55dragoncharge"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

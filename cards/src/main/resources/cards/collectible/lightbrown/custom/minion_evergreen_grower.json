@@ -1,0 +1,29 @@
+{
+  "name": "Evergreen Grower",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Opener: Give another Elemental +1/+2.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 1,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "ELEMENTAL"
+      },
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

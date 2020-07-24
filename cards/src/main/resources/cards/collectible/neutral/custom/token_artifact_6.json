@@ -1,0 +1,31 @@
+{
+  "name": "Amulet of Domination",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Shuffle a minion into your deck. It costs (3) less.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ShuffleMinionToDeckSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 3,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "ARTIFACT": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ]
+}

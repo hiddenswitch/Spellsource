@@ -1,0 +1,32 @@
+{
+  "name": "Armored Scoundrel",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "CAMO",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Whenever you lose Armor, gain +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "ArmorChangedTrigger",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "operation": "LESS",
+        "value1": {
+          "class": "EventValueProvider"
+        },
+        "value2": 0
+      }
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "TRIGGER_HOST",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

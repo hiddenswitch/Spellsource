@@ -1,0 +1,33 @@
+{
+  "name": "Curious Faerie",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Whenever you draw a card, reduce its Cost by (1).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "EVENT_TARGET",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

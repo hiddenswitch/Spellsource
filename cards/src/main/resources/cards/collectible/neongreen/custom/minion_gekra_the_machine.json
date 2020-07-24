@@ -1,0 +1,196 @@
+{
+  "name": "Gekra, the Machine",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Aftermath: Give this Guard, Dodge, Hidden, or Extra Strike at random and shuffle it into your deck.",
+  "deathrattle": {
+    "class": "ShuffleToDeckSpell",
+    "target": "SELF",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "WINDFURY",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "TAUNT",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "DIVINE_SHIELD",
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "OUTPUT",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "STEALTH",
+              "operation": "HAS"
+            }
+          }
+        ],
+        "invert": true
+      },
+      "spell": {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "AnyMatchFilterCondition",
+          "target": "SELF",
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "RESERVED_BOOLEAN_1",
+            "invert": true,
+            "operation": "HAS"
+          }
+        },
+        "spell": {
+          "class": "RandomlyCastSpell",
+          "spells": [
+            {
+              "class": "ConditionalSpell",
+              "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "OUTPUT",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "TAUNT",
+                  "operation": "HAS"
+                },
+                "invert": true
+              },
+              "spell": {
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "TAUNT"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
+              }
+            },
+            {
+              "class": "ConditionalSpell",
+              "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "OUTPUT",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "DIVINE_SHIELD",
+                  "operation": "HAS"
+                },
+                "invert": true
+              },
+              "spell": {
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "DIVINE_SHIELD"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
+              }
+            },
+            {
+              "class": "ConditionalSpell",
+              "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "OUTPUT",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "STEALTH",
+                  "operation": "HAS"
+                },
+                "invert": true
+              },
+              "spell": {
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "STEALTH"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
+              }
+            },
+            {
+              "class": "ConditionalSpell",
+              "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "OUTPUT",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "WINDFURY",
+                  "operation": "HAS"
+                },
+                "invert": true
+              },
+              "spell": {
+                "class": "MetaSpell",
+                "spells": [
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "OUTPUT",
+                    "attribute": "WINDFURY"
+                  },
+                  {
+                    "class": "AddAttributeSpell",
+                    "target": "SELF",
+                    "attribute": "RESERVED_BOOLEAN_1"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

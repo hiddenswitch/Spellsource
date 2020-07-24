@@ -4,9 +4,6 @@ import net.demilich.metastone.game.events.GameEvent;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 2/19/17.
- */
 public class EventLogicRequest<T extends GameEvent> extends LogicRequest implements Serializable {
 	private String cardInventoryId;
 	private int entityId;

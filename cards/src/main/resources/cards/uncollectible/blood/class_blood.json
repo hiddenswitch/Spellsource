@@ -1,0 +1,44 @@
+{
+  "name": "Vampire Lord",
+  "type": "CLASS",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.384,
+      "g": 0.392,
+      "r": 0.6
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.08235294117647059,
+      "g": 0.09019607843137255,
+      "r": 0.4
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.078,
+      "g": 0.086,
+      "r": 0.396
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.078,
+      "g": 0.086,
+      "r": 0.396
+    }
+  },
+  "hero": "hero_koltira"
+}

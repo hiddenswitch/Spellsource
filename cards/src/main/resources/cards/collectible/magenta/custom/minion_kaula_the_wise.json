@@ -1,0 +1,35 @@
+{
+  "name": "Kau'La the Wise",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Your cards from other classes cost (2) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -2,
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "heroClass": "SELF",
+          "invert": true
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "ANY",
+          "invert": true
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_ECHOESOFEMINENCE"
+  ]
+}

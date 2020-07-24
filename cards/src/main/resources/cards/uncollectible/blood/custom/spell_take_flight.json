@@ -1,0 +1,24 @@
+{
+  "name": "Take Flight",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Your champion is Immune until the start of your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "AURA_IMMUNE",
+    "revertTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

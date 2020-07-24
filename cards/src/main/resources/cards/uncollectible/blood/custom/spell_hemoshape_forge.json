@@ -1,0 +1,35 @@
+{
+  "name": "Hemoshape: Forge",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Take 3 damage. Add a copy of your weapon to your hand. It costs Health instead of Lun.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3,
+        "ignoreSpellDamage": true
+      },
+      {
+        "class": "CopyCardSpell",
+        "target": "FRIENDLY_WEAPON",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "COSTS_HEALTH_INSTEAD_OF_MANA"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

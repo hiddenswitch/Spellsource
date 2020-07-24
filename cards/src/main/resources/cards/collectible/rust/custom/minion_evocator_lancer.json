@@ -1,0 +1,47 @@
+{
+  "name": "Evocator Lancer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Opener: Summon a 4/3 Ebon Drake with Dash for each spell you cast this turn.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        },
+        "offset": -1
+      },
+      "card": "token_ebon_drake"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Scavenge",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "COMMON",
+  "description": "Gain [0] Armor. Draw a card. (Increases for each minion that died this turn)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": {
+          "class": "DiedThisTurnValueProvider",
+          "targetPlayer": "BOTH"
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH"
+      }
+    }
+  ]
+}

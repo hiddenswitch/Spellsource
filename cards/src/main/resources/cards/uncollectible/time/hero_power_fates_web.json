@@ -1,0 +1,25 @@
+{
+  "name": "Fate's Web",
+  "heroPower": "hero_power_fates_tapestry",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Reshuffle a card. Draw a card.",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spells": [
+      {
+        "class": "ChooseAndReshuffleSpell",
+        "value": 1
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

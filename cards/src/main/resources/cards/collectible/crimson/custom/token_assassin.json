@@ -1,0 +1,19 @@
+{
+  "name": "Assassin",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "<b>Dash</b>",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

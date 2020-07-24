@@ -1,0 +1,22 @@
+{
+  "name": "Role Call",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CAMO",
+  "rarity": "RARE",
+  "description": "Receive 2 random Opener minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "BATTLECRY",
+      "cardType": "MINION",
+      "operation": "HAS"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

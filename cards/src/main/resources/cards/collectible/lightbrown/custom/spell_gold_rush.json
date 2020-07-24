@@ -1,0 +1,30 @@
+{
+  "name": "Gold Rush",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "LEGENDARY",
+  "description": "Shuffle 8 Legendaries into your deck. They cost (0).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "value": 8,
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "rarity": "LEGENDARY"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

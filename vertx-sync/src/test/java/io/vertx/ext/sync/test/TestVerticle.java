@@ -1,5 +1,6 @@
 package io.vertx.ext.sync.test;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.channels.Channel;
@@ -44,7 +45,7 @@ public class TestVerticle extends SyncVerticle {
 
   @Override
   @Suspendable
-  public void start() throws Exception {
+  protected void syncStart() throws SuspendExecution, InterruptedException {
 
     ai = new AsyncInterfaceImpl(vertx);
 
@@ -317,7 +318,7 @@ public class TestVerticle extends SyncVerticle {
 
   @Override
   @Suspendable
-  public void stop() {
+  protected void syncStop() throws SuspendExecution {
 
     try {
 

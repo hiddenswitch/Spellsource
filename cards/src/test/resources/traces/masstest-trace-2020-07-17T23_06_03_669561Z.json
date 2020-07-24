@@ -1,0 +1,26 @@
+{
+  "seed" : 404559855496747957,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CAMO", "NEONGREEN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_nomads_intuition", "minion_chief_vigilante", "minion_blackflame_bomber", "minion_doodles", "minion_burrows_sniper", "minion_peacock_mystic", "minion_timewalker_initiate", "weapon_dreamscape_scythe", "minion_the_diamond_sultan", "minion_vasz_the_sellsword", "minion_chief_vigilante", "spell_smokescreen", "minion_armored_scoundrel", "minion_alien_ravager", "spell_warriors_death", "minion_stallius_the_horned", "weapon_dreamscape_scythe", "minion_inept_investigator", "minion_chainwrecker_corsair", "minion_perplexed_courtsman", "minion_towering_treant", "spell_espionage", "spell_coerce", "minion_line_breaker", "spell_no_quarter", "spell_nomads_intuition", "spell_intimidate", "minion_deranged_greengill", "minion_frontline_cutthroat", "minion_frontline_cutthroat" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_holy_bulwark", "minion_towering_treant", "minion_gekra_the_machine", "minion_hostile_snapdragon", "minion_defender_of_tomorrow", "minion_lingering_spirit", "minion_primalist_kirra", "minion_towering_treant", "minion_realm_parasite", "spell_cull_and_reap", "minion_klive_icetooth", "minion_fiery_warchief", "spell_transhumanism", "spell_cellular_overdrive", "minion_organ_donor", "minion_sleepy_sprite", "minion_hope_eater", "spell_chaos_bolts", "minion_gentleman_s_giant", "minion_rafaam_philanthropist", "spell_tranquilizer_shot", "spell_bioweaponize", "minion_lord_cookie", "minion_io_the_catatonic", "minion_hooded_ritualist", "spell_primordial_supremacy", "minion_augmented_pixie", "minion_enhancing_shaman", "minion_bittertide_crab", "minion_warclub_ruffian" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 28, 19, 31 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 39 ]
+  } ],
+  "actions" : [ 0, 1, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 7, 2, 2, 13, 0, 1, 21, 18, 1, 0, 0, 1, 16, 1, 0, 0, 0, 1, 17, 1, 0, 4, 0, 11, 8, 0, 1, 7, 7, 0, 20, 5, 0, 1, 11, 1, 2, 5, 4 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

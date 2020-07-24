@@ -1,0 +1,43 @@
+{
+  "name": "Market Research",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "EPIC",
+  "description": "Shuffle your hand into your deck, then Source copies of four cards in your opponent's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ShuffleOriginalToDeckSpell",
+        "target": "FRIENDLY_HAND"
+      },
+      {
+        "class": "CastRepeatedlySpell",
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardSource": {
+            "class": "DeckSource",
+            "distinct": true,
+            "targetPlayer": "OPPONENT"
+          }
+        },
+        "howMany": 4
+      }
+    ]
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ]
+}

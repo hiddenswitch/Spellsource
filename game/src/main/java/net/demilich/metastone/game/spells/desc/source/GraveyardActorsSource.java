@@ -54,11 +54,11 @@ public class GraveyardActorsSource extends CardSource implements HasCardCreation
 						return null;
 					}
 					// Include the turn this card died
+					sourceCard = sourceCard.getCopy();
 					sourceCard.getAttributes().put(Attribute.DIED_ON_TURN, actor.getAttributeValue(Attribute.DIED_ON_TURN));
 					return sourceCard;
 				})
 				.filter(Objects::nonNull)
-				.collect(toCollection(CardArrayList::new))
-				.getCopy();
+				.collect(toCollection(CardArrayList::new));
 	}
 }

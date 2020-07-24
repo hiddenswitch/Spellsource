@@ -636,7 +636,7 @@ public interface Accounts {
 
 		router.route(resetUrl)
 				.method(HttpMethod.GET)
-				.handler(Sync.suspendableHandler(routingContext -> {
+				.handler(Sync.fiber(routingContext -> {
 					routingContext.response().setStatusCode(303);
 
 					if (routingContext.queryParam("token").size() != 1) {
@@ -663,7 +663,7 @@ public interface Accounts {
 
 		router.route(resetUrl)
 				.method(HttpMethod.POST)
-				.handler(HandlerFactory.returnUnhandledExceptions(routingContext -> {
+				.handler(Handlers.returnUnhandledExceptions(routingContext -> {
 					routingContext.response().setStatusCode(303);
 
 					String password1 = routingContext.request().getFormAttribute("password1");
@@ -713,7 +713,7 @@ public interface Accounts {
 
 		router.route(requestUrl)
 				.method(HttpMethod.POST)
-				.handler(Sync.suspendableHandler(routingContext -> {
+				.handler(Sync.fiber(routingContext -> {
 					routingContext.response().setStatusCode(303);
 					String email = routingContext.request().getFormAttribute("email");
 					boolean isValid = EmailValidator.getInstance().isValid(email);

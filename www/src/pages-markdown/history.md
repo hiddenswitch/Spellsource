@@ -5,6 +5,8 @@ path: "/history"
 header: false
 ---
 
+## History
+
 ### 0.8.34-2.0.31 (June 30th, 2019)
 
 Bug fixes and content additions.

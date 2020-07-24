@@ -1,0 +1,40 @@
+{
+  "name": "Conjuration",
+  "heroPower": "hero_power_advanced_summoning",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "FREE",
+  "description": "Summon a 0/2 Eidolon with Guard.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "EIDOLON_RACE",
+          "operation": "HAS"
+        },
+        "spell": {
+          "class": "custom.SetRaceFromAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "EIDOLON_RACE",
+          "secondaryTarget": "FRIENDLY_PLAYER"
+        }
+      },
+      "card": "token_eidolon"
+    }
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

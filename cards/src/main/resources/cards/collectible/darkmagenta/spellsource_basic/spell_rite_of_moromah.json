@@ -1,0 +1,51 @@
+{
+  "name": "Rite of Moromah",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "RARE",
+  "description": "Draw a card for each friendly minion. Invoke (2): Each minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_MINIONS"
+      }
+    },
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "name": "Don't Invoke",
+      "description": "Only draw from friendly minions",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_MINIONS"
+        }
+      },
+      "mana": 0
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "name": "Rite of Moro-cards",
+      "description": "Draw from all minions.",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": {
+          "class": "EntityCountValueProvider",
+          "target": "ALL_MINIONS"
+        }
+      },
+      "mana": 2
+    }
+  },
+  "attributes": {
+    "INVOKE": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

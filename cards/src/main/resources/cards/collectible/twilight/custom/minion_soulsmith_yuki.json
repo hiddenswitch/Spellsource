@@ -1,0 +1,28 @@
+{
+  "name": "Soulsmith Yuki",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Your champion and weapon are both Immune.",
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO",
+      "attribute": "AURA_IMMUNE"
+    },
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_WEAPON",
+      "attribute": "AURA_IMMUNE"
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

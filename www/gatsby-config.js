@@ -1,3 +1,6 @@
+const remark = require('remark')
+const visit = require('unist-util-visit')
+
 function isString (str) {
   return typeof str === 'string'
 }
@@ -59,14 +62,17 @@ module.exports = {
               if (!!object['args' + i.toString()]) {
                 const args = object['args' + i.toString()]
                 args.forEach(arg => {
-                  if (!!arg.value) {
+                  if (arg.hasOwnProperty('value')) {
                     if (isNumber(arg.value)) {
                       arg['valueI'] = arg.value
-                      delete arg.value
                     } else if (isString(arg.value)) {
                       arg['valueS'] = arg.value
-                      delete arg.value
+                    } else if (arg.value === true) {
+                      arg['valueB'] = true
+                    } else if (arg.value === false) {
+                      arg['valueB'] = false
                     }
+                    delete arg.value
                   }
                   if (!!arg.check) {
                     if (isArray(arg.check)) {
@@ -85,7 +91,19 @@ module.exports = {
             const newMessages = []
             for (let i = 0; i <= 9; i++) {
               if (!!object['message' + i.toString()]) {
-                newMessages.push(object['message' + i.toString()])
+                let newMessage = object['message' + i.toString()]
+                if (!!newArgs[i] && !!newArgs[i].args) {
+                  for (let j = 0; j < newArgs[i].args.length; j++) {
+                    let arg = newArgs[i].args[j]
+                    let token = '%' + (j+1).toString()
+                    if (arg.type === 'field_label_serializable_hidden'
+                      && !newMessage.includes(token)) {
+                      newMessage = token + newMessage
+                      console.warn('Block ' + object.type + ' forgot arg ' + token + ' in message' + i.toString())
+                    }
+                  }
+                }
+                newMessages.push(newMessage)
               } else {
                 break
               }
@@ -120,13 +138,14 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../cards/src/main/resources/cards/custom`,
+        path: `${__dirname}/../cards/src/main/resources/cards`,
       },
     },
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
     `gatsby-image`,
     `gatsby-transformer-sharp`,
+    `gatsby-plugin-anchor-links`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {
@@ -138,12 +157,20 @@ module.exports = {
               // It's important to specify the maxWidth (in pixels) of
               // the content container as this plugin uses this as the
               // base for generating different widths of each image.
-              maxWidth: 650,
+              maxWidth: 700,
               linkImagesToOriginal: false,
               backgroundColor: 'transparent',
               withWebp: true,
               disableBgImage: true,
               quality: 100,
+              wrapperStyle: `float: right; width: 100%; margin-left: 0.5em; margin-bottom: 0.5em;`
+            },
+          },
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              maintainCase: false,
+              removeAccents: true,
             },
           },
         ],
@@ -161,23 +188,40 @@ module.exports = {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`title`, `tags`, `rawMarkdownBody`],
+        fields: [`title`, `rawMarkdownBody`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type MarkdownRemark, list how to resolve the fields` values
           MarkdownRemark: {
             title: node => node.frontmatter.title,
-            tags: node => node.frontmatter.tags,
             path: node => node.frontmatter.path,
-            rawMarkdownBody: node => node.rawMarkdownBody
+            rawMarkdownBody: node => node.rawMarkdownBody,
+            excerpt: node => {
+              const excerptLength = 250 // Hard coded excerpt length
+              let excerpt = ''
+              const tree = remark().parse(node.rawMarkdownBody)
+              visit(tree, 'text', (node) => {
+                excerpt += node.value
+              })
+              return excerpt.slice(0, excerptLength) + '...'
+            },
+            nodeType: node => 'MarkdownRemark'
           },
           Card: {
             // TODO: Change the name of the field to be its content
             title: node => node.name,
-            tags: node => '', // [node.type, ...(Object.keys(node.attributes) || [])].join(', ')
             rawMarkdownBody: node => node.description,
             path: node => node.path,
-            collectible: node => node.collectible
+            collectible: node => node.collectible,
+            excerpt: node => node.description,
+            nodeType: node => 'Card',
+            heroClass: node => node.heroClass,
+            baseManaCost: node => node.baseManaCost
+          },
+          Block: {
+            title: node => node.type.replace('_', ' '),
+            nodeType: node => 'Block',
+            rawMarkdownBody: node => node.searchMessage
           }
         },
         // Optional filter to limit indexed nodes

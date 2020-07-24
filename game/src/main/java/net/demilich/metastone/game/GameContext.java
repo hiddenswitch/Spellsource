@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -264,6 +265,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		setStatus(fromContext.getStatus());
 		setTurnState(fromContext.getTurnState());
 		setWinner(fromContext.getWinner());
+		setTrace(getTrace().clone());
 		if (fromContext.getTrace() != null) {
 			setTrace(fromContext.getTrace().clone());
 		}
@@ -1467,7 +1469,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        completed. This can be used to implement progress on a different thread.
 	 */
 	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, AtomicInteger matchCounter) {
-		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, false, matchCounter, null);
+		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, false, matchCounter, null, null);
 	}
 
 	/**
@@ -1491,7 +1493,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param includeMirrors  When {@code true}, includes mirror matchups for each deck.
 	 */
 	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors) {
-		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, includeMirrors, null, null);
+		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, includeMirrors, null, null, null);
 	}
 
 	/**
@@ -1501,25 +1503,28 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * <p>
 	 * When more than two decks are specified, the players will have their statistics merged with multiple decks.
 	 *
-	 * @param decks           Decks to run the match with. At least two are required.
-	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
-	 *                        corresponds to an AI to use for this player.
-	 *                        <p>
-	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first
-	 *                        player's AI should be a game state value behaviour.
-	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
-	 *                        corresponds to an AI to use for this player.
-	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
-	 *                        {@link #simulationCount(int, int, boolean)}.
-	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
-	 *                        on this JVM instance.
-	 * @param includeMirrors  When {@code true}, includes mirror matchups
-	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
-	 * @param contextHandler  A handler that can modify the game context for customization after it was initialized with
-	 *                        the specified decks but before mulligans. For example, the {@link GameLogic#getSeed()} can
-	 *                        be
+	 * @param decks                        Decks to run the match with. At least two are required.
+	 * @param player1                      A {@link Supplier} (function which returns a new instance) of a {@link
+	 *                                     Behaviour} that corresponds to an AI to use for this player.
+	 *                                     <p>
+	 *                                     For example, use the argument {@code GameStateValueBehaviour::new} to specify
+	 *                                     that the first player's AI should be a game state value behaviour.
+	 * @param player2                      A {@link Supplier} (function which returns a new instance) of a {@link
+	 *                                     Behaviour} that corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup              The number of games per matchup to play. The number of matchups total can be
+	 *                                     calculated with {@link #simulationCount(int, int, boolean)}.
+	 * @param useJavaParallel              When {@code true}, uses the Java Streams Parallel interface to parallelize this
+	 *                                     computation on this JVM instance.
+	 * @param includeMirrors               When {@code true}, includes mirror matchups
+	 * @param matchCounter                 When not {@code null}, the simulator will increment this counter each time a
+	 *                                     match is
+	 * @param mutateConstructedGameContext A handler that can modify the game context for customization after it was
+	 *                                     initialized with the specified decks but before mulligans. For example, the
+	 *                                     {@link GameLogic#getSeed()} can
+	 * @param afterGameContextInit         A handler that can add/remove things to the game context after the players have
+	 *                                     mulliganned.
 	 */
-	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> mutateConstructedGameContext, Consumer<GameContext> afterGameContextInit) {
 		// Actually run the computation
 		List<GameDeck[]> combinations = getDeckCombinations(decks, includeMirrors);
 		Stream<GameDeck[]> deckStream = IntStream.range(0, gamesPerMatchup).boxed().flatMap(i -> combinations.stream());
@@ -1532,8 +1537,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			newGame.setLoggingLevel(Level.OFF);
 			newGame.behaviours[0] = player1.get();
 			newGame.behaviours[1] = player2.get();
-			if (contextHandler != null) {
-				contextHandler.accept(newGame);
+			if (mutateConstructedGameContext != null) {
+				mutateConstructedGameContext.accept(newGame);
 			}
 			SimulationResult innerResult = new SimulationResult(1);
 
@@ -1542,14 +1547,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 					matchCounter.incrementAndGet();
 				}
 
-				newGame.play();
+				newGame.init();
+				if (afterGameContextInit != null) {
+					afterGameContextInit.accept(newGame);
+				}
+				newGame.resume();
 
 				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
 				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
 				innerResult.calculateMetaStatistics();
 			} catch (Throwable any) {
 				innerResult.setExceptionCount(innerResult.getExceptionCount() + 1);
-				return null;
+				return innerResult;
 			} finally {
 				newGame.dispose();
 			}

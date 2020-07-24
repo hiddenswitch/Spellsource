@@ -1,0 +1,51 @@
+{
+  "name": "Doodles",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Skill: Draw a card. After you play a minion, change back.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_draw_card_skill"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "BeforeMinionPlayedTrigger",
+              "targetPlayer": "SELF"
+            },
+            "spell": {
+              "class": "RemoveEnchantmentSpell",
+              "target": "FRIENDLY_PLAYER",
+              "card": "enchantment_draw_card_skill"
+            },
+            "maxFires": 1
+          }
+        },
+        {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RefreshHeroPowerSpell"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

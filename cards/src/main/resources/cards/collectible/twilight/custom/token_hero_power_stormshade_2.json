@@ -1,0 +1,32 @@
+{
+  "name": "Sanguiphage",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TWILIGHT",
+  "rarity": "FREE",
+  "description": "Gain +2 Attack and Extra Strike this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "target": "FRIENDLY_HERO",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "WINDFURY",
+        "revertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_FROMTHEDARKNESS"
+  ]
+}

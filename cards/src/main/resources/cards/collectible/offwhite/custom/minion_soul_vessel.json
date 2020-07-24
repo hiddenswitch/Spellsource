@@ -1,0 +1,76 @@
+{
+  "name": "Soul Vessel",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OFFWHITE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Consume 1 to summon another Soul Vessel.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "offset": {
+          "class": "BoardCountValueProvider",
+		  "offset": -1
+        }
+      },
+      "value2": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "QueryTargetSpell",
+          "howMany": 1,
+          "target": "OTHER_FRIENDLY_MINIONS",
+	      "filter": {
+	        "class": "EntityEqualsFilter",
+		    "invert": true,
+		    "secondaryTarget": "TRIGGER_HOST"
+	      },
+          "value": {
+            "class": "AttributeValueProvider",
+            "attribute": "INDEX",
+            "multiplier": -1
+          },
+          "spell": {
+            "class": "DestroySpell"
+          }
+        },
+        {
+          "class": "MetaSpell",
+          "howMany": {
+            "class": "BoardCountValueProvider",
+            "offset": 2,
+            "multiplier": -1
+          },
+          "spells": [
+            {
+              "class": "DiscardSpell",
+              "target": "RIGHTMOST_FRIENDLY_CARD_HAND"
+            }
+          ]
+        },
+		{
+          "class": "SummonSpell",
+          "value": 1,
+          "target": "SELF"
+		}
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+	"CORE"
+  ],
+  "fileFormatVersion": 1
+}

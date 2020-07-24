@@ -1,0 +1,34 @@
+{
+  "name": "Super Sale!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "COMMON",
+  "description": "Both players draw their highest-Cost card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "ManaCostFilter",
+        "value": {
+          "class": "ReduceValueProvider",
+          "target": "FRIENDLY_DECK",
+          "operation": "MAXIMUM",
+          "value1": {
+            "class": "ManaCostProvider"
+          }
+        },
+        "operation": "EQUAL"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ]
+}

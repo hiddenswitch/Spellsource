@@ -1,0 +1,36 @@
+{
+  "name": "Blackboar",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Opener: The next Dash minion you play this turn costs (3) less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "value": 3,
+        "cardType": "MINION",
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "requiredAttribute": "RUSH",
+          "targetPlayer": "SELF"
+        },
+        "operation": "SUBTRACT",
+        "requiredAttribute": "RUSH"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

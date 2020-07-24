@@ -1,0 +1,47 @@
+{
+  "name": "Father Kiliar",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKBLUE",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Destroy your other minions and choose a Ritual. (Each minion destroyed empowers the ritual.)",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "OTHER_FRIENDLY_MINIONS"
+        },
+        {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "spell": {
+              "class": "SetAttributeSpell",
+              "target": "OUTPUT",
+              "value": {
+                "class": "DestroyedThisSequenceValueProvider"
+              },
+              "attribute": "RESERVED_INTEGER_1"
+            }
+          },
+          "cards": [
+            "spell_ritual_of_proliferation",
+            "spell_ritual_of_exultation",
+            "spell_ritual_of_annihilation"
+          ]
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

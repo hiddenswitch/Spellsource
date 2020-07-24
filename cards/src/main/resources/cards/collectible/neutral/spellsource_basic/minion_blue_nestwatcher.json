@@ -1,0 +1,41 @@
+{
+  "name": "Blue Nestwatcher",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 12,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Guard. Opener: Receive [0] 1/1 Dragons. (Increases for each card in your hand)",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      },
+      "card": "token_blue_whelp"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "offset": -1,
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  ]
+}

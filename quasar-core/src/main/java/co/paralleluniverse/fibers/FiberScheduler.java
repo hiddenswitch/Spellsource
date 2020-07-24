@@ -47,7 +47,9 @@ public abstract class FiberScheduler implements FiberFactory, StrandFactory {
             case JMX:
                 return new JMXFibersMonitor(name, scheduler, detailedInfo);
             case METRICS:
-                return new MetricsFibersMonitor(name, scheduler);
+                return new DropwizardFibersMonitor(name, scheduler);
+	          case MICROMETER:
+	        	    return new MicrometerFibersMonitor(name, scheduler, detailedInfo);
             case NONE:
                 return NOOP_FIBERS_MONITOR;
             default:

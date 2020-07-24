@@ -1,0 +1,42 @@
+{
+  "name": "Slam",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKMAGENTA",
+  "rarity": "COMMON",
+  "description": "Deal $4 damage to a minion. Invoke (2): Deal $8 instead.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "InvokeSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 4
+    },
+    "spell1": {
+      "class": "InvokeOptionSpell",
+      "name": "Come on and Slam",
+      "description": "Deal 4 damage to the target.",
+      "spell": {
+        "class": "DamageSpell",
+        "value": 4
+      },
+      "mana": 0
+    },
+    "spell2": {
+      "class": "InvokeOptionSpell",
+      "name": "And welcome to the jam",
+      "description": "Deal 8 damage to the target instead.",
+      "spell": {
+        "class": "DamageSpell",
+        "value": 8
+      },
+      "mana": 2
+    }
+  },
+  "attributes": {
+    "INVOKE": 2
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

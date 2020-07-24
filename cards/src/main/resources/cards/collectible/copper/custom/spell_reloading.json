@@ -1,0 +1,29 @@
+{
+  "name": "Reloading",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "EPIC",
+  "description": "Draw 2 cards. If your hand is empty, draw three instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 0,
+      "operation": "LESS_OR_EQUAL"
+    },
+    "exclusive": true,
+    "spell1": {
+      "class": "DrawCardSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "DrawCardSpell",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

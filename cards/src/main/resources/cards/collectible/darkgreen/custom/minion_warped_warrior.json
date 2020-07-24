@@ -1,0 +1,25 @@
+{
+  "name": "Warped Warrior",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Guard. Aftermath: Deal 1 damage to all minions.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

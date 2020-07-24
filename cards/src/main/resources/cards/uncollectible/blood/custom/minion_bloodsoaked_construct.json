@@ -1,0 +1,34 @@
+{
+  "name": "Bloodsoaked Construct",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Aftermath: Give your other minions +1 Health and this Aftermath.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "hpBonus": 1
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "target": "FRIENDLY_MINIONS",
+        "card": "enchantment_bloodsoaked_construct"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

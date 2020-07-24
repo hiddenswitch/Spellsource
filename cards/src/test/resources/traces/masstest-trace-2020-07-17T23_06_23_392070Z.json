@@ -1,0 +1,26 @@
+{
+  "seed" : -7811279017533376230,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "ROSE", "COPPER" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_vilewing_broodmother", "minion_dragonfruit_whelp", "minion_pumpkin_abomination", "spell_bodyswap", "minion_dreamshaker", "minion_fel_manticore", "minion_tree_giant", "secret_funeral_rites", "minion_antique_collector", "secret_shallow_grave", "minion_volcanic_elemental", "minion_fel_manticore", "minion_novice_time_traveler", "spell_aquatic_fantasy", "minion_ceremonial_alter", "minion_magishire_wildcat", "minion_acolyte_of_peroth'arn", "minion_cursing_chimp", "spell_wicked_insight", "minion_volcanic_elemental", "minion_mind_controlled_mech", "minion_tiki_tokens", "minion_aeonus", "minion_channeled_spirit", "minion_primal_mother", "minion_doctor_rigo_morti", "minion_lingering_spirit", "minion_natural_convert", "spell_morbid_mockery", "minion_oppressor_defender" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_crystal_golem", "spell_one_in_the_chamber", "minion_emerald_dreamer", "weapon_silver_scattershot", "spell_trigger_happy", "minion_ankylo_devotee", "spell_dream_of_anarchy", "minion_lord_of_the_sea", "minion_harbinger_of_hope", "minion_divine_cleric", "minion_dustbowl_anarchist", "minion_cheating_wrangler", "minion_bronze_timekeeper", "minion_centaur_acumen", "minion_roadblock_pufferfish", "minion_perplexed_courtsman", "minion_channeled_spirit", "spell_mob_party", "minion_shady_stranger", "spell_armed_and_dangerous", "minion_inept_investigator", "minion_timewalker_strider", "minion_mind_controlled_mech", "minion_freyas_familliar", "minion_uccian_hydra", "minion_jabberwocky", "minion_adamant_gunslinger", "minion_krentiaxx_tyrant", "minion_bullet_bull", "minion_ironplate_samurai" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 46 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 14 ]
+  } ],
+  "actions" : [ 0, 2, 1, 1, 0, 4, 4, 2, 1, 7, 0, 4, 1, 1, 4, 1, 0, 0, 0, 19, 10, 3, 4, 12, 0, 30, 2, 1, 10, 4, 28, 28, 24, 9, 1, 8, 0, 5, 7 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

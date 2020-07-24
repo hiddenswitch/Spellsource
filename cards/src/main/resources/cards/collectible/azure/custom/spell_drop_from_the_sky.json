@@ -1,0 +1,37 @@
+{
+  "name": "Drop From the Sky",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Source a minion. It has Dash this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "OUTPUT",
+        "attribute": "RUSH",
+        "revertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      },
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}
