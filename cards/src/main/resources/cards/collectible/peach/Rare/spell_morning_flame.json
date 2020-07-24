@@ -1,0 +1,45 @@
+{
+  "name": "Morning Flame",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Deal 4 damage. If your deck has no units, gain two empty Lun.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "EQUAL",
+      "value1": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      "value2": 0
+    },
+    "spell1": {
+	  "class": "MetaSpell",
+	  "spells": [
+	    {
+          "class": "DamageSpell",
+          "value": 4
+		},
+		{
+		  "class": "ModifyMaxManaSpell",
+          "value": 2
+		}
+	  ]
+    },
+    "spell2": {
+      "class": "DamageSpell",
+	  "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Flame Formation",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Deal $8 damage to a unit. Summon an 8/8 Raging Flame.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "BOTH"
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 8
+      },
+      {
+        "class": "SummonSpell",
+        "target": "NONE",
+        "card": "token_raging_flame",
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

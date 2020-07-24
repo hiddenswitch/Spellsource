@@ -1,0 +1,14 @@
+{
+  "name": "Raging Flame",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "",
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

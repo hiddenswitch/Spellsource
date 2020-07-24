@@ -1,0 +1,25 @@
+{
+  "name": "Starlight Ceremony",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Draw 3 cards. Restore #6 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      },
+      {
+        "class": "HealSpell",
+        "value": 6
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

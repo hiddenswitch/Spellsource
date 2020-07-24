@@ -1,0 +1,78 @@
+{
+  "name": "Lunar Oracle",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Imbue: If you cast three spells this turn, your next spell costs (1) this turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        }
+      },
+      "value2": 3
+    },
+    "spell": {
+	  "class": "ImbueSpell", #Noting for Later
+	  "spell1": {
+	    "class": "ImbueOptionSpell",
+		"name": "Normal",
+		"description": "Don't Imbue."
+	  },
+	  "spell2": {
+	    "class": "ImbueOptionSpell",
+		"name": "Imbue",
+		"description": "Your next spell costs (1) this turn.",
+		"spell": {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "OneTurnCostModifier",
+            "value": 1,
+		    "filter": {
+		      "class": "CardFilter",
+              "cardType": "SPELL"
+		    },
+            "expirationTrigger": {
+              "class": "CardPlayedTrigger",
+              "targetPlayer": "SELF"
+            },
+            "operation": "SET"
+          }
+        }
+      }
+	}
+  },
+  "attributes": {
+    "IMBUE": true #Noting for later
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

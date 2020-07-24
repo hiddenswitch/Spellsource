@@ -1,0 +1,32 @@
+{
+  "name": "Fox Kiss",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "FREE",
+  "description": "Restore #2 Health. Restores double Health to champions.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 2,
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "CardPropertyCondition",
+        "cardType": "HERO"
+      },
+      "spell1": {
+        "class": "ModifyHealingSpell",
+        "value": 2,
+        "operation": "MULTIPLY"
+      },
+      "spell2": {
+        "class": "NullSpell"
+      }
+    }
+  },
+  #I am not sure about this code#
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

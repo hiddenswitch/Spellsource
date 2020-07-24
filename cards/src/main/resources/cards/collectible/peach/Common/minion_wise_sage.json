@@ -1,0 +1,79 @@
+{
+  "name": "Wise Sage",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Source a spell. <b>Imbue</b>: It costs (2) less.",
+  "battlecry":
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ImbueSpell", #Noting for the future
+      "spell1": {
+        "class": "ImbueOptionSpell",
+        "name": "Normal",
+        "description": "Source a spell."
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+			"heroClass": "SELF",
+            "cardType": "SPELL"
+          }
+	    }
+      },
+      "spell2": {
+        "class": "ImbueOptionSpell", #Noting for the future
+        "name": "Imbue",
+        "description": "Source a spell and reduce its cost by (2).",
+	    "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "spell": {
+              "class": "CardCostModifierSpell",
+              "target": "OUTPUT",
+              "cardCostModifier": {
+                "class": "CardCostModifier",
+                "target": "SELF",
+                "value": 2,
+                "operation": "SUBTRACT"
+              }
+            },
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "SELF",
+            "cardType": "SPELL"
+          }
+        }
+      },
+	  "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "IMBUE": true, #Noting for the future
+	"DISCOVER": true,
+	"BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
