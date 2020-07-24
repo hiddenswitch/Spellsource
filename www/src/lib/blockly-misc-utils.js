@@ -114,12 +114,22 @@ export default class BlocklyMiscUtils {
         return 'TargetSelection'
       case 'eventTrigger':
       case 'revertTrigger':
+      case 'secondaryTrigger':
         return 'Trigger'
       case 'value':
       case 'howMany':
       case 'ifTrue':
       case 'ifFalse':
+      case 'value1':
+      case 'value2':
+      case 'secondaryValue':
+      case 'multiplier':
+      case 'offset':
+      case 'attackBonus':
+      case 'hpBonus':
         return 'ValueProvider'
+      case 'aura':
+        return 'Aura'
       default:
         return null
     }

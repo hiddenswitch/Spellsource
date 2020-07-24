@@ -58,33 +58,29 @@ export default class JsonConversionUtils {
     block.initSvg()
 
     if (!!block.getInput('name')) {
-      block.getInput('name').connection.targetBlock().setFieldValue(card.name, 'name')
+      block.getInput('name').connection.targetBlock().setFieldValue(card.name, 'text')
     }
     if (!!block.getInput('description')) {
-      block.getInput('description').connection.targetBlock().setFieldValue(card.description, 'description')
+      block.getInput('description').connection.targetBlock().setFieldValue(card.description, 'text')
     }
 
     let lowestBlock = block
 
     if (!!card.heroClass) {
-      let heroClassBlock = workspace.newBlock('HeroClass_' + card.heroClass)
-      block.getInput('heroClass').connection.connect(heroClassBlock.outputConnection)
-      heroClassBlock.initSvg()
+      this.simpleHandleArg(block, 'heroClass', card, workspace)
     }
 
     if (!!card.rarity) {
-      let rarityBlock = workspace.newBlock('Rarity_' + card.rarity)
-      block.getInput('rarity').connection.connect(rarityBlock.outputConnection)
-      rarityBlock.initSvg()
+      this.simpleHandleArg(block, 'rarity', card, workspace)
     }
 
     if (!!card.spell) {
-      this.handleArg(block.getInput('targetSelection').connection, card.targetSelection, 'targetSelection', workspace, card)
-      this.handleArg(block.getInput('spell').connection, card.spell, 'spell', workspace, card)
+      this.simpleHandleArg(block, 'targetSelection', card, workspace)
+      this.simpleHandleArg(block, 'spell', card, workspace)
     }
 
     if (!!card.battlecry) {
-      let openerBlock = null
+      let openerBlock
       if (!!card.battlecry.condition) {
         openerBlock = this.newBlock(workspace, 'Property_opener2')
       } else {
@@ -180,7 +176,7 @@ export default class JsonConversionUtils {
           this.handleArg(costyBlock.getInput('manaCostModifier.ifTrue').connection, card.manaCostModifier.ifTrue,
             'ifTrue', workspace, card)
         } else {
-          this.handleIntArg(costyBlock, costyBlock.json.args0[0], workspace, card.manaCostModifier.ifTrue)
+          this.handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier.ifTrue)
         }
 
       } else {
@@ -193,9 +189,67 @@ export default class JsonConversionUtils {
       lowestBlock = costyBlock
     }
 
+    if (!!card.dynamicDescription) {
+      let descriptionsBlock = this.newBlock(workspace, 'Property_descriptions')
+
+      this.dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, 'i')
+
+      descriptionsBlock.previousConnection.connect(lowestBlock.nextConnection)
+      descriptionsBlock.initSvg()
+      lowestBlock = descriptionsBlock
+    }
+
     workspace.render()
 
     return block
+  }
+
+  static dynamicDescription(workspace, connection, descriptions, inputName) {
+    for (let dynamicDescription of descriptions) {
+      let block = connection.targetBlock()
+      if (!block) {
+        block = this.newBlock(workspace, 'Property_description')
+        connection.connect(block.outputConnection)
+        block.initSvg()
+      }
+      if (typeof dynamicDescription === 'string') {
+        dynamicDescription = {
+          class: 'StringDescription',
+          string: dynamicDescription
+        }
+      }
+
+      let descBlock = this.newBlock(workspace, 'Property_' + dynamicDescription.class)
+
+      block.getInput(inputName).connection.connect(descBlock.outputConnection)
+
+
+      if (!!dynamicDescription.value) {
+        this.handleArg(descBlock.getInput('value').connection, dynamicDescription.value,
+          'value', workspace, dynamicDescription)
+      }
+      if (!!dynamicDescription.condition) {
+        this.handleArg(descBlock.getInput('condition').connection, dynamicDescription.condition,
+          'condition', workspace, dynamicDescription)
+      }
+      if (!!dynamicDescription.string) {
+        descBlock.setFieldValue(dynamicDescription.string, 'string')
+      }
+      if (!!dynamicDescription.description1) {
+        this.dynamicDescription(workspace, block.getInput(inputName).connection, [dynamicDescription.description1], 'description1')
+      }
+      if (!!dynamicDescription.description2) {
+        this.dynamicDescription(workspace, block.getInput(inputName).connection, [dynamicDescription.description2], 'description2')
+      }
+
+      if (!!dynamicDescription.descriptions) {
+        this.dynamicDescription(workspace, descBlock.getFirstStatementConnection(), dynamicDescription.descriptions)
+      }
+
+      block.getInput(inputName).connection.connect(descBlock.outputConnection)
+      connection = block.nextConnection
+      descBlock.initSvg()
+    }
   }
 
   //handles finding an input on a block by what its name ends with
@@ -266,7 +320,7 @@ export default class JsonConversionUtils {
     }
     let lowestConnection = block.getFirstStatementConnection()
     for (let aura of auras) {
-      this.handleArg(lowestConnection, aura, 'aura', workspace, auras, true)
+      this.handleArg(lowestConnection, aura, 'aura', workspace, aura, true)
       lowestConnection = lowestConnection.targetBlock().nextConnection
     }
   }
@@ -314,6 +368,9 @@ export default class JsonConversionUtils {
           if ((className.endsWith('Spell') || json.targetPlayer === 'SELF') && property === 'targetPlayer') {
             continue
           }
+          if ((className.endsWith('Trigger') || json.targetPlayer === 'BOTH') && property === 'targetPlayer') {
+            continue
+          }
           let hasIt = false
           for (let arg of this.argsList(match)) { //see if the match has a corresponding prop
             if (arg.name.split('.')[0] === property) {
@@ -336,56 +393,52 @@ export default class JsonConversionUtils {
           goodMatches.push(match)
         }
       }
-      let fewest = null
-      for (let goodMatch of goodMatches) { //choose the one with the fewest extra properties
-        let argsList = this.argsList(goodMatch);
-        let score = 0
-        for (let property in json) { //see how many extra properties the json has that the potential match doesn't
-          if (json[property] === null || json[property] === undefined) {
-            continue
-          }
-          let delta = 1
+      let bestScore = null
+      for (let goodMatch of goodMatches) { //choose the one with the highest number of correct properties
+        let bestScore = null
+        for (let goodMatch of matches) {
+          let argsList = this.argsList(goodMatch);
+          let score = 0
           for (let arg of argsList) {
-            if (arg.name.split('.').slice(-1)[0] === property) {
+            let delta = 0
+            let property = this.traverseJsonByArgName(arg.name, json)
+            if (property !== null && property !== undefined) {
               if (arg.type === 'field_label_serializable_hidden') {
-                if ((arg.value === 'TRUE' ? true : arg.value) === json[property]) {
-                  delta = 0
+                if ((arg.value === 'TRUE' ? true : arg.value) === property) {
+                  delta = 1
                 }
               } else {
-                delta = 0
+                delta = 1
               }
-              break
+            } else {
+              delta = -.5
             }
+            score += delta
           }
-          score += delta
-        }
-        for (let arg of argsList) { //see how many extra properties the potential match has that the json doesn't
-          let delta = 1
-          for (let property in json) {
-            if (json[property] === null || json[property] === undefined) {
-              continue
-            }
-            if (arg.name.split('.').slice(-1)[0] === property) {
-              if (arg.type === 'field_label_serializable_hidden') {
-                if ((arg.value === 'TRUE' ? true : arg.value) === json[property]) {
-                  delta = 0
-                }
-              } else {
-                delta = 0
-              }
-              break
-            }
+          if (bestScore === null || score > bestScore
+            || (score >= bestScore && bestMatch.type.localeCompare(goodMatch.type) > 0)) {
+            bestMatch = goodMatch
+            bestScore = score
           }
-          score += delta
-        }
-        if (fewest === null || score < fewest
-          || (score <= fewest && bestMatch.type.localeCompare(goodMatch.type) > 0)) {
-          bestMatch = goodMatch
-          fewest = score
         }
       }
     }
     return bestMatch
+  }
+
+  static traverseJsonByArgName(argName, json) {
+    if (json === undefined || json === null) {
+      return null
+    }
+    if (argName.includes(',')) {
+      let names = argName.split(',')
+      return this.traverseJsonByArgName(names[0], json) || this.traverseJsonByArgName(names.slice(1).join(','), json)
+    }
+    if (!argName.includes('.')) {
+      return json[argName]
+    }
+    let names = argName.split('.')
+    return this.traverseJsonByArgName(names.slice(1).join('.'), json[names[0]])
   }
 
   /**
@@ -413,89 +466,19 @@ export default class JsonConversionUtils {
     } else {
       newBlock = this.newBlock(workspace, bestMatch.type)
     }
-
-    if (json.hasOwnProperty('targetPlayer') && !!bestMatch && bestMatch.output !== 'Trigger') {
-      let realBlock
-      switch (bestMatch.output) {
-        case 'ValueProviderDesc':
-          realBlock = this.newBlock(workspace, 'ValueProvider_TargetPlayer')
-          break
-        default:
-          realBlock = this.newBlock(workspace, 'Spell_TargetPlayer')
-          break
-      }
-      realBlock.getInput('super').connection.connect(newBlock.outputConnection)
-      this.handleArg(realBlock.getInput('targetPlayer').connection, json.targetPlayer, 'targetPlayer', workspace, json)
-      connection.connect(realBlock.outputConnection)
-      realBlock.initSvg()
-    } else if (inputName === 'target' && !!parentJson.target && !!parentJson.filter
-      && !this.getInputEndsWith(connection.getSourceBlock(), 'filter')) {
-      let filterBlock = this.newBlock(workspace, 'EntityReference_FILTER')
-      filterBlock.getInput('super').connection.connect(newBlock.outputConnection)
-      this.handleArg(filterBlock.getInput('super.filter').connection, parentJson.filter, 'filter', workspace, json)
-      connection.connect(filterBlock.outputConnection)
-      filterBlock.initSvg()
-    } else if (!!json.invert && !this.argsList(bestMatch).map(arg => arg.name.split('.').slice(-1)[0]).includes('invert')) {
-      let invertBlock
-      if (json.class.endsWith('Filter')) {
-        invertBlock = this.newBlock(workspace, 'Filter_NOT')
-      } else if (json.class.endsWith('Condition')) {
-        invertBlock = this.newBlock(workspace, 'Condition_NOT')
-      }
-      invertBlock.getInput('super').connection.connect(newBlock.outputConnection)
-      connection.connect(invertBlock.outputConnection)
-      invertBlock.initSvg()
-    } else if (inputName.endsWith('Trigger') && !!json.class && json.class.endsWith('Trigger')) {
-      let outerMostBlock = newBlock
-      if (!!json.fireCondition) {
-        let addedBlock = this.newBlock(workspace, 'Trigger_FireCondition')
-        this.handleArg(addedBlock.getInput('fireCondition').connection, json.fireCondition, 'fireCondition', workspace, json)
-        addedBlock.initSvg()
-        addedBlock.getInput('super').connection.connect(outerMostBlock.outputConnection)
-        outerMostBlock = addedBlock
-      }
-      if (!!json.queueCondition) {
-        let addedBlock = this.newBlock(workspace, 'Trigger_QueueCondition')
-        this.handleArg(addedBlock.getInput('queueCondition').connection, json.queueCondition, 'queueCondition', workspace, json)
-        addedBlock.initSvg()
-        addedBlock.getInput('super').connection.connect(outerMostBlock.outputConnection)
-        outerMostBlock = addedBlock
-      }
-      if (!!json.race) {
-        let addedBlock = this.newBlock(workspace, 'Trigger_Race')
-        this.handleArg(addedBlock.getInput('race').connection, json.race, 'race', workspace, json)
-        addedBlock.initSvg()
-        addedBlock.getInput('super').connection.connect(outerMostBlock.outputConnection)
-        outerMostBlock = addedBlock
-      }
-      if (!!json.requiredAttribute) {
-
-      }
-
-      connection.connect(outerMostBlock.outputConnection)
-    } else if (inputName.endsWith('targetSelection') && !!parentJson.spell && !!parentJson.spell.filter) {
-      let outerBlock
-      if (parentJson.spell.filter.class === 'RaceFilter') {
-        outerBlock = this.newBlock(workspace, 'TargetSelection_RACE')
-        this.handleArg(outerBlock.getInput('super.spell.filter.race').connection, parentJson.spell.filter.race, 'race', workspace, parentJson.spell.filter)
-      } else {
-        outerBlock = this.newBlock(workspace, 'TargetSelection_FILTER')
-        this.handleArg(outerBlock.getInput('super.spell.filter').connection, parentJson.spell.filter, 'filter', workspace, parentJson.spell)
-      }
-      outerBlock.getInput('super').connection.connect(newBlock.outputConnection)
-      outerBlock.initSvg()
-      connection.connect(outerBlock.outputConnection)
-    } else {
-      if (statement) {
-        connection.connect(newBlock.previousConnection)
-      } else {
-        connection.connect(newBlock.outputConnection)
-      }
-    }
     newBlock.initSvg()
 
+    let outerBlock = this.wrapperBlocks(newBlock, json, inputName, workspace, parentJson, connection, bestMatch)
+
+    if (statement) {
+      connection.connect(outerBlock.previousConnection)
+    } else {
+      connection.connect(outerBlock.outputConnection)
+    }
+
+
     if (!bestMatch) {
-      return
+      return //args already taken care of by handleNoMatch
     }
 
     //now handle each dropdown on the new block (assumes stuff will just work)
@@ -515,6 +498,7 @@ export default class JsonConversionUtils {
     //now handle each input on the new block
     for (let inputArg of this.inputsList(bestMatch)) {
       let name = inputArg.name;
+      let argName = name
       let jsonElement = json[name];
       if (!jsonElement && (name.includes('.') || name.includes('super') || name.includes(','))) {
         jsonElement = this.tryToFindCorrectElement(name, json, parentJson)
@@ -524,63 +508,151 @@ export default class JsonConversionUtils {
       if (jsonElement === null || jsonElement === undefined) {
         continue
       }
-
-      if (name === 'target' && json.randomTarget != null) { //handles the randomTarget arg
-        let randomBlock = this.newBlock(workspace, 'EntityReference_RANDOM')
-        this.handleArg(randomBlock.getInput('super').connection, jsonElement, name, workspace, json)
-        newBlock.getInput(name).connection.connect(randomBlock.outputConnection)
-        randomBlock.initSvg()
-      } else { //if the json has a corresponding argument
-        if (typeof jsonElement !== 'object' && (name.startsWith('value') || name.endsWith('Bonus')
-          || name === 'howMany' || name.startsWith('if')
-        )) { //integer block stuff
-          this.handleIntArg(newBlock, inputArg, workspace, jsonElement)
-        } else if (name === 'spells' || name === 'conditions'
-          || name === 'filters' || name === 'cards') { //arrays of things stuff
-          let thingArray = jsonElement
-          let lowestBlock = newBlock.getFirstStatementConnection().targetBlock()
-          this.handleArg(lowestBlock.getInput('i').connection, thingArray[0], name.slice(0, -1), workspace, thingArray)
-          for (let i = 1; i < thingArray.length; i++) {
-            let thingI
-            switch (name) {
-              case 'conditions':
-                thingI = this.newBlock(workspace, 'Condition_I')
-                break
-              case 'filters':
-                thingI = this.newBlock(workspace, 'Filter_I')
-                break
-              case 'cards':
-                thingI = this.newBlock(workspace, 'Spell_Card')
-                break
-              default:
-                thingI = this.newBlock(workspace, 'Spell_Meta')
-                break
-            }
-            this.handleArg(thingI.getInput('i').connection, thingArray[i], name.slice(0, -1), workspace, thingArray)
-            lowestBlock.nextConnection.connect(thingI.previousConnection)
-            thingI.initSvg()
-            lowestBlock = thingI
+      //if the json has a corresponding argument
+      if (typeof jsonElement !== 'object' && BlocklyMiscUtils.inputNameToBlockType(name) === 'ValueProvider') {
+        //integer block stuff
+        this.handleIntArg(newBlock, inputArg.name, workspace, jsonElement)
+      } else if (name === 'spells' || name === 'conditions'
+        || name === 'filters' || name === 'cards') { //arrays of things stuff
+        let thingArray = jsonElement
+        let lowestBlock = newBlock.getFirstStatementConnection().targetBlock()
+        this.handleArg(lowestBlock.getInput('i').connection, thingArray[0], name.slice(0, -1), workspace, thingArray)
+        for (let i = 1; i < thingArray.length; i++) {
+          let thingI
+          switch (name) {
+            case 'conditions':
+              thingI = this.newBlock(workspace, 'Condition_I')
+              break
+            case 'filters':
+              thingI = this.newBlock(workspace, 'Filter_I')
+              break
+            case 'cards':
+              thingI = this.newBlock(workspace, 'Spell_Card')
+              break
+            default:
+              thingI = this.newBlock(workspace, 'Spell_Meta')
+              break
           }
-
-        } else if (name === 'trigger') {
-          this.enchantment(json.trigger, workspace, newBlock.getFirstStatementConnection().targetBlock())
-        } else { //default recursion case
-          this.handleArg(newBlock.getInput(name).connection, jsonElement, name, workspace, json)
+          this.handleArg(thingI.getInput('i').connection, thingArray[i], name.slice(0, -1), workspace, thingArray)
+          lowestBlock.nextConnection.connect(thingI.previousConnection)
+          thingI.initSvg()
+          lowestBlock = thingI
         }
+
+      } else if (name === 'trigger') {
+        this.enchantment(json.trigger, workspace, newBlock.getFirstStatementConnection().targetBlock())
+      } else { //default recursion case
+        this.handleArg(newBlock.getInput(argName).connection, jsonElement, name, workspace, json)
       }
     }
   }
 
+  static wrapperBlocks(outerBlock, json, inputName, workspace, parentJson, connection, bestMatch) {
+    const wrap = (blockType, inputName = 'super') => {
+      let newOuterBlock = this.newBlock(workspace, blockType)
+      newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection)
+      newOuterBlock.initSvg()
+      outerBlock = newOuterBlock
+    }
+
+    if (json.hasOwnProperty('targetPlayer') && !!bestMatch && json.targetPlayer !== 'SELF' &&
+      (bestMatch.output === 'ValueProviderDesc' || bestMatch.output === 'SpellDesc')) {
+      switch (bestMatch.output) {
+        case 'ValueProviderDesc':
+          wrap('ValueProvider_targetPlayer')
+          break
+        default:
+          wrap('Spell_TargetPlayer')
+          break
+      }
+      this.simpleHandleArg(outerBlock, 'targetPlayer', json, workspace)
+    }
+
+    if (inputName === 'target' && !!parentJson.target && !!parentJson.filter
+      && !this.getInputEndsWith(connection.getSourceBlock(), 'filter')) {
+      wrap('EntityReference_FILTER')
+      this.handleArg(outerBlock.getInput('super.filter').connection, parentJson.filter, 'filter', workspace, json)
+    }
+
+    if (!!json.invert && !this.argsList(bestMatch).map(arg => arg.name.split('.').slice(-1)[0]).includes('invert')) {
+      if (json.class.endsWith('Filter')) {
+        wrap('Filter_NOT')
+      } else if (json.class.endsWith('Condition')) {
+        wrap('Condition_NOT')
+      }
+    }
+
+    if (inputName.endsWith('Trigger') && !!json.class && json.class.endsWith('Trigger')) {
+      if (!!json.fireCondition) {
+        wrap('Trigger_FireCondition')
+        this.simpleHandleArg(outerBlock, 'fireCondition', json, workspace)
+      }
+      if (!!json.queueCondition) {
+        wrap('Trigger_QueueCondition')
+        this.simpleHandleArg(outerBlock, 'queueCondition', json, workspace)
+      }
+      if (!!json.race) {
+        wrap('Trigger_Race')
+        this.simpleHandleArg(outerBlock, 'race', json, workspace)
+      }
+      if (!!json.requiredAttribute) {
+
+      }
+    }
+
+    if (inputName.endsWith('targetSelection') && !!parentJson.spell && !!parentJson.spell.filter
+      && json !== 'NONE') {
+      if (parentJson.spell.filter.class === 'RaceFilter') {
+        wrap('TargetSelection_RACE')
+        this.handleArg(outerBlock.getInput('super.spell.filter.race').connection, parentJson.spell.filter.race, 'race', workspace, parentJson.spell.filter)
+      } else {
+        wrap('TargetSelection_FILTER')
+        this.handleArg(outerBlock.getInput('super.spell.filter').connection, parentJson.spell.filter, 'filter', workspace, parentJson.spell)
+      }
+    }
+
+    if (inputName === 'target' && parentJson.randomTarget === true) { //handles the randomTarget arg
+      wrap('EntityReference_RANDOM')
+    }
+
+    if (!!json.multiplier) {
+      wrap('ValueProvider_multiplier')
+      if (typeof json.multiplier !== 'object') {
+        this.handleIntArg(outerBlock, 'multiplier', workspace, json.multiplier)
+      } else {
+        this.simpleHandleArg(outerBlock, 'multiplier', json, workspace)
+      }
+    }
+
+    if (!!json.offset) {
+      wrap('ValueProvider_offset')
+      if (typeof json.offset !== 'object') {
+        this.handleIntArg(outerBlock, 'offset', workspace, json.offset)
+      } else {
+        this.simpleHandleArg(outerBlock, 'offset', json, workspace)
+      }
+    }
+
+    return outerBlock
+  }
+
+  static simpleHandleArg(block, inputName, json, workspace) {
+    return this.handleArg(block.getInput(inputName).connection, json[inputName], inputName, workspace, json)
+  }
+
   static tryToFindCorrectElement(name, json, parentJson) {
-    if (!name) {
-      return
+    if (!name || !json) {
+      return undefined
     }
     if (name.includes(',')) {
       let names = name.split(',')
-      const recurr = (names, i, json, parentJson) => {
-        return this.tryToFindCorrectElement(names[i]) || recurr(names, i + 1, json, parentJson)
+      for (let name of names) {
+        let elem = this.tryToFindCorrectElement(name, json, parentJson)
+        if (elem !== undefined) {
+          return elem
+        }
       }
-      return recurr(names, 0, json, parentJson)
+      return undefined
     } else {
       let i = name.indexOf('.')
       if (i <= 0) {
@@ -590,7 +662,8 @@ export default class JsonConversionUtils {
       let rest = name.substring(i + 1)
       if (start === 'super' && !!parentJson) {
         return this.tryToFindCorrectElement(rest, parentJson, null)
-      } else if (!!json[start]){
+      }
+      {
         return this.tryToFindCorrectElement(rest, json[start], json)
       }
     }
@@ -598,12 +671,12 @@ export default class JsonConversionUtils {
 
   static handleIntArg(newBlock, inputArg, workspace, int) {
     let valueBlock
-    if (!!newBlock.getInput(inputArg.name).connection.targetBlock()
-      && newBlock.getInput(inputArg.name).connection.targetBlock().type === 'ValueProvider_int') {
-      valueBlock = newBlock.getInput(inputArg.name).connection.targetBlock()
+    if (!!newBlock.getInput(inputArg).connection.targetBlock()
+      && newBlock.getInput(inputArg).connection.targetBlock().type === 'ValueProvider_int') {
+      valueBlock = newBlock.getInput(inputArg).connection.targetBlock()
     } else {
       valueBlock = this.newBlock(workspace, 'ValueProvider_int')
-      newBlock.getInput(inputArg.name).connection.connect(valueBlock.outputConnection)
+      newBlock.getInput(inputArg).connection.connect(valueBlock.outputConnection)
       valueBlock.initSvg()
     }
     valueBlock.setFieldValue(int, 'int')
@@ -621,10 +694,11 @@ export default class JsonConversionUtils {
           type = 'BoolAttribute'
         }
       }
+      let color = this.blockTypeColors[type]
       consoleBlock = {
         type: type + '_' + json.toString(),
         data: json.toString(),
-        colour: this.blockTypeColors[type],
+        colour: isNumber(color) ? parseInt(color) : color,
         output: type,
         message0: BlocklyMiscUtils.toHappyFormatting(json.toString())
       }
@@ -664,18 +738,19 @@ export default class JsonConversionUtils {
             type: prop === 'target' ? 'EntityReference_IT' :
               BlocklyMiscUtils.inputNameToBlockType(prop) +
               (prop === 'attribute' ? (!!parentJson.value ? '_INT_SHADOW' : '_BOOL_SHADOW')
-              : '_SHADOW')
+                : '_SHADOW')
           }
         }
         messages.push(newMessage)
         args.push(arg)
       }
 
+      let color = this.blockTypeColors[type]
       consoleBlock = {
-        type: type + '_Custom' + className.replace(type, ''),
+        type: type + '_' + className.replace(type, ''),
         inputsInline: false,
         output: BlocklyMiscUtils.blockTypeToOuput(type),
-        colour: this.blockTypeColors[type],
+        colour: isNumber(color) ? parseInt(color) : color,
         message0: className + '%1',
         args0: [{
           type: 'field_label_serializable_hidden',
@@ -693,8 +768,8 @@ export default class JsonConversionUtils {
         //block['args' + j.toString()] = [args[j - 1]]
 
 
-        consoleBlock.message0 += ' ' + messages[j-1].replace('%1', '%'+(j+1).toString())
-        consoleBlock.args0.push(args[j-1])
+        consoleBlock.message0 += ' ' + messages[j - 1].replace('%1', '%' + (j + 1).toString())
+        consoleBlock.args0.push(args[j - 1])
       }
 
     }
@@ -711,7 +786,14 @@ export default class JsonConversionUtils {
     if (!type && !!json.class) {
       type = BlocklyMiscUtils.inputNameToBlockType(json.class.split(/(?=[A-Z])/).slice(-1)[0].toLowerCase())
     }
-    let newBlock = this.newBlock(workspace, 'Custom'+type)
+    if (type === 'Attribute') {
+      if (!!json.value || (typeof json !== 'object' && parentJson.hasOwnProperty('value'))) {
+        type = 'IntAttribute'
+      } else {
+        type = 'BoolAttribute'
+      }
+    }
+    let newBlock = this.newBlock(workspace, 'Custom' + type)
     if (typeof json !== 'object') {
       newBlock.setFieldValue(json, 'value')
     } else if (!!json.class) {
@@ -724,8 +806,16 @@ export default class JsonConversionUtils {
         }
 
         let blockType = BlocklyMiscUtils.inputNameToBlockType(arg);
+
         if (!blockType) {
           blockType = 'text'
+        }
+        if (blockType === 'Attribute') {
+          if (!!json.value) {
+            blockType = 'IntAttribute'
+          } else {
+            blockType = 'BoolAttribute'
+          }
         }
         let newArgBlock = this.newBlock(workspace, 'CustomArg_' + blockType)
         newArgBlock.previousConnection.connect(lowestConnection)
@@ -734,10 +824,14 @@ export default class JsonConversionUtils {
         newArgBlock.setFieldValue(arg, 'customArg')
 
         if (!!newArgBlock.getInput('customValue')) {
-          this.handleArg(newArgBlock.getInput('customValue').connection, json[arg], arg,
-            workspace, parentJson)
+          if (isNumber(json[arg])) {
+            this.handleIntArg(newArgBlock, 'customValue', workspace, json[arg])
+          } else {
+            this.handleArg(newArgBlock.getInput('customValue').connection, json[arg], arg,
+              workspace, parentJson)
+          }
         } else {
-          newArgBlock.setFieldValue(json[arg],'customValue')
+          newArgBlock.setFieldValue(json[arg], 'customValue')
         }
       }
     }
@@ -750,7 +844,7 @@ export default class JsonConversionUtils {
     for (let property in json) {
       if ((property === 'randomTarget' && !!json.target) || property === 'class'
         || property === 'fireCondition' || property === 'queueCondition'
-        || property === 'invert') {
+        || property === 'invert' || property === 'offset' || property === 'multiplier') {
         continue
       }
       if (!!json[property]) {
@@ -772,7 +866,7 @@ export default class JsonConversionUtils {
     let className = json.class
     let props = this.relevantProperties(json);
 
-    //the 'has operation can be implied in many cases
+    //the 'has' operation can be implied in many cases
     if (className.endsWith('Filter') || className.endsWith('Condition')) {
       if (props.includes('attribute') && props.includes('operation')
         && !props.includes('value') && json.operation === 'HAS') {
