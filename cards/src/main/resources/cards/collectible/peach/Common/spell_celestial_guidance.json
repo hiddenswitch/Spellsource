@@ -1,0 +1,63 @@
+{
+  "name": "Celestial Guidance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Receive two random Witch spells. <b>Imbue</b>: Source them instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ImbueSpell", #Noting for the future
+    "spell1": {
+      "class": "ImbueOptionSpell",
+      "name": "Normal",
+      "description": "Receive two Witch spells.",
+	  "spell": {
+        "class": "ReceiveCardSpell",
+        "value": 2,
+        "cardFilter": {
+          "class": "CardFilter",
+          "heroClass": "PEACH",
+          "cardType": "SPELL"
+        }
+	  }
+    },
+    "spell2": {
+      "class": "ImbueOptionSpell", #Noting for the future
+      "name": "Imbue",
+      "description": "Source two Witch spells.",
+	  "spell": {
+        "class": "CastRepeatedlySpell",
+        "howMany": 2,
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+			"heroClass": "SELF",
+            "cardType": "SPELL"
+          }
+        }
+      }
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "PEACH",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "attributes": {
+    "IMBUE": true, #Noting for the future
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

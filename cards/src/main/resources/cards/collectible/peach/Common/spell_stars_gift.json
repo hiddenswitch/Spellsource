@@ -1,0 +1,28 @@
+{
+  "name": "Star's Gift",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Give an allied unit +3 Health. Restore it to full Health."
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+	  {
+        "class": "BuffSpell",
+        "hpBonus": 3
+      },
+      {
+        "class": "HealSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

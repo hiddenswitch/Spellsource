@@ -1,0 +1,21 @@
+{
+  "name": "Fox's Gifts",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Receive a random Fox Spell.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_fox_dance",
+      "spell_fox_fire",
+      "spell_fox_kiss"
+    ],
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

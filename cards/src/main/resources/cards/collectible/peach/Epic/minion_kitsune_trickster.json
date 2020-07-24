@@ -1,0 +1,32 @@
+{
+  "name": "Kitsune Trickster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Has Spellpower +2 while your opponent has 6 or more cards in hand.",
+  "aura": {
+    "class": "AttributeValueAura",
+    "target": "SELF",
+    "value": 2,
+    "triggers": [
+      {
+        "class": "CardReceivedTrigger",
+        "targetPlayer": "OPPONENT"
+      }
+    ],
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 6,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "OPPONENT"
+    },
+    "attribute": "AURA_SPELL_DAMAGE"
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

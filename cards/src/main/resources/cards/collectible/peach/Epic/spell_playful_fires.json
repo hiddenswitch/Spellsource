@@ -1,0 +1,61 @@
+{
+  "name": "Playful Fires",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "EPIC",
+  "description": "This turn, after you cast a spell, summon a Flame with Stats equal to the spell's cost.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "queueCondition": {
+          "class": "ComparisonCondition",
+          "operation": "GREATER",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "LAST_MANA_COST",
+            "targetPlayer": "SELF"
+          },
+          "value2": 0
+        },
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "CreateSummonSpell",
+        "name": "Playful Flame",
+        "race": "ELEMENTAL",
+        "spell": {
+          "class": "NullSpell"
+        },
+        "attackBonus": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST",
+          "targetPlayer": "SELF"
+        },
+        "hpBonus": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST",
+          "targetPlayer": "SELF"
+        },
+        "mana": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MINIMUM",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "LAST_MANA_COST",
+            "targetPlayer": "SELF"
+          },
+          "value2": 10
+        }
+      },
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

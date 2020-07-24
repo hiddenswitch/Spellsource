@@ -1,0 +1,30 @@
+{
+  "name": "Spiritflame",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage. Receive a random Fox Spell.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+	  {
+	    "class": "DamageSpell",
+		"value": 3
+	  },
+	  {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_fox_dance",
+          "spell_fox_fire",
+          "spell_fox_kiss"
+        ]
+        "randomTarget": true
+	  }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

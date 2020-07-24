@@ -1,0 +1,37 @@
+{
+  "name": "Kinru Dawnriser",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you cast a spell on an allied unit, give it +3/+3 instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_SOURCE",
+          "attribute": "COUNTERED"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "attackBonus": 3,
+          "hpBonus": 3
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

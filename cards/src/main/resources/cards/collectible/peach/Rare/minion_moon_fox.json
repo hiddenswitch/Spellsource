@@ -1,0 +1,34 @@
+{
+  "name": "Moon Fox",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": ":PEACH",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Spellpower +1. Whenever this attacks, receive a random Fox Spell.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+	{
+	  "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_fox_dance",
+          "spell_fox_fire",
+          "spell_fox_kiss"
+        ]
+        "randomTarget": true
+	  }
+	}
+  },
+  "attributes": {
+	"SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

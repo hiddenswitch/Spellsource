@@ -1,0 +1,81 @@
+{
+  "name": "Lost Possessions",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Source a card in your graveyard. <b>Imbue</b>: Do it twice.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ImbueSpell", #Noting for the future
+    "spell1": {
+      "class": "ImbueOptionSpell",
+      "name": "Normal",
+      "description": "Source a card in your graveyard.",
+	  "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "operation": "HAS"
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        }
+	  }
+    },
+    "spell2": {
+      "class": "ImbueOptionSpell", #Noting for the future
+      "name": "Imbue",
+      "description": "Source two cards in your graveyard.",
+	  "spell": {
+        "class": "CastRepeatedlySpell",
+        "howMany": 2,
+	    "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "operation": "HAS"
+          },
+          "cardSource": {
+            "class": "GraveyardCardsSource",
+            "targetPlayer": "SELF"
+          }
+	    }
+      }
+    },
+	"spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "operation": "HAS"
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      }
+	}
+  },
+  "attributes": {
+    "IMBUE": true, #Noting for the future
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
